@@ -91,7 +91,7 @@ export function DashboardPage() {
                       <td className="py-3 px-2 text-gray-500">{doc.filedDate}</td>
                       <td className="py-3 px-2 text-gray-500">{documentTypeLabels[doc.type]}</td>
                       <td className="py-3 px-2">
-                        <AIStatusBadge status={doc.aiStatus} />
+                        <AIStatusBadge status={doc.analysisStatus} />
                       </td>
                     </tr>
                   ))}

@@ -1,22 +1,22 @@
 // ============================================
-// Court Access — AI Expert Recommendations Service
+// Court Access — AI Expert Recommendations Service (Phase 1)
 // ============================================
 
-import type { Expert } from '../../types';
+import type { ExpertEntity } from '../../models/CaseModel';
 
 export interface ExpertRecommendationsRequest {
   caseId: string;
 }
 
 export interface ExpertRecommendationsResponse {
-  experts: Expert[];
+  experts: ExpertEntity[];
   generatedAt: string;
 }
 
 export async function getExpertRecommendations(
   request: ExpertRecommendationsRequest
 ): Promise<ExpertRecommendationsResponse> {
-  // Mock implementation — will be replaced with real API
+  // Mock implementation — will be replaced with real API in Phase 6
   await new Promise((resolve) => setTimeout(resolve, 500));
 
   void request;
@@ -56,6 +56,6 @@ export async function getExpertRecommendations(
         costRange: '$8,000 - $18,000',
       },
     ],
-    generatedAt: new Date().toISOString(),
+    generatedAt: '2024-01-22T00:00:00Z', // Deterministic — no Date.now()
   };
 }

@@ -1,22 +1,22 @@
 // ============================================
-// Court Access — AI Motion Recommendations Service
+// Court Access — AI Motion Recommendations Service (Phase 1)
 // ============================================
 
-import type { Motion } from '../../types';
+import type { MotionEntity } from '../../models/CaseModel';
 
 export interface MotionRecommendationsRequest {
   caseId: string;
 }
 
 export interface MotionRecommendationsResponse {
-  motions: Motion[];
+  motions: MotionEntity[];
   generatedAt: string;
 }
 
 export async function getMotionRecommendations(
   request: MotionRecommendationsRequest
 ): Promise<MotionRecommendationsResponse> {
-  // Mock implementation — will be replaced with real API
+  // Mock implementation — will be replaced with real API in Phase 6
   await new Promise((resolve) => setTimeout(resolve, 500));
 
   void request;
@@ -50,12 +50,12 @@ export async function getMotionRecommendations(
       {
         id: '4',
         title: 'Motion in Limine',
-        code: undefined,
+        code: null,
         priority: 'medium',
         description:
           'To exclude prior bad acts evidence that would unfairly prejudice the jury.',
       },
     ],
-    generatedAt: new Date().toISOString(),
+    generatedAt: '2024-01-22T00:00:00Z', // Deterministic — no Date.now()
   };
 }

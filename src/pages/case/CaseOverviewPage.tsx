@@ -77,7 +77,7 @@ export function CaseOverviewPage() {
                     <td className="py-3 px-2 font-medium text-gray-900">{doc.name}</td>
                     <td className="py-3 px-2 text-gray-500">{doc.filedDate}</td>
                     <td className="py-3 px-2 text-gray-500">{documentTypeLabels[doc.type]}</td>
-                    <td className="py-3 px-2"><AIStatusBadge status={doc.aiStatus} /></td>
+                    <td className="py-3 px-2"><AIStatusBadge status={doc.analysisStatus} /></td>
                   </tr>
                 ))}
               </tbody>

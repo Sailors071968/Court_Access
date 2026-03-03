@@ -1,22 +1,24 @@
 // ============================================
-// Court Access — Case Data Provider (Phase 0)
-// Abstraction layer to isolate mock data usage.
-// Phase 1 will replace this with real data sources.
+// Court Access — Case Data Provider (Phase 1)
+// Abstraction layer returning canonical model types.
+// Phase 6 will replace mock data with real API calls.
 // ============================================
 
-import type { ActivityItem, Case, CaseDocument, Charge, DocumentType, Notification } from '../types';
-import { DOCUMENT_TYPE_LABELS, MOCK_ACTIVITY, MOCK_CASES, MOCK_CHARGES, MOCK_DOCUMENTS, MOCK_NOTIFICATIONS } from '../constants/mockData';
+import type { CaseEntity, ChargeEntity, ActivityEntry, NotificationEntry } from '../models/CaseModel';
+import type { DocumentEntity, DocumentType } from '../models/DocumentModel';
+import { DOCUMENT_TYPE_LABELS } from '../models/DocumentModel';
+import { MOCK_ACTIVITY, MOCK_CASES, MOCK_CHARGES, MOCK_DOCUMENTS, MOCK_NOTIFICATIONS } from '../constants/mockData';
 
 function stableSortById<T extends { id: string }>(items: T[]): T[] {
   return [...items].sort((a, b) => a.id.localeCompare(b.id));
 }
 
 export const caseDataProvider = {
-  getCases(): Case[] {
+  getCases(): CaseEntity[] {
     return stableSortById(MOCK_CASES);
   },
 
-  getPrimaryCase(): Case {
+  getPrimaryCase(): CaseEntity {
     const cases = caseDataProvider.getCases();
     if (cases.length === 0) {
       throw new Error('No cases available');
@@ -24,26 +26,30 @@ export const caseDataProvider = {
     return cases[0];
   },
 
-  getCharges(_caseId?: string): Charge[] {
+  getCaseById(caseId: string): CaseEntity | null {
+    const cases = caseDataProvider.getCases();
+    return cases.find((c) => c.id === caseId) ?? null;
+  },
+
+  getCharges(_caseId?: string): ChargeEntity[] {
     return stableSortById(MOCK_CHARGES);
   },
 
-  getDocuments(_caseId?: string): CaseDocument[] {
+  getDocuments(_caseId?: string): DocumentEntity[] {
     return stableSortById(MOCK_DOCUMENTS);
   },
 
-  getActivity(_caseId?: string): ActivityItem[] {
+  getActivity(_caseId?: string): ActivityEntry[] {
     return stableSortById(MOCK_ACTIVITY);
   },
 
-  getNotifications(): Notification[] {
+  getNotifications(): NotificationEntry[] {
     return stableSortById(MOCK_NOTIFICATIONS);
   },
 
   getDocumentTypeLabels(): Record<DocumentType, string> {
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    return { ...DOCUMENT_TYPE_LABELS } as Record<DocumentType, string>;
+    return { ...DOCUMENT_TYPE_LABELS };
   },
 } as const;
 
-export const { getCases, getPrimaryCase, getCharges, getDocuments, getActivity, getNotifications, getDocumentTypeLabels } = caseDataProvider;
+export const { getCases, getPrimaryCase, getCaseById, getCharges, getDocuments, getActivity, getNotifications, getDocumentTypeLabels } = caseDataProvider;

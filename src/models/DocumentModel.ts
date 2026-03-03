@@ -30,6 +30,32 @@ export type DocumentAnalysisStatus = 'pending' | 'analyzing' | 'analyzed' | 'fai
 export type ExtractionStatus = 'pending' | 'processing' | 'complete' | 'failed';
 
 // ---------------------------------------------------------------------------
+// Pre-Ingest Document Input
+// ---------------------------------------------------------------------------
+
+/**
+ * Pre-ingestion document input.
+ * Represents metadata known BEFORE a file is ingested into the system.
+ * Hashes do not exist yet — they are computed during ingestion.
+ *
+ * This type exists to enforce the Phase 4 + Phase 35 binary state rule:
+ *   - A document is either PRE-INGEST (no hashes, not yet a DocumentEntity)
+ *   - Or FULLY INGESTED (dual-hashed, persisted as DocumentEntity)
+ *   - There is no intermediate "partially hashed" state.
+ */
+export interface PreIngestDocumentInput {
+  tenantId: string;
+  caseId: string;
+  name: string;
+  type: DocumentType;
+  filedDate: string;
+  pages: number;
+  fileSize: number;
+  fileType: string | null;
+  uploadedBy: string | null;
+}
+
+// ---------------------------------------------------------------------------
 // Document Entity
 // ---------------------------------------------------------------------------
 
@@ -38,9 +64,14 @@ export type ExtractionStatus = 'pending' | 'processing' | 'complete' | 'failed';
  * Represents a single legal document attached to a case.
  * Includes integrity, provenance, and ingestion fields.
  *
+ * Binary state rule (Phase 4 + Phase 35):
+ *   - A DocumentEntity ALWAYS has both hashes. No null hashes allowed.
+ *   - Documents without hashes are PreIngestDocumentInput, not DocumentEntity.
+ *   - There is no "partially hashed" persisted state.
+ *
  * Immutability contract:
- *   - Once `contentHash` (SHA-256) is set, it MUST NOT be mutated.
- *   - Once `sha3Hash` (SHA3-256) is set, it MUST NOT be mutated.
+ *   - `contentHash` (SHA-256) is REQUIRED and IMMUTABLE once set.
+ *   - `sha3Hash` (SHA3-256) is REQUIRED and IMMUTABLE once set.
  *   - `integrityVerified` may only transition false → true, never true → false.
  *
  * Dual-hash doctrine (Phase 24 — Crypto Survivability Horizon):
@@ -60,8 +91,8 @@ export interface DocumentEntity {
   analysisStatus: DocumentAnalysisStatus;
   fileSize: number;              // File size in bytes — always known at upload time
   fileType: string | null;
-  contentHash: string | null;   // SHA-256 integrity hash — immutable once set (primary)
-  sha3Hash: string | null;      // SHA3-256 integrity hash — immutable once set (secondary)
+  contentHash: string;           // SHA-256 integrity hash — REQUIRED, immutable (primary)
+  sha3Hash: string;              // SHA3-256 integrity hash — REQUIRED, immutable (secondary)
   uploadedBy: string | null;    // User ID of uploader
   uploadedAt: string | null;    // ISO 8601
 
@@ -69,7 +100,7 @@ export interface DocumentEntity {
   storagePath: string | null;         // Path/key in storage (local or S3)
   extractedText: string | null;       // Raw extracted text content
   extractionStatus: ExtractionStatus;  // Text extraction pipeline status
-  integrityVerified: boolean;          // True once contentHash has been verified post-upload
+  integrityVerified: boolean;          // True once dual-hash has been verified post-upload
 }
 
 // ---------------------------------------------------------------------------

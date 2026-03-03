@@ -360,11 +360,13 @@ export async function buildCourtPacketExport(
     nonInterpretiveDeclaration: true,
   };
 
-  // Step 9: Build CAPSBinding
+  // Step 9: Build CAPSBinding (Phase 8: includes immutableCoreHash + merkleRoot)
   const caps: CAPSBinding = {
     sha256: capsSha256,
     sha3_256: capsSha3,
     scopeHash,
+    immutableCoreHash,
+    merkleRoot: input.merkleRoot,
     nonInterpretiveDeclaration: true,
     anchorEpoch: input.anchorEpoch,
   };

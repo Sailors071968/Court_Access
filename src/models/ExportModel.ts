@@ -85,11 +85,15 @@ export interface CourtPacketExport {
  *
  * This is the integrity envelope around the export.
  * Both hashes must match for the export to be considered authentic.
+ *
+ * Updated in Phase 8 to include immutableCoreHash and merkleRoot.
  */
 export interface CAPSBinding {
   sha256: string;                                     // SHA-256 of canonical export JSON
   sha3_256: string;                                   // SHA3-256 of canonical export JSON
   scopeHash: string;                                  // Same as export.scopeHash
+  immutableCoreHash: string;                          // System-wide immutable core hash reference
+  merkleRoot: string;                                 // Daily anchor Merkle root (from TATL)
   nonInterpretiveDeclaration: true;                   // Always true
   anchorEpoch: number;                                // Same as export.anchorEpoch
 }
@@ -123,6 +127,7 @@ export interface CourtPacketExportInput {
   officerStructuralIndexes: OfficerStructuralIndexEntity[];
   documents: DocumentEntity[];
   anchorEpoch: number;
+  merkleRoot: string;                                   // Daily anchor Merkle root (from TATL, Phase 7)
 }
 
 // ---------------------------------------------------------------------------

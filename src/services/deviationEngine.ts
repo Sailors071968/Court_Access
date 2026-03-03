@@ -55,29 +55,69 @@ export function detectDeviation(
 // ---------------------------------------------------------------------------
 
 /**
- * Generate a deterministic comparison hash.
- * Concatenates the two normalized texts with a canonical separator,
- * then dual-hashes the concatenation.
+ * Canonical comparison payload structure.
+ * Key order is FIXED and DOCUMENTED:
+ *   1. "policy" — normalized policy text (always first)
+ *   2. "report" — normalized report text (always second)
  *
- * Separator: "\n---COMPARISON-BOUNDARY---\n"
- * This separator is chosen to be:
- *   - Unlikely to appear in natural text
- *   - Deterministic
- *   - Self-documenting
+ * This structure is serialized via explicit key-ordered JSON construction
+ * (NOT via JSON.stringify on an object, which has implementation-defined key order).
  *
- * The concatenation order is always: policy text FIRST, report text SECOND.
- * This ensures the same comparison always produces the same hash
- * regardless of which direction the comparison is performed.
+ * The canonical serialization format is:
+ *   {"policy":"<normalizedPolicyText>","report":"<normalizedReportText>"}
+ *
+ * This ensures:
+ *   - Deterministic ordering across all JavaScript engines
+ *   - No ambiguous concatenation boundaries
+ *   - Self-documenting structure
+ *   - UTF-8 encoding via TextEncoder before hashing
  */
-const COMPARISON_SEPARATOR = '\n---COMPARISON-BOUNDARY---\n';
+interface ComparisonPayload {
+  policy: string;
+  report: string;
+}
 
+/**
+ * Serialize a ComparisonPayload to canonical JSON.
+ * Key order is enforced explicitly — NOT relying on object key insertion order.
+ *
+ * Canonical format:
+ *   {"policy":"<escaped>","report":"<escaped>"}
+ *
+ * Uses JSON.stringify on individual values for proper escaping of special
+ * characters (quotes, backslashes, control characters) per RFC 8259.
+ * Then assembles the final string with explicit key ordering.
+ *
+ * This is a pure function — same input always produces same output.
+ */
+function canonicalizeComparisonPayload(payload: ComparisonPayload): string {
+  // Explicit key order: "policy" first, "report" second
+  // JSON.stringify on individual string values handles RFC 8259 escaping
+  return `{"policy":${JSON.stringify(payload.policy)},"report":${JSON.stringify(payload.report)}}`;
+}
+
+/**
+ * Generate a deterministic comparison hash.
+ * Serializes both texts into canonical JSON with fixed key order,
+ * then dual-hashes the serialization.
+ *
+ * Canonical JSON format (key order fixed and documented):
+ *   {"policy":"<normalizedPolicyText>","report":"<normalizedReportText>"}
+ *
+ * Both SHA-256 and SHA3-256 are computed from the UTF-8 bytes of the
+ * canonical JSON string. No ambiguous concatenation. No separator heuristics.
+ */
 export async function computeComparisonHashes(
   normalizedPolicyText: string,
   normalizedReportText: string
 ): Promise<{ sha256: string; sha3: string }> {
-  const concatenated = `${normalizedPolicyText}${COMPARISON_SEPARATOR}${normalizedReportText}`;
-  const sha256 = await computeTextSHA256(concatenated);
-  const sha3 = computeTextSHA3_256(concatenated);
+  const payload: ComparisonPayload = {
+    policy: normalizedPolicyText,
+    report: normalizedReportText,
+  };
+  const canonical = canonicalizeComparisonPayload(payload);
+  const sha256 = await computeTextSHA256(canonical);
+  const sha3 = computeTextSHA3_256(canonical);
   return { sha256, sha3 };
 }
 

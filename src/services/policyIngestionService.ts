@@ -250,15 +250,51 @@ export function chunkText(text: string, maxChunkSize: number = DEFAULT_CHUNK_SIZ
 
 /**
  * Split text into sentences deterministically.
- * Splits on period+space, question mark+space, exclamation+space.
- * Preserves sentence-ending punctuation.
+ * Uses a forward-scan algorithm (no regex lookbehind).
  *
+ * Algorithm:
+ *   1. Scan each character left-to-right (deterministic, index-based)
+ *   2. When a sentence terminator (.!?) is found followed by whitespace,
+ *      mark the split point AFTER the terminator (preserving punctuation)
+ *   3. Collect text between split points as sentences
+ *   4. Discard empty results
+ *
+ * No lookbehind. No lookahead. No regex groups.
+ * No locale-dependent behavior. No environment variance.
  * This is a pure function — same input always produces same output.
  */
 function splitSentences(text: string): string[] {
-  // Split on sentence boundaries while preserving the delimiter
-  const parts = text.split(/(?<=[.!?])\s+/);
-  return parts.filter((s) => s.trim().length > 0);
+  const terminators = new Set(['.', '!', '?']);
+  const sentences: string[] = [];
+  let start = 0;
+
+  for (let i = 0; i < text.length; i++) {
+    // Check: current char is a terminator AND next char is whitespace (or end of string)
+    if (terminators.has(text[i]) && (i + 1 >= text.length || text[i + 1] === ' ' || text[i + 1] === '\t' || text[i + 1] === '\n')) {
+      // Split point is after the terminator (i + 1)
+      const sentence = text.slice(start, i + 1).trim();
+      if (sentence.length > 0) {
+        sentences.push(sentence);
+      }
+      // Skip whitespace after terminator to find start of next sentence
+      let next = i + 1;
+      while (next < text.length && (text[next] === ' ' || text[next] === '\t' || text[next] === '\n')) {
+        next++;
+      }
+      start = next;
+      i = next - 1; // -1 because for-loop will increment
+    }
+  }
+
+  // Final segment (text after last terminator, if any)
+  if (start < text.length) {
+    const remaining = text.slice(start).trim();
+    if (remaining.length > 0) {
+      sentences.push(remaining);
+    }
+  }
+
+  return sentences;
 }
 
 // ---------------------------------------------------------------------------

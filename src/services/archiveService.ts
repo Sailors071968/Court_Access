@@ -241,6 +241,14 @@ export async function verifyArchiveManifest(
 
 /**
  * Archive pipeline result — the complete output of archiveTenant().
+ *
+ * anchorLeafHash is the bundle SHA-256, provided as a ready-to-use
+ * leaf for inclusion in the next Daily Anchor (TATL) exportCapsHashes
+ * pipeline. This ensures archive events are cryptographically anchored
+ * and not silently stored off-chain.
+ *
+ * The caller is responsible for feeding anchorLeafHash into the
+ * daily anchor leaf set for the current anchor date.
  */
 export interface ArchiveTenantResult {
   manifest: ArchiveManifestEntity;
@@ -249,6 +257,7 @@ export interface ArchiveTenantResult {
   storagePath: string;
   ledgerInput: LedgerEntryInput;
   documentsVerified: boolean;
+  anchorLeafHash: string;              // bundleSha256 — eligible for Daily Anchor (TATL) inclusion
 }
 
 /**
@@ -344,6 +353,9 @@ export async function archiveTenant(
   const storagePath = `archives/${tenantId}/${manifest.archiveId}.zip`;
 
   // Step 6: Ledger input for ARCHIVE_EVENT
+  // bundleSha256 is explicitly included in the description for on-chain traceability.
+  // This ensures the archive bundle hash is recorded in the append-only ledger
+  // and is not silently stored off-chain.
   const ledgerInput: LedgerEntryInput = {
     tenantId,
     eventType: 'ARCHIVE_EVENT',
@@ -352,8 +364,15 @@ export async function archiveTenant(
     balanceAfter: 0,
     referenceId: manifest.archiveId,
     referenceType: 'archive',
-    description: `Archive created for tenant ${tenantId} with ${sorted.length} documents`,
+    description:
+      `Archive created for tenant ${tenantId} with ${sorted.length} documents. ` +
+      `bundleSha256:${bundleSha256}. bundleSha3_256:${bundleSha3_256}.`,
   };
+
+  // Step 7: Anchor leaf hash — the bundle SHA-256 is eligible for inclusion
+  // in the next Daily Anchor (TATL) exportCapsHashes leaf set.
+  // This closes the cryptographic chain: Archive → Ledger → Anchor.
+  const anchorLeafHash = bundleSha256;
 
   return {
     manifest,
@@ -362,6 +381,7 @@ export async function archiveTenant(
     storagePath,
     ledgerInput,
     documentsVerified,
+    anchorLeafHash,
   };
 }
 

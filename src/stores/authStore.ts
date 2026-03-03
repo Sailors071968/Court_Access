@@ -47,6 +47,13 @@ const MOCK_USERS: Record<string, User> = {
     role: 'staff',
     avatar: undefined,
   },
+  'client@courtaccess.com': {
+    id: '5',
+    name: 'John Smith',
+    email: 'client@courtaccess.com',
+    role: 'client',
+    avatar: undefined,
+  },
 };
 
 export const useAuthStore = create<AuthState>((set, get) => ({

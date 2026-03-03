@@ -132,6 +132,7 @@ export function LoginPage() {
                 { label: 'Investigator', email: 'investigator@courtaccess.com' },
                 { label: 'Admin', email: 'admin@courtaccess.com' },
                 { label: 'Staff', email: 'staff@courtaccess.com' },
+                { label: 'Client', email: 'client@courtaccess.com' },
               ].map((demo) => (
                 <button
                   key={demo.email}

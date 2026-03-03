@@ -3,7 +3,7 @@
 // ============================================
 
 // --- Roles ---
-export type UserRole = 'investigator' | 'attorney' | 'admin' | 'staff';
+export type UserRole = 'investigator' | 'attorney' | 'admin' | 'staff' | 'client';
 
 export interface User {
   id: string;

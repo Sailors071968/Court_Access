@@ -166,6 +166,20 @@ export const ROLE_PERMISSIONS: Record<UserRole, RolePermissions> = {
     canViewTasks: false,
     canViewSettings: true,
   },
+  client: {
+    canViewCharges: true,
+    canViewEvidence: true,
+    canViewExperts: false,
+    canViewMotions: false,
+    canViewResearch: false,
+    canViewActivity: false,
+    canViewDocuments: true,
+    canUploadDocuments: true,
+    canManageCases: false,
+    canViewAdmin: false,
+    canViewTasks: false,
+    canViewSettings: true,
+  },
 } as const;
 
 // --- Case Tab Definitions (deterministic order) ---

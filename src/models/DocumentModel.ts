@@ -22,12 +22,12 @@ export type DocumentAnalysisStatus = 'pending' | 'analyzing' | 'analyzed' | 'fai
 
 /**
  * Text extraction pipeline status.
- * pending  — file uploaded, extraction not yet started
- * extracting — extraction in progress
- * extracted — text successfully extracted
- * failed — extraction failed (corrupt file, unsupported format, etc.)
+ * pending    — file uploaded, extraction not yet started
+ * processing — extraction in progress
+ * complete   — text successfully extracted
+ * failed     — extraction failed (corrupt file, unsupported format, etc.)
  */
-export type ExtractionStatus = 'pending' | 'extracting' | 'extracted' | 'failed';
+export type ExtractionStatus = 'pending' | 'processing' | 'complete' | 'failed';
 
 // ---------------------------------------------------------------------------
 // Document Entity
@@ -51,7 +51,7 @@ export interface DocumentEntity {
   filedDate: string;            // Display date string (will become ISO 8601 in Phase 6)
   pages: number;
   analysisStatus: DocumentAnalysisStatus;
-  fileSize: string | null;
+  fileSize: number;              // File size in bytes — always known at upload time
   fileType: string | null;
   contentHash: string | null;   // SHA-256 integrity hash — immutable once set
   uploadedBy: string | null;    // User ID of uploader

@@ -79,20 +79,25 @@ export function generateStoragePath(
 // ---------------------------------------------------------------------------
 
 /**
- * Validate that a contentHash has not been mutated.
- * Once set, contentHash is immutable — this function enforces that contract.
+ * Enforce contentHash immutability.
+ * Once set, contentHash MUST NOT be mutated.
  *
- * Returns true if hash is valid (unchanged or newly set).
- * Returns false if an existing hash would be overwritten with a different value.
+ * Throws if an existing hash would be overwritten with a different value.
+ * This is a runtime guard — not comment-only enforcement.
  */
 export function validateHashImmutability(
   existingHash: string | null,
   newHash: string
-): boolean {
+): void {
   if (existingHash === null) {
-    return true; // First time setting — allowed
+    return; // First time setting — allowed
   }
-  return existingHash === newHash; // Must match if already set
+  if (existingHash !== newHash) {
+    throw new Error(
+      `ContentHash immutability violation: existing hash "${existingHash}" cannot be overwritten with "${newHash}". ` +
+      'Once set, contentHash is immutable. This may indicate tampering or a pipeline bug.'
+    );
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -100,19 +105,38 @@ export function validateHashImmutability(
 // ---------------------------------------------------------------------------
 
 /**
+ * Integrity verification result.
+ * Separates the boolean match from the computed hash for audit logging.
+ */
+export interface IntegrityVerificationResult {
+  verified: boolean;
+  computedHash: string;
+  storedHash: string;
+}
+
+/**
  * Verify document integrity by re-hashing the file and comparing to stored hash.
- * Returns true if the computed hash matches the stored contentHash.
  *
  * This is the verification side of the immutability contract:
  *   1. On upload: computeSHA256 → store as contentHash
  *   2. On verify: computeSHA256 again → compare to stored contentHash
+ *
+ * Returns structured result:
+ *   - verified: true ONLY if computed hash === stored hash
+ *   - Does NOT auto-correct the hash
+ *   - Does NOT overwrite contentHash
+ *   - Caller must set integrityVerified = true only if verified === true
  */
 export async function verifyDocumentIntegrity(
   file: File,
   storedHash: string
-): Promise<boolean> {
+): Promise<IntegrityVerificationResult> {
   const computedHash = await computeSHA256(file);
-  return computedHash === storedHash;
+  return {
+    verified: computedHash === storedHash,
+    computedHash,
+    storedHash,
+  };
 }
 
 // ---------------------------------------------------------------------------
@@ -133,7 +157,7 @@ export async function verifyDocumentIntegrity(
  *
  * The returned DocumentEntity has:
  *   - contentHash set (immutable from this point)
- *   - integrityVerified = true (hash just computed)
+ *   - integrityVerified = false (must be verified separately via verifyDocumentIntegrity)
  *   - extractionStatus = 'pending' (extraction deferred to extractionEngine)
  *   - analysisStatus = 'pending' (analysis deferred to intelligence pipeline)
  */
@@ -157,6 +181,10 @@ export async function ingestDocument(input: IngestionInput): Promise<IngestionRe
     );
 
     // Step 4: Build canonical DocumentEntity
+    // integrityVerified = false — hash is computed but NOT yet verified.
+    // Verification is a separate step (verifyDocumentIntegrity) that
+    // re-hashes the stored file and compares to contentHash.
+    // Only after that step succeeds should integrityVerified become true.
     const document: DocumentEntity = {
       id: documentId,
       tenantId: input.tenantId,
@@ -166,15 +194,15 @@ export async function ingestDocument(input: IngestionInput): Promise<IngestionRe
       filedDate: input.filedDate,
       pages: input.pages,
       analysisStatus: 'pending',
-      fileSize: formatFileSize(input.file.size),
+      fileSize: input.file.size,  // Raw bytes — no formatting at domain level
       fileType,
       contentHash,
       uploadedBy: input.uploadedBy,
-      uploadedAt: new Date().toISOString(), // Will be server-generated in Phase 6+
+      uploadedAt: input.filedDate, // Deterministic — server timestamp in Phase 6+
       storagePath,
       extractedText: null,
       extractionStatus: 'pending' as ExtractionStatus,
-      integrityVerified: true, // Just computed — verified by definition
+      integrityVerified: false, // Must be verified via verifyDocumentIntegrity()
     };
 
     return {
@@ -198,8 +226,9 @@ export async function ingestDocument(input: IngestionInput): Promise<IngestionRe
 /**
  * Format file size in bytes to human-readable string.
  * Deterministic — same input always produces same output.
+ * Exported for UI display layers that need human-readable sizes.
  */
-function formatFileSize(bytes: number): string {
+export function formatFileSize(bytes: number): string {
   if (bytes < 1024) return `${bytes}B`;
   if (bytes < 1024 * 1024) return `${Math.round(bytes / 1024)}KB`;
   return `${(bytes / (1024 * 1024)).toFixed(1)}MB`;

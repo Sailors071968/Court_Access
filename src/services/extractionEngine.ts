@@ -53,7 +53,7 @@ export async function requestExtraction(
     success: true,
     documentId: document.id,
     extractedText: null,
-    extractionStatus: 'pending',
+    extractionStatus: 'pending', // Will become 'processing' when dispatched
     error: null,
   };
 }
@@ -82,5 +82,5 @@ export function isExtractable(document: DocumentEntity): boolean {
  * Returns true only when extractionStatus is 'extracted' and extractedText is non-null.
  */
 export function isExtractionComplete(document: DocumentEntity): boolean {
-  return document.extractionStatus === 'extracted' && document.extractedText !== null;
+  return document.extractionStatus === 'complete' && document.extractedText !== null;
 }

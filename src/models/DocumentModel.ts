@@ -1,6 +1,7 @@
 // ============================================
-// Court Access — Canonical Document Model (Phase 1)
+// Court Access — Canonical Document Model (Phase 2)
 // All document-related domain types.
+// Includes ingestion & integrity fields.
 // ============================================
 
 // ---------------------------------------------------------------------------
@@ -19,6 +20,15 @@ export type DocumentType =
 /** Analysis pipeline status for a document. */
 export type DocumentAnalysisStatus = 'pending' | 'analyzing' | 'analyzed' | 'failed';
 
+/**
+ * Text extraction pipeline status.
+ * pending  — file uploaded, extraction not yet started
+ * extracting — extraction in progress
+ * extracted — text successfully extracted
+ * failed — extraction failed (corrupt file, unsupported format, etc.)
+ */
+export type ExtractionStatus = 'pending' | 'extracting' | 'extracted' | 'failed';
+
 // ---------------------------------------------------------------------------
 // Document Entity
 // ---------------------------------------------------------------------------
@@ -26,7 +36,11 @@ export type DocumentAnalysisStatus = 'pending' | 'analyzing' | 'analyzed' | 'fai
 /**
  * Canonical Document entity.
  * Represents a single legal document attached to a case.
- * Includes integrity and provenance fields for Phase 2+ immutable storage.
+ * Includes integrity, provenance, and ingestion fields.
+ *
+ * Immutability contract:
+ *   - Once `contentHash` is set, it MUST NOT be mutated.
+ *   - `integrityVerified` may only transition false → true, never true → false.
  */
 export interface DocumentEntity {
   id: string;
@@ -39,9 +53,15 @@ export interface DocumentEntity {
   analysisStatus: DocumentAnalysisStatus;
   fileSize: string | null;
   fileType: string | null;
-  contentHash: string | null;   // SHA-256 integrity hash (Phase 2+)
+  contentHash: string | null;   // SHA-256 integrity hash — immutable once set
   uploadedBy: string | null;    // User ID of uploader
   uploadedAt: string | null;    // ISO 8601
+
+  // --- Phase 2: Ingestion & Integrity ---
+  storagePath: string | null;         // Path/key in storage (local or S3)
+  extractedText: string | null;       // Raw extracted text content
+  extractionStatus: ExtractionStatus;  // Text extraction pipeline status
+  integrityVerified: boolean;          // True once contentHash has been verified post-upload
 }
 
 // ---------------------------------------------------------------------------

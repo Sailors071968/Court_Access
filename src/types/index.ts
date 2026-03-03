@@ -41,6 +41,7 @@ export type {
 export type {
   DocumentType,
   DocumentAnalysisStatus,
+  ExtractionStatus,
   AIAnalysisStatus,
   DocumentEntity,
   CaseDocument,

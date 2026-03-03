@@ -7,14 +7,16 @@ import { Search, Plus, Filter } from 'lucide-react';
 import { useState } from 'react';
 import { Card } from '../components/common/Card';
 import { CaseStatusBadge } from '../components/common/StatusBadge';
-import { MOCK_CASES } from '../constants/mockData';
+import { caseDataProvider } from '../services/caseDataProvider';
 
 export function CasesListPage() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
 
-  const filteredCases = MOCK_CASES.filter((c) => {
+  const allCases = caseDataProvider.getCases();
+
+  const filteredCases = allCases.filter((c) => {
     const matchesSearch = !searchQuery ||
       c.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       c.caseNumber.toLowerCase().includes(searchQuery.toLowerCase());
@@ -27,7 +29,7 @@ export function CasesListPage() {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Cases</h1>
-          <p className="text-sm text-gray-500 mt-1">{MOCK_CASES.length} total cases</p>
+          <p className="text-sm text-gray-500 mt-1">{allCases.length} total cases</p>
         </div>
         <button className="inline-flex items-center gap-2 px-4 py-2.5 bg-slate-800 text-white rounded-lg text-sm font-medium hover:bg-slate-700 transition-colors">
           <Plus size={16} />

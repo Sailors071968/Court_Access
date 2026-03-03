@@ -167,8 +167,8 @@ export const ROLE_PERMISSIONS: Record<UserRole, RolePermissions> = {
     canViewSettings: true,
   },
   client: {
-    canViewCharges: true,
-    canViewEvidence: true,
+    canViewCharges: false,
+    canViewEvidence: false,
     canViewExperts: false,
     canViewMotions: false,
     canViewResearch: false,

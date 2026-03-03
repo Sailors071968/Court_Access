@@ -1,13 +1,15 @@
 // ============================================
 // Court Access — Client Dashboard
 // Transparency + reassurance. Simplified view.
-// No internal strategy mechanics exposed.
+// No internal analysis mechanics exposed.
 // ============================================
 
 import { useNavigate } from 'react-router-dom';
 import { FileText, Calendar, Download, Clock, CheckCircle, User, Scale } from 'lucide-react';
 import { Card, StatCard } from '../../components/common/Card';
-import { MOCK_CASES, MOCK_DOCUMENTS } from '../../constants/mockData';
+import { DemoModeBadge } from '../../components/common/DemoModeBadge';
+import { STATUS_COLORS } from '../../constants/designTokens';
+import { caseDataProvider } from '../../services/caseDataProvider';
 import { useAuthStore } from '../../stores/authStore';
 
 // Case phase for client view
@@ -24,16 +26,21 @@ const CASE_PHASE_CONFIG: Record<CasePhase, { label: string; bgColor: string; tex
 export function ClientDashboard() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const primaryCase = MOCK_CASES[0];
+  const { getPrimaryCase, getDocuments } = caseDataProvider;
+  const primaryCase = getPrimaryCase();
+  const documents = getDocuments(primaryCase.id);
   const currentPhase: CasePhase = 'pretrial';
   const phaseConfig = CASE_PHASE_CONFIG[currentPhase];
 
   return (
     <div className="max-w-5xl mx-auto space-y-6">
       {/* Header */}
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Welcome, {user?.name}</h1>
-        <p className="text-sm text-gray-500 mt-1">Your case information and updates</p>
+      <div className="flex items-start justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Welcome, {user?.name}</h1>
+          <p className="text-sm text-gray-500 mt-1">Your case information and updates</p>
+        </div>
+        <DemoModeBadge />
       </div>
 
       {/* 1. Case Status Overview */}
@@ -96,21 +103,21 @@ export function ClientDashboard() {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-gray-900">Documents</h2>
             <button
-              onClick={() => navigate('/cases/1/documents')}
+              onClick={() => navigate(`/cases/${primaryCase.id}/documents`)}
               className="text-xs text-blue-600 hover:text-blue-700 font-medium"
             >
               View All
             </button>
           </div>
           <div className="space-y-2">
-            {MOCK_DOCUMENTS.slice(0, 4).map((doc) => (
+            {documents.slice(0, 4).map((doc) => (
               <div
                 key={doc.id}
                 className="flex items-center justify-between p-3 rounded-lg border border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors"
-                onClick={() => navigate('/cases/1/documents')}
+                onClick={() => navigate(`/cases/${primaryCase.id}/documents`)}
               >
                 <div className="flex items-center gap-3 min-w-0">
-                  <div className="w-8 h-8 rounded-lg bg-blue-50 text-blue-600 flex items-center justify-center flex-shrink-0">
+                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${STATUS_COLORS.info}`}>
                     <FileText size={14} />
                   </div>
                   <div className="min-w-0">
@@ -125,7 +132,7 @@ export function ClientDashboard() {
             ))}
           </div>
           <button
-            onClick={() => navigate('/cases/1/evidence')}
+            onClick={() => navigate(`/cases/${primaryCase.id}/documents`)}
             className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-lg text-sm font-medium hover:bg-slate-700 transition-colors"
           >
             <FileText size={16} />
@@ -138,10 +145,10 @@ export function ClientDashboard() {
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Upcoming Events</h2>
           <div className="space-y-3">
             {[
-              { type: 'court', label: 'Court Hearing', date: 'Feb 15, 2024', time: '9:00 AM', location: 'Dept. 24', icon: Calendar, color: 'bg-red-50 text-red-600' },
-              { type: 'meeting', label: 'Attorney Meeting', date: 'Feb 10, 2024', time: '2:00 PM', location: 'Video Call', icon: User, color: 'bg-blue-50 text-blue-600' },
-              { type: 'action', label: 'Submit Character References', date: 'Feb 18, 2024', time: 'Before 5:00 PM', location: '', icon: CheckCircle, color: 'bg-amber-50 text-amber-600' },
-              { type: 'deadline', label: 'Document Review Deadline', date: 'Feb 22, 2024', time: 'EOD', location: '', icon: Clock, color: 'bg-gray-50 text-gray-600' },
+              { type: 'court', label: 'Court Hearing', date: 'Feb 15, 2024', time: '9:00 AM', location: 'Dept. 24', icon: Calendar, color: STATUS_COLORS.danger },
+              { type: 'meeting', label: 'Attorney Meeting', date: 'Feb 10, 2024', time: '2:00 PM', location: 'Video Call', icon: User, color: STATUS_COLORS.info },
+              { type: 'action', label: 'Submit Character References', date: 'Feb 18, 2024', time: 'Before 5:00 PM', location: '', icon: CheckCircle, color: STATUS_COLORS.warning },
+              { type: 'deadline', label: 'Document Review Deadline', date: 'Feb 22, 2024', time: 'EOD', location: '', icon: Clock, color: STATUS_COLORS.neutral },
             ].map((event, i) => {
               const Icon = event.icon;
               return (
@@ -183,7 +190,7 @@ export function ClientDashboard() {
         </div>
         <div className="bg-gray-50 rounded-lg p-4">
           <p className="text-sm text-gray-700 leading-relaxed">
-            Your case is currently in the <strong>{currentPhase}</strong> phase.
+            Your case is currently in the <strong>{phaseConfig.label}</strong> phase.
             Your attorney is reviewing the evidence and preparing for the next court date.
             If you have any questions, please contact your assigned attorney.
           </p>

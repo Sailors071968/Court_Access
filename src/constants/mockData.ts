@@ -109,10 +109,10 @@ export const MOCK_DOCUMENTS: CaseDocument[] = [
 ];
 
 export const MOCK_ACTIVITY: ActivityItem[] = [
-  { id: '1', type: 'document', title: 'New Document Filed', description: 'Motion to Exclude Witness Testimony filed by prosecution.', timestamp: '2 hours ago', actionLabel: 'View Document', actionUrl: '/cases/1/documents' },
+  { id: '1', type: 'document', title: 'New Document Filed', description: 'Motion to Exclude Witness Testimony filed by prosecution.', timestamp: '2 hours ago', actionLabel: 'View Document', actionUrl: undefined },
   { id: '2', type: 'hearing', title: 'Upcoming Court Date', description: 'Preliminary Hearing scheduled for Feb 15, 2024 at 10:00 AM — Courtroom 3B.', timestamp: '1 day ago', actionLabel: 'Add to Calendar' },
-  { id: '3', type: 'analysis', title: 'AI Analysis Complete', description: 'Motion to Suppress Evidence has been analyzed. 3 key insights identified.', timestamp: '3 days ago', actionLabel: 'View Analysis', actionUrl: '/cases/1/documents' },
-  { id: '4', type: 'document', title: 'New Document Filed', description: 'Criminal Complaint filed - 3 charges identified.', timestamp: '1 week ago', actionLabel: 'View Document', actionUrl: '/cases/1/documents' },
+  { id: '3', type: 'analysis', title: 'AI Analysis Complete', description: 'Motion to Suppress Evidence has been analyzed. 3 key insights identified.', timestamp: '3 days ago', actionLabel: 'View Analysis', actionUrl: undefined },
+  { id: '4', type: 'document', title: 'New Document Filed', description: 'Criminal Complaint filed - 3 charges identified.', timestamp: '1 week ago', actionLabel: 'View Document', actionUrl: undefined },
 ];
 
 export const MOCK_NOTIFICATIONS: Notification[] = [

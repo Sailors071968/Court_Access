@@ -10,13 +10,19 @@ import {
 } from 'lucide-react';
 import { Card, StatCard } from '../../components/common/Card';
 import { AIStatusBadge } from '../../components/common/StatusBadge';
-import { MOCK_CASES, MOCK_DOCUMENTS, MOCK_ACTIVITY, DOCUMENT_TYPE_LABELS } from '../../constants/mockData';
+import { DemoModeBadge } from '../../components/common/DemoModeBadge';
+import { STATUS_COLORS, TEXT_COLORS } from '../../constants/designTokens';
+import { caseDataProvider } from '../../services/caseDataProvider';
 import { useAuthStore } from '../../stores/authStore';
 
 export function StaffDashboard() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const primaryCase = MOCK_CASES[0];
+  const { getPrimaryCase, getDocuments, getActivity, getDocumentTypeLabels } = caseDataProvider;
+  const primaryCase = getPrimaryCase();
+  const documents = getDocuments(primaryCase.id);
+  const activity = getActivity(primaryCase.id);
+  const documentTypeLabels = getDocumentTypeLabels();
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
@@ -26,40 +32,41 @@ export function StaffDashboard() {
           <h1 className="text-2xl font-bold text-gray-900">Staff Dashboard</h1>
           <p className="text-sm text-gray-500 mt-1">Welcome back, {user?.name}</p>
         </div>
+        <DemoModeBadge />
       </div>
 
       {/* 1. Case Overview Panel */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         <StatCard
-          icon={<Briefcase size={28} className="text-blue-500" />}
+          icon={<Briefcase size={28} className={TEXT_COLORS.info} />}
           value={3}
           label="Active Cases"
           onClick={() => navigate('/cases?status=active')}
         />
         <StatCard
-          icon={<Plus size={28} className="text-green-500" />}
+          icon={<Plus size={28} className={TEXT_COLORS.success} />}
           value={1}
-          label="New (7 days)"
+          label="New Cases (7 Days)"
           trend="+1 this week"
           onClick={() => navigate('/cases?sort=newest')}
         />
         <StatCard
-          icon={<AlertTriangle size={28} className="text-red-500" />}
+          icon={<AlertTriangle size={28} className={TEXT_COLORS.danger} />}
           value={2}
-          label="Needs Action"
+          label="Action Required"
           highlight
           onClick={() => navigate('/cases?filter=action-needed')}
         />
         <StatCard
-          icon={<Calendar size={28} className="text-blue-500" />}
+          icon={<Calendar size={28} className={TEXT_COLORS.info} />}
           value="Feb 15"
           label="Next Hearing"
           onClick={() => navigate(`/cases/${primaryCase.id}/activity`)}
         />
         <StatCard
-          icon={<Lightbulb size={28} className="text-amber-500" />}
+          icon={<Lightbulb size={28} className={TEXT_COLORS.warning} />}
           value={8}
-          label="AI Insights"
+          label="Intelligence Signals"
           highlight
           onClick={() => navigate(`/cases/${primaryCase.id}/charges`)}
         />
@@ -75,11 +82,11 @@ export function StaffDashboard() {
             </div>
             <div className="space-y-3">
               {[
-                { type: 'high', icon: AlertTriangle, color: 'text-red-600 bg-red-50', label: 'Evidence dispute added — People v. Smith', time: '2 hours ago' },
-                { type: 'high', icon: Lightbulb, color: 'text-amber-600 bg-amber-50', label: 'AI motion recommendation: Motion to Suppress (HIGH)', time: '4 hours ago' },
-                { type: 'medium', icon: Upload, color: 'text-blue-600 bg-blue-50', label: 'New client upload — 3 documents pending review', time: '6 hours ago' },
-                { type: 'medium', icon: Users, color: 'text-purple-600 bg-purple-50', label: 'Expert recommendation flagged: Forensic Toxicologist', time: '1 day ago' },
-                { type: 'low', icon: Clock, color: 'text-gray-600 bg-gray-50', label: 'Discovery deadline approaching — Case #2024-CF-001234', time: '2 days ago' },
+                { type: 'high', icon: AlertTriangle, color: STATUS_COLORS.danger, label: 'Evidence dispute added — People v. Smith', time: '2 hours ago' },
+                { type: 'high', icon: Lightbulb, color: STATUS_COLORS.warning, label: 'Motion recommendation signal: Motion to Suppress (HIGH)', time: '4 hours ago' },
+                { type: 'medium', icon: Upload, color: STATUS_COLORS.info, label: 'New client upload — 3 documents pending review', time: '6 hours ago' },
+                { type: 'medium', icon: Users, color: STATUS_COLORS.accent, label: 'Expert recommendation flagged: Forensic Toxicologist', time: '1 day ago' },
+                { type: 'low', icon: Clock, color: STATUS_COLORS.neutral, label: 'Discovery deadline approaching — Case #2024-CF-001234', time: '2 days ago' },
               ].map((alert, i) => {
                 const Icon = alert.icon;
                 return (
@@ -114,11 +121,11 @@ export function StaffDashboard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {MOCK_DOCUMENTS.slice(0, 3).map((doc) => (
-                    <tr key={doc.id} className="border-b border-gray-50 hover:bg-gray-50 cursor-pointer" onClick={() => navigate(`/cases/1/documents`)}>
+                  {documents.slice(0, 3).map((doc) => (
+                    <tr key={doc.id} className="border-b border-gray-50 hover:bg-gray-50 cursor-pointer" onClick={() => navigate(`/cases/${primaryCase.id}/documents`)}>
                       <td className="py-3 px-2 font-medium text-gray-900">{doc.name}</td>
                       <td className="py-3 px-2 text-gray-500">{doc.filedDate}</td>
-                      <td className="py-3 px-2 text-gray-500">{DOCUMENT_TYPE_LABELS[doc.type]}</td>
+                      <td className="py-3 px-2 text-gray-500">{documentTypeLabels[doc.type]}</td>
                       <td className="py-3 px-2"><AIStatusBadge status={doc.aiStatus} /></td>
                     </tr>
                   ))}
@@ -130,15 +137,15 @@ export function StaffDashboard() {
 
         {/* Right Column */}
         <div className="space-y-6">
-          {/* 3. AI Insight Summary */}
+          {/* 3. Case Intelligence Overview */}
           <Card>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">AI Insight Summary</h2>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">Case Intelligence Overview</h2>
             <div className="space-y-3">
               {[
-                { label: 'High-risk cases', value: '1', color: 'text-red-600' },
-                { label: 'Weak prosecution elements', value: '3', color: 'text-amber-600' },
-                { label: 'Sentencing exposure alerts', value: '2', color: 'text-orange-600' },
-                { label: 'Procedural deadline warnings', value: '1', color: 'text-blue-600' },
+                { label: 'Priority cases', value: '1', color: TEXT_COLORS.danger },
+                { label: 'Prosecution Vulnerabilities', value: '3', color: TEXT_COLORS.warning },
+                { label: 'Sentencing Exposure Flags', value: '2', color: TEXT_COLORS.orange },
+                { label: 'Procedural deadline warnings', value: '1', color: TEXT_COLORS.info },
               ].map((insight, i) => (
                 <div key={i} className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50">
                   <span className="text-sm text-gray-700">{insight.label}</span>
@@ -147,7 +154,7 @@ export function StaffDashboard() {
               ))}
             </div>
             <button
-              onClick={() => navigate('/cases/1/charges')}
+              onClick={() => navigate(`/cases/${primaryCase.id}/charges`)}
               className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-amber-50 text-amber-700 rounded-lg text-sm font-medium hover:bg-amber-100 transition-colors w-full justify-center"
             >
               <TrendingUp size={16} />
@@ -186,9 +193,9 @@ export function StaffDashboard() {
             <div className="grid grid-cols-2 gap-2">
               {[
                 { label: 'New Case', icon: Plus, action: () => navigate('/cases') },
-                { label: 'Upload Evidence', icon: Upload, action: () => navigate('/cases/1/evidence') },
-                { label: 'Charge Analysis', icon: BarChart3, action: () => navigate('/cases/1/charges') },
-                { label: 'Expert Review', icon: Users, action: () => navigate('/cases/1/experts') },
+                { label: 'Upload Evidence', icon: Upload, action: () => navigate(`/cases/${primaryCase.id}/evidence`) },
+                { label: 'Charge Analysis', icon: BarChart3, action: () => navigate(`/cases/${primaryCase.id}/charges`) },
+                { label: 'Expert Review', icon: Users, action: () => navigate(`/cases/${primaryCase.id}/experts`) },
               ].map((action, i) => {
                 const Icon = action.icon;
                 return (
@@ -209,7 +216,7 @@ export function StaffDashboard() {
           <Card>
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h2>
             <div className="space-y-3">
-              {MOCK_ACTIVITY.slice(0, 3).map((item) => (
+              {activity.slice(0, 3).map((item) => (
                 <div key={item.id} className="flex gap-3 pb-3 border-b border-gray-50 last:border-0">
                   <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
                     item.type === 'document' ? 'bg-orange-100 text-orange-600' :

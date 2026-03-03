@@ -3,7 +3,7 @@
 // ============================================
 
 import { Card } from '../../components/common/Card';
-import { MOCK_ACTIVITY } from '../../constants/mockData';
+import { caseDataProvider } from '../../services/caseDataProvider';
 import { FileText, Calendar, Lightbulb, Gavel } from 'lucide-react';
 
 const iconMap = {
@@ -15,6 +15,8 @@ const iconMap = {
 };
 
 export function ActivityPage() {
+  const activityItems = caseDataProvider.getActivity();
+
   return (
     <div className="space-y-6">
       <div>
@@ -27,7 +29,7 @@ export function ActivityPage() {
         <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gray-200" />
 
         <div className="space-y-6">
-          {MOCK_ACTIVITY.map((item) => {
+          {activityItems.map((item) => {
             const config = iconMap[item.type];
             const Icon = config.icon;
             return (

@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { Search, Upload, Eye, MoreHorizontal } from 'lucide-react';
 import { Card } from '../../components/common/Card';
 import { AIStatusBadge } from '../../components/common/StatusBadge';
-import { MOCK_DOCUMENTS, DOCUMENT_TYPE_LABELS } from '../../constants/mockData';
+import { caseDataProvider } from '../../services/caseDataProvider';
 
 const DOCUMENT_TABS = [
   { id: 'all', label: 'All Documents', count: 24 },
@@ -20,8 +20,10 @@ const DOCUMENT_TABS = [
 export function EvidencePage() {
   const [activeTab, setActiveTab] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
+  const allDocuments = caseDataProvider.getDocuments();
+  const documentTypeLabels = caseDataProvider.getDocumentTypeLabels();
 
-  const filteredDocs = MOCK_DOCUMENTS.filter((doc) => {
+  const filteredDocs = allDocuments.filter((doc) => {
     const matchesTab = activeTab === 'all' || doc.type === activeTab;
     const matchesSearch = !searchQuery || doc.name.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesTab && matchesSearch;
@@ -87,7 +89,7 @@ export function EvidencePage() {
               {filteredDocs.map((doc) => (
                 <tr key={doc.id} className="border-b border-gray-50 hover:bg-gray-50">
                   <td className="py-3 px-4 font-medium text-gray-900">{doc.name}</td>
-                  <td className="py-3 px-4 text-gray-500">{DOCUMENT_TYPE_LABELS[doc.type]}</td>
+                  <td className="py-3 px-4 text-gray-500">{documentTypeLabels[doc.type]}</td>
                   <td className="py-3 px-4 text-gray-500">{doc.filedDate}</td>
                   <td className="py-3 px-4 text-gray-500">{doc.pages} pages</td>
                   <td className="py-3 px-4"><AIStatusBadge status={doc.aiStatus} /></td>

@@ -138,7 +138,7 @@ export interface InvestigativeTask {
   status: TaskStatus;
 }
 
-// --- AI Insights ---
+// --- Intelligence Signals ---
 export interface DefenseInsight {
   id: string;
   content: string;

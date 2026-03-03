@@ -9,17 +9,19 @@ import { ExpertRecommendationBadge } from '../../components/common/StatusBadge';
 import { getExpertRecommendations } from '../../services/ai/expertRecommendations';
 import type { Expert } from '../../types';
 import { AlertTriangle, MessageSquare } from 'lucide-react';
-import { MOCK_CASES } from '../../constants/mockData';
+import { caseDataProvider } from '../../services/caseDataProvider';
 
 export function ExpertsPage() {
   const { caseId } = useParams<{ caseId: string }>();
   const [experts, setExperts] = useState<Expert[]>([]);
   const [loading, setLoading] = useState(true);
-  const currentCase = MOCK_CASES.find((c) => c.id === caseId) || MOCK_CASES[0];
+  const cases = caseDataProvider.getCases();
+  const currentCase = cases.find((c) => c.id === caseId) || caseDataProvider.getPrimaryCase();
 
   useEffect(() => {
     setLoading(true);
-    getExpertRecommendations({ caseId: caseId || '1' }).then((res) => {
+    if (!caseId) return;
+    getExpertRecommendations({ caseId }).then((res) => {
       setExperts(res.experts);
       setLoading(false);
     });

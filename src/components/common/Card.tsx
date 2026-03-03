@@ -68,6 +68,7 @@ export function StatCard({ icon, value, label, trend, highlight = false, onClick
       className={`rounded-xl border p-5 ${highlight ? 'bg-amber-50 border-amber-200' : 'bg-white border-gray-200'} ${onClick ? 'cursor-pointer hover:shadow-md transition-shadow' : ''}`}
       onClick={onClick}
       role={onClick ? 'button' : undefined}
+      aria-label={label}
       tabIndex={onClick ? 0 : undefined}
       onKeyDown={onClick ? (e) => { if (e.key === 'Enter' || e.key === ' ') onClick(); } : undefined}
     >

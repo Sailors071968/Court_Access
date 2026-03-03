@@ -6,12 +6,13 @@ import { NavLink, Outlet, useParams } from 'react-router-dom';
 import { CASE_TABS, ROLE_PERMISSIONS } from '../../constants';
 import { useAuthStore } from '../../stores/authStore';
 import { CaseStatusBadge } from '../../components/common/StatusBadge';
-import { MOCK_CASES } from '../../constants/mockData';
+import { caseDataProvider } from '../../services/caseDataProvider';
 
 export function CaseLayout() {
   const { caseId } = useParams<{ caseId: string }>();
   const { user } = useAuthStore();
-  const currentCase = MOCK_CASES.find((c) => c.id === caseId) || MOCK_CASES[0];
+  const cases = caseDataProvider.getCases();
+  const currentCase = cases.find((c) => c.id === caseId) || caseDataProvider.getPrimaryCase();
 
   if (!user) return null;
   const permissions = ROLE_PERMISSIONS[user.role];

@@ -9,17 +9,19 @@ import { MotionPriorityBadge } from '../../components/common/StatusBadge';
 import { getMotionRecommendations } from '../../services/ai/motionRecommendations';
 import type { Motion } from '../../types';
 import { AlertTriangle, MessageSquare, Pencil } from 'lucide-react';
-import { MOCK_CASES } from '../../constants/mockData';
+import { caseDataProvider } from '../../services/caseDataProvider';
 
 export function MotionsPage() {
   const { caseId } = useParams<{ caseId: string }>();
   const [motions, setMotions] = useState<Motion[]>([]);
   const [loading, setLoading] = useState(true);
-  const currentCase = MOCK_CASES.find((c) => c.id === caseId) || MOCK_CASES[0];
+  const cases = caseDataProvider.getCases();
+  const currentCase = cases.find((c) => c.id === caseId) || caseDataProvider.getPrimaryCase();
 
   useEffect(() => {
     setLoading(true);
-    getMotionRecommendations({ caseId: caseId || '1' }).then((res) => {
+    if (!caseId) return;
+    getMotionRecommendations({ caseId }).then((res) => {
       setMotions(res.motions);
       setLoading(false);
     });

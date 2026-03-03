@@ -4,7 +4,7 @@
 
 import { useState } from 'react';
 import { Card } from '../components/common/Card';
-import { MOCK_NOTIFICATIONS } from '../constants/mockData';
+import { caseDataProvider } from '../services/caseDataProvider';
 import { FileText, Calendar, Lightbulb, Phone, Mail } from 'lucide-react';
 
 export function NotificationsPage() {
@@ -65,7 +65,7 @@ export function NotificationsPage() {
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Notification Feed */}
         <div className="lg:col-span-2 space-y-3">
-          {MOCK_NOTIFICATIONS.map((notif) => (
+          {caseDataProvider.getNotifications().map((notif) => (
             <Card key={notif.id} hover>
               <div className="flex gap-4">
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${

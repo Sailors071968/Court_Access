@@ -5,7 +5,7 @@
 import { useState, useEffect } from 'react';
 import { Card } from '../../components/common/Card';
 import { EvidenceStatusBadge } from '../../components/common/StatusBadge';
-import { MOCK_CHARGES } from '../../constants/mockData';
+import { caseDataProvider } from '../../services/caseDataProvider';
 import { getDefenseInsights } from '../../services/ai/defenseInsights';
 import type { DefenseInsight } from '../../types';
 import { useParams } from 'react-router-dom';
@@ -16,16 +16,18 @@ export function ChargesPage() {
   const [activeChargeIndex, setActiveChargeIndex] = useState(0);
   const [insights, setInsights] = useState<DefenseInsight[]>([]);
   const [insightsLoading, setInsightsLoading] = useState(true);
+  const charges = caseDataProvider.getCharges(caseId);
 
   useEffect(() => {
+    if (!caseId) return;
     setInsightsLoading(true);
-    getDefenseInsights({ caseId: caseId || '1' }).then((res) => {
+    getDefenseInsights({ caseId }).then((res) => {
       setInsights(res.insights);
       setInsightsLoading(false);
     });
   }, [caseId]);
 
-  const activeCharge = MOCK_CHARGES[activeChargeIndex];
+  const activeCharge = charges[activeChargeIndex];
 
   return (
     <div className="space-y-6">
@@ -37,9 +39,9 @@ export function ChargesPage() {
             activeChargeIndex === -1 ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
-          All Charges ({MOCK_CHARGES.length})
+          All Charges ({charges.length})
         </button>
-        {MOCK_CHARGES.map((charge, idx) => (
+        {charges.map((charge, idx) => (
           <button
             key={charge.id}
             onClick={() => setActiveChargeIndex(idx)}
@@ -127,7 +129,7 @@ export function ChargesPage() {
       ) : (
         /* All Charges View */
         <div className="space-y-4">
-          {MOCK_CHARGES.map((charge, idx) => (
+          {charges.map((charge, idx) => (
             <Card key={charge.id} hover className="cursor-pointer" onClick={() => setActiveChargeIndex(idx)}>
               <div className="flex items-start justify-between">
                 <div>

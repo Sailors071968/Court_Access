@@ -39,8 +39,15 @@ export type ExtractionStatus = 'pending' | 'processing' | 'complete' | 'failed';
  * Includes integrity, provenance, and ingestion fields.
  *
  * Immutability contract:
- *   - Once `contentHash` is set, it MUST NOT be mutated.
+ *   - Once `contentHash` (SHA-256) is set, it MUST NOT be mutated.
+ *   - Once `sha3Hash` (SHA3-256) is set, it MUST NOT be mutated.
  *   - `integrityVerified` may only transition false → true, never true → false.
+ *
+ * Dual-hash doctrine (Phase 24 — Crypto Survivability Horizon):
+ *   - Both SHA-256 and SHA3-256 are computed at ingest time.
+ *   - Both are immutable once set.
+ *   - Both must match on verification for integrityVerified = true.
+ *   - Protects against future collision vulnerability and algorithmic obsolescence.
  */
 export interface DocumentEntity {
   id: string;
@@ -53,7 +60,8 @@ export interface DocumentEntity {
   analysisStatus: DocumentAnalysisStatus;
   fileSize: number;              // File size in bytes — always known at upload time
   fileType: string | null;
-  contentHash: string | null;   // SHA-256 integrity hash — immutable once set
+  contentHash: string | null;   // SHA-256 integrity hash — immutable once set (primary)
+  sha3Hash: string | null;      // SHA3-256 integrity hash — immutable once set (secondary)
   uploadedBy: string | null;    // User ID of uploader
   uploadedAt: string | null;    // ISO 8601
 

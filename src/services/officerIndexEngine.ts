@@ -93,7 +93,7 @@ function countExactSubstring(text: string, phrase: string): number {
  * Key order enforced via explicit string construction.
  * NOT relying on JSON.stringify object key insertion order.
  * Uses JSON.stringify on individual values for RFC 8259 escaping.
- * Phrase keys are sorted lexicographically before serialization.
+ * Phrase keys are sorted via deterministic ASCII comparator before serialization.
  *
  * This is a pure function — same input always produces same output.
  */
@@ -105,9 +105,9 @@ function canonicalizeOfficerIndex(
   firstSeen: string,
   lastSeen: string
 ): string {
-  // Sort phrase keys lexicographically — no unordered object iteration
+  // Sort phrase keys via deterministic ASCII comparator — no locale-sensitive operations
   const sortedPhraseKeys = Object.keys(phraseFrequency).sort(
-    (a, b) => a.localeCompare(b)
+    (a, b) => a < b ? -1 : a > b ? 1 : 0
   );
 
   // Build phraseFrequency JSON with sorted keys via explicit string construction
@@ -221,18 +221,18 @@ export async function buildOfficerStructuralIndex(
     }
   }
 
-  // Step 3: Sort documents by documentDate ascending (lexicographic)
+  // Step 3: Sort documents by documentDate ascending (deterministic ASCII comparator)
   const sortedDocuments = [...uniqueDocuments].sort(
-    (a, b) => a.documentDate.localeCompare(b.documentDate)
+    (a, b) => a.documentDate < b.documentDate ? -1 : a.documentDate > b.documentDate ? 1 : 0
   );
 
   // Step 4: Compute documentCount
   const documentCount = sortedDocuments.length;
 
   // Step 5: Compute phraseFrequency
-  // Sort phrase list lexicographically before processing (deterministic order)
+  // Sort phrase list via deterministic ASCII comparator before processing
   const sortedPhraseList = [...input.phraseList].sort(
-    (a, b) => a.localeCompare(b)
+    (a, b) => a < b ? -1 : a > b ? 1 : 0
   );
   const phraseFrequency: { [phrase: string]: number } = {};
   for (const phrase of sortedPhraseList) {

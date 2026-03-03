@@ -50,36 +50,41 @@ import { computeTextSHA256 } from './policyIngestionService';
  *
  * Leaf hashing rule:
  *   - Input leaf is already a raw 64-char lowercase hex string
- *   - Leaf hash = SHA-256 of the raw hex string (treated as UTF-8 text)
- *   - This creates a domain separation between leaf hashes and internal node hashes
+ *   - Leaf hash = SHA-256("00" + leafValue)
+ *   - "00" is a literal ASCII prefix for explicit domain separation
  *
- * Domain separation rationale:
- *   - Leaf: SHA-256(leafValue)
- *   - Internal node: SHA-256(leftChild + rightChild)
- *   - A leaf hash is always derived from a single 64-char input
- *   - An internal node hash is always derived from a 128-char input (two 64-char hashes)
- *   - This prevents second-preimage attacks where a leaf could be confused with an internal node
+ * Explicit domain separation:
+ *   - Leaf: SHA-256("00" + leafValue)
+ *   - Internal node: SHA-256("01" + left + right)
+ *   - The "00" / "01" prefix is mandatory, not optional
+ *   - Prevents second-preimage attacks: a leaf can never be confused with an internal node
+ *   - Cryptographic separation is explicit, not implicit via input length
  *
  * This is a pure function — same input always produces same output.
  */
 export async function hashLeaf(leafValue: string): Promise<string> {
-  return computeTextSHA256(leafValue);
+  return computeTextSHA256('00' + leafValue);
 }
 
 /**
  * Hash two child nodes to produce a parent node.
  *
  * Internal node hashing rule:
- *   - Concatenate left + right as literal string (no separator)
+ *   - Concatenate "01" + left + right as literal string (no separator)
  *   - Hash the concatenation with SHA-256
+ *   - "01" is a literal ASCII prefix for explicit domain separation
  *   - Result is raw 64-char lowercase hex
  *
- * This matches the pair hashing in anchorEngine.buildMerkleRoot().
+ * Explicit domain separation:
+ *   - Leaf: SHA-256("00" + leafValue)
+ *   - Internal node: SHA-256("01" + left + right)
+ *   - The prefix is mandatory, not optional
+ *   - Enforced in both tree construction and verification
  *
  * This is a pure function — same input always produces same output.
  */
 export async function hashPair(left: string, right: string): Promise<string> {
-  return computeTextSHA256(left + right);
+  return computeTextSHA256('01' + left + right);
 }
 
 // ---------------------------------------------------------------------------
@@ -330,12 +335,15 @@ export function canonicalizeMerkleInclusionProof(
  * Verification pipeline:
  *   1. Start with leafHash
  *   2. For each step in the proof path:
- *      a. If step.position === 'left': currentHash = SHA-256(step.hash + currentHash)
+ *      a. If step.position === 'left': currentHash = SHA-256("01" + step.hash + currentHash)
  *         (sibling is on the left, so it goes first)
- *      b. If step.position === 'right': currentHash = SHA-256(currentHash + step.hash)
+ *      b. If step.position === 'right': currentHash = SHA-256("01" + currentHash + step.hash)
  *         (sibling is on the right, so it goes second)
  *   3. Final currentHash is the computed root
  *   4. verified = true ONLY if computedRoot === proof.merkleRoot
+ *
+ * Domain separation is enforced via hashPair() which prepends "01" to all
+ * internal node concatenations. This matches the construction pipeline.
  *
  * No auto-correction. No mutation of the proof. No partial result.
  * Binary output only: verified true or false.

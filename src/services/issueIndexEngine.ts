@@ -143,19 +143,59 @@ function canonicalizeIssueIndex(
 }
 
 // ---------------------------------------------------------------------------
-// ID generation — deterministic from hash
+// ID generation — deterministic from identity fields ONLY
 // ---------------------------------------------------------------------------
 
 /**
- * Generate a deterministic ID from a content hash.
- * Extracts 16 hex characters from the hash (after the prefix).
+ * Generate a deterministic element ID from identity fields only.
+ *
+ * ID is derived from SHA-256 of canonical string:
+ *   {"tenantId":"...","caseId":"...","chargeId":"...","elementNumber":N}
+ *
+ * Key order is FIXED: tenantId, caseId, chargeId, elementNumber.
+ * Does NOT include: status, description, supporting references.
+ *
+ * Rationale: Element identity is determined by WHERE it exists
+ * (tenant, case, charge, element number), not by WHAT it contains.
+ * Content may change (status updates, new citations) without
+ * changing the element's identity.
  *
  * This is a pure function — same input always produces same output.
  */
-function idFromHash(contentHash: string): string {
-  const prefixEnd = contentHash.indexOf(':');
-  return contentHash.slice(prefixEnd + 1, prefixEnd + 17);
+function canonicalizeElementIdentity(
+  tenantId: string,
+  caseId: string,
+  chargeId: string,
+  elementNumber: number
+): string {
+  return (
+    '{' +
+    `"tenantId":${JSON.stringify(tenantId)},` +
+    `"caseId":${JSON.stringify(caseId)},` +
+    `"chargeId":${JSON.stringify(chargeId)},` +
+    `"elementNumber":${JSON.stringify(elementNumber)}` +
+    '}'
+  );
 }
+
+/**
+ * Derive a deterministic element ID from identity fields.
+ * Computes SHA-256 of canonical identity JSON, then extracts 16 hex chars.
+ *
+ * This is a pure function — same input always produces same output.
+ */
+async function deriveElementId(
+  tenantId: string,
+  caseId: string,
+  chargeId: string,
+  elementNumber: number
+): Promise<string> {
+  const canonical = canonicalizeElementIdentity(tenantId, caseId, chargeId, elementNumber);
+  const hash = await computeTextSHA256(canonical);
+  const prefixEnd = hash.indexOf(':');
+  return hash.slice(prefixEnd + 1, prefixEnd + 17);
+}
+
 
 // ---------------------------------------------------------------------------
 // Issue Index Construction Pipeline
@@ -171,15 +211,16 @@ function idFromHash(contentHash: string): string {
  *      b. Sort supportingCitationReferences (ascending lexicographic)
  *      c. Determine status from structural conditions
  *      d. Canonicalize element to JSON
- *      e. Dual-hash canonical JSON
- *      f. Derive deterministic ID from content hash
+ *      e. Dual-hash canonical JSON (for content integrity)
+ *      f. Derive deterministic ID from identity fields (tenantId+caseId+chargeId+elementNumber)
  *      g. Build ChargeElementEntity
  *   3. Canonicalize full result to JSON
  *   4. Dual-hash canonical result JSON
  *   5. Return StructuredIssueIndexResult
  *
  * Constitutional constraints:
- *   - All IDs derived deterministically from content hashes
+ *   - Element IDs derived from identity fields (tenantId+caseId+chargeId+elementNumber)
+ *   - Result hashes derived from canonical JSON of full content
  *   - All arrays explicitly sorted before processing
  *   - No randomness. No Date.now(). No non-deterministic branching.
  *   - Status determined by structural conditions only (no interpretation)
@@ -224,8 +265,13 @@ export async function buildIssueIndex(
     const contentHash = await computeTextSHA256(canonical);
     const sha3Hash = computeTextSHA3_256(canonical);
 
-    // Step 2e: Derive deterministic ID
-    const id = idFromHash(contentHash);
+    // Step 2e: Derive deterministic ID from identity fields ONLY
+    const id = await deriveElementId(
+      input.tenantId,
+      input.caseId,
+      input.chargeId,
+      elementInput.elementNumber
+    );
 
     // Step 2f: Build entity
     entities.push({

@@ -41,6 +41,7 @@ import type {
   ExportVerificationResult,
 } from '../models/ExportModel';
 import { computeTextSHA256, computeTextSHA3_256 } from './policyIngestionService';
+import { IMMUTABLE_CORE_HASH } from '../constants/immutableCore';
 
 // ---------------------------------------------------------------------------
 // Document reference extraction — export-safe subset
@@ -306,7 +307,10 @@ export async function buildCourtPacketExport(
     (a, b) => a.id < b.id ? -1 : a.id > b.id ? 1 : 0
   );
 
-  // Step 3: First pass — build canonical JSON with empty hashes to compute scope
+  // Step 3: immutableCoreHash sourced from static constant (not computed from payload)
+  const immutableCoreHash = IMMUTABLE_CORE_HASH;
+
+  // Step 4: Build canonical JSON with immutableCoreHash but empty scopeHash to compute scope
   const firstPassCanonical = canonicalizeCourtPacketExport(
     '1.0',
     input.tenantId,
@@ -316,15 +320,14 @@ export async function buildCourtPacketExport(
     sortedOfficerIndexes,
     sortedDocumentRefs,
     '',  // scopeHash placeholder
-    '',  // immutableCoreHash placeholder
+    immutableCoreHash,
     input.anchorEpoch
   );
 
-  // Step 4: Compute dual-hash of first pass (these become the scope/core hashes)
+  // Step 5: Compute scopeHash from first pass canonical JSON
   const scopeHash = await computeTextSHA256(firstPassCanonical);
-  const immutableCoreHash = computeTextSHA3_256(firstPassCanonical);
 
-  // Step 5: Rebuild canonical JSON with real hashes
+  // Step 6: Rebuild canonical JSON with real scopeHash
   const finalCanonical = canonicalizeCourtPacketExport(
     '1.0',
     input.tenantId,
@@ -338,11 +341,11 @@ export async function buildCourtPacketExport(
     input.anchorEpoch
   );
 
-  // Step 6: Compute dual-hash of final canonical JSON (for CAPS binding)
+  // Step 7: Compute dual-hash of final canonical JSON (for CAPS binding)
   const capsSha256 = await computeTextSHA256(finalCanonical);
   const capsSha3 = computeTextSHA3_256(finalCanonical);
 
-  // Step 7: Build CourtPacketExport entity
+  // Step 8: Build CourtPacketExport entity
   const exportArtifact: CourtPacketExport = {
     version: '1.0',
     tenantId: input.tenantId,
@@ -357,7 +360,7 @@ export async function buildCourtPacketExport(
     nonInterpretiveDeclaration: true,
   };
 
-  // Step 8: Build CAPSBinding
+  // Step 9: Build CAPSBinding
   const caps: CAPSBinding = {
     sha256: capsSha256,
     sha3_256: capsSha3,
@@ -366,7 +369,7 @@ export async function buildCourtPacketExport(
     anchorEpoch: input.anchorEpoch,
   };
 
-  // Step 9: Return CAPSBoundExport
+  // Step 10: Return CAPSBoundExport
   return {
     export: exportArtifact,
     caps,

@@ -3,7 +3,8 @@
 // Time Anchored Trust Layer (TATL)
 //
 // All anchor-related domain types.
-// Deterministic. Dual-hashed. Append-only.
+// Deterministic. Append-only.
+// Dual-hash verification computed on demand from canonical JSON.
 //
 // Constitutional boundaries:
 //   - No probability
@@ -29,14 +30,10 @@
  *   - Once created, an anchor record is NEVER updated or deleted.
  *   - There is no update method. There is no delete method.
  *
- * Binary state rule:
- *   - contentHash and sha3Hash are REQUIRED (non-null).
- *   - A DailyAnchorEntity only exists after full construction.
- *
- * Immutability contract:
- *   - All fields are IMMUTABLE once set.
- *   - contentHash (SHA-256) is REQUIRED and IMMUTABLE.
- *   - sha3Hash (SHA3-256) is REQUIRED and IMMUTABLE.
+ * Dual-hash verification:
+ *   - SHA-256 and SHA3-256 are computed from canonical JSON on demand.
+ *   - Hashes are DERIVED, not stored. No redundant hash fields.
+ *   - Canonical JSON key order: date, merkleRoot, scopeHash, immutableCoreHash, epoch.
  *
  * ID derivation:
  *   - Derived from date ONLY.
@@ -49,8 +46,6 @@ export interface DailyAnchorEntity {
   scopeHash: string;             // Scope hash for the day's anchor
   immutableCoreHash: string;     // System-wide immutable core hash reference
   epoch: number;                 // Anchor epoch number
-  contentHash: string;           // SHA-256 of canonical anchor JSON — REQUIRED, immutable
-  sha3Hash: string;              // SHA3-256 of canonical anchor JSON — REQUIRED, immutable
 }
 
 // ---------------------------------------------------------------------------

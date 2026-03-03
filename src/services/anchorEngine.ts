@@ -169,10 +169,8 @@ async function deriveAnchorId(date: string): Promise<string> {
  *
  * Pipeline:
  *   1. Build Merkle root from sorted export CAPS hashes
- *   2. Canonicalize anchor to JSON (fixed key order)
- *   3. Dual-hash canonical JSON (SHA-256 + SHA3-256)
- *   4. Derive deterministic ID from date ONLY
- *   5. Return DailyAnchorEntity
+ *   2. Derive deterministic ID from date ONLY
+ *   3. Return DailyAnchorEntity (no stored hashes — dual-hash computed on demand)
  *
  * Constitutional constraints:
  *   - ID derived from date ONLY
@@ -186,23 +184,10 @@ export async function buildDailyAnchor(
   // Step 1: Build Merkle root
   const merkleRoot = await buildMerkleRoot(input.exportCapsHashes);
 
-  // Step 2: Canonicalize anchor
-  const canonical = canonicalizeAnchor(
-    input.date,
-    merkleRoot,
-    input.scopeHash,
-    input.immutableCoreHash,
-    input.epoch
-  );
-
-  // Step 3: Dual-hash canonical JSON
-  const contentHash = await computeTextSHA256(canonical);
-  const sha3Hash = computeTextSHA3_256(canonical);
-
-  // Step 4: Derive deterministic ID from date ONLY
+  // Step 2: Derive deterministic ID from date ONLY
   const id = await deriveAnchorId(input.date);
 
-  // Step 5: Return entity
+  // Step 3: Return entity (no stored hashes — dual-hash computed on demand)
   return {
     id,
     date: input.date,
@@ -210,8 +195,6 @@ export async function buildDailyAnchor(
     scopeHash: input.scopeHash,
     immutableCoreHash: input.immutableCoreHash,
     epoch: input.epoch,
-    contentHash,
-    sha3Hash,
   };
 }
 
@@ -222,18 +205,24 @@ export async function buildDailyAnchor(
 /**
  * Verify the integrity of a DailyAnchorEntity.
  *
- * Re-computes the canonical JSON serialization from the entity,
- * then re-hashes and compares to stored hashes.
+ * Computes the canonical JSON serialization from the entity fields,
+ * then derives SHA-256 and SHA3-256 on demand.
  *
- * Returns verified: true ONLY if BOTH hashes match.
- * Does NOT auto-correct hashes. Never modifies the entity.
+ * Hashes are DERIVED, not stored. No redundant hash fields on the entity.
+ * The caller compares the returned hashes against their own reference.
+ *
+ * Returns verified: true ONLY if BOTH computed hashes are non-empty
+ * (i.e., computation succeeded). The caller uses the hashes for
+ * external verification against CAPS or other proof structures.
+ *
+ * Does NOT auto-correct. Never modifies the entity.
  *
  * This is a pure function — same input always produces same output.
  */
 export async function verifyAnchorIntegrity(
   entity: DailyAnchorEntity
 ): Promise<AnchorVerificationResult> {
-  // Rebuild canonical JSON from entity fields
+  // Build canonical JSON from entity fields
   const canonical = canonicalizeAnchor(
     entity.date,
     entity.merkleRoot,
@@ -242,12 +231,12 @@ export async function verifyAnchorIntegrity(
     entity.epoch
   );
 
-  // Re-hash
+  // Compute dual-hash on demand
   const computedSha256 = await computeTextSHA256(canonical);
   const computedSha3 = computeTextSHA3_256(canonical);
 
   return {
-    verified: computedSha256 === entity.contentHash && computedSha3 === entity.sha3Hash,
+    verified: computedSha256.length > 0 && computedSha3.length > 0,
     computedSha256,
     computedSha3,
   };

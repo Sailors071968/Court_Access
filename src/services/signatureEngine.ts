@@ -2,11 +2,29 @@
 // Court Access — Hybrid Signature Engine (Phase 10)
 // RSA + Ed25519 + Dilithium
 //
+// VERIFICATION-ONLY ENGINE.
+// Court Access VERIFIES signatures. It does NOT generate them.
+//
+// Architectural boundary:
+//   - NO key generation (no generateKey, no createKeyPair)
+//   - NO signature generation (no sign, no createSignature)
+//   - NO random number generator calls (no getRandomValues, no randomBytes)
+//   - NO internal entropy usage
+//   - Signatures are EXTERNAL DETERMINISTIC INPUTS
+//   - Court Access accepts provided signatureHex and verifies
+//   - Signing is EXPLICITLY OUT OF SCOPE for core logic
+//
+// This boundary is constitutional and permanent.
+// Deterministic core + externalized entropy.
+// Verification is deterministic. Signature generation is not.
+// Allowing internal randomness would break reproducibility,
+// expand attack surface, and violate the core invariant.
+//
 // Implements:
 //   - Signature algorithm registry (additive-only, immutable)
 //   - Deterministic signature binding structure
 //   - Canonical JSON serialization for signature payloads
-//   - Multi-algorithm verification logic (stub — real crypto in later phases)
+//   - Multi-algorithm structural verification logic
 //   - Validation matrix (PASS/FAIL only)
 //
 // No UI dependencies. No React imports.
@@ -379,9 +397,13 @@ export function buildHybridSignatureBundle(
 /**
  * Verify an individual signature.
  *
+ * VERIFICATION ONLY — this function does NOT generate signatures or keys.
+ * Signatures are external deterministic inputs provided to this function.
+ *
  * Phase 10 implementation: structural verification only.
- * Real cryptographic verification (RSA, Ed25519, Dilithium) will be
- * wired in future phases when key management infrastructure exists.
+ * Cryptographic verification (RSA, Ed25519, Dilithium) will be wired
+ * in future phases via external verification adapters.
+ * Those adapters will also be verification-only — no signing.
  *
  * Current verification:
  *   1. signedPayloadHash must match expected payloadHash
@@ -392,7 +414,7 @@ export function buildHybridSignatureBundle(
  * Structural verification ensures the binding is correct.
  * Cryptographic verification will be additive (not replacing this logic).
  *
- * No auto-correction. No mutation. Binary result only.
+ * No auto-correction. No mutation. No entropy. Binary result only.
  *
  * This is a pure function — same input always produces same output.
  */

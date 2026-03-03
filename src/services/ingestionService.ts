@@ -39,7 +39,7 @@ export interface IngestionResult {
 /**
  * Compute SHA-256 hash of file contents.
  * Uses the Web Crypto API (available in browsers and Node 18+).
- * Returns hex-encoded hash prefixed with "sha256:".
+ * Returns raw lowercase hex string (64 characters). No prefix.
  *
  * This is a pure function — same input always produces same output.
  */
@@ -47,8 +47,7 @@ export async function computeSHA256(file: File): Promise<string> {
   const buffer = await file.arrayBuffer();
   const hashBuffer = await crypto.subtle.digest('SHA-256', buffer);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
-  return `sha256:${hashHex}`;
+  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 
 // ---------------------------------------------------------------------------
@@ -62,15 +61,14 @@ export async function computeSHA256(file: File): Promise<string> {
  * Compute SHA3-256 hash of file contents.
  * Uses js-sha3 (pure JavaScript Keccak implementation).
  * No external network dependency. No randomness. Fully deterministic.
- * Returns hex-encoded hash prefixed with "sha3-256:".
+ * Returns raw lowercase hex string (64 characters). No prefix.
  *
  * Input: raw file bytes via File.arrayBuffer() — identical byte sequence as computeSHA256.
  * This is a pure function — same input always produces same output.
  */
 export async function computeSHA3_256(file: File): Promise<string> {
   const buffer = await file.arrayBuffer();
-  const hashHex = sha3_256(buffer);
-  return `sha3-256:${hashHex}`;
+  return sha3_256(buffer);
 }
 
 // ---------------------------------------------------------------------------
@@ -241,7 +239,7 @@ export async function ingestDocument(input: IngestionInput): Promise<IngestionRe
 
     // Step 2: Generate document ID (deterministic from hash for deduplication)
     // In Phase 6+ this will be a UUID from the backend
-    const documentId = contentHash.slice(7, 23); // 16 hex chars from hash
+    const documentId = contentHash.slice(0, 16); // 16 hex chars from raw hex hash
 
     // Step 3: Generate storage path
     const fileType = input.file.name.split('.').pop() || 'bin';

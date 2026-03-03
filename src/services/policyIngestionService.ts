@@ -58,7 +58,7 @@ export function normalizeText(raw: string): string {
 /**
  * Compute SHA-256 hash of a text string.
  * Encodes text as UTF-8 bytes, then hashes the raw bytes.
- * Returns hex-encoded hash prefixed with "sha256:".
+ * Returns raw lowercase hex string (64 characters). No prefix.
  *
  * Uses TextEncoder for deterministic UTF-8 byte conversion.
  * This is a pure function — same input always produces same output.
@@ -68,8 +68,7 @@ export async function computeTextSHA256(text: string): Promise<string> {
   const data = encoder.encode(text);
   const hashBuffer = await crypto.subtle.digest('SHA-256', data);
   const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
-  return `sha256:${hashHex}`;
+  return hashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
 }
 
 // ---------------------------------------------------------------------------
@@ -79,7 +78,7 @@ export async function computeTextSHA256(text: string): Promise<string> {
 /**
  * Compute SHA3-256 hash of a text string.
  * Encodes text as UTF-8 bytes, then hashes the raw bytes.
- * Returns hex-encoded hash prefixed with "sha3-256:".
+ * Returns raw lowercase hex string (64 characters). No prefix.
  *
  * Uses js-sha3 (pure JavaScript Keccak). No network dependency.
  * This is a pure function — same input always produces same output.
@@ -87,8 +86,7 @@ export async function computeTextSHA256(text: string): Promise<string> {
 export function computeTextSHA3_256(text: string): string {
   const encoder = new TextEncoder();
   const data = encoder.encode(text);
-  const hashHex = sha3_256(data);
-  return `sha3-256:${hashHex}`;
+  return sha3_256(data);
 }
 
 // ---------------------------------------------------------------------------
@@ -308,9 +306,8 @@ function splitSentences(text: string): string[] {
  * This is a pure function — same input always produces same output.
  */
 function idFromHash(contentHash: string): string {
-  // Skip the "sha256:" or "sha3-256:" prefix
-  const prefixEnd = contentHash.indexOf(':');
-  return contentHash.slice(prefixEnd + 1, prefixEnd + 17);
+  // Raw hex — no prefix to skip. Extract first 16 hex characters.
+  return contentHash.slice(0, 16);
 }
 
 // ---------------------------------------------------------------------------
@@ -347,8 +344,8 @@ export async function ingestPolicyManual(
     const fileBuffer = await input.file.arrayBuffer();
     const fileHashBuffer = await crypto.subtle.digest('SHA-256', fileBuffer);
     const fileHashArray = Array.from(new Uint8Array(fileHashBuffer));
-    const fileContentHash = `sha256:${fileHashArray.map((b) => b.toString(16).padStart(2, '0')).join('')}`;
-    const fileSha3Hash = `sha3-256:${sha3_256(fileBuffer)}`;
+    const fileContentHash = fileHashArray.map((b) => b.toString(16).padStart(2, '0')).join('');
+    const fileSha3Hash = sha3_256(fileBuffer);
 
     const manualId = idFromHash(fileContentHash);
 

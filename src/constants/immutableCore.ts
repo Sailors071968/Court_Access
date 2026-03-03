@@ -19,4 +19,4 @@
  * Current value: static placeholder (Phase 6).
  * Will be finalized during Phase 8 (Cryptographic Proof Readiness).
  */
-export const IMMUTABLE_CORE_HASH = 'sha3-256:placeholder-immutable-core-hash-awaiting-phase8-finalization';
+export const IMMUTABLE_CORE_HASH = '0000000000000000000000000000000000000000000000000000000000000000';

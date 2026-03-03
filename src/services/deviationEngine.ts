@@ -127,11 +127,10 @@ export async function computeComparisonHashes(
 
 /**
  * Generate a deterministic ID from a content hash.
- * Extracts 16 hex characters from the hash (after the prefix).
+ * Extracts first 16 hex characters from raw hex hash.
  */
 function idFromHash(contentHash: string): string {
-  const prefixEnd = contentHash.indexOf(':');
-  return contentHash.slice(prefixEnd + 1, prefixEnd + 17);
+  return contentHash.slice(0, 16);
 }
 
 // ---------------------------------------------------------------------------

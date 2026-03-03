@@ -311,11 +311,11 @@ export async function verifyCAPSSignatureBinding(
  *
  * Each required field is validated independently:
  *   - version: must be "1.0"
- *   - sha256: must be non-empty string starting with "sha256:"
- *   - sha3_256: must be non-empty string starting with "sha3-256:"
- *   - scopeHash: must be non-empty string starting with "sha256:"
- *   - immutableCoreHash: must be non-empty string
- *   - merkleRoot: must be non-empty string starting with "sha256:"
+ *   - sha256: must be 64 lowercase hex characters
+ *   - sha3_256: must be 64 lowercase hex characters
+ *   - scopeHash: must be 64 lowercase hex characters
+ *   - immutableCoreHash: must be 64 lowercase hex characters
+ *   - merkleRoot: must be 64 lowercase hex characters
  *   - anchorEpoch: must be positive integer
  *   - nonInterpretiveDeclaration: must be true
  *
@@ -336,58 +336,40 @@ export function validateCAPSEnvelope(
     result: proof.version === '1.0' ? 'PASS' : 'FAIL',
   });
 
-  // sha256: must be non-empty string starting with "sha256:"
+  // Hex validation: 64 lowercase hex characters, no prefix, no whitespace
+  const isValidHex64 = (value: string): boolean =>
+    typeof value === 'string' &&
+    value.length === 64 &&
+    /^[0-9a-f]{64}$/.test(value);
+
+  // sha256: must be 64 lowercase hex characters
   fields.push({
     field: 'sha256',
-    result:
-      typeof proof.sha256 === 'string' &&
-      proof.sha256.length > 0 &&
-      proof.sha256.startsWith('sha256:')
-        ? 'PASS'
-        : 'FAIL',
+    result: isValidHex64(proof.sha256) ? 'PASS' : 'FAIL',
   });
 
-  // sha3_256: must be non-empty string starting with "sha3-256:"
+  // sha3_256: must be 64 lowercase hex characters
   fields.push({
     field: 'sha3_256',
-    result:
-      typeof proof.sha3_256 === 'string' &&
-      proof.sha3_256.length > 0 &&
-      proof.sha3_256.startsWith('sha3-256:')
-        ? 'PASS'
-        : 'FAIL',
+    result: isValidHex64(proof.sha3_256) ? 'PASS' : 'FAIL',
   });
 
-  // scopeHash: must be non-empty string starting with "sha256:"
+  // scopeHash: must be 64 lowercase hex characters
   fields.push({
     field: 'scopeHash',
-    result:
-      typeof proof.scopeHash === 'string' &&
-      proof.scopeHash.length > 0 &&
-      proof.scopeHash.startsWith('sha256:')
-        ? 'PASS'
-        : 'FAIL',
+    result: isValidHex64(proof.scopeHash) ? 'PASS' : 'FAIL',
   });
 
-  // immutableCoreHash: must be non-empty string
+  // immutableCoreHash: must be 64 lowercase hex characters
   fields.push({
     field: 'immutableCoreHash',
-    result:
-      typeof proof.immutableCoreHash === 'string' &&
-      proof.immutableCoreHash.length > 0
-        ? 'PASS'
-        : 'FAIL',
+    result: isValidHex64(proof.immutableCoreHash) ? 'PASS' : 'FAIL',
   });
 
-  // merkleRoot: must be non-empty string starting with "sha256:"
+  // merkleRoot: must be 64 lowercase hex characters
   fields.push({
     field: 'merkleRoot',
-    result:
-      typeof proof.merkleRoot === 'string' &&
-      proof.merkleRoot.length > 0 &&
-      proof.merkleRoot.startsWith('sha256:')
-        ? 'PASS'
-        : 'FAIL',
+    result: isValidHex64(proof.merkleRoot) ? 'PASS' : 'FAIL',
   });
 
   // anchorEpoch: must be positive integer

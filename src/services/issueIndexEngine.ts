@@ -192,8 +192,7 @@ async function deriveElementId(
 ): Promise<string> {
   const canonical = canonicalizeElementIdentity(tenantId, caseId, chargeId, elementNumber);
   const hash = await computeTextSHA256(canonical);
-  const prefixEnd = hash.indexOf(':');
-  return hash.slice(prefixEnd + 1, prefixEnd + 17);
+  return hash.slice(0, 16);
 }
 
 

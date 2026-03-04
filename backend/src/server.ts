@@ -19,6 +19,7 @@ import analysisRoutes from './routes/analysisRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import billingRoutes from './routes/billingRoutes.js';
 import emailRoutes from './routes/emailRoutes.js';
+import analyticsRoutes from './routes/analyticsRoutes.js';
 
 const app = express();
 
@@ -41,6 +42,7 @@ app.use('/api/analysis', analysisRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/billing', billingRoutes);
 app.use('/api/email', emailRoutes);
+app.use('/api/analytics', analyticsRoutes);
 
 // Error handler (must be last)
 app.use(errorHandler);

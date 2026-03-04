@@ -86,3 +86,17 @@ export async function handleGetDocumentDownloadUrl(req: Request, res: Response, 
     next(error);
   }
 }
+
+export async function handleGetDocumentStatus(req: Request, res: Response, next: NextFunction) {
+  try {
+    if (!req.user) { res.status(401).json({ error: 'Authentication required' }); return; }
+    const doc = await getDocumentById(req.params.id, req.user.tenantId);
+    res.json({
+      id: doc.id,
+      analysisStatus: doc.analysisStatus,
+      fileName: doc.fileName,
+    });
+  } catch (error) {
+    next(error);
+  }
+}

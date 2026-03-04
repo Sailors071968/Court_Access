@@ -4,7 +4,7 @@
 
 import { Router } from 'express';
 import multer from 'multer';
-import { handleUploadDocument, handleListDocuments, handleGetDocument, handleGetDocumentDownloadUrl } from '../controllers/documentController.js';
+import { handleUploadDocument, handleListDocuments, handleGetDocument, handleGetDocumentDownloadUrl, handleGetDocumentStatus } from '../controllers/documentController.js';
 import { authMiddleware } from '../middleware/authMiddleware.js';
 import { tenantMiddleware } from '../middleware/tenantMiddleware.js';
 import { env } from '../config/env.js';
@@ -33,5 +33,6 @@ router.post('/case/:caseId/upload', upload.single('file'), handleUploadDocument)
 router.get('/case/:caseId', handleListDocuments);
 router.get('/:id', handleGetDocument);
 router.get('/:id/download', handleGetDocumentDownloadUrl);
+router.get('/:id/status', handleGetDocumentStatus);
 
 export default router;

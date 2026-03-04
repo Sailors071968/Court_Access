@@ -82,6 +82,10 @@ function asciiCompare(a: string, b: string): number {
  *   3. Response tenant matches communication tenant (no cross-tenant leak)
  *   4. Response agency matches communication agency (no cross-agency fabrication)
  *   5. bodyHash is not empty (response must have content)
+ *   6. response.receivedTimestamp >= communication.sentTimestamp (chronological order)
+ *
+ * Chronological validation uses Date.parse for ISO 8601 deterministic parsing.
+ * No Date.now. No new Date. Deterministic comparison only.
  *
  * Pure function. No side effects. Binary PASS/FAIL per check.
  * Overall: PASS only if ALL checks pass.
@@ -106,11 +110,23 @@ export function validateResponseLinkage(
   // Check 5: bodyHash present
   const bodyHashPresent = response.bodyHash.length > 0 ? 'PASS' : 'FAIL';
 
+  // Check 6: chronological order — response cannot precede the communication it answers
+  // Uses Date.parse for deterministic ISO 8601 parsing. No Date.now. No new Date.
+  let chronologicalOrder: 'PASS' | 'FAIL' = 'FAIL';
+  if (comm !== undefined) {
+    const sentMs = Date.parse(comm.sentTimestamp);
+    const receivedMs = Date.parse(response.receivedTimestamp);
+    if (!Number.isNaN(sentMs) && !Number.isNaN(receivedMs) && receivedMs >= sentMs) {
+      chronologicalOrder = 'PASS';
+    }
+  }
+
   const allPass =
     communicationExists === 'PASS' &&
     tenantMatch === 'PASS' &&
     agencyMatch === 'PASS' &&
-    bodyHashPresent === 'PASS';
+    bodyHashPresent === 'PASS' &&
+    chronologicalOrder === 'PASS';
 
   return {
     responseId: response.responseId,
@@ -119,6 +135,7 @@ export function validateResponseLinkage(
     tenantMatch,
     agencyMatch,
     bodyHashPresent,
+    chronologicalOrder,
     overallResult: allPass ? 'PASS' : 'FAIL',
   };
 }
@@ -196,6 +213,18 @@ export function validateAllResponseLinkages(
         description: 'Response bodyHash is empty',
       });
     }
+
+    if (result.communicationExists === 'PASS' && result.chronologicalOrder === 'FAIL') {
+      violations.push({
+        domain: 'RESPONSE_TO_COMMUNICATION',
+        violationType: 'HASH_MISMATCH',
+        sourceEntityId: response.responseId,
+        sourceField: 'receivedTimestamp',
+        referencedValue: response.receivedTimestamp,
+        description:
+          'Response receivedTimestamp precedes linked communication sentTimestamp',
+      });
+    }
   }
 
   return { results, violations };
@@ -234,7 +263,16 @@ export function validateTraceCrossRefs(
         ? 'PASS'
         : 'FAIL';
 
-    const allPass = artifactExists === 'PASS' && hashMatch === 'PASS';
+    // Tenant isolation: artifact must belong to same tenant as trace entry
+    const tenantMatch =
+      resolved !== undefined && resolved.tenantId === entry.tenantId
+        ? 'PASS'
+        : 'FAIL';
+
+    const allPass =
+      artifactExists === 'PASS' &&
+      hashMatch === 'PASS' &&
+      tenantMatch === 'PASS';
 
     results.push({
       traceId: entry.traceId,
@@ -243,6 +281,7 @@ export function validateTraceCrossRefs(
       artifactId: ref.artifactId,
       artifactExists,
       hashMatch,
+      tenantMatch,
       overallResult: allPass ? 'PASS' : 'FAIL',
     });
 
@@ -267,6 +306,18 @@ export function validateTraceCrossRefs(
         referencedValue: ref.artifactHash,
         description:
           'crossPhaseRef artifactHash does not match resolved artifact sha256',
+      });
+    }
+
+    if (artifactExists === 'PASS' && tenantMatch === 'FAIL') {
+      violations.push({
+        domain: 'AUDIT_TRACE_CROSS_REF',
+        violationType: 'CROSS_TENANT_LEAK',
+        sourceEntityId: entry.traceId,
+        sourceField: 'crossPhaseRefs[' + String(i) + '].artifactId',
+        referencedValue: ref.artifactId,
+        description:
+          'crossPhaseRef artifact tenantId does not match trace entry tenantId',
       });
     }
   }

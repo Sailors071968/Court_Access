@@ -107,6 +107,7 @@ export interface LinkageViolation {
  *   2. The linked communication belongs to the same tenant
  *   3. The linked communication belongs to the same agency
  *   4. bodyHash is not empty
+ *   5. response.receivedTimestamp >= communication.sentTimestamp (chronological order)
  *
  * Binary only: PASS or FAIL.
  */
@@ -117,6 +118,7 @@ export interface ResponseLinkageResult {
   tenantMatch: 'PASS' | 'FAIL';
   agencyMatch: 'PASS' | 'FAIL';
   bodyHashPresent: 'PASS' | 'FAIL';
+  chronologicalOrder: 'PASS' | 'FAIL';
   overallResult: 'PASS' | 'FAIL';
 }
 
@@ -130,7 +132,7 @@ export interface ResponseLinkageResult {
  * Checks:
  *   1. artifactId resolves to an existing entity
  *   2. artifactHash matches the source entity's sha256
- *   3. phase number is valid (positive integer)
+ *   3. artifact tenantId matches trace entry tenantId (no cross-tenant leak)
  *
  * Binary only: PASS or FAIL.
  */
@@ -141,6 +143,7 @@ export interface CrossRefValidationResult {
   artifactId: string;
   artifactExists: 'PASS' | 'FAIL';
   hashMatch: 'PASS' | 'FAIL';
+  tenantMatch: 'PASS' | 'FAIL';
   overallResult: 'PASS' | 'FAIL';
 }
 
@@ -264,6 +267,7 @@ export interface ResolvedCommunication {
   agencyId: string;
   messageHash: string;
   sha256: string;
+  sentTimestamp: string;              // ISO 8601, for chronological validation
 }
 
 /**

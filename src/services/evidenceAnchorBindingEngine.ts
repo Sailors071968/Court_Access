@@ -235,8 +235,8 @@ export async function buildEvidenceAnchorBinding(
  *   4. sha3_256 from full canonical
  *
  * Also validates:
- *   - integrationHash exists in caller-provided anchor integration lookup
- *   - signatureHash exists in caller-provided signature lookup
+ *   - integrationLookup[integrationHash] === anchorId (not just existence)
+ *   - signatureLookup[signatureHash] === anchorId (not just existence)
  *
  * Binary only. No partial pass.
  * Async because SHA-256 uses crypto.subtle.digest.
@@ -276,11 +276,13 @@ export async function verifyEvidenceAnchorBinding(
   const sha256Match = binding.sha256 === recomputedSha256;
   const sha3_256Match = binding.sha3_256 === recomputedSha3_256;
 
-  // Validate integrationHash exists in anchor integration lookup
-  const integrationHashMatch = integrationLookup.has(binding.integrationHash);
+  // Validate integrationHash maps to binding's anchorId (not just existence)
+  const integrationLookupValue = integrationLookup.get(binding.integrationHash);
+  const integrationHashMatch = integrationLookupValue === binding.anchorId;
 
-  // Validate signatureHash exists in signature lookup
-  const signatureHashMatch = signatureLookup.has(binding.signatureHash);
+  // Validate signatureHash maps to binding's anchorId (not just existence)
+  const signatureLookupValue = signatureLookup.get(binding.signatureHash);
+  const signatureHashMatch = signatureLookupValue === binding.anchorId;
 
   const allPass =
     anchorLeafHashMatch &&

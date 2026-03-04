@@ -6,8 +6,14 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppLayout } from './components/layout/AppLayout';
 import { ProtectedRoute } from './components/layout/ProtectedRoute';
 
+// Marketing Pages (separate from app)
+import { LandingPage } from './pages/marketing/LandingPage';
+import { PricingPage } from './pages/marketing/PricingPage';
+import { AboutPage } from './pages/marketing/AboutPage';
+
 // Auth Pages
 import { LoginPage } from './pages/auth/LoginPage';
+import { SignupPage } from './pages/auth/SignupPage';
 import { RegisterPage } from './pages/auth/RegisterPage';
 import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage';
 import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
@@ -36,22 +42,28 @@ function App() {
   return (
     <BrowserRouter>
       <Routes>
-        {/* Public Auth Routes */}
+        {/* Marketing Pages (public) */}
+        <Route path="/" element={<LandingPage />} />
+        <Route path="/pricing" element={<PricingPage />} />
+        <Route path="/about" element={<AboutPage />} />
+
+        {/* Auth Pages (public) */}
         <Route path="/login" element={<LoginPage />} />
+        <Route path="/signup" element={<SignupPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
 
         {/* Protected App Routes */}
         <Route
-          path="/"
+          path="/app"
           element={
             <ProtectedRoute>
               <AppLayout />
             </ProtectedRoute>
           }
         >
-          <Route index element={<Navigate to="/dashboard" replace />} />
+          <Route index element={<Navigate to="/app/dashboard" replace />} />
           <Route path="dashboard" element={<DashboardRouter />} />
           <Route path="cases" element={<CasesListPage />} />
           <Route path="search" element={<SearchPage />} />

@@ -19,7 +19,7 @@ export function Header({ onMobileMenuToggle }: HeaderProps) {
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
     if (searchQuery.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
+      navigate(`/app/search?q=${encodeURIComponent(searchQuery.trim())}`);
       setSearchQuery('');
     }
   };
@@ -52,7 +52,7 @@ export function Header({ onMobileMenuToggle }: HeaderProps) {
       <div className="flex items-center gap-3">
         {/* Notifications */}
         <button
-          onClick={() => navigate('/notifications')}
+          onClick={() => navigate('/app/notifications')}
           className="relative p-2 text-gray-500 hover:text-gray-700 rounded-lg hover:bg-gray-100"
           aria-label="Notifications"
         >

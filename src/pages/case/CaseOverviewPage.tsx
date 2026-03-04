@@ -60,7 +60,7 @@ export function CaseOverviewPage() {
           <Card>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold text-gray-900">Recent Documents</h2>
-              <button onClick={() => navigate(`/cases/${currentCase.id}/documents`)} className="text-sm text-blue-600 hover:text-blue-700 font-medium">View all</button>
+              <button onClick={() => navigate(`/app/cases/${currentCase.id}/documents`)} className="text-sm text-blue-600 hover:text-blue-700 font-medium">View all</button>
             </div>
             <table className="w-full text-sm">
               <thead>
@@ -95,7 +95,7 @@ export function CaseOverviewPage() {
               </p>
               {permissions.canViewCharges && (
                 <button
-                  onClick={() => navigate(`/cases/${currentCase.id}/charges`)}
+                  onClick={() => navigate(`/app/cases/${currentCase.id}/charges`)}
                   className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-amber-50 text-amber-700 rounded-lg text-sm font-medium hover:bg-amber-100 transition-colors"
                 >
                   <TrendingUp size={16} />

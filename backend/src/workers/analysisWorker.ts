@@ -76,7 +76,7 @@ async function processDocument(data: AnalysisJobData): Promise<void> {
   });
 
   // Stage 6: Update document status
-  await updateDocumentAnalysisStatus(documentId, 'analyzed');
+  await updateDocumentAnalysisStatus(documentId, 'completed');
 
   logger.info('Document analysis complete', {
     documentId,

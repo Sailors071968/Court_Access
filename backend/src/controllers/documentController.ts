@@ -5,6 +5,7 @@
 import type { Request, Response, NextFunction } from 'express';
 import { uploadDocument, listDocuments, getDocumentById, getDocumentDownloadUrl } from '../services/documentService.js';
 import { enqueueAnalysisJob } from '../services/analysisQueueService.js';
+import { getCaseById } from '../services/caseService.js';
 import { logger } from '../config/logger.js';
 
 export async function handleUploadDocument(req: Request, res: Response, next: NextFunction) {
@@ -14,6 +15,9 @@ export async function handleUploadDocument(req: Request, res: Response, next: Ne
 
     const { caseId } = req.params;
     if (!caseId) { res.status(400).json({ error: 'caseId is required' }); return; }
+
+    // Verify case belongs to tenant
+    await getCaseById(caseId, req.user.tenantId);
 
     const doc = await uploadDocument({
       tenantId: req.user.tenantId,

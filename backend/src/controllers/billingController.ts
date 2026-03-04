@@ -4,15 +4,17 @@
 
 import type { Request, Response, NextFunction } from 'express';
 import { createCheckoutSession, getSubscription, handleStripeWebhook } from '../services/stripeService.js';
+import { getCurrentUser } from '../services/authService.js';
 
 export async function handleCreateCheckoutSession(req: Request, res: Response, next: NextFunction) {
   try {
     if (!req.user) { res.status(401).json({ error: 'Authentication required' }); return; }
     const { plan, successUrl, cancelUrl } = req.body;
     if (!plan) { res.status(400).json({ error: 'plan is required' }); return; }
+    const user = await getCurrentUser(req.user.userId);
     const result = await createCheckoutSession(
       req.user.tenantId,
-      '', // email from user profile
+      user.email,
       plan,
       successUrl || 'https://courtaccess.net/billing/success',
       cancelUrl || 'https://courtaccess.net/billing/cancel'

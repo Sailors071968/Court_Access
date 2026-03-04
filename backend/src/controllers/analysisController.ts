@@ -25,6 +25,10 @@ export async function handleGetSnapshotById(req: Request, res: Response, next: N
   try {
     if (!req.user) { res.status(401).json({ error: 'Authentication required' }); return; }
     const snapshot = await getSnapshotById(req.params.id);
+
+    // Verify snapshot's document belongs to tenant
+    await getDocumentById(snapshot.documentId, req.user.tenantId);
+
     res.json(snapshot);
   } catch (error) {
     next(error);

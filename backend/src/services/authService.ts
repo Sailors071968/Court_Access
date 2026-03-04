@@ -42,22 +42,28 @@ export async function registerUser(input: RegisterInput): Promise<AuthResponse> 
     throw new AppError('Email already registered', 409);
   }
 
-  const tenant = await prisma.tenant.create({
-    data: {
-      organizationName: input.organizationName || `${input.name}'s Organization`,
-    },
-  });
-
+  // Hash password before transaction (CPU-bound, no DB dependency)
   const passwordHash = await bcrypt.hash(input.password, SALT_ROUNDS);
 
-  const user = await prisma.user.create({
-    data: {
-      tenantId: tenant.id,
-      email: input.email,
-      passwordHash,
-      name: input.name,
-      role: input.role || 'client',
-    },
+  // Atomic transaction: tenant + user created together or both rolled back
+  const { tenant, user } = await prisma.$transaction(async (tx) => {
+    const tenant = await tx.tenant.create({
+      data: {
+        organizationName: input.organizationName || `${input.name}'s Organization`,
+      },
+    });
+
+    const user = await tx.user.create({
+      data: {
+        tenantId: tenant.id,
+        email: input.email,
+        passwordHash,
+        name: input.name,
+        role: input.role || 'client',
+      },
+    });
+
+    return { tenant, user };
   });
 
   logger.info('User registered', { userId: user.id, tenantId: tenant.id });

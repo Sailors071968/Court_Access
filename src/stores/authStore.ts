@@ -1,10 +1,12 @@
 // ============================================
 // Court Access — Auth Store (Zustand)
+// Connected to real backend API
 // ============================================
 
 import { create } from 'zustand';
 import type { User, UserRole } from '../types';
 import { ROLE_PERMISSIONS } from '../constants';
+import apiClient from '../services/apiClient';
 
 interface AuthState {
   user: User | null;
@@ -15,86 +17,62 @@ interface AuthState {
   logout: () => void;
   switchRole: (role: UserRole) => void;
   hasPermission: (permission: keyof typeof ROLE_PERMISSIONS.admin) => boolean;
+  loadUser: () => Promise<void>;
 }
-
-// Mock users for development
-const MOCK_USERS: Record<string, User> = {
-  'attorney@courtaccess.com': {
-    id: '1',
-    name: 'Attorney Jane Doe',
-    email: 'attorney@courtaccess.com',
-    role: 'attorney',
-    avatar: undefined,
-  },
-  'investigator@courtaccess.com': {
-    id: '2',
-    name: 'Agent J. Doe',
-    email: 'investigator@courtaccess.com',
-    role: 'investigator',
-    avatar: undefined,
-  },
-  'admin@courtaccess.com': {
-    id: '3',
-    name: 'Admin User',
-    email: 'admin@courtaccess.com',
-    role: 'admin',
-    avatar: undefined,
-  },
-  'staff@courtaccess.com': {
-    id: '4',
-    name: 'Staff Member',
-    email: 'staff@courtaccess.com',
-    role: 'staff',
-    avatar: undefined,
-  },
-  'client@courtaccess.com': {
-    id: '5',
-    name: 'John Smith',
-    email: 'client@courtaccess.com',
-    role: 'client',
-    avatar: undefined,
-  },
-};
 
 export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
-  isAuthenticated: false,
+  isAuthenticated: !!localStorage.getItem('court_access_token'),
   isLoading: false,
 
-  login: async (email: string, _password: string) => {
+  login: async (email: string, password: string) => {
     set({ isLoading: true });
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 800));
-
-    const mockUser = MOCK_USERS[email];
-    if (mockUser) {
-      set({ user: mockUser, isAuthenticated: true, isLoading: false });
-    } else {
-      // Default to attorney role for any email
+    try {
+      const res = await apiClient.post('/auth/login', { email, password });
+      const { token, user } = res.data;
+      localStorage.setItem('court_access_token', token);
       set({
         user: {
-          id: '99',
-          name: email.split('@')[0],
-          email,
-          role: 'attorney',
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role as UserRole,
+          phone: user.phone,
         },
         isAuthenticated: true,
         isLoading: false,
       });
+    } catch (error) {
+      set({ isLoading: false });
+      throw error;
     }
   },
 
-  register: async (name: string, email: string, _password: string, role: UserRole) => {
+  register: async (name: string, email: string, password: string, role: UserRole) => {
     set({ isLoading: true });
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    set({
-      user: { id: Date.now().toString(), name, email, role },
-      isAuthenticated: true,
-      isLoading: false,
-    });
+    try {
+      const res = await apiClient.post('/auth/register', { name, email, password, role });
+      const { token, user } = res.data;
+      localStorage.setItem('court_access_token', token);
+      set({
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role as UserRole,
+          phone: undefined,
+        },
+        isAuthenticated: true,
+        isLoading: false,
+      });
+    } catch (error) {
+      set({ isLoading: false });
+      throw error;
+    }
   },
 
   logout: () => {
+    localStorage.removeItem('court_access_token');
     set({ user: null, isAuthenticated: false });
   },
 
@@ -109,5 +87,30 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     const { user } = get();
     if (!user) return false;
     return ROLE_PERMISSIONS[user.role][permission];
+  },
+
+  loadUser: async () => {
+    const token = localStorage.getItem('court_access_token');
+    if (!token) {
+      set({ user: null, isAuthenticated: false });
+      return;
+    }
+    try {
+      const res = await apiClient.get('/auth/me');
+      const user = res.data;
+      set({
+        user: {
+          id: user.id,
+          name: user.name,
+          email: user.email,
+          role: user.role as UserRole,
+          phone: user.phone,
+        },
+        isAuthenticated: true,
+      });
+    } catch {
+      localStorage.removeItem('court_access_token');
+      set({ user: null, isAuthenticated: false });
+    }
   },
 }));

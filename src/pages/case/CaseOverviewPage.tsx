@@ -1,28 +1,42 @@
 // ============================================
 // Court Access — Case Overview Tab
+// Connected to real backend API
 // ============================================
 
 import { useParams, useNavigate } from 'react-router-dom';
-import { FileText, Scale, Calendar, Lightbulb, TrendingUp } from 'lucide-react';
+import { FileText, Scale, Calendar, Lightbulb, TrendingUp, Loader2 } from 'lucide-react';
 import { Card, StatCard } from '../../components/common/Card';
 import { AIStatusBadge } from '../../components/common/StatusBadge';
 import { ROLE_PERMISSIONS } from '../../constants';
-import { caseDataProvider } from '../../services/caseDataProvider';
+import { useCase, useDocuments } from '../../hooks/useApi';
 import { useAuthStore } from '../../stores/authStore';
 
 export function CaseOverviewPage() {
   const { caseId } = useParams<{ caseId: string }>();
   const navigate = useNavigate();
   const { user } = useAuthStore();
+  const { data: currentCase, isLoading: caseLoading } = useCase(caseId);
+  const { data: documents, isLoading: docsLoading } = useDocuments(caseId);
 
   if (!user) return null;
 
   const permissions = ROLE_PERMISSIONS[user.role];
-  const cases = caseDataProvider.getCases();
-  const currentCase = cases.find((c) => c.id === caseId) || caseDataProvider.getPrimaryCase();
-  const documents = caseDataProvider.getDocuments(currentCase.id);
-  const activity = caseDataProvider.getActivity(currentCase.id);
-  const documentTypeLabels = caseDataProvider.getDocumentTypeLabels();
+  const isLoading = caseLoading || docsLoading;
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 size={24} className="animate-spin text-gray-400" />
+        <span className="ml-2 text-gray-500">Loading...</span>
+      </div>
+    );
+  }
+
+  if (!currentCase) {
+    return <p className="text-gray-500 text-center py-8">Case not found.</p>;
+  }
+
+  const docList = documents || [];
 
   const showIntelligence = user.role !== 'client';
 
@@ -30,9 +44,9 @@ export function CaseOverviewPage() {
     <div className="space-y-6">
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        <StatCard icon={<FileText size={28} className="text-blue-500" />} value={currentCase.documentsCount} label="Documents Filed" trend="+2 this week" />
-        <StatCard icon={<Scale size={28} className="text-amber-600" />} value={currentCase.chargesCount} label="Charges" />
-        <StatCard icon={<Calendar size={28} className="text-blue-500" />} value={currentCase.nextHearing || 'TBD'} label={currentCase.nextHearingLocation || 'Unresolved'} />
+        <StatCard icon={<FileText size={28} className="text-blue-500" />} value={docList.length} label="Documents Filed" />
+        <StatCard icon={<Scale size={28} className="text-amber-600" />} value={0} label="Charges" />
+        <StatCard icon={<Calendar size={28} className="text-blue-500" />} value="TBD" label="Next Hearing" />
         {showIntelligence && (
           <>
             <StatCard icon={<Lightbulb size={28} className="text-amber-500" />} value="8 New" label="Intelligence Signals" highlight />
@@ -47,12 +61,9 @@ export function CaseOverviewPage() {
           <Card>
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Case Information</h2>
             <div className="grid sm:grid-cols-2 gap-4 text-sm">
-              <div><span className="text-gray-500">Case #:</span> <span className="font-medium text-gray-900 ml-2">{currentCase.caseNumber}</span></div>
-              <div><span className="text-gray-500">Judge:</span> <span className="font-medium text-gray-900 ml-2">{currentCase.judge}</span></div>
-              <div><span className="text-gray-500">Jurisdiction:</span> <span className="font-medium text-gray-900 ml-2">{currentCase.jurisdiction}</span></div>
-              <div><span className="text-gray-500">Court:</span> <span className="font-medium text-gray-900 ml-2">{currentCase.court}</span></div>
-              <div><span className="text-gray-500">Department:</span> <span className="font-medium text-gray-900 ml-2">{currentCase.department}</span></div>
+              <div><span className="text-gray-500">Case #:</span> <span className="font-medium text-gray-900 ml-2">{currentCase.caseNumber || 'N/A'}</span></div>
               <div><span className="text-gray-500">Status:</span> <span className="font-medium text-gray-900 ml-2 capitalize">{currentCase.status}</span></div>
+              <div><span className="text-gray-500">Created:</span> <span className="font-medium text-gray-900 ml-2">{new Date(currentCase.createdAt).toLocaleDateString()}</span></div>
             </div>
           </Card>
 
@@ -72,11 +83,11 @@ export function CaseOverviewPage() {
                 </tr>
               </thead>
               <tbody>
-                {documents.slice(0, 3).map((doc) => (
+                {docList.slice(0, 3).map((doc) => (
                   <tr key={doc.id} className="border-b border-gray-50 hover:bg-gray-50">
-                    <td className="py-3 px-2 font-medium text-gray-900">{doc.name}</td>
-                    <td className="py-3 px-2 text-gray-500">{doc.filedDate}</td>
-                    <td className="py-3 px-2 text-gray-500">{documentTypeLabels[doc.type]}</td>
+                    <td className="py-3 px-2 font-medium text-gray-900">{doc.fileName}</td>
+                    <td className="py-3 px-2 text-gray-500">{new Date(doc.uploadedAt).toLocaleDateString()}</td>
+                    <td className="py-3 px-2 text-gray-500">Document</td>
                     <td className="py-3 px-2"><AIStatusBadge status={doc.analysisStatus} /></td>
                   </tr>
                 ))}
@@ -114,26 +125,7 @@ export function CaseOverviewPage() {
 
           <Card>
             <h2 className="text-lg font-semibold text-gray-900 mb-3">Recent Activity</h2>
-            <div className="space-y-3">
-              {activity.slice(0, 4).map((item) => (
-                <div key={item.id} className="flex gap-3 pb-3 border-b border-gray-50 last:border-0">
-                  <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
-                    item.type === 'document' ? 'bg-orange-100 text-orange-600' :
-                    item.type === 'hearing' ? 'bg-blue-100 text-blue-600' :
-                    'bg-green-100 text-green-600'
-                  }`}>
-                    {item.type === 'document' ? <FileText size={14} /> :
-                     item.type === 'hearing' ? <Calendar size={14} /> :
-                     <Lightbulb size={14} />}
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-900">{item.title}</p>
-                    <p className="text-xs text-gray-500">{item.description}</p>
-                    <p className="text-xs text-gray-400 mt-1">{item.timestamp}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
+            <p className="text-sm text-gray-500">No recent activity.</p>
           </Card>
         </div>
       </div>

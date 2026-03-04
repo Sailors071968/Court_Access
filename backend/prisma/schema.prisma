@@ -1,0 +1,93 @@
+// ============================================
+// Court Access — Prisma Schema
+// All tables enforce tenant isolation via tenant_id.
+// ============================================
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Tenant {
+  id                String         @id @default(uuid())
+  organizationName  String         @map("organization_name")
+  subscriptionTier  String         @default("basic") @map("subscription_tier")
+  createdAt         DateTime       @default(now()) @map("created_at")
+  users             User[]
+  cases             Case[]
+
+  @@map("tenants")
+}
+
+model User {
+  id            String         @id @default(uuid())
+  email         String         @unique
+  passwordHash  String         @map("password_hash")
+  name          String
+  role          String         @default("client")
+  phone         String?
+  smsEnabled    Boolean        @default(false) @map("sms_enabled")
+  tenantId      String         @map("tenant_id")
+  tenant        Tenant         @relation(fields: [tenantId], references: [id])
+  createdAt     DateTime       @default(now()) @map("created_at")
+  documents     Document[]
+
+  @@map("users")
+}
+
+model Case {
+  id            String         @id @default(uuid())
+  tenantId      String         @map("tenant_id")
+  tenant        Tenant         @relation(fields: [tenantId], references: [id])
+  caseNumber    String?        @map("case_number")
+  title         String
+  status        String         @default("active")
+  createdAt     DateTime       @default(now()) @map("created_at")
+  documents     Document[]
+
+  @@map("cases")
+}
+
+model Document {
+  id              String         @id @default(uuid())
+  caseId          String         @map("case_id")
+  case            Case           @relation(fields: [caseId], references: [id])
+  fileName        String         @map("file_name")
+  fileHashSha256  String?        @map("file_hash_sha256")
+  fileHashSha3256 String?        @map("file_hash_sha3_256")
+  storagePath     String         @map("storage_path")
+  uploadedBy      String         @map("uploaded_by")
+  user            User           @relation(fields: [uploadedBy], references: [id])
+  uploadedAt      DateTime       @default(now()) @map("uploaded_at")
+  extractedText   String?        @map("extracted_text")
+  analysisStatus  String         @default("pending") @map("analysis_status")
+  snapshots       Snapshot[]
+
+  @@map("documents")
+}
+
+model Snapshot {
+  id              String         @id @default(uuid())
+  documentId      String         @map("document_id")
+  document        Document       @relation(fields: [documentId], references: [id])
+  snapshotHash    String?        @map("snapshot_hash")
+  modelVersion    String?        @map("model_version")
+  analysisJson    Json?          @map("analysis_json")
+  createdAt       DateTime       @default(now()) @map("created_at")
+
+  @@map("snapshots")
+}
+
+model EmailSuppression {
+  id           String         @id @default(uuid())
+  email        String
+  reason       String
+  sourceEvent  String         @map("source_event")
+  createdAt    DateTime       @default(now()) @map("created_at")
+
+  @@map("email_suppression")
+}

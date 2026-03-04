@@ -8,8 +8,8 @@ import { useAuthStore } from '../../stores/authStore';
 import { Scale, Eye, EyeOff } from 'lucide-react';
 
 export function LoginPage() {
-  const [email, setEmail] = useState('attorney@courtaccess.com');
-  const [password, setPassword] = useState('password');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const { login, isLoading } = useAuthStore();
@@ -123,28 +123,7 @@ export function LoginPage() {
             </Link>
           </div>
 
-          {/* Demo Accounts */}
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <p className="text-xs text-gray-400 mb-3 text-center">Demo accounts:</p>
-            <div className="grid grid-cols-2 gap-2">
-              {[
-                { label: 'Attorney', email: 'attorney@courtaccess.com' },
-                { label: 'Investigator', email: 'investigator@courtaccess.com' },
-                { label: 'Admin', email: 'admin@courtaccess.com' },
-                { label: 'Staff', email: 'staff@courtaccess.com' },
-                { label: 'Client', email: 'client@courtaccess.com' },
-              ].map((demo) => (
-                <button
-                  key={demo.email}
-                  type="button"
-                  onClick={() => { setEmail(demo.email); setPassword('password'); }}
-                  className="text-xs px-3 py-2 bg-gray-50 text-gray-600 rounded-lg hover:bg-gray-100 transition-colors border border-gray-200"
-                >
-                  {demo.label}
-                </button>
-              ))}
-            </div>
-          </div>
+          {/* Removed demo accounts — real API authentication */}
         </div>
       </div>
     </div>

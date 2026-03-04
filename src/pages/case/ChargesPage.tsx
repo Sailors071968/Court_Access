@@ -5,18 +5,27 @@
 import { useState, useEffect } from 'react';
 import { Card } from '../../components/common/Card';
 import { EvidenceStatusBadge } from '../../components/common/StatusBadge';
-import { caseDataProvider } from '../../services/caseDataProvider';
 import { getDefenseInsights } from '../../services/ai/defenseInsights';
-import type { DefenseInsight } from '../../types';
+import type { DefenseInsight, ChargeEntity } from '../../types';
 import { useParams } from 'react-router-dom';
 import { ArrowRight, AlertTriangle } from 'lucide-react';
+import apiClient from '../../services/apiClient';
 
 export function ChargesPage() {
   const { caseId } = useParams<{ caseId: string }>();
   const [activeChargeIndex, setActiveChargeIndex] = useState(0);
   const [insights, setInsights] = useState<DefenseInsight[]>([]);
   const [insightsLoading, setInsightsLoading] = useState(true);
-  const charges = caseDataProvider.getCharges(caseId);
+  const [charges, setCharges] = useState<ChargeEntity[]>([]);
+
+  useEffect(() => {
+    if (!caseId) return;
+    apiClient.get(`/cases/${caseId}/charges`).then((res) => {
+      setCharges(res.data || []);
+    }).catch(() => {
+      setCharges([]);
+    });
+  }, [caseId]);
 
   useEffect(() => {
     if (!caseId) return;

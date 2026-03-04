@@ -8,15 +8,14 @@ import { Card } from '../../components/common/Card';
 import { ExpertRecommendationBadge } from '../../components/common/StatusBadge';
 import { getExpertRecommendations } from '../../services/ai/expertRecommendations';
 import type { Expert } from '../../types';
-import { AlertTriangle, MessageSquare } from 'lucide-react';
-import { caseDataProvider } from '../../services/caseDataProvider';
+import { AlertTriangle, MessageSquare, Loader2 } from 'lucide-react';
+import { useCase } from '../../hooks/useApi';
 
 export function ExpertsPage() {
   const { caseId } = useParams<{ caseId: string }>();
   const [experts, setExperts] = useState<Expert[]>([]);
   const [loading, setLoading] = useState(true);
-  const cases = caseDataProvider.getCases();
-  const currentCase = cases.find((c) => c.id === caseId) || caseDataProvider.getPrimaryCase();
+  const { data: currentCase, isLoading: caseLoading } = useCase(caseId);
 
   useEffect(() => {
     setLoading(true);
@@ -40,11 +39,19 @@ export function ExpertsPage() {
 
       {/* Case Info */}
       <div>
-        <h2 className="text-xl font-bold text-blue-700">{currentCase.title} - Case #{currentCase.caseNumber}</h2>
-        <p className="text-sm text-gray-500 mt-1">
-          Jurisdiction: {currentCase.jurisdiction}, {currentCase.court}<br />
-          Status: Pre-Trial Motions
-        </p>
+        {caseLoading ? (
+          <div className="flex items-center gap-2">
+            <Loader2 size={16} className="animate-spin text-gray-400" />
+            <span className="text-gray-500 text-sm">Loading case...</span>
+          </div>
+        ) : currentCase ? (
+          <>
+            <h2 className="text-xl font-bold text-blue-700">{currentCase.title} - Case #{currentCase.caseNumber || 'N/A'}</h2>
+            <p className="text-sm text-gray-500 mt-1">Status: {currentCase.status}</p>
+          </>
+        ) : (
+          <p className="text-gray-500 text-sm">Case not found.</p>
+        )}
       </div>
 
       <h3 className="text-lg font-bold text-gray-900">Recommended Expert Witnesses</h3>

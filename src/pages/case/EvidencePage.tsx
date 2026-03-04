@@ -3,30 +3,21 @@
 // ============================================
 
 import { useState } from 'react';
-import { Search, Upload, Eye, MoreHorizontal } from 'lucide-react';
+import { useParams } from 'react-router-dom';
+import { Search, Upload, Eye, MoreHorizontal, Loader2 } from 'lucide-react';
 import { Card } from '../../components/common/Card';
 import { AIStatusBadge } from '../../components/common/StatusBadge';
-import { caseDataProvider } from '../../services/caseDataProvider';
-
-const DOCUMENT_TABS = [
-  { id: 'all', label: 'All Documents', count: 24 },
-  { id: 'defense_motion', label: 'Motions', count: 8 },
-  { id: 'transcript', label: 'Transcripts', count: 5 },
-  { id: 'charging_document', label: 'Charging Documents', count: 3 },
-  { id: 'court_order', label: 'Court Orders', count: 4 },
-  { id: 'other', label: 'Other Filings', count: 4 },
-];
+import { useDocuments } from '../../hooks/useApi';
 
 export function EvidencePage() {
-  const [activeTab, setActiveTab] = useState('all');
+  const { caseId } = useParams<{ caseId: string }>();
   const [searchQuery, setSearchQuery] = useState('');
-  const allDocuments = caseDataProvider.getDocuments();
-  const documentTypeLabels = caseDataProvider.getDocumentTypeLabels();
+  const { data: documents, isLoading } = useDocuments(caseId);
+  const docList = documents || [];
 
-  const filteredDocs = allDocuments.filter((doc) => {
-    const matchesTab = activeTab === 'all' || doc.type === activeTab;
-    const matchesSearch = !searchQuery || doc.name.toLowerCase().includes(searchQuery.toLowerCase());
-    return matchesTab && matchesSearch;
+  const filteredDocs = docList.filter((doc) => {
+    const matchesSearch = !searchQuery || doc.fileName.toLowerCase().includes(searchQuery.toLowerCase());
+    return matchesSearch;
   });
 
   return (
@@ -54,22 +45,12 @@ export function EvidencePage() {
         </div>
       </div>
 
-      {/* Document Type Tabs */}
-      <div className="flex gap-1 overflow-x-auto border-b border-gray-200">
-        {DOCUMENT_TABS.map((tab) => (
-          <button
-            key={tab.id}
-            onClick={() => setActiveTab(tab.id)}
-            className={`px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
-              activeTab === tab.id
-                ? 'border-blue-600 text-blue-600'
-                : 'border-transparent text-gray-500 hover:text-gray-700'
-            }`}
-          >
-            {tab.label} ({tab.count})
-          </button>
-        ))}
-      </div>
+      {isLoading && (
+        <div className="flex items-center justify-center py-8">
+          <Loader2 size={24} className="animate-spin text-gray-400" />
+          <span className="ml-2 text-gray-500">Loading documents...</span>
+        </div>
+      )}
 
       {/* Documents Table */}
       <Card padding="none">
@@ -88,10 +69,10 @@ export function EvidencePage() {
             <tbody>
               {filteredDocs.map((doc) => (
                 <tr key={doc.id} className="border-b border-gray-50 hover:bg-gray-50">
-                  <td className="py-3 px-4 font-medium text-gray-900">{doc.name}</td>
-                  <td className="py-3 px-4 text-gray-500">{documentTypeLabels[doc.type]}</td>
-                  <td className="py-3 px-4 text-gray-500">{doc.filedDate}</td>
-                  <td className="py-3 px-4 text-gray-500">{doc.pages} pages</td>
+                  <td className="py-3 px-4 font-medium text-gray-900">{doc.fileName}</td>
+                  <td className="py-3 px-4 text-gray-500">Document</td>
+                  <td className="py-3 px-4 text-gray-500">{new Date(doc.uploadedAt).toLocaleDateString()}</td>
+                  <td className="py-3 px-4 text-gray-500">—</td>
                   <td className="py-3 px-4"><AIStatusBadge status={doc.analysisStatus} /></td>
                   <td className="py-3 px-4">
                     <div className="flex items-center gap-2">

@@ -8,15 +8,14 @@ import { Card } from '../../components/common/Card';
 import { MotionPriorityBadge } from '../../components/common/StatusBadge';
 import { getMotionRecommendations } from '../../services/ai/motionRecommendations';
 import type { Motion } from '../../types';
-import { AlertTriangle, MessageSquare, Pencil } from 'lucide-react';
-import { caseDataProvider } from '../../services/caseDataProvider';
+import { AlertTriangle, MessageSquare, Pencil, Loader2 } from 'lucide-react';
+import { useCase } from '../../hooks/useApi';
 
 export function MotionsPage() {
   const { caseId } = useParams<{ caseId: string }>();
   const [motions, setMotions] = useState<Motion[]>([]);
   const [loading, setLoading] = useState(true);
-  const cases = caseDataProvider.getCases();
-  const currentCase = cases.find((c) => c.id === caseId) || caseDataProvider.getPrimaryCase();
+  const { data: currentCase, isLoading: caseLoading } = useCase(caseId);
 
   useEffect(() => {
     setLoading(true);
@@ -41,10 +40,17 @@ export function MotionsPage() {
       <div className="flex items-start justify-between">
         <div>
           <h2 className="text-xl font-bold text-gray-900">Court Attorney - Motion Recommendations</h2>
-          <div className="flex items-center gap-2 mt-2 px-4 py-2 bg-purple-600 text-white rounded-lg text-sm">
-            <span>{currentCase.title} - Case #{currentCase.caseNumber}</span>
-            <button aria-label="Edit case"><Pencil size={14} /></button>
-          </div>
+          {caseLoading ? (
+            <div className="flex items-center gap-2 mt-2">
+              <Loader2 size={16} className="animate-spin text-gray-400" />
+              <span className="text-gray-500 text-sm">Loading case...</span>
+            </div>
+          ) : currentCase ? (
+            <div className="flex items-center gap-2 mt-2 px-4 py-2 bg-purple-600 text-white rounded-lg text-sm">
+              <span>{currentCase.title} - Case #{currentCase.caseNumber || 'N/A'}</span>
+              <button aria-label="Edit case"><Pencil size={14} /></button>
+            </div>
+          ) : null}
         </div>
       </div>
 

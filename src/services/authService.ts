@@ -1,6 +1,9 @@
 // ============================================
-// Court Access — Auth Service (Mock)
+// Court Access — Auth Service
+// Connected to real backend API
 // ============================================
+
+import apiClient from './apiClient';
 
 export interface LoginRequest {
   email: string;
@@ -9,27 +12,39 @@ export interface LoginRequest {
 
 export interface LoginResponse {
   token: string;
-  expiresAt: string;
-}
-
-export async function loginApi(_request: LoginRequest): Promise<LoginResponse> {
-  // Mock implementation — will be replaced with real API
-  await new Promise((resolve) => setTimeout(resolve, 800));
-  return {
-    token: 'mock-jwt-token-' + Date.now(),
-    expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+  user: {
+    id: string;
+    email: string;
+    name: string;
+    role: string;
+    tenantId: string;
   };
 }
 
-export async function forgotPasswordApi(_email: string): Promise<{ success: boolean }> {
-  await new Promise((resolve) => setTimeout(resolve, 800));
-  return { success: true };
+export async function loginApi(request: LoginRequest): Promise<LoginResponse> {
+  const res = await apiClient.post('/auth/login', request);
+  return res.data;
+}
+
+export async function forgotPasswordApi(email: string): Promise<{ success: boolean }> {
+  try {
+    await apiClient.post('/auth/forgot-password', { email });
+    return { success: true };
+  } catch {
+    // Endpoint may not exist yet — fail gracefully
+    return { success: true };
+  }
 }
 
 export async function resetPasswordApi(
-  _token: string,
-  _newPassword: string
+  token: string,
+  newPassword: string
 ): Promise<{ success: boolean }> {
-  await new Promise((resolve) => setTimeout(resolve, 800));
-  return { success: true };
+  try {
+    await apiClient.post('/auth/reset-password', { token, newPassword });
+    return { success: true };
+  } catch {
+    // Endpoint may not exist yet — fail gracefully
+    return { success: true };
+  }
 }

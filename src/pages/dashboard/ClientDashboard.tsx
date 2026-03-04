@@ -5,12 +5,12 @@
 // ============================================
 
 import { useNavigate } from 'react-router-dom';
-import { FileText, Calendar, Download, Clock, CheckCircle, User, Scale } from 'lucide-react';
+import { FileText, Calendar, Download, Clock, CheckCircle, User, Scale, Loader2 } from 'lucide-react';
 import { Card, StatCard } from '../../components/common/Card';
 import { DemoModeBadge } from '../../components/common/DemoModeBadge';
 import { STATUS_COLORS } from '../../constants/designTokens';
-import { caseDataProvider } from '../../services/caseDataProvider';
 import { useAuthStore } from '../../stores/authStore';
+import { useCases } from '../../hooks/useApi';
 
 // Case phase for client view
 type CasePhase = 'preliminary' | 'pretrial' | 'trial' | 'sentencing' | 'closed';
@@ -26,11 +26,19 @@ const CASE_PHASE_CONFIG: Record<CasePhase, { label: string; bgColor: string; tex
 export function ClientDashboard() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const { getPrimaryCase, getDocuments } = caseDataProvider;
-  const primaryCase = getPrimaryCase();
-  const documents = getDocuments(primaryCase.id);
+  const { data: cases, isLoading } = useCases();
+  const primaryCase = (cases || [])[0] || null;
   const currentPhase: CasePhase = 'pretrial';
   const phaseConfig = CASE_PHASE_CONFIG[currentPhase];
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 size={24} className="animate-spin text-gray-400" />
+        <span className="ml-2 text-gray-500">Loading...</span>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-5xl mx-auto space-y-6">
@@ -54,19 +62,19 @@ export function ClientDashboard() {
         <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
           <div>
             <p className="text-xs text-gray-500 uppercase tracking-wide">Case</p>
-            <p className="text-sm font-semibold text-gray-900 mt-1">{primaryCase.title}</p>
+            <p className="text-sm font-semibold text-gray-900 mt-1">{primaryCase?.title || 'No case assigned'}</p>
           </div>
           <div>
             <p className="text-xs text-gray-500 uppercase tracking-wide">Case Number</p>
-            <p className="text-sm font-semibold text-gray-900 mt-1">#{primaryCase.caseNumber}</p>
+            <p className="text-sm font-semibold text-gray-900 mt-1">{primaryCase?.caseNumber ? `#${primaryCase.caseNumber}` : 'N/A'}</p>
           </div>
           <div>
             <p className="text-xs text-gray-500 uppercase tracking-wide">Next Court Date</p>
-            <p className="text-sm font-semibold text-gray-900 mt-1">{primaryCase.nextHearing || 'TBD'}</p>
+            <p className="text-sm font-semibold text-gray-900 mt-1">TBD</p>
           </div>
           <div>
             <p className="text-xs text-gray-500 uppercase tracking-wide">Assigned Attorney</p>
-            <p className="text-sm font-semibold text-gray-900 mt-1">Jane Doe, Esq.</p>
+            <p className="text-sm font-semibold text-gray-900 mt-1">TBD</p>
           </div>
         </div>
 
@@ -102,42 +110,29 @@ export function ClientDashboard() {
         <Card>
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-gray-900">Documents</h2>
-            <button
-              onClick={() => navigate(`/cases/${primaryCase.id}/documents`)}
-              className="text-xs text-blue-600 hover:text-blue-700 font-medium"
-            >
-              View All
-            </button>
-          </div>
-          <div className="space-y-2">
-            {documents.slice(0, 4).map((doc) => (
-              <div
-                key={doc.id}
-                className="flex items-center justify-between p-3 rounded-lg border border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors"
+            {primaryCase && (
+              <button
                 onClick={() => navigate(`/cases/${primaryCase.id}/documents`)}
+                className="text-xs text-blue-600 hover:text-blue-700 font-medium"
               >
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${STATUS_COLORS.info}`}>
-                    <FileText size={14} />
-                  </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">{doc.name}</p>
-                    <p className="text-xs text-gray-500">{doc.filedDate}</p>
-                  </div>
-                </div>
-                <button className="text-gray-400 hover:text-gray-600 flex-shrink-0 p-1">
-                  <Download size={14} />
-                </button>
-              </div>
-            ))}
+                View All
+              </button>
+            )}
           </div>
-          <button
-            onClick={() => navigate(`/cases/${primaryCase.id}/documents`)}
-            className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-lg text-sm font-medium hover:bg-slate-700 transition-colors"
-          >
-            <FileText size={16} />
-            Upload Document
-          </button>
+          {primaryCase ? (
+            <>
+              <p className="text-sm text-gray-500 mb-4">View and upload documents for your case.</p>
+              <button
+                onClick={() => navigate(`/cases/${primaryCase.id}/documents`)}
+                className="w-full flex items-center justify-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-lg text-sm font-medium hover:bg-slate-700 transition-colors"
+              >
+                <FileText size={16} />
+                View Documents
+              </button>
+            </>
+          ) : (
+            <p className="text-sm text-gray-500">No case assigned yet.</p>
+          )}
         </Card>
 
         {/* 3. Upcoming Events */}
@@ -174,8 +169,8 @@ export function ClientDashboard() {
         <div className="grid sm:grid-cols-3 gap-4 mb-4">
           <StatCard
             icon={<Scale size={24} className="text-gray-600" />}
-            value={primaryCase.chargesCount}
-            label="Charges"
+            value={(cases || []).length}
+            label="Cases"
           />
           <StatCard
             icon={<Clock size={24} className="text-amber-600" />}
@@ -184,7 +179,7 @@ export function ClientDashboard() {
           />
           <StatCard
             icon={<Calendar size={24} className="text-blue-600" />}
-            value={primaryCase.nextHearing || 'TBD'}
+            value="TBD"
             label="Next Date"
           />
         </div>

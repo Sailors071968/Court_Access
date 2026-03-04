@@ -191,31 +191,49 @@ export function getPhrasesByCategory(
 // ---------------------------------------------------------------------------
 
 /**
+ * ASCII-only lowercase normalization.
+ *
+ * Converts A-Z (0x41-0x5A) to a-z (0x61-0x7A) by adding 32.
+ * All other characters pass through unchanged.
+ *
+ * This is NOT locale-sensitive. Does NOT use .toLowerCase().
+ * No Unicode folding. No environment-dependent behavior.
+ * Pure ASCII transformation — deterministic across all runtimes.
+ */
+function asciiLowerChar(ch: string): string {
+  return ch >= 'A' && ch <= 'Z'
+    ? String.fromCharCode(ch.charCodeAt(0) + 32)
+    : ch;
+}
+
+/**
  * Tokenize text into structural tokens.
  *
  * Tokenization rules (deterministic):
- *   1. Convert to lowercase (case-insensitive matching)
- *   2. Split on whitespace and punctuation boundaries
- *   3. Remove empty tokens
- *   4. Assign sequential zero-based positions
+ *   1. Normalize each character to ASCII lowercase (asciiLowerChar)
+ *   2. Classify: alphanumeric (a-z, 0-9) + apostrophe = token char
+ *   3. Everything else = token boundary
+ *   4. Emit non-empty tokens with sequential zero-based positions
  *
  * This is NOT regex-only — it is a forward-scan tokenizer:
  *   - Scans each character sequentially
- *   - Accumulates alphanumeric + apostrophe characters into tokens
- *   - Everything else is a token boundary
+ *   - ASCII-only lowercase normalization (no .toLowerCase())
  *   - No locale-sensitive operations
+ *   - No Unicode folding
+ *   - No environment-dependent behavior
  *   - No regex engine dependency for core tokenization
  *
  * This is a pure function — same input always produces same output.
  */
 export function tokenizeText(text: string): TextToken[] {
   const tokens: TextToken[] = [];
-  const lower = text.toLowerCase();
   let currentToken = '';
   let position = 0;
 
-  for (let i = 0; i < lower.length; i++) {
-    const ch = lower[i];
+  for (let i = 0; i < text.length; i++) {
+    // ASCII-only lowercase — no .toLowerCase(), no locale dependency
+    const ch = asciiLowerChar(text[i]);
+
     // Alphanumeric and apostrophe are token characters
     const isTokenChar =
       (ch >= 'a' && ch <= 'z') ||

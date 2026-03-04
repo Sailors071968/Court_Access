@@ -1,21 +1,39 @@
 // ============================================
 // Court Access — Case Layout with Tab Navigation
+// Connected to real backend API
 // ============================================
 
 import { NavLink, Outlet, useParams } from 'react-router-dom';
+import { Loader2 } from 'lucide-react';
 import { CASE_TABS, ROLE_PERMISSIONS } from '../../constants';
 import { useAuthStore } from '../../stores/authStore';
 import { CaseStatusBadge } from '../../components/common/StatusBadge';
-import { caseDataProvider } from '../../services/caseDataProvider';
+import { useCase } from '../../hooks/useApi';
 
 export function CaseLayout() {
   const { caseId } = useParams<{ caseId: string }>();
   const { user } = useAuthStore();
-  const cases = caseDataProvider.getCases();
-  const currentCase = cases.find((c) => c.id === caseId) || caseDataProvider.getPrimaryCase();
+  const { data: currentCase, isLoading } = useCase(caseId);
 
   if (!user) return null;
   const permissions = ROLE_PERMISSIONS[user.role];
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <Loader2 size={24} className="animate-spin text-gray-400" />
+        <span className="ml-2 text-gray-500">Loading case...</span>
+      </div>
+    );
+  }
+
+  if (!currentCase) {
+    return (
+      <div className="flex items-center justify-center py-12">
+        <p className="text-gray-500">Case not found.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
@@ -24,7 +42,7 @@ export function CaseLayout() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">{currentCase.title}</h1>
           <p className="text-sm text-gray-500 mt-1">
-            Case #{currentCase.caseNumber} &middot; {currentCase.jurisdiction}, {currentCase.court}
+            Case #{currentCase.caseNumber || 'N/A'}
           </p>
         </div>
         <CaseStatusBadge status={currentCase.status} />

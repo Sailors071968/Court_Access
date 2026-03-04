@@ -314,48 +314,221 @@ export function getInvariantsByCategory(
 }
 
 // ---------------------------------------------------------------------------
-// Comment Detection — skip comment lines
+// String/Comment State Machine — determines if a character position
+// is inside a comment, string literal, or functional code.
+//
+// States:
+//   CODE             — functional code (invariants enforced)
+//   STRING_SINGLE    — inside '...' (invariants enforced)
+//   STRING_DOUBLE    — inside "..." (invariants enforced)
+//   STRING_TEMPLATE  — inside `...` (invariants enforced)
+//   COMMENT_LINE     — inside // ... (invariants NOT enforced)
+//   COMMENT_BLOCK    — inside /* ... */ (invariants NOT enforced)
+//
+// Key guarantee:
+//   Comment markers inside string literals do NOT trigger comment state.
+//   Patterns inside string literals ARE enforced (strings are code).
+//   Only actual comments are skipped.
+//
+// Forward-scan, ASCII-only, no regex, deterministic.
 // ---------------------------------------------------------------------------
 
 /**
- * Determine if a line is a comment line.
- *
- * Detects:
- *   - Lines starting with // (single-line comment)
- *   - Lines starting with * (block comment continuation)
- *   - Lines starting with /* (block comment start)
- *   - Lines containing only whitespace before comment markers
- *
- * This ensures invariant violations inside comments are NOT flagged.
- * The drift detector enforces functional code only.
- *
- * Forward-scan, ASCII-only, no regex.
+ * Character position classification.
+ * 'CODE' includes string literals — invariants are enforced there.
+ * 'COMMENT' means the position is inside a comment — invariants skipped.
  */
-function isCommentLine(line: string): boolean {
-  // Skip leading whitespace
+type CharClass = 'CODE' | 'COMMENT';
+
+/**
+ * Classify each character position in a line as CODE or COMMENT.
+ *
+ * State machine tracks:
+ *   - Single-quoted string boundaries (') with backslash escape
+ *   - Double-quoted string boundaries (") with backslash escape
+ *   - Template literal boundaries (`) with backslash escape
+ *   - Single-line comment start (//)
+ *   - Block comment regions (/* ... * /)
+ *
+ * String literals are classified as CODE — patterns inside strings
+ * are still enforced. Only actual comments are classified as COMMENT.
+ *
+ * The inBlockComment parameter carries block comment state across lines
+ * (block comments can span multiple lines).
+ *
+ * This is a pure function — same input always produces same output
+ * given the same inBlockComment state.
+ */
+function classifyLinePositions(
+  line: string,
+  inBlockComment: boolean
+): { classes: CharClass[]; outBlockComment: boolean } {
+  const classes: CharClass[] = new Array(line.length);
+  let state: 'CODE' | 'STR_SINGLE' | 'STR_DOUBLE' | 'STR_TEMPLATE' | 'COMMENT_LINE' | 'COMMENT_BLOCK' =
+    inBlockComment ? 'COMMENT_BLOCK' : 'CODE';
   let i = 0;
-  while (i < line.length && (line[i] === ' ' || line[i] === '\t')) {
-    i++;
+
+  while (i < line.length) {
+    const ch = line[i];
+    const next = i + 1 < line.length ? line[i + 1] : '';
+
+    switch (state) {
+      case 'CODE':
+        // Check for comment start
+        if (ch === '/' && next === '/') {
+          // Single-line comment — rest of line is COMMENT
+          for (let k = i; k < line.length; k++) {
+            classes[k] = 'COMMENT';
+          }
+          return { classes, outBlockComment: false };
+        }
+        if (ch === '/' && next === '*') {
+          // Block comment start
+          classes[i] = 'COMMENT';
+          classes[i + 1] = 'COMMENT';
+          state = 'COMMENT_BLOCK';
+          i += 2;
+          continue;
+        }
+        // Check for string literal start
+        if (ch === "'") {
+          classes[i] = 'CODE';
+          state = 'STR_SINGLE';
+          i++;
+          continue;
+        }
+        if (ch === '"') {
+          classes[i] = 'CODE';
+          state = 'STR_DOUBLE';
+          i++;
+          continue;
+        }
+        if (ch === '`') {
+          classes[i] = 'CODE';
+          state = 'STR_TEMPLATE';
+          i++;
+          continue;
+        }
+        // Regular code character
+        classes[i] = 'CODE';
+        i++;
+        break;
+
+      case 'STR_SINGLE':
+        classes[i] = 'CODE'; // String content is CODE — enforce invariants
+        if (ch === '\\') {
+          // Escape sequence — skip next character
+          if (i + 1 < line.length) {
+            classes[i + 1] = 'CODE';
+            i += 2;
+          } else {
+            i++;
+          }
+        } else if (ch === "'") {
+          // End of single-quoted string
+          state = 'CODE';
+          i++;
+        } else {
+          i++;
+        }
+        break;
+
+      case 'STR_DOUBLE':
+        classes[i] = 'CODE'; // String content is CODE — enforce invariants
+        if (ch === '\\') {
+          // Escape sequence — skip next character
+          if (i + 1 < line.length) {
+            classes[i + 1] = 'CODE';
+            i += 2;
+          } else {
+            i++;
+          }
+        } else if (ch === '"') {
+          // End of double-quoted string
+          state = 'CODE';
+          i++;
+        } else {
+          i++;
+        }
+        break;
+
+      case 'STR_TEMPLATE':
+        classes[i] = 'CODE'; // Template content is CODE — enforce invariants
+        if (ch === '\\') {
+          // Escape sequence — skip next character
+          if (i + 1 < line.length) {
+            classes[i + 1] = 'CODE';
+            i += 2;
+          } else {
+            i++;
+          }
+        } else if (ch === '`') {
+          // End of template literal
+          state = 'CODE';
+          i++;
+        } else {
+          i++;
+        }
+        break;
+
+      case 'COMMENT_BLOCK':
+        // Inside block comment — look for */
+        if (ch === '*' && next === '/') {
+          classes[i] = 'COMMENT';
+          classes[i + 1] = 'COMMENT';
+          state = 'CODE';
+          i += 2;
+          continue;
+        }
+        classes[i] = 'COMMENT';
+        i++;
+        break;
+
+      // COMMENT_LINE is not a state variable value — single-line comments
+      // are handled by early return in the CODE case above.
+    }
   }
 
-  // Check for comment markers
-  if (i >= line.length) return false;
+  return {
+    classes,
+    outBlockComment: state === 'COMMENT_BLOCK',
+  };
+}
 
-  // Single-line comment: //
-  if (line[i] === '/' && i + 1 < line.length && line[i + 1] === '/') {
-    return true;
+/**
+ * Check if ALL positions in a range [start, start+length) are COMMENT.
+ * Returns true only if every character in the range is inside a comment.
+ * If any character is CODE (including string literals), returns false.
+ */
+function isRangeAllComment(
+  classes: CharClass[],
+  start: number,
+  length: number
+): boolean {
+  for (let i = start; i < start + length && i < classes.length; i++) {
+    if (classes[i] !== 'COMMENT') return false;
   }
+  return true;
+}
 
-  // Block comment start: /*
-  if (line[i] === '/' && i + 1 < line.length && line[i + 1] === '*') {
-    return true;
+/**
+ * Check if a line is entirely a comment (no functional code).
+ * Uses the state machine to classify all positions.
+ * Returns true only if every non-whitespace character is COMMENT.
+ */
+function isEntirelyComment(
+  classes: CharClass[],
+  line: string
+): boolean {
+  for (let i = 0; i < line.length; i++) {
+    if (line[i] !== ' ' && line[i] !== '\t') {
+      if (classes[i] !== 'COMMENT') return false;
+    }
   }
-
-  // Block comment continuation: *
-  if (line[i] === '*') {
-    return true;
+  // If line is all whitespace, it is not a comment — it is empty
+  for (let i = 0; i < line.length; i++) {
+    if (line[i] !== ' ' && line[i] !== '\t') return true;
   }
-
   return false;
 }
 
@@ -559,20 +732,39 @@ function detectTokenExact(line: string, pattern: string): boolean {
  *   - IMPORT_PATH:  forbidden import path in import statement
  *   - TOKEN_EXACT:  exact token sequence match
  *
- * Comment lines are EXCLUDED — invariants apply to functional code only.
+ * String/comment state awareness:
+ *   - If the ENTIRE line is a comment → skip (no enforcement)
+ *   - For SUBSTRING matches, checks if the match position is inside a
+ *     comment region → skip that match. If the match is in CODE or a
+ *     string literal → enforce (violation detected).
+ *   - For IMPORT_PATH, comment-only lines are already skipped.
+ *   - For TOKEN_EXACT, comment-only lines are already skipped.
  *
- * This is a pure function — same input always produces same output.
+ * This ensures:
+ *   - Patterns inside string literals ARE enforced
+ *   - Patterns inside comments are NOT enforced
+ *   - Comment markers inside strings do NOT trigger comment state
+ *
+ * This is a pure function — same input always produces same output
+ * given the same classes array.
  */
 function scanLineForInvariant(
   line: string,
-  entry: InvariantEntry
+  entry: InvariantEntry,
+  classes: CharClass[]
 ): boolean {
-  // Skip comment lines — invariants apply to functional code only
-  if (isCommentLine(line)) return false;
+  // If entire line is a comment, skip all enforcement
+  if (isEntirelyComment(classes, line)) return false;
 
   switch (entry.patternType) {
-    case 'SUBSTRING':
-      return findSubstring(line, entry.pattern) !== -1;
+    case 'SUBSTRING': {
+      const pos = findSubstring(line, entry.pattern);
+      if (pos === -1) return false;
+      // Check if the match is inside a comment region
+      if (isRangeAllComment(classes, pos, entry.pattern.length)) return false;
+      // Match is in CODE or string literal — violation
+      return true;
+    }
     case 'IMPORT_PATH':
       return detectForbiddenImport(line, entry.pattern);
     case 'TOKEN_EXACT':
@@ -615,12 +807,19 @@ export function scanFile(
     (e) => invariantAppliesToScope(e.scope, fileScope)
   );
 
-  // Scan each line
+  // Track block comment state across lines
+  let inBlockComment = false;
+
+  // Scan each line with string/comment state machine
   for (let lineIndex = 0; lineIndex < sourceLines.length; lineIndex++) {
     const line = sourceLines[lineIndex];
 
+    // Classify each character position as CODE or COMMENT
+    const { classes, outBlockComment } = classifyLinePositions(line, inBlockComment);
+    inBlockComment = outBlockComment;
+
     for (const entry of applicable) {
-      if (scanLineForInvariant(line, entry)) {
+      if (scanLineForInvariant(line, entry, classes)) {
         // Extract matched text (the portion of the line containing the pattern)
         let matchedText = line;
         // Trim to reasonable length for reporting

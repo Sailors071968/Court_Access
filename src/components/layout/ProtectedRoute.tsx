@@ -1,7 +1,9 @@
 // ============================================
 // Court Access — Protected Route Wrapper
+// Connected to real backend API — validates token on mount
 // ============================================
 
+import { useEffect } from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 import type { RolePermissions } from '../../types';
@@ -12,8 +14,15 @@ interface ProtectedRouteProps {
 }
 
 export function ProtectedRoute({ children, requiredPermission }: ProtectedRouteProps) {
-  const { isAuthenticated, hasPermission } = useAuthStore();
+  const { isAuthenticated, hasPermission, user, loadUser } = useAuthStore();
   const location = useLocation();
+
+  // Load user from token on mount if authenticated but user is null
+  useEffect(() => {
+    if (isAuthenticated && !user) {
+      loadUser();
+    }
+  }, [isAuthenticated, user, loadUser]);
 
   if (!isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />;

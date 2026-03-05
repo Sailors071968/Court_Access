@@ -38,8 +38,8 @@ export function CaseLayout() {
             if (tab.permission && !permissions[tab.permission]) return null;
 
             const path = tab.path
-              ? `/cases/${caseId}${tab.path}`
-              : `/cases/${caseId}/overview`;
+              ? `/app/cases/${caseId}${tab.path}`
+              : `/app/cases/${caseId}/overview`;
 
             return (
               <NavLink

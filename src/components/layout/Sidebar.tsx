@@ -19,12 +19,12 @@ const iconMap = {
 };
 
 const navItems = [
-  { id: 'dashboard', label: 'Dashboard', path: '/dashboard', icon: 'LayoutDashboard', permission: null },
-  { id: 'cases', label: 'Cases', path: '/cases', icon: 'Briefcase', permission: null },
-  { id: 'search', label: 'Search', path: '/search', icon: 'Search', permission: null },
-  { id: 'notifications', label: 'Notifications & Alerts', path: '/notifications', icon: 'Bell', permission: null },
-  { id: 'settings', label: 'Settings', path: '/settings', icon: 'Settings', permission: 'canViewSettings' as keyof RolePermissions },
-  { id: 'admin', label: 'Admin', path: '/admin', icon: 'Shield', permission: 'canViewAdmin' as keyof RolePermissions },
+  { id: 'dashboard', label: 'Dashboard', path: '/app/dashboard', icon: 'LayoutDashboard', permission: null },
+  { id: 'cases', label: 'Cases', path: '/app/cases', icon: 'Briefcase', permission: null },
+  { id: 'search', label: 'Search', path: '/app/search', icon: 'Search', permission: null },
+  { id: 'notifications', label: 'Notifications & Alerts', path: '/app/notifications', icon: 'Bell', permission: null },
+  { id: 'settings', label: 'Settings', path: '/app/settings', icon: 'Settings', permission: 'canViewSettings' as keyof RolePermissions },
+  { id: 'admin', label: 'Admin', path: '/app/admin', icon: 'Shield', permission: 'canViewAdmin' as keyof RolePermissions },
 ];
 
 export function Sidebar() {
@@ -77,7 +77,7 @@ export function Sidebar() {
           const Icon = iconMap[item.icon as keyof typeof iconMap];
           const isActive =
             location.pathname === item.path ||
-            (item.path !== '/dashboard' && location.pathname.startsWith(item.path));
+            (item.path !== '/app/dashboard' && location.pathname.startsWith(item.path));
 
           return (
             <NavLink

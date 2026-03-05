@@ -103,7 +103,7 @@ export function ClientDashboard() {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-gray-900">Documents</h2>
             <button
-              onClick={() => navigate(`/cases/${primaryCase.id}/documents`)}
+              onClick={() => navigate(`/app/cases/${primaryCase.id}/documents`)}
               className="text-xs text-blue-600 hover:text-blue-700 font-medium"
             >
               View All
@@ -114,7 +114,7 @@ export function ClientDashboard() {
               <div
                 key={doc.id}
                 className="flex items-center justify-between p-3 rounded-lg border border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors"
-                onClick={() => navigate(`/cases/${primaryCase.id}/documents`)}
+                onClick={() => navigate(`/app/cases/${primaryCase.id}/documents`)}
               >
                 <div className="flex items-center gap-3 min-w-0">
                   <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${STATUS_COLORS.info}`}>
@@ -132,7 +132,7 @@ export function ClientDashboard() {
             ))}
           </div>
           <button
-            onClick={() => navigate(`/cases/${primaryCase.id}/documents`)}
+            onClick={() => navigate(`/app/cases/${primaryCase.id}/documents`)}
             className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-lg text-sm font-medium hover:bg-slate-700 transition-colors"
           >
             <FileText size={16} />

@@ -12,6 +12,7 @@ import { sendClientSms } from './smsNotification.js';
 import prisma from './prismaClient.js';
 
 let schedulerTask = null;
+let lastRunTimestamp = null;
 
 // ---------------------------------------------------------------------------
 // Core scheduler logic
@@ -92,12 +93,68 @@ function formatTime(isoString) {
 }
 
 /**
+ * Retry a single failed SMS after 60 seconds.
+ * If the retry also fails, log a ReminderFailure record.
+ */
+async function retrySmsSend({ hearing, reminder, phone, message }) {
+  try {
+    await sendClientSms(phone, message);
+
+    // Log the sent reminder in the database
+    await prisma.hearingReminderLog.create({
+      data: {
+        hearingId: hearing.id,
+        reminderType: reminder.type,
+      },
+    });
+
+    console.log(JSON.stringify({
+      event: 'reminder_triggered',
+      hearingId: hearing.id,
+      caseId: hearing.caseId,
+      clientPhone: phone,
+      reminderType: reminder.type,
+      attempt: 2,
+      timestamp: new Date().toISOString(),
+    }));
+  } catch (retryErr) {
+    // Second attempt failed — create reminder_failure record
+    console.error(JSON.stringify({
+      event: 'sms_failed',
+      hearingId: hearing.id,
+      caseId: hearing.caseId,
+      clientPhone: phone,
+      reminderType: reminder.type,
+      error: retryErr.message,
+      attempt: 2,
+      timestamp: new Date().toISOString(),
+    }));
+
+    try {
+      await prisma.reminderFailure.create({
+        data: {
+          hearingId: hearing.id,
+          reminderType: reminder.type,
+          phone,
+          errorMessage: retryErr.message || 'Unknown error',
+          attempt: 2,
+        },
+      });
+    } catch (dbErr) {
+      console.error(`[HearingScheduler] Failed to log reminder failure: ${dbErr.message}`);
+    }
+  }
+}
+
+/**
  * Run one pass of the reminder scheduler.
  * Queries PostgreSQL for hearings within the next 30 days and sends reminders.
+ * Failed sends are retried once after 60 seconds.
  */
 export async function runSchedulerPass() {
   let checked = 0;
   let sent = 0;
+  const retryQueue = [];
 
   try {
     const now = new Date();
@@ -142,7 +199,14 @@ export async function runSchedulerPass() {
         // Resolve phone number (priority: hearing.clientPhone > admin phone)
         const phone = resolvePhone(hearing);
         if (!phone) {
-          console.warn(`[HearingScheduler] No phone number for hearing ${hearing.id} (case: ${hearing.caseName || 'unknown'}) — skipping SMS`);
+          console.warn(JSON.stringify({
+            event: 'reminder_skipped',
+            reason: 'no_phone',
+            hearingId: hearing.id,
+            caseId: hearing.caseId,
+            reminderType: reminder.type,
+            timestamp: new Date().toISOString(),
+          }));
           continue;
         }
 
@@ -161,9 +225,29 @@ export async function runSchedulerPass() {
           });
 
           sent++;
-          console.log(`[HearingScheduler] Sent reminder ${reminder.type} for hearing ${hearing.id} to ${phone} (${days} days before)`);
+          console.log(JSON.stringify({
+            event: 'reminder_triggered',
+            hearingId: hearing.id,
+            caseId: hearing.caseId,
+            clientPhone: phone,
+            reminderType: reminder.type,
+            daysBefore: days,
+            timestamp: new Date().toISOString(),
+          }));
         } catch (err) {
-          console.error(`[HearingScheduler] Failed to send reminder for hearing ${hearing.id}: ${err.message}`);
+          console.error(JSON.stringify({
+            event: 'reminder_send_failed',
+            hearingId: hearing.id,
+            caseId: hearing.caseId,
+            clientPhone: phone,
+            reminderType: reminder.type,
+            error: err.message,
+            attempt: 1,
+            timestamp: new Date().toISOString(),
+          }));
+
+          // Retry once after 60 seconds
+          retryQueue.push({ hearing, reminder, phone, message });
         }
       }
     }
@@ -175,7 +259,72 @@ export async function runSchedulerPass() {
     console.error(`[HearingScheduler] Pass error: ${err.message}`);
   }
 
+  // Process retry queue — retry failed sends after 60 seconds
+  if (retryQueue.length > 0) {
+    console.log(`[HearingScheduler] ${retryQueue.length} reminder(s) queued for retry in 60s`);
+    setTimeout(async () => {
+      for (const item of retryQueue) {
+        await retrySmsSend(item);
+      }
+    }, 60000);
+  }
+
+  lastRunTimestamp = new Date().toISOString();
   return { checked, sent };
+}
+
+// ---------------------------------------------------------------------------
+// Admin status — used by GET /api/admin/reminder-status
+// ---------------------------------------------------------------------------
+
+/**
+ * Get the current reminder system status for admin monitoring.
+ */
+export async function getReminderStatus() {
+  const now = new Date();
+  const todayStart = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const todayEnd = new Date(todayStart.getTime() + 24 * 60 * 60 * 1000);
+
+  const [hearingsPending, hearingsToday, remindersQueued, recentFailures] = await Promise.all([
+    // Hearings with future dates
+    prisma.hearing.count({
+      where: { hearingDatetime: { gte: now } },
+    }),
+    // Hearings scheduled for today
+    prisma.hearing.count({
+      where: {
+        hearingDatetime: { gte: todayStart, lt: todayEnd },
+      },
+    }),
+    // Hearings within reminder window (next 30 days)
+    prisma.hearing.count({
+      where: {
+        hearingDatetime: {
+          gte: now,
+          lte: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000),
+        },
+      },
+    }),
+    // Recent failures in last 24 hours
+    prisma.reminderFailure.count({
+      where: { createdAt: { gte: new Date(now.getTime() - 24 * 60 * 60 * 1000) } },
+    }),
+  ]);
+
+  // Estimate the next cron run time (top of the next hour)
+  const nextHour = new Date(now);
+  nextHour.setMinutes(0, 0, 0);
+  nextHour.setHours(nextHour.getHours() + 1);
+
+  return {
+    schedulerRunning: schedulerTask !== null,
+    lastRunTimestamp,
+    nextScheduledRun: schedulerTask ? nextHour.toISOString() : null,
+    hearingsPending,
+    hearingsToday,
+    remindersQueued,
+    recentFailures,
+  };
 }
 
 // ---------------------------------------------------------------------------

@@ -123,7 +123,14 @@ router.post('/:caseId', async (req, res) => {
       },
     });
 
-    console.log(`[Hearings] Created hearing ${hearing.id} for case ${caseId}: ${hearing.hearingName}`);
+    console.log(JSON.stringify({
+      event: 'hearing_created',
+      hearingId: hearing.id,
+      caseId,
+      hearingName: hearing.hearingName,
+      clientPhone: hearing.clientPhone || null,
+      timestamp: new Date().toISOString(),
+    }));
     res.status(201).json({ hearing });
   } catch (err) {
     console.error('[Hearings] POST error:', err.message);
@@ -196,7 +203,14 @@ router.put('/:caseId/:hearingId', async (req, res) => {
       data: updateData,
     });
 
-    console.log(`[Hearings] Updated hearing ${hearingId}: ${hearing.hearingName}`);
+    console.log(JSON.stringify({
+      event: 'hearing_updated',
+      hearingId,
+      caseId,
+      hearingName: hearing.hearingName,
+      clientPhone: hearing.clientPhone || null,
+      timestamp: new Date().toISOString(),
+    }));
     res.json({ hearing });
   } catch (err) {
     console.error('[Hearings] PUT error:', err.message);
@@ -220,7 +234,13 @@ router.delete('/:caseId/:hearingId', async (req, res) => {
     // Cascade delete handles reminder logs (onDelete: Cascade in schema)
     await prisma.hearing.delete({ where: { id: hearingId } });
 
-    console.log(`[Hearings] Deleted hearing ${hearingId}: ${existing.hearingName}`);
+    console.log(JSON.stringify({
+      event: 'hearing_deleted',
+      hearingId,
+      caseId,
+      hearingName: existing.hearingName,
+      timestamp: new Date().toISOString(),
+    }));
     res.json({ success: true });
   } catch (err) {
     console.error('[Hearings] DELETE error:', err.message);

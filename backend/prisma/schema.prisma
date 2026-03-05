@@ -52,3 +52,32 @@ model HearingReminderLog {
   @@unique([hearingId, reminderType])
   @@index([hearingId])
 }
+
+// ---------------------------------------------------------------------------
+// Reminder Failures — tracks failed SMS delivery attempts
+// ---------------------------------------------------------------------------
+
+model ReminderFailure {
+  id           String   @id @default(uuid())
+  hearingId    String
+  reminderType Int
+  phone        String
+  errorMessage String
+  attempt      Int      @default(1)
+  createdAt    DateTime @default(now())
+
+  @@index([hearingId])
+  @@index([phone])
+}
+
+// ---------------------------------------------------------------------------
+// SMS Rate Log — tracks SMS sends per phone for rate protection
+// ---------------------------------------------------------------------------
+
+model SmsRateLog {
+  id        String   @id @default(uuid())
+  phone     String
+  sentAt    DateTime @default(now())
+
+  @@index([phone, sentAt])
+}

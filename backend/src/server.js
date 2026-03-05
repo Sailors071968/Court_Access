@@ -23,7 +23,7 @@ import { isClamAVAvailable } from './services/virusScanner.js';
 import { apiLimiter, webhookLimiter } from './middleware/rateLimiter.js';
 import { isSmsAvailable } from './services/smsNotification.js';
 import hearingsRoutes from './routes/hearings.js';
-import { initScheduler, stopScheduler } from './services/hearingScheduler.js';
+import { initScheduler, stopScheduler, getReminderStatus, runSchedulerPass } from './services/hearingScheduler.js';
 import Stripe from 'stripe';
 
 const app = express();
@@ -222,6 +222,31 @@ app.use('/api/evidence', evidenceUploadRoutes);
 // ---------------------------------------------------------------------------
 
 app.use('/api/hearings', hearingsRoutes);
+
+// ---------------------------------------------------------------------------
+// Routes — Admin Monitoring
+// ---------------------------------------------------------------------------
+
+app.get('/api/admin/reminder-status', async (_req, res) => {
+  try {
+    const status = await getReminderStatus();
+    res.json(status);
+  } catch (err) {
+    console.error('[Admin] reminder-status error:', err.message);
+    res.status(500).json({ error: 'Failed to fetch reminder status' });
+  }
+});
+
+// Manual scheduler trigger (for testing / recovery)
+app.post('/api/admin/run-scheduler', async (_req, res) => {
+  try {
+    const result = await runSchedulerPass();
+    res.json({ success: true, ...result });
+  } catch (err) {
+    console.error('[Admin] run-scheduler error:', err.message);
+    res.status(500).json({ error: 'Failed to run scheduler' });
+  }
+});
 
 // ---------------------------------------------------------------------------
 // Health Check + System Status

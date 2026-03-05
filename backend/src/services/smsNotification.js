@@ -2,12 +2,44 @@
 // Court Access — SMS Notification Service
 // Sends Twilio SMS alerts to admin on key events
 // (new subscriptions, payments, cancellations).
+// Includes rate protection (max 5 SMS per phone per 10 min)
+// and retry logic for hearing reminders.
 // ============================================
 
 import twilio from 'twilio';
 import { config, features } from '../config/index.js';
+import prisma from './prismaClient.js';
 
 let twilioClient = null;
+
+// ---------------------------------------------------------------------------
+// SMS Rate Protection — max 5 SMS per phone per 10 minutes
+// ---------------------------------------------------------------------------
+
+const SMS_RATE_WINDOW_MS = 10 * 60 * 1000; // 10 minutes
+const SMS_RATE_MAX = 5;
+
+/**
+ * Check if a phone number has exceeded the SMS rate limit.
+ * Returns true if the phone can receive another SMS.
+ */
+export async function checkSmsRateLimit(phone) {
+  const windowStart = new Date(Date.now() - SMS_RATE_WINDOW_MS);
+  const recentCount = await prisma.smsRateLog.count({
+    where: {
+      phone,
+      sentAt: { gte: windowStart },
+    },
+  });
+  return recentCount < SMS_RATE_MAX;
+}
+
+/**
+ * Record an SMS send for rate limiting purposes.
+ */
+async function recordSmsSend(phone) {
+  await prisma.smsRateLog.create({ data: { phone } });
+}
 
 /**
  * Get or create the Twilio client.
@@ -108,18 +140,32 @@ export async function notifySubscriptionCancelled({ customerEmail }) {
 /**
  * Send an SMS message to a specific client phone number.
  * Used by the hearing reminder scheduler.
+ * Enforces rate protection (max 5 SMS per phone per 10 min).
  * Silently degrades if Twilio is not configured.
  */
 export async function sendClientSms(toPhone, message) {
   const client = getClient();
   if (!client) {
-    console.log('[SMS] Twilio not configured — skipping client SMS');
+    console.log(JSON.stringify({
+      event: 'sms_skipped', reason: 'twilio_not_configured', phone: toPhone, timestamp: new Date().toISOString(),
+    }));
     return null;
   }
 
   if (!toPhone) {
-    console.log('[SMS] No recipient phone number — skipping client SMS');
+    console.log(JSON.stringify({
+      event: 'sms_skipped', reason: 'no_phone', timestamp: new Date().toISOString(),
+    }));
     return null;
+  }
+
+  // Rate protection: max 5 SMS per phone per 10 minutes
+  const withinLimit = await checkSmsRateLimit(toPhone);
+  if (!withinLimit) {
+    console.warn(JSON.stringify({
+      event: 'sms_rate_limited', phone: toPhone, timestamp: new Date().toISOString(),
+    }));
+    throw new Error(`SMS rate limit exceeded for ${toPhone} (max ${SMS_RATE_MAX} per ${SMS_RATE_WINDOW_MS / 60000} min)`);
   }
 
   try {
@@ -128,11 +174,17 @@ export async function sendClientSms(toPhone, message) {
       from: config.twilioPhoneNumber,
       to: toPhone,
     });
-    console.log(`[SMS] Client SMS sent to ${toPhone} (SID: ${result.sid})`);
+    // Record send for rate limiting
+    await recordSmsSend(toPhone);
+    console.log(JSON.stringify({
+      event: 'sms_sent', phone: toPhone, sid: result.sid, timestamp: new Date().toISOString(),
+    }));
     return result;
   } catch (err) {
-    console.error(`[SMS] Failed to send client SMS: ${err.message}`);
-    return null;
+    console.error(JSON.stringify({
+      event: 'sms_failed', phone: toPhone, error: err.message, timestamp: new Date().toISOString(),
+    }));
+    throw err; // Re-throw so scheduler can handle retry
   }
 }
 

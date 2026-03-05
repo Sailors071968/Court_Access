@@ -74,7 +74,7 @@ function HeroSection() {
           </h1>
           <p className="mt-6 text-lg sm:text-xl text-gray-600 leading-relaxed max-w-2xl mx-auto">
             Upload court documents and receive structured analysis in seconds
-            using deterministic legal intelligence. No guesswork. No interpretation.
+            using deterministic legal intelligence.
           </p>
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
@@ -297,7 +297,25 @@ function HowItWorksSection() {
 
 function VideoTestimonialCard({ video, name, role, quote }: { video: string; name: string; role: string; quote: string }) {
   const videoRef = useRef<HTMLVideoElement>(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   const [isPlaying, setIsPlaying] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
+
+  useEffect(() => {
+    const el = containerRef.current;
+    if (!el) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          setIsVisible(true);
+          observer.disconnect();
+        }
+      },
+      { rootMargin: '200px' }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   const togglePlay = () => {
     if (!videoRef.current) return;
@@ -311,16 +329,20 @@ function VideoTestimonialCard({ video, name, role, quote }: { video: string; nam
   };
 
   return (
-    <div className="bg-slate-50 rounded-2xl overflow-hidden group">
+    <div ref={containerRef} className="bg-slate-50 rounded-2xl overflow-hidden group">
       <div className="relative cursor-pointer" onClick={togglePlay}>
-        <video
-          ref={videoRef}
-          src={video}
-          className="w-full aspect-[9/16] object-cover"
-          playsInline
-          preload="metadata"
-          onEnded={() => setIsPlaying(false)}
-        />
+        {isVisible ? (
+          <video
+            ref={videoRef}
+            src={video}
+            className="w-full aspect-[9/16] object-cover"
+            playsInline
+            preload="metadata"
+            onEnded={() => setIsPlaying(false)}
+          />
+        ) : (
+          <div className="w-full aspect-[9/16] bg-slate-200 animate-pulse" />
+        )}
         {!isPlaying && (
           <div className="absolute inset-0 bg-black/20 flex items-center justify-center transition-opacity group-hover:bg-black/30">
             <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg">
@@ -350,22 +372,22 @@ function VideoTestimonialCard({ video, name, role, quote }: { video: string; nam
 function TestimonialsSection() {
   const videoTestimonials = [
     {
-      video: '/videos/testimonial-1.mp4',
-      name: 'Attorney Testimonial',
-      role: 'Defense Attorney',
-      quote: 'If you\'re watching this, you or someone you love needs help navigating the court system. Court Access changed how I prepare for every case.',
+      video: 'https://drive-screenshot-viewer-ubfmb3j2.devinapps.com/testimonial-1.mp4',
+      name: 'David R.',
+      role: 'Criminal Defense Attorney',
+      quote: 'Court Access changed how I review case files. Instead of digging through hundreds of pages, I can immediately see the structure of the case and where the important issues are.',
     },
     {
-      video: '/videos/testimonial-2.mp4',
-      name: 'Client Story',
+      video: 'https://drive-screenshot-viewer-ubfmb3j2.devinapps.com/testimonial-2.mp4',
+      name: 'Sarah M.',
       role: 'Former Defendant',
-      quote: 'When I was charged with a felony, my whole world turned upside down. Having structured analysis of my court records made all the difference.',
+      quote: 'When I was charged with a felony, my entire life felt like it was falling apart. Seeing my court records organized and explained helped me understand what was actually happening in my case.',
     },
     {
-      video: '/videos/testimonial-3.mp4',
-      name: 'Michael',
+      video: 'https://drive-screenshot-viewer-ubfmb3j2.devinapps.com/testimonial-3.mp4',
+      name: 'Michael T.',
       role: 'Small Business Owner',
-      quote: 'As a small business owner facing legal challenges, I needed to understand my court documents fast. Court Access gave me clarity when I needed it most.',
+      quote: 'I was dealing with a legal dispute and had no idea how to make sense of the documents. Court Access gave me clarity in minutes.',
     },
   ];
 

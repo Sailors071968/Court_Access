@@ -1,0 +1,52 @@
+// Court Access — Prisma Schema
+// Database models for persistent storage.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Court Hearings
+// ---------------------------------------------------------------------------
+
+model Hearing {
+  id                String   @id @default(uuid())
+  caseId            String
+  courthouseName    String
+  courthouseAddress String
+  hearingName       String
+  hearingDatetime   DateTime
+  department        String   @default("")
+
+  reminder1Enabled    Boolean @default(true)
+  reminder2Enabled    Boolean @default(true)
+  reminder3Enabled    Boolean @default(true)
+
+  reminder1DaysBefore Int @default(7)
+  reminder2DaysBefore Int @default(3)
+  reminder3DaysBefore Int @default(1)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  reminderLogs HearingReminderLog[]
+
+  @@index([caseId])
+}
+
+model HearingReminderLog {
+  id           String   @id @default(uuid())
+  hearingId    String
+  reminderType Int
+  sentAt       DateTime @default(now())
+
+  hearing Hearing @relation(fields: [hearingId], references: [id], onDelete: Cascade)
+
+  @@unique([hearingId, reminderType])
+  @@index([hearingId])
+}

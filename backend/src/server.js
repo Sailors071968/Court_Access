@@ -22,7 +22,7 @@ import { getRedisConnection, closeRedisConnection, isRedisAvailable } from './se
 import { isClamAVAvailable } from './services/virusScanner.js';
 import { apiLimiter, webhookLimiter } from './middleware/rateLimiter.js';
 import { isSmsAvailable } from './services/smsNotification.js';
-import hearingsRoutes, { hearingsStore, reminderLogsStore } from './routes/hearings.js';
+import hearingsRoutes from './routes/hearings.js';
 import { initScheduler, stopScheduler } from './services/hearingScheduler.js';
 import Stripe from 'stripe';
 
@@ -289,7 +289,7 @@ const server = app.listen(PORT, () => {
 });
 
 // Start hearing reminder scheduler
-initScheduler(hearingsStore, reminderLogsStore);
+initScheduler();
 
 // Start BullMQ worker
 const worker = startProcessingWorker();

@@ -1,39 +1,17 @@
 // ============================================
 // Court Access — Court Hearings CRUD API
-// In-memory store for hearing data with
+// Persistent storage via Prisma/PostgreSQL with
 // max 5 hearings per case constraint.
 // ============================================
 
 import express from 'express';
-import crypto from 'crypto';
+import prisma from '../services/prismaClient.js';
 
 const router = express.Router();
 
 // ---------------------------------------------------------------------------
-// In-memory stores
-// ---------------------------------------------------------------------------
-
-/** @type {Map<string, object>} hearingId -> hearing */
-const hearingsStore = new Map();
-
-/** @type {Map<string, object>} logId -> reminder log */
-const reminderLogsStore = new Map();
-
-// ---------------------------------------------------------------------------
 // Helpers
 // ---------------------------------------------------------------------------
-
-function getHearingsForCase(caseId) {
-  const results = [];
-  for (const hearing of hearingsStore.values()) {
-    if (hearing.caseId === caseId) {
-      results.push(hearing);
-    }
-  }
-  // Sort by hearing datetime ascending
-  results.sort((a, b) => new Date(a.hearingDatetime).getTime() - new Date(b.hearingDatetime).getTime());
-  return results;
-}
 
 function validateHearingInput(body) {
   const errors = [];
@@ -65,163 +43,178 @@ function validateHearingInput(body) {
 // GET /api/hearings/:caseId — List all hearings for a case
 // ---------------------------------------------------------------------------
 
-router.get('/:caseId', (req, res) => {
-  const { caseId } = req.params;
-  const hearings = getHearingsForCase(caseId);
-  res.json({ hearings });
+router.get('/:caseId', async (req, res) => {
+  try {
+    const { caseId } = req.params;
+    const hearings = await prisma.hearing.findMany({
+      where: { caseId },
+      orderBy: { hearingDatetime: 'asc' },
+    });
+    res.json({ hearings });
+  } catch (err) {
+    console.error('[Hearings] GET error:', err.message);
+    res.status(500).json({ error: 'Failed to fetch hearings' });
+  }
 });
 
 // ---------------------------------------------------------------------------
 // POST /api/hearings/:caseId — Create a new hearing for a case
 // ---------------------------------------------------------------------------
 
-router.post('/:caseId', (req, res) => {
-  const { caseId } = req.params;
+router.post('/:caseId', async (req, res) => {
+  try {
+    const { caseId } = req.params;
 
-  // Enforce max 5 hearings per case
-  const existing = getHearingsForCase(caseId);
-  if (existing.length >= 5) {
-    return res.status(400).json({ error: 'Maximum 5 hearings per case. Remove a hearing before adding a new one.' });
+    // Enforce max 5 hearings per case
+    const count = await prisma.hearing.count({ where: { caseId } });
+    if (count >= 5) {
+      return res.status(400).json({ error: 'Maximum 5 hearings per case. Remove a hearing before adding a new one.' });
+    }
+
+    const errors = validateHearingInput(req.body);
+    if (errors.length > 0) {
+      return res.status(400).json({ error: errors.join('; ') });
+    }
+
+    const hearing = await prisma.hearing.create({
+      data: {
+        caseId,
+        courthouseName: req.body.courthouseName.trim(),
+        courthouseAddress: req.body.courthouseAddress.trim(),
+        hearingName: req.body.hearingName.trim(),
+        hearingDatetime: new Date(req.body.hearingDatetime),
+        department: (req.body.department || '').trim(),
+        reminder1Enabled: req.body.reminder1Enabled !== false,
+        reminder2Enabled: req.body.reminder2Enabled !== false,
+        reminder3Enabled: req.body.reminder3Enabled !== false,
+        reminder1DaysBefore: Number.isInteger(req.body.reminder1DaysBefore) && req.body.reminder1DaysBefore > 0
+          ? req.body.reminder1DaysBefore : 7,
+        reminder2DaysBefore: Number.isInteger(req.body.reminder2DaysBefore) && req.body.reminder2DaysBefore > 0
+          ? req.body.reminder2DaysBefore : 3,
+        reminder3DaysBefore: Number.isInteger(req.body.reminder3DaysBefore) && req.body.reminder3DaysBefore > 0
+          ? req.body.reminder3DaysBefore : 1,
+      },
+    });
+
+    console.log(`[Hearings] Created hearing ${hearing.id} for case ${caseId}: ${hearing.hearingName}`);
+    res.status(201).json({ hearing });
+  } catch (err) {
+    console.error('[Hearings] POST error:', err.message);
+    res.status(500).json({ error: 'Failed to create hearing' });
   }
-
-  const errors = validateHearingInput(req.body);
-  if (errors.length > 0) {
-    return res.status(400).json({ error: errors.join('; ') });
-  }
-
-  const hearing = {
-    id: crypto.randomUUID(),
-    caseId,
-    courthouseName: req.body.courthouseName.trim(),
-    courthouseAddress: req.body.courthouseAddress.trim(),
-    hearingName: req.body.hearingName.trim(),
-    hearingDatetime: new Date(req.body.hearingDatetime).toISOString(),
-    department: (req.body.department || '').trim(),
-    reminder1Enabled: req.body.reminder1Enabled !== false,
-    reminder2Enabled: req.body.reminder2Enabled !== false,
-    reminder3Enabled: req.body.reminder3Enabled !== false,
-    reminder1DaysBefore: Number.isInteger(req.body.reminder1DaysBefore) && req.body.reminder1DaysBefore > 0
-      ? req.body.reminder1DaysBefore : 7,
-    reminder2DaysBefore: Number.isInteger(req.body.reminder2DaysBefore) && req.body.reminder2DaysBefore > 0
-      ? req.body.reminder2DaysBefore : 3,
-    reminder3DaysBefore: Number.isInteger(req.body.reminder3DaysBefore) && req.body.reminder3DaysBefore > 0
-      ? req.body.reminder3DaysBefore : 1,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
-
-  hearingsStore.set(hearing.id, hearing);
-  console.log(`[Hearings] Created hearing ${hearing.id} for case ${caseId}: ${hearing.hearingName}`);
-
-  res.status(201).json({ hearing });
 });
 
 // ---------------------------------------------------------------------------
 // PUT /api/hearings/:caseId/:hearingId — Update a hearing
 // ---------------------------------------------------------------------------
 
-router.put('/:caseId/:hearingId', (req, res) => {
-  const { caseId, hearingId } = req.params;
-  const hearing = hearingsStore.get(hearingId);
+router.put('/:caseId/:hearingId', async (req, res) => {
+  try {
+    const { caseId, hearingId } = req.params;
+    const existing = await prisma.hearing.findUnique({ where: { id: hearingId } });
 
-  if (!hearing || hearing.caseId !== caseId) {
-    return res.status(404).json({ error: 'Hearing not found' });
-  }
-
-  // Validate only changed fields that need validation
-  if (req.body.hearingDatetime !== undefined) {
-    const dt = new Date(req.body.hearingDatetime);
-    if (isNaN(dt.getTime())) {
-      return res.status(400).json({ error: 'hearingDatetime must be a valid date' });
+    if (!existing || existing.caseId !== caseId) {
+      return res.status(404).json({ error: 'Hearing not found' });
     }
-    if (dt.getTime() <= Date.now()) {
-      return res.status(400).json({ error: 'hearingDatetime must be in the future' });
+
+    // Validate only changed fields that need validation
+    if (req.body.hearingDatetime !== undefined) {
+      const dt = new Date(req.body.hearingDatetime);
+      if (isNaN(dt.getTime())) {
+        return res.status(400).json({ error: 'hearingDatetime must be a valid date' });
+      }
+      if (dt.getTime() <= Date.now()) {
+        return res.status(400).json({ error: 'hearingDatetime must be in the future' });
+      }
     }
-  }
 
-  // Validate required fields are not cleared to empty strings
-  if (req.body.courthouseName !== undefined && String(req.body.courthouseName ?? '').trim().length === 0) {
-    return res.status(400).json({ error: 'courthouseName cannot be empty' });
-  }
-  if (req.body.courthouseAddress !== undefined && String(req.body.courthouseAddress ?? '').trim().length === 0) {
-    return res.status(400).json({ error: 'courthouseAddress cannot be empty' });
-  }
-  if (req.body.hearingName !== undefined && String(req.body.hearingName ?? '').trim().length === 0) {
-    return res.status(400).json({ error: 'hearingName cannot be empty' });
-  }
+    // Validate required fields are not cleared to empty strings
+    if (req.body.courthouseName !== undefined && String(req.body.courthouseName ?? '').trim().length === 0) {
+      return res.status(400).json({ error: 'courthouseName cannot be empty' });
+    }
+    if (req.body.courthouseAddress !== undefined && String(req.body.courthouseAddress ?? '').trim().length === 0) {
+      return res.status(400).json({ error: 'courthouseAddress cannot be empty' });
+    }
+    if (req.body.hearingName !== undefined && String(req.body.hearingName ?? '').trim().length === 0) {
+      return res.status(400).json({ error: 'hearingName cannot be empty' });
+    }
 
-  // Update fields (null-safe: coerce to string before .trim())
-  if (req.body.courthouseName !== undefined) hearing.courthouseName = String(req.body.courthouseName ?? '').trim();
-  if (req.body.courthouseAddress !== undefined) hearing.courthouseAddress = String(req.body.courthouseAddress ?? '').trim();
-  if (req.body.hearingName !== undefined) hearing.hearingName = String(req.body.hearingName ?? '').trim();
-  if (req.body.hearingDatetime !== undefined) hearing.hearingDatetime = new Date(req.body.hearingDatetime).toISOString();
-  if (req.body.department !== undefined) hearing.department = String(req.body.department ?? '').trim();
+    // Build update data object — only include fields that were sent
+    const updateData = {};
 
-  // Reminder configuration
-  if (req.body.reminder1Enabled !== undefined) hearing.reminder1Enabled = !!req.body.reminder1Enabled;
-  if (req.body.reminder2Enabled !== undefined) hearing.reminder2Enabled = !!req.body.reminder2Enabled;
-  if (req.body.reminder3Enabled !== undefined) hearing.reminder3Enabled = !!req.body.reminder3Enabled;
-  if (Number.isInteger(req.body.reminder1DaysBefore) && req.body.reminder1DaysBefore > 0) {
-    hearing.reminder1DaysBefore = req.body.reminder1DaysBefore;
-  }
-  if (Number.isInteger(req.body.reminder2DaysBefore) && req.body.reminder2DaysBefore > 0) {
-    hearing.reminder2DaysBefore = req.body.reminder2DaysBefore;
-  }
-  if (Number.isInteger(req.body.reminder3DaysBefore) && req.body.reminder3DaysBefore > 0) {
-    hearing.reminder3DaysBefore = req.body.reminder3DaysBefore;
-  }
+    if (req.body.courthouseName !== undefined) updateData.courthouseName = String(req.body.courthouseName ?? '').trim();
+    if (req.body.courthouseAddress !== undefined) updateData.courthouseAddress = String(req.body.courthouseAddress ?? '').trim();
+    if (req.body.hearingName !== undefined) updateData.hearingName = String(req.body.hearingName ?? '').trim();
+    if (req.body.hearingDatetime !== undefined) updateData.hearingDatetime = new Date(req.body.hearingDatetime);
+    if (req.body.department !== undefined) updateData.department = String(req.body.department ?? '').trim();
 
-  hearing.updatedAt = new Date().toISOString();
-  hearingsStore.set(hearingId, hearing);
+    // Reminder configuration
+    if (req.body.reminder1Enabled !== undefined) updateData.reminder1Enabled = !!req.body.reminder1Enabled;
+    if (req.body.reminder2Enabled !== undefined) updateData.reminder2Enabled = !!req.body.reminder2Enabled;
+    if (req.body.reminder3Enabled !== undefined) updateData.reminder3Enabled = !!req.body.reminder3Enabled;
+    if (Number.isInteger(req.body.reminder1DaysBefore) && req.body.reminder1DaysBefore > 0) {
+      updateData.reminder1DaysBefore = req.body.reminder1DaysBefore;
+    }
+    if (Number.isInteger(req.body.reminder2DaysBefore) && req.body.reminder2DaysBefore > 0) {
+      updateData.reminder2DaysBefore = req.body.reminder2DaysBefore;
+    }
+    if (Number.isInteger(req.body.reminder3DaysBefore) && req.body.reminder3DaysBefore > 0) {
+      updateData.reminder3DaysBefore = req.body.reminder3DaysBefore;
+    }
 
-  console.log(`[Hearings] Updated hearing ${hearingId}: ${hearing.hearingName}`);
-  res.json({ hearing });
+    const hearing = await prisma.hearing.update({
+      where: { id: hearingId },
+      data: updateData,
+    });
+
+    console.log(`[Hearings] Updated hearing ${hearingId}: ${hearing.hearingName}`);
+    res.json({ hearing });
+  } catch (err) {
+    console.error('[Hearings] PUT error:', err.message);
+    res.status(500).json({ error: 'Failed to update hearing' });
+  }
 });
 
 // ---------------------------------------------------------------------------
 // DELETE /api/hearings/:caseId/:hearingId — Remove a hearing
 // ---------------------------------------------------------------------------
 
-router.delete('/:caseId/:hearingId', (req, res) => {
-  const { caseId, hearingId } = req.params;
-  const hearing = hearingsStore.get(hearingId);
+router.delete('/:caseId/:hearingId', async (req, res) => {
+  try {
+    const { caseId, hearingId } = req.params;
+    const existing = await prisma.hearing.findUnique({ where: { id: hearingId } });
 
-  if (!hearing || hearing.caseId !== caseId) {
-    return res.status(404).json({ error: 'Hearing not found' });
-  }
-
-  hearingsStore.delete(hearingId);
-
-  // Clean up reminder logs for this hearing
-  for (const [logId, log] of reminderLogsStore.entries()) {
-    if (log.hearingId === hearingId) {
-      reminderLogsStore.delete(logId);
+    if (!existing || existing.caseId !== caseId) {
+      return res.status(404).json({ error: 'Hearing not found' });
     }
-  }
 
-  console.log(`[Hearings] Deleted hearing ${hearingId}: ${hearing.hearingName}`);
-  res.json({ success: true });
+    // Cascade delete handles reminder logs (onDelete: Cascade in schema)
+    await prisma.hearing.delete({ where: { id: hearingId } });
+
+    console.log(`[Hearings] Deleted hearing ${hearingId}: ${existing.hearingName}`);
+    res.json({ success: true });
+  } catch (err) {
+    console.error('[Hearings] DELETE error:', err.message);
+    res.status(500).json({ error: 'Failed to delete hearing' });
+  }
 });
 
 // ---------------------------------------------------------------------------
 // GET /api/hearings/:caseId/:hearingId/reminders — Get reminder logs
 // ---------------------------------------------------------------------------
 
-router.get('/:caseId/:hearingId/reminders', (req, res) => {
-  const { hearingId } = req.params;
-  const logs = [];
-  for (const log of reminderLogsStore.values()) {
-    if (log.hearingId === hearingId) {
-      logs.push(log);
-    }
+router.get('/:caseId/:hearingId/reminders', async (req, res) => {
+  try {
+    const { hearingId } = req.params;
+    const logs = await prisma.hearingReminderLog.findMany({
+      where: { hearingId },
+      orderBy: { sentAt: 'asc' },
+    });
+    res.json({ reminders: logs });
+  } catch (err) {
+    console.error('[Hearings] GET reminders error:', err.message);
+    res.status(500).json({ error: 'Failed to fetch reminder logs' });
   }
-  logs.sort((a, b) => new Date(a.sentAt).getTime() - new Date(b.sentAt).getTime());
-  res.json({ reminders: logs });
 });
 
-// ---------------------------------------------------------------------------
-// Exports for scheduler access
-// ---------------------------------------------------------------------------
-
-export { hearingsStore, reminderLogsStore };
 export default router;

@@ -70,11 +70,11 @@ export function validateConfig(requiredKeys = []) {
  * Checks if a feature is enabled based on config availability.
  */
 export const features = {
-  get redis() { return !!config.redisUrl; },
+  get redis() { return !!process.env.REDIS_URL; },
   get stripe() { return !!config.stripeSecretKey; },
   get openai() { return !!config.openaiApiKey; },
   get r2() { return !!config.r2AccessKeyId && !!config.r2SecretAccessKey; },
   get sentry() { return !!config.sentryDsn; },
   get twilio() { return !!config.twilioAccountSid && !!config.twilioAuthToken && !!config.twilioPhoneNumber; },
-  get clamav() { return !!config.clamavHost; },
+  get clamav() { return !!process.env.CLAMAV_HOST; },
 };

@@ -139,12 +139,12 @@ router.put('/:caseId/:hearingId', (req, res) => {
     }
   }
 
-  // Update fields
-  if (req.body.courthouseName !== undefined) hearing.courthouseName = req.body.courthouseName.trim();
-  if (req.body.courthouseAddress !== undefined) hearing.courthouseAddress = req.body.courthouseAddress.trim();
-  if (req.body.hearingName !== undefined) hearing.hearingName = req.body.hearingName.trim();
+  // Update fields (null-safe: coerce to string before .trim())
+  if (req.body.courthouseName !== undefined) hearing.courthouseName = String(req.body.courthouseName ?? '').trim();
+  if (req.body.courthouseAddress !== undefined) hearing.courthouseAddress = String(req.body.courthouseAddress ?? '').trim();
+  if (req.body.hearingName !== undefined) hearing.hearingName = String(req.body.hearingName ?? '').trim();
   if (req.body.hearingDatetime !== undefined) hearing.hearingDatetime = new Date(req.body.hearingDatetime).toISOString();
-  if (req.body.department !== undefined) hearing.department = req.body.department.trim();
+  if (req.body.department !== undefined) hearing.department = String(req.body.department ?? '').trim();
 
   // Reminder configuration
   if (req.body.reminder1Enabled !== undefined) hearing.reminder1Enabled = !!req.body.reminder1Enabled;

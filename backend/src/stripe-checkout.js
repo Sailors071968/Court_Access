@@ -137,8 +137,8 @@ app.get('/api/stripe/session-status', async (req, res) => {
   try {
     const { session_id } = req.query;
 
-    if (!session_id) {
-      return res.status(400).json({ error: 'session_id is required' });
+    if (!session_id || typeof session_id !== 'string') {
+      return res.status(400).json({ error: 'session_id is required and must be a string' });
     }
 
     const session = await stripe.checkout.sessions.retrieve(session_id);

@@ -21,18 +21,23 @@ export function CheckoutSuccessPage() {
   const sessionId = searchParams.get('session_id');
   const [session, setSession] = useState<SessionStatus | null>(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
 
   useEffect(() => {
     document.title = 'Payment Successful — Court Access';
 
     if (sessionId) {
-      fetch(`/api/stripe/session-status?session_id=${sessionId}`)
-        .then((res) => res.json())
+      fetch(`/api/stripe/session-status?session_id=${encodeURIComponent(sessionId)}`)
+        .then((res) => {
+          if (!res.ok) throw new Error('Failed to fetch session status');
+          return res.json();
+        })
         .then((data) => {
           setSession(data);
           setLoading(false);
         })
         .catch(() => {
+          setError(true);
           setLoading(false);
         });
     } else {
@@ -67,6 +72,31 @@ export function CheckoutSuccessPage() {
               <Loader2 className="animate-spin text-slate-400" size={48} />
               <p className="text-gray-500">Confirming your payment...</p>
             </div>
+          ) : error ? (
+            <>
+              <div className="w-16 h-16 bg-amber-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                <Scale className="text-amber-600" size={32} />
+              </div>
+              <h1 className="text-3xl font-bold text-slate-900 tracking-tight">Unable to Confirm Payment</h1>
+              <p className="mt-3 text-gray-500">
+                We couldn&apos;t verify your payment status. If you were charged, your subscription is still active.
+                Please contact support or check your email for a confirmation receipt.
+              </p>
+              <div className="mt-8 flex flex-col sm:flex-row gap-3 justify-center">
+                <Link
+                  to="/pricing"
+                  className="inline-flex items-center justify-center gap-2 bg-slate-800 text-white px-6 py-3 rounded-xl font-medium text-sm hover:bg-slate-700 transition-colors"
+                >
+                  Back to Pricing <ArrowRight size={16} />
+                </Link>
+                <Link
+                  to="/"
+                  className="inline-flex items-center justify-center gap-2 border border-gray-200 text-slate-700 px-6 py-3 rounded-xl font-medium text-sm hover:bg-gray-50 transition-colors"
+                >
+                  Go Home
+                </Link>
+              </div>
+            </>
           ) : (
             <>
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">

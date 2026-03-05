@@ -44,6 +44,9 @@ import { BetaManagementPage } from './pages/admin/BetaManagementPage';
 import { CollaborationPage } from './pages/case/CollaborationPage';
 import { CheckoutSuccessPage } from './pages/checkout/CheckoutSuccessPage';
 import { CheckoutCancelPage } from './pages/checkout/CheckoutCancelPage';
+import { BillingPage } from './pages/billing/BillingPage';
+import { EvidenceViewerPage } from './pages/case/EvidenceViewerPage';
+import { AdminControlsPage } from './pages/admin/AdminControlsPage';
 
 function App() {
   return (
@@ -112,6 +115,15 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="admin/controls"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <AdminControlsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="billing" element={<BillingPage />} />
 
           {/* Case Routes — deterministic tab structure */}
           <Route path="cases/:caseId" element={<CaseLayout />}>
@@ -186,6 +198,14 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canManageCases">
                   <CaseSettingsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="evidence-viewer"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <EvidenceViewerPage />
                 </ProtectedRoute>
               }
             />

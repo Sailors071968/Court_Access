@@ -1,60 +1,33 @@
 // ============================================
-// Court Access — Evidence Dashboard (AI Evidence Intelligence Phase 10)
-// Comprehensive evidence management interface.
-//
-// Features:
-//   - Multi-format evidence upload (documents, images, audio, video)
-//   - Evidence list with filters
-//   - Transcript viewer
-//   - Frame gallery
-//   - AI summaries
-//   - Timeline view
-//   - Relationship graph view
-//   - Evidence search
+// Court Access — Evidence Dashboard (Phases 21-22-24)
+// Complete evidence management interface with:
+//   - Full upload flow with drag-drop + progress (Phase 21)
+//   - Processing status indicators + results (Phase 22)
+//   - Evidence search with filters + highlighting (Phase 24)
 // ============================================
 
 import { useState, useRef, useCallback } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
-  Upload,
-  Search,
-  FileText,
-  Image,
-  Mic,
-  Video,
-  Clock,
-  GitBranch,
-  FileSearch,
-  ChevronDown,
-  X,
-  CheckCircle,
-  AlertCircle,
-  Loader2,
-  Play,
-  Eye,
-  Shield,
-  BarChart3,
-  Filter,
+  Upload, Search, FileText, Image, Mic, Video, Clock, GitBranch,
+  FileSearch, X, CheckCircle, AlertCircle, Loader2, Eye, Shield,
+  BarChart3, Filter, Calendar, User, Zap, Copy,
 } from 'lucide-react';
 import { Card } from '../../components/common/Card';
-
 import type { EvidenceRecord, EvidenceType, EvidenceProcessingStatus } from '../../models/EvidenceModel';
-import {
-  EVIDENCE_TYPE_LABELS,
-  EVIDENCE_STATUS_LABELS,
-  SUPPORTED_EXTENSIONS,
-  getAllSupportedExtensions,
-} from '../../models/EvidenceModel';
-import type { AudioTranscript } from '../../models/AudioTranscriptModel';
-import type { VideoMetadata, VideoFrame } from '../../models/VideoAnalysisModel';
-import type { ImageAnalysis } from '../../models/ImageAnalysisModel';
-import type { EvidenceSummary } from '../../models/EvidenceSummaryModel';
+import { EVIDENCE_TYPE_LABELS, EVIDENCE_STATUS_LABELS, SUPPORTED_EXTENSIONS, getAllSupportedExtensions } from '../../models/EvidenceModel';
 import type { CaseTimelineEvent } from '../../models/CaseTimelineModel';
 import { TIMELINE_CATEGORY_LABELS } from '../../models/CaseTimelineModel';
 import type { EvidenceGraph } from '../../models/EvidenceGraphModel';
-import { validateEvidenceFile, formatEvidenceFileSize, formatDuration } from '../../services/evidenceIngestionService';
+import { formatEvidenceFileSize } from '../../services/evidenceIngestionService';
+import type { UploadItem, ProcessingResult } from '../../services/evidenceUploadService';
+import { createUploadItem, simulateUploadPipeline } from '../../services/evidenceUploadService';
+import { indexEvidence, searchEvidence } from '../../services/evidenceSearchService';
+import type { SearchResult, SearchFilters } from '../../services/evidenceSearchService';
+import { checkUploadRateLimit, trackUploadStart, trackUploadEnd, scanFile } from '../../services/productionHardeningService';
 
 // ---------------------------------------------------------------------------
-// Evidence Type Icons
+// Constants
 // ---------------------------------------------------------------------------
 
 const EVIDENCE_TYPE_ICONS: Record<EvidenceType, typeof FileText> = {
@@ -65,7 +38,7 @@ const EVIDENCE_TYPE_ICONS: Record<EvidenceType, typeof FileText> = {
 };
 
 // ---------------------------------------------------------------------------
-// Processing Status Badges
+// Processing Status Badge (Phase 22)
 // ---------------------------------------------------------------------------
 
 function ProcessingStatusBadge({ status }: { status: EvidenceProcessingStatus }) {
@@ -75,9 +48,7 @@ function ProcessingStatusBadge({ status }: { status: EvidenceProcessingStatus })
     complete: { color: 'bg-green-100 text-green-700', icon: CheckCircle },
     error: { color: 'bg-red-100 text-red-700', icon: AlertCircle },
   };
-
   const { color, icon: Icon } = config[status];
-
   return (
     <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${color}`}>
       <Icon size={12} className={status === 'processing' ? 'animate-spin' : ''} />
@@ -97,9 +68,7 @@ function EvidenceTypeBadge({ type }: { type: EvidenceType }) {
     audio: 'bg-amber-100 text-amber-700',
     video: 'bg-blue-100 text-blue-700',
   };
-
   const Icon = EVIDENCE_TYPE_ICONS[type];
-
   return (
     <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium ${colors[type]}`}>
       <Icon size={12} />
@@ -109,7 +78,7 @@ function EvidenceTypeBadge({ type }: { type: EvidenceType }) {
 }
 
 // ---------------------------------------------------------------------------
-// Upload Dropzone
+// Upload Dropzone (Phase 21)
 // ---------------------------------------------------------------------------
 
 function UploadDropzone({
@@ -127,7 +96,6 @@ function UploadDropzone({
       e.preventDefault();
       setIsDragging(false);
       if (isUploading) return;
-
       const files = Array.from(e.dataTransfer.files);
       if (files.length > 0) onFilesSelected(files);
     },
@@ -147,7 +115,6 @@ function UploadDropzone({
     (e: React.ChangeEvent<HTMLInputElement>) => {
       const files = Array.from(e.target.files ?? []);
       if (files.length > 0) onFilesSelected(files);
-      // Reset input so same file can be re-selected
       if (fileInputRef.current) fileInputRef.current.value = '';
     },
     [onFilesSelected]
@@ -173,7 +140,6 @@ function UploadDropzone({
         onChange={handleFileInput}
         className="hidden"
       />
-
       <Upload className="mx-auto mb-3 text-gray-400" size={32} />
       <p className="text-sm font-medium text-gray-700 mb-1">
         {isUploading ? 'Uploading...' : 'Drop evidence files here or click to browse'}
@@ -193,38 +159,61 @@ function UploadDropzone({
 }
 
 // ---------------------------------------------------------------------------
-// Upload Queue Item
+// Upload Queue Row (Phase 21 + 22)
 // ---------------------------------------------------------------------------
 
-interface UploadQueueItem {
-  file: File;
-  status: 'validating' | 'uploading' | 'processing' | 'complete' | 'error';
-  evidenceType: EvidenceType | null;
-  error: string | null;
-  progress: number;
-}
-
-function UploadQueueRow({ item }: { item: UploadQueueItem }) {
+function UploadQueueRow({ item }: { item: UploadItem }) {
   const Icon = item.evidenceType ? EVIDENCE_TYPE_ICONS[item.evidenceType] : FileText;
+  const statusColors: Record<string, string> = {
+    validating: 'text-gray-500',
+    uploading: 'text-blue-500',
+    processing: 'text-blue-600',
+    analyzing: 'text-purple-600',
+    complete: 'text-green-600',
+    error: 'text-red-500',
+  };
 
   return (
-    <div className="flex items-center gap-3 py-2.5 px-3 border-b border-gray-50 last:border-b-0">
+    <div className="flex items-center gap-3 py-3 px-4 border-b border-gray-50 last:border-b-0">
       <Icon size={16} className="text-gray-400 flex-shrink-0" />
       <div className="flex-1 min-w-0">
         <p className="text-sm font-medium text-gray-900 truncate">{item.file.name}</p>
-        <p className="text-xs text-gray-500">{formatEvidenceFileSize(item.file.size)}</p>
+        <div className="flex items-center gap-2 mt-0.5">
+          <p className="text-xs text-gray-500">{formatEvidenceFileSize(item.file.size)}</p>
+          {item.processingStep && item.status !== 'error' && (
+            <>
+              <span className="text-xs text-gray-300">&bull;</span>
+              <p className={`text-xs ${statusColors[item.status] || 'text-gray-500'}`}>
+                {item.processingStep}
+              </p>
+            </>
+          )}
+        </div>
       </div>
-      <div className="flex-shrink-0">
-        {item.status === 'validating' && <Loader2 size={14} className="animate-spin text-gray-400" />}
+      <div className="flex-shrink-0 flex items-center gap-2">
+        {(item.status === 'validating' ||
+          item.status === 'processing' ||
+          item.status === 'analyzing') && (
+          <Loader2 size={14} className="animate-spin text-blue-500" />
+        )}
         {item.status === 'uploading' && (
-          <div className="w-20 h-1.5 bg-gray-200 rounded-full overflow-hidden">
-            <div className="h-full bg-blue-500 rounded-full transition-all" style={{ width: `${item.progress}%` }} />
+          <div className="flex items-center gap-2">
+            <div className="w-24 h-1.5 bg-gray-200 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-blue-500 rounded-full transition-all duration-300"
+                style={{ width: `${item.progress}%` }}
+              />
+            </div>
+            <span className="text-xs text-blue-600 font-medium w-10 text-right">
+              {Math.round(item.progress)}%
+            </span>
           </div>
         )}
-        {item.status === 'processing' && <Loader2 size={14} className="animate-spin text-blue-500" />}
         {item.status === 'complete' && <CheckCircle size={14} className="text-green-500" />}
         {item.status === 'error' && (
-          <span className="text-xs text-red-500">{item.error ?? 'Error'}</span>
+          <span className="text-xs text-red-500 max-w-xs truncate">
+            {item.error ?? 'Error'}
+          </span>
         )}
       </div>
     </div>
@@ -232,16 +221,18 @@ function UploadQueueRow({ item }: { item: UploadQueueItem }) {
 }
 
 // ---------------------------------------------------------------------------
-// Evidence List Table
+// Evidence Table
 // ---------------------------------------------------------------------------
 
 function EvidenceTable({
   records,
   onSelect,
+  onView,
   selectedId,
 }: {
   records: EvidenceRecord[];
-  onSelect: (record: EvidenceRecord) => void;
+  onSelect: (r: EvidenceRecord) => void;
+  onView: (r: EvidenceRecord) => void;
   selectedId: string | null;
 }) {
   return (
@@ -279,15 +270,23 @@ function EvidenceTable({
                 <td className="py-3 px-4">
                   <div className="flex items-center gap-2">
                     <Icon size={16} className="text-gray-400" />
-                    <span className="font-medium text-gray-900 truncate max-w-xs">{record.fileName}</span>
+                    <span className="font-medium text-gray-900 truncate max-w-xs">
+                      {record.fileName}
+                    </span>
                   </div>
                 </td>
-                <td className="py-3 px-4"><EvidenceTypeBadge type={record.fileType} /></td>
-                <td className="py-3 px-4 text-gray-500">{formatEvidenceFileSize(record.fileSize)}</td>
+                <td className="py-3 px-4">
+                  <EvidenceTypeBadge type={record.fileType} />
+                </td>
+                <td className="py-3 px-4 text-gray-500">
+                  {formatEvidenceFileSize(record.fileSize)}
+                </td>
                 <td className="py-3 px-4 text-gray-500 text-xs">
                   {new Date(record.uploadTimestamp).toLocaleDateString()}
                 </td>
-                <td className="py-3 px-4"><ProcessingStatusBadge status={record.processingStatus} /></td>
+                <td className="py-3 px-4">
+                  <ProcessingStatusBadge status={record.processingStatus} />
+                </td>
                 <td className="py-3 px-4">
                   {record.integrityVerified ? (
                     <span className="inline-flex items-center gap-1 text-green-600 text-xs font-medium">
@@ -299,7 +298,10 @@ function EvidenceTable({
                 </td>
                 <td className="py-3 px-4">
                   <button
-                    onClick={(e) => { e.stopPropagation(); onSelect(record); }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onView(record);
+                    }}
                     className="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 transition-colors inline-flex items-center gap-1"
                   >
                     <Eye size={12} /> View
@@ -315,19 +317,20 @@ function EvidenceTable({
 }
 
 // ---------------------------------------------------------------------------
-// Evidence Detail Panel
+// Evidence Detail Panel (Phase 22)
 // ---------------------------------------------------------------------------
 
 function EvidenceDetailPanel({
   record,
-  summary,
+  processingResult,
   onClose,
 }: {
   record: EvidenceRecord;
-  summary: EvidenceSummary | null;
+  processingResult: ProcessingResult | null;
   onClose: () => void;
 }) {
   const Icon = EVIDENCE_TYPE_ICONS[record.fileType];
+  const [showFullText, setShowFullText] = useState(false);
 
   return (
     <div className="bg-white border border-gray-200 rounded-xl p-5 space-y-4">
@@ -338,10 +341,15 @@ function EvidenceDetailPanel({
           </div>
           <div>
             <h3 className="text-sm font-semibold text-gray-900">{record.fileName}</h3>
-            <p className="text-xs text-gray-500">{formatEvidenceFileSize(record.fileSize)} &middot; {record.mimeType}</p>
+            <p className="text-xs text-gray-500">
+              {formatEvidenceFileSize(record.fileSize)} &middot; {record.mimeType}
+            </p>
           </div>
         </div>
-        <button onClick={onClose} className="p-1 text-gray-400 hover:text-gray-600 rounded">
+        <button
+          onClick={onClose}
+          className="p-1 text-gray-400 hover:text-gray-600 rounded"
+        >
           <X size={16} />
         </button>
       </div>
@@ -354,11 +362,15 @@ function EvidenceDetailPanel({
         </div>
         <div>
           <span className="text-gray-500">Type</span>
-          <p className="mt-0.5"><EvidenceTypeBadge type={record.fileType} /></p>
+          <p className="mt-0.5">
+            <EvidenceTypeBadge type={record.fileType} />
+          </p>
         </div>
         <div>
           <span className="text-gray-500">Processing</span>
-          <p className="mt-0.5"><ProcessingStatusBadge status={record.processingStatus} /></p>
+          <p className="mt-0.5">
+            <ProcessingStatusBadge status={record.processingStatus} />
+          </p>
         </div>
         <div>
           <span className="text-gray-500">Integrity</span>
@@ -368,61 +380,150 @@ function EvidenceDetailPanel({
                 <Shield size={12} /> Verified
               </span>
             ) : (
-              <span className="text-gray-400">Pending verification</span>
+              <span className="text-gray-400">Pending</span>
             )}
           </p>
         </div>
         <div className="col-span-2">
           <span className="text-gray-500">SHA-256</span>
-          <p className="font-mono text-gray-700 mt-0.5 break-all text-[10px]">{record.sha256Hash}</p>
+          <p className="font-mono text-gray-700 mt-0.5 break-all text-[10px]">
+            {record.sha256Hash}
+          </p>
         </div>
         <div className="col-span-2">
           <span className="text-gray-500">SHA3-256</span>
-          <p className="font-mono text-gray-700 mt-0.5 break-all text-[10px]">{record.sha3Hash}</p>
+          <p className="font-mono text-gray-700 mt-0.5 break-all text-[10px]">
+            {record.sha3Hash}
+          </p>
         </div>
       </div>
 
-      {/* AI Summary */}
-      {summary && (
-        <div className="border-t border-gray-100 pt-4">
-          <h4 className="text-xs font-semibold text-gray-700 uppercase tracking-wide mb-2">AI Summary</h4>
-          <p className="text-sm text-gray-600 leading-relaxed">{summary.summaryText}</p>
-          {summary.keyPoints.length > 0 && (
-            <div className="mt-3">
-              <h5 className="text-xs font-medium text-gray-500 mb-1">Key Points</h5>
+      {/* Processing Results (Phase 22) */}
+      {processingResult && (
+        <>
+          <div className="border-t border-gray-100 pt-4">
+            <h4 className="text-xs font-semibold text-gray-700 uppercase tracking-wide mb-2 flex items-center gap-1.5">
+              <Zap size={12} className="text-blue-500" />
+              AI Summary
+            </h4>
+            <p className="text-sm text-gray-600 leading-relaxed">
+              {processingResult.summary}
+            </p>
+          </div>
+
+          {processingResult.keyPoints.length > 0 && (
+            <div>
+              <h5 className="text-xs font-medium text-gray-500 mb-1.5">Key Points</h5>
               <ul className="space-y-1">
-                {summary.keyPoints.map((point, i) => (
-                  <li key={i} className="text-xs text-gray-600 flex items-start gap-1.5">
-                    <span className="text-blue-500 mt-0.5">&#8226;</span>
+                {processingResult.keyPoints.map((point, i) => (
+                  <li
+                    key={i}
+                    className="text-xs text-gray-600 flex items-start gap-1.5"
+                  >
+                    <span className="text-blue-500 mt-0.5">&bull;</span>
                     {point}
                   </li>
                 ))}
               </ul>
             </div>
           )}
-          {summary.mentionedEntities.length > 0 && (
-            <div className="mt-3">
-              <h5 className="text-xs font-medium text-gray-500 mb-1">Mentioned Entities</h5>
+
+          {processingResult.extractedText && (
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <h5 className="text-xs font-medium text-gray-500">Extracted Text</h5>
+                <button
+                  onClick={() => setShowFullText(!showFullText)}
+                  className="text-xs text-blue-600 hover:text-blue-700"
+                >
+                  {showFullText ? 'Collapse' : 'Expand'}
+                </button>
+              </div>
+              <div
+                className={`bg-gray-50 rounded-lg p-3 ${showFullText ? '' : 'max-h-32'} overflow-hidden`}
+              >
+                <p className="text-xs text-gray-600 whitespace-pre-wrap">
+                  {processingResult.extractedText}
+                </p>
+              </div>
+            </div>
+          )}
+
+          {processingResult.transcript && (
+            <div>
+              <div className="flex items-center justify-between mb-1.5">
+                <h5 className="text-xs font-medium text-gray-500">Transcript</h5>
+                <button className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1">
+                  <Copy size={10} /> Copy
+                </button>
+              </div>
+              <div className="bg-gray-50 rounded-lg p-3 max-h-48 overflow-y-auto">
+                <pre className="text-xs text-gray-600 whitespace-pre-wrap font-sans">
+                  {processingResult.transcript}
+                </pre>
+              </div>
+            </div>
+          )}
+
+          {processingResult.ocrText && (
+            <div>
+              <h5 className="text-xs font-medium text-gray-500 mb-1.5">
+                OCR Extracted Text
+              </h5>
+              <div className="bg-gray-50 rounded-lg p-3 max-h-32 overflow-y-auto">
+                <pre className="text-xs text-gray-600 whitespace-pre-wrap font-mono">
+                  {processingResult.ocrText}
+                </pre>
+              </div>
+            </div>
+          )}
+
+          {processingResult.entities.length > 0 && (
+            <div>
+              <h5 className="text-xs font-medium text-gray-500 mb-1.5">
+                Detected Entities
+              </h5>
               <div className="flex flex-wrap gap-1.5">
-                {summary.mentionedEntities.slice(0, 10).map((entity, i) => (
+                {processingResult.entities.map((entity, i) => (
                   <span
                     key={i}
                     className="inline-flex items-center gap-1 px-2 py-0.5 bg-gray-100 text-gray-600 rounded text-xs"
                   >
                     {entity.name}
-                    <span className="text-gray-400">({entity.occurrenceCount})</span>
+                    <span className="text-gray-400">({entity.count})</span>
                   </span>
                 ))}
               </div>
             </div>
           )}
-        </div>
+
+          <div className="grid grid-cols-2 gap-2 text-xs">
+            {processingResult.pageCount !== null && (
+              <div className="bg-gray-50 rounded-lg p-2 text-center">
+                <p className="text-lg font-bold text-gray-900">
+                  {processingResult.pageCount}
+                </p>
+                <p className="text-gray-500">Pages</p>
+              </div>
+            )}
+            {processingResult.duration !== null && (
+              <div className="bg-gray-50 rounded-lg p-2 text-center">
+                <p className="text-lg font-bold text-gray-900">
+                  {Math.floor(processingResult.duration / 60)}:
+                  {String(processingResult.duration % 60).padStart(2, '0')}
+                </p>
+                <p className="text-gray-500">Duration</p>
+              </div>
+            )}
+          </div>
+        </>
       )}
 
-      {/* Storage Location */}
       <div className="border-t border-gray-100 pt-3">
         <span className="text-xs text-gray-500">Storage</span>
-        <p className="font-mono text-[10px] text-gray-500 mt-0.5 break-all">{record.storageLocation}</p>
+        <p className="font-mono text-[10px] text-gray-500 mt-0.5 break-all">
+          {record.storageLocation}
+        </p>
       </div>
     </div>
   );
@@ -445,32 +546,21 @@ function TimelineView({ events }: { events: CaseTimelineEvent[] }) {
     <div className="space-y-0">
       {events.map((event, index) => (
         <div key={event.eventId} className="flex gap-3">
-          {/* Timeline line */}
           <div className="flex flex-col items-center">
             <div className="w-2.5 h-2.5 bg-blue-500 rounded-full flex-shrink-0 mt-1.5" />
             {index < events.length - 1 && <div className="w-0.5 flex-1 bg-gray-200" />}
           </div>
-
-          {/* Event content */}
           <div className="pb-6 flex-1">
             <div className="flex items-center gap-2 mb-1">
               <span className="text-xs font-medium text-gray-900">
-                {new Date(event.timestamp).toLocaleDateString()} {new Date(event.timestamp).toLocaleTimeString()}
+                {new Date(event.timestamp).toLocaleDateString()}{' '}
+                {new Date(event.timestamp).toLocaleTimeString()}
               </span>
               <span className="px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded text-[10px] font-medium">
                 {TIMELINE_CATEGORY_LABELS[event.eventCategory]}
               </span>
             </div>
             <p className="text-sm text-gray-600">{event.eventDescription}</p>
-            {Object.keys(event.metadata).length > 0 && (
-              <div className="flex flex-wrap gap-1.5 mt-1.5">
-                {Object.entries(event.metadata).map(([key, value]) => (
-                  <span key={key} className="text-[10px] text-gray-400 bg-gray-50 px-1.5 py-0.5 rounded">
-                    {key}: {value}
-                  </span>
-                ))}
-              </div>
-            )}
           </div>
         </div>
       ))}
@@ -479,7 +569,7 @@ function TimelineView({ events }: { events: CaseTimelineEvent[] }) {
 }
 
 // ---------------------------------------------------------------------------
-// Graph View (Placeholder — will use D3/force-graph in production)
+// Graph View
 // ---------------------------------------------------------------------------
 
 function GraphView({ graph }: { graph: EvidenceGraph | null }) {
@@ -504,12 +594,16 @@ function GraphView({ graph }: { graph: EvidenceGraph | null }) {
         </div>
       </div>
 
-      {/* Node list */}
       <div>
-        <h4 className="text-xs font-semibold text-gray-700 uppercase tracking-wide mb-2">Entities</h4>
+        <h4 className="text-xs font-semibold text-gray-700 uppercase tracking-wide mb-2">
+          Entities
+        </h4>
         <div className="space-y-1">
           {graph.nodes.map((node) => (
-            <div key={node.nodeId} className="flex items-center gap-2 py-1.5 px-3 bg-gray-50 rounded-lg">
+            <div
+              key={node.nodeId}
+              className="flex items-center gap-2 py-1.5 px-3 bg-gray-50 rounded-lg"
+            >
               <span className="px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded text-[10px] font-medium uppercase">
                 {node.nodeType}
               </span>
@@ -519,23 +613,31 @@ function GraphView({ graph }: { graph: EvidenceGraph | null }) {
         </div>
       </div>
 
-      {/* Edge list */}
       {graph.edges.length > 0 && (
         <div>
-          <h4 className="text-xs font-semibold text-gray-700 uppercase tracking-wide mb-2">Relationships</h4>
+          <h4 className="text-xs font-semibold text-gray-700 uppercase tracking-wide mb-2">
+            Relationships
+          </h4>
           <div className="space-y-1">
             {graph.edges.map((edge) => {
               const source = graph.nodes.find((n) => n.nodeId === edge.sourceNodeId);
               const target = graph.nodes.find((n) => n.nodeId === edge.targetNodeId);
               return (
-                <div key={edge.edgeId} className="flex items-center gap-2 py-1.5 px-3 bg-gray-50 rounded-lg text-xs">
-                  <span className="text-gray-700 font-medium">{source?.label ?? '?'}</span>
-                  <span className="text-gray-400">→</span>
+                <div
+                  key={edge.edgeId}
+                  className="flex items-center gap-2 py-1.5 px-3 bg-gray-50 rounded-lg text-xs"
+                >
+                  <span className="text-gray-700 font-medium">
+                    {source?.label ?? '?'}
+                  </span>
+                  <span className="text-gray-400">&rarr;</span>
                   <span className="px-1.5 py-0.5 bg-amber-100 text-amber-700 rounded text-[10px]">
                     {edge.relationshipType.replace(/_/g, ' ')}
                   </span>
-                  <span className="text-gray-400">→</span>
-                  <span className="text-gray-700 font-medium">{target?.label ?? '?'}</span>
+                  <span className="text-gray-400">&rarr;</span>
+                  <span className="text-gray-700 font-medium">
+                    {target?.label ?? '?'}
+                  </span>
                 </div>
               );
             })}
@@ -547,10 +649,70 @@ function GraphView({ graph }: { graph: EvidenceGraph | null }) {
 }
 
 // ---------------------------------------------------------------------------
+// Search Results List (Phase 24)
+// ---------------------------------------------------------------------------
+
+function SearchResultsList({ results }: { results: SearchResult[] }) {
+  if (results.length === 0) {
+    return (
+      <div className="text-center py-8 text-gray-400 text-sm">
+        No results found. Try different search terms or filters.
+      </div>
+    );
+  }
+
+  const matchTypeLabels: Record<string, string> = {
+    content: 'Content',
+    transcript: 'Transcript',
+    ocr: 'OCR',
+    summary: 'Summary',
+    entity: 'Entity',
+    filename: 'File Name',
+  };
+
+  return (
+    <div className="space-y-3">
+      {results.map((result, i) => {
+        const Icon = EVIDENCE_TYPE_ICONS[result.fileType];
+        return (
+          <div
+            key={`${result.evidenceId}-${i}`}
+            className="bg-white border border-gray-200 rounded-lg p-4 hover:border-gray-300 transition-colors"
+          >
+            <div className="flex items-center gap-2 mb-2">
+              <Icon size={14} className="text-gray-400" />
+              <span className="text-sm font-medium text-gray-900">
+                {result.fileName}
+              </span>
+              <EvidenceTypeBadge type={result.fileType} />
+              <span className="px-1.5 py-0.5 bg-gray-100 text-gray-500 rounded text-[10px]">
+                {matchTypeLabels[result.matchType] || result.matchType}
+              </span>
+            </div>
+            <div
+              className="text-sm text-gray-600 leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: result.matchHighlight }}
+            />
+            <div className="flex items-center gap-3 mt-2 text-xs text-gray-400">
+              <span>Relevance: {Math.round(result.relevanceScore * 100)}%</span>
+              <span>&bull;</span>
+              <span>
+                Uploaded: {new Date(result.uploadTimestamp).toLocaleDateString()}
+              </span>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Dashboard Tabs
 // ---------------------------------------------------------------------------
 
 type DashboardTab = 'evidence' | 'timeline' | 'graph' | 'search';
+type FilterType = 'all' | EvidenceType;
 
 const DASHBOARD_TABS: { id: DashboardTab; label: string; icon: typeof FileText }[] = [
   { id: 'evidence', label: 'Evidence', icon: FileSearch },
@@ -560,84 +722,133 @@ const DASHBOARD_TABS: { id: DashboardTab; label: string; icon: typeof FileText }
 ];
 
 // ---------------------------------------------------------------------------
-// Evidence Filter
-// ---------------------------------------------------------------------------
-
-type FilterType = 'all' | EvidenceType;
-
-// ---------------------------------------------------------------------------
-// Main Evidence Dashboard Component
+// Main Dashboard Component
 // ---------------------------------------------------------------------------
 
 export function EvidenceDashboardPage() {
-  // State
+  const navigate = useNavigate();
+  const { caseId } = useParams();
+
+  // UI State
   const [activeTab, setActiveTab] = useState<DashboardTab>('evidence');
   const [filterType, setFilterType] = useState<FilterType>('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedRecord, setSelectedRecord] = useState<EvidenceRecord | null>(null);
-  const [uploadQueue, setUploadQueue] = useState<UploadQueueItem[]>([]);
   const [showUpload, setShowUpload] = useState(false);
 
-  // Demo data — will be replaced with real data from API
-  const [evidenceRecords] = useState<EvidenceRecord[]>([]);
+  // Evidence State
+  const [uploadQueue, setUploadQueue] = useState<UploadItem[]>([]);
+  const [evidenceRecords, setEvidenceRecords] = useState<EvidenceRecord[]>([]);
+  const [processingResults, setProcessingResults] = useState<Map<string, ProcessingResult>>(
+    new Map()
+  );
+
+  // Timeline + Graph (populated by processing pipeline)
   const [timelineEvents] = useState<CaseTimelineEvent[]>([]);
   const [evidenceGraph] = useState<EvidenceGraph | null>(null);
-  const [summaries] = useState<Map<string, EvidenceSummary>>(new Map());
 
-  // File upload handler
-  const handleFilesSelected = useCallback((files: File[]) => {
-    const newItems: UploadQueueItem[] = files.map((file) => {
-      const validation = validateEvidenceFile(file);
-      return {
-        file,
-        status: validation.valid ? 'uploading' as const : 'error' as const,
-        evidenceType: validation.evidenceType,
-        error: validation.error,
-        progress: 0,
-      };
-    });
+  // Search State (Phase 24)
+  const [globalSearchQuery, setGlobalSearchQuery] = useState('');
+  const [searchResults, setSearchResults] = useState<SearchResult[]>([]);
+  const [searchFilters, setSearchFilters] = useState<SearchFilters>({
+    evidenceType: 'all',
+    dateFrom: null,
+    dateTo: null,
+    personMentioned: null,
+  });
 
-    setUploadQueue((prev) => [...prev, ...newItems]);
+  // ---------------------------------------------------------------------------
+  // Upload Handler (Phase 21 + Phase 27 hardening)
+  // ---------------------------------------------------------------------------
 
-    // Simulate upload progress for valid files
-    for (const item of newItems) {
-      if (item.status === 'uploading') {
-        simulateUpload(item);
+  const handleFilesSelected = useCallback(async (files: File[]) => {
+    for (const file of files) {
+      // Phase 27: Rate limit check
+      const rateCheck = checkUploadRateLimit(file.size);
+      if (!rateCheck.allowed) {
+        const errorItem = createUploadItem(file);
+        errorItem.status = 'error';
+        errorItem.error = rateCheck.reason;
+        setUploadQueue((prev) => [...prev, errorItem]);
+        continue;
       }
+
+      // Phase 27: File security scan
+      const scanResult = await scanFile(file);
+      if (!scanResult.safe) {
+        const errorItem = createUploadItem(file);
+        errorItem.status = 'error';
+        errorItem.error = scanResult.threats.join('; ');
+        setUploadQueue((prev) => [...prev, errorItem]);
+        continue;
+      }
+
+      // Create upload item (validates file type + size)
+      const uploadItem = createUploadItem(file);
+      if (uploadItem.status === 'error') {
+        setUploadQueue((prev) => [...prev, uploadItem]);
+        continue;
+      }
+
+      setUploadQueue((prev) => [...prev, uploadItem]);
+      trackUploadStart(file.size);
+
+      // Run simulated upload + processing pipeline
+      simulateUploadPipeline(
+        uploadItem,
+        (updated) => {
+          setUploadQueue((prev) =>
+            prev.map((q) => (q.id === updated.id ? updated : q))
+          );
+          // Add evidence record when upload completes
+          if (updated.record && updated.status === 'processing') {
+            setEvidenceRecords((prev) => {
+              const exists = prev.some(
+                (r) => r.evidenceId === updated.record!.evidenceId
+              );
+              if (exists) return prev;
+              return [...prev, updated.record!];
+            });
+          }
+        },
+        (completedRecord, result) => {
+          trackUploadEnd();
+          // Update evidence record to complete status
+          setEvidenceRecords((prev) =>
+            prev.map((r) =>
+              r.evidenceId === completedRecord.evidenceId ? completedRecord : r
+            )
+          );
+          // Store processing result
+          setProcessingResults((prev) => {
+            const next = new Map(prev);
+            next.set(completedRecord.evidenceId, result);
+            return next;
+          });
+          // Index for search (Phase 24)
+          indexEvidence(completedRecord, result);
+        }
+      );
     }
   }, []);
 
-  const simulateUpload = (item: UploadQueueItem) => {
-    let progress = 0;
-    const interval = setInterval(() => {
-      progress += Math.random() * 30;
-      if (progress >= 100) {
-        progress = 100;
-        clearInterval(interval);
-        setUploadQueue((prev) =>
-          prev.map((q) =>
-            q.file === item.file ? { ...q, status: 'processing' as const, progress: 100 } : q
-          )
-        );
-        // Simulate processing completion
-        setTimeout(() => {
-          setUploadQueue((prev) =>
-            prev.map((q) =>
-              q.file === item.file ? { ...q, status: 'complete' as const } : q
-            )
-          );
-        }, 2000);
-      } else {
-        setUploadQueue((prev) =>
-          prev.map((q) =>
-            q.file === item.file ? { ...q, progress } : q
-          )
-        );
-      }
-    }, 500);
-  };
+  // ---------------------------------------------------------------------------
+  // Search Handler (Phase 24)
+  // ---------------------------------------------------------------------------
 
-  // Filter evidence records
+  const handleSearch = useCallback(() => {
+    if (!globalSearchQuery.trim()) {
+      setSearchResults([]);
+      return;
+    }
+    const results = searchEvidence(globalSearchQuery, searchFilters);
+    setSearchResults(results);
+  }, [globalSearchQuery, searchFilters]);
+
+  // ---------------------------------------------------------------------------
+  // Filtered Records
+  // ---------------------------------------------------------------------------
+
   const filteredRecords = evidenceRecords.filter((record) => {
     const matchesType = filterType === 'all' || record.fileType === filterType;
     const matchesSearch =
@@ -647,7 +858,10 @@ export function EvidenceDashboardPage() {
     return matchesType && matchesSearch;
   });
 
+  // ---------------------------------------------------------------------------
   // Stats
+  // ---------------------------------------------------------------------------
+
   const stats = {
     total: evidenceRecords.length,
     documents: evidenceRecords.filter((r) => r.fileType === 'document').length,
@@ -657,6 +871,14 @@ export function EvidenceDashboardPage() {
     processing: evidenceRecords.filter((r) => r.processingStatus === 'processing').length,
     complete: evidenceRecords.filter((r) => r.processingStatus === 'complete').length,
   };
+
+  const handleViewEvidence = (_record: EvidenceRecord) => {
+    navigate(`/app/cases/${caseId}/evidence-viewer`);
+  };
+
+  // ---------------------------------------------------------------------------
+  // Render
+  // ---------------------------------------------------------------------------
 
   return (
     <div className="space-y-6">
@@ -668,18 +890,16 @@ export function EvidenceDashboardPage() {
             Upload, analyze, and search evidence across all media types
           </p>
         </div>
-        <div className="flex items-center gap-3">
-          <button
-            onClick={() => setShowUpload(!showUpload)}
-            className="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-lg text-sm font-medium hover:bg-slate-700 transition-colors"
-          >
-            <Upload size={16} />
-            Upload Evidence
-          </button>
-        </div>
+        <button
+          onClick={() => setShowUpload(!showUpload)}
+          className="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-lg text-sm font-medium hover:bg-slate-700 transition-colors"
+        >
+          <Upload size={16} />
+          Upload Evidence
+        </button>
       </div>
 
-      {/* Stats Bar */}
+      {/* Stats Row */}
       <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-3">
         {[
           { label: 'Total', value: stats.total, icon: BarChart3, color: 'text-gray-600' },
@@ -689,46 +909,61 @@ export function EvidenceDashboardPage() {
           { label: 'Video', value: stats.video, icon: Video, color: 'text-blue-600' },
           { label: 'Processing', value: stats.processing, icon: Loader2, color: 'text-blue-500' },
           { label: 'Analyzed', value: stats.complete, icon: CheckCircle, color: 'text-green-500' },
-        ].map(({ label, value, icon: Icon, color }) => (
+        ].map(({ label, value, icon: StatIcon, color }) => (
           <div key={label} className="bg-white border border-gray-100 rounded-lg p-3 text-center">
-            <Icon size={16} className={`mx-auto mb-1 ${color}`} />
+            <StatIcon size={16} className={`mx-auto mb-1 ${color}`} />
             <p className="text-lg font-bold text-gray-900">{value}</p>
             <p className="text-[10px] text-gray-500 uppercase tracking-wide">{label}</p>
           </div>
         ))}
       </div>
 
-      {/* Upload Area */}
+      {/* Upload Area (Phase 21) */}
       {showUpload && (
         <Card>
           <div className="space-y-4">
             <div className="flex items-center justify-between">
               <h3 className="text-sm font-semibold text-gray-900">Upload Evidence</h3>
-              <button onClick={() => setShowUpload(false)} className="text-gray-400 hover:text-gray-600">
+              <button
+                onClick={() => setShowUpload(false)}
+                className="text-gray-400 hover:text-gray-600"
+              >
                 <X size={16} />
               </button>
             </div>
-
             <UploadDropzone
               onFilesSelected={handleFilesSelected}
               isUploading={uploadQueue.some((q) => q.status === 'uploading')}
             />
-
-            {/* Upload Queue */}
             {uploadQueue.length > 0 && (
-              <div className="border border-gray-200 rounded-lg divide-y divide-gray-50">
-                {uploadQueue.map((item, i) => (
-                  <UploadQueueRow key={`${item.file.name}-${i}`} item={item} />
-                ))}
+              <div>
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="text-xs font-medium text-gray-500">Upload Queue</h4>
+                  {uploadQueue.every(
+                    (q) => q.status === 'complete' || q.status === 'error'
+                  ) && (
+                    <button
+                      onClick={() => setUploadQueue([])}
+                      className="text-xs text-gray-400 hover:text-gray-600"
+                    >
+                      Clear
+                    </button>
+                  )}
+                </div>
+                <div className="border border-gray-200 rounded-lg divide-y divide-gray-50">
+                  {uploadQueue.map((item) => (
+                    <UploadQueueRow key={item.id} item={item} />
+                  ))}
+                </div>
               </div>
             )}
           </div>
         </Card>
       )}
 
-      {/* Dashboard Tabs */}
+      {/* Tab Navigation */}
       <div className="flex gap-1 border-b border-gray-200">
-        {DASHBOARD_TABS.map(({ id, label, icon: Icon }) => (
+        {DASHBOARD_TABS.map(({ id, label, icon: TabIcon }) => (
           <button
             key={id}
             onClick={() => setActiveTab(id)}
@@ -738,64 +973,69 @@ export function EvidenceDashboardPage() {
                 : 'border-transparent text-gray-500 hover:text-gray-700'
             }`}
           >
-            <Icon size={14} />
+            <TabIcon size={14} />
             {label}
           </button>
         ))}
       </div>
 
-      {/* Tab Content */}
+      {/* Evidence Tab */}
       {activeTab === 'evidence' && (
         <div className="space-y-4">
           {/* Filters */}
           <div className="flex items-center gap-3">
             <div className="relative">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search
+                size={14}
+                className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              />
               <input
                 type="search"
                 placeholder="Search evidence..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="pl-9 pr-4 py-2 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 w-64"
-                aria-label="Search evidence"
+                className="pl-9 pr-4 py-2 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 w-64"
               />
             </div>
             <div className="flex items-center gap-1">
               <Filter size={14} className="text-gray-400" />
-              {(['all', 'document', 'image', 'audio', 'video'] as FilterType[]).map((type) => (
-                <button
-                  key={type}
-                  onClick={() => setFilterType(type)}
-                  className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
-                    filterType === type
-                      ? 'bg-blue-100 text-blue-700'
-                      : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
-                  }`}
-                >
-                  {type === 'all' ? 'All' : EVIDENCE_TYPE_LABELS[type]}
-                </button>
-              ))}
+              {(['all', 'document', 'image', 'audio', 'video'] as FilterType[]).map(
+                (type) => (
+                  <button
+                    key={type}
+                    onClick={() => setFilterType(type)}
+                    className={`px-3 py-1.5 rounded-lg text-xs font-medium transition-colors ${
+                      filterType === type
+                        ? 'bg-blue-100 text-blue-700'
+                        : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                    }`}
+                  >
+                    {type === 'all' ? 'All' : EVIDENCE_TYPE_LABELS[type]}
+                  </button>
+                )
+              )}
             </div>
           </div>
 
+          {/* Table + Detail Panel */}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-            {/* Evidence Table */}
-            <div className={`${selectedRecord ? 'lg:col-span-2' : 'lg:col-span-3'}`}>
+            <div className={selectedRecord ? 'lg:col-span-2' : 'lg:col-span-3'}>
               <Card padding="none">
                 <EvidenceTable
                   records={filteredRecords}
                   onSelect={setSelectedRecord}
+                  onView={handleViewEvidence}
                   selectedId={selectedRecord?.evidenceId ?? null}
                 />
               </Card>
             </div>
-
-            {/* Detail Panel */}
             {selectedRecord && (
               <div className="lg:col-span-1">
                 <EvidenceDetailPanel
                   record={selectedRecord}
-                  summary={summaries.get(selectedRecord.evidenceId) ?? null}
+                  processingResult={
+                    processingResults.get(selectedRecord.evidenceId) ?? null
+                  }
                   onClose={() => setSelectedRecord(null)}
                 />
               </div>
@@ -804,49 +1044,153 @@ export function EvidenceDashboardPage() {
         </div>
       )}
 
+      {/* Timeline Tab */}
       {activeTab === 'timeline' && (
         <Card>
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-semibold text-gray-900">Case Evidence Timeline</h3>
+            <h3 className="text-sm font-semibold text-gray-900">
+              Case Evidence Timeline
+            </h3>
             <span className="text-xs text-gray-500">{timelineEvents.length} events</span>
           </div>
           <TimelineView events={timelineEvents} />
         </Card>
       )}
 
+      {/* Graph Tab */}
       {activeTab === 'graph' && (
         <Card>
           <div className="flex items-center justify-between mb-4">
-            <h3 className="text-sm font-semibold text-gray-900">Evidence Relationships</h3>
+            <h3 className="text-sm font-semibold text-gray-900">
+              Evidence Relationships
+            </h3>
           </div>
           <GraphView graph={evidenceGraph} />
         </Card>
       )}
 
+      {/* Search Tab (Phase 24) */}
       {activeTab === 'search' && (
         <Card>
           <div className="space-y-4">
             <h3 className="text-sm font-semibold text-gray-900">Evidence Search</h3>
-            <div className="relative">
-              <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-              <input
-                type="search"
-                placeholder="Search across all evidence — transcripts, OCR text, documents..."
-                className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500"
-                aria-label="Search all evidence"
-              />
-            </div>
+
+            {/* Search Input */}
             <div className="flex gap-2">
-              <button className="px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg text-xs font-medium">
-                Keyword Search
-              </button>
-              <button className="px-3 py-1.5 bg-gray-100 text-gray-500 rounded-lg text-xs font-medium hover:bg-gray-200">
-                Semantic Search
+              <div className="relative flex-1">
+                <Search
+                  size={16}
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                />
+                <input
+                  type="search"
+                  placeholder="Search across all evidence..."
+                  value={globalSearchQuery}
+                  onChange={(e) => setGlobalSearchQuery(e.target.value)}
+                  onKeyDown={(e) => e.key === 'Enter' && handleSearch()}
+                  className="w-full pl-10 pr-4 py-3 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500/20"
+                />
+              </div>
+              <button
+                onClick={handleSearch}
+                className="px-5 py-3 bg-slate-800 text-white rounded-lg text-sm font-medium hover:bg-slate-700 transition-colors"
+              >
+                Search
               </button>
             </div>
-            <div className="text-center py-8 text-gray-400 text-sm">
-              Upload and process evidence to enable cross-evidence search.
+
+            {/* Search Filters */}
+            <div className="flex flex-wrap items-center gap-3">
+              <div className="flex items-center gap-1">
+                <Filter size={12} className="text-gray-400" />
+                <span className="text-xs text-gray-500">Type:</span>
+                {(['all', 'document', 'image', 'audio', 'video'] as const).map(
+                  (type) => (
+                    <button
+                      key={type}
+                      onClick={() =>
+                        setSearchFilters({ ...searchFilters, evidenceType: type })
+                      }
+                      className={`px-2.5 py-1 rounded-lg text-xs font-medium transition-colors ${
+                        searchFilters.evidenceType === type
+                          ? 'bg-blue-100 text-blue-700'
+                          : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                      }`}
+                    >
+                      {type === 'all' ? 'All' : EVIDENCE_TYPE_LABELS[type]}
+                    </button>
+                  )
+                )}
+              </div>
+              <div className="flex items-center gap-2">
+                <Calendar size={12} className="text-gray-400" />
+                <input
+                  type="date"
+                  value={searchFilters.dateFrom ?? ''}
+                  onChange={(e) =>
+                    setSearchFilters({
+                      ...searchFilters,
+                      dateFrom: e.target.value || null,
+                    })
+                  }
+                  className="px-2 py-1 rounded border border-gray-200 text-xs text-gray-600"
+                />
+                <span className="text-xs text-gray-400">to</span>
+                <input
+                  type="date"
+                  value={searchFilters.dateTo ?? ''}
+                  onChange={(e) =>
+                    setSearchFilters({
+                      ...searchFilters,
+                      dateTo: e.target.value || null,
+                    })
+                  }
+                  className="px-2 py-1 rounded border border-gray-200 text-xs text-gray-600"
+                />
+              </div>
+              <div className="flex items-center gap-2">
+                <User size={12} className="text-gray-400" />
+                <input
+                  type="text"
+                  placeholder="Person mentioned..."
+                  value={searchFilters.personMentioned ?? ''}
+                  onChange={(e) =>
+                    setSearchFilters({
+                      ...searchFilters,
+                      personMentioned: e.target.value || null,
+                    })
+                  }
+                  className="px-2.5 py-1 rounded border border-gray-200 text-xs text-gray-600 w-40"
+                />
+              </div>
             </div>
+
+            {/* Search Results */}
+            {searchResults.length > 0 && (
+              <div className="border-t border-gray-100 pt-4">
+                <span className="text-sm font-medium text-gray-700 mb-3 block">
+                  {searchResults.length} result{searchResults.length !== 1 ? 's' : ''}{' '}
+                  found
+                </span>
+                <SearchResultsList results={searchResults} />
+              </div>
+            )}
+
+            {globalSearchQuery && searchResults.length === 0 && (
+              <div className="text-center py-8 text-gray-400 text-sm">
+                {evidenceRecords.length === 0
+                  ? 'Upload and process evidence to enable search.'
+                  : 'No results found.'}
+              </div>
+            )}
+
+            {!globalSearchQuery && (
+              <div className="text-center py-8 text-gray-400 text-sm">
+                {evidenceRecords.length === 0
+                  ? 'Upload and process evidence to enable search.'
+                  : `${evidenceRecords.length} evidence items indexed.`}
+              </div>
+            )}
           </div>
         </Card>
       )}

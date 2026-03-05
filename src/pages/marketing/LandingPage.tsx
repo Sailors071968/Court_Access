@@ -100,7 +100,133 @@ function HeroSection() {
           <p className="mt-4 text-xs text-gray-400">
             No credit card required. 1 free document analysis included.
           </p>
+          <p className="mt-6 text-sm text-gray-500 font-medium">
+            Used by defense attorneys, investigators, and legal researchers.
+          </p>
         </div>
+      </div>
+    </section>
+  );
+}
+
+// ---- Demo Request Section ----
+
+function DemoRequestSection() {
+  const [formData, setFormData] = useState({
+    name: '',
+    firm: '',
+    email: '',
+    phone: '',
+    caseType: '',
+  });
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent'>('idle');
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setStatus('sending');
+    trackEvent('demo_request_submit', { caseType: formData.caseType });
+    // In production: POST to /api/demo-request
+    setTimeout(() => {
+      setStatus('sent');
+      setFormData({ name: '', firm: '', email: '', phone: '', caseType: '' });
+    }, 1000);
+  };
+
+  return (
+    <section id="demo" className="py-20 bg-slate-50">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-10">
+          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">
+            Request a Demo
+          </h2>
+          <p className="mt-4 text-gray-600 text-lg">
+            See how CourtAccess can streamline your case analysis workflow.
+          </p>
+        </div>
+
+        {status === 'sent' ? (
+          <div className="bg-emerald-50 border border-emerald-200 rounded-2xl p-8 text-center">
+            <CheckCircle className="mx-auto text-emerald-500 mb-3" size={32} />
+            <h3 className="text-lg font-semibold text-emerald-800">Demo Request Received</h3>
+            <p className="text-sm text-emerald-600 mt-2">We&rsquo;ll contact you within 1 business day to schedule your personalized demo.</p>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="bg-white rounded-2xl border border-slate-200 p-8 shadow-sm">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">Full Name</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.name}
+                  onChange={(e) => setFormData((p) => ({ ...p, name: e.target.value }))}
+                  className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400"
+                  placeholder="Jane Smith"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">Firm / Organization</label>
+                <input
+                  type="text"
+                  required
+                  value={formData.firm}
+                  onChange={(e) => setFormData((p) => ({ ...p, firm: e.target.value }))}
+                  className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400"
+                  placeholder="Smith & Associates"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">Email</label>
+                <input
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) => setFormData((p) => ({ ...p, email: e.target.value }))}
+                  className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400"
+                  placeholder="jane@lawfirm.com"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">Phone</label>
+                <input
+                  type="tel"
+                  value={formData.phone}
+                  onChange={(e) => setFormData((p) => ({ ...p, phone: e.target.value }))}
+                  className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400"
+                  placeholder="(555) 123-4567"
+                />
+              </div>
+              <div className="md:col-span-2">
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">Primary Case Type</label>
+                <select
+                  required
+                  value={formData.caseType}
+                  onChange={(e) => setFormData((p) => ({ ...p, caseType: e.target.value }))}
+                  className="w-full px-4 py-2.5 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900/10 focus:border-slate-400"
+                >
+                  <option value="">Select case type...</option>
+                  <option value="criminal-defense">Criminal Defense</option>
+                  <option value="civil-litigation">Civil Litigation</option>
+                  <option value="family-law">Family Law</option>
+                  <option value="personal-injury">Personal Injury</option>
+                  <option value="immigration">Immigration</option>
+                  <option value="corporate">Corporate / Business</option>
+                  <option value="other">Other</option>
+                </select>
+              </div>
+            </div>
+            <button
+              type="submit"
+              disabled={status === 'sending'}
+              className="mt-6 w-full py-3 bg-slate-900 text-white font-medium rounded-xl hover:bg-slate-800 transition-colors disabled:opacity-50"
+            >
+              {status === 'sending' ? 'Submitting...' : 'Request Demo'}
+            </button>
+            <p className="mt-3 text-xs text-gray-400 text-center">
+              We&rsquo;ll reach out within 1 business day. No spam, ever.
+            </p>
+          </form>
+        )}
       </div>
     </section>
   );
@@ -984,6 +1110,7 @@ export function LandingPage() {
       <HowItWorksSection />
       <TestimonialsSection />
       <PricingSection />
+      <DemoRequestSection />
       <FAQSection />
       <ContactSection />
       <CTASection />

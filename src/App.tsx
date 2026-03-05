@@ -39,6 +39,9 @@ import { ActivityPage } from './pages/case/ActivityPage';
 import { DocumentsPage } from './pages/case/DocumentsPage';
 import { CaseSettingsPage } from './pages/case/CaseSettingsPage';
 import { EvidenceDashboardPage } from './pages/case/EvidenceDashboardPage';
+import { MonitoringPage } from './pages/admin/MonitoringPage';
+import { BetaManagementPage } from './pages/admin/BetaManagementPage';
+import { CollaborationPage } from './pages/case/CollaborationPage';
 
 function App() {
   return (
@@ -84,6 +87,22 @@ function App() {
             element={
               <ProtectedRoute requiredPermission="canViewAdmin">
                 <AdminPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/monitoring"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <MonitoringPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/beta"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <BetaManagementPage />
               </ProtectedRoute>
             }
           />
@@ -161,6 +180,14 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canManageCases">
                   <CaseSettingsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="collaboration"
+              element={
+                <ProtectedRoute requiredPermission="canViewActivity">
+                  <CollaborationPage />
                 </ProtectedRoute>
               }
             />

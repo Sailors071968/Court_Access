@@ -84,7 +84,8 @@ app.post('/api/stripe/create-checkout-session', async (req, res) => {
     }
 
     const planConfig = PLANS[plan];
-    const origin = req.headers.origin || 'http://localhost:5174';
+    const ALLOWED_ORIGINS = ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175'];
+    const origin = ALLOWED_ORIGINS.includes(req.headers.origin) ? req.headers.origin : ALLOWED_ORIGINS[0];
 
     const sessionParams = {
       mode: 'subscription',

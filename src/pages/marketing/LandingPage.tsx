@@ -16,6 +16,9 @@ import {
   BarChart3,
   Users,
   Star,
+  ChevronDown,
+  Send,
+  MessageSquare,
 } from 'lucide-react';
 import { useEffect, useRef, useState } from 'react';
 import { trackEvent } from '../../utils/analytics';
@@ -37,6 +40,8 @@ function NavBar() {
             <a href="#features" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">Features</a>
             <a href="#how-it-works" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">How It Works</a>
             <a href="#pricing" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">Pricing</a>
+            <a href="#faq" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">FAQ</a>
+            <a href="#contact" className="text-sm text-gray-600 hover:text-gray-900 transition-colors">Contact</a>
           </div>
           <div className="flex items-center gap-3">
             <Link
@@ -526,6 +531,298 @@ function PricingSection() {
   );
 }
 
+// ---- FAQ Section ----
+
+const faqItems = [
+  {
+    q: 'What is CourtAccess?',
+    a: 'CourtAccess is a structured court record analysis platform that helps defense attorneys, investigators, and legal teams understand court documents quickly. Upload documents and receive deterministic, auditable analysis in seconds.',
+  },
+  {
+    q: 'Is CourtAccess a law firm?',
+    a: 'No. CourtAccess is a legal technology platform, not a law firm. We do not provide legal advice, representation, or attorney-client relationships. Our platform provides structured analysis tools for legal professionals.',
+  },
+  {
+    q: 'How secure are uploaded documents?',
+    a: 'Every document is hashed with SHA-256 on upload, creating a tamper-proof cryptographic fingerprint. All data is encrypted in transit (TLS 1.3) and at rest (AES-256). We maintain an immutable audit trail of all access.',
+  },
+  {
+    q: 'Who can access my files?',
+    a: 'Only authorized users within your tenant can access your files. CourtAccess enforces strict tenant isolation at the database level. No cross-tenant data access is possible by design.',
+  },
+  {
+    q: 'What file types are supported?',
+    a: 'We support documents (PDF, DOC, DOCX, TXT, RTF, CSV), images (JPG, PNG, HEIC, TIFF, BMP, WEBP), audio (MP3, WAV, M4A, AAC, OGG, FLAC), and video (MP4, MOV, AVI, MKV, WEBM) evidence files.',
+  },
+  {
+    q: 'How does pricing work?',
+    a: 'We offer a free tier with 1 document analysis (up to 10 pages). Professional plans start at $99/month for unlimited analysis. Team plans at $249/month include collaboration features and role-based access control.',
+  },
+  {
+    q: 'Are my documents stored permanently?',
+    a: 'Documents are retained according to your plan and preferences. You can delete files at any time. We maintain cryptographic proof of document integrity even after deletion for audit purposes.',
+  },
+  {
+    q: 'Can multiple attorneys collaborate on a case?',
+    a: 'Yes. Team plans support up to 10 team members with role-based access control. Attorneys, investigators, staff, and clients each see exactly what they need with permission-controlled views.',
+  },
+  {
+    q: 'How does CourtAccess analyze documents?',
+    a: 'CourtAccess uses deterministic analysis — not probabilistic AI. Documents are parsed, classified, and structurally mapped. Charges, evidence, filings, witnesses, and deadlines are extracted automatically. Same input always produces the same output.',
+  },
+  {
+    q: 'Is my data encrypted?',
+    a: 'Yes. All data is encrypted in transit using TLS 1.3 and at rest using AES-256 encryption. Document hashes use SHA-256 for integrity verification. We employ a dual-hash system for tamper detection.',
+  },
+  {
+    q: 'What types of evidence can be uploaded?',
+    a: 'CourtAccess supports documents, photographs, audio recordings, and video evidence. Each file type is handled with appropriate integrity verification and metadata extraction.',
+  },
+  {
+    q: 'Can I upload video or audio evidence?',
+    a: 'Yes. We support common audio formats (MP3, WAV, M4A, AAC, OGG, FLAC) and video formats (MP4, MOV, AVI, MKV, WEBM). Files up to 500MB can be uploaded on Professional and Team plans.',
+  },
+  {
+    q: 'Is CourtAccess compliant with legal privacy requirements?',
+    a: 'CourtAccess is designed with legal privacy requirements in mind. We enforce strict tenant isolation, immutable audit trails, cryptographic document integrity, and role-based access control. All processing stays within defined constitutional boundaries.',
+  },
+  {
+    q: 'How large can uploaded files be?',
+    a: 'Free tier supports files up to 10MB. Professional plans support files up to 500MB. Team plans support files up to 1GB. Contact us for enterprise needs requiring larger file support.',
+  },
+  {
+    q: 'Can I delete my files at any time?',
+    a: 'Yes. You retain full control over your uploaded files and can delete them at any time from your dashboard. Deletion is permanent and irreversible, though cryptographic audit records are preserved.',
+  },
+];
+
+function FAQItem({ question, answer }: { question: string; answer: string }) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  return (
+    <div className="border-b border-gray-100 last:border-b-0">
+      <button
+        onClick={() => setIsOpen(!isOpen)}
+        className="w-full flex items-center justify-between py-5 text-left group"
+        aria-expanded={isOpen}
+      >
+        <span className="text-sm font-medium text-slate-900 pr-4 group-hover:text-amber-700 transition-colors">
+          {question}
+        </span>
+        <ChevronDown
+          size={18}
+          className={`text-gray-400 flex-shrink-0 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`}
+        />
+      </button>
+      {isOpen && (
+        <div className="pb-5 pr-8">
+          <p className="text-sm text-gray-600 leading-relaxed">{answer}</p>
+        </div>
+      )}
+    </div>
+  );
+}
+
+function FAQSection() {
+  return (
+    <section id="faq" className="py-20 bg-slate-50">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">
+            Frequently asked questions
+          </h2>
+          <p className="mt-4 text-gray-600 text-lg">
+            Everything you need to know about CourtAccess.
+          </p>
+        </div>
+        <div className="bg-white rounded-2xl border border-gray-100 px-6 sm:px-8 divide-y divide-gray-100">
+          {faqItems.map((item) => (
+            <FAQItem key={item.q} question={item.q} answer={item.a} />
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ---- Contact Form Section ----
+
+function ContactSection() {
+  const [formData, setFormData] = useState({
+    name: '',
+    email: '',
+    role: '',
+    subject: '',
+    message: '',
+    _honeypot: '',
+  });
+  const [status, setStatus] = useState<'idle' | 'sending' | 'sent' | 'error'>('idle');
+  const lastSubmitRef = useRef(0);
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    // Honeypot check
+    if (formData._honeypot) return;
+
+    // Rate limiting — 30 seconds between submissions
+    const now = Date.now();
+    if (now - lastSubmitRef.current < 30000) {
+      setStatus('error');
+      return;
+    }
+    lastSubmitRef.current = now;
+
+    setStatus('sending');
+    trackEvent('contact_form_submit', { role: formData.role });
+
+    try {
+      // Send via mailto fallback for now — will be wired to API endpoint when backend is ready
+      const mailtoLink = `mailto:support@courtaccess.net?subject=${encodeURIComponent(`[Contact Form] ${formData.subject}`)}&body=${encodeURIComponent(`Name: ${formData.name}\nEmail: ${formData.email}\nRole: ${formData.role}\n\n${formData.message}`)}`;
+      window.open(mailtoLink, '_blank');
+      setStatus('sent');
+      setFormData({ name: '', email: '', role: '', subject: '', message: '', _honeypot: '' });
+    } catch {
+      setStatus('error');
+    }
+  };
+
+  const updateField = (field: string, value: string) => {
+    setFormData((prev) => ({ ...prev, [field]: value }));
+  };
+
+  return (
+    <section id="contact" className="py-20 bg-white">
+      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <div className="inline-flex items-center justify-center w-12 h-12 bg-slate-100 rounded-xl mb-4">
+            <MessageSquare className="text-slate-600" size={22} />
+          </div>
+          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">
+            Get in touch
+          </h2>
+          <p className="mt-4 text-gray-600 text-lg">
+            Have questions about CourtAccess? We&rsquo;d love to hear from you.
+          </p>
+        </div>
+
+        {status === 'sent' ? (
+          <div className="bg-green-50 border border-green-200 rounded-2xl p-8 text-center">
+            <CheckCircle className="text-green-600 mx-auto mb-3" size={32} />
+            <h3 className="text-lg font-semibold text-slate-900 mb-1">Message sent</h3>
+            <p className="text-sm text-gray-600">Thank you for reaching out. We&rsquo;ll get back to you within 24 hours.</p>
+            <button
+              onClick={() => setStatus('idle')}
+              className="mt-4 text-sm text-amber-700 hover:text-amber-800 font-medium"
+            >
+              Send another message
+            </button>
+          </div>
+        ) : (
+          <form onSubmit={handleSubmit} className="bg-slate-50 rounded-2xl p-6 sm:p-8 border border-gray-100">
+            {/* Honeypot — hidden from users */}
+            <input
+              type="text"
+              name="_honeypot"
+              value={formData._honeypot}
+              onChange={(e) => updateField('_honeypot', e.target.value)}
+              className="hidden"
+              tabIndex={-1}
+              autoComplete="off"
+              aria-hidden="true"
+            />
+
+            <div className="grid sm:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label htmlFor="contact-name" className="block text-xs font-medium text-slate-700 mb-1.5">Name</label>
+                <input
+                  id="contact-name"
+                  type="text"
+                  required
+                  value={formData.name}
+                  onChange={(e) => updateField('name', e.target.value)}
+                  className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
+                  placeholder="Your name"
+                />
+              </div>
+              <div>
+                <label htmlFor="contact-email" className="block text-xs font-medium text-slate-700 mb-1.5">Email</label>
+                <input
+                  id="contact-email"
+                  type="email"
+                  required
+                  value={formData.email}
+                  onChange={(e) => updateField('email', e.target.value)}
+                  className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
+                  placeholder="you@example.com"
+                />
+              </div>
+            </div>
+
+            <div className="grid sm:grid-cols-2 gap-4 mb-4">
+              <div>
+                <label htmlFor="contact-role" className="block text-xs font-medium text-slate-700 mb-1.5">Role</label>
+                <select
+                  id="contact-role"
+                  required
+                  value={formData.role}
+                  onChange={(e) => updateField('role', e.target.value)}
+                  className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 bg-white"
+                >
+                  <option value="" disabled>Select your role</option>
+                  <option value="Attorney">Attorney</option>
+                  <option value="Investigator">Investigator</option>
+                  <option value="Legal Assistant">Legal Assistant</option>
+                  <option value="Researcher">Researcher</option>
+                  <option value="Other">Other</option>
+                </select>
+              </div>
+              <div>
+                <label htmlFor="contact-subject" className="block text-xs font-medium text-slate-700 mb-1.5">Subject</label>
+                <input
+                  id="contact-subject"
+                  type="text"
+                  required
+                  value={formData.subject}
+                  onChange={(e) => updateField('subject', e.target.value)}
+                  className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500"
+                  placeholder="How can we help?"
+                />
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <label htmlFor="contact-message" className="block text-xs font-medium text-slate-700 mb-1.5">Message</label>
+              <textarea
+                id="contact-message"
+                required
+                rows={4}
+                value={formData.message}
+                onChange={(e) => updateField('message', e.target.value)}
+                className="w-full px-3 py-2.5 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500/20 focus:border-amber-500 resize-none"
+                placeholder="Tell us about your needs..."
+              />
+            </div>
+
+            <button
+              type="submit"
+              disabled={status === 'sending'}
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-slate-800 text-white px-6 py-2.5 rounded-lg font-medium text-sm hover:bg-slate-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              {status === 'sending' ? 'Sending...' : 'Send Message'}
+              <Send size={14} />
+            </button>
+
+            {status === 'error' && (
+              <p className="mt-3 text-sm text-red-600">Something went wrong. Please try again in a moment.</p>
+            )}
+          </form>
+        )}
+      </div>
+    </section>
+  );
+}
+
 function CTASection() {
   return (
     <section className="py-20 bg-slate-800">
@@ -654,8 +951,26 @@ export function LandingPage() {
     });
     document.head.appendChild(schema);
 
+    // FAQ schema markup for SEO
+    const faqSchema = document.createElement('script');
+    faqSchema.type = 'application/ld+json';
+    faqSchema.text = JSON.stringify({
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      mainEntity: faqItems.map((item) => ({
+        '@type': 'Question',
+        name: item.q,
+        acceptedAnswer: {
+          '@type': 'Answer',
+          text: item.a,
+        },
+      })),
+    });
+    document.head.appendChild(faqSchema);
+
     return () => {
       document.head.removeChild(schema);
+      document.head.removeChild(faqSchema);
     };
   }, []);
 
@@ -669,6 +984,8 @@ export function LandingPage() {
       <HowItWorksSection />
       <TestimonialsSection />
       <PricingSection />
+      <FAQSection />
+      <ContactSection />
       <CTASection />
       <Footer />
     </div>

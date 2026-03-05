@@ -342,7 +342,7 @@ function VideoTestimonialCard({ video, name, role, quote }: { video: string; nam
             src={video}
             className="w-full aspect-[9/16] object-cover"
             playsInline
-            preload="metadata"
+            preload="none"
             onEnded={() => setIsPlaying(false)}
           />
         ) : (

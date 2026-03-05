@@ -73,8 +73,109 @@ const evidenceRecords = new Map();
 // Rate limiting — per-tenant upload tracking
 const uploadRateLimits = new Map();
 
+// Cleanup stale rate limit entries every 60 seconds
+setInterval(() => {
+  const currentMinute = Math.floor(Date.now() / 60000);
+  for (const [key] of uploadRateLimits) {
+    const parts = key.split('-');
+    const keyMinute = parseInt(parts[parts.length - 1], 10);
+    if (currentMinute - keyMinute > 2) {
+      uploadRateLimits.delete(key);
+    }
+  }
+}, 60000);
+
 // ---------------------------------------------------------------------------
-// Routes
+// Routes — Static paths MUST be registered before parameterized /:evidenceId
+// ---------------------------------------------------------------------------
+
+/**
+ * GET /api/evidence/queue/stats
+ * Get processing queue statistics (admin).
+ */
+router.get('/queue/stats', async (req, res) => {
+  try {
+    const stats = await getQueueStats();
+    const clamavAvailable = await isClamAVAvailable();
+
+    res.json({
+      queue: stats || { waiting: 0, active: 0, completed: 0, failed: 0, delayed: 0 },
+      totalRecords: evidenceRecords.size,
+      clamavAvailable,
+    });
+  } catch (err) {
+    res.status(500).json({ error: 'Failed to get queue stats' });
+  }
+});
+
+/**
+ * GET /api/evidence/list/:caseId
+ * List all evidence for a case.
+ */
+router.get('/list/:caseId', (req, res) => {
+  const { caseId } = req.params;
+  const tenantId = req.headers['x-tenant-id'] || 'default';
+
+  const records = Array.from(evidenceRecords.values())
+    .filter((r) => r.caseId === caseId && r.tenantId === tenantId)
+    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+
+  res.json({ evidence: records, total: records.length });
+});
+
+/**
+ * POST /api/evidence/presigned-upload
+ * Generate a presigned upload URL for direct client-to-R2 uploads.
+ * Used for large files to avoid passing through the backend.
+ */
+router.post('/presigned-upload', async (req, res) => {
+  const tenantId = req.headers['x-tenant-id'] || 'default';
+  const { filename, contentType, caseId } = req.body;
+
+  if (!filename || !contentType) {
+    return res.status(400).json({ error: 'filename and contentType are required' });
+  }
+
+  const mimeConfig = ALLOWED_MIME_TYPES[contentType];
+  if (!mimeConfig) {
+    return res.status(400).json({ error: `Unsupported file type: ${contentType}` });
+  }
+
+  try {
+    const evidenceId = `ev-${crypto.randomBytes(8).toString('hex')}`;
+    const { signedUrl, storageKey } = await getSignedUploadUrl(
+      tenantId, evidenceId, filename, contentType
+    );
+
+    // Create a pending evidence record
+    evidenceRecords.set(evidenceId, {
+      id: evidenceId,
+      tenantId,
+      caseId: caseId || 'unassigned',
+      filename,
+      contentType,
+      evidenceType: mimeConfig.type,
+      fileSize: 0, // Updated after upload completes
+      storageKey,
+      status: 'pending_upload',
+      createdAt: new Date().toISOString(),
+      updatedAt: new Date().toISOString(),
+    });
+
+    res.json({
+      evidenceId,
+      uploadUrl: signedUrl,
+      storageKey,
+      expiresIn: 600, // 10 minutes
+    });
+  } catch (err) {
+    console.error(`[Evidence] Presigned URL generation failed: ${err.message}`);
+    res.status(500).json({ error: 'Failed to generate upload URL' });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// Routes — Upload + parameterized routes
 // ---------------------------------------------------------------------------
 
 /**
@@ -280,21 +381,6 @@ router.get('/:evidenceId/download', async (req, res) => {
 });
 
 /**
- * GET /api/evidence/list/:caseId
- * List all evidence for a case.
- */
-router.get('/list/:caseId', (req, res) => {
-  const { caseId } = req.params;
-  const tenantId = req.headers['x-tenant-id'] || 'default';
-
-  const records = Array.from(evidenceRecords.values())
-    .filter((r) => r.caseId === caseId && r.tenantId === tenantId)
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-
-  res.json({ evidence: records, total: records.length });
-});
-
-/**
  * DELETE /api/evidence/:evidenceId
  * Delete an evidence record and its R2 file.
  */
@@ -322,57 +408,6 @@ router.delete('/:evidenceId', async (req, res) => {
 
   evidenceRecords.delete(evidenceId);
   res.json({ deleted: true, evidenceId });
-});
-
-/**
- * POST /api/evidence/presigned-upload
- * Generate a presigned upload URL for direct client-to-R2 uploads.
- * Used for large files to avoid passing through the backend.
- */
-router.post('/presigned-upload', async (req, res) => {
-  const tenantId = req.headers['x-tenant-id'] || 'default';
-  const { filename, contentType, caseId } = req.body;
-
-  if (!filename || !contentType) {
-    return res.status(400).json({ error: 'filename and contentType are required' });
-  }
-
-  const mimeConfig = ALLOWED_MIME_TYPES[contentType];
-  if (!mimeConfig) {
-    return res.status(400).json({ error: `Unsupported file type: ${contentType}` });
-  }
-
-  try {
-    const evidenceId = `ev-${crypto.randomBytes(8).toString('hex')}`;
-    const { signedUrl, storageKey } = await getSignedUploadUrl(
-      tenantId, evidenceId, filename, contentType
-    );
-
-    // Create a pending evidence record
-    evidenceRecords.set(evidenceId, {
-      id: evidenceId,
-      tenantId,
-      caseId: caseId || 'unassigned',
-      filename,
-      contentType,
-      evidenceType: mimeConfig.type,
-      fileSize: 0, // Updated after upload completes
-      storageKey,
-      status: 'pending_upload',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    });
-
-    res.json({
-      evidenceId,
-      uploadUrl: signedUrl,
-      storageKey,
-      expiresIn: 600, // 10 minutes
-    });
-  } catch (err) {
-    console.error(`[Evidence] Presigned URL generation failed: ${err.message}`);
-    res.status(500).json({ error: 'Failed to generate upload URL' });
-  }
 });
 
 /**
@@ -415,25 +450,6 @@ router.post('/:evidenceId/confirm-upload', async (req, res) => {
 
   evidenceRecords.set(evidenceId, record);
   res.json({ evidenceId, status: record.status });
-});
-
-/**
- * GET /api/evidence/queue/stats
- * Get processing queue statistics (admin).
- */
-router.get('/queue/stats', async (req, res) => {
-  try {
-    const stats = await getQueueStats();
-    const clamavAvailable = await isClamAVAvailable();
-
-    res.json({
-      queue: stats || { waiting: 0, active: 0, completed: 0, failed: 0, delayed: 0 },
-      totalRecords: evidenceRecords.size,
-      clamavAvailable,
-    });
-  } catch (err) {
-    res.status(500).json({ error: 'Failed to get queue stats' });
-  }
 });
 
 export default router;

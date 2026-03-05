@@ -59,15 +59,15 @@ app.use(cors({
 // Body Parsing
 // ---------------------------------------------------------------------------
 
-// Raw body capture for Stripe webhook signature verification
-// Must come BEFORE express.json()
-app.use('/api/stripe/webhooks', express.raw({ type: 'application/json' }), (req, _res, next) => {
-  req.rawBody = req.body;
-  next();
+// JSON body parser for all routes EXCEPT Stripe webhooks
+// Stripe webhooks need the raw body for signature verification
+app.use((req, res, next) => {
+  if (req.originalUrl === '/api/stripe/webhooks') {
+    // Skip JSON parsing — raw body handled by webhook route
+    return next();
+  }
+  express.json({ limit: '10mb' })(req, res, next);
 });
-
-// JSON body parser for all other routes
-app.use(express.json({ limit: '10mb' }));
 
 // ---------------------------------------------------------------------------
 // Stripe Configuration (for checkout routes)

@@ -10,6 +10,7 @@
 // - customer.subscription.updated
 // ============================================
 
+import express from 'express';
 import Stripe from 'stripe';
 import { config } from '../config/index.js';
 import { captureException, captureMessage } from '../services/errorMonitoring.js';
@@ -33,17 +34,11 @@ const subscriptions = new Map();
  * NOT express.json(). This is required for Stripe signature verification.
  */
 export function registerWebhookRoutes(app) {
-  // Webhook endpoint — uses raw body for signature verification
+  // Webhook endpoint — uses express.raw() for Stripe signature verification
+  // express.raw() parses the body as a Buffer, which Stripe needs for signature check
   app.post(
     '/api/stripe/webhooks',
-    // Raw body parser for Stripe signature verification
-    (req, res, next) => {
-      if (req.headers['content-type'] === 'application/json' && !req.rawBody) {
-        // If body was already parsed by express.json(), we need rawBody
-        // This is handled by the rawBody middleware in server.js
-      }
-      next();
-    },
+    express.raw({ type: 'application/json' }),
     async (req, res) => {
       const sig = req.headers['stripe-signature'];
 
@@ -57,16 +52,17 @@ export function registerWebhookRoutes(app) {
         const stripeClient = getStripe();
 
         if (config.stripeWebhookSecret) {
-          // Verify webhook signature in production
+          // Verify webhook signature — req.body is a raw Buffer from express.raw()
           event = stripeClient.webhooks.constructEvent(
-            req.rawBody || req.body,
+            req.body,
             sig,
             config.stripeWebhookSecret
           );
         } else {
           // Development mode — parse without verification
           console.warn('[Stripe Webhook] No webhook secret configured — skipping signature verification');
-          event = typeof req.body === 'string' ? JSON.parse(req.body) : req.body;
+          const bodyStr = Buffer.isBuffer(req.body) ? req.body.toString('utf8') : req.body;
+          event = typeof bodyStr === 'string' ? JSON.parse(bodyStr) : bodyStr;
         }
       } catch (err) {
         console.error(`[Stripe Webhook] Signature verification failed: ${err.message}`);

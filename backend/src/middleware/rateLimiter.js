@@ -6,10 +6,9 @@
 // In production, use Redis-backed rate limiting for multi-instance support.
 // ============================================
 
-const requestCounts = new Map();
-
 /**
  * Create a rate limiter middleware.
+ * Each instance gets its own Map to avoid cross-limiter interference.
  *
  * @param options - { windowMs, maxRequests, keyFn, message }
  * @returns Express middleware
@@ -21,6 +20,9 @@ export function rateLimiter(options = {}) {
     keyFn = (req) => req.ip, // Key function (default: by IP)
     message = 'Too many requests, please try again later.',
   } = options;
+
+  // Each rate limiter instance gets its own Map to avoid cross-limiter interference
+  const requestCounts = new Map();
 
   // Cleanup old entries periodically
   setInterval(() => {

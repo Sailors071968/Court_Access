@@ -40,7 +40,7 @@ const PLAN_LIMITS = {
 export function requireFeature(requiredFeature) {
   return (req, res, next) => {
     // Get user's plan from request (set by auth middleware)
-    const plan = req.user?.plan || req.headers['x-subscription-plan'] || 'free';
+    const plan = req.user?.plan || 'free';
     const limits = PLAN_LIMITS[plan] || PLAN_LIMITS.free;
 
     if (!limits.features.includes(requiredFeature)) {
@@ -64,7 +64,7 @@ export function requireFeature(requiredFeature) {
  */
 export function checkUploadLimit(getCurrentDocCount) {
   return async (req, res, next) => {
-    const plan = req.user?.plan || req.headers['x-subscription-plan'] || 'free';
+    const plan = req.user?.plan || 'free';
     const limits = PLAN_LIMITS[plan] || PLAN_LIMITS.free;
     const tenantId = req.headers['x-tenant-id'] || 'default';
 
@@ -95,7 +95,7 @@ export function checkUploadLimit(getCurrentDocCount) {
  */
 export function checkStorageLimit(getCurrentStorageBytes) {
   return async (req, res, next) => {
-    const plan = req.user?.plan || req.headers['x-subscription-plan'] || 'free';
+    const plan = req.user?.plan || 'free';
     const limits = PLAN_LIMITS[plan] || PLAN_LIMITS.free;
     const tenantId = req.headers['x-tenant-id'] || 'default';
 

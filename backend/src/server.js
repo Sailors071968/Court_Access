@@ -102,8 +102,12 @@ const PLANS = {
 // Rate Limiting
 // ---------------------------------------------------------------------------
 
-app.use('/api/', apiLimiter);
+// Webhook limiter first (more permissive), then API limiter excluding webhooks
 app.use('/api/stripe/webhooks', webhookLimiter);
+app.use('/api/', (req, res, next) => {
+  if (req.originalUrl === '/api/stripe/webhooks') return next();
+  return apiLimiter(req, res, next);
+});
 
 // ---------------------------------------------------------------------------
 // Routes — Stripe Checkout (existing functionality)

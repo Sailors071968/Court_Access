@@ -24,8 +24,8 @@ export function rateLimiter(options = {}) {
   // Each rate limiter instance gets its own Map to avoid cross-limiter interference
   const requestCounts = new Map();
 
-  // Cleanup old entries periodically
-  setInterval(() => {
+  // Cleanup old entries periodically (unref to not block graceful shutdown)
+  const cleanupTimer = setInterval(() => {
     const now = Date.now();
     for (const [key, data] of requestCounts) {
       if (now - data.windowStart > windowMs * 2) {
@@ -33,6 +33,7 @@ export function rateLimiter(options = {}) {
       }
     }
   }, windowMs);
+  if (cleanupTimer.unref) cleanupTimer.unref();
 
   return (req, res, next) => {
     const key = keyFn(req);

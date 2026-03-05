@@ -87,12 +87,12 @@ function scanWithClamAV(fileBuffer) {
       const response = Buffer.concat(chunks).toString('utf8').trim();
       console.log(`[VirusScanner] ClamAV response: ${response}`);
 
-      if (response.includes('OK')) {
-        resolve({ safe: true, scanner: 'clamav', response });
-      } else if (response.includes('FOUND')) {
+      if (response.includes('FOUND')) {
         const threatMatch = response.match(/stream: (.+) FOUND/);
         const threat = threatMatch ? threatMatch[1] : 'Unknown threat';
         resolve({ safe: false, threat, scanner: 'clamav', response });
+      } else if (response.includes('OK')) {
+        resolve({ safe: true, scanner: 'clamav', response });
       } else {
         reject(new Error(`ClamAV unexpected response: ${response}`));
       }

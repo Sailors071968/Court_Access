@@ -73,8 +73,8 @@ const evidenceRecords = new Map();
 // Rate limiting — per-tenant upload tracking
 const uploadRateLimits = new Map();
 
-// Cleanup stale rate limit entries every 60 seconds
-setInterval(() => {
+// Cleanup stale rate limit entries every 60 seconds (unref to not block graceful shutdown)
+const rateLimitCleanupTimer = setInterval(() => {
   const currentMinute = Math.floor(Date.now() / 60000);
   for (const [key] of uploadRateLimits) {
     const parts = key.split('-');
@@ -84,6 +84,7 @@ setInterval(() => {
     }
   }
 }, 60000);
+if (rateLimitCleanupTimer.unref) rateLimitCleanupTimer.unref();
 
 // ---------------------------------------------------------------------------
 // Routes — Static paths MUST be registered before parameterized /:evidenceId
@@ -219,7 +220,7 @@ router.post('/upload', upload.single('file'), async (req, res) => {
   try {
     // Step 1: Generate evidence ID from file hash
     const sha256 = crypto.createHash('sha256').update(file.buffer).digest('hex');
-    const evidenceId = `ev-${sha256.substring(0, 16)}`;
+    const evidenceId = `ev-${sha256.substring(0, 16)}-${crypto.randomBytes(4).toString('hex')}`;
 
     console.log(`[Upload] Processing: ${file.originalname} (${mimeConfig.type}, ${file.size} bytes) → ${evidenceId}`);
 

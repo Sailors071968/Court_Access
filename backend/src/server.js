@@ -18,7 +18,7 @@ import { initErrorMonitoring, sentryErrorHandler, captureMessage } from './servi
 import { registerWebhookRoutes } from './routes/stripeWebhooks.js';
 import evidenceUploadRoutes from './routes/evidenceUpload.js';
 import { startProcessingWorker, stopProcessingWorker, getQueueStats } from './workers/evidenceProcessor.js';
-import { getRedisConnection, closeRedisConnection } from './services/redisClient.js';
+import { getRedisConnection, closeRedisConnection, isRedisAvailable } from './services/redisClient.js';
 import { isClamAVAvailable } from './services/virusScanner.js';
 import { apiLimiter, webhookLimiter } from './middleware/rateLimiter.js';
 import { isSmsAvailable } from './services/smsNotification.js';
@@ -228,7 +228,7 @@ app.use('/api/hearings', hearingsRoutes);
 // ---------------------------------------------------------------------------
 
 app.get('/api/health', async (_req, res) => {
-  const redisConnected = !!getRedisConnection();
+  const redisConnected = isRedisAvailable();
   const clamavAvailable = await isClamAVAvailable();
   let queueStats = null;
 

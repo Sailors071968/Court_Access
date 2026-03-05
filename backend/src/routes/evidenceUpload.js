@@ -468,9 +468,9 @@ router.post('/:evidenceId/confirm-upload', async (req, res) => {
     record.fileSize = downloadedBuffer.length;
     record.sha256 = crypto.createHash('sha256').update(downloadedBuffer).digest('hex');
   } else {
-    // Fallback to client-provided values only when R2 download failed
+    // Fallback: reject client-provided hash — never trust client for integrity
     record.fileSize = fileSize || 0;
-    record.sha256 = sha256 || '';
+    record.sha256 = ''; // Server-side computation unavailable — hash left empty
   }
   record.status = 'pending';
   record.updatedAt = new Date().toISOString();

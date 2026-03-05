@@ -18,14 +18,18 @@ let schedulerTask = null;
 // ---------------------------------------------------------------------------
 
 /**
- * Calculate days between now and a target datetime.
- * Returns a whole number of days (floor).
+ * Calculate calendar days between today and a target date.
+ * Compares dates only (ignoring time of day) to avoid
+ * missing reminders due to hour-of-day timing.
+ * Returns 0 if the hearing is today, 1 if tomorrow, etc.
  */
-function daysUntil(targetDatetime) {
+function calendarDaysUntil(targetDatetime) {
   const now = new Date();
+  const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const target = new Date(targetDatetime);
-  const diffMs = target.getTime() - now.getTime();
-  return Math.floor(diffMs / (1000 * 60 * 60 * 24));
+  const targetMidnight = new Date(target.getFullYear(), target.getMonth(), target.getDate());
+  const diffMs = targetMidnight.getTime() - todayMidnight.getTime();
+  return Math.round(diffMs / (1000 * 60 * 60 * 24));
 }
 
 /**
@@ -113,7 +117,7 @@ export async function runSchedulerPass() {
     });
 
     for (const hearing of hearings) {
-      const days = daysUntil(hearing.hearingDatetime);
+      const days = calendarDaysUntil(hearing.hearingDatetime);
       if (days < 0 || days > 30) continue;
       checked++;
 
@@ -125,7 +129,9 @@ export async function runSchedulerPass() {
 
       for (const reminder of reminders) {
         if (!reminder.enabled) continue;
-        if (days !== reminder.daysBefore) continue;
+        // Use range check: fire on target day or any day after (closer to hearing).
+        // DB unique constraint on (hearingId, reminderType) prevents duplicate sends.
+        if (days > reminder.daysBefore) continue;
 
         // Check if already sent via database (unique constraint on hearingId + reminderType)
         const alreadySent = hearing.reminderLogs.some(

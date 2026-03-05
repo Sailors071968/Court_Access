@@ -109,6 +109,7 @@ const PLANS = {
 app.use('/api/stripe/webhooks', webhookLimiter);
 app.use('/api/', (req, res, next) => {
   if (req.originalUrl === '/api/stripe/webhooks') return next();
+  if (req.originalUrl.startsWith('/api/admin/')) return next(); // Admin endpoints exempt from rate limit
   return apiLimiter(req, res, next);
 });
 

@@ -16,7 +16,7 @@ let connectionAttempted = false;
  * Silently degrades when Redis is not running.
  */
 export function getRedisConnection() {
-  if (redisConnection) return redisConnection;
+  if (redisConnection && redisAvailable) return redisConnection;
   if (connectionAttempted && !redisAvailable) return null;
 
   connectionAttempted = true;

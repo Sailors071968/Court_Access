@@ -17,7 +17,7 @@ import multer from 'multer';
 import crypto from 'crypto';
 import { config } from '../config/index.js';
 import { scanFile, isClamAVAvailable } from '../services/virusScanner.js';
-import { uploadFile, getSignedDownloadUrl, getSignedUploadUrl, deleteFile } from '../services/r2Storage.js';
+import { uploadFile, getSignedDownloadUrl, getSignedUploadUrl, deleteFile, downloadFile } from '../services/r2Storage.js';
 import { enqueueProcessingJob, getQueueStats } from '../workers/evidenceProcessor.js';
 import { captureException, trackUploadFailure } from '../services/errorMonitoring.js';
 
@@ -427,6 +427,38 @@ router.post('/:evidenceId/confirm-upload', async (req, res) => {
 
   if (record.status !== 'pending_upload') {
     return res.status(400).json({ error: 'Evidence is not in pending_upload state' });
+  }
+
+  // Virus scan: download file from R2 and scan before proceeding
+  try {
+    const fileBuffer = await downloadFile(tenantId, record.storageKey);
+    console.log(`[Evidence] Downloaded ${record.storageKey} for virus scan (${fileBuffer.length} bytes)`);
+
+    const scanResult = await scanFile(fileBuffer);
+    if (!scanResult.safe) {
+      console.warn(`[Evidence] REJECTED presigned upload — malware detected: ${scanResult.threat}`);
+      // Delete infected file from R2
+      try {
+        await deleteFile(tenantId, record.storageKey);
+      } catch (delErr) {
+        console.error(`[Evidence] Failed to delete infected file: ${delErr.message}`);
+      }
+      record.status = 'rejected';
+      record.scanResult = { safe: false, threat: scanResult.threat, scanner: scanResult.scanner };
+      record.updatedAt = new Date().toISOString();
+      evidenceRecords.set(evidenceId, record);
+      return res.status(422).json({
+        error: 'File rejected: malware detected',
+        threat: scanResult.threat,
+        scanner: scanResult.scanner,
+      });
+    }
+    console.log(`[Evidence] Presigned upload scan passed (scanner: ${scanResult.scanner})`);
+    record.scanResult = { safe: true, scanner: scanResult.scanner };
+  } catch (err) {
+    console.warn(`[Evidence] Could not scan presigned upload (${err.message}) — proceeding with caution`);
+    // If R2 download fails (e.g. R2 not configured), proceed but flag as unscanned
+    record.scanResult = { safe: null, scanner: 'none', note: 'scan skipped — file not downloadable' };
   }
 
   // Update record

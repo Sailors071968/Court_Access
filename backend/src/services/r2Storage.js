@@ -158,6 +158,32 @@ export async function deleteFile(tenantId, storageKey) {
 }
 
 /**
+ * Download a file from R2 as a Buffer.
+ * Used for virus scanning files uploaded via presigned URLs.
+ */
+export async function downloadFile(tenantId, storageKey) {
+  const client = getClient();
+  if (!client) throw new Error('R2 storage not configured');
+
+  // Tenant isolation check
+  if (!storageKey.startsWith(`tenants/${tenantId}/`)) {
+    throw new Error('Access denied: evidence does not belong to this tenant');
+  }
+
+  const command = new GetObjectCommand({
+    Bucket: config.r2BucketName,
+    Key: storageKey,
+  });
+
+  const response = await client.send(command);
+  const chunks = [];
+  for await (const chunk of response.Body) {
+    chunks.push(chunk);
+  }
+  return Buffer.concat(chunks);
+}
+
+/**
  * Check if a file exists in R2.
  */
 export async function fileExists(storageKey) {

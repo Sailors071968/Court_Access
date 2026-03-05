@@ -59,9 +59,13 @@ export function registerWebhookRoutes(app) {
             sig,
             config.stripeWebhookSecret
           );
+        } else if (config.nodeEnv === 'production') {
+          // In production, refuse to process webhooks without signature verification
+          console.error('[Stripe Webhook] STRIPE_WEBHOOK_SECRET not configured in production — rejecting webhook');
+          return res.status(500).json({ error: 'Webhook secret not configured' });
         } else {
-          // Development mode — parse without verification
-          console.warn('[Stripe Webhook] No webhook secret configured — skipping signature verification');
+          // Development mode only — parse without verification
+          console.warn('[Stripe Webhook] No webhook secret configured — skipping signature verification (dev mode)');
           const bodyStr = Buffer.isBuffer(req.body) ? req.body.toString('utf8') : req.body;
           event = typeof bodyStr === 'string' ? JSON.parse(bodyStr) : bodyStr;
         }

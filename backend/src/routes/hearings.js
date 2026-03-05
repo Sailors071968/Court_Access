@@ -84,6 +84,8 @@ router.post('/:caseId', async (req, res) => {
         hearingName: req.body.hearingName.trim(),
         hearingDatetime: new Date(req.body.hearingDatetime),
         department: (req.body.department || '').trim(),
+        caseName: req.body.caseName ? String(req.body.caseName).trim() : null,
+        clientPhone: req.body.clientPhone ? String(req.body.clientPhone).trim() : null,
         reminder1Enabled: req.body.reminder1Enabled !== false,
         reminder2Enabled: req.body.reminder2Enabled !== false,
         reminder3Enabled: req.body.reminder3Enabled !== false,
@@ -147,6 +149,8 @@ router.put('/:caseId/:hearingId', async (req, res) => {
     if (req.body.hearingName !== undefined) updateData.hearingName = String(req.body.hearingName ?? '').trim();
     if (req.body.hearingDatetime !== undefined) updateData.hearingDatetime = new Date(req.body.hearingDatetime);
     if (req.body.department !== undefined) updateData.department = String(req.body.department ?? '').trim();
+    if (req.body.caseName !== undefined) updateData.caseName = req.body.caseName ? String(req.body.caseName).trim() : null;
+    if (req.body.clientPhone !== undefined) updateData.clientPhone = req.body.clientPhone ? String(req.body.clientPhone).trim() : null;
 
     // Reminder configuration
     if (req.body.reminder1Enabled !== undefined) updateData.reminder1Enabled = !!req.body.reminder1Enabled;
@@ -205,7 +209,13 @@ router.delete('/:caseId/:hearingId', async (req, res) => {
 
 router.get('/:caseId/:hearingId/reminders', async (req, res) => {
   try {
-    const { hearingId } = req.params;
+    const { caseId, hearingId } = req.params;
+    const existing = await prisma.hearing.findUnique({ where: { id: hearingId } });
+
+    if (!existing || existing.caseId !== caseId) {
+      return res.status(404).json({ error: 'Hearing not found' });
+    }
+
     const logs = await prisma.hearingReminderLog.findMany({
       where: { hearingId },
       orderBy: { sentAt: 'asc' },

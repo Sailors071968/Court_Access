@@ -22,6 +22,8 @@ model Hearing {
   hearingName       String
   hearingDatetime   DateTime
   department        String   @default("")
+  caseName          String?
+  clientPhone       String?
 
   reminder1Enabled    Boolean @default(true)
   reminder2Enabled    Boolean @default(true)

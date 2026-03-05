@@ -76,10 +76,12 @@ function combineDatetime(date: string, time: string): string {
 function splitDatetime(iso: string): { date: string; time: string } {
   if (!iso) return { date: '', time: '' };
   const dt = new Date(iso);
-  const date = dt.toISOString().split('T')[0];
+  const year = dt.getFullYear();
+  const month = (dt.getMonth() + 1).toString().padStart(2, '0');
+  const day = dt.getDate().toString().padStart(2, '0');
   const hours = dt.getHours().toString().padStart(2, '0');
   const minutes = dt.getMinutes().toString().padStart(2, '0');
-  return { date, time: `${hours}:${minutes}` };
+  return { date: `${year}-${month}-${day}`, time: `${hours}:${minutes}` };
 }
 
 function formatHearingDate(iso: string): string {

@@ -430,8 +430,10 @@ router.post('/:evidenceId/confirm-upload', async (req, res) => {
   }
 
   // Virus scan: download file from R2 and scan before proceeding
+  let downloadedBuffer = null;
   try {
     const fileBuffer = await downloadFile(tenantId, record.storageKey);
+    downloadedBuffer = fileBuffer;
     console.log(`[Evidence] Downloaded ${record.storageKey} for virus scan (${fileBuffer.length} bytes)`);
 
     const scanResult = await scanFile(fileBuffer);
@@ -461,9 +463,15 @@ router.post('/:evidenceId/confirm-upload', async (req, res) => {
     record.scanResult = { safe: null, scanner: 'none', note: 'scan skipped — file not downloadable' };
   }
 
-  // Update record
-  record.fileSize = fileSize || 0;
-  record.sha256 = sha256 || '';
+  // Update record — compute fileSize and sha256 server-side when possible
+  if (downloadedBuffer) {
+    record.fileSize = downloadedBuffer.length;
+    record.sha256 = crypto.createHash('sha256').update(downloadedBuffer).digest('hex');
+  } else {
+    // Fallback to client-provided values only when R2 download failed
+    record.fileSize = fileSize || 0;
+    record.sha256 = sha256 || '';
+  }
   record.status = 'pending';
   record.updatedAt = new Date().toISOString();
 

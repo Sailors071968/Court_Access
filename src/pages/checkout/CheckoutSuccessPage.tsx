@@ -41,6 +41,7 @@ export function CheckoutSuccessPage() {
           setLoading(false);
         });
     } else {
+      setError(true);
       setLoading(false);
     }
   }, [sessionId]);

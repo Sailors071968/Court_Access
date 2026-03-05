@@ -17,7 +17,7 @@ import {
   Users,
   Star,
 } from 'lucide-react';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { trackEvent } from '../../utils/analytics';
 
 // ---- Reusable Section Components ----
@@ -295,25 +295,77 @@ function HowItWorksSection() {
   );
 }
 
+function VideoTestimonialCard({ video, name, role, quote }: { video: string; name: string; role: string; quote: string }) {
+  const videoRef = useRef<HTMLVideoElement>(null);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const togglePlay = () => {
+    if (!videoRef.current) return;
+    if (isPlaying) {
+      videoRef.current.pause();
+      setIsPlaying(false);
+    } else {
+      videoRef.current.play();
+      setIsPlaying(true);
+    }
+  };
+
+  return (
+    <div className="bg-slate-50 rounded-2xl overflow-hidden group">
+      <div className="relative cursor-pointer" onClick={togglePlay}>
+        <video
+          ref={videoRef}
+          src={video}
+          className="w-full aspect-[9/16] object-cover"
+          playsInline
+          preload="metadata"
+          onEnded={() => setIsPlaying(false)}
+        />
+        {!isPlaying && (
+          <div className="absolute inset-0 bg-black/20 flex items-center justify-center transition-opacity group-hover:bg-black/30">
+            <div className="w-16 h-16 bg-white/90 rounded-full flex items-center justify-center shadow-lg">
+              <svg className="w-7 h-7 text-slate-800 ml-1" fill="currentColor" viewBox="0 0 24 24">
+                <path d="M8 5v14l11-7z" />
+              </svg>
+            </div>
+          </div>
+        )}
+      </div>
+      <div className="p-5">
+        <div className="flex gap-0.5 mb-3">
+          {Array.from({ length: 5 }).map((_, i) => (
+            <Star key={i} className="text-amber-400 fill-amber-400" size={14} />
+          ))}
+        </div>
+        <p className="text-gray-700 text-sm leading-relaxed mb-3">&ldquo;{quote}&rdquo;</p>
+        <div>
+          <div className="font-medium text-slate-900 text-sm">{name}</div>
+          <div className="text-xs text-gray-500">{role}</div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 function TestimonialsSection() {
-  const testimonials = [
+  const videoTestimonials = [
     {
-      quote: 'Court Access cut our document review time by 80%. We now catch details we used to miss entirely.',
-      name: 'Sarah M.',
-      role: 'Criminal Defense Attorney',
-      rating: 5,
+      video: '/videos/testimonial-1.mp4',
+      name: 'Attorney Testimonial',
+      role: 'Defense Attorney',
+      quote: 'If you\'re watching this, you or someone you love needs help navigating the court system. Court Access changed how I prepare for every case.',
     },
     {
-      quote: 'The structured output is exactly what we need for case preparation. No more guessing what a filing contains.',
-      name: 'David R.',
-      role: 'Private Investigator',
-      rating: 5,
+      video: '/videos/testimonial-2.mp4',
+      name: 'Client Story',
+      role: 'Former Defendant',
+      quote: 'When I was charged with a felony, my whole world turned upside down. Having structured analysis of my court records made all the difference.',
     },
     {
-      quote: 'Finally, a legal tech tool that doesn\'t try to replace attorneys. It just makes the data accessible.',
-      name: 'Maria L.',
-      role: 'Public Defender',
-      rating: 5,
+      video: '/videos/testimonial-3.mp4',
+      name: 'Michael',
+      role: 'Small Business Owner',
+      quote: 'As a small business owner facing legal challenges, I needed to understand my court documents fast. Court Access gave me clarity when I needed it most.',
     },
   ];
 
@@ -322,23 +374,21 @@ function TestimonialsSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="max-w-3xl mx-auto text-center mb-16">
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 tracking-tight">
-            Trusted by legal professionals
+            Real stories from real people
           </h2>
+          <p className="mt-4 text-gray-600 text-lg">
+            Hear directly from those who have used Court Access to navigate the legal system.
+          </p>
         </div>
         <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-          {testimonials.map((t) => (
-            <div key={t.name} className="p-6 bg-slate-50 rounded-2xl">
-              <div className="flex gap-0.5 mb-4">
-                {Array.from({ length: t.rating }).map((_, i) => (
-                  <Star key={i} className="text-amber-400 fill-amber-400" size={16} />
-                ))}
-              </div>
-              <p className="text-gray-700 text-sm leading-relaxed mb-4">"{t.quote}"</p>
-              <div>
-                <div className="font-medium text-slate-900 text-sm">{t.name}</div>
-                <div className="text-xs text-gray-500">{t.role}</div>
-              </div>
-            </div>
+          {videoTestimonials.map((t) => (
+            <VideoTestimonialCard
+              key={t.name}
+              video={t.video}
+              name={t.name}
+              role={t.role}
+              quote={t.quote}
+            />
           ))}
         </div>
       </div>

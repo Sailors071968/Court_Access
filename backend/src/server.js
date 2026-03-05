@@ -21,6 +21,7 @@ import { startProcessingWorker, stopProcessingWorker, getQueueStats } from './wo
 import { getRedisConnection, closeRedisConnection } from './services/redisClient.js';
 import { isClamAVAvailable } from './services/virusScanner.js';
 import { apiLimiter, webhookLimiter } from './middleware/rateLimiter.js';
+import { isSmsAvailable } from './services/smsNotification.js';
 import Stripe from 'stripe';
 
 const app = express();
@@ -242,6 +243,7 @@ app.get('/api/health', async (_req, res) => {
       r2Storage: (config.r2AccessKeyId && config.r2SecretAccessKey) ? 'configured' : 'not_configured',
       clamav: clamavAvailable ? 'available' : 'unavailable',
       sentry: config.sentryDsn ? 'configured' : 'not_configured',
+      twilio: isSmsAvailable() ? 'configured' : 'not_configured',
     },
     queue: queueStats,
   });
@@ -273,6 +275,7 @@ const server = app.listen(PORT, () => {
   console.log(`  - R2 Storage: ${config.r2AccessKeyId ? 'configured' : 'MISSING'}`);
   console.log(`  - Redis: ${config.redisUrl}`);
   console.log(`  - Sentry: ${config.sentryDsn ? 'configured' : 'MISSING'}`);
+  console.log(`  - Twilio SMS: ${config.twilioAccountSid ? 'configured' : 'MISSING'}`);
   console.log('');
 });
 

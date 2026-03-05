@@ -35,6 +35,12 @@ export const config = {
   // Sentry
   sentryDsn: process.env.SENTRY_DSN || '',
 
+  // Twilio SMS
+  twilioAccountSid: process.env.TWILIO_ACCOUNT_SID || '',
+  twilioAuthToken: process.env.TWILIO_AUTH_TOKEN || '',
+  twilioPhoneNumber: process.env.TWILIO_PHONE_NUMBER || '',
+  adminAlertPhone: process.env.ADMIN_ALERT_PHONE || '',
+
   // ClamAV
   clamavHost: process.env.CLAMAV_HOST || 'localhost',
   clamavPort: parseInt(process.env.CLAMAV_PORT || '3310', 10),
@@ -69,5 +75,6 @@ export const features = {
   get openai() { return !!config.openaiApiKey; },
   get r2() { return !!config.r2AccessKeyId && !!config.r2SecretAccessKey; },
   get sentry() { return !!config.sentryDsn; },
+  get twilio() { return !!config.twilioAccountSid && !!config.twilioAuthToken && !!config.twilioPhoneNumber; },
   get clamav() { return !!config.clamavHost; },
 };

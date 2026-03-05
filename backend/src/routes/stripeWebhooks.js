@@ -14,6 +14,7 @@ import express from 'express';
 import Stripe from 'stripe';
 import { config } from '../config/index.js';
 import { captureException, captureMessage } from '../services/errorMonitoring.js';
+import { notifyNewSubscription, notifyPaymentReceived, notifyPaymentFailed, notifySubscriptionCancelled } from '../services/smsNotification.js';
 
 let stripe = null;
 
@@ -142,6 +143,8 @@ async function handleCheckoutCompleted(session) {
   const plan = session.metadata?.plan || 'professional';
   const email = session.customer_details?.email || session.customer_email;
 
+  const customerName = session.customer_details?.name || '';
+
   console.log(`[Stripe Webhook] Checkout completed: customer=${customerId}, plan=${plan}, email=${email}`);
 
   // Store subscription data
@@ -156,6 +159,15 @@ async function handleCheckoutCompleted(session) {
   });
 
   captureMessage('New subscription created', 'info', { customerId, plan, email });
+
+  // SMS alert to admin
+  const amount = session.amount_total ? (session.amount_total / 100).toFixed(2) : '0.00';
+  await notifyNewSubscription({
+    customerName,
+    customerEmail: email,
+    planName: plan,
+    amount,
+  });
 
   // In production: Update user record in database
   // await db.users.update({ stripeCustomerId: customerId }, { plan, subscriptionStatus: 'active' });
@@ -180,6 +192,13 @@ async function handlePaymentSucceeded(invoice) {
     subscriptions.set(customerId, existing);
   }
 
+  // SMS alert to admin
+  await notifyPaymentReceived({
+    customerEmail: existing?.email || invoice.customer_email || '',
+    amount: (amountPaid / 100).toFixed(2),
+    currency,
+  });
+
   // In production: Update payment record, send receipt email
 }
 
@@ -202,6 +221,12 @@ async function handlePaymentFailed(invoice) {
   }
 
   captureMessage('Subscription payment failed', 'warning', { customerId, attemptCount });
+
+  // SMS alert to admin
+  await notifyPaymentFailed({
+    customerEmail: existing?.email || '',
+    attemptCount,
+  });
 
   // In production:
   // - Update user subscription status to 'past_due'
@@ -227,6 +252,11 @@ async function handleSubscriptionDeleted(subscription) {
   }
 
   captureMessage('Subscription cancelled', 'info', { customerId });
+
+  // SMS alert to admin
+  await notifySubscriptionCancelled({
+    customerEmail: existing?.email || '',
+  });
 
   // In production:
   // - Downgrade user to free plan

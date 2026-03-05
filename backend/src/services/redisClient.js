@@ -68,8 +68,17 @@ export function isRedisAvailable() {
  */
 export async function closeRedisConnection() {
   if (redisConnection) {
-    await redisConnection.quit();
+    try {
+      if (redisAvailable) {
+        await redisConnection.quit();
+      } else {
+        redisConnection.disconnect();
+      }
+    } catch {
+      // Ignore errors during shutdown
+    }
     redisConnection = null;
+    redisAvailable = false;
     console.log('[Redis] Connection closed');
   }
 }

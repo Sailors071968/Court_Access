@@ -38,6 +38,7 @@ import { ResearchPage } from './pages/case/ResearchPage';
 import { ActivityPage } from './pages/case/ActivityPage';
 import { DocumentsPage } from './pages/case/DocumentsPage';
 import { CaseSettingsPage } from './pages/case/CaseSettingsPage';
+import { EvidenceDashboardPage } from './pages/case/EvidenceDashboardPage';
 
 function App() {
   return (
@@ -104,6 +105,14 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canViewEvidence">
                   <EvidencePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="evidence-intelligence"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <EvidenceDashboardPage />
                 </ProtectedRoute>
               }
             />

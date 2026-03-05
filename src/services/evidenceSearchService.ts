@@ -92,8 +92,8 @@ export function searchEvidence(
         const end = Math.min(field.text.length, matchIndex + query.length + 60);
         const snippet = (start > 0 ? '...' : '') + field.text.slice(start, end) + (end < field.text.length ? '...' : '');
 
-        // Create highlighted version
-        const highlight = snippet.replace(
+        // Create highlighted version (escape HTML first to prevent XSS)
+        const highlight = escapeHtml(snippet).replace(
           new RegExp(`(${escapeRegex(query)})`, 'gi'),
           '<mark>$1</mark>'
         );
@@ -121,6 +121,15 @@ export function searchEvidence(
 
 function escapeRegex(str: string): string {
   return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+}
+
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#039;');
 }
 
 // ---------------------------------------------------------------------------

@@ -69,12 +69,16 @@ function DocumentViewer({
   const [showSearch, setShowSearch] = useState(false);
   const totalPages = pageCount ?? 1;
 
+  // Escape HTML to prevent XSS before applying search highlights
+  const escapeHtml = (str: string): string =>
+    str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;').replace(/'/g, '&#039;');
+
   const highlightedText = searchQuery
-    ? extractedText.replace(
+    ? escapeHtml(extractedText).replace(
         new RegExp(`(${searchQuery.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`, 'gi'),
         '<mark class="bg-yellow-200 px-0.5 rounded">$1</mark>'
       )
-    : extractedText;
+    : escapeHtml(extractedText);
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 h-full">

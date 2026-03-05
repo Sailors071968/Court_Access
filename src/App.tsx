@@ -42,6 +42,7 @@ import { EvidenceDashboardPage } from './pages/case/EvidenceDashboardPage';
 import { MonitoringPage } from './pages/admin/MonitoringPage';
 import { BetaManagementPage } from './pages/admin/BetaManagementPage';
 import { CollaborationPage } from './pages/case/CollaborationPage';
+import { HearingsPage } from './pages/case/HearingsPage';
 import { CheckoutSuccessPage } from './pages/checkout/CheckoutSuccessPage';
 import { CheckoutCancelPage } from './pages/checkout/CheckoutCancelPage';
 import { BillingPage } from './pages/billing/BillingPage';
@@ -201,6 +202,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="hearings" element={<HearingsPage />} />
             <Route
               path="evidence-viewer"
               element={

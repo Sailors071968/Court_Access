@@ -22,6 +22,8 @@ import { getRedisConnection, closeRedisConnection } from './services/redisClient
 import { isClamAVAvailable } from './services/virusScanner.js';
 import { apiLimiter, webhookLimiter } from './middleware/rateLimiter.js';
 import { isSmsAvailable } from './services/smsNotification.js';
+import hearingsRoutes, { hearingsStore, reminderLogsStore } from './routes/hearings.js';
+import { initScheduler, stopScheduler } from './services/hearingScheduler.js';
 import Stripe from 'stripe';
 
 const app = express();
@@ -216,6 +218,12 @@ registerWebhookRoutes(app);
 app.use('/api/evidence', evidenceUploadRoutes);
 
 // ---------------------------------------------------------------------------
+// Routes — Court Hearings + SMS Reminders
+// ---------------------------------------------------------------------------
+
+app.use('/api/hearings', hearingsRoutes);
+
+// ---------------------------------------------------------------------------
 // Health Check + System Status
 // ---------------------------------------------------------------------------
 
@@ -276,8 +284,12 @@ const server = app.listen(PORT, () => {
   console.log(`  - Redis: ${config.redisUrl}`);
   console.log(`  - Sentry: ${config.sentryDsn ? 'configured' : 'MISSING'}`);
   console.log(`  - Twilio SMS: ${config.twilioAccountSid ? 'configured' : 'MISSING'}`);
+  console.log(`  - Hearing Scheduler: running (hourly)`);
   console.log('');
 });
+
+// Start hearing reminder scheduler
+initScheduler(hearingsStore, reminderLogsStore);
 
 // Start BullMQ worker
 const worker = startProcessingWorker();
@@ -295,6 +307,7 @@ async function shutdown(signal) {
   console.log(`\n[Court Access] Received ${signal}. Shutting down gracefully...`);
 
   server.close(async () => {
+    stopScheduler();
     await stopProcessingWorker();
     await closeRedisConnection();
     console.log('[Court Access] Server shut down complete');

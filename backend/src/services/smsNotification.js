@@ -106,6 +106,37 @@ export async function notifySubscriptionCancelled({ customerEmail }) {
 }
 
 /**
+ * Send an SMS message to a specific client phone number.
+ * Used by the hearing reminder scheduler.
+ * Silently degrades if Twilio is not configured.
+ */
+export async function sendClientSms(toPhone, message) {
+  const client = getClient();
+  if (!client) {
+    console.log('[SMS] Twilio not configured — skipping client SMS');
+    return null;
+  }
+
+  if (!toPhone) {
+    console.log('[SMS] No recipient phone number — skipping client SMS');
+    return null;
+  }
+
+  try {
+    const result = await client.messages.create({
+      body: message,
+      from: config.twilioPhoneNumber,
+      to: toPhone,
+    });
+    console.log(`[SMS] Client SMS sent to ${toPhone} (SID: ${result.sid})`);
+    return result;
+  } catch (err) {
+    console.error(`[SMS] Failed to send client SMS: ${err.message}`);
+    return null;
+  }
+}
+
+/**
  * Check if SMS notifications are available.
  */
 export function isSmsAvailable() {

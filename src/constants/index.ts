@@ -191,6 +191,7 @@ export const CASE_TABS = [
   { id: 'experts', label: 'Experts', path: '/experts', permission: 'canViewExperts' as const },
   { id: 'motions', label: 'Motions', path: '/motions', permission: 'canViewMotions' as const },
   { id: 'research', label: 'Research', path: '/research', permission: 'canViewResearch' as const },
+  { id: 'hearings', label: 'Hearings', path: '/hearings', permission: null },
   { id: 'activity', label: 'Activity', path: '/activity', permission: 'canViewActivity' as const },
   { id: 'settings', label: 'Settings', path: '/settings', permission: 'canManageCases' as const },
 ] as const;

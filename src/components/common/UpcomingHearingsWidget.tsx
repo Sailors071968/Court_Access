@@ -23,9 +23,11 @@ interface UpcomingHearing {
 
 function daysUntil(datetime: string): number {
   const now = new Date();
+  const todayMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const target = new Date(datetime);
-  const diffMs = target.getTime() - now.getTime();
-  return Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+  const targetMidnight = new Date(target.getFullYear(), target.getMonth(), target.getDate());
+  const diffMs = targetMidnight.getTime() - todayMidnight.getTime();
+  return Math.max(0, Math.round(diffMs / (1000 * 60 * 60 * 24)));
 }
 
 function formatDate(datetime: string): string {

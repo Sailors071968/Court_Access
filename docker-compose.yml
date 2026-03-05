@@ -4,6 +4,7 @@
 #
 # Services:
 # - api: Main backend API server + BullMQ worker
+# - postgres: PostgreSQL database (Prisma)
 # - redis: Redis for BullMQ job queue
 # - clamav: ClamAV antivirus daemon
 # ============================================
@@ -34,7 +35,14 @@ services:
       - R2_BUCKET_NAME=${R2_BUCKET_NAME:-court-access-evidence}
       - SENTRY_DSN=${SENTRY_DSN}
       - FRONTEND_URL=${FRONTEND_URL:-http://localhost:5174}
+      - DATABASE_URL=${DATABASE_URL:-postgresql://courtaccess:courtaccess@postgres:5432/courtaccess}
+      - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
+      - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
+      - TWILIO_PHONE_NUMBER=${TWILIO_PHONE_NUMBER}
+      - ADMIN_ALERT_PHONE=${ADMIN_ALERT_PHONE}
     depends_on:
+      postgres:
+        condition: service_healthy
       redis:
         condition: service_healthy
     restart: unless-stopped
@@ -44,6 +52,24 @@ services:
       timeout: 10s
       retries: 3
       start_period: 10s
+
+  # ----- PostgreSQL (Prisma) -----
+  postgres:
+    image: postgres:16-alpine
+    ports:
+      - '5432:5432'
+    environment:
+      - POSTGRES_USER=courtaccess
+      - POSTGRES_PASSWORD=courtaccess
+      - POSTGRES_DB=courtaccess
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U courtaccess']
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
   # ----- Redis (BullMQ) -----
   redis:
@@ -76,5 +102,6 @@ services:
       start_period: 120s
 
 volumes:
+  postgres-data:
   redis-data:
   clamav-data:

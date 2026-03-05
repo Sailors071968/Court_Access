@@ -116,15 +116,14 @@ export function extractKeyPoints(text: string, maxPoints: number = 5): string[] 
     'key finding', 'important', 'critical', 'significant',
   ];
 
-  const scored = sentences.map((sentence) => {
+  const scored = sentences.map((sentence, sentenceIndex) => {
     let score = 0;
     const lower = sentence.toLowerCase();
     for (const marker of importanceMarkers) {
       if (lower.includes(marker)) score += 1;
     }
     // Boost sentences near the beginning
-    const idx = sentences.indexOf(sentence);
-    if (idx < 3) score += 1;
+    if (sentenceIndex < 3) score += 1;
     return { sentence, score };
   });
 

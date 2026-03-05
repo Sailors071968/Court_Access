@@ -40,6 +40,31 @@ function validateHearingInput(body) {
 }
 
 // ---------------------------------------------------------------------------
+// GET /api/hearings/upcoming — List upcoming hearings across all cases (next 14 days)
+// ---------------------------------------------------------------------------
+
+router.get('/upcoming', async (req, res) => {
+  try {
+    const now = new Date();
+    const fourteenDaysFromNow = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
+
+    const hearings = await prisma.hearing.findMany({
+      where: {
+        hearingDatetime: {
+          gte: now,
+          lte: fourteenDaysFromNow,
+        },
+      },
+      orderBy: { hearingDatetime: 'asc' },
+    });
+    res.json({ hearings });
+  } catch (err) {
+    console.error('[Hearings] GET upcoming error:', err.message);
+    res.status(500).json({ error: 'Failed to fetch upcoming hearings' });
+  }
+});
+
+// ---------------------------------------------------------------------------
 // GET /api/hearings/:caseId — List all hearings for a case
 // ---------------------------------------------------------------------------
 

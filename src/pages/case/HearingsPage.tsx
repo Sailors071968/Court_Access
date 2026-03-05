@@ -4,10 +4,11 @@
 // with configurable SMS reminder toggles.
 // ============================================
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams } from 'react-router-dom';
-import { Calendar, MapPin, Clock, Bell, Plus, Trash2, Save, AlertCircle, CheckCircle } from 'lucide-react';
+import { Calendar, MapPin, Clock, Bell, Plus, Trash2, Save, AlertCircle, CheckCircle, Phone, FileText } from 'lucide-react';
 import { Card } from '../../components/common/Card';
+import { caseDataProvider } from '../../services/caseDataProvider';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -21,6 +22,8 @@ interface Hearing {
   hearingName: string;
   hearingDatetime: string;
   department: string;
+  caseName: string | null;
+  clientPhone: string | null;
   reminder1Enabled: boolean;
   reminder2Enabled: boolean;
   reminder3Enabled: boolean;
@@ -38,6 +41,8 @@ interface HearingFormData {
   hearingDate: string;
   hearingTime: string;
   department: string;
+  caseName: string;
+  clientPhone: string;
   reminder1Enabled: boolean;
   reminder2Enabled: boolean;
   reminder3Enabled: boolean;
@@ -53,6 +58,8 @@ const EMPTY_FORM: HearingFormData = {
   hearingDate: '',
   hearingTime: '',
   department: '',
+  caseName: '',
+  clientPhone: '',
   reminder1Enabled: true,
   reminder2Enabled: true,
   reminder3Enabled: true,
@@ -60,6 +67,12 @@ const EMPTY_FORM: HearingFormData = {
   reminder2DaysBefore: 3,
   reminder3DaysBefore: 1,
 };
+
+function isValidPhone(phone: string): boolean {
+  if (!phone) return true; // optional field
+  const cleaned = phone.replace(/[\s\-().+]/g, '');
+  return /^\d{10,15}$/.test(cleaned);
+}
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 const MAX_HEARINGS = 5;
@@ -187,6 +200,49 @@ function ReminderConfig({
 // Hearing Form (Add / Edit)
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// Reminder Preview Component
+// ---------------------------------------------------------------------------
+
+function ReminderPreview({ form }: { form: HearingFormData }) {
+  const reminders = [
+    { num: 1, enabled: form.reminder1Enabled, days: form.reminder1DaysBefore },
+    { num: 2, enabled: form.reminder2Enabled, days: form.reminder2DaysBefore },
+    { num: 3, enabled: form.reminder3Enabled, days: form.reminder3DaysBefore },
+  ];
+
+  const active = reminders.filter((r) => r.enabled);
+  if (active.length === 0 || !form.hearingDate) return null;
+
+  const hearingDate = new Date(`${form.hearingDate}T${form.hearingTime || '09:00'}`);
+
+  return (
+    <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+      <h5 className="text-xs font-semibold text-blue-800 mb-2">Reminder Schedule</h5>
+      <div className="space-y-1">
+        {active
+          .sort((a, b) => b.days - a.days)
+          .map((r) => {
+            const sendDate = new Date(hearingDate);
+            sendDate.setDate(sendDate.getDate() - r.days);
+            return (
+              <div key={r.num} className="flex items-center gap-2 text-xs text-blue-700">
+                <Bell size={10} />
+                <span>{r.days} days before</span>
+                <span className="text-blue-500">&mdash;</span>
+                <span className="font-medium">{sendDate.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</span>
+              </div>
+            );
+          })}
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Hearing Form (Add / Edit)
+// ---------------------------------------------------------------------------
+
 function HearingForm({
   form,
   onChange,
@@ -213,6 +269,31 @@ function HearingForm({
       </h3>
 
       <div className="grid sm:grid-cols-2 gap-4 mb-4">
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Case Name *</label>
+          <input
+            type="text"
+            value={form.caseName}
+            onChange={(e) => updateField('caseName', e.target.value)}
+            placeholder="e.g. People v. Smith"
+            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+          />
+        </div>
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">Client Phone Number</label>
+          <input
+            type="tel"
+            value={form.clientPhone}
+            onChange={(e) => updateField('clientPhone', e.target.value)}
+            placeholder="e.g. +1 (555) 123-4567"
+            className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${
+              form.clientPhone && !isValidPhone(form.clientPhone) ? 'border-red-300 bg-red-50' : 'border-gray-300'
+            }`}
+          />
+          {form.clientPhone && !isValidPhone(form.clientPhone) && (
+            <p className="text-xs text-red-500 mt-1">Please enter a valid phone number</p>
+          )}
+        </div>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">Hearing Name *</label>
           <input
@@ -303,6 +384,7 @@ function HearingForm({
             onDaysChange={(v) => updateField('reminder3DaysBefore', v)}
           />
         </div>
+        <ReminderPreview form={form} />
       </div>
 
       {/* Form Actions */}
@@ -354,6 +436,12 @@ function HearingCard({
       <div className="flex items-start justify-between mb-3">
         <div>
           <h4 className="text-base font-semibold text-gray-900">{hearing.hearingName}</h4>
+          {hearing.caseName && (
+            <p className="text-xs text-gray-500 mt-0.5 flex items-center gap-1">
+              <FileText size={10} />
+              {hearing.caseName}
+            </p>
+          )}
           <div className="flex items-center gap-1 mt-1">
             {isPast ? (
               <span className="text-xs px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full">Past</span>
@@ -408,6 +496,14 @@ function HearingCard({
         </div>
       </div>
 
+      {/* Client Phone */}
+      {hearing.clientPhone && (
+        <div className="mt-2 flex items-center gap-2 text-sm text-gray-600">
+          <Phone size={12} className="text-gray-400" />
+          <span className="text-xs">{hearing.clientPhone}</span>
+        </div>
+      )}
+
       {/* Reminder Status */}
       <div className="mt-3 pt-3 border-t border-gray-100">
         <div className="flex items-center gap-2 flex-wrap">
@@ -442,6 +538,13 @@ export function HearingsPage() {
   const [form, setForm] = useState<HearingFormData>({ ...EMPTY_FORM });
   const [isSaving, setIsSaving] = useState(false);
 
+  // Auto-populate case name from case data provider
+  const currentCase = useMemo(() => {
+    if (!caseId) return null;
+    return caseDataProvider.getCaseById(caseId);
+  }, [caseId]);
+  const defaultCaseName = currentCase?.title || '';
+
   const fetchHearings = useCallback(async () => {
     if (!caseId) return;
     try {
@@ -470,7 +573,7 @@ export function HearingsPage() {
   }, [successMsg]);
 
   const handleAdd = () => {
-    setForm({ ...EMPTY_FORM });
+    setForm({ ...EMPTY_FORM, caseName: defaultCaseName });
     setEditingId(null);
     setShowForm(true);
     setError(null);
@@ -485,6 +588,8 @@ export function HearingsPage() {
       hearingDate: date,
       hearingTime: time,
       department: hearing.department,
+      caseName: hearing.caseName || defaultCaseName,
+      clientPhone: hearing.clientPhone || '',
       reminder1Enabled: hearing.reminder1Enabled,
       reminder2Enabled: hearing.reminder2Enabled,
       reminder3Enabled: hearing.reminder3Enabled,
@@ -508,11 +613,13 @@ export function HearingsPage() {
     if (!caseId) return;
 
     // Client-side validation
+    if (!form.caseName.trim()) { setError('Case name is required'); return; }
     if (!form.hearingName.trim()) { setError('Hearing name is required'); return; }
     if (!form.courthouseName.trim()) { setError('Courthouse name is required'); return; }
     if (!form.courthouseAddress.trim()) { setError('Courthouse address is required'); return; }
     if (!form.hearingDate) { setError('Hearing date is required'); return; }
     if (!form.hearingTime) { setError('Hearing time is required'); return; }
+    if (form.clientPhone && !isValidPhone(form.clientPhone)) { setError('Please enter a valid phone number'); return; }
 
     const hearingDatetime = combineDatetime(form.hearingDate, form.hearingTime);
     if (new Date(hearingDatetime).getTime() <= Date.now()) {
@@ -529,6 +636,8 @@ export function HearingsPage() {
       hearingName: form.hearingName,
       hearingDatetime,
       department: form.department,
+      caseName: form.caseName.trim(),
+      clientPhone: form.clientPhone.trim() || null,
       reminder1Enabled: form.reminder1Enabled,
       reminder2Enabled: form.reminder2Enabled,
       reminder3Enabled: form.reminder3Enabled,
@@ -671,9 +780,9 @@ export function HearingsPage() {
           <div>
             <h4 className="text-sm font-semibold text-gray-800">SMS Reminders</h4>
             <p className="text-xs text-gray-600 mt-1 leading-relaxed">
-              Reminders are sent to the phone number on your account. Each hearing supports up to 3 customizable
-              reminders. You can set each reminder to trigger 1-30 days before the hearing date. Toggle
-              individual reminders on or off at any time.
+              SMS reminders are sent to the client phone number specified for each hearing. If no phone number is
+              provided, the system uses the admin phone number as fallback. Each hearing supports up to 3 customizable
+              reminders (1-30 days before). Toggle individual reminders on or off at any time.
             </p>
           </div>
         </div>

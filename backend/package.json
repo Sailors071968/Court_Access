@@ -145,6 +145,7 @@
     "negotiator": "^0.6.3",
     "node-abort-controller": "^3.1.1",
     "node-addon-api": "^5.1.0",
+    "node-cron": "^4.2.1",
     "node-ensure": "^0.0.0",
     "node-fetch": "^2.7.0",
     "node-gyp-build-optional-packages": "^5.2.2",

@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { FileText, Calendar, Download, Clock, CheckCircle, User, Scale } from 'lucide-react';
 import { Card, StatCard } from '../../components/common/Card';
 import { DemoModeBadge } from '../../components/common/DemoModeBadge';
+import { UpcomingHearingsWidget } from '../../components/common/UpcomingHearingsWidget';
 import { STATUS_COLORS } from '../../constants/designTokens';
 import { caseDataProvider } from '../../services/caseDataProvider';
 import { useAuthStore } from '../../stores/authStore';
@@ -140,32 +141,8 @@ export function ClientDashboard() {
           </button>
         </Card>
 
-        {/* 3. Upcoming Events */}
-        <Card>
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Upcoming Events</h2>
-          <div className="space-y-3">
-            {[
-              { type: 'court', label: 'Court Hearing', date: 'Feb 15, 2024', time: '9:00 AM', location: 'Dept. 24', icon: Calendar, color: STATUS_COLORS.danger },
-              { type: 'meeting', label: 'Attorney Meeting', date: 'Feb 10, 2024', time: '2:00 PM', location: 'Video Call', icon: User, color: STATUS_COLORS.info },
-              { type: 'action', label: 'Submit Character References', date: 'Feb 18, 2024', time: 'Before 5:00 PM', location: '', icon: CheckCircle, color: STATUS_COLORS.warning },
-              { type: 'deadline', label: 'Document Review Deadline', date: 'Feb 22, 2024', time: 'EOD', location: '', icon: Clock, color: STATUS_COLORS.neutral },
-            ].map((event, i) => {
-              const Icon = event.icon;
-              return (
-                <div key={i} className="flex items-start gap-3 p-3 rounded-lg border border-gray-100">
-                  <div className={`w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0 ${event.color}`}>
-                    <Icon size={16} />
-                  </div>
-                  <div className="flex-1">
-                    <p className="text-sm font-semibold text-gray-900">{event.label}</p>
-                    <p className="text-xs text-gray-500 mt-0.5">{event.date} at {event.time}</p>
-                    {event.location && <p className="text-xs text-gray-400 mt-0.5">{event.location}</p>}
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </Card>
+        {/* 3. Upcoming Hearings (live from database) */}
+        <UpcomingHearingsWidget />
       </div>
 
       {/* 5. Case Summary (AI-Sanitized) */}

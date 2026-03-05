@@ -1,15 +1,17 @@
 // ============================================
 // Court Access — Hearing Reminder Scheduler
-// Runs every hour, checks upcoming hearings,
-// and sends SMS reminders via Twilio.
+// Uses node-cron for reliable hourly scheduling
+// that survives server restarts (re-initialized on boot).
+// Sends SMS reminders via Twilio with Google Maps link.
 // Prevents duplicate alerts via Prisma DB logs.
 // ============================================
 
+import cron from 'node-cron';
 import { config } from '../config/index.js';
 import { sendClientSms } from './smsNotification.js';
 import prisma from './prismaClient.js';
 
-let schedulerInterval = null;
+let schedulerTask = null;
 
 // ---------------------------------------------------------------------------
 // Core scheduler logic
@@ -28,21 +30,39 @@ function daysUntil(targetDatetime) {
 
 /**
  * Build the SMS message for a hearing reminder.
+ * Includes Google Maps directions link.
  */
 function buildReminderMessage(hearing, caseName) {
+  const address = hearing.courthouseAddress || '';
+  const mapsUrl = address
+    ? `https://maps.google.com/?q=${encodeURIComponent(address)}`
+    : null;
+
   return [
     'Court Access Reminder',
     '',
-    'Your hearing is coming up.',
-    '',
     `Case: ${caseName || 'Unknown Case'}`,
+    '',
     `Hearing: ${hearing.hearingName}`,
     `Courthouse: ${hearing.courthouseName}`,
-    `Address: ${hearing.courthouseAddress}`,
+    `Address: ${address}`,
     hearing.department ? `Dept: ${hearing.department}` : null,
     `Date: ${formatDate(hearing.hearingDatetime)}`,
     `Time: ${formatTime(hearing.hearingDatetime)}`,
+    '',
+    mapsUrl ? `Directions:\n${mapsUrl}` : null,
   ].filter(Boolean).join('\n');
+}
+
+/**
+ * Resolve the phone number to send SMS to.
+ * Priority: hearing.clientPhone > config.adminAlertPhone
+ * Returns null if no phone available (skip SMS + log warning).
+ */
+function resolvePhone(hearing) {
+  if (hearing.clientPhone) return hearing.clientPhone;
+  if (config.adminAlertPhone) return config.adminAlertPhone;
+  return null;
 }
 
 /**
@@ -113,16 +133,17 @@ export async function runSchedulerPass() {
         );
         if (alreadySent) continue;
 
+        // Resolve phone number (priority: hearing.clientPhone > admin phone)
+        const phone = resolvePhone(hearing);
+        if (!phone) {
+          console.warn(`[HearingScheduler] No phone number for hearing ${hearing.id} (case: ${hearing.caseName || 'unknown'}) — skipping SMS`);
+          continue;
+        }
+
         // Build and send the SMS
         const message = buildReminderMessage(hearing, hearing.caseName || 'Unknown Case');
 
         try {
-          const phone = hearing.clientPhone || config.adminAlertPhone;
-          if (!phone) {
-            console.log(`[HearingScheduler] No phone number for hearing ${hearing.id} — skipping`);
-            continue;
-          }
-
           await sendClientSms(phone, message);
 
           // Log the sent reminder in the database (persists across restarts)
@@ -134,7 +155,7 @@ export async function runSchedulerPass() {
           });
 
           sent++;
-          console.log(`[HearingScheduler] Sent reminder ${reminder.type} for hearing ${hearing.id} (${days} days before)`);
+          console.log(`[HearingScheduler] Sent reminder ${reminder.type} for hearing ${hearing.id} to ${phone} (${days} days before)`);
         } catch (err) {
           console.error(`[HearingScheduler] Failed to send reminder for hearing ${hearing.id}: ${err.message}`);
         }
@@ -156,33 +177,33 @@ export async function runSchedulerPass() {
 // ---------------------------------------------------------------------------
 
 /**
- * Initialize the scheduler.
- * No longer needs store references — queries Prisma directly.
- * Runs the scheduler every hour (3600000 ms).
+ * Initialize the scheduler using node-cron.
+ * Runs at the top of every hour (minute 0).
+ * Survives server restarts by being re-initialized on boot.
  */
 export function initScheduler() {
-  // Run first pass immediately
+  // Run first pass immediately on startup
   runSchedulerPass().catch((err) => {
     console.error(`[HearingScheduler] Initial pass error: ${err.message}`);
   });
 
-  // Schedule hourly passes
-  schedulerInterval = setInterval(() => {
+  // Schedule hourly passes using node-cron (at minute 0 of every hour)
+  schedulerTask = cron.schedule('0 * * * *', () => {
     runSchedulerPass().catch((err) => {
       console.error(`[HearingScheduler] Scheduled pass error: ${err.message}`);
     });
-  }, 60 * 60 * 1000); // Every hour
+  });
 
-  console.log('[HearingScheduler] Started — running every hour');
+  console.log('[HearingScheduler] Started — running every hour (node-cron)');
 }
 
 /**
  * Stop the scheduler.
  */
 export function stopScheduler() {
-  if (schedulerInterval) {
-    clearInterval(schedulerInterval);
-    schedulerInterval = null;
+  if (schedulerTask) {
+    schedulerTask.stop();
+    schedulerTask = null;
     console.log('[HearingScheduler] Stopped');
   }
 }

@@ -85,6 +85,7 @@ export const authLimiter = rateLimiter({
 
 export const webhookLimiter = rateLimiter({
   windowMs: 60000,
-  maxRequests: 200,
+  maxRequests: 2000,
+  keyFn: () => 'stripe-webhooks', // Use constant key — all Stripe webhooks share same IPs
   message: 'Webhook rate limit exceeded.',
 });

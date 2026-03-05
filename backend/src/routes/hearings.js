@@ -129,7 +129,7 @@ router.put('/:caseId/:hearingId', (req, res) => {
   }
 
   // Validate only changed fields that need validation
-  if (req.body.hearingDatetime) {
+  if (req.body.hearingDatetime !== undefined) {
     const dt = new Date(req.body.hearingDatetime);
     if (isNaN(dt.getTime())) {
       return res.status(400).json({ error: 'hearingDatetime must be a valid date' });
@@ -137,6 +137,17 @@ router.put('/:caseId/:hearingId', (req, res) => {
     if (dt.getTime() <= Date.now()) {
       return res.status(400).json({ error: 'hearingDatetime must be in the future' });
     }
+  }
+
+  // Validate required fields are not cleared to empty strings
+  if (req.body.courthouseName !== undefined && String(req.body.courthouseName ?? '').trim().length === 0) {
+    return res.status(400).json({ error: 'courthouseName cannot be empty' });
+  }
+  if (req.body.courthouseAddress !== undefined && String(req.body.courthouseAddress ?? '').trim().length === 0) {
+    return res.status(400).json({ error: 'courthouseAddress cannot be empty' });
+  }
+  if (req.body.hearingName !== undefined && String(req.body.hearingName ?? '').trim().length === 0) {
+    return res.status(400).json({ error: 'hearingName cannot be empty' });
   }
 
   // Update fields (null-safe: coerce to string before .trim())

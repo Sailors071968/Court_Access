@@ -1,14 +1,31 @@
 // ============================================
 // Court Access — Pricing Page
+// Paid plan CTAs redirect to Stripe Checkout.
+// Free plan CTA links to /signup.
 // ============================================
 
+import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Scale, CheckCircle, ArrowRight } from 'lucide-react';
+import { Scale, CheckCircle, ArrowRight, Loader2 } from 'lucide-react';
 import { useEffect } from 'react';
 import { trackEvent } from '../../utils/analytics';
 
-const plans = [
+interface PlanConfig {
+  id: string;
+  name: string;
+  price: string;
+  period: string;
+  description: string;
+  features: string[];
+  cta: string;
+  ctaStyle: string;
+  highlighted: boolean;
+  stripeEnabled: boolean;
+}
+
+const plans: PlanConfig[] = [
   {
+    id: 'free',
     name: 'Free',
     price: '$0',
     period: 'forever',
@@ -23,8 +40,10 @@ const plans = [
     cta: 'Get Started Free',
     ctaStyle: 'border border-gray-200 text-slate-800 hover:bg-gray-50',
     highlighted: false,
+    stripeEnabled: false,
   },
   {
+    id: 'professional',
     name: 'Professional',
     price: '$99',
     period: '/month',
@@ -41,8 +60,10 @@ const plans = [
     cta: 'Start Free Trial',
     ctaStyle: 'bg-slate-800 text-white hover:bg-slate-700 shadow-lg shadow-slate-800/10',
     highlighted: true,
+    stripeEnabled: true,
   },
   {
+    id: 'team',
     name: 'Team',
     price: '$249',
     period: '/month',
@@ -57,17 +78,50 @@ const plans = [
       'Dedicated account manager',
       'Phone & video support',
     ],
-    cta: 'Contact Sales',
+    cta: 'Start Team Plan',
     ctaStyle: 'border border-gray-200 text-slate-800 hover:bg-gray-50',
     highlighted: false,
+    stripeEnabled: true,
   },
 ];
 
 export function PricingPage() {
+  const [loadingPlan, setLoadingPlan] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
     trackEvent('pricing_page_view');
     document.title = 'Pricing — Court Access';
   }, []);
+
+  const handleCheckout = async (plan: PlanConfig) => {
+    if (!plan.stripeEnabled) return;
+
+    setLoadingPlan(plan.id);
+    setError(null);
+    trackEvent('cta_click', { location: 'pricing_page', plan: plan.name });
+
+    try {
+      const response = await fetch('/api/stripe/create-checkout-session', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ plan: plan.id }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.error || 'Failed to start checkout');
+      }
+
+      const { url } = await response.json();
+      if (url) {
+        window.location.href = url;
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
+      setLoadingPlan(null);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-white">
@@ -96,10 +150,19 @@ export function PricingPage() {
             Simple, transparent pricing
           </h1>
           <p className="mt-4 text-lg text-gray-600">
-            Start with a free analysis. Upgrade when you're ready. No hidden fees.
+            Start with a free analysis. Upgrade when you&apos;re ready. No hidden fees.
           </p>
         </div>
       </section>
+
+      {/* Error banner */}
+      {error && (
+        <div className="max-w-5xl mx-auto px-4 mt-4">
+          <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm text-center">
+            {error}
+          </div>
+        </div>
+      )}
 
       {/* Plans */}
       <section className="py-16 px-4 sm:px-6 lg:px-8">
@@ -124,13 +187,30 @@ export function PricingPage() {
                 <span className="text-gray-500 text-sm">{plan.period}</span>
               </div>
               <p className="mt-3 text-sm text-gray-500">{plan.description}</p>
-              <Link
-                to="/signup"
-                onClick={() => trackEvent('cta_click', { location: 'pricing_page', plan: plan.name })}
-                className={`mt-6 block text-center py-3 rounded-xl font-medium text-sm transition-colors ${plan.ctaStyle}`}
-              >
-                {plan.cta}
-              </Link>
+              {plan.stripeEnabled ? (
+                <button
+                  onClick={() => handleCheckout(plan)}
+                  disabled={loadingPlan === plan.id}
+                  className={`mt-6 w-full block text-center py-3 rounded-xl font-medium text-sm transition-colors disabled:opacity-70 disabled:cursor-wait ${plan.ctaStyle}`}
+                >
+                  {loadingPlan === plan.id ? (
+                    <span className="inline-flex items-center gap-2 justify-center">
+                      <Loader2 className="animate-spin" size={16} />
+                      Redirecting to checkout...
+                    </span>
+                  ) : (
+                    plan.cta
+                  )}
+                </button>
+              ) : (
+                <Link
+                  to="/signup"
+                  onClick={() => trackEvent('cta_click', { location: 'pricing_page', plan: plan.name })}
+                  className={`mt-6 block text-center py-3 rounded-xl font-medium text-sm transition-colors ${plan.ctaStyle}`}
+                >
+                  {plan.cta}
+                </Link>
+              )}
               <ul className="mt-6 space-y-3">
                 {plan.features.map((feature) => (
                   <li key={feature} className="flex items-start gap-2 text-sm text-gray-600">

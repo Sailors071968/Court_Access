@@ -42,6 +42,8 @@ import { EvidenceDashboardPage } from './pages/case/EvidenceDashboardPage';
 import { MonitoringPage } from './pages/admin/MonitoringPage';
 import { BetaManagementPage } from './pages/admin/BetaManagementPage';
 import { CollaborationPage } from './pages/case/CollaborationPage';
+import { CheckoutSuccessPage } from './pages/checkout/CheckoutSuccessPage';
+import { CheckoutCancelPage } from './pages/checkout/CheckoutCancelPage';
 
 function App() {
   return (
@@ -59,6 +61,10 @@ function App() {
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
+
+        {/* Checkout Pages (Stripe) */}
+        <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
+        <Route path="/checkout/cancel" element={<CheckoutCancelPage />} />
 
         {/* Protected App Routes */}
         <Route

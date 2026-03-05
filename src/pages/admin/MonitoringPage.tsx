@@ -149,7 +149,7 @@ function MetricCard({ label, value, sub, icon: Icon }: { label: string; value: s
 // Main Component
 // ---------------------------------------------------------------------------
 
-export default function MonitoringPage() {
+export function MonitoringPage() {
   const [activeTab, setActiveTab] = useState<TabId>('overview');
   const [logFilter, setLogFilter] = useState<'all' | 'warn' | 'error'>('all');
   const [expandedJob, setExpandedJob] = useState<string | null>(null);

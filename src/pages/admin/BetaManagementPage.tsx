@@ -125,7 +125,7 @@ function StorageBar({ used, limit }: { used: number; limit: number }) {
 // Main Component
 // ---------------------------------------------------------------------------
 
-export default function BetaManagementPage() {
+export function BetaManagementPage() {
   const [activeTab, setActiveTab] = useState<'users' | 'invites' | 'limits'>('users');
   const [showInviteForm, setShowInviteForm] = useState(false);
   const [searchQuery, setSearchQuery] = useState('');

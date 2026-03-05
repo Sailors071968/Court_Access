@@ -182,7 +182,7 @@ function TimeAgo({ timestamp }: { timestamp: string }) {
 // Main Component
 // ---------------------------------------------------------------------------
 
-export default function CollaborationPage() {
+export function CollaborationPage() {
   const [activeTab, setActiveTab] = useState<TabId>('team');
   const [showInvite, setShowInvite] = useState(false);
   const [expandedThread, setExpandedThread] = useState<string | null>('t1');

@@ -115,7 +115,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     try {
       const res = await apiFetch('/api/auth/me');
       if (!res.ok) {
-        clearToken();
+        // Only clear token on 401 (unauthorized/expired) — not on transient 500 errors
+        if (res.status === 401) {
+          clearToken();
+        }
         return;
       }
 

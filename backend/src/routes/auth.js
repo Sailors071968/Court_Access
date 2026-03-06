@@ -193,7 +193,13 @@ router.get('/me', authenticate, async (req, res) => {
       return res.status(404).json({ error: 'User not found' });
     }
 
-    res.json({ user });
+    // Convert BigInt fields to Number for JSON serialization
+    const safeUser = {
+      ...user,
+      storageUsedBytes: Number(user.storageUsedBytes),
+    };
+
+    res.json({ user: safeUser });
   } catch (err) {
     console.error('[Auth] Profile error:', err.message);
     res.status(500).json({ error: 'Failed to fetch profile' });

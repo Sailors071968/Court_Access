@@ -165,6 +165,68 @@ router.post('/invite', async (req, res) => {
 });
 
 /**
+ * POST /api/admin/beta-access/invite-batch
+ * Phase 117: Generate a batch of invite codes (up to 10 at a time).
+ * Each code is not tied to a specific email — distributable to any user.
+ */
+router.post('/invite-batch', async (req, res) => {
+  try {
+    const { count = 10, role } = req.body;
+    const batchSize = Math.min(Number(count), 10); // Max 10 per batch
+
+    // Check beta capacity
+    let config = await prisma.betaAccessConfig.findFirst();
+    const maxAccounts = config?.maxBetaAccounts || DEFAULT_MAX_BETA_ACCOUNTS;
+    const expireDays = config?.inviteExpireDays || DEFAULT_INVITE_EXPIRE_DAYS;
+
+    const totalUsers = await prisma.user.count({ where: { status: 'active' } });
+    const pendingInvites = await prisma.betaInvite.count({ where: { status: 'pending' } });
+    const remainingSlots = Math.max(0, maxAccounts - totalUsers - pendingInvites);
+
+    if (remainingSlots < batchSize) {
+      return res.status(400).json({
+        error: `Only ${remainingSlots} slots remaining. Requested ${batchSize} invites.`,
+        remainingSlots,
+      });
+    }
+
+    const invites = [];
+    for (let i = 0; i < batchSize; i++) {
+      const inviteCode = crypto.randomBytes(16).toString('hex');
+      const expiresAt = new Date();
+      expiresAt.setDate(expiresAt.getDate() + expireDays);
+
+      const invite = await prisma.betaInvite.create({
+        data: {
+          email: `batch-invite-${inviteCode.slice(0, 8)}@pending.courtaccess.net`,
+          role: role || 'attorney',
+          inviteCode,
+          status: 'pending',
+          expiresAt,
+        },
+      });
+
+      invites.push({
+        id: invite.id,
+        inviteCode: invite.inviteCode,
+        role: invite.role,
+        expiresAt: invite.expiresAt,
+        signupUrl: `/signup?invite=${invite.inviteCode}`,
+      });
+    }
+
+    res.status(201).json({
+      invites,
+      count: invites.length,
+      remainingSlots: remainingSlots - invites.length,
+    });
+  } catch (err) {
+    console.error('[BetaAccess] Batch invite error:', err.message);
+    res.status(500).json({ error: 'Failed to generate invite batch' });
+  }
+});
+
+/**
  * GET /api/admin/beta-access/invites
  * List all beta invites.
  */

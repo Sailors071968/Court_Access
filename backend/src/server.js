@@ -47,6 +47,7 @@ import alertRoutes from './routes/alerts.js';
 import betaFeedbackRoutes from './routes/betaFeedback.js';
 import bugTrackingRoutes from './routes/bugTracking.js';
 import healthReportRoutes from './routes/healthReport.js';
+import betaStabilityRoutes from './routes/betaStabilityPolicy.js';
 import { initScheduler, stopScheduler, getReminderStatus, runSchedulerPass } from './services/hearingScheduler.js';
 import { registerWorker, startWorker, startHealthChecker, stopAllWorkers, getWorkerStatuses } from './services/workerMonitor.js';
 import { initAlertRules, installCrashHandlers } from './services/alertService.js';
@@ -373,6 +374,12 @@ app.use('/api/admin/bugs', bugTrackingRoutes);
 // ---------------------------------------------------------------------------
 
 app.use('/api/admin/health-report', healthReportRoutes);
+
+// ---------------------------------------------------------------------------
+// Routes — Phase 123: Beta Stability Period Policy
+// ---------------------------------------------------------------------------
+
+app.use('/api/admin/beta-stability', betaStabilityRoutes);
 
 // Phase 100: Worker status endpoint
 app.get('/api/admin/worker-status', authenticate, requireRole('admin'), (_req, res) => {

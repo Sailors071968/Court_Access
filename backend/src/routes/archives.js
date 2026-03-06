@@ -10,6 +10,23 @@ import prisma from '../services/prismaClient.js';
 const router = express.Router();
 
 // ---------------------------------------------------------------------------
+// Stable JSON stringify — recursively sorts object keys at all nesting levels
+// so the hash is deterministic and includes all nested data.
+// ---------------------------------------------------------------------------
+
+function stableStringify(obj) {
+  return JSON.stringify(obj, (_key, value) => {
+    if (value && typeof value === 'object' && !Array.isArray(value)) {
+      return Object.keys(value).sort().reduce((sorted, k) => {
+        sorted[k] = value[k];
+        return sorted;
+      }, {});
+    }
+    return value;
+  });
+}
+
+// ---------------------------------------------------------------------------
 // GET /api/archives/:caseId — Get archive status for a case
 // ---------------------------------------------------------------------------
 
@@ -83,8 +100,8 @@ router.post('/:caseId/archive', async (req, res) => {
       },
     };
 
-    // Compute archive hash from manifest
-    const manifestString = JSON.stringify(manifest, Object.keys(manifest).sort());
+    // Compute archive hash from manifest (stable stringify includes all nested data)
+    const manifestString = stableStringify(manifest);
     const archiveHash = crypto.createHash('sha256').update(manifestString).digest('hex');
 
     const archive = await prisma.archiveRecord.upsert({
@@ -161,9 +178,9 @@ router.post('/:caseId/restore', async (req, res) => {
       return res.status(409).json({ error: 'Case restoration is already in progress' });
     }
 
-    // Verify archive hash
+    // Verify archive hash (must use same stable stringify as archive creation)
     const manifest = archive.archiveManifest;
-    const manifestString = JSON.stringify(manifest, Object.keys(manifest).sort());
+    const manifestString = stableStringify(manifest);
     const computedHash = crypto.createHash('sha256').update(manifestString).digest('hex');
 
     if (computedHash !== archive.archiveHash) {

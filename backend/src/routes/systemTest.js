@@ -242,6 +242,9 @@ router.post('/run', async (req, res) => {
     // Cleanup: Remove all test data
     try {
       if (testUser) {
+        // Clean up non-cascaded records first (tenantId is not a FK)
+        await prisma.publicRecordsRequest.deleteMany({ where: { tenantId: testUser.id } });
+        await prisma.lawEnforcementAgency.deleteMany({ where: { tenantId: testUser.id } });
         // Cascade deletes will clean up cases, evidence, audit logs
         await prisma.user.delete({ where: { id: testUser.id } });
       }

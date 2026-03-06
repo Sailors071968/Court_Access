@@ -142,6 +142,7 @@ router.post('/generate', async (req, res) => {
       },
     });
 
+    report.storageUsedBytes = Number(report.storageUsedBytes);
     res.status(201).json({ report });
   } catch (err) {
     console.error('[HealthReport] Generate error:', err.message);
@@ -167,7 +168,8 @@ router.get('/', async (req, res) => {
       prisma.betaHealthReport.count(),
     ]);
 
-    res.json({ reports, total, page: Number(page), totalPages: Math.ceil(total / Number(limit)) });
+    const serialized = reports.map(r => ({ ...r, storageUsedBytes: Number(r.storageUsedBytes) }));
+    res.json({ reports: serialized, total, page: Number(page), totalPages: Math.ceil(total / Number(limit)) });
   } catch (err) {
     console.error('[HealthReport] List error:', err.message);
     res.status(500).json({ error: 'Failed to fetch health reports' });
@@ -188,6 +190,7 @@ router.get('/latest', async (_req, res) => {
       return res.status(404).json({ error: 'No health reports found. Generate one first.' });
     }
 
+    report.storageUsedBytes = Number(report.storageUsedBytes);
     res.json({ report });
   } catch (err) {
     console.error('[HealthReport] Latest error:', err.message);
@@ -209,6 +212,7 @@ router.get('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Report not found' });
     }
 
+    report.storageUsedBytes = Number(report.storageUsedBytes);
     res.json({ report });
   } catch (err) {
     console.error('[HealthReport] Get error:', err.message);

@@ -98,7 +98,21 @@ function formatTime(isoString) {
  */
 async function retrySmsSend({ hearing, reminder, phone, message }) {
   try {
-    await sendClientSms(phone, message);
+    const smsResult = await sendClientSms(phone, message);
+
+    // Only log as sent if SMS was actually delivered
+    if (smsResult === null) {
+      console.warn(JSON.stringify({
+        event: 'retry_skipped',
+        reason: 'sms_not_configured',
+        hearingId: hearing.id,
+        caseId: hearing.caseId,
+        reminderType: reminder.type,
+        attempt: 2,
+        timestamp: new Date().toISOString(),
+      }));
+      return;
+    }
 
     // Log the sent reminder in the database
     await prisma.hearingReminderLog.create({
@@ -214,7 +228,20 @@ export async function runSchedulerPass() {
         const message = buildReminderMessage(hearing, hearing.caseName || 'Unknown Case');
 
         try {
-          await sendClientSms(phone, message);
+          const smsResult = await sendClientSms(phone, message);
+
+          // Only log as sent if SMS was actually delivered (not silently skipped)
+          if (smsResult === null) {
+            console.warn(JSON.stringify({
+              event: 'reminder_skipped',
+              reason: 'sms_not_configured',
+              hearingId: hearing.id,
+              caseId: hearing.caseId,
+              reminderType: reminder.type,
+              timestamp: new Date().toISOString(),
+            }));
+            continue;
+          }
 
           // Log the sent reminder in the database (persists across restarts)
           await prisma.hearingReminderLog.create({

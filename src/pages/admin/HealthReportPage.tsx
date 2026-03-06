@@ -13,7 +13,6 @@ import {
   Activity,
   AlertTriangle,
   MessageSquare,
-  Bug,
   RefreshCw,
   Download,
   Clock,

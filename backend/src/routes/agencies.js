@@ -6,7 +6,6 @@
 import express from 'express';
 import prisma from '../services/prismaClient.js';
 import { authenticate, requireRole } from '../middleware/auth.js';
-import { sendStaffNotification } from '../services/emailService.js';
 
 const router = express.Router();
 
@@ -81,6 +80,74 @@ router.get('/', authenticate, async (req, res) => {
   } catch (err) {
     console.error('[Agencies] List error:', err.message);
     res.status(500).json({ error: 'Failed to list agencies' });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// Phase 75: GET /api/agencies/queue/review — Staff review queue
+// MUST be registered BEFORE /:agencyId to avoid Express param shadowing
+// ---------------------------------------------------------------------------
+
+router.get('/queue/review', authenticate, requireRole('admin', 'staff'), async (req, res) => {
+  try {
+    const tenantId = req.user.id;
+    const { state } = req.query;
+
+    const where = {
+      tenantId,
+      verificationStatus: { in: ['pending', 'needs_review'] },
+    };
+    if (state) where.state = state;
+
+    const agencies = await prisma.lawEnforcementAgency.findMany({
+      where,
+      orderBy: { discoveredAt: 'desc' },
+    });
+
+    res.json({ agencies, count: agencies.length });
+  } catch (err) {
+    console.error('[Agencies] Review queue error:', err.message);
+    res.status(500).json({ error: 'Failed to fetch review queue' });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// Phase 70: GET /api/agencies/stats/summary — Agency statistics
+// MUST be registered BEFORE /:agencyId to avoid Express param shadowing
+// ---------------------------------------------------------------------------
+
+router.get('/stats/summary', authenticate, requireRole('admin', 'staff'), async (req, res) => {
+  try {
+    const tenantId = req.user.id;
+
+    const [byState, byType, byStatus, total] = await Promise.all([
+      prisma.lawEnforcementAgency.groupBy({
+        by: ['state'],
+        where: { tenantId },
+        _count: { id: true },
+      }),
+      prisma.lawEnforcementAgency.groupBy({
+        by: ['agencyType'],
+        where: { tenantId },
+        _count: { id: true },
+      }),
+      prisma.lawEnforcementAgency.groupBy({
+        by: ['verificationStatus'],
+        where: { tenantId },
+        _count: { id: true },
+      }),
+      prisma.lawEnforcementAgency.count({ where: { tenantId } }),
+    ]);
+
+    res.json({
+      total,
+      byState: byState.reduce((acc, s) => { acc[s.state] = s._count.id; return acc; }, {}),
+      byType: byType.reduce((acc, s) => { acc[s.agencyType] = s._count.id; return acc; }, {}),
+      byStatus: byStatus.reduce((acc, s) => { acc[s.verificationStatus] = s._count.id; return acc; }, {}),
+    });
+  } catch (err) {
+    console.error('[Agencies] Stats error:', err.message);
+    res.status(500).json({ error: 'Failed to fetch agency stats' });
   }
 });
 
@@ -283,72 +350,6 @@ router.patch('/:agencyId', authenticate, requireRole('admin', 'staff'), async (r
   } catch (err) {
     console.error('[Agencies] Update error:', err.message);
     res.status(500).json({ error: 'Failed to update agency' });
-  }
-});
-
-// ---------------------------------------------------------------------------
-// Phase 75: GET /api/agencies/queue/review — Staff review queue
-// ---------------------------------------------------------------------------
-
-router.get('/queue/review', authenticate, requireRole('admin', 'staff'), async (req, res) => {
-  try {
-    const tenantId = req.user.id;
-    const { state } = req.query;
-
-    const where = {
-      tenantId,
-      verificationStatus: { in: ['pending', 'needs_review'] },
-    };
-    if (state) where.state = state;
-
-    const agencies = await prisma.lawEnforcementAgency.findMany({
-      where,
-      orderBy: { discoveredAt: 'desc' },
-    });
-
-    res.json({ agencies, count: agencies.length });
-  } catch (err) {
-    console.error('[Agencies] Review queue error:', err.message);
-    res.status(500).json({ error: 'Failed to fetch review queue' });
-  }
-});
-
-// ---------------------------------------------------------------------------
-// Phase 70: GET /api/agencies/stats/summary — Agency statistics
-// ---------------------------------------------------------------------------
-
-router.get('/stats/summary', authenticate, requireRole('admin', 'staff'), async (req, res) => {
-  try {
-    const tenantId = req.user.id;
-
-    const [byState, byType, byStatus, total] = await Promise.all([
-      prisma.lawEnforcementAgency.groupBy({
-        by: ['state'],
-        where: { tenantId },
-        _count: { id: true },
-      }),
-      prisma.lawEnforcementAgency.groupBy({
-        by: ['agencyType'],
-        where: { tenantId },
-        _count: { id: true },
-      }),
-      prisma.lawEnforcementAgency.groupBy({
-        by: ['verificationStatus'],
-        where: { tenantId },
-        _count: { id: true },
-      }),
-      prisma.lawEnforcementAgency.count({ where: { tenantId } }),
-    ]);
-
-    res.json({
-      total,
-      byState: byState.reduce((acc, s) => { acc[s.state] = s._count.id; return acc; }, {}),
-      byType: byType.reduce((acc, s) => { acc[s.agencyType] = s._count.id; return acc; }, {}),
-      byStatus: byStatus.reduce((acc, s) => { acc[s.verificationStatus] = s._count.id; return acc; }, {}),
-    });
-  } catch (err) {
-    console.error('[Agencies] Stats error:', err.message);
-    res.status(500).json({ error: 'Failed to fetch agency stats' });
   }
 });
 

@@ -37,6 +37,7 @@ model User {
   evidenceRecords   EvidenceRecord[]
   auditLogs         UserAuditLog[]
   refreshTokens     RefreshToken[]
+  feedbacks         BetaFeedback[]
 
   @@index([email])
   @@index([stripeCustomerId])
@@ -715,4 +716,124 @@ model BetaAccessConfig {
   inviteExpireDays Int     @default(7)
   registrationOpen Boolean @default(false)
   updatedAt       DateTime @updatedAt
+}
+
+// ---------------------------------------------------------------------------
+// Phase 116 — Alert Configuration (monitoring & alerting)
+// ---------------------------------------------------------------------------
+
+model AlertRule {
+  id            String   @id @default(uuid())
+  alertType     String   // server_crash, worker_failure, db_connection_error, email_delivery_failure, high_error_rate
+  threshold     Int      @default(1)    // Number of occurrences before alerting
+  windowMinutes Int      @default(5)    // Time window for threshold
+  enabled       Boolean  @default(true)
+  notifyEmail   String   @default("")   // Admin email to notify
+  notifyMethod  String   @default("email") // email, log
+  lastTriggered DateTime?
+  triggerCount  Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([alertType])
+  @@index([alertType])
+  @@index([enabled])
+}
+
+model AlertEvent {
+  id          String   @id @default(uuid())
+  alertType   String
+  severity    String   @default("high") // low, medium, high, critical
+  message     String
+  details     Json     @default("{}")
+  acknowledged Boolean @default(false)
+  acknowledgedBy String?
+  acknowledgedAt DateTime?
+  createdAt   DateTime @default(now())
+
+  @@index([alertType])
+  @@index([severity])
+  @@index([acknowledged])
+  @@index([createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 120 — Beta Feedback System
+// ---------------------------------------------------------------------------
+
+model BetaFeedback {
+  id            String   @id @default(uuid())
+  userId        String
+  feedbackType  String   // bug, analysis_error, ui_issue, performance, feature_request, other
+  title         String
+  description   String
+  severity      String   @default("medium") // low, medium, high, critical
+  status        String   @default("open")   // open, in_review, acknowledged, resolved, closed
+  pageUrl       String   @default("")
+  userAgent     String   @default("")
+  screenshotUrl String?
+  adminNotes    String   @default("")
+  resolvedAt    DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([feedbackType])
+  @@index([severity])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 121 — Internal Bug Tracking
+// ---------------------------------------------------------------------------
+
+model BugReport {
+  id                String   @id @default(uuid())
+  feedbackId        String?  // Optional link to BetaFeedback
+  title             String
+  description       String
+  reproductionSteps String   @default("")
+  severity          String   @default("medium") // low, medium, high, critical
+  status            String   @default("open")   // open, in_progress, fixed, verified, closed, wont_fix
+  assignedTo        String?
+  component         String   @default("") // frontend, backend, worker, database, auth, upload, ai
+  environment       String   @default("beta")
+  fixCommit         String?
+  fixVersion        String?
+  reportedBy        String   @default("system")
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([severity])
+  @@index([status])
+  @@index([component])
+  @@index([createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 122 — Weekly Beta Health Reports
+// ---------------------------------------------------------------------------
+
+model BetaHealthReport {
+  id                 String   @id @default(uuid())
+  reportDate         DateTime
+  periodStart        DateTime
+  periodEnd          DateTime
+  activeUsers        Int      @default(0)
+  totalCases         Int      @default(0)
+  evidenceProcessed  Int      @default(0)
+  workerUptime       Float    @default(0) // percentage
+  systemErrors       Int      @default(0)
+  feedbackCount      Int      @default(0)
+  bugCount           Int      @default(0)
+  avgResponseTimeMs  Int      @default(0)
+  storageUsedBytes   BigInt   @default(0)
+  reportData         Json     @default("{}")
+  createdAt          DateTime @default(now())
+
+  @@index([reportDate])
+  @@index([createdAt])
 }

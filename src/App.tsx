@@ -62,6 +62,10 @@ import { AgencyIntelligencePage } from './pages/admin/AgencyIntelligencePage';
 import { EmailAdminPage } from './pages/admin/EmailAdminPage';
 import { RecordsRequestPage } from './pages/case/RecordsRequestPage';
 import { CrossReferencePage } from './pages/case/CrossReferencePage';
+import { FeedbackPage } from './pages/admin/FeedbackPage';
+import { BugTrackingPage } from './pages/admin/BugTrackingPage';
+import { HealthReportPage } from './pages/admin/HealthReportPage';
+import { AlertsPage } from './pages/admin/AlertsPage';
 
 function App() {
   const restoreSession = useAuthStore((s) => s.restoreSession);
@@ -159,6 +163,38 @@ function App() {
             element={
               <ProtectedRoute requiredPermission="canViewAdmin">
                 <EmailAdminPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/alerts"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <AlertsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/feedback"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <FeedbackPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/bugs"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <BugTrackingPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/health-reports"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <HealthReportPage />
               </ProtectedRoute>
             }
           />

@@ -43,8 +43,13 @@ import systemTestRoutes from './routes/systemTest.js';
 import backupRecoveryRoutes from './routes/backupRecovery.js';
 import betaAccessControlRoutes from './routes/betaAccessControl.js';
 import betaReadinessRoutes from './routes/betaReadiness.js';
+import alertRoutes from './routes/alerts.js';
+import betaFeedbackRoutes from './routes/betaFeedback.js';
+import bugTrackingRoutes from './routes/bugTracking.js';
+import healthReportRoutes from './routes/healthReport.js';
 import { initScheduler, stopScheduler, getReminderStatus, runSchedulerPass } from './services/hearingScheduler.js';
 import { registerWorker, startWorker, startHealthChecker, stopAllWorkers, getWorkerStatuses } from './services/workerMonitor.js';
+import { initAlertRules, installCrashHandlers } from './services/alertService.js';
 import Stripe from 'stripe';
 
 // Phase 36-45 imports
@@ -345,6 +350,30 @@ app.use('/api/admin/backup-test', backupRecoveryRoutes);
 app.use('/api/admin/beta-access', betaAccessControlRoutes);
 app.use('/api/admin/beta-readiness', betaReadinessRoutes);
 
+// ---------------------------------------------------------------------------
+// Routes — Phase 116: Monitoring & Alerting
+// ---------------------------------------------------------------------------
+
+app.use('/api/admin/alerts', alertRoutes);
+
+// ---------------------------------------------------------------------------
+// Routes — Phase 120: Beta Feedback Collection
+// ---------------------------------------------------------------------------
+
+app.use('/api/feedback', betaFeedbackRoutes);
+
+// ---------------------------------------------------------------------------
+// Routes — Phase 121: Bug Tracking
+// ---------------------------------------------------------------------------
+
+app.use('/api/admin/bugs', bugTrackingRoutes);
+
+// ---------------------------------------------------------------------------
+// Routes — Phase 122: Weekly Health Reports
+// ---------------------------------------------------------------------------
+
+app.use('/api/admin/health-report', healthReportRoutes);
+
 // Phase 100: Worker status endpoint
 app.get('/api/admin/worker-status', authenticate, requireRole('admin'), (_req, res) => {
   const statuses = getWorkerStatuses();
@@ -437,6 +466,10 @@ const PORT = config.port || 3001;
 
 // Phase 44: Run startup deployment readiness checks
 runStartupChecks();
+
+// Phase 116: Initialize alert rules and crash handlers
+initAlertRules();
+installCrashHandlers();
 
 const server = app.listen(PORT, () => {
   console.log(`\n[Court Access] API server running on http://localhost:${PORT}`);

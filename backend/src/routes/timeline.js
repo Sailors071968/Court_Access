@@ -5,8 +5,12 @@
 
 import express from 'express';
 import prisma from '../services/prismaClient.js';
+import { authenticate } from '../middleware/auth.js';
 
 const router = express.Router();
+
+// Phase 94: All timeline routes require authentication
+router.use(authenticate);
 
 // ---------------------------------------------------------------------------
 // GET /api/timeline/:caseId — List timeline events for a case

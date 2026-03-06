@@ -6,8 +6,12 @@
 import express from 'express';
 import prisma from '../services/prismaClient.js';
 import { runCorrelationAnalysis } from '../services/correlationEngine.js';
+import { authenticate } from '../middleware/auth.js';
 
 const router = express.Router();
+
+// Phase 94: All correlation routes require authentication
+router.use(authenticate);
 
 // Phase 60: Legal safeguard disclaimer for all AI-generated content
 const AI_DISCLAIMER = 'This analysis is automated and intended for investigative assistance only. It does not constitute legal advice, definitive conclusions, or expert opinion. All findings should be independently verified by qualified professionals before use in legal proceedings.';

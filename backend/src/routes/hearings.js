@@ -6,8 +6,12 @@
 
 import express from 'express';
 import prisma from '../services/prismaClient.js';
+import { authenticate } from '../middleware/auth.js';
 
 const router = express.Router();
+
+// Phase 94: All hearing routes require authentication
+router.use(authenticate);
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -48,8 +52,16 @@ router.get('/upcoming', async (req, res) => {
     const now = new Date();
     const fourteenDaysFromNow = new Date(now.getTime() + 14 * 24 * 60 * 60 * 1000);
 
+    // Phase 94: Scope to authenticated user's cases only (tenant isolation)
+    const userCases = await prisma.case.findMany({
+      where: { userId: req.user.id },
+      select: { id: true },
+    });
+    const caseIds = userCases.map((c) => c.id);
+
     const hearings = await prisma.hearing.findMany({
       where: {
+        caseId: { in: caseIds },
         hearingDatetime: {
           gte: now,
           lte: fourteenDaysFromNow,

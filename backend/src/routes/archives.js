@@ -6,8 +6,12 @@
 import express from 'express';
 import crypto from 'crypto';
 import prisma from '../services/prismaClient.js';
+import { authenticate } from '../middleware/auth.js';
 
 const router = express.Router();
+
+// Phase 94: All archive routes require authentication
+router.use(authenticate);
 
 // ---------------------------------------------------------------------------
 // Stable JSON stringify — recursively sorts object keys at all nesting levels
@@ -16,6 +20,11 @@ const router = express.Router();
 
 function stableStringify(obj) {
   return JSON.stringify(obj, (_key, value) => {
+    // Phase 94: Handle Date objects explicitly to prevent hash mismatch
+    // after Prisma JSON round-trip (Date.toJSON() vs Object.keys on Date)
+    if (value instanceof Date) {
+      return value.toISOString();
+    }
     if (value && typeof value === 'object' && !Array.isArray(value)) {
       return Object.keys(value).sort().reduce((sorted, k) => {
         sorted[k] = value[k];

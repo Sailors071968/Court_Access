@@ -5,8 +5,12 @@
 
 import express from 'express';
 import prisma from '../services/prismaClient.js';
+import { authenticate } from '../middleware/auth.js';
 
 const router = express.Router();
+
+// Phase 94: All entity routes require authentication
+router.use(authenticate);
 
 // ---------------------------------------------------------------------------
 // GET /api/entities/:caseId — List all entities for a case

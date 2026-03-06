@@ -48,6 +48,9 @@ import { EntitiesPage } from './pages/case/EntitiesPage';
 import { NarrativePage } from './pages/case/NarrativePage';
 import { IntegrityCertificatePage } from './pages/case/IntegrityCertificatePage';
 import { ArchiveStatusPage } from './pages/case/ArchiveStatusPage';
+import { MediaTranscriptsPage } from './pages/case/MediaTranscriptsPage';
+import { CorrelationsPage } from './pages/case/CorrelationsPage';
+import { PolicyCompliancePage } from './pages/case/PolicyCompliancePage';
 import { CheckoutSuccessPage } from './pages/checkout/CheckoutSuccessPage';
 import { CheckoutCancelPage } from './pages/checkout/CheckoutCancelPage';
 import { BillingPage } from './pages/billing/BillingPage';
@@ -261,6 +264,30 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canViewActivity">
                   <CollaborationPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="media-transcripts"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <MediaTranscriptsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="evidence-correlations"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <CorrelationsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="policy-compliance"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <PolicyCompliancePage />
                 </ProtectedRoute>
               }
             />

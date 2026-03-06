@@ -373,3 +373,101 @@ model ArchiveAuditLog {
   @@index([caseId])
   @@index([caseId, createdAt])
 }
+
+// ---------------------------------------------------------------------------
+// Phase 52 — Media Transcripts
+// ---------------------------------------------------------------------------
+
+model MediaTranscript {
+  id               String   @id @default(uuid())
+  evidenceId       String
+  caseId           String
+  speakerLabel     String   @default("")
+  startTime        Float    @default(0)   // seconds
+  endTime          Float    @default(0)   // seconds
+  transcriptText   String
+  confidenceScore  Float    @default(0.0)
+  language         String   @default("en")
+  modelVersion     String   @default("whisper-1")
+  fullTranscript   Boolean  @default(false) // true = full file transcript, false = segment
+  status           String   @default("pending") // pending, processing, complete, error
+  metadata         Json     @default("{}")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([evidenceId])
+  @@index([caseId])
+  @@index([caseId, evidenceId])
+  @@index([status])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 53 — Evidence Correlations
+// ---------------------------------------------------------------------------
+
+model EvidenceCorrelation {
+  id                  String   @id @default(uuid())
+  caseId              String
+  sourceEvidenceId    String
+  relatedEvidenceId   String
+  correlationType     String   // timeline_mismatch, statement_contradiction, entity_reference_match, event_confirmation
+  confidenceScore     Float    @default(0.0)
+  description         String
+  sourceSnippet       String   @default("")
+  relatedSnippet      String   @default("")
+  metadata            Json     @default("{}")
+  status              String   @default("active") // active, dismissed, confirmed
+  createdAt           DateTime @default(now())
+
+  @@index([caseId])
+  @@index([sourceEvidenceId])
+  @@index([relatedEvidenceId])
+  @@index([caseId, correlationType])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 54 — Policy Documents
+// ---------------------------------------------------------------------------
+
+model PolicyDocument {
+  id              String   @id @default(uuid())
+  caseId          String
+  title           String
+  documentType    String   // police_policy, use_of_force, arrest_procedure, bodycam_rules, evidence_handling
+  content         String   @default("")
+  sections        Json     @default("[]")  // parsed sections: [{sectionId, title, content}]
+  uploadedBy      String?
+  status          String   @default("active") // active, archived
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  findings        PolicyComplianceFinding[]
+
+  @@index([caseId])
+  @@index([caseId, documentType])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 54 — Policy Compliance Findings
+// ---------------------------------------------------------------------------
+
+model PolicyComplianceFinding {
+  id                 String   @id @default(uuid())
+  caseId             String
+  evidenceId         String
+  policyDocumentId   String
+  policySection      String   @default("")
+  description        String
+  confidenceScore    Float    @default(0.0)
+  severity           String   @default("medium") // low, medium, high, critical
+  status             String   @default("active") // active, dismissed, confirmed, resolved
+  metadata           Json     @default("{}")
+  createdAt          DateTime @default(now())
+
+  policyDocument     PolicyDocument @relation(fields: [policyDocumentId], references: [id], onDelete: Cascade)
+
+  @@index([caseId])
+  @@index([evidenceId])
+  @@index([policyDocumentId])
+  @@index([caseId, severity])
+}

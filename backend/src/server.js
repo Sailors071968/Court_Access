@@ -32,6 +32,9 @@ import entitiesRoutes from './routes/entities.js';
 import narrativeRoutes from './routes/narrative.js';
 import integrityRoutes from './routes/integrity.js';
 import archivesRoutes from './routes/archives.js';
+import transcriptsRoutes from './routes/transcripts.js';
+import correlationsRoutes from './routes/correlations.js';
+import policyComplianceRoutes from './routes/policyCompliance.js';
 import { initScheduler, stopScheduler, getReminderStatus, runSchedulerPass } from './services/hearingScheduler.js';
 import Stripe from 'stripe';
 
@@ -252,6 +255,14 @@ app.use('/api/entities', entitiesRoutes);
 app.use('/api/narrative', narrativeRoutes);
 app.use('/api/integrity', integrityRoutes);
 app.use('/api/archives', archivesRoutes);
+
+// ---------------------------------------------------------------------------
+// Routes — Phase 52-56: AI Evidence Intelligence Layer
+// ---------------------------------------------------------------------------
+
+app.use('/api/transcripts', transcriptsRoutes);
+app.use('/api/correlations', correlationsRoutes);
+app.use('/api/policy', policyComplianceRoutes);
 
 // ---------------------------------------------------------------------------
 // Routes — Phase 36: Auth + User Management

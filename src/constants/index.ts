@@ -197,6 +197,9 @@ export const CASE_TABS = [
   { id: 'narrative', label: 'Narrative', path: '/narrative', permission: 'canViewEvidence' as const },
   { id: 'integrity', label: 'Integrity', path: '/integrity', permission: 'canViewEvidence' as const },
   { id: 'archive', label: 'Archive', path: '/archive', permission: 'canManageCases' as const },
+  { id: 'media-transcripts', label: 'Transcripts', path: '/media-transcripts', permission: 'canViewEvidence' as const },
+  { id: 'evidence-correlations', label: 'Correlations', path: '/evidence-correlations', permission: 'canViewEvidence' as const },
+  { id: 'policy-compliance', label: 'Policy Compliance', path: '/policy-compliance', permission: 'canViewEvidence' as const },
   { id: 'activity', label: 'Activity', path: '/activity', permission: 'canViewActivity' as const },
   { id: 'settings', label: 'Settings', path: '/settings', permission: 'canManageCases' as const },
 ] as const;

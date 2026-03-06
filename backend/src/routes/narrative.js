@@ -1,6 +1,8 @@
 // ============================================
-// Court Access — Phase C: AI Case Narrative API
+// Court Access — Phase C/55: AI Case Narrative API
 // Generate and retrieve structured case narratives.
+// Phase 55: Integrates correlations, policy findings,
+// and transcripts into narrative generation.
 // ============================================
 
 import express from 'express';
@@ -62,18 +64,32 @@ router.post('/:caseId/generate', async (req, res) => {
   try {
     const { caseId } = req.params;
 
-    // Gather timeline events for the case
-    const timelineEvents = await prisma.timelineEvent.findMany({
-      where: { caseId },
-      orderBy: { timestamp: 'asc' },
-      take: 100,
-    });
-
-    // Gather entities for the case
-    const entities = await prisma.entity.findMany({
-      where: { caseId },
-      include: { links: true },
-    });
+    // Gather all intelligence sources (Phase 55: integrated intelligence)
+    const [timelineEvents, entities, correlations, policyFindings, transcripts] = await Promise.all([
+      prisma.timelineEvent.findMany({
+        where: { caseId },
+        orderBy: { timestamp: 'asc' },
+        take: 100,
+      }),
+      prisma.entity.findMany({
+        where: { caseId },
+        include: { links: true },
+      }),
+      prisma.evidenceCorrelation.findMany({
+        where: { caseId, status: { not: 'dismissed' } },
+        orderBy: { confidenceScore: 'desc' },
+        take: 20,
+      }),
+      prisma.policyComplianceFinding.findMany({
+        where: { caseId, status: { not: 'dismissed' } },
+        orderBy: { severity: 'desc' },
+        take: 20,
+      }),
+      prisma.mediaTranscript.findMany({
+        where: { caseId, fullTranscript: true, status: 'complete' },
+        take: 10,
+      }),
+    ]);
 
     // Build context for narrative generation
     const timelineSummary = timelineEvents.map((e) =>
@@ -82,6 +98,19 @@ router.post('/:caseId/generate', async (req, res) => {
 
     const entitySummary = entities.map((e) =>
       `${e.entityType}: ${e.entityValue} (linked to ${e.links.length} evidence items)`
+    ).join('\n');
+
+    // Phase 55: Additional intelligence context
+    const correlationSummary = correlations.map((c) =>
+      `[${c.correlationType}] ${c.description} (confidence: ${c.confidenceScore})`
+    ).join('\n');
+
+    const policySummary = policyFindings.map((f) =>
+      `[${f.severity}] ${f.description} (section: ${f.policySection})`
+    ).join('\n');
+
+    const transcriptSummary = transcripts.map((t) =>
+      `Transcript (${t.evidenceId}): ${t.transcriptText.substring(0, 300)}...`
     ).join('\n');
 
     // Generate narrative using OpenAI if available, otherwise deterministic
@@ -104,11 +133,24 @@ ${timelineSummary || 'No timeline events recorded yet.'}
 Detected Entities:
 ${entitySummary || 'No entities detected yet.'}
 
+Evidence Correlations:
+${correlationSummary || 'No cross-evidence correlations detected yet.'}
+
+Policy Compliance Findings:
+${policySummary || 'No policy compliance findings yet.'}
+
+Media Transcript Excerpts:
+${transcriptSummary || 'No media transcripts available yet.'}
+
 Generate a JSON response with:
-1. "summary": A concise narrative overview of the case (2-4 paragraphs)
+1. "summary": A concise narrative overview of the case (2-4 paragraphs), incorporating correlation findings and policy deviations where relevant
 2. "keyEvents": Array of the 5 most significant events with date and description
-3. "conflicts": Array of any detected contradictions or conflicts between evidence
-4. "participants": Array of key people/organizations involved with their roles`;
+3. "conflicts": Array of any detected contradictions or conflicts between evidence (include cross-evidence correlations)
+4. "participants": Array of key people/organizations involved with their roles
+5. "policyDeviations": Array of any identified policy compliance issues with severity and description
+6. "timelineInconsistencies": Array of timeline mismatches found across evidence sources
+7. "evidenceConflicts": Array of statement contradictions or conflicting evidence
+8. "keySupportingEvidence": Array of strongest corroborating evidence pairs`;
 
         const completion = await openai.chat.completions.create({
           model: 'gpt-4',
@@ -135,7 +177,7 @@ Generate a JSON response with:
       const personEntities = entities.filter((e) => e.entityType === 'person');
       const locationEntities = entities.filter((e) => e.entityType === 'location');
 
-      summaryText = `Case analysis based on ${eventCount} timeline events and ${entityCount} detected entities. `;
+      summaryText = `Case analysis based on ${eventCount} timeline events, ${entityCount} detected entities, ${correlations.length} evidence correlations, and ${policyFindings.length} policy compliance findings. `;
 
       if (personEntities.length > 0) {
         summaryText += `Key individuals identified: ${personEntities.map((e) => e.entityValue).join(', ')}. `;
@@ -148,7 +190,28 @@ Generate a JSON response with:
       if (eventCount > 0) {
         const first = timelineEvents[0];
         const last = timelineEvents[eventCount - 1];
-        summaryText += `Events span from ${first.timestamp.toISOString().split('T')[0]} to ${last.timestamp.toISOString().split('T')[0]}.`;
+        summaryText += `Events span from ${first.timestamp.toISOString().split('T')[0]} to ${last.timestamp.toISOString().split('T')[0]}. `;
+      }
+
+      // Phase 55: Include correlations and policy findings in deterministic output
+      if (correlations.length > 0) {
+        const contradictions = correlations.filter((c) => c.correlationType === 'statement_contradiction');
+        const mismatches = correlations.filter((c) => c.correlationType === 'timeline_mismatch');
+        if (contradictions.length > 0) {
+          summaryText += `${contradictions.length} statement contradiction(s) detected across evidence sources. `;
+        }
+        if (mismatches.length > 0) {
+          summaryText += `${mismatches.length} timeline mismatch(es) identified between sources. `;
+        }
+      }
+
+      if (policyFindings.length > 0) {
+        const critical = policyFindings.filter((f) => f.severity === 'critical' || f.severity === 'high');
+        summaryText += `${policyFindings.length} policy compliance finding(s) identified${critical.length > 0 ? `, including ${critical.length} high/critical severity` : ''}. `;
+      }
+
+      if (transcripts.length > 0) {
+        summaryText += `${transcripts.length} media transcript(s) analyzed. `;
       }
 
       keyEvents = timelineEvents.slice(0, 5).map((e) => ({
@@ -157,13 +220,22 @@ Generate a JSON response with:
         type: e.eventType,
       }));
 
+      // Phase 55: Deterministic conflicts from correlations
+      conflictsDetected = correlations
+        .filter((c) => c.correlationType === 'statement_contradiction' || c.correlationType === 'timeline_mismatch')
+        .map((c) => ({
+          type: c.correlationType,
+          description: c.description,
+          confidence: c.confidenceScore,
+        }));
+
       participants = personEntities.map((e) => ({
         name: e.entityValue,
         role: 'mentioned in evidence',
         evidenceCount: e.links.length,
       }));
 
-      modelVersion = 'deterministic-v1';
+      modelVersion = 'deterministic-v2';
     }
 
     const narrative = await prisma.caseNarrative.create({

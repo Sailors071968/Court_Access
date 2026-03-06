@@ -1,0 +1,167 @@
+// ============================================
+// Court Access — Phase 53: Evidence Correlation API
+// CRUD + correlation analysis trigger.
+// ============================================
+
+import express from 'express';
+import prisma from '../services/prismaClient.js';
+import { runCorrelationAnalysis } from '../services/correlationEngine.js';
+
+const router = express.Router();
+
+// ---------------------------------------------------------------------------
+// GET /api/correlations/:caseId — List all correlations for a case
+// ---------------------------------------------------------------------------
+
+router.get('/:caseId', async (req, res) => {
+  try {
+    const { caseId } = req.params;
+    const { type, status, minConfidence } = req.query;
+
+    const where = { caseId };
+    if (type) where.correlationType = type;
+    if (status) where.status = status;
+    if (minConfidence) where.confidenceScore = { gte: parseFloat(minConfidence) };
+
+    const correlations = await prisma.evidenceCorrelation.findMany({
+      where,
+      orderBy: { confidenceScore: 'desc' },
+    });
+
+    // Enrich with evidence metadata
+    const evidenceIds = new Set();
+    for (const c of correlations) {
+      evidenceIds.add(c.sourceEvidenceId);
+      evidenceIds.add(c.relatedEvidenceId);
+    }
+
+    const evidenceRecords = await prisma.evidenceRecord.findMany({
+      where: { id: { in: Array.from(evidenceIds) } },
+      select: { id: true, filename: true, evidenceType: true },
+    });
+
+    const evidenceMap = Object.fromEntries(evidenceRecords.map((e) => [e.id, e]));
+
+    const enriched = correlations.map((c) => ({
+      ...c,
+      sourceEvidence: evidenceMap[c.sourceEvidenceId] || null,
+      relatedEvidence: evidenceMap[c.relatedEvidenceId] || null,
+    }));
+
+    res.json({ correlations: enriched, count: enriched.length });
+  } catch (err) {
+    console.error('[Correlations] List error:', err.message);
+    res.status(500).json({ error: 'Failed to fetch correlations' });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// GET /api/correlations/:caseId/summary — Get correlation summary/stats
+// ---------------------------------------------------------------------------
+
+router.get('/:caseId/summary', async (req, res) => {
+  try {
+    const { caseId } = req.params;
+
+    const correlations = await prisma.evidenceCorrelation.findMany({
+      where: { caseId },
+    });
+
+    const byType = {};
+    const byStatus = {};
+    let avgConfidence = 0;
+
+    for (const c of correlations) {
+      byType[c.correlationType] = (byType[c.correlationType] || 0) + 1;
+      byStatus[c.status] = (byStatus[c.status] || 0) + 1;
+      avgConfidence += c.confidenceScore;
+    }
+
+    if (correlations.length > 0) {
+      avgConfidence = Math.round((avgConfidence / correlations.length) * 100) / 100;
+    }
+
+    res.json({
+      total: correlations.length,
+      byType,
+      byStatus,
+      avgConfidence,
+    });
+  } catch (err) {
+    console.error('[Correlations] Summary error:', err.message);
+    res.status(500).json({ error: 'Failed to fetch summary' });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// POST /api/correlations/:caseId/analyze — Run correlation analysis
+// ---------------------------------------------------------------------------
+
+router.post('/:caseId/analyze', async (req, res) => {
+  try {
+    const { caseId } = req.params;
+
+    const result = await runCorrelationAnalysis(caseId);
+
+    res.status(201).json({
+      message: `Analysis complete — ${result.count} correlations found`,
+      correlations: result.correlations,
+      count: result.count,
+    });
+  } catch (err) {
+    console.error('[Correlations] Analyze error:', err.message);
+    res.status(500).json({ error: 'Correlation analysis failed' });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// PATCH /api/correlations/:caseId/:correlationId — Update correlation status
+// ---------------------------------------------------------------------------
+
+router.patch('/:caseId/:correlationId', async (req, res) => {
+  try {
+    const { correlationId } = req.params;
+    const { status } = req.body;
+
+    if (!status || !['active', 'dismissed', 'confirmed'].includes(status)) {
+      return res.status(400).json({ error: 'Valid status required: active, dismissed, confirmed' });
+    }
+
+    const updated = await prisma.evidenceCorrelation.update({
+      where: { id: correlationId },
+      data: { status },
+    });
+
+    res.json(updated);
+  } catch (err) {
+    if (err.code === 'P2025') {
+      return res.status(404).json({ error: 'Correlation not found' });
+    }
+    console.error('[Correlations] Update error:', err.message);
+    res.status(500).json({ error: 'Failed to update correlation' });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// DELETE /api/correlations/:caseId/:correlationId — Delete a correlation
+// ---------------------------------------------------------------------------
+
+router.delete('/:caseId/:correlationId', async (req, res) => {
+  try {
+    const { correlationId } = req.params;
+
+    await prisma.evidenceCorrelation.delete({
+      where: { id: correlationId },
+    });
+
+    res.json({ deleted: true });
+  } catch (err) {
+    if (err.code === 'P2025') {
+      return res.status(404).json({ error: 'Correlation not found' });
+    }
+    console.error('[Correlations] Delete error:', err.message);
+    res.status(500).json({ error: 'Failed to delete correlation' });
+  }
+});
+
+export default router;

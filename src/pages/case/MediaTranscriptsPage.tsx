@@ -7,7 +7,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import { Mic, Search, FileText, Clock, ChevronDown, ChevronUp, RefreshCw, Download, Play, AlertCircle, Loader2, Info } from 'lucide-react';
+import { Mic, Search, FileText, Clock, ChevronDown, ChevronUp, RefreshCw, Loader2, Info } from 'lucide-react';
 import { Card } from '../../components/common/Card';
 import { apiFetch } from '../../services/apiClient';
 

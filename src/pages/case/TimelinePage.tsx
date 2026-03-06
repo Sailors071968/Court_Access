@@ -5,7 +5,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import { Clock, Filter, Plus, Trash2, Calendar, FileText, Mic, Video, Image, MapPin, ChevronDown, ChevronUp, RefreshCw } from 'lucide-react';
+import { Clock, Filter, Plus, Trash2, Calendar, FileText, Mic, Video, Image, ChevronDown, ChevronUp, RefreshCw } from 'lucide-react';
 import { Card } from '../../components/common/Card';
 import { apiFetch } from '../../services/apiClient';
 

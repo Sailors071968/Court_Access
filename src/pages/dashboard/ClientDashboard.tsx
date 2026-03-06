@@ -5,7 +5,7 @@
 // ============================================
 
 import { useNavigate } from 'react-router-dom';
-import { FileText, Calendar, Download, Clock, CheckCircle, User, Scale } from 'lucide-react';
+import { FileText, Calendar, Download, Clock, Scale } from 'lucide-react';
 import { Card, StatCard } from '../../components/common/Card';
 import { DemoModeBadge } from '../../components/common/DemoModeBadge';
 import { UpcomingHearingsWidget } from '../../components/common/UpcomingHearingsWidget';

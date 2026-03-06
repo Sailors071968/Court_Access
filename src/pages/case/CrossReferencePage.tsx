@@ -6,7 +6,7 @@
 
 import { useState } from 'react';
 import {
-  Link2, FileText, Search, AlertTriangle,
+  Link2, FileText, Search,
   Info, Filter, RefreshCw,
 } from 'lucide-react';
 

@@ -14,7 +14,6 @@
 import type {
   EvidenceSummary,
   MentionedEntity,
-  SummaryType,
   SummaryGenerationInput,
   SummaryGenerationResult,
 } from '../models/EvidenceSummaryModel';
@@ -55,7 +54,6 @@ export function extractMentionedEntities(text: string): MentionedEntity[] {
     'warrant', 'arraignment', 'bail', 'indictment', 'plea',
     'felony', 'misdemeanor', 'statute', 'jurisdiction',
   ];
-  const lowerText = text.toLowerCase();
   for (const term of legalTerms) {
     const regex = new RegExp(`\\b${term}\\b`, 'gi');
     const matches = text.match(regex);

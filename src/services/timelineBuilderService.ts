@@ -17,7 +17,6 @@ import type {
   TimelineBuilderResult,
   TimelineEventExtraction,
   TimelineEventCategory,
-  TimelineEventSource,
 } from '../models/CaseTimelineModel';
 import type { AudioTranscript } from '../models/AudioTranscriptModel';
 import type { VideoMetadata, VideoFrame } from '../models/VideoAnalysisModel';
@@ -77,7 +76,7 @@ export function buildTimelineEvents(
  */
 export function extractAudioTimelineEvents(
   transcript: AudioTranscript,
-  evidenceId: string
+  _evidenceId: string
 ): TimelineEventExtraction[] {
   const events: TimelineEventExtraction[] = [];
 
@@ -128,7 +127,7 @@ export function extractAudioTimelineEvents(
 export function extractVideoTimelineEvents(
   metadata: VideoMetadata,
   frames: VideoFrame[],
-  evidenceId: string
+  _evidenceId: string
 ): TimelineEventExtraction[] {
   const events: TimelineEventExtraction[] = [];
 
@@ -171,7 +170,7 @@ export function extractVideoTimelineEvents(
  */
 export function extractImageTimelineEvents(
   exifData: ImageExifData | null,
-  evidenceId: string
+  _evidenceId: string
 ): TimelineEventExtraction[] {
   const events: TimelineEventExtraction[] = [];
 

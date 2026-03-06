@@ -85,7 +85,7 @@ export interface RateLimitState {
 export function checkRateLimit(
   state: RateLimitState,
   domain: string,
-  currentTimestamp: string,
+  _currentTimestamp: string,
   config: CrawlerRateLimitConfig
 ): 'ALLOW' | 'BLOCKED' {
   // Check global requests per minute

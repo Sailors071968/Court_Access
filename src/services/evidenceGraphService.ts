@@ -19,8 +19,6 @@ import type {
   GraphRelationshipType,
   GraphBuilderInput,
   GraphBuilderResult,
-  ExtractedEntity,
-  ExtractedRelationship,
 } from '../models/EvidenceGraphModel';
 
 // ---------------------------------------------------------------------------

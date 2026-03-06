@@ -14,6 +14,7 @@ import {
   revokeRefreshToken,
   revokeAllUserRefreshTokens,
 } from '../middleware/auth.js';
+import { authLimiter } from '../middleware/rateLimiter.js';
 
 const router = Router();
 
@@ -21,7 +22,7 @@ const router = Router();
 // POST /api/auth/login — Authenticate user and return JWT
 // ---------------------------------------------------------------------------
 
-router.post('/login', async (req, res) => {
+router.post('/login', authLimiter, async (req, res) => {
   try {
     const { email, password } = req.body;
 
@@ -85,7 +86,7 @@ router.post('/login', async (req, res) => {
 // POST /api/auth/signup — Public signup (beta: requires invite code)
 // ---------------------------------------------------------------------------
 
-router.post('/signup', async (req, res) => {
+router.post('/signup', authLimiter, async (req, res) => {
   try {
     const { email, password, name, inviteCode } = req.body;
 
@@ -290,7 +291,7 @@ router.get('/me', authenticate, async (req, res) => {
 // POST /api/auth/demo-login — Quick demo access (dev/beta only)
 // ---------------------------------------------------------------------------
 
-router.post('/demo-login', async (req, res) => {
+router.post('/demo-login', authLimiter, async (req, res) => {
   // Only allow demo login in development/staging
   if (process.env.NODE_ENV === 'production') {
     return res.status(404).json({ error: 'Not found' });

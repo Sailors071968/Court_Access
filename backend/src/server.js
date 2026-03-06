@@ -310,7 +310,9 @@ app.use('/api/cross-reference', crossReferenceRoutes);
 // Routes — Phase 36: Auth + User Management
 // ---------------------------------------------------------------------------
 
-app.use('/api/auth', authLimiter, authRoutes);
+// authLimiter applied selectively inside auth routes (login, signup, demo-login only)
+// /me and /logout are exempt to avoid locking out legitimate users
+app.use('/api/auth', authRoutes);
 
 // ---------------------------------------------------------------------------
 // Routes — Phase 36: Case Management (tenant-isolated)

@@ -43,6 +43,11 @@ import { MonitoringPage } from './pages/admin/MonitoringPage';
 import { BetaManagementPage } from './pages/admin/BetaManagementPage';
 import { CollaborationPage } from './pages/case/CollaborationPage';
 import { HearingsPage } from './pages/case/HearingsPage';
+import { TimelinePage } from './pages/case/TimelinePage';
+import { EntitiesPage } from './pages/case/EntitiesPage';
+import { NarrativePage } from './pages/case/NarrativePage';
+import { IntegrityCertificatePage } from './pages/case/IntegrityCertificatePage';
+import { ArchiveStatusPage } from './pages/case/ArchiveStatusPage';
 import { CheckoutSuccessPage } from './pages/checkout/CheckoutSuccessPage';
 import { CheckoutCancelPage } from './pages/checkout/CheckoutCancelPage';
 import { BillingPage } from './pages/billing/BillingPage';
@@ -203,6 +208,46 @@ function App() {
               }
             />
             <Route path="hearings" element={<HearingsPage />} />
+            <Route
+              path="timeline"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <TimelinePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="entities"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <EntitiesPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="narrative"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <NarrativePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="integrity"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <IntegrityCertificatePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="archive"
+              element={
+                <ProtectedRoute requiredPermission="canManageCases">
+                  <ArchiveStatusPage />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="evidence-viewer"
               element={

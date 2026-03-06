@@ -81,3 +81,129 @@ model SmsRateLog {
 
   @@index([phone, sentAt])
 }
+
+// ---------------------------------------------------------------------------
+// Phase A — Evidence Timeline Events
+// ---------------------------------------------------------------------------
+
+model TimelineEvent {
+  id                String   @id @default(uuid())
+  caseId            String
+  timestamp         DateTime
+  sourceEvidenceId  String?
+  sourceType        String   // audio_transcript, video_transcript, document_date, image_exif, manual
+  eventType         String   @default("other")
+  eventDescription  String
+  confidenceScore   Float    @default(1.0)
+  metadata          Json     @default("{}")
+  createdAt         DateTime @default(now())
+
+  @@index([caseId])
+  @@index([caseId, timestamp])
+}
+
+// ---------------------------------------------------------------------------
+// Phase B — Entity Linking
+// ---------------------------------------------------------------------------
+
+model Entity {
+  id                      String   @id @default(uuid())
+  caseId                  String
+  entityType              String   // person, organization, location, phone_number, vehicle, date, email_address
+  entityValue             String
+  firstDetectedEvidenceId String?
+  createdAt               DateTime @default(now())
+
+  links EvidenceEntityLink[]
+
+  @@unique([caseId, entityType, entityValue])
+  @@index([caseId])
+  @@index([caseId, entityType])
+}
+
+model EvidenceEntityLink {
+  id                  String   @id @default(uuid())
+  entityId            String
+  evidenceId          String
+  detectionConfidence Float    @default(1.0)
+  contextSnippet      String   @default("")
+  createdAt           DateTime @default(now())
+
+  entity Entity @relation(fields: [entityId], references: [id], onDelete: Cascade)
+
+  @@unique([entityId, evidenceId])
+  @@index([entityId])
+  @@index([evidenceId])
+}
+
+// ---------------------------------------------------------------------------
+// Phase C — AI Case Narrative
+// ---------------------------------------------------------------------------
+
+model CaseNarrative {
+  id                 String   @id @default(uuid())
+  caseId             String
+  generatedTimestamp DateTime @default(now())
+  summaryText        String
+  keyEvents          Json     @default("[]")
+  conflictsDetected  Json     @default("[]")
+  participants       Json     @default("[]")
+  modelVersion       String   @default("gpt-4")
+  createdAt          DateTime @default(now())
+
+  @@index([caseId])
+  @@index([caseId, generatedTimestamp])
+}
+
+// ---------------------------------------------------------------------------
+// Phase D — Evidence Integrity Certificates
+// ---------------------------------------------------------------------------
+
+model EvidenceIntegrityReport {
+  id                 String   @id @default(uuid())
+  evidenceId         String
+  caseId             String
+  fileName           String   @default("")
+  sha256Hash         String
+  sha3Hash           String
+  uploadTimestamp    DateTime
+  verificationStatus String   @default("verified") // verified, failed, pending
+  chainOfCustody     Json     @default("[]")
+  createdAt          DateTime @default(now())
+
+  @@unique([evidenceId])
+  @@index([caseId])
+}
+
+// ---------------------------------------------------------------------------
+// Phase E — Cold Archive System
+// ---------------------------------------------------------------------------
+
+model ArchiveRecord {
+  id               String   @id @default(uuid())
+  caseId           String
+  archiveHash      String
+  archiveLocation  String
+  archiveTimestamp DateTime @default(now())
+  archiveManifest  Json     @default("{}")
+  status           String   @default("archived") // archived, restoring, restored, failed
+  fileCount        Int      @default(0)
+  totalSizeBytes   BigInt   @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@unique([caseId])
+  @@index([status])
+}
+
+model ArchiveAuditLog {
+  id        String   @id @default(uuid())
+  caseId    String
+  action    String   // archive_initiated, archive_completed, restore_initiated, restore_completed, hash_verified, hash_failed
+  actor     String   @default("system")
+  details   Json     @default("{}")
+  createdAt DateTime @default(now())
+
+  @@index([caseId])
+  @@index([caseId, createdAt])
+}

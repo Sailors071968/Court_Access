@@ -23,6 +23,11 @@ import { isClamAVAvailable } from './services/virusScanner.js';
 import { apiLimiter, webhookLimiter } from './middleware/rateLimiter.js';
 import { isSmsAvailable } from './services/smsNotification.js';
 import hearingsRoutes from './routes/hearings.js';
+import timelineRoutes from './routes/timeline.js';
+import entitiesRoutes from './routes/entities.js';
+import narrativeRoutes from './routes/narrative.js';
+import integrityRoutes from './routes/integrity.js';
+import archivesRoutes from './routes/archives.js';
 import { initScheduler, stopScheduler, getReminderStatus, runSchedulerPass } from './services/hearingScheduler.js';
 import Stripe from 'stripe';
 
@@ -223,6 +228,16 @@ app.use('/api/evidence', evidenceUploadRoutes);
 // ---------------------------------------------------------------------------
 
 app.use('/api/hearings', hearingsRoutes);
+
+// ---------------------------------------------------------------------------
+// Routes — Phase A-E: Intelligence Layer
+// ---------------------------------------------------------------------------
+
+app.use('/api/timeline', timelineRoutes);
+app.use('/api/entities', entitiesRoutes);
+app.use('/api/narrative', narrativeRoutes);
+app.use('/api/integrity', integrityRoutes);
+app.use('/api/archives', archivesRoutes);
 
 // ---------------------------------------------------------------------------
 // Routes — Admin Monitoring

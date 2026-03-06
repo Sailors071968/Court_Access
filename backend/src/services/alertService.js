@@ -207,20 +207,26 @@ export async function updateAlertRule(alertType, updates) {
  * Install global error handlers for crash detection.
  */
 export function installCrashHandlers() {
-  process.on('uncaughtException', async (err) => {
-    await fireAlert('server_crash', 'critical', `Uncaught exception: ${err.message}`, {
+  process.on('uncaughtException', (err) => {
+    // Log synchronously first — process may exit before async completes
+    console.error(`[ALERT CRITICAL] Uncaught exception: ${err.message}\n${err.stack}`);
+    // Fire-and-forget async DB write — may or may not complete before exit
+    fireAlert('server_crash', 'critical', `Uncaught exception: ${err.message}`, {
       stack: err.stack,
       name: err.name,
-    });
+    }).catch(() => {});
     // Let Node.js default handler continue (process exits)
   });
 
-  process.on('unhandledRejection', async (reason) => {
+  process.on('unhandledRejection', (reason) => {
     const message = reason instanceof Error ? reason.message : String(reason);
     const stack = reason instanceof Error ? reason.stack : undefined;
-    await fireAlert('server_crash', 'high', `Unhandled promise rejection: ${message}`, {
+    // Log synchronously first
+    console.error(`[ALERT HIGH] Unhandled rejection: ${message}\n${stack || ''}`);
+    // Fire-and-forget async DB write
+    fireAlert('server_crash', 'high', `Unhandled promise rejection: ${message}`, {
       stack,
-    });
+    }).catch(() => {});
   });
 
   console.log('[Alerts] Crash handlers installed');

@@ -10,6 +10,9 @@ import { downloadFile } from '../services/r2Storage.js';
 
 const router = express.Router();
 
+// Phase 60: Legal safeguard disclaimer for all AI-generated content
+const AI_DISCLAIMER = 'This analysis is automated and intended for investigative assistance only. It does not constitute legal advice, definitive conclusions, or expert opinion. All findings should be independently verified by qualified professionals before use in legal proceedings.';
+
 // ---------------------------------------------------------------------------
 // GET /api/transcripts/:caseId — List all transcripts for a case
 // ---------------------------------------------------------------------------
@@ -26,7 +29,7 @@ router.get('/:caseId', async (req, res) => {
       transcripts = await getCaseTranscripts(caseId);
     }
 
-    res.json({ transcripts, count: transcripts.length });
+    res.json({ transcripts, count: transcripts.length, disclaimer: AI_DISCLAIMER });
   } catch (err) {
     console.error('[Transcripts] List error:', err.message);
     res.status(500).json({ error: 'Failed to fetch transcripts' });
@@ -166,6 +169,7 @@ router.get('/:caseId/evidence/:evidenceId/legal-ledger', async (req, res) => {
       format: 'legal-ledger-8.5x11',
       pageSize: '8.5" x 11"',
       ledger,
+      disclaimer: AI_DISCLAIMER,
     });
   } catch (err) {
     console.error('[Transcripts] Legal ledger error:', err.message);

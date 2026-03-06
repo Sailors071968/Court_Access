@@ -6,7 +6,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import { Shield, Plus, FileText, AlertTriangle, CheckCircle, XCircle, RefreshCw, Loader2, Filter, Search, ChevronDown, ChevronUp } from 'lucide-react';
+import { Shield, Plus, FileText, AlertTriangle, CheckCircle, XCircle, RefreshCw, Loader2, Filter, Search, ChevronDown, ChevronUp, Info } from 'lucide-react';
 import { Card } from '../../components/common/Card';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
@@ -250,7 +250,10 @@ function FindingCard({
             </span>
           </div>
 
-          <p className="text-sm text-gray-900 leading-relaxed mb-2">
+          <p className="text-sm text-gray-900 leading-relaxed mb-1">
+            <span className="text-xs font-medium text-amber-700 bg-amber-50 px-1.5 py-0.5 rounded mr-1">Potential policy deviation detected</span>
+          </p>
+          <p className="text-sm text-gray-700 leading-relaxed mb-2">
             {finding.description}
           </p>
 
@@ -436,6 +439,14 @@ export function PolicyCompliancePage() {
           </Card>
         </div>
       )}
+
+      {/* Phase 60: AI Disclaimer */}
+      <div className="flex items-start gap-2 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+        <Info size={14} className="text-amber-600 mt-0.5 flex-shrink-0" />
+        <p className="text-xs text-amber-800 leading-relaxed">
+          This analysis is automated and intended for investigative assistance only. It does not constitute legal advice, definitive conclusions, or expert opinion. All findings should be independently verified by qualified professionals before use in legal proceedings.
+        </p>
+      </div>
 
       {/* Upload Form */}
       {showUploadForm && caseId && (

@@ -11,6 +11,9 @@ import { config } from '../config/index.js';
 
 const router = express.Router();
 
+// Phase 60: Legal safeguard disclaimer for all AI-generated content
+const AI_DISCLAIMER = 'This analysis is automated and intended for investigative assistance only. It does not constitute legal advice, definitive conclusions, or expert opinion. All findings should be independently verified by qualified professionals before use in legal proceedings.';
+
 // ---------------------------------------------------------------------------
 // GET /api/narrative/:caseId — Get latest narrative for a case
 // ---------------------------------------------------------------------------
@@ -28,7 +31,7 @@ router.get('/:caseId', async (req, res) => {
       return res.json({ narrative: null, message: 'No narrative generated yet' });
     }
 
-    res.json({ narrative });
+    res.json({ narrative, disclaimer: AI_DISCLAIMER });
   } catch (err) {
     console.error('[Narrative] Get error:', err.message);
     res.status(500).json({ error: 'Failed to fetch narrative' });
@@ -258,7 +261,7 @@ Generate a JSON response with:
       timestamp: new Date().toISOString(),
     }));
 
-    res.status(201).json({ narrative });
+    res.status(201).json({ narrative, disclaimer: AI_DISCLAIMER });
   } catch (err) {
     console.error('[Narrative] Generate error:', err.message);
     res.status(500).json({ error: 'Failed to generate narrative' });

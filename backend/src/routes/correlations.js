@@ -9,6 +9,9 @@ import { runCorrelationAnalysis } from '../services/correlationEngine.js';
 
 const router = express.Router();
 
+// Phase 60: Legal safeguard disclaimer for all AI-generated content
+const AI_DISCLAIMER = 'This analysis is automated and intended for investigative assistance only. It does not constitute legal advice, definitive conclusions, or expert opinion. All findings should be independently verified by qualified professionals before use in legal proceedings.';
+
 // ---------------------------------------------------------------------------
 // GET /api/correlations/:caseId — List all correlations for a case
 // ---------------------------------------------------------------------------
@@ -48,7 +51,7 @@ router.get('/:caseId', async (req, res) => {
       relatedEvidence: evidenceMap[c.relatedEvidenceId] || null,
     }));
 
-    res.json({ correlations: enriched, count: enriched.length });
+    res.json({ correlations: enriched, count: enriched.length, disclaimer: AI_DISCLAIMER });
   } catch (err) {
     console.error('[Correlations] List error:', err.message);
     res.status(500).json({ error: 'Failed to fetch correlations' });
@@ -86,6 +89,7 @@ router.get('/:caseId/summary', async (req, res) => {
       byType,
       byStatus,
       avgConfidence,
+      disclaimer: AI_DISCLAIMER,
     });
   } catch (err) {
     console.error('[Correlations] Summary error:', err.message);
@@ -104,9 +108,10 @@ router.post('/:caseId/analyze', async (req, res) => {
     const result = await runCorrelationAnalysis(caseId);
 
     res.status(201).json({
-      message: `Analysis complete — ${result.count} correlations found`,
+      message: `Analysis complete — ${result.count} possible correlations detected`,
       correlations: result.correlations,
       count: result.count,
+      disclaimer: AI_DISCLAIMER,
     });
   } catch (err) {
     console.error('[Correlations] Analyze error:', err.message);

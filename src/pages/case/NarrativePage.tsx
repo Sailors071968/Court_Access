@@ -5,7 +5,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
-import { BookOpen, RefreshCw, Clock, AlertTriangle, Users, Calendar, Loader2, History } from 'lucide-react';
+import { BookOpen, RefreshCw, Clock, AlertTriangle, Users, Calendar, Loader2, History, Info } from 'lucide-react';
 import { Card } from '../../components/common/Card';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
@@ -177,6 +177,14 @@ export function NarrativePage() {
         </Card>
       ) : (
         <div className="space-y-4">
+          {/* Phase 60: AI Disclaimer */}
+          <div className="flex items-start gap-2 p-3 bg-amber-50 border border-amber-200 rounded-lg">
+            <Info size={14} className="text-amber-600 mt-0.5 flex-shrink-0" />
+            <p className="text-xs text-amber-800 leading-relaxed">
+              This analysis is automated and intended for investigative assistance only. It does not constitute legal advice, definitive conclusions, or expert opinion. All findings should be independently verified by qualified professionals before use in legal proceedings.
+            </p>
+          </div>
+
           {/* Meta info */}
           <div className="flex items-center gap-4 text-xs text-gray-400">
             <span className="flex items-center gap-1">

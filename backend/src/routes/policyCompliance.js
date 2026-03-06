@@ -9,6 +9,9 @@ import { indexPolicyDocument, analyzeCompliance } from '../services/policyCompli
 
 const router = express.Router();
 
+// Phase 60: Legal safeguard disclaimer for all AI-generated content
+const AI_DISCLAIMER = 'This analysis is automated and intended for investigative assistance only. It does not constitute legal advice, definitive conclusions, or expert opinion. All findings should be independently verified by qualified professionals before use in legal proceedings.';
+
 // ---------------------------------------------------------------------------
 // GET /api/policy/:caseId/documents — List policy documents for a case
 // ---------------------------------------------------------------------------
@@ -147,7 +150,7 @@ router.get('/:caseId/findings', async (req, res) => {
       evidence: evidenceMap[f.evidenceId] || null,
     }));
 
-    res.json({ findings: enriched, count: enriched.length });
+    res.json({ findings: enriched, count: enriched.length, disclaimer: AI_DISCLAIMER });
   } catch (err) {
     console.error('[PolicyCompliance] List findings error:', err.message);
     res.status(500).json({ error: 'Failed to fetch compliance findings' });
@@ -185,6 +188,7 @@ router.get('/:caseId/findings/summary', async (req, res) => {
       bySeverity,
       byStatus,
       avgConfidence,
+      disclaimer: AI_DISCLAIMER,
     });
   } catch (err) {
     console.error('[PolicyCompliance] Summary error:', err.message);
@@ -204,9 +208,10 @@ router.post('/:caseId/analyze', async (req, res) => {
     const result = await analyzeCompliance(caseId, evidenceId);
 
     res.status(201).json({
-      message: `Analysis complete — ${result.count} findings`,
+      message: `Analysis complete — ${result.count} potential policy deviation(s) detected`,
       findings: result.findings,
       count: result.count,
+      disclaimer: AI_DISCLAIMER,
     });
   } catch (err) {
     console.error('[PolicyCompliance] Analyze error:', err.message);

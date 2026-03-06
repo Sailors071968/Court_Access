@@ -14,6 +14,7 @@ interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  sessionChecked: boolean;
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string, role: UserRole) => Promise<void>;
   logout: () => void;
@@ -26,6 +27,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   user: null,
   isAuthenticated: false,
   isLoading: false,
+  sessionChecked: false,
 
   login: async (email: string, password: string) => {
     set({ isLoading: true });
@@ -55,6 +57,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       },
       isAuthenticated: true,
       isLoading: false,
+      sessionChecked: true,
     });
   },
 
@@ -86,6 +89,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       },
       isAuthenticated: true,
       isLoading: false,
+      sessionChecked: true,
     });
   },
 
@@ -110,7 +114,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   // Restore session from stored JWT on app load
   restoreSession: async () => {
     const token = getToken();
-    if (!token) return;
+    if (!token) {
+      set({ sessionChecked: true });
+      return;
+    }
 
     try {
       const res = await apiFetch('/api/auth/me');
@@ -119,6 +126,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
         if (res.status === 401) {
           clearToken();
         }
+        set({ sessionChecked: true });
         return;
       }
 
@@ -131,10 +139,12 @@ export const useAuthStore = create<AuthState>((set, get) => ({
           role: data.user.role as UserRole,
         },
         isAuthenticated: true,
+        sessionChecked: true,
       });
     } catch {
       // Token invalid or expired — clear silently
       clearToken();
+      set({ sessionChecked: true });
     }
   },
 }));

@@ -2,9 +2,11 @@
 // Court Access — Main App Router
 // ============================================
 
+import { useEffect } from 'react';
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import { AppLayout } from './components/layout/AppLayout';
 import { ProtectedRoute } from './components/layout/ProtectedRoute';
+import { useAuthStore } from './stores/authStore';
 
 // Marketing Pages (separate from app)
 import { LandingPage } from './pages/marketing/LandingPage';
@@ -62,6 +64,13 @@ import { RecordsRequestPage } from './pages/case/RecordsRequestPage';
 import { CrossReferencePage } from './pages/case/CrossReferencePage';
 
 function App() {
+  const restoreSession = useAuthStore((s) => s.restoreSession);
+
+  // Restore JWT session eagerly on app mount (before ProtectedRoute checks auth)
+  useEffect(() => {
+    restoreSession();
+  }, [restoreSession]);
+
   return (
     <BrowserRouter>
       <Routes>

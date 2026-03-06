@@ -464,7 +464,9 @@ router.post('/templates/render', authenticate, async (req, res) => {
     let rendered = template.content;
     if (mergeData && typeof mergeData === 'object') {
       for (const [key, value] of Object.entries(mergeData)) {
-        rendered = rendered.replace(new RegExp(`\\{\\{${key}\\}\\}`, 'g'), String(value));
+        // Phase 94: Escape regex special chars to prevent ReDoS via user-controlled keys
+        const escapedKey = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        rendered = rendered.replace(new RegExp(`\\{\\{${escapedKey}\\}\\}`, 'g'), String(value));
       }
     }
 

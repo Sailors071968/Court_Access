@@ -6,17 +6,18 @@
 import express from 'express';
 import prisma from '../services/prismaClient.js';
 import { authenticate } from '../middleware/auth.js';
+import { verifyCaseOwnership } from '../middleware/tenantIsolation.js';
 
 const router = express.Router();
 
-// Phase 94: All entity routes require authentication
+// Phase 94: All entity routes require authentication + case ownership
 router.use(authenticate);
 
 // ---------------------------------------------------------------------------
 // GET /api/entities/:caseId — List all entities for a case
 // ---------------------------------------------------------------------------
 
-router.get('/:caseId', async (req, res) => {
+router.get('/:caseId', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
     const { entityType } = req.query;
@@ -43,7 +44,7 @@ router.get('/:caseId', async (req, res) => {
 // GET /api/entities/:caseId/:entityId — Get entity with all evidence links
 // ---------------------------------------------------------------------------
 
-router.get('/:caseId/:entityId', async (req, res) => {
+router.get('/:caseId/:entityId', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId, entityId } = req.params;
 
@@ -71,7 +72,7 @@ router.get('/:caseId/:entityId', async (req, res) => {
 // POST /api/entities/:caseId — Create or upsert an entity
 // ---------------------------------------------------------------------------
 
-router.post('/:caseId', async (req, res) => {
+router.post('/:caseId', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
     const { entityType, entityValue, firstDetectedEvidenceId } = req.body;
@@ -108,7 +109,7 @@ router.post('/:caseId', async (req, res) => {
 // POST /api/entities/:caseId/batch — Batch upsert entities with links
 // ---------------------------------------------------------------------------
 
-router.post('/:caseId/batch', async (req, res) => {
+router.post('/:caseId/batch', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
     const { entities } = req.body;
@@ -173,7 +174,7 @@ router.post('/:caseId/batch', async (req, res) => {
 // POST /api/entities/:caseId/:entityId/link — Link entity to evidence
 // ---------------------------------------------------------------------------
 
-router.post('/:caseId/:entityId/link', async (req, res) => {
+router.post('/:caseId/:entityId/link', verifyCaseOwnership, async (req, res) => {
   try {
     const { entityId } = req.params;
     const { evidenceId, detectionConfidence, contextSnippet } = req.body;
@@ -209,7 +210,7 @@ router.post('/:caseId/:entityId/link', async (req, res) => {
 // DELETE /api/entities/:caseId/:entityId — Delete entity and all links
 // ---------------------------------------------------------------------------
 
-router.delete('/:caseId/:entityId', async (req, res) => {
+router.delete('/:caseId/:entityId', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId, entityId } = req.params;
 

@@ -7,10 +7,11 @@ import express from 'express';
 import crypto from 'crypto';
 import prisma from '../services/prismaClient.js';
 import { authenticate } from '../middleware/auth.js';
+import { verifyCaseOwnership } from '../middleware/tenantIsolation.js';
 
 const router = express.Router();
 
-// Phase 94: All archive routes require authentication
+// Phase 94: All archive routes require authentication + case ownership
 router.use(authenticate);
 
 // ---------------------------------------------------------------------------
@@ -39,7 +40,7 @@ function stableStringify(obj) {
 // GET /api/archives/:caseId — Get archive status for a case
 // ---------------------------------------------------------------------------
 
-router.get('/:caseId', async (req, res) => {
+router.get('/:caseId', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
 
@@ -68,7 +69,7 @@ router.get('/:caseId', async (req, res) => {
 // POST /api/archives/:caseId/archive — Initiate archive for a case
 // ---------------------------------------------------------------------------
 
-router.post('/:caseId/archive', async (req, res) => {
+router.post('/:caseId/archive', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
     const { actor, reason } = req.body;
@@ -166,7 +167,7 @@ router.post('/:caseId/archive', async (req, res) => {
 // POST /api/archives/:caseId/restore — Restore from cold archive
 // ---------------------------------------------------------------------------
 
-router.post('/:caseId/restore', async (req, res) => {
+router.post('/:caseId/restore', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
     const { actor } = req.body;
@@ -257,7 +258,7 @@ router.post('/:caseId/restore', async (req, res) => {
 // GET /api/archives/:caseId/audit — Get audit log for a case
 // ---------------------------------------------------------------------------
 
-router.get('/:caseId/audit', async (req, res) => {
+router.get('/:caseId/audit', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
 

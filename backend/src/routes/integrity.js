@@ -6,17 +6,18 @@
 import express from 'express';
 import prisma from '../services/prismaClient.js';
 import { authenticate } from '../middleware/auth.js';
+import { verifyCaseOwnership } from '../middleware/tenantIsolation.js';
 
 const router = express.Router();
 
-// Phase 94: All integrity routes require authentication
+// Phase 94: All integrity routes require authentication + case ownership
 router.use(authenticate);
 
 // ---------------------------------------------------------------------------
 // GET /api/integrity/:caseId — List all integrity reports for a case
 // ---------------------------------------------------------------------------
 
-router.get('/:caseId', async (req, res) => {
+router.get('/:caseId', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
 
@@ -36,7 +37,7 @@ router.get('/:caseId', async (req, res) => {
 // GET /api/integrity/:caseId/:evidenceId — Get integrity certificate
 // ---------------------------------------------------------------------------
 
-router.get('/:caseId/:evidenceId', async (req, res) => {
+router.get('/:caseId/:evidenceId', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId, evidenceId } = req.params;
 
@@ -59,7 +60,7 @@ router.get('/:caseId/:evidenceId', async (req, res) => {
 // GET /api/integrity/:caseId/:evidenceId/export — Export as JSON certificate
 // ---------------------------------------------------------------------------
 
-router.get('/:caseId/:evidenceId/export', async (req, res) => {
+router.get('/:caseId/:evidenceId/export', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId, evidenceId } = req.params;
 
@@ -104,7 +105,7 @@ router.get('/:caseId/:evidenceId/export', async (req, res) => {
 // POST /api/integrity/:caseId — Create integrity report for evidence
 // ---------------------------------------------------------------------------
 
-router.post('/:caseId', async (req, res) => {
+router.post('/:caseId', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
     const {

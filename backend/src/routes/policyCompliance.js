@@ -7,10 +7,11 @@ import express from 'express';
 import prisma from '../services/prismaClient.js';
 import { indexPolicyDocument, analyzeCompliance } from '../services/policyComplianceAnalyzer.js';
 import { authenticate } from '../middleware/auth.js';
+import { verifyCaseOwnership } from '../middleware/tenantIsolation.js';
 
 const router = express.Router();
 
-// Phase 94: All policy compliance routes require authentication
+// Phase 94: All policy compliance routes require authentication + case ownership
 router.use(authenticate);
 
 // Phase 60: Legal safeguard disclaimer for all AI-generated content
@@ -20,7 +21,7 @@ const AI_DISCLAIMER = 'This analysis is automated and intended for investigative
 // GET /api/policy/:caseId/documents — List policy documents for a case
 // ---------------------------------------------------------------------------
 
-router.get('/:caseId/documents', async (req, res) => {
+router.get('/:caseId/documents', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
 
@@ -41,7 +42,7 @@ router.get('/:caseId/documents', async (req, res) => {
 // GET /api/policy/:caseId/documents/:docId — Get a specific policy document
 // ---------------------------------------------------------------------------
 
-router.get('/:caseId/documents/:docId', async (req, res) => {
+router.get('/:caseId/documents/:docId', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId, docId } = req.params;
 
@@ -65,7 +66,7 @@ router.get('/:caseId/documents/:docId', async (req, res) => {
 // POST /api/policy/:caseId/documents — Upload a policy document
 // ---------------------------------------------------------------------------
 
-router.post('/:caseId/documents', async (req, res) => {
+router.post('/:caseId/documents', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
     const { title, documentType, content } = req.body;
@@ -98,7 +99,7 @@ router.post('/:caseId/documents', async (req, res) => {
 // DELETE /api/policy/:caseId/documents/:docId — Archive a policy document
 // ---------------------------------------------------------------------------
 
-router.delete('/:caseId/documents/:docId', async (req, res) => {
+router.delete('/:caseId/documents/:docId', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId, docId } = req.params;
 
@@ -122,7 +123,7 @@ router.delete('/:caseId/documents/:docId', async (req, res) => {
 // GET /api/policy/:caseId/findings — List compliance findings for a case
 // ---------------------------------------------------------------------------
 
-router.get('/:caseId/findings', async (req, res) => {
+router.get('/:caseId/findings', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
     const { severity, status, evidenceId } = req.query;
@@ -166,7 +167,7 @@ router.get('/:caseId/findings', async (req, res) => {
 // GET /api/policy/:caseId/findings/summary — Summary of compliance findings
 // ---------------------------------------------------------------------------
 
-router.get('/:caseId/findings/summary', async (req, res) => {
+router.get('/:caseId/findings/summary', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
 
@@ -205,7 +206,7 @@ router.get('/:caseId/findings/summary', async (req, res) => {
 // POST /api/policy/:caseId/analyze — Run compliance analysis
 // ---------------------------------------------------------------------------
 
-router.post('/:caseId/analyze', async (req, res) => {
+router.post('/:caseId/analyze', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
     const { evidenceId } = req.body;
@@ -228,7 +229,7 @@ router.post('/:caseId/analyze', async (req, res) => {
 // PATCH /api/policy/:caseId/findings/:findingId — Update finding status
 // ---------------------------------------------------------------------------
 
-router.patch('/:caseId/findings/:findingId', async (req, res) => {
+router.patch('/:caseId/findings/:findingId', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId, findingId } = req.params;
     const { status } = req.body;

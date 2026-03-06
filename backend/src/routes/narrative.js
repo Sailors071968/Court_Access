@@ -9,10 +9,11 @@ import express from 'express';
 import prisma from '../services/prismaClient.js';
 import { config } from '../config/index.js';
 import { authenticate } from '../middleware/auth.js';
+import { verifyCaseOwnership } from '../middleware/tenantIsolation.js';
 
 const router = express.Router();
 
-// Phase 94: All narrative routes require authentication
+// Phase 94: All narrative routes require authentication + case ownership
 router.use(authenticate);
 
 // Phase 60: Legal safeguard disclaimer for all AI-generated content
@@ -22,7 +23,7 @@ const AI_DISCLAIMER = 'This analysis is automated and intended for investigative
 // GET /api/narrative/:caseId — Get latest narrative for a case
 // ---------------------------------------------------------------------------
 
-router.get('/:caseId', async (req, res) => {
+router.get('/:caseId', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
 
@@ -46,7 +47,7 @@ router.get('/:caseId', async (req, res) => {
 // GET /api/narrative/:caseId/history — Get all narratives for a case
 // ---------------------------------------------------------------------------
 
-router.get('/:caseId/history', async (req, res) => {
+router.get('/:caseId/history', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
 
@@ -67,7 +68,7 @@ router.get('/:caseId/history', async (req, res) => {
 // POST /api/narrative/:caseId/generate — Generate a new narrative
 // ---------------------------------------------------------------------------
 
-router.post('/:caseId/generate', async (req, res) => {
+router.post('/:caseId/generate', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
 

@@ -8,10 +8,11 @@ import prisma from '../services/prismaClient.js';
 import { transcribeMedia, getTranscripts, getCaseTranscripts, searchTranscripts, getTranscriptStatus } from '../services/transcriptionService.js';
 import { downloadFile } from '../services/r2Storage.js';
 import { authenticate } from '../middleware/auth.js';
+import { verifyCaseOwnership } from '../middleware/tenantIsolation.js';
 
 const router = express.Router();
 
-// Phase 94: All transcript routes require authentication
+// Phase 94: All transcript routes require authentication + case ownership
 router.use(authenticate);
 
 // Phase 60: Legal safeguard disclaimer for all AI-generated content
@@ -21,7 +22,7 @@ const AI_DISCLAIMER = 'This analysis is automated and intended for investigative
 // GET /api/transcripts/:caseId — List all transcripts for a case
 // ---------------------------------------------------------------------------
 
-router.get('/:caseId', async (req, res) => {
+router.get('/:caseId', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
     const { search } = req.query;
@@ -44,7 +45,7 @@ router.get('/:caseId', async (req, res) => {
 // GET /api/transcripts/:caseId/evidence/:evidenceId — Get transcript for specific evidence
 // ---------------------------------------------------------------------------
 
-router.get('/:caseId/evidence/:evidenceId', async (req, res) => {
+router.get('/:caseId/evidence/:evidenceId', verifyCaseOwnership, async (req, res) => {
   try {
     const { evidenceId } = req.params;
     const transcripts = await getTranscripts(evidenceId);
@@ -67,7 +68,7 @@ router.get('/:caseId/evidence/:evidenceId', async (req, res) => {
 // GET /api/transcripts/:caseId/evidence/:evidenceId/status — Check transcription status
 // ---------------------------------------------------------------------------
 
-router.get('/:caseId/evidence/:evidenceId/status', async (req, res) => {
+router.get('/:caseId/evidence/:evidenceId/status', verifyCaseOwnership, async (req, res) => {
   try {
     const { evidenceId } = req.params;
     const status = await getTranscriptStatus(evidenceId);
@@ -82,7 +83,7 @@ router.get('/:caseId/evidence/:evidenceId/status', async (req, res) => {
 // POST /api/transcripts/:caseId/evidence/:evidenceId/transcribe — Trigger transcription
 // ---------------------------------------------------------------------------
 
-router.post('/:caseId/evidence/:evidenceId/transcribe', async (req, res) => {
+router.post('/:caseId/evidence/:evidenceId/transcribe', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId, evidenceId } = req.params;
 
@@ -133,7 +134,7 @@ router.post('/:caseId/evidence/:evidenceId/transcribe', async (req, res) => {
 // GET /api/transcripts/:caseId/evidence/:evidenceId/legal-ledger — Export as legal format
 // ---------------------------------------------------------------------------
 
-router.get('/:caseId/evidence/:evidenceId/legal-ledger', async (req, res) => {
+router.get('/:caseId/evidence/:evidenceId/legal-ledger', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId, evidenceId } = req.params;
 
@@ -185,7 +186,7 @@ router.get('/:caseId/evidence/:evidenceId/legal-ledger', async (req, res) => {
 // DELETE /api/transcripts/:caseId/evidence/:evidenceId — Delete all transcripts for evidence
 // ---------------------------------------------------------------------------
 
-router.delete('/:caseId/evidence/:evidenceId', async (req, res) => {
+router.delete('/:caseId/evidence/:evidenceId', verifyCaseOwnership, async (req, res) => {
   try {
     const { evidenceId } = req.params;
 

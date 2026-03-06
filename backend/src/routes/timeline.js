@@ -6,17 +6,18 @@
 import express from 'express';
 import prisma from '../services/prismaClient.js';
 import { authenticate } from '../middleware/auth.js';
+import { verifyCaseOwnership } from '../middleware/tenantIsolation.js';
 
 const router = express.Router();
 
-// Phase 94: All timeline routes require authentication
+// Phase 94: All timeline routes require authentication + case ownership
 router.use(authenticate);
 
 // ---------------------------------------------------------------------------
 // GET /api/timeline/:caseId — List timeline events for a case
 // ---------------------------------------------------------------------------
 
-router.get('/:caseId', async (req, res) => {
+router.get('/:caseId', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
     const { sourceType, startDate, endDate, eventType } = req.query;
@@ -48,7 +49,7 @@ router.get('/:caseId', async (req, res) => {
 // POST /api/timeline/:caseId — Create a timeline event
 // ---------------------------------------------------------------------------
 
-router.post('/:caseId', async (req, res) => {
+router.post('/:caseId', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
     const {
@@ -89,7 +90,7 @@ router.post('/:caseId', async (req, res) => {
 // POST /api/timeline/:caseId/batch — Batch create timeline events
 // ---------------------------------------------------------------------------
 
-router.post('/:caseId/batch', async (req, res) => {
+router.post('/:caseId/batch', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
     const { events } = req.body;
@@ -122,7 +123,7 @@ router.post('/:caseId/batch', async (req, res) => {
 // DELETE /api/timeline/:caseId/:eventId — Delete a timeline event
 // ---------------------------------------------------------------------------
 
-router.delete('/:caseId/:eventId', async (req, res) => {
+router.delete('/:caseId/:eventId', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId, eventId } = req.params;
 

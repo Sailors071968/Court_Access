@@ -7,6 +7,7 @@
 import express from 'express';
 import prisma from '../services/prismaClient.js';
 import { authenticate } from '../middleware/auth.js';
+import { verifyCaseOwnership } from '../middleware/tenantIsolation.js';
 
 const router = express.Router();
 
@@ -80,7 +81,7 @@ router.get('/upcoming', async (req, res) => {
 // GET /api/hearings/:caseId — List all hearings for a case
 // ---------------------------------------------------------------------------
 
-router.get('/:caseId', async (req, res) => {
+router.get('/:caseId', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
     const hearings = await prisma.hearing.findMany({
@@ -98,7 +99,7 @@ router.get('/:caseId', async (req, res) => {
 // POST /api/hearings/:caseId — Create a new hearing for a case
 // ---------------------------------------------------------------------------
 
-router.post('/:caseId', async (req, res) => {
+router.post('/:caseId', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
 
@@ -154,7 +155,7 @@ router.post('/:caseId', async (req, res) => {
 // PUT /api/hearings/:caseId/:hearingId — Update a hearing
 // ---------------------------------------------------------------------------
 
-router.put('/:caseId/:hearingId', async (req, res) => {
+router.put('/:caseId/:hearingId', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId, hearingId } = req.params;
     const existing = await prisma.hearing.findUnique({ where: { id: hearingId } });
@@ -234,7 +235,7 @@ router.put('/:caseId/:hearingId', async (req, res) => {
 // DELETE /api/hearings/:caseId/:hearingId — Remove a hearing
 // ---------------------------------------------------------------------------
 
-router.delete('/:caseId/:hearingId', async (req, res) => {
+router.delete('/:caseId/:hearingId', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId, hearingId } = req.params;
     const existing = await prisma.hearing.findUnique({ where: { id: hearingId } });
@@ -264,7 +265,7 @@ router.delete('/:caseId/:hearingId', async (req, res) => {
 // GET /api/hearings/:caseId/:hearingId/reminders — Get reminder logs
 // ---------------------------------------------------------------------------
 
-router.get('/:caseId/:hearingId/reminders', async (req, res) => {
+router.get('/:caseId/:hearingId/reminders', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId, hearingId } = req.params;
     const existing = await prisma.hearing.findUnique({ where: { id: hearingId } });

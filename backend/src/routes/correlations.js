@@ -7,10 +7,11 @@ import express from 'express';
 import prisma from '../services/prismaClient.js';
 import { runCorrelationAnalysis } from '../services/correlationEngine.js';
 import { authenticate } from '../middleware/auth.js';
+import { verifyCaseOwnership } from '../middleware/tenantIsolation.js';
 
 const router = express.Router();
 
-// Phase 94: All correlation routes require authentication
+// Phase 94: All correlation routes require authentication + case ownership
 router.use(authenticate);
 
 // Phase 60: Legal safeguard disclaimer for all AI-generated content
@@ -20,7 +21,7 @@ const AI_DISCLAIMER = 'This analysis is automated and intended for investigative
 // GET /api/correlations/:caseId — List all correlations for a case
 // ---------------------------------------------------------------------------
 
-router.get('/:caseId', async (req, res) => {
+router.get('/:caseId', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
     const { type, status, minConfidence } = req.query;
@@ -66,7 +67,7 @@ router.get('/:caseId', async (req, res) => {
 // GET /api/correlations/:caseId/summary — Get correlation summary/stats
 // ---------------------------------------------------------------------------
 
-router.get('/:caseId/summary', async (req, res) => {
+router.get('/:caseId/summary', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
 
@@ -105,7 +106,7 @@ router.get('/:caseId/summary', async (req, res) => {
 // POST /api/correlations/:caseId/analyze — Run correlation analysis
 // ---------------------------------------------------------------------------
 
-router.post('/:caseId/analyze', async (req, res) => {
+router.post('/:caseId/analyze', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
 
@@ -127,7 +128,7 @@ router.post('/:caseId/analyze', async (req, res) => {
 // PATCH /api/correlations/:caseId/:correlationId — Update correlation status
 // ---------------------------------------------------------------------------
 
-router.patch('/:caseId/:correlationId', async (req, res) => {
+router.patch('/:caseId/:correlationId', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId, correlationId } = req.params;
     const { status } = req.body;
@@ -156,7 +157,7 @@ router.patch('/:caseId/:correlationId', async (req, res) => {
 // DELETE /api/correlations/:caseId/:correlationId — Delete a correlation
 // ---------------------------------------------------------------------------
 
-router.delete('/:caseId/:correlationId', async (req, res) => {
+router.delete('/:caseId/:correlationId', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId, correlationId } = req.params;
 

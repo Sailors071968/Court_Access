@@ -17,6 +17,7 @@ import { captureException, captureMessage } from '../services/errorMonitoring.js
 import { notifyNewSubscription, notifyPaymentReceived, notifyPaymentFailed, notifySubscriptionCancelled } from '../services/smsNotification.js';
 import prisma from '../services/prismaClient.js';
 import { logPaymentError } from '../services/systemLogger.js';
+import { authenticate, requireRole } from '../middleware/auth.js';
 
 let stripe = null;
 
@@ -89,7 +90,7 @@ export function registerWebhookRoutes(app) {
   );
 
   // Admin endpoint to check subscription status
-  app.get('/api/stripe/subscription/:customerId', async (req, res) => {
+  app.get('/api/stripe/subscription/:customerId', authenticate, requireRole('admin'), async (req, res) => {
     const { customerId } = req.params;
 
     if (!customerId || typeof customerId !== 'string') {
@@ -346,6 +347,26 @@ async function handleSubscriptionDeleted(subscription, eventId) {
 }
 
 /**
+ * Map Stripe subscription status to our internal status values.
+ * Stripe uses 'canceled' (American), we use 'cancelled' (British).
+ * Also normalizes edge-case statuses to our known set.
+ */
+function mapStripeStatus(stripeStatus) {
+  const STATUS_MAP = {
+    active: 'active',
+    past_due: 'past_due',
+    canceled: 'cancelled',
+    cancelled: 'cancelled',
+    unpaid: 'past_due',
+    incomplete: 'incomplete',
+    incomplete_expired: 'cancelled',
+    trialing: 'trialing',
+    paused: 'paused',
+  };
+  return STATUS_MAP[stripeStatus] || stripeStatus;
+}
+
+/**
  * Handle customer.subscription.updated
  * Fired when subscription is changed (upgrade, downgrade, etc.)
  */
@@ -366,7 +387,7 @@ async function handleSubscriptionUpdated(subscription, eventId) {
   try {
     await prisma.user.updateMany({
       where: { stripeCustomerId: customerId },
-      data: { subscriptionStatus: status },
+      data: { subscriptionStatus: mapStripeStatus(status) },
     });
   } catch (dbErr) {
     logPaymentError('customer.subscription.updated', dbErr, { customerId }).catch(() => {});

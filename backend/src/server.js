@@ -24,7 +24,7 @@ import evidenceUploadRoutes from './routes/evidenceUpload.js';
 import { startProcessingWorker, stopProcessingWorker, getQueueStats } from './workers/evidenceProcessor.js';
 import { getRedisConnection, closeRedisConnection, isRedisAvailable } from './services/redisClient.js';
 import { isClamAVAvailable } from './services/virusScanner.js';
-import { apiLimiter, webhookLimiter } from './middleware/rateLimiter.js';
+import { apiLimiter, webhookLimiter, authLimiter } from './middleware/rateLimiter.js';
 import { isSmsAvailable } from './services/smsNotification.js';
 import hearingsRoutes from './routes/hearings.js';
 import timelineRoutes from './routes/timeline.js';
@@ -304,7 +304,7 @@ app.use('/api/cross-reference', crossReferenceRoutes);
 // Routes — Phase 36: Auth + User Management
 // ---------------------------------------------------------------------------
 
-app.use('/api/auth', authRoutes);
+app.use('/api/auth', authLimiter, authRoutes);
 
 // ---------------------------------------------------------------------------
 // Routes — Phase 36: Case Management (tenant-isolated)

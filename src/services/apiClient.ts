@@ -129,6 +129,10 @@ async function attemptTokenRefresh(): Promise<boolean> {
 
       const data = await res.json();
       setToken(data.token);
+      // Store rotated refresh token if provided
+      if (data.refreshToken) {
+        setRefreshToken(data.refreshToken);
+      }
       return true;
     } catch {
       return false;

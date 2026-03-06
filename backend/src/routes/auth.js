@@ -202,10 +202,14 @@ router.post('/refresh', async (req, res) => {
       return res.status(401).json({ error: 'User account unavailable' });
     }
 
+    // Rotate refresh token: revoke old, issue new
+    await revokeRefreshToken(refreshToken);
+    const newRefreshToken = await generateRefreshToken(user.id);
     const newAccessToken = generateToken(user);
 
     res.json({
       token: newAccessToken,
+      refreshToken: newRefreshToken,
       user: {
         id: user.id,
         email: user.email,

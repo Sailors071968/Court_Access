@@ -635,6 +635,7 @@ model EvidenceReference {
   extractionMethod  String   @default("deterministic") // deterministic only, no probabilistic
   createdAt         DateTime @default(now())
 
+  @@unique([caseId, tenantId, sourceDocumentId, referenceType, referenceValue])
   @@index([caseId])
   @@index([tenantId])
   @@index([referenceType])

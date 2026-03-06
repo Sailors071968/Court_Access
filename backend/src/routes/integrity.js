@@ -117,6 +117,17 @@ router.post('/:caseId', async (req, res) => {
       return res.status(400).json({ error: 'evidenceId, sha256Hash, and sha3Hash are required' });
     }
 
+    // Verify caseId ownership: if report already exists for this evidenceId,
+    // it must belong to the same case to prevent cross-case data corruption
+    const existing = await prisma.evidenceIntegrityReport.findUnique({
+      where: { evidenceId },
+    });
+    if (existing && existing.caseId !== caseId) {
+      return res.status(409).json({
+        error: 'Evidence integrity report already exists under a different case',
+      });
+    }
+
     const report = await prisma.evidenceIntegrityReport.upsert({
       where: { evidenceId },
       update: {

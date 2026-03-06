@@ -471,3 +471,195 @@ model PolicyComplianceFinding {
   @@index([policyDocumentId])
   @@index([caseId, severity])
 }
+
+// ---------------------------------------------------------------------------
+// Phase 63 — Verified Email Registry (SES Sandbox)
+// ---------------------------------------------------------------------------
+
+model VerifiedEmail {
+  id                  String   @id @default(uuid())
+  emailAddress        String   @unique
+  verificationStatus  String   @default("pending") // pending, verified, failed
+  verificationToken   String   @unique @default(uuid())
+  verifiedAt          DateTime?
+  createdAt           DateTime @default(now())
+
+  @@index([emailAddress])
+  @@index([verificationStatus])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 65 — Email Job Queue
+// ---------------------------------------------------------------------------
+
+model EmailJob {
+  id            String   @id @default(uuid())
+  emailType     String   // transactional, notification, invite, processing_alert
+  recipient     String
+  payload       Json     @default("{}")
+  status        String   @default("pending") // pending, queued, sent, failed, blocked
+  attemptCount  Int      @default(0)
+  lastError     String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([status])
+  @@index([emailType])
+  @@index([recipient])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 67 — Email Log
+// ---------------------------------------------------------------------------
+
+model EmailLog {
+  id              String   @id @default(uuid())
+  recipient       String
+  emailType       String
+  subject         String   @default("")
+  deliveryStatus  String   @default("pending") // pending, sent, delivered, bounced, failed
+  errorMessage    String?
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  @@index([recipient])
+  @@index([emailType])
+  @@index([deliveryStatus])
+  @@index([createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 70 — Law Enforcement Agency Intelligence Database
+// ---------------------------------------------------------------------------
+
+model LawEnforcementAgency {
+  id                    String   @id @default(uuid())
+  tenantId              String   // Phase 3 tenant isolation
+  agencyName            String
+  agencyType            String   // state_police, county_sheriff, city_police, regional_task_force, transit_police, university_police, other
+  state                 String
+  county                String   @default("")
+  city                  String   @default("")
+  address               String   @default("")
+  phoneMain             String   @default("")
+  phoneRecordsDivision  String   @default("")
+  emailRecordsDivision  String   @default("")
+  website               String   @default("")
+  recordsRequestUrl     String   @default("")
+  dataSource            String   @default("") // URL or source identifier
+  verificationStatus    String   @default("pending") // pending, approved, rejected, needs_review
+  lastVerifiedAt        DateTime?
+  discoveredAt          DateTime @default(now())
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  recordsRequests       PublicRecordsRequest[]
+
+  @@unique([tenantId, agencyName, state])
+  @@index([tenantId])
+  @@index([state])
+  @@index([agencyType])
+  @@index([verificationStatus])
+  @@index([tenantId, state])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 76 — Public Records Request Tracking
+// ---------------------------------------------------------------------------
+
+model PublicRecordsRequest {
+  id                    String   @id @default(uuid())
+  agencyId              String
+  tenantId              String   // Phase 3 tenant isolation
+  caseId                String?  // Optional link to case
+  requestType           String   // public_records, body_camera, dispatch_logs, policy_manual, incident_report
+  submissionDate        DateTime @default(now())
+  deliveryMethod        String   @default("email") // email, mail, portal, fax
+  status                String   @default("submitted") // submitted, acknowledged, fulfilled, partial_response, denied, no_response
+  responseReceivedDate  DateTime?
+  responseHash          String?  // SHA-256 of response document
+  requestDocumentHash   String?  // SHA-256 of outgoing request
+  requestContent        String   @default("") // The actual request text
+  templateId            String?  // Reference to template used
+  staffApproved         Boolean  @default(false)
+  staffApprovedBy       String?
+  staffApprovedAt       DateTime?
+  notes                 String   @default("")
+  metadata              Json     @default("{}")
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  agency                LawEnforcementAgency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([agencyId])
+  @@index([caseId])
+  @@index([status])
+  @@index([tenantId, status])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 80 — Records Request Templates
+// ---------------------------------------------------------------------------
+
+model RecordsRequestTemplate {
+  id            String   @id @default(uuid())
+  tenantId      String
+  templateName  String   // public_records, body_camera, dispatch_logs, policy_manual, incident_report
+  displayName   String
+  content       String   // Template text with merge fields: {{agency_name}}, {{records_email}}, etc.
+  mergeFields   Json     @default("[]") // Available merge fields
+  isDefault     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([tenantId, templateName])
+  @@index([tenantId])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 82 — Evidence Reference Entities (extracted from agency responses)
+// ---------------------------------------------------------------------------
+
+model EvidenceReference {
+  id                String   @id @default(uuid())
+  caseId            String
+  tenantId          String
+  sourceDocumentId  String   // Evidence record ID or records request response
+  referenceType     String   // incident_number, officer_name, date, case_number, badge_number
+  referenceValue    String
+  sourceContext     String   @default("") // Surrounding text snippet
+  extractionMethod  String   @default("deterministic") // deterministic only, no probabilistic
+  createdAt         DateTime @default(now())
+
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([referenceType])
+  @@index([caseId, referenceType])
+  @@index([referenceValue])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 83 — Document Cross-Reference Results
+// ---------------------------------------------------------------------------
+
+model DocumentCrossReference {
+  id                  String   @id @default(uuid())
+  caseId              String
+  tenantId            String
+  sourceDocumentId    String
+  relatedDocumentId   String
+  referenceType       String   // reference_match, reference_conflict, missing_reference
+  sourceReferenceId   String?  // Links to EvidenceReference
+  relatedReferenceId  String?  // Links to EvidenceReference
+  description         String
+  sourceSnippet       String   @default("")
+  relatedSnippet      String   @default("")
+  status              String   @default("active") // active, dismissed, confirmed
+  createdAt           DateTime @default(now())
+
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([referenceType])
+  @@index([caseId, referenceType])
+}

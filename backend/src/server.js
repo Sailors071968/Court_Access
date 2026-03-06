@@ -35,6 +35,10 @@ import archivesRoutes from './routes/archives.js';
 import transcriptsRoutes from './routes/transcripts.js';
 import correlationsRoutes from './routes/correlations.js';
 import policyComplianceRoutes from './routes/policyCompliance.js';
+import emailRoutes from './routes/email.js';
+import agenciesRoutes from './routes/agencies.js';
+import recordsRequestsRoutes from './routes/recordsRequests.js';
+import crossReferenceRoutes from './routes/crossReference.js';
 import { initScheduler, stopScheduler, getReminderStatus, runSchedulerPass } from './services/hearingScheduler.js';
 import Stripe from 'stripe';
 
@@ -265,6 +269,30 @@ app.use('/api/correlations', correlationsRoutes);
 app.use('/api/policy', policyComplianceRoutes);
 
 // ---------------------------------------------------------------------------
+// Routes — Phases 63-69: Email System (SES Sandbox)
+// ---------------------------------------------------------------------------
+
+app.use('/api/email', emailRoutes);
+
+// ---------------------------------------------------------------------------
+// Routes — Phases 70-75: Law Enforcement Agency Intelligence
+// ---------------------------------------------------------------------------
+
+app.use('/api/agencies', agenciesRoutes);
+
+// ---------------------------------------------------------------------------
+// Routes — Phases 76-81: Public Records Request System
+// ---------------------------------------------------------------------------
+
+app.use('/api/records-requests', recordsRequestsRoutes);
+
+// ---------------------------------------------------------------------------
+// Routes — Phases 82-83: Evidence Cross-Reference Engine
+// ---------------------------------------------------------------------------
+
+app.use('/api/cross-reference', crossReferenceRoutes);
+
+// ---------------------------------------------------------------------------
 // Routes — Phase 36: Auth + User Management
 // ---------------------------------------------------------------------------
 
@@ -397,9 +425,13 @@ const server = app.listen(PORT, () => {
   console.log(`  - Redis: ${config.redisUrl}`);
   console.log(`  - Sentry: ${config.sentryDsn ? 'configured' : 'MISSING'}`);
   console.log(`  - Twilio SMS: ${config.twilioAccountSid ? 'configured' : 'MISSING'}`);
+  console.log(`  - SES Email: ${config.sesAccessKeyId ? 'configured' : 'MISSING'} (sandbox: ${config.emailSandboxMode})`);
   console.log(`  - Auth: JWT (${config.jwtSecret ? 'configured' : 'MISSING'})`);
   console.log(`  - Database: ${config.databaseUrl ? 'configured' : 'MISSING'}`);
+  console.log(`  - Email Sandbox: ${config.emailSandboxMode ? 'ON' : 'OFF'}`);
   console.log(`  - Hearing Scheduler: running (hourly)`);
+  console.log(`  - Agency Intelligence: active`);
+  console.log(`  - Records Request System: active`);
   console.log('');
 });
 

@@ -41,6 +41,13 @@ export const config = {
   twilioPhoneNumber: process.env.TWILIO_PHONE_NUMBER || '',
   adminAlertPhone: process.env.ADMIN_ALERT_PHONE || '',
 
+  // SES Email
+  sesRegion: process.env.SES_REGION || '',
+  sesAccessKeyId: process.env.SES_ACCESS_KEY_ID || '',
+  sesSecretAccessKey: process.env.SES_SECRET_ACCESS_KEY || '',
+  emailSandboxMode: process.env.EMAIL_SANDBOX_MODE !== 'false',
+  staffAlertEmail: process.env.STAFF_ALERT_EMAIL || '',
+
   // ClamAV
   clamavHost: process.env.CLAMAV_HOST || 'localhost',
   clamavPort: parseInt(process.env.CLAMAV_PORT || '3310', 10),
@@ -78,4 +85,5 @@ export const features = {
   get sentry() { return !!config.sentryDsn; },
   get twilio() { return !!config.twilioAccountSid && !!config.twilioAuthToken && !!config.twilioPhoneNumber; },
   get clamav() { return !!process.env.CLAMAV_HOST; },
+  get ses() { return !!config.sesAccessKeyId && !!config.sesSecretAccessKey; },
 };

@@ -56,6 +56,10 @@ import { CheckoutCancelPage } from './pages/checkout/CheckoutCancelPage';
 import { BillingPage } from './pages/billing/BillingPage';
 import { EvidenceViewerPage } from './pages/case/EvidenceViewerPage';
 import { AdminControlsPage } from './pages/admin/AdminControlsPage';
+import { AgencyIntelligencePage } from './pages/admin/AgencyIntelligencePage';
+import { EmailAdminPage } from './pages/admin/EmailAdminPage';
+import { RecordsRequestPage } from './pages/case/RecordsRequestPage';
+import { CrossReferencePage } from './pages/case/CrossReferencePage';
 
 function App() {
   return (
@@ -133,6 +137,22 @@ function App() {
             }
           />
           <Route path="billing" element={<BillingPage />} />
+          <Route
+            path="admin/agencies"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <AgencyIntelligencePage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/email"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <EmailAdminPage />
+              </ProtectedRoute>
+            }
+          />
 
           {/* Case Routes — deterministic tab structure */}
           <Route path="cases/:caseId" element={<CaseLayout />}>
@@ -280,6 +300,22 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canViewEvidence">
                   <CorrelationsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="records-requests"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <RecordsRequestPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="cross-references"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <CrossReferencePage />
                 </ProtectedRoute>
               }
             />

@@ -21,6 +21,7 @@ import { uploadFile, getSignedDownloadUrl, getSignedUploadUrl, deleteFile, downl
 import { enqueueProcessingJob, getQueueStats } from '../workers/evidenceProcessor.js';
 import { captureException, trackUploadFailure } from '../services/errorMonitoring.js';
 import { authenticate } from '../middleware/auth.js';
+import { uploadLimiterPerMinute, uploadLimiterPerHour } from '../middleware/rateLimiter.js';
 
 const router = Router();
 
@@ -74,21 +75,8 @@ const upload = multer({
 // In-memory evidence store (replace with database in production)
 const evidenceRecords = new Map();
 
-// Rate limiting — per-tenant upload tracking
-const uploadRateLimits = new Map();
-
-// Cleanup stale rate limit entries every 60 seconds (unref to not block graceful shutdown)
-const rateLimitCleanupTimer = setInterval(() => {
-  const currentMinute = Math.floor(Date.now() / 60000);
-  for (const [key] of uploadRateLimits) {
-    const parts = key.split('-');
-    const keyMinute = parseInt(parts[parts.length - 1], 10);
-    if (currentMinute - keyMinute > 2) {
-      uploadRateLimits.delete(key);
-    }
-  }
-}, 60000);
-if (rateLimitCleanupTimer.unref) rateLimitCleanupTimer.unref();
+// Phase 98: Rate limiting now handled by Redis-backed middleware (rateLimiter.js)
+// In-memory Maps replaced with uploadLimiterPerMinute + uploadLimiterPerHour
 
 // ---------------------------------------------------------------------------
 // Routes — Static paths MUST be registered before parameterized /:evidenceId
@@ -190,7 +178,7 @@ router.post('/presigned-upload', async (req, res) => {
  * Headers: x-tenant-id (required)
  * Body: multipart form with 'file' field + optional 'caseId', 'description'
  */
-router.post('/upload', upload.single('file'), async (req, res) => {
+router.post('/upload', uploadLimiterPerMinute, uploadLimiterPerHour, upload.single('file'), async (req, res) => {
   const tenantId = req.headers['x-tenant-id'] || 'default';
   const caseId = req.body?.caseId || 'unassigned';
   const description = req.body?.description || '';
@@ -212,14 +200,6 @@ router.post('/upload', upload.single('file'), async (req, res) => {
       error: `File too large. Maximum for ${mimeConfig.type}: ${Math.round(mimeConfig.maxSize / (1024 * 1024))}MB`,
     });
   }
-
-  // Rate limiting: max 20 uploads per tenant per minute
-  const rateLimitKey = `${tenantId}-${Math.floor(Date.now() / 60000)}`;
-  const currentCount = uploadRateLimits.get(rateLimitKey) || 0;
-  if (currentCount >= 20) {
-    return res.status(429).json({ error: 'Upload rate limit exceeded. Try again in a minute.' });
-  }
-  uploadRateLimits.set(rateLimitKey, currentCount + 1);
 
   try {
     // Step 1: Generate evidence ID from file hash

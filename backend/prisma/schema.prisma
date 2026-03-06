@@ -36,6 +36,7 @@ model User {
   cases             Case[]
   evidenceRecords   EvidenceRecord[]
   auditLogs         UserAuditLog[]
+  refreshTokens     RefreshToken[]
 
   @@index([email])
   @@index([stripeCustomerId])
@@ -664,4 +665,53 @@ model DocumentCrossReference {
   @@index([tenantId])
   @@index([referenceType])
   @@index([caseId, referenceType])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 96I — Refresh Tokens (JWT Security Hardening)
+// ---------------------------------------------------------------------------
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  userId    String
+  tokenHash String   @unique
+  revoked   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([tokenHash])
+  @@index([expiresAt])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 100 — Worker Heartbeat Monitoring
+// ---------------------------------------------------------------------------
+
+model WorkerHeartbeat {
+  id          String   @id @default(uuid())
+  workerName  String   @unique
+  status      String   @default("running") // running, stopped, failed, restarting
+  lastBeatAt  DateTime @default(now())
+  startedAt   DateTime @default(now())
+  restartCount Int     @default(0)
+  metadata    Json     @default("{}")
+  updatedAt   DateTime @updatedAt
+
+  @@index([workerName])
+  @@index([status])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 104 — Beta Invite Codes (enhanced)
+// ---------------------------------------------------------------------------
+
+model BetaAccessConfig {
+  id              String   @id @default(uuid())
+  maxBetaAccounts Int      @default(50)
+  inviteExpireDays Int     @default(7)
+  registrationOpen Boolean @default(false)
+  updatedAt       DateTime @updatedAt
 }

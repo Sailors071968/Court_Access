@@ -17,7 +17,7 @@
 import express from 'express';
 import cors from 'cors';
 import helmet from 'helmet';
-import { config } from './config/index.js';
+import { config, validateProductionEnvironment } from './config/index.js';
 import { initErrorMonitoring, sentryErrorHandler, captureMessage } from './services/errorMonitoring.js';
 import { registerWebhookRoutes } from './routes/stripeWebhooks.js';
 import evidenceUploadRoutes from './routes/evidenceUpload.js';
@@ -39,7 +39,12 @@ import emailRoutes from './routes/email.js';
 import agenciesRoutes from './routes/agencies.js';
 import recordsRequestsRoutes from './routes/recordsRequests.js';
 import crossReferenceRoutes from './routes/crossReference.js';
+import systemTestRoutes from './routes/systemTest.js';
+import backupRecoveryRoutes from './routes/backupRecovery.js';
+import betaAccessControlRoutes from './routes/betaAccessControl.js';
+import betaReadinessRoutes from './routes/betaReadiness.js';
 import { initScheduler, stopScheduler, getReminderStatus, runSchedulerPass } from './services/hearingScheduler.js';
+import { registerWorker, startWorker, startHealthChecker, stopAllWorkers, getWorkerStatuses } from './services/workerMonitor.js';
 import Stripe from 'stripe';
 
 // Phase 36-45 imports
@@ -57,6 +62,9 @@ const app = express();
 // ---------------------------------------------------------------------------
 // Initialize Services
 // ---------------------------------------------------------------------------
+
+// Phase 99: Validate required environment variables on startup
+validateProductionEnvironment();
 
 await initErrorMonitoring();
 
@@ -329,6 +337,21 @@ app.use('/api/admin/beta', betaControlsRoutes);
 app.use('/api/admin/deployment', deploymentReadinessRoutes);
 
 // ---------------------------------------------------------------------------
+// Routes — Phases 101-105: System Tests, Backup, Beta Access, Readiness
+// ---------------------------------------------------------------------------
+
+app.use('/api/admin/system-test', systemTestRoutes);
+app.use('/api/admin/backup-test', backupRecoveryRoutes);
+app.use('/api/admin/beta-access', betaAccessControlRoutes);
+app.use('/api/admin/beta-readiness', betaReadinessRoutes);
+
+// Phase 100: Worker status endpoint
+app.get('/api/admin/worker-status', authenticate, requireRole('admin'), (_req, res) => {
+  const statuses = getWorkerStatuses();
+  res.json({ workers: statuses, timestamp: new Date().toISOString() });
+});
+
+// ---------------------------------------------------------------------------
 // Routes — Admin Monitoring (legacy)
 // ---------------------------------------------------------------------------
 
@@ -435,16 +458,31 @@ const server = app.listen(PORT, () => {
   console.log('');
 });
 
-// Start hearing reminder scheduler
-initScheduler();
+// Phase 100: Register workers with heartbeat monitor
+registerWorker(
+  'evidence-processor',
+  () => startProcessingWorker(),
+  () => stopProcessingWorker()
+);
 
-// Start BullMQ worker
-const worker = startProcessingWorker();
-if (worker) {
-  console.log('[Court Access] Evidence processing worker started');
-} else {
-  console.log('[Court Access] Evidence processing worker not started (Redis unavailable)');
-}
+registerWorker(
+  'hearing-scheduler',
+  () => { initScheduler(); return true; },
+  () => { stopScheduler(); return true; }
+);
+
+// Start all registered workers
+await startWorker('evidence-processor').then(ok => {
+  console.log(`[Court Access] Evidence processing worker ${ok ? 'started' : 'not started (Redis unavailable)'}`);
+});
+
+await startWorker('hearing-scheduler').then(ok => {
+  console.log(`[Court Access] Hearing scheduler ${ok ? 'started' : 'not started'}`);
+});
+
+// Start worker health checker
+startHealthChecker();
+console.log('[Court Access] Worker health monitor active');
 
 // ---------------------------------------------------------------------------
 // Graceful Shutdown
@@ -454,8 +492,7 @@ async function shutdown(signal) {
   console.log(`\n[Court Access] Received ${signal}. Shutting down gracefully...`);
 
   server.close(async () => {
-    stopScheduler();
-    await stopProcessingWorker();
+    await stopAllWorkers();
     await closeRedisConnection();
     console.log('[Court Access] Server shut down complete');
     process.exit(0);

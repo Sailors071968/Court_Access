@@ -6,7 +6,7 @@
 import { create } from 'zustand';
 import type { User, UserRole } from '../types';
 import { ROLE_PERMISSIONS } from '../constants';
-import { getToken, setToken, clearToken, apiFetch } from '../services/apiClient';
+import { getToken, setToken, clearAllTokens, setRefreshToken, getRefreshToken, apiFetch } from '../services/apiClient';
 
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
@@ -45,8 +45,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       throw new Error(data.error || 'Login failed');
     }
 
-    // Store JWT token
+    // Store JWT tokens (access + refresh)
     setToken(data.token);
+    if (data.refreshToken) setRefreshToken(data.refreshToken);
 
     set({
       user: {
@@ -77,8 +78,9 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       throw new Error(data.error || 'Registration failed');
     }
 
-    // Store JWT token
+    // Store JWT tokens (access + refresh)
     setToken(data.token);
+    if (data.refreshToken) setRefreshToken(data.refreshToken);
 
     set({
       user: {
@@ -94,7 +96,16 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   logout: () => {
-    clearToken();
+    // Phase 96I: Revoke refresh token on server before clearing
+    const refreshToken = getRefreshToken();
+    if (refreshToken) {
+      fetch(`${API_BASE}/api/auth/logout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refreshToken }),
+      }).catch(() => {}); // Fire and forget
+    }
+    clearAllTokens();
     set({ user: null, isAuthenticated: false });
   },
 
@@ -122,10 +133,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     try {
       const res = await apiFetch('/api/auth/me');
       if (!res.ok) {
-        // Only clear token on 401 (unauthorized/expired) — not on transient 500 errors
-        if (res.status === 401) {
-          clearToken();
-        }
+          // Only clear token on 401 (unauthorized/expired) — not on transient 500 errors
+          if (res.status === 401) {
+            clearAllTokens();
+          }
         set({ sessionChecked: true });
         return;
       }
@@ -143,7 +154,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       });
     } catch {
       // Token invalid or expired — clear silently
-      clearToken();
+      clearAllTokens();
       set({ sessionChecked: true });
     }
   },

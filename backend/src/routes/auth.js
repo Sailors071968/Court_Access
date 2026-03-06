@@ -6,7 +6,14 @@
 import { Router } from 'express';
 import bcrypt from 'bcrypt';
 import prisma from '../services/prismaClient.js';
-import { generateToken, authenticate } from '../middleware/auth.js';
+import {
+  generateToken,
+  authenticate,
+  generateRefreshToken,
+  verifyRefreshToken,
+  revokeRefreshToken,
+  revokeAllUserRefreshTokens,
+} from '../middleware/auth.js';
 
 const router = Router();
 
@@ -53,9 +60,11 @@ router.post('/login', async (req, res) => {
     }).catch(() => {});
 
     const token = generateToken(user);
+    const refreshToken = await generateRefreshToken(user.id);
 
     res.json({
       token,
+      refreshToken,
       user: {
         id: user.id,
         email: user.email,
@@ -147,9 +156,11 @@ router.post('/signup', async (req, res) => {
     }).catch(() => {});
 
     const token = generateToken(user);
+    const refreshToken = await generateRefreshToken(user.id);
 
     res.status(201).json({
       token,
+      refreshToken,
       user: {
         id: user.id,
         email: user.email,
@@ -163,6 +174,71 @@ router.post('/signup', async (req, res) => {
   } catch (err) {
     console.error('[Auth] Signup error:', err.message);
     res.status(500).json({ error: 'Signup failed' });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// POST /api/auth/refresh — Exchange refresh token for new access token
+// ---------------------------------------------------------------------------
+
+router.post('/refresh', async (req, res) => {
+  try {
+    const { refreshToken } = req.body;
+
+    if (!refreshToken) {
+      return res.status(400).json({ error: 'Refresh token is required' });
+    }
+
+    const tokenRecord = await verifyRefreshToken(refreshToken);
+    if (!tokenRecord) {
+      return res.status(401).json({ error: 'Invalid or expired refresh token' });
+    }
+
+    // Fetch the user to generate a fresh access token
+    const user = await prisma.user.findUnique({ where: { id: tokenRecord.userId } });
+    if (!user || user.status === 'suspended') {
+      // Revoke the refresh token if user is gone or suspended
+      await revokeRefreshToken(refreshToken);
+      return res.status(401).json({ error: 'User account unavailable' });
+    }
+
+    const newAccessToken = generateToken(user);
+
+    res.json({
+      token: newAccessToken,
+      user: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        plan: user.plan,
+        status: user.status,
+        onboardingComplete: user.onboardingComplete,
+      },
+    });
+  } catch (err) {
+    console.error('[Auth] Refresh error:', err.message);
+    res.status(500).json({ error: 'Token refresh failed' });
+  }
+});
+
+// ---------------------------------------------------------------------------
+// POST /api/auth/logout — Revoke refresh token on logout
+// ---------------------------------------------------------------------------
+
+router.post('/logout', async (req, res) => {
+  try {
+    const { refreshToken } = req.body;
+
+    if (refreshToken) {
+      await revokeRefreshToken(refreshToken);
+    }
+
+    res.json({ success: true });
+  } catch (err) {
+    console.error('[Auth] Logout error:', err.message);
+    // Still return success — client should clear tokens regardless
+    res.json({ success: true });
   }
 });
 
@@ -248,9 +324,11 @@ router.post('/demo-login', async (req, res) => {
     }
 
     const token = generateToken(user);
+    const refreshToken = await generateRefreshToken(user.id);
 
     res.json({
       token,
+      refreshToken,
       user: {
         id: user.id,
         email: user.email,

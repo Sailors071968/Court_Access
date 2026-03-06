@@ -75,6 +75,55 @@ export function validateConfig(requiredKeys = []) {
 }
 
 /**
+ * Phase 99: Production environment validation.
+ * Required variables that MUST be present for production startup.
+ * In development, missing variables produce warnings instead of fatal errors.
+ */
+const REQUIRED_PRODUCTION_VARS = [
+  'DATABASE_URL',
+  'JWT_SECRET',
+  'OPENAI_API_KEY',
+  'STRIPE_SECRET_KEY',
+  'STRIPE_WEBHOOK_SECRET',
+  'R2_ACCESS_KEY_ID',
+  'R2_SECRET_ACCESS_KEY',
+  'R2_BUCKET_NAME',
+  'REDIS_URL',
+  'EMAIL_SANDBOX_MODE',
+];
+
+/**
+ * Phase 99: Validate all required production environment variables.
+ * In production: missing vars cause server to refuse to start.
+ * In development: missing vars are logged as warnings.
+ */
+export function validateProductionEnvironment() {
+  const missing = validateConfig(REQUIRED_PRODUCTION_VARS);
+  const isProduction = config.nodeEnv === 'production';
+
+  if (missing.length > 0) {
+    const message = `[Config] Missing required environment variables: ${missing.join(', ')}`;
+
+    if (isProduction) {
+      console.error(`\n\x1b[31m${'='.repeat(60)}`);
+      console.error('FATAL: Server refusing to start — missing required config');
+      console.error(`${'='.repeat(60)}\x1b[0m`);
+      console.error(message);
+      console.error('\nSet all required variables before starting in production.\n');
+      process.exit(1);
+    } else {
+      console.warn(`\n\x1b[33m[Config] WARNING: ${missing.length} production variable(s) missing:\x1b[0m`);
+      for (const v of missing) {
+        console.warn(`  \x1b[33m- ${v}\x1b[0m`);
+      }
+      console.warn('  (Non-fatal in development mode)\n');
+    }
+  }
+
+  return missing;
+}
+
+/**
  * Checks if a feature is enabled based on config availability.
  */
 export const features = {

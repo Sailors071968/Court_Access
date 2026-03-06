@@ -7,6 +7,7 @@
 const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 
 const TOKEN_KEY = 'court_access_token';
+const REFRESH_TOKEN_KEY = 'court_access_refresh_token';
 
 // ---------------------------------------------------------------------------
 // Token management
@@ -22,6 +23,23 @@ export function setToken(token: string): void {
 
 export function clearToken(): void {
   localStorage.removeItem(TOKEN_KEY);
+}
+
+export function getRefreshToken(): string | null {
+  return localStorage.getItem(REFRESH_TOKEN_KEY);
+}
+
+export function setRefreshToken(token: string): void {
+  localStorage.setItem(REFRESH_TOKEN_KEY, token);
+}
+
+export function clearRefreshToken(): void {
+  localStorage.removeItem(REFRESH_TOKEN_KEY);
+}
+
+export function clearAllTokens(): void {
+  localStorage.removeItem(TOKEN_KEY);
+  localStorage.removeItem(REFRESH_TOKEN_KEY);
 }
 
 // ---------------------------------------------------------------------------
@@ -55,16 +73,71 @@ export async function apiFetch(
     headers,
   });
 
-  // If 401, token is expired or invalid — clear and redirect to login
+  // If 401, attempt silent refresh before giving up
   if (res.status === 401) {
-    clearToken();
-    // Only redirect if we're in the /app section (not on login/signup pages)
+    const refreshed = await attemptTokenRefresh();
+    if (refreshed) {
+      // Retry the original request with the new token
+      const retryHeaders: Record<string, string> = {
+        ...(options.headers as Record<string, string> || {}),
+      };
+      const newToken = getToken();
+      if (newToken) {
+        retryHeaders['Authorization'] = `Bearer ${newToken}`;
+      }
+      if (options.body && !(options.body instanceof FormData)) {
+        retryHeaders['Content-Type'] = retryHeaders['Content-Type'] || 'application/json';
+      }
+      return fetch(url, { ...options, headers: retryHeaders });
+    }
+
+    // Refresh failed — clear everything and redirect
+    clearAllTokens();
     if (window.location.pathname.startsWith('/app')) {
       window.location.href = '/login';
     }
   }
 
   return res;
+}
+
+// ---------------------------------------------------------------------------
+// Phase 96I: Silent token refresh
+// ---------------------------------------------------------------------------
+
+let refreshPromise: Promise<boolean> | null = null;
+
+async function attemptTokenRefresh(): Promise<boolean> {
+  // Deduplicate concurrent refresh attempts
+  if (refreshPromise) return refreshPromise;
+
+  refreshPromise = (async () => {
+    const refreshToken = getRefreshToken();
+    if (!refreshToken) return false;
+
+    try {
+      const res = await fetch(`${API_BASE}/api/auth/refresh`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ refreshToken }),
+      });
+
+      if (!res.ok) {
+        clearAllTokens();
+        return false;
+      }
+
+      const data = await res.json();
+      setToken(data.token);
+      return true;
+    } catch {
+      return false;
+    } finally {
+      refreshPromise = null;
+    }
+  })();
+
+  return refreshPromise;
 }
 
 // ---------------------------------------------------------------------------

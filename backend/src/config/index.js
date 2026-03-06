@@ -53,13 +53,14 @@ export const config = {
 };
 
 /**
- * Validates that required configuration values are present.
- * Returns an array of missing config keys.
+ * Validates that required environment variables are present.
+ * Accepts raw env var names (e.g. 'STRIPE_SECRET_KEY') and checks process.env directly.
+ * Returns an array of missing env var names.
  */
 export function validateConfig(requiredKeys = []) {
   const missing = [];
   for (const key of requiredKeys) {
-    if (!config[key]) {
+    if (!process.env[key]) {
       missing.push(key);
     }
   }

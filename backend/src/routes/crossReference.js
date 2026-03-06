@@ -7,8 +7,12 @@
 import express from 'express';
 import prisma from '../services/prismaClient.js';
 import { authenticate } from '../middleware/auth.js';
+import { verifyCaseOwnership } from '../middleware/tenantIsolation.js';
 
 const router = express.Router();
+
+// Phase 94: All cross-reference routes require authentication
+router.use(authenticate);
 
 // ---------------------------------------------------------------------------
 // Phase 82: Reference type patterns (deterministic extraction)
@@ -28,7 +32,7 @@ const REFERENCE_PATTERN_DEFS = {
 // Phase 82: POST /api/cross-reference/:caseId/extract — Extract references from text
 // ---------------------------------------------------------------------------
 
-router.post('/:caseId/extract', authenticate, async (req, res) => {
+router.post('/:caseId/extract', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
     const tenantId = req.user.id;
@@ -128,7 +132,7 @@ router.post('/:caseId/extract', authenticate, async (req, res) => {
 // Phase 82: GET /api/cross-reference/:caseId/references — List references
 // ---------------------------------------------------------------------------
 
-router.get('/:caseId/references', authenticate, async (req, res) => {
+router.get('/:caseId/references', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
     const tenantId = req.user.id;
@@ -159,7 +163,7 @@ router.get('/:caseId/references', authenticate, async (req, res) => {
 // No scoring, no accusations.
 // ---------------------------------------------------------------------------
 
-router.post('/:caseId/compare', authenticate, async (req, res) => {
+router.post('/:caseId/compare', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
     const tenantId = req.user.id;
@@ -314,7 +318,7 @@ router.post('/:caseId/compare', authenticate, async (req, res) => {
 // Phase 83: GET /api/cross-reference/:caseId — List cross-references
 // ---------------------------------------------------------------------------
 
-router.get('/:caseId', authenticate, async (req, res) => {
+router.get('/:caseId', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId } = req.params;
     const tenantId = req.user.id;
@@ -348,7 +352,7 @@ router.get('/:caseId', authenticate, async (req, res) => {
 // Phase 83: PATCH /api/cross-reference/:caseId/:crossRefId — Update status
 // ---------------------------------------------------------------------------
 
-router.patch('/:caseId/:crossRefId', authenticate, async (req, res) => {
+router.patch('/:caseId/:crossRefId', verifyCaseOwnership, async (req, res) => {
   try {
     const { caseId, crossRefId } = req.params;
     const tenantId = req.user.id;

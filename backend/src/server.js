@@ -402,7 +402,7 @@ app.use(sentryErrorHandler());
 app.use((err, req, res, next) => {
   logApiError(err, req).catch(() => {});
   if (!res.headersSent) {
-    res.status(err.statusCode || 500).json({ error: err.message || 'Internal server error' });
+    res.status(err.statusCode || 500).json({ error: config.nodeEnv === 'production' ? 'Internal server error' : (err.message || 'Internal server error') });
   }
 });
 

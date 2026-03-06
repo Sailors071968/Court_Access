@@ -112,7 +112,7 @@ router.post('/errors/:id/resolve', async (req, res) => {
       where: { id: req.params.id },
       data: { resolved: true },
     });
-    res.json({ error: updated });
+    res.json({ errorLog: updated });
   } catch (err) {
     console.error('[Admin Monitoring] Resolve error:', err.message);
     res.status(500).json({ error: 'Failed to resolve error' });
@@ -220,7 +220,7 @@ router.post('/log-error', async (req, res) => {
       });
     }
 
-    res.status(201).json({ error: errorLog });
+    res.status(201).json({ errorLog });
   } catch (err) {
     console.error('[Admin Monitoring] Log error:', err.message);
     res.status(500).json({ error: 'Failed to log error' });

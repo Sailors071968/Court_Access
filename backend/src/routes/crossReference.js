@@ -14,12 +14,14 @@ const router = express.Router();
 // Phase 82: Reference type patterns (deterministic extraction)
 // ---------------------------------------------------------------------------
 
-const REFERENCE_PATTERNS = {
-  incident_number: /(?:incident|report|case)\s*(?:#|no\.?|number)?\s*[:.]?\s*([A-Z0-9][\w-]{3,20})/gi,
-  officer_name: /(?:officer|ofc\.?|deputy|det\.?|sergeant|sgt\.?|lieutenant|lt\.?|captain|cpt\.?)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)+)/g,
-  badge_number: /(?:badge|shield)\s*(?:#|no\.?|number)?\s*[:.]?\s*([A-Z0-9]{2,10})/gi,
-  date: /\b(\d{1,2}[\/\-]\d{1,2}[\/\-]\d{2,4})\b/g,
-  case_number: /(?:case)\s*(?:#|no\.?|number)?\s*[:.]?\s*([A-Z0-9][\w-]{3,20})/gi,
+// Phase 84/94: Store patterns as source+flags to create fresh RegExp per request.
+// This avoids shared lastIndex state across concurrent requests on global regex objects.
+const REFERENCE_PATTERN_DEFS = {
+  incident_number: { source: '(?:incident|report|case)\\s*(?:#|no\\.?|number)?\\s*[:.]?\\s*([A-Z0-9][\\w-]{3,20})', flags: 'gi' },
+  officer_name: { source: '(?:officer|ofc\\.?|deputy|det\\.?|sergeant|sgt\\.?|lieutenant|lt\\.?|captain|cpt\\.?)\\s+([A-Z][a-z]+(?:\\s+[A-Z][a-z]+)+)', flags: 'gi' },
+  badge_number: { source: '(?:badge|shield)\\s*(?:#|no\\.?|number)?\\s*[:.]?\\s*([A-Z0-9]{2,10})', flags: 'gi' },
+  date: { source: '\\b(\\d{1,2}[\\/\\-]\\d{1,2}[\\/\\-]\\d{2,4})\\b', flags: 'g' },
+  case_number: { source: '(?:case)\\s*(?:#|no\\.?|number)?\\s*[:.]?\\s*([A-Z0-9][\\w-]{3,20})', flags: 'gi' },
 };
 
 // ---------------------------------------------------------------------------
@@ -38,9 +40,9 @@ router.post('/:caseId/extract', authenticate, async (req, res) => {
 
     const extractedRefs = [];
 
-    for (const [refType, pattern] of Object.entries(REFERENCE_PATTERNS)) {
-      // Reset regex lastIndex
-      pattern.lastIndex = 0;
+    for (const [refType, patternDef] of Object.entries(REFERENCE_PATTERN_DEFS)) {
+      // Create fresh RegExp per request to avoid shared lastIndex state
+      const pattern = new RegExp(patternDef.source, patternDef.flags);
       let match;
 
       while ((match = pattern.exec(text)) !== null) {

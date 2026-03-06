@@ -20,8 +20,12 @@ import { scanFile, isClamAVAvailable } from '../services/virusScanner.js';
 import { uploadFile, getSignedDownloadUrl, getSignedUploadUrl, deleteFile, downloadFile } from '../services/r2Storage.js';
 import { enqueueProcessingJob, getQueueStats } from '../workers/evidenceProcessor.js';
 import { captureException, trackUploadFailure } from '../services/errorMonitoring.js';
+import { authenticate } from '../middleware/auth.js';
 
 const router = Router();
+
+// Phase 94: All evidence routes require authentication
+router.use(authenticate);
 
 // ---------------------------------------------------------------------------
 // File Upload Configuration

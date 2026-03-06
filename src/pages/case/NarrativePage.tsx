@@ -7,8 +7,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { BookOpen, RefreshCw, Clock, AlertTriangle, Users, Calendar, Loader2, History, Info } from 'lucide-react';
 import { Card } from '../../components/common/Card';
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+import { apiFetch } from '../../services/apiClient';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -60,7 +59,7 @@ export function NarrativePage() {
     if (!caseId) return;
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/api/narrative/${caseId}`);
+      const res = await apiFetch(`/api/narrative/${caseId}`);
       const data = await res.json();
       setNarrative(data.narrative || null);
     } catch (err) {
@@ -73,7 +72,7 @@ export function NarrativePage() {
   const fetchHistory = useCallback(async () => {
     if (!caseId) return;
     try {
-      const res = await fetch(`${API_BASE}/api/narrative/${caseId}/history`);
+      const res = await apiFetch(`/api/narrative/${caseId}/history`);
       const data = await res.json();
       setHistory(data.narratives || []);
     } catch (err) {
@@ -89,9 +88,8 @@ export function NarrativePage() {
     if (!caseId) return;
     setGenerating(true);
     try {
-      const res = await fetch(`${API_BASE}/api/narrative/${caseId}/generate`, {
+      const res = await apiFetch(`/api/narrative/${caseId}/generate`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
       });
       const data = await res.json();
       if (data.narrative) {

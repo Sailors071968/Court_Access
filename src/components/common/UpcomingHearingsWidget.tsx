@@ -7,8 +7,7 @@
 import { useState, useEffect } from 'react';
 import { Calendar, MapPin, Clock, Bell } from 'lucide-react';
 import { Card } from './Card';
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+import { apiFetch } from '../../services/apiClient';
 
 interface UpcomingHearing {
   id: string;
@@ -70,7 +69,7 @@ export function UpcomingHearingsWidget() {
 
     async function fetchUpcoming() {
       try {
-        const res = await fetch(`${API_BASE}/api/hearings/upcoming`);
+        const res = await apiFetch(`/api/hearings/upcoming`);
         if (!res.ok) throw new Error('Failed to fetch');
         const data = await res.json();
         if (!cancelled) setHearings(data.hearings || []);

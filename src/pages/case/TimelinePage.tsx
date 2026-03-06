@@ -7,8 +7,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { Clock, Filter, Plus, Trash2, Calendar, FileText, Mic, Video, Image, MapPin, ChevronDown, ChevronUp, RefreshCw } from 'lucide-react';
 import { Card } from '../../components/common/Card';
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+import { apiFetch } from '../../services/apiClient';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -80,9 +79,8 @@ function AddEventForm({
     if (!timestamp || !description) return;
     setSaving(true);
     try {
-      await fetch(`${API_BASE}/api/timeline/${caseId}`, {
+      await apiFetch(`/api/timeline/${caseId}`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           timestamp: new Date(timestamp).toISOString(),
           eventDescription: description,
@@ -258,7 +256,7 @@ export function TimelinePage() {
       if (filterType) params.set('eventType', filterType);
       if (filterSource) params.set('sourceType', filterSource);
 
-      const res = await fetch(`${API_BASE}/api/timeline/${caseId}?${params}`);
+      const res = await apiFetch(`/api/timeline/${caseId}?${params}`);
       const data = await res.json();
       setEvents(data.events || []);
     } catch (err) {
@@ -275,7 +273,7 @@ export function TimelinePage() {
   const handleDelete = async (eventId: string) => {
     if (!caseId) return;
     try {
-      await fetch(`${API_BASE}/api/timeline/${caseId}/${eventId}`, { method: 'DELETE' });
+      await apiFetch(`/api/timeline/${caseId}/${eventId}`, { method: 'DELETE' });
       fetchEvents();
     } catch (err) {
       console.error('Failed to delete event:', err);

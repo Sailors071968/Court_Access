@@ -7,8 +7,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { Users, Building2, MapPin, Phone, Car, Calendar, Mail, Hash, RefreshCw, ChevronDown, ChevronUp, Link2, FileText } from 'lucide-react';
 import { Card } from '../../components/common/Card';
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+import { apiFetch } from '../../services/apiClient';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -125,7 +124,7 @@ export function EntitiesPage() {
       const params = new URLSearchParams();
       if (filterType) params.set('entityType', filterType);
 
-      const res = await fetch(`${API_BASE}/api/entities/${caseId}?${params}`);
+      const res = await apiFetch(`/api/entities/${caseId}?${params}`);
       const data = await res.json();
       setEntities(data.entities || []);
     } catch (err) {

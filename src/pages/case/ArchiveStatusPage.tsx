@@ -7,8 +7,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { Archive, RotateCcw, Shield, Clock, AlertTriangle, CheckCircle, FileText, Hash, RefreshCw, Loader2 } from 'lucide-react';
 import { Card } from '../../components/common/Card';
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+import { apiFetch } from '../../services/apiClient';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -89,7 +88,7 @@ export function ArchiveStatusPage() {
     if (!caseId) return;
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/api/archives/${caseId}`);
+      const res = await apiFetch(`/api/archives/${caseId}`);
       const data = await res.json();
       setArchive(data.archive || null);
       setAuditLog(data.auditLog || []);
@@ -109,9 +108,8 @@ export function ArchiveStatusPage() {
     if (!caseId) return;
     setArchiving(true);
     try {
-      const res = await fetch(`${API_BASE}/api/archives/${caseId}/archive`, {
+      const res = await apiFetch(`/api/archives/${caseId}/archive`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ actor: 'attorney', reason: 'manual_archive' }),
       });
       if (res.ok) {
@@ -128,9 +126,8 @@ export function ArchiveStatusPage() {
     if (!caseId) return;
     setRestoring(true);
     try {
-      const res = await fetch(`${API_BASE}/api/archives/${caseId}/restore`, {
+      const res = await apiFetch(`/api/archives/${caseId}/restore`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ actor: 'attorney' }),
       });
       if (res.ok) {

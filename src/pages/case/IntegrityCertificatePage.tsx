@@ -7,8 +7,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { Shield, Download, CheckCircle, XCircle, RefreshCw, FileText, Lock, Clock } from 'lucide-react';
 import { Card } from '../../components/common/Card';
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+import { apiFetch } from '../../services/apiClient';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -153,7 +152,7 @@ export function IntegrityCertificatePage() {
     if (!caseId) return;
     setLoading(true);
     try {
-      const res = await fetch(`${API_BASE}/api/integrity/${caseId}`);
+      const res = await apiFetch(`/api/integrity/${caseId}`);
       const data = await res.json();
       setReports(data.reports || []);
     } catch (err) {
@@ -170,7 +169,7 @@ export function IntegrityCertificatePage() {
   const handleExport = async (evidenceId: string) => {
     if (!caseId) return;
     try {
-      const res = await fetch(`${API_BASE}/api/integrity/${caseId}/${evidenceId}/export`);
+      const res = await apiFetch(`/api/integrity/${caseId}/${evidenceId}/export`);
       const data = await res.json();
 
       // Download as JSON file

@@ -6,6 +6,7 @@
 
 import type { EvidenceRecord, EvidenceType } from '../models/EvidenceModel';
 import { validateEvidenceFile } from './evidenceIngestionService';
+import { apiFetch, getToken } from './apiClient';
 
 // ---------------------------------------------------------------------------
 // Backend API Configuration
@@ -234,6 +235,8 @@ export async function uploadToBackend(
 
       xhr.open('POST', `${API_BASE_URL}/api/evidence/upload`);
       xhr.setRequestHeader('x-tenant-id', tenantId);
+      const token = getToken();
+      if (token) xhr.setRequestHeader('Authorization', `Bearer ${token}`);
       xhr.send(formData);
     });
 
@@ -290,7 +293,7 @@ export async function uploadToBackend(
  * Get evidence record from backend.
  */
 export async function getEvidenceFromBackend(evidenceId: string, tenantId = 'tenant-demo-001'): Promise<unknown> {
-  const res = await fetch(`${API_BASE_URL}/api/evidence/${evidenceId}`, {
+  const res = await apiFetch(`/api/evidence/${evidenceId}`, {
     headers: { 'x-tenant-id': tenantId },
   });
   if (!res.ok) throw new Error(`Failed to fetch evidence: ${res.statusText}`);
@@ -301,7 +304,7 @@ export async function getEvidenceFromBackend(evidenceId: string, tenantId = 'ten
  * Get signed download URL for evidence file.
  */
 export async function getEvidenceDownloadUrl(evidenceId: string, tenantId = 'tenant-demo-001'): Promise<string> {
-  const res = await fetch(`${API_BASE_URL}/api/evidence/${evidenceId}/download`, {
+  const res = await apiFetch(`/api/evidence/${evidenceId}/download`, {
     headers: { 'x-tenant-id': tenantId },
   });
   if (!res.ok) throw new Error(`Failed to get download URL: ${res.statusText}`);
@@ -313,7 +316,7 @@ export async function getEvidenceDownloadUrl(evidenceId: string, tenantId = 'ten
  * List evidence for a case.
  */
 export async function listCaseEvidence(caseId: string, tenantId = 'tenant-demo-001'): Promise<unknown[]> {
-  const res = await fetch(`${API_BASE_URL}/api/evidence/list/${caseId}`, {
+  const res = await apiFetch(`/api/evidence/list/${caseId}`, {
     headers: { 'x-tenant-id': tenantId },
   });
   if (!res.ok) throw new Error(`Failed to list evidence: ${res.statusText}`);
@@ -325,7 +328,7 @@ export async function listCaseEvidence(caseId: string, tenantId = 'tenant-demo-0
  * Delete evidence record.
  */
 export async function deleteEvidence(evidenceId: string, tenantId = 'tenant-demo-001'): Promise<void> {
-  const res = await fetch(`${API_BASE_URL}/api/evidence/${evidenceId}`, {
+  const res = await apiFetch(`/api/evidence/${evidenceId}`, {
     method: 'DELETE',
     headers: { 'x-tenant-id': tenantId },
   });
@@ -336,7 +339,7 @@ export async function deleteEvidence(evidenceId: string, tenantId = 'tenant-demo
  * Get processing queue statistics.
  */
 export async function getQueueStats(): Promise<unknown> {
-  const res = await fetch(`${API_BASE_URL}/api/evidence/queue/stats`);
+  const res = await apiFetch(`/api/evidence/queue/stats`);
   if (!res.ok) throw new Error(`Failed to get queue stats: ${res.statusText}`);
   return res.json();
 }
@@ -345,7 +348,7 @@ export async function getQueueStats(): Promise<unknown> {
  * Check backend health.
  */
 export async function checkBackendHealth(): Promise<{ status: string; services: Record<string, string> }> {
-  const res = await fetch(`${API_BASE_URL}/api/health`);
+  const res = await apiFetch(`/api/health`);
   if (!res.ok) throw new Error(`Backend health check failed: ${res.statusText}`);
   return res.json();
 }

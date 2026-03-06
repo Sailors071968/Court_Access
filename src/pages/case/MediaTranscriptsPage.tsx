@@ -9,8 +9,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { Mic, Search, FileText, Clock, ChevronDown, ChevronUp, RefreshCw, Download, Play, AlertCircle, Loader2, Info } from 'lucide-react';
 import { Card } from '../../components/common/Card';
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+import { apiFetch } from '../../services/apiClient';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -317,7 +316,7 @@ export function MediaTranscriptsPage() {
       const params = new URLSearchParams();
       if (searchQuery) params.set('search', searchQuery);
 
-      const res = await fetch(`${API_BASE}/api/transcripts/${caseId}?${params}`);
+      const res = await apiFetch(`/api/transcripts/${caseId}?${params}`);
       const data = await res.json();
       setTranscripts(data.transcripts || []);
     } catch (err) {
@@ -336,7 +335,7 @@ export function MediaTranscriptsPage() {
     setLedgerLoading(true);
     setViewingEvidenceId(evidenceId);
     try {
-      const res = await fetch(`${API_BASE}/api/transcripts/${caseId}/evidence/${evidenceId}/legal-ledger`);
+      const res = await apiFetch(`/api/transcripts/${caseId}/evidence/${evidenceId}/legal-ledger`);
       const data = await res.json();
       setLedger(data.ledger || null);
     } catch (err) {

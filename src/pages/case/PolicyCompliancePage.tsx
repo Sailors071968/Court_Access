@@ -8,8 +8,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { Shield, Plus, FileText, AlertTriangle, CheckCircle, XCircle, RefreshCw, Loader2, Filter, Search, ChevronDown, ChevronUp, Info } from 'lucide-react';
 import { Card } from '../../components/common/Card';
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+import { apiFetch } from '../../services/apiClient';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -101,9 +100,8 @@ function PolicyUploadForm({
     if (!title || !content) return;
     setSaving(true);
     try {
-      await fetch(`${API_BASE}/api/policy/${caseId}/documents`, {
+      await apiFetch(`/api/policy/${caseId}/documents`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ title, documentType, content }),
       });
       onUploaded();
@@ -325,9 +323,9 @@ export function PolicyCompliancePage() {
       if (filterStatus) params.set('status', filterStatus);
 
       const [docsRes, findingsRes, summaryRes] = await Promise.all([
-        fetch(`${API_BASE}/api/policy/${caseId}/documents`),
-        fetch(`${API_BASE}/api/policy/${caseId}/findings?${params}`),
-        fetch(`${API_BASE}/api/policy/${caseId}/findings/summary`),
+        apiFetch(`/api/policy/${caseId}/documents`),
+        apiFetch(`/api/policy/${caseId}/findings?${params}`),
+        apiFetch(`/api/policy/${caseId}/findings/summary`),
       ]);
 
       const docsData = await docsRes.json();
@@ -352,9 +350,8 @@ export function PolicyCompliancePage() {
     if (!caseId) return;
     setAnalyzing(true);
     try {
-      await fetch(`${API_BASE}/api/policy/${caseId}/analyze`, {
+      await apiFetch(`/api/policy/${caseId}/analyze`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({}),
       });
       await fetchData();
@@ -368,9 +365,8 @@ export function PolicyCompliancePage() {
   const handleUpdateStatus = async (findingId: string, status: string) => {
     if (!caseId) return;
     try {
-      await fetch(`${API_BASE}/api/policy/${caseId}/findings/${findingId}`, {
+      await apiFetch(`/api/policy/${caseId}/findings/${findingId}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status }),
       });
       await fetchData();

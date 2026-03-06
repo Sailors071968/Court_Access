@@ -8,8 +8,7 @@ import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import { GitCompare, AlertTriangle, CheckCircle, Clock, Search, Filter, RefreshCw, Loader2, XCircle, Link2, Info } from 'lucide-react';
 import { Card } from '../../components/common/Card';
-
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
+import { apiFetch } from '../../services/apiClient';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -244,8 +243,8 @@ export function CorrelationsPage() {
       if (filterStatus) params.set('status', filterStatus);
 
       const [corrRes, summaryRes] = await Promise.all([
-        fetch(`${API_BASE}/api/correlations/${caseId}?${params}`),
-        fetch(`${API_BASE}/api/correlations/${caseId}/summary`),
+        apiFetch(`/api/correlations/${caseId}?${params}`),
+        apiFetch(`/api/correlations/${caseId}/summary`),
       ]);
 
       const corrData = await corrRes.json();
@@ -268,7 +267,7 @@ export function CorrelationsPage() {
     if (!caseId) return;
     setAnalyzing(true);
     try {
-      await fetch(`${API_BASE}/api/correlations/${caseId}/analyze`, { method: 'POST' });
+      await apiFetch(`/api/correlations/${caseId}/analyze`, { method: 'POST' });
       await fetchCorrelations();
     } catch (err) {
       console.error('Correlation analysis failed:', err);
@@ -280,9 +279,8 @@ export function CorrelationsPage() {
   const handleUpdateStatus = async (correlationId: string, status: string) => {
     if (!caseId) return;
     try {
-      await fetch(`${API_BASE}/api/correlations/${caseId}/${correlationId}`, {
+      await apiFetch(`/api/correlations/${caseId}/${correlationId}`, {
         method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ status }),
       });
       await fetchCorrelations();

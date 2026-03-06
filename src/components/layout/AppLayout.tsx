@@ -5,10 +5,17 @@
 import { Outlet } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useAuthStore } from '../../stores/authStore';
 
 export function AppLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const restoreSession = useAuthStore((s) => s.restoreSession);
+
+  // Restore JWT session on app mount
+  useEffect(() => {
+    restoreSession();
+  }, [restoreSession]);
 
   return (
     <div className="min-h-screen bg-gray-50">

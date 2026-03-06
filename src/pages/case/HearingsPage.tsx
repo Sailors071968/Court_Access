@@ -9,6 +9,7 @@ import { useParams } from 'react-router-dom';
 import { Calendar, MapPin, Clock, Bell, Plus, Trash2, Save, AlertCircle, CheckCircle, Phone, FileText } from 'lucide-react';
 import { Card } from '../../components/common/Card';
 import { caseDataProvider } from '../../services/caseDataProvider';
+import { apiFetch } from '../../services/apiClient';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -74,7 +75,6 @@ function isValidPhone(phone: string): boolean {
   return /^\d{10,15}$/.test(cleaned);
 }
 
-const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:3001';
 const MAX_HEARINGS = 5;
 
 // ---------------------------------------------------------------------------
@@ -548,7 +548,7 @@ export function HearingsPage() {
   const fetchHearings = useCallback(async () => {
     if (!caseId) return;
     try {
-      const res = await fetch(`${API_BASE}/api/hearings/${caseId}`);
+      const res = await apiFetch(`/api/hearings/${caseId}`);
       if (!res.ok) throw new Error('Failed to load hearings');
       const data = await res.json();
       setHearings(data.hearings || []);
@@ -647,14 +647,13 @@ export function HearingsPage() {
     };
 
     try {
-      const url = editingId
-        ? `${API_BASE}/api/hearings/${caseId}/${editingId}`
-        : `${API_BASE}/api/hearings/${caseId}`;
+      const path = editingId
+        ? `/api/hearings/${caseId}/${editingId}`
+        : `/api/hearings/${caseId}`;
       const method = editingId ? 'PUT' : 'POST';
 
-      const res = await fetch(url, {
+      const res = await apiFetch(path, {
         method,
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(payload),
       });
 
@@ -678,7 +677,7 @@ export function HearingsPage() {
     if (!window.confirm('Remove this hearing? This cannot be undone.')) return;
 
     try {
-      const res = await fetch(`${API_BASE}/api/hearings/${caseId}/${hearingId}`, {
+      const res = await apiFetch(`/api/hearings/${caseId}/${hearingId}`, {
         method: 'DELETE',
       });
       if (!res.ok) throw new Error('Failed to delete hearing');

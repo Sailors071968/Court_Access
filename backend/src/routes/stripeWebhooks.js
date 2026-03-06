@@ -1,6 +1,6 @@
 // ============================================
 // Court Access — Stripe Webhook Handlers
-// Phase 32: Real Stripe Webhooks
+// Phase 32/39: Real Stripe Webhooks + Prisma persistence
 //
 // Handles:
 // - checkout.session.completed
@@ -15,6 +15,8 @@ import Stripe from 'stripe';
 import { config } from '../config/index.js';
 import { captureException, captureMessage } from '../services/errorMonitoring.js';
 import { notifyNewSubscription, notifyPaymentReceived, notifyPaymentFailed, notifySubscriptionCancelled } from '../services/smsNotification.js';
+import prisma from '../services/prismaClient.js';
+import { logPaymentError } from '../services/systemLogger.js';
 
 let stripe = null;
 
@@ -25,7 +27,7 @@ function getStripe() {
   return stripe;
 }
 
-// In-memory subscription store (replace with database in production)
+// In-memory subscription store (fallback; Prisma-backed persistence added in Phase 39)
 const subscriptions = new Map();
 
 /**
@@ -151,7 +153,7 @@ async function handleCheckoutCompleted(session) {
 
   console.log(`[Stripe Webhook] Checkout completed: customer=${customerId}, plan=${plan}, email=${email}`);
 
-  // Store subscription data
+  // Store subscription data (in-memory fallback)
   subscriptions.set(customerId, {
     customerId,
     subscriptionId,
@@ -161,6 +163,34 @@ async function handleCheckoutCompleted(session) {
     startedAt: new Date().toISOString(),
     lastPaymentAt: new Date().toISOString(),
   });
+
+  // Phase 39: Persist subscription event + update user record in database
+  try {
+    await prisma.subscriptionEvent.create({
+      data: {
+        stripeCustomerId: customerId,
+        stripeEventId: `checkout_${customerId}_${Date.now()}`,
+        eventType: 'checkout.session.completed',
+        plan,
+        amount: session.amount_total || 0,
+        status: 'active',
+        metadata: { email, subscriptionId },
+      },
+    });
+
+    // Update user record if linked via stripeCustomerId
+    await prisma.user.updateMany({
+      where: { stripeCustomerId: customerId },
+      data: {
+        plan,
+        subscriptionId: subscriptionId || undefined,
+        subscriptionStatus: 'active',
+      },
+    });
+  } catch (dbErr) {
+    console.warn('[Stripe Webhook] DB persistence failed:', dbErr.message);
+    logPaymentError('checkout.session.completed', dbErr, { customerId }).catch(() => {});
+  }
 
   captureMessage('New subscription created', 'info', { customerId, plan, email });
 
@@ -172,9 +202,6 @@ async function handleCheckoutCompleted(session) {
     planName: plan,
     amount,
   });
-
-  // In production: Update user record in database
-  // await db.users.update({ stripeCustomerId: customerId }, { plan, subscriptionStatus: 'active' });
 }
 
 /**
@@ -196,14 +223,28 @@ async function handlePaymentSucceeded(invoice) {
     subscriptions.set(customerId, existing);
   }
 
+  // Phase 39: Persist payment event
+  try {
+    await prisma.subscriptionEvent.create({
+      data: {
+        stripeCustomerId: customerId,
+        stripeEventId: `payment_${customerId}_${Date.now()}`,
+        eventType: 'invoice.payment_succeeded',
+        amount: amountPaid,
+        currency,
+        status: 'paid',
+      },
+    });
+  } catch (dbErr) {
+    logPaymentError('invoice.payment_succeeded', dbErr, { customerId }).catch(() => {});
+  }
+
   // SMS alert to admin
   await notifyPaymentReceived({
     customerEmail: existing?.email || invoice.customer_email || '',
     amount: (amountPaid / 100).toFixed(2),
     currency,
   });
-
-  // In production: Update payment record, send receipt email
 }
 
 /**
@@ -226,16 +267,31 @@ async function handlePaymentFailed(invoice) {
 
   captureMessage('Subscription payment failed', 'warning', { customerId, attemptCount });
 
+  // Phase 39: Persist failure event + update user status
+  try {
+    await prisma.subscriptionEvent.create({
+      data: {
+        stripeCustomerId: customerId,
+        stripeEventId: `failed_${customerId}_${Date.now()}`,
+        eventType: 'invoice.payment_failed',
+        status: 'failed',
+        metadata: { attemptCount },
+      },
+    });
+
+    await prisma.user.updateMany({
+      where: { stripeCustomerId: customerId },
+      data: { subscriptionStatus: 'past_due' },
+    });
+  } catch (dbErr) {
+    logPaymentError('invoice.payment_failed', dbErr, { customerId }).catch(() => {});
+  }
+
   // SMS alert to admin
   await notifyPaymentFailed({
     customerEmail: existing?.email || '',
     attemptCount,
   });
-
-  // In production:
-  // - Update user subscription status to 'past_due'
-  // - Send dunning email to customer
-  // - If attemptCount >= 3, consider downgrading to free tier
 }
 
 /**
@@ -257,15 +313,34 @@ async function handleSubscriptionDeleted(subscription) {
 
   captureMessage('Subscription cancelled', 'info', { customerId });
 
+  // Phase 39: Persist cancellation + downgrade user
+  try {
+    await prisma.subscriptionEvent.create({
+      data: {
+        stripeCustomerId: customerId,
+        stripeEventId: `cancelled_${customerId}_${Date.now()}`,
+        eventType: 'customer.subscription.deleted',
+        plan: 'free',
+        status: 'cancelled',
+      },
+    });
+
+    await prisma.user.updateMany({
+      where: { stripeCustomerId: customerId },
+      data: {
+        plan: 'free',
+        subscriptionStatus: 'cancelled',
+        subscriptionId: null,
+      },
+    });
+  } catch (dbErr) {
+    logPaymentError('customer.subscription.deleted', dbErr, { customerId }).catch(() => {});
+  }
+
   // SMS alert to admin
   await notifySubscriptionCancelled({
     customerEmail: existing?.email || '',
   });
-
-  // In production:
-  // - Downgrade user to free plan
-  // - Restrict access based on free tier limits
-  // - Send cancellation confirmation email
 }
 
 /**
@@ -285,7 +360,15 @@ async function handleSubscriptionUpdated(subscription) {
     subscriptions.set(customerId, existing);
   }
 
-  // In production: Sync subscription changes to user record
+  // Phase 39: Sync subscription status to user record
+  try {
+    await prisma.user.updateMany({
+      where: { stripeCustomerId: customerId },
+      data: { subscriptionStatus: status },
+    });
+  } catch (dbErr) {
+    logPaymentError('customer.subscription.updated', dbErr, { customerId }).catch(() => {});
+  }
 }
 
 /**

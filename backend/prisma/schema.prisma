@@ -1,5 +1,6 @@
 // Court Access — Prisma Schema
 // Database models for persistent storage.
+// Phases 36-45: Full system integration models.
 
 generator client {
   provider = "prisma-client-js"
@@ -8,6 +9,171 @@ generator client {
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 36/39/43 — Users & Authentication
+// ---------------------------------------------------------------------------
+
+model User {
+  id                String   @id @default(uuid())
+  email             String   @unique
+  passwordHash      String
+  name              String   @default("")
+  role              String   @default("attorney") // admin, attorney, investigator, client, staff
+  status            String   @default("active")   // active, inactive, suspended, onboarding
+  plan              String   @default("free")      // free, professional, team
+  stripeCustomerId  String?  @unique
+  subscriptionId    String?
+  subscriptionStatus String  @default("none")      // none, active, past_due, cancelled
+  betaInviteId      String?
+  onboardingComplete Boolean @default(false)
+  storageUsedBytes  BigInt   @default(0)
+  lastLoginAt       DateTime?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  cases             Case[]
+  evidenceRecords   EvidenceRecord[]
+  auditLogs         UserAuditLog[]
+
+  @@index([email])
+  @@index([stripeCustomerId])
+  @@index([status])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 36/43 — Beta Invites
+// ---------------------------------------------------------------------------
+
+model BetaInvite {
+  id          String   @id @default(uuid())
+  email       String
+  role        String   @default("attorney")
+  inviteCode  String   @unique
+  status      String   @default("pending") // pending, accepted, expired, revoked
+  sentAt      DateTime @default(now())
+  acceptedAt  DateTime?
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+
+  @@index([email])
+  @@index([inviteCode])
+  @@index([status])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 36 — Cases
+// ---------------------------------------------------------------------------
+
+model Case {
+  id          String   @id @default(uuid())
+  userId      String
+  caseNumber  String   @default("")
+  caseName    String
+  description String   @default("")
+  status      String   @default("active") // active, closed, archived
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  evidenceRecords EvidenceRecord[]
+
+  @@index([userId])
+  @@index([status])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 36/37 — Evidence Records (Prisma-backed, replaces in-memory Map)
+// ---------------------------------------------------------------------------
+
+model EvidenceRecord {
+  id            String   @id @default(uuid())
+  userId        String
+  caseId        String
+  filename      String
+  contentType   String
+  evidenceType  String   // document, image, audio, video
+  fileSize      BigInt   @default(0)
+  sha256        String   @default("")
+  storageKey    String?
+  description   String   @default("")
+  status        String   @default("pending") // pending, pending_upload, processing, complete, error, rejected
+  processingResult Json?
+  scanResult    Json?
+  jobId         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  case          Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([caseId])
+  @@index([status])
+  @@index([caseId, status])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 39 — Subscription Events (audit trail for Stripe lifecycle)
+// ---------------------------------------------------------------------------
+
+model SubscriptionEvent {
+  id                String   @id @default(uuid())
+  stripeCustomerId  String
+  stripeEventId     String   @unique
+  eventType         String   // checkout.session.completed, invoice.payment_succeeded, etc.
+  plan              String   @default("free")
+  amount            Int      @default(0)
+  currency          String   @default("usd")
+  status            String   @default("")
+  metadata          Json     @default("{}")
+  createdAt         DateTime @default(now())
+
+  @@index([stripeCustomerId])
+  @@index([eventType])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 42 — System Error Log (persistent error tracking)
+// ---------------------------------------------------------------------------
+
+model SystemErrorLog {
+  id          String   @id @default(uuid())
+  service     String   // api, evidence-processor, audio-processor, video-processor, upload, stripe
+  level       String   @default("error") // info, warn, error
+  message     String
+  stackTrace  String?
+  metadata    Json     @default("{}")
+  resolved    Boolean  @default(false)
+  count       Int      @default(1)
+  firstSeen   DateTime @default(now())
+  lastSeen    DateTime @default(now())
+
+  @@index([service])
+  @@index([level])
+  @@index([resolved])
+  @@index([lastSeen])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 40/42 — User Audit Log (security + access tracking)
+// ---------------------------------------------------------------------------
+
+model UserAuditLog {
+  id        String   @id @default(uuid())
+  userId    String
+  action    String   // login, logout, evidence_access, case_create, evidence_upload, admin_action
+  resource  String   @default("") // e.g. caseId, evidenceId
+  ipAddress String   @default("")
+  metadata  Json     @default("{}")
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
 }
 
 // ---------------------------------------------------------------------------

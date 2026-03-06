@@ -120,13 +120,15 @@ export function checkStorageLimit(getCurrentStorageBytes) {
 }
 
 /**
- * Get the minimum plan required for a feature.
+ * Get the minimum paid plan required for a feature.
+ * Skips 'free' tier so the upgrade suggestion is always a paid plan.
  */
 function getRequiredPlan(feature) {
-  for (const [plan, limits] of Object.entries(PLAN_LIMITS)) {
+  const paidPlans = Object.entries(PLAN_LIMITS).filter(([plan]) => plan !== 'free');
+  for (const [plan, limits] of paidPlans) {
     if (limits.features.includes(feature)) return plan;
   }
-  return 'team';
+  return 'professional';
 }
 
 /**

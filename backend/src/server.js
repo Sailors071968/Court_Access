@@ -1,13 +1,17 @@
 // ============================================
 // Court Access — Main Server Entry Point
 // Wires together all backend modules:
-// - Stripe Checkout + Webhooks (Phases 32)
-// - Evidence Upload Pipeline (Phase 28)
-// - BullMQ Workers (Phase 28)
+// - Phases 36-45: Full system integration + beta readiness
+// - Stripe Checkout + Webhooks (Phases 32/39)
+// - Evidence Upload Pipeline (Phase 28/37)
+// - BullMQ Workers (Phase 28/38)
 // - Virus Scanning (Phase 29)
 // - R2 Storage (Phase 31)
 // - Rate Limiting + Subscription Guards (Phase 33)
-// - Error Monitoring (Phase 34)
+// - Error Monitoring (Phase 34/42)
+// - Auth + Tenant Isolation (Phase 36/40)
+// - Beta User Controls (Phase 43)
+// - Deployment Readiness (Phase 44)
 // ============================================
 
 import express from 'express';
@@ -30,6 +34,15 @@ import integrityRoutes from './routes/integrity.js';
 import archivesRoutes from './routes/archives.js';
 import { initScheduler, stopScheduler, getReminderStatus, runSchedulerPass } from './services/hearingScheduler.js';
 import Stripe from 'stripe';
+
+// Phase 36-45 imports
+import authRoutes from './routes/auth.js';
+import casesRoutes from './routes/cases.js';
+import billingRoutes from './routes/billing.js';
+import adminMonitoringRoutes from './routes/adminMonitoring.js';
+import betaControlsRoutes from './routes/betaControls.js';
+import deploymentReadinessRoutes, { runStartupChecks } from './routes/deploymentReadiness.js';
+import { logApiError } from './services/systemLogger.js';
 
 const app = express();
 
@@ -240,7 +253,43 @@ app.use('/api/integrity', integrityRoutes);
 app.use('/api/archives', archivesRoutes);
 
 // ---------------------------------------------------------------------------
-// Routes — Admin Monitoring
+// Routes — Phase 36: Auth + User Management
+// ---------------------------------------------------------------------------
+
+app.use('/api/auth', authRoutes);
+
+// ---------------------------------------------------------------------------
+// Routes — Phase 36: Case Management (tenant-isolated)
+// ---------------------------------------------------------------------------
+
+app.use('/api/cases', casesRoutes);
+
+// ---------------------------------------------------------------------------
+// Routes — Phase 39: Billing + Subscription Lifecycle
+// ---------------------------------------------------------------------------
+
+app.use('/api/billing', billingRoutes);
+
+// ---------------------------------------------------------------------------
+// Routes — Phase 42: Admin Monitoring (real data)
+// ---------------------------------------------------------------------------
+
+app.use('/api/admin/monitoring', adminMonitoringRoutes);
+
+// ---------------------------------------------------------------------------
+// Routes — Phase 43: Beta User Controls
+// ---------------------------------------------------------------------------
+
+app.use('/api/admin/beta', betaControlsRoutes);
+
+// ---------------------------------------------------------------------------
+// Routes — Phase 44: Deployment Readiness
+// ---------------------------------------------------------------------------
+
+app.use('/api/admin/deployment', deploymentReadinessRoutes);
+
+// ---------------------------------------------------------------------------
+// Routes — Admin Monitoring (legacy)
 // ---------------------------------------------------------------------------
 
 app.get('/api/admin/reminder-status', async (_req, res) => {
@@ -304,16 +353,27 @@ app.get('/api/stripe/health', (_req, res) => {
 });
 
 // ---------------------------------------------------------------------------
-// Error Handling
+// Error Handling (Phase 42: persistent error logging)
 // ---------------------------------------------------------------------------
 
 app.use(sentryErrorHandler());
+
+// Log API errors to database
+app.use((err, req, res, next) => {
+  logApiError(err, req).catch(() => {});
+  if (!res.headersSent) {
+    res.status(err.statusCode || 500).json({ error: err.message || 'Internal server error' });
+  }
+});
 
 // ---------------------------------------------------------------------------
 // Start Server
 // ---------------------------------------------------------------------------
 
 const PORT = config.port || 3001;
+
+// Phase 44: Run startup deployment readiness checks
+runStartupChecks();
 
 const server = app.listen(PORT, () => {
   console.log(`\n[Court Access] API server running on http://localhost:${PORT}`);
@@ -325,6 +385,8 @@ const server = app.listen(PORT, () => {
   console.log(`  - Redis: ${config.redisUrl}`);
   console.log(`  - Sentry: ${config.sentryDsn ? 'configured' : 'MISSING'}`);
   console.log(`  - Twilio SMS: ${config.twilioAccountSid ? 'configured' : 'MISSING'}`);
+  console.log(`  - Auth: JWT (${config.jwtSecret ? 'configured' : 'MISSING'})`);
+  console.log(`  - Database: ${config.databaseUrl ? 'configured' : 'MISSING'}`);
   console.log(`  - Hearing Scheduler: running (hourly)`);
   console.log('');
 });

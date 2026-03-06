@@ -205,6 +205,11 @@ router.get('/me', authenticate, async (req, res) => {
 // ---------------------------------------------------------------------------
 
 router.post('/demo-login', async (req, res) => {
+  // Only allow demo login in development/staging
+  if (process.env.NODE_ENV === 'production') {
+    return res.status(404).json({ error: 'Not found' });
+  }
+
   try {
     const { role } = req.body;
     const demoEmails = {

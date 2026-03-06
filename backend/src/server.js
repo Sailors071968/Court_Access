@@ -36,6 +36,7 @@ import { initScheduler, stopScheduler, getReminderStatus, runSchedulerPass } fro
 import Stripe from 'stripe';
 
 // Phase 36-45 imports
+import { authenticate, requireRole } from './middleware/auth.js';
 import authRoutes from './routes/auth.js';
 import casesRoutes from './routes/cases.js';
 import billingRoutes from './routes/billing.js';
@@ -292,7 +293,7 @@ app.use('/api/admin/deployment', deploymentReadinessRoutes);
 // Routes — Admin Monitoring (legacy)
 // ---------------------------------------------------------------------------
 
-app.get('/api/admin/reminder-status', async (_req, res) => {
+app.get('/api/admin/reminder-status', authenticate, requireRole('admin'), async (_req, res) => {
   try {
     const status = await getReminderStatus();
     res.json(status);
@@ -303,7 +304,7 @@ app.get('/api/admin/reminder-status', async (_req, res) => {
 });
 
 // Manual scheduler trigger (for testing / recovery)
-app.post('/api/admin/run-scheduler', async (_req, res) => {
+app.post('/api/admin/run-scheduler', authenticate, requireRole('admin'), async (_req, res) => {
   try {
     const result = await runSchedulerPass();
     res.json({ success: true, ...result });

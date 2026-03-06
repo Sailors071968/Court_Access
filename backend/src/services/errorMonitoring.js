@@ -108,12 +108,8 @@ export function sentryErrorHandler() {
       tenantId: req.user?.tenantId,
     });
 
-    const statusCode = err.statusCode || err.status || 500;
-    res.status(statusCode).json({
-      error: config.nodeEnv === 'production'
-        ? 'Internal server error'
-        : err.message,
-    });
+    // Pass to next error handler (logApiError) instead of sending response here
+    next(err);
   };
 }
 

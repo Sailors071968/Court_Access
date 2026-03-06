@@ -113,25 +113,27 @@ export function registerWebhookRoutes(app) {
 async function handleWebhookEvent(event) {
   console.log(`[Stripe Webhook] Received: ${event.type} (${event.id})`);
 
+  const eventId = event.id;
+
   switch (event.type) {
     case 'checkout.session.completed':
-      await handleCheckoutCompleted(event.data.object);
+      await handleCheckoutCompleted(event.data.object, eventId);
       break;
 
     case 'invoice.payment_succeeded':
-      await handlePaymentSucceeded(event.data.object);
+      await handlePaymentSucceeded(event.data.object, eventId);
       break;
 
     case 'invoice.payment_failed':
-      await handlePaymentFailed(event.data.object);
+      await handlePaymentFailed(event.data.object, eventId);
       break;
 
     case 'customer.subscription.deleted':
-      await handleSubscriptionDeleted(event.data.object);
+      await handleSubscriptionDeleted(event.data.object, eventId);
       break;
 
     case 'customer.subscription.updated':
-      await handleSubscriptionUpdated(event.data.object);
+      await handleSubscriptionUpdated(event.data.object, eventId);
       break;
 
     default:
@@ -143,7 +145,7 @@ async function handleWebhookEvent(event) {
  * Handle checkout.session.completed
  * Fired when a customer completes the Stripe Checkout flow.
  */
-async function handleCheckoutCompleted(session) {
+async function handleCheckoutCompleted(session, eventId) {
   const customerId = session.customer;
   const subscriptionId = session.subscription;
   const plan = session.metadata?.plan || 'professional';
@@ -169,7 +171,7 @@ async function handleCheckoutCompleted(session) {
     await prisma.subscriptionEvent.create({
       data: {
         stripeCustomerId: customerId,
-        stripeEventId: `checkout_${customerId}_${Date.now()}`,
+        stripeEventId: eventId,
         eventType: 'checkout.session.completed',
         plan,
         amount: session.amount_total || 0,
@@ -208,7 +210,7 @@ async function handleCheckoutCompleted(session) {
  * Handle invoice.payment_succeeded
  * Fired when a subscription renewal payment succeeds.
  */
-async function handlePaymentSucceeded(invoice) {
+async function handlePaymentSucceeded(invoice, eventId) {
   const customerId = invoice.customer;
   const amountPaid = invoice.amount_paid;
   const currency = invoice.currency;
@@ -228,7 +230,7 @@ async function handlePaymentSucceeded(invoice) {
     await prisma.subscriptionEvent.create({
       data: {
         stripeCustomerId: customerId,
-        stripeEventId: `payment_${customerId}_${Date.now()}`,
+        stripeEventId: eventId,
         eventType: 'invoice.payment_succeeded',
         amount: amountPaid,
         currency,
@@ -251,7 +253,7 @@ async function handlePaymentSucceeded(invoice) {
  * Handle invoice.payment_failed
  * Fired when a subscription renewal payment fails.
  */
-async function handlePaymentFailed(invoice) {
+async function handlePaymentFailed(invoice, eventId) {
   const customerId = invoice.customer;
   const attemptCount = invoice.attempt_count;
 
@@ -272,7 +274,7 @@ async function handlePaymentFailed(invoice) {
     await prisma.subscriptionEvent.create({
       data: {
         stripeCustomerId: customerId,
-        stripeEventId: `failed_${customerId}_${Date.now()}`,
+        stripeEventId: eventId,
         eventType: 'invoice.payment_failed',
         status: 'failed',
         metadata: { attemptCount },
@@ -298,7 +300,7 @@ async function handlePaymentFailed(invoice) {
  * Handle customer.subscription.deleted
  * Fired when a subscription is cancelled (end of billing period).
  */
-async function handleSubscriptionDeleted(subscription) {
+async function handleSubscriptionDeleted(subscription, eventId) {
   const customerId = subscription.customer;
 
   console.log(`[Stripe Webhook] Subscription deleted: customer=${customerId}`);
@@ -318,7 +320,7 @@ async function handleSubscriptionDeleted(subscription) {
     await prisma.subscriptionEvent.create({
       data: {
         stripeCustomerId: customerId,
-        stripeEventId: `cancelled_${customerId}_${Date.now()}`,
+        stripeEventId: eventId,
         eventType: 'customer.subscription.deleted',
         plan: 'free',
         status: 'cancelled',
@@ -347,7 +349,7 @@ async function handleSubscriptionDeleted(subscription) {
  * Handle customer.subscription.updated
  * Fired when subscription is changed (upgrade, downgrade, etc.)
  */
-async function handleSubscriptionUpdated(subscription) {
+async function handleSubscriptionUpdated(subscription, eventId) {
   const customerId = subscription.customer;
   const status = subscription.status;
 

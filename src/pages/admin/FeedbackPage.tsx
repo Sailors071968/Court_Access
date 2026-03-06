@@ -4,6 +4,7 @@
 // ============================================
 
 import { useState, useEffect, useCallback } from 'react';
+import type { LucideIcon } from 'lucide-react';
 import {
   MessageSquare,
   Filter,
@@ -53,7 +54,7 @@ interface FeedbackStats {
 // Helpers
 // ---------------------------------------------------------------------------
 
-const TYPE_ICONS: Record<string, React.ComponentType<{ size?: number; className?: string }>> = {
+const TYPE_ICONS: Record<string, LucideIcon> = {
   bug: Bug,
   analysis_error: AlertTriangle,
   ui_issue: Eye,

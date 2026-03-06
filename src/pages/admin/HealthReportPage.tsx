@@ -4,6 +4,7 @@
 // ============================================
 
 import { useState, useEffect } from 'react';
+import type { LucideIcon } from 'lucide-react';
 import {
   BarChart3,
   Users,
@@ -80,7 +81,7 @@ function MetricCard({
   label: string;
   value: string | number;
   sub?: string;
-  icon: React.ComponentType<{ size?: number; className?: string }>;
+  icon: LucideIcon;
   color?: string;
 }) {
   return (

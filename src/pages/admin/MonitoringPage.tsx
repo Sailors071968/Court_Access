@@ -4,6 +4,7 @@
 // ============================================
 
 import { useState } from 'react';
+import type { LucideIcon } from 'lucide-react';
 import {
   AlertTriangle,
   Activity,
@@ -132,7 +133,7 @@ function LogLevelBadge({ level }: { level: 'info' | 'warn' | 'error' }) {
   );
 }
 
-function MetricCard({ label, value, sub, icon: Icon }: { label: string; value: string; sub?: string; icon: React.ComponentType<{ size?: number; className?: string }> }) {
+function MetricCard({ label, value, sub, icon: Icon }: { label: string; value: string; sub?: string; icon: LucideIcon }) {
   return (
     <div className="bg-white rounded-xl border border-slate-200 p-5">
       <div className="flex items-center justify-between mb-3">

@@ -4,6 +4,7 @@
 // ============================================
 
 import { useState } from 'react';
+import type { LucideIcon } from 'lucide-react';
 import {
   Users,
   MessageSquare,
@@ -188,7 +189,7 @@ export function CollaborationPage() {
   const [expandedThread, setExpandedThread] = useState<string | null>('t1');
   const [newReply, setNewReply] = useState('');
 
-  const tabs: { id: TabId; label: string; icon: React.ComponentType<{ size?: number }>; count?: number }[] = [
+  const tabs: { id: TabId; label: string; icon: LucideIcon; count?: number }[] = [
     { id: 'team', label: 'Team', icon: Users, count: TEAM.length },
     { id: 'comments', label: 'Comments', icon: MessageSquare, count: THREADS.filter((t) => !t.isResolved).length },
     { id: 'annotations', label: 'Annotations', icon: StickyNote, count: ANNOTATIONS.length },

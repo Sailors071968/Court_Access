@@ -39,10 +39,10 @@ router.get('/:caseId/documents', async (req, res) => {
 
 router.get('/:caseId/documents/:docId', async (req, res) => {
   try {
-    const { docId } = req.params;
+    const { caseId, docId } = req.params;
 
-    const document = await prisma.policyDocument.findUnique({
-      where: { id: docId },
+    const document = await prisma.policyDocument.findFirst({
+      where: { id: docId, caseId },
       include: { findings: true },
     });
 
@@ -96,18 +96,19 @@ router.post('/:caseId/documents', async (req, res) => {
 
 router.delete('/:caseId/documents/:docId', async (req, res) => {
   try {
-    const { docId } = req.params;
+    const { caseId, docId } = req.params;
 
-    await prisma.policyDocument.update({
-      where: { id: docId },
+    const result = await prisma.policyDocument.updateMany({
+      where: { id: docId, caseId },
       data: { status: 'archived' },
     });
 
-    res.json({ archived: true });
-  } catch (err) {
-    if (err.code === 'P2025') {
+    if (result.count === 0) {
       return res.status(404).json({ error: 'Policy document not found' });
     }
+
+    res.json({ archived: true });
+  } catch (err) {
     console.error('[PolicyCompliance] Delete doc error:', err.message);
     res.status(500).json({ error: 'Failed to archive policy document' });
   }
@@ -225,23 +226,24 @@ router.post('/:caseId/analyze', async (req, res) => {
 
 router.patch('/:caseId/findings/:findingId', async (req, res) => {
   try {
-    const { findingId } = req.params;
+    const { caseId, findingId } = req.params;
     const { status } = req.body;
 
     if (!status || !['active', 'dismissed', 'confirmed', 'resolved'].includes(status)) {
       return res.status(400).json({ error: 'Valid status required: active, dismissed, confirmed, resolved' });
     }
 
-    const updated = await prisma.policyComplianceFinding.update({
-      where: { id: findingId },
+    const updated = await prisma.policyComplianceFinding.updateMany({
+      where: { id: findingId, caseId },
       data: { status },
     });
 
-    res.json(updated);
-  } catch (err) {
-    if (err.code === 'P2025') {
+    if (updated.count === 0) {
       return res.status(404).json({ error: 'Finding not found' });
     }
+
+    res.json({ updated: true, count: updated.count });
+  } catch (err) {
     console.error('[PolicyCompliance] Update finding error:', err.message);
     res.status(500).json({ error: 'Failed to update finding' });
   }

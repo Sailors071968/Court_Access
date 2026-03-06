@@ -125,23 +125,24 @@ router.post('/:caseId/analyze', async (req, res) => {
 
 router.patch('/:caseId/:correlationId', async (req, res) => {
   try {
-    const { correlationId } = req.params;
+    const { caseId, correlationId } = req.params;
     const { status } = req.body;
 
     if (!status || !['active', 'dismissed', 'confirmed'].includes(status)) {
       return res.status(400).json({ error: 'Valid status required: active, dismissed, confirmed' });
     }
 
-    const updated = await prisma.evidenceCorrelation.update({
-      where: { id: correlationId },
+    const updated = await prisma.evidenceCorrelation.updateMany({
+      where: { id: correlationId, caseId },
       data: { status },
     });
 
-    res.json(updated);
-  } catch (err) {
-    if (err.code === 'P2025') {
+    if (updated.count === 0) {
       return res.status(404).json({ error: 'Correlation not found' });
     }
+
+    res.json({ updated: true, count: updated.count });
+  } catch (err) {
     console.error('[Correlations] Update error:', err.message);
     res.status(500).json({ error: 'Failed to update correlation' });
   }
@@ -153,17 +154,18 @@ router.patch('/:caseId/:correlationId', async (req, res) => {
 
 router.delete('/:caseId/:correlationId', async (req, res) => {
   try {
-    const { correlationId } = req.params;
+    const { caseId, correlationId } = req.params;
 
-    await prisma.evidenceCorrelation.delete({
-      where: { id: correlationId },
+    const result = await prisma.evidenceCorrelation.deleteMany({
+      where: { id: correlationId, caseId },
     });
+
+    if (result.count === 0) {
+      return res.status(404).json({ error: 'Correlation not found' });
+    }
 
     res.json({ deleted: true });
   } catch (err) {
-    if (err.code === 'P2025') {
-      return res.status(404).json({ error: 'Correlation not found' });
-    }
     console.error('[Correlations] Delete error:', err.message);
     res.status(500).json({ error: 'Failed to delete correlation' });
   }

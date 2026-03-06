@@ -219,7 +219,9 @@ router.post('/demo-login', async (req, res) => {
       client: 'client@courtaccess.com',
     };
 
-    const email = demoEmails[role] || demoEmails.attorney;
+    // Validate role against known demo roles to prevent arbitrary role injection
+    const validRole = demoEmails[role] ? role : 'attorney';
+    const email = demoEmails[validRole];
 
     let user = await prisma.user.findUnique({ where: { email } });
 
@@ -230,8 +232,8 @@ router.post('/demo-login', async (req, res) => {
         data: {
           email,
           passwordHash,
-          name: `Demo ${role ? role.charAt(0).toUpperCase() + role.slice(1) : 'Attorney'}`,
-          role: role || 'attorney',
+          name: `Demo ${validRole.charAt(0).toUpperCase() + validRole.slice(1)}`,
+          role: validRole,
           status: 'active',
           plan: 'professional',
           onboardingComplete: true,

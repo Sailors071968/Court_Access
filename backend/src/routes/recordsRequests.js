@@ -110,9 +110,12 @@ router.post('/', authenticate, async (req, res) => {
       return res.status(404).json({ error: 'Agency not found' });
     }
 
-    // Phase 78: Hash the outgoing request for immutability
+    // Phase 78: Dual-hash the outgoing request for immutability (SHA-256 + SHA3-256)
     const requestDocumentHash = requestContent
       ? crypto.createHash('sha256').update(requestContent).digest('hex')
+      : null;
+    const requestDocumentHashSha3 = requestContent
+      ? crypto.createHash('sha3-256').update(requestContent).digest('hex')
       : null;
 
     const request = await prisma.publicRecordsRequest.create({
@@ -124,6 +127,7 @@ router.post('/', authenticate, async (req, res) => {
         deliveryMethod: deliveryMethod || 'email',
         requestContent: requestContent || '',
         requestDocumentHash,
+        requestDocumentHashSha3,
         templateId: templateId || null,
         notes: notes || '',
         status: 'submitted',
@@ -244,13 +248,15 @@ router.post('/:requestId/response', authenticate, async (req, res) => {
       return res.status(400).json({ error: 'responseContent is required' });
     }
 
-    // Phase 79: Hash the response document for integrity verification
+    // Phase 79: Dual-hash the response document for integrity verification (SHA-256 + SHA3-256)
     const responseHash = crypto.createHash('sha256').update(responseContent).digest('hex');
+    const responseHashSha3 = crypto.createHash('sha3-256').update(responseContent).digest('hex');
 
     const result = await prisma.publicRecordsRequest.updateMany({
       where: { id: requestId, tenantId },
       data: {
         responseHash,
+        responseHashSha3,
         responseReceivedDate: new Date(),
         status: 'fulfilled',
       },

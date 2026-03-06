@@ -578,7 +578,9 @@ model PublicRecordsRequest {
   status                String   @default("submitted") // submitted, acknowledged, fulfilled, partial_response, denied, no_response
   responseReceivedDate  DateTime?
   responseHash          String?  // SHA-256 of response document
+  responseHashSha3      String?  // SHA3-256 of response document (Phase 87 dual-hash)
   requestDocumentHash   String?  // SHA-256 of outgoing request
+  requestDocumentHashSha3 String? // SHA3-256 of outgoing request (Phase 87 dual-hash)
   requestContent        String   @default("") // The actual request text
   templateId            String?  // Reference to template used
   staffApproved         Boolean  @default(false)

@@ -72,6 +72,13 @@ router.post('/:caseId/extract', authenticate, async (req, res) => {
       }
     }
 
+    // Phase 84: Deterministic sort — by referenceType then referenceValue (ASCII comparator)
+    uniqueRefs.sort((a, b) => {
+      const typeCompare = a.referenceType < b.referenceType ? -1 : a.referenceType > b.referenceType ? 1 : 0;
+      if (typeCompare !== 0) return typeCompare;
+      return a.referenceValue < b.referenceValue ? -1 : a.referenceValue > b.referenceValue ? 1 : 0;
+    });
+
     // Store references
     const created = [];
     for (const ref of uniqueRefs) {
@@ -84,18 +91,30 @@ router.post('/:caseId/extract', authenticate, async (req, res) => {
       }
     }
 
+    // Phase 84: Sort extracted types deterministically before logging
+    const extractedTypes = [...new Set(created.map(r => r.referenceType))].sort(
+      (a, b) => a < b ? -1 : a > b ? 1 : 0
+    );
+
     console.log(JSON.stringify({
       event: 'references_extracted',
       caseId,
       sourceDocumentId,
       count: created.length,
-      types: [...new Set(created.map(r => r.referenceType))],
+      types: extractedTypes,
       timestamp: new Date().toISOString(),
     }));
 
+    // Phase 84: Sort output references deterministically
+    const sortedCreated = [...created].sort((a, b) => {
+      const typeCompare = a.referenceType < b.referenceType ? -1 : a.referenceType > b.referenceType ? 1 : 0;
+      if (typeCompare !== 0) return typeCompare;
+      return a.referenceValue < b.referenceValue ? -1 : a.referenceValue > b.referenceValue ? 1 : 0;
+    });
+
     res.json({
-      extracted: created.length,
-      references: created,
+      extracted: sortedCreated.length,
+      references: sortedCreated,
     });
   } catch (err) {
     console.error('[CrossRef] Extract error:', err.message);
@@ -267,13 +286,20 @@ router.post('/:caseId/compare', authenticate, async (req, res) => {
       timestamp: new Date().toISOString(),
     }));
 
+    // Phase 84: Sort cross-references deterministically by type then source document
+    const sortedStored = [...stored].sort((a, b) => {
+      const typeCompare = a.referenceType < b.referenceType ? -1 : a.referenceType > b.referenceType ? 1 : 0;
+      if (typeCompare !== 0) return typeCompare;
+      return a.sourceDocumentId < b.sourceDocumentId ? -1 : a.sourceDocumentId > b.sourceDocumentId ? 1 : 0;
+    });
+
     res.json({
-      crossReferences: stored,
-      count: stored.length,
+      crossReferences: sortedStored,
+      count: sortedStored.length,
       summary: {
-        matches: stored.filter(r => r.referenceType === 'reference_match').length,
-        conflicts: stored.filter(r => r.referenceType === 'reference_conflict').length,
-        missing: stored.filter(r => r.referenceType === 'missing_reference').length,
+        matches: sortedStored.filter(r => r.referenceType === 'reference_match').length,
+        conflicts: sortedStored.filter(r => r.referenceType === 'reference_conflict').length,
+        missing: sortedStored.filter(r => r.referenceType === 'missing_reference').length,
       },
     });
   } catch (err) {

@@ -102,7 +102,6 @@ export function sentryErrorHandler() {
     captureException(err, {
       url: req.url,
       method: req.method,
-      body: req.body,
       query: req.query,
       userId: req.user?.id,
       tenantId: req.user?.tenantId,

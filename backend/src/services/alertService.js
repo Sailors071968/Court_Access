@@ -215,7 +215,9 @@ export function installCrashHandlers() {
       stack: err.stack,
       name: err.name,
     }).catch(() => {});
-    // Let Node.js default handler continue (process exits)
+    // Adding this listener overrides Node's default exit behavior — we must exit explicitly
+    // Allow a brief window for the async alert to flush, then exit
+    setTimeout(() => process.exit(1), 1000);
   });
 
   process.on('unhandledRejection', (reason) => {

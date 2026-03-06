@@ -102,7 +102,7 @@ router.post('/:caseId/evidence/:evidenceId/transcribe', async (req, res) => {
     // Download file from R2 for transcription
     let fileBuffer;
     if (evidence.storageKey) {
-      fileBuffer = await downloadFile(evidence.storageKey);
+      fileBuffer = await downloadFile(evidence.userId, evidence.storageKey);
     } else {
       return res.status(400).json({ error: 'Evidence file not available in storage' });
     }

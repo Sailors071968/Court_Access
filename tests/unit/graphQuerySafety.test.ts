@@ -215,12 +215,12 @@ describe('Graph Query Safety', () => {
       await createNode({ caseId: 'case-search', type: NODE_TYPES.PERSON, label: 'John (Smith)', metadata: {} });
 
       // Should not throw on special characters
-      const results = await searchGraphEntities('case-search', '(Smith)');
+      const results = await searchGraphEntities('(Smith)', { caseId: 'case-search' });
       expect(results).toBeInstanceOf(Array);
     });
 
     it('should handle empty search query', async () => {
-      const results = await searchGraphEntities('case-search', '');
+      const results = await searchGraphEntities('', { caseId: 'case-search' });
       expect(results).toBeInstanceOf(Array);
     });
   });

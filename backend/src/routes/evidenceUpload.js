@@ -16,6 +16,7 @@ import { Router } from 'express';
 import multer from 'multer';
 import crypto from 'crypto';
 import { config } from '../config/index.js';
+import prisma from '../services/prismaClient.js';
 import { scanFile, isClamAVAvailable } from '../services/virusScanner.js';
 import { uploadFile, getSignedDownloadUrl, getSignedUploadUrl, deleteFile, downloadFile } from '../services/r2Storage.js';
 import { enqueueProcessingJob, getQueueStats } from '../workers/evidenceProcessor.js';
@@ -72,11 +73,20 @@ const upload = multer({
   },
 });
 
-// In-memory evidence store (replace with database in production)
-const evidenceRecords = new Map();
-
 // Phase 98: Rate limiting now handled by Redis-backed middleware (rateLimiter.js)
 // In-memory Maps replaced with uploadLimiterPerMinute + uploadLimiterPerHour
+
+/**
+ * Helper: convert BigInt fields to Number for JSON serialization.
+ * Prisma returns fileSize as BigInt; JSON.stringify cannot handle BigInt natively.
+ */
+function formatEvidenceRecord(record) {
+  if (!record) return null;
+  return {
+    ...record,
+    fileSize: typeof record.fileSize === 'bigint' ? Number(record.fileSize) : record.fileSize,
+  };
+}
 
 // ---------------------------------------------------------------------------
 // Routes — Static paths MUST be registered before parameterized /:evidenceId
@@ -90,10 +100,11 @@ router.get('/queue/stats', async (req, res) => {
   try {
     const stats = await getQueueStats();
     const clamavAvailable = await isClamAVAvailable();
+    const totalRecords = await prisma.evidenceRecord.count();
 
     res.json({
       queue: stats || { waiting: 0, active: 0, completed: 0, failed: 0, delayed: 0 },
-      totalRecords: evidenceRecords.size,
+      totalRecords,
       clamavAvailable,
     });
   } catch (err) {
@@ -105,15 +116,21 @@ router.get('/queue/stats', async (req, res) => {
  * GET /api/evidence/list/:caseId
  * List all evidence for a case.
  */
-router.get('/list/:caseId', (req, res) => {
+router.get('/list/:caseId', async (req, res) => {
   const { caseId } = req.params;
-  const tenantId = req.headers['x-tenant-id'] || 'default';
+  const userId = req.user?.id || 'default';
 
-  const records = Array.from(evidenceRecords.values())
-    .filter((r) => r.caseId === caseId && r.tenantId === tenantId)
-    .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+  try {
+    const records = await prisma.evidenceRecord.findMany({
+      where: { caseId, userId },
+      orderBy: { createdAt: 'desc' },
+    });
 
-  res.json({ evidence: records, total: records.length });
+    res.json({ evidence: records.map(formatEvidenceRecord), total: records.length });
+  } catch (err) {
+    console.error(`[Evidence] List failed: ${err.message}`);
+    res.status(500).json({ error: 'Failed to list evidence' });
+  }
 });
 
 /**
@@ -122,7 +139,7 @@ router.get('/list/:caseId', (req, res) => {
  * Used for large files to avoid passing through the backend.
  */
 router.post('/presigned-upload', async (req, res) => {
-  const tenantId = req.headers['x-tenant-id'] || 'default';
+  const userId = req.user?.id || 'default';
   const { filename, contentType, caseId } = req.body;
 
   if (!filename || !contentType) {
@@ -137,22 +154,22 @@ router.post('/presigned-upload', async (req, res) => {
   try {
     const evidenceId = `ev-${crypto.randomBytes(8).toString('hex')}`;
     const { signedUrl, storageKey } = await getSignedUploadUrl(
-      tenantId, evidenceId, filename, contentType
+      userId, evidenceId, filename, contentType
     );
 
-    // Create a pending evidence record
-    evidenceRecords.set(evidenceId, {
-      id: evidenceId,
-      tenantId,
-      caseId: caseId || 'unassigned',
-      filename,
-      contentType,
-      evidenceType: mimeConfig.type,
-      fileSize: 0, // Updated after upload completes
-      storageKey,
-      status: 'pending_upload',
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
+    // Create a pending evidence record in the database
+    await prisma.evidenceRecord.create({
+      data: {
+        id: evidenceId,
+        userId,
+        caseId: caseId || 'unassigned',
+        filename,
+        contentType,
+        evidenceType: mimeConfig.type,
+        fileSize: BigInt(0),
+        storageKey,
+        status: 'pending_upload',
+      },
     });
 
     res.json({
@@ -175,11 +192,10 @@ router.post('/presigned-upload', async (req, res) => {
  * POST /api/evidence/upload
  * Upload a single evidence file.
  *
- * Headers: x-tenant-id (required)
  * Body: multipart form with 'file' field + optional 'caseId', 'description'
  */
 router.post('/upload', uploadLimiterPerMinute, uploadLimiterPerHour, upload.single('file'), async (req, res) => {
-  const tenantId = req.user?.id || 'default';
+  const userId = req.user?.id || 'default';
   const caseId = req.body?.caseId || 'unassigned';
   const description = req.body?.description || '';
 
@@ -216,7 +232,7 @@ router.post('/upload', uploadLimiterPerMinute, uploadLimiterPerHour, upload.sing
       console.warn(`[Upload] REJECTED — malware detected: ${scanResult.threat} (scanner: ${scanResult.scanner})`);
       trackUploadFailure(evidenceId, new Error(`Malware detected: ${scanResult.threat}`), {
         filename: file.originalname,
-        tenantId,
+        userId,
         scanner: scanResult.scanner,
       });
       return res.status(422).json({
@@ -232,7 +248,7 @@ router.post('/upload', uploadLimiterPerMinute, uploadLimiterPerHour, upload.sing
     let storageKey = null;
     try {
       storageKey = await uploadFile(
-        tenantId,
+        userId,
         evidenceId,
         file.originalname,
         file.buffer,
@@ -245,36 +261,33 @@ router.post('/upload', uploadLimiterPerMinute, uploadLimiterPerHour, upload.sing
       // and can be re-processed when R2 becomes available
     }
 
-    // Step 4: Create evidence record
-    const record = {
-      id: evidenceId,
-      tenantId,
-      caseId,
-      filename: file.originalname,
-      contentType: file.mimetype,
-      evidenceType: mimeConfig.type,
-      fileSize: file.size,
-      sha256,
-      storageKey,
-      description,
-      status: 'pending', // pending → processing → complete | error
-      processingResult: null,
-      scanResult: {
-        safe: scanResult.safe,
-        scanner: scanResult.scanner,
+    // Step 4: Create evidence record in database
+    let record = await prisma.evidenceRecord.create({
+      data: {
+        id: evidenceId,
+        userId,
+        caseId,
+        filename: file.originalname,
+        contentType: file.mimetype,
+        evidenceType: mimeConfig.type,
+        fileSize: BigInt(file.size),
+        sha256,
+        storageKey,
+        description,
+        status: 'pending',
+        scanResult: {
+          safe: scanResult.safe,
+          scanner: scanResult.scanner,
+        },
       },
-      createdAt: new Date().toISOString(),
-      updatedAt: new Date().toISOString(),
-    };
-
-    evidenceRecords.set(evidenceId, record);
+    });
 
     // Step 5: Queue processing job
     let jobId = null;
     try {
       const job = await enqueueProcessingJob(
         evidenceId,
-        tenantId,
+        userId,
         mimeConfig.type,
         storageKey,
         {
@@ -286,9 +299,10 @@ router.post('/upload', uploadLimiterPerMinute, uploadLimiterPerHour, upload.sing
       jobId = job?.id || null;
 
       if (jobId) {
-        record.status = 'processing';
-        record.jobId = jobId;
-        evidenceRecords.set(evidenceId, record);
+        record = await prisma.evidenceRecord.update({
+          where: { id: evidenceId },
+          data: { status: 'processing', jobId },
+        });
       }
     } catch (err) {
       console.warn(`[Upload] Failed to queue processing job: ${err.message}`);
@@ -302,14 +316,14 @@ router.post('/upload', uploadLimiterPerMinute, uploadLimiterPerHour, upload.sing
       status: record.status,
       evidenceType: record.evidenceType,
       filename: record.filename,
-      fileSize: record.fileSize,
+      fileSize: Number(record.fileSize),
       sha256: record.sha256,
       jobId,
       storageKey: record.storageKey,
     });
   } catch (err) {
     console.error(`[Upload] Error: ${err.message}`);
-    captureException(err, { filename: file.originalname, tenantId });
+    captureException(err, { filename: file.originalname, userId });
     res.status(500).json({ error: 'Upload failed' });
   }
 });
@@ -318,21 +332,23 @@ router.post('/upload', uploadLimiterPerMinute, uploadLimiterPerHour, upload.sing
  * GET /api/evidence/:evidenceId
  * Get evidence record by ID.
  */
-router.get('/:evidenceId', (req, res) => {
+router.get('/:evidenceId', async (req, res) => {
   const { evidenceId } = req.params;
-  const tenantId = req.headers['x-tenant-id'] || 'default';
+  const userId = req.user?.id || 'default';
 
-  const record = evidenceRecords.get(evidenceId);
-  if (!record) {
-    return res.status(404).json({ error: 'Evidence not found' });
+  try {
+    const record = await prisma.evidenceRecord.findFirst({
+      where: { id: evidenceId, userId },
+    });
+    if (!record) {
+      return res.status(404).json({ error: 'Evidence not found' });
+    }
+
+    res.json(formatEvidenceRecord(record));
+  } catch (err) {
+    console.error(`[Evidence] Get failed: ${err.message}`);
+    res.status(500).json({ error: 'Failed to get evidence record' });
   }
-
-  // Tenant isolation
-  if (record.tenantId !== tenantId) {
-    return res.status(404).json({ error: 'Evidence not found' });
-  }
-
-  res.json(record);
 });
 
 /**
@@ -341,23 +357,21 @@ router.get('/:evidenceId', (req, res) => {
  */
 router.get('/:evidenceId/download', async (req, res) => {
   const { evidenceId } = req.params;
-  const tenantId = req.headers['x-tenant-id'] || 'default';
-
-  const record = evidenceRecords.get(evidenceId);
-  if (!record) {
-    return res.status(404).json({ error: 'Evidence not found' });
-  }
-
-  if (record.tenantId !== tenantId) {
-    return res.status(404).json({ error: 'Evidence not found' });
-  }
-
-  if (!record.storageKey) {
-    return res.status(404).json({ error: 'File not available in storage' });
-  }
+  const userId = req.user?.id || 'default';
 
   try {
-    const signedUrl = await getSignedDownloadUrl(tenantId, record.storageKey);
+    const record = await prisma.evidenceRecord.findFirst({
+      where: { id: evidenceId, userId },
+    });
+    if (!record) {
+      return res.status(404).json({ error: 'Evidence not found' });
+    }
+
+    if (!record.storageKey) {
+      return res.status(404).json({ error: 'File not available in storage' });
+    }
+
+    const signedUrl = await getSignedDownloadUrl(userId, record.storageKey);
     res.json({ url: signedUrl, expiresIn: 3600 });
   } catch (err) {
     console.error(`[Evidence] Download URL generation failed: ${err.message}`);
@@ -371,28 +385,31 @@ router.get('/:evidenceId/download', async (req, res) => {
  */
 router.delete('/:evidenceId', async (req, res) => {
   const { evidenceId } = req.params;
-  const tenantId = req.headers['x-tenant-id'] || 'default';
+  const userId = req.user?.id || 'default';
 
-  const record = evidenceRecords.get(evidenceId);
-  if (!record) {
-    return res.status(404).json({ error: 'Evidence not found' });
-  }
-
-  if (record.tenantId !== tenantId) {
-    return res.status(404).json({ error: 'Evidence not found' });
-  }
-
-  // Delete from R2
-  if (record.storageKey) {
-    try {
-      await deleteFile(tenantId, record.storageKey);
-    } catch (err) {
-      console.warn(`[Evidence] R2 deletion failed: ${err.message}`);
+  try {
+    const record = await prisma.evidenceRecord.findFirst({
+      where: { id: evidenceId, userId },
+    });
+    if (!record) {
+      return res.status(404).json({ error: 'Evidence not found' });
     }
-  }
 
-  evidenceRecords.delete(evidenceId);
-  res.json({ deleted: true, evidenceId });
+    // Delete from R2
+    if (record.storageKey) {
+      try {
+        await deleteFile(userId, record.storageKey);
+      } catch (err) {
+        console.warn(`[Evidence] R2 deletion failed: ${err.message}`);
+      }
+    }
+
+    await prisma.evidenceRecord.delete({ where: { id: evidenceId } });
+    res.json({ deleted: true, evidenceId });
+  } catch (err) {
+    console.error(`[Evidence] Delete failed: ${err.message}`);
+    res.status(500).json({ error: 'Failed to delete evidence' });
+  }
 });
 
 /**
@@ -401,80 +418,98 @@ router.delete('/:evidenceId', async (req, res) => {
  */
 router.post('/:evidenceId/confirm-upload', async (req, res) => {
   const { evidenceId } = req.params;
-  const tenantId = req.headers['x-tenant-id'] || 'default';
+  const userId = req.user?.id || 'default';
   const { fileSize, sha256 } = req.body;
 
-  const record = evidenceRecords.get(evidenceId);
-  if (!record || record.tenantId !== tenantId) {
-    return res.status(404).json({ error: 'Evidence not found' });
-  }
-
-  if (record.status !== 'pending_upload') {
-    return res.status(400).json({ error: 'Evidence is not in pending_upload state' });
-  }
-
-  // Virus scan: download file from R2 and scan before proceeding
-  let downloadedBuffer = null;
   try {
-    const fileBuffer = await downloadFile(tenantId, record.storageKey);
-    downloadedBuffer = fileBuffer;
-    console.log(`[Evidence] Downloaded ${record.storageKey} for virus scan (${fileBuffer.length} bytes)`);
+    const record = await prisma.evidenceRecord.findFirst({
+      where: { id: evidenceId, userId },
+    });
+    if (!record) {
+      return res.status(404).json({ error: 'Evidence not found' });
+    }
 
-    const scanResult = await scanFile(fileBuffer);
-    if (!scanResult.safe) {
-      console.warn(`[Evidence] REJECTED presigned upload — malware detected: ${scanResult.threat}`);
-      // Delete infected file from R2
-      try {
-        await deleteFile(tenantId, record.storageKey);
-      } catch (delErr) {
-        console.error(`[Evidence] Failed to delete infected file: ${delErr.message}`);
+    if (record.status !== 'pending_upload') {
+      return res.status(400).json({ error: 'Evidence is not in pending_upload state' });
+    }
+
+    // Virus scan: download file from R2 and scan before proceeding
+    let downloadedBuffer = null;
+    let scanResultData = null;
+    try {
+      const fileBuffer = await downloadFile(userId, record.storageKey);
+      downloadedBuffer = fileBuffer;
+      console.log(`[Evidence] Downloaded ${record.storageKey} for virus scan (${fileBuffer.length} bytes)`);
+
+      const scanResult = await scanFile(fileBuffer);
+      if (!scanResult.safe) {
+        console.warn(`[Evidence] REJECTED presigned upload — malware detected: ${scanResult.threat}`);
+        // Delete infected file from R2
+        try {
+          await deleteFile(userId, record.storageKey);
+        } catch (delErr) {
+          console.error(`[Evidence] Failed to delete infected file: ${delErr.message}`);
+        }
+        await prisma.evidenceRecord.update({
+          where: { id: evidenceId },
+          data: {
+            status: 'rejected',
+            scanResult: { safe: false, threat: scanResult.threat, scanner: scanResult.scanner },
+          },
+        });
+        return res.status(422).json({
+          error: 'File rejected: malware detected',
+          threat: scanResult.threat,
+          scanner: scanResult.scanner,
+        });
       }
-      record.status = 'rejected';
-      record.scanResult = { safe: false, threat: scanResult.threat, scanner: scanResult.scanner };
-      record.updatedAt = new Date().toISOString();
-      evidenceRecords.set(evidenceId, record);
-      return res.status(422).json({
-        error: 'File rejected: malware detected',
-        threat: scanResult.threat,
-        scanner: scanResult.scanner,
-      });
+      console.log(`[Evidence] Presigned upload scan passed (scanner: ${scanResult.scanner})`);
+      scanResultData = { safe: true, scanner: scanResult.scanner };
+    } catch (err) {
+      console.warn(`[Evidence] Could not scan presigned upload (${err.message}) — proceeding with caution`);
+      scanResultData = { safe: null, scanner: 'none', note: 'scan skipped — file not downloadable' };
     }
-    console.log(`[Evidence] Presigned upload scan passed (scanner: ${scanResult.scanner})`);
-    record.scanResult = { safe: true, scanner: scanResult.scanner };
-  } catch (err) {
-    console.warn(`[Evidence] Could not scan presigned upload (${err.message}) — proceeding with caution`);
-    // If R2 download fails (e.g. R2 not configured), proceed but flag as unscanned
-    record.scanResult = { safe: null, scanner: 'none', note: 'scan skipped — file not downloadable' };
-  }
 
-  // Update record — compute fileSize and sha256 server-side when possible
-  if (downloadedBuffer) {
-    record.fileSize = downloadedBuffer.length;
-    record.sha256 = crypto.createHash('sha256').update(downloadedBuffer).digest('hex');
-  } else {
-    // Fallback: reject client-provided hash — never trust client for integrity
-    record.fileSize = fileSize || 0;
-    record.sha256 = ''; // Server-side computation unavailable — hash left empty
-  }
-  record.status = 'pending';
-  record.updatedAt = new Date().toISOString();
+    // Compute fileSize and sha256 server-side when possible
+    const computedFileSize = downloadedBuffer
+      ? BigInt(downloadedBuffer.length)
+      : BigInt(fileSize || 0);
+    const computedSha256 = downloadedBuffer
+      ? crypto.createHash('sha256').update(downloadedBuffer).digest('hex')
+      : ''; // Server-side computation unavailable — hash left empty
 
-  // Queue processing
-  try {
-    const job = await enqueueProcessingJob(
-      evidenceId, tenantId, record.evidenceType, record.storageKey,
-      { filename: record.filename, contentType: record.contentType, fileSize: record.fileSize }
-    );
-    if (job) {
-      record.status = 'processing';
-      record.jobId = job.id;
+    // Update record status and queue processing
+    let updatedStatus = 'pending';
+    let jobId = null;
+    try {
+      const job = await enqueueProcessingJob(
+        evidenceId, userId, record.evidenceType, record.storageKey,
+        { filename: record.filename, contentType: record.contentType, fileSize: Number(computedFileSize) }
+      );
+      if (job) {
+        updatedStatus = 'processing';
+        jobId = job.id;
+      }
+    } catch (err) {
+      console.warn(`[Evidence] Failed to queue processing: ${err.message}`);
     }
-  } catch (err) {
-    console.warn(`[Evidence] Failed to queue processing: ${err.message}`);
-  }
 
-  evidenceRecords.set(evidenceId, record);
-  res.json({ evidenceId, status: record.status });
+    const updated = await prisma.evidenceRecord.update({
+      where: { id: evidenceId },
+      data: {
+        fileSize: computedFileSize,
+        sha256: computedSha256,
+        status: updatedStatus,
+        jobId,
+        scanResult: scanResultData,
+      },
+    });
+
+    res.json({ evidenceId, status: updated.status });
+  } catch (err) {
+    console.error(`[Evidence] Confirm upload failed: ${err.message}`);
+    res.status(500).json({ error: 'Failed to confirm upload' });
+  }
 });
 
 export default router;

@@ -86,8 +86,11 @@ export function startJob(
   if (!job || !job.enabled) return false;
   if (activeTimers.has(key)) return false; // already running
 
+  let isRunning = false;
   const wrappedCallback = async () => {
     if (!job.enabled) return;
+    if (isRunning) return; // prevent overlapping concurrent executions
+    isRunning = true;
     job.status = 'running';
     job.lastRun = Date.now();
     try {
@@ -99,6 +102,7 @@ export function startJob(
       job.status = 'error';
     }
     job.nextRun = Date.now() + job.intervalMs;
+    isRunning = false;
   };
 
   // Run immediately, then schedule

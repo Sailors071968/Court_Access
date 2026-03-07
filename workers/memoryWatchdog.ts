@@ -338,6 +338,15 @@ export function stopWatchdog(): void {
     clearInterval(watchdogTimer);
     watchdogTimer = null;
   }
+  // Resume any workers that were paused by the watchdog
+  for (const workerName of pausedByWatchdog) {
+    try {
+      resumeWorker(workerName);
+    } catch {
+      // Worker may not exist in registry
+    }
+  }
+  pausedByWatchdog.clear();
   isRunning = false;
 }
 

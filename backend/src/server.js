@@ -49,9 +49,12 @@ import bugTrackingRoutes from './routes/bugTracking.js';
 import healthReportRoutes from './routes/healthReport.js';
 import betaStabilityRoutes from './routes/betaStabilityPolicy.js';
 import pageUsageRoutes from './routes/pageUsage.js';
+import caseIntelligenceRoutes from './routes/caseIntelligence.js';
 import { initScheduler, stopScheduler, getReminderStatus, runSchedulerPass } from './services/hearingScheduler.js';
 import { startTranscriptWorker, stopTranscriptWorker } from './workers/transcriptWorker.js';
 import { startTimelineWorker, stopTimelineWorker } from './workers/timelineWorker.js';
+import { startEntityWorker, stopEntityWorker } from './workers/entityIndexingWorker.js';
+import { startConflictWorker, stopConflictWorker } from './workers/conflictDetectionWorker.js';
 import { registerWorker, startWorker, startHealthChecker, stopAllWorkers, getWorkerStatuses } from './services/workerMonitor.js';
 import { initAlertRules, installCrashHandlers } from './services/alertService.js';
 import Stripe from 'stripe';
@@ -392,6 +395,12 @@ app.use('/api/admin/beta-stability', betaStabilityRoutes);
 
 app.use('/api/page-usage', pageUsageRoutes);
 
+// ---------------------------------------------------------------------------
+// Routes — Phase 116: Case Intelligence Dashboard
+// ---------------------------------------------------------------------------
+
+app.use('/api/cases', caseIntelligenceRoutes);
+
 // Phase 100: Worker status endpoint
 app.get('/api/admin/worker-status', authenticate, requireRole('admin'), (_req, res) => {
   const statuses = getWorkerStatuses();
@@ -550,6 +559,27 @@ await startWorker('transcript-parser').then(ok => {
 
 await startWorker('timeline-generator').then(ok => {
   console.log(`[Court Access] Timeline generation worker ${ok ? 'started' : 'not started (Redis unavailable)'}`);
+});
+
+// Phase 116: Register entity indexing + conflict detection workers
+registerWorker(
+  'entity-indexer',
+  () => startEntityWorker(),
+  () => stopEntityWorker()
+);
+
+registerWorker(
+  'conflict-detector',
+  () => startConflictWorker(),
+  () => stopConflictWorker()
+);
+
+await startWorker('entity-indexer').then(ok => {
+  console.log(`[Court Access] Entity indexing worker ${ok ? 'started' : 'not started (Redis unavailable)'}`);
+});
+
+await startWorker('conflict-detector').then(ok => {
+  console.log(`[Court Access] Conflict detection worker ${ok ? 'started' : 'not started (Redis unavailable)'}`);
 });
 
 // Start worker health checker

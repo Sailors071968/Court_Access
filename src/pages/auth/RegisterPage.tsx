@@ -31,7 +31,7 @@ export function RegisterPage() {
     }
     try {
       await register(name, email, password, role);
-      navigate('/dashboard');
+      navigate('/app/dashboard');
     } catch {
       setError('Registration failed. Please try again.');
     }

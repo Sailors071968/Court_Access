@@ -226,7 +226,7 @@ router.get('/:id/graph/path', verifyCaseOwnership, async (req, res) => {
 
     while (queue.length > 0 && !foundPath) {
       const current = queue.shift();
-      if (current.path.length > depth) break;
+      if (current.path.length > depth) continue;
 
       const neighbors = adjacency.get(current.nodeId) || [];
       for (const neighbor of neighbors) {

@@ -184,6 +184,12 @@ export async function createRelationship(relationship) {
     metadata = {},
   } = relationship;
 
+  // Validate relationshipType to prevent Cypher injection
+  const validTypes = new Set(Object.values(RELATIONSHIP_TYPES));
+  if (!validTypes.has(relationshipType)) {
+    throw new Error(`Invalid relationship type: ${relationshipType}`);
+  }
+
   const edgeId = `${sourceNode}-${relationshipType}-${targetNode}`;
 
   const edge = {

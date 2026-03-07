@@ -86,7 +86,7 @@ export function DashboardPage() {
                 </thead>
                 <tbody>
                   {documents.slice(0, 3).map((doc) => (
-                    <tr key={doc.id} className="border-b border-gray-50 hover:bg-gray-50 cursor-pointer" onClick={() => navigate(`/cases/${primaryCase.id}/documents`)}>
+                    <tr key={doc.id} className="border-b border-gray-50 hover:bg-gray-50 cursor-pointer" onClick={() => navigate(`/app/cases/${primaryCase.id}/documents`)}>
                       <td className="py-3 px-2 font-medium text-gray-900">{doc.name}</td>
                       <td className="py-3 px-2 text-gray-500">{doc.filedDate}</td>
                       <td className="py-3 px-2 text-gray-500">{documentTypeLabels[doc.type]}</td>
@@ -110,7 +110,7 @@ export function DashboardPage() {
               Review with your attorney.
             </p>
             <button
-              onClick={() => navigate(`/cases/${primaryCase.id}/charges`)}
+              onClick={() => navigate(`/app/cases/${primaryCase.id}/charges`)}
               className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-amber-50 text-amber-700 rounded-lg text-sm font-medium hover:bg-amber-100 transition-colors"
             >
               <TrendingUp size={16} />

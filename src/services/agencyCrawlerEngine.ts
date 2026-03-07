@@ -85,7 +85,7 @@ export interface RateLimitState {
 export function checkRateLimit(
   state: RateLimitState,
   domain: string,
-  currentTimestamp: string,
+  _currentTimestamp: string,
   config: CrawlerRateLimitConfig
 ): 'ALLOW' | 'BLOCKED' {
   // Check global requests per minute
@@ -100,7 +100,7 @@ export function checkRateLimit(
   }
 
   // Check delay between requests
-  const currentMs = Date.parse(currentTimestamp);
+  const currentMs = Date.parse(_currentTimestamp);
   if (currentMs - state.lastRequestTimestamp < config.delayBetweenRequestsMs) {
     return 'BLOCKED';
   }
@@ -246,7 +246,7 @@ export function parseAgencyDataFromHtml(
  */
 export async function crawlSource(
   sourceUrl: string,
-  currentTimestamp: string
+  _currentTimestamp: string
 ): Promise<RawAgencyData[]> {
   // Fetch static HTML
   const response = await fetch(sourceUrl);

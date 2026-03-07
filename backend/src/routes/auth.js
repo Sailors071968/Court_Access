@@ -292,8 +292,8 @@ router.get('/me', authenticate, async (req, res) => {
 // ---------------------------------------------------------------------------
 
 router.post('/demo-login', authLimiter, async (req, res) => {
-  // Only allow demo login in development/staging
-  if (process.env.NODE_ENV === 'production') {
+  // Only allow demo login in local development
+  if (process.env.NODE_ENV !== 'development') {
     return res.status(404).json({ error: 'Not found' });
   }
 

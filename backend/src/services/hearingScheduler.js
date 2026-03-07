@@ -389,3 +389,16 @@ export function stopScheduler() {
     console.log('[HearingScheduler] Stopped');
   }
 }
+
+// ---------------------------------------------------------------------------
+// Standalone entry point — when run directly via PM2 / node
+// ---------------------------------------------------------------------------
+const isMainModule = import.meta.url === `file://${process.argv[1]}`;
+if (isMainModule) {
+  console.log('[HearingScheduler] Starting as standalone process...');
+  initScheduler();
+
+  // Keep the process alive and handle graceful shutdown
+  process.on('SIGINT', () => { stopScheduler(); process.exit(0); });
+  process.on('SIGTERM', () => { stopScheduler(); process.exit(0); });
+}

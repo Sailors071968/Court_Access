@@ -246,8 +246,10 @@ export function updateConcurrency(workerName: string, delta: number): boolean {
   internal.currentConcurrency = Math.max(0, internal.currentConcurrency + delta);
 
   // Check concurrency limit
-  if (internal.currentConcurrency > config.maxConcurrency) {
-    tripBreaker(workerName, config, internal, `Concurrency exceeded: ${internal.currentConcurrency} active (max: ${config.maxConcurrency})`);
+  if (delta > 0 && internal.currentConcurrency > config.maxConcurrency) {
+    // Roll back the increment since the operation is being rejected
+    internal.currentConcurrency = Math.max(0, internal.currentConcurrency - delta);
+    tripBreaker(workerName, config, internal, `Concurrency exceeded: ${internal.currentConcurrency + delta} active (max: ${config.maxConcurrency})`);
     return false;
   }
 

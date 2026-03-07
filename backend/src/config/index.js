@@ -4,6 +4,7 @@
 // ============================================
 
 import dotenv from 'dotenv';
+import crypto from 'crypto';
 dotenv.config();
 
 export const config = {
@@ -29,7 +30,7 @@ export const config = {
   r2PublicUrl: process.env.R2_PUBLIC_URL || '',
 
   // JWT
-  jwtSecret: process.env.JWT_SECRET || '',
+  jwtSecret: process.env.JWT_SECRET || `INSECURE-DEV-SECRET-${crypto.randomBytes(16).toString('hex')}`,
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || '24h',
 
   // Sentry

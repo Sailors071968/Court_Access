@@ -179,7 +179,7 @@ router.post('/presigned-upload', async (req, res) => {
  * Body: multipart form with 'file' field + optional 'caseId', 'description'
  */
 router.post('/upload', uploadLimiterPerMinute, uploadLimiterPerHour, upload.single('file'), async (req, res) => {
-  const tenantId = req.headers['x-tenant-id'] || 'default';
+  const tenantId = req.user?.id || 'default';
   const caseId = req.body?.caseId || 'unassigned';
   const description = req.body?.description || '';
 

@@ -78,17 +78,8 @@ export function registerWebhookRoutes(app) {
       }
 
       // Phase 115: Idempotency check via StripeEvent table
+      // Use create-only approach — rely on unique constraint to detect duplicates
       try {
-        const existing = await prisma.stripeEvent.findUnique({
-          where: { eventId: event.id },
-        });
-
-        if (existing) {
-          console.log(`[Stripe Webhook] Duplicate event ignored: ${event.id} (already processed at ${existing.processedAt})`);
-          return res.json({ received: true, duplicate: true });
-        }
-
-        // Record event before processing (prevents race conditions)
         await prisma.stripeEvent.create({
           data: {
             eventId: event.id,
@@ -100,7 +91,7 @@ export function registerWebhookRoutes(app) {
       } catch (idempotencyErr) {
         // If unique constraint violation, this is a duplicate — safe to skip
         if (idempotencyErr.code === 'P2002') {
-          console.log(`[Stripe Webhook] Concurrent duplicate ignored: ${event.id}`);
+          console.log(`[Stripe Webhook] Duplicate event ignored: ${event.id}`);
           return res.json({ received: true, duplicate: true });
         }
         console.warn(`[Stripe Webhook] Idempotency check failed: ${idempotencyErr.message}`);

@@ -406,7 +406,7 @@ async function handleSubscriptionUpdated(subscription, eventId) {
 
   const existing = subscriptions.get(customerId);
   if (existing) {
-    existing.status = status;
+    existing.status = mapStripeStatus(status);
     existing.updatedAt = new Date().toISOString();
     subscriptions.set(customerId, existing);
   }

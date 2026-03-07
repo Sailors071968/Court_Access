@@ -115,12 +115,10 @@ export async function generateCrossExamQuestions(caseId, witnessName) {
         data: {
           caseId,
           witnessName,
-          category: q.category,
-          priority: q.priority,
           questionText: q.question,
-          basis: q.basis,
-          tactic: q.tactic,
-          metadata: {},
+          questionType: q.tactic || 'impeachment',
+          notes: q.basis || '',
+          metadata: { category: q.category, priority: q.priority },
         },
       });
       stored.push(record);

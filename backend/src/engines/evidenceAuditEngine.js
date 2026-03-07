@@ -34,12 +34,9 @@ export async function logAuditEvent({ caseId, action, actor, evidenceId, entityT
     data: {
       caseId,
       action,
-      actor,
-      evidenceId: evidenceId || null,
-      entityType: entityType || null,
-      entityId: entityId || null,
-      details,
-      ipAddress: details.ipAddress || null,
+      algorithm: actor || '',
+      input: { evidenceId: evidenceId || null, entityType: entityType || null, entityId: entityId || null, ipAddress: details.ipAddress || null },
+      output: details,
       timestamp: new Date(),
     },
   });
@@ -57,8 +54,6 @@ export async function logAuditEvent({ caseId, action, actor, evidenceId, entityT
 export async function getCaseAuditTrail(caseId, filters = {}) {
   const where = { caseId };
   if (filters.action) where.action = filters.action;
-  if (filters.actor) where.actor = filters.actor;
-  if (filters.evidenceId) where.evidenceId = filters.evidenceId;
   if (filters.startDate) where.timestamp = { ...where.timestamp, gte: new Date(filters.startDate) };
   if (filters.endDate) where.timestamp = { ...where.timestamp, lte: new Date(filters.endDate) };
 
@@ -81,17 +76,17 @@ export async function getAuditSummary(caseId) {
   });
 
   const byAction = {};
-  const byActor = {};
+  const byAlgorithm = {};
   for (const log of logs) {
     byAction[log.action] = (byAction[log.action] || 0) + 1;
-    byActor[log.actor] = (byActor[log.actor] || 0) + 1;
+    if (log.algorithm) byAlgorithm[log.algorithm] = (byAlgorithm[log.algorithm] || 0) + 1;
   }
 
   return {
     caseId,
     totalEvents: logs.length,
     byAction,
-    byActor,
+    byActor: byAlgorithm,
     firstEvent: logs.length > 0 ? logs[logs.length - 1].timestamp : null,
     lastEvent: logs.length > 0 ? logs[0].timestamp : null,
   };
@@ -105,24 +100,29 @@ export async function getAuditSummary(caseId) {
  */
 export async function verifyAuditCompleteness(caseId, evidenceId) {
   const logs = await prisma.evidenceAuditLog.findMany({
-    where: { caseId, evidenceId },
+    where: { caseId },
     orderBy: { timestamp: 'asc' },
+  });
+  // Filter logs related to this evidence via input JSON field
+  const filtered = logs.filter(l => {
+    const input = typeof l.input === 'object' ? l.input : {};
+    return input.evidenceId === evidenceId;
   });
 
   const expectedActions = ['evidence_registered', 'evidence_classified', 'fact_extracted'];
-  const foundActions = new Set(logs.map(l => l.action));
+  const foundActions = new Set(filtered.map(l => l.action));
   const missing = expectedActions.filter(a => !foundActions.has(a));
 
   return {
     evidenceId,
-    totalEvents: logs.length,
+    totalEvents: filtered.length,
     expectedActions,
     foundActions: [...foundActions],
     missingActions: missing,
     isComplete: missing.length === 0,
-    timeline: logs.map(l => ({
+    timeline: filtered.map(l => ({
       action: l.action,
-      actor: l.actor,
+      actor: l.algorithm,
       timestamp: l.timestamp,
     })),
   };

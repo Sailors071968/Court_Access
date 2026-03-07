@@ -15,17 +15,22 @@ import prisma from '../services/prismaClient.js';
 export async function scoreEvidenceImpact(caseId, evidenceId) {
   console.log(`[EvidenceImpact] Scoring evidence ${evidenceId} for case ${caseId}`);
 
-  // Gather related data
-  const [facts, correlations, conflicts, admissibilityIssues] = await Promise.all([
+  // Gather related data (correlations depend on facts, so run sequentially)
+  const [facts, conflicts, admissibilityIssues] = await Promise.all([
     prisma.extractedFact.findMany({ where: { caseId, documentId: evidenceId } }),
-    prisma.factCorrelation.findMany({
-      where: { caseId, OR: [{ factAId: { in: [] } }, { factBId: { in: [] } }] },
-    }).catch(() => []),
     prisma.evidenceConflict.findMany({
       where: { caseId, OR: [{ documentA: evidenceId }, { documentB: evidenceId }] },
     }),
     prisma.admissibilityIssue.findMany({ where: { caseId, evidenceId } }),
   ]);
+
+  // Now query correlations using the resolved fact IDs
+  const factIds = facts.map(f => f.id);
+  const correlations = factIds.length > 0
+    ? await prisma.factCorrelation.findMany({
+        where: { caseId, OR: [{ factAId: { in: factIds } }, { factBId: { in: factIds } }] },
+      }).catch(() => [])
+    : [];
 
   // Reliability: based on admissibility issues and conflicts
   const admissibilityPenalty = admissibilityIssues.length * 0.15;

@@ -11,6 +11,7 @@
 
 import { Router } from 'express';
 import { authenticate } from '../middleware/auth.js';
+import { verifyCaseOwnership } from '../middleware/tenantIsolation.js';
 import { searchEntityIndex, findDocumentsByEntity } from '../engines/documentIntelligenceEngine.js';
 import { getEnrichedTimeline } from '../engines/timelineEnrichmentEngine.js';
 import { getCaseConflicts, getConflictSummary } from '../engines/conflictDetectionEngine.js';
@@ -22,13 +23,19 @@ const router = Router();
 // All case intelligence routes require authentication
 router.use(authenticate);
 
+// Map :id param to :caseId for tenant isolation middleware
+router.param('id', (req, _res, next, val) => {
+  req.params.caseId = val;
+  next();
+});
+
 // ---------------------------------------------------------------------------
 // GET /api/cases/:id/entities
 // Returns all extracted entities for a case, grouped by type.
 // Query params: ?type=person&value=Smith&documentId=xxx
 // ---------------------------------------------------------------------------
 
-router.get('/:id/entities', async (req, res) => {
+router.get('/:id/entities', verifyCaseOwnership, async (req, res) => {
   try {
     const caseId = req.params.id;
     const { type, value, documentId } = req.query;
@@ -83,7 +90,7 @@ router.get('/:id/entities', async (req, res) => {
 // Query params: ?eventType=arrest&limit=100
 // ---------------------------------------------------------------------------
 
-router.get('/:id/timeline', async (req, res) => {
+router.get('/:id/timeline', verifyCaseOwnership, async (req, res) => {
   try {
     const caseId = req.params.id;
     const { eventType, limit } = req.query;
@@ -128,7 +135,7 @@ router.get('/:id/timeline', async (req, res) => {
 // Query params: ?type=contradiction&minConfidence=0.7
 // ---------------------------------------------------------------------------
 
-router.get('/:id/conflicts', async (req, res) => {
+router.get('/:id/conflicts', verifyCaseOwnership, async (req, res) => {
   try {
     const caseId = req.params.id;
     const { type, minConfidence } = req.query;
@@ -164,7 +171,7 @@ router.get('/:id/conflicts', async (req, res) => {
 // Query params: ?speaker=Officer+Smith&type=confession&limit=50
 // ---------------------------------------------------------------------------
 
-router.get('/:id/statements', async (req, res) => {
+router.get('/:id/statements', verifyCaseOwnership, async (req, res) => {
   try {
     const caseId = req.params.id;
     const { speaker, type, transcriptId, limit } = req.query;
@@ -196,7 +203,7 @@ router.get('/:id/statements', async (req, res) => {
 // Query params: ?value=Officer+Smith
 // ---------------------------------------------------------------------------
 
-router.get('/:id/entity-search', async (req, res) => {
+router.get('/:id/entity-search', verifyCaseOwnership, async (req, res) => {
   try {
     const caseId = req.params.id;
     const { value } = req.query;

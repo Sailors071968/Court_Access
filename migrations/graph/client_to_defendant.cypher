@@ -7,8 +7,9 @@
 //   2. Removes :Client label
 //   3. Preserves all properties and edges
 //
-// Run via neo4j-shell or cypher-shell:
-//   cypher-shell -f scripts/neo4j-rename-client-to-defendant.cypher
+// MANUAL MIGRATION ONLY — do not execute automatically.
+// Run via cypher-shell when confirmed that :Client labels exist:
+//   cypher-shell -f migrations/graph/client_to_defendant.cypher
 //
 // Safe to run multiple times (idempotent).
 // ============================================

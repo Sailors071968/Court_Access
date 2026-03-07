@@ -70,12 +70,11 @@ import type {
   EscalationEvaluationInput,
   EscalationDecision,
   EscalationAction,
-  EscalationDecisionReason,
   EscalationQueueResult,
   TemplateRenderResult,
 } from '../models/EscalationModel';
 
-import type { RecipientReputationStatus } from '../models/BounceModel';
+import type { RecipientReputationStatus as _RecipientReputationStatus } from '../models/BounceModel';
 
 import type { SendQueueEntry, SendQueueEntryInput } from '../models/SendQueueModel';
 

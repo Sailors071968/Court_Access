@@ -246,7 +246,7 @@ export function parseAgencyDataFromHtml(
  */
 export async function crawlSource(
   sourceUrl: string,
-  currentTimestamp: string
+  _currentTimestamp: string
 ): Promise<RawAgencyData[]> {
   // Fetch static HTML
   const response = await fetch(sourceUrl);

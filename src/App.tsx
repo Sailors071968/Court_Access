@@ -68,6 +68,7 @@ import { HealthReportPage } from './pages/admin/HealthReportPage';
 import { AlertsPage } from './pages/admin/AlertsPage';
 import CaseInvestigationWorkspace from './pages/case/CaseInvestigationWorkspace';
 import CaseIntelligenceDashboard from './pages/case/CaseIntelligenceDashboard';
+import { SystemHealthDashboard } from './pages/admin/SystemHealthDashboard';
 
 function App() {
   const restoreSession = useAuthStore((s) => s.restoreSession);
@@ -197,6 +198,14 @@ function App() {
             element={
               <ProtectedRoute requiredPermission="canViewAdmin">
                 <HealthReportPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/system-health"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <SystemHealthDashboard />
               </ProtectedRoute>
             }
           />

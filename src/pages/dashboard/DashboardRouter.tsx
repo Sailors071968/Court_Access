@@ -6,16 +6,16 @@
 
 import { useAuthStore } from '../../stores/authStore';
 import { StaffDashboard } from './StaffDashboard';
-import { ClientDashboard } from './ClientDashboard';
+import { DefendantDashboard } from './DefendantDashboard';
 
 export function DashboardRouter() {
   const { user } = useAuthStore();
 
   if (!user) return null;
 
-  // Client role gets simplified transparency dashboard
-  if (user.role === 'client') {
-    return <ClientDashboard />;
+  // Defendant role gets simplified transparency dashboard
+  if (user.role === 'defendant') {
+    return <DefendantDashboard />;
   }
 
   // All staff roles (investigator, attorney, admin, staff) get operational dashboard

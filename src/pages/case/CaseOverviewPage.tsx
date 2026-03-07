@@ -24,7 +24,7 @@ export function CaseOverviewPage() {
   const activity = caseDataProvider.getActivity(currentCase.id);
   const documentTypeLabels = caseDataProvider.getDocumentTypeLabels();
 
-  const showIntelligence = user.role !== 'client';
+  const showIntelligence = user.role !== 'defendant';
 
   return (
     <div className="space-y-6">

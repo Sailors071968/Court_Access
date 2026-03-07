@@ -79,7 +79,7 @@ export type {
 // Auth & RBAC (remain here — not domain models)
 // ---------------------------------------------------------------------------
 
-export type UserRole = 'investigator' | 'attorney' | 'admin' | 'staff' | 'client';
+export type UserRole = 'investigator' | 'attorney' | 'admin' | 'staff' | 'defendant';
 
 export interface User {
   id: string;

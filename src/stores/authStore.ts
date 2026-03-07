@@ -47,11 +47,11 @@ const MOCK_USERS: Record<string, User> = {
     role: 'staff',
     avatar: undefined,
   },
-  'client@courtaccess.com': {
+  'defendant@courtaccess.com': {
     id: '5',
     name: 'John Smith',
-    email: 'client@courtaccess.com',
-    role: 'client',
+    email: 'defendant@courtaccess.com',
+    role: 'defendant',
     avatar: undefined,
   },
 };

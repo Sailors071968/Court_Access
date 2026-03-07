@@ -166,7 +166,7 @@ export const ROLE_PERMISSIONS: Record<UserRole, RolePermissions> = {
     canViewTasks: false,
     canViewSettings: true,
   },
-  client: {
+  defendant: {
     canViewCharges: false,
     canViewEvidence: false,
     canViewExperts: false,

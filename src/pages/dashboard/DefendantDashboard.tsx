@@ -1,5 +1,5 @@
 // ============================================
-// Court Access — Client Dashboard
+// Court Access — Defendant Dashboard
 // Transparency + reassurance. Simplified view.
 // No internal analysis mechanics exposed.
 // ============================================
@@ -12,7 +12,7 @@ import { STATUS_COLORS } from '../../constants/designTokens';
 import { caseDataProvider } from '../../services/caseDataProvider';
 import { useAuthStore } from '../../stores/authStore';
 
-// Case phase for client view
+// Case phase for defendant view
 type CasePhase = 'preliminary' | 'pretrial' | 'trial' | 'sentencing' | 'closed';
 
 const CASE_PHASE_CONFIG: Record<CasePhase, { label: string; bgColor: string; textColor: string }> = {
@@ -23,7 +23,7 @@ const CASE_PHASE_CONFIG: Record<CasePhase, { label: string; bgColor: string; tex
   closed: { label: 'Closed', bgColor: 'bg-gray-100', textColor: 'text-gray-800' },
 };
 
-export function ClientDashboard() {
+export function DefendantDashboard() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
   const { getPrimaryCase, getDocuments } = caseDataProvider;

@@ -1,0 +1,1657 @@
+// Court Access — Prisma Schema
+// Database models for persistent storage.
+// Phases 36-45: Full system integration models.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 36/39/43 — Users & Authentication
+// ---------------------------------------------------------------------------
+
+model User {
+  id                String   @id @default(uuid())
+  email             String   @unique
+  passwordHash      String
+  name              String   @default("")
+  role              String   @default("attorney") // admin, attorney, investigator, client, staff
+  status            String   @default("active")   // active, inactive, suspended, onboarding
+  plan              String   @default("free")      // free, professional, team
+  stripeCustomerId  String?  @unique
+  subscriptionId    String?
+  subscriptionStatus String  @default("none")      // none, active, past_due, cancelled
+  betaInviteId      String?
+  onboardingComplete Boolean @default(false)
+  storageUsedBytes  BigInt   @default(0)
+  pageUsageTotal    Int      @default(0)
+  freePageLimit     Int      @default(10)
+  lastLoginAt       DateTime?
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  cases             Case[]
+  evidenceRecords   EvidenceRecord[]
+  auditLogs         UserAuditLog[]
+  refreshTokens     RefreshToken[]
+  feedbacks         BetaFeedback[]
+
+  @@index([email])
+  @@index([stripeCustomerId])
+  @@index([status])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 36/43 — Beta Invites
+// ---------------------------------------------------------------------------
+
+model BetaInvite {
+  id          String   @id @default(uuid())
+  email       String
+  role        String   @default("attorney")
+  inviteCode  String   @unique
+  status      String   @default("pending") // pending, accepted, expired, revoked
+  sentAt      DateTime @default(now())
+  acceptedAt  DateTime?
+  expiresAt   DateTime
+  createdAt   DateTime @default(now())
+
+  @@index([email])
+  @@index([inviteCode])
+  @@index([status])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 36 — Cases
+// ---------------------------------------------------------------------------
+
+model Case {
+  id          String   @id @default(uuid())
+  userId      String
+  caseNumber  String   @default("")
+  caseName    String
+  description String   @default("")
+  status      String   @default("active") // active, closed, archived
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  evidenceRecords EvidenceRecord[]
+
+  @@index([userId])
+  @@index([status])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 36/37 — Evidence Records (Prisma-backed, replaces in-memory Map)
+// ---------------------------------------------------------------------------
+
+model EvidenceRecord {
+  id            String   @id @default(uuid())
+  userId        String
+  caseId        String
+  filename      String
+  contentType   String
+  evidenceType  String   // document, image, audio, video
+  fileSize      BigInt   @default(0)
+  sha256        String   @default("")
+  storageKey    String?
+  description   String   @default("")
+  status        String   @default("pending") // pending, pending_upload, processing, complete, error, rejected
+  processingResult Json?
+  scanResult    Json?
+  jobId         String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  case          Case     @relation(fields: [caseId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([caseId])
+  @@index([status])
+  @@index([caseId, status])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 39 — Subscription Events (audit trail for Stripe lifecycle)
+// ---------------------------------------------------------------------------
+
+model SubscriptionEvent {
+  id                String   @id @default(uuid())
+  stripeCustomerId  String
+  stripeEventId     String   @unique
+  eventType         String   // checkout.session.completed, invoice.payment_succeeded, etc.
+  plan              String   @default("free")
+  amount            Int      @default(0)
+  currency          String   @default("usd")
+  status            String   @default("")
+  metadata          Json     @default("{}")
+  createdAt         DateTime @default(now())
+
+  @@index([stripeCustomerId])
+  @@index([eventType])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 42 — System Error Log (persistent error tracking)
+// ---------------------------------------------------------------------------
+
+model SystemErrorLog {
+  id          String   @id @default(uuid())
+  service     String   // api, evidence-processor, audio-processor, video-processor, upload, stripe
+  level       String   @default("error") // info, warn, error
+  message     String
+  stackTrace  String?
+  metadata    Json     @default("{}")
+  resolved    Boolean  @default(false)
+  count       Int      @default(1)
+  firstSeen   DateTime @default(now())
+  lastSeen    DateTime @default(now())
+
+  @@index([service])
+  @@index([level])
+  @@index([resolved])
+  @@index([lastSeen])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 40/42 — User Audit Log (security + access tracking)
+// ---------------------------------------------------------------------------
+
+model UserAuditLog {
+  id        String   @id @default(uuid())
+  userId    String
+  action    String   // login, logout, evidence_access, case_create, evidence_upload, admin_action
+  resource  String   @default("") // e.g. caseId, evidenceId
+  ipAddress String   @default("")
+  metadata  Json     @default("{}")
+  createdAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([action])
+  @@index([createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Court Hearings
+// ---------------------------------------------------------------------------
+
+model Hearing {
+  id                String   @id @default(uuid())
+  caseId            String
+  courthouseName    String
+  courthouseAddress String
+  hearingName       String
+  hearingDatetime   DateTime
+  department        String   @default("")
+  caseName          String?
+  clientPhone       String?
+
+  reminder1Enabled    Boolean @default(true)
+  reminder2Enabled    Boolean @default(true)
+  reminder3Enabled    Boolean @default(true)
+
+  reminder1DaysBefore Int @default(7)
+  reminder2DaysBefore Int @default(3)
+  reminder3DaysBefore Int @default(1)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  reminderLogs HearingReminderLog[]
+
+  @@index([caseId])
+}
+
+model HearingReminderLog {
+  id           String   @id @default(uuid())
+  hearingId    String
+  reminderType Int
+  sentAt       DateTime @default(now())
+
+  hearing Hearing @relation(fields: [hearingId], references: [id], onDelete: Cascade)
+
+  @@unique([hearingId, reminderType])
+  @@index([hearingId])
+}
+
+// ---------------------------------------------------------------------------
+// Reminder Failures — tracks failed SMS delivery attempts
+// ---------------------------------------------------------------------------
+
+model ReminderFailure {
+  id           String   @id @default(uuid())
+  hearingId    String
+  reminderType Int
+  phone        String
+  errorMessage String
+  attempt      Int      @default(1)
+  createdAt    DateTime @default(now())
+
+  @@index([hearingId])
+  @@index([phone])
+}
+
+// ---------------------------------------------------------------------------
+// SMS Rate Log — tracks SMS sends per phone for rate protection
+// ---------------------------------------------------------------------------
+
+model SmsRateLog {
+  id        String   @id @default(uuid())
+  phone     String
+  sentAt    DateTime @default(now())
+
+  @@index([phone, sentAt])
+}
+
+// ---------------------------------------------------------------------------
+// Phase A — Evidence Timeline Events
+// ---------------------------------------------------------------------------
+
+model TimelineEvent {
+  id                String   @id @default(uuid())
+  caseId            String
+  timestamp         DateTime
+  sourceEvidenceId  String?
+  sourceType        String   // audio_transcript, video_transcript, document_date, image_exif, manual
+  eventType         String   @default("other")
+  eventDescription  String
+  confidenceScore   Float    @default(1.0)
+  metadata          Json     @default("{}")
+  createdAt         DateTime @default(now())
+
+  @@index([caseId])
+  @@index([caseId, timestamp])
+}
+
+// ---------------------------------------------------------------------------
+// Phase B — Entity Linking
+// ---------------------------------------------------------------------------
+
+model Entity {
+  id                      String   @id @default(uuid())
+  caseId                  String
+  entityType              String   // person, organization, location, phone_number, vehicle, date, email_address
+  entityValue             String
+  firstDetectedEvidenceId String?
+  createdAt               DateTime @default(now())
+
+  links EvidenceEntityLink[]
+
+  @@unique([caseId, entityType, entityValue])
+  @@index([caseId])
+  @@index([caseId, entityType])
+}
+
+model EvidenceEntityLink {
+  id                  String   @id @default(uuid())
+  entityId            String
+  evidenceId          String
+  detectionConfidence Float    @default(1.0)
+  contextSnippet      String   @default("")
+  createdAt           DateTime @default(now())
+
+  entity Entity @relation(fields: [entityId], references: [id], onDelete: Cascade)
+
+  @@unique([entityId, evidenceId])
+  @@index([entityId])
+  @@index([evidenceId])
+}
+
+// ---------------------------------------------------------------------------
+// Phase C — AI Case Narrative
+// ---------------------------------------------------------------------------
+
+model CaseNarrative {
+  id                 String   @id @default(uuid())
+  caseId             String
+  generatedTimestamp DateTime @default(now())
+  summaryText        String
+  keyEvents          Json     @default("[]")
+  conflictsDetected  Json     @default("[]")
+  participants       Json     @default("[]")
+  modelVersion       String   @default("gpt-4")
+  createdAt          DateTime @default(now())
+
+  @@index([caseId])
+  @@index([caseId, generatedTimestamp])
+}
+
+// ---------------------------------------------------------------------------
+// Phase D — Evidence Integrity Certificates
+// ---------------------------------------------------------------------------
+
+model EvidenceIntegrityReport {
+  id                 String   @id @default(uuid())
+  evidenceId         String
+  caseId             String
+  fileName           String   @default("")
+  sha256Hash         String
+  sha3Hash           String
+  uploadTimestamp    DateTime
+  verificationStatus String   @default("verified") // verified, failed, pending
+  chainOfCustody     Json     @default("[]")
+  createdAt          DateTime @default(now())
+
+  @@unique([evidenceId])
+  @@index([caseId])
+}
+
+// ---------------------------------------------------------------------------
+// Phase E — Cold Archive System
+// ---------------------------------------------------------------------------
+
+model ArchiveRecord {
+  id               String   @id @default(uuid())
+  caseId           String
+  archiveHash      String
+  archiveLocation  String
+  archiveTimestamp DateTime @default(now())
+  archiveManifest  Json     @default("{}")
+  status           String   @default("archived") // archived, restoring, restored, failed
+  fileCount        Int      @default(0)
+  totalSizeBytes   BigInt   @default(0)
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@unique([caseId])
+  @@index([status])
+}
+
+model ArchiveAuditLog {
+  id        String   @id @default(uuid())
+  caseId    String
+  action    String   // archive_initiated, archive_completed, restore_initiated, restore_completed, hash_verified, hash_failed
+  actor     String   @default("system")
+  details   Json     @default("{}")
+  createdAt DateTime @default(now())
+
+  @@index([caseId])
+  @@index([caseId, createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 52 — Media Transcripts
+// ---------------------------------------------------------------------------
+
+model MediaTranscript {
+  id               String   @id @default(uuid())
+  evidenceId       String
+  caseId           String
+  speakerLabel     String   @default("")
+  startTime        Float    @default(0)   // seconds
+  endTime          Float    @default(0)   // seconds
+  transcriptText   String
+  confidenceScore  Float    @default(0.0)
+  language         String   @default("en")
+  modelVersion     String   @default("whisper-1")
+  fullTranscript   Boolean  @default(false) // true = full file transcript, false = segment
+  status           String   @default("pending") // pending, processing, complete, error
+  metadata         Json     @default("{}")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([evidenceId])
+  @@index([caseId])
+  @@index([caseId, evidenceId])
+  @@index([status])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 53 — Evidence Correlations
+// ---------------------------------------------------------------------------
+
+model EvidenceCorrelation {
+  id                  String   @id @default(uuid())
+  caseId              String
+  sourceEvidenceId    String
+  relatedEvidenceId   String
+  correlationType     String   // timeline_mismatch, statement_contradiction, entity_reference_match, event_confirmation
+  confidenceScore     Float    @default(0.0)
+  description         String
+  sourceSnippet       String   @default("")
+  relatedSnippet      String   @default("")
+  metadata            Json     @default("{}")
+  status              String   @default("active") // active, dismissed, confirmed
+  createdAt           DateTime @default(now())
+
+  @@index([caseId])
+  @@index([sourceEvidenceId])
+  @@index([relatedEvidenceId])
+  @@index([caseId, correlationType])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 54 — Policy Documents
+// ---------------------------------------------------------------------------
+
+model PolicyDocument {
+  id              String   @id @default(uuid())
+  caseId          String
+  title           String
+  documentType    String   // police_policy, use_of_force, arrest_procedure, bodycam_rules, evidence_handling
+  content         String   @default("")
+  sections        Json     @default("[]")  // parsed sections: [{sectionId, title, content}]
+  uploadedBy      String?
+  status          String   @default("active") // active, archived
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  findings        PolicyComplianceFinding[]
+
+  @@index([caseId])
+  @@index([caseId, documentType])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 54 — Policy Compliance Findings
+// ---------------------------------------------------------------------------
+
+model PolicyComplianceFinding {
+  id                 String   @id @default(uuid())
+  caseId             String
+  evidenceId         String
+  policyDocumentId   String
+  policySection      String   @default("")
+  description        String
+  confidenceScore    Float    @default(0.0)
+  severity           String   @default("medium") // low, medium, high, critical
+  status             String   @default("active") // active, dismissed, confirmed, resolved
+  metadata           Json     @default("{}")
+  createdAt          DateTime @default(now())
+
+  policyDocument     PolicyDocument @relation(fields: [policyDocumentId], references: [id], onDelete: Cascade)
+
+  @@index([caseId])
+  @@index([evidenceId])
+  @@index([policyDocumentId])
+  @@index([caseId, severity])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 63 — Verified Email Registry (SES Sandbox)
+// ---------------------------------------------------------------------------
+
+model VerifiedEmail {
+  id                  String   @id @default(uuid())
+  emailAddress        String   @unique
+  verificationStatus  String   @default("pending") // pending, verified, failed
+  verificationToken   String   @unique @default(uuid())
+  verifiedAt          DateTime?
+  createdAt           DateTime @default(now())
+
+  @@index([emailAddress])
+  @@index([verificationStatus])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 65 — Email Job Queue
+// ---------------------------------------------------------------------------
+
+model EmailJob {
+  id            String   @id @default(uuid())
+  emailType     String   // transactional, notification, invite, processing_alert
+  recipient     String
+  payload       Json     @default("{}")
+  status        String   @default("pending") // pending, queued, sent, failed, blocked
+  attemptCount  Int      @default(0)
+  lastError     String?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([status])
+  @@index([emailType])
+  @@index([recipient])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 67 — Email Log
+// ---------------------------------------------------------------------------
+
+model EmailLog {
+  id              String   @id @default(uuid())
+  recipient       String
+  emailType       String
+  subject         String   @default("")
+  deliveryStatus  String   @default("pending") // pending, sent, delivered, bounced, failed
+  errorMessage    String?
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  @@index([recipient])
+  @@index([emailType])
+  @@index([deliveryStatus])
+  @@index([createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 70 — Law Enforcement Agency Intelligence Database
+// ---------------------------------------------------------------------------
+
+model LawEnforcementAgency {
+  id                    String   @id @default(uuid())
+  tenantId              String   // Phase 3 tenant isolation
+  agencyName            String
+  agencyType            String   // state_police, county_sheriff, city_police, regional_task_force, transit_police, university_police, other
+  state                 String
+  county                String   @default("")
+  city                  String   @default("")
+  address               String   @default("")
+  phoneMain             String   @default("")
+  phoneRecordsDivision  String   @default("")
+  emailRecordsDivision  String   @default("")
+  website               String   @default("")
+  recordsRequestUrl     String   @default("")
+  dataSource            String   @default("") // URL or source identifier
+  verificationStatus    String   @default("pending") // pending, approved, rejected, needs_review
+  lastVerifiedAt        DateTime?
+  discoveredAt          DateTime @default(now())
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  recordsRequests       PublicRecordsRequest[]
+
+  @@unique([tenantId, agencyName, state])
+  @@index([tenantId])
+  @@index([state])
+  @@index([agencyType])
+  @@index([verificationStatus])
+  @@index([tenantId, state])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 76 — Public Records Request Tracking
+// ---------------------------------------------------------------------------
+
+model PublicRecordsRequest {
+  id                    String   @id @default(uuid())
+  agencyId              String
+  tenantId              String   // Phase 3 tenant isolation
+  caseId                String?  // Optional link to case
+  requestType           String   // public_records, body_camera, dispatch_logs, policy_manual, incident_report
+  submissionDate        DateTime @default(now())
+  deliveryMethod        String   @default("email") // email, mail, portal, fax
+  status                String   @default("submitted") // submitted, acknowledged, fulfilled, partial_response, denied, no_response
+  responseReceivedDate  DateTime?
+  responseHash          String?  // SHA-256 of response document
+  responseHashSha3      String?  // SHA3-256 of response document (Phase 87 dual-hash)
+  requestDocumentHash   String?  // SHA-256 of outgoing request
+  requestDocumentHashSha3 String? // SHA3-256 of outgoing request (Phase 87 dual-hash)
+  requestContent        String   @default("") // The actual request text
+  templateId            String?  // Reference to template used
+  staffApproved         Boolean  @default(false)
+  staffApprovedBy       String?
+  staffApprovedAt       DateTime?
+  notes                 String   @default("")
+  metadata              Json     @default("{}")
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  agency                LawEnforcementAgency @relation(fields: [agencyId], references: [id], onDelete: Cascade)
+
+  @@index([tenantId])
+  @@index([agencyId])
+  @@index([caseId])
+  @@index([status])
+  @@index([tenantId, status])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 80 — Records Request Templates
+// ---------------------------------------------------------------------------
+
+model RecordsRequestTemplate {
+  id            String   @id @default(uuid())
+  tenantId      String
+  templateName  String   // public_records, body_camera, dispatch_logs, policy_manual, incident_report
+  displayName   String
+  content       String   // Template text with merge fields: {{agency_name}}, {{records_email}}, etc.
+  mergeFields   Json     @default("[]") // Available merge fields
+  isDefault     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([tenantId, templateName])
+  @@index([tenantId])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 82 — Evidence Reference Entities (extracted from agency responses)
+// ---------------------------------------------------------------------------
+
+model EvidenceReference {
+  id                String   @id @default(uuid())
+  caseId            String
+  tenantId          String
+  sourceDocumentId  String   // Evidence record ID or records request response
+  referenceType     String   // incident_number, officer_name, date, case_number, badge_number
+  referenceValue    String
+  sourceContext     String   @default("") // Surrounding text snippet
+  extractionMethod  String   @default("deterministic") // deterministic only, no probabilistic
+  createdAt         DateTime @default(now())
+
+  @@unique([caseId, tenantId, sourceDocumentId, referenceType, referenceValue])
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([referenceType])
+  @@index([caseId, referenceType])
+  @@index([referenceValue])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 83 — Document Cross-Reference Results
+// ---------------------------------------------------------------------------
+
+model DocumentCrossReference {
+  id                  String   @id @default(uuid())
+  caseId              String
+  tenantId            String
+  sourceDocumentId    String
+  relatedDocumentId   String
+  referenceType       String   // reference_match, reference_conflict, missing_reference
+  sourceReferenceId   String?  // Links to EvidenceReference
+  relatedReferenceId  String?  // Links to EvidenceReference
+  description         String
+  sourceSnippet       String   @default("")
+  relatedSnippet      String   @default("")
+  status              String   @default("active") // active, dismissed, confirmed
+  createdAt           DateTime @default(now())
+
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([referenceType])
+  @@index([caseId, referenceType])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 96I — Refresh Tokens (JWT Security Hardening)
+// ---------------------------------------------------------------------------
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  userId    String
+  tokenHash String   @unique
+  revoked   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  expiresAt DateTime
+
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([tokenHash])
+  @@index([expiresAt])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 100 — Worker Heartbeat Monitoring
+// ---------------------------------------------------------------------------
+
+model WorkerHeartbeat {
+  id          String   @id @default(uuid())
+  workerName  String   @unique
+  status      String   @default("running") // running, stopped, failed, restarting
+  lastBeatAt  DateTime @default(now())
+  startedAt   DateTime @default(now())
+  restartCount Int     @default(0)
+  metadata    Json     @default("{}")
+  updatedAt   DateTime @updatedAt
+
+  @@index([workerName])
+  @@index([status])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 104 — Beta Invite Codes (enhanced)
+// ---------------------------------------------------------------------------
+
+model BetaAccessConfig {
+  id              String   @id @default(uuid())
+  maxBetaAccounts Int      @default(50)
+  inviteExpireDays Int     @default(7)
+  registrationOpen Boolean @default(false)
+  updatedAt       DateTime @updatedAt
+}
+
+// ---------------------------------------------------------------------------
+// Phase 116 — Alert Configuration (monitoring & alerting)
+// ---------------------------------------------------------------------------
+
+model AlertRule {
+  id            String   @id @default(uuid())
+  alertType     String   // server_crash, worker_failure, db_connection_error, email_delivery_failure, high_error_rate
+  threshold     Int      @default(1)    // Number of occurrences before alerting
+  windowMinutes Int      @default(5)    // Time window for threshold
+  enabled       Boolean  @default(true)
+  notifyEmail   String   @default("")   // Admin email to notify
+  notifyMethod  String   @default("email") // email, log
+  lastTriggered DateTime?
+  triggerCount  Int      @default(0)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@unique([alertType])
+  @@index([alertType])
+  @@index([enabled])
+}
+
+model AlertEvent {
+  id          String   @id @default(uuid())
+  alertType   String
+  severity    String   @default("high") // low, medium, high, critical
+  message     String
+  details     Json     @default("{}")
+  acknowledged Boolean @default(false)
+  acknowledgedBy String?
+  acknowledgedAt DateTime?
+  createdAt   DateTime @default(now())
+
+  @@index([alertType])
+  @@index([severity])
+  @@index([acknowledged])
+  @@index([createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 120 — Beta Feedback System
+// ---------------------------------------------------------------------------
+
+model BetaFeedback {
+  id            String   @id @default(uuid())
+  userId        String
+  feedbackType  String   // bug, analysis_error, ui_issue, performance, feature_request, other
+  title         String
+  description   String
+  severity      String   @default("medium") // low, medium, high, critical
+  status        String   @default("open")   // open, in_review, acknowledged, resolved, closed
+  pageUrl       String   @default("")
+  userAgent     String   @default("")
+  screenshotUrl String?
+  adminNotes    String   @default("")
+  resolvedAt    DateTime?
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  user          User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@index([feedbackType])
+  @@index([severity])
+  @@index([status])
+  @@index([createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 121 — Internal Bug Tracking
+// ---------------------------------------------------------------------------
+
+model BugReport {
+  id                String   @id @default(uuid())
+  feedbackId        String?  // Optional link to BetaFeedback
+  title             String
+  description       String
+  reproductionSteps String   @default("")
+  severity          String   @default("medium") // low, medium, high, critical
+  status            String   @default("open")   // open, in_progress, fixed, verified, closed, wont_fix
+  assignedTo        String?
+  component         String   @default("") // frontend, backend, worker, database, auth, upload, ai
+  environment       String   @default("beta")
+  fixCommit         String?
+  fixVersion        String?
+  reportedBy        String   @default("system")
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([severity])
+  @@index([status])
+  @@index([component])
+  @@index([createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 122 — Weekly Beta Health Reports
+// ---------------------------------------------------------------------------
+
+model BetaHealthReport {
+  id                 String   @id @default(uuid())
+  reportDate         DateTime
+  periodStart        DateTime
+  periodEnd          DateTime
+  activeUsers        Int      @default(0)
+  totalCases         Int      @default(0)
+  evidenceProcessed  Int      @default(0)
+  workerUptime       Float    @default(0) // percentage
+  systemErrors       Int      @default(0)
+  feedbackCount      Int      @default(0)
+  bugCount           Int      @default(0)
+  avgResponseTimeMs  Int      @default(0)
+  storageUsedBytes   BigInt   @default(0)
+  reportData         Json     @default("{}")
+  createdAt          DateTime @default(now())
+
+  @@index([reportDate])
+  @@index([createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 115 — Stripe Event Log (idempotent webhook processing)
+// ---------------------------------------------------------------------------
+
+model StripeEvent {
+  id          String   @id @default(uuid())
+  eventId     String   @unique // Stripe event ID (evt_xxx) — ensures idempotency
+  eventType   String
+  payloadJson Json     @default("{}")
+  receivedAt  DateTime @default(now())
+  processedAt DateTime?
+
+  @@index([eventId])
+  @@index([eventType])
+  @@index([receivedAt])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 115 — Document Page Tracking (hybrid pricing enforcement)
+// ---------------------------------------------------------------------------
+
+model DocumentPage {
+  id              String   @id @default(uuid())
+  evidenceId      String
+  userId          String
+  caseId          String
+  filename        String   @default("")
+  pageCount       Int      @default(1)
+  contentType     String   @default("")
+  countedAt       DateTime @default(now())
+
+  @@index([userId])
+  @@index([caseId])
+  @@index([evidenceId])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 116 — Document Entity Extraction
+// ---------------------------------------------------------------------------
+
+model DocumentEntity {
+  id            String   @id @default(uuid())
+  documentId    String
+  caseId        String
+  entityType    String   // person, date, location, phone, case_number, agency, evidence_ref
+  entityValue   String
+  confidence    Float    @default(1.0)
+  sourceContext String   @default("") // surrounding text for verification
+  extractedAt   DateTime @default(now())
+
+  @@index([documentId])
+  @@index([caseId])
+  @@index([entityType])
+  @@index([entityValue])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 116 — Cross-Document Entity Index
+// ---------------------------------------------------------------------------
+
+model EntityIndex {
+  id                 String   @id @default(uuid())
+  entityType         String   // person, date, location, phone, case_number, agency
+  entityValue        String
+  normalizedValue    String   @default("") // lowercase/trimmed for dedup
+  documentId         String
+  caseId             String
+  firstSeenTimestamp DateTime @default(now())
+
+  @@unique([entityType, normalizedValue, documentId])
+  @@index([entityType])
+  @@index([entityValue])
+  @@index([normalizedValue])
+  @@index([documentId])
+  @@index([caseId])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 116 — Case Events (Timeline Enrichment)
+// ---------------------------------------------------------------------------
+
+model CaseEvent {
+  id               String   @id @default(uuid())
+  caseId           String
+  timestamp        DateTime
+  eventType        String   // arrest, filing, hearing, testimony, evidence, incident
+  sourceDocumentId String?
+  description      String
+  confidence       Float    @default(1.0)
+  metadata         Json     @default("{}")
+  createdAt        DateTime @default(now())
+
+  @@index([caseId])
+  @@index([timestamp])
+  @@index([eventType])
+  @@index([sourceDocumentId])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 116 — Transcript Statements (Key Testimony Extraction)
+// ---------------------------------------------------------------------------
+
+model TranscriptStatement {
+  id              String   @id @default(uuid())
+  transcriptId    String
+  caseId          String
+  speaker         String
+  lineNumber      Int      @default(0)
+  statementText   String
+  statementType   String   // confession, contradiction, timeline_ref, evidence_mention, key_testimony
+  confidence      Float    @default(1.0)
+  metadata        Json     @default("{}")
+  extractedAt     DateTime @default(now())
+
+  @@index([transcriptId])
+  @@index([caseId])
+  @@index([speaker])
+  @@index([statementType])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 116 — Evidence Conflicts (Conflict Detection)
+// ---------------------------------------------------------------------------
+
+model EvidenceConflict {
+  id            String   @id @default(uuid())
+  caseId        String
+  entity        String   // what the conflict is about
+  documentA     String
+  documentB     String
+  description   String
+  conflictType  String   @default("contradiction") // contradiction, timeline_mismatch, entity_discrepancy
+  confidence    Float    @default(1.0)
+  metadata      Json     @default("{}")
+  detectedAt    DateTime @default(now())
+
+  @@index([caseId])
+  @@index([entity])
+  @@index([conflictType])
+}
+
+// ===========================================================================
+// Phases 120-150 — Evidence Intelligence + Trial Preparation
+// ===========================================================================
+
+// ---------------------------------------------------------------------------
+// Phase 120 — Evidence Registry (SHA-256 integrity + chain of custody)
+// ---------------------------------------------------------------------------
+
+model EvidenceRegistry {
+  id              String   @id @default(uuid())
+  caseId          String
+  evidenceId      String   @unique
+  fileHash        String   // SHA-256
+  originalFilename String
+  evidenceType    String   // POLICE_REPORT, TRANSCRIPT, PHOTO, VIDEO, AUDIO, PHONE_RECORD, GPS_LOG, COURT_DOCUMENT, OTHER
+  source          String   @default("")
+  chainOfCustody  Json     @default("[]") // [{actor, action, timestamp, hash}]
+  metadata        Json     @default("{}")
+  uploadTimestamp DateTime @default(now())
+  createdAt       DateTime @default(now())
+
+  @@index([caseId])
+  @@index([evidenceId])
+  @@index([fileHash])
+  @@index([evidenceType])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 122 — Transcript Segments (legal ledger format)
+// ---------------------------------------------------------------------------
+
+model TranscriptSegment {
+  id            String   @id @default(uuid())
+  caseId        String
+  evidenceId    String
+  speaker       String
+  page          Int
+  line          Int
+  timestamp     Float    @default(0)
+  text          String
+  confidence    Float    @default(0.0)
+  metadata      Json     @default("{}")
+  createdAt     DateTime @default(now())
+
+  @@index([caseId])
+  @@index([evidenceId])
+  @@index([speaker])
+  @@index([caseId, evidenceId, page, line])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 123/124 — Extracted Facts with Provenance
+// ---------------------------------------------------------------------------
+
+model ExtractedFact {
+  id              String   @id @default(uuid())
+  caseId          String
+  factType        String   // PERSON, LOCATION, DATE, TIME, EVENT, OBJECT, ACTION
+  statementText   String
+  normalizedValue String   @default("")
+  timestamp       DateTime?
+  confidenceScore Float    @default(0.0)
+  documentId      String
+  sourceType      String   @default("")
+  page            Int?
+  line            Int?
+  speaker         String   @default("")
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  @@index([caseId])
+  @@index([factType])
+  @@index([documentId])
+  @@index([caseId, factType])
+  @@index([normalizedValue])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 125 — Fact Correlation Results
+// ---------------------------------------------------------------------------
+
+model FactCorrelation {
+  id                String   @id @default(uuid())
+  caseId            String
+  factAId           String
+  factBId           String
+  correlationType   String   // matching_event, duplicate_mention, timeline_inconsistency, location_conflict
+  confidenceScore   Float    @default(0.0)
+  description       String
+  metadata          Json     @default("{}")
+  createdAt         DateTime @default(now())
+
+  @@index([caseId])
+  @@index([factAId])
+  @@index([factBId])
+  @@index([correlationType])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 126 — Reconstructed Events
+// ---------------------------------------------------------------------------
+
+model ReconstructedEvent {
+  id              String   @id @default(uuid())
+  caseId          String
+  timestamp       DateTime?
+  location        String   @default("")
+  actors          Json     @default("[]")
+  evidenceSources Json     @default("[]")
+  description     String
+  confidenceScore Float    @default(0.0)
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  @@index([caseId])
+  @@index([caseId, timestamp])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 127 — Court Timeline Events
+// ---------------------------------------------------------------------------
+
+model CourtTimelineEvent {
+  id              String   @id @default(uuid())
+  caseId          String
+  time            DateTime
+  event           String
+  sourceEvidence  Json     @default("[]")
+  confidence      Float    @default(0.0)
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  @@index([caseId])
+  @@index([caseId, time])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 128 — Timeline Conflicts
+// ---------------------------------------------------------------------------
+
+model TimelineConflict {
+  id              String   @id @default(uuid())
+  caseId          String
+  conflictType    String   // gps_vs_witness, officer_vs_surveillance, time_impossibility
+  description     String
+  eventAId        String?
+  eventBId        String?
+  sourceAType     String   @default("")
+  sourceBType     String   @default("")
+  severity        String   @default("medium")
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  @@index([caseId])
+  @@index([conflictType])
+  @@index([severity])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 129 — Witness Reliability Scores
+// ---------------------------------------------------------------------------
+
+model WitnessReliability {
+  id                String   @id @default(uuid())
+  caseId            String
+  witnessName       String
+  consistencyScore  Float    @default(0.0)
+  corroborationScore Float   @default(0.0)
+  visibilityScore   Float    @default(0.0)
+  distanceScore     Float    @default(0.0)
+  lightingScore     Float    @default(0.0)
+  stressScore       Float    @default(0.0)
+  credibilityScore  Float    @default(0.0)
+  factorsUsed       Json     @default("{}")
+  evidenceSources   Json     @default("[]")
+  metadata          Json     @default("{}")
+  createdAt         DateTime @default(now())
+
+  @@index([caseId])
+  @@index([witnessName])
+  @@index([credibilityScore])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 130 — Misidentification Risk Assessment
+// ---------------------------------------------------------------------------
+
+model MisidentificationRisk {
+  id                  String   @id @default(uuid())
+  caseId              String
+  witnessName         String
+  distanceScore       Float    @default(0.0)
+  lightingScore       Float    @default(0.0)
+  observationTimeScore Float   @default(0.0)
+  stressScore         Float    @default(0.0)
+  lineupFairnessScore Float    @default(0.0)
+  similarIndividualsScore Float @default(0.0)
+  overallRiskScore    Float    @default(0.0)
+  riskLevel           String   @default("medium")
+  factors             Json     @default("{}")
+  metadata            Json     @default("{}")
+  createdAt           DateTime @default(now())
+
+  @@index([caseId])
+  @@index([witnessName])
+  @@index([riskLevel])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 131 — Admissibility Issues
+// ---------------------------------------------------------------------------
+
+model AdmissibilityIssue {
+  id              String   @id @default(uuid())
+  caseId          String
+  evidenceId      String
+  issueType       String   // hearsay, chain_of_custody_break, improper_interrogation, suggestive_identification
+  description     String
+  severity        String   @default("medium")
+  legalBasis      String   @default("")
+  recommendation  String   @default("")
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  @@index([caseId])
+  @@index([evidenceId])
+  @@index([issueType])
+  @@index([severity])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 132 — Evidence Impact Scores
+// ---------------------------------------------------------------------------
+
+model EvidenceImpactScore {
+  id                  String   @id @default(uuid())
+  caseId              String
+  evidenceId          String
+  reliabilityScore    Float    @default(0.0)
+  corroborationScore  Float    @default(0.0)
+  independenceScore   Float    @default(0.0)
+  timelineAlignmentScore Float @default(0.0)
+  overallImpactScore  Float    @default(0.0)
+  impactLevel         String   @default("medium")
+  factors             Json     @default("{}")
+  metadata            Json     @default("{}")
+  createdAt           DateTime @default(now())
+
+  @@unique([caseId, evidenceId])
+  @@index([caseId])
+  @@index([evidenceId])
+  @@index([overallImpactScore])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 133 — Investigative Opportunities
+// ---------------------------------------------------------------------------
+
+model InvestigativeOpportunity {
+  id              String   @id @default(uuid())
+  caseId          String
+  opportunityType String   // surveillance_camera, phone_tower, parking_meter, rideshare, dna, fingerprint
+  description     String
+  relatedFactIds  Json     @default("[]")
+  priority        String   @default("medium")
+  status          String   @default("suggested")
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  @@index([caseId])
+  @@index([opportunityType])
+  @@index([priority])
+  @@index([status])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 134/135 — Investigative Tasks with Tracking
+// ---------------------------------------------------------------------------
+
+model InvestigativeTask {
+  id              String   @id @default(uuid())
+  caseId          String
+  description     String
+  relatedEvidence Json     @default("[]")
+  relatedFactIds  Json     @default("[]")
+  priority        String   @default("medium")
+  status          String   @default("pending") // pending, completed, not_relevant, impossible, unlikely, ignored
+  assignedTo      String?
+  completedAt     DateTime?
+  notes           String   @default("")
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([status])
+  @@index([priority])
+  @@index([caseId, status])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 137/138 — Narrative Reconstructions
+// ---------------------------------------------------------------------------
+
+model NarrativeReconstruction {
+  id              String   @id @default(uuid())
+  caseId          String
+  narrativeType   String   // prosecution, evidence, defense
+  narrativeText   String
+  timelineEvents  Json     @default("[]")
+  factIds         Json     @default("[]")
+  gaps            Json     @default("[]")
+  contradictions  Json     @default("[]")
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  @@index([caseId])
+  @@index([narrativeType])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 139/141 — Cross Examination Questions
+// ---------------------------------------------------------------------------
+
+model CrossExamQuestion {
+  id              String   @id @default(uuid())
+  caseId          String
+  witnessName     String
+  questionText    String
+  questionType    String   // impeachment, credibility, timeline, contradiction, foundation
+  orderIndex      Int      @default(0)
+  sourceFactIds   Json     @default("[]")
+  contradictionId String?
+  notes           String   @default("")
+  status          String   @default("draft")
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([witnessName])
+  @@index([questionType])
+  @@index([caseId, witnessName, orderIndex])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 143 — Motion Suggestions
+// ---------------------------------------------------------------------------
+
+model MotionSuggestion {
+  id              String   @id @default(uuid())
+  caseId          String
+  motionType      String   // motion_to_suppress, motion_to_compel, motion_to_exclude, subpoena_duces_tecum
+  title           String
+  description     String
+  legalBasis      String   @default("")
+  supportingFacts Json     @default("[]")
+  supportingEvidence Json  @default("[]")
+  priority        String   @default("medium")
+  status          String   @default("suggested")
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  @@index([caseId])
+  @@index([motionType])
+  @@index([status])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 144 — Legal Issues Detected
+// ---------------------------------------------------------------------------
+
+model LegalIssue {
+  id              String   @id @default(uuid())
+  caseId          String
+  issueType       String   // due_process_violation, discovery_violation, procedural_error, constitutional_violation
+  description     String
+  severity        String   @default("medium")
+  evidenceIds     Json     @default("[]")
+  factIds         Json     @default("[]")
+  legalCitation   String   @default("")
+  recommendation  String   @default("")
+  status          String   @default("detected")
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  @@index([caseId])
+  @@index([issueType])
+  @@index([severity])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 148 — Evidence Audit Log
+// ---------------------------------------------------------------------------
+
+model EvidenceAuditLog {
+  id          String   @id @default(uuid())
+  caseId      String
+  analysisId  String?
+  action      String
+  algorithm   String   @default("")
+  input       Json     @default("{}")
+  output      Json     @default("{}")
+  timestamp   DateTime @default(now())
+
+  @@index([caseId])
+  @@index([analysisId])
+  @@index([action])
+  @@index([timestamp])
+}
+
+// ===========================================================================
+// Phases A-P — Verified Fact Registry + Fact-Graph Reasoning
+// ===========================================================================
+
+// ---------------------------------------------------------------------------
+// Phase A — Verified Fact Registry (VFR)
+// ---------------------------------------------------------------------------
+
+model VerifiedFact {
+  id              String   @id @default(uuid())
+  caseId          String
+  factType        String   // PERSON, EVENT, LOCATION, OBJECT, TIME, ACTION
+  statementText   String
+  normalizedValue String   @default("")
+  timestamp       DateTime?
+  confidenceScore Float    @default(0.0)
+  sourceDocumentId String
+  sourceType      String   @default("")
+  pageNumber      Int?
+  lineNumber      Int?
+  speaker         String   @default("")
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  revisions       FactRevision[]
+
+  @@index([caseId])
+  @@index([factType])
+  @@index([sourceDocumentId])
+  @@index([caseId, factType])
+  @@index([normalizedValue])
+}
+
+model FactRevision {
+  id              String   @id @default(uuid())
+  factId          String
+  previousConfidence Float
+  newConfidence   Float
+  reason          String
+  sourceDocumentId String?
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  fact            VerifiedFact @relation(fields: [factId], references: [id], onDelete: Cascade)
+
+  @@index([factId])
+  @@index([createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Phase D — Fact Corroboration Records
+// ---------------------------------------------------------------------------
+
+model FactCorroboration {
+  id              String   @id @default(uuid())
+  caseId          String
+  factId          String
+  supportingFactIds Json   @default("[]")
+  sourceCount     Int      @default(0)
+  corroborationLevel String @default("unsupported") // unsupported, weak, moderate, strong
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  @@index([caseId])
+  @@index([factId])
+  @@index([corroborationLevel])
+}
+
+// ---------------------------------------------------------------------------
+// Phase L — Output Deduplication Records
+// ---------------------------------------------------------------------------
+
+model OutputRecord {
+  id          String   @id @default(uuid())
+  caseId      String
+  outputType  String
+  outputHash  String
+  content     Json     @default("{}")
+  suppressed  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@unique([caseId, outputType, outputHash])
+  @@index([caseId])
+  @@index([outputType])
+}
+
+// ---------------------------------------------------------------------------
+// Phase N — Court-Grade Audit Trail
+// ---------------------------------------------------------------------------
+
+model AnalysisAuditRecord {
+  id             String   @id @default(uuid())
+  caseId         String
+  analysisId     String
+  factsUsed      Json     @default("[]")
+  algorithmsUsed Json     @default("[]")
+  result         Json     @default("{}")
+  timestamp      DateTime @default(now())
+
+  @@index([caseId])
+  @@index([analysisId])
+  @@index([timestamp])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 136 — Corroboration Matrix
+// ---------------------------------------------------------------------------
+
+model CorroborationMatrix {
+  id                    String   @id @default(uuid())
+  caseId                String
+  evidenceAId           String
+  evidenceBId           String
+  relationship          String   @default("neutral") // supporting, contradicting, mixed, neutral
+  supportingFactCount   Int      @default(0)
+  contradictingFactCount Int     @default(0)
+  neutralFactCount      Int      @default(0)
+  strength              Float    @default(0.0)
+  correlationIds        Json     @default("[]")
+  metadata              Json     @default("{}")
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([evidenceAId])
+  @@index([evidenceBId])
+  @@index([relationship])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 145 — Enriched Graph
+// ---------------------------------------------------------------------------
+
+model EnrichedGraph {
+  id          String   @id @default(uuid())
+  caseId      String   @unique
+  nodes       Json     @default("[]")
+  edges       Json     @default("[]")
+  nodeCount   Int      @default(0)
+  edgeCount   Int      @default(0)
+  metadata    Json     @default("{}")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([caseId])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 141 — Examination Outline
+// ---------------------------------------------------------------------------
+
+model ExaminationOutline {
+  id               String   @id @default(uuid())
+  caseId           String
+  witnessName      String
+  examType         String   // direct, cross
+  sections         Json     @default("[]")
+  totalQuestions   Int      @default(0)
+  estimatedMinutes Int      @default(0)
+  metadata         Json     @default("{}")
+  createdAt        DateTime @default(now())
+
+  @@index([caseId])
+  @@index([witnessName])
+  @@index([examType])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 142 — Trial Outline
+// ---------------------------------------------------------------------------
+
+model TrialOutline {
+  id                 String   @id @default(uuid())
+  caseId             String
+  side               String   @default("defense") // defense, prosecution
+  phases             Json     @default("[]")
+  totalPhases        Int      @default(0)
+  estimatedTrialDays Int      @default(0)
+  readinessScore     Float    @default(0.0)
+  metadata           Json     @default("{}")
+  createdAt          DateTime @default(now())
+
+  @@index([caseId])
+  @@index([side])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 138 — Narrative Comparison
+// ---------------------------------------------------------------------------
+
+model NarrativeComparison {
+  id                        String   @id @default(uuid())
+  caseId                    String
+  defenseNarrativeId        String
+  prosecutionNarrativeId    String
+  sharedEvidenceIds         Json     @default("[]")
+  defenseOnlyEvidenceIds    Json     @default("[]")
+  prosecutionOnlyEvidenceIds Json    @default("[]")
+  agreementPoints           Json     @default("[]")
+  disagreementPoints        Json     @default("[]")
+  overallAlignment          Float    @default(0.0)
+  metadata                  Json     @default("{}")
+  createdAt                 DateTime @default(now())
+
+  @@index([caseId])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 146 — Path Analysis
+// ---------------------------------------------------------------------------
+
+model PathAnalysis {
+  id                     String   @id @default(uuid())
+  caseId                 String
+  sourceId               String
+  targetId               String
+  paths                  Json     @default("[]")
+  shortestPathLength     Int      @default(-1)
+  strongestPathStrength  Float    @default(0.0)
+  metadata               Json     @default("{}")
+  createdAt              DateTime @default(now())
+
+  @@index([caseId])
+  @@index([sourceId])
+  @@index([targetId])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 149 — Neutrality Audit
+// ---------------------------------------------------------------------------
+
+model NeutralityAudit {
+  id              String   @id @default(uuid())
+  caseId          String
+  entityType      String   @default("narrative")
+  totalChecked    Int      @default(0)
+  violationsFound Int      @default(0)
+  results         Json     @default("[]")
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  @@index([caseId])
+  @@index([entityType])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 147 — Evidence Performance Metric
+// ---------------------------------------------------------------------------
+
+model EvidencePerformanceMetric {
+  id             String   @id @default(uuid())
+  caseId         String
+  operation      String
+  durationMs     Int      @default(0)
+  status         String   @default("normal") // normal, warning, critical
+  itemsProcessed Int      @default(0)
+  throughput     Float    @default(0.0)
+  metadata       Json     @default("{}")
+  createdAt      DateTime @default(now())
+
+  @@index([caseId])
+  @@index([operation])
+  @@index([status])
+}

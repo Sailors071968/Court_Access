@@ -70,7 +70,7 @@ export function CasesListPage() {
       {/* Cases Grid */}
       <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
         {filteredCases.map((c) => (
-          <Card key={c.id} hover padding="md" className="cursor-pointer" onClick={() => navigate(`/cases/${c.id}/overview`)}>
+          <Card key={c.id} hover padding="md" className="cursor-pointer" onClick={() => navigate(`/app/cases/${c.id}/overview`)}>
             <div className="flex items-start justify-between mb-3">
               <div>
                 <h3 className="font-semibold text-gray-900">{c.title}</h3>

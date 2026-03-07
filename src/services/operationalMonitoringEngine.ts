@@ -178,9 +178,11 @@ export function computeWarmupMetrics(
  */
 export function computeReputationMetrics(
   reputationRecords: RecipientReputationRecord[],
-  _bounceEvents: BounceEventEntity[],
-  _complaintEvents: ComplaintEventEntity[]
+  bounceEvents: BounceEventEntity[],
+  complaintEvents: ComplaintEventEntity[]
 ): ReputationMetrics {
+  void bounceEvents;
+  void complaintEvents;
   let totalActive = 0;
   let softBounce = 0;
   let hardBounce = 0;

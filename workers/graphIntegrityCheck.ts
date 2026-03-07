@@ -72,17 +72,19 @@ export const INTEGRITY_CHECKS = {
   },
 
   /**
-   * Check 3: Invalid edges — Relationships pointing to non-existent nodes.
-   * This catches dangling references from incomplete deletions.
+   * Check 3: Mistyped relationship targets — EXTRACTED_FROM must point to a Document node.
+   * Neo4j enforces relationship endpoint existence natively, so dangling edges cannot occur.
+   * Instead, this checks for relationships pointing to nodes of the wrong type
+   * (e.g., a Fact EXTRACTED_FROM a non-Document node), which indicates a data integrity bug.
    */
-  invalidEdges: {
-    name: 'Invalid Edges',
-    description: 'Relationships with missing start or end nodes',
+  mistypedRelationships: {
+    name: 'Mistyped Relationship Targets',
+    description: 'EXTRACTED_FROM relationships pointing to non-Document nodes',
     severity: 'critical' as const,
     query: `
-      MATCH ()-[r]->()
-      WHERE startNode(r) IS NULL OR endNode(r) IS NULL
-      RETURN type(r) AS relType, id(r) AS relId
+      MATCH (f:Fact)-[:EXTRACTED_FROM]->(target)
+      WHERE NOT target:Document
+      RETURN f.fact_id AS factId, labels(target) AS targetLabels, id(target) AS targetId
       LIMIT 100
     `,
   },

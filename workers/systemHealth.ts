@@ -78,7 +78,7 @@ export async function checkPostgresHealth(
   if (!pingFn) {
     return {
       name: 'PostgreSQL',
-      status: 'healthy',
+      status: 'degraded',
       latencyMs: null,
       message: 'No ping function configured — health check skipped',
       lastChecked,
@@ -118,7 +118,7 @@ export async function checkNeo4jHealth(
   if (!pingFn) {
     return {
       name: 'Neo4j',
-      status: 'healthy',
+      status: 'degraded',
       latencyMs: null,
       message: 'No ping function configured — health check skipped',
       lastChecked,

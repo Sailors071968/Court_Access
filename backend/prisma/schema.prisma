@@ -875,3 +875,108 @@ model DocumentPage {
   @@index([caseId])
   @@index([evidenceId])
 }
+
+// ---------------------------------------------------------------------------
+// Phase 116 — Document Entity Extraction
+// ---------------------------------------------------------------------------
+
+model DocumentEntity {
+  id            String   @id @default(uuid())
+  documentId    String
+  caseId        String
+  entityType    String   // person, date, location, phone, case_number, agency, evidence_ref
+  entityValue   String
+  confidence    Float    @default(1.0)
+  sourceContext String   @default("") // surrounding text for verification
+  extractedAt   DateTime @default(now())
+
+  @@index([documentId])
+  @@index([caseId])
+  @@index([entityType])
+  @@index([entityValue])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 116 — Cross-Document Entity Index
+// ---------------------------------------------------------------------------
+
+model EntityIndex {
+  id                 String   @id @default(uuid())
+  entityType         String   // person, date, location, phone, case_number, agency
+  entityValue        String
+  normalizedValue    String   @default("") // lowercase/trimmed for dedup
+  documentId         String
+  caseId             String
+  firstSeenTimestamp DateTime @default(now())
+
+  @@unique([entityType, normalizedValue, documentId])
+  @@index([entityType])
+  @@index([entityValue])
+  @@index([normalizedValue])
+  @@index([documentId])
+  @@index([caseId])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 116 — Case Events (Timeline Enrichment)
+// ---------------------------------------------------------------------------
+
+model CaseEvent {
+  id               String   @id @default(uuid())
+  caseId           String
+  timestamp        DateTime
+  eventType        String   // arrest, filing, hearing, testimony, evidence, incident
+  sourceDocumentId String?
+  description      String
+  confidence       Float    @default(1.0)
+  metadata         Json     @default("{}")
+  createdAt        DateTime @default(now())
+
+  @@index([caseId])
+  @@index([timestamp])
+  @@index([eventType])
+  @@index([sourceDocumentId])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 116 — Transcript Statements (Key Testimony Extraction)
+// ---------------------------------------------------------------------------
+
+model TranscriptStatement {
+  id              String   @id @default(uuid())
+  transcriptId    String
+  caseId          String
+  speaker         String
+  lineNumber      Int      @default(0)
+  statementText   String
+  statementType   String   // confession, contradiction, timeline_ref, evidence_mention, key_testimony
+  confidence      Float    @default(1.0)
+  metadata        Json     @default("{}")
+  extractedAt     DateTime @default(now())
+
+  @@index([transcriptId])
+  @@index([caseId])
+  @@index([speaker])
+  @@index([statementType])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 116 — Evidence Conflicts (Conflict Detection)
+// ---------------------------------------------------------------------------
+
+model EvidenceConflict {
+  id            String   @id @default(uuid())
+  caseId        String
+  entity        String   // what the conflict is about
+  documentA     String
+  documentB     String
+  description   String
+  conflictType  String   @default("contradiction") // contradiction, timeline_mismatch, entity_discrepancy
+  confidence    Float    @default(1.0)
+  metadata      Json     @default("{}")
+  detectedAt    DateTime @default(now())
+
+  @@index([caseId])
+  @@index([entity])
+  @@index([conflictType])
+}

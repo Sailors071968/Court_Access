@@ -48,7 +48,10 @@ import betaFeedbackRoutes from './routes/betaFeedback.js';
 import bugTrackingRoutes from './routes/bugTracking.js';
 import healthReportRoutes from './routes/healthReport.js';
 import betaStabilityRoutes from './routes/betaStabilityPolicy.js';
+import pageUsageRoutes from './routes/pageUsage.js';
 import { initScheduler, stopScheduler, getReminderStatus, runSchedulerPass } from './services/hearingScheduler.js';
+import { startTranscriptWorker, stopTranscriptWorker } from './workers/transcriptWorker.js';
+import { startTimelineWorker, stopTimelineWorker } from './workers/timelineWorker.js';
 import { registerWorker, startWorker, startHealthChecker, stopAllWorkers, getWorkerStatuses } from './services/workerMonitor.js';
 import { initAlertRules, installCrashHandlers } from './services/alertService.js';
 import Stripe from 'stripe';
@@ -383,6 +386,12 @@ app.use('/api/admin/health-report', healthReportRoutes);
 
 app.use('/api/admin/beta-stability', betaStabilityRoutes);
 
+// ---------------------------------------------------------------------------
+// Routes — Phase 115: Page Usage (Hybrid Pricing)
+// ---------------------------------------------------------------------------
+
+app.use('/api/page-usage', pageUsageRoutes);
+
 // Phase 100: Worker status endpoint
 app.get('/api/admin/worker-status', authenticate, requireRole('admin'), (_req, res) => {
   const statuses = getWorkerStatuses();
@@ -520,6 +529,27 @@ await startWorker('evidence-processor').then(ok => {
 
 await startWorker('hearing-scheduler').then(ok => {
   console.log(`[Court Access] Hearing scheduler ${ok ? 'started' : 'not started'}`);
+});
+
+// Phase 115: Register transcript + timeline workers
+registerWorker(
+  'transcript-parser',
+  () => startTranscriptWorker(),
+  () => stopTranscriptWorker()
+);
+
+registerWorker(
+  'timeline-generator',
+  () => startTimelineWorker(),
+  () => stopTimelineWorker()
+);
+
+await startWorker('transcript-parser').then(ok => {
+  console.log(`[Court Access] Transcript parsing worker ${ok ? 'started' : 'not started (Redis unavailable)'}`);
+});
+
+await startWorker('timeline-generator').then(ok => {
+  console.log(`[Court Access] Timeline generation worker ${ok ? 'started' : 'not started (Redis unavailable)'}`);
 });
 
 // Start worker health checker

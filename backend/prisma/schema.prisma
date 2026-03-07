@@ -29,6 +29,8 @@ model User {
   betaInviteId      String?
   onboardingComplete Boolean @default(false)
   storageUsedBytes  BigInt   @default(0)
+  pageUsageTotal    Int      @default(0)
+  freePageLimit     Int      @default(10)
   lastLoginAt       DateTime?
   createdAt         DateTime @default(now())
   updatedAt         DateTime @updatedAt
@@ -836,4 +838,40 @@ model BetaHealthReport {
 
   @@index([reportDate])
   @@index([createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 115 — Stripe Event Log (idempotent webhook processing)
+// ---------------------------------------------------------------------------
+
+model StripeEvent {
+  id          String   @id @default(uuid())
+  eventId     String   @unique // Stripe event ID (evt_xxx) — ensures idempotency
+  eventType   String
+  payloadJson Json     @default("{}")
+  receivedAt  DateTime @default(now())
+  processedAt DateTime?
+
+  @@index([eventId])
+  @@index([eventType])
+  @@index([receivedAt])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 115 — Document Page Tracking (hybrid pricing enforcement)
+// ---------------------------------------------------------------------------
+
+model DocumentPage {
+  id              String   @id @default(uuid())
+  evidenceId      String
+  userId          String
+  caseId          String
+  filename        String   @default("")
+  pageCount       Int      @default(1)
+  contentType     String   @default("")
+  countedAt       DateTime @default(now())
+
+  @@index([userId])
+  @@index([caseId])
+  @@index([evidenceId])
 }

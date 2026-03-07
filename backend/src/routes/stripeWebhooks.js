@@ -77,9 +77,46 @@ export function registerWebhookRoutes(app) {
         return res.status(400).json({ error: 'Webhook signature verification failed' });
       }
 
+      // Phase 115: Idempotency check via StripeEvent table
+      try {
+        const existing = await prisma.stripeEvent.findUnique({
+          where: { eventId: event.id },
+        });
+
+        if (existing) {
+          console.log(`[Stripe Webhook] Duplicate event ignored: ${event.id} (already processed at ${existing.processedAt})`);
+          return res.json({ received: true, duplicate: true });
+        }
+
+        // Record event before processing (prevents race conditions)
+        await prisma.stripeEvent.create({
+          data: {
+            eventId: event.id,
+            eventType: event.type,
+            payloadJson: JSON.parse(Buffer.isBuffer(req.body) ? req.body.toString('utf8') : JSON.stringify(event)),
+            receivedAt: new Date(),
+          },
+        });
+      } catch (idempotencyErr) {
+        // If unique constraint violation, this is a duplicate — safe to skip
+        if (idempotencyErr.code === 'P2002') {
+          console.log(`[Stripe Webhook] Concurrent duplicate ignored: ${event.id}`);
+          return res.json({ received: true, duplicate: true });
+        }
+        console.warn(`[Stripe Webhook] Idempotency check failed: ${idempotencyErr.message}`);
+        // Continue processing even if idempotency check fails
+      }
+
       // Process the event
       try {
         await handleWebhookEvent(event);
+
+        // Mark event as processed
+        await prisma.stripeEvent.updateMany({
+          where: { eventId: event.id },
+          data: { processedAt: new Date() },
+        }).catch(() => {});
+
         res.json({ received: true });
       } catch (err) {
         console.error(`[Stripe Webhook] Event processing failed: ${err.message}`);

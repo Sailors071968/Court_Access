@@ -682,11 +682,11 @@ ORDER BY f.extracted_at ASC
 
 ```cypher
 MATCH (f:Fact {fact_id: $factId, tenant_id: $tenantId})
-OPTIONAL MATCH (f)-[r:DERIVED_FROM]->(d:Document)
-OPTIONAL MATCH (e:Evidence)-[:HAS_DOCUMENT]->(d)
+OPTIONAL MATCH (f)-[r:EXTRACTED_FROM]->(d:Document)
+OPTIONAL MATCH (c:Case)-[:HAS_DOCUMENT]->(d)
 RETURN f.fact_id, f.content, f.source_page, f.source_line,
        d.document_id, d.name, d.document_type,
-       e.evidence_id, e.name, e.source_uri,
+       c.case_id,
        r.extraction_method
 ```
 
@@ -751,7 +751,7 @@ RETURN f.fact_id, f.sha256, f.sha3_256
 ```cypher
 MATCH (p:Person {tenant_id: $tenantId, role: 'officer'})
 OPTIONAL MATCH (f:Fact)-[:INVOLVES]->(p)
-OPTIONAL MATCH (f)-[:DERIVED_FROM]->(d:Document)
+OPTIONAL MATCH (f)-[:EXTRACTED_FROM]->(d:Document)
 WITH p, collect(DISTINCT d.document_id) AS docs, collect(DISTINCT f.case_id) AS cases
 RETURN p.display_name, p.badge_id,
        size(docs) AS document_count,

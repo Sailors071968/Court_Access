@@ -89,13 +89,20 @@ export function registerWebhookRoutes(app) {
           },
         });
       } catch (idempotencyErr) {
-        // If unique constraint violation, this is a duplicate — safe to skip
+        // If unique constraint violation, check if event was actually processed
         if (idempotencyErr.code === 'P2002') {
-          console.log(`[Stripe Webhook] Duplicate event ignored: ${event.id}`);
-          return res.json({ received: true, duplicate: true });
+          // Check if the existing event was successfully processed
+          const existingEvent = await prisma.stripeEvent.findFirst({ where: { eventId: event.id } }).catch(() => null);
+          if (existingEvent && existingEvent.processedAt) {
+            console.log(`[Stripe Webhook] Duplicate event ignored (already processed): ${event.id}`);
+            return res.json({ received: true, duplicate: true });
+          }
+          // Event exists but was never processed (previous attempt failed) — re-process it
+          console.log(`[Stripe Webhook] Re-processing previously failed event: ${event.id}`);
+        } else {
+          console.warn(`[Stripe Webhook] Idempotency check failed: ${idempotencyErr.message}`);
         }
-        console.warn(`[Stripe Webhook] Idempotency check failed: ${idempotencyErr.message}`);
-        // Continue processing even if idempotency check fails
+        // Continue to processing — either a retry of a failed event or idempotency check failed
       }
 
       // Process the event

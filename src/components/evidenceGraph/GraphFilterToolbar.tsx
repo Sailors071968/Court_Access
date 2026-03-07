@@ -1,6 +1,11 @@
 // ============================================
 // Court Access — Graph Filter Toolbar
-// Phase 117: Evidence Graph + Visualization System
+// Phase 117 + 118: Evidence Graph + Graph Intelligence v2
+//
+// Phase 118 additions:
+// - Date range filter
+// - Confidence score filter
+// - Entity breadcrumbs
 // ============================================
 
 import { useState } from 'react';
@@ -33,6 +38,13 @@ interface GraphFilterToolbarProps {
   onRelTypesChange: (types: string[]) => void;
   onSearchChange: (query: string) => void;
   searchQuery: string;
+  // Phase 118: Extended filters
+  dateRange?: { start: string; end: string };
+  onDateRangeChange?: (range: { start: string; end: string }) => void;
+  confidenceThreshold?: number;
+  onConfidenceChange?: (threshold: number) => void;
+  breadcrumbs?: Array<{ id: string; label: string }>;
+  onBreadcrumbClick?: (id: string) => void;
 }
 
 export default function GraphFilterToolbar({
@@ -42,8 +54,15 @@ export default function GraphFilterToolbar({
   onRelTypesChange,
   onSearchChange,
   searchQuery,
+  dateRange,
+  onDateRangeChange,
+  confidenceThreshold,
+  onConfidenceChange,
+  breadcrumbs,
+  onBreadcrumbClick,
 }: GraphFilterToolbarProps) {
   const [showRelFilters, setShowRelFilters] = useState(false);
+  const [showAdvanced, setShowAdvanced] = useState(false);
 
   const toggleNodeType = (type: string) => {
     if (activeNodeTypes.includes(type)) {
@@ -81,6 +100,16 @@ export default function GraphFilterToolbar({
           }`}
         >
           Relationships
+        </button>
+        <button
+          onClick={() => setShowAdvanced(!showAdvanced)}
+          className={`text-xs px-2 py-1.5 rounded border ${
+            showAdvanced
+              ? 'bg-blue-600 border-blue-500 text-white'
+              : 'bg-gray-700 border-gray-600 text-gray-300 hover:bg-gray-600'
+          }`}
+        >
+          Advanced
         </button>
       </div>
 
@@ -128,6 +157,65 @@ export default function GraphFilterToolbar({
               </button>
             );
           })}
+        </div>
+      )}
+
+      {/* Phase 118: Advanced Filters */}
+      {showAdvanced && (
+        <div className="flex flex-wrap items-center gap-3 mt-2 pt-2 border-t border-gray-700">
+          {/* Date Range */}
+          {onDateRangeChange && (
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs text-gray-500">Date:</span>
+              <input
+                type="date"
+                value={dateRange?.start || ''}
+                onChange={(e) => onDateRangeChange({ start: e.target.value, end: dateRange?.end || '' })}
+                className="bg-gray-900 border border-gray-600 rounded px-1.5 py-0.5 text-xs text-white"
+              />
+              <span className="text-xs text-gray-500">to</span>
+              <input
+                type="date"
+                value={dateRange?.end || ''}
+                onChange={(e) => onDateRangeChange({ start: dateRange?.start || '', end: e.target.value })}
+                className="bg-gray-900 border border-gray-600 rounded px-1.5 py-0.5 text-xs text-white"
+              />
+            </div>
+          )}
+
+          {/* Confidence Threshold */}
+          {onConfidenceChange && (
+            <div className="flex items-center gap-1.5">
+              <span className="text-xs text-gray-500">Min confidence:</span>
+              <input
+                type="range"
+                min="0"
+                max="100"
+                value={(confidenceThreshold || 0) * 100}
+                onChange={(e) => onConfidenceChange(parseInt(e.target.value, 10) / 100)}
+                className="w-20 h-1 accent-blue-500"
+              />
+              <span className="text-xs text-gray-400 w-8">{Math.round((confidenceThreshold || 0) * 100)}%</span>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* Phase 118: Entity Breadcrumbs */}
+      {breadcrumbs && breadcrumbs.length > 0 && (
+        <div className="flex items-center gap-1 mt-2 pt-2 border-t border-gray-700 overflow-x-auto">
+          <span className="text-xs text-gray-500 shrink-0">Path:</span>
+          {breadcrumbs.map((bc, idx) => (
+            <span key={bc.id} className="flex items-center gap-1 shrink-0">
+              {idx > 0 && <span className="text-gray-600 text-xs">&rarr;</span>}
+              <button
+                onClick={() => onBreadcrumbClick?.(bc.id)}
+                className="text-xs text-blue-400 hover:text-blue-300 truncate max-w-24"
+              >
+                {bc.label}
+              </button>
+            </span>
+          ))}
         </div>
       )}
     </div>

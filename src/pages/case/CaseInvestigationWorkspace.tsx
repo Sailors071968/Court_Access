@@ -1,21 +1,28 @@
 // ============================================
 // Court Access — Investigation Workspace
-// Phase 117: Evidence Graph + Visualization System
+// Phase 117 + 118: Evidence Graph + Graph Intelligence v2
 //
 // Layout:
 // -------------------------------------------------
-// |                Evidence Graph                 |
+// |    Evidence Graph    |   AI Insight Panel     |
 // -------------------------------------------------
 // | Timeline | Document Viewer | Entity Inspector |
 // -------------------------------------------------
+//
+// Phase 118 additions:
+// - AI Insight Panel (right side of graph)
+// - Intelligence dashboard link
+// - Keyboard shortcuts (F, E, T, D)
+// - Entity breadcrumbs
 // ============================================
 
-import { useState, useEffect, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import { useState, useEffect, useCallback, useRef } from 'react';
+import { useParams, Link } from 'react-router-dom';
 import EvidenceGraph from '../../components/evidenceGraph/EvidenceGraph';
 import GraphFilterToolbar from '../../components/evidenceGraph/GraphFilterToolbar';
 import EntityInspector from '../../components/evidenceGraph/EntityInspector';
 import DocumentIntelligenceViewer from '../../components/evidenceGraph/DocumentIntelligenceViewer';
+import AIInsightPanel from '../../components/evidenceGraph/AIInsightPanel';
 import CaseTimeline from '../../components/caseTimeline/CaseTimeline';
 import type { GraphNode, GraphEdge } from '../../components/evidenceGraph/EvidenceGraph';
 import type { TimelineEvent } from '../../components/caseTimeline/CaseTimeline';
@@ -95,6 +102,11 @@ export default function CaseInvestigationWorkspace() {
     text: string;
     entities: DetectedEntity[];
   } | null>(null);
+
+  // Phase 118: AI panel state
+  const [showAIPanel, setShowAIPanel] = useState(true);
+  const [breadcrumbs, setBreadcrumbs] = useState<Array<{ id: string; label: string }>>([]);
+  const timelinePanelRef = useRef<HTMLDivElement>(null);
 
   // Load graph data
   const loadGraph = useCallback(async () => {
@@ -204,8 +216,26 @@ export default function CaseInvestigationWorkspace() {
     const node = nodes.find(n => n.id === nodeId);
     if (node) {
       setSelectedNode(node);
+      // Phase 118: Update breadcrumbs
+      setBreadcrumbs(prev => {
+        const existing = prev.findIndex(bc => bc.id === nodeId);
+        if (existing >= 0) return prev.slice(0, existing + 1);
+        return [...prev.slice(-4), { id: node.id, label: node.label }];
+      });
     }
   }, [nodes]);
+
+  // Phase 118: Jump to timeline panel
+  const handleJumpToTimeline = useCallback(() => {
+    timelinePanelRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, []);
+
+  // Phase 118: Open document for selected node
+  const handleOpenDocument = useCallback(() => {
+    if (selectedNode?.type === 'Document') {
+      handleNavigateToDocument(selectedNode.id.replace('document-', ''));
+    }
+  }, [selectedNode, handleNavigateToDocument]);
 
   // Handle navigation to a document
   const handleNavigateToDocument = useCallback(async (documentId: string) => {
@@ -244,6 +274,22 @@ export default function CaseInvestigationWorkspace() {
           )}
         </div>
         <div className="flex items-center gap-2">
+          <Link
+            to={`/app/cases/${caseId}/intelligence`}
+            className="text-xs px-3 py-1.5 bg-purple-600 hover:bg-purple-500 text-white rounded transition-colors"
+          >
+            Intelligence Dashboard
+          </Link>
+          <button
+            onClick={() => setShowAIPanel(!showAIPanel)}
+            className={`text-xs px-3 py-1.5 rounded transition-colors ${
+              showAIPanel
+                ? 'bg-green-600 hover:bg-green-500 text-white'
+                : 'bg-gray-700 hover:bg-gray-600 text-gray-300'
+            }`}
+          >
+            AI Panel
+          </button>
           <button
             onClick={loadGraph}
             disabled={loading}
@@ -262,12 +308,16 @@ export default function CaseInvestigationWorkspace() {
         onRelTypesChange={setFilterRelTypes}
         onSearchChange={setSearchQuery}
         searchQuery={searchQuery}
+        breadcrumbs={breadcrumbs}
+        onBreadcrumbClick={handleNavigateToNode}
       />
 
       {/* Main Content */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        {/* Top Row: Evidence Graph */}
-        <div className="flex-1 min-h-[300px]">
+        {/* Top Row: Evidence Graph + AI Panel */}
+        <div className="flex-1 min-h-[300px] flex">
+          {/* Graph area */}
+          <div className={showAIPanel ? 'flex-1' : 'w-full'}>
           {error ? (
             <div className="flex items-center justify-center h-full">
               <div className="text-center text-gray-500 p-8">
@@ -294,18 +344,32 @@ export default function CaseInvestigationWorkspace() {
               edges={edges}
               onNodeSelect={handleNodeSelect}
               onNodeExpand={handleNodeExpand}
+              onJumpToTimeline={handleJumpToTimeline}
+              onOpenDocument={handleOpenDocument}
               selectedNodeId={selectedNode?.id || null}
               filterTypes={filterNodeTypes.length > 0 ? filterNodeTypes : undefined}
               highlightRelationships={filterRelTypes.length > 0 ? filterRelTypes : undefined}
               className="h-full"
             />
           )}
+          </div>
+
+          {/* Phase 118: AI Insight Panel */}
+          {showAIPanel && caseId && (
+            <div className="w-72 border-l border-gray-800">
+              <AIInsightPanel
+                caseId={caseId}
+                selectedNodeId={selectedNode?.id || null}
+                className="h-full"
+              />
+            </div>
+          )}
         </div>
 
         {/* Bottom Row: Timeline | Document Viewer | Entity Inspector */}
         <div className="grid grid-cols-3 gap-px bg-gray-800 border-t border-gray-700" style={{ height: '45%', minHeight: '280px' }}>
           {/* Timeline Panel */}
-          <div className="bg-gray-950 overflow-hidden">
+          <div ref={timelinePanelRef} className="bg-gray-950 overflow-hidden">
             <CaseTimeline
               events={timelineEvents}
               onEventSelect={handleTimelineEventSelect}

@@ -29,7 +29,7 @@ export const config = {
   r2PublicUrl: process.env.R2_PUBLIC_URL || '',
 
   // JWT
-  jwtSecret: process.env.JWT_SECRET || 'court-access-dev-secret-change-in-production',
+  jwtSecret: process.env.JWT_SECRET || '',
   jwtExpiresIn: process.env.JWT_EXPIRES_IN || '24h',
 
   // Sentry

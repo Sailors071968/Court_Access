@@ -165,7 +165,7 @@ app.use('/api/', (req, res, next) => {
 // Routes — Stripe Checkout (existing functionality)
 // ---------------------------------------------------------------------------
 
-app.post('/api/stripe/create-checkout-session', async (req, res) => {
+app.post('/api/stripe/create-checkout-session', authenticate, async (req, res) => {
   if (!stripe) {
     return res.status(503).json({ error: 'Stripe not configured' });
   }

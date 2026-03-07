@@ -127,6 +127,9 @@ let totalCritical = 0;
 const watchdogEvents: WatchdogEvent[] = [];
 const MAX_EVENTS = 200;
 
+/** Guard to prevent concurrent performCheck executions */
+let checkInProgress = false;
+
 /** Redis memory provider function (injectable for testing / production wiring) */
 let redisMemoryProvider: (() => Promise<{ usedMB: number; connected: boolean }>) | null = null;
 
@@ -222,28 +225,34 @@ function recordEvent(event: WatchdogEvent): void {
 }
 
 async function performCheck(): Promise<void> {
-  totalChecks++;
-  const snapshot = collectSnapshot();
-  lastSnapshot = await snapshot;
+  if (checkInProgress) return;
+  checkInProgress = true;
+  try {
+    totalChecks++;
+    const snapshot = collectSnapshot();
+    lastSnapshot = await snapshot;
 
-  const previousLevel = currentLevel;
-  currentLevel = lastSnapshot.overall;
+    const previousLevel = currentLevel;
+    currentLevel = lastSnapshot.overall;
 
-  // Handle level transitions
-  if (currentLevel === 'critical' && previousLevel !== 'critical') {
-    totalCritical++;
-    pauseAIQueues(lastSnapshot);
-  } else if (currentLevel === 'warning' && previousLevel === 'normal') {
-    totalWarnings++;
-    recordEvent({
-      timestamp: Date.now(),
-      eventType: 'warning',
-      message: `Memory warning: heap=${lastSnapshot.heap.usagePercent}%, RSS=${lastSnapshot.rss.usedMB}MB`,
-      snapshot: lastSnapshot,
-      pausedWorkers: Array.from(pausedByWatchdog),
-    });
-  } else if (currentLevel === 'normal' && previousLevel !== 'normal') {
-    resumeAIQueues(lastSnapshot);
+    // Handle level transitions
+    if (currentLevel === 'critical' && previousLevel !== 'critical') {
+      totalCritical++;
+      pauseAIQueues(lastSnapshot);
+    } else if (currentLevel === 'warning' && previousLevel === 'normal') {
+      totalWarnings++;
+      recordEvent({
+        timestamp: Date.now(),
+        eventType: 'warning',
+        message: `Memory warning: heap=${lastSnapshot.heap.usagePercent}%, RSS=${lastSnapshot.rss.usedMB}MB`,
+        snapshot: lastSnapshot,
+        pausedWorkers: Array.from(pausedByWatchdog),
+      });
+    } else if (currentLevel === 'normal' && previousLevel !== 'normal') {
+      resumeAIQueues(lastSnapshot);
+    }
+  } finally {
+    checkInProgress = false;
   }
 }
 

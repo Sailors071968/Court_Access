@@ -423,6 +423,10 @@ export function getBreakerStatus(workerName: string): CircuitBreakerStatus | nul
   const internal = breakerStates.get(workerName);
   if (!config || !internal) return null;
 
+  // Prune expired timestamps before reporting
+  const cutoff = Date.now() - config.windowMs;
+  internal.opTimestamps = internal.opTimestamps.filter((t) => t >= cutoff);
+
   return {
     workerName,
     state: internal.state,

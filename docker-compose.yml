@@ -26,6 +26,7 @@ services:
       - CLAMAV_HOST=clamav
       - CLAMAV_PORT=3310
       # Secrets — pass via .env file or CI/CD
+      - JWT_SECRET=${JWT_SECRET}
       - STRIPE_SECRET_KEY=${STRIPE_SECRET_KEY}
       - STRIPE_WEBHOOK_SECRET=${STRIPE_WEBHOOK_SECRET}
       - OPENAI_API_KEY=${OPENAI_API_KEY}

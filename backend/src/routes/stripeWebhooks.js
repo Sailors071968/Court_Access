@@ -1,0 +1,439 @@
+// ============================================
+// Court Access — Stripe Webhook Handlers
+// Phase 32/39: Real Stripe Webhooks + Prisma persistence
+//
+// Handles:
+// - checkout.session.completed
+// - invoice.payment_succeeded
+// - invoice.payment_failed
+// - customer.subscription.deleted
+// - customer.subscription.updated
+// ============================================
+
+import express from 'express';
+import Stripe from 'stripe';
+import { config } from '../config/index.js';
+import { captureException, captureMessage } from '../services/errorMonitoring.js';
+import { notifyNewSubscription, notifyPaymentReceived, notifyPaymentFailed, notifySubscriptionCancelled } from '../services/smsNotification.js';
+import prisma from '../services/prismaClient.js';
+import { logPaymentError } from '../services/systemLogger.js';
+import { authenticate, requireRole } from '../middleware/auth.js';
+
+let stripe = null;
+
+function getStripe() {
+  if (stripe) return stripe;
+  if (!config.stripeSecretKey) throw new Error('STRIPE_SECRET_KEY not configured');
+  stripe = new Stripe(config.stripeSecretKey, { apiVersion: '2024-12-18.acacia' });
+  return stripe;
+}
+
+// In-memory subscription store (fallback; Prisma-backed persistence added in Phase 39)
+const subscriptions = new Map();
+
+/**
+ * Register Stripe webhook routes on an Express app.
+ *
+ * IMPORTANT: The webhook endpoint must use express.raw() for body parsing,
+ * NOT express.json(). This is required for Stripe signature verification.
+ */
+export function registerWebhookRoutes(app) {
+  // Webhook endpoint — uses express.raw() for Stripe signature verification
+  // express.raw() parses the body as a Buffer, which Stripe needs for signature check
+  app.post(
+    '/api/stripe/webhooks',
+    express.raw({ type: 'application/json' }),
+    async (req, res) => {
+      const sig = req.headers['stripe-signature'];
+
+      if (!sig) {
+        return res.status(400).json({ error: 'Missing stripe-signature header' });
+      }
+
+      let event;
+
+      try {
+        const stripeClient = getStripe();
+
+        if (config.stripeWebhookSecret) {
+          // Verify webhook signature — req.body is a raw Buffer from express.raw()
+          event = stripeClient.webhooks.constructEvent(
+            req.body,
+            sig,
+            config.stripeWebhookSecret
+          );
+        } else if (config.nodeEnv === 'production') {
+          // In production, refuse to process webhooks without signature verification
+          console.error('[Stripe Webhook] STRIPE_WEBHOOK_SECRET not configured in production — rejecting webhook');
+          return res.status(500).json({ error: 'Webhook secret not configured' });
+        } else {
+          // Development mode only — parse without verification
+          console.warn('[Stripe Webhook] No webhook secret configured — skipping signature verification (dev mode)');
+          const bodyStr = Buffer.isBuffer(req.body) ? req.body.toString('utf8') : req.body;
+          event = typeof bodyStr === 'string' ? JSON.parse(bodyStr) : bodyStr;
+        }
+      } catch (err) {
+        console.error(`[Stripe Webhook] Signature verification failed: ${err.message}`);
+        return res.status(400).json({ error: 'Webhook signature verification failed' });
+      }
+
+      // Phase 115: Idempotency check via StripeEvent table
+      try {
+        const existing = await prisma.stripeEvent.findUnique({
+          where: { eventId: event.id },
+        });
+
+        if (existing) {
+          console.log(`[Stripe Webhook] Duplicate event ignored: ${event.id} (already processed at ${existing.processedAt})`);
+          return res.json({ received: true, duplicate: true });
+        }
+
+        // Record event before processing (prevents race conditions)
+        await prisma.stripeEvent.create({
+          data: {
+            eventId: event.id,
+            eventType: event.type,
+            payloadJson: JSON.parse(Buffer.isBuffer(req.body) ? req.body.toString('utf8') : JSON.stringify(event)),
+            receivedAt: new Date(),
+          },
+        });
+      } catch (idempotencyErr) {
+        // If unique constraint violation, this is a duplicate — safe to skip
+        if (idempotencyErr.code === 'P2002') {
+          console.log(`[Stripe Webhook] Concurrent duplicate ignored: ${event.id}`);
+          return res.json({ received: true, duplicate: true });
+        }
+        console.warn(`[Stripe Webhook] Idempotency check failed: ${idempotencyErr.message}`);
+        // Continue processing even if idempotency check fails
+      }
+
+      // Process the event
+      try {
+        await handleWebhookEvent(event);
+
+        // Mark event as processed
+        await prisma.stripeEvent.updateMany({
+          where: { eventId: event.id },
+          data: { processedAt: new Date() },
+        }).catch(() => {});
+
+        res.json({ received: true });
+      } catch (err) {
+        console.error(`[Stripe Webhook] Event processing failed: ${err.message}`);
+        captureException(err, { eventType: event.type, eventId: event.id });
+        res.status(500).json({ error: 'Webhook processing failed' });
+      }
+    }
+  );
+
+  // Admin endpoint to check subscription status
+  app.get('/api/stripe/subscription/:customerId', authenticate, requireRole('admin'), async (req, res) => {
+    const { customerId } = req.params;
+
+    if (!customerId || typeof customerId !== 'string') {
+      return res.status(400).json({ error: 'customerId is required' });
+    }
+
+    const subscription = subscriptions.get(customerId);
+    if (!subscription) {
+      return res.json({ status: 'none', plan: 'free' });
+    }
+
+    res.json(subscription);
+  });
+
+  console.log('[Stripe Webhook] Routes registered');
+}
+
+/**
+ * Route webhook events to their handlers.
+ */
+async function handleWebhookEvent(event) {
+  console.log(`[Stripe Webhook] Received: ${event.type} (${event.id})`);
+
+  const eventId = event.id;
+
+  switch (event.type) {
+    case 'checkout.session.completed':
+      await handleCheckoutCompleted(event.data.object, eventId);
+      break;
+
+    case 'invoice.payment_succeeded':
+      await handlePaymentSucceeded(event.data.object, eventId);
+      break;
+
+    case 'invoice.payment_failed':
+      await handlePaymentFailed(event.data.object, eventId);
+      break;
+
+    case 'customer.subscription.deleted':
+      await handleSubscriptionDeleted(event.data.object, eventId);
+      break;
+
+    case 'customer.subscription.updated':
+      await handleSubscriptionUpdated(event.data.object, eventId);
+      break;
+
+    default:
+      console.log(`[Stripe Webhook] Unhandled event type: ${event.type}`);
+  }
+}
+
+/**
+ * Handle checkout.session.completed
+ * Fired when a customer completes the Stripe Checkout flow.
+ */
+async function handleCheckoutCompleted(session, eventId) {
+  const customerId = session.customer;
+  const subscriptionId = session.subscription;
+  const plan = session.metadata?.plan || 'professional';
+  const email = session.customer_details?.email || session.customer_email;
+
+  const customerName = session.customer_details?.name || '';
+
+  console.log(`[Stripe Webhook] Checkout completed: customer=${customerId}, plan=${plan}, email=${email}`);
+
+  // Store subscription data (in-memory fallback)
+  subscriptions.set(customerId, {
+    customerId,
+    subscriptionId,
+    plan,
+    email,
+    status: 'active',
+    startedAt: new Date().toISOString(),
+    lastPaymentAt: new Date().toISOString(),
+  });
+
+  // Phase 39: Persist subscription event + update user record in database
+  try {
+    await prisma.subscriptionEvent.create({
+      data: {
+        stripeCustomerId: customerId,
+        stripeEventId: eventId,
+        eventType: 'checkout.session.completed',
+        plan,
+        amount: session.amount_total || 0,
+        status: 'active',
+        metadata: { email, subscriptionId },
+      },
+    });
+
+    // Update user record if linked via stripeCustomerId
+    await prisma.user.updateMany({
+      where: { stripeCustomerId: customerId },
+      data: {
+        plan,
+        subscriptionId: subscriptionId || undefined,
+        subscriptionStatus: 'active',
+      },
+    });
+  } catch (dbErr) {
+    console.warn('[Stripe Webhook] DB persistence failed:', dbErr.message);
+    logPaymentError('checkout.session.completed', dbErr, { customerId }).catch(() => {});
+  }
+
+  captureMessage('New subscription created', 'info', { customerId, plan, email });
+
+  // SMS alert to admin
+  const amount = session.amount_total ? (session.amount_total / 100).toFixed(2) : '0.00';
+  await notifyNewSubscription({
+    customerName,
+    customerEmail: email,
+    planName: plan,
+    amount,
+  });
+}
+
+/**
+ * Handle invoice.payment_succeeded
+ * Fired when a subscription renewal payment succeeds.
+ */
+async function handlePaymentSucceeded(invoice, eventId) {
+  const customerId = invoice.customer;
+  const amountPaid = invoice.amount_paid;
+  const currency = invoice.currency;
+
+  console.log(`[Stripe Webhook] Payment succeeded: customer=${customerId}, amount=${amountPaid} ${currency}`);
+
+  const existing = subscriptions.get(customerId);
+  if (existing) {
+    existing.status = 'active';
+    existing.lastPaymentAt = new Date().toISOString();
+    existing.lastAmountPaid = amountPaid;
+    subscriptions.set(customerId, existing);
+  }
+
+  // Phase 39: Persist payment event
+  try {
+    await prisma.subscriptionEvent.create({
+      data: {
+        stripeCustomerId: customerId,
+        stripeEventId: eventId,
+        eventType: 'invoice.payment_succeeded',
+        amount: amountPaid,
+        currency,
+        status: 'paid',
+      },
+    });
+  } catch (dbErr) {
+    logPaymentError('invoice.payment_succeeded', dbErr, { customerId }).catch(() => {});
+  }
+
+  // SMS alert to admin
+  await notifyPaymentReceived({
+    customerEmail: existing?.email || invoice.customer_email || '',
+    amount: (amountPaid / 100).toFixed(2),
+    currency,
+  });
+}
+
+/**
+ * Handle invoice.payment_failed
+ * Fired when a subscription renewal payment fails.
+ */
+async function handlePaymentFailed(invoice, eventId) {
+  const customerId = invoice.customer;
+  const attemptCount = invoice.attempt_count;
+
+  console.log(`[Stripe Webhook] Payment failed: customer=${customerId}, attempt=${attemptCount}`);
+
+  const existing = subscriptions.get(customerId);
+  if (existing) {
+    existing.status = 'past_due';
+    existing.lastFailedAt = new Date().toISOString();
+    existing.failedAttempts = attemptCount;
+    subscriptions.set(customerId, existing);
+  }
+
+  captureMessage('Subscription payment failed', 'warning', { customerId, attemptCount });
+
+  // Phase 39: Persist failure event + update user status
+  try {
+    await prisma.subscriptionEvent.create({
+      data: {
+        stripeCustomerId: customerId,
+        stripeEventId: eventId,
+        eventType: 'invoice.payment_failed',
+        status: 'failed',
+        metadata: { attemptCount },
+      },
+    });
+
+    await prisma.user.updateMany({
+      where: { stripeCustomerId: customerId },
+      data: { subscriptionStatus: 'past_due' },
+    });
+  } catch (dbErr) {
+    logPaymentError('invoice.payment_failed', dbErr, { customerId }).catch(() => {});
+  }
+
+  // SMS alert to admin
+  await notifyPaymentFailed({
+    customerEmail: existing?.email || '',
+    attemptCount,
+  });
+}
+
+/**
+ * Handle customer.subscription.deleted
+ * Fired when a subscription is cancelled (end of billing period).
+ */
+async function handleSubscriptionDeleted(subscription, eventId) {
+  const customerId = subscription.customer;
+
+  console.log(`[Stripe Webhook] Subscription deleted: customer=${customerId}`);
+
+  const existing = subscriptions.get(customerId);
+  if (existing) {
+    existing.status = 'cancelled';
+    existing.cancelledAt = new Date().toISOString();
+    existing.plan = 'free'; // Downgrade to free
+    subscriptions.set(customerId, existing);
+  }
+
+  captureMessage('Subscription cancelled', 'info', { customerId });
+
+  // Phase 39: Persist cancellation + downgrade user
+  try {
+    await prisma.subscriptionEvent.create({
+      data: {
+        stripeCustomerId: customerId,
+        stripeEventId: eventId,
+        eventType: 'customer.subscription.deleted',
+        plan: 'free',
+        status: 'cancelled',
+      },
+    });
+
+    await prisma.user.updateMany({
+      where: { stripeCustomerId: customerId },
+      data: {
+        plan: 'free',
+        subscriptionStatus: 'cancelled',
+        subscriptionId: null,
+      },
+    });
+  } catch (dbErr) {
+    logPaymentError('customer.subscription.deleted', dbErr, { customerId }).catch(() => {});
+  }
+
+  // SMS alert to admin
+  await notifySubscriptionCancelled({
+    customerEmail: existing?.email || '',
+  });
+}
+
+/**
+ * Map Stripe subscription status to our internal status values.
+ * Stripe uses 'canceled' (American), we use 'cancelled' (British).
+ * Also normalizes edge-case statuses to our known set.
+ */
+function mapStripeStatus(stripeStatus) {
+  const STATUS_MAP = {
+    active: 'active',
+    past_due: 'past_due',
+    canceled: 'cancelled',
+    cancelled: 'cancelled',
+    unpaid: 'past_due',
+    incomplete: 'incomplete',
+    incomplete_expired: 'cancelled',
+    trialing: 'trialing',
+    paused: 'paused',
+  };
+  return STATUS_MAP[stripeStatus] || stripeStatus;
+}
+
+/**
+ * Handle customer.subscription.updated
+ * Fired when subscription is changed (upgrade, downgrade, etc.)
+ */
+async function handleSubscriptionUpdated(subscription, eventId) {
+  const customerId = subscription.customer;
+  const status = subscription.status;
+
+  console.log(`[Stripe Webhook] Subscription updated: customer=${customerId}, status=${status}`);
+
+  const existing = subscriptions.get(customerId);
+  if (existing) {
+    existing.status = status;
+    existing.updatedAt = new Date().toISOString();
+    subscriptions.set(customerId, existing);
+  }
+
+  // Phase 39: Sync subscription status to user record
+  try {
+    await prisma.user.updateMany({
+      where: { stripeCustomerId: customerId },
+      data: { subscriptionStatus: mapStripeStatus(status) },
+    });
+  } catch (dbErr) {
+    logPaymentError('customer.subscription.updated', dbErr, { customerId }).catch(() => {});
+  }
+}
+
+/**
+ * Get all subscriptions (admin use).
+ */
+export function getAllSubscriptions() {
+  return Array.from(subscriptions.values());
+}

@@ -12,7 +12,8 @@ export interface LoginResponse {
   expiresAt: string;
 }
 
-export async function loginApi(_request: LoginRequest): Promise<LoginResponse> {
+export async function loginApi(request: LoginRequest): Promise<LoginResponse> {
+  void request;
   // Mock implementation — will be replaced with real API
   await new Promise((resolve) => setTimeout(resolve, 800));
   return {
@@ -21,15 +22,18 @@ export async function loginApi(_request: LoginRequest): Promise<LoginResponse> {
   };
 }
 
-export async function forgotPasswordApi(_email: string): Promise<{ success: boolean }> {
+export async function forgotPasswordApi(email: string): Promise<{ success: boolean }> {
+  void email;
   await new Promise((resolve) => setTimeout(resolve, 800));
   return { success: true };
 }
 
 export async function resetPasswordApi(
-  _token: string,
-  _newPassword: string
+  token: string,
+  newPassword: string
 ): Promise<{ success: boolean }> {
+  void token;
+  void newPassword;
   await new Promise((resolve) => setTimeout(resolve, 800));
   return { success: true };
 }

@@ -504,15 +504,15 @@ function TestimonialsSection() {
   const videoTestimonials = [
     {
       video: 'https://pub-5902a0d1736f45128ddd003d46626528.r2.dev/testimonials/testimonial-1.mp4',
-      name: 'David R.',
-      role: 'Criminal Defense Attorney',
-      quote: 'Court Access changed how I review case files. Instead of digging through hundreds of pages, I can immediately see the structure of the case and where the important issues are.',
-    },
-    {
-      video: 'https://pub-5902a0d1736f45128ddd003d46626528.r2.dev/testimonials/testimonial-2.mp4',
       name: 'Sarah M.',
       role: 'Former Defendant',
       quote: 'When I was charged with a felony, my entire life felt like it was falling apart. Seeing my court records organized and explained helped me understand what was actually happening in my case.',
+    },
+    {
+      video: 'https://pub-5902a0d1736f45128ddd003d46626528.r2.dev/testimonials/testimonial-2.mp4',
+      name: 'David R.',
+      role: 'Criminal Defense Attorney',
+      quote: 'Court Access changed how I review case files. Instead of digging through hundreds of pages, I can immediately see the structure of the case and where the important issues are.',
     },
     {
       video: 'https://pub-5902a0d1736f45128ddd003d46626528.r2.dev/testimonials/testimonial-3.mp4',

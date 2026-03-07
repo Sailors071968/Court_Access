@@ -245,13 +245,17 @@ An evidence artifact contains one or more extracted facts.
 |---|---|---|---|
 | `extracted_at` | String | Yes | ISO 8601 timestamp of extraction |
 
-### 4.2 Evidence to Document
+### 4.2 Case to Document
 
 ```
-(Evidence)-[:HAS_DOCUMENT]->(Document)
+(Case)-[:HAS_DOCUMENT]->(Document)
 ```
 
-An evidence artifact has an associated legal document (the text layer).
+A case owns one or more legal documents. This is the primary ownership edge
+validated by the nightly integrity checker (`graphIntegrityCheck.ts`).
+
+> **Note:** The `Case` node is defined in `src/models/CaseModel.ts` as `CaseEntity`.
+> It is not redefined in this schema but is referenced as a relationship endpoint.
 
 ### 4.3 Fact to Entity
 
@@ -333,13 +337,15 @@ One fact contradicts another fact.
 |---|---|---|---|
 | `contradiction_type` | String | No | Type of contradiction (`direct`, `temporal`, `logical`) |
 
-### 4.10 Fact Derivation
+### 4.10 Fact Extraction
 
 ```
-(Fact)-[:DERIVED_FROM]->(Document)
+(Fact)-[:EXTRACTED_FROM]->(Document)
 ```
 
-A fact was derived (extracted) from a specific document.
+A fact was extracted from a specific document. This is the canonical
+Fact→Document provenance edge validated by the nightly integrity checker
+(`graphIntegrityCheck.ts`).
 
 | Property | Type | Required | Description |
 |---|---|---|---|
@@ -414,7 +420,7 @@ Establishes temporal ordering between timeline events.
 | Relationship | Source | Target | Semantics |
 |---|---|---|---|
 | `CONTAINS` | Evidence | Fact | Evidence contains extracted fact |
-| `HAS_DOCUMENT` | Evidence | Document | Evidence has associated document |
+| `HAS_DOCUMENT` | Case | Document | Case owns document |
 | `MENTIONS` | Fact | Entity | Fact mentions entity |
 | `INVOLVES` | Fact | Person | Fact involves person |
 | `PARTICIPATES_IN` | Entity | Event | Entity participated in event |
@@ -422,7 +428,7 @@ Establishes temporal ordering between timeline events.
 | `OCCURRED_AT` | Event | Location | Event occurred at location |
 | `SUPPORTS` | Fact | Fact | Fact supports another fact |
 | `CONTRADICTS` | Fact | Fact | Fact contradicts another fact |
-| `DERIVED_FROM` | Fact | Document | Fact extracted from document |
+| `EXTRACTED_FROM` | Fact | Document | Fact extracted from document |
 | `SUPERSEDES` | Fact | Fact | Newer fact replaces older fact |
 | `ATTRIBUTED_TO` | Statement | Person | Statement attributed to person |
 | `SOURCED_FROM` | Statement | Document | Statement extracted from document |
@@ -488,11 +494,11 @@ Facts are APPEND-ONLY.
 The full provenance chain for any fact is:
 
 ```
-Fact --[:DERIVED_FROM]--> Document --[:HAS_DOCUMENT]-- Evidence
+Fact --[:EXTRACTED_FROM]--> Document <--[:HAS_DOCUMENT]-- Case
 ```
 
-This allows any fact to be traced back to its original evidence artifact,
-the specific document, page, and line where it was found.
+This allows any fact to be traced back to its source document and owning case,
+including the specific page and line where it was found.
 
 ---
 

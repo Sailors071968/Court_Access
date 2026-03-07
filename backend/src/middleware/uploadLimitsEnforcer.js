@@ -68,8 +68,8 @@ export function enforceUploadLimits() {
       });
     } catch (err) {
       console.error(`[UploadLimits] Error checking limits: ${err.message}`);
-      // On error, allow the upload (fail open to avoid blocking legitimate users)
-      return next();
+      // On error, block the upload to protect billing enforcement
+      return res.status(503).json({ error: 'Unable to verify upload limits. Please try again.' });
     }
   };
 }

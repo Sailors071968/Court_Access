@@ -60,7 +60,7 @@ let neo4jAvailable = false;
 export async function initGraphDatabase() {
   const neo4jUri = process.env.NEO4J_URI || 'bolt://localhost:7687';
   const neo4jUser = process.env.NEO4J_USER || 'neo4j';
-  const neo4jPassword = process.env.NEO4J_PASSWORD || 'courtaccess_graph_2024';
+  const neo4jPassword = process.env.NEO4J_PASSWORD || '';
 
   try {
     const neo4j = await import('neo4j-driver').catch(() => null);

@@ -400,7 +400,10 @@ export function getMemoryHealthSummary(): {
  */
 export async function forceCheck(): Promise<MemorySnapshot> {
   await performCheck();
-  return lastSnapshot!;
+  if (!lastSnapshot) {
+    return await collectSnapshot();
+  }
+  return lastSnapshot;
 }
 
 /**

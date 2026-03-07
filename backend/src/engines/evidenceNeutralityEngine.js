@@ -86,13 +86,13 @@ export async function auditCaseNeutrality(caseId) {
   const results = [];
 
   for (const narrative of narratives) {
-    const sections = narrative.sections || [];
-    for (const section of sections) {
+    const sections = narrative.metadata?.sections || narrative.keyEvents || [];
+    for (const section of (Array.isArray(sections) ? sections : [])) {
       const check = checkNeutrality(section.content || '');
       if (!check.isNeutral) {
         results.push({
           narrativeId: narrative.id,
-          perspective: narrative.perspective,
+          perspective: narrative.modelVersion || narrative.metadata?.perspective || 'unknown',
           section: section.title,
           violations: check.violations,
           originalText: section.content?.substring(0, 200),

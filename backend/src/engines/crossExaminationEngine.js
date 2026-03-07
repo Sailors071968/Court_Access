@@ -133,15 +133,15 @@ export async function generateCrossExamQuestions(caseId, witnessName) {
     questions: stored,
     summary: {
       total: stored.length,
-      byCategory: groupBy(stored, 'category'),
-      byPriority: groupBy(stored, 'priority'),
+      byCategory: groupBy(stored, r => r.metadata?.category || 'unknown'),
+      byPriority: groupBy(stored, r => r.metadata?.priority || 'unknown'),
     },
   };
 }
 
-function groupBy(items, key) {
+function groupBy(items, keyOrFn) {
   return items.reduce((acc, item) => {
-    const val = item[key] || 'unknown';
+    const val = typeof keyOrFn === 'function' ? keyOrFn(item) : (item[keyOrFn] || 'unknown');
     acc[val] = (acc[val] || 0) + 1;
     return acc;
   }, {});

@@ -171,7 +171,12 @@ export function evidenceScoresKey(caseId) {
  * Called when: new document uploaded, entity extraction runs, graph rebuild triggered.
  */
 export async function invalidateCaseGraphCache(caseId) {
-  await invalidateCache(`graph:*:${caseId}*`);
+  // Use exact caseId boundary to prevent matching prefix-similar caseIds
+  // e.g., graph:case:abc123 should not match graph:case:abc123-xyz
+  await Promise.all([
+    invalidateCache(`graph:*:${caseId}`),
+    invalidateCache(`graph:*:${caseId}:*`),
+  ]);
   console.log(`[GraphCache] Invalidated all graph cache for case ${caseId}`);
 }
 

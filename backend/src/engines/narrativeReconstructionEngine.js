@@ -63,14 +63,22 @@ export async function reconstructNarrative(caseId, perspective = 'defense') {
     supportingEvidence: conflicts.map(c => c.eventAId),
   });
 
+  const confidenceScore = calculateNarrativeConfidence(timeline, facts, conflicts);
+  const evidenceIds = [...new Set(sections.flatMap(s => s.supportingEvidence))];
+
   const narrative = await prisma.caseNarrative.create({
     data: {
       caseId,
-      perspective,
-      sections,
-      evidenceIds: [...new Set(sections.flatMap(s => s.supportingEvidence))],
-      confidenceScore: calculateNarrativeConfidence(timeline, facts, conflicts),
+      summaryText: sections.map(s => `## ${s.title}\n${s.content}`).join('\n\n'),
+      keyEvents: sections,
+      conflictsDetected: conflicts.map(c => ({ id: c.id, type: c.conflictType, description: c.description })),
+      participants: witnesses.map(w => ({ name: w.witnessName, credibility: w.credibilityScore })),
+      modelVersion: perspective,
       metadata: {
+        perspective,
+        sections,
+        evidenceIds,
+        confidenceScore,
         timelineEventCount: timeline.length,
         factCount: facts.length,
         conflictCount: conflicts.length,

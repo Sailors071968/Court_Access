@@ -76,14 +76,17 @@ export async function generateMotionStrategy(caseId) {
         caseId,
         motionType: templateKey,
         title: template.title,
+        description: issue.description,
         legalBasis: template.legalBasis,
-        standardOfReview: template.standardOfReview,
         supportingEvidence: [issue.evidenceId],
-        factualBasis: issue.description,
-        strengthScore: issue.severity === 'critical' ? 0.85 : issue.severity === 'high' ? 0.7 : 0.5,
         priority: issue.severity,
-        requirements: template.requirements,
-        metadata: { admissibilityIssueId: issue.id, issueType: issue.issueType },
+        metadata: {
+          admissibilityIssueId: issue.id,
+          issueType: issue.issueType,
+          standardOfReview: template.standardOfReview,
+          strengthScore: issue.severity === 'critical' ? 0.85 : issue.severity === 'high' ? 0.7 : 0.5,
+          requirements: template.requirements,
+        },
       });
     }
   }
@@ -96,14 +99,17 @@ export async function generateMotionStrategy(caseId) {
         caseId,
         motionType: 'suppress_identification',
         title: template.title,
+        description: `Witness "${risk.witnessName}" has ${risk.riskLevel} misidentification risk (${risk.overallRiskScore}). Distance: ${risk.distanceScore}, Lighting: ${risk.lightingScore}, Observation: ${risk.observationTimeScore}`,
         legalBasis: template.legalBasis,
-        standardOfReview: template.standardOfReview,
         supportingEvidence: [],
-        factualBasis: `Witness "${risk.witnessName}" has ${risk.riskLevel} misidentification risk (${risk.overallRiskScore}). Distance: ${risk.distanceScore}, Lighting: ${risk.lightingScore}, Observation: ${risk.observationTimeScore}`,
-        strengthScore: risk.overallRiskScore,
         priority: risk.riskLevel === 'critical' ? 'critical' : 'high',
-        requirements: template.requirements,
-        metadata: { misidRiskId: risk.id, witnessName: risk.witnessName },
+        metadata: {
+          misidRiskId: risk.id,
+          witnessName: risk.witnessName,
+          standardOfReview: template.standardOfReview,
+          strengthScore: risk.overallRiskScore,
+          requirements: template.requirements,
+        },
       });
     }
   }
@@ -121,7 +127,7 @@ export async function generateMotionStrategy(caseId) {
   const stored = [];
   for (const motion of deduped) {
     try {
-      const record = await prisma.motionRecommendation.create({ data: motion });
+      const record = await prisma.motionSuggestion.create({ data: motion });
       stored.push(record);
     } catch (err) {
       console.warn(`[MotionStrategy] Store error: ${err.message}`);
@@ -137,7 +143,7 @@ export async function generateMotionStrategy(caseId) {
       byType: groupBy(stored, 'motionType'),
       byPriority: groupBy(stored, 'priority'),
       avgStrength: stored.length > 0
-        ? Math.round((stored.reduce((s, m) => s + m.strengthScore, 0) / stored.length) * 100) / 100
+        ? Math.round((stored.reduce((s, m) => s + (m.metadata?.strengthScore || 0), 0) / stored.length) * 100) / 100
         : 0,
     },
   };
@@ -152,8 +158,8 @@ function groupBy(items, key) {
 }
 
 export async function getCaseMotionRecommendations(caseId) {
-  return prisma.motionRecommendation.findMany({
+  return prisma.motionSuggestion.findMany({
     where: { caseId },
-    orderBy: { strengthScore: 'desc' },
+    orderBy: { createdAt: 'desc' },
   });
 }

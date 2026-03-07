@@ -46,9 +46,12 @@ export async function identifyOpportunities(caseId) {
         opportunityType: 'MISSING_WITNESS',
         priority: OPPORTUNITY_TYPES.MISSING_WITNESS.priority,
         description: `Person "${person}" is mentioned in evidence but no witness statement has been analyzed.`,
-        suggestedAction: `Obtain and analyze statement from "${person}" or determine their relevance to the case.`,
-        relatedEvidenceIds: facts.filter(f => f.normalizedValue === person).map(f => f.documentId),
-        metadata: { personName: person },
+        relatedFactIds: facts.filter(f => f.normalizedValue === person).map(f => f.id),
+        metadata: {
+          personName: person,
+          suggestedAction: `Obtain and analyze statement from "${person}" or determine their relevance to the case.`,
+          relatedEvidenceIds: facts.filter(f => f.normalizedValue === person).map(f => f.documentId),
+        },
       });
     }
   }
@@ -63,9 +66,12 @@ export async function identifyOpportunities(caseId) {
         opportunityType: 'TIMELINE_GAP',
         priority: OPPORTUNITY_TYPES.TIMELINE_GAP.priority,
         description: `${Math.round(gapHours)}-hour gap in timeline between "${timeline[i - 1].event.substring(0, 50)}" and "${timeline[i].event.substring(0, 50)}".`,
-        suggestedAction: `Investigate activities during the ${Math.round(gapHours)}-hour unaccounted period. Check surveillance, phone records, or witnesses.`,
-        relatedEvidenceIds: [timeline[i - 1].id, timeline[i].id],
-        metadata: { gapHours: Math.round(gapHours) },
+        relatedFactIds: [],
+        metadata: {
+          gapHours: Math.round(gapHours),
+          suggestedAction: `Investigate activities during the ${Math.round(gapHours)}-hour unaccounted period. Check surveillance, phone records, or witnesses.`,
+          relatedEvidenceIds: [timeline[i - 1].id, timeline[i].id],
+        },
       });
     }
   }
@@ -82,9 +88,12 @@ export async function identifyOpportunities(caseId) {
         opportunityType: 'UNCORROBORATED_CLAIM',
         priority: OPPORTUNITY_TYPES.UNCORROBORATED_CLAIM.priority,
         description: `Event claim "${fact.statementText.substring(0, 80)}" has no corroborating evidence from independent sources.`,
-        suggestedAction: `Seek additional evidence or witnesses to corroborate or refute this claim.`,
-        relatedEvidenceIds: [fact.documentId],
-        metadata: { factId: fact.id },
+        relatedFactIds: [fact.id],
+        metadata: {
+          factId: fact.id,
+          suggestedAction: `Seek additional evidence or witnesses to corroborate or refute this claim.`,
+          relatedEvidenceIds: [fact.documentId],
+        },
       });
     }
   }
@@ -96,9 +105,13 @@ export async function identifyOpportunities(caseId) {
       opportunityType: 'ALIBI_VERIFICATION',
       priority: OPPORTUNITY_TYPES.ALIBI_VERIFICATION.priority,
       description: `Timeline conflict (${conflict.conflictType}): "${conflict.description.substring(0, 100)}". Alibi or location can potentially be verified.`,
-      suggestedAction: `Obtain GPS data, surveillance footage, or third-party records to resolve this conflict.`,
-      relatedEvidenceIds: [conflict.eventAId, conflict.eventBId],
-      metadata: { conflictId: conflict.id, conflictType: conflict.conflictType },
+      relatedFactIds: [],
+      metadata: {
+        conflictId: conflict.id,
+        conflictType: conflict.conflictType,
+        suggestedAction: `Obtain GPS data, surveillance footage, or third-party records to resolve this conflict.`,
+        relatedEvidenceIds: [conflict.eventAId, conflict.eventBId],
+      },
     });
   }
 
@@ -110,9 +123,12 @@ export async function identifyOpportunities(caseId) {
         opportunityType: 'RECORD_REQUEST',
         priority: OPPORTUNITY_TYPES.RECORD_REQUEST.priority,
         description: `Chain of custody issue for evidence "${issue.evidenceId}": ${issue.description.substring(0, 100)}`,
-        suggestedAction: `Subpoena complete chain of custody records and evidence handling logs.`,
-        relatedEvidenceIds: [issue.evidenceId],
-        metadata: { issueId: issue.id },
+        relatedFactIds: [],
+        metadata: {
+          issueId: issue.id,
+          suggestedAction: `Subpoena complete chain of custody records and evidence handling logs.`,
+          relatedEvidenceIds: [issue.evidenceId],
+        },
       });
     }
   }

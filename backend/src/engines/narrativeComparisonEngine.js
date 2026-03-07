@@ -18,23 +18,25 @@ export async function compareNarratives(caseId) {
     orderBy: { createdAt: 'desc' },
   });
 
-  const defense = narratives.find(n => n.perspective === 'defense');
-  const prosecution = narratives.find(n => n.perspective === 'prosecution');
+  const defense = narratives.find(n => (n.modelVersion || n.metadata?.perspective) === 'defense');
+  const prosecution = narratives.find(n => (n.modelVersion || n.metadata?.perspective) === 'prosecution');
 
   if (!defense || !prosecution) {
     console.warn('[NarrativeComparison] Both defense and prosecution narratives required');
     return null;
   }
 
-  const defenseEvidence = new Set(defense.evidenceIds || []);
-  const prosecutionEvidence = new Set(prosecution.evidenceIds || []);
+  const defenseEvidence = new Set(defense.metadata?.evidenceIds || []);
+  const prosecutionEvidence = new Set(prosecution.metadata?.evidenceIds || []);
 
   const sharedEvidence = [...defenseEvidence].filter(e => prosecutionEvidence.has(e));
   const defenseOnly = [...defenseEvidence].filter(e => !prosecutionEvidence.has(e));
   const prosecutionOnly = [...prosecutionEvidence].filter(e => !defenseEvidence.has(e));
 
-  const agreementPoints = findAgreementPoints(defense.sections, prosecution.sections);
-  const disagreementPoints = findDisagreementPoints(defense.sections, prosecution.sections);
+  const defenseSections = defense.metadata?.sections || defense.keyEvents || [];
+  const prosecutionSections = prosecution.metadata?.sections || prosecution.keyEvents || [];
+  const agreementPoints = findAgreementPoints(defenseSections, prosecutionSections);
+  const disagreementPoints = findDisagreementPoints(defenseSections, prosecutionSections);
 
   const comparison = await prisma.narrativeComparison.create({
     data: {
@@ -48,8 +50,8 @@ export async function compareNarratives(caseId) {
       disagreementPoints,
       overallAlignment: calculateAlignment(sharedEvidence.length, defenseOnly.length, prosecutionOnly.length),
       metadata: {
-        defenseConfidence: defense.confidenceScore,
-        prosecutionConfidence: prosecution.confidenceScore,
+        defenseConfidence: defense.metadata?.confidenceScore || 0,
+        prosecutionConfidence: prosecution.metadata?.confidenceScore || 0,
         comparedAt: new Date().toISOString(),
       },
     },

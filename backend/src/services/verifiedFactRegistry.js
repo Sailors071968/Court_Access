@@ -33,9 +33,9 @@ export async function registerVerifiedFact({
     .update(`${caseId}:${factText}:${documentId}:${page}:${line}`)
     .digest('hex');
 
-  // Check for duplicate
+  // Check for duplicate via hash stored in metadata
   const existing = await prisma.verifiedFact.findFirst({
-    where: { factHash },
+    where: { caseId, statementText: factText, sourceDocumentId: documentId },
   });
 
   if (existing) {
@@ -46,32 +46,39 @@ export async function registerVerifiedFact({
   const record = await prisma.verifiedFact.create({
     data: {
       caseId,
-      factHash,
-      factText,
+      statementText: factText,
       factType,
       normalizedValue: normalizedValue || factText.toLowerCase().trim(),
-      documentId,
-      page: page || null,
-      line: line || null,
+      sourceDocumentId: documentId,
+      pageNumber: page || null,
+      lineNumber: line || null,
       timestamp: timestamp ? new Date(timestamp) : null,
-      speaker: speaker || null,
-      confidence: confidence || 0.5,
-      extractionMethod: extractionMethod || 'pattern_matching',
-      verificationStatus: 'unverified',
-      metadata,
+      speaker: speaker || '',
+      confidenceScore: confidence || 0.5,
+      metadata: {
+        ...metadata,
+        factHash,
+        extractionMethod: extractionMethod || 'pattern_matching',
+        verificationStatus: 'unverified',
+      },
     },
   });
 
   // Create initial revision
   await prisma.factRevision.create({
     data: {
-      verifiedFactId: record.id,
-      revisionNumber: 1,
-      changeType: 'created',
-      previousValue: null,
-      newValue: { factText, factType, normalizedValue, confidence },
-      changedBy: 'system',
+      factId: record.id,
+      previousConfidence: 0,
+      newConfidence: confidence || 0.5,
       reason: 'Initial extraction',
+      sourceDocumentId: documentId,
+      metadata: {
+        changeType: 'created',
+        factText,
+        factType,
+        normalizedValue,
+        changedBy: 'system',
+      },
     },
   });
 
@@ -91,23 +98,32 @@ export async function updateFactStatus(factId, newStatus, changedBy, reason) {
   const fact = await prisma.verifiedFact.findUnique({ where: { id: factId } });
   if (!fact) throw new Error(`Fact ${factId} not found`);
 
-  const revisionCount = await prisma.factRevision.count({ where: { verifiedFactId: factId } });
+  const previousStatus = fact.metadata?.verificationStatus || 'unverified';
 
   await prisma.factRevision.create({
     data: {
-      verifiedFactId: factId,
-      revisionNumber: revisionCount + 1,
-      changeType: 'status_change',
-      previousValue: { verificationStatus: fact.verificationStatus },
-      newValue: { verificationStatus: newStatus },
-      changedBy,
+      factId,
+      previousConfidence: fact.confidenceScore,
+      newConfidence: fact.confidenceScore,
       reason,
+      sourceDocumentId: fact.sourceDocumentId,
+      metadata: {
+        changeType: 'status_change',
+        previousStatus,
+        newStatus,
+        changedBy,
+      },
     },
   });
 
   const updated = await prisma.verifiedFact.update({
     where: { id: factId },
-    data: { verificationStatus: newStatus },
+    data: {
+      metadata: {
+        ...((fact.metadata && typeof fact.metadata === 'object') ? fact.metadata : {}),
+        verificationStatus: newStatus,
+      },
+    },
   });
 
   console.log(`[VFR] Fact ${factId} status: ${fact.verificationStatus} → ${newStatus} by ${changedBy}`);
@@ -123,10 +139,9 @@ export async function updateFactStatus(factId, newStatus, changedBy, reason) {
 export async function getCaseVerifiedFacts(caseId, filters = {}) {
   const where = { caseId };
   if (filters.factType) where.factType = filters.factType;
-  if (filters.verificationStatus) where.verificationStatus = filters.verificationStatus;
   if (filters.speaker) where.speaker = { contains: filters.speaker, mode: 'insensitive' };
-  if (filters.documentId) where.documentId = filters.documentId;
-  if (filters.minConfidence) where.confidence = { gte: filters.minConfidence };
+  if (filters.documentId) where.sourceDocumentId = filters.documentId;
+  if (filters.minConfidence) where.confidenceScore = { gte: filters.minConfidence };
 
   return prisma.verifiedFact.findMany({
     where,
@@ -142,8 +157,8 @@ export async function getCaseVerifiedFacts(caseId, filters = {}) {
  */
 export async function getFactRevisions(factId) {
   return prisma.factRevision.findMany({
-    where: { verifiedFactId: factId },
-    orderBy: { revisionNumber: 'asc' },
+    where: { factId },
+    orderBy: { createdAt: 'asc' },
   });
 }
 
@@ -162,9 +177,10 @@ export async function getVFRSummary(caseId) {
 
   for (const fact of facts) {
     byType[fact.factType] = (byType[fact.factType] || 0) + 1;
-    byStatus[fact.verificationStatus] = (byStatus[fact.verificationStatus] || 0) + 1;
-    byDocument[fact.documentId] = (byDocument[fact.documentId] || 0) + 1;
-    totalConfidence += fact.confidence;
+    const status = fact.metadata?.verificationStatus || 'unverified';
+    byStatus[status] = (byStatus[status] || 0) + 1;
+    byDocument[fact.sourceDocumentId] = (byDocument[fact.sourceDocumentId] || 0) + 1;
+    totalConfidence += fact.confidenceScore;
   }
 
   return {

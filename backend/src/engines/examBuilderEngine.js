@@ -86,7 +86,7 @@ export async function buildExamOutline(caseId, witnessName, examType = 'direct')
     // Use cross-exam questions from Phase 139
     const categories = ['consistency', 'perception', 'identification', 'timeline', 'stress'];
     for (const cat of categories) {
-      const catQuestions = crossQuestions.filter(q => q.category === cat);
+      const catQuestions = crossQuestions.filter(q => (q.metadata?.category || '') === cat);
       if (catQuestions.length > 0) {
         sections.push({
           title: `Challenge: ${cat.charAt(0).toUpperCase() + cat.slice(1)}`,

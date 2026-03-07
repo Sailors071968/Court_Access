@@ -1495,3 +1495,163 @@ model AnalysisAuditRecord {
   @@index([analysisId])
   @@index([timestamp])
 }
+
+// ---------------------------------------------------------------------------
+// Phase 136 — Corroboration Matrix
+// ---------------------------------------------------------------------------
+
+model CorroborationMatrix {
+  id                    String   @id @default(uuid())
+  caseId                String
+  evidenceAId           String
+  evidenceBId           String
+  relationship          String   @default("neutral") // supporting, contradicting, mixed, neutral
+  supportingFactCount   Int      @default(0)
+  contradictingFactCount Int     @default(0)
+  neutralFactCount      Int      @default(0)
+  strength              Float    @default(0.0)
+  correlationIds        Json     @default("[]")
+  metadata              Json     @default("{}")
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([evidenceAId])
+  @@index([evidenceBId])
+  @@index([relationship])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 145 — Enriched Graph
+// ---------------------------------------------------------------------------
+
+model EnrichedGraph {
+  id          String   @id @default(uuid())
+  caseId      String   @unique
+  nodes       Json     @default("[]")
+  edges       Json     @default("[]")
+  nodeCount   Int      @default(0)
+  edgeCount   Int      @default(0)
+  metadata    Json     @default("{}")
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([caseId])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 141 — Examination Outline
+// ---------------------------------------------------------------------------
+
+model ExaminationOutline {
+  id               String   @id @default(uuid())
+  caseId           String
+  witnessName      String
+  examType         String   // direct, cross
+  sections         Json     @default("[]")
+  totalQuestions   Int      @default(0)
+  estimatedMinutes Int      @default(0)
+  metadata         Json     @default("{}")
+  createdAt        DateTime @default(now())
+
+  @@index([caseId])
+  @@index([witnessName])
+  @@index([examType])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 142 — Trial Outline
+// ---------------------------------------------------------------------------
+
+model TrialOutline {
+  id                 String   @id @default(uuid())
+  caseId             String
+  side               String   @default("defense") // defense, prosecution
+  phases             Json     @default("[]")
+  totalPhases        Int      @default(0)
+  estimatedTrialDays Int      @default(0)
+  readinessScore     Float    @default(0.0)
+  metadata           Json     @default("{}")
+  createdAt          DateTime @default(now())
+
+  @@index([caseId])
+  @@index([side])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 138 — Narrative Comparison
+// ---------------------------------------------------------------------------
+
+model NarrativeComparison {
+  id                        String   @id @default(uuid())
+  caseId                    String
+  defenseNarrativeId        String
+  prosecutionNarrativeId    String
+  sharedEvidenceIds         Json     @default("[]")
+  defenseOnlyEvidenceIds    Json     @default("[]")
+  prosecutionOnlyEvidenceIds Json    @default("[]")
+  agreementPoints           Json     @default("[]")
+  disagreementPoints        Json     @default("[]")
+  overallAlignment          Float    @default(0.0)
+  metadata                  Json     @default("{}")
+  createdAt                 DateTime @default(now())
+
+  @@index([caseId])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 146 — Path Analysis
+// ---------------------------------------------------------------------------
+
+model PathAnalysis {
+  id                     String   @id @default(uuid())
+  caseId                 String
+  sourceId               String
+  targetId               String
+  paths                  Json     @default("[]")
+  shortestPathLength     Int      @default(-1)
+  strongestPathStrength  Float    @default(0.0)
+  metadata               Json     @default("{}")
+  createdAt              DateTime @default(now())
+
+  @@index([caseId])
+  @@index([sourceId])
+  @@index([targetId])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 149 — Neutrality Audit
+// ---------------------------------------------------------------------------
+
+model NeutralityAudit {
+  id              String   @id @default(uuid())
+  caseId          String
+  entityType      String   @default("narrative")
+  totalChecked    Int      @default(0)
+  violationsFound Int      @default(0)
+  results         Json     @default("[]")
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  @@index([caseId])
+  @@index([entityType])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 147 — Evidence Performance Metric
+// ---------------------------------------------------------------------------
+
+model EvidencePerformanceMetric {
+  id             String   @id @default(uuid())
+  caseId         String
+  operation      String
+  durationMs     Int      @default(0)
+  status         String   @default("normal") // normal, warning, critical
+  itemsProcessed Int      @default(0)
+  throughput     Float    @default(0.0)
+  metadata       Json     @default("{}")
+  createdAt      DateTime @default(now())
+
+  @@index([caseId])
+  @@index([operation])
+  @@index([status])
+}

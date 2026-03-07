@@ -15,7 +15,7 @@ export async function generateTrialOutline(caseId, side = 'defense') {
   console.log(`[TrialOutline] Generating ${side} trial outline for case ${caseId}`);
 
   const [narrative, examOutlines, impacts, admissibility, witnesses, tasks] = await Promise.all([
-    prisma.caseNarrative.findFirst({ where: { caseId, perspective: side }, orderBy: { createdAt: 'desc' } }),
+    prisma.caseNarrative.findFirst({ where: { caseId, modelVersion: side }, orderBy: { createdAt: 'desc' } }),
     prisma.examinationOutline.findMany({ where: { caseId } }),
     prisma.evidenceImpactScore.findMany({ where: { caseId }, orderBy: { overallImpactScore: 'desc' } }),
     prisma.admissibilityIssue.findMany({ where: { caseId } }),
@@ -54,7 +54,7 @@ export async function generateTrialOutline(caseId, side = 'defense') {
     name: 'Opening Statement',
     order: 3,
     items: [
-      { type: 'theme', description: narrative ? `Theme from narrative: ${narrative.sections?.[0]?.content?.substring(0, 100) || 'TBD'}` : 'Develop case theme' },
+      { type: 'theme', description: narrative ? `Theme from narrative: ${(narrative.metadata?.sections?.[0]?.content || narrative.keyEvents?.[0]?.content || 'TBD').substring(0, 100)}` : 'Develop case theme' },
       { type: 'preview', description: `Preview ${impacts.length} key evidence items` },
       { type: 'preview', description: `Preview ${witnesses.length} witness testimonies` },
     ],
@@ -113,7 +113,7 @@ export async function generateTrialOutline(caseId, side = 'defense') {
       order: 0,
       items: tasks.map(t => ({
         type: 'warning',
-        description: `[${t.priority.toUpperCase()}] ${t.title} — Status: ${t.status}`,
+        description: `[${t.priority.toUpperCase()}] ${t.metadata?.title || t.description.substring(0, 80)} — Status: ${t.status}`,
       })),
       notes: `${tasks.length} investigative tasks still incomplete before trial`,
     });

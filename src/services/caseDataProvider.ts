@@ -31,15 +31,18 @@ export const caseDataProvider = {
     return cases.find((c) => c.id === caseId) ?? null;
   },
 
-  getCharges(_caseId?: string): ChargeEntity[] {
+  getCharges(caseId?: string): ChargeEntity[] {
+    void caseId;
     return stableSortById(MOCK_CHARGES);
   },
 
-  getDocuments(_caseId?: string): DocumentEntity[] {
+  getDocuments(caseId?: string): DocumentEntity[] {
+    void caseId;
     return stableSortById(MOCK_DOCUMENTS);
   },
 
-  getActivity(_caseId?: string): ActivityEntry[] {
+  getActivity(caseId?: string): ActivityEntry[] {
+    void caseId;
     return stableSortById(MOCK_ACTIVITY);
   },
 

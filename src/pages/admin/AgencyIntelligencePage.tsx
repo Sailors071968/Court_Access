@@ -53,7 +53,6 @@ interface Agency {
 
 export function AgencyIntelligencePage() {
   const [selectedState, setSelectedState] = useState<string | null>(null);
-  const [_agencies] = useState<Agency[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState<'browse' | 'review' | 'add'>('browse');
   const [isDiscovering, setIsDiscovering] = useState(false);

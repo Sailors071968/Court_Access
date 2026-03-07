@@ -28,8 +28,9 @@ import type {
  * Returns null if no EXIF data is available.
  */
 export async function extractExifData(
-  _fileUrl: string
+  fileUrl: string
 ): Promise<ImageExifData | null> {
+  void fileUrl;
   // Integration point — will be populated by backend processing
   return null;
 }

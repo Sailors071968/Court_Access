@@ -76,8 +76,9 @@ export function buildTimelineEvents(
  */
 export function extractAudioTimelineEvents(
   transcript: AudioTranscript,
-  _evidenceId: string
+  evidenceId: string
 ): TimelineEventExtraction[] {
+  void evidenceId;
   const events: TimelineEventExtraction[] = [];
 
   // Create an event for the audio recording itself
@@ -127,8 +128,9 @@ export function extractAudioTimelineEvents(
 export function extractVideoTimelineEvents(
   metadata: VideoMetadata,
   frames: VideoFrame[],
-  _evidenceId: string
+  evidenceId: string
 ): TimelineEventExtraction[] {
+  void evidenceId;
   const events: TimelineEventExtraction[] = [];
 
   // Video recording event
@@ -170,8 +172,9 @@ export function extractVideoTimelineEvents(
  */
 export function extractImageTimelineEvents(
   exifData: ImageExifData | null,
-  _evidenceId: string
+  evidenceId: string
 ): TimelineEventExtraction[] {
+  void evidenceId;
   const events: TimelineEventExtraction[] = [];
 
   if (exifData?.dateTaken) {

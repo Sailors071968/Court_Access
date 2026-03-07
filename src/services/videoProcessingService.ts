@@ -37,8 +37,9 @@ const DEFAULT_FRAME_INTERVAL = 5; // Extract a frame every 5 seconds
  */
 export async function extractVideoMetadata(
   evidenceId: string,
-  _fileUrl: string
+  fileUrl: string
 ): Promise<VideoMetadata> {
+  void fileUrl;
   const metadataId = `vm-${evidenceId.replace('ev-', '')}`;
 
   // Placeholder — will be populated by backend processing

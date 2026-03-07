@@ -66,6 +66,7 @@ import { FeedbackPage } from './pages/admin/FeedbackPage';
 import { BugTrackingPage } from './pages/admin/BugTrackingPage';
 import { HealthReportPage } from './pages/admin/HealthReportPage';
 import { AlertsPage } from './pages/admin/AlertsPage';
+import CaseInvestigationWorkspace from './pages/case/CaseInvestigationWorkspace';
 
 function App() {
   const restoreSession = useAuthStore((s) => s.restoreSession);
@@ -369,6 +370,14 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canViewEvidence">
                   <PolicyCompliancePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="investigation"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <CaseInvestigationWorkspace />
                 </ProtectedRoute>
               }
             />

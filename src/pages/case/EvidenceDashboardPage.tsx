@@ -872,7 +872,7 @@ export function EvidenceDashboardPage() {
     complete: evidenceRecords.filter((r) => r.processingStatus === 'complete').length,
   };
 
-  const handleViewEvidence = (_record: EvidenceRecord) => {
+  const handleViewEvidence = () => {
     navigate(`/app/cases/${caseId}/evidence-viewer`);
   };
 

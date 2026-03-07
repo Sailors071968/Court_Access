@@ -50,6 +50,8 @@ import healthReportRoutes from './routes/healthReport.js';
 import betaStabilityRoutes from './routes/betaStabilityPolicy.js';
 import pageUsageRoutes from './routes/pageUsage.js';
 import caseIntelligenceRoutes from './routes/caseIntelligence.js';
+import evidenceGraphRoutes from './routes/evidenceGraph.js';
+import { initGraphDatabase, closeGraphDatabase } from './services/graphService.js';
 import { initScheduler, stopScheduler, getReminderStatus, runSchedulerPass } from './services/hearingScheduler.js';
 import { startTranscriptWorker, stopTranscriptWorker } from './workers/transcriptWorker.js';
 import { startTimelineWorker, stopTimelineWorker } from './workers/timelineWorker.js';
@@ -401,6 +403,13 @@ app.use('/api/page-usage', pageUsageRoutes);
 
 app.use('/api/cases', caseIntelligenceRoutes);
 
+// ---------------------------------------------------------------------------
+// Routes — Phase 117: Evidence Graph
+// ---------------------------------------------------------------------------
+
+app.use('/api/cases', evidenceGraphRoutes);
+app.use('/api', evidenceGraphRoutes);
+
 // Phase 100: Worker status endpoint
 app.get('/api/admin/worker-status', authenticate, requireRole('admin'), (_req, res) => {
   const statuses = getWorkerStatuses();
@@ -497,6 +506,11 @@ runStartupChecks();
 // Phase 116: Initialize alert rules and crash handlers
 initAlertRules();
 installCrashHandlers();
+
+// Phase 117: Initialize graph database
+initGraphDatabase().catch(err => {
+  console.log('[Court Access] Graph database initialization skipped:', err.message);
+});
 
 const server = app.listen(PORT, () => {
   console.log(`\n[Court Access] API server running on http://localhost:${PORT}`);
@@ -595,6 +609,7 @@ async function shutdown(signal) {
 
   server.close(async () => {
     await stopAllWorkers();
+    await closeGraphDatabase();
     await closeRedisConnection();
     console.log('[Court Access] Server shut down complete');
     process.exit(0);

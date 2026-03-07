@@ -47,7 +47,7 @@ export function enforceUploadLimits() {
       }
 
       // Check if user is within free tier
-      if (user.pageUsageTotal <= user.freePageLimit) {
+      if (user.pageUsageTotal < user.freePageLimit) {
         // Still within free limit — allow upload
         return next();
       }

@@ -230,13 +230,6 @@ export default function CaseInvestigationWorkspace() {
     timelinePanelRef.current?.scrollIntoView({ behavior: 'smooth' });
   }, []);
 
-  // Phase 118: Open document for selected node
-  const handleOpenDocument = useCallback(() => {
-    if (selectedNode?.type === 'Document') {
-      handleNavigateToDocument(selectedNode.id.replace('document-', ''));
-    }
-  }, [selectedNode, handleNavigateToDocument]);
-
   // Handle navigation to a document
   const handleNavigateToDocument = useCallback(async (documentId: string) => {
     if (!caseId) return;
@@ -260,6 +253,13 @@ export default function CaseInvestigationWorkspace() {
       console.error('[Workspace] Failed to load document:', err);
     }
   }, [caseId]);
+
+  // Phase 118: Open document for selected node
+  const handleOpenDocument = useCallback(() => {
+    if (selectedNode?.type === 'Document') {
+      handleNavigateToDocument(selectedNode.id.replace('document-', ''));
+    }
+  }, [selectedNode, handleNavigateToDocument]);
 
   return (
     <div className="flex flex-col h-full bg-gray-950">

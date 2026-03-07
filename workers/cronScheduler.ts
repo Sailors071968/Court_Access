@@ -96,12 +96,12 @@ export function startJob(
     try {
       await callback();
       job.runCount++;
-      job.status = 'idle';
+      if (job.enabled) job.status = 'idle';
     } catch {
       job.errorCount++;
-      job.status = 'error';
+      if (job.enabled) job.status = 'error';
     }
-    job.nextRun = Date.now() + job.intervalMs;
+    if (job.enabled) job.nextRun = Date.now() + job.intervalMs;
     isRunning = false;
   };
 

@@ -128,16 +128,11 @@ async function recordMetric(operation, duration, category, slow, metadata) {
 
     await pipeline.exec();
 
-    // Update min/max separately (atomic compare-and-set not available, so use Lua)
-    const currentMin = parseFloat(await redis.hget(metricKey, 'minMs') || '99999');
-    const currentMax = parseFloat(await redis.hget(metricKey, 'maxMs') || '0');
-
-    if (duration < currentMin) {
-      await redis.hset(metricKey, 'minMs', duration.toFixed(2));
-    }
-    if (duration > currentMax) {
-      await redis.hset(metricKey, 'maxMs', duration.toFixed(2));
-    }
+    // Update min/max via Lua scripts for atomic compare-and-set
+    const luaMin = "local cur = tonumber(redis.call('hget', KEYS[1], 'minMs') or '99999') if tonumber(ARGV[1]) < cur then redis.call('hset', KEYS[1], 'minMs', ARGV[1]) end";
+    const luaMax = "local cur = tonumber(redis.call('hget', KEYS[1], 'maxMs') or '0') if tonumber(ARGV[1]) > cur then redis.call('hset', KEYS[1], 'maxMs', ARGV[1]) end";
+    await redis.eval(luaMin, 1, metricKey, duration.toFixed(2));
+    await redis.eval(luaMax, 1, metricKey, duration.toFixed(2));
   } catch (err) {
     // Profiling should never break the app
     console.error('[Profiler] Metric recording failed:', err.message);

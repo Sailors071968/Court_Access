@@ -408,7 +408,6 @@ app.use('/api/cases', caseIntelligenceRoutes);
 // ---------------------------------------------------------------------------
 
 app.use('/api/cases', evidenceGraphRoutes);
-app.use('/api', evidenceGraphRoutes);
 
 // Phase 100: Worker status endpoint
 app.get('/api/admin/worker-status', authenticate, requireRole('admin'), (_req, res) => {

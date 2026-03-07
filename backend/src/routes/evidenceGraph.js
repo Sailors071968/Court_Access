@@ -135,12 +135,12 @@ router.get('/:id/graph/expand', verifyCaseOwnership, async (req, res) => {
 });
 
 // ---------------------------------------------------------------------------
-// GET /api/entities/:entityId/neighbors
-// Get neighbors of a specific entity.
+// GET /api/cases/:id/graph/entities/:entityId/neighbors
+// Get neighbors of a specific entity (scoped to case for tenant isolation).
 // Query params: ?depth=1&relationshipTypes=MENTIONED_IN,PARTICIPATED_IN
 // ---------------------------------------------------------------------------
 
-router.get('/entities/:entityId/neighbors', async (req, res) => {
+router.get('/:id/graph/entities/:entityId/neighbors', verifyCaseOwnership, async (req, res) => {
   try {
     const { entityId } = req.params;
     const { depth, relationshipTypes } = req.query;
@@ -162,27 +162,30 @@ router.get('/entities/:entityId/neighbors', async (req, res) => {
 });
 
 // ---------------------------------------------------------------------------
-// GET /api/entities/search
-// Search for entities across the graph.
-// Query params: ?q=Officer+Smith&caseId=xxx&type=Person&limit=50
+// GET /api/cases/:id/graph/entities/search
+// Search for entities within a specific case (tenant-isolated).
+// Query params: ?q=Officer+Smith&type=Person&limit=50
 // ---------------------------------------------------------------------------
 
-router.get('/entities/search', async (req, res) => {
+router.get('/:id/graph/entities/search', verifyCaseOwnership, async (req, res) => {
   try {
-    const { q, caseId, type, limit } = req.query;
+    const caseId = req.params.id;
+    const { q, type, limit } = req.query;
 
     if (!q) {
       return res.status(400).json({ error: 'q query parameter is required' });
     }
 
+    // Always scope search to the case owned by the requesting user
     const results = await searchGraphEntities(q, {
-      caseId: caseId || undefined,
+      caseId,
       type: type || undefined,
       limit: limit ? parseInt(limit, 10) : 50,
     });
 
     res.json({
       query: q,
+      caseId,
       results,
       count: results.length,
     });

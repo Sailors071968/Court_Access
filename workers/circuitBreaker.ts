@@ -321,6 +321,7 @@ function transitionToHalfOpen(
   internal.state = 'half-open';
   internal.tripReason = null;
   internal.resetAt = null;
+  internal.opTimestamps = [];
 
   // Resume the worker so trial operations can actually execute
   try {

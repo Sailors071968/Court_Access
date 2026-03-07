@@ -267,7 +267,13 @@ export function updateBacklog(workerName: string, backlogSize: number): boolean 
 
   internal.currentBacklog = backlogSize;
 
-  if (internal.state === 'open') return false;
+  if (internal.state === 'open') {
+    if (internal.resetAt && Date.now() >= internal.resetAt) {
+      transitionToHalfOpen(workerName, config, internal);
+    } else {
+      return false;
+    }
+  }
 
   // Check backlog threshold
   if (backlogSize > config.backlogThreshold) {

@@ -278,8 +278,10 @@ export function extractAlerts(report: GraphIntegrityReport): GraphIntegrityAlert
     alerts.push({
       checkName: check.checkName,
       severity,
-      issueCount: check.issueCount,
-      message: `Graph integrity check "${check.checkName}" failed with ${check.issueCount} issues`,
+      issueCount: Math.max(0, check.issueCount),
+      message: check.issueCount < 0
+        ? `Graph integrity check "${check.checkName}" failed: query execution error`
+        : `Graph integrity check "${check.checkName}" failed with ${check.issueCount} issues`,
       timestamp: check.executedAt,
     });
   }

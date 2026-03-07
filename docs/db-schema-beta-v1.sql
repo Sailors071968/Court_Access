@@ -2,8 +2,6 @@
 -- PostgreSQL database dump
 --
 
-\restrict ScuR1OKQRop4P8tma3kUoOxIz8HMt6Nf1e1lgP0v0R84TBP6zXZmeOdZbOxNKGt
-
 -- Dumped from database version 14.22 (Ubuntu 14.22-0ubuntu0.22.04.1)
 -- Dumped by pg_dump version 14.22 (Ubuntu 14.22-0ubuntu0.22.04.1)
 
@@ -1690,6 +1688,4 @@ ALTER TABLE ONLY public."UserAuditLog"
 --
 -- PostgreSQL database dump complete
 --
-
-\unrestrict ScuR1OKQRop4P8tma3kUoOxIz8HMt6Nf1e1lgP0v0R84TBP6zXZmeOdZbOxNKGt
 

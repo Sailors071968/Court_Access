@@ -85,10 +85,19 @@ export async function invalidateCache(pattern) {
     const redis = getRedisConnection();
     if (!redis) return;
 
-    const keys = await redis.keys(pattern);
-    if (keys.length > 0) {
-      await redis.del(...keys);
-      console.log(`[GraphCache] Invalidated ${keys.length} keys matching ${pattern}`);
+    // Use SCAN instead of KEYS to avoid blocking Redis
+    let cursor = '0';
+    let totalDeleted = 0;
+    do {
+      const [nextCursor, keys] = await redis.scan(cursor, 'MATCH', pattern, 'COUNT', 100);
+      cursor = nextCursor;
+      if (keys.length > 0) {
+        await redis.del(...keys);
+        totalDeleted += keys.length;
+      }
+    } while (cursor !== '0');
+    if (totalDeleted > 0) {
+      console.log(`[GraphCache] Invalidated ${totalDeleted} keys matching ${pattern}`);
     }
   } catch (err) {
     console.error(`[GraphCache] Invalidation error for ${pattern}:`, err.message);
@@ -162,7 +171,7 @@ export function evidenceScoresKey(caseId) {
  * Called when: new document uploaded, entity extraction runs, graph rebuild triggered.
  */
 export async function invalidateCaseGraphCache(caseId) {
-  await invalidateCache(`graph:*${caseId}*`);
+  await invalidateCache(`graph:*:${caseId}*`);
   console.log(`[GraphCache] Invalidated all graph cache for case ${caseId}`);
 }
 

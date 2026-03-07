@@ -231,16 +231,19 @@ export function updateConcurrency(workerName: string, delta: number): boolean {
   const internal = breakerStates.get(workerName);
   if (!config || !internal || !config.enabled) return true;
 
-  internal.currentConcurrency = Math.max(0, internal.currentConcurrency + delta);
-
-  // Check if breaker is open
+  // Check if breaker is open before modifying concurrency
   if (internal.state === 'open') {
     if (internal.resetAt && Date.now() >= internal.resetAt) {
       transitionToHalfOpen(workerName, config, internal);
     } else {
+      if (delta < 0) {
+        internal.currentConcurrency = Math.max(0, internal.currentConcurrency + delta);
+      }
       return delta < 0; // allow releases, block new acquisitions
     }
   }
+
+  internal.currentConcurrency = Math.max(0, internal.currentConcurrency + delta);
 
   // Check concurrency limit
   if (internal.currentConcurrency > config.maxConcurrency) {
@@ -318,6 +321,13 @@ function transitionToHalfOpen(
   internal.state = 'half-open';
   internal.tripReason = null;
   internal.resetAt = null;
+
+  // Resume the worker so trial operations can actually execute
+  try {
+    resumeWorker(_workerName);
+  } catch {
+    // Worker may not exist in registry
+  }
 
   recordEvent({
     timestamp: Date.now(),

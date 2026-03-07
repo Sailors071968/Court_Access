@@ -314,10 +314,10 @@ export function startWatchdog(config?: Partial<WatchdogConfig>): void {
   isRunning = true;
 
   // Run first check immediately
-  performCheck();
+  performCheck().catch(() => { /* watchdog check failed, will retry next interval */ });
 
   watchdogTimer = setInterval(() => {
-    performCheck();
+    performCheck().catch(() => { /* watchdog check failed, will retry next interval */ });
   }, watchdogConfig.checkIntervalMs);
 }
 

@@ -68,6 +68,8 @@ import { HealthReportPage } from './pages/admin/HealthReportPage';
 import { AlertsPage } from './pages/admin/AlertsPage';
 import CaseInvestigationWorkspace from './pages/case/CaseInvestigationWorkspace';
 import CaseIntelligenceDashboard from './pages/case/CaseIntelligenceDashboard';
+import TrialPreparationCanvas from './pages/case/TrialPreparationCanvas';
+import EvidenceIntelligenceDashboard from './pages/case/EvidenceIntelligenceDashboard';
 import { SystemHealthDashboard } from './pages/admin/SystemHealthDashboard';
 
 function App() {
@@ -396,6 +398,22 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canViewEvidence">
                   <CaseIntelligenceDashboard />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="trial-prep"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <TrialPreparationCanvas />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="evidence-intelligence-dashboard"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <EvidenceIntelligenceDashboard />
                 </ProtectedRoute>
               }
             />

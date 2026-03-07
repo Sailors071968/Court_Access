@@ -51,6 +51,7 @@ import betaStabilityRoutes from './routes/betaStabilityPolicy.js';
 import pageUsageRoutes from './routes/pageUsage.js';
 import caseIntelligenceRoutes from './routes/caseIntelligence.js';
 import evidenceGraphRoutes from './routes/evidenceGraph.js';
+import evidenceIntelligenceRoutes from './routes/evidenceIntelligence.js';
 import { initGraphDatabase, closeGraphDatabase } from './services/graphService.js';
 import { initScheduler, stopScheduler, getReminderStatus, runSchedulerPass } from './services/hearingScheduler.js';
 import { startTranscriptWorker, stopTranscriptWorker } from './workers/transcriptWorker.js';
@@ -408,6 +409,12 @@ app.use('/api/cases', caseIntelligenceRoutes);
 // ---------------------------------------------------------------------------
 
 app.use('/api/cases', evidenceGraphRoutes);
+
+// ---------------------------------------------------------------------------
+// Routes — Phases 120-150 + A-P: Evidence Intelligence + Fact-Graph Reasoning
+// ---------------------------------------------------------------------------
+
+app.use('/api/intelligence', evidenceIntelligenceRoutes);
 
 // Phase 100: Worker status endpoint
 app.get('/api/admin/worker-status', authenticate, requireRole('admin'), (_req, res) => {

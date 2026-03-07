@@ -980,3 +980,518 @@ model EvidenceConflict {
   @@index([entity])
   @@index([conflictType])
 }
+
+// ===========================================================================
+// Phases 120-150 — Evidence Intelligence + Trial Preparation
+// ===========================================================================
+
+// ---------------------------------------------------------------------------
+// Phase 120 — Evidence Registry (SHA-256 integrity + chain of custody)
+// ---------------------------------------------------------------------------
+
+model EvidenceRegistry {
+  id              String   @id @default(uuid())
+  caseId          String
+  evidenceId      String   @unique
+  fileHash        String   // SHA-256
+  originalFilename String
+  evidenceType    String   // POLICE_REPORT, TRANSCRIPT, PHOTO, VIDEO, AUDIO, PHONE_RECORD, GPS_LOG, COURT_DOCUMENT, OTHER
+  source          String   @default("")
+  chainOfCustody  Json     @default("[]") // [{actor, action, timestamp, hash}]
+  metadata        Json     @default("{}")
+  uploadTimestamp DateTime @default(now())
+  createdAt       DateTime @default(now())
+
+  @@index([caseId])
+  @@index([evidenceId])
+  @@index([fileHash])
+  @@index([evidenceType])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 122 — Transcript Segments (legal ledger format)
+// ---------------------------------------------------------------------------
+
+model TranscriptSegment {
+  id            String   @id @default(uuid())
+  caseId        String
+  evidenceId    String
+  speaker       String
+  page          Int
+  line          Int
+  timestamp     Float    @default(0)
+  text          String
+  confidence    Float    @default(0.0)
+  metadata      Json     @default("{}")
+  createdAt     DateTime @default(now())
+
+  @@index([caseId])
+  @@index([evidenceId])
+  @@index([speaker])
+  @@index([caseId, evidenceId, page, line])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 123/124 — Extracted Facts with Provenance
+// ---------------------------------------------------------------------------
+
+model ExtractedFact {
+  id              String   @id @default(uuid())
+  caseId          String
+  factType        String   // PERSON, LOCATION, DATE, TIME, EVENT, OBJECT, ACTION
+  statementText   String
+  normalizedValue String   @default("")
+  timestamp       DateTime?
+  confidenceScore Float    @default(0.0)
+  documentId      String
+  sourceType      String   @default("")
+  page            Int?
+  line            Int?
+  speaker         String   @default("")
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  @@index([caseId])
+  @@index([factType])
+  @@index([documentId])
+  @@index([caseId, factType])
+  @@index([normalizedValue])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 125 — Fact Correlation Results
+// ---------------------------------------------------------------------------
+
+model FactCorrelation {
+  id                String   @id @default(uuid())
+  caseId            String
+  factAId           String
+  factBId           String
+  correlationType   String   // matching_event, duplicate_mention, timeline_inconsistency, location_conflict
+  confidenceScore   Float    @default(0.0)
+  description       String
+  metadata          Json     @default("{}")
+  createdAt         DateTime @default(now())
+
+  @@index([caseId])
+  @@index([factAId])
+  @@index([factBId])
+  @@index([correlationType])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 126 — Reconstructed Events
+// ---------------------------------------------------------------------------
+
+model ReconstructedEvent {
+  id              String   @id @default(uuid())
+  caseId          String
+  timestamp       DateTime?
+  location        String   @default("")
+  actors          Json     @default("[]")
+  evidenceSources Json     @default("[]")
+  description     String
+  confidenceScore Float    @default(0.0)
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  @@index([caseId])
+  @@index([caseId, timestamp])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 127 — Court Timeline Events
+// ---------------------------------------------------------------------------
+
+model CourtTimelineEvent {
+  id              String   @id @default(uuid())
+  caseId          String
+  time            DateTime
+  event           String
+  sourceEvidence  Json     @default("[]")
+  confidence      Float    @default(0.0)
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  @@index([caseId])
+  @@index([caseId, time])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 128 — Timeline Conflicts
+// ---------------------------------------------------------------------------
+
+model TimelineConflict {
+  id              String   @id @default(uuid())
+  caseId          String
+  conflictType    String   // gps_vs_witness, officer_vs_surveillance, time_impossibility
+  description     String
+  eventAId        String?
+  eventBId        String?
+  sourceAType     String   @default("")
+  sourceBType     String   @default("")
+  severity        String   @default("medium")
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  @@index([caseId])
+  @@index([conflictType])
+  @@index([severity])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 129 — Witness Reliability Scores
+// ---------------------------------------------------------------------------
+
+model WitnessReliability {
+  id                String   @id @default(uuid())
+  caseId            String
+  witnessName       String
+  consistencyScore  Float    @default(0.0)
+  corroborationScore Float   @default(0.0)
+  visibilityScore   Float    @default(0.0)
+  distanceScore     Float    @default(0.0)
+  lightingScore     Float    @default(0.0)
+  stressScore       Float    @default(0.0)
+  credibilityScore  Float    @default(0.0)
+  factorsUsed       Json     @default("{}")
+  evidenceSources   Json     @default("[]")
+  metadata          Json     @default("{}")
+  createdAt         DateTime @default(now())
+
+  @@index([caseId])
+  @@index([witnessName])
+  @@index([credibilityScore])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 130 — Misidentification Risk Assessment
+// ---------------------------------------------------------------------------
+
+model MisidentificationRisk {
+  id                  String   @id @default(uuid())
+  caseId              String
+  witnessName         String
+  distanceScore       Float    @default(0.0)
+  lightingScore       Float    @default(0.0)
+  observationTimeScore Float   @default(0.0)
+  stressScore         Float    @default(0.0)
+  lineupFairnessScore Float    @default(0.0)
+  similarIndividualsScore Float @default(0.0)
+  overallRiskScore    Float    @default(0.0)
+  riskLevel           String   @default("medium")
+  factors             Json     @default("{}")
+  metadata            Json     @default("{}")
+  createdAt           DateTime @default(now())
+
+  @@index([caseId])
+  @@index([witnessName])
+  @@index([riskLevel])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 131 — Admissibility Issues
+// ---------------------------------------------------------------------------
+
+model AdmissibilityIssue {
+  id              String   @id @default(uuid())
+  caseId          String
+  evidenceId      String
+  issueType       String   // hearsay, chain_of_custody_break, improper_interrogation, suggestive_identification
+  description     String
+  severity        String   @default("medium")
+  legalBasis      String   @default("")
+  recommendation  String   @default("")
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  @@index([caseId])
+  @@index([evidenceId])
+  @@index([issueType])
+  @@index([severity])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 132 — Evidence Impact Scores
+// ---------------------------------------------------------------------------
+
+model EvidenceImpactScore {
+  id                  String   @id @default(uuid())
+  caseId              String
+  evidenceId          String
+  reliabilityScore    Float    @default(0.0)
+  corroborationScore  Float    @default(0.0)
+  independenceScore   Float    @default(0.0)
+  timelineAlignmentScore Float @default(0.0)
+  overallImpactScore  Float    @default(0.0)
+  impactLevel         String   @default("medium")
+  factors             Json     @default("{}")
+  metadata            Json     @default("{}")
+  createdAt           DateTime @default(now())
+
+  @@unique([caseId, evidenceId])
+  @@index([caseId])
+  @@index([evidenceId])
+  @@index([overallImpactScore])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 133 — Investigative Opportunities
+// ---------------------------------------------------------------------------
+
+model InvestigativeOpportunity {
+  id              String   @id @default(uuid())
+  caseId          String
+  opportunityType String   // surveillance_camera, phone_tower, parking_meter, rideshare, dna, fingerprint
+  description     String
+  relatedFactIds  Json     @default("[]")
+  priority        String   @default("medium")
+  status          String   @default("suggested")
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  @@index([caseId])
+  @@index([opportunityType])
+  @@index([priority])
+  @@index([status])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 134/135 — Investigative Tasks with Tracking
+// ---------------------------------------------------------------------------
+
+model InvestigativeTask {
+  id              String   @id @default(uuid())
+  caseId          String
+  description     String
+  relatedEvidence Json     @default("[]")
+  relatedFactIds  Json     @default("[]")
+  priority        String   @default("medium")
+  status          String   @default("pending") // pending, completed, not_relevant, impossible, unlikely, ignored
+  assignedTo      String?
+  completedAt     DateTime?
+  notes           String   @default("")
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([status])
+  @@index([priority])
+  @@index([caseId, status])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 137/138 — Narrative Reconstructions
+// ---------------------------------------------------------------------------
+
+model NarrativeReconstruction {
+  id              String   @id @default(uuid())
+  caseId          String
+  narrativeType   String   // prosecution, evidence, defense
+  narrativeText   String
+  timelineEvents  Json     @default("[]")
+  factIds         Json     @default("[]")
+  gaps            Json     @default("[]")
+  contradictions  Json     @default("[]")
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  @@index([caseId])
+  @@index([narrativeType])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 139/141 — Cross Examination Questions
+// ---------------------------------------------------------------------------
+
+model CrossExamQuestion {
+  id              String   @id @default(uuid())
+  caseId          String
+  witnessName     String
+  questionText    String
+  questionType    String   // impeachment, credibility, timeline, contradiction, foundation
+  orderIndex      Int      @default(0)
+  sourceFactIds   Json     @default("[]")
+  contradictionId String?
+  notes           String   @default("")
+  status          String   @default("draft")
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([witnessName])
+  @@index([questionType])
+  @@index([caseId, witnessName, orderIndex])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 143 — Motion Suggestions
+// ---------------------------------------------------------------------------
+
+model MotionSuggestion {
+  id              String   @id @default(uuid())
+  caseId          String
+  motionType      String   // motion_to_suppress, motion_to_compel, motion_to_exclude, subpoena_duces_tecum
+  title           String
+  description     String
+  legalBasis      String   @default("")
+  supportingFacts Json     @default("[]")
+  supportingEvidence Json  @default("[]")
+  priority        String   @default("medium")
+  status          String   @default("suggested")
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  @@index([caseId])
+  @@index([motionType])
+  @@index([status])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 144 — Legal Issues Detected
+// ---------------------------------------------------------------------------
+
+model LegalIssue {
+  id              String   @id @default(uuid())
+  caseId          String
+  issueType       String   // due_process_violation, discovery_violation, procedural_error, constitutional_violation
+  description     String
+  severity        String   @default("medium")
+  evidenceIds     Json     @default("[]")
+  factIds         Json     @default("[]")
+  legalCitation   String   @default("")
+  recommendation  String   @default("")
+  status          String   @default("detected")
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  @@index([caseId])
+  @@index([issueType])
+  @@index([severity])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 148 — Evidence Audit Log
+// ---------------------------------------------------------------------------
+
+model EvidenceAuditLog {
+  id          String   @id @default(uuid())
+  caseId      String
+  analysisId  String?
+  action      String
+  algorithm   String   @default("")
+  input       Json     @default("{}")
+  output      Json     @default("{}")
+  timestamp   DateTime @default(now())
+
+  @@index([caseId])
+  @@index([analysisId])
+  @@index([action])
+  @@index([timestamp])
+}
+
+// ===========================================================================
+// Phases A-P — Verified Fact Registry + Fact-Graph Reasoning
+// ===========================================================================
+
+// ---------------------------------------------------------------------------
+// Phase A — Verified Fact Registry (VFR)
+// ---------------------------------------------------------------------------
+
+model VerifiedFact {
+  id              String   @id @default(uuid())
+  caseId          String
+  factType        String   // PERSON, EVENT, LOCATION, OBJECT, TIME, ACTION
+  statementText   String
+  normalizedValue String   @default("")
+  timestamp       DateTime?
+  confidenceScore Float    @default(0.0)
+  sourceDocumentId String
+  sourceType      String   @default("")
+  pageNumber      Int?
+  lineNumber      Int?
+  speaker         String   @default("")
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  revisions       FactRevision[]
+
+  @@index([caseId])
+  @@index([factType])
+  @@index([sourceDocumentId])
+  @@index([caseId, factType])
+  @@index([normalizedValue])
+}
+
+model FactRevision {
+  id              String   @id @default(uuid())
+  factId          String
+  previousConfidence Float
+  newConfidence   Float
+  reason          String
+  sourceDocumentId String?
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  fact            VerifiedFact @relation(fields: [factId], references: [id], onDelete: Cascade)
+
+  @@index([factId])
+  @@index([createdAt])
+}
+
+// ---------------------------------------------------------------------------
+// Phase D — Fact Corroboration Records
+// ---------------------------------------------------------------------------
+
+model FactCorroboration {
+  id              String   @id @default(uuid())
+  caseId          String
+  factId          String
+  supportingFactIds Json   @default("[]")
+  sourceCount     Int      @default(0)
+  corroborationLevel String @default("unsupported") // unsupported, weak, moderate, strong
+  metadata        Json     @default("{}")
+  createdAt       DateTime @default(now())
+
+  @@index([caseId])
+  @@index([factId])
+  @@index([corroborationLevel])
+}
+
+// ---------------------------------------------------------------------------
+// Phase L — Output Deduplication Records
+// ---------------------------------------------------------------------------
+
+model OutputRecord {
+  id          String   @id @default(uuid())
+  caseId      String
+  outputType  String
+  outputHash  String
+  content     Json     @default("{}")
+  suppressed  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+
+  @@unique([caseId, outputType, outputHash])
+  @@index([caseId])
+  @@index([outputType])
+}
+
+// ---------------------------------------------------------------------------
+// Phase N — Court-Grade Audit Trail
+// ---------------------------------------------------------------------------
+
+model AnalysisAuditRecord {
+  id             String   @id @default(uuid())
+  caseId         String
+  analysisId     String
+  factsUsed      Json     @default("[]")
+  algorithmsUsed Json     @default("[]")
+  result         Json     @default("{}")
+  timestamp      DateTime @default(now())
+
+  @@index([caseId])
+  @@index([analysisId])
+  @@index([timestamp])
+}

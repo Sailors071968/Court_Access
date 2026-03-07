@@ -41,34 +41,34 @@ export function StaffDashboard() {
           icon={<Briefcase size={28} className={TEXT_COLORS.info} />}
           value={3}
           label="Active Cases"
-          onClick={() => navigate('/cases?status=active')}
+          onClick={() => navigate('/app/cases?status=active')}
         />
         <StatCard
           icon={<Plus size={28} className={TEXT_COLORS.success} />}
           value={1}
           label="New Cases (7 Days)"
           trend="+1 this week"
-          onClick={() => navigate('/cases?sort=newest')}
+          onClick={() => navigate('/app/cases?sort=newest')}
         />
         <StatCard
           icon={<AlertTriangle size={28} className={TEXT_COLORS.danger} />}
           value={2}
           label="Action Required"
           highlight
-          onClick={() => navigate('/cases?filter=action-needed')}
+          onClick={() => navigate('/app/cases?filter=action-needed')}
         />
         <StatCard
           icon={<Calendar size={28} className={TEXT_COLORS.info} />}
           value="Feb 15"
           label="Next Hearing"
-          onClick={() => navigate(`/cases/${primaryCase.id}/activity`)}
+          onClick={() => navigate(`/app/cases/${primaryCase.id}/activity`)}
         />
         <StatCard
           icon={<Lightbulb size={28} className={TEXT_COLORS.warning} />}
           value={8}
           label="Intelligence Signals"
           highlight
-          onClick={() => navigate(`/cases/${primaryCase.id}/charges`)}
+          onClick={() => navigate(`/app/cases/${primaryCase.id}/charges`)}
         />
       </div>
 
@@ -122,7 +122,7 @@ export function StaffDashboard() {
                 </thead>
                 <tbody>
                   {documents.slice(0, 3).map((doc) => (
-                    <tr key={doc.id} className="border-b border-gray-50 hover:bg-gray-50 cursor-pointer" onClick={() => navigate(`/cases/${primaryCase.id}/documents`)}>
+                    <tr key={doc.id} className="border-b border-gray-50 hover:bg-gray-50 cursor-pointer" onClick={() => navigate(`/app/cases/${primaryCase.id}/documents`)}>
                       <td className="py-3 px-2 font-medium text-gray-900">{doc.name}</td>
                       <td className="py-3 px-2 text-gray-500">{doc.filedDate}</td>
                       <td className="py-3 px-2 text-gray-500">{documentTypeLabels[doc.type]}</td>
@@ -154,7 +154,7 @@ export function StaffDashboard() {
               ))}
             </div>
             <button
-              onClick={() => navigate(`/cases/${primaryCase.id}/charges`)}
+              onClick={() => navigate(`/app/cases/${primaryCase.id}/charges`)}
               className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-amber-50 text-amber-700 rounded-lg text-sm font-medium hover:bg-amber-100 transition-colors w-full justify-center"
             >
               <TrendingUp size={16} />
@@ -192,10 +192,10 @@ export function StaffDashboard() {
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
             <div className="grid grid-cols-2 gap-2">
               {[
-                { label: 'New Case', icon: Plus, action: () => navigate('/cases') },
-                { label: 'Upload Evidence', icon: Upload, action: () => navigate(`/cases/${primaryCase.id}/evidence`) },
-                { label: 'Charge Analysis', icon: BarChart3, action: () => navigate(`/cases/${primaryCase.id}/charges`) },
-                { label: 'Expert Review', icon: Users, action: () => navigate(`/cases/${primaryCase.id}/experts`) },
+                { label: 'New Case', icon: Plus, action: () => navigate('/app/cases') },
+                { label: 'Upload Evidence', icon: Upload, action: () => navigate(`/app/cases/${primaryCase.id}/evidence`) },
+                { label: 'Charge Analysis', icon: BarChart3, action: () => navigate(`/app/cases/${primaryCase.id}/charges`) },
+                { label: 'Expert Review', icon: Users, action: () => navigate(`/app/cases/${primaryCase.id}/experts`) },
               ].map((action, i) => {
                 const Icon = action.icon;
                 return (
@@ -246,7 +246,7 @@ export function StaffDashboard() {
             type="text"
             placeholder="Search cases, documents, statutes, motions, evidence..."
             className="flex-1 text-sm text-gray-700 bg-transparent outline-none placeholder-gray-400"
-            onFocus={() => navigate('/search')}
+            onFocus={() => navigate('/app/search')}
             readOnly
           />
           <span className="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">Ctrl+K</span>

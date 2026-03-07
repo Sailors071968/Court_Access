@@ -8,6 +8,7 @@ import { Header } from './Header';
 import { useState } from 'react';
 
 export function AppLayout() {
+  // Session restoration is handled by App.tsx — no need to duplicate here
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (

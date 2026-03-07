@@ -111,10 +111,10 @@ export function aiRateLimit() {
       const redis = getRedisConnection();
       if (!redis) return next();
 
-      // Check per-minute limit
+      // Check per-minute limit (atomic INCR + EXPIRE via Lua)
+      const luaIncrWithExpire = "local count = redis.call('INCR', KEYS[1]); if count == 1 then redis.call('EXPIRE', KEYS[1], ARGV[1]) end; return count";
       const minuteKey = `ai:rate:minute:${userId}`;
-      const minuteCount = await redis.incr(minuteKey);
-      if (minuteCount === 1) await redis.expire(minuteKey, 60);
+      const minuteCount = await redis.eval(luaIncrWithExpire, 1, minuteKey, 60);
 
       if (minuteCount > AI_SAFETY_CONFIG.maxRequestsPerMinute) {
         return res.status(429).json({
@@ -124,10 +124,9 @@ export function aiRateLimit() {
         });
       }
 
-      // Check per-hour limit
+      // Check per-hour limit (atomic INCR + EXPIRE via Lua)
       const hourKey = `ai:rate:hour:${userId}`;
-      const hourCount = await redis.incr(hourKey);
-      if (hourCount === 1) await redis.expire(hourKey, 3600);
+      const hourCount = await redis.eval(luaIncrWithExpire, 1, hourKey, 3600);
 
       if (hourCount > AI_SAFETY_CONFIG.maxRequestsPerHour) {
         return res.status(429).json({

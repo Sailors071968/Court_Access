@@ -210,7 +210,7 @@ router.get('/:id/graph/path', verifyCaseOwnership, async (req, res) => {
       return res.status(400).json({ error: 'Both "from" and "to" query parameters are required' });
     }
 
-    const depth = maxDepth ? parseInt(maxDepth, 10) : 5;
+    const depth = maxDepth ? Math.min(parseInt(maxDepth, 10), 10) : 5;
     const graph = await getCaseGraph(caseId, { limit: 5000 });
 
     // BFS shortest path

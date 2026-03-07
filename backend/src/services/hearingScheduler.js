@@ -393,7 +393,11 @@ export function stopScheduler() {
 // ---------------------------------------------------------------------------
 // Standalone entry point — when run directly via PM2 / node
 // ---------------------------------------------------------------------------
-const isMainModule = import.meta.url === `file://${process.argv[1]}`;
+import { fileURLToPath } from 'url';
+import { resolve } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const isMainModule = resolve(process.argv[1]) === __filename;
 if (isMainModule) {
   console.log('[HearingScheduler] Starting as standalone process...');
   initScheduler();

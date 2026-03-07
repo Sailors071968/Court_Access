@@ -5,7 +5,7 @@
 > indexing strategy, and the fact provenance model.
 >
 > **Status:** Architecture Lock -- no structural changes without explicit approval.
-> **Version:** 1.0.0
+> **Version:** 1.1.0
 > **Authored:** Phase -- Evidence Graph Schema Definition
 
 ---
@@ -20,6 +20,7 @@
 6. [Graph Integrity Constraints](#6-graph-integrity-constraints)
 7. [Indexing Strategy](#7-indexing-strategy)
 8. [Example Cypher Queries](#8-example-cypher-queries)
+9. [Deterministic Constraints](#9-deterministic-constraints)
 
 ---
 
@@ -54,6 +55,28 @@ MATCH (n:Evidence {tenant_id: $tenantId})
 ---
 
 ## 3. Node Types
+
+### 3.0 Case
+
+The root node for every evidence graph. All evidence, documents, entities,
+events, and timeline entries are anchored to a Case. This guarantees
+deterministic graph boundaries, efficient case-level queries, and strict
+tenant isolation.
+
+| Property | Type | Required | Immutable | Description |
+|---|---|---|---|---|
+| `case_id` | String (UUID) | Yes | Yes | Unique case identifier |
+| `tenant_id` | String (UUID) | Yes | Yes | Tenant scope identifier |
+| `defendant_id` | String (UUID) | Yes | Yes | Associated defendant identifier |
+| `case_number` | String | Yes | No | Human-readable case number (e.g. `2024-CR-00142`) |
+| `jurisdiction` | String | Yes | No | Jurisdiction (`federal`, `state`, `county`, `municipal`) |
+| `status` | String | Yes | No | Case status (`active`, `closed`, `pending`, `archived`) |
+| `created_at` | String | Yes | Yes | ISO 8601 timestamp of case creation |
+| `updated_at` | String | Yes | No | ISO 8601 timestamp of last metadata update |
+
+> **Root anchor contract:** Every evidence graph MUST be rooted at exactly one
+> `Case` node. Orphan subgraphs (evidence, documents, facts, etc. not reachable
+> from a Case) are integrity violations.
 
 ### 3.1 Evidence
 
@@ -233,7 +256,49 @@ A positioned entry on the case timeline, linking events to their evidence chain.
 
 All relationships are directed. Relationship properties are optional unless noted.
 
-### 4.1 Evidence Containment
+### 4.1 Case to Evidence
+
+```
+(Case)-[:HAS_EVIDENCE]->(Evidence)
+```
+
+A case owns one or more evidence artifacts. This is the primary Case→Evidence
+ownership edge.
+
+### 4.2 Case to Document
+
+```
+(Case)-[:HAS_DOCUMENT]->(Document)
+```
+
+A case owns one or more legal documents. This is the primary Case→Document
+ownership edge validated by the nightly integrity checker (`graphIntegrityCheck.ts`).
+
+### 4.3 Case to Entity
+
+```
+(Case)-[:HAS_ENTITY]->(Entity)
+```
+
+A case references one or more named entities.
+
+### 4.4 Case to Event
+
+```
+(Case)-[:HAS_EVENT]->(Event)
+```
+
+A case contains one or more discrete events.
+
+### 4.5 Case to Timeline
+
+```
+(Case)-[:HAS_TIMELINE]->(TimelineEvent)
+```
+
+A case has one or more positioned timeline entries.
+
+### 4.6 Evidence Containment
 
 ```
 (Evidence)-[:CONTAINS]->(Fact)
@@ -245,19 +310,21 @@ An evidence artifact contains one or more extracted facts.
 |---|---|---|---|
 | `extracted_at` | String | Yes | ISO 8601 timestamp of extraction |
 
-### 4.2 Case to Document
+### 4.7 Fact to Case
 
 ```
-(Case)-[:HAS_DOCUMENT]->(Document)
+(Fact)-[:BELONGS_TO_CASE]->(Case)
 ```
 
-A case owns one or more legal documents. This is the primary ownership edge
-validated by the nightly integrity checker (`graphIntegrityCheck.ts`).
+Every fact is anchored to its owning case. This enables direct case-level
+fact queries without intermediate traversal:
 
-> **Note:** The `Case` node is defined in `src/models/CaseModel.ts` as `CaseEntity`.
-> It is not redefined in this schema but is referenced as a relationship endpoint.
+```cypher
+MATCH (c:Case {case_id: $caseId})<-[:BELONGS_TO_CASE]-(f:Fact)
+RETURN f
+```
 
-### 4.3 Fact to Entity
+### 4.8 Fact to Entity
 
 ```
 (Fact)-[:MENTIONS]->(Entity)
@@ -269,7 +336,7 @@ A fact mentions a named entity.
 |---|---|---|---|
 | `mention_type` | String | No | How the entity is mentioned (`direct`, `indirect`, `inferred`) |
 
-### 4.4 Fact to Person
+### 4.9 Fact to Person
 
 ```
 (Fact)-[:INVOLVES]->(Person)
@@ -281,7 +348,7 @@ A fact directly involves a specific person.
 |---|---|---|---|
 | `role_in_fact` | String | No | Person's role in this specific fact (`actor`, `subject`, `witness`, `mentioned`) |
 
-### 4.5 Entity Participation
+### 4.10 Entity Participation
 
 ```
 (Entity)-[:PARTICIPATES_IN]->(Event)
@@ -293,7 +360,7 @@ An entity participated in an event.
 |---|---|---|---|
 | `participation_role` | String | No | Role in the event |
 
-### 4.6 Person Participation
+### 4.11 Person Participation
 
 ```
 (Person)-[:PARTICIPATED_IN]->(Event)
@@ -305,7 +372,7 @@ A person participated in an event (more specific than Entity).
 |---|---|---|---|
 | `role` | String | No | Person's role in the event |
 
-### 4.7 Event Location
+### 4.12 Event Location
 
 ```
 (Event)-[:OCCURRED_AT]->(Location)
@@ -313,7 +380,7 @@ A person participated in an event (more specific than Entity).
 
 An event occurred at a specific location.
 
-### 4.8 Fact Support
+### 4.13 Fact Support
 
 ```
 (Fact)-[:SUPPORTS]->(Fact)
@@ -325,7 +392,7 @@ One fact provides evidentiary support for another fact.
 |---|---|---|---|
 | `support_type` | String | No | Type of support (`corroborates`, `establishes_element`, `provides_context`) |
 
-### 4.9 Fact Contradiction
+### 4.14 Fact Contradiction
 
 ```
 (Fact)-[:CONTRADICTS]->(Fact)
@@ -337,7 +404,7 @@ One fact contradicts another fact.
 |---|---|---|---|
 | `contradiction_type` | String | No | Type of contradiction (`direct`, `temporal`, `logical`) |
 
-### 4.10 Fact Extraction
+### 4.15 Fact Extraction
 
 ```
 (Fact)-[:EXTRACTED_FROM]->(Document)
@@ -353,7 +420,7 @@ Fact→Document provenance edge validated by the nightly integrity checker
 | `page` | Integer | Yes | Source page number |
 | `line` | Integer | No | Source line number |
 
-### 4.11 Fact Supersession
+### 4.16 Fact Supersession
 
 ```
 (Fact)-[:SUPERSEDES]->(Fact)
@@ -366,7 +433,7 @@ new facts linked via this relationship).
 |---|---|---|---|
 | `reason` | String | Yes | Why the original was superseded |
 
-### 4.12 Statement Attribution
+### 4.17 Statement Attribution
 
 ```
 (Statement)-[:ATTRIBUTED_TO]->(Person)
@@ -374,7 +441,7 @@ new facts linked via this relationship).
 
 A statement is attributed to a person.
 
-### 4.13 Statement Source
+### 4.18 Statement Source
 
 ```
 (Statement)-[:SOURCED_FROM]->(Document)
@@ -387,7 +454,7 @@ A statement was extracted from a document.
 | `page` | Integer | Yes | Source page number |
 | `line` | Integer | No | Source line number |
 
-### 4.14 Person Affiliation
+### 4.19 Person Affiliation
 
 ```
 (Person)-[:AFFILIATED_WITH]->(Organization)
@@ -399,7 +466,7 @@ A person is affiliated with an organization (e.g., officer belongs to a departme
 |---|---|---|---|
 | `affiliation_type` | String | No | Type (`employed_by`, `represents`, `member_of`) |
 
-### 4.15 Timeline Evidence Chain
+### 4.20 Timeline Evidence Chain
 
 ```
 (TimelineEvent)-[:EVIDENCED_BY]->(Fact)
@@ -407,7 +474,7 @@ A person is affiliated with an organization (e.g., officer belongs to a departme
 
 A timeline event is evidenced by one or more facts.
 
-### 4.16 Timeline Sequence
+### 4.21 Timeline Sequence
 
 ```
 (TimelineEvent)-[:PRECEDES]->(TimelineEvent)
@@ -419,8 +486,13 @@ Establishes temporal ordering between timeline events.
 
 | Relationship | Source | Target | Semantics |
 |---|---|---|---|
-| `CONTAINS` | Evidence | Fact | Evidence contains extracted fact |
+| `HAS_EVIDENCE` | Case | Evidence | Case owns evidence artifact |
 | `HAS_DOCUMENT` | Case | Document | Case owns document |
+| `HAS_ENTITY` | Case | Entity | Case references entity |
+| `HAS_EVENT` | Case | Event | Case contains event |
+| `HAS_TIMELINE` | Case | TimelineEvent | Case has timeline entry |
+| `CONTAINS` | Evidence | Fact | Evidence contains extracted fact |
+| `BELONGS_TO_CASE` | Fact | Case | Fact anchored to case |
 | `MENTIONS` | Fact | Entity | Fact mentions entity |
 | `INVOLVES` | Fact | Person | Fact involves person |
 | `PARTICIPATES_IN` | Entity | Event | Entity participated in event |
@@ -495,10 +567,13 @@ The full provenance chain for any fact is:
 
 ```
 Fact --[:EXTRACTED_FROM]--> Document <--[:HAS_DOCUMENT]-- Case
+Fact --[:BELONGS_TO_CASE]--> Case
 ```
 
 This allows any fact to be traced back to its source document and owning case,
-including the specific page and line where it was found.
+including the specific page and line where it was found. The direct
+`BELONGS_TO_CASE` edge enables efficient case-level fact queries without
+intermediate traversal.
 
 ---
 
@@ -507,6 +582,10 @@ including the specific page and line where it was found.
 ### 6.1 Uniqueness Constraints
 
 ```cypher
+-- Every case_id is globally unique
+CREATE CONSTRAINT unique_case_id IF NOT EXISTS
+FOR (c:Case) REQUIRE c.case_id IS UNIQUE;
+
 -- Every fact_id is globally unique
 CREATE CONSTRAINT unique_fact_id IF NOT EXISTS
 FOR (f:Fact) REQUIRE f.fact_id IS UNIQUE;
@@ -552,6 +631,9 @@ FOR (t:TimelineEvent) REQUIRE t.timeline_event_id IS UNIQUE;
 
 ```cypher
 -- tenant_id is REQUIRED on every node type
+CREATE CONSTRAINT case_tenant_id IF NOT EXISTS
+FOR (c:Case) REQUIRE c.tenant_id IS NOT NULL;
+
 CREATE CONSTRAINT fact_tenant_id IF NOT EXISTS
 FOR (f:Fact) REQUIRE f.tenant_id IS NOT NULL;
 
@@ -614,6 +696,7 @@ FOR (d:Document) REQUIRE d.sha3_256 IS NOT NULL;
 
 ```cypher
 -- Fast lookup by primary ID for each node type
+CREATE INDEX idx_case_id IF NOT EXISTS FOR (c:Case) ON (c.case_id);
 CREATE INDEX idx_fact_id IF NOT EXISTS FOR (f:Fact) ON (f.fact_id);
 CREATE INDEX idx_evidence_id IF NOT EXISTS FOR (e:Evidence) ON (e.evidence_id);
 CREATE INDEX idx_document_id IF NOT EXISTS FOR (d:Document) ON (d.document_id);
@@ -630,6 +713,7 @@ CREATE INDEX idx_timeline_event_id IF NOT EXISTS FOR (t:TimelineEvent) ON (t.tim
 
 ```cypher
 -- Composite indexes for tenant-scoped queries (most common access pattern)
+CREATE INDEX idx_case_tenant IF NOT EXISTS FOR (c:Case) ON (c.tenant_id);
 CREATE INDEX idx_fact_tenant_case IF NOT EXISTS FOR (f:Fact) ON (f.tenant_id, f.case_id);
 CREATE INDEX idx_evidence_tenant_case IF NOT EXISTS FOR (e:Evidence) ON (e.tenant_id, e.case_id);
 CREATE INDEX idx_document_tenant_case IF NOT EXISTS FOR (d:Document) ON (d.tenant_id, d.case_id);
@@ -670,15 +754,23 @@ CREATE INDEX idx_document_sha256 IF NOT EXISTS FOR (d:Document) ON (d.sha256);
 
 ## 8. Example Cypher Queries
 
-### 8.1 Get All Facts for a Case
+### 8.1 Get All Evidence for a Case
 
 ```cypher
-MATCH (f:Fact {tenant_id: $tenantId, case_id: $caseId})
+MATCH (c:Case {case_id: $caseId, tenant_id: $tenantId})-[:HAS_EVIDENCE]->(e:Evidence)
+RETURN e.evidence_id, e.name, e.type, e.ingested_at
+ORDER BY e.ingested_at ASC
+```
+
+### 8.2 Get All Facts for a Case (via BELONGS_TO_CASE)
+
+```cypher
+MATCH (c:Case {case_id: $caseId, tenant_id: $tenantId})<-[:BELONGS_TO_CASE]-(f:Fact)
 RETURN f.fact_id, f.content, f.source_document, f.source_page, f.extraction_method
 ORDER BY f.extracted_at ASC
 ```
 
-### 8.2 Full Provenance Chain for a Fact
+### 8.3 Full Provenance Chain for a Fact
 
 ```cypher
 MATCH (f:Fact {fact_id: $factId, tenant_id: $tenantId})
@@ -686,11 +778,11 @@ OPTIONAL MATCH (f)-[r:EXTRACTED_FROM]->(d:Document)
 OPTIONAL MATCH (c:Case)-[:HAS_DOCUMENT]->(d)
 RETURN f.fact_id, f.content, f.source_page, f.source_line,
        d.document_id, d.name, d.document_type,
-       c.case_id,
+       c.case_id, c.case_number, c.jurisdiction,
        r.extraction_method
 ```
 
-### 8.3 Find Contradicting Facts
+### 8.4 Find Contradicting Facts
 
 ```cypher
 MATCH (f1:Fact {tenant_id: $tenantId, case_id: $caseId})
@@ -702,10 +794,10 @@ RETURN f1.fact_id, f1.content,
 ORDER BY f1.extracted_at ASC
 ```
 
-### 8.4 Build Case Timeline
+### 8.5 Build Case Timeline (via Case root)
 
 ```cypher
-MATCH (te:TimelineEvent {tenant_id: $tenantId, case_id: $caseId})
+MATCH (c:Case {case_id: $caseId, tenant_id: $tenantId})-[:HAS_TIMELINE]->(te:TimelineEvent)
 OPTIONAL MATCH (te)-[:EVIDENCED_BY]->(f:Fact)
 RETURN te.timeline_event_id, te.title, te.description,
        te.occurred_at, te.category,
@@ -713,7 +805,7 @@ RETURN te.timeline_event_id, te.title, te.description,
 ORDER BY te.occurred_at ASC
 ```
 
-### 8.5 Entity Involvement Graph
+### 8.6 Entity Involvement Graph
 
 ```cypher
 MATCH (p:Person {tenant_id: $tenantId, person_id: $personId})
@@ -726,7 +818,7 @@ RETURN p.display_name, p.role,
        collect(DISTINCT s.statement_id) AS attributed_statements
 ```
 
-### 8.6 Cross-Document Fact Support Network
+### 8.7 Cross-Document Fact Support Network
 
 ```cypher
 MATCH (f1:Fact {tenant_id: $tenantId, case_id: $caseId})
@@ -738,7 +830,7 @@ RETURN f1.fact_id, f1.source_document,
        s.support_type
 ```
 
-### 8.7 Verify Fact Hash Integrity
+### 8.8 Verify Fact Hash Integrity
 
 ```cypher
 MATCH (f:Fact {tenant_id: $tenantId, case_id: $caseId})
@@ -746,7 +838,7 @@ WHERE f.sha256 IS NULL OR f.sha3_256 IS NULL
 RETURN f.fact_id, f.sha256, f.sha3_256
 ```
 
-### 8.8 Officer Cross-Case Document References
+### 8.9 Officer Cross-Case Document References
 
 ```cypher
 MATCH (p:Person {tenant_id: $tenantId, role: 'officer'})
@@ -761,10 +853,27 @@ ORDER BY document_count DESC
 
 ---
 
+## 9. Deterministic Constraints
+
+The following guarantees protect Phase 1 Deterministic Processing and
+Phase 3 Multi-Tenant Isolation.
+
+| Constraint | Rule |
+|---|---|
+| **All node IDs are deterministic** | Every `*_id` is derived from SHA-256 of canonical content JSON (except `case_id` which is a UUID assigned at creation). Given identical input, the same ID is produced. |
+| **All relationships are deterministic** | Relationship creation is idempotent. Re-processing the same source data produces the same graph topology. No random or timestamp-seeded edges. |
+| **All queries are tenant-scoped** | Every query MUST filter by `tenant_id`. Cross-tenant traversal is architecturally forbidden. The database enforces `tenant_id IS NOT NULL` on every node label. |
+| **No probability, no scoring** | Graph nodes carry no confidence scores, no ranking weights, no anomaly scores. All integrity checks are binary PASS/FAIL. |
+| **Append-only facts** | Facts are never mutated or deleted. Corrections create new Facts linked via `[:SUPERSEDES]`. |
+| **Case-rooted containment** | Every evidence subgraph is reachable from exactly one `Case` node. Orphan subgraphs are integrity violations detected by the nightly checker. |
+
+---
+
 ## Appendix: Node Label Summary
 
 | Label | Primary Key | Tenant-Isolated | Dual-Hashed | Immutable |
 |---|---|---|---|---|
+| `Case` | `case_id` | Yes | No | Partial |
 | `Evidence` | `evidence_id` | Yes | Yes | Yes (content) |
 | `Document` | `document_id` | Yes | Yes | Partial |
 | `Fact` | `fact_id` | Yes | Yes | Yes (full) |

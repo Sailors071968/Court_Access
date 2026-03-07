@@ -6,7 +6,8 @@
 // Run twice and confirm identical hashes.
 // ============================================
 
-import { sha3_256 } from 'js-sha3';
+import sha3 from 'js-sha3';
+const { sha3_256 } = sha3;
 
 // ---------------------------------------------------------------------------
 // Test Fixtures — Deterministic Input Document

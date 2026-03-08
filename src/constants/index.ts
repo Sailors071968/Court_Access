@@ -202,6 +202,6 @@ export const SIDEBAR_NAV = [
   { id: 'search', label: 'Search', path: '/search', icon: 'Search', permission: null },
   { id: 'notifications', label: 'Notifications & Alerts', path: '/notifications', icon: 'Bell', permission: null },
   { id: 'settings', label: 'Settings', path: '/settings', icon: 'Settings', permission: 'canViewSettings' as const },
-  { id: 'integrations', label: 'Integrations', path: '/integrations', icon: 'Plug', permission: null },
+  { id: 'integrations', label: 'Integrations', path: '/integrations', icon: 'Plug', permission: 'canViewAdmin' as const },
   { id: 'admin', label: 'Admin', path: '/admin', icon: 'Shield', permission: 'canViewAdmin' as const },
 ] as const;

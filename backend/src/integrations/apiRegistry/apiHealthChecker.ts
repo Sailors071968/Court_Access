@@ -13,7 +13,7 @@ import type { HealthCheckResult, HealthStatus } from './types.js';
 // ---------------------------------------------------------------------------
 
 const HEALTH_CHECK_INTERVAL_MS = 5 * 60 * 1000; // 5 minutes
-const HEALTH_CHECK_TIMEOUT_MS = 10_000; // 10 second timeout per provider
+const HEALTH_CHECK_TIMEOUT_MS = 15_000; // 15 second timeout per provider
 const LATENCY_DEGRADED_THRESHOLD_MS = 5_000; // >5s = degraded
 const LATENCY_UNHEALTHY_THRESHOLD_MS = 10_000; // >10s = unhealthy
 

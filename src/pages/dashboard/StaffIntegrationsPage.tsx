@@ -366,11 +366,6 @@ function CredentialManager({ providerId, credentials: initialCredentials }: {
     const masked = rotateKeyValue.length > 10
       ? `${rotateKeyValue.substring(0, 6)}...${rotateKeyValue.substring(rotateKeyValue.length - 4)}`
       : '****';
-    setCredentials(credentials.map((c) =>
-      c.id === credId
-        ? { ...c, isActive: false }
-        : c
-    ));
     const oldCred = credentials.find((c) => c.id === credId);
     const newCred: CredentialSummary = {
       id: `cred-${Date.now()}`,

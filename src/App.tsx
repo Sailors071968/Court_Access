@@ -73,7 +73,11 @@ function App() {
               </ProtectedRoute>
             }
           />
-          <Route path="integrations" element={<StaffIntegrationsPage />} />
+          <Route path="integrations" element={
+            <ProtectedRoute requiredPermission="canViewAdmin">
+              <StaffIntegrationsPage />
+            </ProtectedRoute>
+          } />
 
           {/* Case Routes — deterministic tab structure */}
           <Route path="cases/:caseId" element={<CaseLayout />}>

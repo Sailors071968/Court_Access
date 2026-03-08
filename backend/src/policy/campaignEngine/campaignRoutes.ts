@@ -16,6 +16,7 @@ import {
   getSchedulerStatus,
 } from './campaignScheduler.js';
 import type { CampaignFilter, PolicyRequestStatus, SendCampaignInput } from './types.js';
+import { ALL_REQUEST_STATUSES } from './types.js';
 
 // ---------------------------------------------------------------------------
 // Generic HTTP types (framework-agnostic — compatible with Fastify/Express)
@@ -63,7 +64,9 @@ export async function registerCampaignRoutes(app: RouteApp): Promise<void> {
 
       const filter: CampaignFilter = {
         agencyId: query.agencyId || undefined,
-        status: query.status as PolicyRequestStatus | undefined,
+        status: (query.status && ALL_REQUEST_STATUSES.includes(query.status as PolicyRequestStatus))
+          ? (query.status as PolicyRequestStatus)
+          : undefined,
         county: query.county || undefined,
         agencyType: query.agencyType || undefined,
         search: query.search || undefined,
@@ -179,6 +182,11 @@ export async function registerCampaignRoutes(app: RouteApp): Promise<void> {
 
       if (!body.status) {
         reply.status(400).send({ error: 'status is required' });
+        return;
+      }
+
+      if (!ALL_REQUEST_STATUSES.includes(body.status)) {
+        reply.status(400).send({ error: `Invalid status value. Allowed: ${ALL_REQUEST_STATUSES.join(', ')}` });
         return;
       }
 

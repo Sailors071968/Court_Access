@@ -31,7 +31,7 @@ function getPrisma(): PrismaClient {
 
 export function generateTrackingId(): string {
   const timestamp = Date.now().toString(36);
-  const random = Math.random().toString(36).substring(2, 8);
+  const random = Math.random().toString(36).substring(2).padEnd(8, '0').substring(0, 8);
   return `CPRA-${timestamp}-${random}`.toUpperCase();
 }
 

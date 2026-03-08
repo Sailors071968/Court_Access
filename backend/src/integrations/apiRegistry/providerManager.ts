@@ -137,24 +137,26 @@ export class ProviderManager {
    * Deactivates the old credential and creates a new one.
    */
   async rotateCredential(providerId: string, credentialId: string, newApiKey: string): Promise<CredentialSummary> {
-    // Deactivate the old credential
-    const oldCred = await this.prisma.apiCredential.update({
-      where: { id: credentialId },
-      data: { isActive: false },
-    });
+    return this.prisma.$transaction(async (tx) => {
+      // Deactivate the old credential, scoped to the correct provider
+      const oldCred = await tx.apiCredential.update({
+        where: { id: credentialId, providerId },
+        data: { isActive: false },
+      });
 
-    // Create the new credential with the same config
-    const encryptedKey = encrypt(newApiKey);
-    const newCred = await this.prisma.apiCredential.create({
-      data: {
-        providerId,
-        apiKeyEncrypted: encryptedKey,
-        environment: oldCred.environment,
-        rateLimitPerMinute: oldCred.rateLimitPerMinute,
-      },
-    });
+      // Create the new credential with the same config
+      const encryptedKey = encrypt(newApiKey);
+      const newCred = await tx.apiCredential.create({
+        data: {
+          providerId,
+          apiKeyEncrypted: encryptedKey,
+          environment: oldCred.environment,
+          rateLimitPerMinute: oldCred.rateLimitPerMinute,
+        },
+      });
 
-    return this.toCredentialSummary(newCred, newApiKey);
+      return this.toCredentialSummary(newCred, newApiKey);
+    });
   }
 
   /**

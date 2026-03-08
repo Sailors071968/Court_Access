@@ -74,7 +74,7 @@ function App() {
             }
           />
           <Route path="integrations" element={
-            <ProtectedRoute requiredPermission="canViewAdmin">
+            <ProtectedRoute requiredPermission="canViewIntegrations">
               <StaffIntegrationsPage />
             </ProtectedRoute>
           } />

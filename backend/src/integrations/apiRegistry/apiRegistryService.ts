@@ -165,30 +165,43 @@ export class ApiRegistryService {
   }
 
   /**
-   * Get usage stats for a provider.
+   * Get usage stats for a provider (bounded to last 7 days, max 10k records).
    */
   async getUsageStats(providerId: string): Promise<UsageStats> {
-    const logs = await this.prisma.apiUsageLog.findMany({
-      where: { providerId },
-      select: { responseStatus: true, latencyMs: true },
-    });
+    const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000);
+    const where = { providerId, requestTimestamp: { gte: sevenDaysAgo } };
 
-    if (logs.length === 0) {
+    const [totalRequests, aggregation] = await Promise.all([
+      this.prisma.apiUsageLog.count({ where }),
+      this.prisma.apiUsageLog.aggregate({
+        where,
+        _avg: { latencyMs: true },
+      }),
+    ]);
+
+    if (totalRequests === 0) {
       return { totalRequests: 0, successCount: 0, errorCount: 0, avgLatencyMs: 0, p95LatencyMs: 0 };
     }
 
-    const successCount = logs.filter((l) => l.responseStatus >= 200 && l.responseStatus < 300).length;
-    const errorCount = logs.filter((l) => l.responseStatus >= 400 || l.responseStatus < 0).length;
-    const latencies = logs.map((l) => l.latencyMs).sort((a, b) => a - b);
-    const avgLatencyMs = Math.round(latencies.reduce((sum, l) => sum + l, 0) / latencies.length);
+    // Bounded sample for p95 and counts (max 10k most recent records)
+    const logs = await this.prisma.apiUsageLog.findMany({
+      where,
+      select: { responseStatus: true, latencyMs: true },
+      orderBy: { requestTimestamp: 'desc' },
+      take: 10_000,
+    });
+
+    const successCount = logs.filter((l: { responseStatus: number }) => l.responseStatus >= 200 && l.responseStatus < 300).length;
+    const errorCount = logs.filter((l: { responseStatus: number }) => l.responseStatus >= 400 || l.responseStatus < 0).length;
+    const latencies = logs.map((l: { latencyMs: number }) => l.latencyMs).sort((a: number, b: number) => a - b);
     const p95Index = Math.floor(latencies.length * 0.95);
-    const p95LatencyMs = latencies[p95Index] ?? latencies[latencies.length - 1];
+    const p95LatencyMs = latencies[p95Index] ?? latencies[latencies.length - 1] ?? 0;
 
     return {
-      totalRequests: logs.length,
+      totalRequests,
       successCount,
       errorCount,
-      avgLatencyMs,
+      avgLatencyMs: Math.round(aggregation._avg.latencyMs ?? 0),
       p95LatencyMs,
     };
   }

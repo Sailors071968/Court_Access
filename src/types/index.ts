@@ -101,6 +101,7 @@ export interface RolePermissions {
   canUploadDocuments: boolean;
   canManageCases: boolean;
   canViewAdmin: boolean;
+  canViewIntegrations: boolean;
   canViewTasks: boolean;
   canViewSettings: boolean;
 }

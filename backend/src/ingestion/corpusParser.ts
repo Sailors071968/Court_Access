@@ -176,6 +176,7 @@ function createCsvParser(filePath: string, startOffset: number): Readable {
   let headers: string[] = [];
   let lineCount = 0;
   let headerParsed = false;
+  let detectedDelimiter = ',';
 
   const transform = new Transform({
     objectMode: true,
@@ -186,8 +187,8 @@ function createCsvParser(filePath: string, startOffset: number): Readable {
 
   rl.on('line', (line: string) => {
     if (!headerParsed) {
-      const delimiter = line.includes('\t') ? '\t' : ',';
-      headers = line.split(delimiter).map(h => h.trim().replace(/^"|"$/g, ''));
+      detectedDelimiter = line.includes('\t') ? '\t' : ',';
+      headers = line.split(detectedDelimiter).map(h => h.trim().replace(/^"|"$/g, ''));
       headerParsed = true;
       return;
     }
@@ -195,8 +196,7 @@ function createCsvParser(filePath: string, startOffset: number): Readable {
     lineCount++;
     if (lineCount <= startOffset) return;
 
-    const delimiter = line.includes('\t') ? '\t' : ',';
-    const values = line.split(delimiter).map(v => v.trim().replace(/^"|"$/g, ''));
+    const values = line.split(detectedDelimiter).map(v => v.trim().replace(/^"|"$/g, ''));
     const doc: RawDocument = {};
     for (let i = 0; i < headers.length; i++) {
       doc[headers[i]] = values[i] ?? '';

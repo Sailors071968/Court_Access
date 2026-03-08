@@ -9,8 +9,30 @@ import type {
   ExtractedRelationship,
   DocumentExtractionResult,
   GraphIndexingResult,
+  GraphNodeType,
+  GraphRelationshipType,
   Neo4jSession,
 } from './types.ts';
+
+// ---------------------------------------------------------------------------
+// Cypher Injection Prevention — Runtime Whitelists
+// ---------------------------------------------------------------------------
+
+const ALLOWED_NODE_TYPES: ReadonlySet<string> = new Set<GraphNodeType>([
+  'Statute', 'Policy', 'CaseLaw', 'Person', 'Officer', 'Agency', 'Evidence', 'Event', 'LegalClaim',
+]);
+
+const ALLOWED_REL_TYPES: ReadonlySet<string> = new Set<GraphRelationshipType>([
+  'VIOLATES', 'SUPPORTS', 'REFUTES', 'REFERENCES', 'MENTIONS', 'ESTABLISHES', 'CONTRADICTS',
+]);
+
+function assertValidNodeType(type: string): asserts type is GraphNodeType {
+  if (!ALLOWED_NODE_TYPES.has(type)) throw new Error(`Invalid node type: ${type}`);
+}
+
+function assertValidRelType(type: string): asserts type is GraphRelationshipType {
+  if (!ALLOWED_REL_TYPES.has(type)) throw new Error(`Invalid relationship type: ${type}`);
+}
 
 // ---------------------------------------------------------------------------
 // Relationship Builder
@@ -90,6 +112,7 @@ export class GraphRelationshipBuilder {
       tenantId: string;
     },
   ): Promise<'created' | 'reused'> {
+    assertValidNodeType(node.type);
     const query = `
       MERGE (n:${node.type} {id: $id})
       ON CREATE SET
@@ -156,6 +179,7 @@ export class GraphRelationshipBuilder {
       extraction.tenantId,
     );
 
+    assertValidRelType(rel.type);
     const query = `
       MATCH (source {id: $sourceId})
       MATCH (target {id: $targetId})
@@ -200,6 +224,7 @@ export class GraphRelationshipBuilder {
         extraction.tenantId,
       );
 
+      assertValidNodeType(entity.type);
       queries.push({
         query: `
           MERGE (n:${entity.type} {id: $id})
@@ -248,6 +273,7 @@ export class GraphRelationshipBuilder {
         extraction.tenantId,
       );
 
+      assertValidRelType(rel.type);
       queries.push({
         query: `
           MATCH (source {id: $sourceId})

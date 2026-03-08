@@ -17,6 +17,26 @@ import type {
 } from './types.ts';
 
 // ---------------------------------------------------------------------------
+// Cypher Injection Prevention — Runtime Whitelists
+// ---------------------------------------------------------------------------
+
+const ALLOWED_NODE_TYPES: ReadonlySet<string> = new Set<GraphNodeType>([
+  'Statute', 'Policy', 'CaseLaw', 'Person', 'Officer', 'Agency', 'Evidence', 'Event', 'LegalClaim',
+]);
+
+const ALLOWED_REL_TYPES: ReadonlySet<string> = new Set<GraphRelationshipType>([
+  'VIOLATES', 'SUPPORTS', 'REFUTES', 'REFERENCES', 'MENTIONS', 'ESTABLISHES', 'CONTRADICTS',
+]);
+
+function assertValidNodeType(type: string): asserts type is GraphNodeType {
+  if (!ALLOWED_NODE_TYPES.has(type)) throw new Error(`Invalid node type: ${type}`);
+}
+
+function assertValidRelType(type: string): asserts type is GraphRelationshipType {
+  if (!ALLOWED_REL_TYPES.has(type)) throw new Error(`Invalid relationship type: ${type}`);
+}
+
+// ---------------------------------------------------------------------------
 // Graph Query Engine
 // ---------------------------------------------------------------------------
 
@@ -124,6 +144,7 @@ export class GraphQueryEngine {
     tenantId: string,
     nodeType: GraphNodeType,
   ): Promise<GraphNode[]> {
+    assertValidNodeType(nodeType);
     const result = await this.neo4jClient.execute(
       `MATCH (n:${nodeType} {tenantId: $tenantId}) RETURN n ORDER BY n.name`,
       { tenantId },
@@ -138,6 +159,7 @@ export class GraphQueryEngine {
     tenantId: string,
     relType: GraphRelationshipType,
   ): Promise<Array<{ source: GraphNode; target: GraphNode; relationship: GraphRelationship }>> {
+    assertValidRelType(relType);
     const result = await this.neo4jClient.execute(
       `
       MATCH (source {tenantId: $tenantId})-[r:${relType}]->(target)
@@ -195,6 +217,7 @@ export class GraphQueryEngine {
     searchTerm: string,
     nodeType?: GraphNodeType,
   ): Promise<GraphNode[]> {
+    if (nodeType) assertValidNodeType(nodeType);
     const typeFilter = nodeType ? `:${nodeType}` : '';
     const result = await this.neo4jClient.execute(
       `

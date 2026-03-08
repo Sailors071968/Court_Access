@@ -47,8 +47,13 @@ async function runDirectPipeline(
     }
   }
 
-  // Initialize state tracking
-  await stateRepo.initializeState(corpusName, fileName, totalRecords);
+  // Initialize state tracking (preserve resume offset if resuming)
+  if (resume && resumeOffset > 0) {
+    // When resuming, just update status to in_progress without resetting offset
+    await stateRepo.checkpoint(corpusName, fileName, resumeOffset, resumeOffset);
+  } else {
+    await stateRepo.initializeState(corpusName, fileName, totalRecords);
+  }
 
   // Create streaming pipeline
   const { stream, format } = await createCorpusParser(filePath, resumeOffset);

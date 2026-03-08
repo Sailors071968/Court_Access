@@ -151,12 +151,16 @@ export class PostgresCopyInserter implements BulkInserter {
       `COPY "${tempTable}" FROM STDIN WITH (FORMAT text)`,
     );
 
+    let pushed = false;
     const dataStream = new Readable({
       read() {
-        for (const doc of documents) {
-          this.push(documentToCopyLine(doc));
+        if (!pushed) {
+          pushed = true;
+          for (const doc of documents) {
+            this.push(documentToCopyLine(doc));
+          }
+          this.push(null);
         }
-        this.push(null);
       },
     });
 

@@ -35,22 +35,40 @@ async function detectFormat(filePath: string): Promise<CorpusFormat> {
 
 function createJsonlParser(filePath: string, startOffset: number): Readable {
   const fileStream = createReadStream(filePath, {
-    start: startOffset,
     encoding: 'utf-8',
   });
 
   let lineCount = 0;
+  let remainder = '';
   const transform = new Transform({
     objectMode: true,
     transform(chunk: string, _encoding, callback) {
-      const lines = chunk.split('\n');
+      const data = remainder + chunk;
+      const lines = data.split('\n');
+      remainder = lines.pop() ?? '';
       for (const line of lines) {
         const trimmed = line.trim();
         if (!trimmed) continue;
         try {
           const doc: RawDocument = JSON.parse(trimmed);
           lineCount++;
+          // Skip records before startOffset (record-count based resume)
+          if (lineCount <= startOffset) continue;
           this.push({ doc, offset: lineCount });
+        } catch {
+          // Skip malformed lines
+        }
+      }
+      callback();
+    },
+    flush(callback) {
+      if (remainder.trim()) {
+        try {
+          const doc: RawDocument = JSON.parse(remainder.trim());
+          lineCount++;
+          if (lineCount > startOffset) {
+            this.push({ doc, offset: lineCount });
+          }
         } catch {
           // Skip malformed lines
         }

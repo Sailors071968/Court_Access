@@ -187,6 +187,12 @@ export class TimelineConflictAnalyzer {
             // Scope constraint: skip pairs outside the proximity window
             if (Math.abs(ea.timestamp.getTime() - eb.timestamp.getTime()) > this.config.proximityWindowMs) continue;
 
+            // Scope constraint: require shared context (same source document)
+            if (this.config.requireSharedContext && ea.sourceDocumentId !== eb.sourceDocumentId) {
+              // Allow if speakers share a related source (same statement source)
+              if (ea.sourceId !== eb.sourceId) continue;
+            }
+
             // Look for pairs where descriptions match another pair in reversed order
             for (const ea2 of eventsA) {
               if (ea2.id === ea.id) continue;
@@ -195,6 +201,12 @@ export class TimelineConflictAnalyzer {
 
                 // Scope constraint: proximity window for the second pair
                 if (Math.abs(ea2.timestamp.getTime() - eb2.timestamp.getTime()) > this.config.proximityWindowMs) continue;
+
+                // Scope constraint: require shared context (same source document)
+                if (this.config.requireSharedContext && ea2.sourceDocumentId !== eb2.sourceDocumentId) {
+                  // Allow if speakers share a related source (same statement source)
+                  if (ea2.sourceId !== eb2.sourceId) continue;
+                }
 
                 // Speaker A: ea before ea2
                 // Speaker B: eb2 (matches ea) before eb (matches ea2)

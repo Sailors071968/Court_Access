@@ -56,19 +56,22 @@ model CorpusIngestionLog {
 // ---------------------------------------------------------------------------
 
 model LegalDocument {
-  id             String   @id @default(uuid())
-  tenantId       String
-  title          String
-  content        String
-  jurisdiction   String
-  documentType   String   // policy | statute | case_law | transcript | evidence | investigative_report
-  source         String
-  version        String   @default("1.0")
-  corpusName     String?
-  sourceFile     String?
-  contentHash    String   // SHA-256 of content for dedup
-  createdAt      DateTime @default(now())
-  updatedAt      DateTime @updatedAt
+  id              String   @id @default(uuid())
+  tenantId        String
+  title           String
+  content         String
+  jurisdiction    String
+  documentType    String   // policy | statute | case_law | transcript | evidence | investigative_report
+  source          String
+  version         String   @default("1.0")
+  corpusName      String?
+  sourceFile      String?
+  contentHash     String   // SHA-256 of content for dedup
+  corpusVersion   String?  // Version of the corpus this document belongs to
+  documentVersion String   @default("1.0") // Version of this specific document
+  supersededBy    String?  // ID of the document that supersedes this one
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   @@unique([contentHash, tenantId])
   @@index([tenantId])
@@ -76,5 +79,49 @@ model LegalDocument {
   @@index([corpusName])
   @@index([jurisdiction])
   @@index([contentHash])
+  @@index([supersededBy])
   @@map("legal_documents")
+}
+
+// ---------------------------------------------------------------------------
+// Corpus Registry — tracks all registered corpora and their versions
+// ---------------------------------------------------------------------------
+
+model CorpusRegistry {
+  id               String   @id @default(uuid())
+  corpusName       String
+  jurisdiction     String
+  sourceAuthority  String   // e.g. "California Legislature", "US Congress"
+  version          String   @default("1.0")
+  releaseDate      DateTime?
+  ingestionStatus  String   @default("pending") // pending | in_progress | completed | failed
+  totalDocuments   Int      @default(0)
+  totalBytes       Int      @default(0)
+  checksum         String?  // SHA-256 of the entire corpus file
+  metadata         String?  // JSON string for extensible metadata
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@unique([corpusName, version])
+  @@index([corpusName])
+  @@index([jurisdiction])
+  @@index([ingestionStatus])
+  @@map("corpus_registry")
+}
+
+// ---------------------------------------------------------------------------
+// Corpus Ingestion Lock — prevents concurrent ingestion of the same corpus
+// ---------------------------------------------------------------------------
+
+model CorpusIngestionLock {
+  id          String   @id @default(uuid())
+  corpusName  String   @unique
+  workerId    String
+  lockedAt    DateTime @default(now())
+  expiresAt   DateTime // Auto-expire to prevent deadlocks
+  metadata    String?  // JSON string for worker info
+
+  @@index([corpusName])
+  @@index([expiresAt])
+  @@map("corpus_ingestion_lock")
 }

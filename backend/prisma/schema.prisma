@@ -125,3 +125,25 @@ model CorpusIngestionLock {
   @@index([expiresAt])
   @@map("corpus_ingestion_lock")
 }
+
+// ---------------------------------------------------------------------------
+// Suggested Exhibit Idea — AI-generated trial exhibit recommendations
+// ---------------------------------------------------------------------------
+
+model SuggestedExhibitIdea {
+  id            String   @id @default(uuid())
+  caseId        String
+  title         String
+  description   String
+  exhibitType   String   // timeline_comparison | testimony_vs_transcript | officer_movement_map | chain_of_custody_flow | evidence_relationship_graph | narrative_conflict_visualization
+  evidenceIds   String[]
+  conflictIds   String[]
+  priorityScore Float
+  status        String   @default("suggested") // suggested | saved | dismissed | generated
+  createdAt     DateTime @default(now())
+
+  @@index([caseId])
+  @@index([status])
+  @@index([priorityScore])
+  @@map("suggested_exhibit_ideas")
+}

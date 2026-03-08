@@ -73,8 +73,9 @@ export class GovernancePipeline {
     }
 
     // Step 1: Register corpus in the registry
+    let registryEntry;
     try {
-      await this.registry.register({
+      registryEntry = await this.registry.register({
         corpusName,
         jurisdiction,
         sourceAuthority,
@@ -160,7 +161,7 @@ export class GovernancePipeline {
           corpusName,
           tenantId,
           latestVersion.version,
-          version,
+          registryEntry.id,
         );
       }
 

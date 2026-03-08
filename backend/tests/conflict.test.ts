@@ -13,7 +13,7 @@ import { StatementComparator } from '../src/conflict/statementComparator.ts';
 import { ConflictScoringEngine } from '../src/conflict/conflictScoringEngine.ts';
 import { ConflictGraphIntegrator } from '../src/conflict/conflictGraphIntegrator.ts';
 import { NarrativeConflictDetector } from '../src/conflict/narrativeConflictDetector.ts';
-import { DEFAULT_CONFLICT_SCORING_WEIGHTS } from '../src/conflict/types.ts';
+import { DEFAULT_CONFLICT_SCORING_WEIGHTS, deriveExplanationFactors } from '../src/conflict/types.ts';
 import type {
   Statement,
   TimelineEvent,
@@ -94,6 +94,7 @@ function makeDetectedConflict(overrides?: Partial<DetectedConflict>): DetectedCo
       },
       weights: { ...DEFAULT_CONFLICT_SCORING_WEIGHTS },
     },
+    explanationFactors: deriveExplanationFactors(overrides?.conflictType ?? 'testimony'),
     sourceNodeIds: ['node-a'],
     targetNodeIds: ['node-b'],
     evidenceIds: [],

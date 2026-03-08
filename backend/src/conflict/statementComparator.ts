@@ -12,6 +12,7 @@ import type {
   DetectedConflict,
   ConflictScoringFactors,
 } from './types.ts';
+import { deriveExplanationFactors } from './types.ts';
 
 // ---------------------------------------------------------------------------
 // Configuration
@@ -367,6 +368,7 @@ export class StatementComparator {
           supportingSourceCount: 0.15,
         },
       },
+      explanationFactors: deriveExplanationFactors('testimony'),
       sourceNodeIds: [a.id],
       targetNodeIds: [b.id],
       evidenceIds: [],

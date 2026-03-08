@@ -11,6 +11,7 @@ import type {
   DetectedConflict,
   ConflictScoringFactors,
 } from './types.ts';
+import { deriveExplanationFactors } from './types.ts';
 
 // ---------------------------------------------------------------------------
 // Configuration
@@ -340,6 +341,7 @@ export class TimelineConflictAnalyzer {
           supportingSourceCount: 0.15,
         },
       },
+      explanationFactors: deriveExplanationFactors('timeline'),
       sourceNodeIds: [tc.eventA.sourceId],
       targetNodeIds: [tc.eventB.sourceId],
       evidenceIds: [],

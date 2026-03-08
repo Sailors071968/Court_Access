@@ -160,6 +160,11 @@ export class ConflictGraphIntegrator {
         evidenceReliability: conflict.severity.factors.evidenceReliability,
         policyViolationWeight: conflict.severity.factors.policyViolationWeight,
         supportingSourceCount: conflict.severity.factors.supportingSourceCount,
+        timestampMismatch: conflict.explanationFactors.timestampMismatch,
+        policyViolation: conflict.explanationFactors.policyViolation,
+        witnessContradiction: conflict.explanationFactors.witnessContradiction,
+        evidenceInconsistency: conflict.explanationFactors.evidenceInconsistency,
+        legalClaimContradiction: conflict.explanationFactors.legalClaimContradiction,
       },
       sourceDocumentId: conflict.sourceDocumentIds[0] ?? '',
       tenantId: conflict.tenantId,
@@ -228,6 +233,11 @@ export class ConflictGraphIntegrator {
         c.policyViolationWeight = $policyViolationWeight,
         c.supportingSourceCount = $supportingSourceCount,
         c.detectedAt = datetime($detectedAt),
+        c.timestampMismatch = $timestampMismatch,
+        c.policyViolation = $policyViolationFlag,
+        c.witnessContradiction = $witnessContradiction,
+        c.evidenceInconsistency = $evidenceInconsistency,
+        c.legalClaimContradiction = $legalClaimContradiction,
         c._created = true
       ON MATCH SET
         c._created = false
@@ -248,6 +258,11 @@ export class ConflictGraphIntegrator {
       policyViolationWeight: conflict.severity.factors.policyViolationWeight,
       supportingSourceCount: conflict.severity.factors.supportingSourceCount,
       detectedAt: conflict.detectedAt.toISOString(),
+      timestampMismatch: conflict.explanationFactors.timestampMismatch,
+      policyViolationFlag: conflict.explanationFactors.policyViolation,
+      witnessContradiction: conflict.explanationFactors.witnessContradiction,
+      evidenceInconsistency: conflict.explanationFactors.evidenceInconsistency,
+      legalClaimContradiction: conflict.explanationFactors.legalClaimContradiction,
     });
 
     if (result.records.length > 0) {

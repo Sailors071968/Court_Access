@@ -190,6 +190,11 @@ export class CorpusLockManager {
       return null;
     }
 
+    // Do not extend an expired lock — another worker may have already acquired it
+    if (existing.expiresAt <= new Date()) {
+      return null;
+    }
+
     const newExpiry = new Date(existing.expiresAt.getTime() + additionalMs);
 
     // Atomic update — no gap in lock ownership

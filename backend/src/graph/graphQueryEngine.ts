@@ -406,6 +406,7 @@ export class GraphQueryEngine {
     relatedNodes: Array<{ node: GraphNode; relationship: GraphRelationship }>;
   }>> {
     const safeThreshold = Math.max(0.0, Math.min(1.0, threshold));
+    if (!Number.isFinite(safeThreshold)) throw new Error('Invalid threshold parameter');
 
     const result = await this.neo4jClient.execute(
       `

@@ -62,10 +62,11 @@ severityScore = temporal * 0.35 + reliability * 0.25 + policy * 0.25 + min(sourc
 ### Type-Specific Adjustments
 
 After base scoring, type-specific multipliers are applied in Stage 6:
-- **evidence:** `evidenceReliability *= 1.1`
+- **timeline:** `temporalContradictionStrength *= 1.2`
+- **testimony:** `evidenceReliability *= 1.15`
+- **evidence:** `evidenceReliability *= 1.1`, `supportingSourceCount = max(current, 2)`
 - **policy_violation:** `policyViolationWeight *= 1.3`
 - **legal_claim:** `policyViolationWeight *= 1.2`, `temporalContradictionStrength *= 1.1`
-- **timeline/testimony:** No additional adjustment (already weighted via raw factors)
 
 ### Severity Bands
 

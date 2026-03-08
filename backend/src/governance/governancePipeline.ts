@@ -139,8 +139,8 @@ export class GovernancePipeline {
       }
 
       // Step 8: Supersede previous version if applicable
-      const latestVersion = await this.registry.getLatestVersion(corpusName);
-      if (latestVersion && latestVersion.version !== version && latestVersion.ingestionStatus === 'completed') {
+      const latestVersion = await this.registry.getLatestVersion(corpusName, version);
+      if (latestVersion && latestVersion.ingestionStatus === 'completed') {
         await this.versionManager.supersedePreviousVersion(
           corpusName,
           tenantId,

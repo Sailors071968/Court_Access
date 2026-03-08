@@ -195,13 +195,21 @@ export class CorpusRegistryRepository {
 
   /**
    * Get the latest version of a corpus.
+   * Optionally exclude a specific version (useful when looking for the
+   * previous completed version during a new ingestion run).
    */
-  async getLatestVersion(corpusName: string): Promise<CorpusRegistryEntry | null> {
+  async getLatestVersion(
+    corpusName: string,
+    excludeVersion?: string,
+  ): Promise<CorpusRegistryEntry | null> {
     const records = await this.db.findMany({
       where: { corpusName },
       orderBy: { createdAt: 'desc' },
     });
-    return records.length > 0 ? this.recordToEntry(records[0]) : null;
+    const filtered = excludeVersion
+      ? records.filter(r => r.version !== excludeVersion)
+      : records;
+    return filtered.length > 0 ? this.recordToEntry(filtered[0]) : null;
   }
 
   /**

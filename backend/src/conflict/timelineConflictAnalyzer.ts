@@ -26,6 +26,17 @@ export interface TimelineAnalyzerConfig {
   detectImpossibleSequences: boolean;
   /** Maximum events to compare (n^2 complexity guard) */
   maxEventsToCompare: number;
+  /**
+   * Timeline proximity window in ms (default: 600000 — 10 minutes).
+   * Only events within this window are compared for cross-speaker conflicts.
+   * Prevents combinatorial explosion from unrelated events.
+   */
+  proximityWindowMs: number;
+  /**
+   * Require shared context for comparisons (default: true).
+   * When true, events must share a sourceDocumentId to be compared.
+   */
+  requireSharedContext: boolean;
 }
 
 const DEFAULT_CONFIG: TimelineAnalyzerConfig = {
@@ -33,6 +44,8 @@ const DEFAULT_CONFIG: TimelineAnalyzerConfig = {
   simultaneousThresholdMs: 60_000,
   detectImpossibleSequences: true,
   maxEventsToCompare: 10_000,
+  proximityWindowMs: 600_000,
+  requireSharedContext: true,
 };
 
 // ---------------------------------------------------------------------------
@@ -109,10 +122,19 @@ export class TimelineConflictAnalyzer {
         // Skip same-speaker comparisons for this check
         if (a.speakerId === b.speakerId) continue;
 
+        const timeGapMs = Math.abs(a.timestamp.getTime() - b.timestamp.getTime());
+
+        // Scope constraint: skip events outside the proximity window
+        if (timeGapMs > this.config.proximityWindowMs) continue;
+
+        // Scope constraint: require shared context (same source document)
+        if (this.config.requireSharedContext && a.sourceDocumentId !== b.sourceDocumentId) {
+          // Allow if speakers share a related source (same statement source)
+          if (a.sourceId !== b.sourceId) continue;
+        }
+
         // Check if descriptions are similar enough to be about the same event
         if (!this.descriptionsSimilar(a.description, b.description)) continue;
-
-        const timeGapMs = Math.abs(a.timestamp.getTime() - b.timestamp.getTime());
 
         // If time gap exceeds threshold, this is a conflict
         if (timeGapMs > this.config.simultaneousThresholdMs) {
@@ -162,11 +184,17 @@ export class TimelineConflictAnalyzer {
 
         for (const ea of eventsA) {
           for (const eb of eventsB) {
+            // Scope constraint: skip pairs outside the proximity window
+            if (Math.abs(ea.timestamp.getTime() - eb.timestamp.getTime()) > this.config.proximityWindowMs) continue;
+
             // Look for pairs where descriptions match another pair in reversed order
             for (const ea2 of eventsA) {
               if (ea2.id === ea.id) continue;
               for (const eb2 of eventsB) {
                 if (eb2.id === eb.id) continue;
+
+                // Scope constraint: proximity window for the second pair
+                if (Math.abs(ea2.timestamp.getTime() - eb2.timestamp.getTime()) > this.config.proximityWindowMs) continue;
 
                 // Speaker A: ea before ea2
                 // Speaker B: eb2 (matches ea) before eb (matches ea2)
@@ -228,6 +256,9 @@ export class TimelineConflictAnalyzer {
           const b = sorted[j];
 
           const timeGapMs = Math.abs(a.timestamp.getTime() - b.timestamp.getTime());
+
+          // Scope constraint: require shared evidence reference (same source document)
+          if (this.config.requireSharedContext && a.sourceDocumentId !== b.sourceDocumentId) continue;
 
           // If events overlap in time and have different descriptions
           if (

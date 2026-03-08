@@ -146,7 +146,7 @@ describe('TimelineConflictAnalyzer', () => {
       makeTimelineEvent({
         id: 'evt-2',
         description: 'suspect arrived at the scene',
-        timestamp: new Date('2025-06-15T12:00:00Z'),
+        timestamp: new Date('2025-06-15T10:05:00Z'),
         speakerId: 'witness-1',
       }),
     ];
@@ -244,7 +244,7 @@ describe('TimelineConflictAnalyzer', () => {
       makeTimelineEvent({
         id: 'evt-2',
         description: 'suspect fled the building quickly',
-        timestamp: new Date('2025-06-15T14:00:00Z'), // 4 hours later
+        timestamp: new Date('2025-06-15T10:05:00Z'), // 5 minutes later
         speakerId: 'witness-1',
       }),
     ];
@@ -272,7 +272,7 @@ describe('TimelineConflictAnalyzer', () => {
       makeTimelineEvent({
         id: 'evt-2',
         description: 'suspect entered the vehicle',
-        timestamp: new Date('2025-06-15T13:00:00Z'),
+        timestamp: new Date('2025-06-15T10:05:00Z'),
         speakerId: 'witness-1',
       }),
     ];
@@ -733,7 +733,7 @@ describe('NarrativeConflictDetector', () => {
         makeTimelineEvent({
           id: 'evt-2',
           description: 'suspect arrived at the warehouse',
-          timestamp: new Date('2025-06-15T14:00:00Z'),
+          timestamp: new Date('2025-06-15T10:05:00Z'),
           speakerId: 'witness-1',
         }),
       ],
@@ -906,7 +906,7 @@ describe('NarrativeConflictDetector', () => {
         makeTimelineEvent({
           id: 'evt-2',
           description: 'incident occurred at the intersection',
-          timestamp: new Date('2025-06-15T15:00:00Z'),
+          timestamp: new Date('2025-06-15T10:05:00Z'),
           speakerId: 'witness-1',
         }),
       ],
@@ -1061,7 +1061,7 @@ describe('NarrativeConflictDetector', () => {
         makeTimelineEvent({
           id: 'evt-2',
           description: 'shooting incident reported at the warehouse',
-          timestamp: new Date('2025-06-15T14:00:00Z'),
+          timestamp: new Date('2025-06-15T10:05:00Z'),
           speakerId: 'witness-1',
         }),
       ],

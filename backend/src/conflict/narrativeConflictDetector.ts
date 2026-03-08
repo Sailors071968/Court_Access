@@ -36,6 +36,17 @@ export interface NarrativeConflictDetectorConfig {
   detectPolicyViolations: boolean;
   /** Whether to detect legal claim conflicts */
   detectLegalClaimConflicts: boolean;
+  /**
+   * Timeline proximity window in ms (default: 600000 — 10 minutes).
+   * Only timeline events within this window are compared.
+   */
+  timelineProximityWindowMs: number;
+  /**
+   * Require shared context for conflict comparisons (default: true).
+   * Constrains comparisons to entities sharing caseId, documents, speakers,
+   * or topical relevance. Prevents combinatorial explosion.
+   */
+  requireSharedContext: boolean;
 }
 
 const DEFAULT_CONFIG: NarrativeConflictDetectorConfig = {
@@ -44,6 +55,8 @@ const DEFAULT_CONFIG: NarrativeConflictDetectorConfig = {
   detectEvidenceInconsistencies: true,
   detectPolicyViolations: true,
   detectLegalClaimConflicts: true,
+  timelineProximityWindowMs: 600_000,
+  requireSharedContext: true,
 };
 
 // ---------------------------------------------------------------------------
@@ -59,8 +72,13 @@ export class NarrativeConflictDetector {
 
   constructor(config?: Partial<NarrativeConflictDetectorConfig>) {
     this.config = { ...DEFAULT_CONFIG, ...config };
-    this.timelineAnalyzer = new TimelineConflictAnalyzer();
-    this.statementComparator = new StatementComparator();
+    this.timelineAnalyzer = new TimelineConflictAnalyzer({
+      proximityWindowMs: this.config.timelineProximityWindowMs,
+      requireSharedContext: this.config.requireSharedContext,
+    });
+    this.statementComparator = new StatementComparator({
+      requireSharedContext: this.config.requireSharedContext,
+    });
     this.scoringEngine = new ConflictScoringEngine();
     this.graphIntegrator = new ConflictGraphIntegrator();
   }

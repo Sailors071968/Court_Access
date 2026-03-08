@@ -249,6 +249,7 @@ export class ExhibitSuggestionEngine {
         priorityScore: idea.priorityScore,
         status: idea.status,
       })),
+      skipDuplicates: true,
     });
   }
 

@@ -307,11 +307,9 @@ export class GraphQueryEngine {
     const result = await this.neo4jClient.execute(
       `
       MATCH path = (e1:Evidence {tenantId: $tenantId})-[*2..${safeMaxLength}]-(e2:Evidence {tenantId: $tenantId})
-      WHERE e1.id < e2.id
-      UNWIND nodes(path) AS n
-      UNWIND relationships(path) AS r
-      RETURN collect(DISTINCT n) AS chain, collect(DISTINCT r) AS relationships
-      LIMIT 100
+      WHERE e1.id < e2.id AND all(n IN nodes(path) WHERE n.tenantId = $tenantId)
+      WITH path LIMIT 100
+      RETURN nodes(path) AS chain, relationships(path) AS relationships
       `,
       { tenantId },
     );

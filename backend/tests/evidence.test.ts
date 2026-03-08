@@ -623,10 +623,10 @@ describe('EvidenceLinker', () => {
     };
 
     const result = await linker.linkEvidence(request);
-    // Self-link should be skipped, only 1 evaluated
-    assert.equal(result.totalEvaluated, 2); // includes self in count but skips it in processing
+    // Self-link should be skipped, only 1 evaluated (excludes self from count)
+    assert.equal(result.totalEvaluated, 1);
     const total = result.insertedRelationships.length + result.candidateRelationships.length;
-    assert.ok(total <= 2);
+    assert.equal(total, 1);
   });
 
   it('should store below-threshold relationships in candidate store', async () => {

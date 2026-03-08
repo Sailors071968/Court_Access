@@ -190,18 +190,14 @@ export class EvidenceIndexer {
 
     for (const node of queue) {
       const p = processOne(node);
-      running.push(p);
+      // Self-removing tracked promise for correct concurrency limiting
+      const tracked = p.then(() => {
+        running.splice(running.indexOf(tracked), 1);
+      });
+      running.push(tracked);
 
       if (running.length >= this.config.concurrency) {
         await Promise.race(running);
-        // Remove settled promises
-        for (let i = running.length - 1; i >= 0; i--) {
-          const settled = await Promise.race([
-            running[i].then(() => true),
-            Promise.resolve(false),
-          ]);
-          if (settled) running.splice(i, 1);
-        }
       }
     }
 

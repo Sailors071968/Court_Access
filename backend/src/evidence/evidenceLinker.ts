@@ -112,7 +112,7 @@ export class EvidenceLinker {
       evidenceNodeId: evidenceNode.id,
       insertedRelationships,
       candidateRelationships,
-      totalEvaluated: targetNodes.length,
+      totalEvaluated: targetNodes.filter((t) => t.id !== evidenceNode.id).length,
       durationMs: Date.now() - startTime,
     };
   }

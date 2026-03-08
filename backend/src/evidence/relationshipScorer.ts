@@ -149,10 +149,11 @@ export class RelationshipScorer {
       const target = targets[i];
       const targetEmbedding = allEmbeddings[i + 1];
 
-      const semanticSimilarity = this.embeddingService.cosineSimilarity(
+      // Normalize from [-1,1] to [0,1] to match computeSemanticSimilarity
+      const semanticSimilarity = (this.embeddingService.cosineSimilarity(
         evidenceEmbedding,
         targetEmbedding,
-      );
+      ) + 1) / 2;
 
       const entityCoOccurrence = this.computeEntityCoOccurrence(
         target.evidenceEntity,

@@ -60,7 +60,7 @@ CREATE TABLE "corpus_registry" (
     "releaseDate" TIMESTAMP(3),
     "ingestionStatus" TEXT NOT NULL DEFAULT 'pending',
     "totalDocuments" INTEGER NOT NULL DEFAULT 0,
-    "totalBytes" INTEGER NOT NULL DEFAULT 0,
+    "totalBytes" BIGINT NOT NULL DEFAULT 0,
     "checksum" TEXT,
     "metadata" TEXT,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

@@ -21,11 +21,11 @@ import type {
 // ---------------------------------------------------------------------------
 
 const ALLOWED_NODE_TYPES: ReadonlySet<string> = new Set<GraphNodeType>([
-  'Statute', 'Policy', 'CaseLaw', 'Person', 'Officer', 'Agency', 'Evidence', 'Event', 'LegalClaim',
+  'Statute', 'Policy', 'CaseLaw', 'Person', 'Officer', 'Agency', 'Evidence', 'Event', 'LegalClaim', 'Conflict',
 ]);
 
 const ALLOWED_REL_TYPES: ReadonlySet<string> = new Set<GraphRelationshipType>([
-  'VIOLATES', 'SUPPORTS', 'REFUTES', 'REFERENCES', 'MENTIONS', 'ESTABLISHES', 'CONTRADICTS',
+  'VIOLATES', 'SUPPORTS', 'REFUTES', 'REFERENCES', 'MENTIONS', 'ESTABLISHES', 'CONTRADICTS', 'INVALIDATES', 'WEAKENS',
 ]);
 
 function assertValidNodeType(type: string): asserts type is GraphNodeType {
@@ -318,6 +318,116 @@ export class GraphQueryEngine {
       chain: this.extractNodeList(record['chain'] as Array<Record<string, unknown>>),
       relationships: this.extractRelationshipList(record['relationships'] as Array<Record<string, unknown>>),
     }));
+  }
+
+  // =========================================================================
+  // Conflict Queries (Phase 3)
+  // =========================================================================
+
+  /**
+   * Find all narrative conflicts for a tenant (case).
+   * Returns Conflict nodes with their relationships to source/target nodes.
+   */
+  async findNarrativeConflicts(tenantId: string): Promise<Array<{
+    conflict: GraphNode;
+    relatedNodes: Array<{ node: GraphNode; relationship: GraphRelationship }>;
+  }>> {
+    const result = await this.neo4jClient.execute(
+      `
+      MATCH (c:Conflict {tenantId: $tenantId})-[r]->(target {tenantId: $tenantId})
+      RETURN c, r, target
+      ORDER BY c.severityScore DESC
+      `,
+      { tenantId },
+    );
+
+    const grouped = new Map<string, {
+      conflict: GraphNode;
+      relatedNodes: Array<{ node: GraphNode; relationship: GraphRelationship }>;
+    }>();
+
+    for (const record of result.records) {
+      const conflict = this.recordToNode(record['c'] as Record<string, unknown>);
+      const target = this.recordToNode(record['target'] as Record<string, unknown>);
+      const relationship = this.recordToRelationship(record['r'] as Record<string, unknown>);
+
+      if (!grouped.has(conflict.id)) {
+        grouped.set(conflict.id, { conflict, relatedNodes: [] });
+      }
+      grouped.get(conflict.id)!.relatedNodes.push({ node: target, relationship });
+    }
+
+    return Array.from(grouped.values());
+  }
+
+  /**
+   * Find timeline-specific conflicts for a tenant.
+   */
+  async findTimelineConflicts(tenantId: string): Promise<Array<{
+    conflict: GraphNode;
+    relatedNodes: Array<{ node: GraphNode; relationship: GraphRelationship }>;
+  }>> {
+    const result = await this.neo4jClient.execute(
+      `
+      MATCH (c:Conflict {tenantId: $tenantId, conflictType: 'timeline'})-[r]->(target {tenantId: $tenantId})
+      RETURN c, r, target
+      ORDER BY c.severityScore DESC
+      `,
+      { tenantId },
+    );
+
+    const grouped = new Map<string, {
+      conflict: GraphNode;
+      relatedNodes: Array<{ node: GraphNode; relationship: GraphRelationship }>;
+    }>();
+
+    for (const record of result.records) {
+      const conflict = this.recordToNode(record['c'] as Record<string, unknown>);
+      const target = this.recordToNode(record['target'] as Record<string, unknown>);
+      const relationship = this.recordToRelationship(record['r'] as Record<string, unknown>);
+
+      if (!grouped.has(conflict.id)) {
+        grouped.set(conflict.id, { conflict, relatedNodes: [] });
+      }
+      grouped.get(conflict.id)!.relatedNodes.push({ node: target, relationship });
+    }
+
+    return Array.from(grouped.values());
+  }
+
+  /**
+   * Find policy-violation conflicts for a tenant.
+   */
+  async findPolicyViolationConflicts(tenantId: string): Promise<Array<{
+    conflict: GraphNode;
+    relatedNodes: Array<{ node: GraphNode; relationship: GraphRelationship }>;
+  }>> {
+    const result = await this.neo4jClient.execute(
+      `
+      MATCH (c:Conflict {tenantId: $tenantId, conflictType: 'policy_violation'})-[r]->(target {tenantId: $tenantId})
+      RETURN c, r, target
+      ORDER BY c.severityScore DESC
+      `,
+      { tenantId },
+    );
+
+    const grouped = new Map<string, {
+      conflict: GraphNode;
+      relatedNodes: Array<{ node: GraphNode; relationship: GraphRelationship }>;
+    }>();
+
+    for (const record of result.records) {
+      const conflict = this.recordToNode(record['c'] as Record<string, unknown>);
+      const target = this.recordToNode(record['target'] as Record<string, unknown>);
+      const relationship = this.recordToRelationship(record['r'] as Record<string, unknown>);
+
+      if (!grouped.has(conflict.id)) {
+        grouped.set(conflict.id, { conflict, relatedNodes: [] });
+      }
+      grouped.get(conflict.id)!.relatedNodes.push({ node: target, relationship });
+    }
+
+    return Array.from(grouped.values());
   }
 
   // =========================================================================

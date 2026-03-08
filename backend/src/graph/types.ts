@@ -16,7 +16,8 @@ export type GraphNodeType =
   | 'Agency'
   | 'Evidence'
   | 'Event'
-  | 'LegalClaim';
+  | 'LegalClaim'
+  | 'Conflict';
 
 // ---------------------------------------------------------------------------
 // Graph Relationship Types
@@ -29,7 +30,9 @@ export type GraphRelationshipType =
   | 'REFERENCES'
   | 'MENTIONS'
   | 'ESTABLISHES'
-  | 'CONTRADICTS';
+  | 'CONTRADICTS'
+  | 'INVALIDATES'
+  | 'WEAKENS';
 
 // ---------------------------------------------------------------------------
 // Graph Node
@@ -58,6 +61,19 @@ export interface GraphRelationship {
   targetNodeId: string;
   /** Confidence score 0.0–1.0 */
   confidence: number;
+  /** Explainable confidence score with factor breakdown */
+  confidenceScore?: number;
+  /** Individual scoring factors that produced the confidence score */
+  scoringFactors?: {
+    semanticSimilarity?: number;
+    entityCooccurrence?: number;
+    documentProximity?: number;
+    legalReferenceStrength?: number;
+    temporalContradiction?: number;
+    evidenceReliability?: number;
+    policyViolationWeight?: number;
+    supportingSourceCount?: number;
+  };
   properties: Record<string, string | number | boolean | null>;
   /** Source document that established this relationship */
   sourceDocumentId: string;

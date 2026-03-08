@@ -66,7 +66,7 @@ export class GovernanceApiHandlers {
           totalDocuments: e.totalDocuments,
           totalBytes: e.totalBytes,
           checksum: e.checksum,
-          metadata: e.metadata ? JSON.parse(e.metadata) : null,
+          metadata: e.metadata ? (() => { try { return JSON.parse(e.metadata!); } catch { return e.metadata; } })() : null,
           createdAt: e.createdAt.toISOString(),
           updatedAt: e.updatedAt.toISOString(),
         })),

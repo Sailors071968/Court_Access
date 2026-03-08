@@ -125,3 +125,72 @@ model CorpusIngestionLock {
   @@index([expiresAt])
   @@map("corpus_ingestion_lock")
 }
+
+// ---------------------------------------------------------------------------
+// API Provider — external API/AI integration registry
+// ---------------------------------------------------------------------------
+
+model ApiProvider {
+  id               String          @id @default(uuid())
+  name             String          @unique
+  providerType     String          // AI_REASONING | AI_PRESENTATION | LEGAL_DATA | MEDIA_ANALYSIS | GRAPH | ANALYTICS
+  baseUrl          String
+  documentationUrl String?
+  enabled          Boolean         @default(true)
+  healthStatus     String          @default("unknown") // healthy | degraded | unhealthy | unknown
+  lastHealthCheck  DateTime?
+  createdAt        DateTime        @default(now())
+  updatedAt        DateTime        @updatedAt
+
+  credentials      ApiCredential[]
+  usageLogs        ApiUsageLog[]
+
+  @@index([providerType])
+  @@index([enabled])
+  @@index([healthStatus])
+  @@map("api_providers")
+}
+
+// ---------------------------------------------------------------------------
+// API Credential — encrypted credential storage per provider
+// ---------------------------------------------------------------------------
+
+model ApiCredential {
+  id                String      @id @default(uuid())
+  providerId        String
+  apiKeyEncrypted   String      // AES-256 encrypted API key
+  environment       String      @default("production") // production | staging | development
+  rateLimitPerMinute Int        @default(60)
+  lastValidatedAt   DateTime?
+  isActive          Boolean     @default(true)
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  provider          ApiProvider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+
+  @@index([providerId])
+  @@index([environment])
+  @@index([isActive])
+  @@map("api_credentials")
+}
+
+// ---------------------------------------------------------------------------
+// API Usage Log — request/response audit trail
+// ---------------------------------------------------------------------------
+
+model ApiUsageLog {
+  id               String   @id @default(uuid())
+  providerId       String
+  endpointUsed     String
+  requestTimestamp DateTime @default(now())
+  responseStatus   Int      // HTTP status code or -1 for network error
+  latencyMs        Int
+  errorMessage     String?
+
+  provider         ApiProvider @relation(fields: [providerId], references: [id], onDelete: Cascade)
+
+  @@index([providerId])
+  @@index([requestTimestamp])
+  @@index([responseStatus])
+  @@map("api_usage_logs")
+}

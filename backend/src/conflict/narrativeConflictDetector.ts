@@ -209,9 +209,7 @@ export class NarrativeConflictDetector {
         supportingSourceCount: 2,
       };
 
-      const severity = this.scoringEngine.computeSeverity(
-        this.scoringEngine.adjustFactorsForType(factors, 'evidence'),
-      );
+      const severity = this.scoringEngine.computeSeverity(factors);
 
       const id = createHash('sha256')
         .update(`evidence:${rel.sourceNodeId}:${rel.targetNodeId}:${tenantId}`)
@@ -280,9 +278,7 @@ export class NarrativeConflictDetector {
           supportingSourceCount: 2,
         };
 
-        const severity = this.scoringEngine.computeSeverity(
-          this.scoringEngine.adjustFactorsForType(factors, 'policy_violation'),
-        );
+        const severity = this.scoringEngine.computeSeverity(factors);
 
         const id = createHash('sha256')
           .update(`policy:${violation.sourceNodeId}:${support.sourceNodeId}:${violation.targetNodeId}:${tenantId}`)
@@ -362,9 +358,7 @@ export class NarrativeConflictDetector {
               supportingSourceCount: 2,
             };
 
-            const severity = this.scoringEngine.computeSeverity(
-              this.scoringEngine.adjustFactorsForType(factors, 'legal_claim'),
-            );
+            const severity = this.scoringEngine.computeSeverity(factors);
 
             const id = createHash('sha256')
               .update(`legal:${claimA.id}:${claimB.id}:${relA.targetNodeId}:${tenantId}`)

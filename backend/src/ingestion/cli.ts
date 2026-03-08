@@ -106,10 +106,11 @@ async function runDirectPipeline(
       logger.logProgress(
         corpusName,
         typedChunk.batchNumber,
-        totalInserted,
+        recordsInserted,
         totalRecords,
         durationMs,
         'success',
+        totalInserted,
       );
 
       // Checkpoint after each batch
@@ -137,10 +138,11 @@ async function runDirectPipeline(
       logger.logProgress(
         corpusName,
         typedChunk.batchNumber,
-        totalInserted,
+        0,
         totalRecords,
         durationMs,
         'failed',
+        totalInserted,
       );
 
       process.stderr.write(`Batch #${typedChunk.batchNumber} failed: ${errorMessage}\n`);

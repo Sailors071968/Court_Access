@@ -93,23 +93,27 @@ export class IngestionLogger {
   logProgress(
     corpusName: string,
     batchNumber: number,
-    recordsProcessed: number,
+    batchRecordsProcessed: number,
     totalRecords: number | null,
     durationMs: number,
     status: BatchStatus,
+    cumulativeProcessed?: number,
   ): void {
+    // Use cumulativeProcessed for percentage if provided, otherwise fall back to batch count
+    const cumulative = cumulativeProcessed ?? batchRecordsProcessed;
     const pct = totalRecords
-      ? ` (${((recordsProcessed / totalRecords) * 100).toFixed(1)}%)`
+      ? ` (${((cumulative / totalRecords) * 100).toFixed(1)}%)`
       : '';
+    // Throughput uses batch-level count / batch duration
     const throughput = durationMs > 0
-      ? ` [${Math.round((60000 / durationMs) * recordsProcessed)} rec/min]`
+      ? ` [${Math.round((60000 / durationMs) * batchRecordsProcessed)} rec/min]`
       : '';
 
     const statusIcon = status === 'success' ? 'OK' : status === 'failed' ? 'FAIL' : 'SKIP';
 
     process.stdout.write(
       `[${statusIcon}] ${corpusName} batch #${batchNumber}: ` +
-      `${recordsProcessed} records${pct}${throughput} (${durationMs}ms)\n`,
+      `${cumulative} records${pct}${throughput} (${durationMs}ms)\n`,
     );
   }
 }

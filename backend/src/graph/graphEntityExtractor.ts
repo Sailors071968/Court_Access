@@ -257,7 +257,16 @@ export class GraphEntityExtractor {
               properties: patternDef.extractProperties(match),
               startOffset: match.index,
               endOffset: match.index + match[0].length,
+              offsets: [{ start: match.index, end: match.index + match[0].length }],
             });
+          } else {
+            // Append this occurrence's offset to the existing entity
+            const existing = entities.find(
+              e => e.type === patternDef.type && e.canonicalName === canonicalName,
+            );
+            if (existing) {
+              existing.offsets.push({ start: match.index, end: match.index + match[0].length });
+            }
           }
         }
       }
@@ -340,14 +349,17 @@ export class GraphEntityExtractor {
     for (const entity of entities) {
       if (entity.type !== type) continue;
 
-      const distance = Math.min(
-        Math.abs(entity.startOffset - position),
-        Math.abs(entity.endOffset - position),
-      );
+      // Check all occurrence offsets for the closest match
+      for (const offset of entity.offsets) {
+        const distance = Math.min(
+          Math.abs(offset.start - position),
+          Math.abs(offset.end - position),
+        );
 
-      if (distance < windowSize && distance < minDistance) {
-        minDistance = distance;
-        nearest = entity;
+        if (distance < windowSize && distance < minDistance) {
+          minDistance = distance;
+          nearest = entity;
+        }
       }
     }
 
@@ -362,14 +374,17 @@ export class GraphEntityExtractor {
     source: ExtractedEntity,
     target: ExtractedEntity,
   ): number {
-    const sourceDistance = Math.min(
-      Math.abs(source.startOffset - matchPos),
-      Math.abs(source.endOffset - matchPos),
-    );
-    const targetDistance = Math.min(
-      Math.abs(target.startOffset - matchPos),
-      Math.abs(target.endOffset - matchPos),
-    );
+    // Use closest occurrence offset for each entity
+    let sourceDistance = Infinity;
+    for (const offset of source.offsets) {
+      const d = Math.min(Math.abs(offset.start - matchPos), Math.abs(offset.end - matchPos));
+      if (d < sourceDistance) sourceDistance = d;
+    }
+    let targetDistance = Infinity;
+    for (const offset of target.offsets) {
+      const d = Math.min(Math.abs(offset.start - matchPos), Math.abs(offset.end - matchPos));
+      if (d < targetDistance) targetDistance = d;
+    }
 
     // Closer entities = higher confidence, max 1.0, decays with distance
     const avgDistance = (sourceDistance + targetDistance) / 2;

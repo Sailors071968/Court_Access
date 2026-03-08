@@ -75,9 +75,11 @@ export interface ExtractedEntity {
   /** Normalized canonical name for dedup */
   canonicalName: string;
   properties: Record<string, string | number | boolean | null>;
-  /** Character offset in source document */
+  /** Character offset of first occurrence in source document */
   startOffset: number;
   endOffset: number;
+  /** All occurrence offsets for proximity-based relationship detection */
+  offsets: Array<{ start: number; end: number }>;
 }
 
 // ---------------------------------------------------------------------------

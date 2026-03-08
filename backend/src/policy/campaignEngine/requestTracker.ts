@@ -42,7 +42,9 @@ export function generateTrackingId(): string {
 export async function createPolicyRequest(input: {
   agencyId: string;
   trackingId: string;
+  status?: PolicyRequestStatus;
   sesMessageId?: string;
+  errorMessage?: string;
 }): Promise<PolicyRequestRecord> {
   const db = getPrisma();
 
@@ -50,9 +52,10 @@ export async function createPolicyRequest(input: {
     data: {
       agencyId: input.agencyId,
       requestSentAt: new Date(),
-      status: 'sent',
+      status: input.status ?? 'sent',
       trackingId: input.trackingId,
       sesMessageId: input.sesMessageId ?? null,
+      errorMessage: input.errorMessage ?? null,
     },
   });
 
@@ -192,7 +195,10 @@ export async function countSentThisHour(): Promise<number> {
   const oneHourAgo = new Date(Date.now() - 60 * 60 * 1000);
 
   return db.policyRequest.count({
-    where: { requestSentAt: { gte: oneHourAgo } },
+    where: {
+      requestSentAt: { gte: oneHourAgo },
+      status: { not: 'pending' }, // Don't count failed attempts against rate limit
+    },
   });
 }
 

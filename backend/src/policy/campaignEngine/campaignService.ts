@@ -144,10 +144,13 @@ export async function sendCampaign(
         });
         totalSent++;
       } else {
-        // Track failed attempt
+        // Track failed attempt with 'pending' status so it doesn't count against
+        // rate limit and agencies remain eligible for retry with onlyNew filter
         await createPolicyRequest({
           agencyId: agency.id,
           trackingId,
+          status: 'pending',
+          errorMessage: emailResult.error,
         });
 
         results.push({

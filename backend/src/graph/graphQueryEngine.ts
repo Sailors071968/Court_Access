@@ -158,6 +158,7 @@ export class GraphQueryEngine {
    * Find the neighborhood of a specific node (all connected nodes within N hops).
    */
   async findNeighborhood(
+    tenantId: string,
     nodeId: string,
     depth: number = 2,
   ): Promise<GraphQueryResult> {
@@ -166,12 +167,13 @@ export class GraphQueryEngine {
 
     const result = await this.neo4jClient.execute(
       `
-      MATCH path = (start {id: $nodeId})-[*1..${safeDepth}]-(connected)
+      MATCH path = (start {id: $nodeId, tenantId: $tenantId})-[*1..${safeDepth}]-(connected)
+      WHERE all(n IN nodes(path) WHERE n.tenantId = $tenantId)
       UNWIND nodes(path) AS n
       UNWIND relationships(path) AS r
       RETURN collect(DISTINCT n) AS nodes, collect(DISTINCT r) AS relationships
       `,
-      { nodeId },
+      { tenantId, nodeId },
     );
 
     if (result.records.length === 0) {
@@ -212,18 +214,20 @@ export class GraphQueryEngine {
    * Find shortest path between two nodes.
    */
   async findShortestPath(
+    tenantId: string,
     sourceNodeId: string,
     targetNodeId: string,
   ): Promise<GraphQueryResult> {
     const result = await this.neo4jClient.execute(
       `
-      MATCH (source {id: $sourceNodeId}), (target {id: $targetNodeId})
+      MATCH (source {id: $sourceNodeId, tenantId: $tenantId}), (target {id: $targetNodeId, tenantId: $tenantId})
       MATCH path = shortestPath((source)-[*..10]-(target))
+      WHERE all(n IN nodes(path) WHERE n.tenantId = $tenantId)
       UNWIND nodes(path) AS n
       UNWIND relationships(path) AS r
       RETURN collect(DISTINCT n) AS nodes, collect(DISTINCT r) AS relationships
       `,
-      { sourceNodeId, targetNodeId },
+      { tenantId, sourceNodeId, targetNodeId },
     );
 
     if (result.records.length === 0) {

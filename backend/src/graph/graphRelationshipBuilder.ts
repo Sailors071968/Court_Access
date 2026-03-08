@@ -125,7 +125,9 @@ export class GraphRelationshipBuilder {
         n._created = true
       ON MATCH SET
         n._created = false
-      RETURN n._created AS created
+      WITH n, n._created AS created
+      REMOVE n._created
+      RETURN created
     `;
 
     const result = await session.run(query, {

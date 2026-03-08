@@ -125,3 +125,31 @@ model CorpusIngestionLock {
   @@index([expiresAt])
   @@map("corpus_ingestion_lock")
 }
+
+// ---------------------------------------------------------------------------
+// Agency Directory — California law enforcement agency registry
+// ---------------------------------------------------------------------------
+
+model Agency {
+  id                String    @id @default(uuid())
+  agencyName        String
+  agencyType        String    // Police | Sheriff | State | TaskForce | Probation | Corrections | District_Attorney | University | Transit
+  county            String
+  city              String?
+  recordsEmail      String?
+  recordsRequestUrl String?
+  phoneNumber       String?
+  website           String?
+  policyUrl         String?
+  lastRequestSent   DateTime?
+  lastResponse      DateTime?
+  notes             String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@unique([agencyName, county])
+  @@index([county])
+  @@index([agencyType])
+  @@index([recordsEmail])
+  @@map("agencies")
+}

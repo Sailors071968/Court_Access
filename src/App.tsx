@@ -14,6 +14,7 @@ import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
 
 // Main Pages — Dashboard Router (role-based)
 import { DashboardRouter } from './pages/dashboard/DashboardRouter';
+import { PolicyAcquisitionAgencies } from './pages/dashboard/PolicyAcquisitionAgencies';
 import { CasesListPage } from './pages/CasesListPage';
 import { SearchPage } from './pages/SearchPage';
 import { NotificationsPage } from './pages/NotificationsPage';
@@ -53,6 +54,14 @@ function App() {
         >
           <Route index element={<Navigate to="/dashboard" replace />} />
           <Route path="dashboard" element={<DashboardRouter />} />
+          <Route
+            path="dashboard/policy-acquisition/agencies"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <PolicyAcquisitionAgencies />
+              </ProtectedRoute>
+            }
+          />
           <Route path="cases" element={<CasesListPage />} />
           <Route path="search" element={<SearchPage />} />
           <Route path="notifications" element={<NotificationsPage />} />

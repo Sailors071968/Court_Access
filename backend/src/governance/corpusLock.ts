@@ -26,6 +26,10 @@ export interface CorpusLockDb {
   create(args: {
     data: Omit<CorpusLockRecord, 'id'>;
   }): Promise<CorpusLockRecord>;
+  update(args: {
+    where: { corpusName: string };
+    data: Partial<Omit<CorpusLockRecord, 'id'>>;
+  }): Promise<CorpusLockRecord>;
   delete(args: {
     where: { corpusName: string };
   }): Promise<CorpusLockRecord>;
@@ -188,17 +192,11 @@ export class CorpusLockManager {
 
     const newExpiry = new Date(existing.expiresAt.getTime() + additionalMs);
 
-    // Delete and recreate (simulating update since interface is minimal)
+    // Atomic update — no gap in lock ownership
     try {
-      await this.db.delete({ where: { corpusName } });
-      const record = await this.db.create({
-        data: {
-          corpusName,
-          workerId,
-          lockedAt: existing.lockedAt,
-          expiresAt: newExpiry,
-          metadata: existing.metadata,
-        },
+      const record = await this.db.update({
+        where: { corpusName },
+        data: { expiresAt: newExpiry },
       });
       return this.recordToLock(record);
     } catch {

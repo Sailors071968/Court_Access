@@ -93,6 +93,13 @@ function createInMemoryLockDb(): CorpusLockDb {
       store.set(record.corpusName, record);
       return record;
     },
+    async update(args) {
+      const existing = store.get(args.where.corpusName);
+      if (!existing) throw new Error('Record not found');
+      const updated = { ...existing, ...args.data };
+      store.set(args.where.corpusName, updated);
+      return updated;
+    },
     async delete(args) {
       const existing = store.get(args.where.corpusName);
       if (!existing) throw new Error('Record not found');

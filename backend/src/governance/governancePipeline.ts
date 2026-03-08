@@ -150,7 +150,7 @@ export class GovernancePipeline {
       }
 
       // Step 9: Update registry with final counts
-      const totalBytes = stampedDocuments.reduce((sum, d) => sum + d.content.length, 0);
+      const totalBytes = stampedDocuments.reduce((sum, d) => sum + Buffer.byteLength(d.content, 'utf8'), 0);
       await this.registry.markCompleted(corpusName, version, insertedCount, totalBytes);
 
       return {

@@ -55,7 +55,7 @@ export class GraphQueryEngine {
     const result = await this.neo4jClient.execute(
       `
       MATCH (violator {tenantId: $tenantId})-[v:VIOLATES]->(policy:Policy {tenantId: $tenantId})
-      OPTIONAL MATCH (evidence:Evidence {tenantId: $tenantId})-[:SUPPORTS]->(claim:LegalClaim)
+      OPTIONAL MATCH (evidence:Evidence {tenantId: $tenantId})-[:SUPPORTS]->(claim:LegalClaim {tenantId: $tenantId})
       WHERE claim.canonicalName CONTAINS 'violation' AND (evidence)-[:MENTIONS]->(violator)
       RETURN violator, policy, v, collect(DISTINCT evidence) AS evidence
       ORDER BY v.confidence DESC
@@ -162,7 +162,7 @@ export class GraphQueryEngine {
     assertValidRelType(relType);
     const result = await this.neo4jClient.execute(
       `
-      MATCH (source {tenantId: $tenantId})-[r:${relType}]->(target)
+      MATCH (source {tenantId: $tenantId})-[r:${relType}]->(target {tenantId: $tenantId})
       RETURN source, r, target
       ORDER BY r.confidence DESC
       `,
@@ -306,7 +306,7 @@ export class GraphQueryEngine {
 
     const result = await this.neo4jClient.execute(
       `
-      MATCH path = (e1:Evidence {tenantId: $tenantId})-[*2..${safeMaxLength}]-(e2:Evidence)
+      MATCH path = (e1:Evidence {tenantId: $tenantId})-[*2..${safeMaxLength}]-(e2:Evidence {tenantId: $tenantId})
       WHERE e1.id < e2.id
       UNWIND nodes(path) AS n
       UNWIND relationships(path) AS r

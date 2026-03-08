@@ -277,7 +277,9 @@ export async function countRecords(filePath: string): Promise<number> {
     const fileStream = createReadStream(filePath, { encoding: 'utf-8' });
     const rl = createInterface({ input: fileStream, crlfDelay: Infinity });
     let count = 0;
-    for await (const _line of rl) {
+    for await (const line of rl) {
+      // Skip blank lines for JSONL to match parser behavior
+      if (format === 'jsonl' && !line.trim()) continue;
       count++;
     }
     // Subtract header for CSV

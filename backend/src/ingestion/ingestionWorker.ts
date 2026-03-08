@@ -89,7 +89,7 @@ export class IngestionWorkerManager {
     logger: IngestionLogger,
     stateRepo: IngestionStateRepository,
   ): Promise<BatchResult> {
-    const { corpusName, batchNumber, documents, dryRun } = job.data;
+    const { corpusName, batchNumber, documents, dryRun, cumulativeOffset } = job.data;
     const startTime = Date.now();
 
     try {
@@ -119,8 +119,8 @@ export class IngestionWorkerManager {
       await stateRepo.checkpoint(
         corpusName,
         fileName,
-        batchNumber * documents.length,
-        batchNumber * documents.length,
+        cumulativeOffset,
+        cumulativeOffset,
       );
 
       await job.updateProgress(batchNumber);

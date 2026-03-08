@@ -99,6 +99,8 @@ export interface BatchJobPayload {
   tenantId: string;
   useCopy: boolean;
   dryRun: boolean;
+  /** Cumulative offset after this batch (from chunkBuilder endOffset) */
+  cumulativeOffset: number;
 }
 
 // ---------------------------------------------------------------------------

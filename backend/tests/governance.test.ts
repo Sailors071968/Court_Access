@@ -122,10 +122,20 @@ function createInMemoryLockDb(): CorpusLockDb {
     },
     async deleteMany(args) {
       let count = 0;
+      const where = args.where;
       for (const [key, record] of store) {
-        if (record.expiresAt < args.where.expiresAt.lt) {
-          store.delete(key);
-          count++;
+        // Compound WHERE: corpusName + workerId (ownership-verified delete)
+        if ('corpusName' in where && 'workerId' in where) {
+          if (record.corpusName === where.corpusName && record.workerId === where.workerId) {
+            store.delete(key);
+            count++;
+          }
+        // Expiry-based WHERE: clean expired locks
+        } else if ('expiresAt' in where) {
+          if (record.expiresAt < (where as { expiresAt: { lt: Date } }).expiresAt.lt) {
+            store.delete(key);
+            count++;
+          }
         }
       }
       return { count };

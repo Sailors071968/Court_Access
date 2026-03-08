@@ -38,7 +38,7 @@ export interface CorpusLockDb {
     where: { corpusName: string };
   }): Promise<CorpusLockRecord>;
   deleteMany(args: {
-    where: { expiresAt: { lt: Date } };
+    where: { expiresAt: { lt: Date } } | { corpusName: string; workerId: string };
   }): Promise<{ count: number }>;
 }
 
@@ -129,12 +129,12 @@ export class CorpusLockManager {
       );
     }
 
-    try {
-      await this.db.delete({ where: { corpusName } });
-      return true;
-    } catch {
-      return false;
-    }
+    // Atomic ownership-verified delete: WHERE includes corpusName + workerId
+    // Prevents TOCTOU race where lock could expire and be re-acquired between check and delete
+    const result = await this.db.deleteMany({
+      where: { corpusName, workerId },
+    });
+    return result.count > 0;
   }
 
   /**

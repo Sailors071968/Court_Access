@@ -92,7 +92,8 @@ function generateStatements(count: number): Statement[] {
       speakerName: `${ROLES[speakerIdx % ROLES.length]} ${speakerIdx}`,
       speakerRole: ROLES[speakerIdx % ROLES.length],
       content,
-      sourceDocumentId: `doc-${(i % 1000).toString().padStart(5, '0')}`,
+      // Shared context: contradiction pairs share a sourceDocumentId
+      sourceDocumentId: `doc-${Math.floor(i / 2).toString().padStart(5, '0')}`,
       tenantId: TENANT_ID,
       statementDate: new Date(`2025-06-${(1 + (i % 28)).toString().padStart(2, '0')}T10:00:00Z`),
       startOffset: 0,

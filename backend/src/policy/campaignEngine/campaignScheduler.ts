@@ -4,8 +4,8 @@
 // ============================================
 
 import { sendCampaign } from './campaignService.js';
-import { countSentThisHour, getCampaignStats } from './requestTracker.js';
-import type { SendCampaignInput, CampaignBatchResult, RateLimitConfig } from './types.js';
+import { countSentThisHour } from './requestTracker.js';
+import type { SendCampaignInput, CampaignBatchResult } from './types.js';
 
 // ---------------------------------------------------------------------------
 // Scheduler State

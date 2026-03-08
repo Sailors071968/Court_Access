@@ -70,9 +70,10 @@ export async function sendCampaign(
   if (input.county) agencyWhere.county = input.county;
   if (input.agencyType) agencyWhere.agencyType = input.agencyType;
 
-  // If onlyNew, exclude agencies that already have a request
+  // If onlyNew, exclude agencies that have a successfully sent request
+  // (agencies with only 'pending'/failed records are still eligible for retry)
   if (input.onlyNew) {
-    agencyWhere.policyRequests = { none: {} };
+    agencyWhere.policyRequests = { none: { status: { not: 'pending' } } };
   }
 
   // Fetch matching agencies

@@ -114,7 +114,8 @@ function createMockSession(): {
   const session: import('../src/graph/types.ts').Neo4jSession = {
     run: async (cypher: string, params?: Record<string, unknown>) => {
       executedQueries.push({ cypher, params: params ?? {} });
-      return { records: [{ c: { id: 'mock' }, r: { id: 'mock-rel' } }] };
+      const data: Record<string, unknown> = { c: { id: 'mock' }, r: { id: 'mock-rel' }, created: true };
+      return { records: [{ get: (key: string) => data[key], ...data }] };
     },
     close: async () => {},
   };

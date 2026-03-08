@@ -227,8 +227,13 @@ export class ConflictGraphIntegrator {
         c.evidenceReliability = $evidenceReliability,
         c.policyViolationWeight = $policyViolationWeight,
         c.supportingSourceCount = $supportingSourceCount,
-        c.detectedAt = datetime($detectedAt)
-      RETURN c
+        c.detectedAt = datetime($detectedAt),
+        c._created = true
+      ON MATCH SET
+        c._created = false
+      WITH c, c._created AS created
+      REMOVE c._created
+      RETURN created
     `;
 
     const result = await session.run(cypher, {
@@ -245,7 +250,11 @@ export class ConflictGraphIntegrator {
       detectedAt: conflict.detectedAt.toISOString(),
     });
 
-    return result.records.length > 0;
+    if (result.records.length > 0) {
+      const created = result.records[0].get('created');
+      return !!created;
+    }
+    return true;
   }
 
   /**

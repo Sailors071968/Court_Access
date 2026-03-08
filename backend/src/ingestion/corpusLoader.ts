@@ -126,7 +126,7 @@ export class PostgresCopyInserter implements BulkInserter {
 
   async insertBatch(documents: NormalizedDocument[]): Promise<number> {
     // Create a temporary staging table
-    const tempTable = `_ingestion_staging_${Date.now()}`;
+    const tempTable = `_ingestion_staging_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 
     await this.client.query(`
       CREATE TEMP TABLE "${tempTable}" (

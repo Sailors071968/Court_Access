@@ -44,19 +44,19 @@ export class Neo4jClient {
     if (this.driver) return;
 
     if (this.driverFactory) {
-      this.driver = this.driverFactory(
+      const driver = this.driverFactory(
         this.config.neo4jUri,
         this.config.neo4jUser,
         this.config.neo4jPassword,
       );
+      await driver.verifyConnectivity();
+      this.driver = driver;
     } else {
       throw new Error(
         'Neo4j driver factory not provided. Pass a driverFactory to the constructor ' +
         'or use Neo4jClient.createWithDriver() for production usage.',
       );
     }
-
-    await this.driver.verifyConnectivity();
   }
 
   /**

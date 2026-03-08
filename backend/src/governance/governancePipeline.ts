@@ -55,6 +55,23 @@ export class GovernancePipeline {
   ): Promise<GovernancePipelineResult> {
     const { corpusName, version, jurisdiction, sourceAuthority, tenantId } = config;
 
+    // Dry run: skip all registry/lock mutations, only compute counts
+    if (config.dryRun) {
+      const { newDocuments, skippedCount } = await this.duplicateDetector.filterDuplicates(
+        documents,
+        tenantId,
+      );
+      return {
+        corpusName,
+        version,
+        workerId: this.workerId,
+        status: 'completed',
+        totalDocuments: documents.length,
+        duplicatesSkipped: skippedCount,
+        newDocuments: newDocuments.length,
+      };
+    }
+
     // Step 1: Register corpus in the registry
     try {
       await this.registry.register({
@@ -132,10 +149,8 @@ export class GovernancePipeline {
 
       // Step 7: Run ingestion
       let insertedCount = 0;
-      if (stampedDocuments.length > 0 && !config.dryRun) {
+      if (stampedDocuments.length > 0) {
         insertedCount = await ingestFn(stampedDocuments);
-      } else if (config.dryRun) {
-        insertedCount = stampedDocuments.length;
       }
 
       // Step 8: Supersede previous version if applicable

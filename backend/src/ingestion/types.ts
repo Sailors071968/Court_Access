@@ -40,6 +40,12 @@ export interface NormalizedDocument {
   corpusName: string;
   sourceFile: string;
   contentHash: string;
+  /** Version of the corpus this document belongs to */
+  corpusVersion?: string;
+  /** Version of this specific document */
+  documentVersion?: string;
+  /** ID of the document that supersedes this one */
+  supersededBy?: string;
   createdAt: Date;
   updatedAt: Date;
 }

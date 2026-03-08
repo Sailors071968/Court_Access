@@ -1,0 +1,241 @@
+// ============================================
+// Court Access — Corpus Ingestion Lock
+// Prevents simultaneous ingestion of the same corpus.
+// Uses database-backed locks with automatic expiry.
+// ============================================
+
+import type { CorpusLock, AcquireLockInput } from './types.ts';
+
+// ---------------------------------------------------------------------------
+// Database Interface (Prisma-compatible)
+// ---------------------------------------------------------------------------
+
+export interface CorpusLockRecord {
+  id: string;
+  corpusName: string;
+  workerId: string;
+  lockedAt: Date;
+  expiresAt: Date;
+  metadata: string | null;
+}
+
+export interface CorpusLockDb {
+  findUnique(args: {
+    where: { corpusName: string };
+  }): Promise<CorpusLockRecord | null>;
+  create(args: {
+    data: Omit<CorpusLockRecord, 'id'>;
+  }): Promise<CorpusLockRecord>;
+  update(args: {
+    where: { corpusName: string };
+    data: Partial<Omit<CorpusLockRecord, 'id'>>;
+  }): Promise<CorpusLockRecord>;
+  updateMany(args: {
+    where: { corpusName: string; workerId: string; expiresAt: { gt: Date } };
+    data: Partial<Omit<CorpusLockRecord, 'id'>>;
+  }): Promise<{ count: number }>;
+  delete(args: {
+    where: { corpusName: string };
+  }): Promise<CorpusLockRecord>;
+  deleteMany(args: {
+    where: { expiresAt: { lt: Date } } | { corpusName: string; workerId: string };
+  }): Promise<{ count: number }>;
+}
+
+// ---------------------------------------------------------------------------
+// Constants
+// ---------------------------------------------------------------------------
+
+/** Default lock duration: 30 minutes */
+const DEFAULT_LOCK_DURATION_MS = 30 * 60 * 1000;
+
+// ---------------------------------------------------------------------------
+// Lock Manager
+// ---------------------------------------------------------------------------
+
+export class CorpusLockManager {
+  constructor(private readonly db: CorpusLockDb) {}
+
+  /**
+   * Attempt to acquire an exclusive lock on a corpus.
+   * Returns the lock if acquired, null if the corpus is already locked.
+   */
+  async acquire(input: AcquireLockInput): Promise<CorpusLock | null> {
+    const { corpusName, workerId, durationMs, metadata } = input;
+    const duration = durationMs ?? DEFAULT_LOCK_DURATION_MS;
+
+    // First, clean up expired locks
+    await this.cleanExpired();
+
+    // Check for existing lock
+    const existing = await this.db.findUnique({
+      where: { corpusName },
+    });
+
+    if (existing) {
+      // Lock exists — check if expired
+      if (existing.expiresAt > new Date()) {
+        // Lock is still active — cannot acquire
+        return null;
+      }
+      // Lock expired — remove it
+      try {
+        await this.db.delete({ where: { corpusName } });
+      } catch {
+        // Race condition: another worker already cleaned it up
+        return null;
+      }
+    }
+
+    // Create new lock
+    const now = new Date();
+    const expiresAt = new Date(now.getTime() + duration);
+
+    try {
+      const record = await this.db.create({
+        data: {
+          corpusName,
+          workerId,
+          lockedAt: now,
+          expiresAt,
+          metadata: metadata ? JSON.stringify(metadata) : null,
+        },
+      });
+
+      return this.recordToLock(record);
+    } catch {
+      // Unique constraint violation: another worker acquired the lock first
+      return null;
+    }
+  }
+
+  /**
+   * Release a lock on a corpus.
+   * Only the worker that acquired the lock can release it.
+   */
+  async release(corpusName: string, workerId: string): Promise<boolean> {
+    const existing = await this.db.findUnique({
+      where: { corpusName },
+    });
+
+    if (!existing) {
+      return false; // No lock to release
+    }
+
+    if (existing.workerId !== workerId) {
+      throw new Error(
+        `Cannot release lock on "${corpusName}": locked by worker "${existing.workerId}", ` +
+        `not "${workerId}"`,
+      );
+    }
+
+    // Atomic ownership-verified delete: WHERE includes corpusName + workerId
+    // Prevents TOCTOU race where lock could expire and be re-acquired between check and delete
+    const result = await this.db.deleteMany({
+      where: { corpusName, workerId },
+    });
+    return result.count > 0;
+  }
+
+  /**
+   * Force-release a lock (admin operation).
+   * Does not check worker ownership.
+   */
+  async forceRelease(corpusName: string): Promise<boolean> {
+    try {
+      await this.db.delete({ where: { corpusName } });
+      return true;
+    } catch {
+      return false;
+    }
+  }
+
+  /**
+   * Check if a corpus is currently locked.
+   */
+  async isLocked(corpusName: string): Promise<boolean> {
+    const existing = await this.db.findUnique({
+      where: { corpusName },
+    });
+    if (!existing) return false;
+    return existing.expiresAt > new Date();
+  }
+
+  /**
+   * Get the current lock for a corpus, if any.
+   */
+  async getLock(corpusName: string): Promise<CorpusLock | null> {
+    const existing = await this.db.findUnique({
+      where: { corpusName },
+    });
+    if (!existing) return null;
+    if (existing.expiresAt <= new Date()) {
+      // Expired — clean up
+      try {
+        await this.db.delete({ where: { corpusName } });
+      } catch {
+        // Already cleaned
+      }
+      return null;
+    }
+    return this.recordToLock(existing);
+  }
+
+  /**
+   * Extend a lock's expiry time.
+   * Only the owning worker can extend.
+   */
+  async extend(corpusName: string, workerId: string, additionalMs: number): Promise<CorpusLock | null> {
+    // Read current lock to compute new expiry
+    const existing = await this.db.findUnique({
+      where: { corpusName },
+    });
+
+    if (!existing || existing.workerId !== workerId) {
+      return null;
+    }
+
+    if (existing.expiresAt <= new Date()) {
+      return null;
+    }
+
+    const newExpiry = new Date(existing.expiresAt.getTime() + additionalMs);
+
+    // Atomic ownership-verified update: WHERE includes corpusName + workerId + not-expired
+    // Prevents TOCTOU race where another worker could acquire the lock between read and update
+    const result = await this.db.updateMany({
+      where: { corpusName, workerId, expiresAt: { gt: new Date() } },
+      data: { expiresAt: newExpiry },
+    });
+
+    if (result.count === 0) {
+      // Lock was released/expired/re-acquired by another worker between read and update
+      return null;
+    }
+
+    // Re-read to return the updated record
+    const updated = await this.db.findUnique({ where: { corpusName } });
+    return updated ? this.recordToLock(updated) : null;
+  }
+
+  /**
+   * Clean up all expired locks.
+   */
+  async cleanExpired(): Promise<number> {
+    const result = await this.db.deleteMany({
+      where: { expiresAt: { lt: new Date() } },
+    });
+    return result.count;
+  }
+
+  private recordToLock(record: CorpusLockRecord): CorpusLock {
+    return {
+      id: record.id,
+      corpusName: record.corpusName,
+      workerId: record.workerId,
+      lockedAt: record.lockedAt,
+      expiresAt: record.expiresAt,
+      metadata: record.metadata,
+    };
+  }
+}

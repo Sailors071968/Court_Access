@@ -38,6 +38,9 @@ export interface PrismaLegalDocumentDelegate {
       corpusName: string | null;
       sourceFile: string | null;
       contentHash: string;
+      corpusVersion: string | null;
+      documentVersion: string;
+      supersededBy: string | null;
     }>;
     skipDuplicates: boolean;
   }): Promise<{ count: number }>;
@@ -59,6 +62,9 @@ export class PrismaBulkInserter implements BulkInserter {
       corpusName: doc.corpusName ?? null,
       sourceFile: doc.sourceFile ?? null,
       contentHash: doc.contentHash,
+      corpusVersion: doc.corpusVersion ?? null,
+      documentVersion: doc.documentVersion ?? '1.0',
+      supersededBy: doc.supersededBy ?? null,
     }));
 
     const result = await this.delegate.createMany({
@@ -111,6 +117,9 @@ function documentToCopyLine(doc: NormalizedDocument): string {
     doc.corpusName,
     doc.sourceFile,
     doc.contentHash,
+    doc.corpusVersion,
+    doc.documentVersion ?? '1.0',
+    doc.supersededBy,
     doc.createdAt.toISOString(),
     doc.updatedAt.toISOString(),
   ];
@@ -141,6 +150,9 @@ export class PostgresCopyInserter implements BulkInserter {
         "corpusName" TEXT,
         "sourceFile" TEXT,
         "contentHash" TEXT,
+        "corpusVersion" TEXT,
+        "documentVersion" TEXT,
+        "supersededBy" TEXT,
         "createdAt" TIMESTAMPTZ,
         "updatedAt" TIMESTAMPTZ
       )
@@ -171,11 +183,13 @@ export class PostgresCopyInserter implements BulkInserter {
       INSERT INTO legal_documents (
         id, "tenantId", title, content, jurisdiction, "documentType",
         source, version, "corpusName", "sourceFile", "contentHash",
+        "corpusVersion", "documentVersion", "supersededBy",
         "createdAt", "updatedAt"
       )
       SELECT
         id, "tenantId", title, content, jurisdiction, "documentType",
         source, version, "corpusName", "sourceFile", "contentHash",
+        "corpusVersion", "documentVersion", "supersededBy",
         "createdAt", "updatedAt"
       FROM "${tempTable}"
       ON CONFLICT ("contentHash", "tenantId") DO NOTHING

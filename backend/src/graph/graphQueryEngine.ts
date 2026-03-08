@@ -34,7 +34,7 @@ export class GraphQueryEngine {
   async findPolicyViolations(tenantId: string): Promise<PolicyViolationResult[]> {
     const result = await this.neo4jClient.execute(
       `
-      MATCH (violator)-[v:VIOLATES]->(policy:Policy {tenantId: $tenantId})
+      MATCH (violator {tenantId: $tenantId})-[v:VIOLATES]->(policy:Policy {tenantId: $tenantId})
       OPTIONAL MATCH (evidence:Evidence {tenantId: $tenantId})-[:SUPPORTS]->(claim:LegalClaim)
       WHERE claim.canonicalName CONTAINS 'violation' AND (evidence)-[:MENTIONS]->(violator)
       RETURN violator, policy, v, collect(DISTINCT evidence) AS evidence
@@ -64,7 +64,7 @@ export class GraphQueryEngine {
 
     const result = await this.neo4jClient.execute(
       `
-      MATCH (e:Evidence)-[r]->(target)
+      MATCH (e:Evidence)-[r]->(target {tenantId: $tenantId})
       ${whereClause}
       RETURN e, r, target
       ORDER BY r.confidence DESC
@@ -96,8 +96,8 @@ export class GraphQueryEngine {
     const result = await this.neo4jClient.execute(
       `
       MATCH (statute:Statute {tenantId: $tenantId})
-      OPTIONAL MATCH (statute)<-[:REFERENCES]-(caselaw:CaseLaw)
-      OPTIONAL MATCH (evidence:Evidence)-[:SUPPORTS]->(claim:LegalClaim)-[:REFERENCES]->(statute)
+      OPTIONAL MATCH (statute)<-[:REFERENCES]-(caselaw:CaseLaw {tenantId: $tenantId})
+      OPTIONAL MATCH (evidence:Evidence {tenantId: $tenantId})-[:SUPPORTS]->(claim:LegalClaim {tenantId: $tenantId})-[:REFERENCES]->(statute)
       RETURN statute,
              collect(DISTINCT caselaw) AS applicableTo,
              collect(DISTINCT evidence) AS supportingEvidence
@@ -255,7 +255,7 @@ export class GraphQueryEngine {
   }>> {
     const result = await this.neo4jClient.execute(
       `
-      MATCH (supporting:Evidence {tenantId: $tenantId})-[:SUPPORTS]->(claim:LegalClaim)
+      MATCH (supporting:Evidence {tenantId: $tenantId})-[:SUPPORTS]->(claim:LegalClaim {tenantId: $tenantId})
       MATCH (refuting:Evidence {tenantId: $tenantId})-[:REFUTES]->(claim)
       RETURN claim,
              collect(DISTINCT supporting) AS supporting,

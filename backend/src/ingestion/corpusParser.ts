@@ -166,6 +166,61 @@ function createJsonArrayParser(filePath: string, startOffset: number): Readable 
 }
 
 // ---------------------------------------------------------------------------
+// CSV Field Splitter (RFC 4180 quote-aware)
+// ---------------------------------------------------------------------------
+
+/**
+ * Split a CSV line respecting RFC 4180 quoting rules.
+ * Fields enclosed in double-quotes can contain the delimiter and escaped
+ * double-quotes (represented as ""). Returns unquoted field values.
+ */
+function splitCsvLine(line: string, delimiter: string): string[] {
+  const fields: string[] = [];
+  let current = '';
+  let inQuotes = false;
+  let i = 0;
+
+  while (i < line.length) {
+    const char = line[i];
+
+    if (inQuotes) {
+      if (char === '"') {
+        // Check for escaped quote ("")
+        if (i + 1 < line.length && line[i + 1] === '"') {
+          current += '"';
+          i += 2;
+          continue;
+        }
+        // End of quoted field
+        inQuotes = false;
+        i++;
+        continue;
+      }
+      current += char;
+      i++;
+    } else {
+      if (char === '"' && current.length === 0) {
+        // Start of quoted field
+        inQuotes = true;
+        i++;
+        continue;
+      }
+      if (char === delimiter) {
+        fields.push(current.trim());
+        current = '';
+        i++;
+        continue;
+      }
+      current += char;
+      i++;
+    }
+  }
+
+  fields.push(current.trim());
+  return fields;
+}
+
+// ---------------------------------------------------------------------------
 // CSV Parser (tab or comma delimited)
 // ---------------------------------------------------------------------------
 
@@ -188,7 +243,7 @@ function createCsvParser(filePath: string, startOffset: number): Readable {
   rl.on('line', (line: string) => {
     if (!headerParsed) {
       detectedDelimiter = line.includes('\t') ? '\t' : ',';
-      headers = line.split(detectedDelimiter).map(h => h.trim().replace(/^"|"$/g, ''));
+      headers = splitCsvLine(line, detectedDelimiter);
       headerParsed = true;
       return;
     }
@@ -196,7 +251,7 @@ function createCsvParser(filePath: string, startOffset: number): Readable {
     lineCount++;
     if (lineCount <= startOffset) return;
 
-    const values = line.split(detectedDelimiter).map(v => v.trim().replace(/^"|"$/g, ''));
+    const values = splitCsvLine(line, detectedDelimiter);
     const doc: RawDocument = {};
     for (let i = 0; i < headers.length; i++) {
       doc[headers[i]] = values[i] ?? '';

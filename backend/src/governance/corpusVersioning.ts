@@ -38,6 +38,7 @@ export class CorpusVersionManager {
     corpusName: string,
     tenantId: string,
     fromVersion: string,
+    toVersion: string,
     toVersionDocuments: NormalizedDocument[],
   ): Promise<VersionDiff> {
     // Get all documents from the previous version
@@ -70,7 +71,7 @@ export class CorpusVersionManager {
     return {
       corpusName,
       fromVersion,
-      toVersion: toVersionDocuments[0]?.version ?? 'unknown',
+      toVersion,
       added,
       removed,
       modified: 0, // Content-hash based: modified = removed old + added new

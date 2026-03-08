@@ -580,7 +580,7 @@ describe('Corpus Version Manager', () => {
       createMockDocument({ contentHash: 'hash-5', version: '2.0' }),
     ];
 
-    const diff = await versionManager.computeVersionDiff('test-corpus', 'tenant-1', '1.0', newDocs);
+    const diff = await versionManager.computeVersionDiff('test-corpus', 'tenant-1', '1.0', '2.0', newDocs);
 
     assert.equal(diff.unchanged, 1, '1 unchanged (hash-1)');
     assert.equal(diff.added, 2, '2 added (hash-4, hash-5)');

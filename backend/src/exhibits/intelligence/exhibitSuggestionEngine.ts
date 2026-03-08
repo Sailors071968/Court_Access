@@ -200,18 +200,26 @@ export class ExhibitSuggestionEngine {
 
   /**
    * Filter out ideas that already exist as suggestions for this case.
-   * Dedup is based on exhibit type + overlapping evidence IDs.
+   * Dedup checks ALL statuses (including dismissed) to prevent primary-key
+   * collisions when the same deterministic ID is regenerated from unchanged
+   * evidence patterns.
    */
   private async dedup(caseId: string, ideas: ExhibitIdea[]): Promise<ExhibitIdea[]> {
     const existing = await this.prisma.suggestedExhibitIdea.findMany({
-      where: { caseId, status: { not: 'dismissed' } },
-      select: { exhibitType: true, evidenceIds: true },
+      where: { caseId },
+      select: { id: true, exhibitType: true, evidenceIds: true, status: true },
     });
 
+    const existingIds = new Set(existing.map((e: { id: string }) => e.id));
+
     return ideas.filter(idea => {
-      // Check if an existing suggestion has the same type and overlapping evidence
+      // Reject if the deterministic ID already exists (any status, including dismissed)
+      if (existingIds.has(idea.id)) return false;
+
+      // Also reject if a non-dismissed suggestion has the same type + overlapping evidence
       const isDuplicate = existing.some(
-        (e: { exhibitType: string; evidenceIds: string[] }) =>
+        (e: { id: string; exhibitType: string; evidenceIds: string[]; status: string }) =>
+          e.status !== 'dismissed' &&
           e.exhibitType === idea.exhibitType &&
           this.arraysOverlap(e.evidenceIds, idea.evidenceIds),
       );

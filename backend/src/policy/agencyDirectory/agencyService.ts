@@ -67,7 +67,7 @@ export async function listAgencies(filter: AgencyFilter = {}): Promise<Paginated
     total,
     page,
     limit,
-    totalPages: Math.ceil(total / limit),
+    totalPages: limit > 0 ? Math.ceil(total / limit) : 0,
   };
 }
 

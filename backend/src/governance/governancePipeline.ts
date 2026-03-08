@@ -179,8 +179,8 @@ export class GovernancePipeline {
         newDocuments: insertedCount,
       };
     } catch (err) {
-      // Mark as failed
-      await this.registry.markFailed(corpusName, version);
+      // Mark as failed (best-effort — don't swallow the original error)
+      try { await this.registry.markFailed(corpusName, version); } catch { /* best-effort */ }
 
       return {
         corpusName,

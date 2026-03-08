@@ -307,6 +307,8 @@ export class GraphEntityExtractor {
               type: relPattern.type,
               sourceEntityName: sourceEntity.canonicalName,
               targetEntityName: targetEntity.canonicalName,
+              sourceEntityType: relPattern.sourceType,
+              targetEntityType: relPattern.targetType,
               confidence: this.computeConfidence(matchPos, sourceEntity, targetEntity),
               properties: {
                 matchContext: content.slice(

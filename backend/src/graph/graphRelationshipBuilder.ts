@@ -130,10 +130,16 @@ export class GraphRelationshipBuilder {
     extraction: DocumentExtractionResult,
   ): Promise<boolean> {
     // Find the source and target entities to get their node IDs
+    // Use both canonicalName AND entity type to avoid collisions
+    // (e.g., Officer "brown" vs Person "brown")
     const sourceEntity = extraction.entities.find(
+      e => e.canonicalName === rel.sourceEntityName && e.type === rel.sourceEntityType,
+    ) ?? extraction.entities.find(
       e => e.canonicalName === rel.sourceEntityName,
     );
     const targetEntity = extraction.entities.find(
+      e => e.canonicalName === rel.targetEntityName && e.type === rel.targetEntityType,
+    ) ?? extraction.entities.find(
       e => e.canonicalName === rel.targetEntityName,
     );
 
@@ -219,9 +225,13 @@ export class GraphRelationshipBuilder {
     // Relationship queries
     for (const rel of extraction.relationships) {
       const sourceEntity = extraction.entities.find(
+        e => e.canonicalName === rel.sourceEntityName && e.type === rel.sourceEntityType,
+      ) ?? extraction.entities.find(
         e => e.canonicalName === rel.sourceEntityName,
       );
       const targetEntity = extraction.entities.find(
+        e => e.canonicalName === rel.targetEntityName && e.type === rel.targetEntityType,
+      ) ?? extraction.entities.find(
         e => e.canonicalName === rel.targetEntityName,
       );
 

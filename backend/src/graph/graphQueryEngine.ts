@@ -36,7 +36,7 @@ export class GraphQueryEngine {
       `
       MATCH (violator)-[v:VIOLATES]->(policy:Policy {tenantId: $tenantId})
       OPTIONAL MATCH (evidence:Evidence {tenantId: $tenantId})-[:SUPPORTS]->(claim:LegalClaim)
-      WHERE claim.canonicalName CONTAINS 'violation'
+      WHERE claim.canonicalName CONTAINS 'violation' AND (evidence)-[:MENTIONS]->(violator)
       RETURN violator, policy, v, collect(DISTINCT evidence) AS evidence
       ORDER BY v.confidence DESC
       `,
@@ -161,9 +161,12 @@ export class GraphQueryEngine {
     nodeId: string,
     depth: number = 2,
   ): Promise<GraphQueryResult> {
+    const safeDepth = Math.max(1, Math.min(10, Math.floor(depth)));
+    if (!Number.isFinite(safeDepth)) throw new Error('Invalid depth parameter');
+
     const result = await this.neo4jClient.execute(
       `
-      MATCH path = (start {id: $nodeId})-[*1..${depth}]-(connected)
+      MATCH path = (start {id: $nodeId})-[*1..${safeDepth}]-(connected)
       UNWIND nodes(path) AS n
       UNWIND relationships(path) AS r
       RETURN collect(DISTINCT n) AS nodes, collect(DISTINCT r) AS relationships
@@ -271,9 +274,12 @@ export class GraphQueryEngine {
     tenantId: string,
     maxLength: number = 5,
   ): Promise<Array<{ chain: GraphNode[]; relationships: GraphRelationship[] }>> {
+    const safeMaxLength = Math.max(2, Math.min(10, Math.floor(maxLength)));
+    if (!Number.isFinite(safeMaxLength)) throw new Error('Invalid maxLength parameter');
+
     const result = await this.neo4jClient.execute(
       `
-      MATCH path = (e1:Evidence {tenantId: $tenantId})-[*2..${maxLength}]-(e2:Evidence)
+      MATCH path = (e1:Evidence {tenantId: $tenantId})-[*2..${safeMaxLength}]-(e2:Evidence)
       WHERE e1.id < e2.id
       UNWIND nodes(path) AS n
       UNWIND relationships(path) AS r

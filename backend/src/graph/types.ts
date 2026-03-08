@@ -89,6 +89,10 @@ export interface ExtractedRelationship {
   /** References ExtractedEntity by canonicalName */
   sourceEntityName: string;
   targetEntityName: string;
+  /** Entity type of the source (for disambiguating canonicalName collisions) */
+  sourceEntityType: GraphNodeType;
+  /** Entity type of the target (for disambiguating canonicalName collisions) */
+  targetEntityType: GraphNodeType;
   confidence: number;
   properties: Record<string, string | number | boolean | null>;
 }

@@ -166,7 +166,7 @@ export async function getCampaignStats(): Promise<CampaignStats> {
     db.policyRequest.count(),
     db.policyRequest.groupBy({ by: ['status'], _count: { id: true } }),
     db.policyRequest.count({ where: { requestSentAt: { gte: startOfDay } } }),
-    db.policyRequest.count({ where: { requestSentAt: { gte: oneHourAgo } } }),
+    db.policyRequest.count({ where: { requestSentAt: { gte: oneHourAgo }, status: { not: 'pending' } } }),
     db.policyRequest.count({
       where: { status: { in: ['responded', 'documents_received'] } },
     }),

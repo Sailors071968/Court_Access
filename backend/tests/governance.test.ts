@@ -106,6 +106,20 @@ function createInMemoryLockDb(): CorpusLockDb {
       store.delete(args.where.corpusName);
       return existing;
     },
+    async updateMany(args) {
+      let count = 0;
+      for (const [key, record] of store) {
+        if (
+          record.corpusName === args.where.corpusName &&
+          record.workerId === args.where.workerId &&
+          record.expiresAt > args.where.expiresAt.gt
+        ) {
+          store.set(key, { ...record, ...args.data });
+          count++;
+        }
+      }
+      return { count };
+    },
     async deleteMany(args) {
       let count = 0;
       for (const [key, record] of store) {

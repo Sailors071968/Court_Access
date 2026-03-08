@@ -30,6 +30,10 @@ export interface CorpusLockDb {
     where: { corpusName: string };
     data: Partial<Omit<CorpusLockRecord, 'id'>>;
   }): Promise<CorpusLockRecord>;
+  updateMany(args: {
+    where: { corpusName: string; workerId: string; expiresAt: { gt: Date } };
+    data: Partial<Omit<CorpusLockRecord, 'id'>>;
+  }): Promise<{ count: number }>;
   delete(args: {
     where: { corpusName: string };
   }): Promise<CorpusLockRecord>;
@@ -182,6 +186,7 @@ export class CorpusLockManager {
    * Only the owning worker can extend.
    */
   async extend(corpusName: string, workerId: string, additionalMs: number): Promise<CorpusLock | null> {
+    // Read current lock to compute new expiry
     const existing = await this.db.findUnique({
       where: { corpusName },
     });
@@ -190,23 +195,27 @@ export class CorpusLockManager {
       return null;
     }
 
-    // Do not extend an expired lock — another worker may have already acquired it
     if (existing.expiresAt <= new Date()) {
       return null;
     }
 
     const newExpiry = new Date(existing.expiresAt.getTime() + additionalMs);
 
-    // Atomic update — no gap in lock ownership
-    try {
-      const record = await this.db.update({
-        where: { corpusName },
-        data: { expiresAt: newExpiry },
-      });
-      return this.recordToLock(record);
-    } catch {
+    // Atomic ownership-verified update: WHERE includes corpusName + workerId + not-expired
+    // Prevents TOCTOU race where another worker could acquire the lock between read and update
+    const result = await this.db.updateMany({
+      where: { corpusName, workerId, expiresAt: { gt: new Date() } },
+      data: { expiresAt: newExpiry },
+    });
+
+    if (result.count === 0) {
+      // Lock was released/expired/re-acquired by another worker between read and update
       return null;
     }
+
+    // Re-read to return the updated record
+    const updated = await this.db.findUnique({ where: { corpusName } });
+    return updated ? this.recordToLock(updated) : null;
   }
 
   /**

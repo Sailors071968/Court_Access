@@ -541,45 +541,87 @@ export class ExhibitPatternDetector {
   // -----------------------------------------------------------------------
 
   private groupConflictsBySharedNodes(conflicts: ConflictInput[]): NarrativeConflictGroup[] {
-    // Build adjacency: conflict -> set of node IDs it touches
-    const conflictNodes = new Map<string, Set<string>>();
+    // Union-Find to correctly group transitively connected conflicts.
+    // Two conflicts belong in the same group if they share any node,
+    // even indirectly through intermediate conflicts.
+
+    const parent = new Map<string, string>();
+    const rank = new Map<string, number>();
+
+    const find = (x: string): string => {
+      let root = x;
+      while (parent.get(root) !== root) {
+        root = parent.get(root)!;
+      }
+      // Path compression
+      let current = x;
+      while (current !== root) {
+        const next = parent.get(current)!;
+        parent.set(current, root);
+        current = next;
+      }
+      return root;
+    };
+
+    const union = (a: string, b: string): void => {
+      const rootA = find(a);
+      const rootB = find(b);
+      if (rootA === rootB) return;
+      const rankA = rank.get(rootA) ?? 0;
+      const rankB = rank.get(rootB) ?? 0;
+      if (rankA < rankB) {
+        parent.set(rootA, rootB);
+      } else if (rankA > rankB) {
+        parent.set(rootB, rootA);
+      } else {
+        parent.set(rootB, rootA);
+        rank.set(rootA, rankA + 1);
+      }
+    };
+
+    // Initialize each conflict as its own set
     for (const conflict of conflicts) {
-      const nodes = new Set([...conflict.sourceNodeIds, ...conflict.targetNodeIds]);
-      conflictNodes.set(conflict.id, nodes);
+      parent.set(conflict.id, conflict.id);
+      rank.set(conflict.id, 0);
     }
 
-    // Simple greedy grouping: conflicts sharing at least one node belong together
-    const visited = new Set<string>();
-    const groups: NarrativeConflictGroup[] = [];
-
+    // Build node → conflict ID mapping
+    const nodeToConflicts = new Map<string, string[]>();
     for (const conflict of conflicts) {
-      if (visited.has(conflict.id)) continue;
-      visited.add(conflict.id);
-
-      const group: string[] = [conflict.id];
-      const groupNodes = conflictNodes.get(conflict.id)!;
-
-      for (const other of conflicts) {
-        if (visited.has(other.id)) continue;
-        const otherNodes = conflictNodes.get(other.id)!;
-        // Check for shared nodes
-        for (const node of otherNodes) {
-          if (groupNodes.has(node)) {
-            group.push(other.id);
-            visited.add(other.id);
-            for (const n of otherNodes) groupNodes.add(n);
-            break;
-          }
-        }
+      const allNodes = [...conflict.sourceNodeIds, ...conflict.targetNodeIds];
+      for (const node of allNodes) {
+        const list = nodeToConflicts.get(node) ?? [];
+        list.push(conflict.id);
+        nodeToConflicts.set(node, list);
       }
+    }
 
-      if (group.length >= this.config.minConflictGroupSize) {
-        const groupConflicts = conflicts.filter(c => group.includes(c.id));
+    // Union conflicts that share any node
+    for (const [, conflictIds] of nodeToConflicts) {
+      for (let i = 1; i < conflictIds.length; i++) {
+        union(conflictIds[0], conflictIds[i]);
+      }
+    }
+
+    // Collect groups by root
+    const groupMap = new Map<string, string[]>();
+    for (const conflict of conflicts) {
+      const root = find(conflict.id);
+      const list = groupMap.get(root) ?? [];
+      list.push(conflict.id);
+      groupMap.set(root, list);
+    }
+
+    // Convert to NarrativeConflictGroup, filtering by minimum size
+    const groups: NarrativeConflictGroup[] = [];
+    for (const [, memberIds] of groupMap) {
+      if (memberIds.length >= this.config.minConflictGroupSize) {
+        const groupConflicts = conflicts.filter(c => memberIds.includes(c.id));
         const avgSeverity = groupConflicts.reduce((sum, c) => sum + c.severityScore, 0) / groupConflicts.length;
 
         groups.push({
           eventDescription: groupConflicts[0].description.slice(0, 100),
-          conflictIds: group,
+          conflictIds: memberIds,
           avgSeverity,
         });
       }

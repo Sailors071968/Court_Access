@@ -19,11 +19,11 @@ import type {
 // ---------------------------------------------------------------------------
 
 const ALLOWED_NODE_TYPES: ReadonlySet<string> = new Set<GraphNodeType>([
-  'Statute', 'Policy', 'CaseLaw', 'Person', 'Officer', 'Agency', 'Evidence', 'Event', 'LegalClaim',
+  'Statute', 'Policy', 'CaseLaw', 'Person', 'Officer', 'Agency', 'Evidence', 'Event', 'LegalClaim', 'Conflict',
 ]);
 
 const ALLOWED_REL_TYPES: ReadonlySet<string> = new Set<GraphRelationshipType>([
-  'VIOLATES', 'SUPPORTS', 'REFUTES', 'REFERENCES', 'MENTIONS', 'ESTABLISHES', 'CONTRADICTS',
+  'VIOLATES', 'SUPPORTS', 'REFUTES', 'REFERENCES', 'MENTIONS', 'ESTABLISHES', 'CONTRADICTS', 'INVALIDATES', 'WEAKENS',
 ]);
 
 function assertValidNodeType(type: string): asserts type is GraphNodeType {

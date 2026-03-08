@@ -1,0 +1,80 @@
+// Court Access — Backend Prisma Schema
+// Manages corpus ingestion state, audit logs, and legal document storage.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// Corpus Ingestion State — checkpoint/resume system
+// ---------------------------------------------------------------------------
+
+model CorpusIngestionState {
+  id                   String   @id @default(uuid())
+  corpusName           String
+  fileName             String
+  lastProcessedOffset  Int      @default(0)
+  recordsProcessed     Int      @default(0)
+  totalRecords         Int?
+  status               String   @default("pending") // pending | in_progress | completed | failed | paused
+  errorMessage         String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@unique([corpusName, fileName])
+  @@index([corpusName])
+  @@index([status])
+  @@map("corpus_ingestion_state")
+}
+
+// ---------------------------------------------------------------------------
+// Corpus Ingestion Log — batch-level audit trail
+// ---------------------------------------------------------------------------
+
+model CorpusIngestionLog {
+  id              String   @id @default(uuid())
+  corpusName      String
+  batchNumber     Int
+  recordsInserted Int
+  durationMs      Int
+  status          String   // success | failed | skipped
+  errorMessage    String?
+  timestamp       DateTime @default(now())
+
+  @@index([corpusName])
+  @@index([timestamp])
+  @@map("corpus_ingestion_log")
+}
+
+// ---------------------------------------------------------------------------
+// Legal Document — normalized corpus storage
+// ---------------------------------------------------------------------------
+
+model LegalDocument {
+  id             String   @id @default(uuid())
+  tenantId       String
+  title          String
+  content        String
+  jurisdiction   String
+  documentType   String   // policy | statute | case_law | transcript | evidence | investigative_report
+  source         String
+  version        String   @default("1.0")
+  corpusName     String?
+  sourceFile     String?
+  contentHash    String   // SHA-256 of content for dedup
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@unique([contentHash, tenantId])
+  @@index([tenantId])
+  @@index([documentType])
+  @@index([corpusName])
+  @@index([jurisdiction])
+  @@index([contentHash])
+  @@map("legal_documents")
+}

@@ -96,7 +96,7 @@ model CorpusRegistry {
   releaseDate      DateTime?
   ingestionStatus  String   @default("pending") // pending | in_progress | completed | failed
   totalDocuments   Int      @default(0)
-  totalBytes       Int      @default(0)
+  totalBytes       BigInt   @default(0)
   checksum         String?  // SHA-256 of the entire corpus file
   metadata         String?  // JSON string for extensible metadata
   createdAt        DateTime @default(now())

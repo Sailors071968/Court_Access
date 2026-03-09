@@ -4,7 +4,7 @@
 // ---------------------------------------------------------------------------
 
 import { Worker, Queue, Job } from 'bullmq';
-import { S3Client, PutObjectCommand, HeadObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
 import https from 'node:https';
 import http from 'node:http';
 import { DEFAULT_CRAWLER_CONFIG } from '../agencyRegistry/types.js';
@@ -52,7 +52,8 @@ function getS3Client(): S3Client {
  */
 async function downloadFile(
   url: string,
-  maxSizeBytes: number = DEFAULT_CRAWLER_CONFIG.maxDocumentSizeBytes
+  maxSizeBytes: number = DEFAULT_CRAWLER_CONFIG.maxDocumentSizeBytes,
+  maxRedirects: number = 5
 ): Promise<{ buffer: Buffer; contentType: string | null }> {
   return new Promise((resolve, reject) => {
     const protocol = url.startsWith('https') ? https : http;
@@ -72,13 +73,19 @@ async function downloadFile(
           response.statusCode < 400 &&
           response.headers.location
         ) {
-          downloadFile(response.headers.location, maxSizeBytes)
+          response.destroy();
+          if (maxRedirects <= 0) {
+            reject(new Error(`Too many redirects for ${url}`));
+            return;
+          }
+          downloadFile(response.headers.location, maxSizeBytes, maxRedirects - 1)
             .then(resolve)
             .catch(reject);
           return;
         }
 
         if (response.statusCode !== 200) {
+          response.destroy();
           reject(new Error(`HTTP ${response.statusCode} for ${url}`));
           return;
         }
@@ -88,6 +95,7 @@ async function downloadFile(
           10
         );
         if (contentLength > maxSizeBytes) {
+          response.destroy();
           reject(
             new Error(
               `File too large: ${contentLength} bytes (max ${maxSizeBytes})`

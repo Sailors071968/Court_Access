@@ -336,7 +336,7 @@ export async function handleGetCpraDashboard(): Promise<
 
     const statusBreakdown: Record<string, number> = {};
     for (const group of statusGroups) {
-      statusBreakdown[group.status] = (group._count as unknown as { _all: number })._all;
+      statusBreakdown[group.status] = group._count as number;
     }
 
     return {

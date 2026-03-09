@@ -160,9 +160,18 @@ export async function sendCpraRequestEmail(
     };
   }
 
-  // Determine email address from website domain (recordsRequestUrl is a URL, not an email)
-  const agencyEmail =
-    `records@${agency.website?.replace(/^https?:\/\//, '').replace(/\/.*$/, '').replace(/^www\./, '') || 'unknown.gov'}`;
+  // Derive email domain from website — skip send if agency has no usable website
+  const domain = agency.website?.replace(/^https?:\/\//, '').replace(/\/.*$/, '').replace(/^www\./, '') || '';
+  if (!domain) {
+    return {
+      requestId: '',
+      agencyId,
+      success: false,
+      messageId: null,
+      error: `Agency ${agencyId} has no website — cannot derive email address`,
+    };
+  }
+  const agencyEmail = `records@${domain}`;
 
   // Load and merge template
   const template = loadTemplate(templateName);
@@ -271,9 +280,18 @@ export async function sendFollowUpEmail(
     };
   }
 
-  // Determine email address from website domain (recordsRequestUrl is a URL, not an email)
-  const agencyEmail =
-    `records@${agency.website?.replace(/^https?:\/\//, '').replace(/\/.*$/, '').replace(/^www\./, '') || 'unknown.gov'}`;
+  // Derive email domain from website — skip send if agency has no usable website
+  const domain = agency.website?.replace(/^https?:\/\//, '').replace(/\/.*$/, '').replace(/^www\./, '') || '';
+  if (!domain) {
+    return {
+      requestId,
+      agencyId: request.agencyId,
+      success: false,
+      messageId: null,
+      error: `Agency ${request.agencyId} has no website — cannot derive email address`,
+    };
+  }
+  const agencyEmail = `records@${domain}`;
 
   const template = loadTemplate(templateName);
   const variables: TemplateVariables = {
@@ -358,9 +376,18 @@ export async function sendThankYouEmail(
     };
   }
 
-  // Determine email address from website domain (recordsRequestUrl is a URL, not an email)
-  const agencyEmail =
-    `records@${agency.website?.replace(/^https?:\/\//, '').replace(/\/.*$/, '').replace(/^www\./, '') || 'unknown.gov'}`;
+  // Derive email domain from website — skip send if agency has no usable website
+  const domain = agency.website?.replace(/^https?:\/\//, '').replace(/\/.*$/, '').replace(/^www\./, '') || '';
+  if (!domain) {
+    return {
+      requestId,
+      agencyId: request.agencyId,
+      success: false,
+      messageId: null,
+      error: `Agency ${request.agencyId} has no website — cannot derive email address`,
+    };
+  }
+  const agencyEmail = `records@${domain}`;
 
   const template = loadTemplate('cpra_thank_you.txt');
   const variables: TemplateVariables = {

@@ -5,7 +5,7 @@
 // place markers, camera presets, animation, export.
 // ============================================================================
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import ThreeSceneRenderer, { type ThreeSceneAPI, type SceneMarker } from '../../../components/exhibits/ThreeSceneRenderer';
 import SceneControls, { type ObjectSettings } from '../../../components/exhibits/SceneControls';
 import SceneMarkerTool from '../../../components/exhibits/SceneMarkerTool';
@@ -79,6 +79,17 @@ export default function ExhibitViewer() {
   // Scene API ref
   const sceneApiRef = useRef<ThreeSceneAPI | null>(null);
   const animFrameRef = useRef<number>(0);
+
+  // Refs for animation loop to avoid stale closures
+  const playbackSpeedRef = useRef(timeline.playbackSpeed);
+  const durationRef = useRef(timeline.duration);
+  const keyframesRef = useRef(timeline.keyframes);
+
+  useEffect(() => {
+    playbackSpeedRef.current = timeline.playbackSpeed;
+    durationRef.current = timeline.duration;
+    keyframesRef.current = timeline.keyframes;
+  }, [timeline.playbackSpeed, timeline.duration, timeline.keyframes]);
 
   // ---------------------------------------------------------------------------
   // Scene Creation
@@ -181,10 +192,10 @@ export default function ExhibitViewer() {
     const startOffset = timeline.currentTime;
 
     function tick() {
-      const elapsed = (performance.now() - startTime) / 1000 * timeline.playbackSpeed;
+      const elapsed = (performance.now() - startTime) / 1000 * playbackSpeedRef.current;
       const newTime = startOffset + elapsed;
 
-      if (newTime >= timeline.duration) {
+      if (newTime >= durationRef.current) {
         setTimeline((prev) => ({ ...prev, isPlaying: false, currentTime: 0 }));
         return;
       }
@@ -192,7 +203,7 @@ export default function ExhibitViewer() {
       setTimeline((prev) => ({ ...prev, currentTime: newTime }));
 
       // Interpolate marker positions
-      const positions = interpolatePositions(timeline.keyframes, newTime);
+      const positions = interpolatePositions(keyframesRef.current, newTime);
       setMarkers((prev) =>
         prev.map((m) => {
           const newPos = positions.get(m.id);
@@ -203,7 +214,7 @@ export default function ExhibitViewer() {
       animFrameRef.current = requestAnimationFrame(tick);
     }
     animFrameRef.current = requestAnimationFrame(tick);
-  }, [timeline]);
+  }, [timeline.currentTime]);
 
   const handlePause = useCallback(() => {
     cancelAnimationFrame(animFrameRef.current);

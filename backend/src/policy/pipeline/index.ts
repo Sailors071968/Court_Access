@@ -3,6 +3,7 @@
 // ---------------------------------------------------------------------------
 
 export { registerPipelineRoutes } from './pipelineRoutes.js';
+export { registerPolicyIntelligenceRoutes } from './policyIntelligenceRoutes.js';
 export {
   runPostDirectoryCrawl,
   runPopulationRanking,

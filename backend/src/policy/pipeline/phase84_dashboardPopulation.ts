@@ -40,17 +40,18 @@ async function main() {
     console.log('  System Coverage:');
     console.log(`    Total Topics:          ${coverageStats.totalTopics}`);
     console.log(`    Total Agencies:        ${coverageStats.totalAgencies}`);
-    console.log(`    Avg Coverage:          ${coverageStats.averageCoveragePercent.toFixed(1)}%`);
+    console.log(`    Avg Coverage:          ${coverageStats.overallCoveragePercent.toFixed(1)}%`);
     console.log(`    Full Coverage:         ${coverageStats.agenciesWithFullCoverage}`);
-    console.log(`    Partial Coverage:      ${coverageStats.agenciesWithPartialCoverage}`);
     console.log(`    No Coverage:           ${coverageStats.agenciesWithNoCoverage}`);
+    console.log(`    Total Found:           ${coverageStats.totalFound}`);
+    console.log(`    Total Missing:         ${coverageStats.totalMissing}`);
 
     console.log();
     console.log('  Coverage Summary:');
     console.log(`    Total Agencies:        ${coverageSummary.totalAgencies}`);
-    console.log(`    Agencies w/ Coverage:  ${coverageSummary.agenciesWithCoverage}`);
+    console.log(`    Agencies Indexed:      ${coverageSummary.agenciesIndexed}`);
     console.log(`    Total Topics:          ${coverageSummary.totalTopics}`);
-    console.log(`    Avg Coverage:          ${coverageSummary.averageCoveragePercent.toFixed(1)}%`);
+    console.log(`    Avg Coverage:          ${coverageSummary.overallCoveragePercent.toFixed(1)}%`);
 
     console.log();
     console.log('  Classification Accuracy:');

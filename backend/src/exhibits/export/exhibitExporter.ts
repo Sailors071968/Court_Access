@@ -188,7 +188,8 @@ function generateInteractiveViewer(sceneJson: string, options: ExportOptions): s
   const encodedSceneJson = encodeURIComponent(sceneJson)
     .replace(/`/g, '%60')
     .replace(/\$/g, '%24')
-    .replace(/\\/g, '%5C');
+    .replace(/\\/g, '%5C')
+    .replace(/</g, '%3C');
 
   return `<!DOCTYPE html>
 <html lang="en">

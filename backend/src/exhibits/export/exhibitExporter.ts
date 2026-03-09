@@ -165,12 +165,26 @@ export function exportAsMp4(
 }
 
 // ---------------------------------------------------------------------------
+// Security Helpers
+// ---------------------------------------------------------------------------
+
+function escapeHtml(str: string): string {
+  return str
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#39;');
+}
+
+// ---------------------------------------------------------------------------
 // Interactive HTML Viewer Generator
 // ---------------------------------------------------------------------------
 
 function generateInteractiveViewer(sceneJson: string, options: ExportOptions): string {
-  const label = options.exhibitLabel ?? 'Trial Exhibit';
-  const caseLabel = options.caseId ? ` | Case: ${options.caseId}` : '';
+  const label = escapeHtml(options.exhibitLabel ?? 'Trial Exhibit');
+  const caseLabel = options.caseId ? ` | Case: ${escapeHtml(options.caseId)}` : '';
+  const encodedSceneJson = encodeURIComponent(sceneJson);
 
   return `<!DOCTYPE html>
 <html lang="en">
@@ -212,7 +226,7 @@ function generateInteractiveViewer(sceneJson: string, options: ExportOptions): s
   <script type="module">
     import * as THREE from 'three';
 
-    const sceneData = ${sceneJson};
+    const sceneData = JSON.parse(decodeURIComponent("${encodedSceneJson}"));
     const canvas = document.getElementById('canvas');
     const renderer = new THREE.WebGLRenderer({ canvas, antialias: true });
     renderer.setSize(window.innerWidth, window.innerHeight);

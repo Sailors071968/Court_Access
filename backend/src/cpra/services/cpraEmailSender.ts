@@ -213,10 +213,15 @@ export async function sendCpraRequestEmail(
         sentAt: new Date(),
       },
     });
+  } else {
+    // Delete orphaned draft so BullMQ retries aren't blocked by duplicate check
+    await prisma.cPRAAgencyRequest.delete({
+      where: { requestId: request.requestId },
+    });
   }
 
   return {
-    requestId: request.requestId,
+    requestId: error ? '' : request.requestId,
     agencyId,
     success: !error,
     messageId,

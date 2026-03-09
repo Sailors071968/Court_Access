@@ -13,6 +13,7 @@ import {
   checkDailyLimit,
   checkMinuteLimit,
   checkDuplicateRequest,
+  checkFollowUpEligibility,
   CPRA_SAFEGUARDS,
 } from '../services/cpraSafeguards.js';
 
@@ -131,6 +132,28 @@ async function handleSendFollowup(
       success: false,
       requestId: data.requestId,
       error: `Daily limit reached`,
+    };
+  }
+
+  // Check minute limit
+  const minuteCheck = await checkMinuteLimit();
+  if (!minuteCheck.allowed) {
+    return {
+      type: 'send_followup',
+      success: false,
+      requestId: data.requestId,
+      error: `Minute limit reached`,
+    };
+  }
+
+  // Check 72-hour minimum gap between follow-ups
+  const eligibility = await checkFollowUpEligibility(data.requestId);
+  if (!eligibility.eligible) {
+    return {
+      type: 'send_followup',
+      success: false,
+      requestId: data.requestId,
+      error: eligibility.reason ?? 'Follow-up not eligible',
     };
   }
 

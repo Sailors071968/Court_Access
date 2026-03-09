@@ -35,3 +35,6 @@ CREATE INDEX "cpra_annual_updates_status_idx" ON "cpra_annual_updates"("status")
 
 -- CreateIndex
 CREATE INDEX "cpra_annual_updates_closed_idx" ON "cpra_annual_updates"("closed");
+
+-- AddForeignKey
+ALTER TABLE "cpra_annual_updates" ADD CONSTRAINT "cpra_annual_updates_agencyId_fkey" FOREIGN KEY ("agencyId") REFERENCES "agencies"("agencyId") ON DELETE RESTRICT ON UPDATE CASCADE;

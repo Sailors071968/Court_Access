@@ -158,6 +158,8 @@ model Agency {
 
   PolicyDocuments     PolicyDocument[]
   PolicyCoverage      PolicyCoverage[]
+  CPRAAgencyRequests  CPRAAgencyRequest[]
+  CPRAAnnualUpdates   CPRAAnnualUpdate[]
 
   @@unique([agencyName, county])
   @@index([county])
@@ -289,6 +291,7 @@ model CPRAAgencyRequest {
   Campaign           CPRARequestCampaign @relation(fields: [campaignId], references: [campaignId])
 
   agencyId           String
+  Agency             Agency @relation(fields: [agencyId], references: [agencyId])
 
   status             String   @default("draft") // draft | sent | awaiting_response | follow_up_1 | follow_up_2 | follow_up_final | documents_received | closed
 
@@ -325,6 +328,7 @@ model CPRAAnnualUpdate {
   updateId           String   @id @default(uuid())
 
   agencyId           String
+  Agency             Agency @relation(fields: [agencyId], references: [agencyId])
 
   requestedAt        DateTime
   responseReceived   Boolean  @default(false)

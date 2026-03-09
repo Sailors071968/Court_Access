@@ -46,3 +46,6 @@ CREATE INDEX "cpra_agency_requests_responseReceived_idx" ON "cpra_agency_request
 
 -- AddForeignKey
 ALTER TABLE "cpra_agency_requests" ADD CONSTRAINT "cpra_agency_requests_campaignId_fkey" FOREIGN KEY ("campaignId") REFERENCES "cpra_request_campaigns"("campaignId") ON DELETE RESTRICT ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "cpra_agency_requests" ADD CONSTRAINT "cpra_agency_requests_agencyId_fkey" FOREIGN KEY ("agencyId") REFERENCES "agencies"("agencyId") ON DELETE RESTRICT ON UPDATE CASCADE;

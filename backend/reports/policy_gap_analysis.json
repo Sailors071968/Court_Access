@@ -1,0 +1,4218 @@
+{
+  "phase": 100,
+  "title": "Policy Gap Analysis",
+  "generatedAt": "2026-03-09T21:53:58.312Z",
+  "purpose": "Identify most common missing policies to prioritize CPRA requests",
+  "note": "NO CPRA emails sent. This audit identifies which requests should be prioritized.",
+  "summary": {
+    "totalTopicsAnalyzed": 334,
+    "totalAgencies": 488,
+    "totalGapInstances": 158319,
+    "criticalGaps": 60,
+    "highPriorityGaps": 6,
+    "mostCommonMissingPolicy": "Less-Lethal Weapons Deployment",
+    "mostCommonMissingCount": 487,
+    "runtimeMs": 315
+  },
+  "categoryGapSummary": [
+    {
+      "category": "INTERNAL_AFFAIRS",
+      "totalMissing": 5844,
+      "topicCount": 12,
+      "avgMissingPerTopic": 487,
+      "criticalMissing": 0
+    },
+    {
+      "category": "PURSUIT",
+      "totalMissing": 5844,
+      "topicCount": 12,
+      "avgMissingPerTopic": 487,
+      "criticalMissing": 0
+    },
+    {
+      "category": "DISCIPLINE",
+      "totalMissing": 5844,
+      "topicCount": 12,
+      "avgMissingPerTopic": 487,
+      "criticalMissing": 0
+    },
+    {
+      "category": "OFFICER_INVOLVED_SHOOTING",
+      "totalMissing": 5844,
+      "topicCount": 12,
+      "avgMissingPerTopic": 487,
+      "criticalMissing": 0
+    },
+    {
+      "category": "SWAT",
+      "totalMissing": 5844,
+      "topicCount": 12,
+      "avgMissingPerTopic": 487,
+      "criticalMissing": 0
+    },
+    {
+      "category": "TRAINING",
+      "totalMissing": 5844,
+      "topicCount": 12,
+      "avgMissingPerTopic": 487,
+      "criticalMissing": 0
+    },
+    {
+      "category": "FTO",
+      "totalMissing": 5844,
+      "topicCount": 12,
+      "avgMissingPerTopic": 487,
+      "criticalMissing": 0
+    },
+    {
+      "category": "DUI_ENFORCEMENT",
+      "totalMissing": 5844,
+      "topicCount": 12,
+      "avgMissingPerTopic": 487,
+      "criticalMissing": 0
+    },
+    {
+      "category": "ACTIVE_SHOOTER",
+      "totalMissing": 5844,
+      "topicCount": 12,
+      "avgMissingPerTopic": 487,
+      "criticalMissing": 0
+    },
+    {
+      "category": "K9",
+      "totalMissing": 5844,
+      "topicCount": 12,
+      "avgMissingPerTopic": 487,
+      "criticalMissing": 0
+    },
+    {
+      "category": "RECORDS",
+      "totalMissing": 5844,
+      "topicCount": 12,
+      "avgMissingPerTopic": 487,
+      "criticalMissing": 0
+    },
+    {
+      "category": "BRADY",
+      "totalMissing": 5844,
+      "topicCount": 12,
+      "avgMissingPerTopic": 487,
+      "criticalMissing": 0
+    },
+    {
+      "category": "TRAFFIC",
+      "totalMissing": 5844,
+      "topicCount": 12,
+      "avgMissingPerTopic": 487,
+      "criticalMissing": 0
+    },
+    {
+      "category": "BODY_CAMERA",
+      "totalMissing": 5456,
+      "topicCount": 12,
+      "avgMissingPerTopic": 455,
+      "criticalMissing": 0
+    },
+    {
+      "category": "Use_of_Force",
+      "totalMissing": 5432,
+      "topicCount": 12,
+      "avgMissingPerTopic": 453,
+      "criticalMissing": 5350
+    },
+    {
+      "category": "USE_OF_FORCE",
+      "totalMissing": 5357,
+      "topicCount": 12,
+      "avgMissingPerTopic": 446,
+      "criticalMissing": 0
+    },
+    {
+      "category": "Internal_Affairs",
+      "totalMissing": 4861,
+      "topicCount": 10,
+      "avgMissingPerTopic": 486,
+      "criticalMissing": 4861
+    },
+    {
+      "category": "Search_Seizure",
+      "totalMissing": 4383,
+      "topicCount": 9,
+      "avgMissingPerTopic": 487,
+      "criticalMissing": 0
+    },
+    {
+      "category": "Body_Camera",
+      "totalMissing": 4383,
+      "topicCount": 9,
+      "avgMissingPerTopic": 487,
+      "criticalMissing": 4383
+    },
+    {
+      "category": "Evidence_Handling",
+      "totalMissing": 4383,
+      "topicCount": 9,
+      "avgMissingPerTopic": 487,
+      "criticalMissing": 0
+    },
+    {
+      "category": "Traffic",
+      "totalMissing": 4374,
+      "topicCount": 9,
+      "avgMissingPerTopic": 486,
+      "criticalMissing": 0
+    },
+    {
+      "category": "Training",
+      "totalMissing": 4138,
+      "topicCount": 10,
+      "avgMissingPerTopic": 414,
+      "criticalMissing": 3886
+    },
+    {
+      "category": "Pursuit",
+      "totalMissing": 4042,
+      "topicCount": 9,
+      "avgMissingPerTopic": 449,
+      "criticalMissing": 3896
+    },
+    {
+      "category": "Special_Units",
+      "totalMissing": 3896,
+      "topicCount": 8,
+      "avgMissingPerTopic": 487,
+      "criticalMissing": 0
+    },
+    {
+      "category": "Critical_Incident",
+      "totalMissing": 3605,
+      "topicCount": 8,
+      "avgMissingPerTopic": 451,
+      "criticalMissing": 0
+    },
+    {
+      "category": "OIS",
+      "totalMissing": 3596,
+      "topicCount": 8,
+      "avgMissingPerTopic": 450,
+      "criticalMissing": 3409
+    },
+    {
+      "category": "Discipline",
+      "totalMissing": 3581,
+      "topicCount": 8,
+      "avgMissingPerTopic": 448,
+      "criticalMissing": 3409
+    },
+    {
+      "category": "Records",
+      "totalMissing": 3581,
+      "topicCount": 8,
+      "avgMissingPerTopic": 448,
+      "criticalMissing": 0
+    },
+    {
+      "category": "Officer_Conduct",
+      "totalMissing": 3529,
+      "topicCount": 8,
+      "avgMissingPerTopic": 441,
+      "criticalMissing": 0
+    },
+    {
+      "category": "Arrest",
+      "totalMissing": 3523,
+      "topicCount": 8,
+      "avgMissingPerTopic": 440,
+      "criticalMissing": 0
+    },
+    {
+      "category": "Interrogation",
+      "totalMissing": 3409,
+      "topicCount": 7,
+      "avgMissingPerTopic": 487,
+      "criticalMissing": 0
+    },
+    {
+      "category": "Informants",
+      "totalMissing": 3409,
+      "topicCount": 7,
+      "avgMissingPerTopic": 487,
+      "criticalMissing": 0
+    },
+    {
+      "category": "Custody",
+      "totalMissing": 3409,
+      "topicCount": 7,
+      "avgMissingPerTopic": 487,
+      "criticalMissing": 0
+    }
+  ],
+  "criticalGaps": [
+    {
+      "topicName": "Less-Lethal Weapons Deployment",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "De-Escalation Requirements",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Chokehold / Neck Restraint Ban",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Taser / CEW Policy",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "OC Spray / Chemical Agents",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Baton Use Guidelines",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Force Review Board Process",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Duty to Intervene",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Warning Requirements Before Force",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Citizen Complaint Intake Process",
+      "category": "Internal_Affairs",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Administrative vs Criminal Investigations",
+      "category": "Internal_Affairs",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Pitchess Motion Compliance",
+      "category": "Internal_Affairs",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Sustained / Exonerated / Unfounded Findings",
+      "category": "Internal_Affairs",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "POBR (Peace Officer Bill of Rights) Compliance",
+      "category": "Internal_Affairs",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Early Warning System / At-Risk Officer Tracking",
+      "category": "Internal_Affairs",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Investigation Timeline Requirements",
+      "category": "Internal_Affairs",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Witness Interview Procedures (IA)",
+      "category": "Internal_Affairs",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Penalty Matrix / Penalty Guidelines",
+      "category": "Discipline",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Skelly Hearing Procedures",
+      "category": "Discipline",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Suspension and Demotion Standards",
+      "category": "Discipline",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Termination Criteria and Process",
+      "category": "Discipline",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Mitigating / Aggravating Factors",
+      "category": "Discipline",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Grievance and Appeal Process",
+      "category": "Discipline",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Written Reprimand Standards",
+      "category": "Discipline",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Pursuit Termination Criteria",
+      "category": "Pursuit",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "PIT Maneuver Authorization",
+      "category": "Pursuit",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Pursuit Supervisor Responsibilities",
+      "category": "Pursuit",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Emergency Vehicle Operation",
+      "category": "Pursuit",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Pursuit Reporting Requirements",
+      "category": "Pursuit",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Air Support During Pursuits",
+      "category": "Pursuit",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Inter-Agency Pursuit Coordination",
+      "category": "Pursuit",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "BWC Activation Requirements",
+      "category": "Body_Camera",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "BWC Deactivation Rules",
+      "category": "Body_Camera",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Recording Retention Periods",
+      "category": "Body_Camera",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Officer Review of Footage Before Reports",
+      "category": "Body_Camera",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Supervisor Review of BWC Footage",
+      "category": "Body_Camera",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Footage Release and Public Records",
+      "category": "Body_Camera",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Redaction Procedures",
+      "category": "Body_Camera",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "In-Car Camera (Dashcam) Policy",
+      "category": "Body_Camera",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Camera Equipment Assignment and Maintenance",
+      "category": "Body_Camera",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Continuing Professional Training (CPT)",
+      "category": "Training",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "De-Escalation Training Requirements",
+      "category": "Training",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Firearms Qualification Standards",
+      "category": "Training",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "First Aid / CPR Training",
+      "category": "Training",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "POST Certification Compliance",
+      "category": "Training",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Use of Force Training Curriculum",
+      "category": "Training",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Shooting Review Board Process",
+      "category": "OIS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Compelled vs Voluntary Statements",
+      "category": "OIS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Scene Management After OIS",
+      "category": "OIS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "District Attorney Review of OIS",
+      "category": "OIS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    }
+  ],
+  "highPriorityGaps": [
+    {
+      "topicName": "OIS Investigation Procedures",
+      "category": "OIS",
+      "agenciesMissingPolicy": 187,
+      "agenciesWithPolicy": 301,
+      "totalAgencies": 488,
+      "gapPercent": "38.3%",
+      "priority": "High"
+    },
+    {
+      "topicName": "Progressive Discipline Framework",
+      "category": "Discipline",
+      "agenciesMissingPolicy": 172,
+      "agenciesWithPolicy": 316,
+      "totalAgencies": 488,
+      "gapPercent": "35.2%",
+      "priority": "High"
+    },
+    {
+      "topicName": "Pursuit Authorization Standards",
+      "category": "Pursuit",
+      "agenciesMissingPolicy": 146,
+      "agenciesWithPolicy": 342,
+      "totalAgencies": 488,
+      "gapPercent": "29.9%",
+      "priority": "High"
+    },
+    {
+      "topicName": "Academy Training Standards",
+      "category": "Training",
+      "agenciesMissingPolicy": 130,
+      "agenciesWithPolicy": 358,
+      "totalAgencies": 488,
+      "gapPercent": "26.6%",
+      "priority": "High"
+    },
+    {
+      "topicName": "Field Training Officer (FTO) Program",
+      "category": "Training",
+      "agenciesMissingPolicy": 122,
+      "agenciesWithPolicy": 366,
+      "totalAgencies": 488,
+      "gapPercent": "25.0%",
+      "priority": "High"
+    },
+    {
+      "topicName": "Force Continuum / Force Options",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 82,
+      "agenciesWithPolicy": 406,
+      "totalAgencies": 488,
+      "gapPercent": "16.8%",
+      "priority": "High"
+    }
+  ],
+  "top50MissingPolicies": [
+    {
+      "topicName": "Less-Lethal Weapons Deployment",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "De-Escalation Requirements",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Chokehold / Neck Restraint Ban",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Taser / CEW Policy",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "OC Spray / Chemical Agents",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Baton Use Guidelines",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Force Review Board Process",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Duty to Intervene",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Warning Requirements Before Force",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Code of Ethics / Standards of Conduct",
+      "category": "Officer_Conduct",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Off-Duty Conduct Standards",
+      "category": "Officer_Conduct",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Conflict of Interest / Gratuities",
+      "category": "Officer_Conduct",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Truthfulness / Brady Disclosure Obligations",
+      "category": "Officer_Conduct",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Secondary Employment Rules",
+      "category": "Officer_Conduct",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Courtesy and Professionalism",
+      "category": "Officer_Conduct",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Citizen Complaint Intake Process",
+      "category": "Internal_Affairs",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Administrative vs Criminal Investigations",
+      "category": "Internal_Affairs",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Pitchess Motion Compliance",
+      "category": "Internal_Affairs",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Sustained / Exonerated / Unfounded Findings",
+      "category": "Internal_Affairs",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "POBR (Peace Officer Bill of Rights) Compliance",
+      "category": "Internal_Affairs",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Early Warning System / At-Risk Officer Tracking",
+      "category": "Internal_Affairs",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Investigation Timeline Requirements",
+      "category": "Internal_Affairs",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Witness Interview Procedures (IA)",
+      "category": "Internal_Affairs",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Penalty Matrix / Penalty Guidelines",
+      "category": "Discipline",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Skelly Hearing Procedures",
+      "category": "Discipline",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Suspension and Demotion Standards",
+      "category": "Discipline",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Termination Criteria and Process",
+      "category": "Discipline",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Mitigating / Aggravating Factors",
+      "category": "Discipline",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Grievance and Appeal Process",
+      "category": "Discipline",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Written Reprimand Standards",
+      "category": "Discipline",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Arrest Authority and Standards",
+      "category": "Arrest",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Probable Cause Determination",
+      "category": "Arrest",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Warrantless Arrest Procedures",
+      "category": "Arrest",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Cite-and-Release Policy",
+      "category": "Arrest",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Arrest Documentation Requirements",
+      "category": "Arrest",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Juvenile Arrest Procedures",
+      "category": "Arrest",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Search Warrant Procedures",
+      "category": "Search_Seizure",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Consent Search Protocols",
+      "category": "Search_Seizure",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Vehicle Search Authority",
+      "category": "Search_Seizure",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Stop-and-Frisk / Pat Down Standards",
+      "category": "Search_Seizure",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Digital Device Search Requirements",
+      "category": "Search_Seizure",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Strip Search / Body Cavity Search Restrictions",
+      "category": "Search_Seizure",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Plain View Doctrine Application",
+      "category": "Search_Seizure",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Exigent Circumstances Searches",
+      "category": "Search_Seizure",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Inventory Search Procedures",
+      "category": "Search_Seizure",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Pursuit Termination Criteria",
+      "category": "Pursuit",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "PIT Maneuver Authorization",
+      "category": "Pursuit",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Pursuit Supervisor Responsibilities",
+      "category": "Pursuit",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Emergency Vehicle Operation",
+      "category": "Pursuit",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Pursuit Reporting Requirements",
+      "category": "Pursuit",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    }
+  ],
+  "fullGapAnalysis": [
+    {
+      "topicName": "Less-Lethal Weapons Deployment",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "De-Escalation Requirements",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Chokehold / Neck Restraint Ban",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Taser / CEW Policy",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "OC Spray / Chemical Agents",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Baton Use Guidelines",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Force Review Board Process",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Duty to Intervene",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Warning Requirements Before Force",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Code of Ethics / Standards of Conduct",
+      "category": "Officer_Conduct",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Off-Duty Conduct Standards",
+      "category": "Officer_Conduct",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Conflict of Interest / Gratuities",
+      "category": "Officer_Conduct",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Truthfulness / Brady Disclosure Obligations",
+      "category": "Officer_Conduct",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Secondary Employment Rules",
+      "category": "Officer_Conduct",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Courtesy and Professionalism",
+      "category": "Officer_Conduct",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Citizen Complaint Intake Process",
+      "category": "Internal_Affairs",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Administrative vs Criminal Investigations",
+      "category": "Internal_Affairs",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Pitchess Motion Compliance",
+      "category": "Internal_Affairs",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Sustained / Exonerated / Unfounded Findings",
+      "category": "Internal_Affairs",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "POBR (Peace Officer Bill of Rights) Compliance",
+      "category": "Internal_Affairs",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Early Warning System / At-Risk Officer Tracking",
+      "category": "Internal_Affairs",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Investigation Timeline Requirements",
+      "category": "Internal_Affairs",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Witness Interview Procedures (IA)",
+      "category": "Internal_Affairs",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Penalty Matrix / Penalty Guidelines",
+      "category": "Discipline",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Skelly Hearing Procedures",
+      "category": "Discipline",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Suspension and Demotion Standards",
+      "category": "Discipline",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Termination Criteria and Process",
+      "category": "Discipline",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Mitigating / Aggravating Factors",
+      "category": "Discipline",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Grievance and Appeal Process",
+      "category": "Discipline",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Written Reprimand Standards",
+      "category": "Discipline",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Arrest Authority and Standards",
+      "category": "Arrest",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Probable Cause Determination",
+      "category": "Arrest",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Warrantless Arrest Procedures",
+      "category": "Arrest",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Cite-and-Release Policy",
+      "category": "Arrest",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Arrest Documentation Requirements",
+      "category": "Arrest",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Juvenile Arrest Procedures",
+      "category": "Arrest",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Search Warrant Procedures",
+      "category": "Search_Seizure",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Consent Search Protocols",
+      "category": "Search_Seizure",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Vehicle Search Authority",
+      "category": "Search_Seizure",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Stop-and-Frisk / Pat Down Standards",
+      "category": "Search_Seizure",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Digital Device Search Requirements",
+      "category": "Search_Seizure",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Strip Search / Body Cavity Search Restrictions",
+      "category": "Search_Seizure",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Plain View Doctrine Application",
+      "category": "Search_Seizure",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Exigent Circumstances Searches",
+      "category": "Search_Seizure",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Inventory Search Procedures",
+      "category": "Search_Seizure",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Pursuit Termination Criteria",
+      "category": "Pursuit",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "PIT Maneuver Authorization",
+      "category": "Pursuit",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Pursuit Supervisor Responsibilities",
+      "category": "Pursuit",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Emergency Vehicle Operation",
+      "category": "Pursuit",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Pursuit Reporting Requirements",
+      "category": "Pursuit",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Air Support During Pursuits",
+      "category": "Pursuit",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Inter-Agency Pursuit Coordination",
+      "category": "Pursuit",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "BWC Activation Requirements",
+      "category": "Body_Camera",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "BWC Deactivation Rules",
+      "category": "Body_Camera",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Recording Retention Periods",
+      "category": "Body_Camera",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Officer Review of Footage Before Reports",
+      "category": "Body_Camera",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Supervisor Review of BWC Footage",
+      "category": "Body_Camera",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Footage Release and Public Records",
+      "category": "Body_Camera",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Redaction Procedures",
+      "category": "Body_Camera",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "In-Car Camera (Dashcam) Policy",
+      "category": "Body_Camera",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Camera Equipment Assignment and Maintenance",
+      "category": "Body_Camera",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Evidence Collection Procedures",
+      "category": "Evidence_Handling",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Property Room Management",
+      "category": "Evidence_Handling",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Digital Evidence Preservation",
+      "category": "Evidence_Handling",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Biological / DNA Evidence Handling",
+      "category": "Evidence_Handling",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Firearms Evidence Processing",
+      "category": "Evidence_Handling",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Narcotics Evidence Storage",
+      "category": "Evidence_Handling",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Evidence Disposal / Destruction",
+      "category": "Evidence_Handling",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Evidence Audit Requirements",
+      "category": "Evidence_Handling",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Custodial Interrogation Recording Requirements",
+      "category": "Interrogation",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Juvenile Interview Protections",
+      "category": "Interrogation",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Right to Counsel Procedures",
+      "category": "Interrogation",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Voluntary Statement Documentation",
+      "category": "Interrogation",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Interpreter / Language Access During Interviews",
+      "category": "Interrogation",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Gang Enforcement Procedures",
+      "category": "Special_Units",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Traffic Stop Procedures",
+      "category": "Traffic",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "DUI Enforcement and FST Protocols",
+      "category": "Traffic",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Speed Enforcement (Radar/Lidar)",
+      "category": "Traffic",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Traffic Citation Issuance",
+      "category": "Traffic",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Traffic Collision Investigation",
+      "category": "Traffic",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Hit-and-Run Investigation",
+      "category": "Traffic",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Fatality Investigation Procedures",
+      "category": "Traffic",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Commercial Vehicle Enforcement",
+      "category": "Traffic",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Continuing Professional Training (CPT)",
+      "category": "Training",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "De-Escalation Training Requirements",
+      "category": "Training",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Firearms Qualification Standards",
+      "category": "Training",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "First Aid / CPR Training",
+      "category": "Training",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "POST Certification Compliance",
+      "category": "Training",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Use of Force Training Curriculum",
+      "category": "Training",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Confidential Informant Registration",
+      "category": "Informants",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Informant Reliability Assessment",
+      "category": "Informants",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Informant Payment / Compensation",
+      "category": "Informants",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Juvenile Informant Restrictions",
+      "category": "Informants",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Informant File Management",
+      "category": "Informants",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Supervisor Approval for CI Operations",
+      "category": "Informants",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Informant Meeting Protocols",
+      "category": "Informants",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Brady / Giglio Disclosure Obligations",
+      "category": "Records",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "SB 1421 / SB 16 Records Disclosure",
+      "category": "Records",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Records Retention Schedule",
+      "category": "Records",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Personnel Records Access (Pitchess)",
+      "category": "Records",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Body Camera Footage Release",
+      "category": "Records",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Holding Cell / Temporary Detention Standards",
+      "category": "Custody",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Detainee Medical Screening",
+      "category": "Custody",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Suicide Prevention in Custody",
+      "category": "Custody",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Prisoner Transport Procedures",
+      "category": "Custody",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Detainee Rights and Treatment",
+      "category": "Custody",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Cell Check Frequency Requirements",
+      "category": "Custody",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Mental Health Crisis in Custody",
+      "category": "Custody",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Shooting Review Board Process",
+      "category": "OIS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Compelled vs Voluntary Statements",
+      "category": "OIS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Body-Worn Cameras — Evidence Chain of Custody",
+      "category": "BODY_CAMERA",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Scene Management After OIS",
+      "category": "OIS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "District Attorney Review of OIS",
+      "category": "OIS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Public Notification After OIS",
+      "category": "OIS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "SWAT Deployment Criteria",
+      "category": "Critical_Incident",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Incident Command System (ICS) Procedures",
+      "category": "Critical_Incident",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Hostage / Barricaded Subject Protocols",
+      "category": "Critical_Incident",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Mass Casualty Incident Response",
+      "category": "Critical_Incident",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Bomb Threat Procedures",
+      "category": "Critical_Incident",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Mutual Aid Coordination",
+      "category": "Critical_Incident",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Emergency Operations Center Activation",
+      "category": "Critical_Incident",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "K-9 Unit Deployment and Bite Protocols",
+      "category": "Special_Units",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "SWAT Team Composition and Deployment",
+      "category": "Special_Units",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Narcotics Unit Operations",
+      "category": "Special_Units",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Body-Worn Cameras — Camera Malfunction Reporting",
+      "category": "BODY_CAMERA",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Bomb Squad / EOD Procedures",
+      "category": "Special_Units",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Aviation / Air Operations",
+      "category": "Special_Units",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Task Force Participation Protocols",
+      "category": "Special_Units",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Use of Force — Authorized Force Options",
+      "category": "USE_OF_FORCE",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Use of Force — Deadly Force Authorization",
+      "category": "USE_OF_FORCE",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Use of Force — De-escalation Requirements",
+      "category": "USE_OF_FORCE",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Use of Force — Force Reporting Requirements",
+      "category": "USE_OF_FORCE",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Use of Force — Less-Lethal Force Options",
+      "category": "USE_OF_FORCE",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Use of Force — Force Continuum Model",
+      "category": "USE_OF_FORCE",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Use of Force — Choke Hold Prohibition",
+      "category": "USE_OF_FORCE",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Use of Force — Carotid Restraint Restrictions",
+      "category": "USE_OF_FORCE",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Use of Force — Prone Restraint Limitations",
+      "category": "USE_OF_FORCE",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Use of Force — Force Against Restrained Persons",
+      "category": "USE_OF_FORCE",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Use of Force — Force Documentation Standards",
+      "category": "USE_OF_FORCE",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Body-Worn Cameras — Camera Activation Requirements",
+      "category": "BODY_CAMERA",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Body-Worn Cameras — Recording Retention Schedule",
+      "category": "BODY_CAMERA",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Body-Worn Cameras — Public Release Procedures",
+      "category": "BODY_CAMERA",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Body-Worn Cameras — Supervisor Review Requirements",
+      "category": "BODY_CAMERA",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Body-Worn Cameras — Camera Equipment Standards",
+      "category": "BODY_CAMERA",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Body-Worn Cameras — Privacy Considerations",
+      "category": "BODY_CAMERA",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Body-Worn Cameras — Camera Deactivation Protocols",
+      "category": "BODY_CAMERA",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Body-Worn Cameras — Redaction Procedures",
+      "category": "BODY_CAMERA",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Internal Affairs — Complaint Intake Procedures",
+      "category": "INTERNAL_AFFAIRS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Internal Affairs — Investigation Timeline Requirements",
+      "category": "INTERNAL_AFFAIRS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Internal Affairs — Sustained Findings Criteria",
+      "category": "INTERNAL_AFFAIRS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Internal Affairs — Citizen Complaint Processing",
+      "category": "INTERNAL_AFFAIRS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Internal Affairs — Anonymous Complaint Handling",
+      "category": "INTERNAL_AFFAIRS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Internal Affairs — IA Case Classification",
+      "category": "INTERNAL_AFFAIRS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Internal Affairs — Witness Interview Protocols",
+      "category": "INTERNAL_AFFAIRS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Internal Affairs — Evidence Collection Standards",
+      "category": "INTERNAL_AFFAIRS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Internal Affairs — Case Disposition Categories",
+      "category": "INTERNAL_AFFAIRS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Internal Affairs — Appeal Rights and Procedures",
+      "category": "INTERNAL_AFFAIRS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Internal Affairs — Confidentiality Requirements",
+      "category": "INTERNAL_AFFAIRS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Internal Affairs — IA Annual Reporting",
+      "category": "INTERNAL_AFFAIRS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Vehicle Pursuits — Pursuit Authorization Criteria",
+      "category": "PURSUIT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Vehicle Pursuits — Supervisor Approval Requirements",
+      "category": "PURSUIT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Vehicle Pursuits — Pursuit Termination Tactics",
+      "category": "PURSUIT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Vehicle Pursuits — Tire Deflation Device Use",
+      "category": "PURSUIT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Vehicle Pursuits — PIT Maneuver Authorization",
+      "category": "PURSUIT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Vehicle Pursuits — Pursuit Reporting Requirements",
+      "category": "PURSUIT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Vehicle Pursuits — Post-Pursuit Review Board",
+      "category": "PURSUIT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Vehicle Pursuits — Pursuit Speed Limitations",
+      "category": "PURSUIT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Vehicle Pursuits — Multi-Jurisdiction Pursuit Protocols",
+      "category": "PURSUIT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Vehicle Pursuits — Civilian Safety Considerations",
+      "category": "PURSUIT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Vehicle Pursuits — Air Support During Pursuit",
+      "category": "PURSUIT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Written Reprimand Procedures",
+      "category": "DISCIPLINE",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Suspension Without Pay",
+      "category": "DISCIPLINE",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Demotion Criteria",
+      "category": "DISCIPLINE",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Termination Proceedings",
+      "category": "DISCIPLINE",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Skelly Hearing Rights",
+      "category": "DISCIPLINE",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Arbitration Procedures",
+      "category": "DISCIPLINE",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Discipline Matrix Categories",
+      "category": "DISCIPLINE",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Mitigating Factors",
+      "category": "DISCIPLINE",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Aggravating Factors",
+      "category": "DISCIPLINE",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Last Chance Agreements",
+      "category": "DISCIPLINE",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Return to Duty Conditions",
+      "category": "DISCIPLINE",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Officer-Involved Shootings — OIS Investigation Protocol",
+      "category": "OFFICER_INVOLVED_SHOOTING",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Officer-Involved Shootings — Scene Preservation Requirements",
+      "category": "OFFICER_INVOLVED_SHOOTING",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Officer-Involved Shootings — Involved Officer Separation",
+      "category": "OFFICER_INVOLVED_SHOOTING",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Officer-Involved Shootings — Compelled Statement Procedures",
+      "category": "OFFICER_INVOLVED_SHOOTING",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Officer-Involved Shootings — DA Referral Timeline",
+      "category": "OFFICER_INVOLVED_SHOOTING",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Officer-Involved Shootings — Administrative Investigation",
+      "category": "OFFICER_INVOLVED_SHOOTING",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Officer-Involved Shootings — Post-Shooting Psychological Services",
+      "category": "OFFICER_INVOLVED_SHOOTING",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Officer-Involved Shootings — Return to Duty Evaluation",
+      "category": "OFFICER_INVOLVED_SHOOTING",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Officer-Involved Shootings — Public Notification",
+      "category": "OFFICER_INVOLVED_SHOOTING",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Officer-Involved Shootings — Community Briefing Requirements",
+      "category": "OFFICER_INVOLVED_SHOOTING",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Officer-Involved Shootings — OIS Review Board",
+      "category": "OFFICER_INVOLVED_SHOOTING",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "SWAT Operations — High-Risk Warrant Service",
+      "category": "SWAT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Training — Academy Training Curriculum",
+      "category": "TRAINING",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Training — Annual In-Service Training",
+      "category": "TRAINING",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Training — Firearms Qualification Standards",
+      "category": "TRAINING",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Training — Defensive Tactics Training",
+      "category": "TRAINING",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Training — Emergency Vehicle Operations",
+      "category": "TRAINING",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Training — Cultural Awareness Training",
+      "category": "TRAINING",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Training — Mental Health Crisis Training",
+      "category": "TRAINING",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Training — Legal Updates Training",
+      "category": "TRAINING",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Training — First Aid/CPR Certification",
+      "category": "TRAINING",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Training — Specialty Training Programs",
+      "category": "TRAINING",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Training — Training Documentation",
+      "category": "TRAINING",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Training — Remedial Training Procedures",
+      "category": "TRAINING",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Field Training Officer Program — FTO Selection Criteria",
+      "category": "FTO",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Field Training Officer Program — FTO Training Requirements",
+      "category": "FTO",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Field Training Officer Program — Probationary Evaluation Standards",
+      "category": "FTO",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Field Training Officer Program — Daily Observation Reports",
+      "category": "FTO",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Field Training Officer Program — Phase Training Schedule",
+      "category": "FTO",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Field Training Officer Program — Shadow Phase Requirements",
+      "category": "FTO",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Field Training Officer Program — Solo Phase Evaluation",
+      "category": "FTO",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Field Training Officer Program — FTO Rotation Schedule",
+      "category": "FTO",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Field Training Officer Program — Problem Officer Identification",
+      "category": "FTO",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Field Training Officer Program — Extension of Probation Criteria",
+      "category": "FTO",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Field Training Officer Program — FTO Documentation Standards",
+      "category": "FTO",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Field Training Officer Program — FTO Program Audit",
+      "category": "FTO",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "DUI Enforcement — DUI Detection Techniques",
+      "category": "DUI_ENFORCEMENT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "DUI Enforcement — Chemical Test Administration",
+      "category": "DUI_ENFORCEMENT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "DUI Enforcement — Implied Consent Procedures",
+      "category": "DUI_ENFORCEMENT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "DUI Enforcement — DUI Checkpoint Operations",
+      "category": "DUI_ENFORCEMENT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "DUI Enforcement — Drug Recognition Expert Program",
+      "category": "DUI_ENFORCEMENT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "DUI Enforcement — DUI Arrest Processing",
+      "category": "DUI_ENFORCEMENT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "DUI Enforcement — Vehicle Impoundment Procedures",
+      "category": "DUI_ENFORCEMENT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "DUI Enforcement — DUI Warrant Procedures",
+      "category": "DUI_ENFORCEMENT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "DUI Enforcement — Repeat Offender Protocols",
+      "category": "DUI_ENFORCEMENT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "DUI Enforcement — DUI Collision Investigation",
+      "category": "DUI_ENFORCEMENT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "DUI Enforcement — DUI Statistical Reporting",
+      "category": "DUI_ENFORCEMENT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Active Shooter Response — Rapid Deployment Tactics",
+      "category": "ACTIVE_SHOOTER",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Active Shooter Response — Contact Team Formation",
+      "category": "ACTIVE_SHOOTER",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Active Shooter Response — Rescue Team Operations",
+      "category": "ACTIVE_SHOOTER",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Active Shooter Response — Unified Command Procedures",
+      "category": "ACTIVE_SHOOTER",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Active Shooter Response — School Response Protocols",
+      "category": "ACTIVE_SHOOTER",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Active Shooter Response — Workplace Violence Response",
+      "category": "ACTIVE_SHOOTER",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Active Shooter Response — Multi-Agency Coordination",
+      "category": "ACTIVE_SHOOTER",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Active Shooter Response — Hostage Rescue Operations",
+      "category": "ACTIVE_SHOOTER",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Active Shooter Response — Post-Incident Procedures",
+      "category": "ACTIVE_SHOOTER",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Active Shooter Response — Active Shooter Training Requirements",
+      "category": "ACTIVE_SHOOTER",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Active Shooter Response — Equipment Standards",
+      "category": "ACTIVE_SHOOTER",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "SWAT Operations — SWAT Activation Criteria",
+      "category": "SWAT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "SWAT Operations — SWAT Team Selection",
+      "category": "SWAT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "SWAT Operations — SWAT Training Standards",
+      "category": "SWAT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "SWAT Operations — Hostage Negotiation",
+      "category": "SWAT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "SWAT Operations — Chemical Agent Deployment",
+      "category": "SWAT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "SWAT Operations — Breaching Operations",
+      "category": "SWAT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "SWAT Operations — Sniper Operations",
+      "category": "SWAT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "SWAT Operations — SWAT Equipment Standards",
+      "category": "SWAT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "SWAT Operations — After-Action Review Process",
+      "category": "SWAT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "SWAT Operations — SWAT Annual Assessment",
+      "category": "SWAT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Deployment Authorization",
+      "category": "K9",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Handler Selection",
+      "category": "K9",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Training Standards",
+      "category": "K9",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Bite Reporting",
+      "category": "K9",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Use of Force Documentation",
+      "category": "K9",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Handler Responsibilities",
+      "category": "K9",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Kennel Standards",
+      "category": "K9",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Veterinary Care",
+      "category": "K9",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Retirement Procedures",
+      "category": "K9",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Narcotics Detection",
+      "category": "K9",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Tracking Operations",
+      "category": "K9",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Annual Certification",
+      "category": "K9",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Records Management — Public Records Act Compliance",
+      "category": "RECORDS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Records Management — CLETS Access Controls",
+      "category": "RECORDS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Records Management — Data Privacy Requirements",
+      "category": "RECORDS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Records Management — Records Destruction Procedures",
+      "category": "RECORDS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Records Management — Digital Evidence Storage",
+      "category": "RECORDS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Records Management — Report Writing Standards",
+      "category": "RECORDS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Records Management — Records Amendment Procedures",
+      "category": "RECORDS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Records Management — Information Sharing Agreements",
+      "category": "RECORDS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Records Management — Personnel File Management",
+      "category": "RECORDS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Records Management — Records Audit Procedures",
+      "category": "RECORDS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Brady Disclosure — Brady List Maintenance",
+      "category": "BRADY",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Brady Disclosure — Material Impeachment Identification",
+      "category": "BRADY",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Brady Disclosure — Disclosure Procedures",
+      "category": "BRADY",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Brady Disclosure — Pitchess Motion Response",
+      "category": "BRADY",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Brady Disclosure — Officer Notification Requirements",
+      "category": "BRADY",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Brady Disclosure — DA Liaison Procedures",
+      "category": "BRADY",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Brady Disclosure — Annual Brady Audit",
+      "category": "BRADY",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Brady Disclosure — SB 1421 Compliance",
+      "category": "BRADY",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Brady Disclosure — Personnel Record Disclosure",
+      "category": "BRADY",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Brady Disclosure — Sustained Finding Notifications",
+      "category": "BRADY",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Brady Disclosure — Court Testimony Monitoring",
+      "category": "BRADY",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Brady Disclosure — Brady Training Requirements",
+      "category": "BRADY",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Traffic Enforcement — Traffic Stop Procedures",
+      "category": "TRAFFIC",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Traffic Enforcement — Citation Issuance Standards",
+      "category": "TRAFFIC",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Traffic Enforcement — Traffic Collision Investigation",
+      "category": "TRAFFIC",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Traffic Enforcement — Hit-and-Run Investigation",
+      "category": "TRAFFIC",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Traffic Enforcement — Speed Enforcement Methods",
+      "category": "TRAFFIC",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Traffic Enforcement — Pedestrian Safety Enforcement",
+      "category": "TRAFFIC",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Traffic Enforcement — School Zone Enforcement",
+      "category": "TRAFFIC",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Traffic Enforcement — Construction Zone Enforcement",
+      "category": "TRAFFIC",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Traffic Enforcement — Red Light Camera Procedures",
+      "category": "TRAFFIC",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Traffic Enforcement — Traffic Data Analysis",
+      "category": "TRAFFIC",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Traffic Enforcement — Selective Traffic Enforcement",
+      "category": "TRAFFIC",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Force Reporting Requirements",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Social Media Policy",
+      "category": "Officer_Conduct",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Anonymous Complaint Processing",
+      "category": "Internal_Affairs",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Handcuffing and Restraint During Arrest",
+      "category": "Arrest",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Spike Strip / Tire Deflation Policy",
+      "category": "Pursuit",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Chain of Custody Protocols",
+      "category": "Evidence_Handling",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Miranda Warning Procedures",
+      "category": "Interrogation",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Deception in Interrogation Guidelines",
+      "category": "Interrogation",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Defensive Tactics Training",
+      "category": "Training",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Public Records Request Processing",
+      "category": "Records",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Involved Officer Post-Shooting Protocol",
+      "category": "OIS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Independent Investigation Requirements",
+      "category": "OIS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Undercover Operations Guidelines",
+      "category": "Special_Units",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Body-Worn Cameras — BWC Data Storage Standards",
+      "category": "BODY_CAMERA",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Vehicle Pursuits — Pursuit Driving Training",
+      "category": "PURSUIT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Progressive Discipline Schedule",
+      "category": "DISCIPLINE",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Officer-Involved Shootings — Annual OIS Statistical Report",
+      "category": "OFFICER_INVOLVED_SHOOTING",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "DUI Enforcement — Standardized Field Sobriety Tests",
+      "category": "DUI_ENFORCEMENT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Active Shooter Response — Active Shooter Response Protocol",
+      "category": "ACTIVE_SHOOTER",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "SWAT Operations — Barricaded Subject Response",
+      "category": "SWAT",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Records Management — Records Retention Schedule",
+      "category": "RECORDS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Records Management — Body Camera Footage Retention",
+      "category": "RECORDS",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Traffic Enforcement — Commercial Vehicle Inspection",
+      "category": "TRAFFIC",
+      "agenciesMissingPolicy": 487,
+      "agenciesWithPolicy": 1,
+      "totalAgencies": 488,
+      "gapPercent": "99.8%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "CPRA (California Public Records Act) Compliance",
+      "category": "Records",
+      "agenciesMissingPolicy": 481,
+      "agenciesWithPolicy": 7,
+      "totalAgencies": 488,
+      "gapPercent": "98.6%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Deadly Force Authorization",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 480,
+      "agenciesWithPolicy": 8,
+      "totalAgencies": 488,
+      "gapPercent": "98.4%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Sobriety Checkpoint Authorization",
+      "category": "Traffic",
+      "agenciesMissingPolicy": 478,
+      "agenciesWithPolicy": 10,
+      "totalAgencies": 488,
+      "gapPercent": "98.0%",
+      "priority": "Medium"
+    },
+    {
+      "topicName": "Internal Investigation Procedures",
+      "category": "Internal_Affairs",
+      "agenciesMissingPolicy": 478,
+      "agenciesWithPolicy": 10,
+      "totalAgencies": 488,
+      "gapPercent": "98.0%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Crisis Intervention Training (CIT)",
+      "category": "Training",
+      "agenciesMissingPolicy": 477,
+      "agenciesWithPolicy": 11,
+      "totalAgencies": 488,
+      "gapPercent": "97.7%",
+      "priority": "Critical"
+    },
+    {
+      "topicName": "Active Shooter Response Protocol",
+      "category": "Critical_Incident",
+      "agenciesMissingPolicy": 196,
+      "agenciesWithPolicy": 292,
+      "totalAgencies": 488,
+      "gapPercent": "40.2%",
+      "priority": "Low"
+    },
+    {
+      "topicName": "OIS Investigation Procedures",
+      "category": "OIS",
+      "agenciesMissingPolicy": 187,
+      "agenciesWithPolicy": 301,
+      "totalAgencies": 488,
+      "gapPercent": "38.3%",
+      "priority": "High"
+    },
+    {
+      "topicName": "Redaction Procedures for Public Release",
+      "category": "Records",
+      "agenciesMissingPolicy": 178,
+      "agenciesWithPolicy": 310,
+      "totalAgencies": 488,
+      "gapPercent": "36.5%",
+      "priority": "Low"
+    },
+    {
+      "topicName": "Progressive Discipline Framework",
+      "category": "Discipline",
+      "agenciesMissingPolicy": 172,
+      "agenciesWithPolicy": 316,
+      "totalAgencies": 488,
+      "gapPercent": "35.2%",
+      "priority": "High"
+    },
+    {
+      "topicName": "Pursuit Authorization Standards",
+      "category": "Pursuit",
+      "agenciesMissingPolicy": 146,
+      "agenciesWithPolicy": 342,
+      "totalAgencies": 488,
+      "gapPercent": "29.9%",
+      "priority": "High"
+    },
+    {
+      "topicName": "Academy Training Standards",
+      "category": "Training",
+      "agenciesMissingPolicy": 130,
+      "agenciesWithPolicy": 358,
+      "totalAgencies": 488,
+      "gapPercent": "26.6%",
+      "priority": "High"
+    },
+    {
+      "topicName": "Field Training Officer (FTO) Program",
+      "category": "Training",
+      "agenciesMissingPolicy": 122,
+      "agenciesWithPolicy": 366,
+      "totalAgencies": 488,
+      "gapPercent": "25.0%",
+      "priority": "High"
+    },
+    {
+      "topicName": "Bias-Free Policing / Racial Profiling Prohibition",
+      "category": "Officer_Conduct",
+      "agenciesMissingPolicy": 120,
+      "agenciesWithPolicy": 368,
+      "totalAgencies": 488,
+      "gapPercent": "24.6%",
+      "priority": "Low"
+    },
+    {
+      "topicName": "Custodial Arrest and Transport",
+      "category": "Arrest",
+      "agenciesMissingPolicy": 114,
+      "agenciesWithPolicy": 374,
+      "totalAgencies": 488,
+      "gapPercent": "23.4%",
+      "priority": "Low"
+    },
+    {
+      "topicName": "Body-Worn Cameras — Training Requirements for BWC",
+      "category": "BODY_CAMERA",
+      "agenciesMissingPolicy": 99,
+      "agenciesWithPolicy": 389,
+      "totalAgencies": 488,
+      "gapPercent": "20.3%",
+      "priority": "Low"
+    },
+    {
+      "topicName": "Force Continuum / Force Options",
+      "category": "Use_of_Force",
+      "agenciesMissingPolicy": 82,
+      "agenciesWithPolicy": 406,
+      "totalAgencies": 488,
+      "gapPercent": "16.8%",
+      "priority": "High"
+    },
+    {
+      "topicName": "Use of Force — Force Review Board Procedures",
+      "category": "USE_OF_FORCE",
+      "agenciesMissingPolicy": 0,
+      "agenciesWithPolicy": 488,
+      "totalAgencies": 488,
+      "gapPercent": "0.0%",
+      "priority": "Low"
+    }
+  ]
+}

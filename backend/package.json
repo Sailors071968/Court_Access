@@ -15,7 +15,8 @@
     "phase83:dataset": "tsx src/policy/pipeline/phase83_intelligenceDataset.ts",
     "phase84:dashboard": "tsx src/policy/pipeline/phase84_dashboardPopulation.ts",
     "phase85-90:validate": "tsx src/policy/pipeline/phase85_90_operationalValidation.ts",
-    "phase91-96:activate": "tsx src/policy/pipeline/phase91_96_statewideActivation.ts"
+    "phase91-96:activate": "tsx src/policy/pipeline/phase91_96_statewideActivation.ts",
+    "phase97-102:audit": "tsx src/policy/pipeline/phase97_102_datasetAudit.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1004.0",

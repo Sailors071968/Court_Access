@@ -352,3 +352,38 @@ model CPRAAnnualUpdate {
   @@index([closed])
   @@map("cpra_annual_updates")
 }
+
+// ---------------------------------------------------------------------------
+// Trial Exhibit Scene — saved 3D courtroom exhibit scenes (Phase 63)
+// ---------------------------------------------------------------------------
+
+model TrialExhibitScene {
+  sceneId         String   @id @default(uuid())
+  caseId          String?
+  name            String
+  description     String?
+
+  // Location data
+  latitude        Float
+  longitude       Float
+  address         String?
+
+  // Scene configuration (stored as JSON strings)
+  objectSettings  String   // JSON: { showTrees, showBushes, showVehicles, ... }
+  cameraSettings  String?  // JSON: { position, target, preset }
+  markers         String?  // JSON: array of scene markers
+  sceneData       String?  // JSON: buildings, roads, sidewalks, etc.
+  animationData   String?  // JSON: timeline keyframes
+
+  // Metadata
+  createdBy       String?
+  thumbnail       String?  // base64 PNG thumbnail
+  isPublic        Boolean  @default(false)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([createdBy])
+  @@map("trial_exhibit_scenes")
+}

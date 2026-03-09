@@ -17,6 +17,7 @@ import { DashboardRouter } from './pages/dashboard/DashboardRouter';
 import { PolicyPipelineDashboard } from './pages/dashboard/PolicyPipelineDashboard';
 import { PolicyIntelligenceDashboard } from './pages/dashboard/PolicyIntelligenceDashboard';
 import { CpraDashboard } from './pages/dashboard/CpraDashboard';
+import { SystemHealthDashboard } from './pages/dashboard/SystemHealthDashboard';
 import ExhibitViewer from './pages/dashboard/exhibits/ExhibitViewer';
 import { CasesListPage } from './pages/CasesListPage';
 import { SearchPage } from './pages/SearchPage';
@@ -82,6 +83,14 @@ function App() {
             }
           />
           <Route path="dashboard/exhibits/viewer" element={<ExhibitViewer />} />
+          <Route
+            path="dashboard/system-health"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <SystemHealthDashboard />
+              </ProtectedRoute>
+            }
+          />
           <Route path="cases" element={<CasesListPage />} />
           <Route path="search" element={<SearchPage />} />
           <Route path="notifications" element={<NotificationsPage />} />

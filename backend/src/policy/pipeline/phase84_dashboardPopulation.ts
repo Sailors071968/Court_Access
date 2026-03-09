@@ -56,8 +56,9 @@ async function main() {
     console.log('  Classification Accuracy:');
     console.log(`    Documents Classified:  ${classificationAccuracy.totalClassified}`);
     console.log(`    Avg Confidence:        ${(classificationAccuracy.averageConfidence * 100).toFixed(1)}%`);
-    console.log(`    High Confidence (>0.8): ${classificationAccuracy.highConfidenceCount}`);
-    console.log(`    Low Confidence (<0.5):  ${classificationAccuracy.lowConfidenceCount}`);
+    console.log(`    High Confidence %:     ${classificationAccuracy.highConfidencePercent.toFixed(1)}%`);
+    console.log(`    Estimated Accuracy:    ${classificationAccuracy.estimatedAccuracy.toFixed(1)}%`);
+    console.log(`    Above 85% Threshold:   ${classificationAccuracy.aboveThreshold ? 'YES' : 'NO'}`);
 
     console.log();
     console.log('  CHP Baseline:');
@@ -171,12 +172,17 @@ async function main() {
 
     console.log();
     console.log('  Campaign Status:');
-    console.log(`    Active Campaign:       ${campaignStatus.activeCampaign ? 'Yes' : 'No'}`);
-    if (campaignStatus.activeCampaign) {
-      console.log(`    Campaign Name:         ${campaignStatus.campaignName}`);
-      console.log(`    Total Requests:        ${campaignStatus.totalRequests}`);
-      console.log(`    Sent:                  ${campaignStatus.sentCount}`);
-      console.log(`    Responses:             ${campaignStatus.responseCount}`);
+    console.log(`    Active Campaigns:      ${campaignStatus.activeCampaigns}`);
+    console.log(`    Total Requests Sent:   ${campaignStatus.totalRequestsSent}`);
+    console.log(`    Responses Received:    ${campaignStatus.totalResponsesReceived}`);
+    console.log(`    Pending Follow-Ups:    ${campaignStatus.pendingFollowUps}`);
+    console.log(`    Daily Send Count:      ${campaignStatus.dailySendCount}/${campaignStatus.dailyLimit}`);
+    if (campaignStatus.campaigns.length > 0) {
+      console.log();
+      console.log('  Campaign Details:');
+      for (const c of campaignStatus.campaigns) {
+        console.log(`    ${c.campaignName}: ${c.sentCount}/${c.requestCount} sent, ${c.respondedCount} responded, ${c.closedCount} closed`);
+      }
     }
   } catch (error) {
     console.error('  Error loading CPRA data:', error);

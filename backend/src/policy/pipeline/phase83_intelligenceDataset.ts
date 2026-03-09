@@ -52,26 +52,33 @@ async function main() {
   console.log('[Step 2] Running classification validation...');
   try {
     const validation = await runClassificationValidation();
-    console.log(`  Total Documents:    ${validation.totalDocuments}`);
-    console.log(`  Matches:            ${validation.matches}`);
-    console.log(`  Mismatches:         ${validation.mismatches}`);
-    console.log(`  Unclassified:       ${validation.unclassified}`);
-    console.log(`  Accuracy:           ${validation.accuracy.toFixed(2)}%`);
+    console.log(`  Total Documents:    ${validation.totalDocumentsAudited}`);
+    console.log(`  With Topic:         ${validation.documentsWithTopic}`);
+    console.log(`  Without Topic:      ${validation.documentsWithoutTopic}`);
+    console.log(`  Avg Confidence:     ${validation.averageConfidence.toFixed(2)}`);
+    console.log(`  Accuracy Estimate:  ${validation.accuracyEstimate.toFixed(2)}%`);
+    console.log(`  Above 85% Threshold: ${validation.aboveThreshold ? 'YES' : 'NO'}`);
 
-    if (validation.documentsChanged.length > 0) {
+    console.log();
+    console.log('  Confidence Distribution:');
+    console.log(`    High (>=0.85):    ${validation.confidenceDistribution.high}`);
+    console.log(`    Medium (0.65-84): ${validation.confidenceDistribution.medium}`);
+    console.log(`    Low (0.40-0.64):  ${validation.confidenceDistribution.low}`);
+    console.log(`    Very Low (<0.40): ${validation.confidenceDistribution.veryLow}`);
+
+    if (validation.flaggedForReview.length > 0) {
       console.log();
-      console.log(`  Classification Changes (${validation.documentsChanged.length}):`);
-      for (const change of validation.documentsChanged.slice(0, 10)) {
-        console.log(`    ${change.documentId}: ${change.previousTopicId || 'none'} → ${change.newTopicId || 'none'} (${(change.confidence * 100).toFixed(0)}%)`);
+      console.log(`  Flagged for Review (${validation.flaggedForReview.length}):`);
+      for (const entry of validation.flaggedForReview.slice(0, 10)) {
+        console.log(`    ${entry.documentId}: ${entry.topicName} (${(entry.confidence * 100).toFixed(0)}%) — ${entry.matchReason}`);
       }
     }
 
-    if (validation.accuracyByCategory) {
+    if (validation.categoryBreakdown.length > 0) {
       console.log();
       console.log('  Accuracy by Category:');
-      for (const [category, stats] of Object.entries(validation.accuracyByCategory)) {
-        const s = stats as { total: number; matches: number; accuracy: number };
-        console.log(`    ${category.padEnd(30)} ${s.accuracy.toFixed(1)}% (${s.matches}/${s.total})`);
+      for (const cat of validation.categoryBreakdown) {
+        console.log(`    ${cat.category.padEnd(30)} ${cat.estimatedAccuracy.toFixed(1)}% (${cat.highConfidenceCount}/${cat.totalDocuments})`);
       }
     }
   } catch (error) {

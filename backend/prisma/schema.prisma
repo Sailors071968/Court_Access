@@ -125,3 +125,139 @@ model CorpusIngestionLock {
   @@index([expiresAt])
   @@map("corpus_ingestion_lock")
 }
+
+// ---------------------------------------------------------------------------
+// Agency — California law enforcement agency registry (POST directory)
+// ---------------------------------------------------------------------------
+
+model Agency {
+  agencyId            String   @id @default(uuid())
+  agencyName          String
+  agencyType          String?  // Police | Sheriff | State | TaskForce | Probation | Corrections | District_Attorney | University | Transit | Communications | Coroner | Other
+  city                String?
+  county              String?
+  populationEstimate  Int?
+  jurisdictionRank    Int?
+
+  website             String?
+  postDirectoryUrl    String?
+
+  recordsRequestUrl   String?
+  policyCollectionUrl String?
+
+  policiesDiscovered  Boolean  @default(false)
+
+  crawlStatus         String   @default("pending") // pending | in_progress | completed | failed | skipped
+  crawlError          String?
+  lastCrawledAt       DateTime?
+  pagesFound          Int      @default(0)
+  policyPagesFound    Int      @default(0)
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  PolicyDocuments     PolicyDocument[]
+  PolicyCoverage      PolicyCoverage[]
+
+  @@unique([agencyName, county])
+  @@index([county])
+  @@index([agencyType])
+  @@index([crawlStatus])
+  @@index([jurisdictionRank])
+  @@map("agencies")
+}
+
+// ---------------------------------------------------------------------------
+// PolicyTopic — normalized policy topic taxonomy (derived from CHP corpus)
+// ---------------------------------------------------------------------------
+
+model PolicyTopic {
+  id           String   @id @default(uuid())
+  topicName    String   @unique
+  category     String   // Use_of_Force | Officer_Conduct | Internal_Affairs | Discipline | Arrest | Search_Seizure | Pursuit | Body_Camera | Evidence_Handling | Interrogation | Traffic | Training | Informants | Records | Custody | OIS | Critical_Incident | Special_Units
+  keywords     String   // JSON array of search terms
+  description  String?
+  chpReference String?  // CHP policy number reference (e.g. HPM 100.68)
+  sortOrder    Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  PolicyDocuments     PolicyDocument[]
+  PolicyCoverage      PolicyCoverage[]
+
+  @@index([category])
+  @@map("policy_topics")
+}
+
+// ---------------------------------------------------------------------------
+// PolicyDocument — discovered policy documents from agency websites
+// ---------------------------------------------------------------------------
+
+model PolicyDocument {
+  documentId     String   @id @default(uuid())
+
+  agencyId       String
+  Agency         Agency   @relation(fields: [agencyId], references: [agencyId])
+
+  topicId        String?
+  Topic          PolicyTopic? @relation(fields: [topicId], references: [id])
+
+  documentType   String?  // USE_OF_FORCE | INTERNAL_AFFAIRS | BODY_CAMERA | DISCIPLINE | TRAINING | GENERAL_POLICY
+  title          String?
+  policyNumber   String?  // e.g. HPM 100.68
+
+  sourceUrl      String
+  s3Url          String?
+
+  mimeType       String?
+  fileSizeBytes  Int?
+
+  textExtracted  Boolean  @default(false)
+  textContent    String?
+  ocrStatus      String   @default("pending") // pending | in_progress | completed | failed | skipped
+  ocrError       String?
+
+  classificationStatus String @default("pending") // pending | completed | failed
+  classificationScore  Float?
+
+  isChpCanonical Boolean  @default(false) // true for CHP reference policies
+  matchedTopicConfidence Float? // confidence of topic matching (0-1)
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([agencyId])
+  @@index([topicId])
+  @@index([documentType])
+  @@index([ocrStatus])
+  @@index([classificationStatus])
+  @@index([isChpCanonical])
+  @@map("policy_documents")
+}
+
+// ---------------------------------------------------------------------------
+// PolicyCoverage — tracks which topics each agency has policies for
+// ---------------------------------------------------------------------------
+
+model PolicyCoverage {
+  id          String   @id @default(uuid())
+  agencyId    String
+  Agency      Agency   @relation(fields: [agencyId], references: [agencyId])
+
+  topicId     String
+  Topic       PolicyTopic @relation(fields: [topicId], references: [id])
+
+  policyFound Boolean  @default(false)
+  documentId  String?  // reference to the discovered PolicyDocument
+  sourceUrl   String?
+  notes       String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([agencyId, topicId])
+  @@index([agencyId])
+  @@index([topicId])
+  @@index([policyFound])
+  @@map("policy_coverage")
+}

@@ -32,8 +32,8 @@ export async function extractTextFromPDF(
   const start = Date.now();
 
   try {
-    // eslint-disable-next-line @typescript-eslint/no-require-imports
-    const pdfParse = require('pdf-parse') as (buf: Buffer) => Promise<{ text: string; numpages: number }>;
+    const pdfParseModule = await import('pdf-parse');
+    const pdfParse = pdfParseModule.default as (buf: Buffer) => Promise<{ text: string; numpages: number }>;
     const pdfData = await pdfParse(documentBytes);
 
     const text = pdfData.text?.trim() || '';

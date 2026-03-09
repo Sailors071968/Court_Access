@@ -1,0 +1,2198 @@
+{
+  "phase": 103,
+  "title": "Live Web Crawling Report",
+  "generatedAt": "2026-03-09T23:19:12.244Z",
+  "safetyConfig": {
+    "maxPagesPerAgency": 30,
+    "requestDelayMs": 1000,
+    "maxConcurrentDomains": 2,
+    "maxCrawlTimeMs": 45000
+  },
+  "summary": {
+    "totalAgenciesWithWebsites": 172,
+    "agenciesCrawled": 172,
+    "agenciesSucceeded": 172,
+    "agenciesFailed": 0,
+    "agenciesSkipped": 0,
+    "totalPagesCrawled": 3597,
+    "totalPolicyUrlsDiscovered": 7804,
+    "totalPdfsDiscovered": 1798,
+    "runtimeMs": 3967229,
+    "runtimeMinutes": 66
+  },
+  "topAgenciesByDiscoveries": [
+    {
+      "agency": "Arcadia Police Department",
+      "website": "https://www.arcadiaca.gov/government/city-departments/police-department",
+      "pagesCrawled": 30,
+      "policyUrls": 871,
+      "pdfs": 34,
+      "status": "completed",
+      "runtimeMs": 29390
+    },
+    {
+      "agency": "Porterville Police Department",
+      "website": "https://www.ci.porterville.ca.us/departments/police",
+      "pagesCrawled": 30,
+      "policyUrls": 778,
+      "pdfs": 2,
+      "status": "completed",
+      "runtimeMs": 29518
+    },
+    {
+      "agency": "Yuba City Police Department",
+      "website": "https://www.yubacity.net/police",
+      "pagesCrawled": 30,
+      "policyUrls": 657,
+      "pdfs": 14,
+      "status": "completed",
+      "runtimeMs": 29313
+    },
+    {
+      "agency": "San Francisco Police Department",
+      "website": "https://www.sanfranciscopolice.org",
+      "pagesCrawled": 30,
+      "policyUrls": 516,
+      "pdfs": 442,
+      "status": "completed",
+      "runtimeMs": 29166
+    },
+    {
+      "agency": "Huntington Beach Police Department",
+      "website": "https://www.huntingtonbeachca.gov/government/departments/police",
+      "pagesCrawled": 30,
+      "policyUrls": 493,
+      "pdfs": 0,
+      "status": "completed",
+      "runtimeMs": 30153
+    },
+    {
+      "agency": "Oakland Police Department",
+      "website": "https://www.oaklandca.gov/departments/police",
+      "pagesCrawled": 30,
+      "policyUrls": 438,
+      "pdfs": 329,
+      "status": "completed",
+      "runtimeMs": 30376
+    },
+    {
+      "agency": "Fortuna Police Department",
+      "website": "https://www.friendlyfortuna.com/185/Police-Department",
+      "pagesCrawled": 30,
+      "policyUrls": 409,
+      "pdfs": 65,
+      "status": "completed",
+      "runtimeMs": 29282
+    },
+    {
+      "agency": "Sacramento Police Department",
+      "website": "https://www.cityofsacramento.gov/police",
+      "pagesCrawled": 30,
+      "policyUrls": 373,
+      "pdfs": 308,
+      "status": "completed",
+      "runtimeMs": 29373
+    },
+    {
+      "agency": "Redondo Beach Police Department",
+      "website": "https://www.redondo.org/departments/police/default.aspx",
+      "pagesCrawled": 30,
+      "policyUrls": 319,
+      "pdfs": 19,
+      "status": "completed",
+      "runtimeMs": 29586
+    },
+    {
+      "agency": "San Marino Police Department",
+      "website": "https://www.cityofsanmarino.org/government/departments/police.php",
+      "pagesCrawled": 30,
+      "policyUrls": 291,
+      "pdfs": 12,
+      "status": "completed",
+      "runtimeMs": 29671
+    },
+    {
+      "agency": "Pasadena Police Department",
+      "website": "https://www.cityofpasadena.net/police",
+      "pagesCrawled": 30,
+      "policyUrls": 210,
+      "pdfs": 191,
+      "status": "completed",
+      "runtimeMs": 30265
+    },
+    {
+      "agency": "Pacific Grove Police Department",
+      "website": "https://www.cityofpacificgrove.org/police",
+      "pagesCrawled": 30,
+      "policyUrls": 150,
+      "pdfs": 18,
+      "status": "completed",
+      "runtimeMs": 29627
+    },
+    {
+      "agency": "Santa Monica Police Department",
+      "website": "https://www.santamonica.gov/police",
+      "pagesCrawled": 30,
+      "policyUrls": 145,
+      "pdfs": 1,
+      "status": "completed",
+      "runtimeMs": 30264
+    },
+    {
+      "agency": "San Diego Police Department",
+      "website": "https://www.sandiego.gov/police",
+      "pagesCrawled": 30,
+      "policyUrls": 108,
+      "pdfs": 27,
+      "status": "completed",
+      "runtimeMs": 29110
+    },
+    {
+      "agency": "Fort Bragg Police Department",
+      "website": "https://city.fortbragg.com/131/Police-Department",
+      "pagesCrawled": 30,
+      "policyUrls": 108,
+      "pdfs": 21,
+      "status": "completed",
+      "runtimeMs": 29361
+    },
+    {
+      "agency": "Lincoln Police Department",
+      "website": "https://www.lincolnca.gov/government/departments/police",
+      "pagesCrawled": 30,
+      "policyUrls": 90,
+      "pdfs": 35,
+      "status": "completed",
+      "runtimeMs": 29659
+    },
+    {
+      "agency": "Upland Police Department",
+      "website": "https://www.uplandpd.org",
+      "pagesCrawled": 25,
+      "policyUrls": 84,
+      "pdfs": 74,
+      "status": "completed",
+      "runtimeMs": 24632
+    },
+    {
+      "agency": "Monterey Police Department",
+      "website": "https://monterey.org/police",
+      "pagesCrawled": 30,
+      "policyUrls": 69,
+      "pdfs": 3,
+      "status": "completed",
+      "runtimeMs": 29308
+    },
+    {
+      "agency": "Clovis Police Department",
+      "website": "https://www.ci.clovis.ca.us/Government/Departments/Police",
+      "pagesCrawled": 30,
+      "policyUrls": 62,
+      "pdfs": 22,
+      "status": "completed",
+      "runtimeMs": 29521
+    },
+    {
+      "agency": "Berkeley Police Department",
+      "website": "https://www.cityofberkeley.info/Police",
+      "pagesCrawled": 30,
+      "policyUrls": 57,
+      "pdfs": 24,
+      "status": "completed",
+      "runtimeMs": 33008
+    },
+    {
+      "agency": "Alameda Police Department",
+      "website": "https://www.alamedaca.gov/departments/police-department",
+      "pagesCrawled": 30,
+      "policyUrls": 51,
+      "pdfs": 16,
+      "status": "completed",
+      "runtimeMs": 29631
+    },
+    {
+      "agency": "Ukiah Police Department",
+      "website": "https://www.cityofukiah.com/police",
+      "pagesCrawled": 30,
+      "policyUrls": 50,
+      "pdfs": 32,
+      "status": "completed",
+      "runtimeMs": 30270
+    },
+    {
+      "agency": "Ventura Police Department",
+      "website": "https://www.cityofventura.ca.gov/165/Police",
+      "pagesCrawled": 30,
+      "policyUrls": 49,
+      "pdfs": 1,
+      "status": "completed",
+      "runtimeMs": 29396
+    },
+    {
+      "agency": "Gilroy Police Department",
+      "website": "https://www.cityofgilroy.org/106/Police-Department",
+      "pagesCrawled": 30,
+      "policyUrls": 46,
+      "pdfs": 0,
+      "status": "completed",
+      "runtimeMs": 29472
+    },
+    {
+      "agency": "Riverside Police Department",
+      "website": "https://www.riversideca.gov/rpd",
+      "pagesCrawled": 29,
+      "policyUrls": 44,
+      "pdfs": 17,
+      "status": "completed",
+      "runtimeMs": 28457
+    },
+    {
+      "agency": "Rocklin Police Department",
+      "website": "https://www.rocklin.ca.us/police",
+      "pagesCrawled": 30,
+      "policyUrls": 43,
+      "pdfs": 1,
+      "status": "completed",
+      "runtimeMs": 29980
+    },
+    {
+      "agency": "Santa Rosa Police Department",
+      "website": "https://srcity.org/219/Police-Department",
+      "pagesCrawled": 30,
+      "policyUrls": 41,
+      "pdfs": 0,
+      "status": "completed",
+      "runtimeMs": 29771
+    },
+    {
+      "agency": "Newport Beach Police Department",
+      "website": "https://www.nbpd.org",
+      "pagesCrawled": 30,
+      "policyUrls": 41,
+      "pdfs": 0,
+      "status": "completed",
+      "runtimeMs": 29872
+    },
+    {
+      "agency": "Santa Barbara Police Department",
+      "website": "https://www.santabarbaraca.gov/gov/depts/police",
+      "pagesCrawled": 30,
+      "policyUrls": 37,
+      "pdfs": 13,
+      "status": "completed",
+      "runtimeMs": 31806
+    },
+    {
+      "agency": "South Lake Tahoe Police Department",
+      "website": "https://www.cityofslt.us/184/Police-Department",
+      "pagesCrawled": 30,
+      "policyUrls": 36,
+      "pdfs": 0,
+      "status": "completed",
+      "runtimeMs": 29459
+    },
+    {
+      "agency": "Escondido Police Department",
+      "website": "https://www.escondido.org/police",
+      "pagesCrawled": 30,
+      "policyUrls": 34,
+      "pdfs": 0,
+      "status": "completed",
+      "runtimeMs": 30259
+    },
+    {
+      "agency": "Milpitas Police Department",
+      "website": "https://www.milpitas.gov/milpitas/departments/police",
+      "pagesCrawled": 30,
+      "policyUrls": 33,
+      "pdfs": 0,
+      "status": "completed",
+      "runtimeMs": 29603
+    },
+    {
+      "agency": "Colton Police Department",
+      "website": "https://www.coltonpd.org",
+      "pagesCrawled": 30,
+      "policyUrls": 33,
+      "pdfs": 0,
+      "status": "completed",
+      "runtimeMs": 29925
+    },
+    {
+      "agency": "El Segundo Police Department",
+      "website": "https://www.elsegundo.org/government/departments/police-department",
+      "pagesCrawled": 30,
+      "policyUrls": 33,
+      "pdfs": 0,
+      "status": "completed",
+      "runtimeMs": 42190
+    },
+    {
+      "agency": "Fresno Police Department",
+      "website": "https://www.fresno.gov/police",
+      "pagesCrawled": 19,
+      "policyUrls": 32,
+      "pdfs": 28,
+      "status": "completed",
+      "runtimeMs": 19189
+    },
+    {
+      "agency": "San Rafael Police Department",
+      "website": "https://www.cityofsanrafael.org/police",
+      "pagesCrawled": 30,
+      "policyUrls": 32,
+      "pdfs": 0,
+      "status": "completed",
+      "runtimeMs": 29827
+    },
+    {
+      "agency": "Delano Police Department",
+      "website": "https://www.cityofdelano.org/175/Police-Department",
+      "pagesCrawled": 30,
+      "policyUrls": 29,
+      "pdfs": 0,
+      "status": "completed",
+      "runtimeMs": 29336
+    },
+    {
+      "agency": "South Pasadena Police Department",
+      "website": "https://www.southpasadenaca.gov/government/departments/police",
+      "pagesCrawled": 30,
+      "policyUrls": 29,
+      "pdfs": 5,
+      "status": "completed",
+      "runtimeMs": 29920
+    },
+    {
+      "agency": "Santa Ana Police Department",
+      "website": "https://www.santa-ana.org/police-department",
+      "pagesCrawled": 30,
+      "policyUrls": 28,
+      "pdfs": 0,
+      "status": "completed",
+      "runtimeMs": 29680
+    },
+    {
+      "agency": "Signal Hill Police Department",
+      "website": "https://www.cityofsignalhill.org/149/Police-Department",
+      "pagesCrawled": 30,
+      "policyUrls": 28,
+      "pdfs": 0,
+      "status": "completed",
+      "runtimeMs": 29341
+    },
+    {
+      "agency": "California Highway Patrol",
+      "website": "https://www.chp.ca.gov",
+      "pagesCrawled": 30,
+      "policyUrls": 26,
+      "pdfs": 11,
+      "status": "completed",
+      "runtimeMs": 29346
+    },
+    {
+      "agency": "Vallejo Police Department",
+      "website": "https://www.cityofvallejo.net/city_hall/departments___divisions/police_department",
+      "pagesCrawled": 30,
+      "policyUrls": 25,
+      "pdfs": 0,
+      "status": "completed",
+      "runtimeMs": 30202
+    },
+    {
+      "agency": "Napa Police Department",
+      "website": "https://www.cityofnapa.org/264/Police",
+      "pagesCrawled": 30,
+      "policyUrls": 25,
+      "pdfs": 0,
+      "status": "completed",
+      "runtimeMs": 29317
+    },
+    {
+      "agency": "Grass Valley Police Department",
+      "website": "https://www.cityofgrassvalley.com/departments/police",
+      "pagesCrawled": 30,
+      "policyUrls": 25,
+      "pdfs": 1,
+      "status": "completed",
+      "runtimeMs": 31397
+    },
+    {
+      "agency": "Alhambra Police Department",
+      "website": "https://www.cityofalhambra.org/159/Police-Department",
+      "pagesCrawled": 30,
+      "policyUrls": 24,
+      "pdfs": 0,
+      "status": "completed",
+      "runtimeMs": 29710
+    },
+    {
+      "agency": "Roseville Police Department",
+      "website": "https://www.roseville.ca.us/government/departments/police_department",
+      "pagesCrawled": 30,
+      "policyUrls": 23,
+      "pdfs": 5,
+      "status": "completed",
+      "runtimeMs": 31449
+    },
+    {
+      "agency": "Fountain Valley Police Department",
+      "website": "https://www.fountainvalley.org/129/Police-Department",
+      "pagesCrawled": 30,
+      "policyUrls": 22,
+      "pdfs": 0,
+      "status": "completed",
+      "runtimeMs": 31446
+    },
+    {
+      "agency": "Salinas Police Department",
+      "website": "https://www.cityofsalinas.org/our-government/departments/police-department",
+      "pagesCrawled": 30,
+      "policyUrls": 21,
+      "pdfs": 0,
+      "status": "completed",
+      "runtimeMs": 29590
+    },
+    {
+      "agency": "La Habra Police Department",
+      "website": "https://www.lahabraca.gov/165/Police-Department",
+      "pagesCrawled": 30,
+      "policyUrls": 21,
+      "pdfs": 0,
+      "status": "completed",
+      "runtimeMs": 29750
+    },
+    {
+      "agency": "Santa Cruz Police Department",
+      "website": "https://www.cityofsantacruz.com/government/city-departments/police",
+      "pagesCrawled": 30,
+      "policyUrls": 19,
+      "pdfs": 1,
+      "status": "completed",
+      "runtimeMs": 30017
+    }
+  ],
+  "failedAgencies": [],
+  "agencyResults": [
+    {
+      "agency": "California Highway Patrol",
+      "website": "https://www.chp.ca.gov",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 26,
+      "pdfs": 11,
+      "runtimeMs": 29346,
+      "errors": []
+    },
+    {
+      "agency": "Los Angeles Police Department",
+      "website": "https://www.lapdonline.org",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14183,
+      "errors": []
+    },
+    {
+      "agency": "San Diego Police Department",
+      "website": "https://www.sandiego.gov/police",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 108,
+      "pdfs": 27,
+      "runtimeMs": 29110,
+      "errors": []
+    },
+    {
+      "agency": "San Jose Police Department",
+      "website": "https://www.sjpd.org",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14172,
+      "errors": []
+    },
+    {
+      "agency": "San Francisco Police Department",
+      "website": "https://www.sanfranciscopolice.org",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 516,
+      "pdfs": 442,
+      "runtimeMs": 29166,
+      "errors": []
+    },
+    {
+      "agency": "Fresno Police Department",
+      "website": "https://www.fresno.gov/police",
+      "status": "completed",
+      "pagesCrawled": 19,
+      "policyUrls": 32,
+      "pdfs": 28,
+      "runtimeMs": 19189,
+      "errors": []
+    },
+    {
+      "agency": "Sacramento Police Department",
+      "website": "https://www.cityofsacramento.gov/police",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 373,
+      "pdfs": 308,
+      "runtimeMs": 29373,
+      "errors": []
+    },
+    {
+      "agency": "Long Beach Police Department",
+      "website": "https://www.longbeach.gov/police",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 17,
+      "pdfs": 0,
+      "runtimeMs": 29539,
+      "errors": []
+    },
+    {
+      "agency": "Oakland Police Department",
+      "website": "https://www.oaklandca.gov/departments/police",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 438,
+      "pdfs": 329,
+      "runtimeMs": 30376,
+      "errors": []
+    },
+    {
+      "agency": "Bakersfield Police Department",
+      "website": "https://www.bakersfieldpd.us",
+      "status": "completed",
+      "pagesCrawled": 0,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14338,
+      "errors": []
+    },
+    {
+      "agency": "Anaheim Police Department",
+      "website": "https://www.anaheim.net/149/Police",
+      "status": "completed",
+      "pagesCrawled": 26,
+      "policyUrls": 11,
+      "pdfs": 0,
+      "runtimeMs": 25262,
+      "errors": []
+    },
+    {
+      "agency": "Stockton Police Department",
+      "website": "https://www.stocktonca.gov/government/departments/police",
+      "status": "completed",
+      "pagesCrawled": 24,
+      "policyUrls": 9,
+      "pdfs": 0,
+      "runtimeMs": 23526,
+      "errors": []
+    },
+    {
+      "agency": "Riverside Police Department",
+      "website": "https://www.riversideca.gov/rpd",
+      "status": "completed",
+      "pagesCrawled": 29,
+      "policyUrls": 44,
+      "pdfs": 17,
+      "runtimeMs": 28457,
+      "errors": []
+    },
+    {
+      "agency": "Santa Ana Police Department",
+      "website": "https://www.santa-ana.org/police-department",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 28,
+      "pdfs": 0,
+      "runtimeMs": 29680,
+      "errors": []
+    },
+    {
+      "agency": "Irvine Police Department",
+      "website": "https://www.cityofirvine.org/irvine-police-department",
+      "status": "completed",
+      "pagesCrawled": 21,
+      "policyUrls": 6,
+      "pdfs": 0,
+      "runtimeMs": 20768,
+      "errors": []
+    },
+    {
+      "agency": "Chula Vista Police Department",
+      "website": "https://www.chulavistaca.gov/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14251,
+      "errors": []
+    },
+    {
+      "agency": "Fremont Police Department",
+      "website": "https://www.fremontpolice.gov",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14144,
+      "errors": []
+    },
+    {
+      "agency": "San Bernardino Police Department",
+      "website": "https://www.sbcity.org/city_hall/police",
+      "status": "completed",
+      "pagesCrawled": 27,
+      "policyUrls": 12,
+      "pdfs": 0,
+      "runtimeMs": 27039,
+      "errors": []
+    },
+    {
+      "agency": "Modesto Police Department",
+      "website": "https://www.modestopd.com",
+      "status": "partial",
+      "pagesCrawled": 0,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 45016,
+      "errors": []
+    },
+    {
+      "agency": "Fontana Police Department",
+      "website": "https://www.fontana.org/149/Police",
+      "status": "completed",
+      "pagesCrawled": 25,
+      "policyUrls": 10,
+      "pdfs": 0,
+      "runtimeMs": 24843,
+      "errors": []
+    },
+    {
+      "agency": "Huntington Beach Police Department",
+      "website": "https://www.huntingtonbeachca.gov/government/departments/police",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 493,
+      "pdfs": 0,
+      "runtimeMs": 30153,
+      "errors": []
+    },
+    {
+      "agency": "Glendale Police Department",
+      "website": "https://www.glendaleca.gov/government/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14172,
+      "errors": []
+    },
+    {
+      "agency": "Santa Rosa Police Department",
+      "website": "https://srcity.org/219/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 41,
+      "pdfs": 0,
+      "runtimeMs": 29771,
+      "errors": []
+    },
+    {
+      "agency": "Oceanside Police Department",
+      "website": "https://www.oceansideca.org/government/police",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14449,
+      "errors": []
+    },
+    {
+      "agency": "Elk Grove Police Department",
+      "website": "https://www.elkgrovepd.org",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14303,
+      "errors": []
+    },
+    {
+      "agency": "Ontario Police Department",
+      "website": "https://www.ontarioca.gov/police",
+      "status": "completed",
+      "pagesCrawled": 17,
+      "policyUrls": 2,
+      "pdfs": 0,
+      "runtimeMs": 42684,
+      "errors": []
+    },
+    {
+      "agency": "Garden Grove Police Department",
+      "website": "https://www.ggcity.org/police",
+      "status": "partial",
+      "pagesCrawled": 16,
+      "policyUrls": 14,
+      "pdfs": 3,
+      "runtimeMs": 52426,
+      "errors": []
+    },
+    {
+      "agency": "Salinas Police Department",
+      "website": "https://www.cityofsalinas.org/our-government/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 21,
+      "pdfs": 0,
+      "runtimeMs": 29590,
+      "errors": []
+    },
+    {
+      "agency": "Hayward Police Department",
+      "website": "https://www.hayward-ca.gov/your-government/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 24,
+      "policyUrls": 11,
+      "pdfs": 1,
+      "runtimeMs": 34014,
+      "errors": []
+    },
+    {
+      "agency": "Corona Police Department",
+      "website": "https://www.coronaca.gov/government/departments-divisions/police-department",
+      "status": "completed",
+      "pagesCrawled": 29,
+      "policyUrls": 14,
+      "pdfs": 0,
+      "runtimeMs": 28170,
+      "errors": []
+    },
+    {
+      "agency": "Sunnyvale Police Department",
+      "website": "https://sunnyvale.ca.gov/government/public-safety",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14479,
+      "errors": []
+    },
+    {
+      "agency": "Pomona Police Department",
+      "website": "https://www.pomonaca.gov/government/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14258,
+      "errors": []
+    },
+    {
+      "agency": "Escondido Police Department",
+      "website": "https://www.escondido.org/police",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 34,
+      "pdfs": 0,
+      "runtimeMs": 30259,
+      "errors": []
+    },
+    {
+      "agency": "Roseville Police Department",
+      "website": "https://www.roseville.ca.us/government/departments/police_department",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 23,
+      "pdfs": 5,
+      "runtimeMs": 31449,
+      "errors": []
+    },
+    {
+      "agency": "Torrance Police Department",
+      "website": "https://www.torranceca.gov/our-city/police",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14145,
+      "errors": []
+    },
+    {
+      "agency": "Visalia Police Department",
+      "website": "https://www.visalia.city/depts/police",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14340,
+      "errors": []
+    },
+    {
+      "agency": "Orange Police Department",
+      "website": "https://www.cityoforange.org/258/Police",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14305,
+      "errors": []
+    },
+    {
+      "agency": "Fullerton Police Department",
+      "website": "https://www.fullertonpd.org",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14622,
+      "errors": []
+    },
+    {
+      "agency": "Pasadena Police Department",
+      "website": "https://www.cityofpasadena.net/police",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 210,
+      "pdfs": 191,
+      "runtimeMs": 30265,
+      "errors": []
+    },
+    {
+      "agency": "Concord Police Department",
+      "website": "https://www.concordpolice.com",
+      "status": "completed",
+      "pagesCrawled": 0,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14225,
+      "errors": []
+    },
+    {
+      "agency": "Santa Clara Police Department",
+      "website": "https://www.santaclaraca.gov/our-city/departments-a-f/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14216,
+      "errors": []
+    },
+    {
+      "agency": "Simi Valley Police Department",
+      "website": "https://www.simivalley.org/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14237,
+      "errors": []
+    },
+    {
+      "agency": "Berkeley Police Department",
+      "website": "https://www.cityofberkeley.info/Police",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 57,
+      "pdfs": 24,
+      "runtimeMs": 33008,
+      "errors": []
+    },
+    {
+      "agency": "Vallejo Police Department",
+      "website": "https://www.cityofvallejo.net/city_hall/departments___divisions/police_department",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 25,
+      "pdfs": 0,
+      "runtimeMs": 30202,
+      "errors": []
+    },
+    {
+      "agency": "Clovis Police Department",
+      "website": "https://www.ci.clovis.ca.us/Government/Departments/Police",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 62,
+      "pdfs": 22,
+      "runtimeMs": 29521,
+      "errors": []
+    },
+    {
+      "agency": "Fairfield Police Department",
+      "website": "https://www.fairfield.ca.gov/gov/city_departments/police",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14191,
+      "errors": []
+    },
+    {
+      "agency": "Richmond Police Department",
+      "website": "https://www.ci.richmond.ca.us/178/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 24,
+      "policyUrls": 9,
+      "pdfs": 0,
+      "runtimeMs": 23342,
+      "errors": []
+    },
+    {
+      "agency": "Antioch Police Department",
+      "website": "https://www.antiochca.gov/police",
+      "status": "completed",
+      "pagesCrawled": 25,
+      "policyUrls": 10,
+      "pdfs": 0,
+      "runtimeMs": 24259,
+      "errors": []
+    },
+    {
+      "agency": "Carlsbad Police Department",
+      "website": "https://www.carlsbadca.gov/departments/police",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14182,
+      "errors": []
+    },
+    {
+      "agency": "El Monte Police Department",
+      "website": "https://www.ci.el-monte.ca.us/government/police-department",
+      "status": "completed",
+      "pagesCrawled": 25,
+      "policyUrls": 10,
+      "pdfs": 0,
+      "runtimeMs": 24340,
+      "errors": []
+    },
+    {
+      "agency": "Costa Mesa Police Department",
+      "website": "https://www.costamesaca.gov/city-hall/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14222,
+      "errors": []
+    },
+    {
+      "agency": "Downey Police Department",
+      "website": "https://www.downeyca.org/our-city/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14289,
+      "errors": []
+    },
+    {
+      "agency": "Santa Maria Police Department",
+      "website": "https://www.cityofsantamaria.org/city-government/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14224,
+      "errors": []
+    },
+    {
+      "agency": "Ventura Police Department",
+      "website": "https://www.cityofventura.ca.gov/165/Police",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 49,
+      "pdfs": 1,
+      "runtimeMs": 29396,
+      "errors": []
+    },
+    {
+      "agency": "Inglewood Police Department",
+      "website": "https://www.cityofinglewood.org/149/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 16,
+      "pdfs": 0,
+      "runtimeMs": 29281,
+      "errors": []
+    },
+    {
+      "agency": "Burbank Police Department",
+      "website": "https://www.burbankpd.org",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 15,
+      "pdfs": 0,
+      "runtimeMs": 30520,
+      "errors": []
+    },
+    {
+      "agency": "El Cajon Police Department",
+      "website": "https://www.elcajon.gov/your-government/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14342,
+      "errors": []
+    },
+    {
+      "agency": "West Covina Police Department",
+      "website": "https://www.westcovina.org/government/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 25,
+      "policyUrls": 10,
+      "pdfs": 0,
+      "runtimeMs": 24730,
+      "errors": []
+    },
+    {
+      "agency": "San Mateo Police Department",
+      "website": "https://www.cityofsanmateo.org/131/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 27,
+      "policyUrls": 12,
+      "pdfs": 0,
+      "runtimeMs": 26524,
+      "errors": []
+    },
+    {
+      "agency": "Daly City Police Department",
+      "website": "https://www.dalycity.org/police",
+      "status": "completed",
+      "pagesCrawled": 25,
+      "policyUrls": 10,
+      "pdfs": 0,
+      "runtimeMs": 24401,
+      "errors": []
+    },
+    {
+      "agency": "Rialto Police Department",
+      "website": "https://www.rialtoca.gov/police",
+      "status": "completed",
+      "pagesCrawled": 26,
+      "policyUrls": 11,
+      "pdfs": 0,
+      "runtimeMs": 25322,
+      "errors": []
+    },
+    {
+      "agency": "Vacaville Police Department",
+      "website": "https://www.cityofvacaville.com/government/police",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14789,
+      "errors": []
+    },
+    {
+      "agency": "Chico Police Department",
+      "website": "https://www.chicopolice.com",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14099,
+      "errors": []
+    },
+    {
+      "agency": "Santa Monica Police Department",
+      "website": "https://www.santamonica.gov/police",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 145,
+      "pdfs": 1,
+      "runtimeMs": 30264,
+      "errors": []
+    },
+    {
+      "agency": "Tracy Police Department",
+      "website": "https://www.ci.tracy.ca.us/government/departments/police",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 18,
+      "pdfs": 0,
+      "runtimeMs": 29565,
+      "errors": []
+    },
+    {
+      "agency": "Redding Police Department",
+      "website": "https://www.cityofredding.org/departments/redding-police-department",
+      "status": "completed",
+      "pagesCrawled": 0,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 548,
+      "errors": []
+    },
+    {
+      "agency": "Indio Police Department",
+      "website": "https://www.indio.org/government/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14531,
+      "errors": []
+    },
+    {
+      "agency": "Chino Police Department",
+      "website": "https://www.chinopd.org",
+      "status": "completed",
+      "pagesCrawled": 0,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14390,
+      "errors": []
+    },
+    {
+      "agency": "San Leandro Police Department",
+      "website": "https://www.sanleandro.org/245/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 24,
+      "policyUrls": 9,
+      "pdfs": 0,
+      "runtimeMs": 23155,
+      "errors": []
+    },
+    {
+      "agency": "Westminster Police Department",
+      "website": "https://www.westminster-ca.gov/government/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14279,
+      "errors": []
+    },
+    {
+      "agency": "Livermore Police Department",
+      "website": "https://www.livermorepd.org",
+      "status": "completed",
+      "pagesCrawled": 0,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14036,
+      "errors": []
+    },
+    {
+      "agency": "Santa Barbara Police Department",
+      "website": "https://www.santabarbaraca.gov/gov/depts/police",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 37,
+      "pdfs": 13,
+      "runtimeMs": 31806,
+      "errors": []
+    },
+    {
+      "agency": "Hawthorne Police Department",
+      "website": "https://www.cityofhawthorne.org/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14274,
+      "errors": []
+    },
+    {
+      "agency": "Citrus Heights Police Department",
+      "website": "https://www.citrusheights.net/176/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 25,
+      "policyUrls": 10,
+      "pdfs": 0,
+      "runtimeMs": 24329,
+      "errors": []
+    },
+    {
+      "agency": "Whittier Police Department",
+      "website": "https://www.cityofwhittier.org/government/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14253,
+      "errors": []
+    },
+    {
+      "agency": "Merced Police Department",
+      "website": "https://www.cityofmerced.org/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14703,
+      "errors": []
+    },
+    {
+      "agency": "Newport Beach Police Department",
+      "website": "https://www.nbpd.org",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 41,
+      "pdfs": 0,
+      "runtimeMs": 29872,
+      "errors": []
+    },
+    {
+      "agency": "Redwood City Police Department",
+      "website": "https://www.redwoodcity.org/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14150,
+      "errors": []
+    },
+    {
+      "agency": "Buena Park Police Department",
+      "website": "https://www.buenapark.com/city-government/departments/police",
+      "status": "completed",
+      "pagesCrawled": 0,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 143,
+      "errors": []
+    },
+    {
+      "agency": "Alhambra Police Department",
+      "website": "https://www.cityofalhambra.org/159/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 24,
+      "pdfs": 0,
+      "runtimeMs": 29710,
+      "errors": []
+    },
+    {
+      "agency": "Folsom Police Department",
+      "website": "https://www.folsom.ca.us/government/police",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14177,
+      "errors": []
+    },
+    {
+      "agency": "Mountain View Police Department",
+      "website": "https://www.mountainview.gov/police",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14204,
+      "errors": []
+    },
+    {
+      "agency": "Manteca Police Department",
+      "website": "https://www.ci.manteca.ca.us/Police",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14453,
+      "errors": []
+    },
+    {
+      "agency": "Milpitas Police Department",
+      "website": "https://www.milpitas.gov/milpitas/departments/police",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 33,
+      "pdfs": 0,
+      "runtimeMs": 29603,
+      "errors": []
+    },
+    {
+      "agency": "Tustin Police Department",
+      "website": "https://tustinca.org/207/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 25,
+      "policyUrls": 10,
+      "pdfs": 0,
+      "runtimeMs": 24341,
+      "errors": []
+    },
+    {
+      "agency": "Pleasanton Police Department",
+      "website": "https://www.pleasantonca.gov/government/police-department",
+      "status": "completed",
+      "pagesCrawled": 0,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14496,
+      "errors": []
+    },
+    {
+      "agency": "Upland Police Department",
+      "website": "https://www.uplandpd.org",
+      "status": "completed",
+      "pagesCrawled": 25,
+      "policyUrls": 84,
+      "pdfs": 74,
+      "runtimeMs": 24632,
+      "errors": []
+    },
+    {
+      "agency": "Alameda Police Department",
+      "website": "https://www.alamedaca.gov/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 51,
+      "pdfs": 16,
+      "runtimeMs": 29631,
+      "errors": []
+    },
+    {
+      "agency": "Napa Police Department",
+      "website": "https://www.cityofnapa.org/264/Police",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 25,
+      "pdfs": 0,
+      "runtimeMs": 29317,
+      "errors": []
+    },
+    {
+      "agency": "Baldwin Park Police Department",
+      "website": "https://www.baldwinpark.com/police",
+      "status": "completed",
+      "pagesCrawled": 25,
+      "policyUrls": 10,
+      "pdfs": 0,
+      "runtimeMs": 24370,
+      "errors": []
+    },
+    {
+      "agency": "Union City Police Department",
+      "website": "https://www.unioncity.org/290/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 28,
+      "policyUrls": 13,
+      "pdfs": 0,
+      "runtimeMs": 27629,
+      "errors": []
+    },
+    {
+      "agency": "Pittsburg Police Department",
+      "website": "https://www.ci.pittsburg.ca.us/government/departments/police_department",
+      "status": "partial",
+      "pagesCrawled": 0,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 45005,
+      "errors": []
+    },
+    {
+      "agency": "Turlock Police Department",
+      "website": "https://www.turlock.ca.us/police",
+      "status": "completed",
+      "pagesCrawled": 24,
+      "policyUrls": 9,
+      "pdfs": 0,
+      "runtimeMs": 23306,
+      "errors": []
+    },
+    {
+      "agency": "Redlands Police Department",
+      "website": "https://www.cityofredlands.org/police",
+      "status": "completed",
+      "pagesCrawled": 24,
+      "policyUrls": 9,
+      "pdfs": 0,
+      "runtimeMs": 27995,
+      "errors": []
+    },
+    {
+      "agency": "Redondo Beach Police Department",
+      "website": "https://www.redondo.org/departments/police/default.aspx",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 319,
+      "pdfs": 19,
+      "runtimeMs": 29586,
+      "errors": []
+    },
+    {
+      "agency": "Rocklin Police Department",
+      "website": "https://www.rocklin.ca.us/police",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 43,
+      "pdfs": 1,
+      "runtimeMs": 29980,
+      "errors": []
+    },
+    {
+      "agency": "Yuba City Police Department",
+      "website": "https://www.yubacity.net/police",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 657,
+      "pdfs": 14,
+      "runtimeMs": 29313,
+      "errors": []
+    },
+    {
+      "agency": "Tulare Police Department",
+      "website": "https://www.tulare.ca.gov/government/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14179,
+      "errors": []
+    },
+    {
+      "agency": "Walnut Creek Police Department",
+      "website": "https://www.walnut-creek.org/government/departments/police",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14569,
+      "errors": []
+    },
+    {
+      "agency": "Brentwood Police Department",
+      "website": "https://www.brentwoodca.gov/government/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14193,
+      "errors": []
+    },
+    {
+      "agency": "Lodi Police Department",
+      "website": "https://www.lodi.gov/189/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 25,
+      "policyUrls": 10,
+      "pdfs": 0,
+      "runtimeMs": 26320,
+      "errors": []
+    },
+    {
+      "agency": "Santa Cruz Police Department",
+      "website": "https://www.cityofsantacruz.com/government/city-departments/police",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 19,
+      "pdfs": 1,
+      "runtimeMs": 30017,
+      "errors": []
+    },
+    {
+      "agency": "Davis Police Department",
+      "website": "https://www.cityofdavis.org/city-hall/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14189,
+      "errors": []
+    },
+    {
+      "agency": "Madera Police Department",
+      "website": "https://www.cityofmadera.ca.gov/government/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 0,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14244,
+      "errors": []
+    },
+    {
+      "agency": "La Habra Police Department",
+      "website": "https://www.lahabraca.gov/165/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 21,
+      "pdfs": 0,
+      "runtimeMs": 29750,
+      "errors": []
+    },
+    {
+      "agency": "Woodland Police Department",
+      "website": "https://www.cityofwoodland.org/137/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 19,
+      "pdfs": 0,
+      "runtimeMs": 30131,
+      "errors": []
+    },
+    {
+      "agency": "Porterville Police Department",
+      "website": "https://www.ci.porterville.ca.us/departments/police",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 778,
+      "pdfs": 2,
+      "runtimeMs": 29518,
+      "errors": []
+    },
+    {
+      "agency": "National City Police Department",
+      "website": "https://www.nationalcityca.gov/government/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14283,
+      "errors": []
+    },
+    {
+      "agency": "San Rafael Police Department",
+      "website": "https://www.cityofsanrafael.org/police",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 32,
+      "pdfs": 0,
+      "runtimeMs": 29827,
+      "errors": []
+    },
+    {
+      "agency": "La Mesa Police Department",
+      "website": "https://www.cityoflamesa.us/121/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 24,
+      "policyUrls": 9,
+      "pdfs": 0,
+      "runtimeMs": 23621,
+      "errors": []
+    },
+    {
+      "agency": "Petaluma Police Department",
+      "website": "https://cityofpetaluma.org/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14128,
+      "errors": []
+    },
+    {
+      "agency": "Hanford Police Department",
+      "website": "https://www.ci.hanford.ca.us/177/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 25,
+      "policyUrls": 10,
+      "pdfs": 0,
+      "runtimeMs": 24595,
+      "errors": []
+    },
+    {
+      "agency": "Gilroy Police Department",
+      "website": "https://www.cityofgilroy.org/106/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 46,
+      "pdfs": 0,
+      "runtimeMs": 29472,
+      "errors": []
+    },
+    {
+      "agency": "Arcadia Police Department",
+      "website": "https://www.arcadiaca.gov/government/city-departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 871,
+      "pdfs": 34,
+      "runtimeMs": 29390,
+      "errors": []
+    },
+    {
+      "agency": "Fountain Valley Police Department",
+      "website": "https://www.fountainvalley.org/129/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 22,
+      "pdfs": 0,
+      "runtimeMs": 31446,
+      "errors": []
+    },
+    {
+      "agency": "Novato Police Department",
+      "website": "https://www.novatopd.org",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14580,
+      "errors": []
+    },
+    {
+      "agency": "Colton Police Department",
+      "website": "https://www.coltonpd.org",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 33,
+      "pdfs": 0,
+      "runtimeMs": 29925,
+      "errors": []
+    },
+    {
+      "agency": "Beaumont Police Department",
+      "website": "https://www.beaumontpd.com",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 15745,
+      "errors": []
+    },
+    {
+      "agency": "Watsonville Police Department",
+      "website": "https://www.watsonvillepd.com",
+      "status": "completed",
+      "pagesCrawled": 16,
+      "policyUrls": 1,
+      "pdfs": 0,
+      "runtimeMs": 15526,
+      "errors": []
+    },
+    {
+      "agency": "West Sacramento Police Department",
+      "website": "https://www.cityofwestsacramento.org/government/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14286,
+      "errors": []
+    },
+    {
+      "agency": "Delano Police Department",
+      "website": "https://www.cityofdelano.org/175/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 29,
+      "pdfs": 0,
+      "runtimeMs": 29336,
+      "errors": []
+    },
+    {
+      "agency": "Glendora Police Department",
+      "website": "https://www.cityofglendora.org/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 18,
+      "pdfs": 0,
+      "runtimeMs": 29792,
+      "errors": []
+    },
+    {
+      "agency": "Placentia Police Department",
+      "website": "https://www.placentia.org/156/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 26,
+      "policyUrls": 11,
+      "pdfs": 0,
+      "runtimeMs": 25559,
+      "errors": []
+    },
+    {
+      "agency": "Lincoln Police Department",
+      "website": "https://www.lincolnca.gov/government/departments/police",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 90,
+      "pdfs": 35,
+      "runtimeMs": 29659,
+      "errors": []
+    },
+    {
+      "agency": "Ceres Police Department",
+      "website": "https://www.ci.ceres.ca.us/223/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 24,
+      "policyUrls": 9,
+      "pdfs": 0,
+      "runtimeMs": 24331,
+      "errors": []
+    },
+    {
+      "agency": "Azusa Police Department",
+      "website": "https://www.ci.azusa.ca.us/165/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 0,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14497,
+      "errors": []
+    },
+    {
+      "agency": "Covina Police Department",
+      "website": "https://www.covinaca.gov/government/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 15078,
+      "errors": []
+    },
+    {
+      "agency": "Cypress Police Department",
+      "website": "https://www.cypressca.org/government/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14190,
+      "errors": []
+    },
+    {
+      "agency": "Palm Springs Police Department",
+      "website": "https://www.palmspringsca.gov/government/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14130,
+      "errors": []
+    },
+    {
+      "agency": "San Luis Obispo Police Department",
+      "website": "https://www.slocity.org/government/department-directory/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14173,
+      "errors": []
+    },
+    {
+      "agency": "Brea Police Department",
+      "website": "https://www.ci.brea.ca.us/224/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 0,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14370,
+      "errors": []
+    },
+    {
+      "agency": "El Centro Police Department",
+      "website": "https://www.cityofelcentro.org/departments/police",
+      "status": "completed",
+      "pagesCrawled": 24,
+      "policyUrls": 9,
+      "pdfs": 0,
+      "runtimeMs": 23255,
+      "errors": []
+    },
+    {
+      "agency": "Lompoc Police Department",
+      "website": "https://www.cityoflompoc.com/government/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14160,
+      "errors": []
+    },
+    {
+      "agency": "Hollister Police Department",
+      "website": "https://www.hollister.ca.gov/government/departments/police",
+      "status": "completed",
+      "pagesCrawled": 24,
+      "policyUrls": 17,
+      "pdfs": 8,
+      "runtimeMs": 23431,
+      "errors": []
+    },
+    {
+      "agency": "Calexico Police Department",
+      "website": "https://www.calexico.ca.gov/government/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 0,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 671,
+      "errors": []
+    },
+    {
+      "agency": "Monrovia Police Department",
+      "website": "https://www.cityofmonrovia.org/your-government/departments/police",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14657,
+      "errors": []
+    },
+    {
+      "agency": "Claremont Police Department",
+      "website": "https://www.ci.claremont.ca.us/government/departments-divisions/police-department",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 19,
+      "pdfs": 1,
+      "runtimeMs": 29776,
+      "errors": []
+    },
+    {
+      "agency": "Bell Police Department",
+      "website": "https://www.bellpd.org",
+      "status": "completed",
+      "pagesCrawled": 0,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14265,
+      "errors": []
+    },
+    {
+      "agency": "Manhattan Beach Police Department",
+      "website": "https://www.manhattanbeach.gov/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14188,
+      "errors": []
+    },
+    {
+      "agency": "Seaside Police Department",
+      "website": "https://www.ci.seaside.ca.us/government/police-department",
+      "status": "completed",
+      "pagesCrawled": 24,
+      "policyUrls": 9,
+      "pdfs": 0,
+      "runtimeMs": 23370,
+      "errors": []
+    },
+    {
+      "agency": "La Verne Police Department",
+      "website": "https://www.cityoflaverne.org/government/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 29,
+      "policyUrls": 14,
+      "pdfs": 0,
+      "runtimeMs": 29021,
+      "errors": []
+    },
+    {
+      "agency": "Paso Robles Police Department",
+      "website": "https://www.prcity.com/183/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 29,
+      "policyUrls": 14,
+      "pdfs": 0,
+      "runtimeMs": 28745,
+      "errors": []
+    },
+    {
+      "agency": "Banning Police Department",
+      "website": "https://www.ci.banning.ca.us/index.aspx?nid=105",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 16,
+      "pdfs": 0,
+      "runtimeMs": 29545,
+      "errors": []
+    },
+    {
+      "agency": "Atascadero Police Department",
+      "website": "https://www.atascadero.org/government/police-department",
+      "status": "completed",
+      "pagesCrawled": 26,
+      "policyUrls": 12,
+      "pdfs": 1,
+      "runtimeMs": 25482,
+      "errors": []
+    },
+    {
+      "agency": "Monterey Police Department",
+      "website": "https://monterey.org/police",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 69,
+      "pdfs": 3,
+      "runtimeMs": 29308,
+      "errors": []
+    },
+    {
+      "agency": "Ridgecrest Police Department",
+      "website": "https://www.ridgecrest-ca.gov/government/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 24,
+      "policyUrls": 9,
+      "pdfs": 0,
+      "runtimeMs": 23435,
+      "errors": []
+    },
+    {
+      "agency": "Benicia Police Department",
+      "website": "https://www.ci.benicia.ca.us/163/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 0,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 395,
+      "errors": []
+    },
+    {
+      "agency": "Eureka Police Department",
+      "website": "https://www.eurekaca.gov/193/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 25,
+      "policyUrls": 10,
+      "pdfs": 0,
+      "runtimeMs": 24318,
+      "errors": []
+    },
+    {
+      "agency": "Brawley Police Department",
+      "website": "https://www.brawleyca.gov/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 0,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14032,
+      "errors": []
+    },
+    {
+      "agency": "South Pasadena Police Department",
+      "website": "https://www.southpasadenaca.gov/government/departments/police",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 29,
+      "pdfs": 5,
+      "runtimeMs": 29920,
+      "errors": []
+    },
+    {
+      "agency": "Barstow Police Department",
+      "website": "https://www.barstowca.org/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14169,
+      "errors": []
+    },
+    {
+      "agency": "Coronado Police Department",
+      "website": "https://www.coronado.ca.us/government/departments___divisions/police_department",
+      "status": "completed",
+      "pagesCrawled": 24,
+      "policyUrls": 9,
+      "pdfs": 0,
+      "runtimeMs": 24439,
+      "errors": []
+    },
+    {
+      "agency": "San Fernando Police Department",
+      "website": "https://www.sfcity.org/government/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 18,
+      "pdfs": 0,
+      "runtimeMs": 29677,
+      "errors": []
+    },
+    {
+      "agency": "Seal Beach Police Department",
+      "website": "https://www.sealbeachca.gov/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 16,
+      "policyUrls": 1,
+      "pdfs": 0,
+      "runtimeMs": 20018,
+      "errors": []
+    },
+    {
+      "agency": "Laguna Beach Police Department",
+      "website": "https://www.lagunabeachcity.net/government/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14216,
+      "errors": []
+    },
+    {
+      "agency": "South Lake Tahoe Police Department",
+      "website": "https://www.cityofslt.us/184/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 36,
+      "pdfs": 0,
+      "runtimeMs": 29459,
+      "errors": []
+    },
+    {
+      "agency": "Oroville Police Department",
+      "website": "https://www.cityoforoville.org/government/departments/police",
+      "status": "completed",
+      "pagesCrawled": 25,
+      "policyUrls": 10,
+      "pdfs": 0,
+      "runtimeMs": 24782,
+      "errors": []
+    },
+    {
+      "agency": "Hermosa Beach Police Department",
+      "website": "https://www.hermosabeach.gov/government/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14125,
+      "errors": []
+    },
+    {
+      "agency": "Arcata Police Department",
+      "website": "https://www.cityofarcata.org/228/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 24,
+      "policyUrls": 9,
+      "pdfs": 0,
+      "runtimeMs": 23397,
+      "errors": []
+    },
+    {
+      "agency": "El Segundo Police Department",
+      "website": "https://www.elsegundo.org/government/departments/police-department",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 33,
+      "pdfs": 0,
+      "runtimeMs": 42190,
+      "errors": []
+    },
+    {
+      "agency": "Ukiah Police Department",
+      "website": "https://www.cityofukiah.com/police",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 50,
+      "pdfs": 32,
+      "runtimeMs": 30270,
+      "errors": []
+    },
+    {
+      "agency": "Pacific Grove Police Department",
+      "website": "https://www.cityofpacificgrove.org/police",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 150,
+      "pdfs": 18,
+      "runtimeMs": 29627,
+      "errors": []
+    },
+    {
+      "agency": "Auburn Police Department",
+      "website": "https://www.auburn.ca.gov/91/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 15,
+      "pdfs": 0,
+      "runtimeMs": 29558,
+      "errors": []
+    },
+    {
+      "agency": "Red Bluff Police Department",
+      "website": "https://www.cityofredbluff.org/government/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 10,
+      "pdfs": 10,
+      "runtimeMs": 14608,
+      "errors": []
+    },
+    {
+      "agency": "San Marino Police Department",
+      "website": "https://www.cityofsanmarino.org/government/departments/police.php",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 291,
+      "pdfs": 12,
+      "runtimeMs": 29671,
+      "errors": []
+    },
+    {
+      "agency": "Grass Valley Police Department",
+      "website": "https://www.cityofgrassvalley.com/departments/police",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 25,
+      "pdfs": 1,
+      "runtimeMs": 31397,
+      "errors": []
+    },
+    {
+      "agency": "Fortuna Police Department",
+      "website": "https://www.friendlyfortuna.com/185/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 409,
+      "pdfs": 65,
+      "runtimeMs": 29282,
+      "errors": []
+    },
+    {
+      "agency": "Healdsburg Police Department",
+      "website": "https://www.ci.healdsburg.ca.us/175/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 24,
+      "policyUrls": 9,
+      "pdfs": 0,
+      "runtimeMs": 23494,
+      "errors": []
+    },
+    {
+      "agency": "Signal Hill Police Department",
+      "website": "https://www.cityofsignalhill.org/149/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 28,
+      "pdfs": 0,
+      "runtimeMs": 29341,
+      "errors": []
+    },
+    {
+      "agency": "Placerville Police Department",
+      "website": "https://www.cityofplacerville.org/police-department",
+      "status": "completed",
+      "pagesCrawled": 15,
+      "policyUrls": 2,
+      "pdfs": 2,
+      "runtimeMs": 14380,
+      "errors": []
+    },
+    {
+      "agency": "Sierra Madre Police Department",
+      "website": "https://www.cityofsierramadre.com/government/departments/police_department",
+      "status": "completed",
+      "pagesCrawled": 0,
+      "policyUrls": 0,
+      "pdfs": 0,
+      "runtimeMs": 14359,
+      "errors": []
+    },
+    {
+      "agency": "Fort Bragg Police Department",
+      "website": "https://city.fortbragg.com/131/Police-Department",
+      "status": "completed",
+      "pagesCrawled": 30,
+      "policyUrls": 108,
+      "pdfs": 21,
+      "runtimeMs": 29361,
+      "errors": []
+    }
+  ]
+}

@@ -109,7 +109,7 @@ async function handleSendAnnual(
   const domain =
     agency.website
       ?.replace(/^https?:\/\//, '')
-      .replace(/\/.*$/, '')
+      .replace(/[\/:].*$/, '')
       .replace(/^www\./, '') || '';
   if (!domain) {
     return {
@@ -275,7 +275,7 @@ async function handleSendAnnualFollowup(
   const domain =
     agency.website
       ?.replace(/^https?:\/\//, '')
-      .replace(/\/.*$/, '')
+      .replace(/[\/:].*$/, '')
       .replace(/^www\./, '') || '';
   if (!domain) {
     return {

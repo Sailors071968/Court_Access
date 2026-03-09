@@ -161,7 +161,7 @@ export async function sendCpraRequestEmail(
   }
 
   // Derive email domain from website — skip send if agency has no usable website
-  const domain = agency.website?.replace(/^https?:\/\//, '').replace(/\/.*$/, '').replace(/^www\./, '') || '';
+  const domain = agency.website?.replace(/^https?:\/\//, '').replace(/[\/:].*$/, '').replace(/^www\./, '') || '';
   if (!domain) {
     return {
       requestId: '',
@@ -286,7 +286,7 @@ export async function sendFollowUpEmail(
   }
 
   // Derive email domain from website — skip send if agency has no usable website
-  const domain = agency.website?.replace(/^https?:\/\//, '').replace(/\/.*$/, '').replace(/^www\./, '') || '';
+  const domain = agency.website?.replace(/^https?:\/\//, '').replace(/[\/:].*$/, '').replace(/^www\./, '') || '';
   if (!domain) {
     return {
       requestId,
@@ -382,7 +382,7 @@ export async function sendThankYouEmail(
   }
 
   // Derive email domain from website — skip send if agency has no usable website
-  const domain = agency.website?.replace(/^https?:\/\//, '').replace(/\/.*$/, '').replace(/^www\./, '') || '';
+  const domain = agency.website?.replace(/^https?:\/\//, '').replace(/[\/:].*$/, '').replace(/^www\./, '') || '';
   if (!domain) {
     return {
       requestId,

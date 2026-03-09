@@ -254,10 +254,13 @@ export async function handleCloseRequest(params: {
 }): Promise<RouteResponse<{ closed: boolean }>> {
   try {
     const result = await closeRequestNoResponse(params.requestId);
+    if (!result.success) {
+      return { success: false, data: null, error: result.error };
+    }
     return {
-      success: result.success,
-      data: { closed: result.success },
-      error: result.error,
+      success: true,
+      data: { closed: true },
+      error: null,
     };
   } catch (error) {
     return {

@@ -32,6 +32,10 @@ import {
   getSystemCoverageStats,
   getCoverageHeatmap,
 } from './policyCoverageTracker.js';
+import { detectAgencyFlags, detectSystemFlags } from './intelligenceFlagDetector.js';
+import { getSystemSafetyStatus } from './systemSafety.js';
+import { getCoverageSummary } from './coveragePopulator.js';
+import { classifyAgencyDocuments, classifyAllPendingDocuments } from './classificationPipeline.js';
 
 const prisma = new PrismaClient();
 
@@ -417,6 +421,92 @@ export async function handleDashboard(): Promise<RouteResponse> {
 }
 
 // ---------------------------------------------------------------------------
+// INTELLIGENCE FLAGS HANDLERS (Phase 19)
+// ---------------------------------------------------------------------------
+
+/** GET /api/policy-intelligence/flags/:agencyId */
+export async function handleAgencyFlags(params: {
+  agencyId: string;
+}): Promise<RouteResponse> {
+  try {
+    const report = await detectAgencyFlags(params.agencyId);
+    return { status: 200, data: report };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    return { status: 500, error: `Agency flags failed: ${message}` };
+  }
+}
+
+/** GET /api/policy-intelligence/flags/summary */
+export async function handleSystemFlags(): Promise<RouteResponse> {
+  try {
+    const summary = await detectSystemFlags();
+    return { status: 200, data: summary };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    return { status: 500, error: `System flags failed: ${message}` };
+  }
+}
+
+// ---------------------------------------------------------------------------
+// SYSTEM SAFETY HANDLER (Phase 20)
+// ---------------------------------------------------------------------------
+
+/** GET /api/policy-intelligence/safety/status */
+export async function handleSafetyStatus(): Promise<RouteResponse> {
+  try {
+    const status = getSystemSafetyStatus();
+    return { status: 200, data: status };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    return { status: 500, error: `Safety status failed: ${message}` };
+  }
+}
+
+// ---------------------------------------------------------------------------
+// CLASSIFICATION HANDLERS (Phase 15)
+// ---------------------------------------------------------------------------
+
+/** POST /api/policy-intelligence/classify/agency/:agencyId */
+export async function handleClassifyAgency(params: {
+  agencyId: string;
+}): Promise<RouteResponse> {
+  try {
+    const result = await classifyAgencyDocuments(params.agencyId);
+    return { status: 200, data: result };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    return { status: 500, error: `Agency classification failed: ${message}` };
+  }
+}
+
+/** POST /api/policy-intelligence/classify/all */
+export async function handleClassifyAll(): Promise<RouteResponse> {
+  try {
+    const result = await classifyAllPendingDocuments();
+    return { status: 200, data: result };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    return { status: 500, error: `Batch classification failed: ${message}` };
+  }
+}
+
+// ---------------------------------------------------------------------------
+// COVERAGE POPULATION HANDLER (Phase 16)
+// ---------------------------------------------------------------------------
+
+/** GET /api/policy-intelligence/coverage/summary */
+export async function handleCoverageSummary(): Promise<RouteResponse> {
+  try {
+    const summary = await getCoverageSummary();
+    return { status: 200, data: summary };
+  } catch (error) {
+    const message = error instanceof Error ? error.message : String(error);
+    return { status: 500, error: `Coverage summary failed: ${message}` };
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Route Registration Table
 // ---------------------------------------------------------------------------
 
@@ -438,4 +528,10 @@ export const POLICY_INTELLIGENCE_ROUTES = [
   { method: 'GET' as const, path: '/api/policy-intelligence/coverage/heatmap', handler: handleCoverageHeatmap },
   { method: 'GET' as const, path: '/api/policy-intelligence/coverage/category/:category', handler: handleCategoryDetail },
   { method: 'GET' as const, path: '/api/policy-intelligence/dashboard', handler: handleDashboard },
+  { method: 'GET' as const, path: '/api/policy-intelligence/flags/summary', handler: handleSystemFlags },
+  { method: 'GET' as const, path: '/api/policy-intelligence/flags/:agencyId', handler: handleAgencyFlags },
+  { method: 'GET' as const, path: '/api/policy-intelligence/safety/status', handler: handleSafetyStatus },
+  { method: 'POST' as const, path: '/api/policy-intelligence/classify/agency/:agencyId', handler: handleClassifyAgency },
+  { method: 'POST' as const, path: '/api/policy-intelligence/classify/all', handler: handleClassifyAll },
+  { method: 'GET' as const, path: '/api/policy-intelligence/coverage/summary', handler: handleCoverageSummary },
 ] as const;

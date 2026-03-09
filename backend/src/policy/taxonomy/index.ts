@@ -75,6 +75,53 @@ export {
   type SystemCoverageStats,
 } from './policyCoverageTracker.js';
 
+// Phase 15: Classification pipeline
+export {
+  classifyDocumentText,
+  classifyDocument,
+  classifyAgencyDocuments,
+  classifyAllPendingDocuments,
+  classifyAfterOcr,
+  type ClassificationResult,
+  type BatchClassificationResult,
+} from './classificationPipeline.js';
+
+// Phase 16: Coverage populator
+export {
+  populateAgencyCoverage,
+  populateAllAgencyCoverage,
+  updateCoverageAfterClassification,
+  getCoverageSummary,
+  type CoveragePopulationResult,
+  type SystemCoveragePopulationResult,
+} from './coveragePopulator.js';
+
+// Phase 19: Intelligence flag detector
+export {
+  detectAgencyFlags,
+  detectSystemFlags,
+  type IntelligenceFlag,
+  type AgencyFlagReport,
+  type SystemFlagSummary,
+  type FlagSeverity,
+} from './intelligenceFlagDetector.js';
+
+// Phase 20: System safety
+export {
+  SAFETY_LIMITS,
+  getSystemSafetyStatus,
+  validateDocumentSize,
+  validatePageCount,
+  calculateRetry,
+  getSafeJobOptions,
+  rateLimitDelay,
+  incrementActiveCrawls,
+  decrementActiveCrawls,
+  type SafetyLimits,
+  type SafetyStatus,
+  type RetryConfig,
+} from './systemSafety.js';
+
 // API Route Handlers
 export {
   POLICY_INTELLIGENCE_ROUTES,
@@ -95,5 +142,11 @@ export {
   handleCoverageMatrix,
   handleCoverageHeatmap,
   handleCategoryDetail,
+  handleAgencyFlags,
+  handleSystemFlags,
+  handleSafetyStatus,
+  handleClassifyAgency,
+  handleClassifyAll,
+  handleCoverageSummary,
   type RouteResponse,
 } from './taxonomyRoutes.js';

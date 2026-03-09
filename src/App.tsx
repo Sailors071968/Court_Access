@@ -16,6 +16,7 @@ import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
 import { DashboardRouter } from './pages/dashboard/DashboardRouter';
 import { PolicyPipelineDashboard } from './pages/dashboard/PolicyPipelineDashboard';
 import { PolicyIntelligenceDashboard } from './pages/dashboard/PolicyIntelligenceDashboard';
+import { CpraDashboard } from './pages/dashboard/CpraDashboard';
 import { CasesListPage } from './pages/CasesListPage';
 import { SearchPage } from './pages/SearchPage';
 import { NotificationsPage } from './pages/NotificationsPage';
@@ -68,6 +69,14 @@ function App() {
             element={
               <ProtectedRoute requiredPermission="canViewAdmin">
                 <PolicyIntelligenceDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="dashboard/cpra"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <CpraDashboard />
               </ProtectedRoute>
             }
           />

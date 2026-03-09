@@ -115,7 +115,7 @@ export async function classifyDocumentText(
       where: { documentId },
       data: {
         documentType: bestDocType,
-        classificationStatus: 'partial',
+        classificationStatus: 'completed',
       },
     });
   }

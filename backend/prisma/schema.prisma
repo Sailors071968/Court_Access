@@ -261,3 +261,54 @@ model PolicyCoverage {
   @@index([policyFound])
   @@map("policy_coverage")
 }
+
+// ---------------------------------------------------------------------------
+// CPRA Request Campaign — tracks CPRA request campaigns
+// ---------------------------------------------------------------------------
+
+model CPRARequestCampaign {
+  campaignId   String   @id @default(uuid())
+  campaignName String
+  createdAt    DateTime @default(now())
+  active       Boolean  @default(true)
+
+  requests     CPRAAgencyRequest[]
+
+  @@index([active])
+  @@map("cpra_request_campaigns")
+}
+
+// ---------------------------------------------------------------------------
+// CPRA Agency Request — tracks individual CPRA requests per agency
+// ---------------------------------------------------------------------------
+
+model CPRAAgencyRequest {
+  requestId          String   @id @default(uuid())
+
+  campaignId         String
+  Campaign           CPRARequestCampaign @relation(fields: [campaignId], references: [campaignId])
+
+  agencyId           String
+
+  status             String   @default("draft") // draft | sent | awaiting_response | follow_up_1 | follow_up_2 | follow_up_final | documents_received | closed
+
+  sentAt             DateTime?
+  lastFollowUpAt     DateTime?
+
+  responseReceived   Boolean  @default(false)
+  responseReceivedAt DateTime?
+
+  closed             Boolean  @default(false)
+
+  followUpCount      Int      @default(0)
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([campaignId])
+  @@index([agencyId])
+  @@index([status])
+  @@index([closed])
+  @@index([responseReceived])
+  @@map("cpra_agency_requests")
+}

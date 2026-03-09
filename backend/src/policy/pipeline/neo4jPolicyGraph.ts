@@ -330,7 +330,7 @@ function extractRulesFromText(
 
     if (isRule) {
       ruleIndex++;
-      const ruleId = `rule-${documentType ?? 'UNKNOWN'}-${ruleIndex}-${Date.now()}`;
+      const ruleId = `rule-${documentType ?? 'UNKNOWN'}-${ruleIndex}`;
       rules.push({
         ruleId,
         ruleText: para.trim().slice(0, 500), // Cap at 500 chars

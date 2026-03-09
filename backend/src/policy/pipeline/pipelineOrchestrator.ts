@@ -136,43 +136,46 @@ export async function enqueueSiteCrawls(limit?: number): Promise<{ enqueued: num
   const connection = getRedisConnection();
   const queue = new Queue<SiteCrawlJobData>(SITE_CRAWL_QUEUE, { connection });
 
-  const agencies = await prisma.agency.findMany({
-    where: {
-      website: { not: null },
-      crawlStatus: 'pending',
-    },
-    orderBy: { jurisdictionRank: 'asc' },
-    take: limit,
-  });
-
   let enqueued = 0;
-  for (const agency of agencies) {
-    if (!agency.website) continue;
-
-    await queue.add(
-      `crawl-${agency.agencyId}`,
-      {
-        agencyId: agency.agencyId,
-        agencyName: agency.agencyName,
-        website: agency.website,
-        config: DEFAULT_CRAWLER_CONFIG,
+  try {
+    const agencies = await prisma.agency.findMany({
+      where: {
+        website: { not: null },
+        crawlStatus: 'pending',
       },
-      {
-        priority: agency.jurisdictionRank ?? 999,
-        attempts: 3,
-        backoff: { type: 'exponential', delay: 5000 },
-      }
-    );
-
-    await prisma.agency.update({
-      where: { agencyId: agency.agencyId },
-      data: { crawlStatus: 'in_progress' },
+      orderBy: { jurisdictionRank: 'asc' },
+      take: limit,
     });
 
-    enqueued++;
+    for (const agency of agencies) {
+      if (!agency.website) continue;
+
+      await queue.add(
+        `crawl-${agency.agencyId}`,
+        {
+          agencyId: agency.agencyId,
+          agencyName: agency.agencyName,
+          website: agency.website,
+          config: DEFAULT_CRAWLER_CONFIG,
+        },
+        {
+          priority: agency.jurisdictionRank ?? 999,
+          attempts: 3,
+          backoff: { type: 'exponential', delay: 5000 },
+        }
+      );
+
+      await prisma.agency.update({
+        where: { agencyId: agency.agencyId },
+        data: { crawlStatus: 'in_progress' },
+      });
+
+      enqueued++;
+    }
+  } finally {
+    await queue.close();
   }
 
-  await queue.close();
   console.log(`[Pipeline] Phase 4 complete: ${enqueued} sites enqueued`);
   return { enqueued };
 }
@@ -190,36 +193,38 @@ export async function enqueueDocumentDownloads(
   });
 
   let enqueued = 0;
-  for (const doc of documentUrls) {
-    // Create PolicyDocument record first
-    const policyDoc = await prisma.policyDocument.create({
-      data: {
-        agencyId,
-        sourceUrl: doc.url,
-        title: doc.title,
-        documentType: doc.estimatedType,
-      },
-    });
+  try {
+    for (const doc of documentUrls) {
+      // Create PolicyDocument record first
+      const policyDoc = await prisma.policyDocument.create({
+        data: {
+          agencyId,
+          sourceUrl: doc.url,
+          title: doc.title,
+          documentType: doc.estimatedType,
+        },
+      });
 
-    await queue.add(
-      `download-${policyDoc.documentId}`,
-      {
-        documentId: policyDoc.documentId,
-        agencyId,
-        sourceUrl: doc.url,
-        title: doc.title,
-        estimatedType: doc.estimatedType,
-      },
-      {
-        attempts: 3,
-        backoff: { type: 'exponential', delay: 3000 },
-      }
-    );
+      await queue.add(
+        `download-${policyDoc.documentId}`,
+        {
+          documentId: policyDoc.documentId,
+          agencyId,
+          sourceUrl: doc.url,
+          title: doc.title,
+          estimatedType: doc.estimatedType,
+        },
+        {
+          attempts: 3,
+          backoff: { type: 'exponential', delay: 3000 },
+        }
+      );
 
-    enqueued++;
+      enqueued++;
+    }
+  } finally {
+    await queue.close();
   }
-
-  await queue.close();
   return { enqueued };
 }
 
@@ -235,16 +240,18 @@ export async function enqueueOcr(
   const connection = getRedisConnection();
   const queue = new Queue<OcrJobData>(OCR_QUEUE, { connection });
 
-  await queue.add(
-    `ocr-${documentId}`,
-    { documentId, agencyId, s3Url, mimeType },
-    {
-      attempts: 2,
-      backoff: { type: 'exponential', delay: 5000 },
-    }
-  );
-
-  await queue.close();
+  try {
+    await queue.add(
+      `ocr-${documentId}`,
+      { documentId, agencyId, s3Url, mimeType },
+      {
+        attempts: 2,
+        backoff: { type: 'exponential', delay: 5000 },
+      }
+    );
+  } finally {
+    await queue.close();
+  }
 }
 
 /**
@@ -261,13 +268,15 @@ export async function enqueueClassification(
     connection,
   });
 
-  await queue.add(
-    `classify-${documentId}`,
-    { documentId, title, sourceUrl, textContent },
-    { attempts: 2 }
-  );
-
-  await queue.close();
+  try {
+    await queue.add(
+      `classify-${documentId}`,
+      { documentId, title, sourceUrl, textContent },
+      { attempts: 2 }
+    );
+  } finally {
+    await queue.close();
+  }
 }
 
 /**

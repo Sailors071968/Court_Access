@@ -1,0 +1,72 @@
+{
+  "phase": 90,
+  "title": "System Performance Report",
+  "generatedAt": "2026-03-09T19:58:44.671Z",
+  "crawlerThroughput": {
+    "totalAgenciesCrawled": 11,
+    "totalDocumentsDiscovered": 1701,
+    "totalDocumentsDownloaded": 151,
+    "crawlInProgress": 0,
+    "crawlFailed": 0
+  },
+  "ocrBacklog": {
+    "completed": 151,
+    "pending": 0,
+    "failed": 0,
+    "backlogPercent": 0
+  },
+  "workerQueueDepth": {
+    "ocrQueueDepth": 0,
+    "classificationQueueDepth": 0,
+    "pipelineHealthStatus": {
+      "inboundEmailStatus": "operational",
+      "ocrStatus": "operational",
+      "classificationStatus": "operational",
+      "coverageUpdateStatus": "operational",
+      "recentResponses": 0,
+      "pendingOcr": 0,
+      "pendingClassification": 0,
+      "lastResponseAt": null
+    }
+  },
+  "databaseSize": {
+    "agencies": 11,
+    "policyDocuments": 1701,
+    "policyTopics": 334,
+    "coverageEntries": 3674,
+    "cpraCampaigns": 0,
+    "cpraRequests": 0,
+    "estimatedTextStorageMB": 0.59
+  },
+  "s3StorageUsage": {
+    "note": "Sandbox uses synthetic S3 URLs — no actual S3 storage consumed",
+    "documentsWithS3Url": 151,
+    "estimatedStorageMB": 37
+  },
+  "classificationPerformance": {
+    "totalClassified": 1701,
+    "classificationPending": 0,
+    "averageClassificationTimeMs": 146
+  },
+  "coverageMetrics": {
+    "systemCoverage": {
+      "totalAgencies": 11,
+      "totalTopics": 334,
+      "totalCoverageEntries": 3674,
+      "totalFound": 450,
+      "totalMissing": 3224,
+      "overallCoveragePercent": 12.25,
+      "agenciesWithFullCoverage": 1,
+      "agenciesWithNoCoverage": 0
+    },
+    "coverageSummary": {
+      "totalAgencies": 11,
+      "agenciesIndexed": 11,
+      "totalTopics": 334,
+      "overallCoveragePercent": 12.25,
+      "missingTopicsCount": 3224,
+      "totalPoliciesCollected": 151
+    }
+  },
+  "validationRuntimeMs": 179
+}

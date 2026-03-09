@@ -162,7 +162,7 @@ export async function sendCpraRequestEmail(
 
   // Determine email address from website domain (recordsRequestUrl is a URL, not an email)
   const agencyEmail =
-    `records@${agency.website?.replace(/^https?:\/\//, '').replace(/\/.*$/, '') ?? 'unknown.gov'}`;
+    `records@${agency.website?.replace(/^https?:\/\//, '').replace(/\/.*$/, '').replace(/^www\./, '') ?? 'unknown.gov'}`;
 
   // Load and merge template
   const template = loadTemplate(templateName);
@@ -262,7 +262,7 @@ export async function sendFollowUpEmail(
 
   // Determine email address from website domain (recordsRequestUrl is a URL, not an email)
   const agencyEmail =
-    `records@${agency.website?.replace(/^https?:\/\//, '').replace(/\/.*$/, '') ?? 'unknown.gov'}`;
+    `records@${agency.website?.replace(/^https?:\/\//, '').replace(/\/.*$/, '').replace(/^www\./, '') ?? 'unknown.gov'}`;
 
   const template = loadTemplate(templateName);
   const variables: TemplateVariables = {
@@ -349,7 +349,7 @@ export async function sendThankYouEmail(
 
   // Determine email address from website domain (recordsRequestUrl is a URL, not an email)
   const agencyEmail =
-    `records@${agency.website?.replace(/^https?:\/\//, '').replace(/\/.*$/, '') ?? 'unknown.gov'}`;
+    `records@${agency.website?.replace(/^https?:\/\//, '').replace(/\/.*$/, '').replace(/^www\./, '') ?? 'unknown.gov'}`;
 
   const template = loadTemplate('cpra_thank_you.txt');
   const variables: TemplateVariables = {

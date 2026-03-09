@@ -1,0 +1,29 @@
+Subject: Annual Public Records Request – Policy Updates
+
+To: {agencyName}
+
+CourtAccess maintains a statewide research database of law enforcement policies for legal research purposes.
+
+On {policyReceivedDate}, your agency provided policy documents in response to a California Public Records Act request.
+
+This message is a follow-up request to determine whether any updates or revisions have been made to the following policies since that time:
+
+* Use-of-Force Policies
+* Internal Affairs Procedures
+* Officer Discipline Policies
+* Body Worn Camera Policies
+* Training Manuals
+* Pursuit Policies
+* Arrest Procedures
+* Search and Seizure Policies
+* Informant Management Policies
+
+If updated versions are available, please provide the current documents or a link where they may be accessed.
+
+If no updates have been made, please confirm that the previously provided policies remain current.
+
+Thank you for your continued cooperation.
+
+{requesterName}
+{requesterOrganization}
+cpra@courtaccess.net

@@ -7,6 +7,7 @@
 
 import { PrismaClient } from '@prisma/client';
 import { sendThankYouEmail } from './cpraEmailSender.js';
+import { scheduleAnnualPolicyUpdate } from './cpraAnnualUpdateService.js';
 
 const prisma = new PrismaClient();
 
@@ -106,6 +107,21 @@ export async function processIncomingCpraResponse(
   } catch (error) {
     console.error(
       `[CPRA Response] Failed to send thank-you email: ${error instanceof Error ? error.message : error}`,
+    );
+  }
+
+  // Phase 46-47 — Schedule annual policy update (365-day cycle)
+  try {
+    const { annualUpdateDue } = await scheduleAnnualPolicyUpdate(
+      request.agencyId,
+      requestId,
+    );
+    console.log(
+      `[CPRA Response] Annual update scheduled for agency ${request.agencyId} on ${annualUpdateDue.toISOString()}`,
+    );
+  } catch (error) {
+    console.error(
+      `[CPRA Response] Failed to schedule annual update: ${error instanceof Error ? error.message : error}`,
     );
   }
 

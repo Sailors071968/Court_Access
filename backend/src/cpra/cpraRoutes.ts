@@ -8,6 +8,11 @@ import { enqueueCampaignBatch, scheduleOverdueCheck } from './workers/cpraCampai
 import { markResponseReceived, closeRequestNoResponse, getCpraRequestStatus } from './services/cpraResponseProcessor.js';
 import { getCampaignDeadlineSummary, findOverdueRequests } from './services/cpraDeadlineService.js';
 import { getCpraSafetyStatus } from './services/cpraSafeguards.js';
+import {
+  getAnnualUpdateSummary,
+  restartAnnualCycle,
+} from './services/cpraAnnualUpdateService.js';
+import { scheduleDailyAnnualCheck } from './workers/cpraAnnualUpdateWorker.js';
 import type { DocumentAttachment } from './services/cpraResponseProcessor.js';
 
 const prisma = new PrismaClient();
@@ -363,6 +368,122 @@ export async function handleProcessOverdue(): Promise<
 > {
   try {
     await scheduleOverdueCheck();
+    return { success: true, data: { scheduled: true }, error: null };
+  } catch (error) {
+    return {
+      success: false,
+      data: null,
+      error: error instanceof Error ? error.message : String(error),
+    };
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Phase 46-52 — Annual Policy Update routes
+// ---------------------------------------------------------------------------
+
+export async function handleGetAnnualUpdateDashboard(): Promise<
+  RouteResponse<Awaited<ReturnType<typeof getAnnualUpdateSummary>>>
+> {
+  try {
+    const summary = await getAnnualUpdateSummary();
+    return { success: true, data: summary, error: null };
+  } catch (error) {
+    return {
+      success: false,
+      data: null,
+      error: error instanceof Error ? error.message : String(error),
+    };
+  }
+}
+
+export async function handleGetAnnualUpdates(): Promise<
+  RouteResponse<
+    Array<{
+      updateId: string;
+      agencyId: string;
+      agencyName: string;
+      status: string;
+      requestedAt: Date;
+      annualUpdateDue: Date | null;
+      policyReceivedAt: Date | null;
+      followUpCount: number;
+      responseReceived: boolean;
+      closed: boolean;
+    }>
+  >
+> {
+  try {
+    const updates = await prisma.cPRAAnnualUpdate.findMany({
+      orderBy: { annualUpdateDue: 'asc' },
+      take: 200,
+    });
+
+    const enriched = await Promise.all(
+      updates.map(async (u) => {
+        const agency = await prisma.agency.findUnique({
+          where: { agencyId: u.agencyId },
+          select: { agencyName: true },
+        });
+        return {
+          updateId: u.updateId,
+          agencyId: u.agencyId,
+          agencyName: agency?.agencyName ?? 'Unknown',
+          status: u.status,
+          requestedAt: u.requestedAt,
+          annualUpdateDue: u.annualUpdateDue,
+          policyReceivedAt: u.policyReceivedAt,
+          followUpCount: u.followUpCount,
+          responseReceived: u.responseReceived,
+          closed: u.closed,
+        };
+      }),
+    );
+
+    return { success: true, data: enriched, error: null };
+  } catch (error) {
+    return {
+      success: false,
+      data: null,
+      error: error instanceof Error ? error.message : String(error),
+    };
+  }
+}
+
+export async function handleMarkAnnualUpdateReceived(params: {
+  updateId: string;
+}): Promise<RouteResponse<{ received: boolean; nextCycleScheduled: boolean }>> {
+  try {
+    const update = await prisma.cPRAAnnualUpdate.findUnique({
+      where: { updateId: params.updateId },
+    });
+
+    if (!update) {
+      return { success: false, data: null, error: 'Annual update not found' };
+    }
+
+    // Phase 52 — Restart the cycle
+    await restartAnnualCycle(update.agencyId, params.updateId);
+
+    return {
+      success: true,
+      data: { received: true, nextCycleScheduled: true },
+      error: null,
+    };
+  } catch (error) {
+    return {
+      success: false,
+      data: null,
+      error: error instanceof Error ? error.message : String(error),
+    };
+  }
+}
+
+export async function handleTriggerAnnualCheck(): Promise<
+  RouteResponse<{ scheduled: boolean }>
+> {
+  try {
+    await scheduleDailyAnnualCheck();
     return { success: true, data: { scheduled: true }, error: null };
   } catch (error) {
     return {

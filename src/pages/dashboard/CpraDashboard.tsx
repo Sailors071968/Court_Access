@@ -39,6 +39,33 @@ interface CpraDashboardData {
   };
 }
 
+interface AnnualUpdateSummary {
+  totalScheduled: number;
+  totalSent: number;
+  totalAwaitingResponse: number;
+  totalReceived: number;
+  totalClosed: number;
+  upcomingUpdates: Array<{
+    updateId: string;
+    agencyId: string;
+    annualUpdateDue: string | null;
+    status: string;
+  }>;
+}
+
+interface AnnualUpdateItem {
+  updateId: string;
+  agencyId: string;
+  agencyName: string;
+  status: string;
+  requestedAt: string;
+  annualUpdateDue: string | null;
+  policyReceivedAt: string | null;
+  followUpCount: number;
+  responseReceived: boolean;
+  closed: boolean;
+}
+
 interface CampaignItem {
   campaignId: string;
   campaignName: string;
@@ -133,6 +160,32 @@ async function triggerOverdueCheck(): Promise<void> {
   if (!res.ok) throw new Error(`Overdue check failed: ${res.status}`);
 }
 
+async function fetchAnnualUpdateSummary(): Promise<AnnualUpdateSummary> {
+  const res = await fetch(`${API_BASE}/annual/dashboard`);
+  if (!res.ok) throw new Error(`Annual summary fetch failed: ${res.status}`);
+  const json = await res.json();
+  return json.data;
+}
+
+async function fetchAnnualUpdates(): Promise<AnnualUpdateItem[]> {
+  const res = await fetch(`${API_BASE}/annual/updates`);
+  if (!res.ok) throw new Error(`Annual updates fetch failed: ${res.status}`);
+  const json = await res.json();
+  return json.data;
+}
+
+async function markAnnualUpdateReceived(updateId: string): Promise<void> {
+  const res = await fetch(`${API_BASE}/annual/updates/${updateId}/received`, {
+    method: 'POST',
+  });
+  if (!res.ok) throw new Error(`Mark annual received failed: ${res.status}`);
+}
+
+async function triggerAnnualCheck(): Promise<void> {
+  const res = await fetch(`${API_BASE}/annual/check`, { method: 'POST' });
+  if (!res.ok) throw new Error(`Annual check failed: ${res.status}`);
+}
+
 // ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
@@ -143,19 +196,25 @@ export function CpraDashboard() {
   const [selectedCampaign, setSelectedCampaign] = useState<CampaignDetail | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [activeTab, setActiveTab] = useState<'overview' | 'campaigns' | 'tracking'>('overview');
+  const [annualSummary, setAnnualSummary] = useState<AnnualUpdateSummary | null>(null);
+  const [annualUpdates, setAnnualUpdates] = useState<AnnualUpdateItem[]>([]);
+  const [activeTab, setActiveTab] = useState<'overview' | 'campaigns' | 'tracking' | 'annual'>('overview');
   const [newCampaignName, setNewCampaignName] = useState('');
   const [creating, setCreating] = useState(false);
 
   const loadData = useCallback(async () => {
     try {
       setLoading(true);
-      const [dashData, campaignData] = await Promise.all([
+      const [dashData, campaignData, annualData, annualList] = await Promise.all([
         fetchCpraDashboard(),
         fetchCampaigns(),
+        fetchAnnualUpdateSummary().catch(() => null),
+        fetchAnnualUpdates().catch(() => []),
       ]);
       setDashboard(dashData);
       setCampaigns(campaignData);
+      setAnnualSummary(annualData);
+      setAnnualUpdates(annualList);
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load dashboard');
@@ -219,6 +278,26 @@ export function CpraDashboard() {
     try {
       await triggerOverdueCheck();
       alert('Overdue check scheduled');
+    } catch (err) {
+      alert(`Failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    }
+  };
+
+  const handleAnnualCheck = async () => {
+    try {
+      await triggerAnnualCheck();
+      alert('Annual update check scheduled');
+      loadData();
+    } catch (err) {
+      alert(`Failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
+    }
+  };
+
+  const handleMarkAnnualReceived = async (updateId: string) => {
+    try {
+      await markAnnualUpdateReceived(updateId);
+      alert('Annual update marked received — next cycle scheduled');
+      loadData();
     } catch (err) {
       alert(`Failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
     }
@@ -312,9 +391,21 @@ export function CpraDashboard() {
         </div>
       )}
 
+      {/* Annual Update Summary */}
+      {annualSummary && (
+        <div style={{ backgroundColor: '#eff6ff', border: '1px solid #bfdbfe', borderRadius: 8, padding: 12, marginBottom: 24, fontSize: 13 }}>
+          <strong>Annual Updates:</strong>{' '}
+          {annualSummary.totalScheduled} scheduled |{' '}
+          {annualSummary.totalSent} sent |{' '}
+          {annualSummary.totalAwaitingResponse} awaiting |{' '}
+          {annualSummary.totalReceived} received |{' '}
+          {annualSummary.upcomingUpdates.length} due in 30 days
+        </div>
+      )}
+
       {/* Tabs */}
       <div style={{ display: 'flex', gap: 0, marginBottom: 24, borderBottom: '1px solid #e5e7eb' }}>
-        {(['overview', 'campaigns', 'tracking'] as const).map((tab) => (
+        {(['overview', 'campaigns', 'tracking', 'annual'] as const).map((tab) => (
           <button
             key={tab}
             onClick={() => setActiveTab(tab)}
@@ -352,6 +443,14 @@ export function CpraDashboard() {
         <TrackingTab
           campaignDetail={selectedCampaign}
           onMarkResponse={handleMarkResponse}
+        />
+      )}
+      {activeTab === 'annual' && (
+        <AnnualUpdateTab
+          summary={annualSummary}
+          updates={annualUpdates}
+          onTriggerCheck={handleAnnualCheck}
+          onMarkReceived={handleMarkAnnualReceived}
         />
       )}
     </div>
@@ -637,15 +736,129 @@ function TrackingTab({
 // Helper components
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// Annual Update Tab (Phase 46-52 — Annual Policy Update Tracking)
+// ---------------------------------------------------------------------------
+
+function AnnualUpdateTab({
+  summary,
+  updates,
+  onTriggerCheck,
+  onMarkReceived,
+}: {
+  summary: AnnualUpdateSummary | null;
+  updates: AnnualUpdateItem[];
+  onTriggerCheck: () => void;
+  onMarkReceived: (updateId: string) => void;
+}) {
+  return (
+    <div>
+      {/* Summary Stats */}
+      {summary && (
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: 12, marginBottom: 24 }}>
+          <MiniStat label="Scheduled" value={summary.totalScheduled} color="#3b82f6" />
+          <MiniStat label="Sent" value={summary.totalSent} color="#8b5cf6" />
+          <MiniStat label="Awaiting" value={summary.totalAwaitingResponse} color="#f59e0b" />
+          <MiniStat label="Received" value={summary.totalReceived} color="#10b981" />
+          <MiniStat label="Closed" value={summary.totalClosed} />
+        </div>
+      )}
+
+      {/* Actions */}
+      <div style={{ display: 'flex', gap: 8, marginBottom: 24 }}>
+        <button
+          onClick={onTriggerCheck}
+          style={{ padding: '8px 16px', backgroundColor: '#7c3aed', color: 'white', border: 'none', borderRadius: 6, cursor: 'pointer', fontSize: 13, fontWeight: 600 }}
+        >
+          Run Annual Check
+        </button>
+      </div>
+
+      {/* Annual Updates Table */}
+      <div style={{ backgroundColor: 'white', border: '1px solid #e5e7eb', borderRadius: 8, overflow: 'hidden' }}>
+        <table style={{ width: '100%', borderCollapse: 'collapse' }}>
+          <thead>
+            <tr style={{ backgroundColor: '#f9fafb' }}>
+              <th style={thStyle}>Agency</th>
+              <th style={thStyle}>Status</th>
+              <th style={thStyle}>Last Received</th>
+              <th style={thStyle}>Next Update</th>
+              <th style={thStyle}>Follow-Ups</th>
+              <th style={thStyle}>Response</th>
+              <th style={thStyle}>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {updates.map((u) => (
+              <tr key={u.updateId} style={{ borderBottom: '1px solid #f3f4f6' }}>
+                <td style={tdStyle}>
+                  <div style={{ fontWeight: 500, color: '#111827' }}>{u.agencyName}</div>
+                </td>
+                <td style={tdStyle}><StatusBadge status={u.status} /></td>
+                <td style={tdStyle}>
+                  <span style={{ fontSize: 12, color: '#6b7280' }}>
+                    {u.policyReceivedAt ? new Date(u.policyReceivedAt).toLocaleDateString() : '—'}
+                  </span>
+                </td>
+                <td style={tdStyle}>
+                  <span style={{ fontSize: 12, color: '#6b7280' }}>
+                    {u.annualUpdateDue ? new Date(u.annualUpdateDue).toLocaleDateString() : '—'}
+                  </span>
+                </td>
+                <td style={tdStyle}>{u.followUpCount}</td>
+                <td style={tdStyle}>
+                  <span style={{
+                    padding: '2px 8px',
+                    borderRadius: 12,
+                    fontSize: 11,
+                    fontWeight: 600,
+                    backgroundColor: u.responseReceived ? '#dcfce7' : '#fef3c7',
+                    color: u.responseReceived ? '#166534' : '#92400e',
+                  }}>
+                    {u.responseReceived ? 'Received' : 'Awaiting'}
+                  </span>
+                </td>
+                <td style={tdStyle}>
+                  {!u.responseReceived && !u.closed && (
+                    <button
+                      onClick={() => onMarkReceived(u.updateId)}
+                      style={{ padding: '4px 12px', backgroundColor: '#10b981', color: 'white', border: 'none', borderRadius: 4, cursor: 'pointer', fontSize: 12 }}
+                    >
+                      Mark Received
+                    </button>
+                  )}
+                </td>
+              </tr>
+            ))}
+            {updates.length === 0 && (
+              <tr>
+                <td colSpan={7} style={{ ...tdStyle, textAlign: 'center', color: '#9ca3af' }}>
+                  No annual updates scheduled yet. Updates are created automatically when agencies provide policy documents.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Helper components
+// ---------------------------------------------------------------------------
+
 function StatusBadge({ status }: { status: string }) {
   const colors: Record<string, { bg: string; text: string }> = {
     draft: { bg: '#f3f4f6', text: '#6b7280' },
+    scheduled: { bg: '#dbeafe', text: '#1e40af' },
     sent: { bg: '#dbeafe', text: '#1e40af' },
     awaiting_response: { bg: '#fef3c7', text: '#92400e' },
     follow_up_1: { bg: '#fed7aa', text: '#9a3412' },
     follow_up_2: { bg: '#fecaca', text: '#991b1b' },
     follow_up_final: { bg: '#fecaca', text: '#7f1d1d' },
     documents_received: { bg: '#dcfce7', text: '#166534' },
+    received: { bg: '#dcfce7', text: '#166534' },
     closed: { bg: '#f3f4f6', text: '#374151' },
   };
 

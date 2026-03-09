@@ -298,6 +298,9 @@ model CPRAAgencyRequest {
   responseReceived   Boolean  @default(false)
   responseReceivedAt DateTime?
 
+  policyReceivedAt   DateTime?
+  annualUpdateDue    DateTime?
+
   closed             Boolean  @default(false)
 
   followUpCount      Int      @default(0)
@@ -310,5 +313,38 @@ model CPRAAgencyRequest {
   @@index([status])
   @@index([closed])
   @@index([responseReceived])
+  @@index([annualUpdateDue])
   @@map("cpra_agency_requests")
+}
+
+// ---------------------------------------------------------------------------
+// CPRA Annual Update — tracks yearly policy update request cycles
+// ---------------------------------------------------------------------------
+
+model CPRAAnnualUpdate {
+  updateId           String   @id @default(uuid())
+
+  agencyId           String
+
+  requestedAt        DateTime
+  responseReceived   Boolean  @default(false)
+  responseReceivedAt DateTime?
+
+  policyReceivedAt   DateTime?
+  annualUpdateDue    DateTime?
+
+  followUpCount      Int      @default(0)
+  lastFollowUpAt     DateTime?
+
+  closed             Boolean  @default(false)
+  status             String   @default("scheduled") // scheduled | sent | follow_up_1 | follow_up_2 | follow_up_final | received | closed
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([agencyId])
+  @@index([annualUpdateDue])
+  @@index([status])
+  @@index([closed])
+  @@map("cpra_annual_updates")
 }

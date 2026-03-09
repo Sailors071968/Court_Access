@@ -44,6 +44,15 @@ export {
   type DocumentAttachment,
 } from './services/cpraResponseProcessor.js';
 
+export {
+  scheduleAnnualPolicyUpdate,
+  findDueAnnualUpdates,
+  findAnnualUpdatesNeedingFollowUp,
+  markAnnualUpdateReceived,
+  restartAnnualCycle,
+  getAnnualUpdateSummary,
+} from './services/cpraAnnualUpdateService.js';
+
 // Workers
 export {
   createCpraCampaignWorker,
@@ -53,6 +62,14 @@ export {
   type CpraCampaignJobData,
   type CpraCampaignResult,
 } from './workers/cpraCampaignWorker.js';
+
+export {
+  createCpraAnnualUpdateWorker,
+  scheduleDailyAnnualCheck,
+  CPRA_ANNUAL_UPDATE_QUEUE,
+  type CpraAnnualJobData,
+  type CpraAnnualJobResult,
+} from './workers/cpraAnnualUpdateWorker.js';
 
 // Route handlers
 export {
@@ -65,4 +82,8 @@ export {
   handleGetRequestStatus,
   handleGetCpraDashboard,
   handleProcessOverdue,
+  handleGetAnnualUpdateDashboard,
+  handleGetAnnualUpdates,
+  handleMarkAnnualUpdateReceived,
+  handleTriggerAnnualCheck,
 } from './cpraRoutes.js';

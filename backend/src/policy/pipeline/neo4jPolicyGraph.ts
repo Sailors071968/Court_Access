@@ -139,7 +139,7 @@ export async function extractAndStorePolicyRules(
   textContent: string,
   documentType: string | null
 ): Promise<number> {
-  const rules = extractRulesFromText(textContent, documentType);
+  const rules = extractRulesFromText(documentId, textContent, documentType);
   const session = getSession();
   let created = 0;
 
@@ -295,6 +295,7 @@ interface PolicyRule {
  * Looks for numbered sections, bullet points, and key phrases.
  */
 function extractRulesFromText(
+  documentId: string,
   text: string,
   documentType: string | null
 ): PolicyRule[] {
@@ -330,7 +331,7 @@ function extractRulesFromText(
 
     if (isRule) {
       ruleIndex++;
-      const ruleId = `rule-${documentType ?? 'UNKNOWN'}-${ruleIndex}`;
+      const ruleId = `rule-${documentId}-${documentType ?? 'UNKNOWN'}-${ruleIndex}`;
       rules.push({
         ruleId,
         ruleText: para.trim().slice(0, 500), // Cap at 500 chars

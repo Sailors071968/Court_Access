@@ -162,7 +162,7 @@ export async function sendCpraRequestEmail(
 
   // Determine email address from website domain (recordsRequestUrl is a URL, not an email)
   const agencyEmail =
-    `records@${agency.website?.replace(/^https?:\/\//, '').replace(/\/.*$/, '').replace(/^www\./, '') ?? 'unknown.gov'}`;
+    `records@${agency.website?.replace(/^https?:\/\//, '').replace(/\/.*$/, '').replace(/^www\./, '') || 'unknown.gov'}`;
 
   // Load and merge template
   const template = loadTemplate(templateName);
@@ -182,18 +182,29 @@ export async function sendCpraRequestEmail(
 
   const { subject, body } = mergeTemplate(template, variables);
 
-  // Send email
-  const { messageId, error } = await sendEmail(agencyEmail, subject, body);
-
-  // Create CPRAAgencyRequest record
+  // Create CPRAAgencyRequest record BEFORE sending to prevent TOCTOU race with duplicate check
   const request = await prisma.cPRAAgencyRequest.create({
     data: {
       campaignId,
       agencyId,
-      status: error ? 'draft' : 'sent',
-      sentAt: error ? null : new Date(),
+      status: 'draft',
+      sentAt: null,
     },
   });
+
+  // Send email
+  const { messageId, error } = await sendEmail(agencyEmail, subject, body);
+
+  // Update record status after send attempt
+  if (!error) {
+    await prisma.cPRAAgencyRequest.update({
+      where: { requestId: request.requestId },
+      data: {
+        status: 'sent',
+        sentAt: new Date(),
+      },
+    });
+  }
 
   return {
     requestId: request.requestId,
@@ -262,7 +273,7 @@ export async function sendFollowUpEmail(
 
   // Determine email address from website domain (recordsRequestUrl is a URL, not an email)
   const agencyEmail =
-    `records@${agency.website?.replace(/^https?:\/\//, '').replace(/\/.*$/, '').replace(/^www\./, '') ?? 'unknown.gov'}`;
+    `records@${agency.website?.replace(/^https?:\/\//, '').replace(/\/.*$/, '').replace(/^www\./, '') || 'unknown.gov'}`;
 
   const template = loadTemplate(templateName);
   const variables: TemplateVariables = {
@@ -349,7 +360,7 @@ export async function sendThankYouEmail(
 
   // Determine email address from website domain (recordsRequestUrl is a URL, not an email)
   const agencyEmail =
-    `records@${agency.website?.replace(/^https?:\/\//, '').replace(/\/.*$/, '').replace(/^www\./, '') ?? 'unknown.gov'}`;
+    `records@${agency.website?.replace(/^https?:\/\//, '').replace(/\/.*$/, '').replace(/^www\./, '') || 'unknown.gov'}`;
 
   const template = loadTemplate('cpra_thank_you.txt');
   const variables: TemplateVariables = {

@@ -271,8 +271,8 @@ export async function getResponsePipelineHealth(): Promise<PipelineHealthCheck> 
   });
 
   // Determine status based on queue sizes
-  const ocrStatus = pendingOcr > 100 ? 'degraded' : pendingOcr > 500 ? 'down' : 'operational';
-  const classStatus = pendingClassification > 100 ? 'degraded' : pendingClassification > 500 ? 'down' : 'operational';
+  const ocrStatus = pendingOcr > 500 ? 'down' : pendingOcr > 100 ? 'degraded' : 'operational';
+  const classStatus = pendingClassification > 500 ? 'down' : pendingClassification > 100 ? 'degraded' : 'operational';
 
   return {
     inboundEmailStatus: 'operational',

@@ -184,7 +184,11 @@ function escapeHtml(str: string): string {
 function generateInteractiveViewer(sceneJson: string, options: ExportOptions): string {
   const label = escapeHtml(options.exhibitLabel ?? 'Trial Exhibit');
   const caseLabel = options.caseId ? ` | Case: ${escapeHtml(options.caseId)}` : '';
-  const encodedSceneJson = encodeURIComponent(sceneJson);
+  // encodeURIComponent doesn't encode backticks, $, or \ which can break template literals
+  const encodedSceneJson = encodeURIComponent(sceneJson)
+    .replace(/`/g, '%60')
+    .replace(/\$/g, '%24')
+    .replace(/\\/g, '%5C');
 
   return `<!DOCTYPE html>
 <html lang="en">

@@ -540,7 +540,7 @@ export async function importChpPolicies(): Promise<ChpImportResult> {
       _count: true,
     });
     for (const group of topicGroups) {
-      topicsByCategory[group.category] = group._count as number;
+      topicsByCategory[group.category] = (group._count as unknown as { _all: number })._all;
     }
 
     const coverageEntries = await prisma.policyCoverage.count({

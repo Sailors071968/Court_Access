@@ -19,7 +19,6 @@ import {
   Map,
   FileDown,
   ChevronRight,
-  Play,
 } from 'lucide-react';
 
 function DefenseNav() {
@@ -92,11 +91,10 @@ function DefenseHero() {
               <ArrowRight size={20} />
             </Link>
             <Link
-              to="/demo"
+              to="/register"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-medium px-8 py-3.5 rounded-xl text-lg transition-colors border border-white/20"
             >
-              <Play size={18} />
-              Request a Demo
+              Create Your Account
             </Link>
           </div>
         </div>
@@ -247,10 +245,10 @@ function DefenseCta() {
             <ArrowRight size={20} />
           </Link>
           <Link
-            to="/demo"
+            to="/contact"
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-medium px-8 py-3.5 rounded-xl text-lg transition-colors border border-white/20"
           >
-            Request a Demo
+            Contact Sales
           </Link>
         </div>
       </div>

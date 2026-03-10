@@ -517,10 +517,10 @@ function FinalCtaSection() {
             <ArrowRight size={20} />
           </Link>
           <Link
-            to="/login"
+            to="/contact"
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-medium px-8 py-3.5 rounded-xl text-lg transition-colors border border-white/20"
           >
-            Schedule a Demonstration
+            Contact Sales
           </Link>
         </div>
       </div>
@@ -605,7 +605,7 @@ function LandingFooter() {
               <li><Link to="/for-defense" className="text-sm text-slate-400 hover:text-white transition-colors">For Defense</Link></li>
               <li><Link to="/for-prosecutors" className="text-sm text-slate-400 hover:text-white transition-colors">For Prosecutors</Link></li>
               <li><Link to="/government" className="text-sm text-slate-400 hover:text-white transition-colors">Government</Link></li>
-              <li><Link to="/demo" className="text-sm text-slate-400 hover:text-white transition-colors">Request Demo</Link></li>
+              <li><Link to="/contact" className="text-sm text-slate-400 hover:text-white transition-colors">Contact Sales</Link></li>
             </ul>
           </div>
           <div>

@@ -13,7 +13,7 @@ import { LandingPage } from './pages/LandingPage';
 import { ForDefensePage } from './pages/ForDefensePage';
 import { ForProsecutorsPage } from './pages/ForProsecutorsPage';
 import { GovernmentPage } from './pages/GovernmentPage';
-import { DemoRequestPage } from './pages/DemoRequestPage';
+import { ContactSalesPage } from './pages/ContactSalesPage';
 import { CaseStudiesPage } from './pages/CaseStudiesPage';
 
 // Auth Pages
@@ -65,7 +65,7 @@ function App() {
         <Route path="/for-defense" element={<ForDefensePage />} />
         <Route path="/for-prosecutors" element={<ForProsecutorsPage />} />
         <Route path="/government" element={<GovernmentPage />} />
-        <Route path="/demo" element={<DemoRequestPage />} />
+        <Route path="/contact" element={<ContactSalesPage />} />
         <Route path="/case-studies" element={<CaseStudiesPage />} />
 
         {/* Public Auth Routes */}

@@ -109,8 +109,8 @@ function CaseStudyNav() {
           </div>
           <div className="flex items-center gap-3">
             <Link to="/login" className="text-sm text-slate-300 hover:text-white font-medium transition-colors">Sign In</Link>
-            <Link to="/demo" className="text-sm bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-4 py-2 rounded-lg transition-colors">
-              Request Demo
+            <Link to="/register" className="text-sm bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-4 py-2 rounded-lg transition-colors">
+              Get Started
             </Link>
           </div>
         </div>
@@ -215,21 +215,21 @@ export function CaseStudiesPage() {
             See CourtAccess in Action
           </h2>
           <p className="text-lg text-slate-300 mb-10 max-w-2xl mx-auto">
-            Request a demonstration tailored to your agency type and case volume.
+            Start analyzing evidence today or contact our team for enterprise licensing.
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
-              to="/demo"
+              to="/register"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-3.5 rounded-xl text-lg transition-colors"
             >
-              Request a Demo
+              Start Your First Case Analysis
               <ArrowRight size={20} />
             </Link>
             <Link
-              to="/register"
+              to="/contact"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-medium px-8 py-3.5 rounded-xl text-lg transition-colors border border-white/20"
             >
-              Start Free Trial
+              Contact Sales
             </Link>
           </div>
         </div>

@@ -37,8 +37,8 @@ function GovNav() {
           </div>
           <div className="flex items-center gap-3">
             <Link to="/login" className="text-sm text-slate-300 hover:text-white font-medium transition-colors">Sign In</Link>
-            <Link to="/demo" className="text-sm bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-4 py-2 rounded-lg transition-colors">
-              Request Demo
+            <Link to="/register" className="text-sm bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-4 py-2 rounded-lg transition-colors">
+              Get Started
             </Link>
           </div>
         </div>
@@ -67,13 +67,21 @@ function GovHero() {
             secure infrastructure, and dedicated support for government agencies.
           </p>
 
-          <Link
-            to="/demo"
-            className="inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-3.5 rounded-xl text-lg transition-colors"
-          >
-            Request Government Demonstration
-            <ArrowRight size={20} />
-          </Link>
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+            <Link
+              to="/register"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-3.5 rounded-xl text-lg transition-colors"
+            >
+              Start Your First Case Analysis
+              <ArrowRight size={20} />
+            </Link>
+            <Link
+              to="/contact"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-medium px-8 py-3.5 rounded-xl text-lg transition-colors border border-white/20"
+            >
+              Contact Sales
+            </Link>
+          </div>
         </div>
       </div>
     </section>
@@ -198,9 +206,9 @@ function GovEnterprise() {
 
 function GovProcess() {
   const steps = [
-    { step: 1, title: 'Request Demonstration', description: 'Schedule a demo tailored to your agency type and case volume.' },
+    { step: 1, title: 'Create Your Account', description: 'Sign up and start analyzing your first case immediately.' },
     { step: 2, title: 'Pilot Deployment', description: 'Test CourtAccess with a limited case set in your environment.' },
-    { step: 3, title: 'Enterprise Licensing', description: 'Configure seat count, office access, and admin accounts.' },
+    { step: 3, title: 'Enterprise Licensing', description: 'Contact sales to configure seat count, office access, and admin accounts.' },
     { step: 4, title: 'Full Deployment', description: 'Roll out across your office with training and dedicated support.' },
   ];
 
@@ -242,11 +250,17 @@ function GovCta() {
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
-            to="/demo"
+            to="/register"
             className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-3.5 rounded-xl text-lg transition-colors"
           >
-            Request Government Demonstration
+            Create Your Account
             <ArrowRight size={20} />
+          </Link>
+          <Link
+            to="/contact"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white/10 hover:bg-white/20 text-white font-medium px-8 py-3.5 rounded-xl text-lg transition-colors border border-white/20"
+          >
+            Contact Sales
           </Link>
         </div>
       </div>

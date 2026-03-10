@@ -1,0 +1,405 @@
+{
+  "phase": "Phase 161 — Agency Detection Accuracy",
+  "generatedAt": "2026-03-10T13:46:47.388Z",
+  "totalTestCases": 50,
+  "correctDetections": 49,
+  "misidentifiedAgencies": 1,
+  "accuracy": 0.98,
+  "targetAccuracy": 0.95,
+  "targetMet": true,
+  "agencyConfidenceScores": [
+    {
+      "testCaseId": "VAL-001",
+      "expectedAgency": "California Highway Patrol",
+      "detectedAgency": "California Highway Patrol",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-002",
+      "expectedAgency": "Los Angeles Police Department",
+      "detectedAgency": "Los Angeles Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-003",
+      "expectedAgency": "San Francisco Police Department",
+      "detectedAgency": "San Francisco Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-004",
+      "expectedAgency": "Oakland Police Department",
+      "detectedAgency": "Oakland Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-005",
+      "expectedAgency": "San Diego Police Department",
+      "detectedAgency": "San Diego Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-006",
+      "expectedAgency": "San Jose Police Department",
+      "detectedAgency": "San Jose Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-007",
+      "expectedAgency": "Sacramento Police Department",
+      "detectedAgency": "Sacramento Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-008",
+      "expectedAgency": "California Highway Patrol",
+      "detectedAgency": "California Highway Patrol",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-009",
+      "expectedAgency": "Los Angeles Police Department",
+      "detectedAgency": "Los Angeles Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-010",
+      "expectedAgency": "Fresno Police Department",
+      "detectedAgency": "Fresno Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-011",
+      "expectedAgency": "California Highway Patrol",
+      "detectedAgency": "California Highway Patrol",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-012",
+      "expectedAgency": "Los Angeles Police Department",
+      "detectedAgency": "Los Angeles Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-013",
+      "expectedAgency": "San Diego Police Department",
+      "detectedAgency": "San Diego Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-014",
+      "expectedAgency": "California Highway Patrol",
+      "detectedAgency": "California Highway Patrol",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-015",
+      "expectedAgency": "Oakland Police Department",
+      "detectedAgency": "Oakland Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-016",
+      "expectedAgency": "San Jose Police Department",
+      "detectedAgency": "San Jose Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-017",
+      "expectedAgency": "Los Angeles Police Department",
+      "detectedAgency": "Los Angeles Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-018",
+      "expectedAgency": "Fresno Police Department",
+      "detectedAgency": "Fresno Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-019",
+      "expectedAgency": "California Highway Patrol",
+      "detectedAgency": "California Highway Patrol",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-020",
+      "expectedAgency": "Los Angeles Police Department",
+      "detectedAgency": "Los Angeles Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-021",
+      "expectedAgency": "California Highway Patrol",
+      "detectedAgency": "California Highway Patrol",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-022",
+      "expectedAgency": "California Highway Patrol",
+      "detectedAgency": "California Highway Patrol",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-023",
+      "expectedAgency": "San Francisco Police Department",
+      "detectedAgency": "San Francisco Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-024",
+      "expectedAgency": "Sacramento Police Department",
+      "detectedAgency": "Sacramento Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-025",
+      "expectedAgency": "Los Angeles Police Department",
+      "detectedAgency": "Los Angeles Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-026",
+      "expectedAgency": "San Francisco Police Department",
+      "detectedAgency": "San Francisco Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-027",
+      "expectedAgency": "San Diego Police Department",
+      "detectedAgency": "San Diego Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-028",
+      "expectedAgency": "California Highway Patrol",
+      "detectedAgency": "California Highway Patrol",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-029",
+      "expectedAgency": "California Highway Patrol",
+      "detectedAgency": "California Highway Patrol",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-030",
+      "expectedAgency": "Los Angeles Police Department",
+      "detectedAgency": "Los Angeles Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-031",
+      "expectedAgency": "San Francisco Police Department",
+      "detectedAgency": "San Francisco Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-032",
+      "expectedAgency": "California Highway Patrol",
+      "detectedAgency": "California Highway Patrol",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-033",
+      "expectedAgency": "Oakland Police Department",
+      "detectedAgency": "Oakland Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-034",
+      "expectedAgency": "San Diego Police Department",
+      "detectedAgency": "California Highway Patrol",
+      "correct": false,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-035",
+      "expectedAgency": "Los Angeles Police Department",
+      "detectedAgency": "Los Angeles Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-036",
+      "expectedAgency": "Oakland Police Department",
+      "detectedAgency": "Oakland Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-037",
+      "expectedAgency": "California Highway Patrol",
+      "detectedAgency": "California Highway Patrol",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-038",
+      "expectedAgency": "Los Angeles Police Department",
+      "detectedAgency": "Los Angeles Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-039",
+      "expectedAgency": "San Jose Police Department",
+      "detectedAgency": "San Jose Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-040",
+      "expectedAgency": "California Highway Patrol",
+      "detectedAgency": "California Highway Patrol",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-041",
+      "expectedAgency": "Fresno Police Department",
+      "detectedAgency": "Fresno Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-042",
+      "expectedAgency": "California Highway Patrol",
+      "detectedAgency": "California Highway Patrol",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-043",
+      "expectedAgency": "Oakland Police Department",
+      "detectedAgency": "Oakland Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-044",
+      "expectedAgency": "Sacramento Police Department",
+      "detectedAgency": "Sacramento Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-045",
+      "expectedAgency": "San Diego Police Department",
+      "detectedAgency": "San Diego Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-046",
+      "expectedAgency": "Los Angeles Police Department",
+      "detectedAgency": "Los Angeles Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-047",
+      "expectedAgency": "San Francisco Police Department",
+      "detectedAgency": "San Francisco Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-048",
+      "expectedAgency": "Sacramento Police Department",
+      "detectedAgency": "Sacramento Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-049",
+      "expectedAgency": "San Jose Police Department",
+      "detectedAgency": "San Jose Police Department",
+      "correct": true,
+      "confidence": 0.95
+    },
+    {
+      "testCaseId": "VAL-050",
+      "expectedAgency": "California Highway Patrol",
+      "detectedAgency": "California Highway Patrol",
+      "correct": true,
+      "confidence": 0.95
+    }
+  ],
+  "agencyBreakdown": {
+    "California Highway Patrol": {
+      "totalCases": 14,
+      "correctDetections": 14,
+      "accuracy": 1
+    },
+    "Los Angeles Police Department": {
+      "totalCases": 10,
+      "correctDetections": 10,
+      "accuracy": 1
+    },
+    "San Francisco Police Department": {
+      "totalCases": 5,
+      "correctDetections": 5,
+      "accuracy": 1
+    },
+    "Oakland Police Department": {
+      "totalCases": 5,
+      "correctDetections": 5,
+      "accuracy": 1
+    },
+    "San Diego Police Department": {
+      "totalCases": 5,
+      "correctDetections": 4,
+      "accuracy": 0.8
+    },
+    "San Jose Police Department": {
+      "totalCases": 4,
+      "correctDetections": 4,
+      "accuracy": 1
+    },
+    "Sacramento Police Department": {
+      "totalCases": 4,
+      "correctDetections": 4,
+      "accuracy": 1
+    },
+    "Fresno Police Department": {
+      "totalCases": 3,
+      "correctDetections": 3,
+      "accuracy": 1
+    }
+  },
+  "safetyLanguageCheck": "PASSED"
+}

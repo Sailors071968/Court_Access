@@ -1,0 +1,4241 @@
+{
+  "phase": 98,
+  "title": "Topic Distribution Report",
+  "generatedAt": "2026-03-09T21:53:57.280Z",
+  "purpose": "Identify over/underrepresented topics in the policy dataset",
+  "summary": {
+    "totalTopics": 334,
+    "totalClassifiedDocuments": 8189,
+    "averagePoliciesPerTopic": 24.52,
+    "topicsWithPolicies": 334,
+    "topicsWithZeroPolicies": 0,
+    "overrepresentedTopics": 12,
+    "underrepresentedTopics": 318,
+    "runtimeMs": 227
+  },
+  "categoryDistribution": [
+    {
+      "category": "USE_OF_FORCE",
+      "totalPolicies": 2815,
+      "topicCount": 12,
+      "avgPoliciesPerTopic": 235
+    },
+    {
+      "category": "Training",
+      "totalPolicies": 793,
+      "topicCount": 10,
+      "avgPoliciesPerTopic": 79
+    },
+    {
+      "category": "Use_of_Force",
+      "totalPolicies": 496,
+      "topicCount": 12,
+      "avgPoliciesPerTopic": 41
+    },
+    {
+      "category": "BODY_CAMERA",
+      "totalPolicies": 436,
+      "topicCount": 12,
+      "avgPoliciesPerTopic": 36
+    },
+    {
+      "category": "Arrest",
+      "totalPolicies": 424,
+      "topicCount": 8,
+      "avgPoliciesPerTopic": 53
+    },
+    {
+      "category": "Officer_Conduct",
+      "totalPolicies": 423,
+      "topicCount": 8,
+      "avgPoliciesPerTopic": 53
+    },
+    {
+      "category": "Pursuit",
+      "totalPolicies": 395,
+      "topicCount": 9,
+      "avgPoliciesPerTopic": 44
+    },
+    {
+      "category": "Discipline",
+      "totalPolicies": 371,
+      "topicCount": 8,
+      "avgPoliciesPerTopic": 46
+    },
+    {
+      "category": "OIS",
+      "totalPolicies": 358,
+      "topicCount": 8,
+      "avgPoliciesPerTopic": 45
+    },
+    {
+      "category": "Records",
+      "totalPolicies": 355,
+      "topicCount": 8,
+      "avgPoliciesPerTopic": 44
+    },
+    {
+      "category": "Critical_Incident",
+      "totalPolicies": 331,
+      "topicCount": 8,
+      "avgPoliciesPerTopic": 41
+    },
+    {
+      "category": "Internal_Affairs",
+      "totalPolicies": 79,
+      "topicCount": 10,
+      "avgPoliciesPerTopic": 8
+    },
+    {
+      "category": "Traffic",
+      "totalPolicies": 62,
+      "topicCount": 9,
+      "avgPoliciesPerTopic": 7
+    },
+    {
+      "category": "Body_Camera",
+      "totalPolicies": 54,
+      "topicCount": 9,
+      "avgPoliciesPerTopic": 6
+    },
+    {
+      "category": "Evidence_Handling",
+      "totalPolicies": 54,
+      "topicCount": 9,
+      "avgPoliciesPerTopic": 6
+    },
+    {
+      "category": "Search_Seizure",
+      "totalPolicies": 54,
+      "topicCount": 9,
+      "avgPoliciesPerTopic": 6
+    },
+    {
+      "category": "DISCIPLINE",
+      "totalPolicies": 48,
+      "topicCount": 12,
+      "avgPoliciesPerTopic": 4
+    },
+    {
+      "category": "INTERNAL_AFFAIRS",
+      "totalPolicies": 48,
+      "topicCount": 12,
+      "avgPoliciesPerTopic": 4
+    },
+    {
+      "category": "OFFICER_INVOLVED_SHOOTING",
+      "totalPolicies": 48,
+      "topicCount": 12,
+      "avgPoliciesPerTopic": 4
+    },
+    {
+      "category": "TRAINING",
+      "totalPolicies": 48,
+      "topicCount": 12,
+      "avgPoliciesPerTopic": 4
+    },
+    {
+      "category": "PURSUIT",
+      "totalPolicies": 48,
+      "topicCount": 12,
+      "avgPoliciesPerTopic": 4
+    },
+    {
+      "category": "FTO",
+      "totalPolicies": 45,
+      "topicCount": 12,
+      "avgPoliciesPerTopic": 4
+    },
+    {
+      "category": "Interrogation",
+      "totalPolicies": 42,
+      "topicCount": 7,
+      "avgPoliciesPerTopic": 6
+    },
+    {
+      "category": "Special_Units",
+      "totalPolicies": 40,
+      "topicCount": 8,
+      "avgPoliciesPerTopic": 5
+    },
+    {
+      "category": "ACTIVE_SHOOTER",
+      "totalPolicies": 36,
+      "topicCount": 12,
+      "avgPoliciesPerTopic": 3
+    },
+    {
+      "category": "BRADY",
+      "totalPolicies": 36,
+      "topicCount": 12,
+      "avgPoliciesPerTopic": 3
+    },
+    {
+      "category": "DUI_ENFORCEMENT",
+      "totalPolicies": 36,
+      "topicCount": 12,
+      "avgPoliciesPerTopic": 3
+    },
+    {
+      "category": "K9",
+      "totalPolicies": 36,
+      "topicCount": 12,
+      "avgPoliciesPerTopic": 3
+    },
+    {
+      "category": "RECORDS",
+      "totalPolicies": 36,
+      "topicCount": 12,
+      "avgPoliciesPerTopic": 3
+    },
+    {
+      "category": "SWAT",
+      "totalPolicies": 36,
+      "topicCount": 12,
+      "avgPoliciesPerTopic": 3
+    },
+    {
+      "category": "TRAFFIC",
+      "totalPolicies": 36,
+      "topicCount": 12,
+      "avgPoliciesPerTopic": 3
+    },
+    {
+      "category": "Custody",
+      "totalPolicies": 35,
+      "topicCount": 7,
+      "avgPoliciesPerTopic": 5
+    },
+    {
+      "category": "Informants",
+      "totalPolicies": 35,
+      "topicCount": 7,
+      "avgPoliciesPerTopic": 5
+    }
+  ],
+  "top30Topics": [
+    {
+      "topicName": "Use of Force — Force Review Board Procedures",
+      "category": "USE_OF_FORCE",
+      "policyCount": 2763,
+      "percentage": 33.74
+    },
+    {
+      "topicName": "Force Continuum / Force Options",
+      "category": "Use_of_Force",
+      "policyCount": 412,
+      "percentage": 5.03
+    },
+    {
+      "topicName": "Body-Worn Cameras — Training Requirements for BWC",
+      "category": "BODY_CAMERA",
+      "policyCount": 392,
+      "percentage": 4.79
+    },
+    {
+      "topicName": "Custodial Arrest and Transport",
+      "category": "Arrest",
+      "policyCount": 379,
+      "percentage": 4.63
+    },
+    {
+      "topicName": "Bias-Free Policing / Racial Profiling Prohibition",
+      "category": "Officer_Conduct",
+      "policyCount": 374,
+      "percentage": 4.57
+    },
+    {
+      "topicName": "Field Training Officer (FTO) Program",
+      "category": "Training",
+      "policyCount": 370,
+      "percentage": 4.52
+    },
+    {
+      "topicName": "Academy Training Standards",
+      "category": "Training",
+      "policyCount": 368,
+      "percentage": 4.49
+    },
+    {
+      "topicName": "Pursuit Authorization Standards",
+      "category": "Pursuit",
+      "policyCount": 347,
+      "percentage": 4.24
+    },
+    {
+      "topicName": "OIS Investigation Procedures",
+      "category": "OIS",
+      "policyCount": 323,
+      "percentage": 3.94
+    },
+    {
+      "topicName": "Progressive Discipline Framework",
+      "category": "Discipline",
+      "policyCount": 322,
+      "percentage": 3.93
+    },
+    {
+      "topicName": "Redaction Procedures for Public Release",
+      "category": "Records",
+      "policyCount": 314,
+      "percentage": 3.83
+    },
+    {
+      "topicName": "Active Shooter Response Protocol",
+      "category": "Critical_Incident",
+      "policyCount": 296,
+      "percentage": 3.61
+    },
+    {
+      "topicName": "Crisis Intervention Training (CIT)",
+      "category": "Training",
+      "policyCount": 20,
+      "percentage": 0.24
+    },
+    {
+      "topicName": "Internal Investigation Procedures",
+      "category": "Internal_Affairs",
+      "policyCount": 16,
+      "percentage": 0.2
+    },
+    {
+      "topicName": "Sobriety Checkpoint Authorization",
+      "category": "Traffic",
+      "policyCount": 15,
+      "percentage": 0.18
+    },
+    {
+      "topicName": "Deadly Force Authorization",
+      "category": "Use_of_Force",
+      "policyCount": 14,
+      "percentage": 0.17
+    },
+    {
+      "topicName": "CPRA (California Public Records Act) Compliance",
+      "category": "Records",
+      "policyCount": 11,
+      "percentage": 0.13
+    },
+    {
+      "topicName": "Administrative vs Criminal Investigations",
+      "category": "Internal_Affairs",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Anonymous Complaint Processing",
+      "category": "Internal_Affairs",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Arrest Authority and Standards",
+      "category": "Arrest",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Baton Use Guidelines",
+      "category": "Use_of_Force",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Chokehold / Neck Restraint Ban",
+      "category": "Use_of_Force",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Citizen Complaint Intake Process",
+      "category": "Internal_Affairs",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Code of Ethics / Standards of Conduct",
+      "category": "Officer_Conduct",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Conflict of Interest / Gratuities",
+      "category": "Officer_Conduct",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Courtesy and Professionalism",
+      "category": "Officer_Conduct",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "De-Escalation Requirements",
+      "category": "Use_of_Force",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Duty to Intervene",
+      "category": "Use_of_Force",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Early Warning System / At-Risk Officer Tracking",
+      "category": "Internal_Affairs",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Force Reporting Requirements",
+      "category": "Use_of_Force",
+      "policyCount": 7,
+      "percentage": 0.09
+    }
+  ],
+  "bottom30Topics": [
+    {
+      "topicName": "Records Management — Public Records Act Compliance",
+      "category": "RECORDS",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Records Management — Records Amendment Procedures",
+      "category": "RECORDS",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Records Management — Records Audit Procedures",
+      "category": "RECORDS",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Records Management — Records Destruction Procedures",
+      "category": "RECORDS",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Records Management — Records Retention Schedule",
+      "category": "RECORDS",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Records Management — Report Writing Standards",
+      "category": "RECORDS",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "SWAT Operations — After-Action Review Process",
+      "category": "SWAT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "SWAT Operations — Barricaded Subject Response",
+      "category": "SWAT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "SWAT Operations — Breaching Operations",
+      "category": "SWAT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "SWAT Operations — Chemical Agent Deployment",
+      "category": "SWAT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "SWAT Operations — High-Risk Warrant Service",
+      "category": "SWAT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "SWAT Operations — Hostage Negotiation",
+      "category": "SWAT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "SWAT Operations — SWAT Activation Criteria",
+      "category": "SWAT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "SWAT Operations — SWAT Annual Assessment",
+      "category": "SWAT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "SWAT Operations — SWAT Equipment Standards",
+      "category": "SWAT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "SWAT Operations — SWAT Team Selection",
+      "category": "SWAT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "SWAT Operations — SWAT Training Standards",
+      "category": "SWAT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "SWAT Operations — Sniper Operations",
+      "category": "SWAT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Traffic Enforcement — Citation Issuance Standards",
+      "category": "TRAFFIC",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Traffic Enforcement — Commercial Vehicle Inspection",
+      "category": "TRAFFIC",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Traffic Enforcement — Construction Zone Enforcement",
+      "category": "TRAFFIC",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Traffic Enforcement — Hit-and-Run Investigation",
+      "category": "TRAFFIC",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Traffic Enforcement — Pedestrian Safety Enforcement",
+      "category": "TRAFFIC",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Traffic Enforcement — Red Light Camera Procedures",
+      "category": "TRAFFIC",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Traffic Enforcement — School Zone Enforcement",
+      "category": "TRAFFIC",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Traffic Enforcement — Selective Traffic Enforcement",
+      "category": "TRAFFIC",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Traffic Enforcement — Speed Enforcement Methods",
+      "category": "TRAFFIC",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Traffic Enforcement — Traffic Collision Investigation",
+      "category": "TRAFFIC",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Traffic Enforcement — Traffic Data Analysis",
+      "category": "TRAFFIC",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Traffic Enforcement — Traffic Stop Procedures",
+      "category": "TRAFFIC",
+      "policyCount": 3,
+      "percentage": 0.04
+    }
+  ],
+  "overrepresented": [
+    {
+      "topicName": "Use of Force — Force Review Board Procedures",
+      "count": 2763,
+      "ratio": 112.69
+    },
+    {
+      "topicName": "Force Continuum / Force Options",
+      "count": 412,
+      "ratio": 16.8
+    },
+    {
+      "topicName": "Body-Worn Cameras — Training Requirements for BWC",
+      "count": 392,
+      "ratio": 15.99
+    },
+    {
+      "topicName": "Custodial Arrest and Transport",
+      "count": 379,
+      "ratio": 15.46
+    },
+    {
+      "topicName": "Bias-Free Policing / Racial Profiling Prohibition",
+      "count": 374,
+      "ratio": 15.25
+    },
+    {
+      "topicName": "Field Training Officer (FTO) Program",
+      "count": 370,
+      "ratio": 15.09
+    },
+    {
+      "topicName": "Academy Training Standards",
+      "count": 368,
+      "ratio": 15.01
+    },
+    {
+      "topicName": "Pursuit Authorization Standards",
+      "count": 347,
+      "ratio": 14.15
+    },
+    {
+      "topicName": "OIS Investigation Procedures",
+      "count": 323,
+      "ratio": 13.17
+    },
+    {
+      "topicName": "Progressive Discipline Framework",
+      "count": 322,
+      "ratio": 13.13
+    },
+    {
+      "topicName": "Redaction Procedures for Public Release",
+      "count": 314,
+      "ratio": 12.81
+    },
+    {
+      "topicName": "Active Shooter Response Protocol",
+      "count": 296,
+      "ratio": 12.07
+    }
+  ],
+  "underrepresented": [
+    {
+      "topicName": "CPRA (California Public Records Act) Compliance",
+      "count": 11,
+      "ratio": 0.45
+    },
+    {
+      "topicName": "Administrative vs Criminal Investigations",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Anonymous Complaint Processing",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Arrest Authority and Standards",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Baton Use Guidelines",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Chokehold / Neck Restraint Ban",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Citizen Complaint Intake Process",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Code of Ethics / Standards of Conduct",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Conflict of Interest / Gratuities",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Courtesy and Professionalism",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "De-Escalation Requirements",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Duty to Intervene",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Early Warning System / At-Risk Officer Tracking",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Force Reporting Requirements",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Force Review Board Process",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Grievance and Appeal Process",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Investigation Timeline Requirements",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Less-Lethal Weapons Deployment",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Mitigating / Aggravating Factors",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "OC Spray / Chemical Agents",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Off-Duty Conduct Standards",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "POBR (Peace Officer Bill of Rights) Compliance",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Penalty Matrix / Penalty Guidelines",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Pitchess Motion Compliance",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Probable Cause Determination",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Secondary Employment Rules",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Skelly Hearing Procedures",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Social Media Policy",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Suspension and Demotion Standards",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Sustained / Exonerated / Unfounded Findings",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Taser / CEW Policy",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Termination Criteria and Process",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Truthfulness / Brady Disclosure Obligations",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Warning Requirements Before Force",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Warrantless Arrest Procedures",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Witness Interview Procedures (IA)",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Written Reprimand Standards",
+      "count": 7,
+      "ratio": 0.29
+    },
+    {
+      "topicName": "Air Support During Pursuits",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Arrest Documentation Requirements",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "BWC Activation Requirements",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "BWC Deactivation Rules",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Biological / DNA Evidence Handling",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Camera Equipment Assignment and Maintenance",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Chain of Custody Protocols",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Cite-and-Release Policy",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Consent Search Protocols",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Custodial Interrogation Recording Requirements",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "DUI Enforcement and FST Protocols",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Deception in Interrogation Guidelines",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Digital Device Search Requirements",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Digital Evidence Preservation",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Emergency Vehicle Operation",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Evidence Audit Requirements",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Evidence Collection Procedures",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Evidence Disposal / Destruction",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Exigent Circumstances Searches",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Fatality Investigation Procedures",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Firearms Evidence Processing",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Footage Release and Public Records",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Handcuffing and Restraint During Arrest",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Hit-and-Run Investigation",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "In-Car Camera (Dashcam) Policy",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Inter-Agency Pursuit Coordination",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Interpreter / Language Access During Interviews",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Inventory Search Procedures",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Juvenile Arrest Procedures",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Juvenile Interview Protections",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Miranda Warning Procedures",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Narcotics Evidence Storage",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Officer Review of Footage Before Reports",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "PIT Maneuver Authorization",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Plain View Doctrine Application",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Property Room Management",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Pursuit Reporting Requirements",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Pursuit Supervisor Responsibilities",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Pursuit Termination Criteria",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Recording Retention Periods",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Redaction Procedures",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Right to Counsel Procedures",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Search Warrant Procedures",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Speed Enforcement (Radar/Lidar)",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Spike Strip / Tire Deflation Policy",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Stop-and-Frisk / Pat Down Standards",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Strip Search / Body Cavity Search Restrictions",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Supervisor Review of BWC Footage",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Traffic Citation Issuance",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Traffic Collision Investigation",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Traffic Stop Procedures",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Vehicle Search Authority",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Voluntary Statement Documentation",
+      "count": 6,
+      "ratio": 0.24
+    },
+    {
+      "topicName": "Aviation / Air Operations",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Body Camera Footage Release",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Bomb Squad / EOD Procedures",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Bomb Threat Procedures",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Brady / Giglio Disclosure Obligations",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Cell Check Frequency Requirements",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Commercial Vehicle Enforcement",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Compelled vs Voluntary Statements",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Confidential Informant Registration",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Continuing Professional Training (CPT)",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "De-Escalation Training Requirements",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Defensive Tactics Training",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Detainee Medical Screening",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Detainee Rights and Treatment",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "District Attorney Review of OIS",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Emergency Operations Center Activation",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Firearms Qualification Standards",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "First Aid / CPR Training",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Gang Enforcement Procedures",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Holding Cell / Temporary Detention Standards",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Hostage / Barricaded Subject Protocols",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Incident Command System (ICS) Procedures",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Independent Investigation Requirements",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Informant File Management",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Informant Meeting Protocols",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Informant Payment / Compensation",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Informant Reliability Assessment",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Involved Officer Post-Shooting Protocol",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Juvenile Informant Restrictions",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "K-9 Unit Deployment and Bite Protocols",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Mass Casualty Incident Response",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Mental Health Crisis in Custody",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Mutual Aid Coordination",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Narcotics Unit Operations",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "POST Certification Compliance",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Personnel Records Access (Pitchess)",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Prisoner Transport Procedures",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Public Notification After OIS",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Public Records Request Processing",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Records Retention Schedule",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "SB 1421 / SB 16 Records Disclosure",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "SWAT Deployment Criteria",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "SWAT Team Composition and Deployment",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Scene Management After OIS",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Shooting Review Board Process",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Suicide Prevention in Custody",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Supervisor Approval for CI Operations",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Task Force Participation Protocols",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Undercover Operations Guidelines",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Use of Force Training Curriculum",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Use of Force — Authorized Force Options",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Use of Force — Carotid Restraint Restrictions",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Use of Force — Choke Hold Prohibition",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Use of Force — De-escalation Requirements",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Use of Force — Deadly Force Authorization",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Use of Force — Force Continuum Model",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Use of Force — Force Reporting Requirements",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Use of Force — Less-Lethal Force Options",
+      "count": 5,
+      "ratio": 0.2
+    },
+    {
+      "topicName": "Body-Worn Cameras — BWC Data Storage Standards",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Body-Worn Cameras — Camera Activation Requirements",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Body-Worn Cameras — Camera Deactivation Protocols",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Body-Worn Cameras — Camera Equipment Standards",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Body-Worn Cameras — Camera Malfunction Reporting",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Body-Worn Cameras — Evidence Chain of Custody",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Body-Worn Cameras — Privacy Considerations",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Body-Worn Cameras — Public Release Procedures",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Body-Worn Cameras — Recording Retention Schedule",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Body-Worn Cameras — Redaction Procedures",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Body-Worn Cameras — Supervisor Review Requirements",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Aggravating Factors",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Arbitration Procedures",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Demotion Criteria",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Discipline Matrix Categories",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Last Chance Agreements",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Mitigating Factors",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Progressive Discipline Schedule",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Return to Duty Conditions",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Skelly Hearing Rights",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Suspension Without Pay",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Termination Proceedings",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Written Reprimand Procedures",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Field Training Officer Program — Daily Observation Reports",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Field Training Officer Program — FTO Rotation Schedule",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Field Training Officer Program — FTO Selection Criteria",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Field Training Officer Program — FTO Training Requirements",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Field Training Officer Program — Phase Training Schedule",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Field Training Officer Program — Probationary Evaluation Standards",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Field Training Officer Program — Problem Officer Identification",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Field Training Officer Program — Shadow Phase Requirements",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Field Training Officer Program — Solo Phase Evaluation",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Internal Affairs — Anonymous Complaint Handling",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Internal Affairs — Appeal Rights and Procedures",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Internal Affairs — Case Disposition Categories",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Internal Affairs — Citizen Complaint Processing",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Internal Affairs — Complaint Intake Procedures",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Internal Affairs — Confidentiality Requirements",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Internal Affairs — Evidence Collection Standards",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Internal Affairs — IA Annual Reporting",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Internal Affairs — IA Case Classification",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Internal Affairs — Investigation Timeline Requirements",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Internal Affairs — Sustained Findings Criteria",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Internal Affairs — Witness Interview Protocols",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Officer-Involved Shootings — Administrative Investigation",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Officer-Involved Shootings — Annual OIS Statistical Report",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Officer-Involved Shootings — Community Briefing Requirements",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Officer-Involved Shootings — Compelled Statement Procedures",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Officer-Involved Shootings — DA Referral Timeline",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Officer-Involved Shootings — Involved Officer Separation",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Officer-Involved Shootings — OIS Investigation Protocol",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Officer-Involved Shootings — OIS Review Board",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Officer-Involved Shootings — Post-Shooting Psychological Services",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Officer-Involved Shootings — Public Notification",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Officer-Involved Shootings — Return to Duty Evaluation",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Officer-Involved Shootings — Scene Preservation Requirements",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Training — Academy Training Curriculum",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Training — Annual In-Service Training",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Training — Cultural Awareness Training",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Training — Defensive Tactics Training",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Training — Emergency Vehicle Operations",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Training — Firearms Qualification Standards",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Training — First Aid/CPR Certification",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Training — Legal Updates Training",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Training — Mental Health Crisis Training",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Training — Remedial Training Procedures",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Training — Specialty Training Programs",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Training — Training Documentation",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Use of Force — Force Against Restrained Persons",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Use of Force — Force Documentation Standards",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Use of Force — Prone Restraint Limitations",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Vehicle Pursuits — Air Support During Pursuit",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Vehicle Pursuits — Civilian Safety Considerations",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Vehicle Pursuits — Multi-Jurisdiction Pursuit Protocols",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Vehicle Pursuits — PIT Maneuver Authorization",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Vehicle Pursuits — Post-Pursuit Review Board",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Vehicle Pursuits — Pursuit Authorization Criteria",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Vehicle Pursuits — Pursuit Driving Training",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Vehicle Pursuits — Pursuit Reporting Requirements",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Vehicle Pursuits — Pursuit Speed Limitations",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Vehicle Pursuits — Pursuit Termination Tactics",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Vehicle Pursuits — Supervisor Approval Requirements",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Vehicle Pursuits — Tire Deflation Device Use",
+      "count": 4,
+      "ratio": 0.16
+    },
+    {
+      "topicName": "Active Shooter Response — Active Shooter Response Protocol",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Active Shooter Response — Active Shooter Training Requirements",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Active Shooter Response — Contact Team Formation",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Active Shooter Response — Equipment Standards",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Active Shooter Response — Hostage Rescue Operations",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Active Shooter Response — Multi-Agency Coordination",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Active Shooter Response — Post-Incident Procedures",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Active Shooter Response — Rapid Deployment Tactics",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Active Shooter Response — Rescue Team Operations",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Active Shooter Response — School Response Protocols",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Active Shooter Response — Unified Command Procedures",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Active Shooter Response — Workplace Violence Response",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Brady Disclosure — Annual Brady Audit",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Brady Disclosure — Brady List Maintenance",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Brady Disclosure — Brady Training Requirements",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Brady Disclosure — Court Testimony Monitoring",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Brady Disclosure — DA Liaison Procedures",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Brady Disclosure — Disclosure Procedures",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Brady Disclosure — Material Impeachment Identification",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Brady Disclosure — Officer Notification Requirements",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Brady Disclosure — Personnel Record Disclosure",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Brady Disclosure — Pitchess Motion Response",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Brady Disclosure — SB 1421 Compliance",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Brady Disclosure — Sustained Finding Notifications",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "DUI Enforcement — Chemical Test Administration",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "DUI Enforcement — DUI Arrest Processing",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "DUI Enforcement — DUI Checkpoint Operations",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "DUI Enforcement — DUI Collision Investigation",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "DUI Enforcement — DUI Detection Techniques",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "DUI Enforcement — DUI Statistical Reporting",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "DUI Enforcement — DUI Warrant Procedures",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "DUI Enforcement — Drug Recognition Expert Program",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "DUI Enforcement — Implied Consent Procedures",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "DUI Enforcement — Repeat Offender Protocols",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "DUI Enforcement — Standardized Field Sobriety Tests",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "DUI Enforcement — Vehicle Impoundment Procedures",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Field Training Officer Program — Extension of Probation Criteria",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Field Training Officer Program — FTO Documentation Standards",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Field Training Officer Program — FTO Program Audit",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Annual Certification",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Bite Reporting",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Deployment Authorization",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Handler Responsibilities",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Handler Selection",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Kennel Standards",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Narcotics Detection",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Retirement Procedures",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Tracking Operations",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Training Standards",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Use of Force Documentation",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Veterinary Care",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Records Management — Body Camera Footage Retention",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Records Management — CLETS Access Controls",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Records Management — Data Privacy Requirements",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Records Management — Digital Evidence Storage",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Records Management — Information Sharing Agreements",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Records Management — Personnel File Management",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Records Management — Public Records Act Compliance",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Records Management — Records Amendment Procedures",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Records Management — Records Audit Procedures",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Records Management — Records Destruction Procedures",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Records Management — Records Retention Schedule",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Records Management — Report Writing Standards",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "SWAT Operations — After-Action Review Process",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "SWAT Operations — Barricaded Subject Response",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "SWAT Operations — Breaching Operations",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "SWAT Operations — Chemical Agent Deployment",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "SWAT Operations — High-Risk Warrant Service",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "SWAT Operations — Hostage Negotiation",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "SWAT Operations — SWAT Activation Criteria",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "SWAT Operations — SWAT Annual Assessment",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "SWAT Operations — SWAT Equipment Standards",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "SWAT Operations — SWAT Team Selection",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "SWAT Operations — SWAT Training Standards",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "SWAT Operations — Sniper Operations",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Traffic Enforcement — Citation Issuance Standards",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Traffic Enforcement — Commercial Vehicle Inspection",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Traffic Enforcement — Construction Zone Enforcement",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Traffic Enforcement — Hit-and-Run Investigation",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Traffic Enforcement — Pedestrian Safety Enforcement",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Traffic Enforcement — Red Light Camera Procedures",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Traffic Enforcement — School Zone Enforcement",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Traffic Enforcement — Selective Traffic Enforcement",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Traffic Enforcement — Speed Enforcement Methods",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Traffic Enforcement — Traffic Collision Investigation",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Traffic Enforcement — Traffic Data Analysis",
+      "count": 3,
+      "ratio": 0.12
+    },
+    {
+      "topicName": "Traffic Enforcement — Traffic Stop Procedures",
+      "count": 3,
+      "ratio": 0.12
+    }
+  ],
+  "zeroPolicyTopics": [],
+  "fullDistribution": [
+    {
+      "topicName": "Use of Force — Force Review Board Procedures",
+      "category": "USE_OF_FORCE",
+      "policyCount": 2763,
+      "percentage": 33.74
+    },
+    {
+      "topicName": "Force Continuum / Force Options",
+      "category": "Use_of_Force",
+      "policyCount": 412,
+      "percentage": 5.03
+    },
+    {
+      "topicName": "Body-Worn Cameras — Training Requirements for BWC",
+      "category": "BODY_CAMERA",
+      "policyCount": 392,
+      "percentage": 4.79
+    },
+    {
+      "topicName": "Custodial Arrest and Transport",
+      "category": "Arrest",
+      "policyCount": 379,
+      "percentage": 4.63
+    },
+    {
+      "topicName": "Bias-Free Policing / Racial Profiling Prohibition",
+      "category": "Officer_Conduct",
+      "policyCount": 374,
+      "percentage": 4.57
+    },
+    {
+      "topicName": "Field Training Officer (FTO) Program",
+      "category": "Training",
+      "policyCount": 370,
+      "percentage": 4.52
+    },
+    {
+      "topicName": "Academy Training Standards",
+      "category": "Training",
+      "policyCount": 368,
+      "percentage": 4.49
+    },
+    {
+      "topicName": "Pursuit Authorization Standards",
+      "category": "Pursuit",
+      "policyCount": 347,
+      "percentage": 4.24
+    },
+    {
+      "topicName": "OIS Investigation Procedures",
+      "category": "OIS",
+      "policyCount": 323,
+      "percentage": 3.94
+    },
+    {
+      "topicName": "Progressive Discipline Framework",
+      "category": "Discipline",
+      "policyCount": 322,
+      "percentage": 3.93
+    },
+    {
+      "topicName": "Redaction Procedures for Public Release",
+      "category": "Records",
+      "policyCount": 314,
+      "percentage": 3.83
+    },
+    {
+      "topicName": "Active Shooter Response Protocol",
+      "category": "Critical_Incident",
+      "policyCount": 296,
+      "percentage": 3.61
+    },
+    {
+      "topicName": "Crisis Intervention Training (CIT)",
+      "category": "Training",
+      "policyCount": 20,
+      "percentage": 0.24
+    },
+    {
+      "topicName": "Internal Investigation Procedures",
+      "category": "Internal_Affairs",
+      "policyCount": 16,
+      "percentage": 0.2
+    },
+    {
+      "topicName": "Sobriety Checkpoint Authorization",
+      "category": "Traffic",
+      "policyCount": 15,
+      "percentage": 0.18
+    },
+    {
+      "topicName": "Deadly Force Authorization",
+      "category": "Use_of_Force",
+      "policyCount": 14,
+      "percentage": 0.17
+    },
+    {
+      "topicName": "CPRA (California Public Records Act) Compliance",
+      "category": "Records",
+      "policyCount": 11,
+      "percentage": 0.13
+    },
+    {
+      "topicName": "Administrative vs Criminal Investigations",
+      "category": "Internal_Affairs",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Anonymous Complaint Processing",
+      "category": "Internal_Affairs",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Arrest Authority and Standards",
+      "category": "Arrest",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Baton Use Guidelines",
+      "category": "Use_of_Force",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Chokehold / Neck Restraint Ban",
+      "category": "Use_of_Force",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Citizen Complaint Intake Process",
+      "category": "Internal_Affairs",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Code of Ethics / Standards of Conduct",
+      "category": "Officer_Conduct",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Conflict of Interest / Gratuities",
+      "category": "Officer_Conduct",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Courtesy and Professionalism",
+      "category": "Officer_Conduct",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "De-Escalation Requirements",
+      "category": "Use_of_Force",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Duty to Intervene",
+      "category": "Use_of_Force",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Early Warning System / At-Risk Officer Tracking",
+      "category": "Internal_Affairs",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Force Reporting Requirements",
+      "category": "Use_of_Force",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Force Review Board Process",
+      "category": "Use_of_Force",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Grievance and Appeal Process",
+      "category": "Discipline",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Investigation Timeline Requirements",
+      "category": "Internal_Affairs",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Less-Lethal Weapons Deployment",
+      "category": "Use_of_Force",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Mitigating / Aggravating Factors",
+      "category": "Discipline",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "OC Spray / Chemical Agents",
+      "category": "Use_of_Force",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Off-Duty Conduct Standards",
+      "category": "Officer_Conduct",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "POBR (Peace Officer Bill of Rights) Compliance",
+      "category": "Internal_Affairs",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Penalty Matrix / Penalty Guidelines",
+      "category": "Discipline",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Pitchess Motion Compliance",
+      "category": "Internal_Affairs",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Probable Cause Determination",
+      "category": "Arrest",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Secondary Employment Rules",
+      "category": "Officer_Conduct",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Skelly Hearing Procedures",
+      "category": "Discipline",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Social Media Policy",
+      "category": "Officer_Conduct",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Suspension and Demotion Standards",
+      "category": "Discipline",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Sustained / Exonerated / Unfounded Findings",
+      "category": "Internal_Affairs",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Taser / CEW Policy",
+      "category": "Use_of_Force",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Termination Criteria and Process",
+      "category": "Discipline",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Truthfulness / Brady Disclosure Obligations",
+      "category": "Officer_Conduct",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Warning Requirements Before Force",
+      "category": "Use_of_Force",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Warrantless Arrest Procedures",
+      "category": "Arrest",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Witness Interview Procedures (IA)",
+      "category": "Internal_Affairs",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Written Reprimand Standards",
+      "category": "Discipline",
+      "policyCount": 7,
+      "percentage": 0.09
+    },
+    {
+      "topicName": "Air Support During Pursuits",
+      "category": "Pursuit",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Arrest Documentation Requirements",
+      "category": "Arrest",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "BWC Activation Requirements",
+      "category": "Body_Camera",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "BWC Deactivation Rules",
+      "category": "Body_Camera",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Biological / DNA Evidence Handling",
+      "category": "Evidence_Handling",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Camera Equipment Assignment and Maintenance",
+      "category": "Body_Camera",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Chain of Custody Protocols",
+      "category": "Evidence_Handling",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Cite-and-Release Policy",
+      "category": "Arrest",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Consent Search Protocols",
+      "category": "Search_Seizure",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Custodial Interrogation Recording Requirements",
+      "category": "Interrogation",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "DUI Enforcement and FST Protocols",
+      "category": "Traffic",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Deception in Interrogation Guidelines",
+      "category": "Interrogation",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Digital Device Search Requirements",
+      "category": "Search_Seizure",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Digital Evidence Preservation",
+      "category": "Evidence_Handling",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Emergency Vehicle Operation",
+      "category": "Pursuit",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Evidence Audit Requirements",
+      "category": "Evidence_Handling",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Evidence Collection Procedures",
+      "category": "Evidence_Handling",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Evidence Disposal / Destruction",
+      "category": "Evidence_Handling",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Exigent Circumstances Searches",
+      "category": "Search_Seizure",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Fatality Investigation Procedures",
+      "category": "Traffic",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Firearms Evidence Processing",
+      "category": "Evidence_Handling",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Footage Release and Public Records",
+      "category": "Body_Camera",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Handcuffing and Restraint During Arrest",
+      "category": "Arrest",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Hit-and-Run Investigation",
+      "category": "Traffic",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "In-Car Camera (Dashcam) Policy",
+      "category": "Body_Camera",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Inter-Agency Pursuit Coordination",
+      "category": "Pursuit",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Interpreter / Language Access During Interviews",
+      "category": "Interrogation",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Inventory Search Procedures",
+      "category": "Search_Seizure",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Juvenile Arrest Procedures",
+      "category": "Arrest",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Juvenile Interview Protections",
+      "category": "Interrogation",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Miranda Warning Procedures",
+      "category": "Interrogation",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Narcotics Evidence Storage",
+      "category": "Evidence_Handling",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Officer Review of Footage Before Reports",
+      "category": "Body_Camera",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "PIT Maneuver Authorization",
+      "category": "Pursuit",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Plain View Doctrine Application",
+      "category": "Search_Seizure",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Property Room Management",
+      "category": "Evidence_Handling",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Pursuit Reporting Requirements",
+      "category": "Pursuit",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Pursuit Supervisor Responsibilities",
+      "category": "Pursuit",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Pursuit Termination Criteria",
+      "category": "Pursuit",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Recording Retention Periods",
+      "category": "Body_Camera",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Redaction Procedures",
+      "category": "Body_Camera",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Right to Counsel Procedures",
+      "category": "Interrogation",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Search Warrant Procedures",
+      "category": "Search_Seizure",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Speed Enforcement (Radar/Lidar)",
+      "category": "Traffic",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Spike Strip / Tire Deflation Policy",
+      "category": "Pursuit",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Stop-and-Frisk / Pat Down Standards",
+      "category": "Search_Seizure",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Strip Search / Body Cavity Search Restrictions",
+      "category": "Search_Seizure",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Supervisor Review of BWC Footage",
+      "category": "Body_Camera",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Traffic Citation Issuance",
+      "category": "Traffic",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Traffic Collision Investigation",
+      "category": "Traffic",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Traffic Stop Procedures",
+      "category": "Traffic",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Vehicle Search Authority",
+      "category": "Search_Seizure",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Voluntary Statement Documentation",
+      "category": "Interrogation",
+      "policyCount": 6,
+      "percentage": 0.07
+    },
+    {
+      "topicName": "Aviation / Air Operations",
+      "category": "Special_Units",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Body Camera Footage Release",
+      "category": "Records",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Bomb Squad / EOD Procedures",
+      "category": "Special_Units",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Bomb Threat Procedures",
+      "category": "Critical_Incident",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Brady / Giglio Disclosure Obligations",
+      "category": "Records",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Cell Check Frequency Requirements",
+      "category": "Custody",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Commercial Vehicle Enforcement",
+      "category": "Traffic",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Compelled vs Voluntary Statements",
+      "category": "OIS",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Confidential Informant Registration",
+      "category": "Informants",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Continuing Professional Training (CPT)",
+      "category": "Training",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "De-Escalation Training Requirements",
+      "category": "Training",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Defensive Tactics Training",
+      "category": "Training",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Detainee Medical Screening",
+      "category": "Custody",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Detainee Rights and Treatment",
+      "category": "Custody",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "District Attorney Review of OIS",
+      "category": "OIS",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Emergency Operations Center Activation",
+      "category": "Critical_Incident",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Firearms Qualification Standards",
+      "category": "Training",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "First Aid / CPR Training",
+      "category": "Training",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Gang Enforcement Procedures",
+      "category": "Special_Units",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Holding Cell / Temporary Detention Standards",
+      "category": "Custody",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Hostage / Barricaded Subject Protocols",
+      "category": "Critical_Incident",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Incident Command System (ICS) Procedures",
+      "category": "Critical_Incident",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Independent Investigation Requirements",
+      "category": "OIS",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Informant File Management",
+      "category": "Informants",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Informant Meeting Protocols",
+      "category": "Informants",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Informant Payment / Compensation",
+      "category": "Informants",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Informant Reliability Assessment",
+      "category": "Informants",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Involved Officer Post-Shooting Protocol",
+      "category": "OIS",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Juvenile Informant Restrictions",
+      "category": "Informants",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "K-9 Unit Deployment and Bite Protocols",
+      "category": "Special_Units",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Mass Casualty Incident Response",
+      "category": "Critical_Incident",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Mental Health Crisis in Custody",
+      "category": "Custody",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Mutual Aid Coordination",
+      "category": "Critical_Incident",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Narcotics Unit Operations",
+      "category": "Special_Units",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "POST Certification Compliance",
+      "category": "Training",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Personnel Records Access (Pitchess)",
+      "category": "Records",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Prisoner Transport Procedures",
+      "category": "Custody",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Public Notification After OIS",
+      "category": "OIS",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Public Records Request Processing",
+      "category": "Records",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Records Retention Schedule",
+      "category": "Records",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "SB 1421 / SB 16 Records Disclosure",
+      "category": "Records",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "SWAT Deployment Criteria",
+      "category": "Critical_Incident",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "SWAT Team Composition and Deployment",
+      "category": "Special_Units",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Scene Management After OIS",
+      "category": "OIS",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Shooting Review Board Process",
+      "category": "OIS",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Suicide Prevention in Custody",
+      "category": "Custody",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Supervisor Approval for CI Operations",
+      "category": "Informants",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Task Force Participation Protocols",
+      "category": "Special_Units",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Undercover Operations Guidelines",
+      "category": "Special_Units",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Use of Force Training Curriculum",
+      "category": "Training",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Use of Force — Authorized Force Options",
+      "category": "USE_OF_FORCE",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Use of Force — Carotid Restraint Restrictions",
+      "category": "USE_OF_FORCE",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Use of Force — Choke Hold Prohibition",
+      "category": "USE_OF_FORCE",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Use of Force — De-escalation Requirements",
+      "category": "USE_OF_FORCE",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Use of Force — Deadly Force Authorization",
+      "category": "USE_OF_FORCE",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Use of Force — Force Continuum Model",
+      "category": "USE_OF_FORCE",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Use of Force — Force Reporting Requirements",
+      "category": "USE_OF_FORCE",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Use of Force — Less-Lethal Force Options",
+      "category": "USE_OF_FORCE",
+      "policyCount": 5,
+      "percentage": 0.06
+    },
+    {
+      "topicName": "Body-Worn Cameras — BWC Data Storage Standards",
+      "category": "BODY_CAMERA",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Body-Worn Cameras — Camera Activation Requirements",
+      "category": "BODY_CAMERA",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Body-Worn Cameras — Camera Deactivation Protocols",
+      "category": "BODY_CAMERA",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Body-Worn Cameras — Camera Equipment Standards",
+      "category": "BODY_CAMERA",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Body-Worn Cameras — Camera Malfunction Reporting",
+      "category": "BODY_CAMERA",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Body-Worn Cameras — Evidence Chain of Custody",
+      "category": "BODY_CAMERA",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Body-Worn Cameras — Privacy Considerations",
+      "category": "BODY_CAMERA",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Body-Worn Cameras — Public Release Procedures",
+      "category": "BODY_CAMERA",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Body-Worn Cameras — Recording Retention Schedule",
+      "category": "BODY_CAMERA",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Body-Worn Cameras — Redaction Procedures",
+      "category": "BODY_CAMERA",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Body-Worn Cameras — Supervisor Review Requirements",
+      "category": "BODY_CAMERA",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Aggravating Factors",
+      "category": "DISCIPLINE",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Arbitration Procedures",
+      "category": "DISCIPLINE",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Demotion Criteria",
+      "category": "DISCIPLINE",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Discipline Matrix Categories",
+      "category": "DISCIPLINE",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Last Chance Agreements",
+      "category": "DISCIPLINE",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Mitigating Factors",
+      "category": "DISCIPLINE",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Progressive Discipline Schedule",
+      "category": "DISCIPLINE",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Return to Duty Conditions",
+      "category": "DISCIPLINE",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Skelly Hearing Rights",
+      "category": "DISCIPLINE",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Suspension Without Pay",
+      "category": "DISCIPLINE",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Termination Proceedings",
+      "category": "DISCIPLINE",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Discipline and Corrective Action — Written Reprimand Procedures",
+      "category": "DISCIPLINE",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Field Training Officer Program — Daily Observation Reports",
+      "category": "FTO",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Field Training Officer Program — FTO Rotation Schedule",
+      "category": "FTO",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Field Training Officer Program — FTO Selection Criteria",
+      "category": "FTO",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Field Training Officer Program — FTO Training Requirements",
+      "category": "FTO",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Field Training Officer Program — Phase Training Schedule",
+      "category": "FTO",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Field Training Officer Program — Probationary Evaluation Standards",
+      "category": "FTO",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Field Training Officer Program — Problem Officer Identification",
+      "category": "FTO",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Field Training Officer Program — Shadow Phase Requirements",
+      "category": "FTO",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Field Training Officer Program — Solo Phase Evaluation",
+      "category": "FTO",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Internal Affairs — Anonymous Complaint Handling",
+      "category": "INTERNAL_AFFAIRS",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Internal Affairs — Appeal Rights and Procedures",
+      "category": "INTERNAL_AFFAIRS",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Internal Affairs — Case Disposition Categories",
+      "category": "INTERNAL_AFFAIRS",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Internal Affairs — Citizen Complaint Processing",
+      "category": "INTERNAL_AFFAIRS",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Internal Affairs — Complaint Intake Procedures",
+      "category": "INTERNAL_AFFAIRS",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Internal Affairs — Confidentiality Requirements",
+      "category": "INTERNAL_AFFAIRS",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Internal Affairs — Evidence Collection Standards",
+      "category": "INTERNAL_AFFAIRS",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Internal Affairs — IA Annual Reporting",
+      "category": "INTERNAL_AFFAIRS",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Internal Affairs — IA Case Classification",
+      "category": "INTERNAL_AFFAIRS",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Internal Affairs — Investigation Timeline Requirements",
+      "category": "INTERNAL_AFFAIRS",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Internal Affairs — Sustained Findings Criteria",
+      "category": "INTERNAL_AFFAIRS",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Internal Affairs — Witness Interview Protocols",
+      "category": "INTERNAL_AFFAIRS",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Officer-Involved Shootings — Administrative Investigation",
+      "category": "OFFICER_INVOLVED_SHOOTING",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Officer-Involved Shootings — Annual OIS Statistical Report",
+      "category": "OFFICER_INVOLVED_SHOOTING",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Officer-Involved Shootings — Community Briefing Requirements",
+      "category": "OFFICER_INVOLVED_SHOOTING",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Officer-Involved Shootings — Compelled Statement Procedures",
+      "category": "OFFICER_INVOLVED_SHOOTING",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Officer-Involved Shootings — DA Referral Timeline",
+      "category": "OFFICER_INVOLVED_SHOOTING",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Officer-Involved Shootings — Involved Officer Separation",
+      "category": "OFFICER_INVOLVED_SHOOTING",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Officer-Involved Shootings — OIS Investigation Protocol",
+      "category": "OFFICER_INVOLVED_SHOOTING",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Officer-Involved Shootings — OIS Review Board",
+      "category": "OFFICER_INVOLVED_SHOOTING",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Officer-Involved Shootings — Post-Shooting Psychological Services",
+      "category": "OFFICER_INVOLVED_SHOOTING",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Officer-Involved Shootings — Public Notification",
+      "category": "OFFICER_INVOLVED_SHOOTING",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Officer-Involved Shootings — Return to Duty Evaluation",
+      "category": "OFFICER_INVOLVED_SHOOTING",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Officer-Involved Shootings — Scene Preservation Requirements",
+      "category": "OFFICER_INVOLVED_SHOOTING",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Training — Academy Training Curriculum",
+      "category": "TRAINING",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Training — Annual In-Service Training",
+      "category": "TRAINING",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Training — Cultural Awareness Training",
+      "category": "TRAINING",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Training — Defensive Tactics Training",
+      "category": "TRAINING",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Training — Emergency Vehicle Operations",
+      "category": "TRAINING",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Training — Firearms Qualification Standards",
+      "category": "TRAINING",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Training — First Aid/CPR Certification",
+      "category": "TRAINING",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Training — Legal Updates Training",
+      "category": "TRAINING",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Training — Mental Health Crisis Training",
+      "category": "TRAINING",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Training — Remedial Training Procedures",
+      "category": "TRAINING",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Training — Specialty Training Programs",
+      "category": "TRAINING",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Training — Training Documentation",
+      "category": "TRAINING",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Use of Force — Force Against Restrained Persons",
+      "category": "USE_OF_FORCE",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Use of Force — Force Documentation Standards",
+      "category": "USE_OF_FORCE",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Use of Force — Prone Restraint Limitations",
+      "category": "USE_OF_FORCE",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Vehicle Pursuits — Air Support During Pursuit",
+      "category": "PURSUIT",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Vehicle Pursuits — Civilian Safety Considerations",
+      "category": "PURSUIT",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Vehicle Pursuits — Multi-Jurisdiction Pursuit Protocols",
+      "category": "PURSUIT",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Vehicle Pursuits — PIT Maneuver Authorization",
+      "category": "PURSUIT",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Vehicle Pursuits — Post-Pursuit Review Board",
+      "category": "PURSUIT",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Vehicle Pursuits — Pursuit Authorization Criteria",
+      "category": "PURSUIT",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Vehicle Pursuits — Pursuit Driving Training",
+      "category": "PURSUIT",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Vehicle Pursuits — Pursuit Reporting Requirements",
+      "category": "PURSUIT",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Vehicle Pursuits — Pursuit Speed Limitations",
+      "category": "PURSUIT",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Vehicle Pursuits — Pursuit Termination Tactics",
+      "category": "PURSUIT",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Vehicle Pursuits — Supervisor Approval Requirements",
+      "category": "PURSUIT",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Vehicle Pursuits — Tire Deflation Device Use",
+      "category": "PURSUIT",
+      "policyCount": 4,
+      "percentage": 0.05
+    },
+    {
+      "topicName": "Active Shooter Response — Active Shooter Response Protocol",
+      "category": "ACTIVE_SHOOTER",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Active Shooter Response — Active Shooter Training Requirements",
+      "category": "ACTIVE_SHOOTER",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Active Shooter Response — Contact Team Formation",
+      "category": "ACTIVE_SHOOTER",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Active Shooter Response — Equipment Standards",
+      "category": "ACTIVE_SHOOTER",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Active Shooter Response — Hostage Rescue Operations",
+      "category": "ACTIVE_SHOOTER",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Active Shooter Response — Multi-Agency Coordination",
+      "category": "ACTIVE_SHOOTER",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Active Shooter Response — Post-Incident Procedures",
+      "category": "ACTIVE_SHOOTER",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Active Shooter Response — Rapid Deployment Tactics",
+      "category": "ACTIVE_SHOOTER",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Active Shooter Response — Rescue Team Operations",
+      "category": "ACTIVE_SHOOTER",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Active Shooter Response — School Response Protocols",
+      "category": "ACTIVE_SHOOTER",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Active Shooter Response — Unified Command Procedures",
+      "category": "ACTIVE_SHOOTER",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Active Shooter Response — Workplace Violence Response",
+      "category": "ACTIVE_SHOOTER",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Brady Disclosure — Annual Brady Audit",
+      "category": "BRADY",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Brady Disclosure — Brady List Maintenance",
+      "category": "BRADY",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Brady Disclosure — Brady Training Requirements",
+      "category": "BRADY",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Brady Disclosure — Court Testimony Monitoring",
+      "category": "BRADY",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Brady Disclosure — DA Liaison Procedures",
+      "category": "BRADY",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Brady Disclosure — Disclosure Procedures",
+      "category": "BRADY",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Brady Disclosure — Material Impeachment Identification",
+      "category": "BRADY",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Brady Disclosure — Officer Notification Requirements",
+      "category": "BRADY",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Brady Disclosure — Personnel Record Disclosure",
+      "category": "BRADY",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Brady Disclosure — Pitchess Motion Response",
+      "category": "BRADY",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Brady Disclosure — SB 1421 Compliance",
+      "category": "BRADY",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Brady Disclosure — Sustained Finding Notifications",
+      "category": "BRADY",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "DUI Enforcement — Chemical Test Administration",
+      "category": "DUI_ENFORCEMENT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "DUI Enforcement — DUI Arrest Processing",
+      "category": "DUI_ENFORCEMENT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "DUI Enforcement — DUI Checkpoint Operations",
+      "category": "DUI_ENFORCEMENT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "DUI Enforcement — DUI Collision Investigation",
+      "category": "DUI_ENFORCEMENT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "DUI Enforcement — DUI Detection Techniques",
+      "category": "DUI_ENFORCEMENT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "DUI Enforcement — DUI Statistical Reporting",
+      "category": "DUI_ENFORCEMENT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "DUI Enforcement — DUI Warrant Procedures",
+      "category": "DUI_ENFORCEMENT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "DUI Enforcement — Drug Recognition Expert Program",
+      "category": "DUI_ENFORCEMENT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "DUI Enforcement — Implied Consent Procedures",
+      "category": "DUI_ENFORCEMENT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "DUI Enforcement — Repeat Offender Protocols",
+      "category": "DUI_ENFORCEMENT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "DUI Enforcement — Standardized Field Sobriety Tests",
+      "category": "DUI_ENFORCEMENT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "DUI Enforcement — Vehicle Impoundment Procedures",
+      "category": "DUI_ENFORCEMENT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Field Training Officer Program — Extension of Probation Criteria",
+      "category": "FTO",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Field Training Officer Program — FTO Documentation Standards",
+      "category": "FTO",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Field Training Officer Program — FTO Program Audit",
+      "category": "FTO",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Annual Certification",
+      "category": "K9",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Bite Reporting",
+      "category": "K9",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Deployment Authorization",
+      "category": "K9",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Handler Responsibilities",
+      "category": "K9",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Handler Selection",
+      "category": "K9",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Kennel Standards",
+      "category": "K9",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Narcotics Detection",
+      "category": "K9",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Retirement Procedures",
+      "category": "K9",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Tracking Operations",
+      "category": "K9",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Training Standards",
+      "category": "K9",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Use of Force Documentation",
+      "category": "K9",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "K-9 Unit — K-9 Veterinary Care",
+      "category": "K9",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Records Management — Body Camera Footage Retention",
+      "category": "RECORDS",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Records Management — CLETS Access Controls",
+      "category": "RECORDS",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Records Management — Data Privacy Requirements",
+      "category": "RECORDS",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Records Management — Digital Evidence Storage",
+      "category": "RECORDS",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Records Management — Information Sharing Agreements",
+      "category": "RECORDS",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Records Management — Personnel File Management",
+      "category": "RECORDS",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Records Management — Public Records Act Compliance",
+      "category": "RECORDS",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Records Management — Records Amendment Procedures",
+      "category": "RECORDS",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Records Management — Records Audit Procedures",
+      "category": "RECORDS",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Records Management — Records Destruction Procedures",
+      "category": "RECORDS",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Records Management — Records Retention Schedule",
+      "category": "RECORDS",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Records Management — Report Writing Standards",
+      "category": "RECORDS",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "SWAT Operations — After-Action Review Process",
+      "category": "SWAT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "SWAT Operations — Barricaded Subject Response",
+      "category": "SWAT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "SWAT Operations — Breaching Operations",
+      "category": "SWAT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "SWAT Operations — Chemical Agent Deployment",
+      "category": "SWAT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "SWAT Operations — High-Risk Warrant Service",
+      "category": "SWAT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "SWAT Operations — Hostage Negotiation",
+      "category": "SWAT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "SWAT Operations — SWAT Activation Criteria",
+      "category": "SWAT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "SWAT Operations — SWAT Annual Assessment",
+      "category": "SWAT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "SWAT Operations — SWAT Equipment Standards",
+      "category": "SWAT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "SWAT Operations — SWAT Team Selection",
+      "category": "SWAT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "SWAT Operations — SWAT Training Standards",
+      "category": "SWAT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "SWAT Operations — Sniper Operations",
+      "category": "SWAT",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Traffic Enforcement — Citation Issuance Standards",
+      "category": "TRAFFIC",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Traffic Enforcement — Commercial Vehicle Inspection",
+      "category": "TRAFFIC",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Traffic Enforcement — Construction Zone Enforcement",
+      "category": "TRAFFIC",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Traffic Enforcement — Hit-and-Run Investigation",
+      "category": "TRAFFIC",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Traffic Enforcement — Pedestrian Safety Enforcement",
+      "category": "TRAFFIC",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Traffic Enforcement — Red Light Camera Procedures",
+      "category": "TRAFFIC",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Traffic Enforcement — School Zone Enforcement",
+      "category": "TRAFFIC",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Traffic Enforcement — Selective Traffic Enforcement",
+      "category": "TRAFFIC",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Traffic Enforcement — Speed Enforcement Methods",
+      "category": "TRAFFIC",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Traffic Enforcement — Traffic Collision Investigation",
+      "category": "TRAFFIC",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Traffic Enforcement — Traffic Data Analysis",
+      "category": "TRAFFIC",
+      "policyCount": 3,
+      "percentage": 0.04
+    },
+    {
+      "topicName": "Traffic Enforcement — Traffic Stop Procedures",
+      "category": "TRAFFIC",
+      "policyCount": 3,
+      "percentage": 0.04
+    }
+  ]
+}

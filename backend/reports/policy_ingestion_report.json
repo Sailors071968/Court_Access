@@ -1,0 +1,43 @@
+{
+  "phase": 93,
+  "title": "Policy Ingestion Pipeline Report",
+  "generatedAt": "2026-03-09T20:24:22.227Z",
+  "summary": {
+    "totalDocumentsInSystem": 8189,
+    "documentsProcessedThisRun": 6488,
+    "ocrCompleted": 6488,
+    "classificationsCompleted": 6488,
+    "coverageEntriesMapped": 159318,
+    "agenciesProcessed": 477,
+    "pipelineRuntimeMs": 317186,
+    "pipelineRuntimeSeconds": 317
+  },
+  "pipeline": {
+    "stage1_download": {
+      "completed": 6488,
+      "failed": 0
+    },
+    "stage2_ocr": {
+      "completed": 6488,
+      "failed": 0
+    },
+    "stage3_classification": {
+      "completed": 6488,
+      "failed": 0
+    },
+    "stage4_topicMapping": {
+      "coverageEntries": 159318
+    },
+    "stage5_coverageMatrixUpdate": {
+      "agenciesProcessed": 488,
+      "newEntries": 159318,
+      "updatedEntries": 0
+    }
+  },
+  "ocrMethodDistribution": {
+    "pdfParse": 6488,
+    "textract": 0,
+    "tesseract": 0,
+    "note": "Sandbox mode: synthetic text generation used in place of real OCR"
+  }
+}

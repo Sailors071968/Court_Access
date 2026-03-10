@@ -1,0 +1,89 @@
+{
+  "phase": 193,
+  "title": "CSRF Protection Validation",
+  "generated": "2026-03-10T15:55:00Z",
+  "status": "IMPLEMENTED",
+  "summary": "CSRF protection is now active with same-site cookies, CSRF tokens, and origin validation for all state-changing requests.",
+
+  "implementation": {
+    "file": "backend/src/security/csrfProtection.ts",
+    "linesOfCode": 230,
+    "integrationFile": "backend/src/server.ts",
+    "hookRegistration": "app.addHook('onRequest', csrfProtectionHook)"
+  },
+
+  "protectionLayers": {
+    "layer1_sameSiteCookies": {
+      "status": "ACTIVE",
+      "sameSitePolicy": "strict",
+      "description": "All session and auth cookies use SameSite=Strict to prevent cross-origin cookie sending",
+      "cookies": [
+        { "name": "_session", "httpOnly": true, "sameSite": "strict", "secure": "production-only", "maxAge": "24 hours" },
+        { "name": "_csrf", "httpOnly": false, "sameSite": "strict", "secure": "production-only", "maxAge": "1 hour" },
+        { "name": "refreshToken", "httpOnly": true, "sameSite": "strict", "secure": "production-only", "maxAge": "7 days" }
+      ]
+    },
+    "layer2_csrfTokens": {
+      "status": "ACTIVE",
+      "tokenGeneration": "crypto.randomBytes(32).toString('hex')",
+      "tokenExpiry": "1 hour",
+      "tokenValidation": "crypto.timingSafeEqual (constant-time comparison)",
+      "headerName": "x-csrf-token",
+      "cookieName": "_csrf",
+      "endpoint": "GET /api/auth/csrf-token"
+    },
+    "layer3_originValidation": {
+      "status": "ACTIVE",
+      "validatedHeaders": ["Origin", "Referer"],
+      "allowedOrigins": [
+        "http://localhost:5173",
+        "http://localhost:4173",
+        "http://localhost:3000",
+        "http://localhost:3001",
+        "https://*.courtaccess.com (production)"
+      ],
+      "rejectOnMismatch": true
+    }
+  },
+
+  "protectedMethods": ["POST", "PUT", "DELETE", "PATCH"],
+  "unprotectedMethods": ["GET", "HEAD", "OPTIONS"],
+
+  "exemptRoutes": [
+    "/api/auth/login",
+    "/api/auth/register",
+    "/api/health"
+  ],
+
+  "bearerTokenBypass": {
+    "description": "Requests using Bearer token authentication bypass CSRF checks because Bearer tokens are not auto-sent by browsers (unlike cookies)",
+    "rationale": "CSRF attacks exploit automatic cookie sending; Bearer tokens require explicit JavaScript to include, making CSRF impossible for API-only clients"
+  },
+
+  "errorResponses": {
+    "originValidationFailure": {
+      "statusCode": 403,
+      "body": { "error": "CSRF validation failed", "message": "Request origin is not allowed" }
+    },
+    "tokenValidationFailure": {
+      "statusCode": 403,
+      "body": { "error": "CSRF validation failed", "message": "Invalid or expired CSRF token" }
+    }
+  },
+
+  "tokenEndpoint": {
+    "method": "GET",
+    "path": "/api/auth/csrf-token",
+    "description": "Returns a CSRF token and sets _session and _csrf cookies",
+    "usage": "Frontend fetches this endpoint on page load, includes the token in x-csrf-token header for state-changing requests"
+  },
+
+  "productionRecommendations": [
+    "Verify FRONTEND_URL and BACKEND_URL environment variables are set for production origin validation",
+    "Enable secure cookies in production (set NODE_ENV=production)",
+    "Consider double-submit cookie pattern for stateless CSRF protection",
+    "Add CSRF token rotation on each state-changing request for enhanced security"
+  ],
+
+  "validationResult": "PASS"
+}

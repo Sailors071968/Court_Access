@@ -1,0 +1,36 @@
+{
+  "phase": "Phase 166 — Compliance Engine Performance Metrics",
+  "generatedAt": "2026-03-10T13:46:47.510Z",
+  "totalTestCases": 50,
+  "performanceMetrics": {
+    "eventExtractionMs": 26,
+    "agencyDetectionMs": 3,
+    "policyMatchingMs": 46,
+    "complianceAnalysisMs": 73,
+    "expertReportMs": 1,
+    "totalPipelineMs": 149
+  },
+  "perCaseMetrics": {
+    "averageExtractionMs": 0.52,
+    "averageAnalysisMs": 1.46,
+    "maxExtractionMs": 1.3,
+    "maxAnalysisMs": 3.65
+  },
+  "memoryUsage": {
+    "heapUsedMB": 11.9,
+    "heapTotalMB": 28.3,
+    "rssMB": 105.78,
+    "externalMB": 2.93
+  },
+  "gpuUsage": "Not applicable — current pipeline uses CPU-based NLP pattern matching. GPU acceleration available for future video analysis models (Phase 167+).",
+  "queueLatency": {
+    "averageReviewQueueTimeMs": 2.19,
+    "estimatedThroughputPerHour": 1208054
+  },
+  "scalabilityEstimate": {
+    "casesPerMinute": 20134.23,
+    "estimatedMaxConcurrent": 50,
+    "bottleneck": "Pipeline is well-optimized for current workload"
+  },
+  "safetyLanguageCheck": "PASSED"
+}

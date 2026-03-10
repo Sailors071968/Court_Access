@@ -5,7 +5,8 @@
 // ============================================
 
 import { useNavigate } from 'react-router-dom';
-import { FileText, Calendar, Download, Clock, CheckCircle, User, Scale } from 'lucide-react';
+import { useState } from 'react';
+import { FileText, Calendar, Download, Clock, CheckCircle, User, Scale, Archive } from 'lucide-react';
 import { Card, StatCard } from '../../components/common/Card';
 import { DemoModeBadge } from '../../components/common/DemoModeBadge';
 import { STATUS_COLORS } from '../../constants/designTokens';
@@ -31,6 +32,38 @@ export function DefendantDashboard() {
   const documents = getDocuments(primaryCase.id);
   const currentPhase: CasePhase = 'pretrial';
   const phaseConfig = CASE_PHASE_CONFIG[currentPhase];
+
+  // Phase 234 — Client Disregard File feature
+  const [disregardedDocs, setDisregardedDocs] = useState<Set<string>>(() => {
+    const stored = localStorage.getItem('courtaccess_defendant_disregarded');
+    return stored ? new Set(JSON.parse(stored)) : new Set();
+  });
+
+  const handleDisregard = (docId: string, e: React.MouseEvent) => {
+    e.stopPropagation();
+    const updated = new Set(disregardedDocs);
+    if (updated.has(docId)) {
+      updated.delete(docId);
+    } else {
+      updated.add(docId);
+    }
+    setDisregardedDocs(updated);
+    localStorage.setItem('courtaccess_defendant_disregarded', JSON.stringify([...updated]));
+
+    // Also log to evidence audit trail (shared with admin Evidence Management)
+    const auditKey = 'courtaccess_evidence_audit_log';
+    const log = JSON.parse(localStorage.getItem(auditKey) || '[]');
+    log.push({
+      actionId: crypto.randomUUID(),
+      adminUser: user?.name || 'Defendant',
+      fileId: docId,
+      fileName: documents.find((d) => d.id === docId)?.name || 'Unknown',
+      actionType: updated.has(docId) ? 'disregard' : 'undo_disregard',
+      timestamp: new Date().toISOString(),
+      notes: `Defendant ${updated.has(docId) ? 'marked' : 'unmarked'} file as disregard`,
+    });
+    localStorage.setItem(auditKey, JSON.stringify(log));
+  };
 
   return (
     <div className="max-w-5xl mx-auto space-y-6">
@@ -110,26 +143,52 @@ export function DefendantDashboard() {
             </button>
           </div>
           <div className="space-y-2">
-            {documents.slice(0, 4).map((doc) => (
-              <div
-                key={doc.id}
-                className="flex items-center justify-between p-3 rounded-lg border border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors"
-                onClick={() => navigate(`/cases/${primaryCase.id}/documents`)}
-              >
-                <div className="flex items-center gap-3 min-w-0">
-                  <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${STATUS_COLORS.info}`}>
-                    <FileText size={14} />
+            {documents.slice(0, 4).map((doc) => {
+              const isDisregarded = disregardedDocs.has(doc.id);
+              return (
+                <div
+                  key={doc.id}
+                  className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${
+                    isDisregarded
+                      ? 'border-gray-200 bg-gray-50 opacity-60'
+                      : 'border-gray-100 hover:bg-gray-50 cursor-pointer'
+                  }`}
+                  onClick={() => !isDisregarded && navigate(`/cases/${primaryCase.id}/documents`)}
+                >
+                  <div className="flex items-center gap-3 min-w-0">
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${STATUS_COLORS.info}`}>
+                      <FileText size={14} />
+                    </div>
+                    <div className="min-w-0">
+                      <p className={`text-sm font-medium truncate ${isDisregarded ? 'text-gray-400 line-through' : 'text-gray-900'}`}>{doc.name}</p>
+                      <p className="text-xs text-gray-500">{doc.filedDate}</p>
+                      {isDisregarded && (
+                        <span className="text-[10px] text-gray-400 font-medium">DISREGARDED — will not be analyzed</span>
+                      )}
+                    </div>
                   </div>
-                  <div className="min-w-0">
-                    <p className="text-sm font-medium text-gray-900 truncate">{doc.name}</p>
-                    <p className="text-xs text-gray-500">{doc.filedDate}</p>
+                  <div className="flex items-center gap-1 flex-shrink-0">
+                    <button
+                      onClick={(e) => handleDisregard(doc.id, e)}
+                      title={isDisregarded ? 'Undo disregard' : 'Mark as Disregard'}
+                      className={`p-1.5 rounded-lg text-xs font-medium transition-colors ${
+                        isDisregarded
+                          ? 'text-emerald-600 hover:bg-emerald-50'
+                          : 'text-gray-400 hover:bg-gray-100 hover:text-gray-600'
+                      }`}
+                    >
+                      <Archive size={14} />
+                    </button>
+                    <button
+                      onClick={(e) => { e.stopPropagation(); }}
+                      className="text-gray-400 hover:text-gray-600 p-1"
+                    >
+                      <Download size={14} />
+                    </button>
                   </div>
                 </div>
-                <button className="text-gray-400 hover:text-gray-600 flex-shrink-0 p-1">
-                  <Download size={14} />
-                </button>
-              </div>
-            ))}
+              );
+            })}
           </div>
           <button
             onClick={() => navigate(`/cases/${primaryCase.id}/documents`)}

@@ -37,6 +37,7 @@ import { PolicyTopicsViewer } from './pages/dashboard/PolicyTopicsViewer';
 import { PolicyComplianceDashboard } from './pages/dashboard/PolicyComplianceDashboard';
 import { CaseTimelineVisualizer } from './pages/dashboard/CaseTimelineVisualizer';
 import ExhibitViewer from './pages/dashboard/exhibits/ExhibitViewer';
+import { EvidenceManagementDashboard } from './pages/dashboard/EvidenceManagementDashboard';
 import { CasesListPage } from './pages/CasesListPage';
 import { SearchPage } from './pages/SearchPage';
 import { NotificationsPage } from './pages/NotificationsPage';
@@ -178,6 +179,14 @@ function App() {
             element={
               <ProtectedRoute requiredPermission="canViewAdmin">
                 <DiscountCodesDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="dashboard/evidence-management"
+            element={
+              <ProtectedRoute requiredPermission="canViewEvidenceManagement">
+                <EvidenceManagementDashboard />
               </ProtectedRoute>
             }
           />

@@ -38,6 +38,9 @@ import { PolicyComplianceDashboard } from './pages/dashboard/PolicyComplianceDas
 import { CaseTimelineVisualizer } from './pages/dashboard/CaseTimelineVisualizer';
 import ExhibitViewer from './pages/dashboard/exhibits/ExhibitViewer';
 import { EvidenceManagementDashboard } from './pages/dashboard/EvidenceManagementDashboard';
+import { ExpertWitnessDatabase } from './pages/dashboard/ExpertWitnessDatabase';
+import { MotionLibrary } from './pages/dashboard/MotionLibrary';
+import { ApiRegistryDashboard } from './pages/dashboard/ApiRegistryDashboard';
 import { CasesListPage } from './pages/CasesListPage';
 import { SearchPage } from './pages/SearchPage';
 import { NotificationsPage } from './pages/NotificationsPage';
@@ -187,6 +190,30 @@ function App() {
             element={
               <ProtectedRoute requiredPermission="canViewEvidenceManagement">
                 <EvidenceManagementDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="dashboard/expert-witnesses"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <ExpertWitnessDatabase />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="dashboard/motion-library"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <MotionLibrary />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="dashboard/api-registry"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <ApiRegistryDashboard />
               </ProtectedRoute>
             }
           />

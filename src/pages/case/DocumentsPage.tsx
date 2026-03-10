@@ -3,7 +3,7 @@
 // ============================================
 
 import { useState } from 'react';
-import { Upload, FileText, Film, Image, CheckCircle, MoreHorizontal, Eye } from 'lucide-react';
+import { Upload, FileText, Film, Image, CheckCircle, MoreHorizontal, Eye, AlertCircle } from 'lucide-react';
 import { Card } from '../../components/common/Card';
 
 interface UploadedFile {
@@ -23,6 +23,8 @@ const MOCK_UPLOADS: UploadedFile[] = [
 
 export function DocumentsPage() {
   const [isDragging, setIsDragging] = useState(false);
+  const [uploadProgress] = useState<Record<string, number>>({});
+  const [viewingFileId, setViewingFileId] = useState<string | null>(null);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -99,7 +101,10 @@ export function DocumentsPage() {
                     </div>
                   )}
                   {file.status === 'analyzed' ? (
-                    <button className="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 inline-flex items-center gap-1">
+                    <button
+                      onClick={() => setViewingFileId(viewingFileId === file.id ? null : file.id)}
+                      className="px-3 py-1.5 bg-blue-600 text-white rounded-lg text-xs font-medium hover:bg-blue-700 inline-flex items-center gap-1"
+                    >
                       <Eye size={12} /> View Analysis
                     </button>
                   ) : file.status === 'processing' ? (
@@ -112,10 +117,42 @@ export function DocumentsPage() {
                   </button>
                 </div>
               </div>
+              {viewingFileId === file.id && (
+                <div className="mt-3 pt-3 border-t border-gray-200">
+                  <div className="bg-blue-50 rounded-lg p-3">
+                    <h4 className="text-sm font-semibold text-blue-900 mb-2 flex items-center gap-1.5">
+                      <AlertCircle size={14} /> AI Analysis Summary
+                    </h4>
+                    <p className="text-xs text-blue-800">
+                      {file.type === 'pdf' && 'Document analyzed: 12 key entities extracted, 3 timeline events identified, 2 potential inconsistencies flagged.'}
+                      {file.type === 'jpg' && 'Image analyzed: Location metadata extracted, 4 objects identified, scene matches incident report description.'}
+                      {file.type === 'mp4' && 'Video analyzed: 3 key moments flagged, audio transcript generated, 2 persons of interest identified.'}
+                    </p>
+                  </div>
+                </div>
+              )}
             </Card>
           ))}
         </div>
       </div>
+
+      {/* Upload Progress */}
+      {Object.keys(uploadProgress).length > 0 && (
+        <div className="space-y-2">
+          <h3 className="text-sm font-semibold text-gray-700">Uploading...</h3>
+          {Object.entries(uploadProgress).map(([id, progress]) => (
+            <div key={id} className="bg-white rounded-lg border border-gray-200 p-3">
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-xs text-gray-600">Uploading file...</span>
+                <span className="text-xs font-medium text-gray-700">{Math.round(progress)}%</span>
+              </div>
+              <div className="w-full bg-gray-200 rounded-full h-2">
+                <div className="bg-blue-600 h-2 rounded-full transition-all" style={{ width: `${progress}%` }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

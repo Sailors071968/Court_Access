@@ -8,7 +8,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, Briefcase, Search, Bell, Settings, Shield, LogOut,
   ChevronLeft, ChevronRight, ChevronDown,
-  FileText, Tag, Upload, BarChart3, Globe,
+  FileText, Tag, Upload, BarChart3, Globe, Users, BookOpen, Plug,
 } from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
 import { ROLE_PERMISSIONS } from '../../constants';
@@ -66,6 +66,9 @@ const navItems: NavItem[] = [
       { id: 'policy-ops', label: 'Policy Operations', path: '/dashboard/policy-operations', icon: <FileText size={16} /> },
       { id: 'discount-codes', label: 'Discount Codes', path: '/dashboard/discount-codes', icon: <Tag size={16} /> },
       { id: 'evidence-mgmt', label: 'Evidence Management', path: '/dashboard/evidence-management', icon: <Upload size={16} />, permission: 'canViewEvidenceManagement' },
+      { id: 'expert-witnesses', label: 'Expert Witnesses', path: '/dashboard/expert-witnesses', icon: <Users size={16} /> },
+      { id: 'motion-library', label: 'Motion Library', path: '/dashboard/motion-library', icon: <BookOpen size={16} /> },
+      { id: 'api-registry', label: 'API Registry', path: '/dashboard/api-registry', icon: <Plug size={16} /> },
       { id: 'system-health', label: 'System Health', path: '/dashboard/system-health', icon: <BarChart3 size={16} /> },
     ],
   },

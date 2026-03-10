@@ -310,6 +310,7 @@ export function DiscountCodesDashboard() {
                       <th className="text-left px-4 py-3 font-medium text-gray-600">Campaign</th>
                       <th className="text-left px-4 py-3 font-medium text-gray-600">Discount</th>
                       <th className="text-left px-4 py-3 font-medium text-gray-600">Status</th>
+                      <th className="text-center px-4 py-3 font-medium text-gray-600">ON / OFF</th>
                       <th className="text-left px-4 py-3 font-medium text-gray-600">Usage</th>
                       <th className="text-left px-4 py-3 font-medium text-gray-600">Expires</th>
                       <th className="text-right px-4 py-3 font-medium text-gray-600">Actions</th>
@@ -344,6 +345,20 @@ export function DiscountCodesDashboard() {
                             {code.active ? <CheckCircle2 size={12} /> : <XCircle size={12} />}
                             {code.active ? 'Active' : 'Inactive'}
                           </button>
+                        </td>
+                        <td className="px-4 py-3 text-center">
+                          <button
+                            onClick={(e) => { e.stopPropagation(); toggleActive(code.codeId); }}
+                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${
+                              code.active ? 'bg-emerald-500' : 'bg-gray-300'
+                            }`}
+                            aria-label={code.active ? 'Turn off' : 'Turn on'}
+                          >
+                            <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${
+                              code.active ? 'translate-x-6' : 'translate-x-1'
+                            }`} />
+                          </button>
+                          <span className={`block text-[10px] font-bold mt-0.5 ${code.active ? 'text-emerald-600' : 'text-gray-400'}`}>{code.active ? 'ON' : 'OFF'}</span>
                         </td>
                         <td className="px-4 py-3 text-gray-600">
                           {code.usageCount}{code.usageLimit !== null ? ` / ${code.usageLimit}` : ''}

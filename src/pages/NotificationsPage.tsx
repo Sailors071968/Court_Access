@@ -3,11 +3,13 @@
 // ============================================
 
 import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { Card } from '../components/common/Card';
 import { caseDataProvider } from '../services/caseDataProvider';
 import { FileText, Calendar, Lightbulb, Phone, Mail } from 'lucide-react';
 
 export function NotificationsPage() {
+  const navigate = useNavigate();
   const [smsEnabled, setSmsEnabled] = useState(true);
   const [emailEnabled, setEmailEnabled] = useState(true);
   const [settings, setSettings] = useState({
@@ -86,7 +88,15 @@ export function NotificationsPage() {
                   <div className="flex items-center gap-4 mt-2">
                     <span className="text-xs text-gray-400">{notif.timestamp}</span>
                     {notif.actionLabel && (
-                      <button className="text-xs text-blue-600 hover:text-blue-700 font-medium">
+                      <button
+                        className="text-xs text-blue-600 hover:text-blue-700 font-medium"
+                        onClick={() => {
+                          if (notif.actionLabel === 'View Document') navigate('/cases');
+                          else if (notif.actionLabel === 'Add to Calendar') navigate('/cases');
+                          else if (notif.actionLabel === 'View Analysis') navigate('/cases');
+                          else navigate('/cases');
+                        }}
+                      >
                         {notif.actionLabel}
                       </button>
                     )}

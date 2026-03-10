@@ -37,9 +37,9 @@ export function ResearchPage() {
             <div>
               <h3 className="font-semibold text-gray-900">PC 459 — Burglary</h3>
               <p className="text-sm text-gray-500 mt-1">California Penal Code Section 459 — Every person who enters any building with intent to commit grand or petit larceny...</p>
-              <button className="mt-2 text-xs text-blue-600 hover:text-blue-700 font-medium inline-flex items-center gap-1">
+              <a href="https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=459.&lawCode=PEN" target="_blank" rel="noopener noreferrer" className="mt-2 text-xs text-blue-600 hover:text-blue-700 font-medium inline-flex items-center gap-1">
                 View full statute <ExternalLink size={10} />
-              </button>
+              </a>
             </div>
           </div>
         </Card>
@@ -51,9 +51,9 @@ export function ResearchPage() {
             <div>
               <h3 className="font-semibold text-gray-900">PC 1538.5 — Motion to Suppress</h3>
               <p className="text-sm text-gray-500 mt-1">Motion to return property or suppress as evidence any tangible or intangible thing obtained as a result of a search or seizure...</p>
-              <button className="mt-2 text-xs text-blue-600 hover:text-blue-700 font-medium inline-flex items-center gap-1">
+              <a href="https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?sectionNum=1538.5.&lawCode=PEN" target="_blank" rel="noopener noreferrer" className="mt-2 text-xs text-blue-600 hover:text-blue-700 font-medium inline-flex items-center gap-1">
                 View full statute <ExternalLink size={10} />
-              </button>
+              </a>
             </div>
           </div>
         </Card>
@@ -65,9 +65,9 @@ export function ResearchPage() {
             <div>
               <h3 className="font-semibold text-gray-900">CALCRIM 1700 — Burglary Elements</h3>
               <p className="text-sm text-gray-500 mt-1">Jury instruction for burglary charges. The defendant is charged with burglary in violation of Penal Code section 459...</p>
-              <button className="mt-2 text-xs text-blue-600 hover:text-blue-700 font-medium inline-flex items-center gap-1">
+              <a href="https://www.justia.com/criminal/docs/calcrim/1700/" target="_blank" rel="noopener noreferrer" className="mt-2 text-xs text-blue-600 hover:text-blue-700 font-medium inline-flex items-center gap-1">
                 View instruction <ExternalLink size={10} />
-              </button>
+              </a>
             </div>
           </div>
         </Card>
@@ -79,9 +79,9 @@ export function ResearchPage() {
             <div>
               <h3 className="font-semibold text-gray-900">People v. Montoya (2004)</h3>
               <p className="text-sm text-gray-500 mt-1">Key case regarding intent requirements for first-degree burglary and the distinction between entry and remaining inside...</p>
-              <button className="mt-2 text-xs text-blue-600 hover:text-blue-700 font-medium inline-flex items-center gap-1">
+              <a href="https://scholar.google.com/scholar_case?q=People+v.+Montoya+2004+California" target="_blank" rel="noopener noreferrer" className="mt-2 text-xs text-blue-600 hover:text-blue-700 font-medium inline-flex items-center gap-1">
                 View case <ExternalLink size={10} />
-              </button>
+              </a>
             </div>
           </div>
         </Card>

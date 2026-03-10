@@ -160,6 +160,7 @@ model Agency {
   PolicyCoverage      PolicyCoverage[]
   CPRAAgencyRequests  CPRAAgencyRequest[]
   CPRAAnnualUpdates   CPRAAnnualUpdate[]
+  AgencyPolicyStatus  AgencyPolicyStatus?
 
   @@unique([agencyName, county])
   @@index([county])
@@ -351,6 +352,115 @@ model CPRAAnnualUpdate {
   @@index([status])
   @@index([closed])
   @@map("cpra_annual_updates")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 121 — Agency Policy Status (operational intelligence)
+// ---------------------------------------------------------------------------
+
+model AgencyPolicyStatus {
+  id                    String    @id @default(uuid())
+  agencyId              String    @unique
+  Agency                Agency    @relation(fields: [agencyId], references: [agencyId])
+
+  agencyName            String
+  city                  String?
+  county                String?
+  website               String?
+
+  lastCrawledAt         DateTime?
+  policiesDiscovered    Int       @default(0)
+  policiesDownloaded    Int       @default(0)
+  policiesIngested      Int       @default(0)
+  coverageScore         Float     @default(0)   // 0-100 percentage
+
+  cpraStatus            String    @default("none") // none | draft | sent | awaiting_response | follow_up | received | closed
+  lastCpraEmailSent     DateTime?
+  cpraDeadline          DateTime?
+  annualUpdateDeadline  DateTime?
+
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([county])
+  @@index([cpraStatus])
+  @@index([coverageScore])
+  @@index([cpraDeadline])
+  @@map("agency_policy_status")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 122 — Policy Inventory (every policy obtained)
+// ---------------------------------------------------------------------------
+
+model PolicyInventory {
+  id                        String    @id @default(uuid())
+  policyId                  String    // reference to PolicyDocument.documentId
+  agencyId                  String
+  policyTitle               String?
+  policyTopic               String?   // topic category
+  sourceUrl                 String
+  fileHash                  String?
+  discoveredAt              DateTime  @default(now())
+  downloadedAt              DateTime?
+  ocrProcessedAt            DateTime?
+  classificationConfidence  Float?
+  ingestionStatus           String    @default("discovered") // discovered | downloaded | ocr_complete | classified | ingested | failed
+
+  createdAt                 DateTime  @default(now())
+  updatedAt                 DateTime  @updatedAt
+
+  @@index([agencyId])
+  @@index([ingestionStatus])
+  @@index([policyTopic])
+  @@map("policy_inventory")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 123 — Policy Topic Coverage Matrix (topic × agency status)
+// ---------------------------------------------------------------------------
+
+model PolicyTopicCoverage {
+  id        String   @id @default(uuid())
+  agencyId  String
+  topic     String   // topic name
+  status    String   @default("MISSING") // FOUND | MISSING | CPRA_REQUESTED | RECEIVED
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([agencyId, topic])
+  @@index([agencyId])
+  @@index([topic])
+  @@index([status])
+  @@map("policy_topic_coverage")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 124 — CPRA Request Log (campaign tracking)
+// ---------------------------------------------------------------------------
+
+model CpraRequestLog {
+  id                  String    @id @default(uuid())
+  requestId           String    // reference to CPRAAgencyRequest.requestId
+  agencyId            String
+  emailSentDate       DateTime?
+  emailTemplateUsed   String?
+  recipientEmail      String?
+  responseReceived    Boolean   @default(false)
+  responseDate        DateTime?
+  documentsReceived   Int       @default(0)
+  followUpRequired    Boolean   @default(false)
+  followUpDate        DateTime?
+
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@index([agencyId])
+  @@index([requestId])
+  @@index([responseReceived])
+  @@index([followUpRequired])
+  @@map("cpra_request_log")
 }
 
 // ---------------------------------------------------------------------------

@@ -18,6 +18,8 @@ import { PolicyPipelineDashboard } from './pages/dashboard/PolicyPipelineDashboa
 import { PolicyIntelligenceDashboard } from './pages/dashboard/PolicyIntelligenceDashboard';
 import { CpraDashboard } from './pages/dashboard/CpraDashboard';
 import { SystemHealthDashboard } from './pages/dashboard/SystemHealthDashboard';
+import { PolicyOperationsDashboard } from './pages/dashboard/PolicyOperationsDashboard';
+import { PolicyTopicsViewer } from './pages/dashboard/PolicyTopicsViewer';
 import ExhibitViewer from './pages/dashboard/exhibits/ExhibitViewer';
 import { CasesListPage } from './pages/CasesListPage';
 import { SearchPage } from './pages/SearchPage';
@@ -79,6 +81,22 @@ function App() {
             element={
               <ProtectedRoute requiredPermission="canViewAdmin">
                 <CpraDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="dashboard/policy-operations"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <PolicyOperationsDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="dashboard/policy-topics"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <PolicyTopicsViewer />
               </ProtectedRoute>
             }
           />

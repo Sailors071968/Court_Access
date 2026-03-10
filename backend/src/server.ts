@@ -8,6 +8,7 @@ import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import { registerPipelineRoutes } from './policy/pipeline/pipelineRoutes.js';
 import { registerPolicyIntelligenceRoutes } from './policy/pipeline/policyIntelligenceRoutes.js';
+import { registerOperationsConsoleRoutes } from './policy/pipeline/operationsConsoleRoutes.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -39,6 +40,9 @@ async function startServer() {
   console.log('[Server] Registering policy intelligence routes...');
   await registerPolicyIntelligenceRoutes(app);
 
+  console.log('[Server] Registering operations console routes...');
+  await registerOperationsConsoleRoutes(app);
+
   // Start server
   try {
     await app.listen({ port: PORT, host: HOST });
@@ -55,6 +59,12 @@ async function startServer() {
     console.log('  - POST /api/policy-intelligence/cpra/launch-campaign');
     console.log('  - POST /api/policy-intelligence/responses/process');
     console.log('  - GET  /api/policy-intelligence/dashboard');
+    console.log('  - GET  /api/operations/dashboard');
+    console.log('  - GET  /api/operations/deadlines');
+    console.log('  - GET  /api/operations/topics');
+    console.log('  - GET  /api/operations/topics/:agencyId');
+    console.log('  - POST /api/operations/report');
+    console.log('  - POST /api/operations/populate');
   } catch (err) {
     console.error('[Server] Failed to start:', err);
     process.exit(1);

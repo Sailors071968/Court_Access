@@ -18,7 +18,8 @@
     "phase91-96:activate": "tsx src/policy/pipeline/phase91_96_statewideActivation.ts",
     "phase97-102:audit": "tsx src/policy/pipeline/phase97_102_datasetAudit.ts",
     "phase103-108:acquire": "tsx src/policy/pipeline/phase103_108_realDataAcquisition.ts",
-    "phase109-114:repair": "tsx src/policy/pipeline/phase109_114_ingestionRepair.ts"
+    "phase109-114:repair": "tsx src/policy/pipeline/phase109_114_ingestionRepair.ts",
+    "phase121-128:operations": "tsx src/policy/pipeline/phase121_128_operationsConsole.ts"
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1004.0",

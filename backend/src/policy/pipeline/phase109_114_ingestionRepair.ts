@@ -364,7 +364,8 @@ async function extractPdfText(buffer: Buffer): Promise<{ text: string; pages: nu
     // pdf-parse v2 uses named export PDFParse class with { data: buffer } option
     const { PDFParse } = await import('pdf-parse');
     const parser = new PDFParse({ data: buffer });
-    await parser.load();
+    // load() is marked private in types but required at runtime — cast to bypass
+    await (parser as unknown as { load(): Promise<void> }).load();
     const result = await parser.getText();
     const text = (typeof result === 'object' && result !== null ? (result as { text?: string }).text || '' : String(result || '')).trim();
     const pages = (typeof result === 'object' && result !== null ? (result as { total?: number }).total : 0) || 1;

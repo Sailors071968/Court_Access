@@ -54,6 +54,7 @@ import { ResearchPage } from './pages/case/ResearchPage';
 import { ActivityPage } from './pages/case/ActivityPage';
 import { DocumentsPage } from './pages/case/DocumentsPage';
 import { CaseSettingsPage } from './pages/case/CaseSettingsPage';
+import { ExhibitIdeasPanel } from './pages/case/ExhibitIdeasPanel';
 
 function App() {
   return (
@@ -266,6 +267,14 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canManageCases">
                   <CaseSettingsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="exhibit-ideas"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <ExhibitIdeasPanel />
                 </ProtectedRoute>
               }
             />

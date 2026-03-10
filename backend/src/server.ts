@@ -9,6 +9,7 @@ import cors from '@fastify/cors';
 import { registerPipelineRoutes } from './policy/pipeline/pipelineRoutes.js';
 import { registerPolicyIntelligenceRoutes } from './policy/pipeline/policyIntelligenceRoutes.js';
 import { registerOperationsConsoleRoutes } from './policy/pipeline/operationsConsoleRoutes.js';
+import { registerComplianceRoutes } from './evidence/complianceRoutes.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -43,6 +44,9 @@ async function startServer() {
   console.log('[Server] Registering operations console routes...');
   await registerOperationsConsoleRoutes(app);
 
+  console.log('[Server] Registering compliance analysis routes...');
+  await registerComplianceRoutes(app);
+
   // Start server
   try {
     await app.listen({ port: PORT, host: HOST });
@@ -65,6 +69,12 @@ async function startServer() {
     console.log('  - GET  /api/operations/topics/:agencyId');
     console.log('  - POST /api/operations/report');
     console.log('  - POST /api/operations/populate');
+    console.log('  - GET  /api/compliance/dashboard');
+    console.log('  - POST /api/compliance/analyze');
+    console.log('  - GET  /api/compliance/timeline/:caseId');
+    console.log('  - GET  /api/compliance/heatmap');
+    console.log('  - GET  /api/compliance/expert/:caseId');
+    console.log('  - GET  /api/compliance/jury/:caseId');
   } catch (err) {
     console.error('[Server] Failed to start:', err);
     process.exit(1);

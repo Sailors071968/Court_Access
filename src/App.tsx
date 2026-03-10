@@ -20,6 +20,7 @@ import { CpraDashboard } from './pages/dashboard/CpraDashboard';
 import { SystemHealthDashboard } from './pages/dashboard/SystemHealthDashboard';
 import { PolicyOperationsDashboard } from './pages/dashboard/PolicyOperationsDashboard';
 import { PolicyTopicsViewer } from './pages/dashboard/PolicyTopicsViewer';
+import { PolicyComplianceDashboard } from './pages/dashboard/PolicyComplianceDashboard';
 import ExhibitViewer from './pages/dashboard/exhibits/ExhibitViewer';
 import { CasesListPage } from './pages/CasesListPage';
 import { SearchPage } from './pages/SearchPage';
@@ -97,6 +98,14 @@ function App() {
             element={
               <ProtectedRoute requiredPermission="canViewAdmin">
                 <PolicyTopicsViewer />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="dashboard/policy-compliance"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <PolicyComplianceDashboard />
               </ProtectedRoute>
             }
           />

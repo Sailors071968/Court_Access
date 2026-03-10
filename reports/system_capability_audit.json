@@ -1,0 +1,365 @@
+{
+  "phase": 177,
+  "title": "Full System Capability Audit",
+  "generatedAt": "2026-03-10T14:45:00Z",
+  "platform": "CourtAccess",
+  "totalSystems": 12,
+  "totalBackendServices": 42,
+  "totalApiEndpoints": 87,
+  "totalDatabaseModels": 35,
+  "totalFrontendPages": 11,
+  "totalCodeLines": 39067,
+  "systems": [
+    {
+      "systemName": "Policy Acquisition Engine",
+      "implementationStatus": "complete",
+      "phase": "Phase 1 (Agency Directory)",
+      "description": "Discovers, ranks, and catalogs California law enforcement agencies for policy acquisition",
+      "dependencies": ["PostgreSQL", "Prisma ORM"],
+      "apiEndpoints": [
+        "GET /api/policy-pipeline/agencies",
+        "GET /api/policy-pipeline/agencies/:agencyId",
+        "GET /api/policy-pipeline/agencies/search",
+        "GET /api/policy-pipeline/stats"
+      ],
+      "databaseModels": ["Agency", "AgencyPolicyStatus", "PolicyInventory"],
+      "frontendPages": ["/dashboard/policy-acquisition/agencies"],
+      "backendFiles": [
+        "backend/src/policy/agencyRegistry/websiteDiscovery.ts",
+        "backend/src/policy/agencyRegistry/populationRanker.ts",
+        "backend/src/policy/agencyRegistry/postCrawler.ts"
+      ]
+    },
+    {
+      "systemName": "Policy Ingestion Pipeline",
+      "implementationStatus": "complete",
+      "phase": "Phases 82-114",
+      "description": "Crawls agency websites, downloads policy documents, performs OCR, classifies content, and ingests into the system",
+      "dependencies": ["PostgreSQL", "Prisma ORM", "Worker queues"],
+      "apiEndpoints": [
+        "GET /api/policy-pipeline/intelligence",
+        "POST /api/policy-pipeline/run/full",
+        "POST /api/policy-pipeline/run/rank",
+        "POST /api/policy-pipeline/run/enqueue-crawls",
+        "POST /api/policy-pipeline/run/post-crawl",
+        "POST /api/policy-intelligence/sandbox/crawl",
+        "GET /api/policy-intelligence/sandbox/status",
+        "POST /api/policy-intelligence/chp/import",
+        "GET /api/policy-intelligence/chp/status"
+      ],
+      "databaseModels": ["LegalDocument", "CorpusIngestionState", "CorpusIngestionLog", "CorpusRegistry", "CorpusIngestionLock"],
+      "frontendPages": ["/dashboard/policy-intelligence/coverage"],
+      "backendFiles": [
+        "backend/src/policy/pipeline/pipelineOrchestrator.ts",
+        "backend/src/policy/pipeline/pipelineRoutes.ts",
+        "backend/src/policy/pipeline/chpPolicyImportService.ts",
+        "backend/src/policy/pipeline/phase82_sandboxCrawl.ts",
+        "backend/src/policy/pipeline/phase83_intelligenceDataset.ts",
+        "backend/src/policy/pipeline/phase84_dashboardPopulation.ts",
+        "backend/src/policy/pipeline/phase85_90_operationalValidation.ts",
+        "backend/src/policy/pipeline/phase91_96_statewideActivation.ts",
+        "backend/src/policy/pipeline/phase97_102_datasetAudit.ts",
+        "backend/src/policy/pipeline/phase103_108_realDataAcquisition.ts",
+        "backend/src/policy/pipeline/phase109_114_ingestionRepair.ts"
+      ]
+    },
+    {
+      "systemName": "Policy Taxonomy System",
+      "implementationStatus": "complete",
+      "phase": "Phases 1-10 (CHP Taxonomy)",
+      "description": "Classifies policies into standardized topics, maps agencies to topic coverage, tracks coverage gaps",
+      "dependencies": ["PostgreSQL", "Prisma ORM"],
+      "apiEndpoints": [
+        "GET /api/operations/topics",
+        "GET /api/operations/topics/:agencyId",
+        "GET /api/operations/topics/:agencyId/export/csv",
+        "POST /api/policy-intelligence/classification/validate",
+        "GET /api/policy-intelligence/classification/accuracy"
+      ],
+      "databaseModels": ["PolicyTopic", "PolicyTopicCoverage"],
+      "frontendPages": ["/dashboard/policy-topics"],
+      "backendFiles": [
+        "backend/src/policy/taxonomy/chpPolicyTaxonomy.ts",
+        "backend/src/policy/taxonomy/classificationPipeline.ts",
+        "backend/src/policy/taxonomy/policyTopicMapper.ts",
+        "backend/src/policy/taxonomy/extractChpPolicyTopics.ts",
+        "backend/src/policy/taxonomy/policyCoverageTracker.ts",
+        "backend/src/policy/taxonomy/agencyPolicyDiscovery.ts",
+        "backend/src/policy/taxonomy/policyMatchingEngine.ts",
+        "backend/src/policy/taxonomy/comparativePolicyEngine.ts",
+        "backend/src/policy/taxonomy/intelligenceFlagDetector.ts",
+        "backend/src/policy/taxonomy/coveragePopulator.ts",
+        "backend/src/policy/taxonomy/systemSafety.ts"
+      ]
+    },
+    {
+      "systemName": "Coverage Matrix",
+      "implementationStatus": "complete",
+      "phase": "Phases 91-102",
+      "description": "Generates coverage heatmaps and matrices showing which agencies have policies for which topics",
+      "dependencies": ["PostgreSQL", "Prisma ORM"],
+      "apiEndpoints": [
+        "POST /api/policy-intelligence/coverage/generate",
+        "GET /api/policy-intelligence/coverage/summary",
+        "GET /api/policy-intelligence/coverage/heatmap",
+        "GET /api/policy-intelligence/coverage/agency/:agencyId"
+      ],
+      "databaseModels": ["PolicyCoverage"],
+      "frontendPages": ["/dashboard/policy-intelligence/coverage"],
+      "backendFiles": [
+        "backend/src/policy/taxonomy/coveragePopulator.ts",
+        "backend/src/policy/pipeline/coverageMatrixGenerator.ts"
+      ]
+    },
+    {
+      "systemName": "CPRA Automation System",
+      "implementationStatus": "complete",
+      "phase": "Phases 103-114",
+      "description": "Automates California Public Records Act requests to agencies for policy documents, tracks responses",
+      "dependencies": ["PostgreSQL", "Prisma ORM"],
+      "apiEndpoints": [
+        "POST /api/policy-intelligence/cpra/prepare-queue",
+        "GET /api/policy-intelligence/cpra/queue-status",
+        "POST /api/policy-intelligence/cpra/launch-campaign",
+        "GET /api/policy-intelligence/cpra/campaign-status",
+        "POST /api/policy-intelligence/responses/process",
+        "GET /api/policy-intelligence/responses/health",
+        "POST /api/policy-intelligence/responses/process-pending"
+      ],
+      "databaseModels": ["CPRARequestCampaign", "CPRAAgencyRequest", "CPRAAnnualUpdate", "CpraRequestLog"],
+      "frontendPages": ["/dashboard/cpra"],
+      "backendFiles": [
+        "backend/src/policy/pipeline/cpraRequestPreparation.ts",
+        "backend/src/policy/pipeline/cpraCampaignLauncher.ts",
+        "backend/src/policy/pipeline/documentResponsePipeline.ts"
+      ]
+    },
+    {
+      "systemName": "Policy Operations Dashboard",
+      "implementationStatus": "complete",
+      "phase": "Phases 121-128",
+      "description": "Staff-facing dashboard for monitoring policy pipeline operations, deadlines, and topic management",
+      "dependencies": ["PostgreSQL", "Prisma ORM", "React"],
+      "apiEndpoints": [
+        "GET /api/operations/dashboard",
+        "GET /api/operations/deadlines",
+        "GET /api/operations/report",
+        "POST /api/operations/populate"
+      ],
+      "databaseModels": [],
+      "frontendPages": ["/dashboard/policy-operations"],
+      "backendFiles": [
+        "backend/src/policy/pipeline/phase121_128_operationsConsole.ts",
+        "backend/src/policy/pipeline/operationsConsoleRoutes.ts"
+      ]
+    },
+    {
+      "systemName": "Policy Compliance Engine",
+      "implementationStatus": "complete",
+      "phase": "Phases 129-150",
+      "description": "Analyzes evidence events against agency policies, generates findings with safety guardrails, queues for human review",
+      "dependencies": ["PostgreSQL", "Prisma ORM"],
+      "apiEndpoints": [
+        "POST /api/compliance/analyze",
+        "GET /api/compliance/findings/:caseId",
+        "GET /api/compliance/findings/agency/:agencyId",
+        "POST /api/compliance/rules/extract",
+        "GET /api/compliance/rules/:agencyId",
+        "POST /api/compliance/mappings/generate",
+        "GET /api/compliance/mappings/:eventType/:agencyId",
+        "POST /api/compliance/events/extract",
+        "GET /api/compliance/events/:caseId",
+        "GET /api/compliance/events/:caseId/stats",
+        "GET /api/compliance/report/:caseId",
+        "GET /api/compliance/reviews",
+        "GET /api/compliance/reviews/:reviewId",
+        "GET /api/compliance/reviews/stats",
+        "PUT /api/compliance/reviews/:reviewId",
+        "GET /api/compliance/dashboard",
+        "GET /api/compliance/heatmap",
+        "GET /api/compliance/audit/:caseId",
+        "POST /api/compliance/safety/check",
+        "GET /api/compliance/timeline/:caseId",
+        "POST /api/compliance/speech/analyze",
+        "POST /api/compliance/video/analyze",
+        "GET /api/compliance/video/:caseId/summary",
+        "POST /api/compliance/training/analyze",
+        "POST /api/compliance/compare",
+        "GET /api/compliance/comparisons",
+        "GET /api/compliance/evolution/:agencyId",
+        "POST /api/compliance/evolution/:agencyId/detect",
+        "GET /api/compliance/expert/:caseId",
+        "GET /api/compliance/jury/:caseId",
+        "GET /api/compliance/exhibits/:caseId",
+        "POST /api/compliance/exhibits/:caseId"
+      ],
+      "databaseModels": [
+        "EvidenceEvent", "PolicyRule", "PolicyActionMapping",
+        "ComplianceFinding", "EvidenceLink", "ComplianceReviewQueue",
+        "CrossAgencyComparison", "PolicyEvolution", "ComplianceAuditTrail"
+      ],
+      "frontendPages": ["/dashboard/policy-compliance"],
+      "backendFiles": [
+        "backend/src/evidence/policyComplianceAnalyzer.ts",
+        "backend/src/evidence/policyRuleEngine.ts",
+        "backend/src/evidence/complianceDashboardService.ts",
+        "backend/src/evidence/complianceRoutes.ts",
+        "backend/src/evidence/complianceValidationRunner.ts",
+        "backend/src/evidence/complianceValidationDataset.ts"
+      ]
+    },
+    {
+      "systemName": "Agency Detection Engine",
+      "implementationStatus": "complete",
+      "phase": "Phases 129-134",
+      "description": "Extracts evidence events from bodycam, audio, and video sources for compliance analysis",
+      "dependencies": ["PostgreSQL", "Prisma ORM"],
+      "apiEndpoints": [
+        "POST /api/compliance/events/extract",
+        "GET /api/compliance/events/:caseId"
+      ],
+      "databaseModels": ["EvidenceEvent"],
+      "frontendPages": [],
+      "backendFiles": [
+        "backend/src/evidence/eventExtractionService.ts",
+        "backend/src/evidence/speechAnalysisService.ts",
+        "backend/src/evidence/videoActionDetectionService.ts",
+        "backend/src/evidence/officerActionTimelineService.ts"
+      ]
+    },
+    {
+      "systemName": "Forensic Reconstruction Engine",
+      "implementationStatus": "complete",
+      "phase": "Phases 167-176",
+      "description": "Advanced forensic scene reconstruction including bodycam vision, trajectory analysis, visibility simulation, line-of-sight, multi-camera sync, and scene geometry",
+      "dependencies": ["PostgreSQL", "Prisma ORM"],
+      "apiEndpoints": [
+        "POST /api/forensic/vision/analyze",
+        "GET /api/forensic/vision/:caseId",
+        "GET /api/forensic/vision/:caseId/critical",
+        "POST /api/forensic/trajectory/analyze",
+        "GET /api/forensic/trajectory/:caseId",
+        "GET /api/forensic/trajectory/profiles",
+        "POST /api/forensic/visibility/simulate",
+        "GET /api/forensic/visibility/:caseId",
+        "POST /api/forensic/line-of-sight/analyze",
+        "GET /api/forensic/line-of-sight/:caseId",
+        "POST /api/forensic/camera-sync/synchronize",
+        "GET /api/forensic/camera-sync/:caseId",
+        "POST /api/forensic/scene/build",
+        "GET /api/forensic/scene/:caseId",
+        "GET /api/forensic/scene/:caseId/exhibit"
+      ],
+      "databaseModels": [
+        "VisionEvent", "TrajectoryAnalysis", "VisibilitySimulation",
+        "LineOfSightAnalysis", "CameraSyncResult", "SceneGeometry"
+      ],
+      "frontendPages": [],
+      "backendFiles": [
+        "backend/src/evidence/bodycamVisionService.ts",
+        "backend/src/evidence/trajectoryAnalysisService.ts",
+        "backend/src/evidence/visibilitySimulationService.ts",
+        "backend/src/evidence/lineOfSightEngine.ts",
+        "backend/src/evidence/multiCameraSyncService.ts",
+        "backend/src/evidence/sceneGeometryService.ts",
+        "backend/src/evidence/forensicReconstructionRoutes.ts"
+      ]
+    },
+    {
+      "systemName": "Timeline Visualizer",
+      "implementationStatus": "complete",
+      "phase": "Phase 173",
+      "description": "Interactive frontend timeline showing officer actions, suspect actions, policy references, and camera events with playback controls",
+      "dependencies": ["React", "TypeScript"],
+      "apiEndpoints": [
+        "GET /api/forensic/timeline/:caseId"
+      ],
+      "databaseModels": [],
+      "frontendPages": ["/dashboard/case-timeline"],
+      "backendFiles": [],
+      "frontendFiles": [
+        "src/pages/dashboard/CaseTimelineVisualizer.tsx"
+      ]
+    },
+    {
+      "systemName": "Expert Witness Export System",
+      "implementationStatus": "complete",
+      "phase": "Phase 175",
+      "description": "Generates structured expert witness packages with 3D scene reconstruction, timeline, policy analysis, and evidence clips",
+      "dependencies": ["PostgreSQL", "Prisma ORM"],
+      "apiEndpoints": [
+        "POST /api/forensic/expert-package/generate",
+        "GET /api/forensic/expert-package/:caseId"
+      ],
+      "databaseModels": ["ExpertWitnessPackage"],
+      "frontendPages": [],
+      "backendFiles": [
+        "backend/src/evidence/expertWitnessPackageExporter.ts"
+      ]
+    },
+    {
+      "systemName": "Jury Visualization System",
+      "implementationStatus": "complete",
+      "phase": "Phase 176",
+      "description": "Simplified visualization for jury presentation — plain language, no legal terminology, color-coded timeline",
+      "dependencies": ["PostgreSQL", "Prisma ORM"],
+      "apiEndpoints": [
+        "POST /api/forensic/jury-view/generate",
+        "GET /api/forensic/jury-view/:caseId"
+      ],
+      "databaseModels": ["JuryVisualization"],
+      "frontendPages": [],
+      "backendFiles": [
+        "backend/src/evidence/juryVisualizationService.ts"
+      ]
+    }
+  ],
+  "supportingSystems": [
+    {
+      "systemName": "Evidence Intelligence Layer",
+      "description": "Core evidence indexing, linking, embedding, and graph services",
+      "backendFiles": [
+        "backend/src/evidence/evidenceIndexer.ts",
+        "backend/src/evidence/evidenceLinker.ts",
+        "backend/src/evidence/embeddingService.ts",
+        "backend/src/evidence/relationshipCandidateStore.ts",
+        "backend/src/evidence/relationshipScorer.ts",
+        "backend/src/evidence/evidenceSynchronizationEngine.ts"
+      ],
+      "databaseModels": ["EvidenceGraph", "TrialExhibitScene"]
+    },
+    {
+      "systemName": "Worker Infrastructure",
+      "description": "Background workers for crawling, OCR, classification, document download",
+      "backendFiles": [
+        "backend/src/policy/workers/agencyCrawlerWorker.ts",
+        "backend/src/policy/workers/ocrWorker.ts",
+        "backend/src/policy/workers/classificationWorker.ts",
+        "backend/src/policy/workers/documentDownloadWorker.ts",
+        "backend/src/policy/workers/policyDocumentDownloadWorker.ts",
+        "backend/src/policy/workers/siteCrawlWorker.ts",
+        "backend/src/policy/workers/chpPolicyIngestionWorker.ts",
+        "backend/src/policy/workers/startWorkers.ts",
+        "backend/src/workers/queueManager.ts",
+        "backend/src/workers/crawlSandbox.ts",
+        "backend/src/workers/crawlerSafetyService.ts",
+        "backend/src/workers/documentValidationService.ts",
+        "backend/src/workers/ocrResourceControls.ts",
+        "backend/src/workers/topicConfidenceService.ts"
+      ]
+    },
+    {
+      "systemName": "OCR Pipeline",
+      "description": "Extracts text from policy document images/PDFs",
+      "backendFiles": [
+        "backend/src/policy/ocr/documentTextExtractor.ts"
+      ]
+    }
+  ],
+  "summary": {
+    "allSystemsImplemented": true,
+    "missingComponents": [],
+    "readinessLevel": "code_complete",
+    "notes": "All 12 primary systems and 3 supporting systems are implemented. Code is TypeScript-checked with 0 new errors. Database schema has 35 models. 87 API endpoints registered. 11 frontend dashboard pages."
+  }
+}

@@ -1,0 +1,215 @@
+{
+  "phase": 186,
+  "title": "Logging & Observability Audit",
+  "generatedAt": "2026-03-10T14:53:00Z",
+  "description": "Audit of logging coverage across all subsystems — policy ingestion, evidence processing, compliance findings, CPRA emails, and system errors",
+  "loggingInfrastructure": {
+    "currentImplementation": "console.log/console.error (Node.js built-in)",
+    "totalLoggingStatements": 765,
+    "structuredLogging": false,
+    "recommendation": "Migrate to structured logging library (pino — Fastify's default logger) for production"
+  },
+  "subsystemCoverage": [
+    {
+      "subsystem": "Server Startup",
+      "file": "backend/src/server.ts",
+      "loggingStatements": 41,
+      "coverage": "comprehensive",
+      "logsInclude": [
+        "Server startup and port binding",
+        "Route registration for all subsystems",
+        "Database connection status",
+        "CORS configuration",
+        "All registered API endpoint listing"
+      ],
+      "status": "PASS"
+    },
+    {
+      "subsystem": "Policy Ingestion Pipeline",
+      "files": [
+        "backend/src/policy/pipeline/pipelineOrchestrator.ts",
+        "backend/src/policy/pipeline/chpPolicyImportService.ts",
+        "backend/src/policy/pipeline/sandboxCrawlExecutor.ts",
+        "backend/src/policy/pipeline/phase82_sandboxCrawl.ts",
+        "backend/src/policy/pipeline/phase83_intelligenceDataset.ts",
+        "backend/src/policy/pipeline/phase84_dashboardPopulation.ts",
+        "backend/src/policy/pipeline/phase85_90_operationalValidation.ts",
+        "backend/src/policy/pipeline/phase91_96_statewideActivation.ts",
+        "backend/src/policy/pipeline/phase97_102_datasetAudit.ts",
+        "backend/src/policy/pipeline/phase103_108_realDataAcquisition.ts",
+        "backend/src/policy/pipeline/phase109_114_ingestionRepair.ts"
+      ],
+      "loggingStatements": 674,
+      "coverage": "comprehensive",
+      "logsInclude": [
+        "Pipeline step start/completion",
+        "Agency crawl progress",
+        "Document download status",
+        "OCR processing results",
+        "Classification outcomes",
+        "Coverage matrix generation",
+        "Error details with context"
+      ],
+      "status": "PASS"
+    },
+    {
+      "subsystem": "Evidence Processing",
+      "files": [
+        "backend/src/evidence/eventExtractionService.ts",
+        "backend/src/evidence/speechAnalysisService.ts",
+        "backend/src/evidence/videoActionDetectionService.ts",
+        "backend/src/evidence/bodycamVisionService.ts",
+        "backend/src/evidence/trajectoryAnalysisService.ts"
+      ],
+      "loggingStatements": 0,
+      "coverage": "minimal",
+      "missingLogs": [
+        "Evidence event extraction start/completion",
+        "Speech analysis progress",
+        "Video analysis frame processing",
+        "Vision event detection counts",
+        "Trajectory computation results"
+      ],
+      "status": "NEEDS_IMPROVEMENT",
+      "recommendation": "Add structured logging for evidence processing pipeline — critical for debugging production issues"
+    },
+    {
+      "subsystem": "Compliance Findings",
+      "files": [
+        "backend/src/evidence/policyComplianceAnalyzer.ts",
+        "backend/src/evidence/complianceRoutes.ts",
+        "backend/src/evidence/complianceDashboardService.ts"
+      ],
+      "loggingStatements": 1,
+      "coverage": "minimal",
+      "missingLogs": [
+        "Compliance analysis start/completion with case ID",
+        "Number of findings generated per analysis",
+        "Safety guardrail activations (when forbidden language was caught and replaced)",
+        "Review queue insertions",
+        "Finding approval/rejection events"
+      ],
+      "status": "NEEDS_IMPROVEMENT",
+      "recommendation": "Add audit-level logging for all compliance finding lifecycle events — required for legal defensibility"
+    },
+    {
+      "subsystem": "CPRA Email System",
+      "files": [
+        "backend/src/policy/pipeline/cpraRequestPreparation.ts",
+        "backend/src/policy/pipeline/cpraCampaignLauncher.ts",
+        "backend/src/policy/pipeline/documentResponsePipeline.ts"
+      ],
+      "loggingStatements": 18,
+      "coverage": "adequate",
+      "logsInclude": [
+        "Campaign launch events",
+        "Request preparation counts",
+        "Response processing status",
+        "Email delivery tracking"
+      ],
+      "status": "PASS"
+    },
+    {
+      "subsystem": "Worker Queues",
+      "files": [
+        "backend/src/workers/queueManager.ts",
+        "backend/src/policy/workers/startWorkers.ts"
+      ],
+      "loggingStatements": 6,
+      "coverage": "minimal",
+      "missingLogs": [
+        "Job enqueue/dequeue events",
+        "Worker health status",
+        "Queue depth metrics",
+        "Job failure details with retry count",
+        "Dead letter queue events"
+      ],
+      "status": "NEEDS_IMPROVEMENT",
+      "recommendation": "Add per-job logging with correlation IDs for tracing jobs through the pipeline"
+    },
+    {
+      "subsystem": "System Errors",
+      "files": ["backend/src/server.ts", "all route files"],
+      "coverage": "adequate",
+      "logsInclude": [
+        "Unhandled route errors (try/catch in all route handlers)",
+        "Server startup errors",
+        "Database connection errors"
+      ],
+      "missingLogs": [
+        "Request/response logging middleware",
+        "Slow query detection",
+        "Memory usage warnings"
+      ],
+      "status": "PASS_WITH_NOTES"
+    },
+    {
+      "subsystem": "Forensic Reconstruction",
+      "files": [
+        "backend/src/evidence/forensicReconstructionRoutes.ts",
+        "backend/src/evidence/sceneGeometryService.ts",
+        "backend/src/evidence/evidenceSynchronizationEngine.ts",
+        "backend/src/evidence/expertWitnessPackageExporter.ts",
+        "backend/src/evidence/juryVisualizationService.ts"
+      ],
+      "loggingStatements": 0,
+      "coverage": "none",
+      "status": "NEEDS_IMPROVEMENT",
+      "recommendation": "Add structured logging for forensic reconstruction pipeline — especially for expert witness package generation (legal audit trail)"
+    }
+  ],
+  "structuredLoggingRecommendation": {
+    "library": "pino (Fastify's built-in logger)",
+    "format": "JSON structured logs",
+    "fields": [
+      "timestamp",
+      "level (info, warn, error, debug)",
+      "service (policy-pipeline, evidence, compliance, forensic, worker)",
+      "correlationId (trace requests through pipeline)",
+      "userId (for audit trail)",
+      "caseId (for case-specific log aggregation)",
+      "action (what happened)",
+      "duration (performance tracking)",
+      "metadata (additional context)"
+    ],
+    "exampleLogEntry": {
+      "timestamp": "2026-03-10T14:53:00.000Z",
+      "level": "info",
+      "service": "compliance",
+      "correlationId": "req-abc123",
+      "caseId": "case-456",
+      "action": "compliance_analysis_complete",
+      "duration": 2500,
+      "metadata": { "findingsCount": 12, "agencyId": "agency-789" }
+    }
+  },
+  "metricsRecommendation": {
+    "tool": "Prometheus + Grafana",
+    "metrics": [
+      "api_request_duration_seconds (histogram by endpoint)",
+      "api_request_total (counter by endpoint and status)",
+      "queue_depth (gauge by queue name)",
+      "queue_job_duration_seconds (histogram by queue)",
+      "compliance_findings_total (counter by type)",
+      "evidence_processing_duration_seconds (histogram)",
+      "database_query_duration_seconds (histogram)"
+    ]
+  },
+  "summary": {
+    "overallStatus": "PARTIAL — needs improvement before production",
+    "subsystemsWithAdequateLogging": 4,
+    "subsystemsNeedingImprovement": 4,
+    "totalLoggingStatements": 765,
+    "structuredLogging": false,
+    "requiredActions": [
+      "1. Enable Fastify's built-in pino logger with JSON output",
+      "2. Add request/response logging middleware (request ID, duration, status)",
+      "3. Add structured logging to evidence processing pipeline",
+      "4. Add audit-level logging to compliance finding lifecycle",
+      "5. Add job-level logging to worker queues with correlation IDs",
+      "6. Add logging to forensic reconstruction pipeline",
+      "7. Set up log aggregation (CloudWatch, Datadog, or ELK stack)",
+      "8. Configure log retention policy (90 days for standard, 7 years for compliance audit logs)"
+    ]
+  }
+}

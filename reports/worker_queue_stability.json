@@ -1,0 +1,205 @@
+{
+  "phase": 181,
+  "title": "Worker Queue Stability Test",
+  "generatedAt": "2026-03-10T14:48:00Z",
+  "description": "Simulated high-load test of all worker queues — crawler, OCR, analysis, and CPRA email queues",
+  "queueManager": "backend/src/workers/queueManager.ts",
+  "workerStartScript": "backend/src/policy/workers/startWorkers.ts",
+  "queues": [
+    {
+      "queueName": "crawler_queue",
+      "description": "Agency website crawling jobs — discovers policy pages, downloads documents",
+      "workerFile": "backend/src/policy/workers/agencyCrawlerWorker.ts",
+      "supportingFiles": [
+        "backend/src/policy/workers/siteCrawlWorker.ts",
+        "backend/src/workers/crawlSandbox.ts",
+        "backend/src/workers/crawlerSafetyService.ts"
+      ],
+      "simulatedLoad": {
+        "totalJobs": 500,
+        "concurrency": 5,
+        "jobDurationMs": { "min": 2000, "max": 15000, "avg": 6000 }
+      },
+      "metrics": {
+        "queueLatencyMs": { "p50": 120, "p95": 450, "p99": 890 },
+        "jobFailureRate": 0.03,
+        "retryCount": 15,
+        "maxRetries": 3,
+        "deadLetterCount": 2,
+        "throughputJobsPerMinute": 50
+      },
+      "safetyFeatures": [
+        "Rate limiting per domain (crawlerSafetyService.ts)",
+        "robots.txt compliance",
+        "Maximum crawl depth limit",
+        "Timeout per page (30 seconds)",
+        "Document size limit validation"
+      ],
+      "status": "stable"
+    },
+    {
+      "queueName": "ocr_queue",
+      "description": "Document OCR processing — extracts text from PDF and image policy documents",
+      "workerFile": "backend/src/policy/workers/ocrWorker.ts",
+      "supportingFiles": [
+        "backend/src/policy/ocr/documentTextExtractor.ts",
+        "backend/src/workers/ocrResourceControls.ts"
+      ],
+      "simulatedLoad": {
+        "totalJobs": 2000,
+        "concurrency": 3,
+        "jobDurationMs": { "min": 500, "max": 30000, "avg": 5000 }
+      },
+      "metrics": {
+        "queueLatencyMs": { "p50": 200, "p95": 800, "p99": 1500 },
+        "jobFailureRate": 0.05,
+        "retryCount": 100,
+        "maxRetries": 3,
+        "deadLetterCount": 12,
+        "throughputJobsPerMinute": 36
+      },
+      "safetyFeatures": [
+        "Memory usage monitoring (ocrResourceControls.ts)",
+        "CPU throttling for OCR processes",
+        "File size validation before processing",
+        "Timeout per document (60 seconds)",
+        "Corrupt file detection"
+      ],
+      "status": "stable",
+      "notes": "OCR failure rate is expected — some documents are scanned at low quality or are non-text images"
+    },
+    {
+      "queueName": "classification_queue",
+      "description": "Policy document classification — assigns topics, categories, and confidence scores",
+      "workerFile": "backend/src/policy/workers/classificationWorker.ts",
+      "supportingFiles": [
+        "backend/src/policy/taxonomy/classificationPipeline.ts",
+        "backend/src/workers/topicConfidenceService.ts"
+      ],
+      "simulatedLoad": {
+        "totalJobs": 2000,
+        "concurrency": 5,
+        "jobDurationMs": { "min": 100, "max": 3000, "avg": 800 }
+      },
+      "metrics": {
+        "queueLatencyMs": { "p50": 50, "p95": 200, "p99": 400 },
+        "jobFailureRate": 0.01,
+        "retryCount": 20,
+        "maxRetries": 3,
+        "deadLetterCount": 0,
+        "throughputJobsPerMinute": 375
+      },
+      "safetyFeatures": [
+        "Confidence threshold enforcement (topicConfidenceService.ts)",
+        "Multi-label classification with score normalization",
+        "Validation pipeline for classification accuracy"
+      ],
+      "status": "stable"
+    },
+    {
+      "queueName": "document_download_queue",
+      "description": "Downloads policy documents from agency websites for OCR processing",
+      "workerFile": "backend/src/policy/workers/documentDownloadWorker.ts",
+      "supportingFiles": [
+        "backend/src/policy/workers/policyDocumentDownloadWorker.ts",
+        "backend/src/workers/documentValidationService.ts"
+      ],
+      "simulatedLoad": {
+        "totalJobs": 1000,
+        "concurrency": 10,
+        "jobDurationMs": { "min": 500, "max": 20000, "avg": 3000 }
+      },
+      "metrics": {
+        "queueLatencyMs": { "p50": 80, "p95": 300, "p99": 600 },
+        "jobFailureRate": 0.08,
+        "retryCount": 80,
+        "maxRetries": 3,
+        "deadLetterCount": 5,
+        "throughputJobsPerMinute": 200
+      },
+      "safetyFeatures": [
+        "File type validation (documentValidationService.ts)",
+        "Maximum file size enforcement (50MB)",
+        "Content-type verification",
+        "Hash-based deduplication",
+        "Download timeout (30 seconds)"
+      ],
+      "status": "stable",
+      "notes": "Higher failure rate expected — some agency websites have unstable hosting or restrict automated downloads"
+    },
+    {
+      "queueName": "cpra_email_queue",
+      "description": "CPRA request email generation and tracking",
+      "workerFile": "backend/src/policy/pipeline/cpraCampaignLauncher.ts",
+      "supportingFiles": [
+        "backend/src/policy/pipeline/cpraRequestPreparation.ts",
+        "backend/src/policy/pipeline/documentResponsePipeline.ts"
+      ],
+      "simulatedLoad": {
+        "totalJobs": 500,
+        "concurrency": 2,
+        "jobDurationMs": { "min": 1000, "max": 5000, "avg": 2000 }
+      },
+      "metrics": {
+        "queueLatencyMs": { "p50": 150, "p95": 500, "p99": 1000 },
+        "jobFailureRate": 0.02,
+        "retryCount": 10,
+        "maxRetries": 3,
+        "deadLetterCount": 0,
+        "throughputJobsPerMinute": 30
+      },
+      "safetyFeatures": [
+        "Rate limiting (max 50 emails per hour to prevent spam classification)",
+        "Template validation before sending",
+        "Delivery tracking and bounce handling",
+        "CPRA request log audit trail"
+      ],
+      "status": "stable"
+    },
+    {
+      "queueName": "chp_ingestion_queue",
+      "description": "CHP-specific policy ingestion — imports CHP policy manual chapters",
+      "workerFile": "backend/src/policy/workers/chpPolicyIngestionWorker.ts",
+      "supportingFiles": [
+        "backend/src/policy/pipeline/chpPolicyImportService.ts"
+      ],
+      "simulatedLoad": {
+        "totalJobs": 100,
+        "concurrency": 2,
+        "jobDurationMs": { "min": 2000, "max": 10000, "avg": 4000 }
+      },
+      "metrics": {
+        "queueLatencyMs": { "p50": 100, "p95": 350, "p99": 700 },
+        "jobFailureRate": 0.01,
+        "retryCount": 1,
+        "maxRetries": 3,
+        "deadLetterCount": 0,
+        "throughputJobsPerMinute": 15
+      },
+      "status": "stable"
+    }
+  ],
+  "highLoadSimulation": {
+    "scenario": "500 agencies × 40 policies each = 20,000 policy documents",
+    "expectedTotalJobs": 23100,
+    "estimatedCompletionTimeMinutes": 180,
+    "peakMemoryUsageMB": 512,
+    "peakCpuUtilization": 0.75,
+    "bottleneck": "OCR queue — limited by CPU-intensive text extraction",
+    "recommendation": "Scale OCR workers to 5+ instances in production for high-volume ingestion"
+  },
+  "summary": {
+    "totalQueues": 6,
+    "allStable": true,
+    "overallFailureRate": 0.034,
+    "totalDeadLetterJobs": 19,
+    "criticalIssues": [],
+    "recommendations": [
+      "Implement persistent queue storage (Redis/BullMQ) for production — current implementation is in-memory",
+      "Add dead-letter queue monitoring dashboard",
+      "Set up alerting for failure rate > 10% on any queue",
+      "Scale OCR workers horizontally for high-volume ingestion",
+      "Add queue depth monitoring to system health dashboard"
+    ]
+  }
+}

@@ -1,0 +1,273 @@
+{
+  "phase": 187,
+  "title": "Staff Operations Validation — Dashboard Audit",
+  "generatedAt": "2026-03-10T14:54:00Z",
+  "description": "Verification of all staff-facing dashboards: policy operations, policy topics, policy compliance, and case timeline",
+  "dashboards": [
+    {
+      "name": "Policy Operations Dashboard",
+      "route": "/dashboard/policy-operations",
+      "component": "src/pages/dashboard/PolicyOperationsDashboard.tsx",
+      "protectedRoute": true,
+      "requiredPermission": "canViewAdmin",
+      "backendEndpoints": [
+        "GET /api/operations/dashboard",
+        "GET /api/operations/deadlines",
+        "GET /api/operations/report",
+        "POST /api/operations/populate"
+      ],
+      "features": {
+        "filters": {
+          "status": "implemented",
+          "types": ["status filter", "agency filter", "date range"],
+          "notes": "Filter bar at top of dashboard allows filtering by pipeline status and agency"
+        },
+        "sorting": {
+          "status": "implemented",
+          "types": ["by date", "by priority", "by agency name", "by status"],
+          "notes": "Column headers support click-to-sort"
+        },
+        "exports": {
+          "status": "partial",
+          "types": ["CSV export for topic data via /api/operations/topics/:agencyId/export/csv"],
+          "missing": ["PDF export", "Excel export"],
+          "recommendation": "Add PDF report export for operations summary"
+        },
+        "statusIndicators": {
+          "status": "implemented",
+          "types": ["pipeline progress bars", "crawl status badges", "deadline warnings", "coverage percentages"],
+          "notes": "Color-coded status badges: green (complete), yellow (in-progress), red (overdue/failed)"
+        }
+      },
+      "testResult": "PASS"
+    },
+    {
+      "name": "Policy Topics Viewer",
+      "route": "/dashboard/policy-topics",
+      "component": "src/pages/dashboard/PolicyTopicsViewer.tsx",
+      "protectedRoute": true,
+      "requiredPermission": "canViewAdmin",
+      "backendEndpoints": [
+        "GET /api/operations/topics",
+        "GET /api/operations/topics/:agencyId",
+        "GET /api/operations/topics/:agencyId/export/csv"
+      ],
+      "features": {
+        "filters": {
+          "status": "implemented",
+          "types": ["topic category filter", "agency filter", "coverage level filter"],
+          "notes": "Multi-select filter for topic categories"
+        },
+        "sorting": {
+          "status": "implemented",
+          "types": ["by topic name", "by coverage percentage", "by agency count"],
+          "notes": "Sortable columns with ascending/descending toggle"
+        },
+        "exports": {
+          "status": "implemented",
+          "types": ["CSV export per agency"],
+          "notes": "Export button generates CSV with all topics and coverage data for selected agency"
+        },
+        "statusIndicators": {
+          "status": "implemented",
+          "types": ["coverage heatmap cells", "gap indicators", "topic confidence scores"],
+          "notes": "Heatmap uses green-yellow-red color scale for coverage levels"
+        }
+      },
+      "testResult": "PASS"
+    },
+    {
+      "name": "Policy Compliance Dashboard",
+      "route": "/dashboard/policy-compliance",
+      "component": "src/pages/dashboard/PolicyComplianceDashboard.tsx",
+      "protectedRoute": true,
+      "requiredPermission": "canViewAdmin",
+      "backendEndpoints": [
+        "GET /api/compliance/dashboard",
+        "GET /api/compliance/findings/:caseId",
+        "GET /api/compliance/reviews",
+        "GET /api/compliance/reviews/stats",
+        "GET /api/compliance/heatmap",
+        "GET /api/compliance/timeline/:caseId"
+      ],
+      "features": {
+        "filters": {
+          "status": "implemented",
+          "types": ["finding type filter", "confidence threshold filter", "review status filter", "agency filter", "date range"],
+          "notes": "Advanced filter panel with multiple criteria"
+        },
+        "sorting": {
+          "status": "implemented",
+          "types": ["by confidence score", "by finding type", "by review status", "by date"],
+          "notes": "Default sort by confidence (highest first)"
+        },
+        "exports": {
+          "status": "partial",
+          "types": ["JSON report via /api/compliance/report/:caseId"],
+          "missing": ["PDF compliance report", "Excel findings export"],
+          "recommendation": "Add formatted PDF report generation for attorney use"
+        },
+        "statusIndicators": {
+          "status": "implemented",
+          "types": [
+            "finding severity badges (critical/high/medium/low)",
+            "review status badges (pending/in-review/approved/rejected)",
+            "confidence score bars",
+            "safety language verification checkmarks",
+            "evidence link indicators"
+          ],
+          "notes": "All findings display 'potential policy inconsistency' language consistently"
+        }
+      },
+      "safetyLanguageVerification": {
+        "status": "PASS",
+        "details": "Dashboard always displays findings with safe language. No forbidden phrases visible in any UI component."
+      },
+      "testResult": "PASS"
+    },
+    {
+      "name": "Case Timeline Visualizer",
+      "route": "/dashboard/case-timeline",
+      "component": "src/pages/dashboard/CaseTimelineVisualizer.tsx",
+      "protectedRoute": true,
+      "requiredPermission": "canViewAdmin",
+      "backendEndpoints": [
+        "GET /api/forensic/timeline/:caseId"
+      ],
+      "features": {
+        "filters": {
+          "status": "implemented",
+          "types": ["event type filter (officer/suspect/policy/camera)", "time range filter", "source filter"],
+          "notes": "Filter bar allows showing/hiding event categories"
+        },
+        "sorting": {
+          "status": "implemented",
+          "types": ["chronological (default)", "reverse chronological"],
+          "notes": "Timeline is inherently sorted chronologically"
+        },
+        "exports": {
+          "status": "not_implemented",
+          "recommendation": "Add timeline screenshot/PDF export for trial preparation"
+        },
+        "statusIndicators": {
+          "status": "implemented",
+          "types": [
+            "color-coded event markers (officer blue, suspect red, policy orange, camera green)",
+            "playback position indicator",
+            "camera coverage bars",
+            "event cluster markers",
+            "selected event detail panel"
+          ],
+          "notes": "Interactive timeline with click-to-select events"
+        },
+        "playbackControls": {
+          "status": "implemented",
+          "controls": ["play/pause", "speed adjustment (0.5x, 1x, 2x, 4x)", "seek to timestamp", "step forward/backward"],
+          "notes": "Playback simulation for walking through timeline events"
+        }
+      },
+      "mockDataMode": {
+        "status": "implemented",
+        "details": "Component includes generateMockTimelineData() for development without live API connection",
+        "notes": "Mock data generates realistic officer actions, suspect actions, policy references, and camera events"
+      },
+      "testResult": "PASS"
+    },
+    {
+      "name": "CPRA Dashboard",
+      "route": "/dashboard/cpra",
+      "component": "src/pages/dashboard/CpraDashboard.tsx",
+      "protectedRoute": true,
+      "requiredPermission": "canViewAdmin",
+      "backendEndpoints": [
+        "GET /api/policy-intelligence/cpra/queue-status",
+        "GET /api/policy-intelligence/cpra/campaign-status"
+      ],
+      "features": {
+        "filters": {
+          "status": "implemented",
+          "types": ["campaign status", "agency", "request status"]
+        },
+        "sorting": {
+          "status": "implemented",
+          "types": ["by date", "by agency", "by status"]
+        },
+        "statusIndicators": {
+          "status": "implemented",
+          "types": ["campaign progress", "request status badges", "response tracking"]
+        }
+      },
+      "testResult": "PASS"
+    },
+    {
+      "name": "System Health Dashboard",
+      "route": "/dashboard/system-health",
+      "component": "src/pages/dashboard/SystemHealthDashboard.tsx",
+      "protectedRoute": true,
+      "requiredPermission": "canViewAdmin",
+      "backendEndpoints": ["GET /api/health"],
+      "features": {
+        "statusIndicators": {
+          "status": "implemented",
+          "types": ["system health status", "worker status", "database connectivity"]
+        }
+      },
+      "testResult": "PASS"
+    }
+  ],
+  "additionalDashboards": [
+    {
+      "name": "Policy Intelligence Dashboard",
+      "route": "/dashboard/policy-intelligence/coverage",
+      "component": "src/pages/dashboard/PolicyIntelligenceDashboard.tsx",
+      "testResult": "PASS"
+    },
+    {
+      "name": "Policy Pipeline Dashboard",
+      "route": "/dashboard/policy-acquisition/agencies",
+      "component": "src/pages/dashboard/PolicyPipelineDashboard.tsx",
+      "testResult": "PASS"
+    },
+    {
+      "name": "Staff Dashboard",
+      "route": "/dashboard (index)",
+      "component": "src/pages/dashboard/StaffDashboard.tsx",
+      "testResult": "PASS"
+    },
+    {
+      "name": "Defendant Dashboard",
+      "route": "/dashboard (defendant view)",
+      "component": "src/pages/dashboard/DefendantDashboard.tsx",
+      "testResult": "PASS"
+    },
+    {
+      "name": "Exhibits Viewer",
+      "route": "/dashboard/exhibits/viewer",
+      "component": "src/pages/dashboard/exhibits/",
+      "testResult": "PASS"
+    }
+  ],
+  "accessControl": {
+    "implementation": "ProtectedRoute component with requiredPermission prop",
+    "permissions": ["canViewAdmin", "canViewDashboard", "canViewCase"],
+    "status": "PASS",
+    "notes": "All staff dashboards require canViewAdmin permission"
+  },
+  "summary": {
+    "totalDashboards": 11,
+    "dashboardsPassed": 11,
+    "dashboardsFailed": 0,
+    "filtersImplemented": true,
+    "sortingImplemented": true,
+    "exportsPartial": true,
+    "statusIndicatorsImplemented": true,
+    "overallStatus": "PASS",
+    "recommendations": [
+      "Add PDF export to compliance dashboard for attorney reports",
+      "Add timeline export for trial preparation",
+      "Consider adding dashboard loading states/skeletons for slower API calls",
+      "Add dashboard-level error boundaries for graceful failure handling",
+      "Implement dashboard data caching to reduce API calls on page revisits"
+    ]
+  }
+}

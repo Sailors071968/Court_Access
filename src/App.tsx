@@ -185,7 +185,7 @@ function App() {
           <Route
             path="dashboard/evidence-management"
             element={
-              <ProtectedRoute requiredPermission="canViewAdmin">
+              <ProtectedRoute requiredPermission="canViewEvidenceManagement">
                 <EvidenceManagementDashboard />
               </ProtectedRoute>
             }

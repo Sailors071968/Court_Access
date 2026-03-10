@@ -24,13 +24,21 @@ const iconMap = {
   Shield,
 };
 
+interface NavChild {
+  id: string;
+  label: string;
+  path: string;
+  icon: React.ReactNode;
+  permission?: keyof RolePermissions;
+}
+
 interface NavItem {
   id: string;
   label: string;
   path: string;
   icon: string;
   permission: keyof RolePermissions | null;
-  children?: { id: string; label: string; path: string; icon: React.ReactNode }[];
+  children?: NavChild[];
 }
 
 const navItems: NavItem[] = [
@@ -39,6 +47,14 @@ const navItems: NavItem[] = [
   { id: 'search', label: 'Search', path: '/search', icon: 'Search', permission: null },
   { id: 'notifications', label: 'Notifications & Alerts', path: '/notifications', icon: 'Bell', permission: null },
   { id: 'settings', label: 'Settings', path: '/settings', icon: 'Settings', permission: 'canViewSettings' },
+  // Evidence Management — separate top-level item for staff who lack canViewAdmin
+  {
+    id: 'evidence-mgmt-standalone',
+    label: 'Evidence Management',
+    path: '/dashboard/evidence-management',
+    icon: 'Shield',
+    permission: 'canViewEvidenceManagement',
+  },
   {
     id: 'admin',
     label: 'Admin',
@@ -49,7 +65,7 @@ const navItems: NavItem[] = [
       { id: 'cpra', label: 'CPRA Campaigns', path: '/dashboard/cpra', icon: <Globe size={16} /> },
       { id: 'policy-ops', label: 'Policy Operations', path: '/dashboard/policy-operations', icon: <FileText size={16} /> },
       { id: 'discount-codes', label: 'Discount Codes', path: '/dashboard/discount-codes', icon: <Tag size={16} /> },
-      { id: 'evidence-mgmt', label: 'Evidence Management', path: '/dashboard/evidence-management', icon: <Upload size={16} /> },
+      { id: 'evidence-mgmt', label: 'Evidence Management', path: '/dashboard/evidence-management', icon: <Upload size={16} />, permission: 'canViewEvidenceManagement' },
       { id: 'system-health', label: 'System Health', path: '/dashboard/system-health', icon: <BarChart3 size={16} /> },
     ],
   },
@@ -106,6 +122,8 @@ export function Sidebar() {
       <nav className="flex-1 py-4 px-2 space-y-1 overflow-y-auto">
         {navItems.map((item) => {
           if (item.permission && !permissions[item.permission]) return null;
+          // Hide standalone evidence-mgmt for admins (they see it under Admin sub-nav)
+          if (item.id === 'evidence-mgmt-standalone' && permissions.canViewAdmin) return null;
 
           const Icon = iconMap[item.icon as keyof typeof iconMap];
           const isActive =
@@ -113,7 +131,9 @@ export function Sidebar() {
             (item.path !== '/dashboard' && location.pathname.startsWith(item.path));
           const hasChildren = item.children && item.children.length > 0;
           const isExpanded = expandedSections[item.id] ?? false;
-          const childActive = hasChildren && item.children?.some((c) => location.pathname === c.path);
+          // Filter children by permission
+          const visibleChildren = item.children?.filter((c) => !c.permission || permissions[c.permission]);
+          const childActive = hasChildren && visibleChildren?.some((c) => location.pathname === c.path);
 
           return (
             <div key={item.id}>
@@ -141,7 +161,7 @@ export function Sidebar() {
                   </button>
                   {!collapsed && isExpanded && (
                     <div className="ml-4 mt-1 space-y-0.5 border-l border-slate-700 pl-3">
-                      {item.children?.map((child) => {
+                      {visibleChildren?.map((child) => {
                         const isChildActive = location.pathname === child.path;
                         return (
                           <NavLink

@@ -31,6 +31,7 @@ import { PolicyPipelineDashboard } from './pages/dashboard/PolicyPipelineDashboa
 import { PolicyIntelligenceDashboard } from './pages/dashboard/PolicyIntelligenceDashboard';
 import { CpraDashboard } from './pages/dashboard/CpraDashboard';
 import { SystemHealthDashboard } from './pages/dashboard/SystemHealthDashboard';
+import { DiscountCodesDashboard } from './pages/dashboard/DiscountCodesDashboard';
 import { PolicyOperationsDashboard } from './pages/dashboard/PolicyOperationsDashboard';
 import { PolicyTopicsViewer } from './pages/dashboard/PolicyTopicsViewer';
 import { PolicyComplianceDashboard } from './pages/dashboard/PolicyComplianceDashboard';
@@ -169,6 +170,14 @@ function App() {
             element={
               <ProtectedRoute requiredPermission="canViewAdmin">
                 <SystemHealthDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="dashboard/discount-codes"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <DiscountCodesDashboard />
               </ProtectedRoute>
             }
           />

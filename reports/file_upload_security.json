@@ -1,0 +1,118 @@
+{
+  "phase": 195,
+  "title": "Evidence Upload Protection Validation",
+  "generated": "2026-03-10T15:55:00Z",
+  "status": "IMPLEMENTED",
+  "summary": "Evidence upload protection is now active with file type validation, hash verification, max file size enforcement, and malicious file rejection.",
+
+  "implementation": {
+    "file": "backend/src/security/evidenceUploadProtection.ts",
+    "linesOfCode": 300,
+    "integrationFile": "backend/src/server.ts",
+    "hookRegistration": "app.addHook('onRequest', uploadProtectionHook)"
+  },
+
+  "fileTypeValidation": {
+    "status": "ACTIVE",
+    "extensionWhitelist": [
+      ".pdf", ".docx", ".doc", ".txt", ".csv", ".json",
+      ".mp4", ".mov", ".avi", ".webm",
+      ".jpg", ".jpeg", ".png", ".gif", ".webp", ".tiff", ".bmp",
+      ".mp3", ".wav", ".ogg"
+    ],
+    "dangerousExtensionBlacklist": [
+      ".exe", ".bat", ".cmd", ".com", ".msi", ".scr", ".pif",
+      ".vbs", ".js", ".jse", ".wsf", ".wsh", ".ps1", ".psm1",
+      ".sh", ".bash", ".csh", ".ksh", ".php", ".asp", ".aspx",
+      ".jsp", ".dll", ".sys", ".drv", ".ocx", ".jar", ".class",
+      ".war", ".py", ".pyc", ".pyo", ".rb", ".pl", ".cgi",
+      ".reg", ".inf", ".hta", ".lnk", ".url", ".desktop", ".svg"
+    ],
+    "mimeTypeValidation": true,
+    "allowedMimeTypeCategories": {
+      "document": ["application/pdf", "application/vnd.openxmlformats-officedocument.wordprocessingml.document", "application/msword", "text/plain", "text/csv", "application/json"],
+      "video": ["video/mp4", "video/quicktime", "video/x-msvideo", "video/webm"],
+      "image": ["image/jpeg", "image/png", "image/gif", "image/webp", "image/tiff", "image/bmp"],
+      "audio": ["audio/mpeg", "audio/wav", "audio/ogg", "audio/webm", "audio/mp4"]
+    }
+  },
+
+  "hashVerification": {
+    "status": "ACTIVE",
+    "algorithm": "SHA-256",
+    "features": {
+      "fileIntegrityHash": "Each uploaded file receives a SHA-256 hash for integrity verification",
+      "duplicateDetection": "Files are checked against hash store to detect duplicates",
+      "chainOfCustody": "Hash stored with upload timestamp and user ID for audit trail"
+    }
+  },
+
+  "fileSizeEnforcement": {
+    "status": "ACTIVE",
+    "maxSizes": {
+      "document": "50 MB",
+      "video": "500 MB",
+      "image": "25 MB",
+      "audio": "100 MB",
+      "default": "50 MB"
+    },
+    "errorResponse": {
+      "statusCode": 413,
+      "body": { "error": "Payload Too Large", "message": "Upload size exceeds maximum" }
+    }
+  },
+
+  "maliciousFileRejection": {
+    "status": "ACTIVE",
+    "magicBytesVerification": {
+      "supported": ["application/pdf", "image/jpeg", "image/png", "image/gif", "video/mp4", "application/zip"],
+      "description": "Verifies file content magic bytes match the claimed MIME type to prevent disguised executables"
+    },
+    "contentScanning": {
+      "scannedPatterns": 11,
+      "detects": [
+        "Script tags (<script>)",
+        "JavaScript protocol handlers (javascript:)",
+        "Event handler attributes (onclick, onerror, etc.)",
+        "eval() calls",
+        "DOM manipulation (document.*)",
+        "Window object access (window.*)",
+        "Python import statements (__import__)",
+        "exec() and system() calls",
+        "Password file references (/etc/passwd, /etc/shadow)",
+        "Destructive shell commands (rm -rf)"
+      ],
+      "appliesTo": "Text-based files (text/plain, text/csv, application/json)"
+    },
+    "executableBlocking": {
+      "blockedContentTypes": ["application/x-executable", "application/x-dosexec"],
+      "errorResponse": { "statusCode": 415, "body": { "error": "Unsupported Media Type", "message": "Executable files are not allowed" } }
+    }
+  },
+
+  "uploadValidationPipeline": [
+    "1. File extension validation (whitelist + blacklist check)",
+    "2. MIME type validation (against allowed types)",
+    "3. File size validation (category-specific limits)",
+    "4. Magic bytes verification (content matches claimed type)",
+    "5. SHA-256 hash computation (integrity + dedup)",
+    "6. Duplicate detection (check hash against store)",
+    "7. Malicious content scan (pattern detection for text files)"
+  ],
+
+  "protectedRoutes": [
+    "POST routes containing /upload",
+    "POST routes containing /ingest",
+    "POST routes containing /import"
+  ],
+
+  "productionRecommendations": [
+    "Integrate ClamAV for full antivirus scanning of uploaded files",
+    "Move file hash store from in-memory to PostgreSQL for persistence",
+    "Add virus total API integration for additional malware detection",
+    "Implement file quarantine: store uploads in staging area before processing",
+    "Add file encryption at rest using AES-256"
+  ],
+
+  "validationResult": "PASS"
+}

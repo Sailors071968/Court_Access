@@ -1,0 +1,87 @@
+{
+  "phase": "Phase 112 \u2014 Ingestion Repair Attempt",
+  "title": "Quick Ingestion Repair Results",
+  "generatedAt": "2026-03-10T11:51:41.747611Z",
+  "sourceDataset": {
+    "totalUrls": 1798,
+    "source": "live_policy_ingestion_report.json (Phase 103 crawl)",
+    "previousIngestionResult": "0/1798 (Phase 104 \u2014 all failed)"
+  },
+  "repairImprovements": {
+    "phase109_mimeRelaxation": {
+      "description": "Disabled strict MIME blocking",
+      "acceptedMimeTypes": [
+        "application/pdf",
+        "application/octet-stream",
+        "binary/octet-stream",
+        "application/x-pdf",
+        "text/pdf"
+      ],
+      "urlPdfOverride": true,
+      "documentsRecovered": 6
+    },
+    "phase110_redirects": {
+      "description": "Enabled redirect following",
+      "maxRedirects": 5,
+      "documentsWithRedirects": 271,
+      "avgRedirectsPerDoc": 1.2
+    },
+    "phase111_retries": {
+      "description": "Retry logic with exponential backoff",
+      "maxRetries": 3,
+      "backoffSeconds": [
+        2,
+        4,
+        8
+      ],
+      "retryOn": [
+        "timeout",
+        "ECONNRESET",
+        "HTTP 5xx"
+      ],
+      "documentsRetried": 3,
+      "retriesRecovered": 0
+    }
+  },
+  "results": {
+    "downloadsSuccessful": 1577,
+    "downloadsFailed": 221,
+    "downloadSuccessRate": "87.7%",
+    "ocrProcessed": 0,
+    "ocrNote": "pdfParse v2 import issue (now fixed \u2014 PDFParse named export)",
+    "classifiedDocuments": 0,
+    "classificationNote": "Blocked by OCR failure \u2014 fix applied, re-run will populate",
+    "totalRuntime": "33 minutes (1,972 seconds)"
+  },
+  "failureBreakdown": {
+    "httpError404": 215,
+    "networkReset": 3,
+    "fileSizeRejection": 3,
+    "timeout": 0,
+    "redirectFailure": 0,
+    "mimeMismatch": 0
+  },
+  "httpStatusDistribution": {
+    "200": 1580,
+    "404": 215,
+    "null_networkError": 3
+  },
+  "contentTypeDistribution": {
+    "application/pdf": 1580,
+    "text/html": 94,
+    "null": 123,
+    "text/xml": 1
+  },
+  "decisionRule": {
+    "threshold": 500,
+    "actualDownloads": 1577,
+    "result": "SUCCESS",
+    "decision": "Continue normal crawling and ingestion \u2014 no CPRA pivot needed",
+    "rationale": "1,577 downloads (87.7%) far exceeds 500 threshold. With OCR fix applied, expect 1,000-1,500 successful text extractions on re-run."
+  },
+  "nextSteps": {
+    "immediate": "Re-run ingestion with fixed OCR (pdf-parse v2 PDFParse import) to get text extraction + classification",
+    "expected": "1,000-1,500 policies fully ingested (OCR + classified)",
+    "noCpraPivotNeeded": true
+  }
+}

@@ -30,6 +30,18 @@ export function LoginPage() {
     }
   };
 
+  const handleDemoLogin = async (demoEmail: string) => {
+    setEmail(demoEmail);
+    setPassword('password');
+    setError('');
+    try {
+      await login(demoEmail, 'password');
+      navigate('/dashboard');
+    } catch {
+      setError('Demo login failed. Please try again.');
+    }
+  };
+
   return (
     <div className="min-h-screen bg-slate-800 flex items-center justify-center px-4">
       <div className="w-full max-w-md">
@@ -41,7 +53,7 @@ export function LoginPage() {
             </div>
             <h1 className="text-3xl font-bold text-white">Court Access</h1>
           </div>
-          <p className="text-slate-400">Case Intelligence Platform</p>
+          <p className="text-slate-400">Criminal Evidence Intelligence Platform</p>
         </div>
 
         {/* Login Card */}
@@ -137,8 +149,9 @@ export function LoginPage() {
                 <button
                   key={demo.email}
                   type="button"
-                  onClick={() => { setEmail(demo.email); setPassword('password'); }}
-                  className="text-xs px-3 py-2 bg-gray-50 text-gray-600 rounded-lg hover:bg-gray-100 transition-colors border border-gray-200"
+                  onClick={() => handleDemoLogin(demo.email)}
+                  disabled={isLoading}
+                  className="text-xs px-3 py-2 bg-gray-50 text-gray-600 rounded-lg hover:bg-gray-100 transition-colors border border-gray-200 disabled:opacity-50"
                 >
                   {demo.label}
                 </button>

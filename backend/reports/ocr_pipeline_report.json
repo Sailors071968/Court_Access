@@ -1,0 +1,43 @@
+{
+  "phase": 86,
+  "title": "OCR Pipeline Validation Report",
+  "generatedAt": "2026-03-09T19:58:40.324Z",
+  "summary": {
+    "totalDocumentsProcessed": 1701,
+    "pdfParseSuccesses": 151,
+    "textractFallbackCount": 0,
+    "tesseractFallbackCount": 0,
+    "ocrFailureCount": 0,
+    "averageOcrTimeMs": 72,
+    "documentsWithText": 1701,
+    "documentsSkipped": 1550,
+    "documentsPending": 0,
+    "validationRuntimeMs": 29
+  },
+  "breakdown": {
+    "chpCanonical": {
+      "total": 1550,
+      "status": "Pre-loaded text (no OCR needed)",
+      "ocrSkipped": 1550
+    },
+    "sandboxAgencies": {
+      "total": 151,
+      "ocrCompleted": 151,
+      "ocrPending": 0,
+      "ocrFailed": 0
+    }
+  },
+  "ocrMethodDistribution": {
+    "pdfParse": 151,
+    "textract": 0,
+    "tesseract": 0,
+    "skipped": 1550,
+    "failed": 0
+  },
+  "documentStatusCounts": {
+    "completed": 151,
+    "skipped": 1550,
+    "pending": 0,
+    "failed": 0
+  }
+}

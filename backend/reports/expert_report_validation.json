@@ -1,0 +1,191 @@
+{
+  "phase": "Phase 165 — Expert Witness Report Testing",
+  "generatedAt": "2026-03-10T13:46:47.509Z",
+  "reportsGenerated": 10,
+  "validationChecks": [
+    {
+      "testCaseId": "VAL-001",
+      "title": "Taser Deployment During Traffic Stop",
+      "reportGenerated": true,
+      "hasPolicyAuthority": true,
+      "hasPolicySection": true,
+      "hasEvidenceTimestamps": true,
+      "hasConfidenceScores": true,
+      "hasNeutralLanguage": true,
+      "exportFormatsAvailable": [
+        "pdf",
+        "word",
+        "trial_exhibit_package"
+      ],
+      "findingsCount": 10,
+      "overallPass": true
+    },
+    {
+      "testCaseId": "VAL-002",
+      "title": "Prone Restraint with Subject Distress",
+      "reportGenerated": true,
+      "hasPolicyAuthority": true,
+      "hasPolicySection": true,
+      "hasEvidenceTimestamps": true,
+      "hasConfidenceScores": true,
+      "hasNeutralLanguage": true,
+      "exportFormatsAvailable": [
+        "pdf",
+        "word",
+        "trial_exhibit_package"
+      ],
+      "findingsCount": 10,
+      "overallPass": true
+    },
+    {
+      "testCaseId": "VAL-003",
+      "title": "Neck Restraint Application",
+      "reportGenerated": true,
+      "hasPolicyAuthority": true,
+      "hasPolicySection": true,
+      "hasEvidenceTimestamps": true,
+      "hasConfidenceScores": true,
+      "hasNeutralLanguage": true,
+      "exportFormatsAvailable": [
+        "pdf",
+        "word",
+        "trial_exhibit_package"
+      ],
+      "findingsCount": 9,
+      "overallPass": true
+    },
+    {
+      "testCaseId": "VAL-004",
+      "title": "Pepper Spray Deployment at Protest",
+      "reportGenerated": true,
+      "hasPolicyAuthority": true,
+      "hasPolicySection": true,
+      "hasEvidenceTimestamps": true,
+      "hasConfidenceScores": true,
+      "hasNeutralLanguage": true,
+      "exportFormatsAvailable": [
+        "pdf",
+        "word",
+        "trial_exhibit_package"
+      ],
+      "findingsCount": 3,
+      "overallPass": true
+    },
+    {
+      "testCaseId": "VAL-005",
+      "title": "Officer-Involved Shooting",
+      "reportGenerated": true,
+      "hasPolicyAuthority": true,
+      "hasPolicySection": true,
+      "hasEvidenceTimestamps": true,
+      "hasConfidenceScores": true,
+      "hasNeutralLanguage": true,
+      "exportFormatsAvailable": [
+        "pdf",
+        "word",
+        "trial_exhibit_package"
+      ],
+      "findingsCount": 6,
+      "overallPass": true
+    },
+    {
+      "testCaseId": "VAL-006",
+      "title": "Baton Strike During Arrest",
+      "reportGenerated": true,
+      "hasPolicyAuthority": true,
+      "hasPolicySection": true,
+      "hasEvidenceTimestamps": true,
+      "hasConfidenceScores": true,
+      "hasNeutralLanguage": true,
+      "exportFormatsAvailable": [
+        "pdf",
+        "word",
+        "trial_exhibit_package"
+      ],
+      "findingsCount": 11,
+      "overallPass": true
+    },
+    {
+      "testCaseId": "VAL-007",
+      "title": "K-9 Deployment During Suspect Search",
+      "reportGenerated": true,
+      "hasPolicyAuthority": true,
+      "hasPolicySection": true,
+      "hasEvidenceTimestamps": true,
+      "hasConfidenceScores": true,
+      "hasNeutralLanguage": true,
+      "exportFormatsAvailable": [
+        "pdf",
+        "word",
+        "trial_exhibit_package"
+      ],
+      "findingsCount": 8,
+      "overallPass": true
+    },
+    {
+      "testCaseId": "VAL-008",
+      "title": "De-escalation Success — No Force Used",
+      "reportGenerated": true,
+      "hasPolicyAuthority": true,
+      "hasPolicySection": true,
+      "hasEvidenceTimestamps": true,
+      "hasConfidenceScores": true,
+      "hasNeutralLanguage": true,
+      "exportFormatsAvailable": [
+        "pdf",
+        "word",
+        "trial_exhibit_package"
+      ],
+      "findingsCount": 4,
+      "overallPass": true
+    },
+    {
+      "testCaseId": "VAL-009",
+      "title": "Multiple Force Escalation Steps",
+      "reportGenerated": true,
+      "hasPolicyAuthority": true,
+      "hasPolicySection": true,
+      "hasEvidenceTimestamps": true,
+      "hasConfidenceScores": true,
+      "hasNeutralLanguage": true,
+      "exportFormatsAvailable": [
+        "pdf",
+        "word",
+        "trial_exhibit_package"
+      ],
+      "findingsCount": 10,
+      "overallPass": true
+    },
+    {
+      "testCaseId": "VAL-010",
+      "title": "Physical Strike Without Warning",
+      "reportGenerated": true,
+      "hasPolicyAuthority": true,
+      "hasPolicySection": true,
+      "hasEvidenceTimestamps": true,
+      "hasConfidenceScores": true,
+      "hasNeutralLanguage": true,
+      "exportFormatsAvailable": [
+        "pdf",
+        "word",
+        "trial_exhibit_package"
+      ],
+      "findingsCount": 6,
+      "overallPass": true
+    }
+  ],
+  "aggregateResults": {
+    "policyAuthorityPresent": 10,
+    "policySectionPresent": 10,
+    "evidenceTimestampsPresent": 10,
+    "confidenceScoresPresent": 10,
+    "neutralLanguageVerified": 10,
+    "allChecksPass": 10
+  },
+  "exportFormatValidation": {
+    "pdf": "available",
+    "word": "available",
+    "trial_exhibit_package": "available"
+  },
+  "safetyLanguageCheck": "PASSED"
+}

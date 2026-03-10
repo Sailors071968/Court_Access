@@ -5,8 +5,40 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
-import { Scale } from 'lucide-react';
+import { Scale, Tag, CheckCircle2, XCircle } from 'lucide-react';
 import type { UserRole } from '../../types';
+
+// ---------------------------------------------------------------------------
+// Phase 223: Discount code validation (localStorage-based, mirrors backend)
+// ---------------------------------------------------------------------------
+
+interface DiscountValidation {
+  valid: boolean;
+  discountType?: 'percent' | 'fixed';
+  discountValue?: number;
+  codeName?: string;
+  errorReason?: string;
+}
+
+function validateDiscountCodeClient(codeValue: string): DiscountValidation {
+  if (!codeValue.trim()) return { valid: false, errorReason: 'No code entered' };
+  const codes = JSON.parse(localStorage.getItem('courtaccess_discount_codes') || '[]');
+  const code = codes.find(
+    (c: { codeValue: string }) => c.codeValue.toUpperCase() === codeValue.trim().toUpperCase()
+  );
+  if (!code) return { valid: false, errorReason: 'Invalid discount code' };
+  if (!code.active) return { valid: false, errorReason: 'This code is no longer active' };
+  if (code.usageLimit !== null && code.usageCount >= code.usageLimit)
+    return { valid: false, errorReason: 'This code has reached its usage limit' };
+  if (code.expiresAt && new Date(code.expiresAt) < new Date())
+    return { valid: false, errorReason: 'This code has expired' };
+  return {
+    valid: true,
+    discountType: code.discountType,
+    discountValue: code.discountValue,
+    codeName: code.codeName,
+  };
+}
 
 export function RegisterPage() {
   const [name, setName] = useState('');
@@ -14,6 +46,8 @@ export function RegisterPage() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [role, setRole] = useState<UserRole>('attorney');
+  const [discountCode, setDiscountCode] = useState('');
+  const [discountResult, setDiscountResult] = useState<DiscountValidation | null>(null);
   const [error, setError] = useState('');
   const { register, isLoading } = useAuthStore();
   const navigate = useNavigate();
@@ -31,6 +65,35 @@ export function RegisterPage() {
     }
     try {
       await register(name, email, password, role);
+
+      // Phase 223: Store applied discount code on user record
+      if (discountCode.trim() && discountResult?.valid) {
+        const codes = JSON.parse(localStorage.getItem('courtaccess_discount_codes') || '[]');
+        const idx = codes.findIndex(
+          (c: { codeValue: string }) => c.codeValue.toUpperCase() === discountCode.trim().toUpperCase()
+        );
+        if (idx !== -1) {
+          codes[idx].usageCount = (codes[idx].usageCount || 0) + 1;
+          localStorage.setItem('courtaccess_discount_codes', JSON.stringify(codes));
+        }
+        // Record usage
+        const usages = JSON.parse(localStorage.getItem('courtaccess_discount_usages') || '[]');
+        usages.push({
+          usageId: crypto.randomUUID(),
+          discountCodeId: codes[idx]?.codeId || '',
+          userId: email,
+          usedAt: new Date().toISOString(),
+        });
+        localStorage.setItem('courtaccess_discount_usages', JSON.stringify(usages));
+        // Store on user
+        localStorage.setItem('courtaccess_user_discount', JSON.stringify({
+          email,
+          appliedDiscountCode: discountCode.trim().toUpperCase(),
+          discountPercentage: discountResult.discountValue,
+          discountType: discountResult.discountType,
+        }));
+      }
+
       navigate('/dashboard');
     } catch {
       setError('Registration failed. Please try again.');
@@ -82,6 +145,44 @@ export function RegisterPage() {
               <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700 mb-1">Confirm password</label>
               <input id="confirm-password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Re-enter password" required autoComplete="new-password" />
             </div>
+            {/* Phase 223: Discount code field */}
+            <div>
+              <label htmlFor="discount-code" className="block text-sm font-medium text-gray-700 mb-1">Discount code <span className="text-gray-400 font-normal">(optional)</span></label>
+              <div className="flex gap-2">
+                <div className="relative flex-1">
+                  <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                    <Tag className="text-gray-400" size={14} />
+                  </div>
+                  <input
+                    id="discount-code"
+                    type="text"
+                    value={discountCode}
+                    onChange={(e) => { setDiscountCode(e.target.value); setDiscountResult(null); }}
+                    className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 uppercase"
+                    placeholder="e.g. EARLYACCESS50"
+                  />
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setDiscountResult(validateDiscountCodeClient(discountCode))}
+                  disabled={!discountCode.trim()}
+                  className="px-4 py-2.5 rounded-lg border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-40"
+                >
+                  Apply
+                </button>
+              </div>
+              {discountResult && (
+                <div className={`mt-2 flex items-center gap-2 text-sm ${discountResult.valid ? 'text-emerald-600' : 'text-red-600'}`}>
+                  {discountResult.valid ? <CheckCircle2 size={14} /> : <XCircle size={14} />}
+                  <span>
+                    {discountResult.valid
+                      ? `${discountResult.codeName} — ${discountResult.discountValue}% discount applied`
+                      : discountResult.errorReason}
+                  </span>
+                </div>
+              )}
+            </div>
+
             <button type="submit" disabled={isLoading} className="w-full bg-slate-800 text-white py-2.5 rounded-lg font-medium text-sm hover:bg-slate-700 transition-colors disabled:opacity-50">
               {isLoading ? 'Creating account...' : 'Create account'}
             </button>

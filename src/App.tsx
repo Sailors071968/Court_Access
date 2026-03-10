@@ -42,6 +42,7 @@ import { SearchPage } from './pages/SearchPage';
 import { NotificationsPage } from './pages/NotificationsPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { AdminPage } from './pages/admin/AdminPage';
+import { StaffIntegrationsPage } from './pages/dashboard/StaffIntegrationsPage';
 
 // Case Pages
 import { CaseLayout } from './pages/case/CaseLayout';
@@ -200,6 +201,11 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route path="integrations" element={
+            <ProtectedRoute requiredPermission="canViewIntegrations">
+              <StaffIntegrationsPage />
+            </ProtectedRoute>
+          } />
 
           {/* Case Routes — deterministic tab structure */}
           <Route path="cases/:caseId" element={<CaseLayout />}>

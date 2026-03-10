@@ -21,6 +21,7 @@ import { SystemHealthDashboard } from './pages/dashboard/SystemHealthDashboard';
 import { PolicyOperationsDashboard } from './pages/dashboard/PolicyOperationsDashboard';
 import { PolicyTopicsViewer } from './pages/dashboard/PolicyTopicsViewer';
 import { PolicyComplianceDashboard } from './pages/dashboard/PolicyComplianceDashboard';
+import { CaseTimelineVisualizer } from './pages/dashboard/CaseTimelineVisualizer';
 import ExhibitViewer from './pages/dashboard/exhibits/ExhibitViewer';
 import { CasesListPage } from './pages/CasesListPage';
 import { SearchPage } from './pages/SearchPage';
@@ -106,6 +107,14 @@ function App() {
             element={
               <ProtectedRoute requiredPermission="canViewAdmin">
                 <PolicyComplianceDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="dashboard/case-timeline"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <CaseTimelineVisualizer />
               </ProtectedRoute>
             }
           />

@@ -718,3 +718,212 @@ model ComplianceAuditTrail {
   @@index([stepName])
   @@map("compliance_audit_trail")
 }
+
+// ---------------------------------------------------------------------------
+// Phase 167 — Vision Events (bodycam vision analysis results)
+// ---------------------------------------------------------------------------
+
+model VisionEvent {
+  eventId          String   @id @default(uuid())
+  caseId           String
+  sourceId         String
+  timestamp        String
+  frameNumber      Int
+  eventCategory    String   // officer_posture | hand_movement | weapon_deployment | physical_contact | subject_distance | suspect_position | restraint_technique | de_escalation_posture | crowd_formation | vehicle_interaction
+  detections       String   // JSON: VisionDetection[]
+  poseEstimates    String   // JSON: PoseEstimate[]
+  distanceEstimates String  // JSON: DistanceEstimate[]
+  confidence       Float    @default(0)
+  metadata         String?  // JSON
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([sourceId])
+  @@index([eventCategory])
+  @@index([confidence])
+  @@map("vision_events")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 168 — Trajectory Analysis (ballistic/projectile analysis results)
+// ---------------------------------------------------------------------------
+
+model TrajectoryAnalysis {
+  analysisId       String   @id @default(uuid())
+  caseId           String
+  sceneId          String?
+  trajectories     String   // JSON: TrajectoryVector[]
+  impactPredictions String  // JSON: ImpactPrediction[]
+  lineOfFire       String   // JSON: LineOfFire[]
+  ballisticParams  String   // JSON: BallisticParameters
+  summary          String   // JSON: TrajectorySummary
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([sceneId])
+  @@map("trajectory_analyses")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 169 — Visibility Simulation (lighting/visibility results)
+// ---------------------------------------------------------------------------
+
+model VisibilitySimulation {
+  simulationId     String   @id @default(uuid())
+  caseId           String
+  sceneId          String?
+  inputConditions  String   // JSON: LightingConditions
+  visibilityMap    String   // JSON: VisibilityMap
+  shadowMap        String   // JSON: ShadowMap
+  lightSources     String   // JSON: LightSource[]
+  subjectVisibility String  // JSON: SubjectVisibility[]
+  summary          String   // JSON: VisibilitySummary
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([sceneId])
+  @@map("visibility_simulations")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 170 — Line-of-Sight Analysis
+// ---------------------------------------------------------------------------
+
+model LineOfSightAnalysis {
+  analysisId       String   @id @default(uuid())
+  caseId           String
+  sceneId          String?
+  observerPosition String   // JSON: Position3D
+  viewDirection    String   // JSON: ViewDirection
+  fieldOfView      String   // JSON: FieldOfView
+  obstacles        String   // JSON: SceneObstacle[]
+  visibilityResults String  // JSON: VisibilityResult[]
+  obstructionMap   String   // JSON: ObstructionMap
+  summary          String   // JSON: LineOfSightSummary
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([sceneId])
+  @@map("line_of_sight_analyses")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 171 — Camera Sync Results
+// ---------------------------------------------------------------------------
+
+model CameraSyncResult {
+  syncId           String   @id @default(uuid())
+  caseId           String
+  sources          String   // JSON: CameraSource[]
+  syncPairs        String   // JSON: SyncPair[]
+  masterTimeline   String   // JSON: MasterTimelineEvent[]
+  syncQuality      String   // JSON: SyncQuality
+  summary          String   // JSON: SyncSummary
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@map("camera_sync_results")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 172 — Scene Geometry
+// ---------------------------------------------------------------------------
+
+model SceneGeometry {
+  geometryId       String   @id @default(uuid())
+  caseId           String
+  sceneId          String?
+  bounds           String   // JSON: SceneBounds
+  buildings        String   // JSON: Building[]
+  roads            String   // JSON: Road[]
+  sidewalks        String   // JSON: Sidewalk[]
+  vehicles         String   // JSON: Vehicle[]
+  vegetation       String   // JSON: Vegetation[]
+  obstacles        String   // JSON: GeometryObstacle[]
+  terrain          String   // JSON: TerrainData
+  metadata         String   // JSON: SceneMetadata
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([sceneId])
+  @@map("scene_geometries")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 174 — Evidence Graph (unified event graph)
+// ---------------------------------------------------------------------------
+
+model EvidenceGraph {
+  graphId          String   @id @default(uuid())
+  caseId           String
+  nodes            String   // JSON: EvidenceNode[]
+  edges            String   // JSON: EvidenceEdge[]
+  clusters         String   // JSON: EvidenceCluster[]
+  timeline         String   // JSON: UnifiedTimelineEntry[]
+  summary          String   // JSON: GraphSummary
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@map("evidence_graphs")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 175 — Expert Witness Package
+// ---------------------------------------------------------------------------
+
+model ExpertWitnessPackage {
+  packageId        String   @id @default(uuid())
+  caseId           String
+  packageVersion   String
+  expertInfo       String   // JSON: ExpertInfo
+  sections         String   // JSON: PackageSection[]
+  sceneReconstruction String // JSON: SceneReconstructionSection
+  timeline         String   // JSON: TimelineSection
+  policyAnalysis   String   // JSON: PolicyAnalysisSection
+  evidenceClips    String   // JSON: EvidenceClipSection
+  analysisReport   String   // JSON: AnalysisReportSection
+  appendices       String   // JSON: Appendix[]
+  metadata         String   // JSON: PackageMetadata
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@map("expert_witness_packages")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 176 — Jury Visualization
+// ---------------------------------------------------------------------------
+
+model JuryVisualization {
+  visualizationId  String   @id @default(uuid())
+  caseId           String
+  title            String
+  sceneView        String   // JSON: JurySceneView
+  timeline         String   // JSON: JuryTimeline
+  highlightedEvents String  // JSON: JuryHighlight[]
+  narrativeCards   String   // JSON: NarrativeCard[]
+  viewerSettings   String   // JSON: ViewerSettings
+  metadata         String   // JSON: JuryViewMetadata
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@map("jury_visualizations")
+}

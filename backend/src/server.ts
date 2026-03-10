@@ -10,6 +10,7 @@ import { registerPipelineRoutes } from './policy/pipeline/pipelineRoutes.js';
 import { registerPolicyIntelligenceRoutes } from './policy/pipeline/policyIntelligenceRoutes.js';
 import { registerOperationsConsoleRoutes } from './policy/pipeline/operationsConsoleRoutes.js';
 import { registerComplianceRoutes } from './evidence/complianceRoutes.js';
+import { registerForensicRoutes } from './evidence/forensicReconstructionRoutes.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -47,6 +48,9 @@ async function startServer() {
   console.log('[Server] Registering compliance analysis routes...');
   await registerComplianceRoutes(app);
 
+  console.log('[Server] Registering forensic reconstruction routes...');
+  await registerForensicRoutes(app);
+
   // Start server
   try {
     await app.listen({ port: PORT, host: HOST });
@@ -75,6 +79,16 @@ async function startServer() {
     console.log('  - GET  /api/compliance/heatmap');
     console.log('  - GET  /api/compliance/expert/:caseId');
     console.log('  - GET  /api/compliance/jury/:caseId');
+    console.log('  - POST /api/forensic/vision/analyze');
+    console.log('  - POST /api/forensic/trajectory/analyze');
+    console.log('  - POST /api/forensic/visibility/simulate');
+    console.log('  - POST /api/forensic/line-of-sight/analyze');
+    console.log('  - POST /api/forensic/camera-sync/synchronize');
+    console.log('  - POST /api/forensic/scene/build');
+    console.log('  - GET  /api/forensic/timeline/:caseId');
+    console.log('  - POST /api/forensic/evidence-graph/build');
+    console.log('  - POST /api/forensic/expert-package/generate');
+    console.log('  - POST /api/forensic/jury-view/generate');
   } catch (err) {
     console.error('[Server] Failed to start:', err);
     process.exit(1);

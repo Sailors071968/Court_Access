@@ -361,11 +361,14 @@ async function enhancedFetchBuffer(
 
 async function extractPdfText(buffer: Buffer): Promise<{ text: string; pages: number; method: string; error?: string }> {
   try {
-    const pdfParse = (await import('pdf-parse')).default;
-    const result = await pdfParse(buffer);
-
-    const text = (result.text || '').trim();
-    const pages = result.numpages || 1;
+    // pdf-parse v2 uses named export PDFParse class with { data: buffer } option
+    const { PDFParse } = await import('pdf-parse');
+    const parser = new PDFParse({ data: buffer });
+    await parser.load();
+    const result = await parser.getText();
+    const text = (typeof result === 'object' && result !== null ? (result as { text?: string }).text || '' : String(result || '')).trim();
+    const pages = (typeof result === 'object' && result !== null ? (result as { total?: number }).total : 0) || 1;
+    parser.destroy();
 
     if (text.length >= 10) {
       return { text, pages, method: 'pdf-parse' };

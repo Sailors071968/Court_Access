@@ -41,7 +41,7 @@ export function LoginPage() {
             </div>
             <h1 className="text-3xl font-bold text-white">Court Access</h1>
           </div>
-          <p className="text-slate-400">Case Intelligence Platform</p>
+          <p className="text-slate-400">Criminal Evidence Intelligence Platform</p>
         </div>
 
         {/* Login Card */}

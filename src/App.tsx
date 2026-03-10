@@ -9,6 +9,13 @@ import { ProtectedRoute } from './components/layout/ProtectedRoute';
 // Landing Page
 import { LandingPage } from './pages/LandingPage';
 
+// Public Marketing Pages (Phase 207-216)
+import { ForDefensePage } from './pages/ForDefensePage';
+import { ForProsecutorsPage } from './pages/ForProsecutorsPage';
+import { GovernmentPage } from './pages/GovernmentPage';
+import { DemoRequestPage } from './pages/DemoRequestPage';
+import { CaseStudiesPage } from './pages/CaseStudiesPage';
+
 // Auth Pages
 import { LoginPage } from './pages/auth/LoginPage';
 import { RegisterPage } from './pages/auth/RegisterPage';
@@ -17,6 +24,9 @@ import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
 
 // Main Pages — Dashboard Router (role-based)
 import { DashboardRouter } from './pages/dashboard/DashboardRouter';
+import { DemoRequestsDashboard } from './pages/dashboard/DemoRequestsDashboard';
+import { GovernmentOutreachDashboard } from './pages/dashboard/GovernmentOutreachDashboard';
+import { MarketingDashboard } from './pages/dashboard/MarketingDashboard';
 import { PolicyPipelineDashboard } from './pages/dashboard/PolicyPipelineDashboard';
 import { PolicyIntelligenceDashboard } from './pages/dashboard/PolicyIntelligenceDashboard';
 import { CpraDashboard } from './pages/dashboard/CpraDashboard';
@@ -50,6 +60,13 @@ function App() {
       <Routes>
         {/* Public Landing Page */}
         <Route path="/" element={<LandingPage />} />
+
+        {/* Public Marketing Pages */}
+        <Route path="/for-defense" element={<ForDefensePage />} />
+        <Route path="/for-prosecutors" element={<ForProsecutorsPage />} />
+        <Route path="/government" element={<GovernmentPage />} />
+        <Route path="/demo" element={<DemoRequestPage />} />
+        <Route path="/case-studies" element={<CaseStudiesPage />} />
 
         {/* Public Auth Routes */}
         <Route path="/login" element={<LoginPage />} />
@@ -123,6 +140,30 @@ function App() {
             }
           />
           <Route path="dashboard/exhibits/viewer" element={<ExhibitViewer />} />
+          <Route
+            path="dashboard/demo-requests"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <DemoRequestsDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="dashboard/government-outreach"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <GovernmentOutreachDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="dashboard/marketing"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <MarketingDashboard />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="dashboard/system-health"
             element={

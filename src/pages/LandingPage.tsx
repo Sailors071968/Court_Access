@@ -1,5 +1,5 @@
 // ============================================================================
-// CourtAccess Landing Page — High-Conversion Legal SaaS Format
+// CourtAccess Landing Page — Criminal Evidence Intelligence Platform
 // Public marketing page for courtaccess.com
 // ============================================================================
 
@@ -51,19 +51,19 @@ function HeroSection() {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 rounded-full px-4 py-1.5 mb-8">
             <Scale className="text-amber-400" size={16} />
-            <span className="text-amber-300 text-sm font-medium">Evidence Intelligence Platform</span>
+            <span className="text-amber-300 text-sm font-medium">Criminal Evidence Intelligence Platform</span>
           </div>
 
           {/* Headline */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-            The First Evidence Intelligence Platform{' '}
-            <span className="text-amber-400">Built for Criminal Defense</span>
+            The First{' '}
+            <span className="text-amber-400">Criminal Evidence Intelligence Platform</span>
           </h1>
 
           {/* Subheadline */}
           <p className="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto mb-10 leading-relaxed">
             CourtAccess analyzes police reports, body camera footage, and investigative evidence
-            — and compares officer conduct against department policy, training standards, and legal procedures.
+            — providing structured analytical tools for legal professionals across the criminal justice system.
           </p>
 
           {/* Core Benefits */}
@@ -124,7 +124,7 @@ function PainPointSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
-            What Criminal Defense Professionals Face Every Day
+            What Legal Professionals Face Every Day
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
             Without CourtAccess:
@@ -146,7 +146,7 @@ function PainPointSection() {
         </div>
 
         <p className="text-center text-lg text-slate-500 italic max-w-2xl mx-auto">
-          Defense teams often spend weeks analyzing evidence that software can evaluate in minutes.
+          Legal teams often spend weeks analyzing evidence that software can evaluate in minutes.
         </p>
       </div>
     </section>
@@ -319,7 +319,7 @@ function CoreFeaturesSection() {
             Platform Capabilities
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Six integrated systems that transform how criminal defense teams analyze evidence.
+            Six integrated systems that transform how legal professionals analyze evidence.
           </p>
         </div>
 
@@ -358,7 +358,7 @@ function SocialProofSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
-            Trusted by Criminal Defense Professionals
+            Trusted by Legal Professionals
           </h2>
         </div>
 
@@ -389,9 +389,11 @@ function SocialProofSection() {
 function AuthoritySection() {
   const audiences = [
     { icon: Gavel, label: 'Criminal defense attorneys' },
-    { icon: Search, label: 'Defense investigators' },
+    { icon: Scale, label: 'District attorney offices' },
+    { icon: Search, label: 'Investigators' },
     { icon: FileText, label: 'Appellate specialists' },
     { icon: Users, label: 'Expert witnesses' },
+    { icon: Shield, label: 'Public defender offices' },
   ];
 
   const principles = [
@@ -405,7 +407,7 @@ function AuthoritySection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
-            Built for the Realities of Criminal Defense
+            Built for the Criminal Justice Ecosystem
           </h2>
         </div>
 
@@ -544,8 +546,9 @@ function LandingNav() {
           <div className="hidden md:flex items-center gap-8">
             <a href="#how-it-works" className="text-sm text-slate-300 hover:text-white transition-colors">How It Works</a>
             <a href="#features" className="text-sm text-slate-300 hover:text-white transition-colors">Features</a>
-            <a href="#testimonials" className="text-sm text-slate-300 hover:text-white transition-colors">Testimonials</a>
-            <a href="#faq" className="text-sm text-slate-300 hover:text-white transition-colors">FAQ</a>
+            <Link to="/for-defense" className="text-sm text-slate-300 hover:text-white transition-colors">For Defense</Link>
+            <Link to="/for-prosecutors" className="text-sm text-slate-300 hover:text-white transition-colors">For Prosecutors</Link>
+            <Link to="/government" className="text-sm text-slate-300 hover:text-white transition-colors">Government</Link>
           </div>
           <div className="flex items-center gap-3">
             <Link
@@ -584,7 +587,7 @@ function LandingFooter() {
               <span className="text-xl font-bold text-white">CourtAccess</span>
             </div>
             <p className="text-slate-400 text-sm leading-relaxed max-w-md">
-              The first evidence intelligence platform built for criminal defense.
+              The first criminal evidence intelligence platform.
               Built by investigators who understand how cases actually unfold.
             </p>
           </div>
@@ -593,7 +596,16 @@ function LandingFooter() {
             <ul className="space-y-2">
               <li><a href="#how-it-works" className="text-sm text-slate-400 hover:text-white transition-colors">How It Works</a></li>
               <li><a href="#features" className="text-sm text-slate-400 hover:text-white transition-colors">Features</a></li>
-              <li><a href="#faq" className="text-sm text-slate-400 hover:text-white transition-colors">FAQ</a></li>
+              <li><Link to="/case-studies" className="text-sm text-slate-400 hover:text-white transition-colors">Case Studies</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-sm font-semibold text-white mb-4">Solutions</h4>
+            <ul className="space-y-2">
+              <li><Link to="/for-defense" className="text-sm text-slate-400 hover:text-white transition-colors">For Defense</Link></li>
+              <li><Link to="/for-prosecutors" className="text-sm text-slate-400 hover:text-white transition-colors">For Prosecutors</Link></li>
+              <li><Link to="/government" className="text-sm text-slate-400 hover:text-white transition-colors">Government</Link></li>
+              <li><Link to="/demo" className="text-sm text-slate-400 hover:text-white transition-colors">Request Demo</Link></li>
             </ul>
           </div>
           <div>

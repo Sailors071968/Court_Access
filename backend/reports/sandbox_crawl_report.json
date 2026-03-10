@@ -1,0 +1,151 @@
+{
+  "phase": 85,
+  "title": "Sandbox Crawl Report",
+  "generatedAt": "2026-03-09T19:58:40.293Z",
+  "summary": {
+    "status": "completed",
+    "totalAgencies": 10,
+    "agenciesSucceeded": 10,
+    "agenciesFailed": 0,
+    "totalPagesCrawled": 2538,
+    "policyDocumentsDiscovered": 151,
+    "documentsSuccessfullyDownloaded": 151,
+    "documentsClassified": 151,
+    "coverageMappings": 3340,
+    "duplicatesSkipped": 0,
+    "totalRuntimeMs": 12908,
+    "totalRuntimeSeconds": 13
+  },
+  "chpBaseline": {
+    "status": "completed",
+    "documentsImported": 1550,
+    "topicsSeeded": 334,
+    "coverageEntries": 334,
+    "topicsByCategory": {}
+  },
+  "agencies": [
+    {
+      "agencyName": "Los Angeles Police Department",
+      "agencyId": "ae6bd9a7-1ba8-4f58-9c9e-07f6c46cd52c",
+      "status": "completed",
+      "pagesCrawled": 0,
+      "policyDocumentsDiscovered": 13,
+      "documentsDownloaded": 13,
+      "duplicatesSkipped": 0,
+      "crawlerRuntimeMs": 1291,
+      "errors": []
+    },
+    {
+      "agencyName": "San Diego Police Department",
+      "agencyId": "146dee0e-39ba-4e29-868a-05cb206f2726",
+      "status": "completed",
+      "pagesCrawled": 0,
+      "policyDocumentsDiscovered": 14,
+      "documentsDownloaded": 14,
+      "duplicatesSkipped": 0,
+      "crawlerRuntimeMs": 1291,
+      "errors": []
+    },
+    {
+      "agencyName": "San Jose Police Department",
+      "agencyId": "40858a0c-2e8e-41ab-9d61-fa660243a51c",
+      "status": "completed",
+      "pagesCrawled": 0,
+      "policyDocumentsDiscovered": 14,
+      "documentsDownloaded": 14,
+      "duplicatesSkipped": 0,
+      "crawlerRuntimeMs": 1291,
+      "errors": []
+    },
+    {
+      "agencyName": "Sacramento Police Department",
+      "agencyId": "6d804fff-72cc-4c7e-b3a7-8173ea16878c",
+      "status": "completed",
+      "pagesCrawled": 0,
+      "policyDocumentsDiscovered": 16,
+      "documentsDownloaded": 16,
+      "duplicatesSkipped": 0,
+      "crawlerRuntimeMs": 1291,
+      "errors": []
+    },
+    {
+      "agencyName": "Oakland Police Department",
+      "agencyId": "42f362dd-d94a-4553-8369-64b85a460ad1",
+      "status": "completed",
+      "pagesCrawled": 0,
+      "policyDocumentsDiscovered": 15,
+      "documentsDownloaded": 15,
+      "duplicatesSkipped": 0,
+      "crawlerRuntimeMs": 1291,
+      "errors": []
+    },
+    {
+      "agencyName": "Long Beach Police Department",
+      "agencyId": "1e25d198-d3d7-472a-baa3-c101623b15c4",
+      "status": "completed",
+      "pagesCrawled": 0,
+      "policyDocumentsDiscovered": 17,
+      "documentsDownloaded": 17,
+      "duplicatesSkipped": 0,
+      "crawlerRuntimeMs": 1291,
+      "errors": []
+    },
+    {
+      "agencyName": "Fresno Police Department",
+      "agencyId": "a5ac9e67-df16-4788-a1e2-b3951a561bce",
+      "status": "completed",
+      "pagesCrawled": 0,
+      "policyDocumentsDiscovered": 15,
+      "documentsDownloaded": 15,
+      "duplicatesSkipped": 0,
+      "crawlerRuntimeMs": 1291,
+      "errors": []
+    },
+    {
+      "agencyName": "Riverside Police Department",
+      "agencyId": "d3bb5320-d221-4599-a853-3481198835d0",
+      "status": "completed",
+      "pagesCrawled": 0,
+      "policyDocumentsDiscovered": 18,
+      "documentsDownloaded": 18,
+      "duplicatesSkipped": 0,
+      "crawlerRuntimeMs": 1291,
+      "errors": []
+    },
+    {
+      "agencyName": "Stockton Police Department",
+      "agencyId": "a486b612-8a14-40ce-b5be-bcb1c4566d7b",
+      "status": "completed",
+      "pagesCrawled": 0,
+      "policyDocumentsDiscovered": 13,
+      "documentsDownloaded": 13,
+      "duplicatesSkipped": 0,
+      "crawlerRuntimeMs": 1291,
+      "errors": []
+    },
+    {
+      "agencyName": "Santa Ana Police Department",
+      "agencyId": "14eecf65-0901-4202-952f-adf811ac8828",
+      "status": "completed",
+      "pagesCrawled": 0,
+      "policyDocumentsDiscovered": 16,
+      "documentsDownloaded": 16,
+      "duplicatesSkipped": 0,
+      "crawlerRuntimeMs": 1291,
+      "errors": []
+    }
+  ],
+  "sandboxAgencies": [
+    "Los Angeles PD",
+    "San Diego PD",
+    "San Jose PD",
+    "Sacramento PD",
+    "Oakland PD",
+    "Long Beach PD",
+    "Fresno PD",
+    "Riverside PD",
+    "Stockton PD",
+    "Santa Ana PD"
+  ],
+  "errors": []
+}

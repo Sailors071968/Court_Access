@@ -1,0 +1,17 @@
+Subject: Final Notice: Annual Public Records Request – Policy Updates
+
+To: {agencyName}
+
+This is the final follow-up regarding our annual policy update request originally sent on {requestDate}.
+
+CourtAccess received policy documents from your agency on {policyReceivedDate}. We have sent multiple requests for any updates or revisions and have not received a response.
+
+Under the California Public Records Act (Gov. Code 6250 et seq.), failure to respond to a lawful records request may be subject to legal remedies.
+
+This is our final request. Please provide any updated policy documents or confirm that the previously provided versions remain current.
+
+This request will be marked as closed in our system after this notice.
+
+{requesterName}
+{requesterOrganization}
+cpra@courtaccess.net

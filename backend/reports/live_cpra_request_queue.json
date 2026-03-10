@@ -1,0 +1,3481 @@
+{
+  "phase": 107,
+  "title": "CPRA Campaign Preparation (Real Data)",
+  "generatedAt": "2026-03-09T23:28:34.475Z",
+  "note": "NO CPRA EMAILS SENT. This is preparation and prioritization only.",
+  "summary": {
+    "totalAgencies": 488,
+    "agenciesWithCriticalGaps": 487,
+    "totalCriticalGapInstances": 18257,
+    "topMissingPolicy": "Less-Lethal Weapons Deployment",
+    "topMissingCount": 487,
+    "runtimeMs": 2457
+  },
+  "criticalCategories": [
+    "Use_of_Force",
+    "Internal_Affairs",
+    "Body_Camera",
+    "Discipline"
+  ],
+  "topMissingPolicies": [
+    {
+      "policy": "Less-Lethal Weapons Deployment",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "De-Escalation Requirements",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "Chokehold / Neck Restraint Ban",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "Taser / CEW Policy",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "OC Spray / Chemical Agents",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "Baton Use Guidelines",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "Force Review Board Process",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "Duty to Intervene",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "Warning Requirements Before Force",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "Force Reporting Requirements",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "Citizen Complaint Intake Process",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "Administrative vs Criminal Investigations",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "Pitchess Motion Compliance",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "Sustained / Exonerated / Unfounded Findings",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "POBR (Peace Officer Bill of Rights) Compliance",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "Early Warning System / At-Risk Officer Tracking",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "Investigation Timeline Requirements",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "Witness Interview Procedures (IA)",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "Anonymous Complaint Processing",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "BWC Activation Requirements",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "BWC Deactivation Rules",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "Recording Retention Periods",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "Officer Review of Footage Before Reports",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "Supervisor Review of BWC Footage",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "Footage Release and Public Records",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "Redaction Procedures",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "In-Car Camera (Dashcam) Policy",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "Camera Equipment Assignment and Maintenance",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "Penalty Matrix / Penalty Guidelines",
+      "agenciesMissing": 487
+    },
+    {
+      "policy": "Skelly Hearing Procedures",
+      "agenciesMissing": 487
+    }
+  ],
+  "topPriorityAgencies": [
+    {
+      "agency": "CA Department of Justice - Bureau of Investigation",
+      "website": null,
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "CA Department of Cannabis Control",
+      "website": null,
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "CA Franchise Tax Board - Criminal Investigation",
+      "website": null,
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "Amador County Sheriff's Office",
+      "website": null,
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "Glendale Police Department",
+      "website": "https://www.glendaleca.gov/government/departments/police-department",
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "Fresno County Probation Department",
+      "website": null,
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "West Covina Police Department",
+      "website": "https://www.westcovina.org/government/departments/police-department",
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "Thousand Oaks Police Department",
+      "website": null,
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "Rocklin Police Department",
+      "website": "https://www.rocklin.ca.us/police",
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "Fortuna Police Department",
+      "website": "https://www.friendlyfortuna.com/185/Police-Department",
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "South Pasadena Police Department",
+      "website": "https://www.southpasadenaca.gov/government/departments/police",
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "Grover Beach Police Department",
+      "website": null,
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "Sonora Police Department",
+      "website": null,
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "San Jacinto Police Department",
+      "website": null,
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "Sanger Police Department",
+      "website": null,
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "Colusa Police Department",
+      "website": null,
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "UC Merced Police Department",
+      "website": null,
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "CSU Pomona University Police",
+      "website": null,
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "Stanford University Department of Public Safety",
+      "website": null,
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "Chowchilla Police Department",
+      "website": null,
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "Santa Rosa Police Department",
+      "website": "https://srcity.org/219/Police-Department",
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "Fresno Unified School District Police",
+      "website": null,
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "Ceres Police Department",
+      "website": "https://www.ci.ceres.ca.us/223/Police-Department",
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "San Francisco Municipal Railway Enforcement",
+      "website": null,
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "San Ramon Police Department",
+      "website": null,
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "Inyo County Sheriff's Office",
+      "website": null,
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "Dos Palos Police Department",
+      "website": null,
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "Placerville Police Department",
+      "website": "https://www.cityofplacerville.org/police-department",
+      "missingCriticalCount": 39,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 390
+    },
+    {
+      "agency": "CA Department of Justice - Bureau of Firearms",
+      "website": null,
+      "missingCriticalCount": 38,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 380
+    },
+    {
+      "agency": "CA Department of Corrections and Rehabilitation",
+      "website": null,
+      "missingCriticalCount": 38,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 380
+    },
+    {
+      "agency": "CA Department of Fish and Wildlife",
+      "website": null,
+      "missingCriticalCount": 38,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 380
+    },
+    {
+      "agency": "CA Department of Motor Vehicles Investigations",
+      "website": null,
+      "missingCriticalCount": 38,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force",
+        "Deadly Force Authorization"
+      ],
+      "priorityScore": 380
+    },
+    {
+      "agency": "CA Department of Insurance - Fraud Division",
+      "website": null,
+      "missingCriticalCount": 38,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force",
+        "Deadly Force Authorization"
+      ],
+      "priorityScore": 380
+    },
+    {
+      "agency": "CA Department of Consumer Affairs - Investigation",
+      "website": null,
+      "missingCriticalCount": 38,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 380
+    },
+    {
+      "agency": "CA State Lottery - Security",
+      "website": null,
+      "missingCriticalCount": 38,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force",
+        "Deadly Force Authorization"
+      ],
+      "priorityScore": 380
+    },
+    {
+      "agency": "CA Emergency Medical Services Authority",
+      "website": null,
+      "missingCriticalCount": 38,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force",
+        "Deadly Force Authorization"
+      ],
+      "priorityScore": 380
+    },
+    {
+      "agency": "CA State Controller - Investigations",
+      "website": null,
+      "missingCriticalCount": 38,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force",
+        "Deadly Force Authorization"
+      ],
+      "priorityScore": 380
+    },
+    {
+      "agency": "CA Department of Industrial Relations",
+      "website": null,
+      "missingCriticalCount": 38,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force",
+        "Deadly Force Authorization"
+      ],
+      "priorityScore": 380
+    },
+    {
+      "agency": "CA Senate Sergeant at Arms",
+      "website": null,
+      "missingCriticalCount": 38,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force",
+        "Deadly Force Authorization"
+      ],
+      "priorityScore": 380
+    },
+    {
+      "agency": "Orange County Sheriff's Office",
+      "website": null,
+      "missingCriticalCount": 38,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 380
+    },
+    {
+      "agency": "Fresno County Sheriff's Office",
+      "website": null,
+      "missingCriticalCount": 38,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 380
+    },
+    {
+      "agency": "Butte County Sheriff's Office",
+      "website": null,
+      "missingCriticalCount": 38,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force",
+        "Deadly Force Authorization"
+      ],
+      "priorityScore": 380
+    },
+    {
+      "agency": "Imperial County Sheriff's Office",
+      "website": null,
+      "missingCriticalCount": 38,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force",
+        "Deadly Force Authorization"
+      ],
+      "priorityScore": 380
+    },
+    {
+      "agency": "Napa County Sheriff's Office",
+      "website": null,
+      "missingCriticalCount": 38,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force",
+        "Deadly Force Authorization"
+      ],
+      "priorityScore": 380
+    },
+    {
+      "agency": "Mendocino County Sheriff's Office",
+      "website": null,
+      "missingCriticalCount": 38,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force",
+        "Deadly Force Authorization"
+      ],
+      "priorityScore": 380
+    },
+    {
+      "agency": "Glenn County Sheriff's Office",
+      "website": null,
+      "missingCriticalCount": 38,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 380
+    },
+    {
+      "agency": "Del Norte County Sheriff's Office",
+      "website": null,
+      "missingCriticalCount": 38,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "Force Continuum / Force Options",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force"
+      ],
+      "priorityScore": 380
+    },
+    {
+      "agency": "Mono County Sheriff's Office",
+      "website": null,
+      "missingCriticalCount": 38,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force",
+        "Deadly Force Authorization"
+      ],
+      "priorityScore": 380
+    },
+    {
+      "agency": "Alpine County Sheriff's Office",
+      "website": null,
+      "missingCriticalCount": 38,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force",
+        "Deadly Force Authorization"
+      ],
+      "priorityScore": 380
+    },
+    {
+      "agency": "Riverside County Sheriff's Office",
+      "website": null,
+      "missingCriticalCount": 38,
+      "missingPolicies": [
+        "Less-Lethal Weapons Deployment",
+        "De-Escalation Requirements",
+        "Chokehold / Neck Restraint Ban",
+        "Taser / CEW Policy",
+        "OC Spray / Chemical Agents",
+        "Baton Use Guidelines",
+        "Force Review Board Process",
+        "Duty to Intervene",
+        "Warning Requirements Before Force",
+        "Deadly Force Authorization"
+      ],
+      "priorityScore": 380
+    }
+  ],
+  "fullAgencyGapList": [
+    {
+      "agency": "CA Department of Justice - Bureau of Investigation",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "CA Department of Cannabis Control",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "CA Franchise Tax Board - Criminal Investigation",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "Amador County Sheriff's Office",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "Glendale Police Department",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "Fresno County Probation Department",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "West Covina Police Department",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "Thousand Oaks Police Department",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "Rocklin Police Department",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "Fortuna Police Department",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "South Pasadena Police Department",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "Grover Beach Police Department",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "Sonora Police Department",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "San Jacinto Police Department",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "Sanger Police Department",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "Colusa Police Department",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "UC Merced Police Department",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "CSU Pomona University Police",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "Stanford University Department of Public Safety",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "Chowchilla Police Department",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "Santa Rosa Police Department",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "Fresno Unified School District Police",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "Ceres Police Department",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "San Francisco Municipal Railway Enforcement",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "San Ramon Police Department",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "Inyo County Sheriff's Office",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "Dos Palos Police Department",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "Placerville Police Department",
+      "missingCriticalCount": 39,
+      "priorityScore": 390
+    },
+    {
+      "agency": "CA Department of Justice - Bureau of Firearms",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "CA Department of Corrections and Rehabilitation",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "CA Department of Fish and Wildlife",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "CA Department of Motor Vehicles Investigations",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "CA Department of Insurance - Fraud Division",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "CA Department of Consumer Affairs - Investigation",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "CA State Lottery - Security",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "CA Emergency Medical Services Authority",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "CA State Controller - Investigations",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "CA Department of Industrial Relations",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "CA Senate Sergeant at Arms",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Orange County Sheriff's Office",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Fresno County Sheriff's Office",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Butte County Sheriff's Office",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Imperial County Sheriff's Office",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Napa County Sheriff's Office",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Mendocino County Sheriff's Office",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Glenn County Sheriff's Office",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Del Norte County Sheriff's Office",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Mono County Sheriff's Office",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Alpine County Sheriff's Office",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Riverside County Sheriff's Office",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Riverside County District Attorney - Investigations",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "San Bernardino County Sheriff's Office",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Santa Clara County Sheriff's Office",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Kern County District Attorney - Investigations",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Ventura County District Attorney - Investigations",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "San Mateo County Sheriff's Office",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Sonoma County Sheriff's Office",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Solano County Sheriff's Office",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Santa Cruz County Sheriff's Office",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Yolo County Sheriff's Office",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Tuolumne County Sheriff's Office",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Siskiyou County Sheriff's Office",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Trinity County Sheriff's Office",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Huntington Beach Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "San Diego County Probation Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Orange County Probation Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Santa Clara County Probation Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Alameda County Probation Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "San Joaquin County District Attorney - Investigations",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Stanislaus County District Attorney - Investigations",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Monterey County District Attorney - Investigations",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Marin County District Attorney - Investigations",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Butte County District Attorney - Investigations",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Shasta County District Attorney - Investigations",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Mendocino County District Attorney - Investigations",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Lake County District Attorney - Investigations",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Amador County District Attorney - Investigations",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Lassen County District Attorney - Investigations",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "San Francisco Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Chula Vista Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Oceanside Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Ontario Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Riverside County Coroner",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Sacramento County Probation Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Kern County Probation Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Ventura County Probation Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Placer County Probation Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "San Luis Obispo County Probation Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Corona Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Sunnyvale Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Pomona Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Escondido Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Roseville Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Pasadena Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Simi Valley Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Costa Mesa Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Victorville Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Murrieta Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Norwalk Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Burbank Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "El Cajon Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "San Mateo Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Daly City Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Rialto Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Chico Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Tracy Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Indio Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Hawthorne Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Merced Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Newport Beach Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Redwood City Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Tustin Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Napa Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Compton Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Hemet Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Upland Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Alameda Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Brentwood Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "San Rafael Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Petaluma Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Gilroy Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Novato Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Beaumont Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Perris Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Dublin Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Camarillo Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Monterey Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Eureka Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "South Lake Tahoe Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Oroville Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Ukiah Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Auburn Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Grass Valley Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Fort Bragg Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Wasco Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Shafter Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Arvin Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Tehachapi Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Marysville Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Lakeport Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Azusa Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Lompoc Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Bell Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Paso Robles Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Atascadero Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "El Segundo Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Pacific Grove Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Signal Hill Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Soledad Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Marina Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Arroyo Grande Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Solvang Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "National City Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Fountain Valley Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Cypress Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Brawley Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Yorba Linda Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Los Alamitos Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "La Habra Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Los Banos Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Martinez Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Adelanto Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Lathrop Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Twentynine Palms Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Lemoore Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Oakdale Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Dixon Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Kerman Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Livingston Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Newman Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Mendota Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Farmersville Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Rio Vista Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Gustine Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Amtrak Police - Western Division",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Port of Los Angeles Police",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "UC Berkeley Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "UC Los Angeles Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "UC San Diego Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "UC Santa Cruz Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "UC San Francisco Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "CSU Fullerton University Police",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "CSU Sacramento University Police",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "CSU San Jose University Police",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "CSU Chico University Police",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Vallejo Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "CA Horse Racing Board",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Los Angeles County District Attorney - Investigations",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Los Angeles County Coroner",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Riverside County Probation Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "BART Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Santa Barbara County District Attorney - Investigations",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "San Luis Obispo County Sheriff's Office",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "El Dorado County Sheriff's Office",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Los Rios Community College District Police",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "San Diego Community College District Police",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "East Bay Regional Park District Police",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Inglewood Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Santa Barbara Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Union City Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Arcadia Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Glendora Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Benicia Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Red Bluff Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "CA Exposition Park - Rangers",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "San Diego County District Attorney - Investigations",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "San Marcos Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Encinitas Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Danville Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Kingsburg Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Yuba City Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Lincoln Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Palm Springs Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Coronado Police Department",
+      "missingCriticalCount": 38,
+      "priorityScore": 380
+    },
+    {
+      "agency": "Oakland Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Bakersfield Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Los Angeles Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "San Jose Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Fresno Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Long Beach Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Stockton Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "CA Department of Justice - Bureau of Gambling Control",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "CA Department of Parks and Recreation",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "CA Alcoholic Beverage Control",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "CA Office of Emergency Services",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "CA Department of Toxic Substances Control",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "CA Assembly Sergeant at Arms",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Cal Fire Law Enforcement",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Los Angeles County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Alameda County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Contra Costa County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Kern County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Monterey County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Merced County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Marin County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Madera County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Kings County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Nevada County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Lake County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Calaveras County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Lassen County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Colusa County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Mariposa County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Modoc County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "San Diego County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Orange County District Attorney - Investigations",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "San Bernardino County District Attorney - Investigations",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Alameda County District Attorney - Investigations",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Sacramento County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Sacramento County District Attorney - Investigations",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Contra Costa County District Attorney - Investigations",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Fresno County District Attorney - Investigations",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "San Francisco County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Ventura County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "San Joaquin County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Stanislaus County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Tulare County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Placer County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Shasta County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Sutter County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Yuba County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Tehama County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "San Benito County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Plumas County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Sierra County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "San Bernardino County Probation Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "San Mateo County District Attorney - Investigations",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Sonoma County District Attorney - Investigations",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Tulare County District Attorney - Investigations",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Solano County District Attorney - Investigations",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Placer County District Attorney - Investigations",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "San Luis Obispo County District Attorney - Investigations",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Merced County District Attorney - Investigations",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Santa Cruz County District Attorney - Investigations",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Yolo County District Attorney - Investigations",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "El Dorado County District Attorney - Investigations",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Imperial County District Attorney - Investigations",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Madera County District Attorney - Investigations",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Kings County District Attorney - Investigations",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Napa County District Attorney - Investigations",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Sutter County District Attorney - Investigations",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Tuolumne County District Attorney - Investigations",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Calaveras County District Attorney - Investigations",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Irvine Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Fremont Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "San Bernardino Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Modesto Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Fontana Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "San Diego County Coroner",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Orange County Coroner",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Santa Clara County Coroner",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Alameda County Coroner",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Sacramento County Coroner",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "San Francisco County Coroner",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "San Joaquin County Probation Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Stanislaus County Probation Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Sonoma County Probation Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Tulare County Probation Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Santa Barbara County Probation Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Monterey County Probation Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Santa Clarita Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Moreno Valley Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Rancho Cucamonga Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Elk Grove Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Hayward Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Torrance Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Orange Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Concord Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Santa Clara Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Berkeley Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Fairfield Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Richmond Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Antioch Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Carlsbad Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "El Monte Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Downey Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Ventura Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Lancaster Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Palmdale Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Vacaville Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Santa Monica Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Redding Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Chino Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "San Leandro Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Livermore Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Citrus Heights Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Buena Park Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Alhambra Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Temecula Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Menifee Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Vista Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Hesperia Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Lake Forest Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Folsom Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Mountain View Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Manteca Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Milpitas Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Pleasanton Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Baldwin Park Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Pittsburg Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Turlock Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Redlands Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Redondo Beach Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Lodi Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Santa Cruz Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Davis Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Madera Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Woodland Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Hanford Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Colton Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Bellflower Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Tulare Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Porterville Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Delano Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Hollister Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Seaside Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Ridgecrest Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Arcata Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Healdsburg Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Clearlake Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Taft Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Cloverdale Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Sebastopol Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Yreka Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Cotati Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Crescent City Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "San Luis Obispo Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Monrovia Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "San Fernando Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Hermosa Beach Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Sierra Madre Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Huntington Park Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Greenfield Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "King City Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Carpinteria Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Gonzales Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Pismo Beach Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Guadalupe Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Williams Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Jackson Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Angels Camp Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Walnut Creek Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "La Mesa Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Placentia Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Covina Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Brea Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Calexico Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "La Verne Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Banning Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Seal Beach Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Laguna Beach Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Santee Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Diamond Bar Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Highland Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Yucaipa Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Poway Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Cerritos Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "San Juan Capistrano Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "San Dimas Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Dana Point Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Imperial Beach Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Norco Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Artesia Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "La Palma Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Atwater Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Suisun City Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Reedley Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Selma Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Riverbank Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Dinuba Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Patterson Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Corcoran Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Coalinga Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Ripon Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Parlier Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Lindsay Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Exeter Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Orange Cove Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Firebaugh Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Woodlake Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Escalon Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Fowler Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "LA Metro Transit Security",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Sacramento Regional Transit Police",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Port of Long Beach Police",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Port of San Diego Harbor Police",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "UC Davis Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "UC Irvine Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "UC Riverside Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "UC Santa Barbara Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "CSU Long Beach University Police",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "CSU Los Angeles University Police",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "CSU Northridge University Police",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "CSU Fresno University Police",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "CSU Bakersfield University Police",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "CSU Stanislaus University Police",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "CSU San Bernardino University Police",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "CSU Humboldt University Police",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "USC Department of Public Safety",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Galt Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Susanville Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Winters Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Willits Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Garden Grove Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Salinas Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Visalia Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "CA National Guard - Military Police",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Los Angeles County Probation Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Santa Clara County District Attorney - Investigations",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Contra Costa County Probation Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Los Angeles Airport Police",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "San Francisco Airport Police",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "San Jose Airport Police",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Sacramento Airport Police",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Humboldt County District Attorney - Investigations",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Port of Oakland Police",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Kern Community College District Police",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Los Angeles Unified School District Police",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "San Diego Unified School District Police",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "San Francisco Unified School District Police",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Sacramento City Unified School District Police",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Santa Monica Mountains Conservancy Rangers",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Anaheim Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Fullerton Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Clovis Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Santa Maria Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Watsonville Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "West Sacramento Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "San Marino Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "San Francisco County District Attorney - Investigations",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Santa Barbara County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Humboldt County Sheriff's Office",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Nevada County District Attorney - Investigations",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Lake Elsinore Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "CSU San Francisco University Police",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "CSU San Diego University Police",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Big Bear Lake Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Westminster Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Whittier Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "El Centro Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Claremont Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Manhattan Beach Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "Barstow Police Department",
+      "missingCriticalCount": 37,
+      "priorityScore": 370
+    },
+    {
+      "agency": "San Diego Police Department",
+      "missingCriticalCount": 36,
+      "priorityScore": 360
+    },
+    {
+      "agency": "Sacramento Police Department",
+      "missingCriticalCount": 36,
+      "priorityScore": 360
+    },
+    {
+      "agency": "Riverside Police Department",
+      "missingCriticalCount": 36,
+      "priorityScore": 360
+    },
+    {
+      "agency": "Santa Ana Police Department",
+      "missingCriticalCount": 36,
+      "priorityScore": 360
+    }
+  ]
+}

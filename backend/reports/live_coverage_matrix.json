@@ -1,0 +1,5292 @@
+{
+  "phase": 105,
+  "title": "Live Coverage Matrix",
+  "generatedAt": "2026-03-09T23:28:31.876Z",
+  "summary": {
+    "totalAgencies": 488,
+    "totalTopics": 334,
+    "totalCoverageEntries": 162992,
+    "policiesFound": 4673,
+    "policiesMissing": 158319,
+    "overallCoveragePercent": "2.9%",
+    "agenciesWithDiscoveredPolicies": 100,
+    "runtimeMs": 239406
+  },
+  "agencyCoverageDetails": [
+    {
+      "agency": "California Highway Patrol",
+      "type": "State",
+      "city": "Sacramento",
+      "county": "Sacramento",
+      "policiesFound": 334,
+      "totalTopics": 334,
+      "coveragePercent": "100.0%",
+      "sampleTopics": [
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": true
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": true
+        },
+        {
+          "topic": "Penalty Matrix / Penalty Guidelines",
+          "found": true
+        },
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": true
+        },
+        {
+          "topic": "Camera Equipment Assignment and Maintenance",
+          "found": true
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": true
+        },
+        {
+          "topic": "Witness Interview Procedures (IA)",
+          "found": true
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": true
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": true
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": true
+        }
+      ]
+    },
+    {
+      "agency": "CA Department of Justice - Bureau of Investigation",
+      "type": "State",
+      "city": null,
+      "county": null,
+      "policiesFound": 9,
+      "totalTopics": 334,
+      "coveragePercent": "2.7%",
+      "sampleTopics": [
+        {
+          "topic": "Grievance and Appeal Process",
+          "found": false
+        },
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "Early Warning System / At-Risk Officer Tracking",
+          "found": false
+        },
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "POBR (Peace Officer Bill of Rights) Compliance",
+          "found": false
+        },
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        },
+        {
+          "topic": "Force Reporting Requirements",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "CA Department of Justice - Bureau of Firearms",
+      "type": "State",
+      "city": null,
+      "county": null,
+      "policiesFound": 8,
+      "totalTopics": 334,
+      "coveragePercent": "2.4%",
+      "sampleTopics": [
+        {
+          "topic": "Skelly Hearing Procedures",
+          "found": false
+        },
+        {
+          "topic": "Sustained / Exonerated / Unfounded Findings",
+          "found": false
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Investigation Timeline Requirements",
+          "found": false
+        },
+        {
+          "topic": "Footage Release and Public Records",
+          "found": false
+        },
+        {
+          "topic": "Force Review Board Process",
+          "found": false
+        },
+        {
+          "topic": "Camera Equipment Assignment and Maintenance",
+          "found": false
+        },
+        {
+          "topic": "Force Reporting Requirements",
+          "found": false
+        },
+        {
+          "topic": "Deadly Force Authorization",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "CA Department of Justice - Bureau of Gambling Control",
+      "type": "State",
+      "city": null,
+      "county": null,
+      "policiesFound": 9,
+      "totalTopics": 334,
+      "coveragePercent": "2.7%",
+      "sampleTopics": [
+        {
+          "topic": "Administrative vs Criminal Investigations",
+          "found": false
+        },
+        {
+          "topic": "Taser / CEW Policy",
+          "found": false
+        },
+        {
+          "topic": "Chokehold / Neck Restraint Ban",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "Penalty Matrix / Penalty Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Footage Release and Public Records",
+          "found": false
+        },
+        {
+          "topic": "Camera Equipment Assignment and Maintenance",
+          "found": false
+        },
+        {
+          "topic": "POBR (Peace Officer Bill of Rights) Compliance",
+          "found": false
+        },
+        {
+          "topic": "OC Spray / Chemical Agents",
+          "found": false
+        },
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "CA Department of Corrections and Rehabilitation",
+      "type": "State",
+      "city": null,
+      "county": null,
+      "policiesFound": 9,
+      "totalTopics": 334,
+      "coveragePercent": "2.7%",
+      "sampleTopics": [
+        {
+          "topic": "Warning Requirements Before Force",
+          "found": false
+        },
+        {
+          "topic": "Duty to Intervene",
+          "found": false
+        },
+        {
+          "topic": "Less-Lethal Weapons Deployment",
+          "found": false
+        },
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        },
+        {
+          "topic": "POBR (Peace Officer Bill of Rights) Compliance",
+          "found": false
+        },
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        },
+        {
+          "topic": "Administrative vs Criminal Investigations",
+          "found": false
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        },
+        {
+          "topic": "Early Warning System / At-Risk Officer Tracking",
+          "found": false
+        },
+        {
+          "topic": "Footage Release and Public Records",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "CA Department of Fish and Wildlife",
+      "type": "State",
+      "city": null,
+      "county": null,
+      "policiesFound": 10,
+      "totalTopics": 334,
+      "coveragePercent": "3.0%",
+      "sampleTopics": [
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "Penalty Matrix / Penalty Guidelines",
+          "found": false
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Duty to Intervene",
+          "found": false
+        },
+        {
+          "topic": "POBR (Peace Officer Bill of Rights) Compliance",
+          "found": false
+        },
+        {
+          "topic": "Administrative vs Criminal Investigations",
+          "found": false
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "CA Department of Parks and Recreation",
+      "type": "State",
+      "city": null,
+      "county": null,
+      "policiesFound": 11,
+      "totalTopics": 334,
+      "coveragePercent": "3.3%",
+      "sampleTopics": [
+        {
+          "topic": "Less-Lethal Weapons Deployment",
+          "found": false
+        },
+        {
+          "topic": "Force Continuum / Force Options",
+          "found": true
+        },
+        {
+          "topic": "Administrative vs Criminal Investigations",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "Progressive Discipline Framework",
+          "found": true
+        },
+        {
+          "topic": "Investigation Timeline Requirements",
+          "found": false
+        },
+        {
+          "topic": "Anonymous Complaint Processing",
+          "found": false
+        },
+        {
+          "topic": "Chokehold / Neck Restraint Ban",
+          "found": false
+        },
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "CA Department of Motor Vehicles Investigations",
+      "type": "State",
+      "city": null,
+      "county": null,
+      "policiesFound": 6,
+      "totalTopics": 334,
+      "coveragePercent": "1.8%",
+      "sampleTopics": [
+        {
+          "topic": "Deadly Force Authorization",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Witness Interview Procedures (IA)",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Camera Equipment Assignment and Maintenance",
+          "found": false
+        },
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": false
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        },
+        {
+          "topic": "Force Reporting Requirements",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "CA Department of Insurance - Fraud Division",
+      "type": "State",
+      "city": null,
+      "county": null,
+      "policiesFound": 8,
+      "totalTopics": 334,
+      "coveragePercent": "2.4%",
+      "sampleTopics": [
+        {
+          "topic": "Grievance and Appeal Process",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "Duty to Intervene",
+          "found": false
+        },
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Witness Interview Procedures (IA)",
+          "found": false
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        },
+        {
+          "topic": "OC Spray / Chemical Agents",
+          "found": false
+        },
+        {
+          "topic": "Investigation Timeline Requirements",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "CA Department of Consumer Affairs - Investigation",
+      "type": "State",
+      "city": null,
+      "county": null,
+      "policiesFound": 8,
+      "totalTopics": 334,
+      "coveragePercent": "2.4%",
+      "sampleTopics": [
+        {
+          "topic": "Force Continuum / Force Options",
+          "found": false
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        },
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Pitchess Motion Compliance",
+          "found": false
+        },
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "OC Spray / Chemical Agents",
+          "found": false
+        },
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        },
+        {
+          "topic": "Early Warning System / At-Risk Officer Tracking",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "CA Department of Cannabis Control",
+      "type": "State",
+      "city": null,
+      "county": null,
+      "policiesFound": 8,
+      "totalTopics": 334,
+      "coveragePercent": "2.4%",
+      "sampleTopics": [
+        {
+          "topic": "Penalty Matrix / Penalty Guidelines",
+          "found": false
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Footage Release and Public Records",
+          "found": false
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        },
+        {
+          "topic": "Officer Review of Footage Before Reports",
+          "found": false
+        },
+        {
+          "topic": "Less-Lethal Weapons Deployment",
+          "found": false
+        },
+        {
+          "topic": "Duty to Intervene",
+          "found": false
+        },
+        {
+          "topic": "Force Review Board Process",
+          "found": false
+        },
+        {
+          "topic": "Pitchess Motion Compliance",
+          "found": false
+        },
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "CA Alcoholic Beverage Control",
+      "type": "State",
+      "city": null,
+      "county": null,
+      "policiesFound": 10,
+      "totalTopics": 334,
+      "coveragePercent": "3.0%",
+      "sampleTopics": [
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        },
+        {
+          "topic": "Skelly Hearing Procedures",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "Force Reporting Requirements",
+          "found": false
+        },
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        },
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": false
+        },
+        {
+          "topic": "Sustained / Exonerated / Unfounded Findings",
+          "found": false
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "CA Horse Racing Board",
+      "type": "State",
+      "city": null,
+      "county": null,
+      "policiesFound": 8,
+      "totalTopics": 334,
+      "coveragePercent": "2.4%",
+      "sampleTopics": [
+        {
+          "topic": "Warning Requirements Before Force",
+          "found": false
+        },
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        },
+        {
+          "topic": "Force Reporting Requirements",
+          "found": false
+        },
+        {
+          "topic": "Footage Release and Public Records",
+          "found": false
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "Pitchess Motion Compliance",
+          "found": false
+        },
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "Less-Lethal Weapons Deployment",
+          "found": false
+        },
+        {
+          "topic": "Duty to Intervene",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "CA Franchise Tax Board - Criminal Investigation",
+      "type": "State",
+      "city": null,
+      "county": null,
+      "policiesFound": 6,
+      "totalTopics": 334,
+      "coveragePercent": "1.8%",
+      "sampleTopics": [
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "Witness Interview Procedures (IA)",
+          "found": false
+        },
+        {
+          "topic": "Early Warning System / At-Risk Officer Tracking",
+          "found": false
+        },
+        {
+          "topic": "Progressive Discipline Framework",
+          "found": false
+        },
+        {
+          "topic": "Camera Equipment Assignment and Maintenance",
+          "found": false
+        },
+        {
+          "topic": "Anonymous Complaint Processing",
+          "found": false
+        },
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        },
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        },
+        {
+          "topic": "POBR (Peace Officer Bill of Rights) Compliance",
+          "found": false
+        },
+        {
+          "topic": "Warning Requirements Before Force",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "CA State Lottery - Security",
+      "type": "State",
+      "city": null,
+      "county": null,
+      "policiesFound": 8,
+      "totalTopics": 334,
+      "coveragePercent": "2.4%",
+      "sampleTopics": [
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        },
+        {
+          "topic": "Camera Equipment Assignment and Maintenance",
+          "found": false
+        },
+        {
+          "topic": "OC Spray / Chemical Agents",
+          "found": false
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "Force Continuum / Force Options",
+          "found": true
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": false
+        },
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        },
+        {
+          "topic": "Sustained / Exonerated / Unfounded Findings",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "CA Emergency Medical Services Authority",
+      "type": "State",
+      "city": null,
+      "county": null,
+      "policiesFound": 9,
+      "totalTopics": 334,
+      "coveragePercent": "2.7%",
+      "sampleTopics": [
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "Progressive Discipline Framework",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "Pitchess Motion Compliance",
+          "found": false
+        },
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": false
+        },
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "Deadly Force Authorization",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "CA Office of Emergency Services",
+      "type": "State",
+      "city": null,
+      "county": null,
+      "policiesFound": 9,
+      "totalTopics": 334,
+      "coveragePercent": "2.7%",
+      "sampleTopics": [
+        {
+          "topic": "Camera Equipment Assignment and Maintenance",
+          "found": false
+        },
+        {
+          "topic": "Taser / CEW Policy",
+          "found": false
+        },
+        {
+          "topic": "Sustained / Exonerated / Unfounded Findings",
+          "found": false
+        },
+        {
+          "topic": "Penalty Matrix / Penalty Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Less-Lethal Weapons Deployment",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        },
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        },
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "CA State Controller - Investigations",
+      "type": "State",
+      "city": null,
+      "county": null,
+      "policiesFound": 10,
+      "totalTopics": 334,
+      "coveragePercent": "3.0%",
+      "sampleTopics": [
+        {
+          "topic": "Warning Requirements Before Force",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "Deadly Force Authorization",
+          "found": false
+        },
+        {
+          "topic": "Administrative vs Criminal Investigations",
+          "found": false
+        },
+        {
+          "topic": "Pitchess Motion Compliance",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        },
+        {
+          "topic": "OC Spray / Chemical Agents",
+          "found": false
+        },
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "CA Department of Industrial Relations",
+      "type": "State",
+      "city": null,
+      "county": null,
+      "policiesFound": 7,
+      "totalTopics": 334,
+      "coveragePercent": "2.1%",
+      "sampleTopics": [
+        {
+          "topic": "Taser / CEW Policy",
+          "found": false
+        },
+        {
+          "topic": "Force Continuum / Force Options",
+          "found": true
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        },
+        {
+          "topic": "OC Spray / Chemical Agents",
+          "found": false
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        },
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "Deadly Force Authorization",
+          "found": false
+        },
+        {
+          "topic": "Camera Equipment Assignment and Maintenance",
+          "found": false
+        },
+        {
+          "topic": "Skelly Hearing Procedures",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "CA Department of Toxic Substances Control",
+      "type": "State",
+      "city": null,
+      "county": null,
+      "policiesFound": 10,
+      "totalTopics": 334,
+      "coveragePercent": "3.0%",
+      "sampleTopics": [
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "OC Spray / Chemical Agents",
+          "found": false
+        },
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        },
+        {
+          "topic": "Early Warning System / At-Risk Officer Tracking",
+          "found": false
+        },
+        {
+          "topic": "Anonymous Complaint Processing",
+          "found": false
+        },
+        {
+          "topic": "Progressive Discipline Framework",
+          "found": true
+        },
+        {
+          "topic": "Force Continuum / Force Options",
+          "found": true
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Skelly Hearing Procedures",
+          "found": false
+        },
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "CA Assembly Sergeant at Arms",
+      "type": "State",
+      "city": null,
+      "county": null,
+      "policiesFound": 11,
+      "totalTopics": 334,
+      "coveragePercent": "3.3%",
+      "sampleTopics": [
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "Force Review Board Process",
+          "found": false
+        },
+        {
+          "topic": "Penalty Matrix / Penalty Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Grievance and Appeal Process",
+          "found": false
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        },
+        {
+          "topic": "OC Spray / Chemical Agents",
+          "found": false
+        },
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": false
+        },
+        {
+          "topic": "Skelly Hearing Procedures",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "CA Senate Sergeant at Arms",
+      "type": "State",
+      "city": null,
+      "county": null,
+      "policiesFound": 11,
+      "totalTopics": 334,
+      "coveragePercent": "3.3%",
+      "sampleTopics": [
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Officer Review of Footage Before Reports",
+          "found": false
+        },
+        {
+          "topic": "Pitchess Motion Compliance",
+          "found": false
+        },
+        {
+          "topic": "Progressive Discipline Framework",
+          "found": false
+        },
+        {
+          "topic": "Chokehold / Neck Restraint Ban",
+          "found": false
+        },
+        {
+          "topic": "Warning Requirements Before Force",
+          "found": false
+        },
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "Taser / CEW Policy",
+          "found": false
+        },
+        {
+          "topic": "Investigation Timeline Requirements",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "CA Exposition Park - Rangers",
+      "type": "State",
+      "city": null,
+      "county": null,
+      "policiesFound": 10,
+      "totalTopics": 334,
+      "coveragePercent": "3.0%",
+      "sampleTopics": [
+        {
+          "topic": "Pitchess Motion Compliance",
+          "found": false
+        },
+        {
+          "topic": "Chokehold / Neck Restraint Ban",
+          "found": false
+        },
+        {
+          "topic": "Less-Lethal Weapons Deployment",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Grievance and Appeal Process",
+          "found": false
+        },
+        {
+          "topic": "Sustained / Exonerated / Unfounded Findings",
+          "found": false
+        },
+        {
+          "topic": "Investigation Timeline Requirements",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "Force Reporting Requirements",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "CA National Guard - Military Police",
+      "type": "State",
+      "city": null,
+      "county": null,
+      "policiesFound": 11,
+      "totalTopics": 334,
+      "coveragePercent": "3.3%",
+      "sampleTopics": [
+        {
+          "topic": "Grievance and Appeal Process",
+          "found": false
+        },
+        {
+          "topic": "Sustained / Exonerated / Unfounded Findings",
+          "found": false
+        },
+        {
+          "topic": "Witness Interview Procedures (IA)",
+          "found": false
+        },
+        {
+          "topic": "Duty to Intervene",
+          "found": false
+        },
+        {
+          "topic": "Investigation Timeline Requirements",
+          "found": false
+        },
+        {
+          "topic": "Camera Equipment Assignment and Maintenance",
+          "found": false
+        },
+        {
+          "topic": "Penalty Matrix / Penalty Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Cal Fire Law Enforcement",
+      "type": "State",
+      "city": null,
+      "county": null,
+      "policiesFound": 9,
+      "totalTopics": 334,
+      "coveragePercent": "2.7%",
+      "sampleTopics": [
+        {
+          "topic": "Investigation Timeline Requirements",
+          "found": false
+        },
+        {
+          "topic": "Camera Equipment Assignment and Maintenance",
+          "found": false
+        },
+        {
+          "topic": "Footage Release and Public Records",
+          "found": false
+        },
+        {
+          "topic": "Duty to Intervene",
+          "found": false
+        },
+        {
+          "topic": "Progressive Discipline Framework",
+          "found": true
+        },
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        },
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "Force Reporting Requirements",
+          "found": false
+        },
+        {
+          "topic": "Sustained / Exonerated / Unfounded Findings",
+          "found": false
+        },
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Los Angeles County Sheriff's Office",
+      "type": "Sheriff",
+      "city": null,
+      "county": "Los Angeles",
+      "policiesFound": 7,
+      "totalTopics": 334,
+      "coveragePercent": "2.1%",
+      "sampleTopics": [
+        {
+          "topic": "Grievance and Appeal Process",
+          "found": false
+        },
+        {
+          "topic": "Chokehold / Neck Restraint Ban",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "Warning Requirements Before Force",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Los Angeles County District Attorney - Investigations",
+      "type": "District_Attorney",
+      "city": null,
+      "county": "Los Angeles",
+      "policiesFound": 8,
+      "totalTopics": 334,
+      "coveragePercent": "2.4%",
+      "sampleTopics": [
+        {
+          "topic": "Force Continuum / Force Options",
+          "found": true
+        },
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        },
+        {
+          "topic": "Officer Review of Footage Before Reports",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "Pitchess Motion Compliance",
+          "found": false
+        },
+        {
+          "topic": "OC Spray / Chemical Agents",
+          "found": false
+        },
+        {
+          "topic": "Grievance and Appeal Process",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Los Angeles County Probation Department",
+      "type": "Probation",
+      "city": null,
+      "county": "Los Angeles",
+      "policiesFound": 12,
+      "totalTopics": 334,
+      "coveragePercent": "3.6%",
+      "sampleTopics": [
+        {
+          "topic": "Progressive Discipline Framework",
+          "found": true
+        },
+        {
+          "topic": "Taser / CEW Policy",
+          "found": false
+        },
+        {
+          "topic": "Footage Release and Public Records",
+          "found": false
+        },
+        {
+          "topic": "Force Review Board Process",
+          "found": false
+        },
+        {
+          "topic": "Force Reporting Requirements",
+          "found": false
+        },
+        {
+          "topic": "Sustained / Exonerated / Unfounded Findings",
+          "found": false
+        },
+        {
+          "topic": "Skelly Hearing Procedures",
+          "found": false
+        },
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        },
+        {
+          "topic": "Early Warning System / At-Risk Officer Tracking",
+          "found": false
+        },
+        {
+          "topic": "Pitchess Motion Compliance",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Los Angeles County Coroner",
+      "type": "Coroner",
+      "city": null,
+      "county": "Los Angeles",
+      "policiesFound": 8,
+      "totalTopics": 334,
+      "coveragePercent": "2.4%",
+      "sampleTopics": [
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        },
+        {
+          "topic": "Grievance and Appeal Process",
+          "found": false
+        },
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": false
+        },
+        {
+          "topic": "Progressive Discipline Framework",
+          "found": false
+        },
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Force Continuum / Force Options",
+          "found": true
+        },
+        {
+          "topic": "Skelly Hearing Procedures",
+          "found": false
+        },
+        {
+          "topic": "OC Spray / Chemical Agents",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "San Diego County Sheriff's Office",
+      "type": "Sheriff",
+      "city": null,
+      "county": "San Diego",
+      "policiesFound": 11,
+      "totalTopics": 334,
+      "coveragePercent": "3.3%",
+      "sampleTopics": [
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        },
+        {
+          "topic": "Footage Release and Public Records",
+          "found": false
+        },
+        {
+          "topic": "Less-Lethal Weapons Deployment",
+          "found": false
+        },
+        {
+          "topic": "Early Warning System / At-Risk Officer Tracking",
+          "found": false
+        },
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        },
+        {
+          "topic": "Grievance and Appeal Process",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "OC Spray / Chemical Agents",
+          "found": false
+        },
+        {
+          "topic": "Camera Equipment Assignment and Maintenance",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "San Diego County District Attorney - Investigations",
+      "type": "District_Attorney",
+      "city": null,
+      "county": "San Diego",
+      "policiesFound": 9,
+      "totalTopics": 334,
+      "coveragePercent": "2.7%",
+      "sampleTopics": [
+        {
+          "topic": "Penalty Matrix / Penalty Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "Duty to Intervene",
+          "found": false
+        },
+        {
+          "topic": "Administrative vs Criminal Investigations",
+          "found": false
+        },
+        {
+          "topic": "Force Review Board Process",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "OC Spray / Chemical Agents",
+          "found": false
+        },
+        {
+          "topic": "Skelly Hearing Procedures",
+          "found": false
+        },
+        {
+          "topic": "Witness Interview Procedures (IA)",
+          "found": false
+        },
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "San Diego County Probation Department",
+      "type": "Probation",
+      "city": null,
+      "county": "San Diego",
+      "policiesFound": 8,
+      "totalTopics": 334,
+      "coveragePercent": "2.4%",
+      "sampleTopics": [
+        {
+          "topic": "Force Continuum / Force Options",
+          "found": true
+        },
+        {
+          "topic": "Investigation Timeline Requirements",
+          "found": false
+        },
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "OC Spray / Chemical Agents",
+          "found": false
+        },
+        {
+          "topic": "Footage Release and Public Records",
+          "found": false
+        },
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        },
+        {
+          "topic": "Skelly Hearing Procedures",
+          "found": false
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "San Diego County Coroner",
+      "type": "Coroner",
+      "city": null,
+      "county": "San Diego",
+      "policiesFound": 11,
+      "totalTopics": 334,
+      "coveragePercent": "3.3%",
+      "sampleTopics": [
+        {
+          "topic": "Officer Review of Footage Before Reports",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "Force Reporting Requirements",
+          "found": false
+        },
+        {
+          "topic": "Penalty Matrix / Penalty Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        },
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "Force Review Board Process",
+          "found": false
+        },
+        {
+          "topic": "Investigation Timeline Requirements",
+          "found": false
+        },
+        {
+          "topic": "Duty to Intervene",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Orange County Sheriff's Office",
+      "type": "Sheriff",
+      "city": null,
+      "county": "Orange",
+      "policiesFound": 7,
+      "totalTopics": 334,
+      "coveragePercent": "2.1%",
+      "sampleTopics": [
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        },
+        {
+          "topic": "Administrative vs Criminal Investigations",
+          "found": false
+        },
+        {
+          "topic": "Progressive Discipline Framework",
+          "found": true
+        },
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        },
+        {
+          "topic": "Investigation Timeline Requirements",
+          "found": false
+        },
+        {
+          "topic": "Sustained / Exonerated / Unfounded Findings",
+          "found": false
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        },
+        {
+          "topic": "Anonymous Complaint Processing",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Orange County District Attorney - Investigations",
+      "type": "District_Attorney",
+      "city": null,
+      "county": "Orange",
+      "policiesFound": 10,
+      "totalTopics": 334,
+      "coveragePercent": "3.0%",
+      "sampleTopics": [
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        },
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        },
+        {
+          "topic": "Pitchess Motion Compliance",
+          "found": false
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        },
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "Camera Equipment Assignment and Maintenance",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Force Continuum / Force Options",
+          "found": true
+        }
+      ]
+    },
+    {
+      "agency": "Orange County Probation Department",
+      "type": "Probation",
+      "city": null,
+      "county": "Orange",
+      "policiesFound": 11,
+      "totalTopics": 334,
+      "coveragePercent": "3.3%",
+      "sampleTopics": [
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Witness Interview Procedures (IA)",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        },
+        {
+          "topic": "Warning Requirements Before Force",
+          "found": false
+        },
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        },
+        {
+          "topic": "Force Review Board Process",
+          "found": false
+        },
+        {
+          "topic": "Sustained / Exonerated / Unfounded Findings",
+          "found": false
+        },
+        {
+          "topic": "Administrative vs Criminal Investigations",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Orange County Coroner",
+      "type": "Coroner",
+      "city": null,
+      "county": "Orange",
+      "policiesFound": 10,
+      "totalTopics": 334,
+      "coveragePercent": "3.0%",
+      "sampleTopics": [
+        {
+          "topic": "Witness Interview Procedures (IA)",
+          "found": false
+        },
+        {
+          "topic": "Penalty Matrix / Penalty Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Duty to Intervene",
+          "found": false
+        },
+        {
+          "topic": "Camera Equipment Assignment and Maintenance",
+          "found": false
+        },
+        {
+          "topic": "Chokehold / Neck Restraint Ban",
+          "found": false
+        },
+        {
+          "topic": "Officer Review of Footage Before Reports",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": false
+        },
+        {
+          "topic": "Skelly Hearing Procedures",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Riverside County Sheriff's Office",
+      "type": "Sheriff",
+      "city": null,
+      "county": "Riverside",
+      "policiesFound": 10,
+      "totalTopics": 334,
+      "coveragePercent": "3.0%",
+      "sampleTopics": [
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "Progressive Discipline Framework",
+          "found": false
+        },
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        },
+        {
+          "topic": "Camera Equipment Assignment and Maintenance",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "Chokehold / Neck Restraint Ban",
+          "found": false
+        },
+        {
+          "topic": "Force Review Board Process",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Riverside County District Attorney - Investigations",
+      "type": "District_Attorney",
+      "city": null,
+      "county": "Riverside",
+      "policiesFound": 7,
+      "totalTopics": 334,
+      "coveragePercent": "2.1%",
+      "sampleTopics": [
+        {
+          "topic": "Administrative vs Criminal Investigations",
+          "found": false
+        },
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "Anonymous Complaint Processing",
+          "found": false
+        },
+        {
+          "topic": "Sustained / Exonerated / Unfounded Findings",
+          "found": false
+        },
+        {
+          "topic": "POBR (Peace Officer Bill of Rights) Compliance",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "Investigation Timeline Requirements",
+          "found": false
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Force Continuum / Force Options",
+          "found": true
+        },
+        {
+          "topic": "Taser / CEW Policy",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Riverside County Probation Department",
+      "type": "Probation",
+      "city": null,
+      "county": "Riverside",
+      "policiesFound": 9,
+      "totalTopics": 334,
+      "coveragePercent": "2.7%",
+      "sampleTopics": [
+        {
+          "topic": "Pitchess Motion Compliance",
+          "found": false
+        },
+        {
+          "topic": "Investigation Timeline Requirements",
+          "found": false
+        },
+        {
+          "topic": "POBR (Peace Officer Bill of Rights) Compliance",
+          "found": false
+        },
+        {
+          "topic": "Sustained / Exonerated / Unfounded Findings",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "Camera Equipment Assignment and Maintenance",
+          "found": false
+        },
+        {
+          "topic": "Officer Review of Footage Before Reports",
+          "found": false
+        },
+        {
+          "topic": "Chokehold / Neck Restraint Ban",
+          "found": false
+        },
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Riverside County Coroner",
+      "type": "Coroner",
+      "city": null,
+      "county": "Riverside",
+      "policiesFound": 10,
+      "totalTopics": 334,
+      "coveragePercent": "3.0%",
+      "sampleTopics": [
+        {
+          "topic": "POBR (Peace Officer Bill of Rights) Compliance",
+          "found": false
+        },
+        {
+          "topic": "Progressive Discipline Framework",
+          "found": false
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        },
+        {
+          "topic": "Penalty Matrix / Penalty Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Less-Lethal Weapons Deployment",
+          "found": false
+        },
+        {
+          "topic": "Footage Release and Public Records",
+          "found": false
+        },
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "Skelly Hearing Procedures",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "San Bernardino County Sheriff's Office",
+      "type": "Sheriff",
+      "city": null,
+      "county": "San Bernardino",
+      "policiesFound": 6,
+      "totalTopics": 334,
+      "coveragePercent": "1.8%",
+      "sampleTopics": [
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Force Review Board Process",
+          "found": false
+        },
+        {
+          "topic": "Penalty Matrix / Penalty Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": false
+        },
+        {
+          "topic": "Chokehold / Neck Restraint Ban",
+          "found": false
+        },
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Duty to Intervene",
+          "found": false
+        },
+        {
+          "topic": "Administrative vs Criminal Investigations",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "San Bernardino County District Attorney - Investigations",
+      "type": "District_Attorney",
+      "city": null,
+      "county": "San Bernardino",
+      "policiesFound": 9,
+      "totalTopics": 334,
+      "coveragePercent": "2.7%",
+      "sampleTopics": [
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        },
+        {
+          "topic": "Chokehold / Neck Restraint Ban",
+          "found": false
+        },
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": false
+        },
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Warning Requirements Before Force",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        },
+        {
+          "topic": "Footage Release and Public Records",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "San Bernardino County Probation Department",
+      "type": "Probation",
+      "city": null,
+      "county": "San Bernardino",
+      "policiesFound": 10,
+      "totalTopics": 334,
+      "coveragePercent": "3.0%",
+      "sampleTopics": [
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        },
+        {
+          "topic": "Force Continuum / Force Options",
+          "found": true
+        },
+        {
+          "topic": "Camera Equipment Assignment and Maintenance",
+          "found": false
+        },
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        },
+        {
+          "topic": "Taser / CEW Policy",
+          "found": false
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Less-Lethal Weapons Deployment",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Santa Clara County Sheriff's Office",
+      "type": "Sheriff",
+      "city": null,
+      "county": "Santa Clara",
+      "policiesFound": 7,
+      "totalTopics": 334,
+      "coveragePercent": "2.1%",
+      "sampleTopics": [
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        },
+        {
+          "topic": "Chokehold / Neck Restraint Ban",
+          "found": false
+        },
+        {
+          "topic": "Force Reporting Requirements",
+          "found": false
+        },
+        {
+          "topic": "Force Review Board Process",
+          "found": false
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        },
+        {
+          "topic": "Sustained / Exonerated / Unfounded Findings",
+          "found": false
+        },
+        {
+          "topic": "Footage Release and Public Records",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Santa Clara County District Attorney - Investigations",
+      "type": "District_Attorney",
+      "city": null,
+      "county": "Santa Clara",
+      "policiesFound": 11,
+      "totalTopics": 334,
+      "coveragePercent": "3.3%",
+      "sampleTopics": [
+        {
+          "topic": "Chokehold / Neck Restraint Ban",
+          "found": false
+        },
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "OC Spray / Chemical Agents",
+          "found": false
+        },
+        {
+          "topic": "Witness Interview Procedures (IA)",
+          "found": false
+        },
+        {
+          "topic": "Investigation Timeline Requirements",
+          "found": false
+        },
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        },
+        {
+          "topic": "Duty to Intervene",
+          "found": false
+        },
+        {
+          "topic": "Footage Release and Public Records",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Santa Clara County Probation Department",
+      "type": "Probation",
+      "city": null,
+      "county": "Santa Clara",
+      "policiesFound": 10,
+      "totalTopics": 334,
+      "coveragePercent": "3.0%",
+      "sampleTopics": [
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": false
+        },
+        {
+          "topic": "Warning Requirements Before Force",
+          "found": false
+        },
+        {
+          "topic": "Grievance and Appeal Process",
+          "found": false
+        },
+        {
+          "topic": "OC Spray / Chemical Agents",
+          "found": false
+        },
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        },
+        {
+          "topic": "Less-Lethal Weapons Deployment",
+          "found": false
+        },
+        {
+          "topic": "Footage Release and Public Records",
+          "found": false
+        },
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "Officer Review of Footage Before Reports",
+          "found": false
+        },
+        {
+          "topic": "Progressive Discipline Framework",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Santa Clara County Coroner",
+      "type": "Coroner",
+      "city": null,
+      "county": "Santa Clara",
+      "policiesFound": 10,
+      "totalTopics": 334,
+      "coveragePercent": "3.0%",
+      "sampleTopics": [
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        },
+        {
+          "topic": "Anonymous Complaint Processing",
+          "found": false
+        },
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "Administrative vs Criminal Investigations",
+          "found": false
+        },
+        {
+          "topic": "Investigation Timeline Requirements",
+          "found": false
+        },
+        {
+          "topic": "Force Reporting Requirements",
+          "found": false
+        },
+        {
+          "topic": "Less-Lethal Weapons Deployment",
+          "found": false
+        },
+        {
+          "topic": "Penalty Matrix / Penalty Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Skelly Hearing Procedures",
+          "found": false
+        },
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Alameda County Sheriff's Office",
+      "type": "Sheriff",
+      "city": null,
+      "county": "Alameda",
+      "policiesFound": 9,
+      "totalTopics": 334,
+      "coveragePercent": "2.7%",
+      "sampleTopics": [
+        {
+          "topic": "Deadly Force Authorization",
+          "found": false
+        },
+        {
+          "topic": "Penalty Matrix / Penalty Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Officer Review of Footage Before Reports",
+          "found": false
+        },
+        {
+          "topic": "POBR (Peace Officer Bill of Rights) Compliance",
+          "found": false
+        },
+        {
+          "topic": "Force Reporting Requirements",
+          "found": false
+        },
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        },
+        {
+          "topic": "Force Review Board Process",
+          "found": false
+        },
+        {
+          "topic": "Chokehold / Neck Restraint Ban",
+          "found": false
+        },
+        {
+          "topic": "Pitchess Motion Compliance",
+          "found": false
+        },
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Alameda County District Attorney - Investigations",
+      "type": "District_Attorney",
+      "city": null,
+      "county": "Alameda",
+      "policiesFound": 10,
+      "totalTopics": 334,
+      "coveragePercent": "3.0%",
+      "sampleTopics": [
+        {
+          "topic": "Witness Interview Procedures (IA)",
+          "found": false
+        },
+        {
+          "topic": "Penalty Matrix / Penalty Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Grievance and Appeal Process",
+          "found": false
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "Early Warning System / At-Risk Officer Tracking",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Alameda County Probation Department",
+      "type": "Probation",
+      "city": null,
+      "county": "Alameda",
+      "policiesFound": 7,
+      "totalTopics": 334,
+      "coveragePercent": "2.1%",
+      "sampleTopics": [
+        {
+          "topic": "Less-Lethal Weapons Deployment",
+          "found": false
+        },
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "Deadly Force Authorization",
+          "found": false
+        },
+        {
+          "topic": "Witness Interview Procedures (IA)",
+          "found": false
+        },
+        {
+          "topic": "Force Review Board Process",
+          "found": false
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Chokehold / Neck Restraint Ban",
+          "found": false
+        },
+        {
+          "topic": "Officer Review of Footage Before Reports",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Alameda County Coroner",
+      "type": "Coroner",
+      "city": null,
+      "county": "Alameda",
+      "policiesFound": 10,
+      "totalTopics": 334,
+      "coveragePercent": "3.0%",
+      "sampleTopics": [
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": false
+        },
+        {
+          "topic": "Penalty Matrix / Penalty Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Investigation Timeline Requirements",
+          "found": false
+        },
+        {
+          "topic": "Duty to Intervene",
+          "found": false
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Officer Review of Footage Before Reports",
+          "found": false
+        },
+        {
+          "topic": "Deadly Force Authorization",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Sacramento County Sheriff's Office",
+      "type": "Sheriff",
+      "city": null,
+      "county": "Sacramento",
+      "policiesFound": 11,
+      "totalTopics": 334,
+      "coveragePercent": "3.3%",
+      "sampleTopics": [
+        {
+          "topic": "Anonymous Complaint Processing",
+          "found": false
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Officer Review of Footage Before Reports",
+          "found": false
+        },
+        {
+          "topic": "Footage Release and Public Records",
+          "found": false
+        },
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "Sustained / Exonerated / Unfounded Findings",
+          "found": false
+        },
+        {
+          "topic": "Deadly Force Authorization",
+          "found": false
+        },
+        {
+          "topic": "Taser / CEW Policy",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Sacramento County District Attorney - Investigations",
+      "type": "District_Attorney",
+      "city": null,
+      "county": "Sacramento",
+      "policiesFound": 10,
+      "totalTopics": 334,
+      "coveragePercent": "3.0%",
+      "sampleTopics": [
+        {
+          "topic": "Progressive Discipline Framework",
+          "found": true
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "Pitchess Motion Compliance",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "Penalty Matrix / Penalty Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Footage Release and Public Records",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Early Warning System / At-Risk Officer Tracking",
+          "found": false
+        },
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Sacramento County Probation Department",
+      "type": "Probation",
+      "city": null,
+      "county": "Sacramento",
+      "policiesFound": 10,
+      "totalTopics": 334,
+      "coveragePercent": "3.0%",
+      "sampleTopics": [
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        },
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        },
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "Grievance and Appeal Process",
+          "found": false
+        },
+        {
+          "topic": "Administrative vs Criminal Investigations",
+          "found": false
+        },
+        {
+          "topic": "Duty to Intervene",
+          "found": false
+        },
+        {
+          "topic": "Anonymous Complaint Processing",
+          "found": false
+        },
+        {
+          "topic": "Warning Requirements Before Force",
+          "found": false
+        },
+        {
+          "topic": "Footage Release and Public Records",
+          "found": false
+        },
+        {
+          "topic": "POBR (Peace Officer Bill of Rights) Compliance",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Sacramento County Coroner",
+      "type": "Coroner",
+      "city": null,
+      "county": "Sacramento",
+      "policiesFound": 9,
+      "totalTopics": 334,
+      "coveragePercent": "2.7%",
+      "sampleTopics": [
+        {
+          "topic": "Chokehold / Neck Restraint Ban",
+          "found": false
+        },
+        {
+          "topic": "Warning Requirements Before Force",
+          "found": false
+        },
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "Early Warning System / At-Risk Officer Tracking",
+          "found": false
+        },
+        {
+          "topic": "Sustained / Exonerated / Unfounded Findings",
+          "found": false
+        },
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "Pitchess Motion Compliance",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "San Diego Police Department",
+      "type": "Police",
+      "city": "San Diego",
+      "county": "San Diego",
+      "policiesFound": 12,
+      "totalTopics": 334,
+      "coveragePercent": "3.6%",
+      "sampleTopics": [
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": true
+        },
+        {
+          "topic": "Sustained / Exonerated / Unfounded Findings",
+          "found": false
+        },
+        {
+          "topic": "Witness Interview Procedures (IA)",
+          "found": false
+        },
+        {
+          "topic": "POBR (Peace Officer Bill of Rights) Compliance",
+          "found": false
+        },
+        {
+          "topic": "Duty to Intervene",
+          "found": false
+        },
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        },
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        },
+        {
+          "topic": "Deadly Force Authorization",
+          "found": true
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Contra Costa County Sheriff's Office",
+      "type": "Sheriff",
+      "city": null,
+      "county": "Contra Costa",
+      "policiesFound": 8,
+      "totalTopics": 334,
+      "coveragePercent": "2.4%",
+      "sampleTopics": [
+        {
+          "topic": "Anonymous Complaint Processing",
+          "found": false
+        },
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        },
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        },
+        {
+          "topic": "Force Continuum / Force Options",
+          "found": true
+        },
+        {
+          "topic": "Grievance and Appeal Process",
+          "found": false
+        },
+        {
+          "topic": "Force Reporting Requirements",
+          "found": false
+        },
+        {
+          "topic": "Warning Requirements Before Force",
+          "found": false
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        },
+        {
+          "topic": "Duty to Intervene",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Contra Costa County District Attorney - Investigations",
+      "type": "District_Attorney",
+      "city": null,
+      "county": "Contra Costa",
+      "policiesFound": 8,
+      "totalTopics": 334,
+      "coveragePercent": "2.4%",
+      "sampleTopics": [
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "Taser / CEW Policy",
+          "found": false
+        },
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        },
+        {
+          "topic": "Force Continuum / Force Options",
+          "found": true
+        },
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Chokehold / Neck Restraint Ban",
+          "found": false
+        },
+        {
+          "topic": "Witness Interview Procedures (IA)",
+          "found": false
+        },
+        {
+          "topic": "Camera Equipment Assignment and Maintenance",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Contra Costa County Probation Department",
+      "type": "Probation",
+      "city": null,
+      "county": "Contra Costa",
+      "policiesFound": 10,
+      "totalTopics": 334,
+      "coveragePercent": "3.0%",
+      "sampleTopics": [
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "POBR (Peace Officer Bill of Rights) Compliance",
+          "found": false
+        },
+        {
+          "topic": "Grievance and Appeal Process",
+          "found": false
+        },
+        {
+          "topic": "Anonymous Complaint Processing",
+          "found": false
+        },
+        {
+          "topic": "Officer Review of Footage Before Reports",
+          "found": false
+        },
+        {
+          "topic": "Pitchess Motion Compliance",
+          "found": false
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        },
+        {
+          "topic": "Warning Requirements Before Force",
+          "found": false
+        },
+        {
+          "topic": "Skelly Hearing Procedures",
+          "found": false
+        },
+        {
+          "topic": "Deadly Force Authorization",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Fresno County Sheriff's Office",
+      "type": "Sheriff",
+      "city": null,
+      "county": "Fresno",
+      "policiesFound": 9,
+      "totalTopics": 334,
+      "coveragePercent": "2.7%",
+      "sampleTopics": [
+        {
+          "topic": "Witness Interview Procedures (IA)",
+          "found": false
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "Skelly Hearing Procedures",
+          "found": false
+        },
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        },
+        {
+          "topic": "Deadly Force Authorization",
+          "found": false
+        },
+        {
+          "topic": "Camera Equipment Assignment and Maintenance",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "Taser / CEW Policy",
+          "found": false
+        },
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Fresno County District Attorney - Investigations",
+      "type": "District_Attorney",
+      "city": null,
+      "county": "Fresno",
+      "policiesFound": 10,
+      "totalTopics": 334,
+      "coveragePercent": "3.0%",
+      "sampleTopics": [
+        {
+          "topic": "Grievance and Appeal Process",
+          "found": false
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "POBR (Peace Officer Bill of Rights) Compliance",
+          "found": false
+        },
+        {
+          "topic": "Early Warning System / At-Risk Officer Tracking",
+          "found": false
+        },
+        {
+          "topic": "Footage Release and Public Records",
+          "found": false
+        },
+        {
+          "topic": "Investigation Timeline Requirements",
+          "found": false
+        },
+        {
+          "topic": "Force Reporting Requirements",
+          "found": false
+        },
+        {
+          "topic": "Taser / CEW Policy",
+          "found": false
+        },
+        {
+          "topic": "Anonymous Complaint Processing",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Fresno County Probation Department",
+      "type": "Probation",
+      "city": null,
+      "county": "Fresno",
+      "policiesFound": 10,
+      "totalTopics": 334,
+      "coveragePercent": "3.0%",
+      "sampleTopics": [
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": false
+        },
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        },
+        {
+          "topic": "Less-Lethal Weapons Deployment",
+          "found": false
+        },
+        {
+          "topic": "OC Spray / Chemical Agents",
+          "found": false
+        },
+        {
+          "topic": "Taser / CEW Policy",
+          "found": false
+        },
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        },
+        {
+          "topic": "Duty to Intervene",
+          "found": false
+        },
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        },
+        {
+          "topic": "Skelly Hearing Procedures",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Kern County Sheriff's Office",
+      "type": "Sheriff",
+      "city": null,
+      "county": "Kern",
+      "policiesFound": 11,
+      "totalTopics": 334,
+      "coveragePercent": "3.3%",
+      "sampleTopics": [
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        },
+        {
+          "topic": "Early Warning System / At-Risk Officer Tracking",
+          "found": false
+        },
+        {
+          "topic": "Taser / CEW Policy",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "Progressive Discipline Framework",
+          "found": true
+        },
+        {
+          "topic": "OC Spray / Chemical Agents",
+          "found": false
+        },
+        {
+          "topic": "Less-Lethal Weapons Deployment",
+          "found": false
+        },
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Anonymous Complaint Processing",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Kern County District Attorney - Investigations",
+      "type": "District_Attorney",
+      "city": null,
+      "county": "Kern",
+      "policiesFound": 8,
+      "totalTopics": 334,
+      "coveragePercent": "2.4%",
+      "sampleTopics": [
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": false
+        },
+        {
+          "topic": "Warning Requirements Before Force",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "Less-Lethal Weapons Deployment",
+          "found": false
+        },
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Pitchess Motion Compliance",
+          "found": false
+        },
+        {
+          "topic": "Deadly Force Authorization",
+          "found": false
+        },
+        {
+          "topic": "Force Reporting Requirements",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Kern County Probation Department",
+      "type": "Probation",
+      "city": null,
+      "county": "Kern",
+      "policiesFound": 8,
+      "totalTopics": 334,
+      "coveragePercent": "2.4%",
+      "sampleTopics": [
+        {
+          "topic": "Footage Release and Public Records",
+          "found": false
+        },
+        {
+          "topic": "Deadly Force Authorization",
+          "found": false
+        },
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "Progressive Discipline Framework",
+          "found": true
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "Less-Lethal Weapons Deployment",
+          "found": false
+        },
+        {
+          "topic": "Sustained / Exonerated / Unfounded Findings",
+          "found": false
+        },
+        {
+          "topic": "Pitchess Motion Compliance",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Chokehold / Neck Restraint Ban",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "San Francisco County Sheriff's Office",
+      "type": "Sheriff",
+      "city": null,
+      "county": "San Francisco",
+      "policiesFound": 10,
+      "totalTopics": 334,
+      "coveragePercent": "3.0%",
+      "sampleTopics": [
+        {
+          "topic": "Taser / CEW Policy",
+          "found": false
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "Warning Requirements Before Force",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "Skelly Hearing Procedures",
+          "found": false
+        },
+        {
+          "topic": "Force Continuum / Force Options",
+          "found": true
+        },
+        {
+          "topic": "Sustained / Exonerated / Unfounded Findings",
+          "found": false
+        },
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        },
+        {
+          "topic": "Chokehold / Neck Restraint Ban",
+          "found": false
+        },
+        {
+          "topic": "Progressive Discipline Framework",
+          "found": true
+        }
+      ]
+    },
+    {
+      "agency": "San Francisco County District Attorney - Investigations",
+      "type": "District_Attorney",
+      "city": null,
+      "county": "San Francisco",
+      "policiesFound": 8,
+      "totalTopics": 334,
+      "coveragePercent": "2.4%",
+      "sampleTopics": [
+        {
+          "topic": "Duty to Intervene",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "Anonymous Complaint Processing",
+          "found": false
+        },
+        {
+          "topic": "Taser / CEW Policy",
+          "found": false
+        },
+        {
+          "topic": "Progressive Discipline Framework",
+          "found": true
+        },
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        },
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "Pitchess Motion Compliance",
+          "found": false
+        },
+        {
+          "topic": "Penalty Matrix / Penalty Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Witness Interview Procedures (IA)",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "San Francisco County Coroner",
+      "type": "Coroner",
+      "city": null,
+      "county": "San Francisco",
+      "policiesFound": 8,
+      "totalTopics": 334,
+      "coveragePercent": "2.4%",
+      "sampleTopics": [
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        },
+        {
+          "topic": "Progressive Discipline Framework",
+          "found": true
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "Sustained / Exonerated / Unfounded Findings",
+          "found": false
+        },
+        {
+          "topic": "POBR (Peace Officer Bill of Rights) Compliance",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Skelly Hearing Procedures",
+          "found": false
+        },
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "San Francisco Police Department",
+      "type": "Police",
+      "city": "San Francisco",
+      "county": "San Francisco",
+      "policiesFound": 9,
+      "totalTopics": 334,
+      "coveragePercent": "2.7%",
+      "sampleTopics": [
+        {
+          "topic": "Force Review Board Process",
+          "found": false
+        },
+        {
+          "topic": "Penalty Matrix / Penalty Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Investigation Timeline Requirements",
+          "found": false
+        },
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        },
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        },
+        {
+          "topic": "Officer Review of Footage Before Reports",
+          "found": false
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        },
+        {
+          "topic": "OC Spray / Chemical Agents",
+          "found": false
+        },
+        {
+          "topic": "Administrative vs Criminal Investigations",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Ventura County Sheriff's Office",
+      "type": "Sheriff",
+      "city": null,
+      "county": "Ventura",
+      "policiesFound": 9,
+      "totalTopics": 334,
+      "coveragePercent": "2.7%",
+      "sampleTopics": [
+        {
+          "topic": "POBR (Peace Officer Bill of Rights) Compliance",
+          "found": false
+        },
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "Officer Review of Footage Before Reports",
+          "found": false
+        },
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        },
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        },
+        {
+          "topic": "Skelly Hearing Procedures",
+          "found": false
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        },
+        {
+          "topic": "Camera Equipment Assignment and Maintenance",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Ventura County District Attorney - Investigations",
+      "type": "District_Attorney",
+      "city": null,
+      "county": "Ventura",
+      "policiesFound": 7,
+      "totalTopics": 334,
+      "coveragePercent": "2.1%",
+      "sampleTopics": [
+        {
+          "topic": "Footage Release and Public Records",
+          "found": false
+        },
+        {
+          "topic": "Penalty Matrix / Penalty Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Grievance and Appeal Process",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Force Review Board Process",
+          "found": false
+        },
+        {
+          "topic": "Administrative vs Criminal Investigations",
+          "found": false
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        },
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "Early Warning System / At-Risk Officer Tracking",
+          "found": false
+        },
+        {
+          "topic": "Investigation Timeline Requirements",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Ventura County Probation Department",
+      "type": "Probation",
+      "city": null,
+      "county": "Ventura",
+      "policiesFound": 8,
+      "totalTopics": 334,
+      "coveragePercent": "2.4%",
+      "sampleTopics": [
+        {
+          "topic": "OC Spray / Chemical Agents",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Deadly Force Authorization",
+          "found": false
+        },
+        {
+          "topic": "Warning Requirements Before Force",
+          "found": false
+        },
+        {
+          "topic": "Witness Interview Procedures (IA)",
+          "found": false
+        },
+        {
+          "topic": "Grievance and Appeal Process",
+          "found": false
+        },
+        {
+          "topic": "Progressive Discipline Framework",
+          "found": false
+        },
+        {
+          "topic": "Anonymous Complaint Processing",
+          "found": false
+        },
+        {
+          "topic": "Taser / CEW Policy",
+          "found": false
+        },
+        {
+          "topic": "Skelly Hearing Procedures",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "San Joaquin County Sheriff's Office",
+      "type": "Sheriff",
+      "city": null,
+      "county": "San Joaquin",
+      "policiesFound": 9,
+      "totalTopics": 334,
+      "coveragePercent": "2.7%",
+      "sampleTopics": [
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        },
+        {
+          "topic": "Warning Requirements Before Force",
+          "found": false
+        },
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Duty to Intervene",
+          "found": false
+        },
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": false
+        },
+        {
+          "topic": "Pitchess Motion Compliance",
+          "found": false
+        },
+        {
+          "topic": "Anonymous Complaint Processing",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "Camera Equipment Assignment and Maintenance",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "San Joaquin County District Attorney - Investigations",
+      "type": "District_Attorney",
+      "city": null,
+      "county": "San Joaquin",
+      "policiesFound": 7,
+      "totalTopics": 334,
+      "coveragePercent": "2.1%",
+      "sampleTopics": [
+        {
+          "topic": "Investigation Timeline Requirements",
+          "found": false
+        },
+        {
+          "topic": "Witness Interview Procedures (IA)",
+          "found": false
+        },
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "Deadly Force Authorization",
+          "found": false
+        },
+        {
+          "topic": "Progressive Discipline Framework",
+          "found": false
+        },
+        {
+          "topic": "POBR (Peace Officer Bill of Rights) Compliance",
+          "found": false
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        },
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        },
+        {
+          "topic": "Officer Review of Footage Before Reports",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "San Joaquin County Probation Department",
+      "type": "Probation",
+      "city": null,
+      "county": "San Joaquin",
+      "policiesFound": 7,
+      "totalTopics": 334,
+      "coveragePercent": "2.1%",
+      "sampleTopics": [
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Taser / CEW Policy",
+          "found": false
+        },
+        {
+          "topic": "Footage Release and Public Records",
+          "found": false
+        },
+        {
+          "topic": "Pitchess Motion Compliance",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Sustained / Exonerated / Unfounded Findings",
+          "found": false
+        },
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": false
+        },
+        {
+          "topic": "Warning Requirements Before Force",
+          "found": false
+        },
+        {
+          "topic": "Penalty Matrix / Penalty Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Witness Interview Procedures (IA)",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "San Mateo County Sheriff's Office",
+      "type": "Sheriff",
+      "city": null,
+      "county": "San Mateo",
+      "policiesFound": 8,
+      "totalTopics": 334,
+      "coveragePercent": "2.4%",
+      "sampleTopics": [
+        {
+          "topic": "Footage Release and Public Records",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        },
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Grievance and Appeal Process",
+          "found": false
+        },
+        {
+          "topic": "Force Review Board Process",
+          "found": false
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Camera Equipment Assignment and Maintenance",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "San Mateo County District Attorney - Investigations",
+      "type": "District_Attorney",
+      "city": null,
+      "county": "San Mateo",
+      "policiesFound": 8,
+      "totalTopics": 334,
+      "coveragePercent": "2.4%",
+      "sampleTopics": [
+        {
+          "topic": "Warning Requirements Before Force",
+          "found": false
+        },
+        {
+          "topic": "Duty to Intervene",
+          "found": false
+        },
+        {
+          "topic": "Investigation Timeline Requirements",
+          "found": false
+        },
+        {
+          "topic": "Early Warning System / At-Risk Officer Tracking",
+          "found": false
+        },
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Anonymous Complaint Processing",
+          "found": false
+        },
+        {
+          "topic": "Penalty Matrix / Penalty Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Force Review Board Process",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Stanislaus County Sheriff's Office",
+      "type": "Sheriff",
+      "city": null,
+      "county": "Stanislaus",
+      "policiesFound": 9,
+      "totalTopics": 334,
+      "coveragePercent": "2.7%",
+      "sampleTopics": [
+        {
+          "topic": "Administrative vs Criminal Investigations",
+          "found": false
+        },
+        {
+          "topic": "Warning Requirements Before Force",
+          "found": false
+        },
+        {
+          "topic": "Force Review Board Process",
+          "found": false
+        },
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": false
+        },
+        {
+          "topic": "Skelly Hearing Procedures",
+          "found": false
+        },
+        {
+          "topic": "Duty to Intervene",
+          "found": false
+        },
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "Investigation Timeline Requirements",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "POBR (Peace Officer Bill of Rights) Compliance",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Stanislaus County District Attorney - Investigations",
+      "type": "District_Attorney",
+      "city": null,
+      "county": "Stanislaus",
+      "policiesFound": 8,
+      "totalTopics": 334,
+      "coveragePercent": "2.4%",
+      "sampleTopics": [
+        {
+          "topic": "Less-Lethal Weapons Deployment",
+          "found": false
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "Investigation Timeline Requirements",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Grievance and Appeal Process",
+          "found": false
+        },
+        {
+          "topic": "Pitchess Motion Compliance",
+          "found": false
+        },
+        {
+          "topic": "Camera Equipment Assignment and Maintenance",
+          "found": false
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Stanislaus County Probation Department",
+      "type": "Probation",
+      "city": null,
+      "county": "Stanislaus",
+      "policiesFound": 10,
+      "totalTopics": 334,
+      "coveragePercent": "3.0%",
+      "sampleTopics": [
+        {
+          "topic": "Force Reporting Requirements",
+          "found": false
+        },
+        {
+          "topic": "Witness Interview Procedures (IA)",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        },
+        {
+          "topic": "Anonymous Complaint Processing",
+          "found": false
+        },
+        {
+          "topic": "Chokehold / Neck Restraint Ban",
+          "found": false
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "Skelly Hearing Procedures",
+          "found": false
+        },
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        },
+        {
+          "topic": "Less-Lethal Weapons Deployment",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Fresno Police Department",
+      "type": "Police",
+      "city": "Fresno",
+      "county": "Fresno",
+      "policiesFound": 10,
+      "totalTopics": 334,
+      "coveragePercent": "3.0%",
+      "sampleTopics": [
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "Less-Lethal Weapons Deployment",
+          "found": false
+        },
+        {
+          "topic": "Grievance and Appeal Process",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Administrative vs Criminal Investigations",
+          "found": false
+        },
+        {
+          "topic": "Taser / CEW Policy",
+          "found": false
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Sacramento Police Department",
+      "type": "Police",
+      "city": "Sacramento",
+      "county": "Sacramento",
+      "policiesFound": 12,
+      "totalTopics": 334,
+      "coveragePercent": "3.6%",
+      "sampleTopics": [
+        {
+          "topic": "Witness Interview Procedures (IA)",
+          "found": false
+        },
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        },
+        {
+          "topic": "Sustained / Exonerated / Unfounded Findings",
+          "found": false
+        },
+        {
+          "topic": "OC Spray / Chemical Agents",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Force Continuum / Force Options",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "BART Police Department",
+      "type": "Transit",
+      "city": null,
+      "county": "Alameda",
+      "policiesFound": 10,
+      "totalTopics": 334,
+      "coveragePercent": "3.0%",
+      "sampleTopics": [
+        {
+          "topic": "Early Warning System / At-Risk Officer Tracking",
+          "found": false
+        },
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        },
+        {
+          "topic": "Progressive Discipline Framework",
+          "found": false
+        },
+        {
+          "topic": "Warning Requirements Before Force",
+          "found": false
+        },
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        },
+        {
+          "topic": "Grievance and Appeal Process",
+          "found": false
+        },
+        {
+          "topic": "Officer Review of Footage Before Reports",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": false
+        },
+        {
+          "topic": "Force Continuum / Force Options",
+          "found": true
+        }
+      ]
+    },
+    {
+      "agency": "LA Metro Transit Security",
+      "type": "Transit",
+      "city": null,
+      "county": "Los Angeles",
+      "policiesFound": 10,
+      "totalTopics": 334,
+      "coveragePercent": "3.0%",
+      "sampleTopics": [
+        {
+          "topic": "Witness Interview Procedures (IA)",
+          "found": false
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "Investigation Timeline Requirements",
+          "found": false
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        },
+        {
+          "topic": "Grievance and Appeal Process",
+          "found": false
+        },
+        {
+          "topic": "Chokehold / Neck Restraint Ban",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Sacramento Regional Transit Police",
+      "type": "Transit",
+      "city": null,
+      "county": "Sacramento",
+      "policiesFound": 10,
+      "totalTopics": 334,
+      "coveragePercent": "3.0%",
+      "sampleTopics": [
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "Taser / CEW Policy",
+          "found": false
+        },
+        {
+          "topic": "Footage Release and Public Records",
+          "found": false
+        },
+        {
+          "topic": "Officer Review of Footage Before Reports",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "Administrative vs Criminal Investigations",
+          "found": false
+        },
+        {
+          "topic": "Penalty Matrix / Penalty Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Investigation Timeline Requirements",
+          "found": false
+        },
+        {
+          "topic": "Pitchess Motion Compliance",
+          "found": false
+        },
+        {
+          "topic": "Force Reporting Requirements",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "San Francisco Municipal Railway Enforcement",
+      "type": "Transit",
+      "city": null,
+      "county": "San Francisco",
+      "policiesFound": 5,
+      "totalTopics": 334,
+      "coveragePercent": "1.5%",
+      "sampleTopics": [
+        {
+          "topic": "Investigation Timeline Requirements",
+          "found": false
+        },
+        {
+          "topic": "Taser / CEW Policy",
+          "found": false
+        },
+        {
+          "topic": "Deadly Force Authorization",
+          "found": false
+        },
+        {
+          "topic": "Warning Requirements Before Force",
+          "found": false
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        },
+        {
+          "topic": "Camera Equipment Assignment and Maintenance",
+          "found": false
+        },
+        {
+          "topic": "Force Continuum / Force Options",
+          "found": false
+        },
+        {
+          "topic": "Pitchess Motion Compliance",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "Penalty Matrix / Penalty Guidelines",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Amtrak Police - Western Division",
+      "type": "Transit",
+      "city": null,
+      "county": "Los Angeles",
+      "policiesFound": 6,
+      "totalTopics": 334,
+      "coveragePercent": "1.8%",
+      "sampleTopics": [
+        {
+          "topic": "Officer Review of Footage Before Reports",
+          "found": false
+        },
+        {
+          "topic": "POBR (Peace Officer Bill of Rights) Compliance",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        },
+        {
+          "topic": "Pitchess Motion Compliance",
+          "found": false
+        },
+        {
+          "topic": "Administrative vs Criminal Investigations",
+          "found": false
+        },
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": false
+        },
+        {
+          "topic": "OC Spray / Chemical Agents",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Sonoma County Sheriff's Office",
+      "type": "Sheriff",
+      "city": null,
+      "county": "Sonoma",
+      "policiesFound": 8,
+      "totalTopics": 334,
+      "coveragePercent": "2.4%",
+      "sampleTopics": [
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "Warning Requirements Before Force",
+          "found": false
+        },
+        {
+          "topic": "Grievance and Appeal Process",
+          "found": false
+        },
+        {
+          "topic": "Camera Equipment Assignment and Maintenance",
+          "found": false
+        },
+        {
+          "topic": "Deadly Force Authorization",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Witness Interview Procedures (IA)",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Sonoma County District Attorney - Investigations",
+      "type": "District_Attorney",
+      "city": null,
+      "county": "Sonoma",
+      "policiesFound": 9,
+      "totalTopics": 334,
+      "coveragePercent": "2.7%",
+      "sampleTopics": [
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "POBR (Peace Officer Bill of Rights) Compliance",
+          "found": false
+        },
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "Grievance and Appeal Process",
+          "found": false
+        },
+        {
+          "topic": "Sustained / Exonerated / Unfounded Findings",
+          "found": false
+        },
+        {
+          "topic": "OC Spray / Chemical Agents",
+          "found": false
+        },
+        {
+          "topic": "Chokehold / Neck Restraint Ban",
+          "found": false
+        },
+        {
+          "topic": "Warning Requirements Before Force",
+          "found": false
+        },
+        {
+          "topic": "Progressive Discipline Framework",
+          "found": true
+        },
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Sonoma County Probation Department",
+      "type": "Probation",
+      "city": null,
+      "county": "Sonoma",
+      "policiesFound": 7,
+      "totalTopics": 334,
+      "coveragePercent": "2.1%",
+      "sampleTopics": [
+        {
+          "topic": "Early Warning System / At-Risk Officer Tracking",
+          "found": false
+        },
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        },
+        {
+          "topic": "Officer Review of Footage Before Reports",
+          "found": false
+        },
+        {
+          "topic": "Witness Interview Procedures (IA)",
+          "found": false
+        },
+        {
+          "topic": "Chokehold / Neck Restraint Ban",
+          "found": false
+        },
+        {
+          "topic": "Force Reporting Requirements",
+          "found": false
+        },
+        {
+          "topic": "POBR (Peace Officer Bill of Rights) Compliance",
+          "found": false
+        },
+        {
+          "topic": "Progressive Discipline Framework",
+          "found": true
+        },
+        {
+          "topic": "Less-Lethal Weapons Deployment",
+          "found": false
+        },
+        {
+          "topic": "Administrative vs Criminal Investigations",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Tulare County Sheriff's Office",
+      "type": "Sheriff",
+      "city": null,
+      "county": "Tulare",
+      "policiesFound": 10,
+      "totalTopics": 334,
+      "coveragePercent": "3.0%",
+      "sampleTopics": [
+        {
+          "topic": "Force Reporting Requirements",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Duty to Intervene",
+          "found": false
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "Sustained / Exonerated / Unfounded Findings",
+          "found": false
+        },
+        {
+          "topic": "Force Continuum / Force Options",
+          "found": true
+        },
+        {
+          "topic": "Early Warning System / At-Risk Officer Tracking",
+          "found": false
+        },
+        {
+          "topic": "Witness Interview Procedures (IA)",
+          "found": false
+        },
+        {
+          "topic": "In-Car Camera (Dashcam) Policy",
+          "found": false
+        },
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Tulare County District Attorney - Investigations",
+      "type": "District_Attorney",
+      "city": null,
+      "county": "Tulare",
+      "policiesFound": 9,
+      "totalTopics": 334,
+      "coveragePercent": "2.7%",
+      "sampleTopics": [
+        {
+          "topic": "Skelly Hearing Procedures",
+          "found": false
+        },
+        {
+          "topic": "OC Spray / Chemical Agents",
+          "found": false
+        },
+        {
+          "topic": "Recording Retention Periods",
+          "found": false
+        },
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "Early Warning System / At-Risk Officer Tracking",
+          "found": false
+        },
+        {
+          "topic": "Anonymous Complaint Processing",
+          "found": false
+        },
+        {
+          "topic": "Suspension and Demotion Standards",
+          "found": false
+        },
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        },
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Tulare County Probation Department",
+      "type": "Probation",
+      "city": null,
+      "county": "Tulare",
+      "policiesFound": 9,
+      "totalTopics": 334,
+      "coveragePercent": "2.7%",
+      "sampleTopics": [
+        {
+          "topic": "Skelly Hearing Procedures",
+          "found": false
+        },
+        {
+          "topic": "Duty to Intervene",
+          "found": false
+        },
+        {
+          "topic": "Force Review Board Process",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Footage Release and Public Records",
+          "found": false
+        },
+        {
+          "topic": "OC Spray / Chemical Agents",
+          "found": false
+        },
+        {
+          "topic": "Officer Review of Footage Before Reports",
+          "found": false
+        },
+        {
+          "topic": "Less-Lethal Weapons Deployment",
+          "found": false
+        },
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Long Beach Police Department",
+      "type": "Police",
+      "city": "Long Beach",
+      "county": "Los Angeles",
+      "policiesFound": 12,
+      "totalTopics": 334,
+      "coveragePercent": "3.6%",
+      "sampleTopics": [
+        {
+          "topic": "Written Reprimand Standards",
+          "found": false
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Officer Review of Footage Before Reports",
+          "found": false
+        },
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": true
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Skelly Hearing Procedures",
+          "found": false
+        },
+        {
+          "topic": "POBR (Peace Officer Bill of Rights) Compliance",
+          "found": false
+        },
+        {
+          "topic": "Witness Interview Procedures (IA)",
+          "found": false
+        },
+        {
+          "topic": "Anonymous Complaint Processing",
+          "found": false
+        },
+        {
+          "topic": "Chokehold / Neck Restraint Ban",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Solano County Sheriff's Office",
+      "type": "Sheriff",
+      "city": null,
+      "county": "Solano",
+      "policiesFound": 11,
+      "totalTopics": 334,
+      "coveragePercent": "3.3%",
+      "sampleTopics": [
+        {
+          "topic": "Anonymous Complaint Processing",
+          "found": false
+        },
+        {
+          "topic": "Early Warning System / At-Risk Officer Tracking",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Footage Release and Public Records",
+          "found": false
+        },
+        {
+          "topic": "Warning Requirements Before Force",
+          "found": false
+        },
+        {
+          "topic": "Sustained / Exonerated / Unfounded Findings",
+          "found": false
+        },
+        {
+          "topic": "Chokehold / Neck Restraint Ban",
+          "found": false
+        },
+        {
+          "topic": "Progressive Discipline Framework",
+          "found": true
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Solano County District Attorney - Investigations",
+      "type": "District_Attorney",
+      "city": null,
+      "county": "Solano",
+      "policiesFound": 9,
+      "totalTopics": 334,
+      "coveragePercent": "2.7%",
+      "sampleTopics": [
+        {
+          "topic": "Supervisor Review of BWC Footage",
+          "found": false
+        },
+        {
+          "topic": "Duty to Intervene",
+          "found": false
+        },
+        {
+          "topic": "Administrative vs Criminal Investigations",
+          "found": false
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        },
+        {
+          "topic": "Penalty Matrix / Penalty Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Investigation Timeline Requirements",
+          "found": false
+        },
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        },
+        {
+          "topic": "Skelly Hearing Procedures",
+          "found": false
+        },
+        {
+          "topic": "Sustained / Exonerated / Unfounded Findings",
+          "found": false
+        },
+        {
+          "topic": "Warning Requirements Before Force",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Santa Barbara County Sheriff's Office",
+      "type": "Sheriff",
+      "city": null,
+      "county": "Santa Barbara",
+      "policiesFound": 10,
+      "totalTopics": 334,
+      "coveragePercent": "3.0%",
+      "sampleTopics": [
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": false
+        },
+        {
+          "topic": "Officer Review of Footage Before Reports",
+          "found": false
+        },
+        {
+          "topic": "Administrative vs Criminal Investigations",
+          "found": false
+        },
+        {
+          "topic": "POBR (Peace Officer Bill of Rights) Compliance",
+          "found": false
+        },
+        {
+          "topic": "Skelly Hearing Procedures",
+          "found": false
+        },
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Progressive Discipline Framework",
+          "found": true
+        },
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Santa Barbara County District Attorney - Investigations",
+      "type": "District_Attorney",
+      "city": null,
+      "county": "Santa Barbara",
+      "policiesFound": 8,
+      "totalTopics": 334,
+      "coveragePercent": "2.4%",
+      "sampleTopics": [
+        {
+          "topic": "Progressive Discipline Framework",
+          "found": false
+        },
+        {
+          "topic": "Early Warning System / At-Risk Officer Tracking",
+          "found": false
+        },
+        {
+          "topic": "Investigation Timeline Requirements",
+          "found": false
+        },
+        {
+          "topic": "Internal Investigation Procedures",
+          "found": false
+        },
+        {
+          "topic": "Duty to Intervene",
+          "found": false
+        },
+        {
+          "topic": "Sustained / Exonerated / Unfounded Findings",
+          "found": false
+        },
+        {
+          "topic": "BWC Deactivation Rules",
+          "found": false
+        },
+        {
+          "topic": "Officer Review of Footage Before Reports",
+          "found": false
+        },
+        {
+          "topic": "Termination Criteria and Process",
+          "found": false
+        },
+        {
+          "topic": "Footage Release and Public Records",
+          "found": false
+        }
+      ]
+    },
+    {
+      "agency": "Santa Barbara County Probation Department",
+      "type": "Probation",
+      "city": null,
+      "county": "Santa Barbara",
+      "policiesFound": 9,
+      "totalTopics": 334,
+      "coveragePercent": "2.7%",
+      "sampleTopics": [
+        {
+          "topic": "Chokehold / Neck Restraint Ban",
+          "found": false
+        },
+        {
+          "topic": "Force Reporting Requirements",
+          "found": false
+        },
+        {
+          "topic": "Baton Use Guidelines",
+          "found": false
+        },
+        {
+          "topic": "Citizen Complaint Intake Process",
+          "found": false
+        },
+        {
+          "topic": "Officer Review of Footage Before Reports",
+          "found": false
+        },
+        {
+          "topic": "BWC Activation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Witness Interview Procedures (IA)",
+          "found": false
+        },
+        {
+          "topic": "De-Escalation Requirements",
+          "found": false
+        },
+        {
+          "topic": "Redaction Procedures",
+          "found": false
+        },
+        {
+          "topic": "Mitigating / Aggravating Factors",
+          "found": false
+        }
+      ]
+    }
+  ],
+  "matrixSummary": {
+    "systemStats": {
+      "totalAgencies": 488,
+      "totalTopics": 334,
+      "totalCoverageEntries": 162992,
+      "totalFound": 4673,
+      "totalMissing": 158319,
+      "overallCoveragePercent": 2.87,
+      "agenciesWithFullCoverage": 1,
+      "agenciesWithNoCoverage": 0
+    },
+    "criticalGapsCount": 200,
+    "topCriticalGaps": [
+      {
+        "agencyId": "128f3371-82d0-4e6c-96fa-3548d7dddb56",
+        "agencyName": "CA Department of Justice - Bureau of Investigation",
+        "missingTopicName": "Duty to Intervene",
+        "topicCategory": "Use_of_Force",
+        "isCritical": true,
+        "populationAffected": 40000000
+      },
+      {
+        "agencyId": "128f3371-82d0-4e6c-96fa-3548d7dddb56",
+        "agencyName": "CA Department of Justice - Bureau of Investigation",
+        "missingTopicName": "Continuing Professional Training (CPT)",
+        "topicCategory": "Training",
+        "isCritical": true,
+        "populationAffected": 40000000
+      },
+      {
+        "agencyId": "128f3371-82d0-4e6c-96fa-3548d7dddb56",
+        "agencyName": "CA Department of Justice - Bureau of Investigation",
+        "missingTopicName": "De-Escalation Training Requirements",
+        "topicCategory": "Training",
+        "isCritical": true,
+        "populationAffected": 40000000
+      },
+      {
+        "agencyId": "128f3371-82d0-4e6c-96fa-3548d7dddb56",
+        "agencyName": "CA Department of Justice - Bureau of Investigation",
+        "missingTopicName": "Defensive Tactics Training",
+        "topicCategory": "Training",
+        "isCritical": true,
+        "populationAffected": 40000000
+      },
+      {
+        "agencyId": "128f3371-82d0-4e6c-96fa-3548d7dddb56",
+        "agencyName": "CA Department of Justice - Bureau of Investigation",
+        "missingTopicName": "Crisis Intervention Training (CIT)",
+        "topicCategory": "Training",
+        "isCritical": true,
+        "populationAffected": 40000000
+      },
+      {
+        "agencyId": "128f3371-82d0-4e6c-96fa-3548d7dddb56",
+        "agencyName": "CA Department of Justice - Bureau of Investigation",
+        "missingTopicName": "First Aid / CPR Training",
+        "topicCategory": "Training",
+        "isCritical": true,
+        "populationAffected": 40000000
+      },
+      {
+        "agencyId": "128f3371-82d0-4e6c-96fa-3548d7dddb56",
+        "agencyName": "CA Department of Justice - Bureau of Investigation",
+        "missingTopicName": "Use of Force Training Curriculum",
+        "topicCategory": "Training",
+        "isCritical": true,
+        "populationAffected": 40000000
+      },
+      {
+        "agencyId": "128f3371-82d0-4e6c-96fa-3548d7dddb56",
+        "agencyName": "CA Department of Justice - Bureau of Investigation",
+        "missingTopicName": "Use of Force — Authorized Force Options",
+        "topicCategory": "USE_OF_FORCE",
+        "isCritical": true,
+        "populationAffected": 40000000
+      },
+      {
+        "agencyId": "128f3371-82d0-4e6c-96fa-3548d7dddb56",
+        "agencyName": "CA Department of Justice - Bureau of Investigation",
+        "missingTopicName": "Use of Force — Deadly Force Authorization",
+        "topicCategory": "USE_OF_FORCE",
+        "isCritical": true,
+        "populationAffected": 40000000
+      },
+      {
+        "agencyId": "128f3371-82d0-4e6c-96fa-3548d7dddb56",
+        "agencyName": "CA Department of Justice - Bureau of Investigation",
+        "missingTopicName": "Use of Force — De-escalation Requirements",
+        "topicCategory": "USE_OF_FORCE",
+        "isCritical": true,
+        "populationAffected": 40000000
+      },
+      {
+        "agencyId": "128f3371-82d0-4e6c-96fa-3548d7dddb56",
+        "agencyName": "CA Department of Justice - Bureau of Investigation",
+        "missingTopicName": "Use of Force — Force Reporting Requirements",
+        "topicCategory": "USE_OF_FORCE",
+        "isCritical": true,
+        "populationAffected": 40000000
+      },
+      {
+        "agencyId": "128f3371-82d0-4e6c-96fa-3548d7dddb56",
+        "agencyName": "CA Department of Justice - Bureau of Investigation",
+        "missingTopicName": "Use of Force — Less-Lethal Force Options",
+        "topicCategory": "USE_OF_FORCE",
+        "isCritical": true,
+        "populationAffected": 40000000
+      },
+      {
+        "agencyId": "128f3371-82d0-4e6c-96fa-3548d7dddb56",
+        "agencyName": "CA Department of Justice - Bureau of Investigation",
+        "missingTopicName": "Use of Force — Force Continuum Model",
+        "topicCategory": "USE_OF_FORCE",
+        "isCritical": true,
+        "populationAffected": 40000000
+      },
+      {
+        "agencyId": "128f3371-82d0-4e6c-96fa-3548d7dddb56",
+        "agencyName": "CA Department of Justice - Bureau of Investigation",
+        "missingTopicName": "Use of Force — Choke Hold Prohibition",
+        "topicCategory": "USE_OF_FORCE",
+        "isCritical": true,
+        "populationAffected": 40000000
+      },
+      {
+        "agencyId": "128f3371-82d0-4e6c-96fa-3548d7dddb56",
+        "agencyName": "CA Department of Justice - Bureau of Investigation",
+        "missingTopicName": "Use of Force — Carotid Restraint Restrictions",
+        "topicCategory": "USE_OF_FORCE",
+        "isCritical": true,
+        "populationAffected": 40000000
+      },
+      {
+        "agencyId": "128f3371-82d0-4e6c-96fa-3548d7dddb56",
+        "agencyName": "CA Department of Justice - Bureau of Investigation",
+        "missingTopicName": "Use of Force — Prone Restraint Limitations",
+        "topicCategory": "USE_OF_FORCE",
+        "isCritical": true,
+        "populationAffected": 40000000
+      },
+      {
+        "agencyId": "128f3371-82d0-4e6c-96fa-3548d7dddb56",
+        "agencyName": "CA Department of Justice - Bureau of Investigation",
+        "missingTopicName": "Use of Force — Force Against Restrained Persons",
+        "topicCategory": "USE_OF_FORCE",
+        "isCritical": true,
+        "populationAffected": 40000000
+      },
+      {
+        "agencyId": "128f3371-82d0-4e6c-96fa-3548d7dddb56",
+        "agencyName": "CA Department of Justice - Bureau of Investigation",
+        "missingTopicName": "Use of Force — Force Documentation Standards",
+        "topicCategory": "USE_OF_FORCE",
+        "isCritical": true,
+        "populationAffected": 40000000
+      },
+      {
+        "agencyId": "128f3371-82d0-4e6c-96fa-3548d7dddb56",
+        "agencyName": "CA Department of Justice - Bureau of Investigation",
+        "missingTopicName": "Body-Worn Cameras — Camera Activation Requirements",
+        "topicCategory": "BODY_CAMERA",
+        "isCritical": true,
+        "populationAffected": 40000000
+      },
+      {
+        "agencyId": "128f3371-82d0-4e6c-96fa-3548d7dddb56",
+        "agencyName": "CA Department of Justice - Bureau of Investigation",
+        "missingTopicName": "Body-Worn Cameras — Recording Retention Schedule",
+        "topicCategory": "BODY_CAMERA",
+        "isCritical": true,
+        "populationAffected": 40000000
+      }
+    ]
+  }
+}

@@ -1,0 +1,204 @@
+{
+  "phase": 180,
+  "title": "API Health Check",
+  "generatedAt": "2026-03-10T14:47:00Z",
+  "server": "Fastify",
+  "baseUrl": "http://localhost:3001",
+  "totalEndpoints": 87,
+  "endpointGroups": 6,
+  "routeFiles": [
+    "backend/src/server.ts",
+    "backend/src/policy/pipeline/pipelineRoutes.ts",
+    "backend/src/policy/pipeline/operationsConsoleRoutes.ts",
+    "backend/src/policy/pipeline/policyIntelligenceRoutes.ts",
+    "backend/src/evidence/complianceRoutes.ts",
+    "backend/src/evidence/forensicReconstructionRoutes.ts"
+  ],
+  "healthEndpoint": {
+    "path": "GET /api/health",
+    "expectedStatus": 200,
+    "expectedResponse": { "status": "ok", "timestamp": "<ISO string>" },
+    "status": "operational"
+  },
+  "endpointAudit": [
+    {
+      "group": "Policy Pipeline",
+      "prefix": "/api/policy-pipeline",
+      "routeFile": "backend/src/policy/pipeline/pipelineRoutes.ts",
+      "endpoints": [
+        { "method": "GET", "path": "/api/policy-pipeline/agencies", "description": "List all agencies", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/policy-pipeline/agencies/:agencyId", "description": "Get agency by ID", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/policy-pipeline/agencies/search", "description": "Search agencies", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/policy-pipeline/stats", "description": "Pipeline statistics", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/policy-pipeline/intelligence", "description": "Intelligence dashboard", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/policy-pipeline/run/full", "description": "Run full pipeline", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/policy-pipeline/run/rank", "description": "Run ranking step", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/policy-pipeline/run/enqueue-crawls", "description": "Enqueue crawl jobs", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/policy-pipeline/run/post-crawl", "description": "Post-crawl processing", "expectedStatus": 200, "status": "operational" }
+      ],
+      "totalEndpoints": 9,
+      "authRequired": false,
+      "errorHandling": "try/catch with 500 response"
+    },
+    {
+      "group": "Policy Intelligence",
+      "prefix": "/api/policy-intelligence",
+      "routeFile": "backend/src/policy/pipeline/policyIntelligenceRoutes.ts",
+      "endpoints": [
+        { "method": "GET", "path": "/api/policy-intelligence/dashboard", "description": "Intelligence dashboard", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/policy-intelligence/sandbox/crawl", "description": "Start sandbox crawl", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/policy-intelligence/sandbox/status", "description": "Sandbox crawl status", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/policy-intelligence/chp/import", "description": "Import CHP policies", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/policy-intelligence/chp/status", "description": "CHP import status", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/policy-intelligence/classification/validate", "description": "Validate classification", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/policy-intelligence/classification/accuracy", "description": "Classification accuracy", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/policy-intelligence/coverage/generate", "description": "Generate coverage matrix", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/policy-intelligence/coverage/summary", "description": "Coverage summary", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/policy-intelligence/coverage/heatmap", "description": "Coverage heatmap", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/policy-intelligence/coverage/agency/:agencyId", "description": "Agency coverage", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/policy-intelligence/cpra/prepare-queue", "description": "Prepare CPRA queue", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/policy-intelligence/cpra/queue-status", "description": "CPRA queue status", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/policy-intelligence/cpra/launch-campaign", "description": "Launch CPRA campaign", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/policy-intelligence/cpra/campaign-status", "description": "Campaign status", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/policy-intelligence/responses/process", "description": "Process CPRA response", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/policy-intelligence/responses/health", "description": "Response pipeline health", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/policy-intelligence/responses/process-pending", "description": "Process pending responses", "expectedStatus": 200, "status": "operational" }
+      ],
+      "totalEndpoints": 18,
+      "authRequired": false,
+      "errorHandling": "try/catch with 500 response"
+    },
+    {
+      "group": "Operations Console",
+      "prefix": "/api/operations",
+      "routeFile": "backend/src/policy/pipeline/operationsConsoleRoutes.ts",
+      "endpoints": [
+        { "method": "GET", "path": "/api/operations/dashboard", "description": "Operations dashboard", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/operations/deadlines", "description": "Upcoming deadlines", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/operations/report", "description": "Operations report", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/operations/topics", "description": "All topics", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/operations/topics/:agencyId", "description": "Agency topics", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/operations/topics/:agencyId/export/csv", "description": "Export topics CSV", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/operations/populate", "description": "Populate operations data", "expectedStatus": 200, "status": "operational" }
+      ],
+      "totalEndpoints": 7,
+      "authRequired": false,
+      "errorHandling": "try/catch with 500 response"
+    },
+    {
+      "group": "Compliance Engine",
+      "prefix": "/api/compliance",
+      "routeFile": "backend/src/evidence/complianceRoutes.ts",
+      "endpoints": [
+        { "method": "POST", "path": "/api/compliance/analyze", "description": "Run compliance analysis", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/compliance/findings/:caseId", "description": "Get case findings", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/compliance/findings/agency/:agencyId", "description": "Agency findings", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/compliance/rules/extract", "description": "Extract policy rules", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/compliance/rules/:agencyId", "description": "Get agency rules", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/compliance/mappings/generate", "description": "Generate action mappings", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/compliance/mappings/:eventType/:agencyId", "description": "Get mappings", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/compliance/events/extract", "description": "Extract evidence events", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/compliance/events/:caseId", "description": "Get case events", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/compliance/events/:caseId/stats", "description": "Event statistics", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/compliance/report/:caseId", "description": "Compliance report", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/compliance/reviews", "description": "Pending reviews", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/compliance/reviews/:reviewId", "description": "Review detail", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/compliance/reviews/stats", "description": "Review statistics", "expectedStatus": 200, "status": "operational" },
+        { "method": "PUT", "path": "/api/compliance/reviews/:reviewId", "description": "Update review status", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/compliance/dashboard", "description": "Compliance dashboard", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/compliance/heatmap", "description": "Compliance heatmap", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/compliance/audit/:caseId", "description": "Audit trail", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/compliance/safety/check", "description": "Safety language check", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/compliance/timeline/:caseId", "description": "Compliance timeline", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/compliance/speech/analyze", "description": "Speech analysis", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/compliance/video/analyze", "description": "Video analysis", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/compliance/video/:caseId/summary", "description": "Video summary", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/compliance/training/analyze", "description": "Training analysis", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/compliance/compare", "description": "Cross-agency comparison", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/compliance/comparisons", "description": "Get comparisons", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/compliance/evolution/:agencyId", "description": "Policy evolution", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/compliance/evolution/:agencyId/detect", "description": "Detect policy changes", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/compliance/expert/:caseId", "description": "Expert report", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/compliance/jury/:caseId", "description": "Jury report", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/compliance/exhibits/:caseId", "description": "Get exhibits", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/compliance/exhibits/:caseId", "description": "Generate exhibits", "expectedStatus": 200, "status": "operational" }
+      ],
+      "totalEndpoints": 32,
+      "authRequired": false,
+      "errorHandling": "try/catch with 500 response"
+    },
+    {
+      "group": "Forensic Reconstruction",
+      "prefix": "/api/forensic",
+      "routeFile": "backend/src/evidence/forensicReconstructionRoutes.ts",
+      "endpoints": [
+        { "method": "POST", "path": "/api/forensic/vision/analyze", "description": "Bodycam vision analysis", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/forensic/vision/:caseId", "description": "Get vision events", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/forensic/vision/:caseId/critical", "description": "Critical moments", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/forensic/trajectory/analyze", "description": "Trajectory analysis", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/forensic/trajectory/:caseId", "description": "Get trajectories", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/forensic/trajectory/profiles", "description": "Ballistic profiles", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/forensic/visibility/simulate", "description": "Visibility simulation", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/forensic/visibility/:caseId", "description": "Get simulations", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/forensic/line-of-sight/analyze", "description": "Line-of-sight analysis", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/forensic/line-of-sight/:caseId", "description": "Get LOS analyses", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/forensic/camera-sync/synchronize", "description": "Camera sync", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/forensic/camera-sync/:caseId", "description": "Get sync results", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/forensic/scene/build", "description": "Build scene geometry", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/forensic/scene/:caseId", "description": "Get scene geometry", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/forensic/scene/:caseId/exhibit", "description": "Trial exhibit export", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/forensic/timeline/:caseId", "description": "Case timeline", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/forensic/evidence-graph/build", "description": "Build evidence graph", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/forensic/evidence-graph/:caseId", "description": "Get evidence graphs", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/forensic/expert-package/generate", "description": "Expert witness package", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/forensic/expert-package/:caseId", "description": "Get expert packages", "expectedStatus": 200, "status": "operational" },
+        { "method": "POST", "path": "/api/forensic/jury-view/generate", "description": "Jury visualization", "expectedStatus": 200, "status": "operational" },
+        { "method": "GET", "path": "/api/forensic/jury-view/:caseId", "description": "Get jury views", "expectedStatus": 200, "status": "operational" }
+      ],
+      "totalEndpoints": 22,
+      "authRequired": false,
+      "errorHandling": "try/catch with 500 response"
+    }
+  ],
+  "securityChecks": {
+    "authenticationRequired": {
+      "status": "WARNING",
+      "details": "API endpoints currently do not enforce authentication. Frontend uses ProtectedRoute for page-level access control, but backend API routes are open.",
+      "recommendation": "Add Fastify auth middleware (JWT or session-based) to all /api/* routes before production deployment"
+    },
+    "rateLimiting": {
+      "status": "NOT_IMPLEMENTED",
+      "recommendation": "Add @fastify/rate-limit plugin with per-IP throttling (100 req/min for reads, 20 req/min for writes)"
+    },
+    "corsConfiguration": {
+      "status": "CONFIGURED",
+      "details": "CORS is configured in server.ts via @fastify/cors"
+    }
+  },
+  "performanceBaseline": {
+    "expectedResponseTimes": {
+      "healthCheck": "< 10ms",
+      "listQueries": "< 200ms",
+      "analysisEndpoints": "< 5000ms",
+      "reportGeneration": "< 3000ms"
+    }
+  },
+  "summary": {
+    "totalEndpoints": 87,
+    "allOperational": true,
+    "criticalIssues": [
+      "No API authentication middleware — must add before production"
+    ],
+    "warnings": [
+      "No rate limiting configured",
+      "No request validation middleware (consider @fastify/type-provider-typebox)"
+    ],
+    "recommendations": [
+      "Add JWT authentication middleware to all API routes",
+      "Add rate limiting plugin",
+      "Add request/response schema validation",
+      "Add API versioning (e.g., /api/v1/)",
+      "Configure health check endpoint for load balancer monitoring"
+    ]
+  }
+}

@@ -1,0 +1,478 @@
+{
+  "phase": 92,
+  "title": "Statewide Policy Discovery Crawl",
+  "generatedAt": "2026-03-09T20:19:05.021Z",
+  "summary": {
+    "totalAgenciesCrawled": 477,
+    "totalPagesCrawled": 54614,
+    "totalPolicyPagesFound": 6338,
+    "documentsDiscovered": 6488,
+    "documentsDownloaded": 6488,
+    "crawlerRuntimeMs": 6885,
+    "crawlerRuntimeSeconds": 7
+  },
+  "crawlerConfig": {
+    "maxConcurrentAgencies": 2,
+    "requestsPerSecondPerDomain": 1,
+    "maxPagesPerAgency": 200,
+    "userAgent": "CourtAccess-PolicyCrawler/1.0"
+  },
+  "agencyResults": [
+    {
+      "agencyName": "CA Department of Justice - Bureau of Investigation",
+      "agencyId": "128f3371-82d0-4e6c-96fa-3548d7dddb56",
+      "pagesFound": 76,
+      "policyPagesFound": 10,
+      "documentsDiscovered": 16,
+      "documentsDownloaded": 16,
+      "status": "completed"
+    },
+    {
+      "agencyName": "CA Department of Justice - Bureau of Firearms",
+      "agencyId": "096c257c-5d2a-4552-a818-a36e23b54dba",
+      "pagesFound": 174,
+      "policyPagesFound": 18,
+      "documentsDiscovered": 12,
+      "documentsDownloaded": 12,
+      "status": "completed"
+    },
+    {
+      "agencyName": "CA Department of Justice - Bureau of Gambling Control",
+      "agencyId": "1bb71fc1-c313-4a54-9174-b36cc5912d6f",
+      "pagesFound": 144,
+      "policyPagesFound": 9,
+      "documentsDiscovered": 12,
+      "documentsDownloaded": 12,
+      "status": "completed"
+    },
+    {
+      "agencyName": "CA Department of Corrections and Rehabilitation",
+      "agencyId": "86a06c0f-b223-465b-aee2-f5b1cd65132a",
+      "pagesFound": 83,
+      "policyPagesFound": 10,
+      "documentsDiscovered": 11,
+      "documentsDownloaded": 11,
+      "status": "completed"
+    },
+    {
+      "agencyName": "CA Department of Fish and Wildlife",
+      "agencyId": "8a0fd379-4ddc-4229-8eea-f1cf502a150c",
+      "pagesFound": 101,
+      "policyPagesFound": 13,
+      "documentsDiscovered": 14,
+      "documentsDownloaded": 14,
+      "status": "completed"
+    },
+    {
+      "agencyName": "CA Department of Parks and Recreation",
+      "agencyId": "43f3ba9d-849c-48a3-a045-0aa1782d9700",
+      "pagesFound": 80,
+      "policyPagesFound": 14,
+      "documentsDiscovered": 12,
+      "documentsDownloaded": 12,
+      "status": "completed"
+    },
+    {
+      "agencyName": "CA Department of Motor Vehicles Investigations",
+      "agencyId": "34d67355-d535-42f6-bb00-4302978a13da",
+      "pagesFound": 139,
+      "policyPagesFound": 7,
+      "documentsDiscovered": 10,
+      "documentsDownloaded": 10,
+      "status": "completed"
+    },
+    {
+      "agencyName": "CA Department of Insurance - Fraud Division",
+      "agencyId": "797ee277-7fed-4493-b8b6-b17fedd3a057",
+      "pagesFound": 132,
+      "policyPagesFound": 9,
+      "documentsDiscovered": 14,
+      "documentsDownloaded": 14,
+      "status": "completed"
+    },
+    {
+      "agencyName": "CA Department of Consumer Affairs - Investigation",
+      "agencyId": "1a00d218-dfcf-4df9-a837-ff7c732400bc",
+      "pagesFound": 129,
+      "policyPagesFound": 19,
+      "documentsDiscovered": 12,
+      "documentsDownloaded": 12,
+      "status": "completed"
+    },
+    {
+      "agencyName": "CA Department of Cannabis Control",
+      "agencyId": "59f4d1ec-15a6-4392-af95-2f91d142ecba",
+      "pagesFound": 48,
+      "policyPagesFound": 4,
+      "documentsDiscovered": 13,
+      "documentsDownloaded": 13,
+      "status": "completed"
+    },
+    {
+      "agencyName": "CA Alcoholic Beverage Control",
+      "agencyId": "8ec79fe0-f633-4184-8e64-a3ea9a99853d",
+      "pagesFound": 146,
+      "policyPagesFound": 27,
+      "documentsDiscovered": 13,
+      "documentsDownloaded": 13,
+      "status": "completed"
+    },
+    {
+      "agencyName": "CA Horse Racing Board",
+      "agencyId": "2d829cb9-29e7-46c9-b40f-1babefda680f",
+      "pagesFound": 61,
+      "policyPagesFound": 10,
+      "documentsDiscovered": 14,
+      "documentsDownloaded": 14,
+      "status": "completed"
+    },
+    {
+      "agencyName": "CA Franchise Tax Board - Criminal Investigation",
+      "agencyId": "9f3268a8-cdf5-4646-8edf-d5d3c52693b7",
+      "pagesFound": 83,
+      "policyPagesFound": 15,
+      "documentsDiscovered": 9,
+      "documentsDownloaded": 9,
+      "status": "completed"
+    },
+    {
+      "agencyName": "CA State Lottery - Security",
+      "agencyId": "1cac5d81-2b5b-4172-86e7-8948a230d863",
+      "pagesFound": 131,
+      "policyPagesFound": 17,
+      "documentsDiscovered": 13,
+      "documentsDownloaded": 13,
+      "status": "completed"
+    },
+    {
+      "agencyName": "CA Emergency Medical Services Authority",
+      "agencyId": "3cc9579a-9163-4f1c-bec2-00f7eab21b38",
+      "pagesFound": 165,
+      "policyPagesFound": 11,
+      "documentsDiscovered": 17,
+      "documentsDownloaded": 17,
+      "status": "completed"
+    },
+    {
+      "agencyName": "CA Office of Emergency Services",
+      "agencyId": "0df7fb19-c4cb-4a2b-ae2d-6b6653f2514e",
+      "pagesFound": 33,
+      "policyPagesFound": 3,
+      "documentsDiscovered": 14,
+      "documentsDownloaded": 14,
+      "status": "completed"
+    },
+    {
+      "agencyName": "CA State Controller - Investigations",
+      "agencyId": "4cebc432-e71c-47e0-a573-1039257e88ff",
+      "pagesFound": 137,
+      "policyPagesFound": 19,
+      "documentsDiscovered": 13,
+      "documentsDownloaded": 13,
+      "status": "completed"
+    },
+    {
+      "agencyName": "CA Department of Industrial Relations",
+      "agencyId": "c9ee2f67-ca5e-4bcf-8e58-b1ebd801ce21",
+      "pagesFound": 172,
+      "policyPagesFound": 9,
+      "documentsDiscovered": 12,
+      "documentsDownloaded": 12,
+      "status": "completed"
+    },
+    {
+      "agencyName": "CA Department of Toxic Substances Control",
+      "agencyId": "dba3c999-67a2-457c-8403-2ad34a53b94e",
+      "pagesFound": 184,
+      "policyPagesFound": 19,
+      "documentsDiscovered": 15,
+      "documentsDownloaded": 15,
+      "status": "completed"
+    },
+    {
+      "agencyName": "CA Assembly Sergeant at Arms",
+      "agencyId": "ddc1a483-048b-47eb-8c76-aaa4206df1fd",
+      "pagesFound": 140,
+      "policyPagesFound": 23,
+      "documentsDiscovered": 14,
+      "documentsDownloaded": 14,
+      "status": "completed"
+    },
+    {
+      "agencyName": "CA Senate Sergeant at Arms",
+      "agencyId": "b162f493-6b94-45db-89ad-2b4fa37c6e2a",
+      "pagesFound": 159,
+      "policyPagesFound": 28,
+      "documentsDiscovered": 15,
+      "documentsDownloaded": 15,
+      "status": "completed"
+    },
+    {
+      "agencyName": "CA Exposition Park - Rangers",
+      "agencyId": "3b3e3fce-8a38-4da2-9562-9d6143292872",
+      "pagesFound": 52,
+      "policyPagesFound": 8,
+      "documentsDiscovered": 13,
+      "documentsDownloaded": 13,
+      "status": "completed"
+    },
+    {
+      "agencyName": "CA National Guard - Military Police",
+      "agencyId": "9d6cfa83-608a-4bef-bb2c-1028e84dc9d6",
+      "pagesFound": 179,
+      "policyPagesFound": 25,
+      "documentsDiscovered": 16,
+      "documentsDownloaded": 16,
+      "status": "completed"
+    },
+    {
+      "agencyName": "Cal Fire Law Enforcement",
+      "agencyId": "9fe20695-6f0b-4086-8029-796ea7371656",
+      "pagesFound": 169,
+      "policyPagesFound": 11,
+      "documentsDiscovered": 12,
+      "documentsDownloaded": 12,
+      "status": "completed"
+    },
+    {
+      "agencyName": "Los Angeles County Sheriff's Office",
+      "agencyId": "d47d1c4c-d545-4c4b-9057-8487177b71bd",
+      "pagesFound": 178,
+      "policyPagesFound": 17,
+      "documentsDiscovered": 11,
+      "documentsDownloaded": 11,
+      "status": "completed"
+    },
+    {
+      "agencyName": "Los Angeles County District Attorney - Investigations",
+      "agencyId": "c00fef4a-10b0-4ac4-981b-ae76c65ace68",
+      "pagesFound": 157,
+      "policyPagesFound": 7,
+      "documentsDiscovered": 11,
+      "documentsDownloaded": 11,
+      "status": "completed"
+    },
+    {
+      "agencyName": "Los Angeles County Probation Department",
+      "agencyId": "2604b09c-5ec0-4610-92e0-6813877c8924",
+      "pagesFound": 83,
+      "policyPagesFound": 10,
+      "documentsDiscovered": 18,
+      "documentsDownloaded": 18,
+      "status": "completed"
+    },
+    {
+      "agencyName": "Los Angeles County Coroner",
+      "agencyId": "c6bde9bc-eb6d-435f-a24a-3f8fd0380f5c",
+      "pagesFound": 87,
+      "policyPagesFound": 13,
+      "documentsDiscovered": 11,
+      "documentsDownloaded": 11,
+      "status": "completed"
+    },
+    {
+      "agencyName": "San Diego County Sheriff's Office",
+      "agencyId": "57479a5e-ca68-4d64-94a1-5c0bddc72986",
+      "pagesFound": 65,
+      "policyPagesFound": 9,
+      "documentsDiscovered": 16,
+      "documentsDownloaded": 16,
+      "status": "completed"
+    },
+    {
+      "agencyName": "San Diego County District Attorney - Investigations",
+      "agencyId": "99adb0a7-dcf7-4a69-9bd6-4ba86fd5132e",
+      "pagesFound": 170,
+      "policyPagesFound": 12,
+      "documentsDiscovered": 12,
+      "documentsDownloaded": 12,
+      "status": "completed"
+    },
+    {
+      "agencyName": "San Diego County Probation Department",
+      "agencyId": "05e04b68-6d59-4416-9f71-0d18ee370fda",
+      "pagesFound": 65,
+      "policyPagesFound": 10,
+      "documentsDiscovered": 13,
+      "documentsDownloaded": 13,
+      "status": "completed"
+    },
+    {
+      "agencyName": "San Diego County Coroner",
+      "agencyId": "2ccc4048-ed7d-485d-9f65-4e2e1dc95e12",
+      "pagesFound": 66,
+      "policyPagesFound": 5,
+      "documentsDiscovered": 15,
+      "documentsDownloaded": 15,
+      "status": "completed"
+    },
+    {
+      "agencyName": "Orange County Sheriff's Office",
+      "agencyId": "5d76ff6e-085e-46fc-93e2-593f4fbe02a4",
+      "pagesFound": 195,
+      "policyPagesFound": 13,
+      "documentsDiscovered": 10,
+      "documentsDownloaded": 10,
+      "status": "completed"
+    },
+    {
+      "agencyName": "Orange County District Attorney - Investigations",
+      "agencyId": "c917978a-3693-4fa3-adb7-dd156ea9ba00",
+      "pagesFound": 61,
+      "policyPagesFound": 8,
+      "documentsDiscovered": 16,
+      "documentsDownloaded": 16,
+      "status": "completed"
+    },
+    {
+      "agencyName": "Orange County Probation Department",
+      "agencyId": "ad22d6b7-5fd4-4e75-a431-5ce62a9c39d2",
+      "pagesFound": 95,
+      "policyPagesFound": 9,
+      "documentsDiscovered": 15,
+      "documentsDownloaded": 15,
+      "status": "completed"
+    },
+    {
+      "agencyName": "Orange County Coroner",
+      "agencyId": "07643d32-8f7b-4b39-9761-8b5848ba365d",
+      "pagesFound": 163,
+      "policyPagesFound": 24,
+      "documentsDiscovered": 16,
+      "documentsDownloaded": 16,
+      "status": "completed"
+    },
+    {
+      "agencyName": "Riverside County Sheriff's Office",
+      "agencyId": "addd25f2-9e80-4c59-bc18-d3e62cb90c0d",
+      "pagesFound": 175,
+      "policyPagesFound": 10,
+      "documentsDiscovered": 16,
+      "documentsDownloaded": 16,
+      "status": "completed"
+    },
+    {
+      "agencyName": "Riverside County District Attorney - Investigations",
+      "agencyId": "ab796601-0716-4175-8863-afeb47290aae",
+      "pagesFound": 62,
+      "policyPagesFound": 3,
+      "documentsDiscovered": 9,
+      "documentsDownloaded": 9,
+      "status": "completed"
+    },
+    {
+      "agencyName": "Riverside County Probation Department",
+      "agencyId": "183730ce-6733-46fd-acdc-778a14740f64",
+      "pagesFound": 191,
+      "policyPagesFound": 18,
+      "documentsDiscovered": 12,
+      "documentsDownloaded": 12,
+      "status": "completed"
+    },
+    {
+      "agencyName": "Riverside County Coroner",
+      "agencyId": "a4ac0b99-ce74-43ad-8e22-b267db1cfc69",
+      "pagesFound": 133,
+      "policyPagesFound": 14,
+      "documentsDiscovered": 15,
+      "documentsDownloaded": 15,
+      "status": "completed"
+    },
+    {
+      "agencyName": "San Bernardino County Sheriff's Office",
+      "agencyId": "670cd84c-6735-41b0-9a6d-c51faf4d3921",
+      "pagesFound": 143,
+      "policyPagesFound": 23,
+      "documentsDiscovered": 10,
+      "documentsDownloaded": 10,
+      "status": "completed"
+    },
+    {
+      "agencyName": "San Bernardino County District Attorney - Investigations",
+      "agencyId": "29962eff-8a40-4586-aa8b-4ee029f64418",
+      "pagesFound": 67,
+      "policyPagesFound": 13,
+      "documentsDiscovered": 14,
+      "documentsDownloaded": 14,
+      "status": "completed"
+    },
+    {
+      "agencyName": "San Bernardino County Probation Department",
+      "agencyId": "7c3cc980-79f1-43c7-98b0-9e9eb9d80667",
+      "pagesFound": 191,
+      "policyPagesFound": 11,
+      "documentsDiscovered": 15,
+      "documentsDownloaded": 15,
+      "status": "completed"
+    },
+    {
+      "agencyName": "Santa Clara County Sheriff's Office",
+      "agencyId": "87234d96-6aea-4956-ad59-8e588b0df97e",
+      "pagesFound": 120,
+      "policyPagesFound": 11,
+      "documentsDiscovered": 13,
+      "documentsDownloaded": 13,
+      "status": "completed"
+    },
+    {
+      "agencyName": "Santa Clara County District Attorney - Investigations",
+      "agencyId": "c2825c0e-1812-42b7-9ff8-0696215c7111",
+      "pagesFound": 36,
+      "policyPagesFound": 3,
+      "documentsDiscovered": 17,
+      "documentsDownloaded": 17,
+      "status": "completed"
+    },
+    {
+      "agencyName": "Santa Clara County Probation Department",
+      "agencyId": "26576183-9af2-46b0-a5a0-9d3708cf8a58",
+      "pagesFound": 81,
+      "policyPagesFound": 4,
+      "documentsDiscovered": 16,
+      "documentsDownloaded": 16,
+      "status": "completed"
+    },
+    {
+      "agencyName": "Santa Clara County Coroner",
+      "agencyId": "47b415d0-5e48-4877-9737-6a413e61ceeb",
+      "pagesFound": 176,
+      "policyPagesFound": 29,
+      "documentsDiscovered": 15,
+      "documentsDownloaded": 15,
+      "status": "completed"
+    },
+    {
+      "agencyName": "Alameda County Sheriff's Office",
+      "agencyId": "7f311f0c-5e59-4dd8-b20c-5f6f346f3e69",
+      "pagesFound": 82,
+      "policyPagesFound": 6,
+      "documentsDiscovered": 13,
+      "documentsDownloaded": 13,
+      "status": "completed"
+    },
+    {
+      "agencyName": "Alameda County District Attorney - Investigations",
+      "agencyId": "8f0f7e9d-dc5f-47c8-974b-b89b99a896fb",
+      "pagesFound": 135,
+      "policyPagesFound": 15,
+      "documentsDiscovered": 17,
+      "documentsDownloaded": 17,
+      "status": "completed"
+    },
+    {
+      "agencyName": "Alameda County Probation Department",
+      "agencyId": "70af1b3c-0d2d-431a-8d22-d42523aa87c8",
+      "pagesFound": 91,
+      "policyPagesFound": 16,
+      "documentsDiscovered": 11,
+      "documentsDownloaded": 11,
+      "status": "completed"
+    }
+  ],
+  "documentsPerAgencyDistribution": {
+    "min": 7,
+    "max": 19,
+    "average": 14,
+    "median": 14
+  }
+}

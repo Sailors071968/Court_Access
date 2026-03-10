@@ -1,0 +1,96 @@
+{
+  "phase": 192,
+  "title": "Rate Limit Validation",
+  "generated": "2026-03-10T15:55:00Z",
+  "status": "IMPLEMENTED",
+  "summary": "Rate limiting is now active on all API endpoints to prevent abuse and protect infrastructure.",
+
+  "implementation": {
+    "file": "backend/src/security/rateLimiter.ts",
+    "linesOfCode": 210,
+    "integrationFile": "backend/src/server.ts",
+    "hookRegistration": "app.addHook('onRequest', rateLimitHook)"
+  },
+
+  "rateLimits": {
+    "general": {
+      "windowMs": 60000,
+      "maxRequests": 100,
+      "description": "100 requests per minute per user/IP",
+      "appliesTo": "All API endpoints not covered by specific limits",
+      "keyStrategy": "User ID (authenticated) or IP address (unauthenticated)"
+    },
+    "upload": {
+      "windowMs": 60000,
+      "maxRequests": 10,
+      "description": "10 uploads per minute per user/IP",
+      "appliesTo": "Routes containing /upload, /ingest, /import (POST only)",
+      "keyStrategy": "User ID (authenticated) or IP address (unauthenticated)"
+    },
+    "compliance": {
+      "windowMs": 60000,
+      "maxRequests": 5,
+      "description": "5 compliance analyses per minute per user/IP",
+      "appliesTo": "POST /api/compliance/analyze, POST /api/compliance/run",
+      "keyStrategy": "User ID (authenticated) or IP address (unauthenticated)"
+    },
+    "login": {
+      "windowMs": 60000,
+      "maxRequests": 5,
+      "description": "5 login attempts per minute per IP (brute force protection)",
+      "appliesTo": "POST /api/auth/login",
+      "keyStrategy": "IP address only (prevents credential stuffing)"
+    }
+  },
+
+  "responseHeaders": {
+    "X-RateLimit-Limit": "Maximum requests allowed in window",
+    "X-RateLimit-Remaining": "Remaining requests in current window",
+    "X-RateLimit-Reset": "Unix timestamp when the window resets",
+    "Retry-After": "Seconds until the client can retry (sent with 429 responses)"
+  },
+
+  "errorResponse": {
+    "statusCode": 429,
+    "body": {
+      "error": "Too Many Requests",
+      "message": "Category-specific message describing the limit",
+      "retryAfter": "Seconds until rate limit resets"
+    }
+  },
+
+  "exemptRoutes": [
+    "/api/health"
+  ],
+
+  "adminEndpoints": [
+    {
+      "method": "GET",
+      "path": "/api/admin/rate-limits",
+      "description": "View current rate limit statistics and active entries"
+    }
+  ],
+
+  "store": {
+    "type": "In-memory Map",
+    "cleanupInterval": "60 seconds (automatic expired entry removal)",
+    "productionRecommendation": "Use Redis for distributed rate limiting across multiple server instances"
+  },
+
+  "routeClassification": {
+    "loginRoutes": "POST /api/auth/login → login limit (5/min)",
+    "uploadRoutes": "POST routes with /upload, /ingest, /import → upload limit (10/min)",
+    "complianceRoutes": "POST /api/compliance/analyze → compliance limit (5/min)",
+    "allOtherRoutes": "All other /api/* routes → general limit (100/min)"
+  },
+
+  "productionRecommendations": [
+    "Replace in-memory store with Redis for multi-instance deployments",
+    "Add sliding window algorithm for smoother rate limiting",
+    "Implement per-organization rate limits for multi-tenant scenarios",
+    "Add rate limit bypass tokens for internal monitoring tools",
+    "Configure rate limits via environment variables for easy tuning"
+  ],
+
+  "validationResult": "PASS"
+}

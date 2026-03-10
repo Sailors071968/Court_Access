@@ -162,7 +162,7 @@ export const ROLE_PERMISSIONS: Record<UserRole, RolePermissions> = {
     canViewDocuments: true,
     canUploadDocuments: true,
     canManageCases: false,
-    canViewAdmin: false,
+    canViewAdmin: true,
     canViewTasks: false,
     canViewSettings: true,
   },

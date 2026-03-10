@@ -1,0 +1,15 @@
+Subject: Second Follow-Up: Annual Public Records Request – Policy Updates
+
+To: {agencyName}
+
+This is the second follow-up regarding our annual policy update request originally sent on {requestDate}.
+
+CourtAccess received policy documents from your agency on {policyReceivedDate} and is requesting any updates or revisions since that time.
+
+The California Public Records Act (Gov. Code 6250 et seq.) requires a response within 10 days, with a possible 14-day extension. We have not yet received a response to this request.
+
+Please provide any updated policy documents or confirm that the previously provided versions remain current.
+
+{requesterName}
+{requesterOrganization}
+cpra@courtaccess.net

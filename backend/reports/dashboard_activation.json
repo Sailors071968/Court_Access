@@ -1,0 +1,137 @@
+{
+  "phase": 96,
+  "title": "Intelligence Dashboard Activation",
+  "generatedAt": "2026-03-09T20:26:25.527Z",
+  "summary": {
+    "agenciesIndexed": 488,
+    "policiesCollected": 8189,
+    "topicsCovered": 334,
+    "coverageEntries": 162992,
+    "cpraRequestsCreated": 25,
+    "cpraEmailsSent": 0,
+    "runtimeMs": 171,
+    "runtimeSeconds": 0
+  },
+  "dashboards": {
+    "policyIntelligence": {
+      "path": "/dashboard/policy-intelligence",
+      "metrics": {
+        "agenciesIndexed": 488,
+        "policiesDiscovered": 8189,
+        "policiesIngested": 8189,
+        "topicsSeeded": 334,
+        "coverageEntries": 162992,
+        "classificationAccuracy": 99.6,
+        "aboveThreshold": true,
+        "chpBaseline": {
+          "isComplete": true,
+          "totalDocuments": 1550,
+          "classifiedDocuments": 1550,
+          "coverageEntries": 334,
+          "topicsSeeded": 334,
+          "chpAgencyId": "0bd0d44f-0975-4492-923a-d7d125c93bab"
+        }
+      }
+    },
+    "policyAcquisition": {
+      "path": "/dashboard/policy-acquisition",
+      "metrics": {
+        "totalAgencies": 488,
+        "websitesFound": 172,
+        "sitesCrawled": 488,
+        "documentsFound": 8189,
+        "documentsDownloaded": 6639,
+        "documentsOcr": 6639,
+        "documentsClassified": 8189,
+        "ocrStatus": {
+          "completed": 6639,
+          "pending": 0,
+          "failed": 0
+        },
+        "classificationStatus": {
+          "completed": 8189,
+          "pending": 0
+        }
+      }
+    },
+    "cpra": {
+      "path": "/dashboard/cpra",
+      "metrics": {
+        "activeCampaigns": 1,
+        "totalCampaigns": 1,
+        "totalRequests": 25,
+        "queueStatus": {
+          "pendingRequests": 25,
+          "sentRequests": 0,
+          "responsesReceived": 0,
+          "closedRequests": 0,
+          "agenciesInQueue": 25
+        },
+        "campaignStatus": {
+          "activeCampaigns": 1,
+          "totalRequestsSent": 0,
+          "totalResponsesReceived": 0,
+          "pendingFollowUps": 0,
+          "dailySendCount": 0,
+          "dailyLimit": 20,
+          "campaigns": [
+            {
+              "campaignId": "e37fdd7e-b31a-4641-b997-83de7763a28b",
+              "campaignName": "Phase 95 Statewide CPRA Campaign -- 2026-03-09",
+              "requestCount": 25,
+              "sentCount": 0,
+              "respondedCount": 0,
+              "closedCount": 0
+            }
+          ]
+        },
+        "note": "Campaign in DRAFT status. No emails sent yet."
+      }
+    },
+    "systemHealth": {
+      "path": "/dashboard/system-health",
+      "metrics": {
+        "pipelineHealth": {
+          "inboundEmailStatus": "operational",
+          "ocrStatus": "operational",
+          "classificationStatus": "operational",
+          "coverageUpdateStatus": "operational",
+          "recentResponses": 0,
+          "pendingOcr": 0,
+          "pendingClassification": 0,
+          "lastResponseAt": null
+        },
+        "ocrBacklog": 0,
+        "classificationPending": 0,
+        "databaseCounts": {
+          "agencies": 488,
+          "policyDocuments": 8189,
+          "policyTopics": 334,
+          "coverageEntries": 162992,
+          "cpraCampaigns": 1,
+          "cpraRequests": 25
+        },
+        "coverageStats": {
+          "totalAgencies": 488,
+          "totalTopics": 334,
+          "totalCoverageEntries": 162992,
+          "totalFound": 4673,
+          "totalMissing": 158319,
+          "overallCoveragePercent": 2.87,
+          "agenciesWithFullCoverage": 1,
+          "agenciesWithNoCoverage": 0
+        }
+      }
+    }
+  },
+  "expectedMetrics": {
+    "targetAgencies": "~714",
+    "actualAgencies": 488,
+    "targetPolicies": "5k-15k",
+    "actualPolicies": 8189,
+    "targetTopics": "300+",
+    "actualTopics": 334,
+    "targetCpraRequests": 25,
+    "actualCpraRequests": 25
+  }
+}

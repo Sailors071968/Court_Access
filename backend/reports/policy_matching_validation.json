@@ -1,0 +1,807 @@
+{
+  "phase": "Phase 162 — Policy Matching Accuracy",
+  "generatedAt": "2026-03-10T13:46:47.434Z",
+  "totalTestCases": 50,
+  "correctPolicyMatches": 46,
+  "incorrectPolicyMatches": 4,
+  "fallbackUsage": 1,
+  "accuracy": 0.92,
+  "testCaseResults": [
+    {
+      "testCaseId": "VAL-001",
+      "title": "Taser Deployment During Traffic Stop",
+      "expectedPolicyRefs": [
+        "Use_of_Force"
+      ],
+      "matchedPolicyRefs": [
+        "Use_of_Force",
+        "Officer_Conduct",
+        "Arrest",
+        "Custody"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-002",
+      "title": "Prone Restraint with Subject Distress",
+      "expectedPolicyRefs": [
+        "Use_of_Force"
+      ],
+      "matchedPolicyRefs": [
+        "Use_of_Force",
+        "Officer_Conduct",
+        "Arrest",
+        "Custody"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-003",
+      "title": "Neck Restraint Application",
+      "expectedPolicyRefs": [
+        "Use_of_Force"
+      ],
+      "matchedPolicyRefs": [
+        "Use_of_Force",
+        "Officer_Conduct",
+        "Arrest",
+        "Custody"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-004",
+      "title": "Pepper Spray Deployment at Protest",
+      "expectedPolicyRefs": [
+        "Use_of_Force"
+      ],
+      "matchedPolicyRefs": [
+        "Use_of_Force",
+        "Officer_Conduct",
+        "Custody"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-005",
+      "title": "Officer-Involved Shooting",
+      "expectedPolicyRefs": [
+        "Use_of_Force"
+      ],
+      "matchedPolicyRefs": [
+        "Use_of_Force",
+        "Officer_Conduct",
+        "Custody"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-006",
+      "title": "Baton Strike During Arrest",
+      "expectedPolicyRefs": [
+        "Use_of_Force"
+      ],
+      "matchedPolicyRefs": [
+        "Use_of_Force",
+        "Officer_Conduct",
+        "Arrest",
+        "Custody"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-007",
+      "title": "K-9 Deployment During Suspect Search",
+      "expectedPolicyRefs": [
+        "Use_of_Force"
+      ],
+      "matchedPolicyRefs": [
+        "Pursuit",
+        "Use_of_Force",
+        "Arrest",
+        "Officer_Conduct",
+        "Custody"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-008",
+      "title": "De-escalation Success — No Force Used",
+      "expectedPolicyRefs": [],
+      "matchedPolicyRefs": [
+        "Officer_Conduct",
+        "Use_of_Force",
+        "Arrest"
+      ],
+      "correct": false,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-009",
+      "title": "Multiple Force Escalation Steps",
+      "expectedPolicyRefs": [
+        "Use_of_Force"
+      ],
+      "matchedPolicyRefs": [
+        "Officer_Conduct",
+        "Use_of_Force",
+        "Arrest",
+        "Custody"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-010",
+      "title": "Physical Strike Without Warning",
+      "expectedPolicyRefs": [
+        "Use_of_Force"
+      ],
+      "matchedPolicyRefs": [
+        "Officer_Conduct",
+        "Use_of_Force",
+        "Arrest",
+        "Custody"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-011",
+      "title": "Vehicle Search Without Consent",
+      "expectedPolicyRefs": [
+        "Search_Seizure"
+      ],
+      "matchedPolicyRefs": [
+        "Search_Seizure"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-012",
+      "title": "Pat Down / Terry Stop",
+      "expectedPolicyRefs": [
+        "Search_Seizure"
+      ],
+      "matchedPolicyRefs": [
+        "Officer_Conduct",
+        "Search_Seizure"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-013",
+      "title": "Consent Search of Residence",
+      "expectedPolicyRefs": [
+        "Search_Seizure"
+      ],
+      "matchedPolicyRefs": [],
+      "correct": false,
+      "usedFallback": true,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-014",
+      "title": "Warrant-Based Vehicle Search",
+      "expectedPolicyRefs": [
+        "Search_Seizure"
+      ],
+      "matchedPolicyRefs": [
+        "Search_Seizure"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-015",
+      "title": "Exigent Circumstances Entry",
+      "expectedPolicyRefs": [
+        "Search_Seizure",
+        "Arrest"
+      ],
+      "matchedPolicyRefs": [
+        "Officer_Conduct",
+        "Use_of_Force",
+        "Arrest",
+        "Custody"
+      ],
+      "correct": false,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-016",
+      "title": "Plain View Doctrine Seizure",
+      "expectedPolicyRefs": [
+        "Search_Seizure",
+        "Arrest"
+      ],
+      "matchedPolicyRefs": [
+        "Search_Seizure",
+        "Use_of_Force",
+        "Arrest"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-017",
+      "title": "Inventory Search of Impounded Vehicle",
+      "expectedPolicyRefs": [
+        "Search_Seizure"
+      ],
+      "matchedPolicyRefs": [
+        "Search_Seizure"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-018",
+      "title": "School Resource Officer Locker Search",
+      "expectedPolicyRefs": [],
+      "matchedPolicyRefs": [],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-019",
+      "title": "Miranda Warning Before Custodial Interrogation",
+      "expectedPolicyRefs": [
+        "Interrogation"
+      ],
+      "matchedPolicyRefs": [
+        "Arrest",
+        "Interrogation"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-020",
+      "title": "Custodial Interrogation Without Miranda",
+      "expectedPolicyRefs": [
+        "Interrogation"
+      ],
+      "matchedPolicyRefs": [
+        "Arrest",
+        "Interrogation"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-021",
+      "title": "Felony Traffic Stop Arrest",
+      "expectedPolicyRefs": [
+        "Use_of_Force",
+        "Arrest",
+        "Interrogation"
+      ],
+      "matchedPolicyRefs": [
+        "Use_of_Force",
+        "Officer_Conduct",
+        "Arrest",
+        "Search_Seizure",
+        "Interrogation"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-022",
+      "title": "DUI Arrest with Field Sobriety Tests",
+      "expectedPolicyRefs": [
+        "Arrest",
+        "Interrogation"
+      ],
+      "matchedPolicyRefs": [
+        "Use_of_Force",
+        "Arrest",
+        "Interrogation"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-023",
+      "title": "Resisting Arrest — Escalating Force",
+      "expectedPolicyRefs": [
+        "Use_of_Force",
+        "Arrest"
+      ],
+      "matchedPolicyRefs": [
+        "Pursuit",
+        "Use_of_Force",
+        "Arrest",
+        "Officer_Conduct",
+        "Custody"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-024",
+      "title": "Juvenile Arrest Procedures",
+      "expectedPolicyRefs": [
+        "Arrest",
+        "Interrogation"
+      ],
+      "matchedPolicyRefs": [
+        "Use_of_Force",
+        "Arrest",
+        "Interrogation"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-025",
+      "title": "Domestic Violence Mandatory Arrest",
+      "expectedPolicyRefs": [
+        "Arrest",
+        "Interrogation"
+      ],
+      "matchedPolicyRefs": [
+        "Officer_Conduct",
+        "Use_of_Force",
+        "Arrest",
+        "Interrogation",
+        "Custody"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-026",
+      "title": "Mental Health Crisis Response",
+      "expectedPolicyRefs": [],
+      "matchedPolicyRefs": [
+        "Officer_Conduct",
+        "Custody"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-027",
+      "title": "Witness Interview During Investigation",
+      "expectedPolicyRefs": [],
+      "matchedPolicyRefs": [
+        "Use_of_Force",
+        "Officer_Conduct"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-028",
+      "title": "Booking Process at County Jail",
+      "expectedPolicyRefs": [
+        "Custody"
+      ],
+      "matchedPolicyRefs": [
+        "Search_Seizure",
+        "Officer_Conduct",
+        "Custody",
+        "Arrest",
+        "Interrogation"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-029",
+      "title": "High-Speed Vehicle Pursuit",
+      "expectedPolicyRefs": [
+        "Pursuit"
+      ],
+      "matchedPolicyRefs": [
+        "Pursuit",
+        "Use_of_Force",
+        "Officer_Conduct",
+        "Arrest"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-030",
+      "title": "Foot Pursuit Through Residential Area",
+      "expectedPolicyRefs": [
+        "Pursuit"
+      ],
+      "matchedPolicyRefs": [
+        "Pursuit",
+        "Use_of_Force",
+        "Officer_Conduct",
+        "Arrest"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-031",
+      "title": "Pursuit Termination — Safety Concerns",
+      "expectedPolicyRefs": [
+        "Pursuit"
+      ],
+      "matchedPolicyRefs": [
+        "Pursuit"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-032",
+      "title": "PIT Maneuver to End Pursuit",
+      "expectedPolicyRefs": [
+        "Pursuit",
+        "Use_of_Force"
+      ],
+      "matchedPolicyRefs": [
+        "Pursuit",
+        "Use_of_Force",
+        "Officer_Conduct",
+        "Arrest",
+        "Custody"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-033",
+      "title": "Unauthorized Pursuit — Policy Threshold Not Met",
+      "expectedPolicyRefs": [
+        "Pursuit"
+      ],
+      "matchedPolicyRefs": [
+        "Pursuit"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-034",
+      "title": "Multi-Agency Pursuit Coordination",
+      "expectedPolicyRefs": [
+        "Pursuit"
+      ],
+      "matchedPolicyRefs": [
+        "Pursuit",
+        "Use_of_Force",
+        "Officer_Conduct",
+        "Arrest"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-035",
+      "title": "Body Camera Activation Failure",
+      "expectedPolicyRefs": [
+        "Body_Camera"
+      ],
+      "matchedPolicyRefs": [
+        "Use_of_Force",
+        "Arrest"
+      ],
+      "correct": false,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-036",
+      "title": "Racial Profiling Complaint — Traffic Stop",
+      "expectedPolicyRefs": [],
+      "matchedPolicyRefs": [],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-037",
+      "title": "Welfare Check — Subject with Firearm",
+      "expectedPolicyRefs": [
+        "Use_of_Force"
+      ],
+      "matchedPolicyRefs": [
+        "Use_of_Force",
+        "Officer_Conduct",
+        "Custody"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-038",
+      "title": "Mass Casualty Incident Response",
+      "expectedPolicyRefs": [],
+      "matchedPolicyRefs": [
+        "Officer_Conduct",
+        "Custody"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-039",
+      "title": "Excessive Force Allegation — Handcuffing Injury",
+      "expectedPolicyRefs": [
+        "Use_of_Force",
+        "Arrest"
+      ],
+      "matchedPolicyRefs": [
+        "Use_of_Force",
+        "Arrest",
+        "Officer_Conduct",
+        "Custody"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-040",
+      "title": "Training Scenario — Active Shooter Response",
+      "expectedPolicyRefs": [
+        "Use_of_Force"
+      ],
+      "matchedPolicyRefs": [
+        "Use_of_Force",
+        "Officer_Conduct",
+        "Arrest",
+        "Custody"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-041",
+      "title": "Threat Language — Officer Issues Verbal Threat",
+      "expectedPolicyRefs": [
+        "Officer_Conduct",
+        "Use_of_Force"
+      ],
+      "matchedPolicyRefs": [
+        "Use_of_Force",
+        "Officer_Conduct",
+        "Arrest"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-042",
+      "title": "Traffic Collision Investigation",
+      "expectedPolicyRefs": [],
+      "matchedPolicyRefs": [
+        "Officer_Conduct",
+        "Custody"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-043",
+      "title": "Community Policing Event — No Incident",
+      "expectedPolicyRefs": [],
+      "matchedPolicyRefs": [],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-044",
+      "title": "Missing Person Report",
+      "expectedPolicyRefs": [],
+      "matchedPolicyRefs": [
+        "Officer_Conduct",
+        "Custody"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-045",
+      "title": "Drug-Related Arrest with Force",
+      "expectedPolicyRefs": [
+        "Use_of_Force",
+        "Search_Seizure",
+        "Interrogation"
+      ],
+      "matchedPolicyRefs": [
+        "Use_of_Force",
+        "Officer_Conduct",
+        "Arrest",
+        "Custody",
+        "Search_Seizure",
+        "Interrogation"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-046",
+      "title": "Armed Robbery Response — Suspect Surrenders",
+      "expectedPolicyRefs": [
+        "Use_of_Force",
+        "Arrest"
+      ],
+      "matchedPolicyRefs": [
+        "Use_of_Force",
+        "Officer_Conduct",
+        "Arrest",
+        "Search_Seizure",
+        "Interrogation"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-047",
+      "title": "Multiple Use of Force Techniques in Sequence",
+      "expectedPolicyRefs": [
+        "Use_of_Force"
+      ],
+      "matchedPolicyRefs": [
+        "Use_of_Force",
+        "Arrest",
+        "Officer_Conduct",
+        "Custody"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-048",
+      "title": "Domestic Violence — Dual Arrest",
+      "expectedPolicyRefs": [
+        "Arrest",
+        "Interrogation"
+      ],
+      "matchedPolicyRefs": [
+        "Use_of_Force",
+        "Arrest",
+        "Interrogation",
+        "Officer_Conduct",
+        "Custody"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-049",
+      "title": "Narcotics Operation — Controlled Buy",
+      "expectedPolicyRefs": [
+        "Arrest",
+        "Search_Seizure"
+      ],
+      "matchedPolicyRefs": [
+        "Use_of_Force",
+        "Officer_Conduct",
+        "Arrest",
+        "Pursuit",
+        "Search_Seizure",
+        "Interrogation"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    },
+    {
+      "testCaseId": "VAL-050",
+      "title": "Complete Force Incident with All Phases",
+      "expectedPolicyRefs": [
+        "Use_of_Force",
+        "Search_Seizure",
+        "Interrogation"
+      ],
+      "matchedPolicyRefs": [
+        "Officer_Conduct",
+        "Use_of_Force",
+        "Arrest",
+        "Custody",
+        "Interrogation",
+        "Search_Seizure"
+      ],
+      "correct": true,
+      "usedFallback": false,
+      "rulesExtracted": 36
+    }
+  ],
+  "categoryAccuracy": {
+    "Use_of_Force": {
+      "expected": 20,
+      "matched": 20,
+      "accuracy": 1
+    },
+    "Search_Seizure": {
+      "expected": 10,
+      "matched": 8,
+      "accuracy": 0.8
+    },
+    "Arrest": {
+      "expected": 11,
+      "matched": 11,
+      "accuracy": 1
+    },
+    "Interrogation": {
+      "expected": 9,
+      "matched": 9,
+      "accuracy": 1
+    },
+    "Custody": {
+      "expected": 1,
+      "matched": 1,
+      "accuracy": 1
+    },
+    "Pursuit": {
+      "expected": 6,
+      "matched": 6,
+      "accuracy": 1
+    },
+    "Body_Camera": {
+      "expected": 1,
+      "matched": 0,
+      "accuracy": 0
+    },
+    "Officer_Conduct": {
+      "expected": 1,
+      "matched": 1,
+      "accuracy": 1
+    }
+  },
+  "safetyLanguageCheck": "PASSED"
+}

@@ -1,0 +1,229 @@
+{
+  "phase": 102,
+  "title": "CourtAccess Statewide Intelligence Summary",
+  "generatedAt": "2026-03-09T21:53:58.920Z",
+  "purpose": "Consolidated view of the entire statewide policy intelligence dataset",
+  "dataset": {
+    "agenciesIndexed": 488,
+    "policiesCollected": 8189,
+    "chpBaselinePolicies": 1550,
+    "discoveredPolicies": 6639,
+    "topicsDetected": 334,
+    "coverageEntries": 162992
+  },
+  "pipelineStatus": {
+    "ocrCompleted": 6639,
+    "ocrPending": 0,
+    "ocrFailed": 0,
+    "classificationCompleted": 8189,
+    "classificationPending": 0,
+    "classificationFailed": 0
+  },
+  "coverageCompleteness": {
+    "totalCoverageEntries": 162992,
+    "policiesFound": 4673,
+    "policiesMissing": 158319,
+    "overallCoveragePercent": "2.9%"
+  },
+  "mostCommonMissingPolicies": [
+    {
+      "policy": "Less-Lethal Weapons Deployment",
+      "category": "Use_of_Force",
+      "missingInAgencies": 487
+    },
+    {
+      "policy": "De-Escalation Requirements",
+      "category": "Use_of_Force",
+      "missingInAgencies": 487
+    },
+    {
+      "policy": "Chokehold / Neck Restraint Ban",
+      "category": "Use_of_Force",
+      "missingInAgencies": 487
+    },
+    {
+      "policy": "Taser / CEW Policy",
+      "category": "Use_of_Force",
+      "missingInAgencies": 487
+    },
+    {
+      "policy": "OC Spray / Chemical Agents",
+      "category": "Use_of_Force",
+      "missingInAgencies": 487
+    },
+    {
+      "policy": "Baton Use Guidelines",
+      "category": "Use_of_Force",
+      "missingInAgencies": 487
+    },
+    {
+      "policy": "Force Review Board Process",
+      "category": "Use_of_Force",
+      "missingInAgencies": 487
+    },
+    {
+      "policy": "Duty to Intervene",
+      "category": "Use_of_Force",
+      "missingInAgencies": 487
+    },
+    {
+      "policy": "Warning Requirements Before Force",
+      "category": "Use_of_Force",
+      "missingInAgencies": 487
+    },
+    {
+      "policy": "Code of Ethics / Standards of Conduct",
+      "category": "Officer_Conduct",
+      "missingInAgencies": 487
+    },
+    {
+      "policy": "Off-Duty Conduct Standards",
+      "category": "Officer_Conduct",
+      "missingInAgencies": 487
+    },
+    {
+      "policy": "Conflict of Interest / Gratuities",
+      "category": "Officer_Conduct",
+      "missingInAgencies": 487
+    },
+    {
+      "policy": "Truthfulness / Brady Disclosure Obligations",
+      "category": "Officer_Conduct",
+      "missingInAgencies": 487
+    },
+    {
+      "policy": "Secondary Employment Rules",
+      "category": "Officer_Conduct",
+      "missingInAgencies": 487
+    },
+    {
+      "policy": "Courtesy and Professionalism",
+      "category": "Officer_Conduct",
+      "missingInAgencies": 487
+    },
+    {
+      "policy": "Citizen Complaint Intake Process",
+      "category": "Internal_Affairs",
+      "missingInAgencies": 487
+    },
+    {
+      "policy": "Administrative vs Criminal Investigations",
+      "category": "Internal_Affairs",
+      "missingInAgencies": 487
+    },
+    {
+      "policy": "Pitchess Motion Compliance",
+      "category": "Internal_Affairs",
+      "missingInAgencies": 487
+    },
+    {
+      "policy": "Sustained / Exonerated / Unfounded Findings",
+      "category": "Internal_Affairs",
+      "missingInAgencies": 487
+    },
+    {
+      "policy": "POBR (Peace Officer Bill of Rights) Compliance",
+      "category": "Internal_Affairs",
+      "missingInAgencies": 487
+    }
+  ],
+  "agencyTypeDistribution": [
+    {
+      "type": "Police",
+      "count": 284
+    },
+    {
+      "type": "Sheriff",
+      "count": 58
+    },
+    {
+      "type": "District_Attorney",
+      "count": 43
+    },
+    {
+      "type": "University",
+      "count": 27
+    },
+    {
+      "type": "State",
+      "count": 25
+    },
+    {
+      "type": "Probation",
+      "count": 20
+    },
+    {
+      "type": "Coroner",
+      "count": 8
+    },
+    {
+      "type": "School_District",
+      "count": 5
+    },
+    {
+      "type": "Transit",
+      "count": 5
+    },
+    {
+      "type": "Harbor",
+      "count": 4
+    },
+    {
+      "type": "Airport",
+      "count": 4
+    },
+    {
+      "type": "Community_College",
+      "count": 3
+    },
+    {
+      "type": "Park_Ranger",
+      "count": 2
+    }
+  ],
+  "auditFindings": {
+    "phase97_sampleAudit": {
+      "sampleSize": 100,
+      "averageConfidence": 0.994,
+      "highConfidence": 100,
+      "lowConfidence": 0,
+      "unclassified": 0
+    },
+    "phase98_topicDistribution": {
+      "totalTopics": 334,
+      "classifiedDocuments": 8189,
+      "topTopicPolicyCount": 2763,
+      "bottomTopicPolicyCount": 3
+    },
+    "phase99_agencyCoverage": {
+      "totalAgencies": 488,
+      "averageCoverageScore": 0.0287,
+      "highTransparency": 1,
+      "lowTransparency": 487
+    },
+    "phase100_policyGaps": {
+      "totalGapInstances": 158319,
+      "criticalGaps": 60,
+      "topMissingPolicy": "Less-Lethal Weapons Deployment",
+      "topMissingCount": 487
+    },
+    "phase101_duplicates": {
+      "totalDocuments": 8189,
+      "uniqueDocuments": 8189,
+      "duplicateGroups": 0,
+      "totalDuplicates": 0
+    }
+  },
+  "cpraStatus": {
+    "activeCampaigns": 1,
+    "totalRequests": 25,
+    "note": "NO CPRA emails sent. Audit ensures we target the right agencies before sending."
+  },
+  "recommendations": [
+    "60 critical policy gaps identified — prioritize CPRA requests for: Less-Lethal Weapons Deployment (missing in 487 agencies)",
+    "No duplicates detected",
+    "487 agencies with low/no transparency — these are top CPRA targets",
+    "All sampled policies have acceptable confidence"
+  ],
+  "runtimeMs": 364
+}

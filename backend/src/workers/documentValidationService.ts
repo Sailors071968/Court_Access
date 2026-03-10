@@ -35,7 +35,7 @@ export interface ValidationResult {
 // ---------------------------------------------------------------------------
 
 export const DEFAULT_VALIDATION_CONFIG: ValidationConfig = {
-  maxFileSizeBytes: 50 * 1024 * 1024, // 50MB
+  maxFileSizeBytes: 100 * 1024 * 1024, // 100MB (Phase 113: increased from 50MB for large policy manuals)
   allowedMimeTypes: [
     'application/pdf',
     'application/msword',
@@ -46,6 +46,11 @@ export const DEFAULT_VALIDATION_CONFIG: ValidationConfig = {
     'image/png',
     'image/jpeg',
     'image/tiff',
+    // Phase 110: Relaxed MIME types for government servers that mislabel PDFs
+    'application/octet-stream',
+    'binary/octet-stream',
+    'text/pdf',
+    'application/x-pdf',
   ],
   enableDuplicateDetection: true,
   enableHashCheck: true,
@@ -154,6 +159,7 @@ export function validateDocument(
   buffer: Buffer,
   declaredMimeType?: string,
   config: ValidationConfig = DEFAULT_VALIDATION_CONFIG,
+  sourceUrl?: string,
 ): ValidationResult {
   const errors: string[] = [];
   const warnings: string[] = [];
@@ -183,14 +189,28 @@ export function validateDocument(
   }
 
   const effectiveMime = detectedMimeType ?? declaredMimeType ?? null;
+
+  // Phase 110: URL-based MIME override — if URL ends with .pdf, relax MIME validation
+  const urlEndsPdf = sourceUrl ? /\.pdf(\?.*)?$/i.test(sourceUrl) : false;
+
   if (effectiveMime && !config.allowedMimeTypes.includes(effectiveMime)) {
-    errors.push(
-      `MIME type "${effectiveMime}" is not in the allowed list: ${config.allowedMimeTypes.join(', ')}`
-    );
+    if (urlEndsPdf) {
+      warnings.push(
+        `MIME type "${effectiveMime}" not in allowed list, but URL ends with .pdf — allowing`
+      );
+    } else {
+      errors.push(
+        `MIME type "${effectiveMime}" is not in the allowed list: ${config.allowedMimeTypes.join(', ')}`
+      );
+    }
   }
 
   if (!effectiveMime) {
-    warnings.push('Could not determine MIME type for this file');
+    if (urlEndsPdf) {
+      warnings.push('Could not determine MIME type, but URL ends with .pdf — allowing');
+    } else {
+      warnings.push('Could not determine MIME type for this file');
+    }
   }
 
   // 3. SHA-256 hash

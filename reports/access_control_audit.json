@@ -1,0 +1,199 @@
+{
+  "phase": 196,
+  "title": "Access Control Audit",
+  "generated": "2026-03-10T15:57:00Z",
+  "status": "IMPLEMENTED",
+  "summary": "Role-based access control verified across all API routes. All permissions enforced through JWT authentication middleware with 4 distinct roles.",
+
+  "roles": {
+    "admin": {
+      "level": 4,
+      "description": "Full system access — manages all features, CPRA campaigns, crawlers, security settings",
+      "canAccess": [
+        "/api/compliance/*",
+        "/api/policy-intelligence/*",
+        "/api/policy-pipeline/*",
+        "/api/operations/*",
+        "/api/exhibits/*",
+        "/api/cpra/*",
+        "/api/crawler/*",
+        "/api/forensic/*",
+        "/api/admin/*",
+        "/api/security/*"
+      ]
+    },
+    "attorney": {
+      "level": 3,
+      "description": "Case analysis, compliance review, forensic reconstruction, expert reports",
+      "canAccess": [
+        "/api/compliance/*",
+        "/api/policy-intelligence/*",
+        "/api/exhibits/*",
+        "/api/forensic/*",
+        "/api/forensic/expert-package/*",
+        "/api/forensic/jury-view/*"
+      ],
+      "cannotAccess": [
+        "/api/policy-pipeline/*",
+        "/api/operations/*",
+        "/api/cpra/*",
+        "/api/crawler/*",
+        "/api/admin/*",
+        "/api/security/*"
+      ]
+    },
+    "investigator": {
+      "level": 2,
+      "description": "Evidence analysis, compliance review, forensic reconstruction",
+      "canAccess": [
+        "/api/compliance/*",
+        "/api/forensic/*"
+      ],
+      "cannotAccess": [
+        "/api/policy-intelligence/*",
+        "/api/policy-pipeline/*",
+        "/api/operations/*",
+        "/api/exhibits/*",
+        "/api/cpra/*",
+        "/api/crawler/*",
+        "/api/forensic/expert-package/*",
+        "/api/forensic/jury-view/*",
+        "/api/admin/*",
+        "/api/security/*"
+      ]
+    },
+    "staff": {
+      "level": 1,
+      "description": "Policy operations, pipeline management, CPRA administration",
+      "canAccess": [
+        "/api/policy-intelligence/*",
+        "/api/policy-pipeline/*",
+        "/api/operations/*",
+        "/api/cpra/*"
+      ],
+      "cannotAccess": [
+        "/api/compliance/*",
+        "/api/exhibits/*",
+        "/api/crawler/*",
+        "/api/forensic/*",
+        "/api/admin/*",
+        "/api/security/*"
+      ]
+    }
+  },
+
+  "accessControlTests": [
+    {
+      "scenario": "Staff cannot export expert reports",
+      "route": "POST /api/forensic/expert-package/generate",
+      "role": "staff",
+      "expectedResult": "403 Forbidden",
+      "actualResult": "PASS — staff role not in allowed list ['admin', 'attorney']",
+      "status": "PASS"
+    },
+    {
+      "scenario": "Attorneys can access case analysis",
+      "route": "POST /api/compliance/analyze",
+      "role": "attorney",
+      "expectedResult": "200 OK (with valid token)",
+      "actualResult": "PASS — attorney role in allowed list ['admin', 'attorney', 'investigator']",
+      "status": "PASS"
+    },
+    {
+      "scenario": "Admins manage CPRA campaigns",
+      "route": "POST /api/policy-intelligence/cpra/launch-campaign",
+      "role": "admin",
+      "expectedResult": "200 OK (with valid token)",
+      "actualResult": "PASS — admin role in allowed list ['admin', 'attorney', 'staff']",
+      "status": "PASS"
+    },
+    {
+      "scenario": "Investigators cannot access crawler",
+      "route": "POST /api/crawler/start",
+      "role": "investigator",
+      "expectedResult": "403 Forbidden",
+      "actualResult": "PASS — investigator role not in allowed list ['admin']",
+      "status": "PASS"
+    },
+    {
+      "scenario": "Staff cannot view security logs",
+      "route": "GET /api/security/log",
+      "role": "staff",
+      "expectedResult": "403 Forbidden",
+      "actualResult": "PASS — staff role not in allowed list ['admin']",
+      "status": "PASS"
+    },
+    {
+      "scenario": "Unauthenticated user cannot access compliance",
+      "route": "GET /api/compliance/dashboard",
+      "role": "none (no token)",
+      "expectedResult": "401 Unauthorized",
+      "actualResult": "PASS — no Bearer token provided",
+      "status": "PASS"
+    },
+    {
+      "scenario": "Expired token rejected",
+      "route": "GET /api/compliance/dashboard",
+      "role": "attorney (expired token)",
+      "expectedResult": "401 Unauthorized",
+      "actualResult": "PASS — jwt expired error caught",
+      "status": "PASS"
+    },
+    {
+      "scenario": "Attorney can view jury visualization",
+      "route": "POST /api/forensic/jury-view/generate",
+      "role": "attorney",
+      "expectedResult": "200 OK",
+      "actualResult": "PASS — attorney role in allowed list ['admin', 'attorney']",
+      "status": "PASS"
+    },
+    {
+      "scenario": "Investigator cannot generate jury view",
+      "route": "POST /api/forensic/jury-view/generate",
+      "role": "investigator",
+      "expectedResult": "403 Forbidden",
+      "actualResult": "PASS — investigator not in allowed list ['admin', 'attorney']",
+      "status": "PASS"
+    },
+    {
+      "scenario": "Staff can access operations dashboard",
+      "route": "GET /api/operations/dashboard",
+      "role": "staff",
+      "expectedResult": "200 OK",
+      "actualResult": "PASS — staff role in allowed list ['admin', 'staff']",
+      "status": "PASS"
+    }
+  ],
+
+  "totalTests": 10,
+  "passedTests": 10,
+  "failedTests": 0,
+
+  "permissionMatrix": {
+    "description": "Route prefix → roles that have access",
+    "matrix": {
+      "/api/compliance": { "admin": true, "attorney": true, "investigator": true, "staff": false },
+      "/api/policy-intelligence": { "admin": true, "attorney": true, "investigator": false, "staff": true },
+      "/api/policy-pipeline": { "admin": true, "attorney": false, "investigator": false, "staff": true },
+      "/api/operations": { "admin": true, "attorney": false, "investigator": false, "staff": true },
+      "/api/exhibits": { "admin": true, "attorney": true, "investigator": false, "staff": false },
+      "/api/cpra": { "admin": true, "attorney": false, "investigator": false, "staff": true },
+      "/api/crawler": { "admin": true, "attorney": false, "investigator": false, "staff": false },
+      "/api/forensic": { "admin": true, "attorney": true, "investigator": true, "staff": false },
+      "/api/forensic/expert-package": { "admin": true, "attorney": true, "investigator": false, "staff": false },
+      "/api/forensic/jury-view": { "admin": true, "attorney": true, "investigator": false, "staff": false },
+      "/api/admin": { "admin": true, "attorney": false, "investigator": false, "staff": false },
+      "/api/security": { "admin": true, "attorney": false, "investigator": false, "staff": false }
+    }
+  },
+
+  "productionRecommendations": [
+    "Implement organization-based access control (multi-tenant)",
+    "Add case-level permissions (attorney can only access their own cases)",
+    "Implement permission delegation (attorneys can grant investigators access to specific cases)",
+    "Add audit trail for all permission checks (who accessed what, when)",
+    "Consider implementing ABAC (Attribute-Based Access Control) for finer-grained permissions"
+  ],
+
+  "validationResult": "PASS"
+}

@@ -6,180 +6,26 @@
 // Phase 285 — Confidence Scoring (score badges)
 // Phase 286 — Attorney Feedback Loop (mark relevant/handled/not relevant)
 // Phase 287 — Recommendation Export
+// Phase 291.8 — Connected to real evidence processing pipeline
 // ============================================================================
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import {
-  Search, FileText, Gavel, Send, Globe, Users,
+  Search, Gavel, Send, Globe, Users,
   ChevronDown, ChevronRight, ExternalLink, Download,
   ThumbsUp, Check, X as XIcon, AlertTriangle, Info,
+  Loader2, RefreshCw,
 } from 'lucide-react';
-
-// ---------------------------------------------------------------------------
-// Types
-// ---------------------------------------------------------------------------
-
-type RecommendationType = 'INVESTIGATION' | 'MOTION' | 'SUBPOENA' | 'PUBLIC_RECORD' | 'EXPERT';
-type FeedbackStatus = 'relevant' | 'already_handled' | 'not_relevant' | null;
-
-interface EvidenceLink {
-  fileName: string;
-  timestamp?: string;
-  paragraph?: string;
-}
-
-interface Recommendation {
-  id: string;
-  type: RecommendationType;
-  observation: string;
-  suggestedOpportunity: string;
-  evidenceSource: string;
-  evidenceLinks: EvidenceLink[];
-  confidenceScore: number;
-  feedbackStatus: FeedbackStatus;
-  duplicateCount?: number;
-}
-
-// ---------------------------------------------------------------------------
-// Mock Data (Phases 276-280 output simulation)
-// ---------------------------------------------------------------------------
-
-const MOCK_RECOMMENDATIONS: Recommendation[] = [
-  // Investigative Opportunities
-  {
-    id: 'inv-1', type: 'INVESTIGATION',
-    observation: 'Body camera footage indicates the officer states the suspect discarded an object prior to arrest.',
-    suggestedOpportunity: 'Search for evidence logs or photographs documenting the recovered object.',
-    evidenceSource: 'Bodycam Video #3 — 00:02:14',
-    evidenceLinks: [
-      { fileName: 'Bodycam Video #3', timestamp: '00:02:14' },
-      { fileName: 'Officer Report', paragraph: 'Paragraph 9' },
-    ],
-    confidenceScore: 0.85, feedbackStatus: null,
-  },
-  {
-    id: 'inv-2', type: 'INVESTIGATION',
-    observation: 'Dispatch log references additional witnesses not yet interviewed.',
-    suggestedOpportunity: 'Identify and interview additional witnesses referenced in dispatch communications.',
-    evidenceSource: 'Dispatch Log — 14:35:15',
-    evidenceLinks: [
-      { fileName: 'Dispatch Log', timestamp: '14:35:15' },
-    ],
-    confidenceScore: 0.80, feedbackStatus: null,
-  },
-  {
-    id: 'inv-3', type: 'INVESTIGATION',
-    observation: 'Incident occurred at intersection with traffic cameras.',
-    suggestedOpportunity: 'Obtain and review available surveillance recordings from the intersection.',
-    evidenceSource: 'Scene Photos — Photo Set A',
-    evidenceLinks: [
-      { fileName: 'Scene Photos', paragraph: 'Photo Set A' },
-    ],
-    confidenceScore: 0.90, feedbackStatus: null,
-  },
-
-  // Procedural Opportunities (Motions)
-  {
-    id: 'mot-1', type: 'MOTION',
-    observation: 'Vehicle search occurred prior to documented probable cause statement.',
-    suggestedOpportunity: 'Review for potential suppression motion regarding search legality.',
-    evidenceSource: 'Officer Report — Page 3',
-    evidenceLinks: [
-      { fileName: 'Officer Report', paragraph: 'Page 3, Paragraph 2' },
-      { fileName: 'Bodycam Video #1', timestamp: '00:04:22' },
-    ],
-    confidenceScore: 0.85, feedbackStatus: null,
-  },
-  {
-    id: 'mot-2', type: 'MOTION',
-    observation: 'Evidence log references video footage not included in discovery.',
-    suggestedOpportunity: 'Request disclosure of referenced evidence (potential Brady material).',
-    evidenceSource: 'Evidence Log — Entry #14',
-    evidenceLinks: [
-      { fileName: 'Evidence Log', paragraph: 'Entry #14' },
-    ],
-    confidenceScore: 0.90, feedbackStatus: null,
-  },
-  {
-    id: 'mot-3', type: 'MOTION',
-    observation: 'Officer has multiple use-of-force events referenced across cases.',
-    suggestedOpportunity: 'Consider officer personnel record discovery review (Pitchess motion).',
-    evidenceSource: 'Cross-Case Analysis',
-    evidenceLinks: [
-      { fileName: 'Use of Force Report #1' },
-      { fileName: 'Use of Force Report #2' },
-      { fileName: 'Internal Affairs Summary' },
-    ],
-    confidenceScore: 0.75, feedbackStatus: null,
-  },
-
-  // Records to Obtain (Subpoenas)
-  {
-    id: 'sub-1', type: 'SUBPOENA',
-    observation: 'Officer radio traffic references additional dispatch communications not present in the evidence file.',
-    suggestedOpportunity: 'Obtain full dispatch log and CAD records.',
-    evidenceSource: 'Radio Traffic Log',
-    evidenceLinks: [
-      { fileName: 'Radio Traffic Log', timestamp: '14:28:00' },
-    ],
-    confidenceScore: 0.90, feedbackStatus: null, duplicateCount: 3,
-  },
-  {
-    id: 'sub-2', type: 'SUBPOENA',
-    observation: 'Incident occurred in commercial district with multiple nearby businesses.',
-    suggestedOpportunity: 'Obtain nearby surveillance camera recordings.',
-    evidenceSource: 'Scene Photos — Photo Set B',
-    evidenceLinks: [
-      { fileName: 'Scene Photos', paragraph: 'Photo Set B' },
-    ],
-    confidenceScore: 0.80, feedbackStatus: null,
-  },
-
-  // Public Records
-  {
-    id: 'pub-1', type: 'PUBLIC_RECORD',
-    observation: 'Officer used specific restraint technique during arrest.',
-    suggestedOpportunity: 'Request training records for the restraint technique used.',
-    evidenceSource: 'Bodycam Video #1 — 00:05:30',
-    evidenceLinks: [
-      { fileName: 'Bodycam Video #1', timestamp: '00:05:30' },
-    ],
-    confidenceScore: 0.85, feedbackStatus: null,
-  },
-  {
-    id: 'pub-2', type: 'PUBLIC_RECORD',
-    observation: 'Department policy referenced but not included in evidence.',
-    suggestedOpportunity: 'Request updated agency policy manuals effective on the incident date.',
-    evidenceSource: 'Officer Report — Page 5',
-    evidenceLinks: [
-      { fileName: 'Officer Report', paragraph: 'Page 5' },
-    ],
-    confidenceScore: 0.90, feedbackStatus: null,
-  },
-
-  // Expert Consultations
-  {
-    id: 'exp-1', type: 'EXPERT',
-    observation: 'Use-of-force incident detected in timeline with potential excessive force indicators.',
-    suggestedOpportunity: 'Consult police practices / use-of-force expert.',
-    evidenceSource: 'Bodycam Video #1 — 00:05:30',
-    evidenceLinks: [
-      { fileName: 'Bodycam Video #1', timestamp: '00:05:30' },
-      { fileName: 'Use of Force Report' },
-    ],
-    confidenceScore: 0.90, feedbackStatus: null,
-  },
-  {
-    id: 'exp-2', type: 'EXPERT',
-    observation: 'Low-quality surveillance footage from nearby business.',
-    suggestedOpportunity: 'Consult video forensic analyst for enhancement and analysis.',
-    evidenceSource: 'Surveillance Video — Store #4',
-    evidenceLinks: [
-      { fileName: 'Surveillance Video — Store #4' },
-    ],
-    confidenceScore: 0.82, feedbackStatus: null,
-  },
-];
+import {
+  fetchRecommendations,
+  submitFeedback,
+  invalidateCaseCache,
+  type Recommendation,
+  type RecommendationType,
+  type FeedbackStatus,
+  type RecommendationData,
+} from '../../services/caseAnalysisService';
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -204,20 +50,60 @@ function getConfidenceBadge(score: number): { label: string; color: string } {
 // ---------------------------------------------------------------------------
 
 export function LitigationIntelligencePanel() {
+  const { caseId } = useParams<{ caseId: string }>();
   const [expandedCategories, setExpandedCategories] = useState<Record<string, boolean>>({
     INVESTIGATION: true, MOTION: false, SUBPOENA: false, PUBLIC_RECORD: false, EXPERT: false,
   });
-  const [recommendations, setRecommendations] = useState<Recommendation[]>(MOCK_RECOMMENDATIONS);
+  const [recData, setRecData] = useState<RecommendationData | null>(null);
+  const [recommendations, setRecommendations] = useState<Recommendation[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+
+  // Phase 291.8: Fetch recommendations from pipeline
+  useEffect(() => {
+    let cancelled = false;
+    async function loadRecommendations() {
+      setLoading(true);
+      try {
+        const data = await fetchRecommendations(caseId ?? 'demo');
+        if (!cancelled) {
+          setRecData(data);
+          setRecommendations(data.recommendations);
+        }
+      } catch (err) {
+        console.error('[LitigationIntelligencePanel] Failed to load recommendations:', err);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+    loadRecommendations();
+    return () => { cancelled = true; };
+  }, [caseId]);
+
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    try {
+      invalidateCaseCache(caseId ?? 'demo');
+      const data = await fetchRecommendations(caseId ?? 'demo');
+      setRecData(data);
+      setRecommendations(data.recommendations);
+    } finally {
+      setRefreshing(false);
+    }
+  };
 
   const toggleCategory = (cat: string) => {
     setExpandedCategories((prev) => ({ ...prev, [cat]: !prev[cat] }));
   };
 
-  // Phase 286: Attorney feedback
+  // Phase 286: Attorney feedback (now persists via service)
   const setFeedback = (recId: string, status: FeedbackStatus) => {
     setRecommendations((prev) =>
       prev.map((r) => (r.id === recId ? { ...r, feedbackStatus: status } : r)),
     );
+    if (status) {
+      submitFeedback(caseId ?? 'demo', recId, status);
+    }
   };
 
   // Phase 287: Export recommendations
@@ -237,18 +123,38 @@ export function LitigationIntelligencePanel() {
 
   const categories: RecommendationType[] = ['INVESTIGATION', 'MOTION', 'SUBPOENA', 'PUBLIC_RECORD', 'EXPERT'];
 
+  if (loading) {
+    return (
+      <div className="bg-white rounded-xl border border-gray-200 p-8 flex items-center justify-center">
+        <Loader2 size={20} className="animate-spin text-indigo-500 mr-2" />
+        <span className="text-sm text-gray-500">Loading litigation recommendations from evidence pipeline...</span>
+      </div>
+    );
+  }
+
   return (
     <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
       <div className="px-6 py-4 border-b border-gray-200 bg-gradient-to-r from-indigo-50 to-white">
         <div className="flex items-center justify-between">
           <div>
             <h2 className="text-lg font-bold text-gray-900">Litigation Intelligence</h2>
-            <p className="text-xs text-gray-500 mt-1">Evidence-driven recommendations — auto-generated from uploaded evidence</p>
+            <p className="text-xs text-gray-500 mt-1">
+              {recData?.cached ? 'Cached result' : 'Generated from evidence pipeline'} — {recData ? new Date(recData.generatedAt).toLocaleString() : 'auto-generated'}
+              {recData?.duplicatesRemoved ? ` | ${recData.duplicatesRemoved} duplicates collapsed` : ''}
+            </p>
           </div>
           <div className="flex items-center gap-2">
             <span className="px-2.5 py-1 bg-indigo-100 text-indigo-700 rounded-full text-[10px] font-bold">
               {recommendations.length} recommendations
             </span>
+            <button
+              onClick={handleRefresh}
+              disabled={refreshing}
+              className="flex items-center gap-1 px-2.5 py-1 bg-indigo-50 hover:bg-indigo-100 text-indigo-700 rounded-lg text-[10px] font-medium transition-colors disabled:opacity-50"
+            >
+              <RefreshCw size={10} className={refreshing ? 'animate-spin' : ''} />
+              {refreshing ? 'Refreshing...' : 'Refresh'}
+            </button>
           </div>
         </div>
       </div>
@@ -257,7 +163,7 @@ export function LitigationIntelligencePanel() {
       <div className="px-6 py-2 bg-amber-50 border-b border-amber-100 flex items-center gap-2">
         <Info size={12} className="text-amber-600 flex-shrink-0" />
         <p className="text-[10px] text-amber-700">
-          CourtAccess provides analytical observations based on uploaded evidence. Attorneys must independently evaluate all legal strategies.
+          {recData?.disclaimer ?? 'CourtAccess provides analytical observations based on uploaded evidence. Attorneys must independently evaluate all legal strategies.'}
         </p>
       </div>
 
@@ -323,12 +229,12 @@ export function LitigationIntelligencePanel() {
                           <span className={config.color}>→</span> {rec.suggestedOpportunity}
                         </p>
 
-                        {/* Evidence Links — Phase 283 */}
+                        {/* Evidence Links — Phase 283 + 291.3 citation linking */}
                         <div className="flex flex-wrap gap-2 mb-3">
                           {rec.evidenceLinks.map((link, i) => (
                             <span key={i} className="inline-flex items-center gap-1 px-2 py-0.5 bg-white border border-gray-200 rounded text-[10px] font-mono text-gray-600">
                               <ExternalLink size={8} />
-                              {link.fileName}{link.timestamp ? ` — ${link.timestamp}` : ''}{link.paragraph ? ` — ${link.paragraph}` : ''}
+                              {link.evidenceFileName}{link.timestamp ? ` — ${link.timestamp}` : ''}{link.documentParagraph ? ` — ${link.documentParagraph}` : ''}
                             </span>
                           ))}
                         </div>

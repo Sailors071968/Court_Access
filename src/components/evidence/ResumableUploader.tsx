@@ -85,6 +85,10 @@ export function ResumableUploader({ caseId: _caseId, onUploadComplete, maxConcur
           console.warn(`File ${f.name} exceeds maximum size of ${formatBytes(MAX_FILE_SIZE)}`);
           return false;
         }
+        if (f.type && !ALLOWED_TYPES.includes(f.type)) {
+          console.warn(`File ${f.name} has unsupported type: ${f.type}`);
+          return false;
+        }
         return true;
       })
       .map((f) => ({
@@ -262,6 +266,7 @@ export function ResumableUploader({ caseId: _caseId, onUploadComplete, maxConcur
           ref={fileInputRef}
           type="file"
           multiple
+          accept={ALLOWED_TYPES.join(',')}
           className="hidden"
           onChange={(e) => e.target.files && addFiles(e.target.files)}
         />

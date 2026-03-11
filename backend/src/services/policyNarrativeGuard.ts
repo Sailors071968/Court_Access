@@ -36,7 +36,7 @@ export class PolicyNarrativeGuard {
   static sanitize(text: string): string {
     let result = text;
     for (const [forbidden, replacement] of Object.entries(ALLOWED_REPLACEMENTS)) {
-      const regex = new RegExp(`\\b${forbidden}\\b`, 'gi');
+      const regex = new RegExp(`\\b${forbidden}\\w*\\b`, 'gi');
       result = result.replace(regex, replacement);
     }
     return result;
@@ -48,7 +48,7 @@ export class PolicyNarrativeGuard {
   static audit(text: string): { clean: boolean; violations: string[] } {
     const found: string[] = [];
     for (const term of FORBIDDEN_TERMS) {
-      const regex = new RegExp(`\\b${term}\\b`, 'gi');
+      const regex = new RegExp(`\\b${term}\\w*\\b`, 'gi');
       if (regex.test(text)) {
         found.push(term);
       }

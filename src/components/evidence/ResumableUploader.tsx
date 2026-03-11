@@ -76,6 +76,10 @@ export function ResumableUploader({ caseId: _caseId, onUploadComplete, maxConcur
     const fileArray = Array.from(newFiles);
     const uploadFiles: UploadFile[] = fileArray
       .filter((f) => {
+        if (f.size === 0) {
+          console.warn(`File ${f.name} is empty`);
+          return false;
+        }
         if (f.size > MAX_FILE_SIZE) {
           console.warn(`File ${f.name} exceeds maximum size of ${formatBytes(MAX_FILE_SIZE)}`);
           return false;
@@ -108,6 +112,18 @@ export function ResumableUploader({ caseId: _caseId, onUploadComplete, maxConcur
         if (!file || file.status === 'paused' || file.status === 'complete') {
           clearInterval(timer);
           return prev;
+        }
+
+        // Guard against zero-size files to prevent NaN / infinite timer
+        if (file.size === 0) {
+          clearInterval(timer);
+          delete uploadTimers.current[fileId];
+          onUploadComplete?.(fileId, file.name);
+          return prev.map((f) =>
+            f.id === fileId
+              ? { ...f, progress: 100, status: 'complete' as const, bytesUploaded: 0 }
+              : f
+          );
         }
 
         const increment = Math.min(

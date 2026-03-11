@@ -58,6 +58,7 @@ export const ROUTE_REGISTRY: RouteDefinition[] = [
   { path: '/cases/:caseId/research', label: 'Research', requiresAuth: true, component: 'ResearchPage', status: 'active' },
   { path: '/cases/:caseId/activity', label: 'Activity', requiresAuth: true, component: 'ActivityPage', status: 'active' },
   { path: '/cases/:caseId/trial-exhibits', label: 'Trial Exhibits', requiresAuth: true, component: 'TrialExhibitWorkspace', status: 'active' },
+  { path: '/cases/:caseId/litigation-strategy', label: 'Litigation Strategy', requiresAuth: true, requiredPermission: 'canViewEvidence', component: 'LitigationStrategyView', status: 'active' },
   { path: '/cases/:caseId/settings', label: 'Case Settings', requiresAuth: true, requiredPermission: 'canManageCases', component: 'CaseSettingsPage', status: 'active' },
 
   // Utility routes

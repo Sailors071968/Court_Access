@@ -10,6 +10,7 @@ import { ROLE_PERMISSIONS } from '../../constants';
 import { caseDataProvider } from '../../services/caseDataProvider';
 import { useAuthStore } from '../../stores/authStore';
 import { CaseAnalysisSection } from '../../components/case/CaseAnalysisSection';
+import { LitigationIntelligencePanel } from '../../components/case/LitigationIntelligencePanel';
 
 export function CaseOverviewPage() {
   const { caseId } = useParams<{ caseId: string }>();
@@ -142,6 +143,11 @@ export function CaseOverviewPage() {
       {/* Phase 257: Complete Case Analysis Section */}
       {showIntelligence && (
         <CaseAnalysisSection />
+      )}
+
+      {/* Phase 282: Litigation Intelligence Panel */}
+      {showIntelligence && (
+        <LitigationIntelligencePanel />
       )}
     </div>
   );

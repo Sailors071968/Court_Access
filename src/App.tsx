@@ -62,6 +62,7 @@ import { ActivityPage } from './pages/case/ActivityPage';
 import { DocumentsPage } from './pages/case/DocumentsPage';
 import { CaseSettingsPage } from './pages/case/CaseSettingsPage';
 import { TrialExhibitWorkspace } from './pages/case/TrialExhibitWorkspace';
+import { LitigationStrategyView } from './pages/case/LitigationStrategyView';
 
 function App() {
   return (
@@ -338,6 +339,14 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canViewEvidence">
                   <TrialExhibitWorkspace />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="litigation-strategy"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <LitigationStrategyView />
                 </ProtectedRoute>
               }
             />

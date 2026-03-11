@@ -68,7 +68,7 @@ export class MotionRecommendationEngine {
     }
 
     // Brady motion patterns
-    if (lower.includes('not included in discovery') || lower.includes('missing from') || lower.includes('not disclosed') || lower.includes('referenced') && lower.includes('not present')) {
+    if (lower.includes('not included in discovery') || lower.includes('missing from') || lower.includes('not disclosed') || (lower.includes('referenced') && lower.includes('not present'))) {
       results.push({
         opportunity: 'Request disclosure of referenced evidence not included in discovery.',
         motionType: 'brady',
@@ -95,7 +95,7 @@ export class MotionRecommendationEngine {
     }
 
     // Miranda/statement patterns
-    if (lower.includes('miranda') || lower.includes('rights') && lower.includes('not advised') || lower.includes('interrogat')) {
+    if (lower.includes('miranda') || (lower.includes('rights') && lower.includes('not advised')) || lower.includes('interrogat')) {
       results.push({
         opportunity: 'Review for potential suppression of statements obtained without Miranda advisement.',
         motionType: 'suppression',

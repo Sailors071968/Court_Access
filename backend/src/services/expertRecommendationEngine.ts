@@ -96,7 +96,7 @@ export class ExpertRecommendationEngine {
     }
 
     // Digital forensics
-    if (lower.includes('digital') || lower.includes('metadata') || lower.includes('timestamp') && lower.includes('altere') || lower.includes('file modif')) {
+    if (lower.includes('digital') || lower.includes('metadata') || (lower.includes('timestamp') && lower.includes('altere')) || lower.includes('file modif')) {
       results.push({
         opportunity: 'Consult digital forensics expert for metadata and authenticity analysis.',
         expertType: 'digital_forensics',

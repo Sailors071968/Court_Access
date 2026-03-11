@@ -107,6 +107,9 @@ export function ResumableUploader({ caseId: _caseId, onUploadComplete, maxConcur
   }, []);
 
   const simulateUpload = useCallback((fileId: string) => {
+    // Guard: skip if a timer already exists for this file (prevents double-start race)
+    if (uploadTimers.current[fileId]) { return; }
+
     setFiles((prev) =>
       prev.map((f) => (f.id === fileId ? { ...f, status: 'uploading' as const } : f))
     );

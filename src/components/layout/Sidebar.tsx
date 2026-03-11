@@ -71,6 +71,8 @@ const navItems: NavItem[] = [
       { id: 'worker-queues', label: 'Worker Queues', path: '/dashboard/system/workers', icon: <Server size={16} /> },
       { id: 'policy-registry', label: 'Policy Topic Registry', path: '/dashboard/policy-topic-registry', icon: <BookOpen size={16} /> },
       { id: 'beta-verification', label: 'Beta Verification', path: '/dashboard/beta-verification', icon: <CheckSquare size={16} /> },
+      { id: 'policy-matrix', label: 'Policy Matrix', path: '/dashboard/policy-matrix', icon: <BarChart3 size={16} /> },
+      { id: 'cpra-timeline', label: 'CPRA Timeline', path: '/dashboard/cpra-timeline', icon: <Globe size={16} /> },
     ],
   },
 ];

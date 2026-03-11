@@ -8,7 +8,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, Briefcase, Search, Bell, Settings, Shield, LogOut,
   ChevronLeft, ChevronRight, ChevronDown,
-  FileText, Tag, Upload, BarChart3, Globe,
+  FileText, Tag, Upload, BarChart3, Globe, Activity, Server, BookOpen, CheckSquare,
 } from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
 import { ROLE_PERMISSIONS } from '../../constants';
@@ -67,6 +67,10 @@ const navItems: NavItem[] = [
       { id: 'discount-codes', label: 'Discount Codes', path: '/dashboard/discount-codes', icon: <Tag size={16} /> },
       { id: 'evidence-mgmt', label: 'Evidence Management', path: '/dashboard/evidence-management', icon: <Upload size={16} />, permission: 'canViewEvidenceManagement' },
       { id: 'system-health', label: 'System Health', path: '/dashboard/system-health', icon: <BarChart3 size={16} /> },
+      { id: 'evidence-processing', label: 'Evidence Processing', path: '/dashboard/evidence-processing', icon: <Activity size={16} /> },
+      { id: 'worker-queues', label: 'Worker Queues', path: '/dashboard/system/workers', icon: <Server size={16} /> },
+      { id: 'policy-registry', label: 'Policy Topic Registry', path: '/dashboard/policy-topic-registry', icon: <BookOpen size={16} /> },
+      { id: 'beta-verification', label: 'Beta Verification', path: '/dashboard/beta-verification', icon: <CheckSquare size={16} /> },
     ],
   },
 ];

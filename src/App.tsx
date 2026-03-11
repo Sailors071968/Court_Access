@@ -38,6 +38,12 @@ import { PolicyComplianceDashboard } from './pages/dashboard/PolicyComplianceDas
 import { CaseTimelineVisualizer } from './pages/dashboard/CaseTimelineVisualizer';
 import ExhibitViewer from './pages/dashboard/exhibits/ExhibitViewer';
 import { EvidenceManagementDashboard } from './pages/dashboard/EvidenceManagementDashboard';
+import { EvidenceProcessingTrace } from './pages/dashboard/EvidenceProcessingTrace';
+import { WorkerQueueMonitoring } from './pages/dashboard/WorkerQueueMonitoring';
+import { PolicyTopicRegistry } from './pages/dashboard/PolicyTopicRegistry';
+import { BetaDeploymentVerification } from './pages/dashboard/BetaDeploymentVerification';
+import { PolicyMatrixVirtualized } from './pages/dashboard/PolicyMatrixVirtualized';
+import { CpraCampaignTimeline } from './pages/dashboard/CpraCampaignTimeline';
 import { CasesListPage } from './pages/CasesListPage';
 import { SearchPage } from './pages/SearchPage';
 import { NotificationsPage } from './pages/NotificationsPage';
@@ -55,6 +61,7 @@ import { ResearchPage } from './pages/case/ResearchPage';
 import { ActivityPage } from './pages/case/ActivityPage';
 import { DocumentsPage } from './pages/case/DocumentsPage';
 import { CaseSettingsPage } from './pages/case/CaseSettingsPage';
+import { TrialExhibitWorkspace } from './pages/case/TrialExhibitWorkspace';
 
 function App() {
   return (
@@ -190,6 +197,54 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="dashboard/evidence-processing"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <EvidenceProcessingTrace />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="dashboard/system/workers"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <WorkerQueueMonitoring />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="dashboard/policy-topic-registry"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <PolicyTopicRegistry />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="dashboard/beta-verification"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <BetaDeploymentVerification />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="dashboard/policy-matrix"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <PolicyMatrixVirtualized />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="dashboard/cpra-timeline"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <CpraCampaignTimeline />
+              </ProtectedRoute>
+            }
+          />
           <Route path="cases" element={<CasesListPage />} />
           <Route path="search" element={<SearchPage />} />
           <Route path="notifications" element={<NotificationsPage />} />
@@ -278,6 +333,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="trial-exhibits" element={<TrialExhibitWorkspace />} />
           </Route>
         </Route>
 

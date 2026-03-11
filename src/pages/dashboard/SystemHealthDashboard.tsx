@@ -35,7 +35,18 @@ interface QueueMetric {
   concurrency: number;
 }
 
+interface LatencyMetric {
+  endpoint: string;
+  p50: number;
+  p95: number;
+  p99: number;
+  status: 'healthy' | 'degraded' | 'critical';
+}
+
 interface SystemHealthData {
+  apiLatency: LatencyMetric[];
+  dbLatency: { queryType: string; avgMs: number; maxMs: number; status: 'healthy' | 'degraded' | 'critical' }[];
+  aiLatency: { model: string; avgMs: number; tokensPerSec: number; queueDepth: number; status: 'healthy' | 'degraded' | 'critical' }[];
   crawlerStatus: {
     activeSessions: number;
     domainsThrottled: number;
@@ -129,6 +140,25 @@ function getMockHealthData(): SystemHealthData {
       recentUploads: 0,
       storageClass: 'STANDARD',
     },
+    apiLatency: [
+      { endpoint: '/api/cases', p50: 42, p95: 120, p99: 280, status: 'healthy' },
+      { endpoint: '/api/evidence', p50: 85, p95: 210, p99: 450, status: 'healthy' },
+      { endpoint: '/api/analysis', p50: 320, p95: 890, p99: 1500, status: 'degraded' },
+      { endpoint: '/api/policies', p50: 55, p95: 150, p99: 310, status: 'healthy' },
+      { endpoint: '/api/exhibits', p50: 95, p95: 260, p99: 520, status: 'healthy' },
+    ],
+    dbLatency: [
+      { queryType: 'SELECT (simple)', avgMs: 2, maxMs: 15, status: 'healthy' },
+      { queryType: 'SELECT (join)', avgMs: 18, maxMs: 85, status: 'healthy' },
+      { queryType: 'INSERT', avgMs: 5, maxMs: 22, status: 'healthy' },
+      { queryType: 'Full-text search', avgMs: 45, maxMs: 210, status: 'degraded' },
+      { queryType: 'Aggregation', avgMs: 120, maxMs: 580, status: 'degraded' },
+    ],
+    aiLatency: [
+      { model: 'gpt-4o', avgMs: 2800, tokensPerSec: 42, queueDepth: 0, status: 'healthy' },
+      { model: 'gpt-4o-mini', avgMs: 850, tokensPerSec: 110, queueDepth: 0, status: 'healthy' },
+      { model: 'text-embedding-3-small', avgMs: 120, tokensPerSec: 0, queueDepth: 0, status: 'healthy' },
+    ],
     lastRefreshed: new Date().toISOString(),
   };
 }
@@ -482,6 +512,69 @@ export function SystemHealthDashboard() {
                 <p className="text-lg font-bold text-yellow-700">{data.cpraCampaign.pendingFollowUp}</p>
               </div>
             </div>
+          </div>
+        </Card>
+      </div>
+
+      {/* Phase 262: API / DB / AI Latency Metrics */}
+      <div className="grid lg:grid-cols-3 gap-6">
+        {/* API Latency */}
+        <Card>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">API Latency (ms)</h2>
+          <div className="space-y-2">
+            {data.apiLatency.map((ep) => (
+              <div key={ep.endpoint} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
+                <span className="text-xs font-mono text-gray-700">{ep.endpoint}</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-gray-500">p50: <span className="font-medium text-gray-900">{ep.p50}</span></span>
+                  <span className="text-xs text-gray-500">p95: <span className="font-medium text-gray-900">{ep.p95}</span></span>
+                  <span className={`text-xs px-1.5 py-0.5 rounded ${ep.status === 'healthy' ? 'bg-green-100 text-green-700' : ep.status === 'degraded' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}>
+                    {ep.status}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        {/* DB Latency */}
+        <Card>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Database Latency (ms)</h2>
+          <div className="space-y-2">
+            {data.dbLatency.map((q) => (
+              <div key={q.queryType} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
+                <span className="text-xs text-gray-700">{q.queryType}</span>
+                <div className="flex items-center gap-2">
+                  <span className="text-xs text-gray-500">avg: <span className="font-medium text-gray-900">{q.avgMs}</span></span>
+                  <span className="text-xs text-gray-500">max: <span className="font-medium text-gray-900">{q.maxMs}</span></span>
+                  <span className={`text-xs px-1.5 py-0.5 rounded ${q.status === 'healthy' ? 'bg-green-100 text-green-700' : q.status === 'degraded' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}>
+                    {q.status}
+                  </span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </Card>
+
+        {/* AI Model Latency */}
+        <Card>
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">AI Model Latency</h2>
+          <div className="space-y-2">
+            {data.aiLatency.map((m) => (
+              <div key={m.model} className="p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-sm font-medium text-gray-900">{m.model}</span>
+                  <span className={`text-xs px-1.5 py-0.5 rounded ${m.status === 'healthy' ? 'bg-green-100 text-green-700' : m.status === 'degraded' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}>
+                    {m.status}
+                  </span>
+                </div>
+                <div className="flex gap-4 text-xs text-gray-500">
+                  <span>Avg: <span className="font-medium text-gray-900">{m.avgMs}ms</span></span>
+                  {m.tokensPerSec > 0 && <span>Tokens/s: <span className="font-medium text-gray-900">{m.tokensPerSec}</span></span>}
+                  <span>Queue: <span className="font-medium text-gray-900">{m.queueDepth}</span></span>
+                </div>
+              </div>
+            ))}
           </div>
         </Card>
       </div>

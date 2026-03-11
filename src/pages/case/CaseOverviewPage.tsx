@@ -9,6 +9,7 @@ import { AIStatusBadge } from '../../components/common/StatusBadge';
 import { ROLE_PERMISSIONS } from '../../constants';
 import { caseDataProvider } from '../../services/caseDataProvider';
 import { useAuthStore } from '../../stores/authStore';
+import { CaseAnalysisSection } from '../../components/case/CaseAnalysisSection';
 
 export function CaseOverviewPage() {
   const { caseId } = useParams<{ caseId: string }>();
@@ -137,6 +138,11 @@ export function CaseOverviewPage() {
           </Card>
         </div>
       </div>
+
+      {/* Phase 257: Complete Case Analysis Section */}
+      {showIntelligence && (
+        <CaseAnalysisSection />
+      )}
     </div>
   );
 }

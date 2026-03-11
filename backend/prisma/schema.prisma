@@ -125,3 +125,72 @@ model CorpusIngestionLock {
   @@index([expiresAt])
   @@map("corpus_ingestion_lock")
 }
+
+// ---------------------------------------------------------------------------
+// Doctrine Rule — structured training doctrine from POST manuals
+// ---------------------------------------------------------------------------
+
+model DoctrineRule {
+  id                String   @id @default(uuid())
+  doctrineId        String   @unique // e.g. POST_LD15_RS_001
+  sourceType        String   // POST | DOJ | AGENCY
+  sourceName        String   // e.g. "POST LD-15"
+  sourceVersion     String   @default("1.0") // e.g. "5.0"
+  domain            String   // e.g. "Laws of Arrest"
+  chapter           String   // e.g. "Detentions"
+  topic             String   // e.g. "Reasonable Suspicion"
+  ruleText          String   // The actual doctrine rule
+  explanation       String?  // Detailed explanation
+  legalImplication  String?  // What happens if violated
+  category          String   // constitutional | encounter | detention | search | arrest | miranda | interrogation
+  keywords          String[] // Searchable keywords
+  contentHash       String   // SHA-256 for dedup
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@unique([contentHash])
+  @@index([sourceType])
+  @@index([sourceName])
+  @@index([domain])
+  @@index([chapter])
+  @@index([topic])
+  @@index([category])
+  @@map("doctrine_rules")
+}
+
+// ---------------------------------------------------------------------------
+// Doctrine Embedding — vector storage for doctrine rules
+// ---------------------------------------------------------------------------
+
+model DoctrineEmbedding {
+  id            String   @id @default(uuid())
+  doctrineId    String   @unique // References DoctrineRule.doctrineId
+  model         String   @default("text-embedding-3-large")
+  dimensions    Int      @default(1536)
+  embeddingJson String   // JSON-encoded float array (pgvector requires extension)
+  createdAt     DateTime @default(now())
+
+  @@index([doctrineId])
+  @@map("doctrine_embeddings")
+}
+
+// ---------------------------------------------------------------------------
+// Doctrine Match Log — audit trail of doctrine matches against evidence
+// ---------------------------------------------------------------------------
+
+model DoctrineMatchLog {
+  id              String   @id @default(uuid())
+  caseId          String
+  evidenceText    String   // The input text that was matched
+  doctrineId      String   // Matched doctrine rule
+  similarityScore Float    // Cosine similarity score
+  flagType        String   // violation | concern | compliant
+  flagDescription String   // Human-readable description of the flag
+  createdAt       DateTime @default(now())
+
+  @@index([caseId])
+  @@index([doctrineId])
+  @@index([flagType])
+  @@index([similarityScore])
+  @@map("doctrine_match_log")
+}

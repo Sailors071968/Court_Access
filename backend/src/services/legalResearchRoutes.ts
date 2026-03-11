@@ -33,11 +33,11 @@ export async function registerLegalResearchRoutes(app: FastifyInstance): Promise
   // -----------------------------------------------------------------------
   // Phase 294: Search for case law precedent
   // -----------------------------------------------------------------------
-  app.get('/api/legal-research/search', async (req: FastifyRequest, _reply: FastifyReply) => {
+  app.get('/api/legal-research/search', async (req: FastifyRequest, reply: FastifyReply) => {
     const query = req.query as { q?: string; jurisdiction?: string; motionType?: string; maxResults?: string };
 
     if (!query.q) {
-      return { error: 'Missing required parameter: q' };
+      return reply.code(400).send({ error: 'Missing required parameter: q' });
     }
 
     const result = await LegalResearchEngine.searchForPrecedent(query.q, {
@@ -52,11 +52,11 @@ export async function registerLegalResearchRoutes(app: FastifyInstance): Promise
   // -----------------------------------------------------------------------
   // Phase 294: Search opinions directly
   // -----------------------------------------------------------------------
-  app.get('/api/legal-research/opinions', async (req: FastifyRequest, _reply: FastifyReply) => {
+  app.get('/api/legal-research/opinions', async (req: FastifyRequest, reply: FastifyReply) => {
     const query = req.query as { q?: string; court?: string; pageSize?: string };
 
     if (!query.q) {
-      return { error: 'Missing required parameter: q' };
+      return reply.code(400).send({ error: 'Missing required parameter: q' });
     }
 
     const result = await CourtListenerService.searchOpinions(query.q, {
@@ -70,11 +70,11 @@ export async function registerLegalResearchRoutes(app: FastifyInstance): Promise
   // -----------------------------------------------------------------------
   // Phase 295: Get motion precedent
   // -----------------------------------------------------------------------
-  app.get('/api/legal-research/motion-precedent', async (req: FastifyRequest, _reply: FastifyReply) => {
+  app.get('/api/legal-research/motion-precedent', async (req: FastifyRequest, reply: FastifyReply) => {
     const query = req.query as { motionType?: string; observation?: string; jurisdiction?: string };
 
     if (!query.motionType || !query.observation) {
-      return { error: 'Missing required parameters: motionType, observation' };
+      return reply.code(400).send({ error: 'Missing required parameters: motionType, observation' });
     }
 
     const result = await LegalResearchEngine.searchMotionPrecedent(

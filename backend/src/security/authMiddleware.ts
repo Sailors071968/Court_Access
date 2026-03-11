@@ -164,6 +164,8 @@ const ROUTE_PERMISSIONS: Record<string, UserRole[]> = {
   '/api/forensic/jury-view': ['admin', 'attorney'],
   '/api/admin': ['admin'],
   '/api/security': ['admin'],
+  '/api/legal-research/cache': ['admin'],
+  '/api/legal-research': ['admin', 'attorney', 'investigator'],
 };
 
 export function hasPermission(role: UserRole, requiredRoles: UserRole[]): boolean {

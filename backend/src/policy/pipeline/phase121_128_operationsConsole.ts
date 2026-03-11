@@ -737,4 +737,8 @@ async function main() {
   }
 }
 
-main();
+// Only run when executed directly as a CLI script, not when imported
+const isDirectRun = process.argv[1]?.includes('phase121_128_operationsConsole');
+if (isDirectRun) {
+  main();
+}

@@ -333,7 +333,14 @@ function App() {
                 </ProtectedRoute>
               }
             />
-            <Route path="trial-exhibits" element={<TrialExhibitWorkspace />} />
+            <Route
+              path="trial-exhibits"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <TrialExhibitWorkspace />
+                </ProtectedRoute>
+              }
+            />
           </Route>
         </Route>
 

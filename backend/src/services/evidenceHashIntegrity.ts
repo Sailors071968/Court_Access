@@ -46,6 +46,11 @@ export class EvidenceHashService {
       return { valid: false, details: `SHA-256 mismatch: expected ${storedHash.sha256}, got ${currentSha256}` };
     }
 
+    const currentSha3 = crypto.createHash('sha3-256').update(fileBuffer).digest('hex');
+    if (currentSha3 !== storedHash.sha3_256) {
+      return { valid: false, details: `SHA3-256 mismatch: expected ${storedHash.sha3_256}, got ${currentSha3}` };
+    }
+
     return { valid: true, details: 'Hash verification passed — chain of custody intact' };
   }
 }

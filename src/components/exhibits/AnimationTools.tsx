@@ -4,7 +4,7 @@
 // Supports vehicle movement, suspect movement, officer movement.
 // ============================================================================
 
-import { useState, useCallback } from 'react';
+import { useState } from 'react';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -52,9 +52,10 @@ function formatTime(seconds: number): string {
   return `${mins}:${secs.toString().padStart(2, '0')}`;
 }
 
-function generateId(): string {
-  return `kf_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
-}
+// generateId reserved for future keyframe creation
+// function generateId(): string {
+//   return `kf_${Date.now()}_${Math.random().toString(36).slice(2, 6)}`;
+// }
 
 // ---------------------------------------------------------------------------
 // Component
@@ -68,12 +69,12 @@ export default function AnimationTools({
   onPause,
   onStop,
   onSeek,
-  onAddKeyframe,
+  onAddKeyframe: _onAddKeyframe,
   onRemoveKeyframe,
   className = '',
 }: AnimationToolsProps) {
   const [isExpanded, setIsExpanded] = useState(true);
-  const [selectedMarker, setSelectedMarker] = useState<string>('');
+  const [_selectedMarker, _setSelectedMarker] = useState<string>('');
 
   const handleSpeedChange = (speed: number) => {
     onUpdateTimeline({ ...timeline, playbackSpeed: speed });
@@ -84,7 +85,6 @@ export default function AnimationTools({
   };
 
   const sortedKeyframes = [...timeline.keyframes].sort((a, b) => a.time - b.time);
-  const markerIds = Object.keys(markerLabels);
 
   return (
     <div className={`bg-gray-800 border border-gray-700 rounded-lg shadow-xl ${className}`}>

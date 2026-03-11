@@ -92,7 +92,7 @@ function getMockAgencySummaries(search: string, county: string): AgencyTopicSumm
 }
 
 function getMockAgencyDetail(agencyId: string, name: string): AgencyTopicDetail {
-  const topics: TopicDetail[] = CANONICAL_TOPICS.map((topic, i) => {
+  const topics: TopicDetail[] = CANONICAL_TOPICS.map((topic) => {
     const rand = Math.random();
     let status: TopicDetail['status'] = 'MISSING';
     if (rand > 0.4) status = 'FOUND';
@@ -130,15 +130,6 @@ function TopicStatusIcon({ status }: { status: string }) {
   }
 }
 
-function getStatusLabel(status: string): string {
-  const map: Record<string, string> = {
-    FOUND: 'Found',
-    MISSING: 'Missing',
-    CPRA_REQUESTED: 'CPRA Requested',
-    RECEIVED: 'Received via CPRA',
-  };
-  return map[status] ?? status;
-}
 
 // ---------------------------------------------------------------------------
 // Component

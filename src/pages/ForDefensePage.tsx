@@ -7,8 +7,6 @@ import { Link } from 'react-router-dom';
 import {
   Scale,
   Shield,
-  Search,
-  FileText,
   Clock,
   Upload,
   CheckCircle2,

@@ -4,7 +4,7 @@
 // Capabilities: orbit camera, scene rotation, zoom, pan, 360 rotation, tilt.
 // ============================================================================
 
-import { useEffect, useRef, useCallback, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import * as THREE from 'three';
 
 // ---------------------------------------------------------------------------

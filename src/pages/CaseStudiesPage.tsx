@@ -13,7 +13,6 @@ import {
   Map,
   Layers,
   Search,
-  FileText,
   ChevronRight,
 } from 'lucide-react';
 

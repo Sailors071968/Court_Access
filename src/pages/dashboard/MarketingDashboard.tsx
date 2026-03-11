@@ -11,7 +11,6 @@ import {
   UserPlus,
   TrendingUp,
   Globe,
-  ArrowUpRight,
   RefreshCw,
   Calendar,
 } from 'lucide-react';

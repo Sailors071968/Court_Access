@@ -8,8 +8,6 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Scale,
-  Lock,
-  ArrowRight,
   CheckCircle2,
   Send,
   Building2,

@@ -62,14 +62,6 @@ const SIGNIFICANCE_COLORS: Record<string, string> = {
   critical: '#EF4444',
 };
 
-const SOURCE_ICONS: Record<string, string> = {
-  bodycam: 'camera',
-  dashcam: 'car',
-  audio: 'mic',
-  transcript: 'file-text',
-  police_report: 'file',
-  surveillance: 'eye',
-};
 
 const EVENT_CATEGORIES: Record<FilterCategory, string> = {
   all: 'All Events',
@@ -513,7 +505,7 @@ export function CaseTimelineVisualizer() {
                 width: '2px', backgroundColor: '#E5E7EB',
               }} />
 
-              {filteredEvents.map((event, idx) => (
+              {filteredEvents.map((event) => (
                 <div
                   key={event.eventId}
                   onClick={() => setSelectedEvent(event)}

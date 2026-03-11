@@ -14,7 +14,6 @@ import {
   FileText,
   CheckCircle2,
   ArrowRight,
-  ChevronRight,
   Landmark,
   Globe,
 } from 'lucide-react';

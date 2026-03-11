@@ -69,7 +69,7 @@ export default function SceneMarkerTool({
   markers,
   onAddMarker,
   onRemoveMarker,
-  onUpdateMarker,
+  onUpdateMarker: _onUpdateMarker,
   onClearAll,
   className = '',
 }: SceneMarkerToolProps) {
@@ -77,8 +77,8 @@ export default function SceneMarkerTool({
   const [customLabel, setCustomLabel] = useState('');
   const [customColor, setCustomColor] = useState('#cc3333');
   const [customType, setCustomType] = useState<'pin' | 'number' | 'evidence'>('pin');
-  const [placementMode, setPlacementMode] = useState<string | null>(null);
-  const [editingId, setEditingId] = useState<string | null>(null);
+  const [_placementMode, _setPlacementMode] = useState<string | null>(null);
+  const [_editingId, _setEditingId] = useState<string | null>(null);
 
   const handlePresetClick = (preset: MarkerPreset) => {
     // Place marker at a default position (center of scene, slightly offset per marker count)
@@ -206,7 +206,7 @@ export default function SceneMarkerTool({
                 </button>
               </div>
               <div className="space-y-1 max-h-48 overflow-y-auto">
-                {markers.map((marker, idx) => (
+                {markers.map((marker) => (
                   <div
                     key={marker.id}
                     className="flex items-center justify-between py-1.5 px-2 bg-gray-750 rounded group hover:bg-gray-700"

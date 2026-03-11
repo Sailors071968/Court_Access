@@ -23,10 +23,7 @@ import {
   Lock,
   Users,
   Gavel,
-  Camera,
   Map,
-  Crosshair,
-  Sun,
   Play,
   FileDown,
 } from 'lucide-react';

@@ -144,7 +144,7 @@ export class DoctrineIngestionService {
    * Load the built-in LD-15 seed data only.
    */
   static async loadSeedData(): Promise<DoctrineIngestionResult> {
-    return DoctrineIngestionService.ingestFromChunks(LD15_DOCTRINE_RULES, 'POST LD-15');
+    return DoctrineIngestionService.ingestFromChunks([...LD15_DOCTRINE_RULES, ...LD15_EXPANSION_RULES], 'POST LD-15');
   }
 
   /**

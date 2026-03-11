@@ -4,7 +4,7 @@
 // compliance analysis, and statistics.
 // ============================================
 
-import type { DoctrineCategory } from './types.ts';
+import type { DoctrineCategory, DoctrineComplianceResultWithLitigation } from './types.ts';
 
 // Valid doctrine categories for input validation
 const VALID_CATEGORIES: ReadonlySet<string> = new Set<string>([
@@ -171,6 +171,7 @@ export function registerDoctrineRoutes(app: FastifyInstance): void {
         legalImplication: m.doctrineRule.legalImplication,
       })),
       analyzedAt: result.analyzedAt.toISOString(),
+      litigationSummary: (result as DoctrineComplianceResultWithLitigation).litigationSummary,
     };
   });
 

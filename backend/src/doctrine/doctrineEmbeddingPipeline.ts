@@ -54,9 +54,10 @@ export class DoctrineEmbeddingPipeline {
   private readonly config: EmbeddingPipelineConfig;
   private readonly embeddings: Map<string, DoctrineEmbeddingEntry> = new Map();
 
-  // Permanent embedding cache — keyed by text content hash for deduplication.
-  // Cache entries persist for the lifetime of the process and are only
-  // invalidated when rules are re-ingested (via clearCache / clear).
+  // Embedding cache — keyed by text content hash for deduplication.
+  // Rule embeddings persist permanently; query embeddings are evicted
+  // when the cache exceeds MAX_QUERY_CACHE_SIZE to prevent unbounded growth.
+  private static readonly MAX_QUERY_CACHE_SIZE = 2000;
   private readonly embeddingCache: Map<string, number[]> = new Map();
   private cacheHits = 0;
   private cacheMisses = 0;
@@ -182,18 +183,34 @@ export class DoctrineEmbeddingPipeline {
 
     if (!this.config.apiKey) {
       const embedding = this.deterministicEmbedding(text);
+      this.evictIfNeeded();
       this.embeddingCache.set(cacheKey, embedding);
       return embedding;
     }
 
     try {
       const embeddings = await this.fetchEmbeddings([text]);
+      this.evictIfNeeded();
       this.embeddingCache.set(cacheKey, embeddings[0]);
       return embeddings[0];
     } catch {
       const embedding = this.deterministicEmbedding(text);
+      this.evictIfNeeded();
       this.embeddingCache.set(cacheKey, embedding);
       return embedding;
+    }
+  }
+
+  /**
+   * Evict oldest cache entries if cache exceeds max size.
+   * Keeps rule embeddings (which are finite) and evicts query embeddings.
+   */
+  private evictIfNeeded(): void {
+    if (this.embeddingCache.size <= DoctrineEmbeddingPipeline.MAX_QUERY_CACHE_SIZE) return;
+    // Evict oldest entry (first inserted key in Map iteration order)
+    const firstKey = this.embeddingCache.keys().next().value;
+    if (firstKey !== undefined) {
+      this.embeddingCache.delete(firstKey);
     }
   }
 

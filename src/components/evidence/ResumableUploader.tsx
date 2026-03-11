@@ -63,6 +63,7 @@ export function ResumableUploader({ caseId: _caseId, onUploadComplete, maxConcur
   const uploadTimers = useRef<Record<string, ReturnType<typeof setInterval>>>({});
   const maxConcurrentRef = useRef(maxConcurrent);
   maxConcurrentRef.current = maxConcurrent;
+  const simulateUploadRef = useRef<(fileId: string) => void>();
 
   // Cleanup all interval timers on unmount
   useEffect(() => {
@@ -147,7 +148,7 @@ export function ResumableUploader({ caseId: _caseId, onUploadComplete, maxConcur
           if (activeCount < maxConcurrentRef.current) {
             const nextPending = updated.find((f) => f.status === 'pending');
             if (nextPending) {
-              setTimeout(() => simulateUpload(nextPending.id), 0);
+              setTimeout(() => simulateUploadRef.current?.(nextPending.id), 0);
             }
           }
           return updated;
@@ -173,8 +174,8 @@ export function ResumableUploader({ caseId: _caseId, onUploadComplete, maxConcur
     }, 200);
 
     uploadTimers.current[fileId] = timer;
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [onUploadComplete, simulateUpload]);
+  }, [onUploadComplete]);
+  simulateUploadRef.current = simulateUpload;
 
   const startUpload = useCallback((fileId: string) => {
     simulateUpload(fileId);
@@ -191,8 +192,8 @@ export function ResumableUploader({ caseId: _caseId, onUploadComplete, maxConcur
   }, []);
 
   const resumeUpload = useCallback((fileId: string) => {
-    simulateUpload(fileId);
-  }, [simulateUpload]);
+    simulateUploadRef.current?.(fileId);
+  }, []);
 
   const retryUpload = useCallback((fileId: string) => {
     setFiles((prev) =>
@@ -202,8 +203,8 @@ export function ResumableUploader({ caseId: _caseId, onUploadComplete, maxConcur
           : f
       )
     );
-    setTimeout(() => simulateUpload(fileId), 500);
-  }, [simulateUpload]);
+    setTimeout(() => simulateUploadRef.current?.(fileId), 500);
+  }, []);
 
   const removeFile = useCallback((fileId: string) => {
     if (uploadTimers.current[fileId]) {

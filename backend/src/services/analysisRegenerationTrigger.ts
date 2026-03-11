@@ -50,6 +50,9 @@ export interface RegenerationSubscriber {
 // Regeneration Event Bus
 // ---------------------------------------------------------------------------
 
+const MAX_EVENT_LOG_SIZE = 10_000;
+const PENDING_STALE_MS = 60_000; // 60 seconds
+
 class AnalysisRegenerationBus {
   private subscribers: RegenerationSubscriber[] = [];
   private eventLog: RegenerationEvent[] = [];
@@ -91,6 +94,11 @@ class AnalysisRegenerationBus {
     this.pendingRegenerations.set(debounceKey, event);
     this.eventLog.push(event);
 
+    // Cap eventLog to prevent unbounded memory growth
+    if (this.eventLog.length > MAX_EVENT_LOG_SIZE) {
+      this.eventLog = this.eventLog.slice(-MAX_EVENT_LOG_SIZE);
+    }
+
     console.log(`[RegenerationBus] Firing trigger "${event.trigger}" for case ${event.caseId}`);
 
     const matchingSubscribers = this.subscribers.filter(s =>
@@ -105,10 +113,13 @@ class AnalysisRegenerationBus {
       }
     }
 
-    // Debounce relies solely on timestamp comparison (lines 82-89).
-    // The pending entry stays in the map so subsequent events within
-    // the 5-second window are correctly suppressed. Old entries are
-    // naturally superseded when the next event passes the time check.
+    // Prune stale pending entries older than 60s to prevent unbounded map growth
+    const now = Date.now();
+    for (const [key, evt] of this.pendingRegenerations) {
+      if (now - new Date(evt.triggeredAt).getTime() > PENDING_STALE_MS) {
+        this.pendingRegenerations.delete(key);
+      }
+    }
   }
 
   /**

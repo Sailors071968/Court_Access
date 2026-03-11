@@ -437,11 +437,11 @@ export class EvidenceIntelligenceIntegration {
           const textA = (witnessFiles[i].ocrText ?? witnessFiles[i].transcript ?? '').toLowerCase();
           const textB = (witnessFiles[j].ocrText ?? witnessFiles[j].transcript ?? '').toLowerCase();
 
-          // Check for contradictory descriptions
+          // Check for contradictory descriptions (symmetric — checks both directions)
           if (
-            (textA.includes('hands up') && textB.includes('reaching')) ||
-            (textA.includes('compliant') && textB.includes('aggressive')) ||
-            (textA.includes('standing still') && textB.includes('running'))
+            ((textA.includes('hands up') && textB.includes('reaching')) || (textB.includes('hands up') && textA.includes('reaching'))) ||
+            ((textA.includes('compliant') && textB.includes('aggressive')) || (textB.includes('compliant') && textA.includes('aggressive'))) ||
+            ((textA.includes('standing still') && textB.includes('running')) || (textB.includes('standing still') && textA.includes('running')))
           ) {
             incId++;
             inconsistencies.push({

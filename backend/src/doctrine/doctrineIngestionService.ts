@@ -16,20 +16,28 @@ import { LD20_DOCTRINE_RULES } from './seedLD20.ts';
 import { LD21_DOCTRINE_RULES } from './seedLD21.ts';
 import { LD24_DOCTRINE_RULES } from './seedLD24.ts';
 import { LD30_DOCTRINE_RULES } from './seedLD30.ts';
+import { LD15_EXPANSION_RULES } from './seedLD15_exp.ts';
+import { LD16_EXPANSION_RULES } from './seedLD16_exp.ts';
+import { LD17_EXPANSION_RULES } from './seedLD17_exp.ts';
+import { LD18_EXPANSION_RULES } from './seedLD18_exp.ts';
+import { LD20_EXPANSION_RULES } from './seedLD20_exp.ts';
+import { LD21_EXPANSION_RULES } from './seedLD21_exp.ts';
+import { LD24_EXPANSION_RULES } from './seedLD24_exp.ts';
+import { LD30_EXPANSION_RULES } from './seedLD30_exp.ts';
 
 // ---------------------------------------------------------------------------
 // All seed data sources in ingestion order
 // ---------------------------------------------------------------------------
 
 const ALL_SEED_SOURCES = [
-  { name: 'POST LD-15', rules: LD15_DOCTRINE_RULES },
-  { name: 'POST LD-16', rules: LD16_DOCTRINE_RULES },
-  { name: 'POST LD-17', rules: LD17_DOCTRINE_RULES },
-  { name: 'POST LD-18', rules: LD18_DOCTRINE_RULES },
-  { name: 'POST LD-20', rules: LD20_DOCTRINE_RULES },
-  { name: 'POST LD-21', rules: LD21_DOCTRINE_RULES },
-  { name: 'POST LD-24', rules: LD24_DOCTRINE_RULES },
-  { name: 'POST LD-30', rules: LD30_DOCTRINE_RULES },
+  { name: 'POST LD-15', rules: [...LD15_DOCTRINE_RULES, ...LD15_EXPANSION_RULES] },
+  { name: 'POST LD-16', rules: [...LD16_DOCTRINE_RULES, ...LD16_EXPANSION_RULES] },
+  { name: 'POST LD-17', rules: [...LD17_DOCTRINE_RULES, ...LD17_EXPANSION_RULES] },
+  { name: 'POST LD-18', rules: [...LD18_DOCTRINE_RULES, ...LD18_EXPANSION_RULES] },
+  { name: 'POST LD-20', rules: [...LD20_DOCTRINE_RULES, ...LD20_EXPANSION_RULES] },
+  { name: 'POST LD-21', rules: [...LD21_DOCTRINE_RULES, ...LD21_EXPANSION_RULES] },
+  { name: 'POST LD-24', rules: [...LD24_DOCTRINE_RULES, ...LD24_EXPANSION_RULES] },
+  { name: 'POST LD-30', rules: [...LD30_DOCTRINE_RULES, ...LD30_EXPANSION_RULES] },
 ];
 
 // ---------------------------------------------------------------------------

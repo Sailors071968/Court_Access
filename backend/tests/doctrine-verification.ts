@@ -8,6 +8,8 @@ import { DoctrineIngestionService } from '../src/doctrine/doctrineIngestionServi
 import { DoctrineComplianceEngine } from '../src/doctrine/doctrineComplianceEngine.ts';
 import { doctrineStore } from '../src/doctrine/doctrineStore.ts';
 import { doctrineEmbeddingPipeline } from '../src/doctrine/doctrineEmbeddingPipeline.ts';
+import { DoctrineLitigationMapper } from '../src/doctrine/doctrineLitigationMapper.ts';
+import type { DoctrineComplianceResultWithLitigation } from '../src/doctrine/types.ts';
 
 // -----------------------------------------------------------------------
 // Helpers
@@ -85,6 +87,12 @@ async function step1_ingestionVerification() {
   // Verify embeddings match rule count
   const embeddingsMatch = doctrineEmbeddingPipeline.size === stats.totalRules;
   console.log(`  Embeddings Match Rules: ${embeddingsMatch ? 'YES ✓' : 'NO ✗'} (${doctrineEmbeddingPipeline.size}/${stats.totalRules})`);
+
+  // Report embedding mode and cache stats
+  console.log(`\n  Embedding Mode: ${doctrineEmbeddingPipeline.isRealEmbeddings ? 'REAL (OpenAI text-embedding-3-large)' : 'DEMO (deterministic SHA-256)'}`);
+  console.log(`  Model: ${doctrineEmbeddingPipeline.modelName}`);
+  const cache = doctrineEmbeddingPipeline.cacheStats;
+  console.log(`  Cache: ${cache.size} entries, ${cache.hits} hits, ${cache.misses} misses, hit rate: ${cache.hitRate}`);
 
   return stats;
 }
@@ -180,6 +188,26 @@ async function step3_evidenceAnalysis() {
         console.log(`      Risk: ${c.doctrineRule.category}`);
       }
     }
+
+    // Litigation Intelligence output
+    const resultWithLit = result as DoctrineComplianceResultWithLitigation;
+    if (resultWithLit.litigationSummary) {
+      const lit = resultWithLit.litigationSummary;
+      console.log('\n  LITIGATION INTELLIGENCE:');
+      console.log(`    Strategy: ${lit.strategySummary.slice(0, 150)}`);
+      console.log(`    Motions Recommended: ${lit.motions.length}`);
+      for (const m of lit.motions.slice(0, 3)) {
+        console.log(`      [${m.priority.toUpperCase()}] ${m.title}`);
+      }
+      console.log(`    Investigative Tasks: ${lit.investigativeTasks.length}`);
+      for (const t of lit.investigativeTasks.slice(0, 3)) {
+        console.log(`      [${t.urgency.toUpperCase()}] ${t.task}`);
+      }
+      console.log(`    Expert Recommendations: ${lit.expertRecommendations.length}`);
+      for (const e of lit.expertRecommendations.slice(0, 3)) {
+        console.log(`      - ${e.expertType}: ${e.purpose.slice(0, 80)}`);
+      }
+    }
   }
 }
 
@@ -214,7 +242,31 @@ async function step4_complianceFlagOutput() {
     console.log(`  │ Description:      ${match.flagDescription.slice(0, 120)}...`);
     console.log(`  │ Legal Implication: ${(match.doctrineRule.legalImplication ?? 'N/A').slice(0, 100)}`);
     console.log(`  │ Evidence Citation: "${testInput.slice(0, 80)}..."`);
+
+    // Add litigation recommendation per match
+    if (match.flagType !== 'compliant') {
+      const litRec = DoctrineLitigationMapper.getRecommendation(match);
+      if (litRec) {
+        console.log(`  │ ┌─ Litigation Recommendation ──────────────`);
+        console.log(`  │ │ Motions: ${litRec.motions.map(m => m.title).join('; ').slice(0, 100)}`);
+        console.log(`  │ │ Tasks: ${litRec.investigativeTasks.map(t => t.task).join('; ').slice(0, 100)}`);
+        console.log(`  │ │ Experts: ${litRec.expertRecommendations.map(e => e.expertType).join('; ')}`);
+        console.log(`  │ │ Strategy: ${litRec.strategySummary.slice(0, 100)}`);
+        console.log(`  │ └────────────────────────────────────────────`);
+      }
+    }
     console.log(`  └──────────────────────────────────────────────`);
+  }
+
+  // Aggregated litigation summary
+  const resultWithLit = result as DoctrineComplianceResultWithLitigation;
+  if (resultWithLit.litigationSummary) {
+    subSection('Aggregated Litigation Intelligence');
+    const lit = resultWithLit.litigationSummary;
+    console.log(`  Strategy Summary: ${lit.strategySummary}`);
+    console.log(`  Total Motions: ${lit.motions.length}`);
+    console.log(`  Total Investigative Tasks: ${lit.investigativeTasks.length}`);
+    console.log(`  Total Expert Recommendations: ${lit.expertRecommendations.length}`);
   }
 }
 
@@ -300,8 +352,12 @@ async function main() {
   console.log(`  Domains: ${Object.keys(stats.rulesByDomain).length}`);
   console.log(`  Categories: ${Object.keys(stats.rulesByCategory).length}`);
   console.log(`  Sources: ${Object.keys(stats.rulesBySource).length}`);
-  console.log(`\n  Pipeline: Evidence → Officer Actions → Doctrine Comparison → Compliance Flags → Litigation Recommendations`);
+  console.log(`  Embedding Mode: ${doctrineEmbeddingPipeline.isRealEmbeddings ? 'PRODUCTION (OpenAI text-embedding-3-large)' : 'DEMO (deterministic)'}`);
+  const finalCache = doctrineEmbeddingPipeline.cacheStats;
+  console.log(`  Embedding Cache: ${finalCache.size} entries, hit rate ${finalCache.hitRate}`);
+  console.log(`\n  Pipeline: Evidence → Embedding → Vector Search → Doctrine Match → Compliance Flags → Litigation Intelligence`);
   console.log(`  Status: OPERATIONAL`);
+  console.log(`  Production Ready: ${doctrineEmbeddingPipeline.isRealEmbeddings ? 'YES' : 'DEMO MODE — set OPENAI_API_KEY for production'}`);
 }
 
 main().catch(console.error);

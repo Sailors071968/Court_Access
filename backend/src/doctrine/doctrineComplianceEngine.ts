@@ -8,11 +8,14 @@ import type {
   DoctrineRule,
   DoctrineMatch,
   DoctrineComplianceResult,
+  DoctrineComplianceResultWithLitigation,
   DoctrineFlagType,
   DoctrineSearchOptions,
+  LitigationRecommendation,
 } from './types.ts';
 import { doctrineStore } from './doctrineStore.ts';
 import { doctrineEmbeddingPipeline } from './doctrineEmbeddingPipeline.ts';
+import { DoctrineLitigationMapper } from './doctrineLitigationMapper.ts';
 
 // ---------------------------------------------------------------------------
 // Flag Thresholds
@@ -187,7 +190,14 @@ export class DoctrineComplianceEngine {
         ? 'concerns'
         : 'compliant';
 
-    return {
+    // Generate aggregated litigation recommendations for violations and concerns
+    const flaggedMatches = [...violations, ...concerns];
+    let litigationSummary: LitigationRecommendation | undefined;
+    if (flaggedMatches.length > 0) {
+      litigationSummary = DoctrineLitigationMapper.getAggregatedRecommendations(flaggedMatches);
+    }
+
+    const result: DoctrineComplianceResultWithLitigation = {
       evidenceText,
       matches: topMatches,
       totalRulesChecked: candidateRules.length,
@@ -196,7 +206,10 @@ export class DoctrineComplianceEngine {
       compliant,
       overallCompliance,
       analyzedAt: new Date(),
+      litigationSummary,
     };
+
+    return result;
   }
 
   /**

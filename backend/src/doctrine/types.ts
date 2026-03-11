@@ -121,6 +121,67 @@ export interface DoctrineIngestionResult {
 }
 
 // ---------------------------------------------------------------------------
+// Litigation Intelligence — Doctrine-to-Litigation Mapping
+// ---------------------------------------------------------------------------
+
+export type MotionType =
+  | 'motion_to_suppress'
+  | 'motion_to_dismiss'
+  | 'motion_in_limine'
+  | 'motion_for_discovery'
+  | 'motion_for_sanctions'
+  | 'motion_to_compel'
+  | 'motion_for_summary_judgment'
+  | 'motion_for_new_trial'
+  | 'habeas_corpus';
+
+export interface LitigationMotion {
+  type: MotionType;
+  title: string;
+  basis: string;
+  priority: 'critical' | 'high' | 'medium' | 'low';
+}
+
+export interface InvestigativeTask {
+  task: string;
+  description: string;
+  urgency: 'immediate' | 'standard' | 'low';
+}
+
+export interface ExpertRecommendation {
+  expertType: string;
+  purpose: string;
+  relevance: string;
+}
+
+export interface LitigationRecommendation {
+  motions: LitigationMotion[];
+  investigativeTasks: InvestigativeTask[];
+  expertRecommendations: ExpertRecommendation[];
+  strategySummary: string;
+}
+
+export interface DoctrineToLitigationMapping {
+  domain: string;
+  category: DoctrineCategory;
+  flagType: DoctrineFlagType;
+  keywordTriggers: string[];
+  motions: LitigationMotion[];
+  investigativeTasks: InvestigativeTask[];
+  expertRecommendations: ExpertRecommendation[];
+}
+
+// Extend DoctrineMatch with optional litigation recommendations
+export interface DoctrineMatchWithLitigation extends DoctrineMatch {
+  litigationRecommendation?: LitigationRecommendation;
+}
+
+// Extended compliance result with litigation intelligence
+export interface DoctrineComplianceResultWithLitigation extends DoctrineComplianceResult {
+  litigationSummary?: LitigationRecommendation;
+}
+
+// ---------------------------------------------------------------------------
 // Doctrine Statistics
 // ---------------------------------------------------------------------------
 

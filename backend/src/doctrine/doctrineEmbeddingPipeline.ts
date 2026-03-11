@@ -54,6 +54,13 @@ export class DoctrineEmbeddingPipeline {
   private readonly config: EmbeddingPipelineConfig;
   private readonly embeddings: Map<string, DoctrineEmbeddingEntry> = new Map();
 
+  // Permanent embedding cache — keyed by text content hash for deduplication.
+  // Cache entries persist for the lifetime of the process and are only
+  // invalidated when rules are re-ingested (via clearCache / clear).
+  private readonly embeddingCache: Map<string, number[]> = new Map();
+  private cacheHits = 0;
+  private cacheMisses = 0;
+
   constructor(config?: Partial<EmbeddingPipelineConfig>) {
     this.config = {
       ...DEFAULT_CONFIG,
@@ -82,16 +89,51 @@ export class DoctrineEmbeddingPipeline {
       const batch = rules.slice(start, start + this.config.batchSize);
       const texts = batch.map((r) => this.buildEmbeddingText(r));
 
-      try {
-        const embeddings = await this.fetchEmbeddings(texts);
+      // Check cache first — separate cached from uncached
+      const uncachedIndices: number[] = [];
+      const uncachedTexts: string[] = [];
 
-        for (let i = 0; i < batch.length; i++) {
+      for (let i = 0; i < texts.length; i++) {
+        const cacheKey = this.getCacheKey(texts[i]);
+        const cached = this.embeddingCache.get(cacheKey);
+        if (cached) {
+          // Use cached embedding
+          this.cacheHits++;
           const rule = batch[i];
           this.embeddings.set(rule.doctrineId, {
             doctrineId: rule.doctrineId,
-            embedding: embeddings[i],
+            embedding: cached,
             model: this.config.model,
-            dimensions: embeddings[i].length,
+            dimensions: cached.length,
+            createdAt: new Date(),
+          });
+          generated++;
+        } else {
+          this.cacheMisses++;
+          uncachedIndices.push(i);
+          uncachedTexts.push(texts[i]);
+        }
+      }
+
+      // Fetch embeddings only for uncached texts
+      if (uncachedTexts.length === 0) continue;
+
+      try {
+        const embeddings = await this.fetchEmbeddings(uncachedTexts);
+
+        for (let j = 0; j < uncachedIndices.length; j++) {
+          const originalIdx = uncachedIndices[j];
+          const rule = batch[originalIdx];
+          const embedding = embeddings[j];
+
+          // Store in cache (permanent TTL)
+          this.embeddingCache.set(this.getCacheKey(texts[originalIdx]), embedding);
+
+          this.embeddings.set(rule.doctrineId, {
+            doctrineId: rule.doctrineId,
+            embedding,
+            model: this.config.model,
+            dimensions: embedding.length,
             createdAt: new Date(),
           });
           generated++;
@@ -99,7 +141,19 @@ export class DoctrineEmbeddingPipeline {
       } catch (err) {
         console.error(`Embedding batch error (offset ${start}):`, err);
         // Fall back to demo embeddings for this batch
-        generated += this.generateDemoEmbeddings(batch);
+        for (const idx of uncachedIndices) {
+          const rule = batch[idx];
+          if (!this.embeddings.has(rule.doctrineId)) {
+            this.embeddings.set(rule.doctrineId, {
+              doctrineId: rule.doctrineId,
+              embedding: this.deterministicEmbedding(texts[idx]),
+              model: 'demo-deterministic',
+              dimensions: this.config.dimensions,
+              createdAt: new Date(),
+            });
+            generated++;
+          }
+        }
       }
     }
 
@@ -117,15 +171,29 @@ export class DoctrineEmbeddingPipeline {
    * Generate an embedding for arbitrary text (for search queries).
    */
   async embedText(text: string): Promise<number[]> {
+    // Check cache first
+    const cacheKey = this.getCacheKey(text);
+    const cached = this.embeddingCache.get(cacheKey);
+    if (cached) {
+      this.cacheHits++;
+      return cached;
+    }
+    this.cacheMisses++;
+
     if (!this.config.apiKey) {
-      return this.deterministicEmbedding(text);
+      const embedding = this.deterministicEmbedding(text);
+      this.embeddingCache.set(cacheKey, embedding);
+      return embedding;
     }
 
     try {
       const embeddings = await this.fetchEmbeddings([text]);
+      this.embeddingCache.set(cacheKey, embeddings[0]);
       return embeddings[0];
     } catch {
-      return this.deterministicEmbedding(text);
+      const embedding = this.deterministicEmbedding(text);
+      this.embeddingCache.set(cacheKey, embedding);
+      return embedding;
     }
   }
 
@@ -177,9 +245,39 @@ export class DoctrineEmbeddingPipeline {
     return this.embeddings.size;
   }
 
-  /** Clear all embeddings */
+  /** Clear all embeddings and cache */
   clear(): void {
     this.embeddings.clear();
+    this.clearCache();
+  }
+
+  /** Clear only the embedding cache (call when rules are re-ingested) */
+  clearCache(): void {
+    this.embeddingCache.clear();
+    this.cacheHits = 0;
+    this.cacheMisses = 0;
+  }
+
+  /** Get cache statistics */
+  get cacheStats(): { size: number; hits: number; misses: number; hitRate: string } {
+    const total = this.cacheHits + this.cacheMisses;
+    const hitRate = total > 0 ? `${Math.round((this.cacheHits / total) * 100)}%` : 'N/A';
+    return {
+      size: this.embeddingCache.size,
+      hits: this.cacheHits,
+      misses: this.cacheMisses,
+      hitRate,
+    };
+  }
+
+  /** Check if using real OpenAI embeddings */
+  get isRealEmbeddings(): boolean {
+    return !!this.config.apiKey;
+  }
+
+  /** Get the model name being used */
+  get modelName(): string {
+    return this.config.apiKey ? this.config.model : 'demo-deterministic';
   }
 
   // -----------------------------------------------------------------------
@@ -191,6 +289,13 @@ export class DoctrineEmbeddingPipeline {
    * Combines rule text, explanation, topic, and legal implication
    * for richer semantic representation.
    */
+  /**
+   * Generate a cache key from text using SHA-256 hash.
+   */
+  private getCacheKey(text: string): string {
+    return createHash('sha256').update(text).digest('hex');
+  }
+
   private buildEmbeddingText(rule: DoctrineRule): string {
     const parts = [
       `${rule.chapter}: ${rule.topic}`,

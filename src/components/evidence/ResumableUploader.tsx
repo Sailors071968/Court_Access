@@ -85,8 +85,8 @@ export function ResumableUploader({ caseId: _caseId, onUploadComplete, maxConcur
           console.warn(`File ${f.name} exceeds maximum size of ${formatBytes(MAX_FILE_SIZE)}`);
           return false;
         }
-        if (f.type && !ALLOWED_TYPES.includes(f.type)) {
-          console.warn(`File ${f.name} has unsupported type: ${f.type}`);
+        if (!f.type || !ALLOWED_TYPES.includes(f.type)) {
+          console.warn(`File ${f.name} has unsupported type: ${f.type || 'unknown'}`);
           return false;
         }
         return true;

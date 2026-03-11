@@ -36,7 +36,13 @@ export class PolicyNarrativeGuard {
   static sanitize(text: string): string {
     let result = text;
     for (const [forbidden, replacement] of Object.entries(ALLOWED_REPLACEMENTS)) {
-      const regex = new RegExp(`\\b${forbidden}\\w*\\b`, 'gi');
+      // For multi-word terms, only apply \w* to the last word to avoid over-matching
+      // e.g. "guilty of" → "\bguilty\s+of\w*\b" (won't match "guilty offering")
+      const words = forbidden.split(/\s+/);
+      const pattern = words.length > 1
+        ? `\\b${words.slice(0, -1).join('\\s+')}\\s+${words[words.length - 1]}\\w*\\b`
+        : `\\b${forbidden}\\w*\\b`;
+      const regex = new RegExp(pattern, 'gi');
       result = result.replace(regex, replacement);
     }
     return result;
@@ -48,7 +54,11 @@ export class PolicyNarrativeGuard {
   static audit(text: string): { clean: boolean; violations: string[] } {
     const found: string[] = [];
     for (const term of FORBIDDEN_TERMS) {
-      const regex = new RegExp(`\\b${term}\\w*\\b`, 'gi');
+      const words = term.split(/\s+/);
+      const pattern = words.length > 1
+        ? `\\b${words.slice(0, -1).join('\\s+')}\\s+${words[words.length - 1]}\\w*\\b`
+        : `\\b${term}\\w*\\b`;
+      const regex = new RegExp(pattern, 'gi');
       if (regex.test(text)) {
         found.push(term);
       }

@@ -217,7 +217,7 @@ const DEMO_COMPLIANCE_RESULT: DoctrineComplianceResponse = {
       legalImplication: 'Evidence obtained through constitutional violations is inadmissible, and all derivative evidence may also be suppressed.',
     },
   ],
-  analyzedAt: new Date().toISOString(),
+  analyzedAt: '', // Set dynamically in fallback
 };
 
 const DEMO_STATUS: DoctrineStatusResponse = {
@@ -306,7 +306,7 @@ export async function analyzeDoctrineCompliance(
     if (!response.ok) throw new Error(`API error: ${response.status}`);
     return await response.json() as DoctrineComplianceResponse;
   } catch {
-    return DEMO_COMPLIANCE_RESULT;
+    return { ...DEMO_COMPLIANCE_RESULT, analyzedAt: new Date().toISOString() };
   }
 }
 

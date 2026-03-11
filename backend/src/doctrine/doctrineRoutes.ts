@@ -5,6 +5,15 @@
 // ============================================
 
 import type { DoctrineCategory } from './types.ts';
+
+// Valid doctrine categories for input validation
+const VALID_CATEGORIES: ReadonlySet<string> = new Set<string>([
+  'constitutional', 'encounter', 'detention', 'search', 'arrest',
+  'miranda', 'interrogation', 'use_of_force', 'pursuit',
+  'evidence_presentation', 'chain_of_custody', 'testimony',
+  'report_writing', 'evidence_handling', 'evidence_collection',
+  'crime_scene', 'patrol', 'field_contact', 'general',
+]);
 import { doctrineStore } from './doctrineStore.ts';
 import { doctrineEmbeddingPipeline } from './doctrineEmbeddingPipeline.ts';
 import { DoctrineComplianceEngine } from './doctrineComplianceEngine.ts';
@@ -129,6 +138,12 @@ export function registerDoctrineRoutes(app: FastifyInstance): void {
 
     if (!body?.evidenceText) {
       return reply.code(400).send({ error: 'Missing required field: evidenceText' });
+    }
+
+    if (body.category && !VALID_CATEGORIES.has(body.category)) {
+      return reply.code(400).send({
+        error: `Invalid category: ${body.category}. Valid categories: ${[...VALID_CATEGORIES].join(', ')}`,
+      });
     }
 
     const result = await DoctrineComplianceEngine.analyzeCompliance(body.evidenceText, {

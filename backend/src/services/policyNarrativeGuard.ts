@@ -47,9 +47,9 @@ export class PolicyNarrativeGuard {
    */
   static audit(text: string): { clean: boolean; violations: string[] } {
     const found: string[] = [];
-    const lower = text.toLowerCase();
     for (const term of FORBIDDEN_TERMS) {
-      if (lower.includes(term.toLowerCase())) {
+      const regex = new RegExp(`\\b${term}\\b`, 'gi');
+      if (regex.test(text)) {
         found.push(term);
       }
     }

@@ -278,20 +278,26 @@ class GlobalQueueMonitor {
   }
 
   recordCompletion(configKey: string, jobId: string): void {
-    const m = this.metrics.get(configKey);
-    if (m) {
-      m.completedJobs++;
-      m.lastCompletedAt = Date.now();
+    let m = this.metrics.get(configKey);
+    if (!m) {
+      // Lazily initialize metrics for queues registered after construction
+      m = { completedJobs: 0, failedJobs: 0, lastCompletedAt: null, lastFailedAt: null, lastError: null };
+      this.metrics.set(configKey, m);
     }
+    m.completedJobs++;
+    m.lastCompletedAt = Date.now();
   }
 
   recordFailure(configKey: string, jobId: string, error: string): void {
-    const m = this.metrics.get(configKey);
-    if (m) {
-      m.failedJobs++;
-      m.lastFailedAt = Date.now();
-      m.lastError = error;
+    let m = this.metrics.get(configKey);
+    if (!m) {
+      // Lazily initialize metrics for queues registered after construction
+      m = { completedJobs: 0, failedJobs: 0, lastCompletedAt: null, lastFailedAt: null, lastError: null };
+      this.metrics.set(configKey, m);
     }
+    m.failedJobs++;
+    m.lastFailedAt = Date.now();
+    m.lastError = error;
   }
 
   getAllMetrics(): QueueMetrics[] {

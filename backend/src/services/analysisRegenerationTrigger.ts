@@ -105,10 +105,10 @@ class AnalysisRegenerationBus {
       }
     }
 
-    // Clean up debounce entry after processing
-    setTimeout(() => {
-      this.pendingRegenerations.delete(debounceKey);
-    }, 5000);
+    // Debounce relies solely on timestamp comparison (lines 82-89).
+    // The pending entry stays in the map so subsequent events within
+    // the 5-second window are correctly suppressed. Old entries are
+    // naturally superseded when the next event passes the time check.
   }
 
   /**
@@ -154,7 +154,7 @@ export function onNewEvidenceUploaded(caseId: string, uploadedBy: string, fileId
     triggeredAt: new Date().toISOString(),
     triggeredBy: uploadedBy,
     metadata: { fileId },
-  });
+  }).catch(err => console.error('[RegenerationBus] Fire failed:', err));
 }
 
 /**
@@ -168,7 +168,7 @@ export function onEvidenceReprocessed(caseId: string, triggeredBy: string, fileI
     triggeredAt: new Date().toISOString(),
     triggeredBy,
     metadata: { fileId, reason },
-  });
+  }).catch(err => console.error('[RegenerationBus] Fire failed:', err));
 }
 
 /**
@@ -185,7 +185,7 @@ export function onPolicyDatabaseUpdated(triggeredBy: string, policyId: string): 
     triggeredAt: new Date().toISOString(),
     triggeredBy,
     metadata: { policyId },
-  });
+  }).catch(err => console.error('[RegenerationBus] Fire failed:', err));
 }
 
 /**

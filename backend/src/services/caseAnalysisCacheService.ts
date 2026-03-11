@@ -263,7 +263,7 @@ export function computeEvidenceFingerprint(
   fileTimestamps: string[],
 ): string {
   const sorted = [...fileIds].sort();
-  const combined = sorted.join(':') + '|' + fileTimestamps.sort().join(':');
+  const combined = sorted.join(':') + '|' + [...fileTimestamps].sort().join(':');
   // Simple hash for fingerprint comparison
   let hash = 0;
   for (let i = 0; i < combined.length; i++) {

@@ -131,11 +131,9 @@ export function ResumableUploader({ caseId: _caseId, onUploadComplete, maxConcur
           );
         }
 
-        const increment = Math.min(
-          file.chunkSize,
-          file.size - file.bytesUploaded
-        );
-        const newBytesUploaded = file.bytesUploaded + increment * 0.1;
+        // Use fixed increment per tick to ensure linear progress (avoids Zeno's paradox)
+        const increment = file.chunkSize * 0.1;
+        const newBytesUploaded = Math.min(file.bytesUploaded + increment, file.size);
         const newProgress = Math.min((newBytesUploaded / file.size) * 100, 100);
 
         if (newProgress >= 100) {

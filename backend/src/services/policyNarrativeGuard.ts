@@ -36,11 +36,12 @@ export class PolicyNarrativeGuard {
   static sanitize(text: string): string {
     let result = text;
     for (const [forbidden, replacement] of Object.entries(ALLOWED_REPLACEMENTS)) {
-      // For multi-word terms, only apply \w* to the last word to avoid over-matching
-      // e.g. "guilty of" → "\bguilty\s+of\w*\b" (won't match "guilty offering")
+      // Single-word: \b${term}\w*\b to catch plurals/suffixes
+      // Multi-word: exact match with \b boundaries (no \w* suffix)
+      // e.g. "guilty of" → \bguilty\s+of\b (won't match "guilty officer")
       const words = forbidden.split(/\s+/);
       const pattern = words.length > 1
-        ? `\\b${words.slice(0, -1).join('\\s+')}\\s+${words[words.length - 1]}\\w*\\b`
+        ? `\\b${words.join('\\s+')}\\b`
         : `\\b${forbidden}\\w*\\b`;
       const regex = new RegExp(pattern, 'gi');
       result = result.replace(regex, replacement);
@@ -56,7 +57,7 @@ export class PolicyNarrativeGuard {
     for (const term of FORBIDDEN_TERMS) {
       const words = term.split(/\s+/);
       const pattern = words.length > 1
-        ? `\\b${words.slice(0, -1).join('\\s+')}\\s+${words[words.length - 1]}\\w*\\b`
+        ? `\\b${words.join('\\s+')}\\b`
         : `\\b${term}\\w*\\b`;
       const regex = new RegExp(pattern, 'gi');
       if (regex.test(text)) {

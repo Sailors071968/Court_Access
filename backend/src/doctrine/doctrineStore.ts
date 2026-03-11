@@ -14,6 +14,21 @@ import type {
 import { generateDoctrineId } from './doctrinePdfParser.ts';
 
 // ---------------------------------------------------------------------------
+// Source name → Domain mapping for multi-domain support
+// ---------------------------------------------------------------------------
+
+const SOURCE_TO_DOMAIN: Record<string, string> = {
+  'POST LD-15': 'Laws of Arrest',
+  'POST LD-16': 'Search & Seizure',
+  'POST LD-17': 'Presentation of Evidence',
+  'POST LD-18': 'Investigative Report Writing',
+  'POST LD-20': 'Use of Force',
+  'POST LD-21': 'Patrol Techniques',
+  'POST LD-24': 'Handling Evidence',
+  'POST LD-30': 'Crime Scene Investigation',
+};
+
+// ---------------------------------------------------------------------------
 // In-Memory Doctrine Store
 // ---------------------------------------------------------------------------
 
@@ -54,7 +69,7 @@ class DoctrineStore {
       sourceType: 'POST',
       sourceName: chunk.source,
       sourceVersion: '5.0',
-      domain: 'Laws of Arrest',
+      domain: SOURCE_TO_DOMAIN[chunk.source] ?? chunk.source,
       chapter: chunk.chapter,
       topic: chunk.topic,
       ruleText: chunk.rule,

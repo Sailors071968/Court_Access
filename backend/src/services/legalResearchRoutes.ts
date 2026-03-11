@@ -141,10 +141,15 @@ export async function registerLegalResearchRoutes(app: FastifyInstance): Promise
   // -----------------------------------------------------------------------
   // Phase 298: Citation graph analysis
   // -----------------------------------------------------------------------
-  app.get('/api/legal-research/citation-graph/:opinionId', async (req: FastifyRequest, _reply: FastifyReply) => {
+  app.get('/api/legal-research/citation-graph/:opinionId', async (req: FastifyRequest, reply: FastifyReply) => {
     const { opinionId } = req.params as { opinionId: string };
 
-    const analysis = await CitationGraphService.analyzeCitations(parseInt(opinionId, 10));
+    const parsedId = parseInt(opinionId, 10);
+    if (isNaN(parsedId)) {
+      return reply.code(400).send({ error: 'Invalid opinionId: must be a number' });
+    }
+
+    const analysis = await CitationGraphService.analyzeCitations(parsedId);
 
     // Convert Map to plain object for JSON serialization
     const depthMap: Record<string, number> = {};

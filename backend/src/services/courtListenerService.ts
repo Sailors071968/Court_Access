@@ -464,14 +464,25 @@ export class CourtListenerService {
 
   /**
    * Verify API authentication works.
+   * Bypasses cache to always hit the real API for accurate health status.
    */
   static async verifyAuthentication(): Promise<{ authenticated: boolean; message: string }> {
     try {
-      const result = await apiRequest<RawSearchResponse>('search', {
-        q: 'test',
-        type: 'o',
-        page_size: '1',
-      });
+      const apiKey = getApiKey();
+      const url = `${BASE_URL}/search/?q=test&type=o&page_size=1`;
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (apiKey) headers['Authorization'] = `Token ${apiKey}`;
+
+      const response = await fetch(url, { headers });
+      if (!response.ok) {
+        const errorText = await response.text().catch(() => 'Unknown error');
+        return {
+          authenticated: false,
+          message: `CourtListener API error (${response.status}): ${errorText}`,
+        };
+      }
+
+      const result = await response.json() as RawSearchResponse;
       return {
         authenticated: true,
         message: `CourtListener API connected. ${result.count} total opinions available.`,

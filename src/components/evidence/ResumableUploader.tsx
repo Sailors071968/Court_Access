@@ -4,7 +4,7 @@
 // Uses native File API with chunked upload simulation (Tus protocol ready)
 // ============================================================================
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useEffect } from 'react';
 import { Upload, X, CheckCircle, AlertTriangle, FileText, Pause, Play, RotateCcw } from 'lucide-react';
 
 interface UploadFile {
@@ -61,6 +61,16 @@ export function ResumableUploader({ caseId: _caseId, onUploadComplete, maxConcur
   const [isDragOver, setIsDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const uploadTimers = useRef<Record<string, ReturnType<typeof setInterval>>>({});
+  const maxConcurrentRef = useRef(maxConcurrent);
+  maxConcurrentRef.current = maxConcurrent;
+
+  // Cleanup all interval timers on unmount
+  useEffect(() => {
+    const timers = uploadTimers.current;
+    return () => {
+      Object.values(timers).forEach(clearInterval);
+    };
+  }, []);
 
   const addFiles = useCallback((newFiles: FileList | File[]) => {
     const fileArray = Array.from(newFiles);
@@ -111,11 +121,20 @@ export function ResumableUploader({ caseId: _caseId, onUploadComplete, maxConcur
           clearInterval(timer);
           delete uploadTimers.current[fileId];
           onUploadComplete?.(fileId, file.name);
-          return prev.map((f) =>
+          const updated = prev.map((f) =>
             f.id === fileId
               ? { ...f, progress: 100, status: 'complete' as const, bytesUploaded: f.size, sha256: `sha256:${Math.random().toString(36).substring(2, 18)}` }
               : f
           );
+          // Auto-start next pending file if under maxConcurrent
+          const activeCount = updated.filter((f) => f.status === 'uploading').length;
+          if (activeCount < maxConcurrentRef.current) {
+            const nextPending = updated.find((f) => f.status === 'pending');
+            if (nextPending) {
+              setTimeout(() => simulateUpload(nextPending.id), 0);
+            }
+          }
+          return updated;
         }
 
         // Simulate random error (2% chance per tick)
@@ -138,7 +157,8 @@ export function ResumableUploader({ caseId: _caseId, onUploadComplete, maxConcur
     }, 200);
 
     uploadTimers.current[fileId] = timer;
-  }, [onUploadComplete]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onUploadComplete, simulateUpload]);
 
   const startUpload = useCallback((fileId: string) => {
     simulateUpload(fileId);

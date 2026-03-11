@@ -30,50 +30,65 @@ const VIOLATION_INDICATORS = [
   /(?:no|without|lack(?:ing|ed)?)\s+(?:reasonable\s+)?suspicion/i,
   /(?:no|without|lack(?:ing|ed)?)\s+probable\s+cause/i,
   /(?:did\s+not|didn't|failed\s+to)\s+(?:read|give|provide|administer)\s+miranda/i,
+  /miranda\s+(?:rights?\s+)?(?:were|was)?\s*(?:not|never)\s+(?:read|given|provided|administered)/i,
   /(?:did\s+not|didn't|failed\s+to)\s+(?:obtain|get|secure)\s+(?:a\s+)?(?:warrant|consent)/i,
   /(?:looked?\s+)?(?:nervous|suspicious)\s+(?:only|alone|just)/i,
   /(?:mere|just\s+a)\s+hunch/i,
   /(?:racial|ethnic)\s+(?:profiling|basis|appearance)/i,
   /(?:coerced?|forced?|threatened?|intimidated?)\s+(?:confession|statement|admission)/i,
+  /(?:easy\s+way\s+or\s+the?\s+hard\s+way|do\s+this\s+the\s+(?:easy|hard))/i,
   /(?:excessive|unnecessary|unreasonable)\s+force/i,
   /(?:prolonged|extended|unreasonable)\s+detention/i,
-  /(?:searched|searched\s+without)\s+(?:consent|warrant|authority)/i,
-  /(?:continued|kept)\s+(?:questioning|interrogating)\s+(?:after|despite)/i,
+  /(?:searched|search(?:ing)?)\s+(?:him|her|them|the\s+\w+\s+)?(?:without|before)\s+(?:consent|warrant|permission|stating|asking)/i,
+  /(?:continued|continues|kept)\s+(?:questioning|interrogating|to\s+question)/i,
+  /(?:i\s+(?:want|said\s+i\s+want)|request(?:ed)?)\s+(?:a\s+)?(?:lawyer|attorney)/i,
   // LD-16: Search & Seizure violations
   /(?:no|without|lack(?:ing|ed)?)\s+(?:a\s+)?warrant/i,
-  /(?:exceeded|beyond)\s+(?:the\s+)?scope\s+(?:of\s+)?(?:warrant|consent|search)/i,
+  /without\s+(?:obtaining\s+)?(?:a\s+)?(?:warrant|consent)/i,
+  /(?:exceeded|beyond|exceeding)\s+(?:the\s+)?scope\s+(?:of\s+)?(?:warrant|consent|search|stop)/i,
   /stale\s+(?:information|probable\s+cause|warrant)/i,
   // LD-17: Evidence presentation violations
-  /(?:break|gap|missing)\s+(?:in\s+)?chain\s+of\s+custody/i,
+  /(?:break|gap|missing)\s+(?:in\s+)?(?:the\s+)?chain\s+of\s+custody/i,
+  /chain\s+of\s+custody\s+(?:had|has|showed?|with)\s+(?:a\s+)?(?:gap|break|lapse)/i,
   /tamper(?:ed|ing)?\s+(?:with\s+)?evidence/i,
   // LD-18: Report writing violations
   /(?:false|misleading|inaccurate)\s+(?:statement|report|information)/i,
   /(?:omitted|excluded|left\s+out)\s+(?:exculpatory|favorable|relevant)/i,
   /(?:altered|backdated|modified)\s+(?:the\s+)?report/i,
+  /(?:subjective)\s+(?:language|description|statement)/i,
   // LD-20: Use of force violations
   /(?:shot|fired)\s+(?:at\s+)?(?:unarmed|fleeing|restrained)/i,
+  /(?:unarmed|fleeing)\s+(?:and\s+)?(?:was\s+)?(?:shot|killed|fired)/i,
   /(?:choke|chokehold|carotid|neck\s+restraint)/i,
-  /(?:force|struck|hit|tased)\s+(?:while\s+)?(?:handcuffed|restrained|compliant)/i,
+  /(?:force|struck|hit|tased)\s+(?:the\s+)?(?:\w+\s+)*(?:while\s+)?(?:handcuffed|restrained|compliant)/i,
+  /struck\s+(?:the\s+)?(?:\w+\s+){0,3}(?:handcuffed|restrained|compliant)/i,
   /(?:failed\s+to|did\s+not)\s+(?:de-escalate|intervene|provide\s+medical)/i,
   // LD-24: Evidence handling violations
   /(?:contaminated|cross-contaminated|degraded)\s+evidence/i,
   /(?:improperly|incorrectly)\s+(?:packaged|stored|labeled|collected)/i,
+  /evidence\s+(?:was\s+)?(?:improperly|incorrectly)\s+(?:packaged|stored|labeled|collected)/i,
   // LD-30: Crime scene violations
   /(?:compromised|unsecured|contaminated)\s+(?:crime\s+)?scene/i,
+  /(?:crime\s+)?scene\s+(?:was\s+)?(?:compromised|unsecured|contaminated)/i,
   /(?:failed\s+to|did\s+not)\s+(?:secure|preserve|document)\s+(?:the\s+)?(?:scene|evidence)/i,
+  /without\s+(?:proper\s+)?(?:protocols?|procedures?)/i,
 ];
 
 const CONCERN_INDICATORS = [
   // LD-15: Laws of Arrest concerns
   /(?:officer\s+)?(?:believed|thought|felt|suspected)/i,
-  /(?:appeared\s+to\s+be|seemed)\s+(?:nervous|agitated|evasive)/i,
+  /(?:appeared\s+to\s+be|seemed|appeared)\s+(?:nervous|agitated|evasive)/i,
+  /(?:appeared\s+)(?:nervous|agitated|suspicious)/i,
   /(?:high[- ]crime|known\s+crime)\s+area/i,
   /(?:furtive|evasive)\s+(?:movement|gesture|behavior)/i,
   /(?:consented|agreed)\s+(?:to|after)\s+(?:questioning|search)/i,
   /(?:voluntary|voluntarily)\s+(?:provided|gave|offered)/i,
+  /(?:grabbed|seized|took\s+hold)/i,
+  /(?:officer\s+)?(?:seemed|appeared)\s+(?:aggressive|hostile)/i,
   // LD-16: Search & Seizure concerns
   /(?:extended|prolonged)\s+(?:the\s+)?(?:traffic\s+)?stop/i,
   /(?:inventory|administrative)\s+search/i,
+  /pat\s+(?:search|down)\s+without/i,
   // LD-17: Evidence presentation concerns
   /(?:inconsistent|contradictory)\s+(?:testimony|statement|report)/i,
   /(?:unable|could\s+not)\s+(?:recall|remember|identify)/i,
@@ -86,6 +101,8 @@ const CONCERN_INDICATORS = [
   /(?:delayed|late)\s+(?:collection|processing|packaging)/i,
   // LD-30: Crime scene concerns
   /(?:multiple|numerous)\s+(?:people|persons|officers)\s+(?:entered|accessed|walked)/i,
+  /(?:scene|evidence)\s+(?:was\s+)?(?:compromised|contaminated)/i,
+  /(?:wasn't|was\s+not)\s+doing\s+anything\s+wrong/i,
 ];
 
 // ---------------------------------------------------------------------------
@@ -229,33 +246,74 @@ export class DoctrineComplianceEngine {
     const hasViolationIndicator = VIOLATION_INDICATORS.some((p) => p.test(evidenceText));
     const hasConcernIndicator = CONCERN_INDICATORS.some((p) => p.test(evidenceText));
 
-    // High similarity + violation indicator = violation
-    if (similarityScore >= VIOLATION_THRESHOLD && hasViolationIndicator) {
+    // Compute keyword overlap between evidence and rule for relevance boosting
+    const keywordOverlap = DoctrineComplianceEngine.computeKeywordOverlap(evidenceText, rule);
+
+    // Effective similarity: boost by keyword overlap for more accurate flagging
+    // This compensates for demo/deterministic embeddings that produce lower similarity
+    const effectiveSimilarity = Math.min(1.0, similarityScore + keywordOverlap * 0.3);
+
+    // High effective similarity + violation indicator = violation
+    if (effectiveSimilarity >= VIOLATION_THRESHOLD && hasViolationIndicator) {
       return 'violation';
     }
 
-    // Medium similarity + violation indicator = concern
-    if (similarityScore >= CONCERN_THRESHOLD && hasViolationIndicator) {
+    // Medium effective similarity + violation indicator = concern
+    if (effectiveSimilarity >= CONCERN_THRESHOLD && hasViolationIndicator) {
       return 'concern';
     }
 
-    // High similarity + concern indicator = concern
-    if (similarityScore >= VIOLATION_THRESHOLD && hasConcernIndicator) {
+    // High effective similarity + concern indicator = concern
+    if (effectiveSimilarity >= VIOLATION_THRESHOLD && hasConcernIndicator) {
       return 'concern';
     }
 
     // Check for negative/contradictory language against the rule
     const ruleNegation = DoctrineComplianceEngine.detectRuleNegation(evidenceText, rule);
-    if (ruleNegation && similarityScore >= CONCERN_THRESHOLD) {
+    if (ruleNegation && effectiveSimilarity >= CONCERN_THRESHOLD) {
       return 'violation';
     }
 
-    // High similarity without indicators = compliant (rule is relevant)
-    if (similarityScore >= CONCERN_THRESHOLD) {
+    // Moderate similarity + violation indicator + keyword overlap = concern
+    // Requires keyword overlap to ensure the rule is topically relevant to the violation
+    if (similarityScore >= 0.4 && hasViolationIndicator && keywordOverlap > 0) {
+      return 'concern';
+    }
+
+    // Any keyword overlap + violation indicator = concern
+    if (keywordOverlap >= 0.15 && hasViolationIndicator) {
+      return 'concern';
+    }
+
+    // Moderate similarity + concern indicator + keyword overlap = concern
+    if (similarityScore >= 0.4 && hasConcernIndicator && keywordOverlap > 0) {
+      return 'concern';
+    }
+
+    // Keyword overlap + concern indicator = concern
+    if (keywordOverlap >= 0.2 && hasConcernIndicator && similarityScore >= 0.3) {
+      return 'concern';
+    }
+
+    // High effective similarity without indicators = compliant (rule is relevant)
+    if (effectiveSimilarity >= CONCERN_THRESHOLD) {
       return hasConcernIndicator ? 'concern' : 'compliant';
     }
 
     return 'compliant';
+  }
+
+  /**
+   * Compute keyword overlap ratio between evidence text and a doctrine rule.
+   * Returns 0-1 indicating what fraction of rule keywords appear in the evidence.
+   */
+  private static computeKeywordOverlap(evidenceText: string, rule: DoctrineRule): number {
+    if (rule.keywords.length === 0) return 0;
+    const lowerEvidence = evidenceText.toLowerCase();
+    const matchCount = rule.keywords.filter((kw) =>
+      lowerEvidence.includes(kw.toLowerCase()),
+    ).length;
+    return matchCount / rule.keywords.length;
   }
 
   /**

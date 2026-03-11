@@ -224,17 +224,33 @@ export class DoctrineEmbeddingPipeline {
 
   /**
    * Create a deterministic pseudo-embedding from text.
-   * Uses SHA-256 hash to seed a simple number generator.
+   * Uses chained SHA-256 hashes to produce unique values across all dimensions.
    */
   private deterministicEmbedding(text: string): number[] {
-    const hash = createHash('sha256').update(text).digest();
     const dims = this.config.dimensions;
     const embedding = new Array<number>(dims);
 
-    // Use hash bytes to seed values, cycling through the hash
+    // Pre-allocate buffer for all bytes needed (2 bytes per dimension)
+    const bytesNeeded = dims * 2;
+    const chunksNeeded = Math.ceil(bytesNeeded / 32); // SHA-256 = 32 bytes
+    const allBytes = Buffer.allocUnsafe(chunksNeeded * 32);
+
+    // Chain SHA-256 hashes to fill the buffer efficiently
+    let prevHash = createHash('sha256').update(text).digest();
+    prevHash.copy(allBytes, 0);
+
+    for (let c = 1; c < chunksNeeded; c++) {
+      prevHash = createHash('sha256')
+        .update(prevHash)
+        .update(Buffer.from([c & 0xff, (c >> 8) & 0xff]))
+        .digest();
+      prevHash.copy(allBytes, c * 32);
+    }
+
+    // Each dimension gets two unique bytes
     for (let i = 0; i < dims; i++) {
-      const byte1 = hash[i % hash.length];
-      const byte2 = hash[(i + 7) % hash.length];
+      const byte1 = allBytes[i * 2];
+      const byte2 = allBytes[i * 2 + 1];
       // Normalize to roughly [-0.1, 0.1] range like real embeddings
       embedding[i] = ((byte1 * 256 + byte2) / 65535 - 0.5) * 0.2;
     }

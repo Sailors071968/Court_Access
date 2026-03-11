@@ -1,0 +1,179 @@
+// ============================================================================
+// CourtAccess — Stable Schema Definition (Phase 53 Schema Lock)
+// ============================================================================
+//
+// SCHEMA FREEZE NOTICE
+// ====================
+// The following tables are LOCKED and must NOT be modified without explicit
+// approval from the system architect:
+//
+//   - Agency
+//   - PolicyDocument
+//   - PolicyTopic
+//   - PolicyCoverage
+//   - CPRAAgencyRequest
+//   - CPRAAnnualUpdate
+//
+// Any schema changes to these tables require:
+//   1. Written justification in the PR description
+//   2. Migration safety review (no destructive changes)
+//   3. Worker compatibility check (all workers must handle old + new schema)
+//   4. Manual approval label: "schema-change-approved"
+//
+// Rationale:
+// These tables are actively consumed by:
+//   - Policy Pipeline Workers (crawl, download, OCR, classify)
+//   - CPRA Campaign Workers (send, follow-up, annual update)
+//   - Policy Intelligence API (21 endpoints)
+//   - CPRA API (13 endpoints)
+//   - Frontend Dashboards (3 dashboards)
+//
+// Modifying these tables without coordination will cause:
+//   - Worker failures due to missing/renamed columns
+//   - Migration conflicts across branches
+//   - Data corruption in production
+//
+// ============================================================================
+
+// ---------------------------------------------------------------------------
+// LOCKED TABLE: Agency
+// Last modified: Phase 26 (initial), Phase 46 (CPRA relations)
+// Consumed by: pipelineOrchestrator, siteCrawlWorker, cpraRoutes, taxonomyRoutes
+// ---------------------------------------------------------------------------
+// model Agency {
+//   agencyId            String   @id @default(uuid())
+//   agencyName          String
+//   agencyType          String?
+//   city                String?
+//   county              String?
+//   populationEstimate  Int?
+//   jurisdictionRank    Int?
+//   website             String?
+//   postDirectoryUrl    String?
+//   recordsRequestUrl   String?
+//   policyCollectionUrl String?
+//   policiesDiscovered  Boolean  @default(false)
+//   crawlStatus         String   @default("pending")
+//   crawlError          String?
+//   lastCrawledAt       DateTime?
+//   pagesFound          Int      @default(0)
+//   policyPagesFound    Int      @default(0)
+//   createdAt           DateTime @default(now())
+//   updatedAt           DateTime @updatedAt
+//   @@unique([agencyName, county])
+// }
+
+// ---------------------------------------------------------------------------
+// LOCKED TABLE: PolicyDocument
+// Last modified: Phase 10 (taxonomy integration)
+// Consumed by: classificationWorker, ocrWorker, taxonomyRoutes, pipelineRoutes
+// ---------------------------------------------------------------------------
+// model PolicyDocument {
+//   documentId             String   @id @default(uuid())
+//   agencyId               String
+//   topicId                String?
+//   documentType           String?
+//   title                  String?
+//   policyNumber           String?
+//   sourceUrl              String
+//   s3Url                  String?
+//   mimeType               String?
+//   fileSizeBytes          Int?
+//   textExtracted          Boolean  @default(false)
+//   textContent            String?
+//   ocrStatus              String   @default("pending")
+//   ocrError               String?
+//   classificationStatus   String   @default("pending")
+//   classificationScore    Float?
+//   isChpCanonical         Boolean  @default(false)
+//   matchedTopicConfidence Float?
+//   createdAt              DateTime @default(now())
+//   updatedAt              DateTime @updatedAt
+// }
+
+// ---------------------------------------------------------------------------
+// LOCKED TABLE: PolicyTopic
+// Last modified: Phase 1 (initial creation)
+// Consumed by: taxonomyRoutes, policyMatchingEngine, coveragePopulator
+// ---------------------------------------------------------------------------
+// model PolicyTopic {
+//   id           String   @id @default(uuid())
+//   topicName    String   @unique
+//   category     String
+//   keywords     String
+//   description  String?
+//   chpReference String?
+//   sortOrder    Int      @default(0)
+//   createdAt    DateTime @default(now())
+//   updatedAt    DateTime @updatedAt
+// }
+
+// ---------------------------------------------------------------------------
+// LOCKED TABLE: PolicyCoverage
+// Last modified: Phase 5 (initial creation)
+// Consumed by: policyCoverageTracker, comparativePolicyEngine, taxonomyRoutes
+// ---------------------------------------------------------------------------
+// model PolicyCoverage {
+//   id          String   @id @default(uuid())
+//   agencyId    String
+//   topicId     String
+//   policyFound Boolean  @default(false)
+//   documentId  String?
+//   sourceUrl   String?
+//   notes       String?
+//   createdAt   DateTime @default(now())
+//   updatedAt   DateTime @updatedAt
+//   @@unique([agencyId, topicId])
+// }
+
+// ---------------------------------------------------------------------------
+// LOCKED TABLE: CPRAAgencyRequest
+// Last modified: Phase 46 (FK relation fix)
+// Consumed by: cpraCampaignWorker, cpraRoutes, cpraResponseProcessor
+// ---------------------------------------------------------------------------
+// model CPRAAgencyRequest {
+//   requestId          String   @id @default(uuid())
+//   campaignId         String
+//   agencyId           String
+//   status             String   @default("draft")
+//   sentAt             DateTime?
+//   lastFollowUpAt     DateTime?
+//   responseReceived   Boolean  @default(false)
+//   responseReceivedAt DateTime?
+//   policyReceivedAt   DateTime?
+//   annualUpdateDue    DateTime?
+//   closed             Boolean  @default(false)
+//   followUpCount      Int      @default(0)
+//   createdAt          DateTime @default(now())
+//   updatedAt          DateTime @updatedAt
+// }
+
+// ---------------------------------------------------------------------------
+// LOCKED TABLE: CPRAAnnualUpdate
+// Last modified: Phase 46 (FK relation fix)
+// Consumed by: cpraAnnualUpdateWorker, cpraAnnualUpdateService, cpraRoutes
+// ---------------------------------------------------------------------------
+// model CPRAAnnualUpdate {
+//   updateId           String   @id @default(uuid())
+//   agencyId           String
+//   requestedAt        DateTime
+//   responseReceived   Boolean  @default(false)
+//   responseReceivedAt DateTime?
+//   policyReceivedAt   DateTime?
+//   annualUpdateDue    DateTime?
+//   followUpCount      Int      @default(0)
+//   lastFollowUpAt     DateTime?
+//   closed             Boolean  @default(false)
+//   status             String   @default("scheduled")
+//   createdAt          DateTime @default(now())
+//   updatedAt          DateTime @updatedAt
+// }
+
+// ============================================================================
+// Schema Version Registry
+// ============================================================================
+// Version: 1.0.0-stable
+// Lock Date: 2026-03-09
+// Locked By: Phase 53 — Schema Lock & Migration Safety
+// Next Review: After Phase 60 stabilization complete
+// ============================================================================

@@ -1,0 +1,2678 @@
+{
+  "phase": "Phase 163 — Compliance Finding Validation",
+  "generatedAt": "2026-03-10T13:46:47.506Z",
+  "totalTestCases": 50,
+  "totalFindingsGenerated": 266,
+  "potentialInconsistenciesDetected": 266,
+  "requiresReviewCount": 0,
+  "insufficientEvidenceCount": 0,
+  "falsePositiveEstimate": 114,
+  "confidenceScoreDistribution": {
+    "high": 3,
+    "medium": 263,
+    "low": 0
+  },
+  "averageConfidence": 0.7164624060150376,
+  "findingsByCategory": {
+    "Use_of_Force": 100,
+    "Officer_Conduct": 68,
+    "Arrest": 53,
+    "Custody": 25,
+    "Pursuit": 9,
+    "Search_Seizure": 11
+  },
+  "testCaseResults": [
+    {
+      "testCaseId": "VAL-001",
+      "title": "Taser Deployment During Traffic Stop",
+      "findingsGenerated": 10,
+      "expectedFindingRange": {
+        "min": 1,
+        "max": 5
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 10
+      },
+      "averageConfidence": 0.71467,
+      "findings": [
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7349,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (73%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7349,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (73%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "taser_deployed",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7197,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (taser deployed) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (72%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "uof_warning",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7397,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (uof warning) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6937,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (69%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6937,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (69%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6972999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (medical attention) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Custody",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6597999999999999,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"Transport procedures must ensure subject safety.\". The analysis confidence is moderate (66%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7365,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7365,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (74%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-002",
+      "title": "Prone Restraint with Subject Distress",
+      "findingsGenerated": 10,
+      "expectedFindingRange": {
+        "min": 2,
+        "max": 6
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 10
+      },
+      "averageConfidence": 0.7141899999999999,
+      "findings": [
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6949,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (69%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6949,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (69%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "prone_restraint",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7773,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (prone restraint) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (78%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "compliance_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7349,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (compliance command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (73%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7012999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7012999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7012999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7012999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7361,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (medical attention) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Custody",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6986,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"Transport procedures must ensure subject safety.\". The analysis confidence is moderate (70%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-003",
+      "title": "Neck Restraint Application",
+      "findingsGenerated": 9,
+      "expectedFindingRange": {
+        "min": 2,
+        "max": 6
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 9
+      },
+      "averageConfidence": 0.7270888888888889,
+      "findings": [
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6913,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (69%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6913,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (69%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7441,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7441,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "neck_restraint",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7669,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (neck restraint) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (77%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7333,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (73%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7333,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (73%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7384999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (medical attention) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Custody",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.701,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"Transport procedures must ensure subject safety.\". The analysis confidence is moderate (70%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-004",
+      "title": "Pepper Spray Deployment at Protest",
+      "findingsGenerated": 3,
+      "expectedFindingRange": {
+        "min": 1,
+        "max": 4
+      },
+      "withinExpectedRange": true,
+      "findingTypes": {
+        "potential_inconsistency": 3
+      },
+      "averageConfidence": 0.7328,
+      "findings": [
+        {
+          "detectedAction": "pepper_spray",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7421,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (pepper spray) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7469,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (medical attention) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (75%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Custody",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7094,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"Transport procedures must ensure subject safety.\". The analysis confidence is moderate (71%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-005",
+      "title": "Officer-Involved Shooting",
+      "findingsGenerated": 6,
+      "expectedFindingRange": {
+        "min": 2,
+        "max": 5
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 6
+      },
+      "averageConfidence": 0.7289833333333333,
+      "findings": [
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6949,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (69%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6949,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (69%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "weapon_drawn",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7381,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (weapon drawn) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "shots_fired",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.8001,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (shots fired) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is high (80%)."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7416999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (medical attention) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Custody",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7041999999999999,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"Transport procedures must ensure subject safety.\". The analysis confidence is moderate (70%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-006",
+      "title": "Baton Strike During Arrest",
+      "findingsGenerated": 11,
+      "expectedFindingRange": {
+        "min": 2,
+        "max": 6
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 11
+      },
+      "averageConfidence": 0.7133454545454544,
+      "findings": [
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6957,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6957,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "compliance_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6937,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (compliance command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (69%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "physical_strike",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7221,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (physical strike) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (72%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "baton_strike",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7421,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (baton strike) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6949,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (69%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6949,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (69%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7349,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (73%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7349,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (73%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7376999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (medical attention) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Custody",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7001999999999999,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"Transport procedures must ensure subject safety.\". The analysis confidence is moderate (70%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-007",
+      "title": "K-9 Deployment During Suspect Search",
+      "findingsGenerated": 8,
+      "expectedFindingRange": {
+        "min": 1,
+        "max": 4
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 8
+      },
+      "averageConfidence": 0.7060749999999999,
+      "findings": [
+        {
+          "detectedAction": "foot_pursuit",
+          "policyCategory": "Pursuit",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6606,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"SECTION 2: PURSUIT POLICY\nVehicle pursuits shall only be initiated when the suspect is believed to have committed a violent felony\". The analysis confidence is moderate (66%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "k9_deployment",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7409,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (k9 deployment) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6969,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6969,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7436999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (medical attention) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Custody",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7061999999999999,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"Transport procedures must ensure subject safety.\". The analysis confidence is moderate (71%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7017,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7017,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (70%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-008",
+      "title": "De-escalation Success — No Force Used",
+      "findingsGenerated": 4,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 2
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 4
+      },
+      "averageConfidence": 0.7136,
+      "findings": [
+        {
+          "detectedAction": "officer_proximity",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7061,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (officer proximity) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (71%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "compliance_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7409,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (compliance command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7037,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7037,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (70%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-009",
+      "title": "Multiple Force Escalation Steps",
+      "findingsGenerated": 10,
+      "expectedFindingRange": {
+        "min": 2,
+        "max": 7
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 10
+      },
+      "averageConfidence": 0.7083899999999999,
+      "findings": [
+        {
+          "detectedAction": "compliance_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6759,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (compliance command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (68%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "uof_warning",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6750999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (uof warning) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (68%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "pepper_spray",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7134999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (pepper spray) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (71%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6759,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (68%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6759,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (68%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "taser_deployed",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6895,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (taser deployed) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (69%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7455,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (75%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7455,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (75%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7623,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (medical attention) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (76%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Custody",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7248,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"Transport procedures must ensure subject safety.\". The analysis confidence is moderate (72%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-010",
+      "title": "Physical Strike Without Warning",
+      "findingsGenerated": 6,
+      "expectedFindingRange": {
+        "min": 2,
+        "max": 5
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 6
+      },
+      "averageConfidence": 0.7159833333333334,
+      "findings": [
+        {
+          "detectedAction": "officer_proximity",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6969,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (officer proximity) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "physical_strike",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7601,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (physical strike) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (76%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7381,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7381,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7001,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (medical attention) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Custody",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6626,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"Transport procedures must ensure subject safety.\". The analysis confidence is moderate (66%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-011",
+      "title": "Vehicle Search Without Consent",
+      "findingsGenerated": 1,
+      "expectedFindingRange": {
+        "min": 1,
+        "max": 3
+      },
+      "withinExpectedRange": true,
+      "findingTypes": {
+        "potential_inconsistency": 1
+      },
+      "averageConfidence": 0.7405,
+      "findings": [
+        {
+          "detectedAction": "vehicle_search",
+          "policyCategory": "Search_Seizure",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7405,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (vehicle search) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 3: SEARCH AND SEIZURE POLICY\nOfficers shall not conduct a search without consent, a warrant, or a valid legal exception\". The analysis confidence is moderate (74%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-012",
+      "title": "Pat Down / Terry Stop",
+      "findingsGenerated": 2,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 2
+      },
+      "withinExpectedRange": true,
+      "findingTypes": {
+        "potential_inconsistency": 2
+      },
+      "averageConfidence": 0.7209,
+      "findings": [
+        {
+          "detectedAction": "officer_proximity",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7012999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (officer proximity) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "pat_down_search",
+          "policyCategory": "Search_Seizure",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7405,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (pat down search) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 3: SEARCH AND SEIZURE POLICY\nOfficers shall not conduct a search without consent, a warrant, or a valid legal exception\". The analysis confidence is moderate (74%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-013",
+      "title": "Consent Search of Residence",
+      "findingsGenerated": 0,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 1
+      },
+      "withinExpectedRange": true,
+      "findingTypes": {},
+      "averageConfidence": 0,
+      "findings": []
+    },
+    {
+      "testCaseId": "VAL-014",
+      "title": "Warrant-Based Vehicle Search",
+      "findingsGenerated": 1,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 2
+      },
+      "withinExpectedRange": true,
+      "findingTypes": {
+        "potential_inconsistency": 1
+      },
+      "averageConfidence": 0.7639,
+      "findings": [
+        {
+          "detectedAction": "vehicle_search",
+          "policyCategory": "Search_Seizure",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7639,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (vehicle search) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 3: SEARCH AND SEIZURE POLICY\nOfficers shall not conduct a search without consent, a warrant, or a valid legal exception\". The analysis confidence is moderate (76%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-015",
+      "title": "Exigent Circumstances Entry",
+      "findingsGenerated": 7,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 3
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 7
+      },
+      "averageConfidence": 0.6871142857142857,
+      "findings": [
+        {
+          "detectedAction": "officer_proximity",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7199,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (officer proximity) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (72%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6747,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (67%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6747,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (67%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6747,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (67%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6747,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (67%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7142999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (medical attention) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (71%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Custody",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6768,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"Transport procedures must ensure subject safety.\". The analysis confidence is moderate (68%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-016",
+      "title": "Plain View Doctrine Seizure",
+      "findingsGenerated": 3,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 2
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 3
+      },
+      "averageConfidence": 0.7117,
+      "findings": [
+        {
+          "detectedAction": "pat_down_search",
+          "policyCategory": "Search_Seizure",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7436999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (pat down search) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 3: SEARCH AND SEIZURE POLICY\nOfficers shall not conduct a search without consent, a warrant, or a valid legal exception\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6957,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6957,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (70%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-017",
+      "title": "Inventory Search of Impounded Vehicle",
+      "findingsGenerated": 1,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 1
+      },
+      "withinExpectedRange": true,
+      "findingTypes": {
+        "potential_inconsistency": 1
+      },
+      "averageConfidence": 0.7566999999999999,
+      "findings": [
+        {
+          "detectedAction": "vehicle_search",
+          "policyCategory": "Search_Seizure",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7566999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (vehicle search) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 3: SEARCH AND SEIZURE POLICY\nOfficers shall not conduct a search without consent, a warrant, or a valid legal exception\". The analysis confidence is moderate (76%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-018",
+      "title": "School Resource Officer Locker Search",
+      "findingsGenerated": 0,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 0
+      },
+      "withinExpectedRange": true,
+      "findingTypes": {},
+      "averageConfidence": 0,
+      "findings": []
+    },
+    {
+      "testCaseId": "VAL-019",
+      "title": "Miranda Warning Before Custodial Interrogation",
+      "findingsGenerated": 1,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 1
+      },
+      "withinExpectedRange": true,
+      "findingTypes": {
+        "potential_inconsistency": 1
+      },
+      "averageConfidence": 0.6819,
+      "findings": [
+        {
+          "detectedAction": "miranda_warning",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6819,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (miranda warning) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (68%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-020",
+      "title": "Custodial Interrogation Without Miranda",
+      "findingsGenerated": 1,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 1
+      },
+      "withinExpectedRange": true,
+      "findingTypes": {
+        "potential_inconsistency": 1
+      },
+      "averageConfidence": 0.6790999999999999,
+      "findings": [
+        {
+          "detectedAction": "miranda_warning",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6790999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (miranda warning) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (68%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-021",
+      "title": "Felony Traffic Stop Arrest",
+      "findingsGenerated": 8,
+      "expectedFindingRange": {
+        "min": 1,
+        "max": 4
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 8
+      },
+      "averageConfidence": 0.7258499999999999,
+      "findings": [
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6993,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6993,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "weapon_drawn",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7825,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (weapon drawn) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (78%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "officer_proximity",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6997,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (officer proximity) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6964999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6964999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "pat_down_search",
+          "policyCategory": "Search_Seizure",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7833,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (pat down search) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 3: SEARCH AND SEIZURE POLICY\nOfficers shall not conduct a search without consent, a warrant, or a valid legal exception\". The analysis confidence is moderate (78%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "miranda_warning",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7496999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (miranda warning) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (75%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-022",
+      "title": "DUI Arrest with Field Sobriety Tests",
+      "findingsGenerated": 3,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 2
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 3
+      },
+      "averageConfidence": 0.7153,
+      "findings": [
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7017,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7017,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "miranda_warning",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7424999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (miranda warning) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (74%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-023",
+      "title": "Resisting Arrest — Escalating Force",
+      "findingsGenerated": 11,
+      "expectedFindingRange": {
+        "min": 2,
+        "max": 6
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 11
+      },
+      "averageConfidence": 0.7370272727272726,
+      "findings": [
+        {
+          "detectedAction": "foot_pursuit",
+          "policyCategory": "Pursuit",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7478,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"SECTION 2: PURSUIT POLICY\nVehicle pursuits shall only be initiated when the suspect is believed to have committed a violent felony\". The analysis confidence is moderate (75%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "physical_strike",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7241,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (physical strike) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (72%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7833,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (78%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7833,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (78%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6913,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (69%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6913,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (69%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "compliance_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7713,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (compliance command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (77%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7333,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (73%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7333,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (73%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7429,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (medical attention) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Custody",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7054,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"Transport procedures must ensure subject safety.\". The analysis confidence is moderate (71%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-024",
+      "title": "Juvenile Arrest Procedures",
+      "findingsGenerated": 3,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 2
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 3
+      },
+      "averageConfidence": 0.7161666666666666,
+      "findings": [
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7155,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (72%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7155,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (72%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "miranda_warning",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7174999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (miranda warning) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (72%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-025",
+      "title": "Domestic Violence Mandatory Arrest",
+      "findingsGenerated": 6,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 2
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 6
+      },
+      "averageConfidence": 0.6911166666666665,
+      "findings": [
+        {
+          "detectedAction": "officer_proximity",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6774999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (officer proximity) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (68%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7162999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (72%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7162999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (72%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "miranda_warning",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7134999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (miranda warning) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (71%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6802999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (medical attention) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (68%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Custody",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6427999999999999,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"Transport procedures must ensure subject safety.\". The analysis confidence is moderate (64%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-026",
+      "title": "Mental Health Crisis Response",
+      "findingsGenerated": 2,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 1
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 2
+      },
+      "averageConfidence": 0.68655,
+      "findings": [
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7052999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (medical attention) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (71%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Custody",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6678,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"Transport procedures must ensure subject safety.\". The analysis confidence is moderate (67%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-027",
+      "title": "Witness Interview During Investigation",
+      "findingsGenerated": 2,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 1
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 2
+      },
+      "averageConfidence": 0.6787,
+      "findings": [
+        {
+          "detectedAction": "threat_language",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6787,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (threat language) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (68%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "threat_language",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6787,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (threat language) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (68%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-028",
+      "title": "Booking Process at County Jail",
+      "findingsGenerated": 4,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 1
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 4
+      },
+      "averageConfidence": 0.677625,
+      "findings": [
+        {
+          "detectedAction": "pat_down_search",
+          "policyCategory": "Search_Seizure",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7219,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (pat down search) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 3: SEARCH AND SEIZURE POLICY\nOfficers shall not conduct a search without consent, a warrant, or a valid legal exception\". The analysis confidence is moderate (72%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6759,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (medical attention) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (68%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Custody",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6384,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"Transport procedures must ensure subject safety.\". The analysis confidence is moderate (64%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "miranda_warning",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6743,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (miranda warning) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (67%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-029",
+      "title": "High-Speed Vehicle Pursuit",
+      "findingsGenerated": 5,
+      "expectedFindingRange": {
+        "min": 1,
+        "max": 4
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 5
+      },
+      "averageConfidence": 0.71648,
+      "findings": [
+        {
+          "detectedAction": "vehicle_pursuit",
+          "policyCategory": "Pursuit",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6492,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"SECTION 2: PURSUIT POLICY\nVehicle pursuits shall only be initiated when the suspect is believed to have committed a violent felony\". The analysis confidence is moderate (65%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7111,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (71%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7111,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (71%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7555000000000001,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (76%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7555000000000001,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (76%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-030",
+      "title": "Foot Pursuit Through Residential Area",
+      "findingsGenerated": 5,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 3
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 5
+      },
+      "averageConfidence": 0.7307599999999999,
+      "findings": [
+        {
+          "detectedAction": "foot_pursuit",
+          "policyCategory": "Pursuit",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7086,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"SECTION 2: PURSUIT POLICY\nVehicle pursuits shall only be initiated when the suspect is believed to have committed a violent felony\". The analysis confidence is moderate (71%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7393,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7393,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7333,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (73%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7333,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (73%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-031",
+      "title": "Pursuit Termination — Safety Concerns",
+      "findingsGenerated": 1,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 2
+      },
+      "withinExpectedRange": true,
+      "findingTypes": {
+        "potential_inconsistency": 1
+      },
+      "averageConfidence": 0.6788,
+      "findings": [
+        {
+          "detectedAction": "vehicle_pursuit",
+          "policyCategory": "Pursuit",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6788,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"SECTION 2: PURSUIT POLICY\nVehicle pursuits shall only be initiated when the suspect is believed to have committed a violent felony\". The analysis confidence is moderate (68%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-032",
+      "title": "PIT Maneuver to End Pursuit",
+      "findingsGenerated": 8,
+      "expectedFindingRange": {
+        "min": 1,
+        "max": 5
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 8
+      },
+      "averageConfidence": 0.7058249999999999,
+      "findings": [
+        {
+          "detectedAction": "vehicle_pursuit",
+          "policyCategory": "Pursuit",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6776,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"SECTION 2: PURSUIT POLICY\nVehicle pursuits shall only be initiated when the suspect is believed to have committed a violent felony\". The analysis confidence is moderate (68%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7159,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (72%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7159,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (72%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "weapon_drawn",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7119,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (weapon drawn) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (71%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7142999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (71%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7142999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (71%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7171,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (medical attention) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (72%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Custody",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6796,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"Transport procedures must ensure subject safety.\". The analysis confidence is moderate (68%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-033",
+      "title": "Unauthorized Pursuit — Policy Threshold Not Met",
+      "findingsGenerated": 1,
+      "expectedFindingRange": {
+        "min": 1,
+        "max": 3
+      },
+      "withinExpectedRange": true,
+      "findingTypes": {
+        "potential_inconsistency": 1
+      },
+      "averageConfidence": 0.6379999999999999,
+      "findings": [
+        {
+          "detectedAction": "vehicle_pursuit",
+          "policyCategory": "Pursuit",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6379999999999999,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"SECTION 2: PURSUIT POLICY\nVehicle pursuits shall only be initiated when the suspect is believed to have committed a violent felony\". The analysis confidence is moderate (64%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-034",
+      "title": "Multi-Agency Pursuit Coordination",
+      "findingsGenerated": 5,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 3
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 5
+      },
+      "averageConfidence": 0.70768,
+      "findings": [
+        {
+          "detectedAction": "vehicle_pursuit",
+          "policyCategory": "Pursuit",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6828,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"SECTION 2: PURSUIT POLICY\nVehicle pursuits shall only be initiated when the suspect is believed to have committed a violent felony\". The analysis confidence is moderate (68%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7511,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (75%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7511,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (75%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6767,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (68%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6767,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (68%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-035",
+      "title": "Body Camera Activation Failure",
+      "findingsGenerated": 2,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 2
+      },
+      "withinExpectedRange": true,
+      "findingTypes": {
+        "potential_inconsistency": 2
+      },
+      "averageConfidence": 0.6799,
+      "findings": [
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6799,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (68%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6799,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (68%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-036",
+      "title": "Racial Profiling Complaint — Traffic Stop",
+      "findingsGenerated": 0,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 0
+      },
+      "withinExpectedRange": true,
+      "findingTypes": {},
+      "averageConfidence": 0,
+      "findings": []
+    },
+    {
+      "testCaseId": "VAL-037",
+      "title": "Welfare Check — Subject with Firearm",
+      "findingsGenerated": 5,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 3
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 5
+      },
+      "averageConfidence": 0.7182,
+      "findings": [
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6980999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6980999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "weapon_drawn",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7433,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (weapon drawn) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7444999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (medical attention) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Custody",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.707,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"Transport procedures must ensure subject safety.\". The analysis confidence is moderate (71%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-038",
+      "title": "Mass Casualty Incident Response",
+      "findingsGenerated": 2,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 0
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 2
+      },
+      "averageConfidence": 0.7253499999999999,
+      "findings": [
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7441,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (medical attention) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Custody",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7066,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"Transport procedures must ensure subject safety.\". The analysis confidence is moderate (71%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-039",
+      "title": "Excessive Force Allegation — Handcuffing Injury",
+      "findingsGenerated": 7,
+      "expectedFindingRange": {
+        "min": 1,
+        "max": 4
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 7
+      },
+      "averageConfidence": 0.7182285714285713,
+      "findings": [
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7384999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7384999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7493,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (medical attention) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (75%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Custody",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7118,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"Transport procedures must ensure subject safety.\". The analysis confidence is moderate (71%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6964999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6964999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "compliance_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6964999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (compliance command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (70%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-040",
+      "title": "Training Scenario — Active Shooter Response",
+      "findingsGenerated": 10,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 4
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 10
+      },
+      "averageConfidence": 0.6917099999999998,
+      "findings": [
+        {
+          "detectedAction": "weapon_drawn",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6727,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (weapon drawn) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (67%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7126999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (71%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7126999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (71%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "shots_fired",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7299,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (shots fired) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (73%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "threat_language",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6714999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (threat language) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (67%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "threat_language",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6714999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (threat language) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (67%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6754999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (68%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6754999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (68%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7162999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (medical attention) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (72%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Custody",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6788,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"Transport procedures must ensure subject safety.\". The analysis confidence is moderate (68%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-041",
+      "title": "Threat Language — Officer Issues Verbal Threat",
+      "findingsGenerated": 9,
+      "expectedFindingRange": {
+        "min": 1,
+        "max": 5
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 9
+      },
+      "averageConfidence": 0.7251222222222222,
+      "findings": [
+        {
+          "detectedAction": "threat_language",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7397,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (threat language) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "threat_language",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7397,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (threat language) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "uof_warning",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6997,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (uof warning) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "taser_deployed",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7181,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (taser deployed) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (72%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "compliance_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6980999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (compliance command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7749,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (77%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7749,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (77%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6905,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (69%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6905,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (69%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-042",
+      "title": "Traffic Collision Investigation",
+      "findingsGenerated": 2,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 0
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 2
+      },
+      "averageConfidence": 0.65995,
+      "findings": [
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6787,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (medical attention) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (68%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Custody",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6412,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"Transport procedures must ensure subject safety.\". The analysis confidence is moderate (64%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-043",
+      "title": "Community Policing Event — No Incident",
+      "findingsGenerated": 0,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 0
+      },
+      "withinExpectedRange": true,
+      "findingTypes": {},
+      "averageConfidence": 0,
+      "findings": []
+    },
+    {
+      "testCaseId": "VAL-044",
+      "title": "Missing Person Report",
+      "findingsGenerated": 2,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 0
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 2
+      },
+      "averageConfidence": 0.66475,
+      "findings": [
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6834999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (medical attention) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (68%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Custody",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6459999999999999,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"Transport procedures must ensure subject safety.\". The analysis confidence is moderate (65%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-045",
+      "title": "Drug-Related Arrest with Force",
+      "findingsGenerated": 12,
+      "expectedFindingRange": {
+        "min": 2,
+        "max": 7
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 12
+      },
+      "averageConfidence": 0.7389416666666665,
+      "findings": [
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7353,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7353,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "physical_strike",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7281,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (physical strike) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (73%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7424999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7424999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7345,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (73%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7345,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (73%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "compliance_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7345,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (compliance command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (73%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7489,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (medical attention) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (75%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Custody",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7114,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"Transport procedures must ensure subject safety.\". The analysis confidence is moderate (71%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "pat_down_search",
+          "policyCategory": "Search_Seizure",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7809,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (pat down search) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 3: SEARCH AND SEIZURE POLICY\nOfficers shall not conduct a search without consent, a warrant, or a valid legal exception\". The analysis confidence is moderate (78%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "miranda_warning",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7389,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (miranda warning) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (74%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-046",
+      "title": "Armed Robbery Response — Suspect Surrenders",
+      "findingsGenerated": 7,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 3
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 7
+      },
+      "averageConfidence": 0.7496999999999999,
+      "findings": [
+        {
+          "detectedAction": "weapon_drawn",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.8125,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (weapon drawn) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is high (81%)."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7413,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7413,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7373,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7373,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "pat_down_search",
+          "policyCategory": "Search_Seizure",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7389,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (pat down search) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 3: SEARCH AND SEIZURE POLICY\nOfficers shall not conduct a search without consent, a warrant, or a valid legal exception\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "miranda_warning",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7393,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (miranda warning) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (74%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-047",
+      "title": "Multiple Use of Force Techniques in Sequence",
+      "findingsGenerated": 14,
+      "expectedFindingRange": {
+        "min": 3,
+        "max": 8
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 14
+      },
+      "averageConfidence": 0.7250785714285716,
+      "findings": [
+        {
+          "detectedAction": "physical_strike",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7224999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (physical strike) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (72%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "taser_deployed",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7185,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (taser deployed) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (72%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "uof_warning",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6985,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (uof warning) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "baton_strike",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7397,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (baton strike) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7401,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7401,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "prone_restraint",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7765000000000001,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (prone restraint) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (78%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7001,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7001,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "compliance_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7001,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (compliance command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6905,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (69%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6905,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (69%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7857,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (medical attention) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (79%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Custody",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7482,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"Transport procedures must ensure subject safety.\". The analysis confidence is moderate (75%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-048",
+      "title": "Domestic Violence — Dual Arrest",
+      "findingsGenerated": 7,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 3
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 7
+      },
+      "averageConfidence": 0.7145714285714285,
+      "findings": [
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7081,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (71%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7081,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (71%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6969,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6969,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "miranda_warning",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7429,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (miranda warning) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7433,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (medical attention) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Custody",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7058,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"Transport procedures must ensure subject safety.\". The analysis confidence is moderate (71%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-049",
+      "title": "Narcotics Operation — Controlled Buy",
+      "findingsGenerated": 9,
+      "expectedFindingRange": {
+        "min": 0,
+        "max": 4
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 9
+      },
+      "averageConfidence": 0.7013777777777778,
+      "findings": [
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7142999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (71%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7142999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (71%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7131,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (71%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7131,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (71%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "foot_pursuit",
+          "policyCategory": "Pursuit",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6784,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"SECTION 2: PURSUIT POLICY\nVehicle pursuits shall only be initiated when the suspect is believed to have committed a violent felony\". The analysis confidence is moderate (68%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6727,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (67%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6727,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (67%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "pat_down_search",
+          "policyCategory": "Search_Seizure",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7159,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (pat down search) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 3: SEARCH AND SEIZURE POLICY\nOfficers shall not conduct a search without consent, a warrant, or a valid legal exception\". The analysis confidence is moderate (72%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "miranda_warning",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7179,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (miranda warning) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (72%). Additional review is recommended."
+        }
+      ]
+    },
+    {
+      "testCaseId": "VAL-050",
+      "title": "Complete Force Incident with All Phases",
+      "findingsGenerated": 20,
+      "expectedFindingRange": {
+        "min": 3,
+        "max": 12
+      },
+      "withinExpectedRange": false,
+      "findingTypes": {
+        "potential_inconsistency": 20
+      },
+      "averageConfidence": 0.7399650000000001,
+      "findings": [
+        {
+          "detectedAction": "officer_proximity",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7012999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (officer proximity) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "de_escalation_attempt",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.6953,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (de escalation attempt) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7393,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "verbal_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7393,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (verbal command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "weapon_drawn",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7393,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (weapon drawn) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "threat_language",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7024999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (threat language) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "threat_language",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7024999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (threat language) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (70%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "uof_warning",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7424999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (uof warning) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "physical_strike",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.8033,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (physical strike) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is high (80%)."
+        },
+        {
+          "detectedAction": "taser_deployed",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7229,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (taser deployed) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (72%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "prone_restraint",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7801,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (prone restraint) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (78%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7405,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "suspect_restrained",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7405,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (suspect restrained) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "compliance_command",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7697,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (compliance command) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (77%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Use_of_Force",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7333,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"Neck restraints and chokeholds are prohibited except in life-threatening situations\". The analysis confidence is moderate (73%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "handcuffing",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7333,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (handcuffing) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (73%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Officer_Conduct",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7817,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (medical attention) appears to involve conduct that the policy prohibits. The relevant policy states: \"The pursuing officer must notify dispatch and receive supervisor authorization\". The analysis confidence is moderate (78%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "medical_attention",
+          "policyCategory": "Custody",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7442,
+          "explanation": "The analysis identified that a required procedural step may not have been followed. The policy requires: \"Transport procedures must ensure subject safety.\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "miranda_warning",
+          "policyCategory": "Arrest",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7424999999999999,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (miranda warning) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 5: INTERROGATION POLICY\nOfficers shall not interrogate a suspect in custody without first administering Miranda warnings\". The analysis confidence is moderate (74%). Additional review is recommended."
+        },
+        {
+          "detectedAction": "vehicle_search",
+          "policyCategory": "Search_Seizure",
+          "findingType": "potential_inconsistency",
+          "confidence": 0.7453,
+          "explanation": "This event may be inconsistent with the department's policy because the detected action (vehicle search) appears to involve conduct that the policy prohibits. The relevant policy states: \"SECTION 3: SEARCH AND SEIZURE POLICY\nOfficers shall not conduct a search without consent, a warrant, or a valid legal exception\". The analysis confidence is moderate (75%). Additional review is recommended."
+        }
+      ]
+    }
+  ],
+  "safetyLanguageCheck": "PASSED",
+  "forbiddenLanguageOccurrences": 0
+}

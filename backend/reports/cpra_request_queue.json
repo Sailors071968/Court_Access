@@ -1,0 +1,4272 @@
+{
+  "phase": 89,
+  "title": "CPRA Request Readiness Report",
+  "generatedAt": "2026-03-09T19:58:44.490Z",
+  "note": "No emails have been sent. This is a readiness assessment only.",
+  "summary": {
+    "totalAgenciesAnalyzed": 10,
+    "agenciesWithGaps": 10,
+    "agenciesQueuedForCpra": 10,
+    "totalMissingPolicies": 820,
+    "criticalMissingCount": 460,
+    "cpraRequestsPrepared": 10
+  },
+  "currentQueueStatus": {
+    "pendingRequests": 0,
+    "sentRequests": 0,
+    "responsesReceived": 0,
+    "closedRequests": 0,
+    "agenciesInQueue": 0
+  },
+  "currentCampaignStatus": {
+    "activeCampaigns": 0,
+    "totalRequestsSent": 0,
+    "totalResponsesReceived": 0,
+    "pendingFollowUps": 0,
+    "dailySendCount": 0,
+    "dailyLimit": 20,
+    "campaigns": []
+  },
+  "missingByCategory": {
+    "BODY_CAMERA": 110,
+    "USE_OF_FORCE": 110,
+    "INTERNAL_AFFAIRS": 120,
+    "DISCIPLINE": 120,
+    "PURSUIT": 120,
+    "OFFICER_INVOLVED_SHOOTING": 120,
+    "TRAINING": 120
+  },
+  "agencyReadiness": [
+    {
+      "agencyName": "Los Angeles Police Department",
+      "city": "Los Angeles",
+      "county": "Los Angeles",
+      "website": "https://www.lapdonline.org",
+      "estimatedEmail": "records@lapdonline.org",
+      "populationEstimate": 3900000,
+      "priority": 467,
+      "missingPolicies": [
+        {
+          "topicName": "Body-Worn Cameras — Evidence Chain of Custody",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Malfunction Reporting",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Authorized Force Options",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Deadly Force Authorization",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — De-escalation Requirements",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Reporting Requirements",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Less-Lethal Force Options",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Continuum Model",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Choke Hold Prohibition",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Carotid Restraint Restrictions",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Prone Restraint Limitations",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Against Restrained Persons",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Documentation Standards",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Activation Requirements",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Recording Retention Schedule",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Public Release Procedures",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Supervisor Review Requirements",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Equipment Standards",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Privacy Considerations",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Deactivation Protocols",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — BWC Data Storage Standards",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Redaction Procedures",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Complaint Intake Procedures",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Investigation Timeline Requirements",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Sustained Findings Criteria",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Citizen Complaint Processing",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Anonymous Complaint Handling",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — IA Case Classification",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Witness Interview Protocols",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Evidence Collection Standards",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Case Disposition Categories",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Appeal Rights and Procedures",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Confidentiality Requirements",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — IA Annual Reporting",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Progressive Discipline Schedule",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Written Reprimand Procedures",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Suspension Without Pay",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Demotion Criteria",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Termination Proceedings",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Skelly Hearing Rights",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Arbitration Procedures",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Discipline Matrix Categories",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Mitigating Factors",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Aggravating Factors",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Last Chance Agreements",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Return to Duty Conditions",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Authorization Criteria",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Supervisor Approval Requirements",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Termination Tactics",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Tire Deflation Device Use",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — PIT Maneuver Authorization",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Reporting Requirements",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Post-Pursuit Review Board",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Speed Limitations",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Multi-Jurisdiction Pursuit Protocols",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Civilian Safety Considerations",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Air Support During Pursuit",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Driving Training",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — OIS Investigation Protocol",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Scene Preservation Requirements",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Involved Officer Separation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Compelled Statement Procedures",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — DA Referral Timeline",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Administrative Investigation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Post-Shooting Psychological Services",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Return to Duty Evaluation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Public Notification",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Community Briefing Requirements",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — OIS Review Board",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Annual OIS Statistical Report",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Academy Training Curriculum",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Annual In-Service Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Firearms Qualification Standards",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Defensive Tactics Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Emergency Vehicle Operations",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Cultural Awareness Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Mental Health Crisis Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Legal Updates Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — First Aid/CPR Certification",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Specialty Training Programs",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Training Documentation",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Remedial Training Procedures",
+          "category": "TRAINING",
+          "isCritical": false
+        }
+      ],
+      "missingCriticalCount": 46,
+      "missingImportantCount": 36
+    },
+    {
+      "agencyName": "San Diego Police Department",
+      "city": "San Diego",
+      "county": "San Diego",
+      "website": "https://www.sandiego.gov/police",
+      "estimatedEmail": "records@sandiego.gov",
+      "populationEstimate": 1400000,
+      "priority": 466,
+      "missingPolicies": [
+        {
+          "topicName": "Body-Worn Cameras — Evidence Chain of Custody",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Malfunction Reporting",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Authorized Force Options",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Deadly Force Authorization",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — De-escalation Requirements",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Reporting Requirements",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Less-Lethal Force Options",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Continuum Model",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Choke Hold Prohibition",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Carotid Restraint Restrictions",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Prone Restraint Limitations",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Against Restrained Persons",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Documentation Standards",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Activation Requirements",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Recording Retention Schedule",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Public Release Procedures",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Supervisor Review Requirements",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Equipment Standards",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Privacy Considerations",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Deactivation Protocols",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — BWC Data Storage Standards",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Redaction Procedures",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Complaint Intake Procedures",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Investigation Timeline Requirements",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Sustained Findings Criteria",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Citizen Complaint Processing",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Anonymous Complaint Handling",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — IA Case Classification",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Witness Interview Protocols",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Evidence Collection Standards",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Case Disposition Categories",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Appeal Rights and Procedures",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Confidentiality Requirements",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — IA Annual Reporting",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Progressive Discipline Schedule",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Written Reprimand Procedures",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Suspension Without Pay",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Demotion Criteria",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Termination Proceedings",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Skelly Hearing Rights",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Arbitration Procedures",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Discipline Matrix Categories",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Mitigating Factors",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Aggravating Factors",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Last Chance Agreements",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Return to Duty Conditions",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Authorization Criteria",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Supervisor Approval Requirements",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Termination Tactics",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Tire Deflation Device Use",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — PIT Maneuver Authorization",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Reporting Requirements",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Post-Pursuit Review Board",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Speed Limitations",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Multi-Jurisdiction Pursuit Protocols",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Civilian Safety Considerations",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Air Support During Pursuit",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Driving Training",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — OIS Investigation Protocol",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Scene Preservation Requirements",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Involved Officer Separation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Compelled Statement Procedures",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — DA Referral Timeline",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Administrative Investigation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Post-Shooting Psychological Services",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Return to Duty Evaluation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Public Notification",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Community Briefing Requirements",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — OIS Review Board",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Annual OIS Statistical Report",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Academy Training Curriculum",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Annual In-Service Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Firearms Qualification Standards",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Defensive Tactics Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Emergency Vehicle Operations",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Cultural Awareness Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Mental Health Crisis Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Legal Updates Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — First Aid/CPR Certification",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Specialty Training Programs",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Training Documentation",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Remedial Training Procedures",
+          "category": "TRAINING",
+          "isCritical": false
+        }
+      ],
+      "missingCriticalCount": 46,
+      "missingImportantCount": 36
+    },
+    {
+      "agencyName": "San Jose Police Department",
+      "city": "San Jose",
+      "county": "Santa Clara",
+      "website": "https://www.sjpd.org",
+      "estimatedEmail": "records@sjpd.org",
+      "populationEstimate": 1030000,
+      "priority": 466,
+      "missingPolicies": [
+        {
+          "topicName": "Body-Worn Cameras — Evidence Chain of Custody",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Malfunction Reporting",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Authorized Force Options",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Deadly Force Authorization",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — De-escalation Requirements",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Reporting Requirements",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Less-Lethal Force Options",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Continuum Model",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Choke Hold Prohibition",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Carotid Restraint Restrictions",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Prone Restraint Limitations",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Against Restrained Persons",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Documentation Standards",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Activation Requirements",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Recording Retention Schedule",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Public Release Procedures",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Supervisor Review Requirements",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Equipment Standards",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Privacy Considerations",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Deactivation Protocols",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — BWC Data Storage Standards",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Redaction Procedures",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Complaint Intake Procedures",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Investigation Timeline Requirements",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Sustained Findings Criteria",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Citizen Complaint Processing",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Anonymous Complaint Handling",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — IA Case Classification",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Witness Interview Protocols",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Evidence Collection Standards",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Case Disposition Categories",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Appeal Rights and Procedures",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Confidentiality Requirements",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — IA Annual Reporting",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Progressive Discipline Schedule",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Written Reprimand Procedures",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Suspension Without Pay",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Demotion Criteria",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Termination Proceedings",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Skelly Hearing Rights",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Arbitration Procedures",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Discipline Matrix Categories",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Mitigating Factors",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Aggravating Factors",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Last Chance Agreements",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Return to Duty Conditions",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Authorization Criteria",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Supervisor Approval Requirements",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Termination Tactics",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Tire Deflation Device Use",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — PIT Maneuver Authorization",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Reporting Requirements",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Post-Pursuit Review Board",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Speed Limitations",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Multi-Jurisdiction Pursuit Protocols",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Civilian Safety Considerations",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Air Support During Pursuit",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Driving Training",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — OIS Investigation Protocol",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Scene Preservation Requirements",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Involved Officer Separation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Compelled Statement Procedures",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — DA Referral Timeline",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Administrative Investigation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Post-Shooting Psychological Services",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Return to Duty Evaluation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Public Notification",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Community Briefing Requirements",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — OIS Review Board",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Annual OIS Statistical Report",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Academy Training Curriculum",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Annual In-Service Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Firearms Qualification Standards",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Defensive Tactics Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Emergency Vehicle Operations",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Cultural Awareness Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Mental Health Crisis Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Legal Updates Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — First Aid/CPR Certification",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Specialty Training Programs",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Training Documentation",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Remedial Training Procedures",
+          "category": "TRAINING",
+          "isCritical": false
+        }
+      ],
+      "missingCriticalCount": 46,
+      "missingImportantCount": 36
+    },
+    {
+      "agencyName": "Sacramento Police Department",
+      "city": "Sacramento",
+      "county": "Sacramento",
+      "website": "https://www.cityofsacramento.gov/police",
+      "estimatedEmail": "records@cityofsacramento.gov",
+      "populationEstimate": 525000,
+      "priority": 466,
+      "missingPolicies": [
+        {
+          "topicName": "Body-Worn Cameras — Evidence Chain of Custody",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Malfunction Reporting",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Authorized Force Options",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Deadly Force Authorization",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — De-escalation Requirements",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Reporting Requirements",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Less-Lethal Force Options",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Continuum Model",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Choke Hold Prohibition",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Carotid Restraint Restrictions",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Prone Restraint Limitations",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Against Restrained Persons",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Documentation Standards",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Activation Requirements",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Recording Retention Schedule",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Public Release Procedures",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Supervisor Review Requirements",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Equipment Standards",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Privacy Considerations",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Deactivation Protocols",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — BWC Data Storage Standards",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Redaction Procedures",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Complaint Intake Procedures",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Investigation Timeline Requirements",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Sustained Findings Criteria",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Citizen Complaint Processing",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Anonymous Complaint Handling",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — IA Case Classification",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Witness Interview Protocols",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Evidence Collection Standards",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Case Disposition Categories",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Appeal Rights and Procedures",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Confidentiality Requirements",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — IA Annual Reporting",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Progressive Discipline Schedule",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Written Reprimand Procedures",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Suspension Without Pay",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Demotion Criteria",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Termination Proceedings",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Skelly Hearing Rights",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Arbitration Procedures",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Discipline Matrix Categories",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Mitigating Factors",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Aggravating Factors",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Last Chance Agreements",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Return to Duty Conditions",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Authorization Criteria",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Supervisor Approval Requirements",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Termination Tactics",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Tire Deflation Device Use",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — PIT Maneuver Authorization",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Reporting Requirements",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Post-Pursuit Review Board",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Speed Limitations",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Multi-Jurisdiction Pursuit Protocols",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Civilian Safety Considerations",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Air Support During Pursuit",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Driving Training",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — OIS Investigation Protocol",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Scene Preservation Requirements",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Involved Officer Separation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Compelled Statement Procedures",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — DA Referral Timeline",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Administrative Investigation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Post-Shooting Psychological Services",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Return to Duty Evaluation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Public Notification",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Community Briefing Requirements",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — OIS Review Board",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Annual OIS Statistical Report",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Academy Training Curriculum",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Annual In-Service Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Firearms Qualification Standards",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Defensive Tactics Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Emergency Vehicle Operations",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Cultural Awareness Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Mental Health Crisis Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Legal Updates Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — First Aid/CPR Certification",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Specialty Training Programs",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Training Documentation",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Remedial Training Procedures",
+          "category": "TRAINING",
+          "isCritical": false
+        }
+      ],
+      "missingCriticalCount": 46,
+      "missingImportantCount": 36
+    },
+    {
+      "agencyName": "Oakland Police Department",
+      "city": "Oakland",
+      "county": "Alameda",
+      "website": "https://www.oaklandca.gov/departments/police",
+      "estimatedEmail": "records@oaklandca.gov",
+      "populationEstimate": 433000,
+      "priority": 466,
+      "missingPolicies": [
+        {
+          "topicName": "Body-Worn Cameras — Evidence Chain of Custody",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Malfunction Reporting",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Authorized Force Options",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Deadly Force Authorization",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — De-escalation Requirements",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Reporting Requirements",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Less-Lethal Force Options",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Continuum Model",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Choke Hold Prohibition",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Carotid Restraint Restrictions",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Prone Restraint Limitations",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Against Restrained Persons",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Documentation Standards",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Activation Requirements",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Recording Retention Schedule",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Public Release Procedures",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Supervisor Review Requirements",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Equipment Standards",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Privacy Considerations",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Deactivation Protocols",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — BWC Data Storage Standards",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Redaction Procedures",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Complaint Intake Procedures",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Investigation Timeline Requirements",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Sustained Findings Criteria",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Citizen Complaint Processing",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Anonymous Complaint Handling",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — IA Case Classification",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Witness Interview Protocols",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Evidence Collection Standards",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Case Disposition Categories",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Appeal Rights and Procedures",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Confidentiality Requirements",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — IA Annual Reporting",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Progressive Discipline Schedule",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Written Reprimand Procedures",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Suspension Without Pay",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Demotion Criteria",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Termination Proceedings",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Skelly Hearing Rights",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Arbitration Procedures",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Discipline Matrix Categories",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Mitigating Factors",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Aggravating Factors",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Last Chance Agreements",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Return to Duty Conditions",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Authorization Criteria",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Supervisor Approval Requirements",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Termination Tactics",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Tire Deflation Device Use",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — PIT Maneuver Authorization",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Reporting Requirements",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Post-Pursuit Review Board",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Speed Limitations",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Multi-Jurisdiction Pursuit Protocols",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Civilian Safety Considerations",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Air Support During Pursuit",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Driving Training",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — OIS Investigation Protocol",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Scene Preservation Requirements",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Involved Officer Separation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Compelled Statement Procedures",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — DA Referral Timeline",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Administrative Investigation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Post-Shooting Psychological Services",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Return to Duty Evaluation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Public Notification",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Community Briefing Requirements",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — OIS Review Board",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Annual OIS Statistical Report",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Academy Training Curriculum",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Annual In-Service Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Firearms Qualification Standards",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Defensive Tactics Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Emergency Vehicle Operations",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Cultural Awareness Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Mental Health Crisis Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Legal Updates Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — First Aid/CPR Certification",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Specialty Training Programs",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Training Documentation",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Remedial Training Procedures",
+          "category": "TRAINING",
+          "isCritical": false
+        }
+      ],
+      "missingCriticalCount": 46,
+      "missingImportantCount": 36
+    },
+    {
+      "agencyName": "Long Beach Police Department",
+      "city": "Long Beach",
+      "county": "Los Angeles",
+      "website": "https://www.longbeach.gov/police",
+      "estimatedEmail": "records@longbeach.gov",
+      "populationEstimate": 466000,
+      "priority": 466,
+      "missingPolicies": [
+        {
+          "topicName": "Body-Worn Cameras — Evidence Chain of Custody",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Malfunction Reporting",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Authorized Force Options",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Deadly Force Authorization",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — De-escalation Requirements",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Reporting Requirements",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Less-Lethal Force Options",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Continuum Model",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Choke Hold Prohibition",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Carotid Restraint Restrictions",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Prone Restraint Limitations",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Against Restrained Persons",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Documentation Standards",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Activation Requirements",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Recording Retention Schedule",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Public Release Procedures",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Supervisor Review Requirements",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Equipment Standards",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Privacy Considerations",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Deactivation Protocols",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — BWC Data Storage Standards",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Redaction Procedures",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Complaint Intake Procedures",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Investigation Timeline Requirements",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Sustained Findings Criteria",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Citizen Complaint Processing",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Anonymous Complaint Handling",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — IA Case Classification",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Witness Interview Protocols",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Evidence Collection Standards",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Case Disposition Categories",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Appeal Rights and Procedures",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Confidentiality Requirements",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — IA Annual Reporting",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Progressive Discipline Schedule",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Written Reprimand Procedures",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Suspension Without Pay",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Demotion Criteria",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Termination Proceedings",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Skelly Hearing Rights",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Arbitration Procedures",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Discipline Matrix Categories",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Mitigating Factors",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Aggravating Factors",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Last Chance Agreements",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Return to Duty Conditions",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Authorization Criteria",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Supervisor Approval Requirements",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Termination Tactics",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Tire Deflation Device Use",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — PIT Maneuver Authorization",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Reporting Requirements",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Post-Pursuit Review Board",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Speed Limitations",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Multi-Jurisdiction Pursuit Protocols",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Civilian Safety Considerations",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Air Support During Pursuit",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Driving Training",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — OIS Investigation Protocol",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Scene Preservation Requirements",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Involved Officer Separation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Compelled Statement Procedures",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — DA Referral Timeline",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Administrative Investigation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Post-Shooting Psychological Services",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Return to Duty Evaluation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Public Notification",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Community Briefing Requirements",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — OIS Review Board",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Annual OIS Statistical Report",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Academy Training Curriculum",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Annual In-Service Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Firearms Qualification Standards",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Defensive Tactics Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Emergency Vehicle Operations",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Cultural Awareness Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Mental Health Crisis Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Legal Updates Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — First Aid/CPR Certification",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Specialty Training Programs",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Training Documentation",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Remedial Training Procedures",
+          "category": "TRAINING",
+          "isCritical": false
+        }
+      ],
+      "missingCriticalCount": 46,
+      "missingImportantCount": 36
+    },
+    {
+      "agencyName": "Fresno Police Department",
+      "city": "Fresno",
+      "county": "Fresno",
+      "website": "https://www.fresno.gov/police",
+      "estimatedEmail": "records@fresno.gov",
+      "populationEstimate": 542000,
+      "priority": 466,
+      "missingPolicies": [
+        {
+          "topicName": "Body-Worn Cameras — Evidence Chain of Custody",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Malfunction Reporting",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Authorized Force Options",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Deadly Force Authorization",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — De-escalation Requirements",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Reporting Requirements",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Less-Lethal Force Options",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Continuum Model",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Choke Hold Prohibition",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Carotid Restraint Restrictions",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Prone Restraint Limitations",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Against Restrained Persons",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Documentation Standards",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Activation Requirements",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Recording Retention Schedule",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Public Release Procedures",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Supervisor Review Requirements",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Equipment Standards",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Privacy Considerations",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Deactivation Protocols",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — BWC Data Storage Standards",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Redaction Procedures",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Complaint Intake Procedures",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Investigation Timeline Requirements",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Sustained Findings Criteria",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Citizen Complaint Processing",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Anonymous Complaint Handling",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — IA Case Classification",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Witness Interview Protocols",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Evidence Collection Standards",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Case Disposition Categories",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Appeal Rights and Procedures",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Confidentiality Requirements",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — IA Annual Reporting",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Progressive Discipline Schedule",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Written Reprimand Procedures",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Suspension Without Pay",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Demotion Criteria",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Termination Proceedings",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Skelly Hearing Rights",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Arbitration Procedures",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Discipline Matrix Categories",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Mitigating Factors",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Aggravating Factors",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Last Chance Agreements",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Return to Duty Conditions",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Authorization Criteria",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Supervisor Approval Requirements",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Termination Tactics",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Tire Deflation Device Use",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — PIT Maneuver Authorization",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Reporting Requirements",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Post-Pursuit Review Board",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Speed Limitations",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Multi-Jurisdiction Pursuit Protocols",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Civilian Safety Considerations",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Air Support During Pursuit",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Driving Training",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — OIS Investigation Protocol",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Scene Preservation Requirements",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Involved Officer Separation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Compelled Statement Procedures",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — DA Referral Timeline",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Administrative Investigation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Post-Shooting Psychological Services",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Return to Duty Evaluation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Public Notification",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Community Briefing Requirements",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — OIS Review Board",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Annual OIS Statistical Report",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Academy Training Curriculum",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Annual In-Service Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Firearms Qualification Standards",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Defensive Tactics Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Emergency Vehicle Operations",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Cultural Awareness Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Mental Health Crisis Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Legal Updates Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — First Aid/CPR Certification",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Specialty Training Programs",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Training Documentation",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Remedial Training Procedures",
+          "category": "TRAINING",
+          "isCritical": false
+        }
+      ],
+      "missingCriticalCount": 46,
+      "missingImportantCount": 36
+    },
+    {
+      "agencyName": "Stockton Police Department",
+      "city": "Stockton",
+      "county": "San Joaquin",
+      "website": "https://www.stocktonca.gov/government/departments/police",
+      "estimatedEmail": "records@stocktonca.gov",
+      "populationEstimate": 320000,
+      "priority": 466,
+      "missingPolicies": [
+        {
+          "topicName": "Body-Worn Cameras — Evidence Chain of Custody",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Malfunction Reporting",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Authorized Force Options",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Deadly Force Authorization",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — De-escalation Requirements",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Reporting Requirements",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Less-Lethal Force Options",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Continuum Model",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Choke Hold Prohibition",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Carotid Restraint Restrictions",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Prone Restraint Limitations",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Against Restrained Persons",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Documentation Standards",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Activation Requirements",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Recording Retention Schedule",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Public Release Procedures",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Supervisor Review Requirements",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Equipment Standards",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Privacy Considerations",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Deactivation Protocols",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — BWC Data Storage Standards",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Redaction Procedures",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Complaint Intake Procedures",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Investigation Timeline Requirements",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Sustained Findings Criteria",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Citizen Complaint Processing",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Anonymous Complaint Handling",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — IA Case Classification",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Witness Interview Protocols",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Evidence Collection Standards",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Case Disposition Categories",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Appeal Rights and Procedures",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Confidentiality Requirements",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — IA Annual Reporting",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Progressive Discipline Schedule",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Written Reprimand Procedures",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Suspension Without Pay",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Demotion Criteria",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Termination Proceedings",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Skelly Hearing Rights",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Arbitration Procedures",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Discipline Matrix Categories",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Mitigating Factors",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Aggravating Factors",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Last Chance Agreements",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Return to Duty Conditions",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Authorization Criteria",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Supervisor Approval Requirements",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Termination Tactics",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Tire Deflation Device Use",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — PIT Maneuver Authorization",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Reporting Requirements",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Post-Pursuit Review Board",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Speed Limitations",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Multi-Jurisdiction Pursuit Protocols",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Civilian Safety Considerations",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Air Support During Pursuit",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Driving Training",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — OIS Investigation Protocol",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Scene Preservation Requirements",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Involved Officer Separation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Compelled Statement Procedures",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — DA Referral Timeline",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Administrative Investigation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Post-Shooting Psychological Services",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Return to Duty Evaluation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Public Notification",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Community Briefing Requirements",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — OIS Review Board",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Annual OIS Statistical Report",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Academy Training Curriculum",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Annual In-Service Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Firearms Qualification Standards",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Defensive Tactics Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Emergency Vehicle Operations",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Cultural Awareness Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Mental Health Crisis Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Legal Updates Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — First Aid/CPR Certification",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Specialty Training Programs",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Training Documentation",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Remedial Training Procedures",
+          "category": "TRAINING",
+          "isCritical": false
+        }
+      ],
+      "missingCriticalCount": 46,
+      "missingImportantCount": 36
+    },
+    {
+      "agencyName": "Riverside Police Department",
+      "city": "Riverside",
+      "county": "Riverside",
+      "website": "https://www.riversideca.gov/rpd",
+      "estimatedEmail": "records@riversideca.gov",
+      "populationEstimate": 314000,
+      "priority": 465,
+      "missingPolicies": [
+        {
+          "topicName": "Body-Worn Cameras — Evidence Chain of Custody",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Malfunction Reporting",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Authorized Force Options",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Deadly Force Authorization",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — De-escalation Requirements",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Reporting Requirements",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Less-Lethal Force Options",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Continuum Model",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Choke Hold Prohibition",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Carotid Restraint Restrictions",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Prone Restraint Limitations",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Against Restrained Persons",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Documentation Standards",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Activation Requirements",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Recording Retention Schedule",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Public Release Procedures",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Supervisor Review Requirements",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Equipment Standards",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Privacy Considerations",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Deactivation Protocols",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — BWC Data Storage Standards",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Redaction Procedures",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Complaint Intake Procedures",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Investigation Timeline Requirements",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Sustained Findings Criteria",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Citizen Complaint Processing",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Anonymous Complaint Handling",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — IA Case Classification",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Witness Interview Protocols",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Evidence Collection Standards",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Case Disposition Categories",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Appeal Rights and Procedures",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Confidentiality Requirements",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — IA Annual Reporting",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Progressive Discipline Schedule",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Written Reprimand Procedures",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Suspension Without Pay",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Demotion Criteria",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Termination Proceedings",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Skelly Hearing Rights",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Arbitration Procedures",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Discipline Matrix Categories",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Mitigating Factors",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Aggravating Factors",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Last Chance Agreements",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Return to Duty Conditions",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Authorization Criteria",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Supervisor Approval Requirements",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Termination Tactics",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Tire Deflation Device Use",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — PIT Maneuver Authorization",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Reporting Requirements",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Post-Pursuit Review Board",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Speed Limitations",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Multi-Jurisdiction Pursuit Protocols",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Civilian Safety Considerations",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Air Support During Pursuit",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Driving Training",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — OIS Investigation Protocol",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Scene Preservation Requirements",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Involved Officer Separation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Compelled Statement Procedures",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — DA Referral Timeline",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Administrative Investigation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Post-Shooting Psychological Services",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Return to Duty Evaluation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Public Notification",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Community Briefing Requirements",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — OIS Review Board",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Annual OIS Statistical Report",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Academy Training Curriculum",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Annual In-Service Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Firearms Qualification Standards",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Defensive Tactics Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Emergency Vehicle Operations",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Cultural Awareness Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Mental Health Crisis Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Legal Updates Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — First Aid/CPR Certification",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Specialty Training Programs",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Training Documentation",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Remedial Training Procedures",
+          "category": "TRAINING",
+          "isCritical": false
+        }
+      ],
+      "missingCriticalCount": 46,
+      "missingImportantCount": 36
+    },
+    {
+      "agencyName": "Santa Ana Police Department",
+      "city": "Santa Ana",
+      "county": "Orange",
+      "website": "https://www.santa-ana.org/police-department",
+      "estimatedEmail": "records@santa-ana.org",
+      "populationEstimate": 310000,
+      "priority": 465,
+      "missingPolicies": [
+        {
+          "topicName": "Body-Worn Cameras — Evidence Chain of Custody",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Malfunction Reporting",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Authorized Force Options",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Deadly Force Authorization",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — De-escalation Requirements",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Reporting Requirements",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Less-Lethal Force Options",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Continuum Model",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Choke Hold Prohibition",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Carotid Restraint Restrictions",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Prone Restraint Limitations",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Against Restrained Persons",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Use of Force — Force Documentation Standards",
+          "category": "USE_OF_FORCE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Activation Requirements",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Recording Retention Schedule",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Public Release Procedures",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Supervisor Review Requirements",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Equipment Standards",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Privacy Considerations",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Camera Deactivation Protocols",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — BWC Data Storage Standards",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Body-Worn Cameras — Redaction Procedures",
+          "category": "BODY_CAMERA",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Complaint Intake Procedures",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Investigation Timeline Requirements",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Sustained Findings Criteria",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Citizen Complaint Processing",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Anonymous Complaint Handling",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — IA Case Classification",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Witness Interview Protocols",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Evidence Collection Standards",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Case Disposition Categories",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Appeal Rights and Procedures",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — Confidentiality Requirements",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Internal Affairs — IA Annual Reporting",
+          "category": "INTERNAL_AFFAIRS",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Progressive Discipline Schedule",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Written Reprimand Procedures",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Suspension Without Pay",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Demotion Criteria",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Termination Proceedings",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Skelly Hearing Rights",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Arbitration Procedures",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Discipline Matrix Categories",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Mitigating Factors",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Aggravating Factors",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Last Chance Agreements",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Discipline and Corrective Action — Return to Duty Conditions",
+          "category": "DISCIPLINE",
+          "isCritical": true
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Authorization Criteria",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Supervisor Approval Requirements",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Termination Tactics",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Tire Deflation Device Use",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — PIT Maneuver Authorization",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Reporting Requirements",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Post-Pursuit Review Board",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Speed Limitations",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Multi-Jurisdiction Pursuit Protocols",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Civilian Safety Considerations",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Air Support During Pursuit",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Vehicle Pursuits — Pursuit Driving Training",
+          "category": "PURSUIT",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — OIS Investigation Protocol",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Scene Preservation Requirements",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Involved Officer Separation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Compelled Statement Procedures",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — DA Referral Timeline",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Administrative Investigation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Post-Shooting Psychological Services",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Return to Duty Evaluation",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Public Notification",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Community Briefing Requirements",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — OIS Review Board",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Officer-Involved Shootings — Annual OIS Statistical Report",
+          "category": "OFFICER_INVOLVED_SHOOTING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Academy Training Curriculum",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Annual In-Service Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Firearms Qualification Standards",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Defensive Tactics Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Emergency Vehicle Operations",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Cultural Awareness Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Mental Health Crisis Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Legal Updates Training",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — First Aid/CPR Certification",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Specialty Training Programs",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Training Documentation",
+          "category": "TRAINING",
+          "isCritical": false
+        },
+        {
+          "topicName": "Training — Remedial Training Procedures",
+          "category": "TRAINING",
+          "isCritical": false
+        }
+      ],
+      "missingCriticalCount": 46,
+      "missingImportantCount": 36
+    }
+  ],
+  "validationRuntimeMs": 151
+}

@@ -1,0 +1,23 @@
+{
+  "phase": 101,
+  "title": "Duplicate Document Detection",
+  "generatedAt": "2026-03-09T21:53:58.556Z",
+  "purpose": "Detect identical/duplicate policies across and within agencies",
+  "method": "SHA256 hash of normalized text content + title-based near-duplicate detection",
+  "summary": {
+    "totalDocuments": 8189,
+    "documentsWithContent": 8189,
+    "documentsWithoutContent": 0,
+    "uniqueHashes": 8189,
+    "duplicateGroups": 0,
+    "totalDuplicateDocuments": 0,
+    "crossAgencyDuplicateGroups": 0,
+    "sameAgencyDuplicateGroups": 0,
+    "deduplicationSavings": "0.0%",
+    "runtimeMs": 242
+  },
+  "crossAgencyDuplicates": [],
+  "sameAgencyDuplicates": [],
+  "titleBasedNearDuplicates": [],
+  "allDuplicateGroups": []
+}

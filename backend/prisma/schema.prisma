@@ -194,3 +194,805 @@ model DoctrineMatchLog {
   @@index([similarityScore])
   @@map("doctrine_match_log")
 }
+
+// ---------------------------------------------------------------------------
+// Agency — California law enforcement agency registry (POST directory)
+// ---------------------------------------------------------------------------
+
+model Agency {
+  agencyId            String   @id @default(uuid())
+  agencyName          String
+  agencyType          String?  // Police | Sheriff | State | TaskForce | Probation | Corrections | District_Attorney | University | Transit | Communications | Coroner | Other
+  city                String?
+  county              String?
+  populationEstimate  Int?
+  jurisdictionRank    Int?
+
+  website             String?
+  postDirectoryUrl    String?
+
+  recordsRequestUrl   String?
+  policyCollectionUrl String?
+
+  policiesDiscovered  Boolean  @default(false)
+
+  crawlStatus         String   @default("pending") // pending | in_progress | completed | failed | skipped
+  crawlError          String?
+  lastCrawledAt       DateTime?
+  pagesFound          Int      @default(0)
+  policyPagesFound    Int      @default(0)
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  PolicyDocuments     PolicyDocument[]
+  PolicyCoverage      PolicyCoverage[]
+  CPRAAgencyRequests  CPRAAgencyRequest[]
+  CPRAAnnualUpdates   CPRAAnnualUpdate[]
+  AgencyPolicyStatus  AgencyPolicyStatus?
+
+  @@unique([agencyName, county])
+  @@index([county])
+  @@index([agencyType])
+  @@index([crawlStatus])
+  @@index([jurisdictionRank])
+  @@map("agencies")
+}
+
+// ---------------------------------------------------------------------------
+// PolicyTopic — normalized policy topic taxonomy (derived from CHP corpus)
+// ---------------------------------------------------------------------------
+
+model PolicyTopic {
+  id           String   @id @default(uuid())
+  topicName    String   @unique
+  category     String   // Use_of_Force | Officer_Conduct | Internal_Affairs | Discipline | Arrest | Search_Seizure | Pursuit | Body_Camera | Evidence_Handling | Interrogation | Traffic | Training | Informants | Records | Custody | OIS | Critical_Incident | Special_Units
+  keywords     String   // JSON array of search terms
+  description  String?
+  chpReference String?  // CHP policy number reference (e.g. HPM 100.68)
+  sortOrder    Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  PolicyDocuments     PolicyDocument[]
+  PolicyCoverage      PolicyCoverage[]
+
+  @@index([category])
+  @@map("policy_topics")
+}
+
+// ---------------------------------------------------------------------------
+// PolicyDocument — discovered policy documents from agency websites
+// ---------------------------------------------------------------------------
+
+model PolicyDocument {
+  documentId     String   @id @default(uuid())
+
+  agencyId       String
+  Agency         Agency   @relation(fields: [agencyId], references: [agencyId])
+
+  topicId        String?
+  Topic          PolicyTopic? @relation(fields: [topicId], references: [id])
+
+  documentType   String?  // USE_OF_FORCE | INTERNAL_AFFAIRS | BODY_CAMERA | DISCIPLINE | TRAINING | GENERAL_POLICY
+  title          String?
+  policyNumber   String?  // e.g. HPM 100.68
+
+  sourceUrl      String
+  s3Url          String?
+
+  mimeType       String?
+  fileSizeBytes  Int?
+
+  textExtracted  Boolean  @default(false)
+  textContent    String?
+  ocrStatus      String   @default("pending") // pending | in_progress | completed | failed | skipped
+  ocrError       String?
+
+  classificationStatus String @default("pending") // pending | completed | failed
+  classificationScore  Float?
+
+  isChpCanonical Boolean  @default(false) // true for CHP reference policies
+  matchedTopicConfidence Float? // confidence of topic matching (0-1)
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([agencyId])
+  @@index([topicId])
+  @@index([documentType])
+  @@index([ocrStatus])
+  @@index([classificationStatus])
+  @@index([isChpCanonical])
+  @@map("policy_documents")
+}
+
+// ---------------------------------------------------------------------------
+// PolicyCoverage — tracks which topics each agency has policies for
+// ---------------------------------------------------------------------------
+
+model PolicyCoverage {
+  id          String   @id @default(uuid())
+  agencyId    String
+  Agency      Agency   @relation(fields: [agencyId], references: [agencyId])
+
+  topicId     String
+  Topic       PolicyTopic @relation(fields: [topicId], references: [id])
+
+  policyFound Boolean  @default(false)
+  documentId  String?  // reference to the discovered PolicyDocument
+  sourceUrl   String?
+  notes       String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([agencyId, topicId])
+  @@index([agencyId])
+  @@index([topicId])
+  @@index([policyFound])
+  @@map("policy_coverage")
+}
+
+// ---------------------------------------------------------------------------
+// CPRA Request Campaign — tracks CPRA request campaigns
+// ---------------------------------------------------------------------------
+
+model CPRARequestCampaign {
+  campaignId   String   @id @default(uuid())
+  campaignName String
+  createdAt    DateTime @default(now())
+  active       Boolean  @default(true)
+
+  requests     CPRAAgencyRequest[]
+
+  @@index([active])
+  @@map("cpra_request_campaigns")
+}
+
+// ---------------------------------------------------------------------------
+// CPRA Agency Request — tracks individual CPRA requests per agency
+// ---------------------------------------------------------------------------
+
+model CPRAAgencyRequest {
+  requestId          String   @id @default(uuid())
+
+  campaignId         String
+  Campaign           CPRARequestCampaign @relation(fields: [campaignId], references: [campaignId])
+
+  agencyId           String
+  Agency             Agency @relation(fields: [agencyId], references: [agencyId])
+
+  status             String   @default("draft") // draft | sent | awaiting_response | follow_up_1 | follow_up_2 | follow_up_final | documents_received | closed
+
+  sentAt             DateTime?
+  lastFollowUpAt     DateTime?
+
+  responseReceived   Boolean  @default(false)
+  responseReceivedAt DateTime?
+
+  policyReceivedAt   DateTime?
+  annualUpdateDue    DateTime?
+
+  closed             Boolean  @default(false)
+
+  followUpCount      Int      @default(0)
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([campaignId])
+  @@index([agencyId])
+  @@index([status])
+  @@index([closed])
+  @@index([responseReceived])
+  @@index([annualUpdateDue])
+  @@map("cpra_agency_requests")
+}
+
+// ---------------------------------------------------------------------------
+// CPRA Annual Update — tracks yearly policy update request cycles
+// ---------------------------------------------------------------------------
+
+model CPRAAnnualUpdate {
+  updateId           String   @id @default(uuid())
+
+  agencyId           String
+  Agency             Agency @relation(fields: [agencyId], references: [agencyId])
+
+  requestedAt        DateTime
+  responseReceived   Boolean  @default(false)
+  responseReceivedAt DateTime?
+
+  policyReceivedAt   DateTime?
+  annualUpdateDue    DateTime?
+
+  followUpCount      Int      @default(0)
+  lastFollowUpAt     DateTime?
+
+  closed             Boolean  @default(false)
+  status             String   @default("scheduled") // scheduled | sent | follow_up_1 | follow_up_2 | follow_up_final | received | closed
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([agencyId])
+  @@index([annualUpdateDue])
+  @@index([status])
+  @@index([closed])
+  @@map("cpra_annual_updates")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 121 — Agency Policy Status (operational intelligence)
+// ---------------------------------------------------------------------------
+
+model AgencyPolicyStatus {
+  id                    String    @id @default(uuid())
+  agencyId              String    @unique
+  Agency                Agency    @relation(fields: [agencyId], references: [agencyId])
+
+  agencyName            String
+  city                  String?
+  county                String?
+  website               String?
+
+  lastCrawledAt         DateTime?
+  policiesDiscovered    Int       @default(0)
+  policiesDownloaded    Int       @default(0)
+  policiesIngested      Int       @default(0)
+  coverageScore         Float     @default(0)   // 0-100 percentage
+
+  cpraStatus            String    @default("none") // none | draft | sent | awaiting_response | follow_up | received | closed
+  lastCpraEmailSent     DateTime?
+  cpraDeadline          DateTime?
+  annualUpdateDeadline  DateTime?
+
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([county])
+  @@index([cpraStatus])
+  @@index([coverageScore])
+  @@index([cpraDeadline])
+  @@map("agency_policy_status")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 122 — Policy Inventory (every policy obtained)
+// ---------------------------------------------------------------------------
+
+model PolicyInventory {
+  id                        String    @id @default(uuid())
+  policyId                  String    // reference to PolicyDocument.documentId
+  agencyId                  String
+  policyTitle               String?
+  policyTopic               String?   // topic category
+  sourceUrl                 String
+  fileHash                  String?
+  discoveredAt              DateTime  @default(now())
+  downloadedAt              DateTime?
+  ocrProcessedAt            DateTime?
+  classificationConfidence  Float?
+  ingestionStatus           String    @default("discovered") // discovered | downloaded | ocr_complete | classified | ingested | failed
+
+  createdAt                 DateTime  @default(now())
+  updatedAt                 DateTime  @updatedAt
+
+  @@index([agencyId])
+  @@index([ingestionStatus])
+  @@index([policyTopic])
+  @@map("policy_inventory")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 123 — Policy Topic Coverage Matrix (topic × agency status)
+// ---------------------------------------------------------------------------
+
+model PolicyTopicCoverage {
+  id        String   @id @default(uuid())
+  agencyId  String
+  topic     String   // topic name
+  status    String   @default("MISSING") // FOUND | MISSING | CPRA_REQUESTED | RECEIVED
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([agencyId, topic])
+  @@index([agencyId])
+  @@index([topic])
+  @@index([status])
+  @@map("policy_topic_coverage")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 124 — CPRA Request Log (campaign tracking)
+// ---------------------------------------------------------------------------
+
+model CpraRequestLog {
+  id                  String    @id @default(uuid())
+  requestId           String    // reference to CPRAAgencyRequest.requestId
+  agencyId            String
+  emailSentDate       DateTime?
+  emailTemplateUsed   String?
+  recipientEmail      String?
+  responseReceived    Boolean   @default(false)
+  responseDate        DateTime?
+  documentsReceived   Int       @default(0)
+  followUpRequired    Boolean   @default(false)
+  followUpDate        DateTime?
+
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@index([agencyId])
+  @@index([requestId])
+  @@index([responseReceived])
+  @@index([followUpRequired])
+  @@map("cpra_request_log")
+}
+
+// ---------------------------------------------------------------------------
+// Trial Exhibit Scene — saved 3D courtroom exhibit scenes (Phase 63)
+// ---------------------------------------------------------------------------
+
+model TrialExhibitScene {
+  sceneId         String   @id @default(uuid())
+  caseId          String?
+  name            String
+  description     String?
+
+  // Location data
+  latitude        Float
+  longitude       Float
+  address         String?
+
+  // Scene configuration (stored as JSON strings)
+  objectSettings  String   // JSON: { showTrees, showBushes, showVehicles, ... }
+  cameraSettings  String?  // JSON: { position, target, preset }
+  markers         String?  // JSON: array of scene markers
+  sceneData       String?  // JSON: buildings, roads, sidewalks, etc.
+  animationData   String?  // JSON: timeline keyframes
+
+  // Metadata
+  createdBy       String?
+  thumbnail       String?  // base64 PNG thumbnail
+  isPublic        Boolean  @default(false)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([createdBy])
+  @@map("trial_exhibit_scenes")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 129 — Evidence Events (extracted from bodycam, dashcam, audio, transcripts, reports)
+// ---------------------------------------------------------------------------
+
+model EvidenceEvent {
+  eventId         String   @id @default(uuid())
+  caseId          String
+  timestamp       String   // HH:MM:SS or offset seconds
+  eventType       String   // suspect_restrained | taser_deployed | neck_restraint | vehicle_search | verbal_command | miranda_warning | weapon_drawn | handcuffing | physical_strike | officer_proximity | threat_language | compliance_command | uof_warning | other
+  confidence      Float    @default(0)
+  sourceEvidence  String   // reference to evidence document/file
+  sourceType      String   @default("bodycam") // bodycam | dashcam | audio | transcript | police_report
+  description     String?
+  rawText         String?  // extracted text snippet if applicable
+  metadata        String?  // JSON: additional structured data
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([eventType])
+  @@index([sourceType])
+  @@index([confidence])
+  @@map("evidence_events")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 133 — Policy Rules (structured rules from policy documents)
+// ---------------------------------------------------------------------------
+
+model PolicyRule {
+  ruleId          String   @id @default(uuid())
+  policyId        String   // reference to PolicyDocument
+  agencyId        String
+  ruleType        String   // prohibition | requirement | permission | conditional | escalation
+  ruleName        String
+  ruleText        String   // full text of the rule
+  conditions      String?  // JSON: conditions under which rule applies
+  exceptions      String?  // JSON: exceptions to the rule
+  category        String   // Use_of_Force | Pursuit | Body_Camera | Search_Seizure | Arrest | Interrogation | Custody | Officer_Conduct
+  severity        String   @default("standard") // critical | high | standard | low
+  effectiveDate   DateTime?
+  supersededDate  DateTime?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([policyId])
+  @@index([agencyId])
+  @@index([ruleType])
+  @@index([category])
+  @@index([severity])
+  @@map("policy_rules")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 134 — Policy Action Mapping (maps detected actions to policy rules)
+// ---------------------------------------------------------------------------
+
+model PolicyActionMapping {
+  mappingId       String   @id @default(uuid())
+  eventType       String   // matches EvidenceEvent.eventType
+  ruleId          String   // reference to PolicyRule
+  relevanceScore  Float    @default(0) // 0-1 how relevant this rule is to the action
+  mappingReason   String?  // why this rule maps to this action
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([eventType, ruleId])
+  @@index([eventType])
+  @@index([ruleId])
+  @@map("policy_action_mappings")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 135 — Compliance Findings (analysis results)
+// ---------------------------------------------------------------------------
+
+model ComplianceFinding {
+  findingId           String   @id @default(uuid())
+  caseId              String
+  agencyId            String
+  findingType         String   @default("potential_inconsistency") // potential_inconsistency | consistent | insufficient_evidence | requires_review
+  policyReference     String   // e.g. "Use-of-Force Section 3.2"
+  ruleId              String?  // reference to PolicyRule
+  evidenceTimestamp   String   // timestamp from evidence
+  evidenceEventId     String?  // reference to EvidenceEvent
+  detectedAction      String   // what was detected
+  ruleDescription     String   // what the rule states
+  confidence          Float    @default(0) // 0-1 overall confidence
+  evidenceConfidence  Float    @default(0) // confidence in evidence detection
+  ruleConfidence      Float    @default(0) // confidence in rule matching
+  analysisConfidence  Float    @default(0) // confidence in analysis
+  explanation         String?  // plain-language explanation (Phase 145)
+  safetyLanguage      String   @default("potential_policy_inconsistency") // Phase 150 guardrail
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([agencyId])
+  @@index([findingType])
+  @@index([confidence])
+  @@map("compliance_findings")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 136 — Evidence Links (every finding linked to source evidence)
+// ---------------------------------------------------------------------------
+
+model EvidenceLink {
+  linkId          String   @id @default(uuid())
+  findingId       String   // reference to ComplianceFinding
+  linkType        String   // video_timestamp | transcript_excerpt | policy_section | document_source | scene_reconstruction
+  sourceReference String   // the actual reference (timestamp, section number, etc.)
+  sourceContent   String?  // excerpt or description
+  sourceUrl       String?  // URL to source if applicable
+  metadata        String?  // JSON: additional data
+
+  createdAt       DateTime @default(now())
+
+  @@index([findingId])
+  @@index([linkType])
+  @@map("evidence_links")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 137 — Compliance Review Queue (human review layer)
+// ---------------------------------------------------------------------------
+
+model ComplianceReviewQueue {
+  reviewId        String    @id @default(uuid())
+  findingId       String    @unique // reference to ComplianceFinding
+  reviewStatus    String    @default("pending") // pending | in_review | approved | rejected | needs_more_info
+  reviewerNotes   String?
+  reviewerId      String?   // staff member reviewing
+  approvedForReport Boolean @default(false)
+  priority        Int       @default(0) // 0=normal, 1=high, 2=urgent
+  assignedAt      DateTime?
+  reviewedAt      DateTime?
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([reviewStatus])
+  @@index([priority])
+  @@index([approvedForReport])
+  @@map("compliance_review_queue")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 142 — Cross-Agency Policy Comparison
+// ---------------------------------------------------------------------------
+
+model CrossAgencyComparison {
+  comparisonId    String   @id @default(uuid())
+  topic           String   // policy topic being compared
+  agencyAId       String
+  agencyAName     String
+  agencyAPolicy   String   // summary of agency A's policy
+  agencyBId       String
+  agencyBName     String
+  agencyBPolicy   String   // summary of agency B's policy
+  differenceType  String   // prohibits_vs_allows | stricter | less_strict | same | no_policy
+  summary         String   // plain-language comparison
+
+  createdAt       DateTime @default(now())
+
+  @@index([topic])
+  @@index([agencyAId])
+  @@index([agencyBId])
+  @@map("cross_agency_comparisons")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 144 — Policy Evolution (track changes over time)
+// ---------------------------------------------------------------------------
+
+model PolicyEvolution {
+  evolutionId     String    @id @default(uuid())
+  agencyId        String
+  policyTopic     String
+  previousVersion String?   // previous policy text/summary
+  currentVersion  String    // current policy text/summary
+  changeType      String    // added | modified | removed | strengthened | weakened
+  changeSummary   String    // plain-language description of change
+  effectiveDate   DateTime?
+  detectedAt      DateTime  @default(now())
+
+  createdAt       DateTime  @default(now())
+
+  @@index([agencyId])
+  @@index([policyTopic])
+  @@index([changeType])
+  @@map("policy_evolution")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 147 — Compliance Audit Trail (every analysis step logged)
+// ---------------------------------------------------------------------------
+
+model ComplianceAuditTrail {
+  auditId         String   @id @default(uuid())
+  caseId          String
+  findingId       String?  // reference to ComplianceFinding if applicable
+  stepName        String   // evidence_upload | event_extraction | action_detection | policy_matching | compliance_analysis | review | report_generation
+  stepDescription String
+  inputData       String?  // JSON: what went in
+  outputData      String?  // JSON: what came out
+  durationMs      Int?
+  status          String   @default("completed") // completed | failed | skipped
+
+  createdAt       DateTime @default(now())
+
+  @@index([caseId])
+  @@index([findingId])
+  @@index([stepName])
+  @@map("compliance_audit_trail")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 167 — Vision Events (bodycam vision analysis results)
+// ---------------------------------------------------------------------------
+
+model VisionEvent {
+  eventId          String   @id @default(uuid())
+  caseId           String
+  sourceId         String
+  timestamp        String
+  frameNumber      Int
+  eventCategory    String   // officer_posture | hand_movement | weapon_deployment | physical_contact | subject_distance | suspect_position | restraint_technique | de_escalation_posture | crowd_formation | vehicle_interaction
+  detections       String   // JSON: VisionDetection[]
+  poseEstimates    String   // JSON: PoseEstimate[]
+  distanceEstimates String  // JSON: DistanceEstimate[]
+  confidence       Float    @default(0)
+  metadata         String?  // JSON
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([sourceId])
+  @@index([eventCategory])
+  @@index([confidence])
+  @@map("vision_events")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 168 — Trajectory Analysis (ballistic/projectile analysis results)
+// ---------------------------------------------------------------------------
+
+model TrajectoryAnalysis {
+  analysisId       String   @id @default(uuid())
+  caseId           String
+  sceneId          String?
+  trajectories     String   // JSON: TrajectoryVector[]
+  impactPredictions String  // JSON: ImpactPrediction[]
+  lineOfFire       String   // JSON: LineOfFire[]
+  ballisticParams  String   // JSON: BallisticParameters
+  summary          String   // JSON: TrajectorySummary
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([sceneId])
+  @@map("trajectory_analyses")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 169 — Visibility Simulation (lighting/visibility results)
+// ---------------------------------------------------------------------------
+
+model VisibilitySimulation {
+  simulationId     String   @id @default(uuid())
+  caseId           String
+  sceneId          String?
+  inputConditions  String   // JSON: LightingConditions
+  visibilityMap    String   // JSON: VisibilityMap
+  shadowMap        String   // JSON: ShadowMap
+  lightSources     String   // JSON: LightSource[]
+  subjectVisibility String  // JSON: SubjectVisibility[]
+  summary          String   // JSON: VisibilitySummary
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([sceneId])
+  @@map("visibility_simulations")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 170 — Line-of-Sight Analysis
+// ---------------------------------------------------------------------------
+
+model LineOfSightAnalysis {
+  analysisId       String   @id @default(uuid())
+  caseId           String
+  sceneId          String?
+  observerPosition String   // JSON: Position3D
+  viewDirection    String   // JSON: ViewDirection
+  fieldOfView      String   // JSON: FieldOfView
+  obstacles        String   // JSON: SceneObstacle[]
+  visibilityResults String  // JSON: VisibilityResult[]
+  obstructionMap   String   // JSON: ObstructionMap
+  summary          String   // JSON: LineOfSightSummary
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([sceneId])
+  @@map("line_of_sight_analyses")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 171 — Camera Sync Results
+// ---------------------------------------------------------------------------
+
+model CameraSyncResult {
+  syncId           String   @id @default(uuid())
+  caseId           String
+  sources          String   // JSON: CameraSource[]
+  syncPairs        String   // JSON: SyncPair[]
+  masterTimeline   String   // JSON: MasterTimelineEvent[]
+  syncQuality      String   // JSON: SyncQuality
+  summary          String   // JSON: SyncSummary
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@map("camera_sync_results")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 172 — Scene Geometry
+// ---------------------------------------------------------------------------
+
+model SceneGeometry {
+  geometryId       String   @id @default(uuid())
+  caseId           String
+  sceneId          String?
+  bounds           String   // JSON: SceneBounds
+  buildings        String   // JSON: Building[]
+  roads            String   // JSON: Road[]
+  sidewalks        String   // JSON: Sidewalk[]
+  vehicles         String   // JSON: Vehicle[]
+  vegetation       String   // JSON: Vegetation[]
+  obstacles        String   // JSON: GeometryObstacle[]
+  terrain          String   // JSON: TerrainData
+  metadata         String   // JSON: SceneMetadata
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([sceneId])
+  @@map("scene_geometries")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 174 — Evidence Graph (unified event graph)
+// ---------------------------------------------------------------------------
+
+model EvidenceGraph {
+  graphId          String   @id @default(uuid())
+  caseId           String
+  nodes            String   // JSON: EvidenceNode[]
+  edges            String   // JSON: EvidenceEdge[]
+  clusters         String   // JSON: EvidenceCluster[]
+  timeline         String   // JSON: UnifiedTimelineEntry[]
+  summary          String   // JSON: GraphSummary
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@map("evidence_graphs")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 175 — Expert Witness Package
+// ---------------------------------------------------------------------------
+
+model ExpertWitnessPackage {
+  packageId        String   @id @default(uuid())
+  caseId           String
+  packageVersion   String
+  expertInfo       String   // JSON: ExpertInfo
+  sections         String   // JSON: PackageSection[]
+  sceneReconstruction String // JSON: SceneReconstructionSection
+  timeline         String   // JSON: TimelineSection
+  policyAnalysis   String   // JSON: PolicyAnalysisSection
+  evidenceClips    String   // JSON: EvidenceClipSection
+  analysisReport   String   // JSON: AnalysisReportSection
+  appendices       String   // JSON: Appendix[]
+  metadata         String   // JSON: PackageMetadata
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@map("expert_witness_packages")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 176 — Jury Visualization
+// ---------------------------------------------------------------------------
+
+model JuryVisualization {
+  visualizationId  String   @id @default(uuid())
+  caseId           String
+  title            String
+  sceneView        String   // JSON: JurySceneView
+  timeline         String   // JSON: JuryTimeline
+  highlightedEvents String  // JSON: JuryHighlight[]
+  narrativeCards   String   // JSON: NarrativeCard[]
+  viewerSettings   String   // JSON: ViewerSettings
+  metadata         String   // JSON: JuryViewMetadata
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@map("jury_visualizations")
+}

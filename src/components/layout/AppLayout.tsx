@@ -33,7 +33,7 @@ export function AppLayout() {
         </main>
         <footer className="px-6 py-4 border-t border-gray-200 bg-white">
           <div className="flex items-center justify-between text-xs text-gray-400">
-            <span>Court Access — Case Intelligence Platform</span>
+            <span>CourtAccess — Criminal Evidence Intelligence Platform</span>
             <span>AI-generated insights are not legal advice. Consult your attorney.</span>
           </div>
         </footer>

@@ -1,0 +1,57 @@
+{
+  "phase": "Phase 164 — Investigator Review Calibration",
+  "generatedAt": "2026-03-10T13:46:47.508Z",
+  "totalFindingsReviewed": 266,
+  "reviewResults": {
+    "confirmed_relevant": 26,
+    "needs_investigation": 235,
+    "false_positive": 5
+  },
+  "calibrationRecommendations": {
+    "confidenceThresholdAdjustment": "Confidence threshold could be lowered to 0.70 to capture more findings",
+    "eventDetectionTuning": [
+      "Event detection parameters are well-calibrated"
+    ],
+    "policyMatchingTuning": [
+      "Policy rule matching is well-calibrated"
+    ]
+  },
+  "reviewDistributionByCategory": {
+    "Use_of_Force": {
+      "confirmed": 13,
+      "needsInvestigation": 87,
+      "falsePositive": 0
+    },
+    "Officer_Conduct": {
+      "confirmed": 7,
+      "needsInvestigation": 61,
+      "falsePositive": 0
+    },
+    "Arrest": {
+      "confirmed": 2,
+      "needsInvestigation": 51,
+      "falsePositive": 0
+    },
+    "Custody": {
+      "confirmed": 0,
+      "needsInvestigation": 21,
+      "falsePositive": 4
+    },
+    "Pursuit": {
+      "confirmed": 0,
+      "needsInvestigation": 8,
+      "falsePositive": 1
+    },
+    "Search_Seizure": {
+      "confirmed": 4,
+      "needsInvestigation": 7,
+      "falsePositive": 0
+    }
+  },
+  "confidenceCalibration": {
+    "highConfidenceAccuracy": 1,
+    "mediumConfidenceAccuracy": 0.9809885931558935,
+    "lowConfidenceAccuracy": 0
+  },
+  "safetyLanguageCheck": "PASSED"
+}

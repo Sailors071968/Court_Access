@@ -1,0 +1,141 @@
+{
+  "phase": 184,
+  "title": "Policy Engine Safety Audit — Compliance Language",
+  "generatedAt": "2026-03-10T14:51:00Z",
+  "description": "Verify that all compliance findings use safe language ('potential policy inconsistency') and that forbidden phrases never appear in system output",
+  "safetyDirective": "The system must never state that a violation occurred. All findings must use language: 'potential policy inconsistency'",
+  "forbiddenPhrases": [
+    "policy violation occurred",
+    "officer violated",
+    "illegal conduct",
+    "committed a violation",
+    "broke the law",
+    "guilty of",
+    "violated the policy",
+    "in violation of"
+  ],
+  "codebaseSearch": {
+    "searchPattern": "violation occurred|officer violated|violated the policy|illegal conduct|committed a violation|broke the law|guilty of|in violation of",
+    "totalMatches": 14,
+    "allMatchesAreSafetyCode": true,
+    "matchDetails": [
+      {
+        "file": "backend/src/evidence/policyComplianceAnalyzer.ts",
+        "lines": [22, 23, 24, 25, 26, 27, 28, 29],
+        "context": "FORBIDDEN_LANGUAGE constant array — defines the blocklist of phrases that are automatically replaced by applySafetyGuardrails()",
+        "isSafetyCode": true,
+        "outputsToUser": false,
+        "verdict": "SAFE — this is the blocklist definition, not output"
+      },
+      {
+        "file": "backend/src/evidence/complianceValidationRunner.ts",
+        "line": 14,
+        "context": "Comment: '// SAFETY GUARDRAIL: System never states \"violation occurred\".'",
+        "isSafetyCode": true,
+        "outputsToUser": false,
+        "verdict": "SAFE — documentation comment"
+      },
+      {
+        "file": "backend/src/evidence/complianceValidationRunner.ts",
+        "line": 656,
+        "context": "Legal knowledge dataset entry: 'Statements obtained in violation of Miranda rights may be excluded from evidence.'",
+        "isSafetyCode": true,
+        "outputsToUser": false,
+        "verdict": "SAFE — this is reference legal text in a validation dataset, not a compliance finding. Describes Miranda law, not officer conduct."
+      },
+      {
+        "file": "backend/src/evidence/complianceValidationRunner.ts",
+        "lines": [1108, 1109, 1110, 1111],
+        "context": "Validation test assertions — checking that safety guardrails correctly detect and block forbidden phrases in output",
+        "isSafetyCode": true,
+        "outputsToUser": false,
+        "verdict": "SAFE — these are regex test patterns used to verify the guardrail works"
+      }
+    ]
+  },
+  "safeLanguageUsage": {
+    "searchPattern": "potential.policy.inconsistency",
+    "totalMatches": 13,
+    "filesWithSafeLanguage": [
+      {
+        "file": "backend/src/evidence/policyComplianceAnalyzer.ts",
+        "count": 4,
+        "usages": [
+          "SAFE_LANGUAGE_MAP: violation → 'potential policy inconsistency'",
+          "FORBIDDEN_LANGUAGE replacement target: 'potential policy inconsistency identified'",
+          "ComplianceFinding.safetyLanguage: 'potential_policy_inconsistency'",
+          "FindingOutput.safetyLanguage field"
+        ]
+      },
+      {
+        "file": "backend/src/evidence/complianceValidationRunner.ts",
+        "count": 2,
+        "usages": [
+          "Validation assertion checking for safe language presence",
+          "Expected output format verification"
+        ]
+      },
+      {
+        "file": "backend/src/evidence/expertWitnessPackageExporter.ts",
+        "count": 6,
+        "usages": [
+          "Expert witness package uses 'potential_policy_inconsistency' throughout",
+          "Policy analysis section headers use safe language",
+          "Finding summaries use safe language",
+          "Analysis report uses safe language",
+          "Appendices use safe language",
+          "Metadata tags use safe language"
+        ]
+      },
+      {
+        "file": "backend/src/evidence/juryVisualizationService.ts",
+        "count": 1,
+        "usages": [
+          "Jury visualization narrative cards use safe language"
+        ]
+      }
+    ]
+  },
+  "safetyGuardrailArchitecture": {
+    "guardrailFunction": "applySafetyGuardrails()",
+    "location": "backend/src/evidence/policyComplianceAnalyzer.ts:43-59",
+    "mechanism": "Two-pass replacement: (1) Replace forbidden phrases with safe equivalents, (2) Replace individual unsafe words",
+    "coverage": [
+      "All compliance finding explanations pass through applySafetyGuardrails()",
+      "Expert witness packages use 'potential_policy_inconsistency' identifier",
+      "Jury visualizations use plain language without legal terminology",
+      "Compliance review queue tags all findings with 'potential_policy_inconsistency'"
+    ],
+    "bypassRisk": "LOW — guardrail is called at the point of finding creation (analyzeCompliance function), ensuring all findings are processed before storage"
+  },
+  "validationTests": {
+    "testsImplemented": true,
+    "testFile": "backend/src/evidence/complianceValidationRunner.ts",
+    "testChecks": [
+      "Regex check: /\\bviolation occurred\\b/i — blocks if found in output",
+      "Regex check: /\\bofficer violated\\b/i — blocks if found in output",
+      "Regex check: /\\billegal conduct\\b/i — blocks if found in output",
+      "Regex check: /\\bguilty of\\b/i — blocks if found in output"
+    ],
+    "testResult": "PASS — validation runner confirms safety guardrails are effective"
+  },
+  "summary": {
+    "overallStatus": "PASS",
+    "forbiddenPhraseInOutput": false,
+    "allFindingsUseSafeLanguage": true,
+    "safetyGuardrailActive": true,
+    "safetyGuardrailTested": true,
+    "codebaseClean": true,
+    "notes": [
+      "All 14 matches of forbidden phrases are in safety code (blocklists, validators, comments) — never in user-facing output",
+      "The applySafetyGuardrails() function processes all finding text before storage",
+      "Expert witness and jury visualization systems both enforce safe language",
+      "Validation runner includes automated checks for forbidden phrases in output"
+    ],
+    "recommendations": [
+      "Add runtime assertion in API response middleware to double-check no forbidden phrases escape",
+      "Consider adding a pre-commit hook that scans for new forbidden phrases outside safety code",
+      "Periodically review SAFE_LANGUAGE_MAP for additional terms that should be sanitized"
+    ]
+  }
+}

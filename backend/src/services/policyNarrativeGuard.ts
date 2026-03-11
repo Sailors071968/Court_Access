@@ -36,7 +36,7 @@ export class PolicyNarrativeGuard {
   static sanitize(text: string): string {
     let result = text;
     for (const [forbidden, replacement] of Object.entries(ALLOWED_REPLACEMENTS)) {
-      const regex = new RegExp(forbidden, 'gi');
+      const regex = new RegExp(`\\b${forbidden}\\b`, 'gi');
       result = result.replace(regex, replacement);
     }
     return result;

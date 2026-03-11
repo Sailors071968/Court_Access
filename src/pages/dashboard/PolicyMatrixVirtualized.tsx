@@ -126,7 +126,7 @@ export function PolicyMatrixVirtualized() {
         if (s === 'compliant') compliant++;
         else if (s === 'non_compliant') nonCompliant++;
         else if (s === 'partial') partial++;
-        else unknown++;
+        else if (s === 'unknown') unknown++;
       }
     }
     const sample = Math.min(50, filteredAgencies.length) * Math.min(50, filteredTopics.length);

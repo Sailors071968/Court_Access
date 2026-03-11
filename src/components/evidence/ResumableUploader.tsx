@@ -220,8 +220,10 @@ export function ResumableUploader({ caseId: _caseId, onUploadComplete, maxConcur
   }, []);
 
   const startAll = useCallback(() => {
+    const activeCount = files.filter((f) => f.status === 'uploading').length;
+    const slotsAvailable = Math.max(0, maxConcurrent - activeCount);
     const pending = files.filter((f) => f.status === 'pending');
-    pending.slice(0, maxConcurrent).forEach((f) => startUpload(f.id));
+    pending.slice(0, slotsAvailable).forEach((f) => startUpload(f.id));
   }, [files, maxConcurrent, startUpload]);
 
   const handleDrop = useCallback((e: React.DragEvent) => {

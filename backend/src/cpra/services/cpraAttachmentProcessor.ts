@@ -224,7 +224,7 @@ export async function processAttachment(
     fileUrl: attachment.fileUrl,
     documentType,
     policyTopic: attachment.policyTopicDetected,
-    status: 'classified',
+    status: documentType === 'non_policy' ? 'skipped' : 'classified',
     error: null,
   };
 }

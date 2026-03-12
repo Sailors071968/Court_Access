@@ -538,19 +538,7 @@ const CALIFORNIA_AGENCIES: AgencySeed[] = [
   { agencyName: 'Monte Sereno Police Department', agencyType: 'Police', city: 'Monte Sereno', county: 'Santa Clara', populationEstimate: 4000 },
   { agencyName: 'Los Altos Hills Police Department', agencyType: 'Police', city: 'Los Altos Hills', county: 'Santa Clara', populationEstimate: 8000 },
 
-  // === UNIVERSITY POLICE ===
-  { agencyName: 'UCLA Police Department', agencyType: 'University', city: 'Los Angeles', county: 'Los Angeles', website: 'https://police.ucla.edu' },
-  { agencyName: 'UC Berkeley Police Department', agencyType: 'University', city: 'Berkeley', county: 'Alameda', website: 'https://ucpd.berkeley.edu' },
-  { agencyName: 'UC Davis Police Department', agencyType: 'University', city: 'Davis', county: 'Yolo', website: 'https://police.ucdavis.edu' },
-  { agencyName: 'UC San Diego Police Department', agencyType: 'University', city: 'San Diego', county: 'San Diego', website: 'https://police.ucsd.edu' },
-  { agencyName: 'UC Irvine Police Department', agencyType: 'University', city: 'Irvine', county: 'Orange', website: 'https://police.uci.edu' },
-  { agencyName: 'UC Santa Barbara Police Department', agencyType: 'University', city: 'Santa Barbara', county: 'Santa Barbara' },
-  { agencyName: 'UC Santa Cruz Police Department', agencyType: 'University', city: 'Santa Cruz', county: 'Santa Cruz' },
-  { agencyName: 'UC Riverside Police Department', agencyType: 'University', city: 'Riverside', county: 'Riverside' },
-  { agencyName: 'UC Merced Police Department', agencyType: 'University', city: 'Merced', county: 'Merced' },
-  { agencyName: 'UC San Francisco Police Department', agencyType: 'University', city: 'San Francisco', county: 'San Francisco' },
-  { agencyName: 'Stanford University Department of Public Safety', agencyType: 'University', city: 'Stanford', county: 'Santa Clara' },
-  { agencyName: 'USC Department of Public Safety', agencyType: 'University', city: 'Los Angeles', county: 'Los Angeles' },
+  // === ADDITIONAL UNIVERSITY / CSU POLICE ===
   { agencyName: 'San Diego State University Police Department', agencyType: 'University', city: 'San Diego', county: 'San Diego' },
   { agencyName: 'San Jose State University Police Department', agencyType: 'University', city: 'San Jose', county: 'Santa Clara' },
   { agencyName: 'San Francisco State University Police Department', agencyType: 'University', city: 'San Francisco', county: 'San Francisco' },
@@ -587,35 +575,33 @@ const CALIFORNIA_AGENCIES: AgencySeed[] = [
   { agencyName: 'Pasadena City College Police Department', agencyType: 'College', city: 'Pasadena', county: 'Los Angeles' },
   { agencyName: 'El Camino College Police Department', agencyType: 'College', city: 'Torrance', county: 'Los Angeles' },
 
-  // === SCHOOL DISTRICT POLICE ===
-  { agencyName: 'San Diego Unified School District Police', agencyType: 'School', city: 'San Diego', county: 'San Diego' },
-  { agencyName: 'San Bernardino City Unified School District Police', agencyType: 'School', city: 'San Bernardino', county: 'San Bernardino' },
-  { agencyName: 'Fresno Unified School District Police', agencyType: 'School', city: 'Fresno', county: 'Fresno' },
-  { agencyName: 'Sacramento City Unified School District Police', agencyType: 'School', city: 'Sacramento', county: 'Sacramento' },
-  { agencyName: 'Oakland Unified School District Police', agencyType: 'School', city: 'Oakland', county: 'Alameda' },
-  { agencyName: 'Long Beach Unified School District Police', agencyType: 'School', city: 'Long Beach', county: 'Los Angeles' },
-  { agencyName: 'Santa Ana Unified School District Police', agencyType: 'School', city: 'Santa Ana', county: 'Orange' },
-  { agencyName: 'Stockton Unified School District Police', agencyType: 'School', city: 'Stockton', county: 'San Joaquin' },
-  { agencyName: 'San Jose Unified School District Police', agencyType: 'School', city: 'San Jose', county: 'Santa Clara' },
-  { agencyName: 'Compton Unified School District Police', agencyType: 'School', city: 'Compton', county: 'Los Angeles' },
+  // === ADDITIONAL SCHOOL DISTRICT POLICE ===
+  { agencyName: 'Riverside Unified School District Police', agencyType: 'School', city: 'Riverside', county: 'Riverside' },
+  { agencyName: 'Bakersfield City School District Police', agencyType: 'School', city: 'Bakersfield', county: 'Kern' },
+  { agencyName: 'Kern High School District Police', agencyType: 'School', city: 'Bakersfield', county: 'Kern' },
+  { agencyName: 'Modesto City Schools Police', agencyType: 'School', city: 'Modesto', county: 'Stanislaus' },
+  { agencyName: 'Elk Grove Unified School District Police', agencyType: 'School', city: 'Elk Grove', county: 'Sacramento' },
+  { agencyName: 'Moreno Valley Unified School District Police', agencyType: 'School', city: 'Moreno Valley', county: 'Riverside' },
+  { agencyName: 'Fontana Unified School District Police', agencyType: 'School', city: 'Fontana', county: 'San Bernardino' },
+  { agencyName: 'Pomona Unified School District Police', agencyType: 'School', city: 'Pomona', county: 'Los Angeles' },
+  { agencyName: 'Corona-Norco Unified School District Police', agencyType: 'School', city: 'Norco', county: 'Riverside' },
+  { agencyName: 'Clovis Unified School District Police', agencyType: 'School', city: 'Clovis', county: 'Fresno' },
 
-  // === TRANSIT POLICE ===
-  { agencyName: 'Sacramento Regional Transit Police', agencyType: 'Transit', city: 'Sacramento', county: 'Sacramento' },
-  { agencyName: 'San Diego Metropolitan Transit System Security', agencyType: 'Transit', city: 'San Diego', county: 'San Diego' },
+  // === ADDITIONAL TRANSIT POLICE ===
   { agencyName: 'Metrolink Railroad Police', agencyType: 'Transit', city: 'Los Angeles', county: 'Los Angeles' },
   { agencyName: 'Amtrak Police — California Division', agencyType: 'Transit', county: 'Sacramento' },
-  { agencyName: 'Golden Gate Bridge Highway and Transportation District Police', agencyType: 'Transit', county: 'Marin' },
+  { agencyName: 'Santa Clara Valley Transportation Authority Police', agencyType: 'Transit', city: 'San Jose', county: 'Santa Clara' },
+  { agencyName: 'Altamont Corridor Express Security', agencyType: 'Transit', city: 'Stockton', county: 'San Joaquin' },
+  { agencyName: 'Caltrain Security Services', agencyType: 'Transit', city: 'San Carlos', county: 'San Mateo' },
 
-  // === AIRPORT POLICE ===
-  { agencyName: 'San Jose International Airport Police', agencyType: 'Airport', city: 'San Jose', county: 'Santa Clara' },
-  { agencyName: 'Sacramento International Airport Police', agencyType: 'Airport', city: 'Sacramento', county: 'Sacramento' },
-  { agencyName: 'John Wayne Airport Police', agencyType: 'Airport', city: 'Santa Ana', county: 'Orange' },
-  { agencyName: 'Ontario International Airport Police', agencyType: 'Airport', city: 'Ontario', county: 'San Bernardino' },
+  // === ADDITIONAL AIRPORT POLICE ===
   { agencyName: 'Burbank Bob Hope Airport Police', agencyType: 'Airport', city: 'Burbank', county: 'Los Angeles' },
-  { agencyName: 'Long Beach Airport Police', agencyType: 'Airport', city: 'Long Beach', county: 'Los Angeles' },
+  { agencyName: 'Fresno Yosemite International Airport Police', agencyType: 'Airport', city: 'Fresno', county: 'Fresno' },
+  { agencyName: 'Palm Springs International Airport Police', agencyType: 'Airport', city: 'Palm Springs', county: 'Riverside' },
+  { agencyName: 'Santa Barbara Airport Police', agencyType: 'Airport', city: 'Santa Barbara', county: 'Santa Barbara' },
+  { agencyName: 'Monterey Regional Airport Police', agencyType: 'Airport', city: 'Monterey', county: 'Monterey' },
 
-  // === PARK RANGERS / SPECIAL DISTRICT POLICE ===
-  { agencyName: 'East Bay Regional Park District Police', agencyType: 'Park', county: 'Alameda' },
+  // === ADDITIONAL PARK RANGERS / SPECIAL DISTRICT POLICE ===
   { agencyName: 'Midpeninsula Regional Open Space District Rangers', agencyType: 'Park', county: 'Santa Clara' },
   { agencyName: 'Orange County Parks Rangers', agencyType: 'Park', county: 'Orange' },
   { agencyName: 'San Diego County Parks Rangers', agencyType: 'Park', county: 'San Diego' },
@@ -623,9 +609,8 @@ const CALIFORNIA_AGENCIES: AgencySeed[] = [
   { agencyName: 'Marin County Parks Rangers', agencyType: 'Park', county: 'Marin' },
   { agencyName: 'Santa Clara County Parks Rangers', agencyType: 'Park', county: 'Santa Clara' },
 
-  // === SPECIAL DISTRICT POLICE ===
+  // === ADDITIONAL SPECIAL DISTRICT POLICE ===
   { agencyName: 'Port of Long Beach Police', agencyType: 'Port', city: 'Long Beach', county: 'Los Angeles' },
-  { agencyName: 'Port of Oakland Police', agencyType: 'Port', city: 'Oakland', county: 'Alameda' },
   { agencyName: 'Port of San Diego Harbor Police', agencyType: 'Port', city: 'San Diego', county: 'San Diego' },
   { agencyName: 'Port of Stockton Police', agencyType: 'Port', city: 'Stockton', county: 'San Joaquin' },
   { agencyName: 'East Bay Municipal Utility District Police', agencyType: 'Other', county: 'Alameda' },

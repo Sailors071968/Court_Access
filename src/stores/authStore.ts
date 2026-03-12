@@ -3,6 +3,7 @@
 // ============================================
 
 import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 import type { User, UserRole } from '../types';
 import { ROLE_PERMISSIONS } from '../constants';
 
@@ -56,7 +57,7 @@ const MOCK_USERS: Record<string, User> = {
   },
 };
 
-export const useAuthStore = create<AuthState>((set, get) => ({
+export const useAuthStore = create<AuthState>()(persist((set, get) => ({
   user: null,
   isAuthenticated: false,
   isLoading: false,
@@ -110,4 +111,10 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     if (!user) return false;
     return ROLE_PERMISSIONS[user.role][permission];
   },
+}), {
+  name: 'court-access-auth',
+  partialize: (state) => ({
+    user: state.user,
+    isAuthenticated: state.isAuthenticated,
+  }),
 }));

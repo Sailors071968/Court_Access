@@ -76,6 +76,8 @@ export interface EventTypeDefinition {
   actorTypes: ActorType[];
   objectTypes: ObjectType[];
   relatedDoctrineRules: string[];
+  /** Weight for contradiction scoring (0.0–1.0). Higher = more legally significant. */
+  eventWeight: number;
   createdAt: string;
   updatedAt: string;
 }
@@ -103,9 +105,17 @@ export interface ExtractedEvent {
   object: string | null;
   location: string | null;
   sourceEvidenceId: string;
+  /** Exact text span from the source evidence that generated this event. */
+  sourceTextSpan: string | null;
+  /** Timestamp as recorded in the original source (before normalization). */
+  sourceTimestamp: string | null;
+  /** Confidence score from the source evidence (0.0–1.0). */
+  sourceConfidence: number;
   confidence: number;
   extractionMethod: ExtractionMethod;
   rawText: string | null;
+  /** Whether this event has been validated through normalizeEvent(). */
+  normalized: boolean;
   createdAt: string;
 }
 
@@ -272,6 +282,8 @@ export interface Contradiction {
   timeRangeStart: string | null;
   timeRangeEnd: string | null;
   confidence: number;
+  /** Composite contradiction score for ranking/filtering. */
+  contradictionScore: number;
   sourceEvidenceIds: string[];
   createdAt: string;
 }
@@ -363,6 +375,7 @@ export type GraphEdgeType =
   | 'PERFORMED'
   | 'OBSERVED'
   | 'RECORDED_BY'
+  | 'DERIVED_FROM'
   | 'MENTIONED_IN'
   | 'CONTRADICTS'
   | 'LOCATED_AT'
@@ -374,15 +387,16 @@ export type GraphEdgeType =
   | 'RELATED_TO';
 
 export interface GraphNode {
-  id: string;
+  nodeId: string;
   type: GraphNodeType;
   label: string;
   properties: Record<string, unknown>;
 }
 
 export interface GraphEdge {
-  source: string;
-  target: string;
+  edgeId: string;
+  sourceNodeId: string;
+  targetNodeId: string;
   type: GraphEdgeType;
   properties: Record<string, unknown>;
 }

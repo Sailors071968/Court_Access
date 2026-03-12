@@ -16,6 +16,38 @@ import type {
 import { getEventType } from './eventOntology.ts';
 
 // ---------------------------------------------------------------------------
+// Contradiction Scoring Model
+// score = semantic_conflict_score × event_weight × evidence_confidence × timeline_distance_factor
+// ---------------------------------------------------------------------------
+
+function computeContradictionScore(
+  semanticConflictScore: number,
+  eventTypeA: string,
+  eventTypeB: string,
+  evidenceConfidence: number,
+  timeRangeStartMs: number | null,
+  timeRangeEndMs: number | null,
+): number {
+  // Event weight: average of both events' weights
+  const defA = getEventType(eventTypeA);
+  const defB = getEventType(eventTypeB);
+  const weightA = defA?.eventWeight ?? 0.5;
+  const weightB = defB?.eventWeight ?? 0.5;
+  const eventWeight = (weightA + weightB) / 2;
+
+  // Timeline distance factor: closer in time = higher score
+  let timelineDistanceFactor = 1.0;
+  if (timeRangeStartMs !== null && timeRangeEndMs !== null) {
+    const distanceMs = Math.abs(timeRangeEndMs - timeRangeStartMs);
+    // Decay: events within 5 min get factor 1.0, beyond 1 hour drops to ~0.5
+    timelineDistanceFactor = Math.max(0.3, 1.0 - distanceMs / 7_200_000);
+  }
+
+  const score = semanticConflictScore * eventWeight * evidenceConfidence * timelineDistanceFactor;
+  return Math.round(score * 1000) / 1000; // 3 decimal places
+}
+
+// ---------------------------------------------------------------------------
 // Contradiction Detection Rules
 // ---------------------------------------------------------------------------
 
@@ -67,6 +99,7 @@ function detectNarrativeInconsistencies(events: ExtractedEvent[]): Contradiction
             timeRangeStart: evA.timestamp,
             timeRangeEnd: evB.timestamp,
             confidence: 0.70,
+            contradictionScore: 0,
             sourceEvidenceIds: [evA.sourceEvidenceId, evB.sourceEvidenceId],
             createdAt: new Date().toISOString(),
           });
@@ -84,6 +117,7 @@ function detectNarrativeInconsistencies(events: ExtractedEvent[]): Contradiction
             timeRangeStart: evA.timestamp,
             timeRangeEnd: evB.timestamp,
             confidence: 0.65,
+            contradictionScore: 0,
             sourceEvidenceIds: [evA.sourceEvidenceId, evB.sourceEvidenceId],
             createdAt: new Date().toISOString(),
           });
@@ -156,7 +190,8 @@ function detectTimelineConflicts(
               timeRangeStart: ae.timestamp,
               timeRangeEnd: be.timestamp,
               confidence: 0.75,
-              sourceEvidenceIds: [be.sourceEvidenceId, ae.sourceEvidenceId],
+              contradictionScore: 0,
+            sourceEvidenceIds: [be.sourceEvidenceId, ae.sourceEvidenceId],
               createdAt: new Date().toISOString(),
             });
           }
@@ -223,7 +258,8 @@ function detectMissingBodycam(events: ExtractedEvent[]): Contradiction[] {
           timeRangeStart: ev.timestamp,
           timeRangeEnd: ev.timestamp,
           confidence: 0.80,
-          sourceEvidenceIds: [ev.sourceEvidenceId],
+          contradictionScore: 0,
+            sourceEvidenceIds: [ev.sourceEvidenceId],
           createdAt: new Date().toISOString(),
         });
       }
@@ -271,7 +307,8 @@ function detectDispatchReportInconsistencies(events: ExtractedEvent[]): Contradi
           timeRangeStart: cadEv.timestamp,
           timeRangeEnd: cadEv.timestamp,
           confidence: 0.70,
-          sourceEvidenceIds: [cadEv.sourceEvidenceId],
+          contradictionScore: 0,
+            sourceEvidenceIds: [cadEv.sourceEvidenceId],
           createdAt: new Date().toISOString(),
         });
       }
@@ -292,6 +329,7 @@ function detectDispatchReportInconsistencies(events: ExtractedEvent[]): Contradi
             timeRangeStart: cadEv.timestamp,
             timeRangeEnd: matchingReport.timestamp,
             confidence: 0.75,
+            contradictionScore: 0,
             sourceEvidenceIds: [cadEv.sourceEvidenceId, matchingReport.sourceEvidenceId],
             createdAt: new Date().toISOString(),
           });
@@ -352,7 +390,8 @@ function detectWitnessConflicts(events: ExtractedEvent[]): Contradiction[] {
           timeRangeStart: we.timestamp,
           timeRangeEnd: we.timestamp,
           confidence: 0.65,
-          sourceEvidenceIds: [we.sourceEvidenceId],
+          contradictionScore: 0,
+            sourceEvidenceIds: [we.sourceEvidenceId],
           createdAt: new Date().toISOString(),
         });
       }
@@ -375,6 +414,7 @@ function detectWitnessConflicts(events: ExtractedEvent[]): Contradiction[] {
             timeRangeStart: oe.timestamp,
             timeRangeEnd: oe.timestamp,
             confidence: 0.80,
+            contradictionScore: 0,
             sourceEvidenceIds: [oe.sourceEvidenceId],
             createdAt: new Date().toISOString(),
           });
@@ -416,7 +456,8 @@ function detectChainOfCustodyGaps(events: ExtractedEvent[]): Contradiction[] {
         timeRangeStart: collected[0].timestamp,
         timeRangeEnd: null,
         confidence: 0.60,
-        sourceEvidenceIds: collected.map((e) => e.sourceEvidenceId),
+        contradictionScore: 0,
+            sourceEvidenceIds: collected.map((e) => e.sourceEvidenceId),
         createdAt: new Date().toISOString(),
       });
     }
@@ -434,7 +475,8 @@ function detectChainOfCustodyGaps(events: ExtractedEvent[]): Contradiction[] {
         timeRangeStart: ev.timestamp,
         timeRangeEnd: null,
         confidence: 0.85,
-        sourceEvidenceIds: [ev.sourceEvidenceId],
+        contradictionScore: 0,
+            sourceEvidenceIds: [ev.sourceEvidenceId],
         createdAt: new Date().toISOString(),
       });
     }
@@ -475,7 +517,8 @@ function detectProceduralGaps(events: ExtractedEvent[]): Contradiction[] {
         timeRangeStart: interrogation.timestamp,
         timeRangeEnd: null,
         confidence: 0.75,
-        sourceEvidenceIds: [interrogation.sourceEvidenceId],
+        contradictionScore: 0,
+            sourceEvidenceIds: [interrogation.sourceEvidenceId],
         createdAt: new Date().toISOString(),
       });
     }
@@ -500,7 +543,8 @@ function detectProceduralGaps(events: ExtractedEvent[]): Contradiction[] {
         timeRangeStart: continued.timestamp,
         timeRangeEnd: null,
         confidence: 0.85,
-        sourceEvidenceIds: [continued.sourceEvidenceId],
+        contradictionScore: 0,
+            sourceEvidenceIds: [continued.sourceEvidenceId],
         createdAt: new Date().toISOString(),
       });
     }
@@ -530,7 +574,8 @@ function detectProceduralGaps(events: ExtractedEvent[]): Contradiction[] {
         timeRangeStart: searchEvent.timestamp,
         timeRangeEnd: null,
         confidence: 0.70,
-        sourceEvidenceIds: [searchEvent.sourceEvidenceId],
+        contradictionScore: 0,
+            sourceEvidenceIds: [searchEvent.sourceEvidenceId],
         createdAt: new Date().toISOString(),
       });
     }
@@ -604,6 +649,29 @@ export function analyzeContradictions(
     seen.add(key);
     return true;
   });
+
+  // Compute contradiction scores using the composite scoring model
+  const eventLookup = new Map<string, ExtractedEvent>();
+  for (const ev of events) {
+    eventLookup.set(ev.eventId, ev);
+  }
+
+  for (const c of deduplicated) {
+    const evA = eventLookup.get(c.eventA);
+    const evB = eventLookup.get(c.eventB);
+    const avgConfidence = ((evA?.confidence ?? 0.5) + (evB?.confidence ?? 0.5)) / 2;
+    const tsStartMs = c.timeRangeStart ? new Date(c.timeRangeStart).getTime() : null;
+    const tsEndMs = c.timeRangeEnd ? new Date(c.timeRangeEnd).getTime() : null;
+
+    c.contradictionScore = computeContradictionScore(
+      c.confidence,       // semantic_conflict_score
+      evA?.eventType ?? '',
+      evB?.eventType ?? '',
+      avgConfidence,       // evidence_confidence
+      isNaN(tsStartMs ?? NaN) ? null : tsStartMs,
+      isNaN(tsEndMs ?? NaN) ? null : tsEndMs,
+    );
+  }
 
   // Categorize by confidence
   const highConfidence = deduplicated.filter((c) => c.confidence >= 0.80).length;

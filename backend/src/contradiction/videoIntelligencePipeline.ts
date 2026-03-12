@@ -277,9 +277,13 @@ function actionsToEvents(
       object: action.objectDetected,
       location: null,
       sourceEvidenceId: videoId,
+      sourceTextSpan: `Video action detected: ${action.actionType}`,
+      sourceTimestamp: action.timestamp || null,
+      sourceConfidence: action.confidence,
       confidence: action.confidence,
       extractionMethod: 'VIDEO_ACTION_DETECTION' as ExtractionMethod,
       rawText: `Video action detected: ${action.actionType}`,
+      normalized: false,
       createdAt: new Date().toISOString(),
     });
   }

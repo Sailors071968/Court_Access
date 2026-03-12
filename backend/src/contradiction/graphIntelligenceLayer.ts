@@ -182,7 +182,7 @@ function buildContradictionNodes(contradictions: Contradiction[]): GraphNode[] {
 function buildActorEventEdges(
   events: ExtractedEvent[],
   actorNodes: GraphNode[],
-  eventNodes: GraphNode[],
+  _eventNodes: GraphNode[],
 ): GraphEdge[] {
   const edges: GraphEdge[] = [];
   const actorLookup = new Map<string, string>();
@@ -214,19 +214,41 @@ function buildActorEventEdges(
 }
 
 /**
- * Build edges connecting events to their evidence sources.
+ * Build DERIVED_FROM edges connecting events to their evidence sources.
+ * Each event is derived from a specific piece of evidence.
  */
 function buildEventEvidenceEdges(events: ExtractedEvent[]): GraphEdge[] {
-  return events.map((ev) => ({
-    edgeId: uuidv4(),
-    sourceNodeId: ev.eventId,
-    targetNodeId: ev.sourceEvidenceId,
-    type: 'RECORDED_BY' as GraphEdgeType,
-    properties: {
-      extractionMethod: ev.extractionMethod,
-      confidence: ev.confidence,
-    },
-  }));
+  const edges: GraphEdge[] = [];
+
+  for (const ev of events) {
+    // DERIVED_FROM: Event was extracted from this evidence
+    edges.push({
+      edgeId: uuidv4(),
+      sourceNodeId: ev.eventId,
+      targetNodeId: ev.sourceEvidenceId,
+      type: 'DERIVED_FROM' as GraphEdgeType,
+      properties: {
+        extractionMethod: ev.extractionMethod,
+        confidence: ev.confidence,
+        sourceTextSpan: ev.sourceTextSpan ?? '',
+        sourceConfidence: ev.sourceConfidence ?? ev.confidence,
+      },
+    });
+
+    // RECORDED_BY: Evidence records this event (reverse relationship)
+    edges.push({
+      edgeId: uuidv4(),
+      sourceNodeId: ev.eventId,
+      targetNodeId: ev.sourceEvidenceId,
+      type: 'RECORDED_BY' as GraphEdgeType,
+      properties: {
+        extractionMethod: ev.extractionMethod,
+        confidence: ev.confidence,
+      },
+    });
+  }
+
+  return edges;
 }
 
 /**

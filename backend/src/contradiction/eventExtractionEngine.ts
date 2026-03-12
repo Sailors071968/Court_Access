@@ -14,6 +14,7 @@ import type {
   TimestampSource,
 } from './types.ts';
 import { isValidEventType } from './eventOntology.ts';
+import { normalizeEvent } from './eventNormalization.ts';
 
 // ---------------------------------------------------------------------------
 // NLP Pattern Definitions — Rule-based extraction patterns
@@ -194,7 +195,7 @@ export function extractEventsFromReport(job: ExtractionJobData): ExtractionResul
           continue;
         }
 
-        const event: ExtractedEvent = {
+        const rawEvent: ExtractedEvent = {
           eventId: uuidv4(),
           caseId: job.caseId,
           eventType: pattern.eventType,
@@ -205,13 +206,17 @@ export function extractEventsFromReport(job: ExtractionJobData): ExtractionResul
           object: null,
           location: extractLocation(sentence),
           sourceEvidenceId: job.evidenceId,
+          sourceTextSpan: sentence.trim(),
+          sourceTimestamp: extractTimestamp(sentence),
+          sourceConfidence: pattern.confidence,
           confidence: pattern.confidence,
           extractionMethod: 'REPORT_NLP' as ExtractionMethod,
           rawText: sentence.trim(),
+          normalized: false,
           createdAt: new Date().toISOString(),
         };
 
-        events.push(event);
+        events.push(normalizeEvent(rawEvent).event);
         break; // One event per sentence to avoid duplicates
       }
     }
@@ -244,7 +249,7 @@ export function extractEventsFromTranscript(job: ExtractionJobData): ExtractionR
           continue;
         }
 
-        const event: ExtractedEvent = {
+        const rawEvent: ExtractedEvent = {
           eventId: uuidv4(),
           caseId: job.caseId,
           eventType: pattern.eventType,
@@ -255,13 +260,17 @@ export function extractEventsFromTranscript(job: ExtractionJobData): ExtractionR
           object: null,
           location: null,
           sourceEvidenceId: job.evidenceId,
+          sourceTextSpan: line.trim(),
+          sourceTimestamp: extractTimestamp(line),
+          sourceConfidence: pattern.confidence,
           confidence: pattern.confidence,
           extractionMethod: 'TRANSCRIPT_NLP' as ExtractionMethod,
           rawText: line.trim(),
+          normalized: false,
           createdAt: new Date().toISOString(),
         };
 
-        events.push(event);
+        events.push(normalizeEvent(rawEvent).event);
         break;
       }
     }
@@ -324,7 +333,7 @@ export function extractEventsFromCAD(job: ExtractionJobData): ExtractionResult {
           continue;
         }
 
-        const event: ExtractedEvent = {
+        const rawEvent: ExtractedEvent = {
           eventId: uuidv4(),
           caseId: job.caseId,
           eventType,
@@ -335,13 +344,17 @@ export function extractEventsFromCAD(job: ExtractionJobData): ExtractionResult {
           object: null,
           location: null,
           sourceEvidenceId: job.evidenceId,
+          sourceTextSpan: line.trim(),
+          sourceTimestamp: cadTimestamp,
+          sourceConfidence: 0.95,
           confidence: 0.95, // CAD logs are high-confidence structured data
           extractionMethod: 'CAD_IMPORT' as ExtractionMethod,
           rawText: line.trim(),
+          normalized: false,
           createdAt: new Date().toISOString(),
         };
 
-        events.push(event);
+        events.push(normalizeEvent(rawEvent).event);
         break;
       }
     }

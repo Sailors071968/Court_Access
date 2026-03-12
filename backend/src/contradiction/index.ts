@@ -50,6 +50,12 @@ export {
   isValidEventType,
 } from './eventOntology.ts';
 
+// Event Normalization
+export {
+  normalizeEvent,
+  normalizeEvents,
+} from './eventNormalization.ts';
+
 // Phase 2 — Event Extraction
 export {
   extractEvents,
@@ -94,6 +100,26 @@ export {
   buildContradictionGraph,
   generateCypherStatements,
 } from './graphIntelligenceLayer.ts';
+
+// Worker Queue Isolation
+export {
+  CDE_QUEUE_CONFIGS,
+  InMemoryQueue,
+  createCdeQueues,
+  PM2_ECOSYSTEM_CONFIG,
+} from './workerQueues.ts';
+
+// Performance Safeguards
+export {
+  PERFORMANCE_LIMITS,
+  paginateTimeline,
+  paginateContradictions,
+  batchEvents,
+  batchContradictions,
+  checkCaseSize,
+  RECOMMENDED_INDEXES,
+  RECOMMENDED_NEO4J_INDEXES,
+} from './performanceSafeguards.ts';
 
 // Routes
 export { registerContradictionRoutes } from './contradictionRoutes.ts';

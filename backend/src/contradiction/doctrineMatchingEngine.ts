@@ -146,6 +146,75 @@ const CONTRADICTION_DOCTRINE_MAP: DoctrineRuleMapping[] = [
 ];
 
 // ---------------------------------------------------------------------------
+// Event-Type Pre-Filtering Map
+// Maps event type categories to relevant doctrine rule prefixes.
+// Used to skip irrelevant doctrine rules early before deeper matching.
+// ---------------------------------------------------------------------------
+
+const EVENT_TYPE_DOCTRINE_PREFILTER: Record<string, string[]> = {
+  // Search-related events → LD-16 only
+  'OFFICER_SEARCHES_VEHICLE': ['POSTLD16'],
+  'OFFICER_SEARCHES_PERSON': ['POSTLD16'],
+  'OFFICER_REQUESTS_CONSENT_SEARCH': ['POSTLD16'],
+  'PERSON_GRANTS_CONSENT': ['POSTLD16'],
+  'PERSON_DENIES_CONSENT': ['POSTLD16'],
+  'PERSON_REVOKES_CONSENT': ['POSTLD16'],
+  'OFFICER_EXECUTES_WARRANT': ['POSTLD16'],
+  'OFFICER_OBSERVES_PLAIN_VIEW': ['POSTLD16'],
+  'OFFICER_SEARCHES_INCIDENT_TO_ARREST': ['POSTLD16'],
+
+  // Detention/Miranda events → LD-15 only
+  'OFFICER_DETAINS_PERSON': ['POSTLD15'],
+  'OFFICER_READS_MIRANDA': ['POSTLD15'],
+  'OFFICER_INTERROGATES_SUSPECT': ['POSTLD15'],
+  'SUSPECT_INVOKES_RIGHTS': ['POSTLD15'],
+  'SUSPECT_REQUESTS_ATTORNEY': ['POSTLD15'],
+  'SUSPECT_WAIVES_RIGHTS': ['POSTLD15'],
+  'OFFICER_CONTINUES_QUESTIONING_AFTER_INVOCATION': ['POSTLD15'],
+
+  // Force events → LD-20 only
+  'OFFICER_USES_PHYSICAL_FORCE': ['POSTLD20'],
+  'OFFICER_DRAWS_WEAPON': ['POSTLD20'],
+  'OFFICER_FIRES_WEAPON': ['POSTLD20'],
+  'OFFICER_DEPLOYS_TASER': ['POSTLD20'],
+  'OFFICER_DEPLOYS_OC_SPRAY': ['POSTLD20'],
+  'OFFICER_DEPLOYS_BATON': ['POSTLD20'],
+  'OFFICER_TAKES_DOWN_PERSON': ['POSTLD20'],
+  'OFFICER_WARNS_FORCE': ['POSTLD20'],
+  'OFFICER_DEESCALATES': ['POSTLD20'],
+
+  // Evidence handling → LD-24 only
+  'EVIDENCE_ITEM_COLLECTED': ['POSTLD24'],
+  'EVIDENCE_LOGGED_INTO_STORAGE': ['POSTLD24'],
+  'EVIDENCE_MISSING': ['POSTLD24'],
+  'EVIDENCE_TRANSFERRED': ['POSTLD24'],
+
+  // Arrest events → LD-15 + LD-18
+  'OFFICER_ARRESTS_PERSON': ['POSTLD15', 'POSTLD18'],
+
+  // Report events → LD-18 only
+  'OFFICER_WRITES_REPORT': ['POSTLD18'],
+  'OFFICER_SUPPLEMENTS_REPORT': ['POSTLD18'],
+};
+
+/**
+ * Pre-filter doctrine rules by event type to reduce search volume.
+ * Returns only relevant rule prefixes for the given event types.
+ */
+function getPreFilteredDoctrinePrefixes(eventTypeA: string, eventTypeB: string): string[] | null {
+  const prefixesA = EVENT_TYPE_DOCTRINE_PREFILTER[eventTypeA];
+  const prefixesB = EVENT_TYPE_DOCTRINE_PREFILTER[eventTypeB];
+
+  if (!prefixesA && !prefixesB) return null; // No pre-filter available
+
+  const combined = new Set<string>();
+  if (prefixesA) prefixesA.forEach((p) => combined.add(p));
+  if (prefixesB) prefixesB.forEach((p) => combined.add(p));
+
+  return Array.from(combined);
+}
+
+// ---------------------------------------------------------------------------
 // Event-Level Doctrine Mapping
 // ---------------------------------------------------------------------------
 
@@ -193,7 +262,10 @@ export function matchContradictionToDoctrine(
     }
   }
 
-  // Step 2: Add event-specific doctrine rules
+  // Step 2: Pre-filter by event type to reduce search volume
+  const allowedPrefixes = getPreFilteredDoctrinePrefixes(eventTypeA, eventTypeB);
+
+  // Step 3: Add event-specific doctrine rules (filtered if possible)
   const eventARules = getEventDoctrineRules(eventTypeA);
   const eventBRules = getEventDoctrineRules(eventTypeB);
   const allEventRules = [...new Set([...eventARules, ...eventBRules])];
@@ -201,6 +273,11 @@ export function matchContradictionToDoctrine(
   for (const ruleId of allEventRules) {
     // Avoid duplicates
     if (links.some((l) => l.doctrineRuleId === ruleId)) continue;
+
+    // Apply pre-filter: skip rules that don't match allowed prefixes
+    if (allowedPrefixes && !allowedPrefixes.some((prefix) => ruleId.startsWith(prefix))) {
+      continue;
+    }
 
     links.push({
       contradictionId: contradiction.contradictionId,

@@ -313,11 +313,19 @@ export function buildUnifiedTimeline(caseId: string, events: ExtractedEvent[]): 
     timelineEvents.push(timelineEvent);
   }
 
-  // Step 4: Sort by canonical timestamp
+  // Step 4: Deterministic sort — canonical_timestamp, source_priority, event_id
   timelineEvents.sort((a, b) => {
     const tsA = parseTimestamp(a.canonicalTimestamp) ?? 0;
     const tsB = parseTimestamp(b.canonicalTimestamp) ?? 0;
-    return tsA - tsB;
+    if (tsA !== tsB) return tsA - tsB;
+
+    // Secondary: source priority (lower index = higher priority)
+    const prioA = getTimestampPriority(a.timestampSource);
+    const prioB = getTimestampPriority(b.timestampSource);
+    if (prioA !== prioB) return prioA - prioB;
+
+    // Tertiary: event ID for fully deterministic ordering
+    return a.eventId.localeCompare(b.eventId);
   });
 
   return {

@@ -288,6 +288,10 @@ export function resetMonthlyCredits(userId: string): AiCreditBalance {
   const now = new Date();
   const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
 
+  // Deduct consumed purchased credits before resetting the usage counter.
+  // Purchased credits are consumed first (per deductCredits contract).
+  const purchasedConsumed = Math.min(balance.purchasedCredits, balance.creditsUsed);
+  balance.purchasedCredits -= purchasedConsumed;
   balance.creditsUsed = 0;
   balance.billingPeriodStart = now.toISOString();
   balance.billingPeriodEnd = endOfMonth.toISOString();

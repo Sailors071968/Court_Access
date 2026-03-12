@@ -200,7 +200,7 @@ export function deductCredits(
   analysisType: AnalysisType,
   caseId?: string,
 ): boolean {
-  if (credits <= 0) return false;
+  if (typeof credits !== 'number' || !Number.isFinite(credits) || credits <= 0) return false;
   if (!hasEnoughCredits(userId, credits)) return false;
 
   const balance = getCreditBalance(userId);

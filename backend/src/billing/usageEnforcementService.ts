@@ -116,8 +116,8 @@ export function getUserUsageRecord(userId: string): UsageTrackingRecord {
  * Record pages uploaded by a user. Called after successful upload.
  */
 export function recordPageUpload(userId: string, pageCount: number): UsageTrackingRecord {
-  if (pageCount <= 0) {
-    throw new Error('pageCount must be a positive number');
+  if (typeof pageCount !== 'number' || !Number.isFinite(pageCount) || pageCount <= 0) {
+    throw new Error('pageCount must be a positive finite number');
   }
   const record = getUserUsageRecord(userId);
   record.pagesUploadedTotal += pageCount;
@@ -131,8 +131,8 @@ export function recordPageUpload(userId: string, pageCount: number): UsageTracki
  * Record video minutes processed by a user.
  */
 export function recordVideoProcessing(userId: string, minutes: number): UsageTrackingRecord {
-  if (minutes <= 0) {
-    throw new Error('minutes must be a positive number');
+  if (typeof minutes !== 'number' || !Number.isFinite(minutes) || minutes <= 0) {
+    throw new Error('minutes must be a positive finite number');
   }
   const record = getUserUsageRecord(userId);
   record.videoMinutesProcessed += minutes;
@@ -147,7 +147,7 @@ export function recordVideoProcessing(userId: string, minutes: number): UsageTra
 // ---------------------------------------------------------------------------
 
 function getWarningLevel(percentUsed: number): 'none' | 'approaching' | 'exceeded' {
-  if (percentUsed >= 100) return 'exceeded';
+  if (percentUsed > 100) return 'exceeded';
   if (percentUsed >= 80) return 'approaching';
   return 'none';
 }

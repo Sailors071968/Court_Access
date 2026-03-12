@@ -78,6 +78,40 @@ function checkRateLimit(storeName: string, key: string, config: RateLimitConfig)
   };
 }
 
+/**
+ * Peek at a rate limit without incrementing the counter.
+ * Used to check daily limits before committing to increment.
+ */
+function peekRateLimit(storeName: string, key: string, config: RateLimitConfig): {
+  allowed: boolean;
+  remaining: number;
+  resetAt: number;
+  limit: number;
+} {
+  const store = getOrCreateStore(storeName);
+  const now = Date.now();
+
+  const entry = store.get(key);
+  if (!entry || entry.resetAt <= now) {
+    // No entry or expired — would be allowed
+    return {
+      allowed: true,
+      remaining: config.maxRequests,
+      resetAt: now + config.windowMs,
+      limit: config.maxRequests,
+    };
+  }
+
+  // Check without incrementing
+  const nextCount = entry.count + 1;
+  return {
+    allowed: nextCount <= config.maxRequests,
+    remaining: Math.max(0, config.maxRequests - entry.count),
+    resetAt: entry.resetAt,
+    limit: config.maxRequests,
+  };
+}
+
 // ---------------------------------------------------------------------------
 // Default key generator (IP + userId if available)
 // ---------------------------------------------------------------------------
@@ -168,9 +202,11 @@ function getRouteCategory(path: string, method: string): keyof typeof RATE_LIMIT
   }
 
   // CPRA email sending routes (Phase 6 hardening) — returns per-minute category;
-  // daily limit is checked separately in rateLimitHook
+  // daily limit is checked separately in rateLimitHook.
+  // Exclude worker control endpoints (/worker/start, /worker/stop, /check)
   if (
-    (path.startsWith('/api/admin/cpra/send') || path.startsWith('/api/admin/cpra/follow-up')) &&
+    (path.startsWith('/api/admin/cpra/send') ||
+     (path.startsWith('/api/admin/cpra/follow-up') && !path.includes('/worker/') && !path.endsWith('/check'))) &&
     method === 'POST'
   ) {
     return 'cpraEmail';
@@ -220,17 +256,23 @@ export async function rateLimitHook(
   const config = RATE_LIMIT_CONFIGS[category];
   const key = config.keyGenerator(request);
 
-  // For CPRA email routes, also enforce the daily limit
+  // For CPRA email routes, enforce both per-minute and daily limits.
+  // We peek at both limits first, then only increment when both allow.
   if (category === 'cpraEmail') {
     const dailyConfig = RATE_LIMIT_CONFIGS.cpraEmailDaily;
     const dailyKey = dailyConfig.keyGenerator(request);
-    const dailyResult = checkRateLimit('cpraEmailDaily', dailyKey, dailyConfig);
 
-    reply.header('X-RateLimit-Daily-Limit', dailyResult.limit);
-    reply.header('X-RateLimit-Daily-Remaining', dailyResult.remaining);
+    // Peek at per-minute limit first (don't increment yet)
+    const minutePeek = peekRateLimit(category, key, config);
+    // Peek at daily limit (don't increment yet)
+    const dailyPeek = peekRateLimit('cpraEmailDaily', dailyKey, dailyConfig);
 
-    if (!dailyResult.allowed) {
-      const retryAfter = Math.ceil((dailyResult.resetAt - Date.now()) / 1000);
+    reply.header('X-RateLimit-Daily-Limit', dailyPeek.limit);
+    reply.header('X-RateLimit-Daily-Remaining', dailyPeek.remaining);
+
+    // Check daily limit first
+    if (!dailyPeek.allowed) {
+      const retryAfter = Math.ceil((dailyPeek.resetAt - Date.now()) / 1000);
       reply.header('Retry-After', retryAfter);
       reply.code(429).send({
         error: 'Too Many Requests',
@@ -239,6 +281,31 @@ export async function rateLimitHook(
       });
       return;
     }
+
+    // Check per-minute limit
+    if (!minutePeek.allowed) {
+      reply.header('X-RateLimit-Limit', minutePeek.limit);
+      reply.header('X-RateLimit-Remaining', minutePeek.remaining);
+      reply.header('X-RateLimit-Reset', Math.ceil(minutePeek.resetAt / 1000));
+      const retryAfter = Math.ceil((minutePeek.resetAt - Date.now()) / 1000);
+      reply.header('Retry-After', retryAfter);
+      reply.code(429).send({
+        error: 'Too Many Requests',
+        message: config.message,
+        retryAfter,
+      });
+      return;
+    }
+
+    // Both limits allow — now increment both counters
+    const result = checkRateLimit(category, key, config);
+    const dailyResult = checkRateLimit('cpraEmailDaily', dailyKey, dailyConfig);
+
+    reply.header('X-RateLimit-Limit', result.limit);
+    reply.header('X-RateLimit-Remaining', result.remaining);
+    reply.header('X-RateLimit-Reset', Math.ceil(result.resetAt / 1000));
+    reply.header('X-RateLimit-Daily-Remaining', dailyResult.remaining);
+    return;
   }
 
   const result = checkRateLimit(category, key, config);

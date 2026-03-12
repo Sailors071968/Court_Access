@@ -19,6 +19,7 @@ import { csrfProtectionHook, getCsrfTokenRoute } from './security/csrfProtection
 import { securityHeadersHook } from './security/securityHeaders.js';
 import { uploadProtectionHook } from './security/evidenceUploadProtection.js';
 import { registerSecurityLogging } from './security/securityLogger.js';
+import { registerLegalResearchRoutes } from './services/legalResearchRoutes.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -94,6 +95,10 @@ async function startServer() {
   // Phase 193 — CSRF token endpoint
   app.get('/api/auth/csrf-token', getCsrfTokenRoute());
 
+  // Phases 293-300 — Legal Research (CourtListener integration)
+  console.log('[Server] Registering legal research routes...');
+  await registerLegalResearchRoutes(app);
+
   // Start server
   try {
     await app.listen({ port: PORT, host: HOST });
@@ -142,6 +147,15 @@ async function startServer() {
     console.log('  - GET  /api/security/logs');
     console.log('  - GET  /api/security/summary');
     console.log('  - GET  /api/admin/rate-limits');
+    console.log('  - GET  /api/legal-research/status');
+    console.log('  - GET  /api/legal-research/search');
+    console.log('  - GET  /api/legal-research/opinions');
+    console.log('  - GET  /api/legal-research/motion-precedent');
+    console.log('  - GET  /api/legal-research/case-intelligence/:caseId');
+    console.log('  - GET  /api/legal-research/judge/:judgeName');
+    console.log('  - GET  /api/legal-research/citation-graph/:opinionId');
+    console.log('  - GET  /api/legal-research/cache/stats');
+    console.log('  - POST /api/legal-research/cache/clear');
     console.log('[Server] Security hardening active: JWT auth, rate limiting, CSRF, security headers, upload protection, security logging');
   } catch (err) {
     console.error('[Server] Failed to start:', err);

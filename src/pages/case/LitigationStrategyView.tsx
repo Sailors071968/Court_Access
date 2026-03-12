@@ -12,6 +12,8 @@ import {
   Search, Gavel, Send, Globe, Users, ChevronDown, ChevronRight,
   Info, TrendingUp, Layers,
 } from 'lucide-react';
+import { JudgeIntelligencePanel } from '../../components/case/JudgeIntelligencePanel';
+import { CaseLawIntelligencePanel } from '../../components/case/CaseLawIntelligencePanel';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -366,6 +368,12 @@ export function LitigationStrategyView() {
           </div>
         )}
       </div>
+
+      {/* Phase 297: Judge Intelligence Panel */}
+      <JudgeIntelligencePanel judgeName="Hon. Patricia M. Guerrero" court="Sacramento County Superior Court" />
+
+      {/* Phase 296: Case Law Intelligence Panel */}
+      <CaseLawIntelligencePanel />
     </div>
   );
 }

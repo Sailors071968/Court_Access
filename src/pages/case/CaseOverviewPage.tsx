@@ -12,6 +12,7 @@ import { caseDataProvider } from '../../services/caseDataProvider';
 import { useAuthStore } from '../../stores/authStore';
 import { CaseAnalysisSection } from '../../components/case/CaseAnalysisSection';
 import { LitigationIntelligencePanel } from '../../components/case/LitigationIntelligencePanel';
+import { CaseLawIntelligencePanel } from '../../components/case/CaseLawIntelligencePanel';
 
 export function CaseOverviewPage() {
   const { caseId } = useParams<{ caseId: string }>();
@@ -149,6 +150,11 @@ export function CaseOverviewPage() {
       {/* Phase 282: Litigation Intelligence Panel */}
       {showIntelligence && (
         <LitigationIntelligencePanel />
+      )}
+
+      {/* Phase 296: Case Law Intelligence Panel */}
+      {showIntelligence && (
+        <CaseLawIntelligencePanel />
       )}
 
       {/* Police Training Doctrine Compliance */}

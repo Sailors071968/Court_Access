@@ -10,6 +10,7 @@ import { logEmail } from './cpraEmailLogService.js';
 import { createNotification } from './cpraNotificationService.js';
 import { addTimelineEvent } from './cpraTimelineService.js';
 import { CANONICAL_POLICY_TOPICS } from './cpraMatrixService.js';
+import { checkDailyLimit, checkMinuteLimit } from './cpraSafeguards.js';
 
 const prisma = new PrismaClient();
 
@@ -152,12 +153,29 @@ export async function sendAutonomousCpraRequest(
 export async function sendBatchCpraRequests(
   agencyIds: string[],
   campaignId: string,
-): Promise<BatchRequestResult> {
+): Promise<BatchRequestResult & { skippedDueToLimits: number }> {
   const results: CpraRequestResult[] = [];
   let successful = 0;
   let failed = 0;
+  let skippedDueToLimits = 0;
 
   for (const agencyId of agencyIds) {
+    // Check daily limit before each send
+    const dailyCheck = await checkDailyLimit();
+    if (!dailyCheck.allowed) {
+      console.log(`[CPRA Batch] Daily limit reached (${dailyCheck.sentToday}/${dailyCheck.sentToday + dailyCheck.remaining}). Stopping batch.`);
+      skippedDueToLimits = agencyIds.length - results.length;
+      break;
+    }
+
+    // Check per-minute limit and wait if needed
+    let minuteCheck = await checkMinuteLimit();
+    while (!minuteCheck.allowed) {
+      console.log(`[CPRA Batch] Per-minute limit hit (${minuteCheck.sentLastMinute}). Waiting 15 seconds...`);
+      await new Promise((resolve) => setTimeout(resolve, 15000));
+      minuteCheck = await checkMinuteLimit();
+    }
+
     const result = await sendAutonomousCpraRequest(agencyId, campaignId);
     results.push(result);
     if (result.success) {
@@ -166,14 +184,15 @@ export async function sendBatchCpraRequests(
       failed++;
     }
 
-    // Rate limiting: wait 2 seconds between sends
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    // Rate limiting: wait 12 seconds between sends (5/minute = 1 per 12s)
+    await new Promise((resolve) => setTimeout(resolve, 12000));
   }
 
   return {
     totalRequested: agencyIds.length,
     successful,
     failed,
+    skippedDueToLimits,
     results,
   };
 }

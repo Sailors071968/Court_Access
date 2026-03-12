@@ -193,7 +193,7 @@ export async function processAttachment(
     data: {
       documentType,
       classificationConfidence: confidence,
-      processingStatus: documentType === 'non_policy' ? 'classified' : 'classified',
+      processingStatus: documentType === 'non_policy' ? 'skipped' : 'classified',
     },
   });
 

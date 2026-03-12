@@ -19,6 +19,7 @@ import { csrfProtectionHook, getCsrfTokenRoute } from './security/csrfProtection
 import { securityHeadersHook } from './security/securityHeaders.js';
 import { uploadProtectionHook } from './security/evidenceUploadProtection.js';
 import { registerSecurityLogging } from './security/securityLogger.js';
+import { registerContradictionRoutes } from './contradiction/index.ts';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -94,6 +95,10 @@ async function startServer() {
   // Phase 193 — CSRF token endpoint
   app.get('/api/auth/csrf-token', getCsrfTokenRoute());
 
+  // Contradiction Detection Engine routes
+  console.log('[Server] Registering contradiction detection engine routes...');
+  registerContradictionRoutes(app);
+
   // Start server
   try {
     await app.listen({ port: PORT, host: HOST });
@@ -142,6 +147,12 @@ async function startServer() {
     console.log('  - GET  /api/security/logs');
     console.log('  - GET  /api/security/summary');
     console.log('  - GET  /api/admin/rate-limits');
+    console.log('  - GET  /api/contradiction/status');
+    console.log('  - GET  /api/contradiction/ontology');
+    console.log('  - POST /api/contradiction/extract');
+    console.log('  - POST /api/contradiction/analyze/:caseId');
+    console.log('  - GET  /api/contradiction/graph/:caseId');
+    console.log('  - GET  /api/contradiction/recommendations/:caseId');
     console.log('[Server] Security hardening active: JWT auth, rate limiting, CSRF, security headers, upload protection, security logging');
   } catch (err) {
     console.error('[Server] Failed to start:', err);

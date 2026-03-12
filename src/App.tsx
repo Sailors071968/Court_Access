@@ -63,6 +63,7 @@ import { DocumentsPage } from './pages/case/DocumentsPage';
 import { CaseSettingsPage } from './pages/case/CaseSettingsPage';
 import { TrialExhibitWorkspace } from './pages/case/TrialExhibitWorkspace';
 import { LitigationStrategyView } from './pages/case/LitigationStrategyView';
+import { ContradictionDashboardPage } from './pages/case/ContradictionDashboardPage';
 
 function App() {
   return (
@@ -347,6 +348,14 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canViewEvidence">
                   <LitigationStrategyView />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="contradictions"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <ContradictionDashboardPage />
                 </ProtectedRoute>
               }
             />

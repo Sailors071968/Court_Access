@@ -33,14 +33,34 @@ async function startServer() {
     bodyLimit: 10 * 1024 * 1024, // 10MB
   });
 
-  // CORS for frontend dev server
+  // CORS — production domains + local dev
+  const CORS_ORIGINS = process.env.NODE_ENV === 'production'
+    ? [
+        'https://courtaccess.net',
+        'https://www.courtaccess.net',
+        'https://beta.courtaccess.net',
+      ]
+    : [
+        'http://localhost:5173',
+        'http://localhost:4173',
+        'http://localhost:3000',
+      ];
+
+  // Allow FRONTEND_URL override
+  if (process.env.FRONTEND_URL && !CORS_ORIGINS.includes(process.env.FRONTEND_URL)) {
+    CORS_ORIGINS.push(process.env.FRONTEND_URL);
+  }
+
   await app.register(cors, {
-    origin: ['http://localhost:5173', 'http://localhost:4173', 'http://localhost:3000'],
+    origin: CORS_ORIGINS,
     methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
     credentials: true,
   });
 
   // Cookie support (required for CSRF, refresh tokens)
+  if (!process.env.COOKIE_SECRET && process.env.NODE_ENV === 'production') {
+    console.warn('[Server] WARNING: COOKIE_SECRET not set in production! Using random fallback.');
+  }
   await app.register(cookie, {
     secret: process.env.COOKIE_SECRET || 'court-access-cookie-secret-change-in-production',
   });
@@ -67,8 +87,9 @@ async function startServer() {
   app.get('/api/health', async () => ({
     status: 'ok',
     timestamp: new Date().toISOString(),
-    version: '1.0.0',
+    version: '1.1.0',
     service: 'court-access-backend',
+    environment: process.env.NODE_ENV || 'development',
   }));
 
   // Register route modules

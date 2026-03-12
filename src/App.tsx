@@ -15,6 +15,7 @@ import { ForProsecutorsPage } from './pages/ForProsecutorsPage';
 import { GovernmentPage } from './pages/GovernmentPage';
 import { ContactSalesPage } from './pages/ContactSalesPage';
 import { CaseStudiesPage } from './pages/CaseStudiesPage';
+import { LegalDisclaimerPage } from './pages/LegalDisclaimerPage';
 
 // Auth Pages
 import { LoginPage } from './pages/auth/LoginPage';
@@ -81,6 +82,7 @@ function App() {
         <Route path="/government" element={<GovernmentPage />} />
         <Route path="/contact" element={<ContactSalesPage />} />
         <Route path="/case-studies" element={<CaseStudiesPage />} />
+        <Route path="/legal-disclaimer" element={<LegalDisclaimerPage />} />
 
         {/* Public Auth Routes */}
         <Route path="/login" element={<LoginPage />} />

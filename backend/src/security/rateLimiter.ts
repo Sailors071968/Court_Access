@@ -126,6 +126,22 @@ const RATE_LIMIT_CONFIGS = {
     message: 'Too many login attempts. Please wait before trying again.',
     keyGenerator: (request: FastifyRequest) => `login:${request.ip}`,
   } satisfies RateLimitConfig,
+
+  // CPRA email sending: 5 per minute, 50 per day (Phase 6 production hardening)
+  cpraEmail: {
+    windowMs: 60_000,
+    maxRequests: parseInt(process.env.CPRA_MAX_EMAILS_PER_MINUTE || '5', 10),
+    message: 'CPRA email rate limit exceeded. Maximum 5 emails per minute.',
+    keyGenerator: defaultKeyGenerator,
+  } satisfies RateLimitConfig,
+
+  // Registration: 3 per minute per IP (spam protection)
+  register: {
+    windowMs: 60_000,
+    maxRequests: 3,
+    message: 'Too many registration attempts. Please wait before trying again.',
+    keyGenerator: (request: FastifyRequest) => `register:${request.ip}`,
+  } satisfies RateLimitConfig,
 };
 
 // ---------------------------------------------------------------------------
@@ -136,6 +152,19 @@ function getRouteCategory(path: string, method: string): keyof typeof RATE_LIMIT
   // Login routes
   if (path === '/api/auth/login' && method === 'POST') {
     return 'login';
+  }
+
+  // Registration routes (Phase 6 hardening)
+  if (path === '/api/auth/register' && method === 'POST') {
+    return 'register';
+  }
+
+  // CPRA email sending routes (Phase 6 hardening)
+  if (
+    (path.startsWith('/api/admin/cpra/send') || path.startsWith('/api/admin/cpra/follow-up')) &&
+    method === 'POST'
+  ) {
+    return 'cpraEmail';
   }
 
   // Upload routes
@@ -230,4 +259,6 @@ export const RATE_LIMIT_CONFIG = {
   upload: { windowMs: 60_000, maxRequests: 10, description: '10 uploads per minute per user/IP' },
   compliance: { windowMs: 60_000, maxRequests: 5, description: '5 compliance analyses per minute per user/IP' },
   login: { windowMs: 60_000, maxRequests: 5, description: '5 login attempts per minute per IP' },
+  cpraEmail: { windowMs: 60_000, maxRequests: 5, description: '5 CPRA emails per minute (configurable via env)' },
+  register: { windowMs: 60_000, maxRequests: 3, description: '3 registrations per minute per IP' },
 };

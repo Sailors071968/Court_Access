@@ -1047,3 +1047,103 @@ model UsageTracking {
   @@index([billingPeriodEnd])
   @@map("usage_tracking")
 }
+
+// ---------------------------------------------------------------------------
+// Autonomous CPRA System — Email Log (outbound + inbound)
+// ---------------------------------------------------------------------------
+
+model CpraEmailLog {
+  emailId         String    @id @default(uuid())
+  agencyId        String?
+  direction       String    // OUTBOUND | INBOUND
+  emailAddress    String
+  fromAddress     String?
+  subject         String
+  body            String
+  sentTimestamp   DateTime  @default(now())
+  requestId       String?   // reference to CPRAAgencyRequest.requestId
+  policyTopics    String?   // JSON array of requested policy topics
+  sesMessageId    String?   // AWS SES message ID for outbound
+  processed       Boolean   @default(false) // whether inbound email has been processed
+
+  attachments     CpraEmailAttachment[]
+
+  createdAt       DateTime  @default(now())
+
+  @@index([agencyId])
+  @@index([direction])
+  @@index([requestId])
+  @@index([processed])
+  @@index([sentTimestamp])
+  @@map("cpra_email_log")
+}
+
+// ---------------------------------------------------------------------------
+// Autonomous CPRA System — Email Attachments
+// ---------------------------------------------------------------------------
+
+model CpraEmailAttachment {
+  attachmentId    String    @id @default(uuid())
+  emailId         String
+  Email           CpraEmailLog @relation(fields: [emailId], references: [emailId])
+  fileName        String
+  fileType        String?   // application/pdf, image/png, etc.
+  fileSizeBytes   Int?
+  fileUrl         String?   // R2 URL after upload
+  uploadTimestamp DateTime?
+  documentType    String?   // policy_document | procedural_manual | training_bulletin | general_response | non_policy
+  classificationConfidence Float?
+  policyTopicDetected      String? // detected policy topic name
+  processingStatus         String  @default("pending") // pending | uploaded | classified | ingested | failed
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([emailId])
+  @@index([processingStatus])
+  @@index([documentType])
+  @@map("cpra_email_attachments")
+}
+
+// ---------------------------------------------------------------------------
+// Autonomous CPRA System — Dashboard Notifications
+// ---------------------------------------------------------------------------
+
+model CpraNotification {
+  notificationId  String    @id @default(uuid())
+  agencyId        String?
+  eventType       String    // EMAIL_SENT | EMAIL_RECEIVED | DOCUMENT_UPLOADED | POLICY_PARSED | POLICY_ACTIVE | FOLLOW_UP_SENT | REQUEST_CREATED
+  title           String
+  message         String
+  metadata        String?   // JSON: additional event data
+  read            Boolean   @default(false)
+  dismissed       Boolean   @default(false)
+
+  createdAt       DateTime  @default(now())
+
+  @@index([agencyId])
+  @@index([eventType])
+  @@index([read])
+  @@index([createdAt])
+  @@map("cpra_notifications")
+}
+
+// ---------------------------------------------------------------------------
+// Autonomous CPRA System — Agency Timeline Events
+// ---------------------------------------------------------------------------
+
+model CpraTimelineEvent {
+  eventId         String    @id @default(uuid())
+  agencyId        String
+  eventType       String    // REQUEST_SENT | EMAIL_RECEIVED | ATTACHMENT_DETECTED | POLICY_UPLOADED | POLICY_INGESTED | FOLLOW_UP_SENT | STATUS_CHANGED
+  title           String
+  description     String?
+  metadata        String?   // JSON: attachments, policy topics, subjects, etc.
+
+  createdAt       DateTime  @default(now())
+
+  @@index([agencyId])
+  @@index([eventType])
+  @@index([createdAt])
+  @@map("cpra_timeline_events")
+}

@@ -21,6 +21,7 @@ import { uploadProtectionHook } from './security/evidenceUploadProtection.js';
 import { registerSecurityLogging } from './security/securityLogger.js';
 import { registerContradictionRoutes } from './contradiction/index.ts';
 import { registerPolicyMatrixRoutes } from './cpra/policyMatrixRoutes.js';
+import { registerAutonomousCpraRoutes } from './cpra/autonomousCpraRoutes.js';
 import { registerBillingRoutes } from './billing/billingRoutes.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
@@ -104,6 +105,10 @@ async function startServer() {
   // CPRA Policy Matrix routes
   console.log('[Server] Registering CPRA policy matrix routes...');
   await registerPolicyMatrixRoutes(app);
+
+  // Autonomous CPRA System routes
+  console.log('[Server] Registering autonomous CPRA system routes...');
+  await registerAutonomousCpraRoutes(app);
 
   // Billing, subscriptions, AI credits, usage enforcement routes
   console.log('[Server] Registering billing & usage routes...');

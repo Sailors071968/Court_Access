@@ -59,7 +59,7 @@ async function startServer() {
 
   // Cookie support (required for CSRF, refresh tokens)
   if (!process.env.COOKIE_SECRET && process.env.NODE_ENV === 'production') {
-    console.warn('[Server] WARNING: COOKIE_SECRET not set in production! Using random fallback.');
+    console.warn('[Server] WARNING: COOKIE_SECRET not set in production! Using insecure hardcoded fallback. Set COOKIE_SECRET env var immediately.');
   }
   await app.register(cookie, {
     secret: process.env.COOKIE_SECRET || 'court-access-cookie-secret-change-in-production',

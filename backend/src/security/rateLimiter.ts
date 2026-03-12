@@ -127,11 +127,19 @@ const RATE_LIMIT_CONFIGS = {
     keyGenerator: (request: FastifyRequest) => `login:${request.ip}`,
   } satisfies RateLimitConfig,
 
-  // CPRA email sending: 5 per minute, 50 per day (Phase 6 production hardening)
+  // CPRA email sending: 5 per minute (Phase 6 production hardening)
   cpraEmail: {
     windowMs: 60_000,
     maxRequests: parseInt(process.env.CPRA_MAX_EMAILS_PER_MINUTE || '5', 10),
     message: 'CPRA email rate limit exceeded. Maximum 5 emails per minute.',
+    keyGenerator: defaultKeyGenerator,
+  } satisfies RateLimitConfig,
+
+  // CPRA email sending: 50 per day (Phase 6 production hardening — daily safety cap)
+  cpraEmailDaily: {
+    windowMs: 86_400_000, // 24 hours
+    maxRequests: parseInt(process.env.CPRA_MAX_EMAILS_PER_DAY || '50', 10),
+    message: 'CPRA daily email limit exceeded. Maximum 50 emails per day.',
     keyGenerator: defaultKeyGenerator,
   } satisfies RateLimitConfig,
 
@@ -159,7 +167,8 @@ function getRouteCategory(path: string, method: string): keyof typeof RATE_LIMIT
     return 'register';
   }
 
-  // CPRA email sending routes (Phase 6 hardening)
+  // CPRA email sending routes (Phase 6 hardening) — returns per-minute category;
+  // daily limit is checked separately in rateLimitHook
   if (
     (path.startsWith('/api/admin/cpra/send') || path.startsWith('/api/admin/cpra/follow-up')) &&
     method === 'POST'
@@ -211,6 +220,27 @@ export async function rateLimitHook(
   const config = RATE_LIMIT_CONFIGS[category];
   const key = config.keyGenerator(request);
 
+  // For CPRA email routes, also enforce the daily limit
+  if (category === 'cpraEmail') {
+    const dailyConfig = RATE_LIMIT_CONFIGS.cpraEmailDaily;
+    const dailyKey = dailyConfig.keyGenerator(request);
+    const dailyResult = checkRateLimit('cpraEmailDaily', dailyKey, dailyConfig);
+
+    reply.header('X-RateLimit-Daily-Limit', dailyResult.limit);
+    reply.header('X-RateLimit-Daily-Remaining', dailyResult.remaining);
+
+    if (!dailyResult.allowed) {
+      const retryAfter = Math.ceil((dailyResult.resetAt - Date.now()) / 1000);
+      reply.header('Retry-After', retryAfter);
+      reply.code(429).send({
+        error: 'Too Many Requests',
+        message: dailyConfig.message,
+        retryAfter,
+      });
+      return;
+    }
+  }
+
   const result = checkRateLimit(category, key, config);
 
   // Set rate limit headers
@@ -260,5 +290,6 @@ export const RATE_LIMIT_CONFIG = {
   compliance: { windowMs: 60_000, maxRequests: 5, description: '5 compliance analyses per minute per user/IP' },
   login: { windowMs: 60_000, maxRequests: 5, description: '5 login attempts per minute per IP' },
   cpraEmail: { windowMs: 60_000, maxRequests: 5, description: '5 CPRA emails per minute (configurable via env)' },
+  cpraEmailDaily: { windowMs: 86_400_000, maxRequests: 50, description: '50 CPRA emails per day (configurable via env)' },
   register: { windowMs: 60_000, maxRequests: 3, description: '3 registrations per minute per IP' },
 };

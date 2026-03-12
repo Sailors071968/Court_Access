@@ -135,6 +135,7 @@ export function RegisterPage() {
                 <option value="attorney">Attorney</option>
                 <option value="investigator">Investigator</option>
                 <option value="staff">Staff</option>
+                <option value="defendant">Defendant</option>
               </select>
             </div>
             <div>

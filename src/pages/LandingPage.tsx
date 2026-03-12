@@ -492,6 +492,162 @@ function FaqSection() {
 }
 
 // ---------------------------------------------------------------------------
+// Pricing Section
+// ---------------------------------------------------------------------------
+
+function PricingSection() {
+  const plans = [
+    {
+      name: 'Free',
+      price: 0,
+      pages: '10 pages lifetime',
+      credits: '0 AI credits',
+      features: ['Basic evidence upload', 'Single case', 'Watermarked exports'],
+      cta: 'Get Started Free',
+      highlighted: false,
+    },
+    {
+      name: 'Starter',
+      price: 39,
+      pages: '300 pages/mo',
+      credits: '20 AI credits/mo',
+      features: ['Contradiction detection', 'Timeline analysis', 'Document archival', '1-year retention'],
+      cta: 'Start Starter',
+      highlighted: false,
+    },
+    {
+      name: 'Professional',
+      price: 129,
+      pages: '2,000 pages/mo',
+      credits: '100 AI credits/mo',
+      features: ['Everything in Starter', 'Doctrine matching', 'Litigation intelligence', 'No watermarks', '2-year retention'],
+      cta: 'Go Professional',
+      highlighted: true,
+    },
+    {
+      name: 'Advanced Investigator',
+      price: 249,
+      pages: '6,000 pages/mo',
+      credits: '250 AI credits/mo',
+      features: ['Everything in Professional', 'Video intelligence', 'Reliability scoring', 'Priority processing', '3-year retention'],
+      cta: 'Start Advanced',
+      highlighted: false,
+    },
+    {
+      name: 'Litigation Pro',
+      price: 399,
+      pages: '12,000 pages/mo',
+      credits: '500 AI credits/mo',
+      features: ['Everything in Advanced', 'Expert witness packages', 'Jury visualization', 'Forensic reconstruction', '5-year retention'],
+      cta: 'Start Litigation Pro',
+      highlighted: false,
+    },
+    {
+      name: 'Enterprise Firm',
+      price: 699,
+      pages: '25,000 pages/mo',
+      credits: '1,500 AI credits/mo',
+      features: ['Everything in Litigation Pro', 'Multi-user accounts', 'API access', 'Dedicated support', '10-year retention'],
+      cta: 'Contact Sales',
+      highlighted: false,
+    },
+  ];
+
+  const creditPacks = [
+    { credits: 50, price: 25 },
+    { credits: 150, price: 60 },
+    { credits: 500, price: 175 },
+    { credits: 1500, price: 450 },
+  ];
+
+  return (
+    <section className="py-20 bg-gray-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
+            Simple, Transparent Pricing
+          </h2>
+          <p className="text-lg text-gray-600 max-w-2xl mx-auto">
+            Choose the plan that fits your caseload. All page limits are cumulative across all your cases.
+          </p>
+        </div>
+
+        {/* Plan Cards */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
+          {plans.map((plan) => (
+            <div
+              key={plan.name}
+              className={`rounded-2xl p-6 ${
+                plan.highlighted
+                  ? 'bg-slate-900 text-white ring-2 ring-amber-500 shadow-xl scale-105'
+                  : 'bg-white border border-gray-200 shadow-sm'
+              }`}
+            >
+              {plan.highlighted && (
+                <span className="inline-block bg-amber-500 text-slate-900 text-xs font-bold px-3 py-1 rounded-full mb-3">
+                  Most Popular
+                </span>
+              )}
+              <h3 className={`text-xl font-bold mb-1 ${plan.highlighted ? 'text-white' : 'text-gray-900'}`}>
+                {plan.name}
+              </h3>
+              <div className="flex items-baseline gap-1 mb-4">
+                <span className={`text-4xl font-bold ${plan.highlighted ? 'text-white' : 'text-gray-900'}`}>
+                  ${plan.price}
+                </span>
+                {plan.price > 0 && (
+                  <span className={`text-sm ${plan.highlighted ? 'text-slate-300' : 'text-gray-500'}`}>/month</span>
+                )}
+              </div>
+              <div className={`text-sm mb-1 ${plan.highlighted ? 'text-slate-300' : 'text-gray-600'}`}>
+                {plan.pages}
+              </div>
+              <div className={`text-sm mb-4 ${plan.highlighted ? 'text-slate-300' : 'text-gray-600'}`}>
+                {plan.credits}
+              </div>
+              <ul className="space-y-2 mb-6">
+                {plan.features.map((f) => (
+                  <li key={f} className={`flex items-start gap-2 text-sm ${plan.highlighted ? 'text-slate-200' : 'text-gray-600'}`}>
+                    <span className={plan.highlighted ? 'text-amber-400' : 'text-green-500'}>&#10003;</span>
+                    {f}
+                  </li>
+                ))}
+              </ul>
+              <Link
+                to="/register"
+                className={`block w-full text-center py-2.5 rounded-lg text-sm font-semibold transition-colors ${
+                  plan.highlighted
+                    ? 'bg-amber-500 hover:bg-amber-400 text-slate-900'
+                    : 'bg-slate-900 hover:bg-slate-800 text-white'
+                }`}
+              >
+                {plan.cta}
+              </Link>
+            </div>
+          ))}
+        </div>
+
+        {/* Credit Packs */}
+        <div className="text-center mb-8">
+          <h3 className="text-2xl font-bold text-gray-900 mb-2">Need More AI Credits?</h3>
+          <p className="text-gray-600">Purchase credit packs anytime. Credits roll over for 90 days.</p>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-3xl mx-auto">
+          {creditPacks.map((pack) => (
+            <div key={pack.credits} className="bg-white border border-gray-200 rounded-xl p-6 text-center shadow-sm hover:shadow-md transition-shadow">
+              <p className="text-3xl font-bold text-gray-900">{pack.credits.toLocaleString()}</p>
+              <p className="text-sm text-gray-500 mb-3">credits</p>
+              <p className="text-xl font-bold text-blue-600">${pack.price}</p>
+              <p className="text-xs text-gray-400 mt-1">${(pack.price / pack.credits * 100).toFixed(0)}c/credit</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Final CTA Section
 // ---------------------------------------------------------------------------
 
@@ -647,6 +803,9 @@ export function LandingPage() {
         <SocialProofSection />
       </div>
       <AuthoritySection />
+      <div id="pricing">
+        <PricingSection />
+      </div>
       <div id="faq">
         <FaqSection />
       </div>

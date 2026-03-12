@@ -934,3 +934,116 @@ model JuryVisualization {
   @@index([caseId])
   @@map("jury_visualizations")
 }
+
+// ---------------------------------------------------------------------------
+// CPRA Policy Status Matrix — tracks policy status per agency per topic
+// ---------------------------------------------------------------------------
+
+model AgencyPolicyMatrix {
+  id              String    @id @default(uuid())
+  agencyId        String
+  topicId         String
+  status          String    @default("NOT_REQUESTED") // NOT_REQUESTED | REQUESTED | RECEIVED | UPLOADED | IN_USE
+  requestDate     DateTime?
+  receivedDate    DateTime?
+  uploadedDate    DateTime?
+  inUseDate       DateTime?
+  fileUrl         String?
+  notes           String?
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@unique([agencyId, topicId])
+  @@index([agencyId])
+  @@index([topicId])
+  @@index([status])
+  @@map("agency_policy_matrix")
+}
+
+// ---------------------------------------------------------------------------
+// CPRA Request Tracking — outgoing CPRA requests per agency per topic
+// ---------------------------------------------------------------------------
+
+model CpraRequest {
+  id                String    @id @default(uuid())
+  agencyId          String
+  topicId           String
+  dateSent          DateTime?
+  status            String    @default("draft") // draft | sent | awaiting_response | follow_up | documents_received | closed
+  responseReceived  Boolean   @default(false)
+  followupDate      DateTime?
+
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([agencyId])
+  @@index([topicId])
+  @@index([status])
+  @@map("cpra_requests_v2")
+}
+
+// ---------------------------------------------------------------------------
+// AI Credit Balance — tracks monthly + purchased credits per user
+// ---------------------------------------------------------------------------
+
+model AiCreditBalance {
+  id                  String    @id @default(uuid())
+  userId              String    @unique
+  monthlyCredits      Int       @default(0)
+  purchasedCredits    Int       @default(0)
+  creditsUsed         Int       @default(0)
+  billingPeriodStart  DateTime
+  billingPeriodEnd    DateTime
+
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([billingPeriodEnd])
+  @@map("ai_credit_balances")
+}
+
+// ---------------------------------------------------------------------------
+// AI Credit Usage — audit trail of every credit deduction
+// ---------------------------------------------------------------------------
+
+model AiCreditUsage {
+  id              String    @id @default(uuid())
+  userId          String
+  caseId          String?
+  analysisType    String    // VIDEO_PROCESSING | CONTRADICTION_ENGINE | DOCTRINE_ANALYSIS | LITIGATION_INTELLIGENCE | RELIABILITY_SCORING
+  creditsUsed     Int
+  timestamp       DateTime  @default(now())
+
+  createdAt       DateTime  @default(now())
+
+  @@index([userId])
+  @@index([caseId])
+  @@index([analysisType])
+  @@index([timestamp])
+  @@map("ai_credit_usage")
+}
+
+// ---------------------------------------------------------------------------
+// Usage Tracking — cumulative page + video usage per billing period
+// ---------------------------------------------------------------------------
+
+model UsageTracking {
+  id                      String    @id @default(uuid())
+  userId                  String
+  organizationId          String?
+  billingPeriodStart      DateTime
+  billingPeriodEnd        DateTime
+  pagesUploadedTotal      Int       @default(0)
+  videoMinutesProcessed   Int       @default(0)
+
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+
+  @@unique([userId, billingPeriodStart])
+  @@index([userId])
+  @@index([organizationId])
+  @@index([billingPeriodEnd])
+  @@map("usage_tracking")
+}

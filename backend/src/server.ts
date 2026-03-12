@@ -20,6 +20,8 @@ import { securityHeadersHook } from './security/securityHeaders.js';
 import { uploadProtectionHook } from './security/evidenceUploadProtection.js';
 import { registerSecurityLogging } from './security/securityLogger.js';
 import { registerContradictionRoutes } from './contradiction/index.ts';
+import { registerPolicyMatrixRoutes } from './cpra/policyMatrixRoutes.js';
+import { registerBillingRoutes } from './billing/billingRoutes.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -98,6 +100,14 @@ async function startServer() {
   // Contradiction Detection Engine routes
   console.log('[Server] Registering contradiction detection engine routes...');
   registerContradictionRoutes(app);
+
+  // CPRA Policy Matrix routes
+  console.log('[Server] Registering CPRA policy matrix routes...');
+  await registerPolicyMatrixRoutes(app);
+
+  // Billing, subscriptions, AI credits, usage enforcement routes
+  console.log('[Server] Registering billing & usage routes...');
+  await registerBillingRoutes(app);
 
   // Start server
   try {

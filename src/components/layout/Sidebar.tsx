@@ -73,6 +73,7 @@ const navItems: NavItem[] = [
       { id: 'beta-verification', label: 'Beta Verification', path: '/dashboard/beta-verification', icon: <CheckSquare size={16} /> },
       { id: 'policy-matrix', label: 'Policy Matrix', path: '/dashboard/policy-matrix', icon: <BarChart3 size={16} /> },
       { id: 'cpra-timeline', label: 'CPRA Timeline', path: '/dashboard/cpra-timeline', icon: <Globe size={16} /> },
+      { id: 'cpra-autonomous', label: 'CPRA Autonomous', path: '/dashboard/cpra-autonomous', icon: <Globe size={16} /> },
     ],
   },
 ];

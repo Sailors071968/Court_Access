@@ -422,7 +422,7 @@ export function ContradictionDashboardPage() {
             <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gray-200" />
 
             <div className="space-y-0">
-              {MOCK_TIMELINE.map((te, idx) => {
+              {MOCK_TIMELINE.map((te) => {
                 // Check if this event has a contradiction
                 const hasContradiction = MOCK_CONTRADICTIONS.some(
                   (c) =>

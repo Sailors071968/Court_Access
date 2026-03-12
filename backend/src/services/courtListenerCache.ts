@@ -25,7 +25,7 @@ export class CourtListenerCache {
   private buildKey(endpoint: string, params: Record<string, string>): string {
     const sorted = Object.entries(params)
       .sort(([a], [b]) => a.localeCompare(b))
-      .map(([k, v]) => `${k}=${v}`)
+      .map(([k, v]) => `${encodeURIComponent(k)}=${encodeURIComponent(v)}`)
       .join('&');
     return `${endpoint}?${sorted}`;
   }

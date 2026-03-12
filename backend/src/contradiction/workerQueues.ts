@@ -210,7 +210,7 @@ export class InMemoryQueue<T = unknown> {
       job.status = 'completed';
       job.result = result;
     } catch (err) {
-      if (job.attempts < job.maxRetries) {
+      if (job.attempts <= job.maxRetries) {
         job.status = 'retrying';
         job.error = err instanceof Error ? err.message : String(err);
         // Schedule retry after backoff

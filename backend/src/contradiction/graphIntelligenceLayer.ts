@@ -238,8 +238,8 @@ function buildEventEvidenceEdges(events: ExtractedEvent[]): GraphEdge[] {
     // RECORDED_BY: Evidence records this event (reverse relationship)
     edges.push({
       edgeId: uuidv4(),
-      sourceNodeId: ev.eventId,
-      targetNodeId: ev.sourceEvidenceId,
+      sourceNodeId: ev.sourceEvidenceId,
+      targetNodeId: ev.eventId,
       type: 'RECORDED_BY' as GraphEdgeType,
       properties: {
         extractionMethod: ev.extractionMethod,
@@ -438,8 +438,12 @@ export function generateCypherStatements(graph: ContradictionGraph): string[] {
       .map(([k, v]) => `${k}: ${JSON.stringify(v)}`)
       .join(', ');
 
+    const allNodeProps = propsStr
+      ? `nodeId: ${JSON.stringify(node.nodeId)}, label: ${JSON.stringify(node.label)}, ${propsStr}`
+      : `nodeId: ${JSON.stringify(node.nodeId)}, label: ${JSON.stringify(node.label)}`;
+
     statements.push(
-      `CREATE (n:${node.type} {nodeId: ${JSON.stringify(node.nodeId)}, label: ${JSON.stringify(node.label)}, ${propsStr}})`,
+      `CREATE (n:${node.type} {${allNodeProps}})`,
     );
   }
 
@@ -449,8 +453,12 @@ export function generateCypherStatements(graph: ContradictionGraph): string[] {
       .map(([k, v]) => `${k}: ${JSON.stringify(v)}`)
       .join(', ');
 
+    const allEdgeProps = propsStr
+      ? `edgeId: ${JSON.stringify(edge.edgeId)}, ${propsStr}`
+      : `edgeId: ${JSON.stringify(edge.edgeId)}`;
+
     statements.push(
-      `MATCH (a {nodeId: ${JSON.stringify(edge.sourceNodeId)}}), (b {nodeId: ${JSON.stringify(edge.targetNodeId)}}) CREATE (a)-[:${edge.type} {edgeId: ${JSON.stringify(edge.edgeId)}, ${propsStr}}]->(b)`,
+      `MATCH (a {nodeId: ${JSON.stringify(edge.sourceNodeId)}}), (b {nodeId: ${JSON.stringify(edge.targetNodeId)}}) CREATE (a)-[:${edge.type} {${allEdgeProps}}]->(b)`,
     );
   }
 

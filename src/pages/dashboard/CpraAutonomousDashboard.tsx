@@ -188,9 +188,9 @@ export function CpraAutonomousDashboard() {
   const fetchData = useCallback(async () => {
     try {
       const [statusData, timelineData, notifData] = await Promise.all([
-        apiFetch<SystemStatus>('/cpra/autonomous/status'),
-        apiFetch<{ events: TimelineEvent[] }>('/cpra/autonomous/timeline?limit=50'),
-        apiFetch<{ notifications: Notification[] }>('/cpra/autonomous/notifications?limit=50'),
+        apiFetch<SystemStatus>('/admin/cpra/status'),
+        apiFetch<{ events: TimelineEvent[] }>('/admin/cpra/timeline?limit=50'),
+        apiFetch<{ notifications: Notification[] }>('/admin/cpra/notifications?limit=50'),
       ]);
 
       setStatus(statusData);
@@ -279,7 +279,7 @@ export function CpraAutonomousDashboard() {
 
   const toggleWorker = async (worker: string, action: 'start' | 'stop') => {
     try {
-      await apiFetch(`/cpra/autonomous/${worker}/${action}`, { method: 'POST' });
+      await apiFetch(`/admin/cpra/${worker}/${action}`, { method: 'POST' });
       await fetchData();
     } catch {
       // Silently handle - demo mode
@@ -292,7 +292,7 @@ export function CpraAutonomousDashboard() {
 
   const markAllRead = async () => {
     try {
-      await apiFetch('/cpra/autonomous/notifications/read-all', { method: 'PUT' });
+      await apiFetch('/admin/cpra/notifications/read-all', { method: 'PUT' });
       setNotifications((prev) => prev.map((n) => ({ ...n, read: true })));
     } catch {
       // Demo mode fallback
@@ -718,7 +718,7 @@ export function CpraAutonomousDashboard() {
                     className="w-full text-left px-3 py-2 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 text-sm font-medium transition-colors"
                     onClick={async () => {
                       try {
-                        await apiFetch('/cpra/autonomous/send-all-missing', {
+                        await apiFetch('/admin/cpra/send-all-missing', {
                           method: 'POST',
                           body: JSON.stringify({ campaignId: 'auto-campaign-' + Date.now() }),
                         });
@@ -751,7 +751,7 @@ export function CpraAutonomousDashboard() {
                     className="w-full text-left px-3 py-2 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-700 text-sm font-medium transition-colors"
                     onClick={async () => {
                       try {
-                        await apiFetch('/cpra/autonomous/monitor/poll', { method: 'POST' });
+                        await apiFetch('/admin/cpra/monitor/poll', { method: 'POST' });
                         await fetchData();
                       } catch {
                         // Demo mode
@@ -765,7 +765,7 @@ export function CpraAutonomousDashboard() {
                     className="w-full text-left px-3 py-2 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-medium transition-colors"
                     onClick={async () => {
                       try {
-                        await apiFetch('/cpra/autonomous/attachments/process', { method: 'POST' });
+                        await apiFetch('/admin/cpra/attachments/process', { method: 'POST' });
                         await fetchData();
                       } catch {
                         // Demo mode
@@ -779,7 +779,7 @@ export function CpraAutonomousDashboard() {
                     className="w-full text-left px-3 py-2 rounded-lg bg-yellow-50 hover:bg-yellow-100 text-yellow-700 text-sm font-medium transition-colors"
                     onClick={async () => {
                       try {
-                        await apiFetch('/cpra/autonomous/classify-all', { method: 'POST' });
+                        await apiFetch('/admin/cpra/classify-all', { method: 'POST' });
                         await fetchData();
                       } catch {
                         // Demo mode
@@ -793,7 +793,7 @@ export function CpraAutonomousDashboard() {
                     className="w-full text-left px-3 py-2 rounded-lg bg-green-50 hover:bg-green-100 text-green-700 text-sm font-medium transition-colors"
                     onClick={async () => {
                       try {
-                        await apiFetch('/cpra/autonomous/ingestion/process', { method: 'POST' });
+                        await apiFetch('/admin/cpra/ingestion/process', { method: 'POST' });
                         await fetchData();
                       } catch {
                         // Demo mode
@@ -819,7 +819,7 @@ export function CpraAutonomousDashboard() {
                     className="w-full text-left px-3 py-2 rounded-lg bg-orange-50 hover:bg-orange-100 text-orange-700 text-sm font-medium transition-colors"
                     onClick={async () => {
                       try {
-                        await apiFetch('/cpra/autonomous/follow-up/check', { method: 'POST' });
+                        await apiFetch('/admin/cpra/follow-up/check', { method: 'POST' });
                         await fetchData();
                       } catch {
                         // Demo mode
@@ -849,7 +849,7 @@ export function CpraAutonomousDashboard() {
                     className="w-full text-left px-3 py-2 rounded-lg bg-gray-50 hover:bg-gray-100 text-gray-700 text-sm font-medium transition-colors"
                     onClick={async () => {
                       try {
-                        await apiFetch('/cpra/autonomous/monitor/simulate', {
+                        await apiFetch('/admin/cpra/monitor/simulate', {
                           method: 'POST',
                           body: JSON.stringify({
                             from: 'records@lapd.online',

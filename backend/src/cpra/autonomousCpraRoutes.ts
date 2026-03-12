@@ -65,8 +65,8 @@ export async function registerAutonomousCpraRoutes(app: FastifyInstance): Promis
   // CPRA Request Engine
   // =========================================================================
 
-  // POST /api/cpra/autonomous/send — send CPRA request to single agency
-  app.post('/api/cpra/autonomous/send', async (req: FastifyRequest, reply: FastifyReply) => {
+  // POST /api/admin/cpra/send — send CPRA request to single agency
+  app.post('/api/admin/cpra/send', async (req: FastifyRequest, reply: FastifyReply) => {
     const { agencyId, campaignId } = req.body as { agencyId: string; campaignId: string };
     if (!agencyId || !campaignId) {
       return reply.status(400).send({ error: 'agencyId and campaignId required' });
@@ -75,8 +75,8 @@ export async function registerAutonomousCpraRoutes(app: FastifyInstance): Promis
     return reply.send(result);
   });
 
-  // POST /api/cpra/autonomous/send-batch — send CPRA requests to multiple agencies
-  app.post('/api/cpra/autonomous/send-batch', async (req: FastifyRequest, reply: FastifyReply) => {
+  // POST /api/admin/cpra/send-batch — send CPRA requests to multiple agencies
+  app.post('/api/admin/cpra/send-batch', async (req: FastifyRequest, reply: FastifyReply) => {
     const { agencyIds, campaignId } = req.body as { agencyIds: string[]; campaignId: string };
     if (!agencyIds?.length || !campaignId) {
       return reply.status(400).send({ error: 'agencyIds[] and campaignId required' });
@@ -85,8 +85,8 @@ export async function registerAutonomousCpraRoutes(app: FastifyInstance): Promis
     return reply.send(result);
   });
 
-  // POST /api/cpra/autonomous/send-all-missing — send to all agencies with missing policies
-  app.post('/api/cpra/autonomous/send-all-missing', async (req: FastifyRequest, reply: FastifyReply) => {
+  // POST /api/admin/cpra/send-all-missing — send to all agencies with missing policies
+  app.post('/api/admin/cpra/send-all-missing', async (req: FastifyRequest, reply: FastifyReply) => {
     const { campaignId } = req.body as { campaignId: string };
     if (!campaignId) {
       return reply.status(400).send({ error: 'campaignId required' });
@@ -95,15 +95,15 @@ export async function registerAutonomousCpraRoutes(app: FastifyInstance): Promis
     return reply.send(result);
   });
 
-  // POST /api/cpra/autonomous/follow-up/:requestId — send follow-up for a request
-  app.post('/api/cpra/autonomous/follow-up/:requestId', async (req: FastifyRequest, reply: FastifyReply) => {
+  // POST /api/admin/cpra/follow-up/:requestId — send follow-up for a request
+  app.post('/api/admin/cpra/follow-up/:requestId', async (req: FastifyRequest, reply: FastifyReply) => {
     const { requestId } = req.params as { requestId: string };
     const result = await sendAutonomousFollowUp(requestId);
     return reply.send(result);
   });
 
-  // GET /api/cpra/autonomous/progress — acquisition progress summary
-  app.get('/api/cpra/autonomous/progress', async (_req: FastifyRequest, reply: FastifyReply) => {
+  // GET /api/admin/cpra/progress — acquisition progress summary
+  app.get('/api/admin/cpra/progress', async (_req: FastifyRequest, reply: FastifyReply) => {
     const progress = await getAcquisitionProgress();
     return reply.send(progress);
   });
@@ -112,23 +112,23 @@ export async function registerAutonomousCpraRoutes(app: FastifyInstance): Promis
   // Email Log
   // =========================================================================
 
-  // GET /api/cpra/autonomous/emails/:agencyId — email log for an agency
-  app.get('/api/cpra/autonomous/emails/:agencyId', async (req: FastifyRequest, reply: FastifyReply) => {
+  // GET /api/admin/cpra/emails/:agencyId — email log for an agency
+  app.get('/api/admin/cpra/emails/:agencyId', async (req: FastifyRequest, reply: FastifyReply) => {
     const { agencyId } = req.params as { agencyId: string };
     const query = req.query as { limit?: string };
     const emails = await getEmailLogForAgency(agencyId, parseInt(query.limit ?? '50', 10));
     return reply.send({ emails, total: emails.length });
   });
 
-  // GET /api/cpra/autonomous/emails/conversation/:requestId — email conversation for a request
-  app.get('/api/cpra/autonomous/emails/conversation/:requestId', async (req: FastifyRequest, reply: FastifyReply) => {
+  // GET /api/admin/cpra/emails/conversation/:requestId — email conversation for a request
+  app.get('/api/admin/cpra/emails/conversation/:requestId', async (req: FastifyRequest, reply: FastifyReply) => {
     const { requestId } = req.params as { requestId: string };
     const emails = await getEmailConversation(requestId);
     return reply.send({ emails, total: emails.length });
   });
 
-  // GET /api/cpra/autonomous/email-stats — email statistics
-  app.get('/api/cpra/autonomous/email-stats', async (_req: FastifyRequest, reply: FastifyReply) => {
+  // GET /api/admin/cpra/email-stats — email statistics
+  app.get('/api/admin/cpra/email-stats', async (_req: FastifyRequest, reply: FastifyReply) => {
     const stats = await getEmailStats();
     return reply.send(stats);
   });
@@ -137,14 +137,14 @@ export async function registerAutonomousCpraRoutes(app: FastifyInstance): Promis
   // Attachment Processing
   // =========================================================================
 
-  // POST /api/cpra/autonomous/attachments/process — process all pending attachments
-  app.post('/api/cpra/autonomous/attachments/process', async (_req: FastifyRequest, reply: FastifyReply) => {
+  // POST /api/admin/cpra/attachments/process — process all pending attachments
+  app.post('/api/admin/cpra/attachments/process', async (_req: FastifyRequest, reply: FastifyReply) => {
     const result = await processAllPendingAttachments();
     return reply.send(result);
   });
 
-  // POST /api/cpra/autonomous/attachments/process/:attachmentId — process single attachment
-  app.post('/api/cpra/autonomous/attachments/process/:attachmentId', async (req: FastifyRequest, reply: FastifyReply) => {
+  // POST /api/admin/cpra/attachments/process/:attachmentId — process single attachment
+  app.post('/api/admin/cpra/attachments/process/:attachmentId', async (req: FastifyRequest, reply: FastifyReply) => {
     const { attachmentId } = req.params as { attachmentId: string };
     const result = await processAttachment(attachmentId);
     return reply.send(result);
@@ -154,15 +154,15 @@ export async function registerAutonomousCpraRoutes(app: FastifyInstance): Promis
   // Classification Engine
   // =========================================================================
 
-  // POST /api/cpra/autonomous/classify/:attachmentId — classify a single attachment
-  app.post('/api/cpra/autonomous/classify/:attachmentId', async (req: FastifyRequest, reply: FastifyReply) => {
+  // POST /api/admin/cpra/classify/:attachmentId — classify a single attachment
+  app.post('/api/admin/cpra/classify/:attachmentId', async (req: FastifyRequest, reply: FastifyReply) => {
     const { attachmentId } = req.params as { attachmentId: string };
     const result = await classifyAttachment(attachmentId);
     return reply.send(result);
   });
 
-  // POST /api/cpra/autonomous/classify-all — classify all pending attachments
-  app.post('/api/cpra/autonomous/classify-all', async (_req: FastifyRequest, reply: FastifyReply) => {
+  // POST /api/admin/cpra/classify-all — classify all pending attachments
+  app.post('/api/admin/cpra/classify-all', async (_req: FastifyRequest, reply: FastifyReply) => {
     const result = await classifyAllPending();
     return reply.send(result);
   });
@@ -171,8 +171,8 @@ export async function registerAutonomousCpraRoutes(app: FastifyInstance): Promis
   // Notifications
   // =========================================================================
 
-  // GET /api/cpra/autonomous/notifications — get notifications
-  app.get('/api/cpra/autonomous/notifications', async (req: FastifyRequest, reply: FastifyReply) => {
+  // GET /api/admin/cpra/notifications — get notifications
+  app.get('/api/admin/cpra/notifications', async (req: FastifyRequest, reply: FastifyReply) => {
     const query = req.query as {
       unreadOnly?: string;
       eventType?: string;
@@ -192,33 +192,33 @@ export async function registerAutonomousCpraRoutes(app: FastifyInstance): Promis
     return reply.send({ notifications, total: notifications.length });
   });
 
-  // GET /api/cpra/autonomous/notifications/count — unread count
-  app.get('/api/cpra/autonomous/notifications/count', async (_req: FastifyRequest, reply: FastifyReply) => {
+  // GET /api/admin/cpra/notifications/count — unread count
+  app.get('/api/admin/cpra/notifications/count', async (_req: FastifyRequest, reply: FastifyReply) => {
     const count = await getUnreadCount();
     return reply.send({ unread: count });
   });
 
-  // GET /api/cpra/autonomous/notifications/summary — notification summary
-  app.get('/api/cpra/autonomous/notifications/summary', async (_req: FastifyRequest, reply: FastifyReply) => {
+  // GET /api/admin/cpra/notifications/summary — notification summary
+  app.get('/api/admin/cpra/notifications/summary', async (_req: FastifyRequest, reply: FastifyReply) => {
     const summary = await getNotificationSummary();
     return reply.send(summary);
   });
 
-  // PUT /api/cpra/autonomous/notifications/:notificationId/read — mark as read
-  app.put('/api/cpra/autonomous/notifications/:notificationId/read', async (req: FastifyRequest, reply: FastifyReply) => {
+  // PUT /api/admin/cpra/notifications/:notificationId/read — mark as read
+  app.put('/api/admin/cpra/notifications/:notificationId/read', async (req: FastifyRequest, reply: FastifyReply) => {
     const { notificationId } = req.params as { notificationId: string };
     await markNotificationRead(notificationId);
     return reply.send({ success: true });
   });
 
-  // PUT /api/cpra/autonomous/notifications/read-all — mark all as read
-  app.put('/api/cpra/autonomous/notifications/read-all', async (_req: FastifyRequest, reply: FastifyReply) => {
+  // PUT /api/admin/cpra/notifications/read-all — mark all as read
+  app.put('/api/admin/cpra/notifications/read-all', async (_req: FastifyRequest, reply: FastifyReply) => {
     const count = await markAllNotificationsRead();
     return reply.send({ success: true, markedRead: count });
   });
 
-  // DELETE /api/cpra/autonomous/notifications/:notificationId — dismiss
-  app.delete('/api/cpra/autonomous/notifications/:notificationId', async (req: FastifyRequest, reply: FastifyReply) => {
+  // DELETE /api/admin/cpra/notifications/:notificationId — dismiss
+  app.delete('/api/admin/cpra/notifications/:notificationId', async (req: FastifyRequest, reply: FastifyReply) => {
     const { notificationId } = req.params as { notificationId: string };
     await dismissNotification(notificationId);
     return reply.send({ success: true });
@@ -228,16 +228,16 @@ export async function registerAutonomousCpraRoutes(app: FastifyInstance): Promis
   // Timeline
   // =========================================================================
 
-  // GET /api/cpra/autonomous/timeline/:agencyId — agency timeline
-  app.get('/api/cpra/autonomous/timeline/:agencyId', async (req: FastifyRequest, reply: FastifyReply) => {
+  // GET /api/admin/cpra/timeline/:agencyId — agency timeline
+  app.get('/api/admin/cpra/timeline/:agencyId', async (req: FastifyRequest, reply: FastifyReply) => {
     const { agencyId } = req.params as { agencyId: string };
     const query = req.query as { limit?: string };
     const events = await getAgencyTimeline(agencyId, parseInt(query.limit ?? '100', 10));
     return reply.send({ events, total: events.length });
   });
 
-  // GET /api/cpra/autonomous/timeline — recent timeline events across all agencies
-  app.get('/api/cpra/autonomous/timeline', async (req: FastifyRequest, reply: FastifyReply) => {
+  // GET /api/admin/cpra/timeline — recent timeline events across all agencies
+  app.get('/api/admin/cpra/timeline', async (req: FastifyRequest, reply: FastifyReply) => {
     const query = req.query as { limit?: string; since?: string };
     const events = await getRecentTimelineEvents(
       parseInt(query.limit ?? '50', 10),
@@ -250,14 +250,14 @@ export async function registerAutonomousCpraRoutes(app: FastifyInstance): Promis
   // Email Monitor Worker
   // =========================================================================
 
-  // POST /api/cpra/autonomous/monitor/poll — manually trigger inbox poll
-  app.post('/api/cpra/autonomous/monitor/poll', async (_req: FastifyRequest, reply: FastifyReply) => {
+  // POST /api/admin/cpra/monitor/poll — manually trigger inbox poll
+  app.post('/api/admin/cpra/monitor/poll', async (_req: FastifyRequest, reply: FastifyReply) => {
     const result = await pollIncomingEmails();
     return reply.send(result);
   });
 
-  // POST /api/cpra/autonomous/monitor/simulate — simulate incoming email (testing)
-  app.post('/api/cpra/autonomous/monitor/simulate', async (req: FastifyRequest, reply: FastifyReply) => {
+  // POST /api/admin/cpra/monitor/simulate — simulate incoming email (testing)
+  app.post('/api/admin/cpra/monitor/simulate', async (req: FastifyRequest, reply: FastifyReply) => {
     const body = req.body as {
       from: string;
       subject: string;
@@ -268,14 +268,14 @@ export async function registerAutonomousCpraRoutes(app: FastifyInstance): Promis
     return reply.send(result);
   });
 
-  // POST /api/cpra/autonomous/monitor/start — start email monitor worker
-  app.post('/api/cpra/autonomous/monitor/start', async (_req: FastifyRequest, reply: FastifyReply) => {
+  // POST /api/admin/cpra/monitor/start — start email monitor worker
+  app.post('/api/admin/cpra/monitor/start', async (_req: FastifyRequest, reply: FastifyReply) => {
     startEmailMonitor();
     return reply.send({ started: true, running: isEmailMonitorRunning() });
   });
 
-  // POST /api/cpra/autonomous/monitor/stop — stop email monitor worker
-  app.post('/api/cpra/autonomous/monitor/stop', async (_req: FastifyRequest, reply: FastifyReply) => {
+  // POST /api/admin/cpra/monitor/stop — stop email monitor worker
+  app.post('/api/admin/cpra/monitor/stop', async (_req: FastifyRequest, reply: FastifyReply) => {
     stopEmailMonitor();
     return reply.send({ stopped: true, running: isEmailMonitorRunning() });
   });
@@ -284,20 +284,20 @@ export async function registerAutonomousCpraRoutes(app: FastifyInstance): Promis
   // Follow-Up Worker
   // =========================================================================
 
-  // POST /api/cpra/autonomous/follow-up/check — manually trigger follow-up check
-  app.post('/api/cpra/autonomous/follow-up/check', async (_req: FastifyRequest, reply: FastifyReply) => {
+  // POST /api/admin/cpra/follow-up/check — manually trigger follow-up check
+  app.post('/api/admin/cpra/follow-up/check', async (_req: FastifyRequest, reply: FastifyReply) => {
     const result = await checkAndSendFollowUps();
     return reply.send(result);
   });
 
-  // POST /api/cpra/autonomous/follow-up/worker/start — start follow-up worker
-  app.post('/api/cpra/autonomous/follow-up/worker/start', async (_req: FastifyRequest, reply: FastifyReply) => {
+  // POST /api/admin/cpra/follow-up/worker/start — start follow-up worker
+  app.post('/api/admin/cpra/follow-up/worker/start', async (_req: FastifyRequest, reply: FastifyReply) => {
     startFollowUpWorker();
     return reply.send({ started: true, running: isFollowUpWorkerRunning() });
   });
 
-  // POST /api/cpra/autonomous/follow-up/worker/stop — stop follow-up worker
-  app.post('/api/cpra/autonomous/follow-up/worker/stop', async (_req: FastifyRequest, reply: FastifyReply) => {
+  // POST /api/admin/cpra/follow-up/worker/stop — stop follow-up worker
+  app.post('/api/admin/cpra/follow-up/worker/stop', async (_req: FastifyRequest, reply: FastifyReply) => {
     stopFollowUpWorker();
     return reply.send({ stopped: true, running: isFollowUpWorkerRunning() });
   });
@@ -306,20 +306,20 @@ export async function registerAutonomousCpraRoutes(app: FastifyInstance): Promis
   // Ingestion Worker
   // =========================================================================
 
-  // POST /api/cpra/autonomous/ingestion/process — manually trigger ingestion
-  app.post('/api/cpra/autonomous/ingestion/process', async (_req: FastifyRequest, reply: FastifyReply) => {
+  // POST /api/admin/cpra/ingestion/process — manually trigger ingestion
+  app.post('/api/admin/cpra/ingestion/process', async (_req: FastifyRequest, reply: FastifyReply) => {
     const result = await processIngestionQueue();
     return reply.send(result);
   });
 
-  // POST /api/cpra/autonomous/ingestion/worker/start — start ingestion worker
-  app.post('/api/cpra/autonomous/ingestion/worker/start', async (_req: FastifyRequest, reply: FastifyReply) => {
+  // POST /api/admin/cpra/ingestion/worker/start — start ingestion worker
+  app.post('/api/admin/cpra/ingestion/worker/start', async (_req: FastifyRequest, reply: FastifyReply) => {
     startIngestionWorker();
     return reply.send({ started: true, running: isIngestionWorkerRunning() });
   });
 
-  // POST /api/cpra/autonomous/ingestion/worker/stop — stop ingestion worker
-  app.post('/api/cpra/autonomous/ingestion/worker/stop', async (_req: FastifyRequest, reply: FastifyReply) => {
+  // POST /api/admin/cpra/ingestion/worker/stop — stop ingestion worker
+  app.post('/api/admin/cpra/ingestion/worker/stop', async (_req: FastifyRequest, reply: FastifyReply) => {
     stopIngestionWorker();
     return reply.send({ stopped: true, running: isIngestionWorkerRunning() });
   });
@@ -328,8 +328,8 @@ export async function registerAutonomousCpraRoutes(app: FastifyInstance): Promis
   // System Status
   // =========================================================================
 
-  // GET /api/cpra/autonomous/status — system-wide status
-  app.get('/api/cpra/autonomous/status', async (_req: FastifyRequest, reply: FastifyReply) => {
+  // GET /api/admin/cpra/status — system-wide status
+  app.get('/api/admin/cpra/status', async (_req: FastifyRequest, reply: FastifyReply) => {
     const [progress, emailStats, notificationSummary] = await Promise.all([
       getAcquisitionProgress(),
       getEmailStats(),

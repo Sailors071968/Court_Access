@@ -1,7 +1,7 @@
 // ============================================================================
 // Phase 191 — Authentication Middleware
 // JWT authentication, refresh tokens, session expiration, role-based access control
-// Roles: admin, attorney, investigator, staff
+// Roles: admin, attorney, investigator, staff, defendant
 // ============================================================================
 
 import jwt from 'jsonwebtoken';
@@ -12,7 +12,7 @@ import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 // Types
 // ---------------------------------------------------------------------------
 
-export type UserRole = 'admin' | 'attorney' | 'investigator' | 'staff';
+export type UserRole = 'admin' | 'attorney' | 'investigator' | 'staff' | 'defendant';
 
 export interface JwtPayload {
   userId: string;
@@ -148,6 +148,7 @@ const ROLE_HIERARCHY: Record<UserRole, number> = {
   attorney: 3,
   investigator: 2,
   staff: 1,
+  defendant: 0,
 };
 
 // Route permission map: route prefix → minimum required roles
@@ -280,6 +281,7 @@ function seedDemoUsers(): void {
     { userId: 'attorney-001', email: 'attorney@courtaccess.com', password: 'attorney123', role: 'attorney' as UserRole },
     { userId: 'investigator-001', email: 'investigator@courtaccess.com', password: 'investigator123', role: 'investigator' as UserRole },
     { userId: 'staff-001', email: 'staff@courtaccess.com', password: 'staff123', role: 'staff' as UserRole },
+    { userId: 'defendant-001', email: 'defendant@courtaccess.com', password: 'defendant123', role: 'defendant' as UserRole },
   ];
   for (const user of demoUsers) {
     const passwordHash = crypto.createHash('sha256').update(user.password).digest('hex');
@@ -471,7 +473,7 @@ export const AUTH_CONFIG = {
   refreshTokenExpiry: REFRESH_TOKEN_EXPIRY,
   accessTokenExpirySeconds: ACCESS_TOKEN_EXPIRY_SECONDS,
   refreshTokenExpirySeconds: REFRESH_TOKEN_EXPIRY_SECONDS,
-  roles: ['admin', 'attorney', 'investigator', 'staff'] as UserRole[],
+  roles: ['admin', 'attorney', 'investigator', 'staff', 'defendant'] as UserRole[],
   roleHierarchy: ROLE_HIERARCHY,
   routePermissions: ROUTE_PERMISSIONS,
   publicRoutes: PUBLIC_ROUTES,

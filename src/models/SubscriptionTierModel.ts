@@ -180,6 +180,19 @@ const SUBSCRIPTION_TIER_CONFIGS: readonly SubscriptionTierConfig[] = Object.free
 ] as SubscriptionTierConfig[]);
 
 // ---------------------------------------------------------------------------
+// Legacy Tier Mapping — maps old TIER_N IDs to new named IDs
+// ---------------------------------------------------------------------------
+
+const LEGACY_TIER_MAP: Readonly<Record<string, SubscriptionTierId>> = Object.freeze({
+  TIER_2: 'STARTER',
+  TIER_3: 'PROFESSIONAL',
+  TIER_4: 'ADVANCED_INVESTIGATOR',
+  TIER_5: 'LITIGATION_INTELLIGENCE_PRO',
+  TIER_6: 'ENTERPRISE_FIRM',
+  TIER_7: 'ENTERPRISE_FIRM',
+});
+
+// ---------------------------------------------------------------------------
 // Tier Access Functions — read-only
 // ---------------------------------------------------------------------------
 
@@ -194,6 +207,7 @@ export function getSubscriptionTierRegistry(): readonly SubscriptionTierConfig[]
 /**
  * Get a specific tier configuration by ID.
  * Returns null if the tier ID is not registered.
+ * Supports legacy TIER_2–TIER_7 IDs via mapping to new named tiers.
  */
 export function getSubscriptionTierById(
   tierId: SubscriptionTierId
@@ -201,6 +215,15 @@ export function getSubscriptionTierById(
   for (const tier of SUBSCRIPTION_TIER_CONFIGS) {
     if (tier.id === tierId) {
       return tier;
+    }
+  }
+  // Check legacy tier mapping
+  const mappedId = LEGACY_TIER_MAP[tierId];
+  if (mappedId) {
+    for (const tier of SUBSCRIPTION_TIER_CONFIGS) {
+      if (tier.id === mappedId) {
+        return tier;
+      }
     }
   }
   return null;

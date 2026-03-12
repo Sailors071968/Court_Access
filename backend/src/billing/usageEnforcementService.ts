@@ -5,7 +5,7 @@
 
 import { v4 as uuidv4 } from 'uuid';
 import { getUserSubscription, getPlanById } from './subscriptionService.js';
-import { getAvailableCredits, hasEnoughCredits } from './aiCreditService.js';
+import { getAvailableCredits, hasEnoughCredits, getCreditBalance } from './aiCreditService.js';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -226,7 +226,10 @@ export function getUserUsageDashboard(userId: string): UsageDashboard {
 
   const pageLimit = plan?.monthlyPageLimit ?? 10;
   const creditLimit = plan?.monthlyAiCredits ?? 0;
-  const creditsUsed = creditLimit > 0 ? Math.max(0, creditLimit - availableCredits) : 0;
+  // Use the actual creditsUsed from balance, not derived from available
+  // (available = monthly + purchased - used, so deriving from creditLimit - available breaks with purchased credits)
+  const balance = getCreditBalance(userId);
+  const creditsUsed = balance.creditsUsed;
   const pagePercent = pageLimit > 0 ? Math.round((record.pagesUploadedTotal / pageLimit) * 100) : 0;
   const creditPercent = creditLimit > 0 ? Math.round((creditsUsed / creditLimit) * 100) : 0;
 

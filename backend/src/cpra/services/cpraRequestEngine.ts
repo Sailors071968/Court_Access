@@ -58,6 +58,31 @@ export async function sendAutonomousCpraRequest(
     };
   }
 
+  // Check rate limits before sending
+  const dailyCheck = await checkDailyLimit();
+  if (!dailyCheck.allowed) {
+    return {
+      agencyId,
+      agencyName: agency.agencyName,
+      success: false,
+      requestId: null,
+      emailLogId: null,
+      error: `Daily send limit reached (${dailyCheck.sentToday} sent today)`,
+    };
+  }
+
+  const minuteCheck = await checkMinuteLimit();
+  if (!minuteCheck.allowed) {
+    return {
+      agencyId,
+      agencyName: agency.agencyName,
+      success: false,
+      requestId: null,
+      emailLogId: null,
+      error: `Per-minute send limit reached (${minuteCheck.sentLastMinute} sent in last minute)`,
+    };
+  }
+
   // Send the CPRA request email
   const sendResult = await sendCpraRequestEmail(agencyId, campaignId);
 

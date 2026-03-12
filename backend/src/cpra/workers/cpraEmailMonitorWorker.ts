@@ -168,7 +168,7 @@ async function matchSenderToAgency(
       .replace(/^www\./, '')
       .toLowerCase() ?? '';
 
-    if (agencyDomain && (senderDomain.includes(agencyDomain) || agencyDomain.includes(senderDomain))) {
+    if (agencyDomain && senderDomain === agencyDomain) {
       return { agencyId: agency.agencyId, agencyName: agency.agencyName };
     }
   }

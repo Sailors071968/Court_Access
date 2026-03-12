@@ -305,7 +305,8 @@ export async function classifyAllPending(): Promise<{
 }> {
   const pending = await prisma.cpraEmailAttachment.findMany({
     where: {
-      processingStatus: { in: ['uploaded', 'pending'] },
+      processingStatus: { in: ['uploaded', 'pending', 'classified'] },
+      policyTopicDetected: null,
       documentType: { not: 'non_policy' },
     },
     take: 20,

@@ -112,8 +112,11 @@ function parseRawEmail(rawContent: string): ParsedEmail {
         const mimeType = contentTypeMatch?.[1]?.trim() ?? 'application/octet-stream';
 
         // Find the content after the double newline in this MIME part
-        const contentStart = part.indexOf('\n\n');
-        const content = contentStart > 0 ? part.slice(contentStart + 2).trim() : '';
+        // Handle both \r\n\r\n (standard MIME) and \n\n (unix) line endings
+        const crlfIndex = part.indexOf('\r\n\r\n');
+        const lfIndex = part.indexOf('\n\n');
+        const contentStart = crlfIndex !== -1 ? crlfIndex + 4 : (lfIndex !== -1 ? lfIndex + 2 : -1);
+        const content = contentStart > 0 ? part.slice(contentStart).trim() : '';
 
         const decodedContent = Buffer.from(content, 'base64');
         attachments.push({

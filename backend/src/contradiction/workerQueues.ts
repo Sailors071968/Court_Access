@@ -200,16 +200,18 @@ export class InMemoryQueue<T = unknown> {
     job.status = 'active';
     job.attempts++;
 
+    let timeoutHandle: ReturnType<typeof setTimeout>;
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      timeoutHandle = setTimeout(() => reject(new Error('Job timeout')), this.config.timeoutMs);
+    });
+
     try {
-      const result = await Promise.race([
-        this.processor(job),
-        new Promise((_, reject) =>
-          setTimeout(() => reject(new Error('Job timeout')), this.config.timeoutMs),
-        ),
-      ]);
+      const result = await Promise.race([this.processor(job), timeoutPromise]);
+      clearTimeout(timeoutHandle!);
       job.status = 'completed';
       job.result = result;
     } catch (err) {
+      clearTimeout(timeoutHandle!);
       if (job.attempts <= job.maxRetries) {
         job.status = 'retrying';
         job.error = err instanceof Error ? err.message : String(err);
@@ -221,7 +223,11 @@ export class InMemoryQueue<T = unknown> {
       }
     } finally {
       this.processing = false;
-      void this.processNext();
+      // Only process next if the current job did not enter retrying state;
+      // retrying jobs are scheduled via setTimeout in the catch block.
+      if (job.status !== 'retrying') {
+        void this.processNext();
+      }
     }
   }
 }

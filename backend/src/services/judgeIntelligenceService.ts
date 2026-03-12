@@ -69,16 +69,20 @@ export class JudgeIntelligenceService {
 
       for (const ruling of rulings) {
         const lower = (ruling.caseName + ' ' + ruling.holdingSummary).toLowerCase();
+        let matchedAny = false;
         if (lower.includes('suppress') || lower.includes('motion to suppress')) {
           motionStats.suppressionRulings++;
-          motionStats.totalMotionRulings++;
+          matchedAny = true;
         }
         if (lower.includes('brady') || lower.includes('disclosure')) {
           motionStats.bradyRulings++;
-          motionStats.totalMotionRulings++;
+          matchedAny = true;
         }
         if (lower.includes('discovery') || lower.includes('compel')) {
           motionStats.discoveryRulings++;
+          matchedAny = true;
+        }
+        if (matchedAny) {
           motionStats.totalMotionRulings++;
         }
       }

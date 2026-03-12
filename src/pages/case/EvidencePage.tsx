@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { Search, Upload, Eye, MoreHorizontal } from 'lucide-react';
 import { Card } from '../../components/common/Card';
 import { AIStatusBadge } from '../../components/common/StatusBadge';
+import { DoctrineCompliancePanel } from '../../components/case/DoctrineCompliancePanel';
 import { caseDataProvider } from '../../services/caseDataProvider';
 
 const DOCUMENT_TABS = [
@@ -110,6 +111,9 @@ export function EvidencePage() {
           </table>
         </div>
       </Card>
+
+      {/* Police Training Doctrine Compliance */}
+      <DoctrineCompliancePanel />
     </div>
   );
 }

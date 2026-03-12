@@ -6,6 +6,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { FileText, Scale, Calendar, Lightbulb, TrendingUp } from 'lucide-react';
 import { Card, StatCard } from '../../components/common/Card';
 import { AIStatusBadge } from '../../components/common/StatusBadge';
+import { DoctrineCompliancePanel } from '../../components/case/DoctrineCompliancePanel';
 import { ROLE_PERMISSIONS } from '../../constants';
 import { caseDataProvider } from '../../services/caseDataProvider';
 import { useAuthStore } from '../../stores/authStore';
@@ -154,6 +155,14 @@ export function CaseOverviewPage() {
       {/* Phase 296: Case Law Intelligence Panel */}
       {showIntelligence && (
         <CaseLawIntelligencePanel />
+      )}
+
+      {/* Police Training Doctrine Compliance */}
+      {showIntelligence && (
+        <DoctrineCompliancePanel
+          evidenceText="Officer stopped suspect because he looked nervous in a high-crime area. No specific criminal activity was observed. Officer conducted a pat search based on the location."
+          autoAnalyze
+        />
       )}
     </div>
   );

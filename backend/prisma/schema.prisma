@@ -127,6 +127,13 @@ model CorpusIngestionLock {
 }
 
 // ---------------------------------------------------------------------------
+// NOTE: Doctrine models (DoctrineRule, DoctrineEmbedding, DoctrineMatchLog)
+// are intentionally NOT added to schema.prisma per SCHEMA_FREEZE.md policy.
+// Runtime storage uses the in-memory DoctrineStore (doctrineStore.ts).
+// When SCHEMA_FREEZE is lifted, these models can be migrated to Prisma.
+// ---------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------
 // Agency — California law enforcement agency registry (POST directory)
 // ---------------------------------------------------------------------------
 

@@ -6,7 +6,7 @@
 // ============================================================================
 
 import { PrismaClient } from '@prisma/client';
-import { S3Client, GetObjectCommand, ListObjectsV2Command } from '@aws-sdk/client-s3';
+import { S3Client, GetObjectCommand, ListObjectsV2Command, DeleteObjectCommand, CopyObjectCommand } from '@aws-sdk/client-s3';
 import { logEmail, markEmailProcessed } from '../services/cpraEmailLogService.js';
 import { createNotification } from '../services/cpraNotificationService.js';
 import { addTimelineEvent } from '../services/cpraTimelineService.js';
@@ -115,11 +115,12 @@ function parseRawEmail(rawContent: string): ParsedEmail {
         const contentStart = part.indexOf('\n\n');
         const content = contentStart > 0 ? part.slice(contentStart + 2).trim() : '';
 
+        const decodedContent = Buffer.from(content, 'base64');
         attachments.push({
           fileName,
           mimeType,
-          content: Buffer.from(content, 'base64'),
-          size: content.length,
+          content: decodedContent,
+          size: decodedContent.length,
         });
       }
     }
@@ -332,6 +333,21 @@ export async function pollIncomingEmails(): Promise<EmailMonitorResult> {
           attachmentCount: processResult.attachmentCount,
           status: processResult.status,
         });
+
+        // Move processed email to processed/ prefix to prevent reprocessing
+        await s3.send(
+          new CopyObjectCommand({
+            Bucket: S3_BUCKET_FOR_EMAIL,
+            CopySource: `${S3_BUCKET_FOR_EMAIL}/${obj.Key}`,
+            Key: obj.Key.replace('incoming/', 'processed/'),
+          }),
+        );
+        await s3.send(
+          new DeleteObjectCommand({
+            Bucket: S3_BUCKET_FOR_EMAIL,
+            Key: obj.Key,
+          }),
+        );
       } catch (error) {
         result.errors++;
         console.error(

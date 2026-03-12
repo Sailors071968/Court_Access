@@ -45,6 +45,7 @@ import { BetaDeploymentVerification } from './pages/dashboard/BetaDeploymentVeri
 import { PolicyMatrixVirtualized } from './pages/dashboard/PolicyMatrixVirtualized';
 import { CpraCampaignTimeline } from './pages/dashboard/CpraCampaignTimeline';
 import { CpraMatrixDashboard } from './pages/dashboard/CpraMatrixDashboard';
+import { CpraAutonomousDashboard } from './pages/dashboard/CpraAutonomousDashboard';
 import { UsageDashboard } from './pages/dashboard/UsageDashboard';
 import { CasesListPage } from './pages/CasesListPage';
 import { SearchPage } from './pages/SearchPage';
@@ -254,6 +255,14 @@ function App() {
             element={
               <ProtectedRoute requiredPermission="canViewAdmin">
                 <CpraMatrixDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="dashboard/cpra-autonomous"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <CpraAutonomousDashboard />
               </ProtectedRoute>
             }
           />

@@ -336,8 +336,8 @@ function DoctrineMatchCard({ match }: { match: DoctrineMatchResult }) {
             <span className="text-xs text-gray-500">
               {match.chapter} \u2022 {match.topic}
             </span>
-            <span className="ml-auto text-xs font-mono text-gray-400">
-              {Math.round(match.similarityScore * 100)}%
+            <span className="ml-auto text-xs font-mono text-gray-400" title={`Raw: ${Math.round(match.similarityScore * 100)}%`}>
+              {Math.round((match.effectiveSimilarity ?? match.similarityScore) * 100)}%
             </span>
           </div>
 

@@ -75,6 +75,7 @@ export interface ParsedDoctrineChunk {
 export interface DoctrineMatch {
   doctrineRule: DoctrineRule;
   similarityScore: number;
+  effectiveSimilarity: number;
   flagType: DoctrineFlagType;
   flagDescription: string;
 }

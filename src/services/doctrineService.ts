@@ -39,6 +39,7 @@ export interface DoctrineMatchResult {
   ruleText: string;
   category: DoctrineCategory;
   similarityScore: number;
+  effectiveSimilarity: number;
   flagType: DoctrineFlagType;
   flagDescription: string;
   legalImplication: string | null;
@@ -116,8 +117,9 @@ const DEMO_COMPLIANCE_RESULT: DoctrineComplianceResponse = {
       ruleText: 'Reasonable suspicion cannot be based on a mere hunch, gut feeling, or unparticularized suspicion.',
       category: 'detention',
       similarityScore: 0.89,
+      effectiveSimilarity: 0.92,
       flagType: 'violation',
-      flagDescription: 'Potential detention doctrine violation: Reasonable Suspicion. Training doctrine states: "Reasonable suspicion cannot be based on a mere hunch, gut feeling, or unparticularized suspicion..." (89% relevance). If reasonable suspicion cannot be articulated, evidence obtained during the detention may be suppressed.',
+      flagDescription: 'Potential detention doctrine violation: Reasonable Suspicion. Training doctrine states: "Reasonable suspicion cannot be based on a mere hunch, gut feeling, or unparticularized suspicion..." (92% relevance). If reasonable suspicion cannot be articulated, evidence obtained during the detention may be suppressed.',
       legalImplication: 'A detention based on a mere hunch is unlawful, and any evidence obtained as a result may be suppressed.',
     },
     {
@@ -128,8 +130,9 @@ const DEMO_COMPLIANCE_RESULT: DoctrineComplianceResponse = {
       ruleText: 'A lawful detention requires reasonable suspicion that criminal activity may be occurring and the person detained is connected to that activity.',
       category: 'detention',
       similarityScore: 0.85,
+      effectiveSimilarity: 0.88,
       flagType: 'violation',
-      flagDescription: 'Potential detention doctrine violation: Reasonable Suspicion. Training doctrine states: "A lawful detention requires reasonable suspicion that criminal activity may be occurring..." (85% relevance).',
+      flagDescription: 'Potential detention doctrine violation: Reasonable Suspicion. Training doctrine states: "A lawful detention requires reasonable suspicion that criminal activity may be occurring..." (88% relevance).',
       legalImplication: 'If reasonable suspicion cannot be articulated, evidence obtained during the detention may be suppressed.',
     },
     {
@@ -140,8 +143,9 @@ const DEMO_COMPLIANCE_RESULT: DoctrineComplianceResponse = {
       ruleText: 'Reasonable suspicion must be based on objective facts, not on a person\'s race, ethnicity, national origin, gender, or other protected characteristic.',
       category: 'detention',
       similarityScore: 0.82,
+      effectiveSimilarity: 0.85,
       flagType: 'violation',
-      flagDescription: 'Potential detention doctrine violation: Reasonable Suspicion. Training doctrine states: "Reasonable suspicion must be based on objective facts, not on a person\'s race..." (82% relevance).',
+      flagDescription: 'Potential detention doctrine violation: Reasonable Suspicion. Training doctrine states: "Reasonable suspicion must be based on objective facts, not on a person\'s race..." (85% relevance).',
       legalImplication: 'A detention based on racial profiling violates both the Fourth and Fourteenth Amendments and may result in suppression and civil liability.',
     },
     {
@@ -152,6 +156,7 @@ const DEMO_COMPLIANCE_RESULT: DoctrineComplianceResponse = {
       ruleText: 'An officer cannot conduct a pat search based solely on the fact that the person is in a high-crime area.',
       category: 'search',
       similarityScore: 0.71,
+      effectiveSimilarity: 0.74,
       flagType: 'concern',
       flagDescription: 'search compliance concern: Pat Searches. Related doctrine: "An officer cannot conduct a pat search based solely on the fact that the person is in a high-crime area." (71% relevance). Review recommended.',
       legalImplication: 'A pat search based solely on location is unlawful and evidence discovered may be suppressed.',
@@ -164,6 +169,7 @@ const DEMO_COMPLIANCE_RESULT: DoctrineComplianceResponse = {
       ruleText: 'An officer must not use commands, physical force, sirens, or other displays of authority that would cause a reasonable person to believe they are not free to leave.',
       category: 'encounter',
       similarityScore: 0.65,
+      effectiveSimilarity: 0.68,
       flagType: 'concern',
       flagDescription: 'encounter compliance concern: Consensual Encounters. Related doctrine: "An officer must not use commands, physical force, sirens, or other displays of authority..." (65% relevance). Review recommended.',
       legalImplication: 'If encounter is determined non-consensual, it becomes a detention requiring reasonable suspicion.',
@@ -176,6 +182,7 @@ const DEMO_COMPLIANCE_RESULT: DoctrineComplianceResponse = {
       ruleText: 'The Fourth Amendment protects individuals from unreasonable searches and seizures by the government.',
       category: 'constitutional',
       similarityScore: 0.58,
+      effectiveSimilarity: 0.58,
       flagType: 'compliant',
       flagDescription: 'Evidence aligns with constitutional doctrine: Fourth Amendment. (58% relevance)',
       legalImplication: 'Evidence obtained through an unreasonable search or seizure is subject to the exclusionary rule and may be suppressed at trial.',
@@ -188,6 +195,7 @@ const DEMO_COMPLIANCE_RESULT: DoctrineComplianceResponse = {
       ruleText: 'Probable cause is required before an arrest may be made. It exists when facts and circumstances would lead a reasonable person to believe a crime has been or is being committed.',
       category: 'arrest',
       similarityScore: 0.52,
+      effectiveSimilarity: 0.52,
       flagType: 'compliant',
       flagDescription: 'Evidence aligns with arrest doctrine: Probable Cause. (52% relevance)',
       legalImplication: 'An arrest without probable cause is unlawful; all evidence obtained as a result may be suppressed under the exclusionary rule.',
@@ -200,6 +208,7 @@ const DEMO_COMPLIANCE_RESULT: DoctrineComplianceResponse = {
       ruleText: 'Miranda warnings must be given before any custodial interrogation.',
       category: 'miranda',
       similarityScore: 0.45,
+      effectiveSimilarity: 0.45,
       flagType: 'compliant',
       flagDescription: 'Evidence aligns with miranda doctrine: Miranda Warnings. (45% relevance)',
       legalImplication: 'Failure to administer Miranda warnings before custodial interrogation renders statements inadmissible.',
@@ -212,6 +221,7 @@ const DEMO_COMPLIANCE_RESULT: DoctrineComplianceResponse = {
       ruleText: 'The exclusionary rule requires that evidence obtained in violation of the Constitution must be suppressed.',
       category: 'constitutional',
       similarityScore: 0.42,
+      effectiveSimilarity: 0.42,
       flagType: 'compliant',
       flagDescription: 'Evidence aligns with constitutional doctrine: Exclusionary Rule. (42% relevance)',
       legalImplication: 'Evidence obtained through constitutional violations is inadmissible, and all derivative evidence may also be suppressed.',

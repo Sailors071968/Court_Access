@@ -166,6 +166,7 @@ export function registerDoctrineRoutes(app: FastifyInstance): void {
         ruleText: m.doctrineRule.ruleText,
         category: m.doctrineRule.category,
         similarityScore: Math.round(m.similarityScore * 1000) / 1000,
+        effectiveSimilarity: Math.round(m.effectiveSimilarity * 1000) / 1000,
         flagType: m.flagType,
         flagDescription: m.flagDescription,
         legalImplication: m.doctrineRule.legalImplication,

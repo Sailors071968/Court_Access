@@ -153,7 +153,7 @@ export class DoctrineComplianceEngine {
       if (similarityScore < minSimilarity) continue;
 
       // Determine flag type based on similarity + violation indicators
-      const flagType = DoctrineComplianceEngine.determineFlagType(
+      const { flagType, effectiveSimilarity } = DoctrineComplianceEngine.determineFlagType(
         evidenceText,
         rule,
         similarityScore,
@@ -162,12 +162,13 @@ export class DoctrineComplianceEngine {
       const flagDescription = DoctrineComplianceEngine.generateFlagDescription(
         rule,
         flagType,
-        similarityScore,
+        effectiveSimilarity,
       );
 
       matches.push({
         doctrineRule: rule,
         similarityScore,
+        effectiveSimilarity,
         flagType,
         flagDescription,
       });
@@ -254,7 +255,7 @@ export class DoctrineComplianceEngine {
     evidenceText: string,
     rule: DoctrineRule,
     similarityScore: number,
-  ): DoctrineFlagType {
+  ): { flagType: DoctrineFlagType; effectiveSimilarity: number } {
     // Check for explicit violation indicators in the evidence
     const hasViolationIndicator = VIOLATION_INDICATORS.some((p) => p.test(evidenceText));
     const hasConcernIndicator = CONCERN_INDICATORS.some((p) => p.test(evidenceText));
@@ -266,54 +267,56 @@ export class DoctrineComplianceEngine {
     // This compensates for demo/deterministic embeddings that produce lower similarity
     const effectiveSimilarity = Math.min(1.0, similarityScore + keywordOverlap * 0.3);
 
+    const result = (flagType: DoctrineFlagType) => ({ flagType, effectiveSimilarity });
+
     // High effective similarity + violation indicator = violation
     if (effectiveSimilarity >= VIOLATION_THRESHOLD && hasViolationIndicator) {
-      return 'violation';
+      return result('violation');
     }
 
     // Medium effective similarity + violation indicator = concern
     if (effectiveSimilarity >= CONCERN_THRESHOLD && hasViolationIndicator) {
-      return 'concern';
+      return result('concern');
     }
 
     // High effective similarity + concern indicator = concern
     if (effectiveSimilarity >= VIOLATION_THRESHOLD && hasConcernIndicator) {
-      return 'concern';
+      return result('concern');
     }
 
     // Check for negative/contradictory language against the rule
     const ruleNegation = DoctrineComplianceEngine.detectRuleNegation(evidenceText, rule);
     if (ruleNegation && effectiveSimilarity >= CONCERN_THRESHOLD) {
-      return 'violation';
+      return result('violation');
     }
 
     // Moderate similarity + violation indicator + keyword overlap = concern
     // Requires keyword overlap to ensure the rule is topically relevant to the violation
     if (similarityScore >= 0.4 && hasViolationIndicator && keywordOverlap > 0) {
-      return 'concern';
+      return result('concern');
     }
 
     // Any keyword overlap + violation indicator = concern
     if (keywordOverlap >= 0.15 && hasViolationIndicator) {
-      return 'concern';
+      return result('concern');
     }
 
     // Moderate similarity + concern indicator + keyword overlap = concern
     if (similarityScore >= 0.4 && hasConcernIndicator && keywordOverlap > 0) {
-      return 'concern';
+      return result('concern');
     }
 
     // Keyword overlap + concern indicator = concern
     if (keywordOverlap >= 0.2 && hasConcernIndicator && similarityScore >= 0.3) {
-      return 'concern';
+      return result('concern');
     }
 
     // High effective similarity without indicators = compliant (rule is relevant)
     if (effectiveSimilarity >= CONCERN_THRESHOLD) {
-      return hasConcernIndicator ? 'concern' : 'compliant';
+      return result(hasConcernIndicator ? 'concern' : 'compliant');
     }
 
-    return 'compliant';
+    return result('compliant');
   }
 
   /**

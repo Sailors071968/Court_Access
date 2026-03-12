@@ -128,31 +128,33 @@ function classifyWithHeuristics(
     }
   }
 
-  // Partial keyword matches
-  const keywordMap: Record<string, string> = {
-    'use of force': 'Use of Force',
-    'deadly force': 'Deadly Force',
-    'body worn': 'Body Worn Cameras',
-    'body camera': 'Body Worn Cameras',
-    'bwc': 'Body Worn Cameras',
-    'pursuit': 'Vehicle Pursuits',
-    'search and seizure': 'Search and Seizure',
-    'miranda': 'Custodial Interrogation',
-    'taser': 'Less Lethal Weapons',
-    'k-9': 'Canine (K-9) Operations',
-    'canine': 'Canine (K-9) Operations',
-    'domestic violence': 'Domestic Violence Response',
-    'mental health': 'Mental Health Response',
-    'bias': 'Bias-Free Policing',
-    'racial profiling': 'Bias-Free Policing',
-    'social media': 'Social Media Policy',
-    'foot pursuit': 'Foot Pursuits',
-    'crowd control': 'Crowd Control',
-    'internal affairs': 'Complaint Investigation',
-    'discipline': 'Disciplinary Procedures',
-  };
+  // Partial keyword matches — ordered most-specific first to avoid shadowing.
+  // All values MUST match canonical topic names from CANONICAL_POLICY_TOPICS.
+  const keywordMap: [string, string][] = [
+    ['use of force', 'Use of Force'],
+    ['deadly force', 'Deadly Force'],
+    ['body worn', 'Body Worn Cameras'],
+    ['body camera', 'Body Worn Cameras'],
+    ['bwc', 'Body Worn Cameras'],
+    ['foot pursuit', 'Foot Pursuit Policy'],
+    ['vehicle pursuit', 'Vehicle Pursuits'],
+    ['pursuit', 'Vehicle Pursuits'],
+    ['search and seizure', 'Search and Seizure'],
+    ['miranda', 'Interrogations'],
+    ['taser', 'Use of Tasers'],
+    ['k-9', 'Use of K9 Units'],
+    ['canine', 'Use of K9 Units'],
+    ['domestic violence', 'Domestic Violence Response'],
+    ['mental health', 'Mental Health Crisis Response'],
+    ['racial profiling', 'Racial Profiling Prevention'],
+    ['bias', 'Racial Profiling Prevention'],
+    ['social media', 'Social Media Policy'],
+    ['crowd control', 'Crowd Control'],
+    ['internal affairs', 'Internal Affairs Investigations'],
+    ['discipline', 'Officer Discipline'],
+  ];
 
-  for (const [keyword, topic] of Object.entries(keywordMap)) {
+  for (const [keyword, topic] of keywordMap) {
     if (combined.includes(keyword)) {
       return {
         policyTitle: fileName.replace(/\.[^.]+$/, ''),

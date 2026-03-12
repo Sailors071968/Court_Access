@@ -177,6 +177,21 @@ const SUBSCRIPTION_TIER_CONFIGS: readonly SubscriptionTierConfig[] = Object.free
     monthlyPriceCents: 69900,
     isLifetime: false,
   },
+  // Legacy TIER_7 preserved with original maxUploadMB: 10000 to avoid
+  // downgrading existing Unlimited Enterprise users.
+  {
+    id: 'TIER_7',
+    name: 'Unlimited Enterprise (Legacy)',
+    maxUploadMB: 10000,
+    archiveEligible: true,
+    retentionDays: 3650,
+    watermarkExport: false,
+    creditPriceCents: 25000,
+    monthlyPageLimit: 25000,
+    monthlyAiCredits: 1500,
+    monthlyPriceCents: 69900,
+    isLifetime: false,
+  },
 ] as SubscriptionTierConfig[]);
 
 // ---------------------------------------------------------------------------
@@ -189,7 +204,8 @@ const LEGACY_TIER_MAP: Readonly<Record<string, SubscriptionTierId>> = Object.fre
   TIER_4: 'ADVANCED_INVESTIGATOR',
   TIER_5: 'LITIGATION_INTELLIGENCE_PRO',
   TIER_6: 'ENTERPRISE_FIRM',
-  TIER_7: 'ENTERPRISE_FIRM',
+  // TIER_7 is a first-class entry in SUBSCRIPTION_TIER_CONFIGS (maxUploadMB: 10000)
+  // so it resolves directly and does not need a mapping here.
 });
 
 // ---------------------------------------------------------------------------

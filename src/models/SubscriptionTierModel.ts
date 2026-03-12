@@ -33,6 +33,12 @@
  */
 export type SubscriptionTierId =
   | 'FREE'
+  | 'STARTER'
+  | 'PROFESSIONAL'
+  | 'ADVANCED_INVESTIGATOR'
+  | 'LITIGATION_INTELLIGENCE_PRO'
+  | 'ENTERPRISE_FIRM'
+  // Legacy IDs (kept for backward compatibility)
   | 'TIER_2'
   | 'TIER_3'
   | 'TIER_4'
@@ -62,6 +68,10 @@ export interface SubscriptionTierConfig {
   retentionDays: number;              // Integer — document retention in days
   watermarkExport: boolean;           // Whether exports are watermarked
   creditPriceCents: number;           // Integer — price per credit in cents (USD)
+  monthlyPageLimit: number;           // Pages per month (cumulative across cases)
+  monthlyAiCredits: number;           // AI credits per month
+  monthlyPriceCents: number;          // Monthly subscription price in cents
+  isLifetime: boolean;                // True for free tier (lifetime limit)
 }
 
 // ---------------------------------------------------------------------------
@@ -97,60 +107,75 @@ const SUBSCRIPTION_TIER_CONFIGS: readonly SubscriptionTierConfig[] = Object.free
     retentionDays: 90,
     watermarkExport: true,
     creditPriceCents: 0,
+    monthlyPageLimit: 10,
+    monthlyAiCredits: 0,
+    monthlyPriceCents: 0,
+    isLifetime: true,
   },
   {
-    id: 'TIER_2',
-    name: 'Basic',
+    id: 'STARTER',
+    name: 'Starter',
     maxUploadMB: 200,
     archiveEligible: true,
     retentionDays: 365,
     watermarkExport: true,
     creditPriceCents: 500,
+    monthlyPageLimit: 300,
+    monthlyAiCredits: 20,
+    monthlyPriceCents: 3900,
+    isLifetime: false,
   },
   {
-    id: 'TIER_3',
-    name: 'Standard',
+    id: 'PROFESSIONAL',
+    name: 'Professional',
     maxUploadMB: 500,
     archiveEligible: true,
     retentionDays: 730,
     watermarkExport: false,
     creditPriceCents: 1000,
+    monthlyPageLimit: 2000,
+    monthlyAiCredits: 100,
+    monthlyPriceCents: 12900,
+    isLifetime: false,
   },
   {
-    id: 'TIER_4',
-    name: 'Professional',
+    id: 'ADVANCED_INVESTIGATOR',
+    name: 'Advanced Investigator',
     maxUploadMB: 1000,
     archiveEligible: true,
     retentionDays: 1095,
     watermarkExport: false,
     creditPriceCents: 2500,
+    monthlyPageLimit: 6000,
+    monthlyAiCredits: 250,
+    monthlyPriceCents: 24900,
+    isLifetime: false,
   },
   {
-    id: 'TIER_5',
-    name: 'Enterprise',
+    id: 'LITIGATION_INTELLIGENCE_PRO',
+    name: 'Litigation Intelligence Pro',
     maxUploadMB: 2000,
     archiveEligible: true,
     retentionDays: 1825,
     watermarkExport: false,
     creditPriceCents: 5000,
+    monthlyPageLimit: 12000,
+    monthlyAiCredits: 500,
+    monthlyPriceCents: 39900,
+    isLifetime: false,
   },
   {
-    id: 'TIER_6',
-    name: 'Premium Enterprise',
+    id: 'ENTERPRISE_FIRM',
+    name: 'Enterprise Firm',
     maxUploadMB: 5000,
-    archiveEligible: true,
-    retentionDays: 2555,
-    watermarkExport: false,
-    creditPriceCents: 10000,
-  },
-  {
-    id: 'TIER_7',
-    name: 'Unlimited Enterprise',
-    maxUploadMB: 10000,
     archiveEligible: true,
     retentionDays: 3650,
     watermarkExport: false,
-    creditPriceCents: 25000,
+    creditPriceCents: 10000,
+    monthlyPageLimit: 25000,
+    monthlyAiCredits: 1500,
+    monthlyPriceCents: 69900,
+    isLifetime: false,
   },
 ] as SubscriptionTierConfig[]);
 

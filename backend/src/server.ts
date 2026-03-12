@@ -19,6 +19,8 @@ import { csrfProtectionHook, getCsrfTokenRoute } from './security/csrfProtection
 import { securityHeadersHook } from './security/securityHeaders.js';
 import { uploadProtectionHook } from './security/evidenceUploadProtection.js';
 import { registerSecurityLogging } from './security/securityLogger.js';
+import { registerPolicyMatrixRoutes } from './cpra/policyMatrixRoutes.js';
+import { registerBillingRoutes } from './billing/billingRoutes.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -93,6 +95,14 @@ async function startServer() {
 
   // Phase 193 — CSRF token endpoint
   app.get('/api/auth/csrf-token', getCsrfTokenRoute());
+
+  // CPRA Policy Matrix routes
+  console.log('[Server] Registering CPRA policy matrix routes...');
+  await registerPolicyMatrixRoutes(app);
+
+  // Billing, subscriptions, AI credits, usage enforcement routes
+  console.log('[Server] Registering billing & usage routes...');
+  await registerBillingRoutes(app);
 
   // Start server
   try {

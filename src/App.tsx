@@ -44,6 +44,8 @@ import { PolicyTopicRegistry } from './pages/dashboard/PolicyTopicRegistry';
 import { BetaDeploymentVerification } from './pages/dashboard/BetaDeploymentVerification';
 import { PolicyMatrixVirtualized } from './pages/dashboard/PolicyMatrixVirtualized';
 import { CpraCampaignTimeline } from './pages/dashboard/CpraCampaignTimeline';
+import { CpraMatrixDashboard } from './pages/dashboard/CpraMatrixDashboard';
+import { UsageDashboard } from './pages/dashboard/UsageDashboard';
 import { CasesListPage } from './pages/CasesListPage';
 import { SearchPage } from './pages/SearchPage';
 import { NotificationsPage } from './pages/NotificationsPage';
@@ -246,6 +248,15 @@ function App() {
               </ProtectedRoute>
             }
           />
+          <Route
+            path="dashboard/cpra-matrix"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <CpraMatrixDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="dashboard/usage" element={<UsageDashboard />} />
           <Route path="cases" element={<CasesListPage />} />
           <Route path="search" element={<SearchPage />} />
           <Route path="notifications" element={<NotificationsPage />} />

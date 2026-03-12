@@ -91,10 +91,12 @@ function detectClockDrift(events: ExtractedEvent[]): DriftPair[] {
 // ---------------------------------------------------------------------------
 
 /**
- * Parse a timestamp string into milliseconds since midnight.
- * Handles multiple formats: HH:MM:SS, HH:MM, HHMM, 12-hour with AM/PM.
+ * Parse a timestamp string into epoch milliseconds.
+ * Handles multiple formats: ISO, HH:MM:SS, HH:MM, HHMM, 12-hour with AM/PM.
+ * Time-only strings are normalized to a reference date (UTC epoch day 0)
+ * to ensure all return values are in the same numeric domain.
  */
-function parseTimestamp(ts: string): number | null {
+function parseTimestamp(ts: string, referenceDate?: string): number | null {
   if (!ts) return null;
 
   // Try ISO format first
@@ -103,33 +105,41 @@ function parseTimestamp(ts: string): number | null {
     return isoDate.getTime();
   }
 
+  // For time-only formats, normalize to a reference date so all values
+  // are in epoch-ms domain (consistent with ISO results).
+  // Default reference: 1970-01-01 (UTC epoch day 0).
+  const refPrefix = referenceDate ?? '1970-01-01';
+
   // 24-hour: 14:30:00 or 14:30
   const match24 = ts.match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?$/);
   if (match24) {
-    const h = parseInt(match24[1], 10);
-    const m = parseInt(match24[2], 10);
-    const s = parseInt(match24[3] ?? '0', 10);
-    return (h * 3600 + m * 60 + s) * 1000;
+    const h = match24[1].padStart(2, '0');
+    const m = match24[2];
+    const s = (match24[3] ?? '00').padStart(2, '0');
+    const d = new Date(`${refPrefix}T${h}:${m}:${s}Z`);
+    return !isNaN(d.getTime()) ? d.getTime() : null;
   }
 
   // Military: 1430 or 1430 hrs
   const matchMil = ts.match(/^(\d{4})\s*(?:hrs?)?$/i);
   if (matchMil) {
-    const h = parseInt(matchMil[1].slice(0, 2), 10);
-    const m = parseInt(matchMil[1].slice(2, 4), 10);
-    return (h * 3600 + m * 60) * 1000;
+    const h = matchMil[1].slice(0, 2);
+    const m = matchMil[1].slice(2, 4);
+    const d = new Date(`${refPrefix}T${h}:${m}:00Z`);
+    return !isNaN(d.getTime()) ? d.getTime() : null;
   }
 
   // 12-hour: 2:30 PM
   const match12 = ts.match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?\s*(AM|PM|a\.m\.|p\.m\.)/i);
   if (match12) {
     let h = parseInt(match12[1], 10);
-    const m = parseInt(match12[2], 10);
-    const s = parseInt(match12[3] ?? '0', 10);
+    const m = match12[2];
+    const s = (match12[3] ?? '00').padStart(2, '0');
     const isPM = /pm|p\.m\./i.test(match12[4]);
     if (isPM && h < 12) h += 12;
     if (!isPM && h === 12) h = 0;
-    return (h * 3600 + m * 60 + s) * 1000;
+    const d = new Date(`${refPrefix}T${String(h).padStart(2, '0')}:${m}:${s}Z`);
+    return !isNaN(d.getTime()) ? d.getTime() : null;
   }
 
   return null;

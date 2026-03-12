@@ -599,7 +599,7 @@ export function analyzeContradictions(
   // Deduplicate by checking event pair overlaps
   const seen = new Set<string>();
   const deduplicated = allContradictions.filter((c) => {
-    const key = [c.eventA, c.eventB, c.contradictionType].sort().join(':');
+    const key = [c.eventA, c.eventB].sort().join(':') + '|' + c.contradictionType;
     if (seen.has(key)) return false;
     seen.add(key);
     return true;

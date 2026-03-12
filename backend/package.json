@@ -44,7 +44,8 @@
     "pg-copy-streams": "^6.0.6",
     "selenium-webdriver": "^4.41.0",
     "stream-json": "^1.9.1",
-    "tesseract.js": "^7.0.0"
+    "tesseract.js": "^7.0.0",
+    "uuid": "^13.0.0"
   },
   "devDependencies": {
     "@types/crypto-js": "^4.2.2",
@@ -55,6 +56,7 @@
     "@types/pg-copy-streams": "^1.2.3",
     "@types/selenium-webdriver": "^4.35.5",
     "@types/stream-json": "^1.7.7",
+    "@types/uuid": "^10.0.0",
     "prisma": "^6.9.0",
     "tsx": "^4.19.0",
     "typescript": "~5.6.2"

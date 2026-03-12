@@ -417,7 +417,7 @@ export function generateCypherStatements(graph: ContradictionGraph): string[] {
       .join(', ');
 
     statements.push(
-      `CREATE (n:${node.type} {nodeId: "${node.nodeId}", label: "${node.label.replace(/"/g, '\\"')}", ${propsStr}})`,
+      `CREATE (n:${node.type} {nodeId: ${JSON.stringify(node.nodeId)}, label: ${JSON.stringify(node.label)}, ${propsStr}})`,
     );
   }
 
@@ -428,7 +428,7 @@ export function generateCypherStatements(graph: ContradictionGraph): string[] {
       .join(', ');
 
     statements.push(
-      `MATCH (a {nodeId: "${edge.sourceNodeId}"}), (b {nodeId: "${edge.targetNodeId}"}) CREATE (a)-[:${edge.type} {edgeId: "${edge.edgeId}", ${propsStr}}]->(b)`,
+      `MATCH (a {nodeId: ${JSON.stringify(edge.sourceNodeId)}}), (b {nodeId: ${JSON.stringify(edge.targetNodeId)}}) CREATE (a)-[:${edge.type} {edgeId: ${JSON.stringify(edge.edgeId)}, ${propsStr}}]->(b)`,
     );
   }
 

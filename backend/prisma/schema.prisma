@@ -168,6 +168,7 @@ model Agency {
   CPRAAgencyRequests  CPRAAgencyRequest[]
   CPRAAnnualUpdates   CPRAAnnualUpdate[]
   AgencyPolicyStatus  AgencyPolicyStatus?
+  PolicyRequests      PolicyRequest[]
 
   @@unique([agencyName, county])
   @@index([county])
@@ -933,4 +934,29 @@ model JuryVisualization {
 
   @@index([caseId])
   @@map("jury_visualizations")
+}
+
+// ---------------------------------------------------------------------------
+// Policy Request — CPRA request tracking for policy acquisition campaigns
+// ---------------------------------------------------------------------------
+
+model PolicyRequest {
+  id            String    @id @default(uuid())
+  agencyId      String
+  requestSentAt DateTime
+  responseAt    DateTime?
+  status        String    // pending | sent | delivered | responded | documents_received | denied | no_response
+  trackingId    String    @unique
+  sesMessageId  String?   // AWS SES message ID for bounce/delivery tracking
+  errorMessage  String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  agency        Agency    @relation(fields: [agencyId], references: [agencyId])
+
+  @@index([agencyId])
+  @@index([status])
+  @@index([trackingId])
+  @@index([requestSentAt])
+  @@map("policy_requests")
 }

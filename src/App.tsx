@@ -24,6 +24,7 @@ import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
 
 // Main Pages — Dashboard Router (role-based)
 import { DashboardRouter } from './pages/dashboard/DashboardRouter';
+import { PolicyAcquisitionCampaigns } from './pages/dashboard/PolicyAcquisitionCampaigns';
 import { DemoRequestsDashboard } from './pages/dashboard/DemoRequestsDashboard';
 import { GovernmentOutreachDashboard } from './pages/dashboard/GovernmentOutreachDashboard';
 import { MarketingDashboard } from './pages/dashboard/MarketingDashboard';
@@ -93,6 +94,14 @@ function App() {
           }
         >
           <Route path="dashboard" element={<DashboardRouter />} />
+          <Route
+            path="dashboard/policy-acquisition/campaigns"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <PolicyAcquisitionCampaigns />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="dashboard/policy-acquisition/agencies"
             element={

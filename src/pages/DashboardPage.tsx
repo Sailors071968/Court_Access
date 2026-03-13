@@ -18,6 +18,7 @@ export function DashboardPage() {
   const [primaryCase, setPrimaryCase] = useState<CaseEntity | null>(null);
   const [documents, setDocuments] = useState<DocumentEntity[]>([]);
   const [activity, setActivity] = useState<ActivityEntry[]>([]);
+  const [loading, setLoading] = useState(true);
   const documentTypeLabels = caseDataProvider.getDocumentTypeLabels();
 
   useEffect(() => {
@@ -27,13 +28,21 @@ export function DashboardPage() {
         caseDataProvider.getDocuments(c.id).then(setDocuments);
         caseDataProvider.getActivity(c.id).then(setActivity);
       }
-    });
+    }).finally(() => setLoading(false));
   }, []);
+
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto p-8 text-center">
+        <p className="text-gray-500">Loading dashboard...</p>
+      </div>
+    );
+  }
 
   if (!primaryCase) {
     return (
       <div className="max-w-7xl mx-auto p-8 text-center">
-        <p className="text-gray-500">Loading dashboard...</p>
+        <p className="text-gray-500">No cases found. Create a case to get started.</p>
       </div>
     );
   }

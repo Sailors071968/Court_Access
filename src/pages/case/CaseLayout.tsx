@@ -14,8 +14,10 @@ export function CaseLayout() {
   const { caseId } = useParams<{ caseId: string }>();
   const { user } = useAuthStore();
   const [currentCase, setCurrentCase] = useState<CaseEntity | null>(null);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    setLoading(true);
     caseDataProvider.getCases().then((cases) => {
       const found = cases.find((c) => c.id === caseId);
       if (found) {
@@ -23,14 +25,21 @@ export function CaseLayout() {
       } else {
         caseDataProvider.getPrimaryCase().then((pc) => setCurrentCase(pc));
       }
-    });
+    }).finally(() => setLoading(false));
   }, [caseId]);
 
   if (!user) return null;
-  if (!currentCase) {
+  if (loading) {
     return (
       <div className="max-w-7xl mx-auto p-8 text-center">
         <p className="text-gray-500">Loading case...</p>
+      </div>
+    );
+  }
+  if (!currentCase) {
+    return (
+      <div className="max-w-7xl mx-auto p-8 text-center">
+        <p className="text-gray-500">Case not found.</p>
       </div>
     );
   }

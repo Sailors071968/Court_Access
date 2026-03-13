@@ -23,9 +23,11 @@ export function CaseOverviewPage() {
   const [currentCase, setCurrentCase] = useState<CaseEntity | null>(null);
   const [documents, setDocuments] = useState<DocumentEntity[]>([]);
   const [activity, setActivity] = useState<ActivityEntry[]>([]);
+  const [loading, setLoading] = useState(true);
   const documentTypeLabels = caseDataProvider.getDocumentTypeLabels();
 
   useEffect(() => {
+    setLoading(true);
     caseDataProvider.getCases().then((cases) => {
       const found = cases.find((c) => c.id === caseId);
       const selected = found ?? null;
@@ -42,14 +44,21 @@ export function CaseOverviewPage() {
           }
         });
       }
-    });
+    }).finally(() => setLoading(false));
   }, [caseId]);
 
   if (!user) return null;
-  if (!currentCase) {
+  if (loading) {
     return (
       <div className="p-8 text-center">
         <p className="text-gray-500">Loading case overview...</p>
+      </div>
+    );
+  }
+  if (!currentCase) {
+    return (
+      <div className="p-8 text-center">
+        <p className="text-gray-500">Case not found.</p>
       </div>
     );
   }

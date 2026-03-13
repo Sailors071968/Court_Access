@@ -16,6 +16,7 @@ export type UserRole = 'admin' | 'attorney' | 'investigator' | 'staff' | 'defend
 
 export interface JwtPayload {
   userId: string;
+  tenantId: string;
   email: string;
   role: UserRole;
   iat?: number;
@@ -272,7 +273,7 @@ export async function authenticationHook(
 // ---------------------------------------------------------------------------
 
 // User store (in-memory; production should use database)
-const userStore = new Map<string, { userId: string; email: string; name: string; passwordHash: string; role: UserRole }>();
+const userStore = new Map<string, { userId: string; tenantId: string; email: string; name: string; passwordHash: string; role: UserRole }>();
 
 export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
   // POST /api/auth/login
@@ -292,7 +293,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       return reply.code(401).send({ error: 'Invalid email or password' });
     }
 
-    const tokenPayload = { userId: user.userId, email: user.email, role: user.role };
+    const tokenPayload = { userId: user.userId, tenantId: user.tenantId, email: user.email, role: user.role };
     const accessToken = generateAccessToken(tokenPayload);
     const refreshToken = generateRefreshToken(tokenPayload);
 
@@ -311,7 +312,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       accessToken,
       refreshToken,
       expiresIn: ACCESS_TOKEN_EXPIRY_SECONDS,
-      user: { userId: user.userId, email: user.email, name: user.name, role: user.role },
+      user: { userId: user.userId, tenantId: user.tenantId, email: user.email, name: user.name, role: user.role },
     };
   });
 
@@ -328,13 +329,14 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     }
 
     const userId = `user-${crypto.randomUUID()}`;
+    const tenantId = `tenant-${crypto.randomUUID()}`;
     const passwordHash = crypto.createHash('sha256').update(password).digest('hex');
     const userRole = role || 'staff';
     const userName = name || email.split('@')[0];
 
-    userStore.set(email, { userId, email, name: userName, passwordHash, role: userRole });
+    userStore.set(email, { userId, tenantId, email, name: userName, passwordHash, role: userRole });
 
-    const tokenPayload = { userId, email, role: userRole };
+    const tokenPayload = { userId, tenantId, email, role: userRole };
     const accessToken = generateAccessToken(tokenPayload);
     const refreshToken = generateRefreshToken(tokenPayload);
 
@@ -344,7 +346,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       accessToken,
       refreshToken,
       expiresIn: ACCESS_TOKEN_EXPIRY_SECONDS,
-      user: { userId, email, name: userName, role: userRole },
+      user: { userId, tenantId, email, name: userName, role: userRole },
     };
   });
 
@@ -423,7 +425,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     }
     try {
       const payload = verifyAccessToken(token);
-      return { user: { userId: payload.userId, email: payload.email, role: payload.role } };
+      return { user: { userId: payload.userId, tenantId: payload.tenantId, email: payload.email, role: payload.role } };
     } catch {
       return reply.code(401).send({ error: 'Invalid or expired token' });
     }

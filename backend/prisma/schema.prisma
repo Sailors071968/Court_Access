@@ -1147,3 +1147,82 @@ model CpraTimelineEvent {
   @@index([createdAt])
   @@map("cpra_timeline_events")
 }
+
+// ---------------------------------------------------------------------------
+// Core Evidence System — Case Management
+// ---------------------------------------------------------------------------
+
+model CriminalCase {
+  caseId          String   @id @default(uuid())
+  tenantId        String
+  ownerId         String
+  title           String
+  caseNumber      String
+  jurisdiction    String
+  caseType        String   // felony | misdemeanor | infraction | federal
+  status          String   @default("active") // active | pending | closed | archived
+  phase           String   @default("intake") // intake | preliminary | pretrial | trial | sentencing | appeal | closed
+  court           String?
+  judge           String?
+  department      String?
+  nextHearing     DateTime?
+  nextHearingNote String?
+  deletedAt       DateTime?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  evidence        Evidence[]
+
+  @@unique([tenantId, caseNumber])
+  @@index([tenantId])
+  @@index([ownerId])
+  @@index([status])
+  @@index([caseType])
+  @@index([createdAt])
+  @@map("criminal_cases")
+}
+
+// ---------------------------------------------------------------------------
+// Core Evidence System — Evidence Metadata
+// ---------------------------------------------------------------------------
+
+model Evidence {
+  evidenceId      String   @id @default(uuid())
+  caseId          String
+  case            CriminalCase @relation(fields: [caseId], references: [caseId])
+  tenantId        String
+  fileName        String
+  mimeType        String?
+  size            BigInt   @default(0)
+  duration        Int?     // seconds, for video
+  pageCount       Int?     // for documents
+  evidenceType    String   // transcript | police_report | bodycam | dashcam | witness_video | photo | dispatch_log | forensic_report | autopsy_report | other_document
+  s3Key           String?
+  uploadedBy      String
+  uploadedAt      DateTime @default(now())
+
+  // Processing status
+  processingStatus String  @default("pending") // pending | ingesting | normalized | analyzed | failed
+  processingError  String?
+
+  // Document normalization
+  multiplexDetected Boolean @default(false)
+  multiplexCount    Int?
+  normalizedPageCount Int?
+
+  // ACU compute preparation (Part 15)
+  acuCost          Float?
+  acuConsumed      Float    @default(0)
+  analysisStatus   String   @default("pending") // pending | queued | processing | completed | failed
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([evidenceType])
+  @@index([processingStatus])
+  @@index([analysisStatus])
+  @@map("evidence")
+}

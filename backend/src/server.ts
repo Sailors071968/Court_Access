@@ -23,6 +23,8 @@ import { registerContradictionRoutes } from './contradiction/index.ts';
 import { registerPolicyMatrixRoutes } from './cpra/policyMatrixRoutes.js';
 import { registerAutonomousCpraRoutes } from './cpra/autonomousCpraRoutes.js';
 import { registerBillingRoutes } from './billing/billingRoutes.js';
+import { registerCaseRoutes } from './evidence/caseRoutes.js';
+import { registerEvidenceRoutes } from './evidence/evidenceRoutes.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -135,6 +137,13 @@ async function startServer() {
   console.log('[Server] Registering billing & usage routes...');
   await registerBillingRoutes(app);
 
+  // Core Evidence System — Case Management + Evidence Upload
+  console.log('[Server] Registering case management routes...');
+  await registerCaseRoutes(app);
+
+  console.log('[Server] Registering evidence routes...');
+  await registerEvidenceRoutes(app);
+
   // Start server
   try {
     await app.listen({ port: PORT, host: HOST });
@@ -189,6 +198,16 @@ async function startServer() {
     console.log('  - POST /api/contradiction/analyze/:caseId');
     console.log('  - GET  /api/contradiction/graph/:caseId');
     console.log('  - GET  /api/contradiction/recommendations/:caseId');
+    console.log('  - POST /api/cases');
+    console.log('  - GET  /api/cases');
+    console.log('  - GET  /api/cases/:caseId');
+    console.log('  - PATCH /api/cases/:caseId');
+    console.log('  - DELETE /api/cases/:caseId');
+    console.log('  - POST /api/evidence/upload-url');
+    console.log('  - POST /api/evidence');
+    console.log('  - GET  /api/cases/:caseId/evidence');
+    console.log('  - GET  /api/evidence/:evidenceId');
+    console.log('  - DELETE /api/evidence/:evidenceId');
     console.log('[Server] Security hardening active: JWT auth, rate limiting, CSRF, security headers, upload protection, security logging');
   } catch (err) {
     console.error('[Server] Failed to start:', err);

@@ -139,8 +139,12 @@ function estimateClockOffsets(events: TimelineEventRow[]): ClockOffset[] {
       for (let j = i + 1; j < group.length; j++) {
         const a = group[i];
         const b = group[j];
-        const key = [a.sourceType, b.sourceType].sort().join('::');
-        const offset = a.timestamp.getTime() - b.timestamp.getTime();
+        const sortedTypes = [a.sourceType, b.sourceType].sort();
+        const key = sortedTypes.join('::');
+        // Ensure consistent sign: offset = first-alphabetically minus second-alphabetically
+        const offset = a.sourceType === sortedTypes[0]
+          ? a.timestamp.getTime() - b.timestamp.getTime()
+          : b.timestamp.getTime() - a.timestamp.getTime();
         const existing = pairOffsets.get(key) ?? [];
         existing.push(offset);
         pairOffsets.set(key, existing);

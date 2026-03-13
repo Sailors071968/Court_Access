@@ -203,8 +203,10 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
       return reply.code(403).send({ error: 'Invalid s3Key: does not match expected tenant path' });
     }
 
+    // Create DB record first
+    let evidence;
     try {
-      const evidence = await prisma.evidence.create({
+      evidence = await prisma.evidence.create({
         data: {
           caseId: body.caseId,
           tenantId: user.tenantId,
@@ -218,8 +220,15 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
           uploadedBy: user.userId,
         },
       });
+    } catch (err) {
+      console.error('[EvidenceRoutes] Failed to create evidence record:', err);
+      return reply.code(500).send({ error: 'Failed to register evidence' });
+    }
 
-      // Enqueue evidence processing (Part 5)
+    // Enqueue evidence processing (Part 5) — separate try-catch so a queue
+    // failure doesn't mask the successful DB insert or return a misleading 500.
+    let processingWarning: string | undefined;
+    try {
       await enqueueEvidenceIngestion({
         evidenceId: evidence.evidenceId,
         caseId: body.caseId,
@@ -230,18 +239,19 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
         size: body.size,
         isVideo: VIDEO_EVIDENCE_TYPES.includes(body.evidenceType as EvidenceType),
       });
-
-      // Serialize BigInt for JSON response
-      return reply.code(201).send({
-        evidence: {
-          ...evidence,
-          size: evidence.size.toString(),
-        },
-      });
-    } catch (err) {
-      console.error('[EvidenceRoutes] Failed to create evidence record:', err);
-      return reply.code(500).send({ error: 'Failed to register evidence' });
+    } catch (queueErr) {
+      console.error('[EvidenceRoutes] Failed to enqueue processing (record saved):', queueErr);
+      processingWarning = 'Evidence registered but processing could not be started. It will be retried automatically.';
     }
+
+    // Serialize BigInt for JSON response
+    return reply.code(201).send({
+      evidence: {
+        ...evidence,
+        size: evidence.size.toString(),
+      },
+      ...(processingWarning ? { warning: processingWarning } : {}),
+    });
   });
 
   // GET /api/cases/:caseId/evidence — List evidence for a case

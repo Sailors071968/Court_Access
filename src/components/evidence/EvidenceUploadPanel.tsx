@@ -77,7 +77,11 @@ export function EvidenceUploadPanel({ caseId, onUploadComplete, onClose }: Evide
         setUploads((prev) => prev.map((u) => u.id === item.id ? { ...u, status: 'error', error: errorMsg } : u));
       }
     }
-    onUploadComplete?.();
+    // Only notify parent if at least one upload succeeded
+    const hasSuccess = uploads.some((u) => pending.find((p) => p.id === u.id) && u.status !== 'error');
+    if (hasSuccess) {
+      onUploadComplete?.();
+    }
   }, [uploads, caseId, onUploadComplete]);
 
   const handleDrop = useCallback((e: React.DragEvent) => {

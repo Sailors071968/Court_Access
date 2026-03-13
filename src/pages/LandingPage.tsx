@@ -308,7 +308,7 @@ function CoreFeaturesSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
-            Four Engines That Find What Matters
+            Six Engines That Find What Matters
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
             Each system works independently. Together, they give your defense team a complete picture of the case — contradictions, timelines, and impeachment opportunities included.

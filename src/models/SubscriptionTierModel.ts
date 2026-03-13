@@ -63,6 +63,7 @@ export type SubscriptionTierId =
 export interface SubscriptionTierConfig {
   id: SubscriptionTierId;
   name: string;
+  description: string;                // User-facing plan description
   maxUploadMB: number;                // Integer — maximum upload size in MB
   archiveEligible: boolean;           // Whether this tier supports archival
   retentionDays: number;              // Integer — document retention in days
@@ -102,6 +103,7 @@ const SUBSCRIPTION_TIER_CONFIGS: readonly SubscriptionTierConfig[] = Object.free
   {
     id: 'FREE',
     name: 'Free',
+    description: 'Try the platform with a single case. Upload up to 10 pages of discovery (lifetime), see the evidence graph, and get a feel for how CourtAccess structures case data. No AI analysis, watermarked exports, 90-day retention.',
     maxUploadMB: 50,
     archiveEligible: false,
     retentionDays: 90,
@@ -115,6 +117,7 @@ const SUBSCRIPTION_TIER_CONFIGS: readonly SubscriptionTierConfig[] = Object.free
   {
     id: 'STARTER',
     name: 'Starter',
+    description: 'For solo practitioners handling 1–2 active cases. 300 pages/month, 20 AI credits for contradiction detection and timeline analysis. Document archival with 1-year retention. Exports are watermarked. Upload limit: 200 MB per file.',
     maxUploadMB: 200,
     archiveEligible: true,
     retentionDays: 365,
@@ -128,6 +131,7 @@ const SUBSCRIPTION_TIER_CONFIGS: readonly SubscriptionTierConfig[] = Object.free
   {
     id: 'PROFESSIONAL',
     name: 'Professional',
+    description: 'For attorneys running 3–5 active cases with full discovery sets. 2,000 pages/month, 100 AI credits for timeline reconstruction, narrative deconstruction, and contradiction detection. Clean exports (no watermarks), doctrine matching, and litigation intelligence. 2-year case retention. Upload limit: 500 MB per file.',
     maxUploadMB: 500,
     archiveEligible: true,
     retentionDays: 730,
@@ -141,6 +145,7 @@ const SUBSCRIPTION_TIER_CONFIGS: readonly SubscriptionTierConfig[] = Object.free
   {
     id: 'ADVANCED_INVESTIGATOR',
     name: 'Advanced Investigator',
+    description: 'For defense investigators and firms handling complex multi-defendant cases. 6,000 pages/month, 250 AI credits covering video intelligence (bodycam/dashcam frame analysis), reliability scoring, and priority queue processing. 3-year case retention. Upload limit: 1 GB per file.',
     maxUploadMB: 1000,
     archiveEligible: true,
     retentionDays: 1095,
@@ -153,7 +158,8 @@ const SUBSCRIPTION_TIER_CONFIGS: readonly SubscriptionTierConfig[] = Object.free
   },
   {
     id: 'LITIGATION_INTELLIGENCE_PRO',
-    name: 'Litigation Intelligence Pro',
+    name: 'Litigation Pro',
+    description: 'For trial teams preparing complex litigation with large discovery volumes. 12,000 pages/month, 500 AI credits for full-spectrum analysis including forensic reconstruction, jury-ready exhibit generation, and impeachment package assembly. 5-year case retention. Upload limit: 2 GB per file.',
     maxUploadMB: 2000,
     archiveEligible: true,
     retentionDays: 1825,
@@ -167,6 +173,7 @@ const SUBSCRIPTION_TIER_CONFIGS: readonly SubscriptionTierConfig[] = Object.free
   {
     id: 'ENTERPRISE_FIRM',
     name: 'Enterprise Firm',
+    description: 'For firms and public defender offices with high-volume caseloads. 25,000 pages/month, 1,500 AI credits, multi-user accounts with role-based access, API integration, and dedicated support. 10-year case retention for long-running appeals. Upload limit: 5 GB per file.',
     maxUploadMB: 5000,
     archiveEligible: true,
     retentionDays: 3650,
@@ -182,6 +189,7 @@ const SUBSCRIPTION_TIER_CONFIGS: readonly SubscriptionTierConfig[] = Object.free
   {
     id: 'TIER_7',
     name: 'Unlimited Enterprise (Legacy)',
+    description: 'Legacy enterprise tier. Same as Enterprise Firm with expanded 10 GB upload limit. Preserved for existing subscribers.',
     maxUploadMB: 10000,
     archiveEligible: true,
     retentionDays: 3650,

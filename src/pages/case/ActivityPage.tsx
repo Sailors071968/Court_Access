@@ -3,6 +3,7 @@
 // ============================================
 
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { Card } from '../../components/common/Card';
 import { caseDataProvider } from '../../services/caseDataProvider';
 import type { ActivityEntry } from '../../models/CaseModel';
@@ -17,11 +18,12 @@ const iconMap: Record<string, { icon: typeof FileText; bg: string; color: string
 };
 
 export function ActivityPage() {
+  const { caseId } = useParams<{ caseId: string }>();
   const [activityItems, setActivityItems] = useState<ActivityEntry[]>([]);
 
   useEffect(() => {
-    caseDataProvider.getActivity().then(setActivityItems);
-  }, []);
+    caseDataProvider.getActivity(caseId).then(setActivityItems);
+  }, [caseId]);
 
   return (
     <div className="space-y-6">

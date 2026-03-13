@@ -3,6 +3,7 @@
 // ============================================
 
 import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import { Search, Upload, Eye, MoreHorizontal } from 'lucide-react';
 import { Card } from '../../components/common/Card';
 import { AIStatusBadge } from '../../components/common/StatusBadge';
@@ -20,14 +21,15 @@ const DOCUMENT_TABS = [
 ];
 
 export function EvidencePage() {
+  const { caseId } = useParams<{ caseId: string }>();
   const [activeTab, setActiveTab] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [allDocuments, setAllDocuments] = useState<DocumentEntity[]>([]);
   const documentTypeLabels = caseDataProvider.getDocumentTypeLabels();
 
   useEffect(() => {
-    caseDataProvider.getDocuments().then(setAllDocuments);
-  }, []);
+    caseDataProvider.getDocuments(caseId).then(setAllDocuments);
+  }, [caseId]);
 
   const filteredDocs = allDocuments.filter((doc: DocumentEntity) => {
     const matchesTab = activeTab === 'all' || doc.type === activeTab;

@@ -7,7 +7,7 @@ import { persist } from 'zustand/middleware';
 import type { User, UserRole } from '../types';
 import { ROLE_PERMISSIONS } from '../constants';
 
-type SubscriptionStatus = 'active' | 'trial' | 'none' | 'expired';
+type SubscriptionStatus = 'active' | 'trial' | 'past_due' | 'cancelled' | 'none';
 
 interface AuthState {
   user: User | null;
@@ -90,7 +90,7 @@ export const useAuthStore = create<AuthState>()(persist((set, get) => ({
         user: { id: data.user.userId, name: data.user.name || name, email: data.user.email, role: data.user.role },
         isAuthenticated: true,
         isLoading: false,
-        subscriptionStatus: 'none', // New registrations have no subscription yet
+        subscriptionStatus: (data.user.subscriptionStatus as SubscriptionStatus) || 'none',
       });
     } catch (err) {
       set({ isLoading: false });

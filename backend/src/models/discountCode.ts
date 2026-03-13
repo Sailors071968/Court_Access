@@ -75,7 +75,7 @@ export function updateDiscountCode(
   if (!code) return undefined;
 
   // Prevent duplicate codeValue when renaming
-  if (updates.codeValue && updates.codeValue.toUpperCase() !== code.codeValue) {
+  if (updates.codeValue !== undefined && updates.codeValue.toUpperCase() !== code.codeValue) {
     const conflict = discountCodes.find(
       (c) => c.codeId !== codeId && c.codeValue.toUpperCase() === updates.codeValue!.toUpperCase()
     );

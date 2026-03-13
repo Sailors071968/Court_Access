@@ -108,7 +108,7 @@ export async function registerDiscountRoutes(app: FastifyInstance): Promise<void
     // Only pick allowed fields to prevent overwriting protected fields (usageCount, codeId, createdAt)
     const sanitized: Partial<Pick<import('../models/discountCode.js').DiscountCode, 'codeName' | 'codeValue' | 'active' | 'expiresAt' | 'usageLimit' | 'discountValue' | 'discountType'>> = {};
     if (body.codeName !== undefined) sanitized.codeName = body.codeName as string;
-    if (body.codeValue !== undefined) sanitized.codeValue = (body.codeValue as string).toUpperCase();
+    if (body.codeValue !== undefined && typeof body.codeValue === 'string') sanitized.codeValue = body.codeValue.toUpperCase();
     if (body.active !== undefined) sanitized.active = body.active as boolean;
     if (body.expiresAt !== undefined) sanitized.expiresAt = body.expiresAt as string | null;
     if (body.usageLimit !== undefined) sanitized.usageLimit = body.usageLimit as number | null;

@@ -86,7 +86,7 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
         },
       });
 
-      return reply.code(201).send(newCase);
+      return reply.code(201).send({ case: newCase });
     } catch (err: unknown) {
       const prismaError = err as { code?: string };
       if (prismaError.code === 'P2002') {
@@ -122,7 +122,7 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
         },
       });
 
-      return cases;
+      return { cases };
     } catch (err) {
       console.error('[CaseRoutes] Failed to list cases:', err);
       return reply.code(500).send({ error: 'Failed to list cases' });
@@ -156,7 +156,7 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
         return reply.code(403).send({ error: 'Forbidden' });
       }
 
-      return foundCase;
+      return { case: foundCase };
     } catch (err) {
       console.error('[CaseRoutes] Failed to get case:', err);
       return reply.code(500).send({ error: 'Failed to get case' });
@@ -222,7 +222,7 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
         data: updateData,
       });
 
-      return updated;
+      return { case: updated };
     } catch (err) {
       console.error('[CaseRoutes] Failed to update case:', err);
       return reply.code(500).send({ error: 'Failed to update case' });

@@ -227,8 +227,10 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
 
       // Serialize BigInt for JSON response
       return reply.code(201).send({
-        ...evidence,
-        size: evidence.size.toString(),
+        evidence: {
+          ...evidence,
+          size: evidence.size.toString(),
+        },
       });
     } catch (err) {
       console.error('[EvidenceRoutes] Failed to create evidence record:', err);
@@ -270,10 +272,12 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
       });
 
       // Serialize BigInt for JSON response
-      return evidenceList.map((e) => ({
-        ...e,
-        size: e.size.toString(),
-      }));
+      return {
+        evidence: evidenceList.map((e) => ({
+          ...e,
+          size: e.size.toString(),
+        })),
+      };
     } catch (err) {
       console.error('[EvidenceRoutes] Failed to list evidence:', err);
       return reply.code(500).send({ error: 'Failed to list evidence' });
@@ -302,8 +306,10 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
       }
 
       return {
-        ...evidence,
-        size: evidence.size.toString(),
+        evidence: {
+          ...evidence,
+          size: evidence.size.toString(),
+        },
       };
     } catch (err) {
       console.error('[EvidenceRoutes] Failed to get evidence:', err);

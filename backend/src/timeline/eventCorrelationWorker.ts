@@ -124,24 +124,27 @@ export async function processEventCorrelation(job: EventCorrelationJob): Promise
     return { groupsCreated: 0, eventsCorrelated: 0 };
   }
 
-  // Clear existing correlation groups for fresh analysis
-  await prisma.timelineEvent.updateMany({
-    where: { caseId: job.caseId, tenantId: job.tenantId },
-    data: { correlationGroup: null },
-  });
-
-  // Find correlation groups
+  // Compute correlation groups on in-memory data before touching the database
   const groups = findCorrelationGroups(events);
 
-  // Apply correlation groups to events
+  // Wrap clear + write in a transaction so existing data is preserved on error
   let eventsCorrelated = 0;
-  for (const [groupId, memberIds] of groups) {
-    await prisma.timelineEvent.updateMany({
-      where: { eventId: { in: memberIds } },
-      data: { correlationGroup: groupId },
+  await prisma.$transaction(async (tx) => {
+    // Clear existing correlation groups for fresh analysis
+    await tx.timelineEvent.updateMany({
+      where: { caseId: job.caseId, tenantId: job.tenantId },
+      data: { correlationGroup: null },
     });
-    eventsCorrelated += memberIds.length;
-  }
+
+    // Apply new correlation groups to events
+    for (const [groupId, memberIds] of groups) {
+      await tx.timelineEvent.updateMany({
+        where: { eventId: { in: memberIds } },
+        data: { correlationGroup: groupId },
+      });
+      eventsCorrelated += memberIds.length;
+    }
+  });
 
   console.log(`[EventCorrelation] Created ${groups.size} correlation groups (${eventsCorrelated} events)`);
 

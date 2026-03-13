@@ -207,46 +207,58 @@ export async function processTimelineBuild(job: TimelineBuilderJob): Promise<{
   // Rebuild re-runs conflict detection and clock offset estimation on existing
   // correlated data. To fully re-correlate, trigger the full pipeline instead.
 
-  // Fetch all events for this case
-  const events = await prisma.timelineEvent.findMany({
-    where: { caseId: job.caseId, tenantId: job.tenantId },
-    orderBy: { timestamp: 'asc' },
-  });
+  try {
+    // Fetch all events for this case
+    const events = await prisma.timelineEvent.findMany({
+      where: { caseId: job.caseId, tenantId: job.tenantId },
+      orderBy: { timestamp: 'asc' },
+    });
 
-  // Detect conflicts
-  const conflicts = detectConflicts(events);
+    // Detect conflicts
+    const conflicts = detectConflicts(events);
 
-  // Estimate clock offsets
-  const clockOffsets = estimateClockOffsets(events);
+    // Estimate clock offsets
+    const clockOffsets = estimateClockOffsets(events);
 
-  // Update timeline record
-  await prisma.caseTimeline.update({
-    where: { caseId: job.caseId },
-    data: {
-      status: 'complete',
+    // Update timeline record
+    await prisma.caseTimeline.update({
+      where: { caseId: job.caseId },
+      data: {
+        status: 'complete',
+        eventCount: events.length,
+        conflictCount: conflicts.length,
+        clockOffsets: clockOffsets.length > 0 ? clockOffsets : null,
+        builtAt: new Date(),
+        metadata: {
+          buildDuration: 'computed',
+          conflictDetails: conflicts.map((c) => ({
+            type: c.conflictType,
+            description: c.description,
+            eventIdA: c.eventIdA,
+            eventIdB: c.eventIdB,
+          })),
+        },
+      },
+    });
+
+    console.log(
+      `[TimelineBuilder] Timeline complete: ${events.length} events, ${conflicts.length} conflicts, ${clockOffsets.length} clock offsets`,
+    );
+
+    return {
       eventCount: events.length,
       conflictCount: conflicts.length,
-      clockOffsets: clockOffsets.length > 0 ? clockOffsets : null,
-      builtAt: new Date(),
-      metadata: {
-        buildDuration: 'computed',
-        conflictDetails: conflicts.map((c) => ({
-          type: c.conflictType,
-          description: c.description,
-          eventIdA: c.eventIdA,
-          eventIdB: c.eventIdB,
-        })),
-      },
-    },
-  });
-
-  console.log(
-    `[TimelineBuilder] Timeline complete: ${events.length} events, ${conflicts.length} conflicts, ${clockOffsets.length} clock offsets`,
-  );
-
-  return {
-    eventCount: events.length,
-    conflictCount: conflicts.length,
-    clockOffsets,
-  };
+      clockOffsets,
+    };
+  } catch (err) {
+    // Mark timeline as failed so UI doesn't show perpetual "Building" state
+    console.error(`[TimelineBuilder] Build failed for case ${job.caseId}:`, err);
+    await prisma.caseTimeline.update({
+      where: { caseId: job.caseId },
+      data: { status: 'failed' },
+    }).catch((updateErr) => {
+      console.error(`[TimelineBuilder] Failed to set status to 'failed':`, updateErr);
+    });
+    throw err; // Re-throw so BullMQ can handle retries
+  }
 }

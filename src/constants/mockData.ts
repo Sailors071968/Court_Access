@@ -11,71 +11,11 @@ import { DOCUMENT_TYPE_LABELS } from '../models/DocumentModel';
 export { DOCUMENT_TYPE_LABELS };
 
 // ---------------------------------------------------------------------------
-// Cases
+// Cases — REMOVED: Mock cases deleted for production.
+// Real cases are fetched from backend API via /api/cases.
 // ---------------------------------------------------------------------------
 
-export const MOCK_CASES: CaseEntity[] = [
-  {
-    id: '1',
-    tenantId: 'tenant-001',
-    caseNumber: '2024-CF-001234',
-    title: 'People v. Smith',
-    status: 'active',
-    phase: 'pretrial',
-    jurisdiction: 'Superior Court of California',
-    court: 'County of Los Angeles',
-    judge: 'Hon. Patricia Williams',
-    department: '23',
-    nextHearing: 'Feb 15, 2024',
-    nextHearingLocation: '10:00 AM, Courtroom 3B',
-    assignedAttorneyId: '1',
-    assignedInvestigatorId: '2',
-    documentsCount: 12,
-    chargesCount: 3,
-    createdAt: '2023-12-01',
-    updatedAt: '2024-01-22',
-  },
-  {
-    id: '2',
-    tenantId: 'tenant-001',
-    caseNumber: '2024-CF-002345',
-    title: 'People v. Johnson',
-    status: 'active',
-    phase: 'preliminary',
-    jurisdiction: 'Superior Court of California',
-    court: 'County of San Diego',
-    judge: 'Hon. Robert Chen',
-    department: '15',
-    nextHearing: 'Mar 1, 2024',
-    nextHearingLocation: '2:00 PM, Courtroom 7A',
-    assignedAttorneyId: '1',
-    assignedInvestigatorId: null,
-    documentsCount: 8,
-    chargesCount: 2,
-    createdAt: '2024-01-05',
-    updatedAt: '2024-01-20',
-  },
-  {
-    id: '3',
-    tenantId: 'tenant-001',
-    caseNumber: '2023-CF-009876',
-    title: 'People v. Garcia',
-    status: 'pending',
-    phase: 'intake',
-    jurisdiction: 'Superior Court of California',
-    court: 'County of Orange',
-    judge: 'Hon. Sarah Kim',
-    department: '8',
-    nextHearing: null,
-    nextHearingLocation: null,
-    assignedAttorneyId: null,
-    assignedInvestigatorId: null,
-    documentsCount: 5,
-    chargesCount: 1,
-    createdAt: '2023-11-15',
-    updatedAt: '2024-01-10',
-  },
-];
+export const MOCK_CASES: CaseEntity[] = [];
 
 // ---------------------------------------------------------------------------
 // Charges

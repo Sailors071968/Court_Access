@@ -26,6 +26,10 @@ import { registerBillingRoutes } from './billing/billingRoutes.js';
 import { registerCaseRoutes } from './evidence/caseRoutes.js';
 import { registerEvidenceRoutes } from './evidence/evidenceRoutes.js';
 import { registerNarrativeRoutes } from './narrative/narrativeRoutes.js';
+import { registerTimelineRoutes } from './timeline/timelineRoutes.js';
+import { registerQueueMonitorRoutes } from './admin/queueMonitorRoutes.js';
+import { registerDiscountRoutes } from './billing/discountRoutes.js';
+import { seedDefaultDiscountCodes } from './billing/discountSeed.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -149,6 +153,20 @@ async function startServer() {
   console.log('[Server] Registering narrative deconstruction engine routes...');
   await registerNarrativeRoutes(app);
 
+  // Timeline Reconstruction Engine
+  console.log('[Server] Registering timeline reconstruction routes...');
+  await registerTimelineRoutes(app);
+
+  // Admin queue monitoring
+  console.log('[Server] Registering admin queue monitoring routes...');
+  await registerQueueMonitorRoutes(app);
+
+  // Discount code API routes
+  console.log('[Server] Registering discount code routes...');
+  await registerDiscountRoutes(app);
+
+  // Seed default discount codes (e.g. HUNT100)
+  seedDefaultDiscountCodes();
   // Start server
   try {
     await app.listen({ port: PORT, host: HOST });
@@ -213,6 +231,18 @@ async function startServer() {
     console.log('  - GET  /api/cases/:caseId/evidence');
     console.log('  - GET  /api/evidence/:evidenceId');
     console.log('  - DELETE /api/evidence/:evidenceId');
+    console.log('  - GET  /api/timeline/:caseId');
+    console.log('  - GET  /api/timeline/:caseId/events');
+    console.log('  - GET  /api/timeline/:caseId/conflicts');
+    console.log('  - POST /api/timeline/rebuild/:caseId');
+    console.log('  - GET  /api/timeline/health');
+    console.log('  - GET  /api/admin/queues');
+    console.log('  - GET  /api/discount-codes/validate');
+    console.log('  - POST /api/discount-codes/apply');
+    console.log('  - GET  /api/admin/discount-codes');
+    console.log('  - POST /api/admin/discount-codes');
+    console.log('  - PATCH /api/admin/discount-codes/:codeId');
+    console.log('  - DELETE /api/admin/discount-codes/:codeId');
     console.log('[Server] Security hardening active: JWT auth, rate limiting, CSRF, security headers, upload protection, security logging');
   } catch (err) {
     console.error('[Server] Failed to start:', err);

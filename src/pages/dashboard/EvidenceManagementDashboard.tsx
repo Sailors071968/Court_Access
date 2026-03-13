@@ -96,9 +96,9 @@ function saveAuditLog(log: EvidenceAdminAction[]): void {
 
 function generateDemoEvidence(): EvidenceUpload[] {
   const cases = [
-    { id: 'case-001', name: 'People v. Smith', defendant: 'John Smith' },
-    { id: 'case-002', name: 'People v. Garcia', defendant: 'Maria Garcia' },
-    { id: 'case-003', name: 'People v. Johnson', defendant: 'Robert Johnson' },
+    { id: 'case-001', name: 'Sample Case A', defendant: 'Defendant A' },
+    { id: 'case-002', name: 'Sample Case B', defendant: 'Defendant B' },
+    { id: 'case-003', name: 'Sample Case C', defendant: 'Defendant C' },
   ];
   const files = [
     { name: 'arrest_report.pdf', type: 'application/pdf', size: 245000 },

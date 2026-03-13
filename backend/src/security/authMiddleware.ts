@@ -194,6 +194,7 @@ const PUBLIC_ROUTES = [
   '/api/auth/register',
   '/api/auth/refresh',
   '/api/auth/logout',
+  '/api/discount-codes/validate',
 ];
 
 function isPublicRoute(path: string): boolean {

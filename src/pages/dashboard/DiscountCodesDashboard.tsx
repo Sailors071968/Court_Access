@@ -40,30 +40,71 @@ interface DiscountCodeRecord {
   createdAt: string;
 }
 
-interface DiscountUsageRecord {
-  usageId: string;
-  discountCodeId: string;
-  userId: string;
-  usedAt: string;
-}
-
 // ---------------------------------------------------------------------------
-// localStorage helpers
+// Backend API helpers
 // ---------------------------------------------------------------------------
 
-const CODES_KEY = 'courtaccess_discount_codes';
-const USAGES_KEY = 'courtaccess_discount_usages';
-
-function loadCodes(): DiscountCodeRecord[] {
-  return JSON.parse(localStorage.getItem(CODES_KEY) || '[]');
+function getAuthHeaders(): Record<string, string> {
+  const token = localStorage.getItem('court-access-token');
+  return {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
 }
 
-function saveCodes(codes: DiscountCodeRecord[]): void {
-  localStorage.setItem(CODES_KEY, JSON.stringify(codes));
+async function apiLoadCodes(): Promise<DiscountCodeRecord[]> {
+  try {
+    const res = await fetch('/api/admin/discount-codes', { headers: getAuthHeaders() });
+    if (!res.ok) return [];
+    const data = await res.json();
+    return data.codes || [];
+  } catch {
+    return [];
+  }
 }
 
-function loadUsages(): DiscountUsageRecord[] {
-  return JSON.parse(localStorage.getItem(USAGES_KEY) || '[]');
+async function apiCreateCode(payload: Omit<DiscountCodeRecord, 'codeId' | 'usageCount' | 'createdAt'>): Promise<DiscountCodeRecord | null> {
+  try {
+    const res = await fetch('/api/admin/discount-codes', {
+      method: 'POST',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload),
+    });
+    if (!res.ok) {
+      const err = await res.json().catch(() => ({ error: 'Failed to create' }));
+      throw new Error(err.error || 'Failed to create discount code');
+    }
+    const data = await res.json();
+    return data.code;
+  } catch (err) {
+    alert(err instanceof Error ? err.message : 'Failed to create discount code');
+    return null;
+  }
+}
+
+async function apiUpdateCode(codeId: string, payload: Partial<DiscountCodeRecord>): Promise<boolean> {
+  try {
+    const res = await fetch(`/api/admin/discount-codes/${codeId}`, {
+      method: 'PATCH',
+      headers: getAuthHeaders(),
+      body: JSON.stringify(payload),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
+}
+
+async function apiDeleteCode(codeId: string): Promise<boolean> {
+  try {
+    const res = await fetch(`/api/admin/discount-codes/${codeId}`, {
+      method: 'DELETE',
+      headers: getAuthHeaders(),
+    });
+    return res.ok;
+  } catch {
+    return false;
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -72,77 +113,62 @@ function loadUsages(): DiscountUsageRecord[] {
 
 export function DiscountCodesDashboard() {
   const [codes, setCodes] = useState<DiscountCodeRecord[]>([]);
-  const [usages, setUsages] = useState<DiscountUsageRecord[]>([]);
   const [showCreateForm, setShowCreateForm] = useState(false);
   const [editingCode, setEditingCode] = useState<DiscountCodeRecord | null>(null);
   const [activeTab, setActiveTab] = useState<'codes' | 'analytics'>('codes');
 
-  const refresh = useCallback(() => {
-    setCodes(loadCodes().sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()));
-    setUsages(loadUsages());
+  const refresh = useCallback(async () => {
+    const loaded = await apiLoadCodes();
+    setCodes(loaded.sort((a: DiscountCodeRecord, b: DiscountCodeRecord) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()));
   }, []);
 
   useEffect(() => { refresh(); }, [refresh]);
 
   // --- CRUD handlers ---
 
-  const handleCreate = (data: DiscountCodeFormData) => {
-    const existing = loadCodes();
-    if (existing.some((c) => c.codeValue === data.codeValue.toUpperCase())) {
-      alert('A code with this value already exists');
-      return;
-    }
-    const newCode: DiscountCodeRecord = {
-      codeId: crypto.randomUUID(),
+  const handleCreate = async (data: DiscountCodeFormData) => {
+    const created = await apiCreateCode({
       codeName: data.codeName,
       codeValue: data.codeValue.toUpperCase(),
       discountType: data.discountType,
       discountValue: data.discountValue,
       active: data.active,
       usageLimit: data.usageLimit,
-      usageCount: 0,
       expiresAt: data.expiresAt || null,
-      createdAt: new Date().toISOString(),
-    };
-    saveCodes([...existing, newCode]);
-    setShowCreateForm(false);
-    refresh();
+    });
+    if (created) {
+      setShowCreateForm(false);
+      refresh();
+    }
   };
 
-  const handleUpdate = (data: DiscountCodeFormData) => {
+  const handleUpdate = async (data: DiscountCodeFormData) => {
     if (!editingCode) return;
-    const existing = loadCodes();
-    const updated = existing.map((c) =>
-      c.codeId === editingCode.codeId
-        ? {
-            ...c,
-            codeName: data.codeName,
-            codeValue: data.codeValue.toUpperCase(),
-            discountType: data.discountType,
-            discountValue: data.discountValue,
-            active: data.active,
-            usageLimit: data.usageLimit,
-            expiresAt: data.expiresAt || null,
-          }
-        : c
-    );
-    saveCodes(updated);
-    setEditingCode(null);
+    const ok = await apiUpdateCode(editingCode.codeId, {
+      codeName: data.codeName,
+      codeValue: data.codeValue.toUpperCase(),
+      discountType: data.discountType,
+      discountValue: data.discountValue,
+      active: data.active,
+      usageLimit: data.usageLimit,
+      expiresAt: data.expiresAt || null,
+    });
+    if (ok) {
+      setEditingCode(null);
+      refresh();
+    }
+  };
+
+  const toggleActive = async (codeId: string) => {
+    const code = codes.find((c) => c.codeId === codeId);
+    if (!code) return;
+    await apiUpdateCode(codeId, { active: !code.active });
     refresh();
   };
 
-  const toggleActive = (codeId: string) => {
-    const existing = loadCodes();
-    const updated = existing.map((c) =>
-      c.codeId === codeId ? { ...c, active: !c.active } : c
-    );
-    saveCodes(updated);
-    refresh();
-  };
-
-  const deleteCode = (codeId: string) => {
+  const deleteCode = async (codeId: string) => {
     if (!confirm('Delete this discount code? This action cannot be undone.')) return;
-    saveCodes(loadCodes().filter((c) => c.codeId !== codeId));
+    await apiDeleteCode(codeId);
     refresh();
   };
 
@@ -150,19 +176,15 @@ export function DiscountCodesDashboard() {
 
   const totalCodes = codes.length;
   const activeCodes = codes.filter((c) => c.active).length;
-  const totalUsages = usages.length;
-  const totalDiscountValue = usages.reduce((sum, u) => {
-    const code = codes.find((c) => c.codeId === u.discountCodeId);
-    return sum + (code?.discountValue || 0);
-  }, 0);
+  const totalUsages = codes.reduce((sum, c) => sum + (c.usageCount || 0), 0);
+  const totalDiscountValue = codes.reduce((sum, c) => sum + (c.usageCount || 0) * c.discountValue, 0);
 
   const codeAnalytics = codes.map((code) => {
-    const codeUsages = usages.filter((u) => u.discountCodeId === code.codeId);
     return {
       ...code,
-      signups: codeUsages.length,
-      conversionRate: code.usageCount > 0 ? ((codeUsages.length / code.usageCount) * 100).toFixed(1) : '0.0',
-      totalDiscount: codeUsages.length * code.discountValue,
+      signups: code.usageCount || 0,
+      conversionRate: code.usageCount > 0 ? '100.0' : '0.0',
+      totalDiscount: (code.usageCount || 0) * code.discountValue,
     };
   });
 

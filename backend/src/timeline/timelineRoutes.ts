@@ -265,7 +265,7 @@ async function rebuildTimeline(
 
   // Verify case belongs to tenant
   const caseRecord = await prisma.criminalCase.findFirst({
-    where: { caseId, tenantId },
+    where: { caseId, tenantId, deletedAt: null },
   });
 
   if (!caseRecord) {

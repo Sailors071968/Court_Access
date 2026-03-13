@@ -198,13 +198,10 @@ export async function processTimelineBuild(job: TimelineBuilderJob): Promise<{
     });
   }
 
-  // If rebuild, clear correlation groups (events are kept)
-  if (job.rebuild) {
-    await prisma.timelineEvent.updateMany({
-      where: { caseId: job.caseId },
-      data: { correlationGroup: null },
-    });
-  }
+  // Note: rebuild no longer clears correlation groups. The correlation data
+  // is produced by the event correlation worker and is expensive to regenerate.
+  // Rebuild re-runs conflict detection and clock offset estimation on existing
+  // correlated data. To fully re-correlate, trigger the full pipeline instead.
 
   // Fetch all events for this case
   const events = await prisma.timelineEvent.findMany({

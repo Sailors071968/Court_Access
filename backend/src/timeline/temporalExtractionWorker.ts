@@ -150,8 +150,8 @@ export function extractTemporalEvents(
         } else if (match[0].match(/\d{4}\s*(?:hours?|hrs?)/i)) {
           // Military time: "2143 hours"
           timestamp = parseMilitaryTime(match[1], referenceDate);
-        } else if (match[1] && match[2] && !match[3]) {
-          // HH:MM military format
+        } else if (match[1] && match[2] && (!match[3] || /^\d{2}$/.test(match[3]))) {
+          // HH:MM or HH:MM:SS military format
           timestamp = parseMilitaryTimeHHMM(match[1], match[2], referenceDate);
         }
 

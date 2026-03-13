@@ -167,9 +167,9 @@ export function tenantWhereById(
   }
 
   return {
+    ...additionalWhere,
     id,
     tenantId: ctx.tenantId,
-    ...additionalWhere,
   };
 }
 
@@ -227,10 +227,14 @@ export async function validateCaseAccess(
     }
 
     return true;
-  } catch {
-    // If the Case model doesn't exist yet, allow access
-    // (schema may not have Case table in all environments)
-    return true;
+  } catch (err) {
+    // Fail closed — deny access on any error to prevent bypass
+    console.error('[TenantGuard] validateCaseAccess error:', err);
+    reply.code(500).send({
+      error: 'Internal error',
+      message: 'Unable to verify case access. Please try again.',
+    });
+    return false;
   }
 }
 

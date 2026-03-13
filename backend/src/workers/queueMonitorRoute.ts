@@ -10,6 +10,7 @@
 // ============================================================================
 
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import { extractBearerToken, verifyAccessToken } from '../security/authMiddleware.js';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -131,15 +132,37 @@ function buildDashboard(): QueueDashboard {
 // Route Registration
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// Auth guard for /ops/ routes (these bypass the global auth hook)
+// ---------------------------------------------------------------------------
+
+async function requireOpsAuth(request: FastifyRequest, reply: FastifyReply): Promise<void> {
+  const token = extractBearerToken(request.headers.authorization);
+  if (!token) {
+    reply.code(401).send({ error: 'Authentication required', message: 'Ops routes require a valid Bearer token' });
+    return;
+  }
+  try {
+    const payload = verifyAccessToken(token);
+    if (payload.role !== 'admin' && payload.role !== 'staff') {
+      reply.code(403).send({ error: 'Forbidden', message: 'Ops routes require admin or staff role' });
+      return;
+    }
+  } catch {
+    reply.code(401).send({ error: 'Invalid or expired token' });
+    return;
+  }
+}
+
 export async function registerQueueMonitorRoutes(app: FastifyInstance): Promise<void> {
   // GET /ops/queues — Queue monitoring dashboard (JSON)
-  app.get('/ops/queues', async (_request: FastifyRequest, _reply: FastifyReply) => {
+  app.get('/ops/queues', { preHandler: [requireOpsAuth] }, async (_request: FastifyRequest, _reply: FastifyReply) => {
     const dashboard = buildDashboard();
     return { success: true, data: dashboard };
   });
 
   // GET /ops/queues/:name — Individual queue details
-  app.get('/ops/queues/:name', async (request: FastifyRequest, reply: FastifyReply) => {
+  app.get('/ops/queues/:name', { preHandler: [requireOpsAuth] }, async (request: FastifyRequest, reply: FastifyReply) => {
     const { name } = request.params as { name: string };
     const queue = queueRegistry.get(name);
     if (!queue) {
@@ -149,7 +172,7 @@ export async function registerQueueMonitorRoutes(app: FastifyInstance): Promise<
   });
 
   // POST /ops/queues/:name/retry — Retry failed jobs in a queue
-  app.post('/ops/queues/:name/retry', async (request: FastifyRequest, reply: FastifyReply) => {
+  app.post('/ops/queues/:name/retry', { preHandler: [requireOpsAuth] }, async (request: FastifyRequest, reply: FastifyReply) => {
     const { name } = request.params as { name: string };
     const queue = queueRegistry.get(name);
     if (!queue) {
@@ -162,8 +185,8 @@ export async function registerQueueMonitorRoutes(app: FastifyInstance): Promise<
     return { success: true, message: `${retriedCount} failed jobs moved to waiting`, queue: name };
   });
 
-  // GET /ops/queues/health — Quick health summary
-  app.get('/ops/health', async () => {
+  // GET /ops/health — Quick health summary
+  app.get('/ops/health', { preHandler: [requireOpsAuth] }, async () => {
     const dashboard = buildDashboard();
     return {
       status: dashboard.systemStatus,

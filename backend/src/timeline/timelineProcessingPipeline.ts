@@ -117,7 +117,7 @@ export async function enqueueVideoEventDetection(job: VideoEventDetectionJob): P
 export async function enqueueEventCorrelation(job: EventCorrelationJob): Promise<void> {
   const queue = getQueue<EventCorrelationJob>('timelineEventCorrelation');
   await queue.add('event-correlate', job, {
-    jobId: `correlate-${job.caseId}-${Date.now()}`,
+    jobId: `correlate-${job.caseId}`,
   });
   console.log(`[TimelinePipeline] Enqueued event correlation for case ${job.caseId}`);
 }
@@ -125,7 +125,7 @@ export async function enqueueEventCorrelation(job: EventCorrelationJob): Promise
 export async function enqueueTimelineBuild(job: TimelineBuilderJob): Promise<void> {
   const queue = getQueue<TimelineBuilderJob>('timelineBuilder');
   await queue.add('timeline-build', job, {
-    jobId: `build-${job.caseId}-${Date.now()}`,
+    jobId: `build-${job.caseId}`,
   });
   console.log(`[TimelinePipeline] Enqueued timeline build for case ${job.caseId}${job.rebuild ? ' (rebuild)' : ''}`);
 }

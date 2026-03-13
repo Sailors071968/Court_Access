@@ -1281,3 +1281,114 @@ model CaseTimeline {
   @@index([status])
   @@map("case_timelines")
 }
+
+// ---------------------------------------------------------------------------
+// Narrative Deconstruction Engine — Claims extracted from police narratives
+// ---------------------------------------------------------------------------
+
+model NarrativeClaim {
+  claimId            String   @id @default(uuid())
+  caseId             String
+  tenantId           String
+  evidenceId         String
+  claimText          String
+  subject            String
+  action             String
+  object             String?
+  target             String?
+  timestampReference String?
+  confidence         Float    @default(0.5)
+  sentenceIndex      Int      @default(0)
+  metadata           Json?
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([evidenceId])
+  @@index([caseId, evidenceId])
+  @@index([confidence])
+  @@map("narrative_claims")
+}
+
+// ---------------------------------------------------------------------------
+// Narrative Deconstruction Engine — Normalized claim events
+// ---------------------------------------------------------------------------
+
+model NormalizedClaimEvent {
+  eventId       String   @id @default(uuid())
+  claimId       String
+  caseId        String
+  tenantId      String
+  eventType     String
+  actor         String
+  actionNorm    String
+  object        String?
+  target        String?
+  timestamp     DateTime?
+  confidence    Float    @default(0.5)
+  metadata      Json?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([claimId])
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([eventType])
+  @@map("normalized_claim_events")
+}
+
+// ---------------------------------------------------------------------------
+// Narrative Deconstruction Engine — Claim validation results
+// ---------------------------------------------------------------------------
+
+model ClaimValidation {
+  validationId            String   @id @default(uuid())
+  claimId                 String
+  caseId                  String
+  tenantId                String
+  status                  String   @default("pending") // supported | contradicted | unverified | pending
+  supportingEvidenceIds   Json     @default("[]")
+  contradictingEvidenceIds Json    @default("[]")
+  confidence              Float    @default(0.5)
+  reasoning               String?
+  metadata                Json?
+
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  @@index([claimId])
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([status])
+  @@map("claim_validations")
+}
+
+// ---------------------------------------------------------------------------
+// Narrative Deconstruction Engine — Impeachment candidates
+// ---------------------------------------------------------------------------
+
+model ImpeachmentCandidate {
+  impeachmentId          String   @id @default(uuid())
+  claimId                String
+  caseId                 String
+  tenantId               String
+  severity               String   @default("medium") // high | medium | low
+  contradictionType      String
+  claimText              String
+  contradictingEvidence  String
+  suggestedQuestion      String?
+  confidence             Float    @default(0.5)
+  metadata               Json?
+
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  @@index([claimId])
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([severity])
+  @@map("impeachment_candidates")
+}

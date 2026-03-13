@@ -48,7 +48,7 @@ export const useAuthStore = create<AuthState>()(persist((set, get) => ({
       set({
         user: {
           id: data.user.userId,
-          name: data.user.email.split('@')[0],
+          name: data.user.name || data.user.email.split('@')[0],
           email: data.user.email,
           role: data.user.role,
         },
@@ -67,7 +67,7 @@ export const useAuthStore = create<AuthState>()(persist((set, get) => ({
       const res = await fetch(`${API_BASE}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password, role }),
+        body: JSON.stringify({ name, email, password, role }),
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({ error: 'Registration failed' }));

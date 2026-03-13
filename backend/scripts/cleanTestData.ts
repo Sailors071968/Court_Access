@@ -41,9 +41,11 @@ async function cleanTestData(): Promise<void> {
   try {
     const demoUsers = await prisma.$executeRawUnsafe(`
       DELETE FROM "users"
-      WHERE email LIKE '%demo%'
-        OR email LIKE '%test%'
-        OR email LIKE '%example%'
+      WHERE email LIKE 'demo%'
+        OR email LIKE 'test%'
+        OR email LIKE '%@example.com'
+        OR email LIKE '%@test.com'
+        OR email LIKE '%@demo.%'
         OR email IN (
           'admin@courtaccess.com',
           'attorney@courtaccess.com',

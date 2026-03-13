@@ -272,7 +272,7 @@ export async function authenticationHook(
 // ---------------------------------------------------------------------------
 
 // User store (in-memory; production should use database)
-const userStore = new Map<string, { userId: string; email: string; passwordHash: string; role: UserRole }>();
+const userStore = new Map<string, { userId: string; email: string; name: string; passwordHash: string; role: UserRole }>();
 
 export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
   // POST /api/auth/login
@@ -311,13 +311,13 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       accessToken,
       refreshToken,
       expiresIn: ACCESS_TOKEN_EXPIRY_SECONDS,
-      user: { userId: user.userId, email: user.email, role: user.role },
+      user: { userId: user.userId, email: user.email, name: user.name, role: user.role },
     };
   });
 
   // POST /api/auth/register
   app.post('/api/auth/register', async (request: FastifyRequest, reply: FastifyReply) => {
-    const { email, password, role } = request.body as { email: string; password: string; role?: UserRole };
+    const { name, email, password, role } = request.body as { name?: string; email: string; password: string; role?: UserRole };
 
     if (!email || !password) {
       return reply.code(400).send({ error: 'Email and password are required' });
@@ -330,8 +330,9 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     const userId = `user-${crypto.randomUUID()}`;
     const passwordHash = crypto.createHash('sha256').update(password).digest('hex');
     const userRole = role || 'staff';
+    const userName = name || email.split('@')[0];
 
-    userStore.set(email, { userId, email, passwordHash, role: userRole });
+    userStore.set(email, { userId, email, name: userName, passwordHash, role: userRole });
 
     const tokenPayload = { userId, email, role: userRole };
     const accessToken = generateAccessToken(tokenPayload);
@@ -343,7 +344,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       accessToken,
       refreshToken,
       expiresIn: ACCESS_TOKEN_EXPIRY_SECONDS,
-      user: { userId, email, role: userRole },
+      user: { userId, email, name: userName, role: userRole },
     };
   });
 

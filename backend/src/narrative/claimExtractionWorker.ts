@@ -231,8 +231,16 @@ export function extractClaims(text: string, evidenceType: string): ExtractedClai
 
 export async function processClaimExtraction(job: ClaimExtractionJob): Promise<{
   claimsExtracted: number;
+  processingTimeMs: number;
 }> {
-  console.log(`[ClaimExtraction] Processing evidence ${job.evidenceId} (${job.evidenceType})`);
+  const startTime = Date.now();
+  console.log(
+    `[NarrativeEngine] Claim extraction started` +
+    ` caseId=${job.caseId}` +
+    ` evidenceId=${job.evidenceId}` +
+    ` evidenceType=${job.evidenceType}` +
+    ` fileName=${job.fileName}`
+  );
 
   // Verify evidence exists
   const evidence = await prisma.evidence.findUnique({
@@ -241,13 +249,15 @@ export async function processClaimExtraction(job: ClaimExtractionJob): Promise<{
 
   if (!evidence) {
     console.error(`[ClaimExtraction] Evidence ${job.evidenceId} not found`);
-    return { claimsExtracted: 0 };
+    return { claimsExtracted: 0, processingTimeMs: Date.now() - startTime };
   }
 
   // In production: download document from R2, extract text using PDF/DOCX parser.
   // For now, log the processing intent and trigger downstream normalization.
-  console.log(`[ClaimExtraction] Would extract claims from ${job.fileName} (${job.evidenceType})`);
-  console.log(`[ClaimExtraction] S3 key: ${job.s3Key}`);
+  console.log(
+    `[NarrativeEngine] Would extract claims from ${job.fileName} (${job.evidenceType})` +
+    ` s3Key=${job.s3Key}`
+  );
 
   // After extraction, trigger normalization
   try {
@@ -257,8 +267,17 @@ export async function processClaimExtraction(job: ClaimExtractionJob): Promise<{
       triggerEvidenceId: job.evidenceId,
     });
   } catch (err) {
-    console.error(`[ClaimExtraction] Failed to enqueue normalization:`, err);
+    console.error(`[NarrativeEngine] Failed to enqueue normalization:`, err);
   }
 
-  return { claimsExtracted: 0 };
+  const processingTimeMs = Date.now() - startTime;
+  console.log(
+    `[NarrativeEngine] Claim extraction completed` +
+    ` caseId=${job.caseId}` +
+    ` evidenceId=${job.evidenceId}` +
+    ` claims=0` +
+    ` processingTime=${(processingTimeMs / 1000).toFixed(1)}s`
+  );
+
+  return { claimsExtracted: 0, processingTimeMs };
 }

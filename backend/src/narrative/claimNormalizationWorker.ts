@@ -153,8 +153,14 @@ function normalizeActor(subject: string): string {
 
 export async function processClaimNormalization(job: ClaimNormalizationJob): Promise<{
   eventsNormalized: number;
+  processingTimeMs: number;
 }> {
-  console.log(`[ClaimNormalization] Processing claims for case ${job.caseId}`);
+  const startTime = Date.now();
+  console.log(
+    `[NarrativeEngine] Claim normalization started` +
+    ` caseId=${job.caseId}` +
+    ` triggerEvidenceId=${job.triggerEvidenceId}`
+  );
 
   // Fetch all claims for this case that don't yet have normalized events
   const claims = await prisma.narrativeClaim.findMany({
@@ -162,8 +168,8 @@ export async function processClaimNormalization(job: ClaimNormalizationJob): Pro
   });
 
   if (claims.length === 0) {
-    console.log(`[ClaimNormalization] No claims found for case ${job.caseId}`);
-    return { eventsNormalized: 0 };
+    console.log(`[NarrativeEngine] No claims found for normalization caseId=${job.caseId}`);
+    return { eventsNormalized: 0, processingTimeMs: Date.now() - startTime };
   }
 
   // Check which claims already have normalized events
@@ -198,7 +204,14 @@ export async function processClaimNormalization(job: ClaimNormalizationJob): Pro
     count++;
   }
 
-  console.log(`[ClaimNormalization] Normalized ${count} claims for case ${job.caseId}`);
+  const processingTimeMs = Date.now() - startTime;
+  console.log(
+    `[NarrativeEngine] Claim normalization completed` +
+    ` caseId=${job.caseId}` +
+    ` normalized=${count}` +
+    ` totalClaims=${claims.length}` +
+    ` processingTime=${(processingTimeMs / 1000).toFixed(1)}s`
+  );
 
   // Trigger evidence validation
   try {
@@ -207,8 +220,8 @@ export async function processClaimNormalization(job: ClaimNormalizationJob): Pro
       tenantId: job.tenantId,
     });
   } catch (err) {
-    console.error(`[ClaimNormalization] Failed to enqueue validation:`, err);
+    console.error(`[NarrativeEngine] Failed to enqueue validation:`, err);
   }
 
-  return { eventsNormalized: count };
+  return { eventsNormalized: count, processingTimeMs };
 }

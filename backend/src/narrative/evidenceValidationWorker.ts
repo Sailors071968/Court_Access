@@ -149,8 +149,13 @@ async function validateClaimAgainstEvidence(params: {
 export async function processEvidenceValidation(job: EvidenceValidationJob): Promise<{
   validationsCreated: number;
   contradictions: number;
+  processingTimeMs: number;
 }> {
-  console.log(`[EvidenceValidation] Validating claims for case ${job.caseId}`);
+  const startTime = Date.now();
+  console.log(
+    `[NarrativeEngine] Evidence validation started` +
+    ` caseId=${job.caseId}`
+  );
 
   // Fetch all claims for this case
   const claims = await prisma.narrativeClaim.findMany({
@@ -158,8 +163,8 @@ export async function processEvidenceValidation(job: EvidenceValidationJob): Pro
   });
 
   if (claims.length === 0) {
-    console.log(`[EvidenceValidation] No claims found for case ${job.caseId}`);
-    return { validationsCreated: 0, contradictions: 0 };
+    console.log(`[NarrativeEngine] No claims found for validation caseId=${job.caseId}`);
+    return { validationsCreated: 0, contradictions: 0, processingTimeMs: Date.now() - startTime };
   }
 
   // Check which claims already have validations
@@ -206,7 +211,22 @@ export async function processEvidenceValidation(job: EvidenceValidationJob): Pro
     created++;
   }
 
-  console.log(`[EvidenceValidation] Created ${created} validations (${contradictions} contradictions) for case ${job.caseId}`);
+  const processingTimeMs = Date.now() - startTime;
+  console.log(
+    `[NarrativeEngine] Evidence validation completed` +
+    ` caseId=${job.caseId}` +
+    ` validations=${created}` +
+    ` contradictions=${contradictions}` +
+    ` processingTime=${(processingTimeMs / 1000).toFixed(1)}s`
+  );
+
+  if (contradictions > 0) {
+    console.log(
+      `[NarrativeEngine] Narrative contradiction detected` +
+      ` caseId=${job.caseId}` +
+      ` count=${contradictions}`
+    );
+  }
 
   // Trigger impeachment analysis
   try {
@@ -215,8 +235,8 @@ export async function processEvidenceValidation(job: EvidenceValidationJob): Pro
       tenantId: job.tenantId,
     });
   } catch (err) {
-    console.error(`[EvidenceValidation] Failed to enqueue impeachment analysis:`, err);
+    console.error(`[NarrativeEngine] Failed to enqueue impeachment analysis:`, err);
   }
 
-  return { validationsCreated: created, contradictions };
+  return { validationsCreated: created, contradictions, processingTimeMs };
 }

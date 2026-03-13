@@ -149,13 +149,13 @@ async function startServer() {
   console.log('[Server] Registering evidence routes...');
   await registerEvidenceRoutes(app);
 
-  // Narrative Deconstruction Engine routes
-  console.log('[Server] Registering narrative deconstruction engine routes...');
-  await registerNarrativeRoutes(app);
-
   // Timeline Reconstruction Engine
   console.log('[Server] Registering timeline reconstruction routes...');
   await registerTimelineRoutes(app);
+
+  // Narrative Deconstruction Engine routes
+  console.log('[Server] Registering narrative deconstruction engine routes...');
+  await registerNarrativeRoutes(app);
 
   // Admin queue monitoring
   console.log('[Server] Registering admin queue monitoring routes...');
@@ -167,6 +167,7 @@ async function startServer() {
 
   // Seed default discount codes (e.g. HUNT100)
   seedDefaultDiscountCodes();
+
   // Start server
   try {
     await app.listen({ port: PORT, host: HOST });

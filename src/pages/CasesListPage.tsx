@@ -4,17 +4,21 @@
 
 import { useNavigate } from 'react-router-dom';
 import { Search, Plus, Filter } from 'lucide-react';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from '../components/common/Card';
 import { CaseStatusBadge } from '../components/common/StatusBadge';
 import { caseDataProvider } from '../services/caseDataProvider';
+import type { CaseEntity } from '../models/CaseModel';
 
 export function CasesListPage() {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
+  const [allCases, setAllCases] = useState<CaseEntity[]>([]);
 
-  const allCases = caseDataProvider.getCases();
+  useEffect(() => {
+    caseDataProvider.getCases().then(setAllCases);
+  }, []);
 
   const filteredCases = allCases.filter((c) => {
     const matchesSearch = !searchQuery ||

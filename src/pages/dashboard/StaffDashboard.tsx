@@ -4,6 +4,7 @@
 // ============================================
 
 import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import {
   FileText, Scale, Calendar, Lightbulb, AlertTriangle, Search as SearchIcon,
   Plus, Upload, BarChart3, Users, Clock, TrendingUp, Briefcase
@@ -12,16 +13,44 @@ import { Card, StatCard } from '../../components/common/Card';
 import { AIStatusBadge } from '../../components/common/StatusBadge';
 import { STATUS_COLORS, TEXT_COLORS } from '../../constants/designTokens';
 import { caseDataProvider } from '../../services/caseDataProvider';
+import type { CaseEntity, ActivityEntry } from '../../models/CaseModel';
+import type { DocumentEntity } from '../../models/DocumentModel';
 import { useAuthStore } from '../../stores/authStore';
 
 export function StaffDashboard() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const { getPrimaryCase, getDocuments, getActivity, getDocumentTypeLabels } = caseDataProvider;
-  const primaryCase = getPrimaryCase();
-  const documents = getDocuments(primaryCase.id);
-  const activity = getActivity(primaryCase.id);
-  const documentTypeLabels = getDocumentTypeLabels();
+  const [primaryCase, setPrimaryCase] = useState<CaseEntity | null>(null);
+  const [documents, setDocuments] = useState<DocumentEntity[]>([]);
+  const [activity, setActivity] = useState<ActivityEntry[]>([]);
+  const [loading, setLoading] = useState(true);
+  const documentTypeLabels = caseDataProvider.getDocumentTypeLabels();
+
+  useEffect(() => {
+    caseDataProvider.getPrimaryCase().then((c) => {
+      setPrimaryCase(c);
+      if (c) {
+        caseDataProvider.getDocuments(c.id).then(setDocuments);
+        caseDataProvider.getActivity(c.id).then(setActivity);
+      }
+    }).finally(() => setLoading(false));
+  }, []);
+
+  if (loading) {
+    return (
+      <div className="max-w-7xl mx-auto p-8 text-center">
+        <p className="text-gray-500">Loading dashboard...</p>
+      </div>
+    );
+  }
+
+  if (!primaryCase) {
+    return (
+      <div className="max-w-7xl mx-auto p-8 text-center">
+        <p className="text-gray-500">No cases found. Create a case to get started.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">

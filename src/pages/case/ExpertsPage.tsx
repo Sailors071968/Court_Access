@@ -15,8 +15,20 @@ export function ExpertsPage() {
   const { caseId } = useParams<{ caseId: string }>();
   const [experts, setExperts] = useState<Expert[]>([]);
   const [loading, setLoading] = useState(true);
-  const cases = caseDataProvider.getCases();
-  const currentCase = cases.find((c) => c.id === caseId) || caseDataProvider.getPrimaryCase();
+  const [currentCase, setCurrentCase] = useState<{ id: string; title: string; caseNumber: string; jurisdiction: string; court: string } | null>(null);
+
+  useEffect(() => {
+    caseDataProvider.getCases().then((cases) => {
+      const found = cases.find((c) => c.id === caseId);
+      if (found) {
+        setCurrentCase(found);
+      } else {
+        caseDataProvider.getPrimaryCase().then((pc) => {
+          if (pc) setCurrentCase(pc);
+        });
+      }
+    });
+  }, [caseId]);
 
   useEffect(() => {
     setLoading(true);
@@ -40,9 +52,9 @@ export function ExpertsPage() {
 
       {/* Case Info */}
       <div>
-        <h2 className="text-xl font-bold text-blue-700">{currentCase.title} - Case #{currentCase.caseNumber}</h2>
+        <h2 className="text-xl font-bold text-blue-700">{currentCase?.title ?? 'Loading...'} - Case #{currentCase?.caseNumber ?? ''}</h2>
         <p className="text-sm text-gray-500 mt-1">
-          Jurisdiction: {currentCase.jurisdiction}, {currentCase.court}<br />
+          Jurisdiction: {currentCase?.jurisdiction ?? ''}, {currentCase?.court ?? ''}<br />
           Status: Pre-Trial Motions
         </p>
       </div>

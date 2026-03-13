@@ -5,11 +5,13 @@
 // ============================================
 
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FileText, Calendar, Download, Clock, CheckCircle, User, Scale, Archive } from 'lucide-react';
 import { Card, StatCard } from '../../components/common/Card';
 import { STATUS_COLORS } from '../../constants/designTokens';
 import { caseDataProvider } from '../../services/caseDataProvider';
+import type { CaseEntity } from '../../models/CaseModel';
+import type { DocumentEntity } from '../../models/DocumentModel';
 import { useAuthStore } from '../../stores/authStore';
 
 // Case phase for defendant view
@@ -26,9 +28,16 @@ const CASE_PHASE_CONFIG: Record<CasePhase, { label: string; bgColor: string; tex
 export function DefendantDashboard() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const { getPrimaryCase, getDocuments } = caseDataProvider;
-  const primaryCase = getPrimaryCase();
-  const documents = getDocuments(primaryCase.id);
+  const [primaryCase, setPrimaryCase] = useState<CaseEntity | null>(null);
+  const [documents, setDocuments] = useState<DocumentEntity[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    caseDataProvider.getPrimaryCase().then((c) => {
+      setPrimaryCase(c);
+      if (c) caseDataProvider.getDocuments(c.id).then(setDocuments);
+    }).finally(() => setLoading(false));
+  }, []);
   const currentPhase: CasePhase = 'pretrial';
   const phaseConfig = CASE_PHASE_CONFIG[currentPhase];
 
@@ -63,6 +72,22 @@ export function DefendantDashboard() {
     });
     localStorage.setItem(auditKey, JSON.stringify(log));
   };
+
+  if (loading) {
+    return (
+      <div className="max-w-5xl mx-auto p-8 text-center">
+        <p className="text-gray-500">Loading your case information...</p>
+      </div>
+    );
+  }
+
+  if (!primaryCase) {
+    return (
+      <div className="max-w-5xl mx-auto p-8 text-center">
+        <p className="text-gray-500">No cases found. Your attorney will add your case shortly.</p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-5xl mx-auto space-y-6">

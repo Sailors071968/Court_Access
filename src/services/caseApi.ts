@@ -277,6 +277,123 @@ export async function registerEvidence(payload: RegisterEvidencePayload): Promis
   return data.evidence;
 }
 
+// ---------------------------------------------------------------------------
+// Narrative Deconstruction Engine API
+// ---------------------------------------------------------------------------
+
+export interface ApiNarrativeClaim {
+  claimId: string;
+  evidenceId: string;
+  claimText: string;
+  subject: string;
+  action: string;
+  object: string | null;
+  target: string | null;
+  timestampReference: string | null;
+  confidence: number;
+  sentenceIndex: number;
+  validation: {
+    status: string;
+    confidence: number;
+    reasoning: string | null;
+    supportingEvidenceIds: string[];
+    contradictingEvidenceIds: string[];
+  } | null;
+  normalizedEvent: {
+    eventType: string;
+    actor: string;
+    actionNorm: string;
+    object: string | null;
+    target: string | null;
+  } | null;
+}
+
+export interface ApiImpeachmentCandidate {
+  impeachmentId: string;
+  claimId: string;
+  severity: string;
+  contradictionType: string;
+  claimText: string;
+  contradictingEvidence: string;
+  suggestedQuestion: string | null;
+  confidence: number;
+}
+
+export interface ApiNarrativeContradiction {
+  validationId: string;
+  claimId: string;
+  claim: {
+    claimText: string;
+    subject: string;
+    action: string;
+    object: string | null;
+    target: string | null;
+    evidenceId: string;
+  } | null;
+  confidence: number;
+  reasoning: string | null;
+  supportingEvidenceIds: string[];
+  contradictingEvidenceIds: string[];
+}
+
+export async function fetchNarrativeClaims(
+  caseId: string,
+  params?: { status?: string; minConfidence?: number; evidenceId?: string },
+): Promise<{ claims: ApiNarrativeClaim[]; total: number }> {
+  const searchParams = new URLSearchParams();
+  if (params?.status) searchParams.set('status', params.status);
+  if (params?.minConfidence !== undefined) searchParams.set('minConfidence', String(params.minConfidence));
+  if (params?.evidenceId) searchParams.set('evidenceId', params.evidenceId);
+
+  const qs = searchParams.toString();
+  const url = `${API_BASE}/narrative/${caseId}/claims${qs ? `?${qs}` : ''}`;
+  const res = await fetch(url, { headers: getAuthHeaders() });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to fetch claims' }));
+    throw new Error(err.error || 'Failed to fetch claims');
+  }
+  return res.json();
+}
+
+export async function fetchNarrativeContradictions(
+  caseId: string,
+): Promise<{ contradictions: ApiNarrativeContradiction[]; count: number }> {
+  const res = await fetch(`${API_BASE}/narrative/${caseId}/contradictions`, { headers: getAuthHeaders() });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to fetch contradictions' }));
+    throw new Error(err.error || 'Failed to fetch contradictions');
+  }
+  return res.json();
+}
+
+export async function fetchImpeachmentCandidates(
+  caseId: string,
+  severity?: string,
+): Promise<{ candidates: ApiImpeachmentCandidate[]; total: number; severityCounts: { high: number; medium: number; low: number } }> {
+  const qs = severity ? `?severity=${severity}` : '';
+  const res = await fetch(`${API_BASE}/narrative/${caseId}/impeachment${qs}`, { headers: getAuthHeaders() });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to fetch impeachment candidates' }));
+    throw new Error(err.error || 'Failed to fetch impeachment candidates');
+  }
+  return res.json();
+}
+
+export async function analyzeNarrative(caseId: string): Promise<{ status: string; evidenceCount: number }> {
+  const headers = getAuthHeaders();
+  // Remove content-type to avoid Fastify rejecting empty JSON body
+  const { 'Content-Type': _, ...headersWithoutCT } = headers;
+  const res = await fetch(`${API_BASE}/narrative/analyze/${caseId}`, {
+    method: 'POST',
+    headers: headersWithoutCT,
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to start narrative analysis' }));
+    throw new Error(err.error || 'Failed to start narrative analysis');
+  }
+  return res.json();
+}
+
 /**
  * Full upload flow: get presigned URL → upload to S3 → register metadata.
  */

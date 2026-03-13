@@ -2,6 +2,7 @@
 // Court Access — Case Overview Tab
 // ============================================
 
+import { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { FileText, Scale, Calendar, Lightbulb, TrendingUp } from 'lucide-react';
 import { Card, StatCard } from '../../components/common/Card';
@@ -9,6 +10,8 @@ import { AIStatusBadge } from '../../components/common/StatusBadge';
 import { DoctrineCompliancePanel } from '../../components/case/DoctrineCompliancePanel';
 import { ROLE_PERMISSIONS } from '../../constants';
 import { caseDataProvider } from '../../services/caseDataProvider';
+import type { CaseEntity, ActivityEntry } from '../../models/CaseModel';
+import type { DocumentEntity } from '../../models/DocumentModel';
 import { useAuthStore } from '../../stores/authStore';
 import { CaseAnalysisSection } from '../../components/case/CaseAnalysisSection';
 import { LitigationIntelligencePanel } from '../../components/case/LitigationIntelligencePanel';
@@ -17,16 +20,41 @@ export function CaseOverviewPage() {
   const { caseId } = useParams<{ caseId: string }>();
   const navigate = useNavigate();
   const { user } = useAuthStore();
-
-  if (!user) return null;
-
-  const permissions = ROLE_PERMISSIONS[user.role];
-  const cases = caseDataProvider.getCases();
-  const currentCase = cases.find((c) => c.id === caseId) || caseDataProvider.getPrimaryCase();
-  const documents = caseDataProvider.getDocuments(currentCase.id);
-  const activity = caseDataProvider.getActivity(currentCase.id);
+  const [currentCase, setCurrentCase] = useState<CaseEntity | null>(null);
+  const [documents, setDocuments] = useState<DocumentEntity[]>([]);
+  const [activity, setActivity] = useState<ActivityEntry[]>([]);
   const documentTypeLabels = caseDataProvider.getDocumentTypeLabels();
 
+  useEffect(() => {
+    caseDataProvider.getCases().then((cases) => {
+      const found = cases.find((c) => c.id === caseId);
+      const selected = found ?? null;
+      if (selected) {
+        setCurrentCase(selected);
+        caseDataProvider.getDocuments(selected.id).then(setDocuments);
+        caseDataProvider.getActivity(selected.id).then(setActivity);
+      } else {
+        caseDataProvider.getPrimaryCase().then((pc) => {
+          setCurrentCase(pc);
+          if (pc) {
+            caseDataProvider.getDocuments(pc.id).then(setDocuments);
+            caseDataProvider.getActivity(pc.id).then(setActivity);
+          }
+        });
+      }
+    });
+  }, [caseId]);
+
+  if (!user) return null;
+  if (!currentCase) {
+    return (
+      <div className="p-8 text-center">
+        <p className="text-gray-500">Loading case overview...</p>
+      </div>
+    );
+  }
+
+  const permissions = ROLE_PERMISSIONS[user.role];
   const showIntelligence = user.role !== 'defendant';
 
   return (

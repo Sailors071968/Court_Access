@@ -2,19 +2,38 @@
 // Court Access — Case Layout with Tab Navigation
 // ============================================
 
+import { useState, useEffect } from 'react';
 import { NavLink, Outlet, useParams } from 'react-router-dom';
 import { CASE_TABS, ROLE_PERMISSIONS } from '../../constants';
 import { useAuthStore } from '../../stores/authStore';
 import { CaseStatusBadge } from '../../components/common/StatusBadge';
 import { caseDataProvider } from '../../services/caseDataProvider';
+import type { CaseEntity } from '../../models/CaseModel';
 
 export function CaseLayout() {
   const { caseId } = useParams<{ caseId: string }>();
   const { user } = useAuthStore();
-  const cases = caseDataProvider.getCases();
-  const currentCase = cases.find((c) => c.id === caseId) || caseDataProvider.getPrimaryCase();
+  const [currentCase, setCurrentCase] = useState<CaseEntity | null>(null);
+
+  useEffect(() => {
+    caseDataProvider.getCases().then((cases) => {
+      const found = cases.find((c) => c.id === caseId);
+      if (found) {
+        setCurrentCase(found);
+      } else {
+        caseDataProvider.getPrimaryCase().then((pc) => setCurrentCase(pc));
+      }
+    });
+  }, [caseId]);
 
   if (!user) return null;
+  if (!currentCase) {
+    return (
+      <div className="max-w-7xl mx-auto p-8 text-center">
+        <p className="text-gray-500">Loading case...</p>
+      </div>
+    );
+  }
   const permissions = ROLE_PERMISSIONS[user.role];
 
   return (

@@ -1,50 +1,69 @@
 // ============================================
-// Court Access — Case Data Provider (Phase 1)
-// Abstraction layer returning canonical model types.
-// Phase 6 will replace mock data with real API calls.
+// Court Access — Case Data Provider (Production)
+// Fetches real data from backend API endpoints.
+// All mock data removed for production security.
 // ============================================
 
 import type { CaseEntity, ChargeEntity, ActivityEntry, NotificationEntry } from '../models/CaseModel';
 import type { DocumentEntity, DocumentType } from '../models/DocumentModel';
 import { DOCUMENT_TYPE_LABELS } from '../models/DocumentModel';
-import { MOCK_ACTIVITY, MOCK_CASES, MOCK_CHARGES, MOCK_DOCUMENTS, MOCK_NOTIFICATIONS } from '../constants/mockData';
 
-function stableSortById<T extends { id: string }>(items: T[]): T[] {
-  return [...items].sort((a, b) => a.id.localeCompare(b.id));
+const API_BASE = '/api';
+
+function getAuthHeaders(): HeadersInit {
+  const token = localStorage.getItem('court-access-token');
+  return token ? { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' } : { 'Content-Type': 'application/json' };
+}
+
+async function apiFetch<T>(path: string): Promise<T[]> {
+  try {
+    const res = await fetch(`${API_BASE}${path}`, { headers: getAuthHeaders() });
+    if (!res.ok) return [];
+    const json = await res.json();
+    return Array.isArray(json) ? json : (json.data ?? []);
+  } catch {
+    return [];
+  }
 }
 
 export const caseDataProvider = {
-  getCases(): CaseEntity[] {
-    return stableSortById(MOCK_CASES);
+  async getCases(): Promise<CaseEntity[]> {
+    return apiFetch<CaseEntity>('/cases');
   },
 
-  getPrimaryCase(): CaseEntity {
-    const cases = caseDataProvider.getCases();
-    if (cases.length === 0) {
-      throw new Error('No cases available');
+  async getPrimaryCase(): Promise<CaseEntity | null> {
+    const cases = await caseDataProvider.getCases();
+    return cases.length > 0 ? cases[0] : null;
+  },
+
+  async getCaseById(caseId: string): Promise<CaseEntity | null> {
+    try {
+      const res = await fetch(`${API_BASE}/cases/${caseId}`, { headers: getAuthHeaders() });
+      if (!res.ok) return null;
+      const json = await res.json();
+      return json.data ?? json ?? null;
+    } catch {
+      return null;
     }
-    return cases[0];
   },
 
-  getCaseById(caseId: string): CaseEntity | null {
-    const cases = caseDataProvider.getCases();
-    return cases.find((c) => c.id === caseId) ?? null;
+  async getCharges(caseId?: string): Promise<ChargeEntity[]> {
+    const path = caseId ? `/cases/${caseId}/charges` : '/charges';
+    return apiFetch<ChargeEntity>(path);
   },
 
-  getCharges(_caseId?: string): ChargeEntity[] {
-    return stableSortById(MOCK_CHARGES);
+  async getDocuments(caseId?: string): Promise<DocumentEntity[]> {
+    const path = caseId ? `/cases/${caseId}/documents` : '/documents';
+    return apiFetch<DocumentEntity>(path);
   },
 
-  getDocuments(_caseId?: string): DocumentEntity[] {
-    return stableSortById(MOCK_DOCUMENTS);
+  async getActivity(caseId?: string): Promise<ActivityEntry[]> {
+    const path = caseId ? `/cases/${caseId}/activity` : '/activity';
+    return apiFetch<ActivityEntry>(path);
   },
 
-  getActivity(_caseId?: string): ActivityEntry[] {
-    return stableSortById(MOCK_ACTIVITY);
-  },
-
-  getNotifications(): NotificationEntry[] {
-    return stableSortById(MOCK_NOTIFICATIONS);
+  async getNotifications(): Promise<NotificationEntry[]> {
+    return apiFetch<NotificationEntry>('/notifications');
   },
 
   getDocumentTypeLabels(): Record<DocumentType, string> {

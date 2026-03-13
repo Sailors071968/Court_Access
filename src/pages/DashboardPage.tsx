@@ -3,19 +3,40 @@
 // ============================================
 
 import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { FileText, Scale, Calendar, Lightbulb, Search as SearchIcon, TrendingUp } from 'lucide-react';
 import { Card, StatCard } from '../components/common/Card';
 import { AIStatusBadge } from '../components/common/StatusBadge';
 import { caseDataProvider } from '../services/caseDataProvider';
+import type { CaseEntity, ActivityEntry } from '../models/CaseModel';
+import type { DocumentEntity } from '../models/DocumentModel';
 import { useAuthStore } from '../stores/authStore';
 
 export function DashboardPage() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const primaryCase = caseDataProvider.getPrimaryCase();
-  const documents = caseDataProvider.getDocuments(primaryCase.id);
-  const activity = caseDataProvider.getActivity(primaryCase.id);
+  const [primaryCase, setPrimaryCase] = useState<CaseEntity | null>(null);
+  const [documents, setDocuments] = useState<DocumentEntity[]>([]);
+  const [activity, setActivity] = useState<ActivityEntry[]>([]);
   const documentTypeLabels = caseDataProvider.getDocumentTypeLabels();
+
+  useEffect(() => {
+    caseDataProvider.getPrimaryCase().then((c) => {
+      setPrimaryCase(c);
+      if (c) {
+        caseDataProvider.getDocuments(c.id).then(setDocuments);
+        caseDataProvider.getActivity(c.id).then(setActivity);
+      }
+    });
+  }, []);
+
+  if (!primaryCase) {
+    return (
+      <div className="max-w-7xl mx-auto p-8 text-center">
+        <p className="text-gray-500">Loading dashboard...</p>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">

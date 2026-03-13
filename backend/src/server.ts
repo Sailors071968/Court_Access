@@ -19,10 +19,13 @@ import { csrfProtectionHook, getCsrfTokenRoute } from './security/csrfProtection
 import { securityHeadersHook } from './security/securityHeaders.js';
 import { uploadProtectionHook } from './security/evidenceUploadProtection.js';
 import { registerSecurityLogging } from './security/securityLogger.js';
+import { tenantGuardHook } from './security/tenantGuard.js';
 import { registerContradictionRoutes } from './contradiction/index.ts';
 import { registerPolicyMatrixRoutes } from './cpra/policyMatrixRoutes.js';
 import { registerAutonomousCpraRoutes } from './cpra/autonomousCpraRoutes.js';
 import { registerBillingRoutes } from './billing/billingRoutes.js';
+import { registerQueueMonitorRoutes } from './workers/queueMonitorRoute.js';
+import { installWorkerStabilityGuards } from './workers/workerStability.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -80,6 +83,9 @@ async function startServer() {
   // Phase 195 — Evidence upload protection
   app.addHook('onRequest', uploadProtectionHook);
 
+  // Production Security Patch — Tenant isolation guard
+  app.addHook('onRequest', tenantGuardHook);
+
   // Phase 197 — Security logging (response tracking)
   await registerSecurityLogging(app);
 
@@ -134,6 +140,13 @@ async function startServer() {
   // Billing, subscriptions, AI credits, usage enforcement routes
   console.log('[Server] Registering billing & usage routes...');
   await registerBillingRoutes(app);
+
+  // Production Security Patch — Queue monitor dashboard
+  console.log('[Server] Registering queue monitor routes...');
+  await registerQueueMonitorRoutes(app);
+
+  // Production Security Patch — Worker stability guards
+  installWorkerStabilityGuards();
 
   // Start server
   try {

@@ -2,14 +2,20 @@
 // Court Access — Notifications & Alerts Page
 // ============================================
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from '../components/common/Card';
 import { caseDataProvider } from '../services/caseDataProvider';
+import type { NotificationEntry } from '../models/CaseModel';
 import { FileText, Calendar, Lightbulb, Phone, Mail } from 'lucide-react';
 
 export function NotificationsPage() {
   const [smsEnabled, setSmsEnabled] = useState(true);
   const [emailEnabled, setEmailEnabled] = useState(true);
+  const [notifications, setNotifications] = useState<NotificationEntry[]>([]);
+
+  useEffect(() => {
+    caseDataProvider.getNotifications().then(setNotifications);
+  }, []);
   const [settings, setSettings] = useState({
     courtDateReminders: { oneWeek: true, twentyFourHours: true, twoHours: true },
     newDocumentAlerts: true,
@@ -65,7 +71,7 @@ export function NotificationsPage() {
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Notification Feed */}
         <div className="lg:col-span-2 space-y-3">
-          {caseDataProvider.getNotifications().map((notif) => (
+          {notifications.map((notif) => (
             <Card key={notif.id} hover>
               <div className="flex gap-4">
                 <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${

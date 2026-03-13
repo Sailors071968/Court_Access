@@ -89,76 +89,20 @@ interface SystemHealthData {
 }
 
 // ---------------------------------------------------------------------------
-// Mock data (replaced by API calls in production)
+// Empty data fallback (production uses real API data only)
 // ---------------------------------------------------------------------------
 
-function getMockHealthData(): SystemHealthData {
+function getEmptyHealthData(): SystemHealthData {
   return {
-    crawlerStatus: {
-      activeSessions: 0,
-      domainsThrottled: 0,
-      pagesVisitedToday: 0,
-      robotsTxtCacheSize: 0,
-      status: 'idle',
-    },
-    workerQueues: [
-      { name: 'agencyCrawler', active: 0, waiting: 0, completed: 0, failed: 0, concurrency: 2 },
-      { name: 'policyDiscovery', active: 0, waiting: 0, completed: 0, failed: 0, concurrency: 2 },
-      { name: 'download', active: 0, waiting: 0, completed: 0, failed: 0, concurrency: 3 },
-      { name: 'ocr', active: 0, waiting: 0, completed: 0, failed: 0, concurrency: 3 },
-      { name: 'classification', active: 0, waiting: 0, completed: 0, failed: 0, concurrency: 2 },
-      { name: 'cpraCampaign', active: 0, waiting: 0, completed: 0, failed: 0, concurrency: 1 },
-      { name: 'annualUpdate', active: 0, waiting: 0, completed: 0, failed: 0, concurrency: 1 },
-    ],
-    ocrBacklog: {
-      pending: 0,
-      active: 0,
-      completedToday: 0,
-      failedToday: 0,
-      textractBudgetUsed: 0,
-      textractBudgetLimit: 500,
-      primaryMethod: 'pdf-parse',
-    },
-    policyIngestion: {
-      totalPolicies: 0,
-      ingestedToday: 0,
-      pendingReview: 0,
-      avgConfidenceScore: 0,
-      belowThreshold: 0,
-    },
-    cpraCampaign: {
-      totalAgencies: 714,
-      requestsSent: 0,
-      responsesReceived: 0,
-      pendingFollowUp: 0,
-      campaignStatus: 'not_started',
-    },
-    s3Storage: {
-      totalObjects: 0,
-      totalSizeGb: 0,
-      bucketName: 'court-access-documents',
-      recentUploads: 0,
-      storageClass: 'STANDARD',
-    },
-    apiLatency: [
-      { endpoint: '/api/cases', p50: 42, p95: 120, p99: 280, status: 'healthy' },
-      { endpoint: '/api/evidence', p50: 85, p95: 210, p99: 450, status: 'healthy' },
-      { endpoint: '/api/analysis', p50: 320, p95: 890, p99: 1500, status: 'degraded' },
-      { endpoint: '/api/policies', p50: 55, p95: 150, p99: 310, status: 'healthy' },
-      { endpoint: '/api/exhibits', p50: 95, p95: 260, p99: 520, status: 'healthy' },
-    ],
-    dbLatency: [
-      { queryType: 'SELECT (simple)', avgMs: 2, maxMs: 15, status: 'healthy' },
-      { queryType: 'SELECT (join)', avgMs: 18, maxMs: 85, status: 'healthy' },
-      { queryType: 'INSERT', avgMs: 5, maxMs: 22, status: 'healthy' },
-      { queryType: 'Full-text search', avgMs: 45, maxMs: 210, status: 'degraded' },
-      { queryType: 'Aggregation', avgMs: 120, maxMs: 580, status: 'degraded' },
-    ],
-    aiLatency: [
-      { model: 'gpt-4o', avgMs: 2800, tokensPerSec: 42, queueDepth: 0, status: 'healthy' },
-      { model: 'gpt-4o-mini', avgMs: 850, tokensPerSec: 110, queueDepth: 0, status: 'healthy' },
-      { model: 'text-embedding-3-small', avgMs: 120, tokensPerSec: 0, queueDepth: 0, status: 'healthy' },
-    ],
+    crawlerStatus: { activeSessions: 0, domainsThrottled: 0, pagesVisitedToday: 0, robotsTxtCacheSize: 0, status: 'idle' },
+    workerQueues: [],
+    ocrBacklog: { pending: 0, active: 0, completedToday: 0, failedToday: 0, textractBudgetUsed: 0, textractBudgetLimit: 500, primaryMethod: 'pdf-parse' },
+    policyIngestion: { totalPolicies: 0, ingestedToday: 0, pendingReview: 0, avgConfidenceScore: 0, belowThreshold: 0 },
+    cpraCampaign: { totalAgencies: 0, requestsSent: 0, responsesReceived: 0, pendingFollowUp: 0, campaignStatus: 'not_started' },
+    s3Storage: { totalObjects: 0, totalSizeGb: 0, bucketName: 'court-access-documents', recentUploads: 0, storageClass: 'STANDARD' },
+    apiLatency: [],
+    dbLatency: [],
+    aiLatency: [],
     lastRefreshed: new Date().toISOString(),
   };
 }
@@ -213,12 +157,17 @@ export function SystemHealthDashboard() {
   const fetchData = async () => {
     setIsRefreshing(true);
     try {
-      // In production, this would be: const res = await fetch('/api/system/health');
-      // For now, use mock data
-      const mockData = getMockHealthData();
-      setData(mockData);
+      const token = localStorage.getItem('court-access-token');
+      const headers: HeadersInit = token ? { Authorization: `Bearer ${token}` } : {};
+      const res = await fetch('/api/system/health', { headers });
+      if (res.ok) {
+        const json = await res.json();
+        if (json.data) { setData(json.data); return; }
+      }
+      // API not available — show empty state
+      setData(getEmptyHealthData());
     } catch {
-      // Keep existing data on error
+      setData(getEmptyHealthData());
     } finally {
       setIsRefreshing(false);
     }

@@ -2,11 +2,13 @@
 // Court Access — Activity / Timeline Tab
 // ============================================
 
+import { useState, useEffect } from 'react';
 import { Card } from '../../components/common/Card';
 import { caseDataProvider } from '../../services/caseDataProvider';
+import type { ActivityEntry } from '../../models/CaseModel';
 import { FileText, Calendar, Lightbulb, Gavel } from 'lucide-react';
 
-const iconMap = {
+const iconMap: Record<string, { icon: typeof FileText; bg: string; color: string }> = {
   document: { icon: FileText, bg: 'bg-orange-100', color: 'text-orange-600' },
   hearing: { icon: Calendar, bg: 'bg-blue-100', color: 'text-blue-600' },
   analysis: { icon: Lightbulb, bg: 'bg-green-100', color: 'text-green-600' },
@@ -15,7 +17,11 @@ const iconMap = {
 };
 
 export function ActivityPage() {
-  const activityItems = caseDataProvider.getActivity();
+  const [activityItems, setActivityItems] = useState<ActivityEntry[]>([]);
+
+  useEffect(() => {
+    caseDataProvider.getActivity().then(setActivityItems);
+  }, []);
 
   return (
     <div className="space-y-6">

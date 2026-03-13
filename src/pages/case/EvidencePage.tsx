@@ -2,29 +2,34 @@
 // Court Access — Evidence / Documents Tab
 // ============================================
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Search, Upload, Eye, MoreHorizontal } from 'lucide-react';
 import { Card } from '../../components/common/Card';
 import { AIStatusBadge } from '../../components/common/StatusBadge';
 import { DoctrineCompliancePanel } from '../../components/case/DoctrineCompliancePanel';
 import { caseDataProvider } from '../../services/caseDataProvider';
+import type { DocumentEntity } from '../../models/DocumentModel';
 
 const DOCUMENT_TABS = [
-  { id: 'all', label: 'All Documents', count: 24 },
-  { id: 'defense_motion', label: 'Motions', count: 8 },
-  { id: 'transcript', label: 'Transcripts', count: 5 },
-  { id: 'charging_document', label: 'Charging Documents', count: 3 },
-  { id: 'court_order', label: 'Court Orders', count: 4 },
-  { id: 'other', label: 'Other Filings', count: 4 },
+  { id: 'all', label: 'All Documents', count: 0 },
+  { id: 'defense_motion', label: 'Motions', count: 0 },
+  { id: 'transcript', label: 'Transcripts', count: 0 },
+  { id: 'charging_document', label: 'Charging Documents', count: 0 },
+  { id: 'court_order', label: 'Court Orders', count: 0 },
+  { id: 'other', label: 'Other Filings', count: 0 },
 ];
 
 export function EvidencePage() {
   const [activeTab, setActiveTab] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const allDocuments = caseDataProvider.getDocuments();
+  const [allDocuments, setAllDocuments] = useState<DocumentEntity[]>([]);
   const documentTypeLabels = caseDataProvider.getDocumentTypeLabels();
 
-  const filteredDocs = allDocuments.filter((doc) => {
+  useEffect(() => {
+    caseDataProvider.getDocuments().then(setAllDocuments);
+  }, []);
+
+  const filteredDocs = allDocuments.filter((doc: DocumentEntity) => {
     const matchesTab = activeTab === 'all' || doc.type === activeTab;
     const matchesSearch = !searchQuery || doc.name.toLowerCase().includes(searchQuery.toLowerCase());
     return matchesTab && matchesSearch;

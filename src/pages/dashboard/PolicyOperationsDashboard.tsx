@@ -48,65 +48,21 @@ interface DashboardData {
 }
 
 // ---------------------------------------------------------------------------
-// Mock data generator (replaced by API in production)
+// Empty data fallback (production uses real API data only)
 // ---------------------------------------------------------------------------
 
-function getMockDashboardData(page: number, filters: Record<string, string>): DashboardData {
-  const counties = [
-    'Los Angeles', 'San Diego', 'Orange', 'Riverside', 'San Bernardino',
-    'Santa Clara', 'Alameda', 'Sacramento', 'Contra Costa', 'Fresno',
-    'San Francisco', 'Ventura', 'San Mateo', 'Kern', 'San Joaquin',
-  ];
-
-  const agencies: AgencyRow[] = [];
-  const start = (page - 1) * 50;
-  const total = 488;
-  const count = Math.min(50, total - start);
-
-  const cpraStatuses = ['none', 'draft', 'sent', 'awaiting_response', 'follow_up', 'received', 'closed'];
-  const agencyTypes = ['Police', 'Sheriff', 'State', 'University', 'Transit'];
-
-  for (let i = 0; i < count; i++) {
-    const idx = start + i;
-    const county = counties[idx % counties.length];
-    const type = agencyTypes[idx % agencyTypes.length];
-    const coverageScore = Math.round((20 + Math.random() * 80) * 10) / 10;
-    const found = Math.floor(coverageScore * 3.34);
-    const cpraStatus = cpraStatuses[idx % cpraStatuses.length];
-
-    if (filters.county && county !== filters.county) continue;
-    if (filters.cpraStatus && filters.cpraStatus !== 'all' && cpraStatus !== filters.cpraStatus) continue;
-    if (filters.search && !`Agency ${idx + 1} PD`.toLowerCase().includes(filters.search.toLowerCase())) continue;
-
-    agencies.push({
-      agencyId: `agency-${idx}`,
-      agencyName: `${county} ${type === 'Sheriff' ? 'County Sheriff' : type === 'Police' ? `City PD #${idx + 1}` : `${type} Agency #${idx + 1}`}`,
-      city: type === 'Sheriff' ? null : `City ${idx + 1}`,
-      county,
-      website: `https://www.example-${idx}.gov`,
-      population: 10000 + Math.floor(Math.random() * 500000),
-      agencyType: type,
-      policiesFound: found,
-      policiesMissing: Math.max(0, 334 - found),
-      coverageScore,
-      lastCrawl: idx % 3 === 0 ? null : new Date(Date.now() - Math.random() * 30 * 86400000).toISOString(),
-      cpraStatus,
-      cpraDeadline: cpraStatus === 'awaiting_response' ? new Date(Date.now() + Math.random() * 10 * 86400000).toISOString() : null,
-      annualUpdateCountdown: cpraStatus === 'received' ? Math.floor(200 + Math.random() * 165) : null,
-    });
-  }
-
+function getEmptyDashboardData(): DashboardData {
   return {
-    agencies: agencies.slice(0, 50),
-    pagination: { page, limit: 50, total, pages: Math.ceil(total / 50) },
+    agencies: [],
+    pagination: { page: 1, limit: 50, total: 0, pages: 0 },
     summary: {
-      totalAgencies: 488,
-      totalPoliciesDiscovered: 1577,
-      totalPoliciesIngested: 1550,
-      averageCoverage: 42.3,
-      cpraBreakdown: { none: 380, sent: 45, awaiting_response: 28, received: 20, closed: 15 },
+      totalAgencies: 0,
+      totalPoliciesDiscovered: 0,
+      totalPoliciesIngested: 0,
+      averageCoverage: 0,
+      cpraBreakdown: {},
     },
-    filters: { counties },
+    filters: { counties: [] },
   };
 }
 
@@ -169,15 +125,11 @@ export function PolicyOperationsDashboard() {
           if (json.success) { setData(json.data); return; }
         }
       } catch {
-        // API not available, use mock
+        // API not available — show empty state
       }
 
-      const mockData = getMockDashboardData(page, {
-        county: countyFilter,
-        cpraStatus: cpraFilter,
-        search: searchTerm,
-      });
-      setData(mockData);
+      // No mock data in production — show empty dashboard
+      setData(getEmptyDashboardData());
     } finally {
       setIsLoading(false);
     }

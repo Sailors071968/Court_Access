@@ -15,8 +15,20 @@ export function MotionsPage() {
   const { caseId } = useParams<{ caseId: string }>();
   const [motions, setMotions] = useState<Motion[]>([]);
   const [loading, setLoading] = useState(true);
-  const cases = caseDataProvider.getCases();
-  const currentCase = cases.find((c) => c.id === caseId) || caseDataProvider.getPrimaryCase();
+  const [currentCase, setCurrentCase] = useState<{ id: string; title: string; caseNumber: string } | null>(null);
+
+  useEffect(() => {
+    caseDataProvider.getCases().then((cases) => {
+      const found = cases.find((c) => c.id === caseId);
+      if (found) {
+        setCurrentCase(found);
+      } else {
+        caseDataProvider.getPrimaryCase().then((pc) => {
+          if (pc) setCurrentCase(pc);
+        });
+      }
+    });
+  }, [caseId]);
 
   useEffect(() => {
     setLoading(true);
@@ -42,7 +54,7 @@ export function MotionsPage() {
         <div>
           <h2 className="text-xl font-bold text-gray-900">Court Attorney - Motion Recommendations</h2>
           <div className="flex items-center gap-2 mt-2 px-4 py-2 bg-purple-600 text-white rounded-lg text-sm">
-            <span>{currentCase.title} - Case #{currentCase.caseNumber}</span>
+            <span>{currentCase?.title ?? 'Loading...'} - Case #{currentCase?.caseNumber ?? ''}</span>
             <button aria-label="Edit case"><Pencil size={14} /></button>
           </div>
         </div>

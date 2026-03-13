@@ -1226,3 +1226,58 @@ model Evidence {
   @@index([analysisStatus])
   @@map("evidence")
 }
+
+// ---------------------------------------------------------------------------
+// Timeline Reconstruction Engine — Timeline Events
+// ---------------------------------------------------------------------------
+
+model TimelineEvent {
+  eventId           String   @id @default(uuid())
+  caseId            String
+  tenantId          String
+  sourceEvidenceId  String?  // nullable for synthesized/correlated events
+  eventType         String   // officer_arrival | gunshot | vehicle_stop | foot_pursuit | taser_deployment | use_of_force | 911_call | dispatch | witness_observation | arrest | miranda | search | seizure | medical | statement | other
+  timestamp         DateTime
+  endTimestamp      DateTime? // for duration events (e.g., pursuit from X to Y)
+  confidence        Float    @default(0.5) // 0.0 - 1.0
+  sourceType        String   // police_report | witness_statement | bodycam | dashcam | surveillance | cad_log | transcript | 911_call | investigator_report | correlated
+  description       String
+  rawText           String?  // original text excerpt that produced this event
+  metadata          Json?    // additional structured data (video frame, audio spike, etc.)
+  correlationGroup  String?  // groups events from different sources describing the same incident
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([caseId, timestamp])
+  @@index([sourceEvidenceId])
+  @@index([eventType])
+  @@index([correlationGroup])
+  @@map("timeline_events")
+}
+
+// ---------------------------------------------------------------------------
+// Timeline Reconstruction Engine — Case Timelines (Master)
+// ---------------------------------------------------------------------------
+
+model CaseTimeline {
+  timelineId    String   @id @default(uuid())
+  caseId        String   @unique
+  tenantId      String
+  status        String   @default("pending") // pending | building | complete | failed
+  eventCount    Int      @default(0)
+  conflictCount Int      @default(0)
+  clockOffsets  Json?    // estimated clock offsets between video sources
+  builtAt       DateTime?
+  metadata      Json?    // build stats, processing time, etc.
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([status])
+  @@map("case_timelines")
+}

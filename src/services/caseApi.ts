@@ -277,6 +277,109 @@ export async function registerEvidence(payload: RegisterEvidencePayload): Promis
   return data.evidence;
 }
 
+// ---------------------------------------------------------------------------
+// Timeline API
+// ---------------------------------------------------------------------------
+
+export interface ApiTimelineEvent {
+  eventId: string;
+  caseId: string;
+  sourceEvidenceId: string | null;
+  eventType: string;
+  timestamp: string;
+  endTimestamp: string | null;
+  confidence: number;
+  sourceType: string;
+  description: string;
+  rawText: string | null;
+  metadata: Record<string, unknown> | null;
+  correlationGroup: string | null;
+}
+
+export interface ApiCaseTimeline {
+  timelineId: string;
+  caseId: string;
+  status: string;
+  eventCount: number;
+  conflictCount: number;
+  clockOffsets: unknown;
+  builtAt: string | null;
+}
+
+export interface ApiTimelineConflict {
+  conflictType: string;
+  description: string;
+  eventA: {
+    eventId: string;
+    eventType: string;
+    timestamp: string;
+    sourceType: string;
+    description: string;
+  } | null;
+  eventB: {
+    eventId: string;
+    eventType: string;
+    timestamp: string;
+    sourceType: string;
+    description: string;
+  } | null;
+}
+
+export async function fetchTimeline(caseId: string): Promise<{
+  timeline: ApiCaseTimeline | null;
+  events: ApiTimelineEvent[];
+  graph: { nodes: unknown[]; relationships: unknown[] };
+}> {
+  const res = await fetch(`${API_BASE}/timeline/${caseId}`, { headers: getAuthHeaders() });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to fetch timeline' }));
+    throw new Error(err.error || 'Failed to fetch timeline');
+  }
+  return res.json();
+}
+
+export async function fetchTimelineEvents(
+  caseId: string,
+  params?: { sourceType?: string; eventType?: string; minConfidence?: number },
+): Promise<{ events: ApiTimelineEvent[]; total: number }> {
+  const query = new URLSearchParams();
+  if (params?.sourceType) query.set('sourceType', params.sourceType);
+  if (params?.eventType) query.set('eventType', params.eventType);
+  if (params?.minConfidence !== undefined) query.set('minConfidence', String(params.minConfidence));
+  const qs = query.toString();
+  const url = `${API_BASE}/timeline/${caseId}/events${qs ? `?${qs}` : ''}`;
+  const res = await fetch(url, { headers: getAuthHeaders() });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to fetch timeline events' }));
+    throw new Error(err.error || 'Failed to fetch timeline events');
+  }
+  return res.json();
+}
+
+export async function fetchTimelineConflicts(caseId: string): Promise<{
+  conflicts: ApiTimelineConflict[];
+  conflictCount: number;
+}> {
+  const res = await fetch(`${API_BASE}/timeline/${caseId}/conflicts`, { headers: getAuthHeaders() });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to fetch conflicts' }));
+    throw new Error(err.error || 'Failed to fetch conflicts');
+  }
+  return res.json();
+}
+
+export async function rebuildTimeline(caseId: string): Promise<{ status: string; message: string }> {
+  const res = await fetch(`${API_BASE}/timeline/rebuild/${caseId}`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to rebuild timeline' }));
+    throw new Error(err.error || 'Failed to rebuild timeline');
+  }
+  return res.json();
+}
+
 /**
  * Full upload flow: get presigned URL → upload to S3 → register metadata.
  */

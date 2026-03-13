@@ -25,6 +25,7 @@ import { registerAutonomousCpraRoutes } from './cpra/autonomousCpraRoutes.js';
 import { registerBillingRoutes } from './billing/billingRoutes.js';
 import { registerCaseRoutes } from './evidence/caseRoutes.js';
 import { registerEvidenceRoutes } from './evidence/evidenceRoutes.js';
+import { registerTimelineRoutes } from './timeline/timelineRoutes.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -144,6 +145,10 @@ async function startServer() {
   console.log('[Server] Registering evidence routes...');
   await registerEvidenceRoutes(app);
 
+  // Timeline Reconstruction Engine
+  console.log('[Server] Registering timeline reconstruction routes...');
+  await registerTimelineRoutes(app);
+
   // Start server
   try {
     await app.listen({ port: PORT, host: HOST });
@@ -208,6 +213,10 @@ async function startServer() {
     console.log('  - GET  /api/cases/:caseId/evidence');
     console.log('  - GET  /api/evidence/:evidenceId');
     console.log('  - DELETE /api/evidence/:evidenceId');
+    console.log('  - GET  /api/timeline/:caseId');
+    console.log('  - GET  /api/timeline/:caseId/events');
+    console.log('  - GET  /api/timeline/:caseId/conflicts');
+    console.log('  - POST /api/timeline/rebuild/:caseId');
     console.log('[Server] Security hardening active: JWT auth, rate limiting, CSRF, security headers, upload protection, security logging');
   } catch (err) {
     console.error('[Server] Failed to start:', err);

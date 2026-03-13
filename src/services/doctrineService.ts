@@ -284,7 +284,7 @@ const DEMO_STATUS: DoctrineStatusResponse = {
 
 function getAuthHeaders(): Record<string, string> {
   const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-  const token = localStorage.getItem('accessToken') || sessionStorage.getItem('accessToken');
+  const token = localStorage.getItem('court-access-token') || sessionStorage.getItem('accessToken');
   if (token) headers['Authorization'] = `Bearer ${token}`;
   return headers;
 }

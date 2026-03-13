@@ -115,13 +115,18 @@ export async function registerDiscountRoutes(app: FastifyInstance): Promise<void
     if (body.discountValue !== undefined) sanitized.discountValue = body.discountValue as number;
     if (body.discountType !== undefined) sanitized.discountType = body.discountType as 'percent' | 'fixed';
 
-    const updated = updateDiscountCode(codeId, sanitized);
-    if (!updated) {
-      return reply.code(404).send({ error: 'Discount code not found' });
-    }
+    try {
+      const updated = updateDiscountCode(codeId, sanitized);
+      if (!updated) {
+        return reply.code(404).send({ error: 'Discount code not found' });
+      }
 
-    console.log(`[DiscountRoutes] Updated discount code: ${updated.codeValue} (${codeId})`);
-    return { code: updated };
+      console.log(`[DiscountRoutes] Updated discount code: ${updated.codeValue} (${codeId})`);
+      return { code: updated };
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to update discount code';
+      return reply.code(409).send({ error: message });
+    }
   });
 
   // DELETE /api/admin/discount-codes/:codeId — delete a discount code

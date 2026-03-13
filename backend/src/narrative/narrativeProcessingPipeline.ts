@@ -105,7 +105,7 @@ export async function enqueueClaimExtraction(job: ClaimExtractionJob): Promise<v
 export async function enqueueClaimNormalization(job: ClaimNormalizationJob): Promise<void> {
   const queue = getQueue<ClaimNormalizationJob>('narrativeClaimNormalization');
   await queue.add('claim-normalize', job, {
-    jobId: `claim-normalize-${job.caseId}-${Date.now()}`,
+    jobId: `claim-normalize-${job.caseId}`,
   });
   console.log(`[NarrativePipeline] Enqueued claim normalization for case ${job.caseId}`);
 }
@@ -113,7 +113,7 @@ export async function enqueueClaimNormalization(job: ClaimNormalizationJob): Pro
 export async function enqueueEvidenceValidation(job: EvidenceValidationJob): Promise<void> {
   const queue = getQueue<EvidenceValidationJob>('narrativeEvidenceValidation');
   await queue.add('evidence-validate', job, {
-    jobId: `evidence-validate-${job.caseId}-${Date.now()}`,
+    jobId: `evidence-validate-${job.caseId}`,
   });
   console.log(`[NarrativePipeline] Enqueued evidence validation for case ${job.caseId}`);
 }
@@ -121,7 +121,7 @@ export async function enqueueEvidenceValidation(job: EvidenceValidationJob): Pro
 export async function enqueueImpeachmentAnalysis(job: ImpeachmentAnalysisJob): Promise<void> {
   const queue = getQueue<ImpeachmentAnalysisJob>('narrativeImpeachmentAnalysis');
   await queue.add('impeachment-analyze', job, {
-    jobId: `impeachment-${job.caseId}-${Date.now()}`,
+    jobId: `impeachment-${job.caseId}`,
   });
   console.log(`[NarrativePipeline] Enqueued impeachment analysis for case ${job.caseId}`);
 }

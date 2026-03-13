@@ -177,7 +177,7 @@ export function DiscountCodesDashboard() {
   const totalCodes = codes.length;
   const activeCodes = codes.filter((c) => c.active).length;
   const totalUsages = codes.reduce((sum, c) => sum + (c.usageCount || 0), 0);
-  const totalDiscountValue = codes.reduce((sum, c) => sum + (c.usageCount || 0) * c.discountValue, 0);
+  const totalDiscountValue = codes.filter(c => c.discountType === 'fixed').reduce((sum, c) => sum + (c.usageCount || 0) * c.discountValue, 0);
 
   const codeAnalytics = codes.map((code) => {
     return {

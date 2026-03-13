@@ -83,8 +83,9 @@ function findCorrelationGroups(events: TimelineEventRow[]): Map<string, string[]
       // Must come from a different evidence source
       if (candidate.sourceEvidenceId === event.sourceEvidenceId) continue;
 
-      // Must have a compatible event type
-      if (!compatibleTypes.includes(candidate.eventType)) continue;
+      // Must have a compatible event type (check bidirectionally)
+      const candidateCompatibleTypes = CORRELATABLE_EVENT_TYPES[candidate.eventType] ?? [candidate.eventType];
+      if (!compatibleTypes.includes(candidate.eventType) && !candidateCompatibleTypes.includes(event.eventType)) continue;
 
       groupMembers.push(candidate.eventId);
       assigned.add(candidate.eventId);

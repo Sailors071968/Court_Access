@@ -28,26 +28,13 @@ interface QueueStats {
   depth: number;
 }
 
-const MOCK_QUEUES: QueueStats[] = [
-  { name: 'analysis-worker', active: 2, waiting: 5, completed: 142, failed: 3, retrying: 1, avgProcessingTime: 12.4, depth: 7 },
-  { name: 'policy-comparison-worker', active: 1, waiting: 2, completed: 89, failed: 1, retrying: 0, avgProcessingTime: 8.2, depth: 3 },
-  { name: 'timeline-worker', active: 0, waiting: 0, completed: 67, failed: 0, retrying: 0, avgProcessingTime: 5.1, depth: 0 },
-  { name: 'ocr-worker', active: 1, waiting: 2, completed: 234, failed: 0, retrying: 0, avgProcessingTime: 15.8, depth: 3 },
-  { name: 'upload-worker', active: 1, waiting: 1, completed: 312, failed: 2, retrying: 0, avgProcessingTime: 3.2, depth: 2 },
-  { name: 'exhibit-generation-worker', active: 0, waiting: 3, completed: 28, failed: 1, retrying: 1, avgProcessingTime: 45.0, depth: 3 },
-];
-
-const MOCK_JOBS: WorkerJob[] = [
-  { id: 'j1', queue: 'analysis-worker', status: 'active', startedAt: '2026-01-15 14:25:00', payload: 'case-abc-123 full analysis' },
-  { id: 'j2', queue: 'analysis-worker', status: 'active', startedAt: '2026-01-15 14:26:00', payload: 'case-def-456 evidence comparison' },
-  { id: 'j3', queue: 'ocr-worker', status: 'completed', startedAt: '2026-01-15 14:20:00', completedAt: '2026-01-15 14:20:15', duration: 15, payload: 'ev-789.pdf OCR extraction' },
-  { id: 'j4', queue: 'ocr-worker', status: 'active', startedAt: '2026-01-15 14:21:00', payload: 'ev-456.pdf OCR extraction' },
-  { id: 'j5', queue: 'policy-comparison-worker', status: 'waiting', startedAt: '2026-01-15 14:27:00', payload: 'Sacramento PD pursuit policy vs case-abc-123' },
-];
+// Initial empty state — data will be populated from real API endpoints
+const INITIAL_QUEUES: QueueStats[] = [];
+const INITIAL_JOBS: WorkerJob[] = [];
 
 export function WorkerQueueMonitoring() {
-  const [queues] = useState<QueueStats[]>(MOCK_QUEUES);
-  const [jobs] = useState<WorkerJob[]>(MOCK_JOBS);
+  const [queues] = useState<QueueStats[]>(INITIAL_QUEUES);
+  const [jobs] = useState<WorkerJob[]>(INITIAL_JOBS);
 
   const totalActive = queues.reduce((s, q) => s + q.active, 0);
   const totalFailed = queues.reduce((s, q) => s + q.failed, 0);

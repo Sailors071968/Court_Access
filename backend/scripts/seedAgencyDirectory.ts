@@ -695,13 +695,18 @@ async function seedAgencyDirectory(): Promise<void> {
   console.log(`[Agency Seed] AgencyPolicyStatus records: ${statusCreated} upserted`);
 }
 
-// Run
-seedAgencyDirectory()
-  .then(() => {
-    console.log('[Agency Seed] Done');
-    process.exit(0);
-  })
-  .catch((err) => {
-    console.error('[Agency Seed] Fatal error:', err);
-    process.exit(1);
-  });
+// Only allow seeding in development or when explicitly requested
+if (process.env.NODE_ENV === 'production') {
+  console.log('[Agency Seed] Skipping — NODE_ENV is production. Set NODE_ENV=development to seed.');
+  process.exit(0);
+} else {
+  seedAgencyDirectory()
+    .then(() => {
+      console.log('[Agency Seed] Done');
+      process.exit(0);
+    })
+    .catch((err) => {
+      console.error('[Agency Seed] Fatal error:', err);
+      process.exit(1);
+    });
+}

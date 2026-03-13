@@ -35,6 +35,36 @@ async function cleanTestData(): Promise<void> {
   console.log(`  CpraNotification: ${notificationCount} records`);
   console.log(`  CpraTimelineEvent: ${timelineCount} records`);
 
+  // --- Step 1b: Delete demo user accounts ---
+  console.log('\n[Step 1b] Cleaning demo user accounts...');
+
+  try {
+    const demoUsers = await prisma.$executeRawUnsafe(`
+      DELETE FROM "users"
+      WHERE email LIKE '%demo%'
+        OR email LIKE '%test%'
+        OR email LIKE '%example%'
+        OR email IN (
+          'admin@courtaccess.com',
+          'attorney@courtaccess.com',
+          'investigator@courtaccess.com',
+          'expert@courtaccess.com',
+          'defendant@courtaccess.com',
+          'staff@courtaccess.com'
+        )
+    `);
+    results.push({ table: 'users', deleted: demoUsers, criteria: 'demo/test/example accounts + known demo emails' });
+    console.log(`  Deleted ${demoUsers} demo user accounts`);
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    // Table may not exist yet in some environments
+    if (msg.includes('does not exist') || msg.includes('relation')) {
+      console.log('  [Info] users table not found — skipping demo user cleanup');
+    } else {
+      console.error(`  [Warning] Could not clean demo users: ${msg}`);
+    }
+  }
+
   // --- Step 2: Delete test CPRA simulation data ---
   console.log('\n[Step 2] Cleaning CPRA simulation data...');
 

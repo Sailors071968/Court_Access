@@ -5,7 +5,6 @@
 import { useNavigate } from 'react-router-dom';
 import { FileText, Scale, Calendar, Lightbulb, Search as SearchIcon, TrendingUp } from 'lucide-react';
 import { Card, StatCard } from '../components/common/Card';
-import { DemoModeBadge } from '../components/common/DemoModeBadge';
 import { AIStatusBadge } from '../components/common/StatusBadge';
 import { caseDataProvider } from '../services/caseDataProvider';
 import { useAuthStore } from '../stores/authStore';
@@ -29,7 +28,6 @@ export function DashboardPage() {
           <p className="text-sm text-gray-500 mt-1">Welcome back, {user?.name}</p>
         </div>
         <div className="flex items-center gap-2">
-          <DemoModeBadge />
           <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium bg-green-50 text-green-700">
             <span className="w-2 h-2 rounded-full bg-green-500" />
             Active

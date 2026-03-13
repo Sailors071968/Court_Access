@@ -18,84 +18,90 @@ interface AuthState {
   hasPermission: (permission: keyof typeof ROLE_PERMISSIONS.admin) => boolean;
 }
 
-// Mock users for development
-const MOCK_USERS: Record<string, User> = {
-  'attorney@courtaccess.com': {
-    id: '1',
-    name: 'Attorney Jane Doe',
-    email: 'attorney@courtaccess.com',
-    role: 'attorney',
-    avatar: undefined,
-  },
-  'investigator@courtaccess.com': {
-    id: '2',
-    name: 'Agent J. Doe',
-    email: 'investigator@courtaccess.com',
-    role: 'investigator',
-    avatar: undefined,
-  },
-  'admin@courtaccess.com': {
-    id: '3',
-    name: 'Admin User',
-    email: 'admin@courtaccess.com',
-    role: 'admin',
-    avatar: undefined,
-  },
-  'staff@courtaccess.com': {
-    id: '4',
-    name: 'Staff Member',
-    email: 'staff@courtaccess.com',
-    role: 'staff',
-    avatar: undefined,
-  },
-  'defendant@courtaccess.com': {
-    id: '5',
-    name: 'John Smith',
-    email: 'defendant@courtaccess.com',
-    role: 'defendant',
-    avatar: undefined,
-  },
-};
+const API_BASE = '/api';
 
 export const useAuthStore = create<AuthState>()(persist((set, get) => ({
   user: null,
   isAuthenticated: false,
   isLoading: false,
 
-  login: async (email: string, _password: string) => {
+  login: async (email: string, password: string) => {
     set({ isLoading: true });
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 800));
-
-    const mockUser = MOCK_USERS[email];
-    if (mockUser) {
-      set({ user: mockUser, isAuthenticated: true, isLoading: false });
-    } else {
-      // Default to attorney role for any email
+    try {
+      const res = await fetch(`${API_BASE}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: 'Login failed' }));
+        throw new Error(err.error || 'Invalid credentials');
+      }
+      const data = await res.json();
+      // Store the access token for authenticated API calls
+      if (data.accessToken) {
+        localStorage.setItem('court-access-token', data.accessToken);
+      }
+      if (data.refreshToken) {
+        localStorage.setItem('court-access-refresh-token', data.refreshToken);
+      }
       set({
         user: {
-          id: '99',
-          name: email.split('@')[0],
-          email,
-          role: 'attorney',
+          id: data.user.userId,
+          name: data.user.email.split('@')[0],
+          email: data.user.email,
+          role: data.user.role,
         },
         isAuthenticated: true,
         isLoading: false,
       });
+    } catch (err) {
+      set({ isLoading: false });
+      throw err;
     }
   },
 
-  register: async (name: string, email: string, _password: string, role: UserRole) => {
+  register: async (name: string, email: string, password: string, role: UserRole) => {
     set({ isLoading: true });
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    set({
-      user: { id: Date.now().toString(), name, email, role },
-      isAuthenticated: true,
-      isLoading: false,
-    });
+    try {
+      const res = await fetch(`${API_BASE}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password, role }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: 'Registration failed' }));
+        throw new Error(err.error || 'Registration failed');
+      }
+      const data = await res.json();
+      if (data.accessToken) {
+        localStorage.setItem('court-access-token', data.accessToken);
+      }
+      if (data.refreshToken) {
+        localStorage.setItem('court-access-refresh-token', data.refreshToken);
+      }
+      set({
+        user: { id: data.user.userId, name, email: data.user.email, role: data.user.role },
+        isAuthenticated: true,
+        isLoading: false,
+      });
+    } catch (err) {
+      set({ isLoading: false });
+      throw err;
+    }
   },
 
   logout: () => {
+    // Attempt to call backend logout (fire-and-forget)
+    const token = localStorage.getItem('court-access-token');
+    if (token) {
+      fetch(`${API_BASE}/auth/logout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      }).catch(() => { /* ignore */ });
+    }
+    localStorage.removeItem('court-access-token');
+    localStorage.removeItem('court-access-refresh-token');
     set({ user: null, isAuthenticated: false });
   },
 

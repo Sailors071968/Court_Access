@@ -271,24 +271,8 @@ export async function authenticationHook(
 // Auth Routes (login, register, refresh, logout)
 // ---------------------------------------------------------------------------
 
-// Demo user store (production: use database)
+// User store (in-memory; production should use database)
 const userStore = new Map<string, { userId: string; email: string; passwordHash: string; role: UserRole }>();
-
-// Seed demo users
-function seedDemoUsers(): void {
-  const demoUsers = [
-    { userId: 'admin-001', email: 'admin@courtaccess.com', password: 'admin123', role: 'admin' as UserRole },
-    { userId: 'attorney-001', email: 'attorney@courtaccess.com', password: 'attorney123', role: 'attorney' as UserRole },
-    { userId: 'investigator-001', email: 'investigator@courtaccess.com', password: 'investigator123', role: 'investigator' as UserRole },
-    { userId: 'staff-001', email: 'staff@courtaccess.com', password: 'staff123', role: 'staff' as UserRole },
-    { userId: 'defendant-001', email: 'defendant@courtaccess.com', password: 'defendant123', role: 'defendant' as UserRole },
-  ];
-  for (const user of demoUsers) {
-    const passwordHash = crypto.createHash('sha256').update(user.password).digest('hex');
-    userStore.set(user.email, { userId: user.userId, email: user.email, passwordHash, role: user.role });
-  }
-}
-seedDemoUsers();
 
 export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
   // POST /api/auth/login

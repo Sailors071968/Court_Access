@@ -8,7 +8,6 @@ import { useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import { FileText, Calendar, Download, Clock, CheckCircle, User, Scale, Archive } from 'lucide-react';
 import { Card, StatCard } from '../../components/common/Card';
-import { DemoModeBadge } from '../../components/common/DemoModeBadge';
 import { STATUS_COLORS } from '../../constants/designTokens';
 import { caseDataProvider } from '../../services/caseDataProvider';
 import { useAuthStore } from '../../stores/authStore';
@@ -73,7 +72,6 @@ export function DefendantDashboard() {
           <h1 className="text-2xl font-bold text-gray-900">Welcome, {user?.name}</h1>
           <p className="text-sm text-gray-500 mt-1">Your case information and updates</p>
         </div>
-        <DemoModeBadge />
       </div>
 
       {/* 1. Case Status Overview */}

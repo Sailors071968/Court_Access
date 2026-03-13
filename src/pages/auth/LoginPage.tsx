@@ -8,8 +8,8 @@ import { useAuthStore } from '../../stores/authStore';
 import { Scale, Eye, EyeOff } from 'lucide-react';
 
 export function LoginPage() {
-  const [email, setEmail] = useState('attorney@courtaccess.com');
-  const [password, setPassword] = useState('password');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
   const { login, isLoading } = useAuthStore();
@@ -30,17 +30,6 @@ export function LoginPage() {
     }
   };
 
-  const handleDemoLogin = async (demoEmail: string) => {
-    setEmail(demoEmail);
-    setPassword('password');
-    setError('');
-    try {
-      await login(demoEmail, 'password');
-      navigate('/dashboard');
-    } catch {
-      setError('Demo login failed. Please try again.');
-    }
-  };
 
   return (
     <div className="min-h-screen bg-slate-800 flex items-center justify-center px-4">
@@ -135,29 +124,6 @@ export function LoginPage() {
             </Link>
           </div>
 
-          {/* Demo Accounts */}
-          <div className="mt-6 pt-6 border-t border-gray-200">
-            <p className="text-xs text-gray-400 mb-3 text-center">Demo accounts:</p>
-            <div className="grid grid-cols-2 gap-2">
-              {[
-                { label: 'Attorney', email: 'attorney@courtaccess.com' },
-                { label: 'Investigator', email: 'investigator@courtaccess.com' },
-                { label: 'Admin', email: 'admin@courtaccess.com' },
-                { label: 'Staff', email: 'staff@courtaccess.com' },
-                { label: 'Defendant', email: 'defendant@courtaccess.com' },
-              ].map((demo) => (
-                <button
-                  key={demo.email}
-                  type="button"
-                  onClick={() => handleDemoLogin(demo.email)}
-                  disabled={isLoading}
-                  className="text-xs px-3 py-2 bg-gray-50 text-gray-600 rounded-lg hover:bg-gray-100 transition-colors border border-gray-200 disabled:opacity-50"
-                >
-                  {demo.label}
-                </button>
-              ))}
-            </div>
-          </div>
         </div>
       </div>
     </div>

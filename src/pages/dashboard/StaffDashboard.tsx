@@ -10,7 +10,6 @@ import {
 } from 'lucide-react';
 import { Card, StatCard } from '../../components/common/Card';
 import { AIStatusBadge } from '../../components/common/StatusBadge';
-import { DemoModeBadge } from '../../components/common/DemoModeBadge';
 import { STATUS_COLORS, TEXT_COLORS } from '../../constants/designTokens';
 import { caseDataProvider } from '../../services/caseDataProvider';
 import { useAuthStore } from '../../stores/authStore';
@@ -32,7 +31,6 @@ export function StaffDashboard() {
           <h1 className="text-2xl font-bold text-gray-900">Staff Dashboard</h1>
           <p className="text-sm text-gray-500 mt-1">Welcome back, {user?.name}</p>
         </div>
-        <DemoModeBadge />
       </div>
 
       {/* 1. Case Overview Panel */}

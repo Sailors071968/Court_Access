@@ -195,6 +195,7 @@ export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
       const caseIds = userCases.map((c) => c.caseId);
 
       // 3. Delete R2 objects first (outside transaction — best-effort)
+      //    Scope to per-case prefixes to avoid deleting other users' files in same tenant
       if (caseIds.length > 0) {
         const allEvidence = await prisma.evidence.findMany({
           where: { caseId: { in: caseIds }, tenantId },
@@ -203,8 +204,10 @@ export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
         for (const ev of allEvidence) {
           if (ev.s3Key) await deleteS3Object(ev.s3Key);
         }
+        for (const cId of caseIds) {
+          await deleteS3Prefix(`evidence/${tenantId}/${cId}/`);
+        }
       }
-      await deleteS3Prefix(`evidence/${tenantId}/`);
 
       // 4. Cascading DB delete inside a transaction (atomic)
       await prisma.$transaction(async (tx) => {

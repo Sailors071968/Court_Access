@@ -211,10 +211,12 @@ export function normalizeDocument(input: DocumentNormalizationInput): Normalizat
       multiplexDetected,
       maxMultiplexCount,
       normalizedPageCount: totalLogicalPages,
-      rejectionReason:
-        `CourtAccess requires discovery documents to be uploaded with one page per page. ` +
-        `Multiplexed documents are not permitted except for ${typeLabel} (${limitLabel}). ` +
-        `Detected ${maxMultiplexCount}-up format on page ${(analyzedPages.find((p) => p.logicalPageCount > maxAllowed)?.pageIndex ?? 0) + 1}.`,
+      rejectionReason: isTranscript
+        ? `CourtAccess requires court reporter transcripts to have a maximum of ${MAX_TRANSCRIPT_MULTIPLEX} pages per sheet. ` +
+          `Detected ${maxMultiplexCount}-up format on page ${(analyzedPages.find((p) => p.logicalPageCount > maxAllowed)?.pageIndex ?? 0) + 1}.`
+        : `CourtAccess requires discovery documents to be uploaded with one page per page. ` +
+          `Multiplexed documents are not permitted except for court reporter transcripts (maximum ${MAX_TRANSCRIPT_MULTIPLEX} pages per sheet). ` +
+          `Detected ${maxMultiplexCount}-up format on page ${(analyzedPages.find((p) => p.logicalPageCount > maxAllowed)?.pageIndex ?? 0) + 1}.`,
     };
   }
 

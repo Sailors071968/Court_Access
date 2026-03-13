@@ -223,7 +223,13 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
       });
 
       return { case: updated };
-    } catch (err) {
+    } catch (err: unknown) {
+      const prismaError = err as { code?: string };
+      if (prismaError.code === 'P2002') {
+        return reply.code(409).send({
+          error: 'A case with this case number already exists for your tenant',
+        });
+      }
       console.error('[CaseRoutes] Failed to update case:', err);
       return reply.code(500).send({ error: 'Failed to update case' });
     }

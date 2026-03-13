@@ -25,8 +25,8 @@ import { registerAutonomousCpraRoutes } from './cpra/autonomousCpraRoutes.js';
 import { registerBillingRoutes } from './billing/billingRoutes.js';
 import { registerCaseRoutes } from './evidence/caseRoutes.js';
 import { registerEvidenceRoutes } from './evidence/evidenceRoutes.js';
-import { registerNarrativeRoutes } from './narrative/narrativeRoutes.js';
 import { registerTimelineRoutes } from './timeline/timelineRoutes.js';
+import { registerNarrativeRoutes } from './narrative/narrativeRoutes.js';
 import { registerQueueMonitorRoutes } from './admin/queueMonitorRoutes.js';
 import { registerDiscountRoutes } from './billing/discountRoutes.js';
 import { seedDefaultDiscountCodes } from './billing/discountSeed.js';
@@ -149,13 +149,13 @@ async function startServer() {
   console.log('[Server] Registering evidence routes...');
   await registerEvidenceRoutes(app);
 
-  // Narrative Deconstruction Engine routes
-  console.log('[Server] Registering narrative deconstruction engine routes...');
-  await registerNarrativeRoutes(app);
-
   // Timeline Reconstruction Engine
   console.log('[Server] Registering timeline reconstruction routes...');
   await registerTimelineRoutes(app);
+
+  // Narrative Deconstruction Engine routes
+  console.log('[Server] Registering narrative deconstruction engine routes...');
+  await registerNarrativeRoutes(app);
 
   // Admin queue monitoring
   console.log('[Server] Registering admin queue monitoring routes...');

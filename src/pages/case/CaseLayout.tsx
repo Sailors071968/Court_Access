@@ -23,7 +23,7 @@ export function CaseLayout() {
       if (found) {
         setCurrentCase(found);
       } else {
-        caseDataProvider.getPrimaryCase().then((pc) => setCurrentCase(pc));
+        return caseDataProvider.getPrimaryCase().then((pc) => setCurrentCase(pc));
       }
     }).finally(() => setLoading(false));
   }, [caseId]);

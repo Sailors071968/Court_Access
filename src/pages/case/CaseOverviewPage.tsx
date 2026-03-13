@@ -36,7 +36,7 @@ export function CaseOverviewPage() {
         caseDataProvider.getDocuments(selected.id).then(setDocuments);
         caseDataProvider.getActivity(selected.id).then(setActivity);
       } else {
-        caseDataProvider.getPrimaryCase().then((pc) => {
+        return caseDataProvider.getPrimaryCase().then((pc) => {
           setCurrentCase(pc);
           if (pc) {
             caseDataProvider.getDocuments(pc.id).then(setDocuments);

@@ -69,7 +69,7 @@ export function getDiscountCodeByValue(codeValue: string): DiscountCode | undefi
 
 export function updateDiscountCode(
   codeId: string,
-  updates: Partial<Pick<DiscountCode, 'codeName' | 'active' | 'expiresAt' | 'usageLimit' | 'discountValue' | 'discountType'>>
+  updates: Partial<Pick<DiscountCode, 'codeName' | 'codeValue' | 'active' | 'expiresAt' | 'usageLimit' | 'discountValue' | 'discountType'>>
 ): DiscountCode | undefined {
   const code = discountCodes.find((c) => c.codeId === codeId);
   if (!code) return undefined;

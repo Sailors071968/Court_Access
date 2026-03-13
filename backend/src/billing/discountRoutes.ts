@@ -103,16 +103,19 @@ export async function registerDiscountRoutes(app: FastifyInstance): Promise<void
     }
 
     const { codeId } = request.params as { codeId: string };
-    const body = request.body as Partial<{
-      codeName: string;
-      active: boolean;
-      expiresAt: string | null;
-      usageLimit: number | null;
-      discountValue: number;
-      discountType: 'percent' | 'fixed';
-    }>;
+    const body = request.body as Record<string, unknown>;
 
-    const updated = updateDiscountCode(codeId, body);
+    // Only pick allowed fields to prevent overwriting protected fields (usageCount, codeId, createdAt)
+    const sanitized: Partial<Pick<import('../models/discountCode.js').DiscountCode, 'codeName' | 'codeValue' | 'active' | 'expiresAt' | 'usageLimit' | 'discountValue' | 'discountType'>> = {};
+    if (body.codeName !== undefined) sanitized.codeName = body.codeName as string;
+    if (body.codeValue !== undefined) sanitized.codeValue = (body.codeValue as string).toUpperCase();
+    if (body.active !== undefined) sanitized.active = body.active as boolean;
+    if (body.expiresAt !== undefined) sanitized.expiresAt = body.expiresAt as string | null;
+    if (body.usageLimit !== undefined) sanitized.usageLimit = body.usageLimit as number | null;
+    if (body.discountValue !== undefined) sanitized.discountValue = body.discountValue as number;
+    if (body.discountType !== undefined) sanitized.discountType = body.discountType as 'percent' | 'fixed';
+
+    const updated = updateDiscountCode(codeId, sanitized);
     if (!updated) {
       return reply.code(404).send({ error: 'Discount code not found' });
     }

@@ -65,9 +65,9 @@ async function getTimeline(
       ? ((timeline.metadata as Record<string, unknown>).conflictDetails as Array<{
           eventIdA: string;
           eventIdB: string;
-          conflictType: string;
+          type: string;
           description: string;
-        }>) ?? []
+        }>)?.map((c) => ({ ...c, conflictType: c.type })) ?? []
       : [],
   });
 
@@ -127,9 +127,12 @@ async function getTimelineEvents(
   }
 
   const query = request.query;
-  const minConfidence = query.minConfidence ? parseFloat(query.minConfidence) : undefined;
-  const limit = query.limit ? parseInt(query.limit, 10) : 100;
-  const offset = query.offset ? parseInt(query.offset, 10) : 0;
+  const minConfidenceRaw = query.minConfidence ? parseFloat(query.minConfidence) : undefined;
+  const minConfidence = minConfidenceRaw !== undefined && !isNaN(minConfidenceRaw) ? minConfidenceRaw : undefined;
+  const limitRaw = query.limit ? parseInt(query.limit, 10) : 100;
+  const limit = isNaN(limitRaw) || limitRaw < 0 ? 100 : limitRaw;
+  const offsetRaw = query.offset ? parseInt(query.offset, 10) : 0;
+  const offset = isNaN(offsetRaw) || offsetRaw < 0 ? 0 : offsetRaw;
 
   const where: Record<string, unknown> = { caseId, tenantId };
   if (query.sourceType) where.sourceType = query.sourceType;

@@ -222,7 +222,7 @@ export async function processTimelineBuild(job: TimelineBuilderJob): Promise<{
       status: 'complete',
       eventCount: events.length,
       conflictCount: conflicts.length,
-      clockOffsets: clockOffsets.length > 0 ? clockOffsets : undefined,
+      clockOffsets: clockOffsets.length > 0 ? clockOffsets : null,
       builtAt: new Date(),
       metadata: {
         buildDuration: 'computed',

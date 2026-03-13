@@ -81,7 +81,7 @@ export const useAuthStore = create<AuthState>()(persist((set, get) => ({
         localStorage.setItem('court-access-refresh-token', data.refreshToken);
       }
       set({
-        user: { id: data.user.userId, name, email: data.user.email, role: data.user.role },
+        user: { id: data.user.userId, name: data.user.name || name, email: data.user.email, role: data.user.role },
         isAuthenticated: true,
         isLoading: false,
       });

@@ -19,9 +19,24 @@ export function StaffDashboard() {
   const { user } = useAuthStore();
   const { getPrimaryCase, getDocuments, getActivity, getDocumentTypeLabels } = caseDataProvider;
   const primaryCase = getPrimaryCase();
-  const documents = getDocuments(primaryCase.id);
-  const activity = getActivity(primaryCase.id);
+  const documents = primaryCase ? getDocuments(primaryCase.id) : [];
+  const activity = primaryCase ? getActivity(primaryCase.id) : [];
   const documentTypeLabels = getDocumentTypeLabels();
+
+  if (!primaryCase) {
+    return (
+      <div className="max-w-7xl mx-auto space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Staff Dashboard</h1>
+          <p className="text-sm text-gray-500 mt-1">Welcome back, {user?.name}</p>
+        </div>
+        <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
+          <p className="text-gray-500">No cases yet. Create your first case to get started.</p>
+          <button onClick={() => navigate('/cases')} className="mt-4 px-4 py-2 bg-slate-800 text-white rounded-lg text-sm font-medium hover:bg-slate-700 transition-colors">Go to Cases</button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">

@@ -165,7 +165,7 @@ export function RegisterPage() {
                   {discountResult.valid ? <CheckCircle2 size={14} /> : <XCircle size={14} />}
                   <span>
                     {discountResult.valid
-                      ? `${discountResult.codeName} — ${discountResult.discountValue}% discount applied`
+                      ? `${discountResult.codeName} — ${discountResult.discountType === 'fixed' ? `$${discountResult.discountValue}` : `${discountResult.discountValue}%`} discount applied`
                       : discountResult.errorReason}
                   </span>
                 </div>

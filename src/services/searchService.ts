@@ -23,15 +23,21 @@ export async function search(request: SearchRequest): Promise<SearchResponse> {
   const q = request.query.toLowerCase();
 
   const cases = caseDataProvider.getCases();
-  const primaryCase = cases[0] ?? caseDataProvider.getPrimaryCase();
+  const primaryCase = cases[0] ?? null;
   const secondaryCase = cases[1] ?? primaryCase;
 
   const allResults: SearchResult[] = [
-    { id: '1', type: 'case', title: primaryCase.title, description: `Case #${primaryCase.caseNumber} — ${primaryCase.jurisdiction}, ${primaryCase.court}`, url: `/cases/${primaryCase.id}/overview` },
-    { id: '2', type: 'case', title: secondaryCase.title, description: `Case #${secondaryCase.caseNumber} — ${secondaryCase.jurisdiction}, ${secondaryCase.court}`, url: `/cases/${secondaryCase.id}/overview` },
-    { id: '3', type: 'document', title: 'Motion to Suppress Evidence', description: 'Filed Jan 20, 2024 — Defense Motion — 8 pages', url: `/cases/${primaryCase.id}/documents` },
-    { id: '4', type: 'document', title: 'Criminal Complaint', description: 'Filed Dec 15, 2023 — Charging Document — 4 pages', url: `/cases/${primaryCase.id}/documents` },
-    { id: '5', type: 'document', title: 'Preliminary Hearing Transcript', description: 'Filed Jan 18, 2024 — Transcript — 45 pages', url: `/cases/${primaryCase.id}/documents` },
+    ...(primaryCase ? [
+      { id: '1', type: 'case' as const, title: primaryCase.title, description: `Case #${primaryCase.caseNumber} — ${primaryCase.jurisdiction}, ${primaryCase.court}`, url: `/cases/${primaryCase.id}/overview` },
+    ] : []),
+    ...(secondaryCase ? [
+      { id: '2', type: 'case' as const, title: secondaryCase.title, description: `Case #${secondaryCase.caseNumber} — ${secondaryCase.jurisdiction}, ${secondaryCase.court}`, url: `/cases/${secondaryCase.id}/overview` },
+    ] : []),
+    ...(primaryCase ? [
+      { id: '3', type: 'document' as const, title: 'Motion to Suppress Evidence', description: 'Filed Jan 20, 2024 — Defense Motion — 8 pages', url: `/cases/${primaryCase.id}/documents` },
+      { id: '4', type: 'document' as const, title: 'Criminal Complaint', description: 'Filed Dec 15, 2023 — Charging Document — 4 pages', url: `/cases/${primaryCase.id}/documents` },
+      { id: '5', type: 'document' as const, title: 'Preliminary Hearing Transcript', description: 'Filed Jan 18, 2024 — Transcript — 45 pages', url: `/cases/${primaryCase.id}/documents` },
+    ] : []),
     { id: '6', type: 'statute', title: 'PC 459 — Burglary', description: 'California Penal Code Section 459 — Every person who enters any building with intent to commit grand or petit larceny...', url: '#' },
     { id: '7', type: 'statute', title: 'PC 1538.5 — Motion to Suppress', description: 'California Penal Code Section 1538.5 — Motion to return property or suppress as evidence...', url: '#' },
     { id: '8', type: 'statute', title: 'H&S 11350(a) — Possession of Controlled Substance', description: 'California Health & Safety Code 11350(a) — Possession of specified controlled substances...', url: '#' },

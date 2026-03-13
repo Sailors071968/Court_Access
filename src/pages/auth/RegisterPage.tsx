@@ -9,7 +9,7 @@ import { Scale, Tag, CheckCircle2, XCircle } from 'lucide-react';
 import type { UserRole } from '../../types';
 
 // ---------------------------------------------------------------------------
-// Phase 223: Discount code validation (localStorage-based, mirrors backend)
+// Discount code validation via backend API
 // ---------------------------------------------------------------------------
 
 interface DiscountValidation {
@@ -20,24 +20,17 @@ interface DiscountValidation {
   errorReason?: string;
 }
 
-function validateDiscountCodeClient(codeValue: string): DiscountValidation {
+async function validateDiscountCodeAPI(codeValue: string): Promise<DiscountValidation> {
   if (!codeValue.trim()) return { valid: false, errorReason: 'No code entered' };
-  const codes = JSON.parse(localStorage.getItem('courtaccess_discount_codes') || '[]');
-  const code = codes.find(
-    (c: { codeValue: string }) => c.codeValue.toUpperCase() === codeValue.trim().toUpperCase()
-  );
-  if (!code) return { valid: false, errorReason: 'Invalid discount code' };
-  if (!code.active) return { valid: false, errorReason: 'This code is no longer active' };
-  if (code.usageLimit !== null && code.usageCount >= code.usageLimit)
-    return { valid: false, errorReason: 'This code has reached its usage limit' };
-  if (code.expiresAt && new Date(code.expiresAt) < new Date())
-    return { valid: false, errorReason: 'This code has expired' };
-  return {
-    valid: true,
-    discountType: code.discountType,
-    discountValue: code.discountValue,
-    codeName: code.codeName,
-  };
+  try {
+    const res = await fetch(`/api/discount-codes/validate?code=${encodeURIComponent(codeValue.trim())}`);
+    if (!res.ok) {
+      return { valid: false, errorReason: 'Unable to validate discount code' };
+    }
+    return await res.json();
+  } catch {
+    return { valid: false, errorReason: 'Network error — unable to validate discount code' };
+  }
 }
 
 export function RegisterPage() {
@@ -48,6 +41,7 @@ export function RegisterPage() {
   const [role, setRole] = useState<UserRole>('attorney');
   const [discountCode, setDiscountCode] = useState('');
   const [discountResult, setDiscountResult] = useState<DiscountValidation | null>(null);
+  const [validatingDiscount, setValidatingDiscount] = useState(false);
   const [error, setError] = useState('');
   const { register, isLoading } = useAuthStore();
   const navigate = useNavigate();
@@ -66,32 +60,21 @@ export function RegisterPage() {
     try {
       await register(name, email, password, role);
 
-      // Phase 223: Store applied discount code on user record
+      // Apply discount code via backend (deducts usage)
       if (discountCode.trim() && discountResult?.valid) {
-        const codes = JSON.parse(localStorage.getItem('courtaccess_discount_codes') || '[]');
-        const idx = codes.findIndex(
-          (c: { codeValue: string }) => c.codeValue.toUpperCase() === discountCode.trim().toUpperCase()
-        );
-        if (idx !== -1) {
-          codes[idx].usageCount = (codes[idx].usageCount || 0) + 1;
-          localStorage.setItem('courtaccess_discount_codes', JSON.stringify(codes));
+        try {
+          const token = localStorage.getItem('court-access-token');
+          await fetch('/api/discount-codes/apply', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              ...(token ? { Authorization: `Bearer ${token}` } : {}),
+            },
+            body: JSON.stringify({ code: discountCode.trim() }),
+          });
+        } catch {
+          // Non-critical — discount was validated, apply failure is logged server-side
         }
-        // Record usage
-        const usages = JSON.parse(localStorage.getItem('courtaccess_discount_usages') || '[]');
-        usages.push({
-          usageId: crypto.randomUUID(),
-          discountCodeId: codes[idx]?.codeId || '',
-          userId: email,
-          usedAt: new Date().toISOString(),
-        });
-        localStorage.setItem('courtaccess_discount_usages', JSON.stringify(usages));
-        // Store on user
-        localStorage.setItem('courtaccess_user_discount', JSON.stringify({
-          email,
-          appliedDiscountCode: discountCode.trim().toUpperCase(),
-          discountPercentage: discountResult.discountValue,
-          discountType: discountResult.discountType,
-        }));
       }
 
       navigate('/dashboard');
@@ -165,11 +148,16 @@ export function RegisterPage() {
                 </div>
                 <button
                   type="button"
-                  onClick={() => setDiscountResult(validateDiscountCodeClient(discountCode))}
-                  disabled={!discountCode.trim()}
+                  onClick={async () => {
+                    setValidatingDiscount(true);
+                    const result = await validateDiscountCodeAPI(discountCode);
+                    setDiscountResult(result);
+                    setValidatingDiscount(false);
+                  }}
+                  disabled={!discountCode.trim() || validatingDiscount}
                   className="px-4 py-2.5 rounded-lg border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-40"
                 >
-                  Apply
+                  {validatingDiscount ? 'Checking...' : 'Apply'}
                 </button>
               </div>
               {discountResult && (
@@ -177,7 +165,7 @@ export function RegisterPage() {
                   {discountResult.valid ? <CheckCircle2 size={14} /> : <XCircle size={14} />}
                   <span>
                     {discountResult.valid
-                      ? `${discountResult.codeName} — ${discountResult.discountValue}% discount applied`
+                      ? `${discountResult.codeName} — ${discountResult.discountType === 'fixed' ? `$${discountResult.discountValue}` : `${discountResult.discountValue}%`} discount applied`
                       : discountResult.errorReason}
                   </span>
                 </div>

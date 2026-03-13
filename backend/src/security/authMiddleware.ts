@@ -164,6 +164,7 @@ const ROUTE_PERMISSIONS: Record<string, UserRole[]> = {
   '/api/forensic': ['admin', 'attorney', 'investigator'],
   '/api/forensic/expert-package': ['admin', 'attorney'],
   '/api/forensic/jury-view': ['admin', 'attorney'],
+  '/api/admin/discount-codes': ['admin', 'staff'],
   '/api/admin': ['admin'],
   '/api/security': ['admin'],
 };
@@ -194,6 +195,7 @@ const PUBLIC_ROUTES = [
   '/api/auth/register',
   '/api/auth/refresh',
   '/api/auth/logout',
+  '/api/discount-codes/validate',
 ];
 
 function isPublicRoute(path: string): boolean {

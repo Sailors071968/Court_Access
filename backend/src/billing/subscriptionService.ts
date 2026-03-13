@@ -88,7 +88,7 @@ export const SUBSCRIPTION_PLANS: readonly SubscriptionPlan[] = Object.freeze([
   },
   {
     id: 'LITIGATION_INTELLIGENCE_PRO',
-    name: 'Litigation Intelligence Pro',
+    name: 'Litigation Pro',
     priceCents: 39900,
     monthlyPageLimit: 12000,
     monthlyAiCredits: 500,

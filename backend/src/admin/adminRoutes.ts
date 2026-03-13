@@ -1,6 +1,9 @@
 // ============================================================================
 // Admin Routes — Stats, User/Case Listing, Cascading Delete Endpoints
 // Roles: admin, staff only (enforced by ROUTE_PERMISSIONS in authMiddleware)
+// Uses raw SQL to avoid Prisma model generation dependency.
+// DB tables: "User" (id, email, name, role, ...), "Case" (id, userId, caseName, ...),
+//            "EvidenceRecord" (id, caseId, storageKey, filename, ...)
 // ============================================================================
 
 import type { FastifyInstance, FastifyReply } from 'fastify';
@@ -88,18 +91,16 @@ export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
     if (!user) return reply.code(401).send({ error: 'Authentication required' });
 
     try {
-      const [userCount, caseCount, evidenceCount] = await Promise.all([
-        prisma.$queryRawUnsafe<Array<{ count: bigint }>>('SELECT COUNT(*) as count FROM users'),
-        prisma.criminalCase.count({ where: { deletedAt: null } }),
-        prisma.evidence.count(),
+      const [userRows, caseRows, evidenceRows] = await Promise.all([
+        prisma.$queryRawUnsafe<Array<{ count: bigint }>>('SELECT COUNT(*) as count FROM "User"'),
+        prisma.$queryRawUnsafe<Array<{ count: bigint }>>('SELECT COUNT(*) as count FROM "Case"'),
+        prisma.$queryRawUnsafe<Array<{ count: bigint }>>('SELECT COUNT(*) as count FROM "EvidenceRecord"'),
       ]);
 
-      const totalUsers = Number(userCount[0]?.count ?? 0);
-
       return {
-        totalUsers,
-        activeCases: caseCount,
-        documents: evidenceCount,
+        totalUsers: Number(userRows[0]?.count ?? 0),
+        activeCases: Number(caseRows[0]?.count ?? 0),
+        documents: Number(evidenceRows[0]?.count ?? 0),
       };
     } catch (err) {
       console.error('[AdminRoutes] Failed to fetch stats:', err);
@@ -116,13 +117,14 @@ export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
 
     try {
       const users = await prisma.$queryRawUnsafe<Array<{
-        userId: string;
+        id: string;
         name: string;
         email: string;
         role: string;
-      }>>('SELECT "userId", name, email, role FROM users ORDER BY "createdAt" DESC LIMIT 200');
+        status: string | null;
+      }>>('SELECT id, name, email, role, status FROM "User" ORDER BY "createdAt" DESC LIMIT 200');
 
-      return { users: users.map((u) => ({ ...u, status: 'active' })) };
+      return { users: users.map((u) => ({ userId: u.id, name: u.name, email: u.email, role: u.role, status: u.status || 'active' })) };
     } catch (err) {
       console.error('[AdminRoutes] Failed to list users:', err);
       return reply.code(500).send({ error: 'Failed to list users' });
@@ -137,21 +139,25 @@ export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
     if (!user) return reply.code(401).send({ error: 'Authentication required' });
 
     try {
-      const cases = await prisma.criminalCase.findMany({
-        where: { deletedAt: null },
-        orderBy: { createdAt: 'desc' },
-        take: 200,
-        select: {
-          caseId: true,
-          title: true,
-          status: true,
-          tenantId: true,
-          caseNumber: true,
-          createdAt: true,
-        },
-      });
+      const cases = await prisma.$queryRawUnsafe<Array<{
+        id: string;
+        userId: string;
+        caseName: string;
+        caseNumber: string;
+        status: string;
+        createdAt: Date;
+      }>>('SELECT id, "userId", "caseName", "caseNumber", status, "createdAt" FROM "Case" ORDER BY "createdAt" DESC LIMIT 200');
 
-      return { cases };
+      return {
+        cases: cases.map((c) => ({
+          caseId: c.id,
+          title: c.caseName,
+          status: c.status,
+          caseNumber: c.caseNumber,
+          ownerId: c.userId,
+          createdAt: c.createdAt,
+        })),
+      };
     } catch (err) {
       console.error('[AdminRoutes] Failed to list cases:', err);
       return reply.code(500).send({ error: 'Failed to list cases' });
@@ -177,7 +183,7 @@ export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
     // Prevent staff from deleting admin users (role hierarchy)
     if (adminUser.role !== 'admin') {
       const targetCheck = await prisma.$queryRawUnsafe<Array<{ role: string }>>(
-        'SELECT role FROM users WHERE "userId" = $1',
+        'SELECT role FROM "User" WHERE id = $1',
         userId,
       );
       if (targetCheck?.[0]?.role === 'admin') {
@@ -186,9 +192,9 @@ export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
     }
 
     try {
-      // 1. Look up the user to get tenantId
-      const targetUser = await prisma.$queryRawUnsafe<Array<{ userId: string; tenantId: string; email: string }>>(
-        'SELECT "userId", "tenantId", email FROM users WHERE "userId" = $1',
+      // 1. Look up the user
+      const targetUser = await prisma.$queryRawUnsafe<Array<{ id: string; email: string }>>(
+        'SELECT id, email FROM "User" WHERE id = $1',
         userId,
       );
 
@@ -196,42 +202,38 @@ export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
         return reply.code(404).send({ error: 'User not found' });
       }
 
-      const tenantId = targetUser[0].tenantId;
-
       // 2. Find all cases owned by this user
-      const userCases = await prisma.criminalCase.findMany({
-        where: { ownerId: userId, tenantId },
-        select: { caseId: true },
-      });
-      const caseIds = userCases.map((c) => c.caseId);
+      const userCases = await prisma.$queryRawUnsafe<Array<{ id: string }>>(
+        'SELECT id FROM "Case" WHERE "userId" = $1',
+        userId,
+      );
+      const caseIds = userCases.map((c) => c.id);
 
       // 3. Delete R2 objects first (outside transaction — best-effort)
-      //    Scope to per-case prefixes to avoid deleting other users' files in same tenant
       if (caseIds.length > 0) {
-        const allEvidence = await prisma.evidence.findMany({
-          where: { caseId: { in: caseIds }, tenantId },
-          select: { evidenceId: true, s3Key: true },
-        });
+        const placeholders = caseIds.map((_, i) => `$${i + 1}`).join(',');
+        const allEvidence = await prisma.$queryRawUnsafe<Array<{ id: string; storageKey: string | null }>>(
+          `SELECT id, "storageKey" FROM "EvidenceRecord" WHERE "caseId" IN (${placeholders})`,
+          ...caseIds,
+        );
         for (const ev of allEvidence) {
-          if (ev.s3Key) await deleteS3Object(ev.s3Key);
+          if (ev.storageKey) await deleteS3Object(ev.storageKey);
         }
         for (const cId of caseIds) {
-          await deleteS3Prefix(`evidence/${tenantId}/${cId}/`);
+          await deleteS3Prefix(`evidence/${cId}/`);
         }
       }
 
-      // 4. Cascading DB delete inside a transaction (atomic)
-      await prisma.$transaction(async (tx) => {
-        if (caseIds.length > 0) {
-          await tx.impeachmentCandidate.deleteMany({ where: { caseId: { in: caseIds }, tenantId } });
-          await tx.claimValidation.deleteMany({ where: { caseId: { in: caseIds }, tenantId } });
-          await tx.normalizedClaimEvent.deleteMany({ where: { caseId: { in: caseIds }, tenantId } });
-          await tx.narrativeClaim.deleteMany({ where: { caseId: { in: caseIds }, tenantId } });
-          await tx.evidence.deleteMany({ where: { caseId: { in: caseIds }, tenantId } });
-          await tx.criminalCase.deleteMany({ where: { caseId: { in: caseIds }, tenantId } });
-        }
-        await tx.$executeRawUnsafe('DELETE FROM users WHERE "userId" = $1', userId);
-      });
+      // 4. Cascading DB delete (evidence -> cases -> user)
+      if (caseIds.length > 0) {
+        const placeholders = caseIds.map((_, i) => `$${i + 1}`).join(',');
+        await prisma.$executeRawUnsafe(
+          `DELETE FROM "EvidenceRecord" WHERE "caseId" IN (${placeholders})`,
+          ...caseIds,
+        );
+        await prisma.$executeRawUnsafe('DELETE FROM "Case" WHERE "userId" = $1', userId);
+      }
+      await prisma.$executeRawUnsafe('DELETE FROM "User" WHERE id = $1', userId);
 
       console.log(`[AdminRoutes] Admin ${adminUser.email} deleted user ${targetUser[0].email} (${userId}), ${caseIds.length} cases cascaded`);
 
@@ -258,38 +260,30 @@ export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
     const { caseId } = request.params as { caseId: string };
 
     try {
-      const caseRecord = await prisma.criminalCase.findUnique({
-        where: { caseId },
-        select: { caseId: true, tenantId: true, title: true },
-      });
+      const caseRecord = await prisma.$queryRawUnsafe<Array<{ id: string; caseName: string; userId: string }>>(
+        'SELECT id, "caseName", "userId" FROM "Case" WHERE id = $1',
+        caseId,
+      );
 
-      if (!caseRecord) {
+      if (!caseRecord || caseRecord.length === 0) {
         return reply.code(404).send({ error: 'Case not found' });
       }
 
-      const { tenantId } = caseRecord;
-
       // 1. Delete R2 objects first (outside transaction — best-effort)
-      const allEvidence = await prisma.evidence.findMany({
-        where: { caseId, tenantId },
-        select: { evidenceId: true, s3Key: true },
-      });
+      const allEvidence = await prisma.$queryRawUnsafe<Array<{ id: string; storageKey: string | null }>>(
+        'SELECT id, "storageKey" FROM "EvidenceRecord" WHERE "caseId" = $1',
+        caseId,
+      );
       for (const ev of allEvidence) {
-        if (ev.s3Key) await deleteS3Object(ev.s3Key);
+        if (ev.storageKey) await deleteS3Object(ev.storageKey);
       }
-      await deleteS3Prefix(`evidence/${tenantId}/${caseId}/`);
+      await deleteS3Prefix(`evidence/${caseId}/`);
 
-      // 2. Cascading DB delete inside a transaction (atomic)
-      await prisma.$transaction(async (tx) => {
-        await tx.impeachmentCandidate.deleteMany({ where: { caseId, tenantId } });
-        await tx.claimValidation.deleteMany({ where: { caseId, tenantId } });
-        await tx.normalizedClaimEvent.deleteMany({ where: { caseId, tenantId } });
-        await tx.narrativeClaim.deleteMany({ where: { caseId, tenantId } });
-        await tx.evidence.deleteMany({ where: { caseId, tenantId } });
-        await tx.criminalCase.delete({ where: { caseId } });
-      });
+      // 2. Cascading DB delete (evidence -> case)
+      await prisma.$executeRawUnsafe('DELETE FROM "EvidenceRecord" WHERE "caseId" = $1', caseId);
+      await prisma.$executeRawUnsafe('DELETE FROM "Case" WHERE id = $1', caseId);
 
-      console.log(`[AdminRoutes] Admin ${user.email} deleted case "${caseRecord.title}" (${caseId})`);
+      console.log(`[AdminRoutes] Admin ${user.email} deleted case "${caseRecord[0].caseName}" (${caseId})`);
 
       return {
         message: 'Case deleted',
@@ -312,24 +306,24 @@ export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
     const { evidenceId } = request.params as { evidenceId: string };
 
     try {
-      const evidence = await prisma.evidence.findUnique({
-        where: { evidenceId },
-        select: { evidenceId: true, s3Key: true, fileName: true },
-      });
+      const evidence = await prisma.$queryRawUnsafe<Array<{ id: string; storageKey: string | null; filename: string }>>(
+        'SELECT id, "storageKey", filename FROM "EvidenceRecord" WHERE id = $1',
+        evidenceId,
+      );
 
-      if (!evidence) {
+      if (!evidence || evidence.length === 0) {
         return reply.code(404).send({ error: 'Evidence not found' });
       }
 
       // Delete S3 object
-      if (evidence.s3Key) {
-        await deleteS3Object(evidence.s3Key);
+      if (evidence[0].storageKey) {
+        await deleteS3Object(evidence[0].storageKey);
       }
 
       // Delete DB record
-      await prisma.evidence.delete({ where: { evidenceId } });
+      await prisma.$executeRawUnsafe('DELETE FROM "EvidenceRecord" WHERE id = $1', evidenceId);
 
-      console.log(`[AdminRoutes] Admin ${user.email} deleted evidence "${evidence.fileName}" (${evidenceId})`);
+      console.log(`[AdminRoutes] Admin ${user.email} deleted evidence "${evidence[0].filename}" (${evidenceId})`);
 
       return { message: 'Evidence deleted', evidenceId };
     } catch (err) {

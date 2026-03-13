@@ -27,6 +27,10 @@ export function MotionsPage() {
     });
   }, [caseId]);
 
+  if (!currentCase) {
+    return <div className="p-8 text-center text-gray-500">No cases found.</div>;
+  }
+
   return (
     <div className="space-y-6">
       {/* Disclaimer */}

@@ -23,6 +23,11 @@ export function CaseOverviewPage() {
   const permissions = ROLE_PERMISSIONS[user.role];
   const cases = caseDataProvider.getCases();
   const currentCase = cases.find((c) => c.id === caseId) || caseDataProvider.getPrimaryCase();
+
+  if (!currentCase) {
+    return <div className="p-8 text-center text-gray-500">No cases found. Create a case to get started.</div>;
+  }
+
   const documents = caseDataProvider.getDocuments(currentCase.id);
   const activity = caseDataProvider.getActivity(currentCase.id);
   const documentTypeLabels = caseDataProvider.getDocumentTypeLabels();

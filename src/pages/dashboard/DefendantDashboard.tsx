@@ -28,7 +28,7 @@ export function DefendantDashboard() {
   const { user } = useAuthStore();
   const { getPrimaryCase, getDocuments } = caseDataProvider;
   const primaryCase = getPrimaryCase();
-  const documents = getDocuments(primaryCase.id);
+  const documents = primaryCase ? getDocuments(primaryCase.id) : [];
   const currentPhase: CasePhase = 'pretrial';
   const phaseConfig = CASE_PHASE_CONFIG[currentPhase];
 
@@ -63,6 +63,17 @@ export function DefendantDashboard() {
     });
     localStorage.setItem(auditKey, JSON.stringify(log));
   };
+
+  if (!primaryCase) {
+    return (
+      <div className="max-w-5xl mx-auto space-y-6">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Welcome, {user?.name}</h1>
+          <p className="text-sm text-gray-500 mt-1">No cases found. Your attorney will add your case shortly.</p>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="max-w-5xl mx-auto space-y-6">

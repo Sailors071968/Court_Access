@@ -15,6 +15,7 @@ export function CaseLayout() {
   const currentCase = cases.find((c) => c.id === caseId) || caseDataProvider.getPrimaryCase();
 
   if (!user) return null;
+  if (!currentCase) return <div className="max-w-7xl mx-auto p-8 text-center text-gray-500">No cases found.</div>;
   const permissions = ROLE_PERMISSIONS[user.role];
 
   return (

@@ -18,10 +18,10 @@ export const caseDataProvider = {
     return stableSortById(MOCK_CASES);
   },
 
-  getPrimaryCase(): CaseEntity {
+  getPrimaryCase(): CaseEntity | null {
     const cases = caseDataProvider.getCases();
     if (cases.length === 0) {
-      throw new Error('No cases available');
+      return null;
     }
     return cases[0];
   },

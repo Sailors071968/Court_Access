@@ -37,9 +37,9 @@ async function getTimeline(
     return reply.status(401).send({ error: 'Authentication required' });
   }
 
-  // Fetch case timeline record
-  const timeline = await prisma.caseTimeline.findUnique({
-    where: { caseId },
+  // Fetch case timeline record (with tenant isolation)
+  const timeline = await prisma.caseTimeline.findFirst({
+    where: { caseId, tenantId },
   });
 
   // Fetch all events sorted by timestamp
@@ -183,8 +183,8 @@ async function getTimelineConflicts(
     return reply.status(401).send({ error: 'Authentication required' });
   }
 
-  const timeline = await prisma.caseTimeline.findUnique({
-    where: { caseId },
+  const timeline = await prisma.caseTimeline.findFirst({
+    where: { caseId, tenantId },
   });
 
   if (!timeline) {

@@ -129,8 +129,10 @@ export function extractTemporalEvents(
   const sentences = extractSentences(text);
 
   for (const sentence of sentences) {
-    // Try each time pattern
+    // Try each time pattern — stop after first successful match per sentence
+    let matched = false;
     for (const pattern of TIME_PATTERNS) {
+      if (matched) break;
       pattern.lastIndex = 0;
       let match: RegExpExecArray | null;
 
@@ -166,6 +168,7 @@ export function extractTemporalEvents(
             description: sentence.substring(0, 200),
             rawText: sentence,
           });
+          matched = true;
           break; // One event per sentence
         }
       }

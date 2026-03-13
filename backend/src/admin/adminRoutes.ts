@@ -30,24 +30,33 @@ function getS3Client(): S3Client {
   });
 }
 
-/** Delete all S3 objects under a given prefix (e.g. evidence/{tenantId}/{caseId}/) */
+/** Delete all S3 objects under a given prefix with pagination (handles >1000 objects) */
 async function deleteS3Prefix(prefix: string): Promise<number> {
   if (!R2_ACCOUNT_ID || !R2_ACCESS_KEY_ID) return 0;
   const s3 = getS3Client();
   let deleted = 0;
+  let continuationToken: string | undefined;
 
   try {
-    const listCmd = new ListObjectsV2Command({ Bucket: R2_BUCKET, Prefix: prefix });
-    const listed = await s3.send(listCmd);
-    const objects = listed.Contents;
-    if (!objects || objects.length === 0) return 0;
+    do {
+      const listCmd = new ListObjectsV2Command({
+        Bucket: R2_BUCKET,
+        Prefix: prefix,
+        ContinuationToken: continuationToken,
+      });
+      const listed = await s3.send(listCmd);
+      const objects = listed.Contents;
+      if (!objects || objects.length === 0) break;
 
-    const deleteCmd = new DeleteObjectsCommand({
-      Bucket: R2_BUCKET,
-      Delete: { Objects: objects.map((o) => ({ Key: o.Key })) },
-    });
-    await s3.send(deleteCmd);
-    deleted = objects.length;
+      const deleteCmd = new DeleteObjectsCommand({
+        Bucket: R2_BUCKET,
+        Delete: { Objects: objects.map((o) => ({ Key: o.Key })) },
+      });
+      await s3.send(deleteCmd);
+      deleted += objects.length;
+
+      continuationToken = listed.IsTruncated ? listed.NextContinuationToken : undefined;
+    } while (continuationToken);
   } catch (err) {
     console.error(`[AdminRoutes] Failed to delete S3 prefix ${prefix}:`, err);
   }
@@ -185,36 +194,30 @@ export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
       });
       const caseIds = userCases.map((c) => c.caseId);
 
-      // 3. Delete all evidence (R2 + DB) for those cases
+      // 3. Delete R2 objects first (outside transaction — best-effort)
       if (caseIds.length > 0) {
         const allEvidence = await prisma.evidence.findMany({
           where: { caseId: { in: caseIds }, tenantId },
           select: { evidenceId: true, s3Key: true },
         });
-
-        // Delete S3 objects
         for (const ev of allEvidence) {
           if (ev.s3Key) await deleteS3Object(ev.s3Key);
         }
-
-        // Delete narrative-related records for these cases
-        await prisma.impeachmentCandidate.deleteMany({ where: { caseId: { in: caseIds }, tenantId } });
-        await prisma.claimValidation.deleteMany({ where: { caseId: { in: caseIds }, tenantId } });
-        await prisma.normalizedClaimEvent.deleteMany({ where: { caseId: { in: caseIds }, tenantId } });
-        await prisma.narrativeClaim.deleteMany({ where: { caseId: { in: caseIds }, tenantId } });
-
-        // Delete evidence records
-        await prisma.evidence.deleteMany({ where: { caseId: { in: caseIds }, tenantId } });
-
-        // Delete the cases themselves (hard delete)
-        await prisma.criminalCase.deleteMany({ where: { caseId: { in: caseIds }, tenantId } });
       }
-
-      // Also delete R2 prefix for the entire tenant (clean up orphaned files)
       await deleteS3Prefix(`evidence/${tenantId}/`);
 
-      // 4. Delete the user record
-      await prisma.$executeRawUnsafe('DELETE FROM users WHERE "userId" = $1', userId);
+      // 4. Cascading DB delete inside a transaction (atomic)
+      await prisma.$transaction(async (tx) => {
+        if (caseIds.length > 0) {
+          await tx.impeachmentCandidate.deleteMany({ where: { caseId: { in: caseIds }, tenantId } });
+          await tx.claimValidation.deleteMany({ where: { caseId: { in: caseIds }, tenantId } });
+          await tx.normalizedClaimEvent.deleteMany({ where: { caseId: { in: caseIds }, tenantId } });
+          await tx.narrativeClaim.deleteMany({ where: { caseId: { in: caseIds }, tenantId } });
+          await tx.evidence.deleteMany({ where: { caseId: { in: caseIds }, tenantId } });
+          await tx.criminalCase.deleteMany({ where: { caseId: { in: caseIds }, tenantId } });
+        }
+        await tx.$executeRawUnsafe('DELETE FROM users WHERE "userId" = $1', userId);
+      });
 
       console.log(`[AdminRoutes] Admin ${adminUser.email} deleted user ${targetUser[0].email} (${userId}), ${caseIds.length} cases cascaded`);
 
@@ -252,30 +255,25 @@ export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
 
       const { tenantId } = caseRecord;
 
-      // 1. Delete all evidence (R2 + DB)
+      // 1. Delete R2 objects first (outside transaction — best-effort)
       const allEvidence = await prisma.evidence.findMany({
         where: { caseId, tenantId },
         select: { evidenceId: true, s3Key: true },
       });
-
       for (const ev of allEvidence) {
         if (ev.s3Key) await deleteS3Object(ev.s3Key);
       }
-
-      // 2. Delete narrative-related records
-      await prisma.impeachmentCandidate.deleteMany({ where: { caseId, tenantId } });
-      await prisma.claimValidation.deleteMany({ where: { caseId, tenantId } });
-      await prisma.normalizedClaimEvent.deleteMany({ where: { caseId, tenantId } });
-      await prisma.narrativeClaim.deleteMany({ where: { caseId, tenantId } });
-
-      // 3. Delete evidence records
-      await prisma.evidence.deleteMany({ where: { caseId, tenantId } });
-
-      // 4. Clean up R2 prefix for this case
       await deleteS3Prefix(`evidence/${tenantId}/${caseId}/`);
 
-      // 5. Delete the case (hard delete)
-      await prisma.criminalCase.delete({ where: { caseId } });
+      // 2. Cascading DB delete inside a transaction (atomic)
+      await prisma.$transaction(async (tx) => {
+        await tx.impeachmentCandidate.deleteMany({ where: { caseId, tenantId } });
+        await tx.claimValidation.deleteMany({ where: { caseId, tenantId } });
+        await tx.normalizedClaimEvent.deleteMany({ where: { caseId, tenantId } });
+        await tx.narrativeClaim.deleteMany({ where: { caseId, tenantId } });
+        await tx.evidence.deleteMany({ where: { caseId, tenantId } });
+        await tx.criminalCase.delete({ where: { caseId } });
+      });
 
       console.log(`[AdminRoutes] Admin ${user.email} deleted case "${caseRecord.title}" (${caseId})`);
 

@@ -13,7 +13,6 @@ import {
   Clock,
   Eye,
   BarChart3,
-  Layers,
   Upload,
   ChevronRight,
   Star,
@@ -23,9 +22,7 @@ import {
   Lock,
   Users,
   Gavel,
-  Map,
   Play,
-  FileDown,
 } from 'lucide-react';
 
 // ---------------------------------------------------------------------------
@@ -48,27 +45,27 @@ function HeroSection() {
           {/* Badge */}
           <div className="inline-flex items-center gap-2 bg-amber-500/10 border border-amber-500/20 rounded-full px-4 py-1.5 mb-8">
             <Scale className="text-amber-400" size={16} />
-            <span className="text-amber-300 text-sm font-medium">Criminal Evidence Intelligence Platform</span>
+            <span className="text-amber-300 text-sm font-medium">Built for Criminal Defense Teams</span>
           </div>
 
           {/* Headline */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-            The First{' '}
-            <span className="text-amber-400">Criminal Evidence Intelligence Platform</span>
+            Discovery Is Overwhelming.{' '}
+            <span className="text-amber-400">CourtAccess Makes It Understandable.</span>
           </h1>
 
           {/* Subheadline */}
           <p className="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto mb-10 leading-relaxed">
-            CourtAccess analyzes police reports, body camera footage, and investigative evidence
-            — providing structured analytical tools for legal professionals across the criminal justice system.
+            You get thousands of pages of reports, hours of bodycam footage, and conflicting witness statements.
+            CourtAccess reads it all, reconstructs what happened, finds the contradictions, and shows you exactly where the prosecution's narrative falls apart.
           </p>
 
           {/* Core Benefits */}
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8 mb-10">
             {[
-              'Detect potential policy inconsistencies automatically',
-              'Reconstruct incidents with interactive 3D trial exhibits',
-              'Reveal investigative insights hidden inside evidence',
+              'Automatically reconstruct incident timelines from all evidence sources',
+              'Detect contradictions between reports, video, and witness statements',
+              'Identify impeachment opportunities the prosecution hopes you miss',
             ].map((benefit) => (
               <div key={benefit} className="flex items-center gap-2 text-slate-200">
                 <CheckCircle2 className="text-emerald-400 shrink-0" size={18} />
@@ -83,7 +80,7 @@ function HeroSection() {
               to="/register"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-3.5 rounded-xl text-lg transition-colors"
             >
-              Start Analyzing Your First Case
+              Start Your First Case Analysis
               <ArrowRight size={20} />
             </Link>
             <a
@@ -109,11 +106,11 @@ function HeroSection() {
 
 function PainPointSection() {
   const painPoints = [
-    { icon: FileText, text: 'Thousands of pages of reports must be reviewed manually' },
-    { icon: Video, text: 'Bodycam footage takes hours to analyze' },
-    { icon: Search, text: 'Agency policies are difficult to locate' },
-    { icon: Eye, text: 'Potential misconduct may remain undiscovered' },
-    { icon: Layers, text: 'Trial exhibits must be built manually' },
+    { icon: FileText, text: 'You get 3,000 pages of discovery two weeks before trial. Where do you even start?' },
+    { icon: Video, text: 'The bodycam footage tells a different story than the report — but finding where takes hours.' },
+    { icon: Search, text: 'The officer says one thing. The witness says another. The timeline doesn\'t add up.' },
+    { icon: Eye, text: 'Contradictions that could win your case are buried on page 847 of a supplement.' },
+    { icon: Clock, text: 'Your investigator is juggling six cases. Nobody has time to cross-reference everything.' },
   ];
 
   return (
@@ -121,10 +118,10 @@ function PainPointSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
-            What Legal Professionals Face Every Day
+            Sound Familiar?
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Without CourtAccess:
+            Every defense team hits the same wall.
           </p>
         </div>
 
@@ -143,7 +140,7 @@ function PainPointSection() {
         </div>
 
         <p className="text-center text-lg text-slate-500 italic max-w-2xl mx-auto">
-          Legal teams often spend weeks analyzing evidence that software can evaluate in minutes.
+          You shouldn't need a week to find what matters in your own case file.
         </p>
       </div>
     </section>
@@ -156,11 +153,11 @@ function PainPointSection() {
 
 function SolutionSection() {
   const capabilities = [
-    'Identify agencies involved',
-    'Analyze officer actions',
-    'Compare conduct to department policies',
-    'Detect potential procedural inconsistencies',
-    'Generate expert-ready reports',
+    'Upload your discovery — reports, bodycam, dashcam, witness statements, CAD logs, audio',
+    'CourtAccess reads every document and watches every frame of video',
+    'The system reconstructs a unified timeline of what actually happened',
+    'Contradictions between sources are flagged automatically',
+    'You get impeachment-ready questions and a clear picture of the case',
   ];
 
   return (
@@ -168,16 +165,16 @@ function SolutionSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
-            How CourtAccess Changes Case Analysis
+            Upload Your Evidence. Get Answers.
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            CourtAccess transforms raw evidence into structured legal intelligence.
+            CourtAccess does in minutes what used to take your team weeks.
           </p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-lg border border-slate-200 p-8 sm:p-12 max-w-3xl mx-auto">
           <p className="text-slate-700 text-lg mb-8 text-center">
-            Upload your case evidence and the system can:
+            Here's how it works:
           </p>
           <div className="space-y-4">
             {capabilities.map((cap, i) => (
@@ -235,75 +232,73 @@ function FeatureCard({ icon: Icon, title, description, items, highlight }: Featu
 function CoreFeaturesSection() {
   const features: FeatureCardProps[] = [
     {
-      icon: Globe,
-      title: 'Policy Intelligence Engine',
-      description: 'CourtAccess maintains a growing database of law enforcement policies and procedures.',
-      items: [
-        'Use-of-force policies',
-        'Internal affairs manuals',
-        'Training standards',
-        'Body camera policies',
-        'Officer discipline procedures',
-      ],
-      highlight: 'If a department\'s policies are unavailable, CourtAccess compares conduct to the California Highway Patrol policy baseline.',
-    },
-    {
       icon: Upload,
       title: 'Evidence Intelligence Engine',
-      description: 'Upload police reports, bodycam video, dashcam footage, audio recordings, and witness statements.',
+      description: 'Drop in your discovery — police reports, bodycam, dashcam, witness statements, audio, CAD logs — and CourtAccess extracts every meaningful event automatically.',
       items: [
-        'Extracts key events automatically',
-        'Builds incident timelines',
-        'Identifies officer actions',
-        'Links evidence across sources',
+        'Reads and indexes every document in your case file',
+        'Watches video frame-by-frame to extract events',
+        'Links related evidence across sources',
+        'Builds a structured evidence graph you can query',
+      ],
+      highlight: 'Handles the evidence formats defense teams actually receive: PDF reports, MP4 bodycam, audio recordings, scanned documents.',
+    },
+    {
+      icon: Clock,
+      title: 'Automatic Timeline Reconstruction',
+      description: 'CourtAccess synchronizes timestamps across all evidence sources and builds a single unified timeline of the incident — so you can see exactly what happened and when.',
+      items: [
+        'Correlates timestamps from reports, video, CAD, and dispatch logs',
+        'Detects clock drift between bodycam and dashcam sources',
+        'Shows gaps where evidence is missing or contradictory',
+        'Every event links back to the source evidence',
+      ],
+      highlight: 'When the report says one thing and the bodycam shows another, the timeline makes it obvious.',
+    },
+    {
+      icon: FileText,
+      title: 'Narrative Deconstruction',
+      description: 'Police reports tell a story. CourtAccess breaks that story into individual factual claims, then checks each one against the actual evidence.',
+      items: [
+        'Extracts every factual claim from officer narratives',
+        'Normalizes claims into structured events (who did what, when)',
+        'Validates each claim against bodycam, witnesses, and other sources',
+        'Flags unsupported or contradicted claims for cross-examination',
+      ],
+      highlight: 'Stop reading reports at face value. Start verifying every sentence.',
+    },
+    {
+      icon: Eye,
+      title: 'Contradiction Detection',
+      description: 'The system cross-references every claim, event, and timestamp across your entire case file to find inconsistencies the prosecution hopes you won\'t catch.',
+      items: [
+        'Officer A says X happened at 10:04. The bodycam shows it at 10:11.',
+        'The report says the suspect was aggressive. Two witnesses say otherwise.',
+        'Dispatch logs show a 7-minute gap no report accounts for.',
+        'Generates impeachment questions ready for cross-examination.',
+      ],
+      highlight: 'Every contradiction includes the exact evidence sources so you can verify it yourself.',
+    },
+    {
+      icon: Globe,
+      title: 'Policy Intelligence Engine',
+      description: 'CourtAccess maintains a growing database of law enforcement policies so you can compare what officers did against what their own department requires.',
+      items: [
+        'Use-of-force policies and escalation standards',
+        'Body camera activation requirements',
+        'Search, seizure, and Miranda timing protocols',
+        'Falls back to CHP baseline when department policies are unavailable',
       ],
     },
     {
       icon: Shield,
-      title: 'Policy Compliance Analysis',
-      description: 'CourtAccess compares officer conduct to official policy standards.',
+      title: 'Case Intelligence Dashboard',
+      description: 'Everything your defense team needs in one place — structured, searchable, and ready for trial preparation.',
       items: [
-        'Use-of-force policy inconsistencies',
-        'Search and seizure procedural issues',
-        'Evidence handling irregularities',
-        'Miranda warning timing issues',
-      ],
-      highlight: 'All findings are presented using neutral investigative language suitable for legal environments.',
-    },
-    {
-      icon: Map,
-      title: 'Forensic Reconstruction System',
-      description: 'CourtAccess can reconstruct incidents using 3D visual analysis.',
-      items: [
-        'Scene reconstruction from aerial maps',
-        'Officer line-of-sight analysis',
-        'Lighting and visibility simulation',
-        'Trajectory and impact modeling',
-        'Synchronized multi-camera timelines',
-      ],
-      highlight: 'Attorneys can generate interactive trial exhibits in minutes.',
-    },
-    {
-      icon: Clock,
-      title: 'Timeline Intelligence',
-      description: 'CourtAccess synchronizes evidence sources to build a unified timeline.',
-      items: [
-        'When force was applied',
-        'When commands were issued',
-        'When weapons were drawn',
-        'When suspects were restrained',
-      ],
-      highlight: 'All events are linked directly to the underlying evidence.',
-    },
-    {
-      icon: FileDown,
-      title: 'Expert Witness Report Generator',
-      description: 'Generate structured investigative reports with evidence citations, policy references, timestamps, and analytical findings.',
-      items: [
-        'PDF export',
-        'Word document export',
-        'Trial exhibit packages',
-        'Evidence citations with timestamps',
+        'Evidence graph visualization showing how sources connect',
+        'Filterable contradiction and impeachment lists',
+        'Timeline viewer with multi-source overlay',
+        'One-click evidence navigation from any finding',
       ],
     },
   ];
@@ -313,10 +308,10 @@ function CoreFeaturesSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
-            Platform Capabilities
+            Six Engines That Find What Matters
           </h2>
           <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Six integrated systems that transform how legal professionals analyze evidence.
+            Each system works independently. Together, they give your defense team a complete picture of the case — contradictions, timelines, and impeachment opportunities included.
           </p>
         </div>
 
@@ -337,16 +332,16 @@ function CoreFeaturesSection() {
 function SocialProofSection() {
   const testimonials = [
     {
-      quote: 'CourtAccess uncovered policy inconsistencies in minutes that would have taken our team days to identify.',
+      quote: 'I uploaded 2,800 pages of discovery and had a complete timeline with contradictions flagged in under an hour. My investigator would have needed two weeks.',
       author: 'Criminal Defense Attorney',
     },
     {
-      quote: 'The timeline and evidence synchronization tools are unlike anything we have seen in legal technology.',
+      quote: 'The narrative deconstruction caught three claims in the officer\'s report that directly contradicted the bodycam. Those became our cross-examination.',
       author: 'Defense Investigator',
     },
     {
-      quote: 'The ability to compare officer actions to department policy is a game-changer.',
-      author: 'Trial Attorney',
+      quote: 'We used to manually cross-reference reports against video. CourtAccess does it automatically and catches things we would have missed.',
+      author: 'Trial Preparation Team Lead',
     },
   ];
 
@@ -355,7 +350,7 @@ function SocialProofSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
-            Trusted by Legal Professionals
+            Defense Teams Are Already Using This
           </h2>
         </div>
 
@@ -385,18 +380,16 @@ function SocialProofSection() {
 
 function AuthoritySection() {
   const audiences = [
-    { icon: Gavel, label: 'Criminal defense attorneys' },
-    { icon: Scale, label: 'District attorney offices' },
-    { icon: Search, label: 'Investigators' },
-    { icon: FileText, label: 'Appellate specialists' },
-    { icon: Users, label: 'Expert witnesses' },
-    { icon: Shield, label: 'Public defender offices' },
+    { icon: Gavel, label: 'Criminal defense attorneys handling complex cases' },
+    { icon: Search, label: 'Defense investigators managing multiple case files' },
+    { icon: Users, label: 'Trial preparation teams coordinating discovery review' },
+    { icon: Shield, label: 'Public defender offices with overwhelming caseloads' },
   ];
 
   const principles = [
-    { icon: BarChart3, label: 'Factual neutrality' },
-    { icon: Eye, label: 'Evidence traceability' },
-    { icon: Shield, label: 'Legally defensible analysis' },
+    { icon: BarChart3, label: 'Every finding links to source evidence — nothing is asserted without proof' },
+    { icon: Eye, label: 'Neutral analysis language suitable for legal proceedings' },
+    { icon: Lock, label: 'Tenant-isolated, encrypted, role-based access for case security' },
   ];
 
   return (
@@ -404,13 +397,16 @@ function AuthoritySection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
-            Built for the Criminal Justice Ecosystem
+            Built for Defense Teams. Nobody Else.
           </h2>
+          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+            CourtAccess was designed by people who understand how criminal cases actually work — the evidence you get, the deadlines you face, and the contradictions you need to find.
+          </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-12 max-w-4xl mx-auto">
           <div>
-            <h3 className="text-lg font-semibold text-slate-900 mb-6">Designed specifically for:</h3>
+            <h3 className="text-lg font-semibold text-slate-900 mb-6">Who it's for:</h3>
             <div className="space-y-4">
               {audiences.map((item) => (
                 <div key={item.label} className="flex items-center gap-3">
@@ -423,7 +419,7 @@ function AuthoritySection() {
             </div>
           </div>
           <div>
-            <h3 className="text-lg font-semibold text-slate-900 mb-6">The system prioritizes:</h3>
+            <h3 className="text-lg font-semibold text-slate-900 mb-6">How we handle your evidence:</h3>
             <div className="space-y-4">
               {principles.map((item) => (
                 <div key={item.label} className="flex items-center gap-3">
@@ -448,24 +444,28 @@ function AuthoritySection() {
 function FaqSection() {
   const faqs = [
     {
-      question: 'How does CourtAccess obtain law enforcement policies?',
-      answer: 'CourtAccess collects publicly available policy documents, training manuals, and procedures through official publications, public records requests, and agency websites.',
+      question: 'What types of evidence can I upload?',
+      answer: 'Police reports (PDF), bodycam and dashcam video (MP4), audio recordings, witness statements, CAD/dispatch logs, scanned documents, and investigator reports. If your jurisdiction produces it, CourtAccess can probably process it.',
     },
     {
-      question: 'Can CourtAccess analyze body camera footage?',
-      answer: 'Yes. The system can analyze video evidence to extract events, identify officer actions, and synchronize footage with reports and other evidence.',
+      question: 'How does the timeline reconstruction work?',
+      answer: 'CourtAccess extracts timestamped events from every evidence source — reports, video, audio, dispatch — then synchronizes them into a single timeline. It detects clock drift between video sources and highlights gaps or conflicts automatically.',
     },
     {
-      question: 'Does the system determine that an officer violated policy?',
-      answer: 'No. CourtAccess identifies potential policy inconsistencies and presents evidence for legal review. Final determinations remain with attorneys and courts.',
+      question: 'What is narrative deconstruction?',
+      answer: 'The system breaks officer narratives into individual factual claims ("Officer arrived at 10:04," "Suspect became aggressive"), normalizes each claim, then validates it against bodycam footage, witness statements, and other evidence. Claims that contradict the evidence are flagged for cross-examination.',
     },
     {
-      question: 'Can CourtAccess generate trial exhibits?',
-      answer: 'Yes. The system can produce interactive 3D scene reconstructions, timelines, and evidence visualizations suitable for courtroom presentation.',
+      question: 'Does CourtAccess tell me the officer was wrong?',
+      answer: 'No. CourtAccess identifies contradictions and inconsistencies between evidence sources using neutral language. It shows you what the evidence says and where sources disagree. Legal conclusions remain with you and the court.',
     },
     {
-      question: 'Is the system secure?',
-      answer: 'CourtAccess uses JWT authentication, role-based access controls, encrypted storage, security headers, rate limiting, CSRF protection, and strict evidence handling protocols to protect case data.',
+      question: 'Is my case data secure?',
+      answer: 'Every account is tenant-isolated — your cases, evidence, and analysis are completely separated from other users. All data is encrypted, access is role-based, and the system enforces strict evidence handling protocols.',
+    },
+    {
+      question: 'How many pages can I process?',
+      answer: 'Depends on your plan. Starter handles 300 pages/month (enough for a simple case). Professional handles 2,000 pages/month. Advanced Investigator handles 6,000. Enterprise handles 25,000+. All limits are cumulative across cases.',
     },
   ];
 
@@ -500,10 +500,11 @@ function PricingSection() {
     {
       name: 'Free',
       price: 0,
-      pages: '10 pages lifetime',
-      credits: '0 AI credits',
-      features: ['Basic evidence upload', 'Single case', 'Watermarked exports'],
-      cta: 'Get Started Free',
+      pages: '10 pages (lifetime)',
+      credits: 'No AI credits',
+      bestFor: 'See how CourtAccess structures case evidence',
+      features: ['Upload one case', 'Evidence graph view', 'Watermarked exports', '90-day retention'],
+      cta: 'Try It Free',
       highlighted: false,
     },
     {
@@ -511,7 +512,8 @@ function PricingSection() {
       price: 39,
       pages: '300 pages/mo',
       credits: '20 AI credits/mo',
-      features: ['Contradiction detection', 'Timeline analysis', 'Document archival', '1-year retention'],
+      bestFor: 'Solo practitioners, 1\u20132 active cases',
+      features: ['Contradiction detection', 'Timeline reconstruction', 'Document archival', '200 MB upload limit', '1-year retention'],
       cta: 'Start Starter',
       highlighted: false,
     },
@@ -520,7 +522,8 @@ function PricingSection() {
       price: 129,
       pages: '2,000 pages/mo',
       credits: '100 AI credits/mo',
-      features: ['Everything in Starter', 'Doctrine matching', 'Litigation intelligence', 'No watermarks', '2-year retention'],
+      bestFor: 'Attorneys running 3\u20135 cases with full discovery',
+      features: ['Timeline + narrative deconstruction', 'Contradiction detection across sources', 'Doctrine matching', 'Clean exports (no watermarks)', '500 MB uploads \u00b7 2-year retention'],
       cta: 'Go Professional',
       highlighted: true,
     },
@@ -529,7 +532,8 @@ function PricingSection() {
       price: 249,
       pages: '6,000 pages/mo',
       credits: '250 AI credits/mo',
-      features: ['Everything in Professional', 'Video intelligence', 'Reliability scoring', 'Priority processing', '3-year retention'],
+      bestFor: 'Defense investigators, multi-defendant cases',
+      features: ['Video intelligence (bodycam/dashcam)', 'Reliability scoring', 'Priority processing queue', '1 GB uploads \u00b7 3-year retention'],
       cta: 'Start Advanced',
       highlighted: false,
     },
@@ -538,7 +542,8 @@ function PricingSection() {
       price: 399,
       pages: '12,000 pages/mo',
       credits: '500 AI credits/mo',
-      features: ['Everything in Advanced', 'Expert witness packages', 'Jury visualization', 'Forensic reconstruction', '5-year retention'],
+      bestFor: 'Trial teams with large discovery volumes',
+      features: ['Forensic reconstruction', 'Impeachment package assembly', 'Jury-ready exhibit generation', '2 GB uploads \u00b7 5-year retention'],
       cta: 'Start Litigation Pro',
       highlighted: false,
     },
@@ -547,7 +552,8 @@ function PricingSection() {
       price: 699,
       pages: '25,000 pages/mo',
       credits: '1,500 AI credits/mo',
-      features: ['Everything in Litigation Pro', 'Multi-user accounts', 'API access', 'Dedicated support', '10-year retention'],
+      bestFor: 'Firms & public defender offices',
+      features: ['Multi-user accounts (RBAC)', 'API integration', 'Dedicated support', '5 GB uploads \u00b7 10-year retention'],
       cta: 'Contact Sales',
       highlighted: false,
     },
@@ -565,10 +571,10 @@ function PricingSection() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
           <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 mb-4">
-            Simple, Transparent Pricing
+            Plans That Match Your Caseload
           </h2>
           <p className="text-lg text-gray-600 max-w-2xl mx-auto">
-            Choose the plan that fits your caseload. All page limits are cumulative across all your cases.
+            Every plan includes evidence upload, timeline reconstruction, and contradiction detection. Page limits are cumulative across all your cases.
           </p>
         </div>
 
@@ -591,7 +597,7 @@ function PricingSection() {
               <h3 className={`text-xl font-bold mb-1 ${plan.highlighted ? 'text-white' : 'text-gray-900'}`}>
                 {plan.name}
               </h3>
-              <div className="flex items-baseline gap-1 mb-4">
+              <div className="flex items-baseline gap-1 mb-2">
                 <span className={`text-4xl font-bold ${plan.highlighted ? 'text-white' : 'text-gray-900'}`}>
                   ${plan.price}
                 </span>
@@ -599,6 +605,9 @@ function PricingSection() {
                   <span className={`text-sm ${plan.highlighted ? 'text-slate-300' : 'text-gray-500'}`}>/month</span>
                 )}
               </div>
+              <p className={`text-xs font-medium mb-3 ${plan.highlighted ? 'text-amber-400' : 'text-blue-600'}`}>
+                {plan.bestFor}
+              </p>
               <div className={`text-sm mb-1 ${plan.highlighted ? 'text-slate-300' : 'text-gray-600'}`}>
                 {plan.pages}
               </div>
@@ -656,10 +665,10 @@ function FinalCtaSection() {
     <section className="py-20 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
         <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
-          Stop Manually Analyzing Evidence
+          Your Next Case Has Contradictions You Haven't Found Yet
         </h2>
         <p className="text-lg text-slate-300 mb-10 max-w-2xl mx-auto">
-          Let CourtAccess help you uncover the facts hidden inside case evidence.
+          Upload your discovery. Let CourtAccess reconstruct the timeline, deconstruct the narrative, and surface the inconsistencies that matter.
         </p>
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
@@ -699,9 +708,8 @@ function LandingNav() {
           <div className="hidden md:flex items-center gap-8">
             <a href="#how-it-works" className="text-sm text-slate-300 hover:text-white transition-colors">How It Works</a>
             <a href="#features" className="text-sm text-slate-300 hover:text-white transition-colors">Features</a>
-            <Link to="/for-defense" className="text-sm text-slate-300 hover:text-white transition-colors">For Defense</Link>
-            <Link to="/for-prosecutors" className="text-sm text-slate-300 hover:text-white transition-colors">For Prosecutors</Link>
-            <Link to="/government" className="text-sm text-slate-300 hover:text-white transition-colors">Government</Link>
+            <a href="#pricing" className="text-sm text-slate-300 hover:text-white transition-colors">Pricing</a>
+            <a href="#faq" className="text-sm text-slate-300 hover:text-white transition-colors">FAQ</a>
           </div>
           <div className="flex items-center gap-3">
             <Link
@@ -740,8 +748,8 @@ function LandingFooter() {
               <span className="text-xl font-bold text-white">CourtAccess</span>
             </div>
             <p className="text-slate-400 text-sm leading-relaxed max-w-md">
-              The first criminal evidence intelligence platform.
-              Built by investigators who understand how cases actually unfold.
+              Criminal evidence intelligence for defense teams.
+              Upload your discovery. Find the contradictions. Win the case.
             </p>
           </div>
           <div>
@@ -753,11 +761,10 @@ function LandingFooter() {
             </ul>
           </div>
           <div>
-            <h4 className="text-sm font-semibold text-white mb-4">Solutions</h4>
+            <h4 className="text-sm font-semibold text-white mb-4">For Defense Teams</h4>
             <ul className="space-y-2">
-              <li><Link to="/for-defense" className="text-sm text-slate-400 hover:text-white transition-colors">For Defense</Link></li>
-              <li><Link to="/for-prosecutors" className="text-sm text-slate-400 hover:text-white transition-colors">For Prosecutors</Link></li>
-              <li><Link to="/government" className="text-sm text-slate-400 hover:text-white transition-colors">Government</Link></li>
+              <li><a href="#pricing" className="text-sm text-slate-400 hover:text-white transition-colors">Pricing</a></li>
+              <li><a href="#faq" className="text-sm text-slate-400 hover:text-white transition-colors">FAQ</a></li>
               <li><Link to="/contact" className="text-sm text-slate-400 hover:text-white transition-colors">Contact Sales</Link></li>
             </ul>
           </div>

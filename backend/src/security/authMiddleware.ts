@@ -318,7 +318,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       accessToken,
       refreshToken,
       expiresIn: ACCESS_TOKEN_EXPIRY_SECONDS,
-      user: { userId: user.userId, tenantId: user.tenantId, email: user.email, name: user.name, role: user.role },
+      user: { userId: user.userId, tenantId: user.tenantId, email: user.email, name: user.name, role: user.role, subscriptionStatus: 'trial' },
     };
   });
 
@@ -352,7 +352,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       accessToken,
       refreshToken,
       expiresIn: ACCESS_TOKEN_EXPIRY_SECONDS,
-      user: { userId, tenantId, email, name: userName, role: userRole },
+      user: { userId, tenantId, email, name: userName, role: userRole, subscriptionStatus: 'trial' },
     };
   });
 

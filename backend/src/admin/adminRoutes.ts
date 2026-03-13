@@ -174,6 +174,17 @@ export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
       return reply.code(400).send({ error: 'Cannot delete your own account' });
     }
 
+    // Prevent staff from deleting admin users (role hierarchy)
+    if (adminUser.role !== 'admin') {
+      const targetCheck = await prisma.$queryRawUnsafe<Array<{ role: string }>>(
+        'SELECT role FROM users WHERE "userId" = $1',
+        userId,
+      );
+      if (targetCheck?.[0]?.role === 'admin') {
+        return reply.code(403).send({ error: 'Only admins can delete other admin accounts' });
+      }
+    }
+
     try {
       // 1. Look up the user to get tenantId
       const targetUser = await prisma.$queryRawUnsafe<Array<{ userId: string; tenantId: string; email: string }>>(

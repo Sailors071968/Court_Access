@@ -28,6 +28,7 @@ import { registerEvidenceRoutes } from './evidence/evidenceRoutes.js';
 import { registerNarrativeRoutes } from './narrative/narrativeRoutes.js';
 import { registerTimelineRoutes } from './timeline/timelineRoutes.js';
 import { registerQueueMonitorRoutes } from './admin/queueMonitorRoutes.js';
+import { registerAdminRoutes } from './admin/adminRoutes.js';
 import { registerDiscountRoutes } from './billing/discountRoutes.js';
 import { seedDefaultDiscountCodes } from './billing/discountSeed.js';
 
@@ -161,6 +162,10 @@ async function startServer() {
   console.log('[Server] Registering admin queue monitoring routes...');
   await registerQueueMonitorRoutes(app);
 
+  // Admin management routes (stats, users, cases, delete endpoints)
+  console.log('[Server] Registering admin management routes...');
+  await registerAdminRoutes(app);
+
   // Discount code API routes
   console.log('[Server] Registering discount code routes...');
   await registerDiscountRoutes(app);
@@ -243,6 +248,12 @@ async function startServer() {
     console.log('  - POST /api/admin/discount-codes');
     console.log('  - PATCH /api/admin/discount-codes/:codeId');
     console.log('  - DELETE /api/admin/discount-codes/:codeId');
+    console.log('  - GET  /api/admin/stats');
+    console.log('  - GET  /api/admin/users');
+    console.log('  - GET  /api/admin/cases');
+    console.log('  - DELETE /api/admin/users/:userId');
+    console.log('  - DELETE /api/admin/cases/:caseId');
+    console.log('  - DELETE /api/admin/evidence/:evidenceId');
     console.log('[Server] Security hardening active: JWT auth, rate limiting, CSRF, security headers, upload protection, security logging');
   } catch (err) {
     console.error('[Server] Failed to start:', err);

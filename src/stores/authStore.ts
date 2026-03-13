@@ -7,14 +7,18 @@ import { persist } from 'zustand/middleware';
 import type { User, UserRole } from '../types';
 import { ROLE_PERMISSIONS } from '../constants';
 
+type SubscriptionStatus = 'active' | 'trial' | 'none' | 'expired';
+
 interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
+  subscriptionStatus: SubscriptionStatus;
   login: (email: string, password: string) => Promise<void>;
   register: (name: string, email: string, password: string, role: UserRole) => Promise<void>;
   logout: () => void;
   switchRole: (role: UserRole) => void;
+  setSubscriptionStatus: (status: SubscriptionStatus) => void;
   hasPermission: (permission: keyof typeof ROLE_PERMISSIONS.admin) => boolean;
 }
 
@@ -24,6 +28,7 @@ export const useAuthStore = create<AuthState>()(persist((set, get) => ({
   user: null,
   isAuthenticated: false,
   isLoading: false,
+  subscriptionStatus: 'none',
 
   login: async (email: string, password: string) => {
     set({ isLoading: true });
@@ -54,6 +59,7 @@ export const useAuthStore = create<AuthState>()(persist((set, get) => ({
         },
         isAuthenticated: true,
         isLoading: false,
+        subscriptionStatus: (data.user.subscriptionStatus as SubscriptionStatus) || 'none',
       });
     } catch (err) {
       set({ isLoading: false });
@@ -84,6 +90,7 @@ export const useAuthStore = create<AuthState>()(persist((set, get) => ({
         user: { id: data.user.userId, name: data.user.name || name, email: data.user.email, role: data.user.role },
         isAuthenticated: true,
         isLoading: false,
+        subscriptionStatus: 'none', // New registrations have no subscription yet
       });
     } catch (err) {
       set({ isLoading: false });
@@ -102,7 +109,7 @@ export const useAuthStore = create<AuthState>()(persist((set, get) => ({
     }
     localStorage.removeItem('court-access-token');
     localStorage.removeItem('court-access-refresh-token');
-    set({ user: null, isAuthenticated: false });
+    set({ user: null, isAuthenticated: false, subscriptionStatus: 'none' });
   },
 
   switchRole: (role: UserRole) => {
@@ -110,6 +117,10 @@ export const useAuthStore = create<AuthState>()(persist((set, get) => ({
     if (user) {
       set({ user: { ...user, role } });
     }
+  },
+
+  setSubscriptionStatus: (status: SubscriptionStatus) => {
+    set({ subscriptionStatus: status });
   },
 
   hasPermission: (permission) => {
@@ -122,5 +133,6 @@ export const useAuthStore = create<AuthState>()(persist((set, get) => ({
   partialize: (state) => ({
     user: state.user,
     isAuthenticated: state.isAuthenticated,
+    subscriptionStatus: state.subscriptionStatus,
   }),
 }));

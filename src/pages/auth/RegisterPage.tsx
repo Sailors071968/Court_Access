@@ -77,7 +77,7 @@ export function RegisterPage() {
         }
       }
 
-      navigate('/dashboard');
+      navigate('/pricing');
     } catch {
       setError('Registration failed. Please try again.');
     }

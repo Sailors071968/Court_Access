@@ -76,10 +76,8 @@ const AUDIT_KEY = 'courtaccess_evidence_audit_log';
 function loadEvidence(): EvidenceUpload[] {
   const stored = localStorage.getItem(EVIDENCE_KEY);
   if (stored) return JSON.parse(stored);
-  // Seed demo data
-  const demo = generateDemoEvidence();
-  localStorage.setItem(EVIDENCE_KEY, JSON.stringify(demo));
-  return demo;
+  // Production: start with empty evidence list (no demo data)
+  return [];
 }
 
 function saveEvidence(uploads: EvidenceUpload[]): void {
@@ -94,62 +92,8 @@ function saveAuditLog(log: EvidenceAdminAction[]): void {
   localStorage.setItem(AUDIT_KEY, JSON.stringify(log));
 }
 
-function generateDemoEvidence(): EvidenceUpload[] {
-  const cases = [
-    { id: 'case-001', name: 'Sample Case A', defendant: 'Defendant A' },
-    { id: 'case-002', name: 'Sample Case B', defendant: 'Defendant B' },
-    { id: 'case-003', name: 'Sample Case C', defendant: 'Defendant C' },
-  ];
-  const files = [
-    { name: 'arrest_report.pdf', type: 'application/pdf', size: 245000 },
-    { name: 'bodycam_footage.mp4', type: 'video/mp4', size: 52000000 },
-    { name: 'witness_statement_01.pdf', type: 'application/pdf', size: 128000 },
-    { name: 'forensic_analysis.pdf', type: 'application/pdf', size: 890000 },
-    { name: 'photo_evidence_01.jpg', type: 'image/jpeg', size: 3200000 },
-    { name: 'lab_results.pdf', type: 'application/pdf', size: 456000 },
-    { name: 'defendant_statement.docx', type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', size: 67000 },
-    { name: 'surveillance_clip.mp4', type: 'video/mp4', size: 28000000 },
-    { name: 'phone_records.xlsx', type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet', size: 145000 },
-    { name: 'toxicology_report.pdf', type: 'application/pdf', size: 234000 },
-    { name: 'scene_photos.zip', type: 'application/zip', size: 15000000 },
-    { name: 'character_reference.pdf', type: 'application/pdf', size: 89000 },
-  ];
-  const statuses: AnalysisStatus[] = ['pending', 'analyzing', 'analyzed', 'analyzed', 'analyzed', 'failed', 'analyzed', 'pending', 'analyzed', 'analyzed', 'analyzing', 'analyzed'];
-  const uploaders = [
-    { name: 'Jane Doe', role: 'attorney' as const },
-    { name: 'Admin User', role: 'admin' as const },
-    { name: 'John Smith', role: 'defendant' as const },
-    { name: 'Staff Member', role: 'staff' as const },
-  ];
-
-  return files.map((f, i) => {
-    const caseInfo = cases[i % cases.length];
-    const uploader = uploaders[i % uploaders.length];
-    const daysAgo = Math.floor(Math.random() * 30);
-    const uploadDate = new Date(Date.now() - daysAgo * 86400000);
-
-    return {
-      fileId: `file-${String(i + 1).padStart(3, '0')}`,
-      caseId: caseInfo.id,
-      caseName: caseInfo.name,
-      defendantName: caseInfo.defendant,
-      fileName: f.name,
-      fileType: f.type,
-      fileSizeBytes: f.size,
-      uploadedAt: uploadDate.toISOString(),
-      uploadedBy: uploader.name,
-      uploadedByRole: uploader.role,
-      analysisStatus: statuses[i],
-      disregarded: i === 5, // one disregarded for demo
-      disregardedAt: i === 5 ? new Date(Date.now() - 2 * 86400000).toISOString() : null,
-      disregardedBy: i === 5 ? 'John Smith' : null,
-      deleted: false,
-      deletedAt: null,
-      isEvidenceArtifact: i === 3,
-      flaggedCorrupted: i === 5,
-    };
-  });
-}
+// Demo data generator removed for production.
+// Evidence is loaded from localStorage or starts empty.
 
 // ---------------------------------------------------------------------------
 // Component

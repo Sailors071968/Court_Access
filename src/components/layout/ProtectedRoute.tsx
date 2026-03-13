@@ -1,5 +1,6 @@
 // ============================================
 // Court Access — Protected Route Wrapper
+// Subscription gate: users without active/trial subscription are redirected to /pricing
 // ============================================
 
 import { Navigate, useLocation } from 'react-router-dom';
@@ -9,14 +10,24 @@ import type { RolePermissions } from '../../types';
 interface ProtectedRouteProps {
   children: React.ReactNode;
   requiredPermission?: keyof RolePermissions;
+  /** If true, skip subscription check (used for /pricing route itself) */
+  skipSubscriptionCheck?: boolean;
 }
 
-export function ProtectedRoute({ children, requiredPermission }: ProtectedRouteProps) {
-  const { isAuthenticated, hasPermission } = useAuthStore();
+export function ProtectedRoute({ children, requiredPermission, skipSubscriptionCheck }: ProtectedRouteProps) {
+  const { isAuthenticated, hasPermission, subscriptionStatus } = useAuthStore();
   const location = useLocation();
 
   if (!isAuthenticated) {
     return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  // Subscription gate: redirect to /pricing if no active or trial subscription
+  // Skip this check for admin/staff roles (they manage the platform, not clients)
+  const { user } = useAuthStore.getState();
+  const isStaffOrAdmin = user?.role === 'admin' || user?.role === 'staff';
+  if (!skipSubscriptionCheck && !isStaffOrAdmin && subscriptionStatus !== 'active' && subscriptionStatus !== 'trial') {
+    return <Navigate to="/pricing" replace />;
   }
 
   if (requiredPermission && !hasPermission(requiredPermission)) {

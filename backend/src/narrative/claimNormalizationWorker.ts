@@ -98,6 +98,9 @@ const ACTION_TO_EVENT_TYPE: Record<string, string> = {
   'called ambulance': 'MedicalRequested',
   'administered first aid': 'FirstAidAdministered',
   cpr: 'CPRAdministered',
+  transported: 'MedicalTransport',
+  'transported to hospital': 'MedicalTransport',
+  'requested medical': 'MedicalRequested',
 };
 
 // ---------------------------------------------------------------------------
@@ -112,9 +115,11 @@ function normalizeAction(rawAction: string): string {
     return ACTION_TO_EVENT_TYPE[lower];
   }
 
-  // Partial match
+  // Word-boundary partial match (avoids substring false positives like 'transported' matching 'ran')
   for (const [key, eventType] of Object.entries(ACTION_TO_EVENT_TYPE)) {
-    if (lower.includes(key)) {
+    const escaped = key.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const regex = new RegExp(`\\b${escaped}\\b`);
+    if (regex.test(lower)) {
       return eventType;
     }
   }

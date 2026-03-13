@@ -75,29 +75,46 @@ async function validateClaimAgainstEvidence(params: {
   const reasons: string[] = [];
 
   // Heuristic: claims about visual events should have video evidence
-  const visualActions = ['WeaponRaised', 'WeaponPointed', 'SubjectFled', 'ForceUsed', 'TaserDeployed'];
+  const visualActions = ['raised', 'brandished', 'pointed', 'drew', 'fled', 'ran', 'struck', 'punched', 'kicked', 'tackled', 'tased', 'fired', 'discharged', 'shot'];
   const actionLower = params.action.toLowerCase();
-  const isVisualClaim = visualActions.some((a) => actionLower.includes(a.toLowerCase()));
+  const isVisualClaim = visualActions.some((a) => actionLower.includes(a));
 
   if (isVisualClaim && videoEvidence.length > 0) {
-    // Video evidence exists — could either support or contradict
-    // In production, AI would analyze the video content
+    // Video evidence exists — supports the claim (visual event has video corroboration)
+    for (const v of videoEvidence) {
+      supportingIds.push(v.evidenceId);
+    }
     reasons.push(`Video evidence available for visual claim verification (${videoEvidence.length} sources)`);
     confidence += 0.1;
   } else if (isVisualClaim && videoEvidence.length === 0) {
-    reasons.push('No video evidence available to verify visual claim');
+    // Visual claim but no video — potential contradiction (officer says X happened but no video)
+    // Mark document evidence as contradicting since the narrative claim lacks video corroboration
+    for (const d of documentEvidence) {
+      contradictingIds.push(d.evidenceId);
+    }
+    reasons.push('No video evidence available to verify visual claim — narrative-only basis');
     confidence -= 0.1;
   }
 
   // Check for corroborating document sources
   if (documentEvidence.length > 1) {
-    // Multiple document sources — potential for cross-validation
+    // Multiple document sources — cross-validation available, supports claim
+    for (const d of documentEvidence) {
+      if (!supportingIds.includes(d.evidenceId) && !contradictingIds.includes(d.evidenceId)) {
+        supportingIds.push(d.evidenceId);
+      }
+    }
     reasons.push(`${documentEvidence.length} document sources available for cross-reference`);
     confidence += 0.05;
   }
 
   // Check for witness corroboration
   if (witnessEvidence.length > 0) {
+    for (const w of witnessEvidence) {
+      if (!supportingIds.includes(w.evidenceId)) {
+        supportingIds.push(w.evidenceId);
+      }
+    }
     reasons.push(`${witnessEvidence.length} witness statement(s) available for comparison`);
     confidence += 0.05;
   }

@@ -380,9 +380,12 @@ export async function fetchImpeachmentCandidates(
 }
 
 export async function analyzeNarrative(caseId: string): Promise<{ status: string; evidenceCount: number }> {
+  const headers = getAuthHeaders();
+  // Remove content-type to avoid Fastify rejecting empty JSON body
+  const { 'Content-Type': _, ...headersWithoutCT } = headers;
   const res = await fetch(`${API_BASE}/narrative/analyze/${caseId}`, {
     method: 'POST',
-    headers: getAuthHeaders(),
+    headers: headersWithoutCT,
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({ error: 'Failed to start narrative analysis' }));

@@ -111,7 +111,7 @@ async function validateClaimAgainstEvidence(params: {
   // Check for witness corroboration
   if (witnessEvidence.length > 0) {
     for (const w of witnessEvidence) {
-      if (!supportingIds.includes(w.evidenceId)) {
+      if (!supportingIds.includes(w.evidenceId) && !contradictingIds.includes(w.evidenceId)) {
         supportingIds.push(w.evidenceId);
       }
     }

@@ -29,10 +29,10 @@ const TIME_PATTERNS = [
   /(?:at|around|approximately|approx\.?)\s+(\d{1,2}):(\d{2})\s*(AM|PM|am|pm)/gi,
   // "at 2143 hours" / "at 0943 hours"
   /(?:at|around|approximately|approx\.?)\s+(\d{4})\s*(?:hours?|hrs?)/gi,
-  // "21:43" / "09:43" standalone military time
-  /\b(\d{2}):(\d{2})(?::(\d{2}))?\b/g,
-  // "9:43 PM" without prefix
+  // "9:43 PM" without prefix — MUST come before standalone military pattern
   /\b(\d{1,2}):(\d{2})\s*(AM|PM|am|pm)\b/gi,
+  // "21:43" / "09:43" standalone military time (no AM/PM suffix)
+  /\b(\d{2}):(\d{2})(?::(\d{2}))?\b(?!\s*[APap][Mm])/g,
 ];
 
 // Event type detection keywords

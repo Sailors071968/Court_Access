@@ -15,17 +15,23 @@ import { enqueueEvidenceIngestion } from './evidenceProcessingPipeline.js';
 const prisma = new PrismaClient();
 
 // ---------------------------------------------------------------------------
-// S3 Configuration
+// Cloudflare R2 Configuration (S3-compatible)
 // ---------------------------------------------------------------------------
 
-const S3_BUCKET = process.env.S3_EVIDENCE_BUCKET || 'courtaccess-evidence';
-const S3_REGION = process.env.S3_REGION || 'us-west-2';
+const R2_ACCOUNT_ID = process.env.R2_ACCOUNT_ID ?? '';
+const R2_ACCESS_KEY_ID = process.env.R2_ACCESS_KEY_ID ?? '';
+const R2_SECRET_ACCESS_KEY = process.env.R2_SECRET_ACCESS_KEY ?? '';
+const R2_BUCKET = process.env.R2_BUCKET_NAME ?? 'courtaccess-evidence';
 const PRESIGN_EXPIRY_SECONDS = 3600; // 1 hour
 
 function getS3Client(): S3Client {
   return new S3Client({
-    region: S3_REGION,
-    ...(process.env.S3_ENDPOINT ? { endpoint: process.env.S3_ENDPOINT, forcePathStyle: true } : {}),
+    region: 'auto',
+    endpoint: `https://${R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
+    credentials: {
+      accessKeyId: R2_ACCESS_KEY_ID,
+      secretAccessKey: R2_SECRET_ACCESS_KEY,
+    },
   });
 }
 
@@ -121,7 +127,7 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
     try {
       const s3 = getS3Client();
       const command = new PutObjectCommand({
-        Bucket: S3_BUCKET,
+        Bucket: R2_BUCKET,
         Key: s3Key,
         ContentType: body.fileType,
         ContentLength: body.fileSize,
@@ -364,7 +370,7 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
       try {
         const s3 = getS3Client();
         const deleteCommand = new DeleteObjectCommand({
-          Bucket: S3_BUCKET,
+          Bucket: R2_BUCKET,
           Key: evidence.s3Key,
         });
         await s3.send(deleteCommand);

@@ -55,6 +55,15 @@ async function getNarrativeClaims(
   if (query.evidenceId) where.evidenceId = query.evidenceId;
   if (minConfidence !== undefined) where.confidence = { gte: minConfidence };
 
+  // If status filter is provided, pre-filter claim IDs via ClaimValidation
+  if (query.status) {
+    const matchingValidations = await prisma.claimValidation.findMany({
+      where: { caseId, tenantId, status: query.status },
+      select: { claimId: true },
+    });
+    where.claimId = { in: matchingValidations.map((v) => v.claimId) };
+  }
+
   const [claims, total] = await Promise.all([
     prisma.narrativeClaim.findMany({
       where,
@@ -82,20 +91,10 @@ async function getNarrativeClaims(
     : [];
   const normalizedMap = new Map(normalizedEvents.map((e) => [e.claimId, e]));
 
-  // Filter by validation status if requested
-  let filteredClaims = claims;
-  if (query.status) {
-    const statusFilter = query.status;
-    filteredClaims = claims.filter((c) => {
-      const v = validationMap.get(c.claimId);
-      return v?.status === statusFilter;
-    });
-  }
-
   // Build graph
   const graph = buildNarrativeGraph({
     caseId,
-    claims: filteredClaims.map((c) => {
+    claims: claims.map((c) => {
       const v = validationMap.get(c.claimId);
       return {
         claimId: c.claimId,
@@ -112,7 +111,7 @@ async function getNarrativeClaims(
   });
 
   return reply.send({
-    claims: filteredClaims.map((c) => {
+    claims: claims.map((c) => {
       const v = validationMap.get(c.claimId);
       const n = normalizedMap.get(c.claimId);
       return {
@@ -235,7 +234,14 @@ async function getNarrativeImpeachment(
 
   const candidates = await prisma.impeachmentCandidate.findMany({
     where,
-    orderBy: [{ severity: 'asc' }, { confidence: 'desc' }],
+    orderBy: { confidence: 'desc' },
+  });
+
+  // Sort by semantic severity order: high → medium → low
+  const severityOrder: Record<string, number> = { high: 0, medium: 1, low: 2 };
+  candidates.sort((a, b) => {
+    const sev = (severityOrder[a.severity] ?? 3) - (severityOrder[b.severity] ?? 3);
+    return sev !== 0 ? sev : b.confidence - a.confidence;
   });
 
   // Count by severity
@@ -279,7 +285,7 @@ async function analyzeNarrative(
 
   // Verify case belongs to tenant
   const caseRecord = await prisma.criminalCase.findFirst({
-    where: { caseId, tenantId },
+    where: { caseId, tenantId, deletedAt: null },
   });
 
   if (!caseRecord) {

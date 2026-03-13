@@ -107,8 +107,14 @@ function generateImpeachmentQuestion(params: {
 export async function processImpeachmentAnalysis(job: ImpeachmentAnalysisJob): Promise<{
   impeachmentCandidates: number;
   highSeverity: number;
+  processingTimeMs: number;
 }> {
-  console.log(`[ImpeachmentDetection] Analyzing case ${job.caseId}`);
+  const startTime = Date.now();
+  console.log(
+    `[NarrativeEngine] Impeachment analysis started` +
+    ` caseId=${job.caseId}` +
+    ` rebuild=${job.rebuild ?? false}`
+  );
 
   // If rebuild requested, clear existing impeachment candidates
   if (job.rebuild) {
@@ -127,8 +133,8 @@ export async function processImpeachmentAnalysis(job: ImpeachmentAnalysisJob): P
   });
 
   if (contradictedValidations.length === 0) {
-    console.log(`[ImpeachmentDetection] No contradictions found for case ${job.caseId}`);
-    return { impeachmentCandidates: 0, highSeverity: 0 };
+    console.log(`[NarrativeEngine] No contradictions found for impeachment caseId=${job.caseId}`);
+    return { impeachmentCandidates: 0, highSeverity: 0, processingTimeMs: Date.now() - startTime };
   }
 
   // Check existing impeachment candidates
@@ -207,7 +213,14 @@ export async function processImpeachmentAnalysis(job: ImpeachmentAnalysisJob): P
     created++;
   }
 
-  console.log(`[ImpeachmentDetection] Created ${created} impeachment candidates (${highSeverity} high severity) for case ${job.caseId}`);
+  const processingTimeMs = Date.now() - startTime;
+  console.log(
+    `[NarrativeEngine] Impeachment analysis completed` +
+    ` caseId=${job.caseId}` +
+    ` candidates=${created}` +
+    ` highSeverity=${highSeverity}` +
+    ` processingTime=${(processingTimeMs / 1000).toFixed(1)}s`
+  );
 
-  return { impeachmentCandidates: created, highSeverity };
+  return { impeachmentCandidates: created, highSeverity, processingTimeMs };
 }

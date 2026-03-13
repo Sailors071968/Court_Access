@@ -1,0 +1,33 @@
+COMPUTER AIDED DISPATCH (CAD) LOG
+Case Number: 2025-CR-04821
+Incident Type: 415DV — Domestic Disturbance
+Priority: 2
+
+DATE       TIME     UNIT    EVENT
+03/15/2025 22:47:12 DISP    Call received from RP (reporting party) at 1840 Elm St.
+                            RP states hearing loud arguing from 1842 Elm St for approx 20 min.
+                            RP reports possible sounds of breaking glass.
+03/15/2025 22:47:45 DISP    Unit 47 (Martinez) dispatched. Unit 47 en route.
+03/15/2025 22:48:02 DISP    Additional info from RP: Male and female voices. RP states "it sounds
+                            like it's getting worse."
+03/15/2025 22:51:30 47      Unit 47 on scene.
+03/15/2025 22:52:15 47      Unit 47 reports front door ajar. Approaching residence.
+03/15/2025 22:53:00 47      Unit 47 contact with male subject at door.
+03/15/2025 22:54:30 47      Unit 47 requesting backup. One male, one female at location.
+                            Male has visible injury to hand.
+03/15/2025 22:55:00 DISP    Unit 52 (Chen) dispatched to assist.
+03/15/2025 22:59:45 52      Unit 52 on scene.
+03/15/2025 23:01:00 47      Unit 47 reports statements from victim inconsistent with suspect account.
+03/15/2025 23:12:00 47      Unit 47 reports one in custody. 243(e)(1) PC.
+03/15/2025 23:15:30 47      Unit 47 transporting to Central Station.
+03/15/2025 23:18:00 52      Unit 52 remaining on scene for victim statement and evidence photos.
+03/15/2025 23:35:00 52      Unit 52 clear. Scene secured.
+03/15/2025 23:42:00 47      Unit 47 at Central Station. Booking commenced.
+
+NOTES:
+- Arrival time discrepancy: CAD shows Unit 47 on scene at 22:51:30.
+  Officer report states arrival at approximately 2253 hours.
+  Bodycam activation timestamp: 22:50:15.
+- This 2-minute discrepancy between CAD log and officer report should be noted.
+
+END OF CAD LOG

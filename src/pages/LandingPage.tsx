@@ -794,6 +794,18 @@ function LandingFooter() {
 // Main Landing Page
 // ---------------------------------------------------------------------------
 
+export function PricingPage() {
+  return (
+    <div className="min-h-screen bg-white">
+      <LandingNav />
+      <div className="pt-16">
+        <PricingSection />
+      </div>
+      <LandingFooter />
+    </div>
+  );
+}
+
 export function LandingPage() {
   return (
     <div className="min-h-screen bg-white">

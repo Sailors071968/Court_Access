@@ -7,7 +7,7 @@ import { AppLayout } from './components/layout/AppLayout';
 import { ProtectedRoute } from './components/layout/ProtectedRoute';
 
 // Landing Page
-import { LandingPage } from './pages/LandingPage';
+import { LandingPage, PricingPage } from './pages/LandingPage';
 
 // Public Marketing Pages (Phase 207-216)
 import { ForDefensePage } from './pages/ForDefensePage';
@@ -84,6 +84,9 @@ function App() {
         <Route path="/contact" element={<ContactSalesPage />} />
         <Route path="/case-studies" element={<CaseStudiesPage />} />
         <Route path="/legal-disclaimer" element={<LegalDisclaimerPage />} />
+
+        {/* Pricing (accessible to authenticated users without subscription) */}
+        <Route path="/pricing" element={<PricingPage />} />
 
         {/* Public Auth Routes */}
         <Route path="/login" element={<LoginPage />} />

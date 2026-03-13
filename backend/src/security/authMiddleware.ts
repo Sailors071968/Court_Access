@@ -165,6 +165,10 @@ const ROUTE_PERMISSIONS: Record<string, UserRole[]> = {
   '/api/forensic/expert-package': ['admin', 'attorney'],
   '/api/forensic/jury-view': ['admin', 'attorney'],
   '/api/admin/discount-codes': ['admin', 'staff'],
+  '/api/admin/stats': ['admin', 'staff'],
+  '/api/admin/users': ['admin', 'staff'],
+  '/api/admin/cases': ['admin', 'staff'],
+  '/api/admin/evidence': ['admin', 'staff'],
   '/api/admin': ['admin'],
   '/api/security': ['admin'],
 };
@@ -314,7 +318,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       accessToken,
       refreshToken,
       expiresIn: ACCESS_TOKEN_EXPIRY_SECONDS,
-      user: { userId: user.userId, tenantId: user.tenantId, email: user.email, name: user.name, role: user.role },
+      user: { userId: user.userId, tenantId: user.tenantId, email: user.email, name: user.name, role: user.role, subscriptionStatus: 'trial', subscriptionTier: 'starter' },
     };
   });
 
@@ -348,7 +352,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       accessToken,
       refreshToken,
       expiresIn: ACCESS_TOKEN_EXPIRY_SECONDS,
-      user: { userId, tenantId, email, name: userName, role: userRole },
+      user: { userId, tenantId, email, name: userName, role: userRole, subscriptionStatus: 'none', subscriptionTier: 'free' },
     };
   });
 
@@ -427,7 +431,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     }
     try {
       const payload = verifyAccessToken(token);
-      return { user: { userId: payload.userId, tenantId: payload.tenantId, email: payload.email, role: payload.role } };
+      return { user: { userId: payload.userId, tenantId: payload.tenantId, email: payload.email, role: payload.role, subscriptionStatus: 'trial', subscriptionTier: 'starter' } };
     } catch {
       return reply.code(401).send({ error: 'Invalid or expired token' });
     }

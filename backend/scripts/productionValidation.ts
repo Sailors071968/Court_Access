@@ -163,19 +163,47 @@ async function runValidation(): Promise<void> {
   }
 
   // -----------------------------------------------------------------------
-  // Test 7: Queue monitor accessible
+  // Test 7a: Queue monitor blocked for defendants
   // -----------------------------------------------------------------------
-  console.log('\n--- Test 7: Queue Monitor ---');
+  console.log('\n--- Test 7a: Queue Monitor (defendant — should be 403) ---');
   try {
-    const { status, data } = await apiCall('GET', '/ops/queues', undefined, tokenA);
+    const { status } = await apiCall('GET', '/ops/queues', undefined, tokenA);
+    record(
+      'Queue monitor blocked for defendant',
+      status === 403,
+      `Status ${status} (expected 403)`,
+    );
+  } catch (err) {
+    record('Queue monitor blocked for defendant', false, `Failed: ${err}`);
+  }
+
+  // -----------------------------------------------------------------------
+  // Test 7b: Queue monitor accessible for staff
+  // -----------------------------------------------------------------------
+  console.log('\n--- Test 7b: Queue Monitor (staff — should be 200) ---');
+  const staffEmail = `test-staff-${Date.now()}@courtaccess-test.local`;
+  let tokenStaff = '';
+  try {
+    const { data: staffData } = await apiCall('POST', '/api/auth/register', {
+      email: staffEmail,
+      password: 'TestStaff789!',
+      name: 'Test Staff',
+      role: 'staff',
+    });
+    const sd = staffData as Record<string, unknown>;
+    tokenStaff = (sd?.token as string) || (sd?.accessToken as string) || '';
+  } catch { /* ignore registration failure */ }
+
+  try {
+    const { status, data } = await apiCall('GET', '/ops/queues', undefined, tokenStaff);
     const d = data as Record<string, unknown>;
     record(
-      'Queue monitor',
+      'Queue monitor accessible for staff',
       status === 200 && d?.success === true,
       `Status ${status}, queues: ${(d?.data as Record<string, unknown>)?.totalQueues ?? 'unknown'}`,
     );
   } catch (err) {
-    record('Queue monitor', false, `Failed: ${err}`);
+    record('Queue monitor accessible for staff', false, `Failed: ${err}`);
   }
 
   // -----------------------------------------------------------------------

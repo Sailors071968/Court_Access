@@ -168,13 +168,17 @@ export function generateChunkPlan(
  * Generate the ffmpeg command for segmenting a video.
  * Uses -f segment with -segment_time for chunk splitting.
  *
- * Example output:
- *   ffmpeg -i input.mp4 -f segment -segment_time 30 -c copy output_%04d.mp4
+ * Returns an array of arguments for use with child_process.spawn()
+ * (NOT a joined string — avoids shell injection via filenames).
+ *
+ * Example usage:
+ *   const args = generateFfmpegSegmentCommand(inputPath, outputPattern);
+ *   spawn(args[0], args.slice(1));
  */
 export function generateFfmpegSegmentCommand(
   inputPath: string,
   outputPattern: string,
-): string {
+): string[] {
   return [
     'ffmpeg',
     '-i', inputPath,
@@ -183,7 +187,7 @@ export function generateFfmpegSegmentCommand(
     '-c', 'copy',
     '-reset_timestamps', '1',
     outputPattern,
-  ].join(' ');
+  ];
 }
 
 // ---------------------------------------------------------------------------

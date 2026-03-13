@@ -197,6 +197,12 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
       return reply.code(500).send({ error: 'Failed to verify case access' });
     }
 
+    // Validate s3Key matches expected tenant-scoped path (prevent cross-tenant access)
+    const expectedPrefix = `evidence/${user.tenantId}/${body.caseId}/`;
+    if (!body.s3Key.startsWith(expectedPrefix)) {
+      return reply.code(403).send({ error: 'Invalid s3Key: does not match expected tenant path' });
+    }
+
     try {
       const evidence = await prisma.evidence.create({
         data: {

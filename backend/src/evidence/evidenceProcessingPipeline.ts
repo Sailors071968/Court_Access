@@ -97,38 +97,26 @@ if (!QUEUE_CONFIGS.contradictionAnalysis) {
 // ---------------------------------------------------------------------------
 
 export async function enqueueEvidenceIngestion(job: EvidenceIngestionJob): Promise<void> {
-  try {
-    const queue = getQueue<EvidenceIngestionJob>('evidenceIngestion');
-    await queue.add('evidence-ingest', job, {
-      jobId: `evidence-${job.evidenceId}`,
-      priority: job.isVideo ? 2 : 1, // Documents processed first
-    });
-    console.log(`[EvidencePipeline] Enqueued ingestion for evidence ${job.evidenceId} (${job.evidenceType})`);
-  } catch (err) {
-    console.error('[EvidencePipeline] Failed to enqueue evidence ingestion:', err);
-  }
+  const queue = getQueue<EvidenceIngestionJob>('evidenceIngestion');
+  await queue.add('evidence-ingest', job, {
+    jobId: `evidence-${job.evidenceId}`,
+    priority: job.isVideo ? 2 : 1, // Documents processed first
+  });
+  console.log(`[EvidencePipeline] Enqueued ingestion for evidence ${job.evidenceId} (${job.evidenceType})`);
 }
 
 export async function enqueueVideoSegmentation(job: VideoSegmentJob): Promise<void> {
-  try {
-    const queue = getQueue<VideoSegmentJob>('videoSegment');
-    await queue.add('video-segment', job, {
-      jobId: `video-segment-${job.evidenceId}`,
-    });
-    console.log(`[EvidencePipeline] Enqueued video segmentation for evidence ${job.evidenceId}`);
-  } catch (err) {
-    console.error('[EvidencePipeline] Failed to enqueue video segmentation:', err);
-  }
+  const queue = getQueue<VideoSegmentJob>('videoSegment');
+  await queue.add('video-segment', job, {
+    jobId: `video-segment-${job.evidenceId}`,
+  });
+  console.log(`[EvidencePipeline] Enqueued video segmentation for evidence ${job.evidenceId}`);
 }
 
 export async function enqueueDocumentAnalysis(job: DocumentAnalysisJob): Promise<void> {
-  try {
-    const queue = getQueue<DocumentAnalysisJob>('documentAnalysis');
-    await queue.add('document-analyze', job, {
-      jobId: `doc-analysis-${job.evidenceId}`,
-    });
-    console.log(`[EvidencePipeline] Enqueued document analysis for evidence ${job.evidenceId}`);
-  } catch (err) {
-    console.error('[EvidencePipeline] Failed to enqueue document analysis:', err);
-  }
+  const queue = getQueue<DocumentAnalysisJob>('documentAnalysis');
+  await queue.add('document-analyze', job, {
+    jobId: `doc-analysis-${job.evidenceId}`,
+  });
+  console.log(`[EvidencePipeline] Enqueued document analysis for evidence ${job.evidenceId}`);
 }

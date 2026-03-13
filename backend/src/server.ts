@@ -25,6 +25,7 @@ import { registerAutonomousCpraRoutes } from './cpra/autonomousCpraRoutes.js';
 import { registerBillingRoutes } from './billing/billingRoutes.js';
 import { registerCaseRoutes } from './evidence/caseRoutes.js';
 import { registerEvidenceRoutes } from './evidence/evidenceRoutes.js';
+import { registerNarrativeRoutes } from './narrative/narrativeRoutes.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -143,6 +144,10 @@ async function startServer() {
 
   console.log('[Server] Registering evidence routes...');
   await registerEvidenceRoutes(app);
+
+  // Narrative Deconstruction Engine routes
+  console.log('[Server] Registering narrative deconstruction engine routes...');
+  await registerNarrativeRoutes(app);
 
   // Start server
   try {

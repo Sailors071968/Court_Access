@@ -68,6 +68,7 @@ import { CaseSettingsPage } from './pages/case/CaseSettingsPage';
 import { TrialExhibitWorkspace } from './pages/case/TrialExhibitWorkspace';
 import { LitigationStrategyView } from './pages/case/LitigationStrategyView';
 import { ContradictionDashboardPage } from './pages/case/ContradictionDashboardPage';
+import { NarrativeAnalysisPage } from './pages/case/NarrativeAnalysisPage';
 
 function App() {
   return (
@@ -378,6 +379,14 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canViewEvidence">
                   <ContradictionDashboardPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="narrative-analysis"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <NarrativeAnalysisPage />
                 </ProtectedRoute>
               }
             />

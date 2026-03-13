@@ -249,7 +249,7 @@ export async function processClaimExtraction(job: ClaimExtractionJob): Promise<{
 
   if (!evidence) {
     console.error(`[ClaimExtraction] Evidence ${job.evidenceId} not found`);
-    return { claimsExtracted: 0 };
+    return { claimsExtracted: 0, processingTimeMs: Date.now() - startTime };
   }
 
   // In production: download document from R2, extract text using PDF/DOCX parser.

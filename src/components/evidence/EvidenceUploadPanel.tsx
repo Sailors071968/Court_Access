@@ -60,6 +60,7 @@ export function EvidenceUploadPanel({ caseId, onUploadComplete, onClose }: Evide
 
   const startUpload = useCallback(async () => {
     const pending = uploads.filter((u) => u.status === 'pending');
+    let successCount = 0;
     for (const item of pending) {
       setUploads((prev) => prev.map((u) => u.id === item.id ? { ...u, status: 'uploading' } : u));
       try {
@@ -72,14 +73,15 @@ export function EvidenceUploadPanel({ caseId, onUploadComplete, onClose }: Evide
           },
         });
         setUploads((prev) => prev.map((u) => u.id === item.id ? { ...u, status: 'complete', progress: 100 } : u));
+        successCount++;
       } catch (err) {
         const errorMsg = err instanceof Error ? err.message : 'Upload failed';
         setUploads((prev) => prev.map((u) => u.id === item.id ? { ...u, status: 'error', error: errorMsg } : u));
       }
     }
-    // Only notify parent if at least one upload succeeded
-    const hasSuccess = uploads.some((u) => pending.find((p) => p.id === u.id) && u.status !== 'error');
-    if (hasSuccess) {
+    // Only notify parent if at least one upload succeeded (uses local counter
+    // instead of reading from stale `uploads` closure to avoid false positives)
+    if (successCount > 0) {
       onUploadComplete?.();
     }
   }, [uploads, caseId, onUploadComplete]);

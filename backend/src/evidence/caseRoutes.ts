@@ -174,17 +174,17 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
     const body = request.body as UpdateCaseBody;
 
     // Validate optional fields if provided
-    if (body.caseType && !VALID_CASE_TYPES.includes(body.caseType)) {
+    if (body.caseType !== undefined && !VALID_CASE_TYPES.includes(body.caseType)) {
       return reply.code(400).send({
         error: `Invalid caseType. Must be one of: ${VALID_CASE_TYPES.join(', ')}`,
       });
     }
-    if (body.status && !VALID_STATUSES.includes(body.status)) {
+    if (body.status !== undefined && !VALID_STATUSES.includes(body.status)) {
       return reply.code(400).send({
         error: `Invalid status. Must be one of: ${VALID_STATUSES.join(', ')}`,
       });
     }
-    if (body.phase && !VALID_PHASES.includes(body.phase)) {
+    if (body.phase !== undefined && !VALID_PHASES.includes(body.phase)) {
       return reply.code(400).send({
         error: `Invalid phase. Must be one of: ${VALID_PHASES.join(', ')}`,
       });

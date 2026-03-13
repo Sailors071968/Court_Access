@@ -5,7 +5,7 @@
 
 import type { FastifyInstance, FastifyReply } from 'fastify';
 import { PrismaClient } from '@prisma/client';
-import { S3Client, PutObjectCommand } from '@aws-sdk/client-s3';
+import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import crypto from 'crypto';
 import type { AuthenticatedRequest } from '../security/authMiddleware.js';
@@ -254,13 +254,19 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
     const { caseId } = request.params as { caseId: string };
 
     // Verify case access
-    const caseRecord = await prisma.criminalCase.findFirst({
-      where: {
-        caseId,
-        tenantId: user.tenantId,
-        deletedAt: null,
-      },
-    });
+    let caseRecord;
+    try {
+      caseRecord = await prisma.criminalCase.findFirst({
+        where: {
+          caseId,
+          tenantId: user.tenantId,
+          deletedAt: null,
+        },
+      });
+    } catch (err) {
+      console.error('[EvidenceRoutes] Case access check failed:', err);
+      return reply.code(500).send({ error: 'Failed to verify case access' });
+    }
 
     if (!caseRecord) {
       return reply.code(403).send({ error: 'Forbidden' });
@@ -342,6 +348,19 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
 
       if (!evidence) {
         return reply.code(403).send({ error: 'Forbidden' });
+      }
+
+      // Delete S3 object first, then DB record
+      try {
+        const s3 = getS3Client();
+        const deleteCommand = new DeleteObjectCommand({
+          Bucket: S3_BUCKET,
+          Key: evidence.s3Key,
+        });
+        await s3.send(deleteCommand);
+      } catch (s3Err) {
+        console.error('[EvidenceRoutes] Failed to delete S3 object (proceeding with DB delete):', s3Err);
+        // Continue with DB deletion even if S3 fails — log for manual cleanup
       }
 
       await prisma.evidence.delete({

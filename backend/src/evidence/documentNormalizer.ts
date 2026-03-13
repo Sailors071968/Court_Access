@@ -214,7 +214,7 @@ export function normalizeDocument(input: DocumentNormalizationInput): Normalizat
       rejectionReason:
         `CourtAccess requires discovery documents to be uploaded with one page per page. ` +
         `Multiplexed documents are not permitted except for ${typeLabel} (${limitLabel}). ` +
-        `Detected ${maxMultiplexCount}-up format on page ${analyzedPages.find((p) => p.logicalPageCount > maxAllowed)?.pageIndex ?? 0 + 1}.`,
+        `Detected ${maxMultiplexCount}-up format on page ${(analyzedPages.find((p) => p.logicalPageCount > maxAllowed)?.pageIndex ?? 0) + 1}.`,
     };
   }
 

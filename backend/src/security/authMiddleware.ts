@@ -364,7 +364,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       const payload = verifyRefreshToken(token);
       revokeRefreshToken(token); // Rotate: revoke old token
 
-      const newPayload = { userId: payload.userId, email: payload.email, role: payload.role };
+      const newPayload = { userId: payload.userId, tenantId: payload.tenantId, email: payload.email, role: payload.role };
       const newAccessToken = generateAccessToken(newPayload);
       const newRefreshToken = generateRefreshToken(newPayload);
 

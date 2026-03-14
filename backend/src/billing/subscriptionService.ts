@@ -210,6 +210,7 @@ export async function setUserSubscription(
       billingPeriodEnd,
       stripeSubscriptionId: stripeSubscriptionId ?? null,
       stripeCustomerId: stripeCustomerId ?? null,
+      subscriptionStatus: 'active',
       subscriptionTier: planIdToTier(planId),
     },
     create: {

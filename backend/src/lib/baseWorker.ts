@@ -90,20 +90,32 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
       return; // No credit deduction needed
     }
 
-    await prisma.$transaction([
-      prisma.aiCreditBalance.update({
+    // Atomic check-and-deduct to prevent overdraft from concurrent jobs
+    await prisma.$transaction(async (tx) => {
+      const balance = await tx.aiCreditBalance.findUnique({ where: { userId } });
+      if (!balance) {
+        throw new Error(`[ACU] No credit balance for user ${userId}`);
+      }
+      const available = (balance.monthlyCredits + balance.purchasedCredits) - balance.creditsUsed;
+      if (available < acuCreditsRequired) {
+        throw new Error(
+          `[ACU] Insufficient credits after processing for user ${userId}. ` +
+          `Required: ${acuCreditsRequired}, Available: ${available}. Job ${job.id} rejected.`
+        );
+      }
+      await tx.aiCreditBalance.update({
         where: { userId },
         data: { creditsUsed: { increment: acuCreditsRequired } },
-      }),
-      prisma.aiCreditUsage.create({
+      });
+      await tx.aiCreditUsage.create({
         data: {
           userId,
           caseId: caseId ?? null,
           analysisType: this.workerName,
           creditsUsed: acuCreditsRequired,
         },
-      }),
-    ]);
+      });
+    });
 
     console.log(
       `[${this.workerName}] Deducted ${acuCreditsRequired} ACU credits from user ${userId} for job ${job.id}`

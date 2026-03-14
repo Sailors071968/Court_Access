@@ -104,7 +104,7 @@ function mapStripePriceToTier(priceKey?: string): { planId: string; tier: string
     'litigation_monthly': { planId: 'LITIGATION', tier: 'litigation' },
     'enterprise_monthly': { planId: 'ENTERPRISE', tier: 'enterprise' },
   };
-  return mapping[priceKey ?? ''] ?? { planId: 'STARTER', tier: 'starter' };
+  return mapping[priceKey ?? ''] ?? { planId: 'FREE', tier: 'free' };
 }
 
 // ---------------------------------------------------------------------------
@@ -345,8 +345,12 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
     const signature = request.headers['stripe-signature'] as string;
     const rawBody = (request as unknown as { rawBody?: Buffer }).rawBody;
 
-    // Verify signature in production
-    if (STRIPE_WEBHOOK_SECRET && rawBody && signature) {
+    // Verify signature — reject if secret is configured but header is missing
+    if (STRIPE_WEBHOOK_SECRET) {
+      if (!signature || !rawBody) {
+        void logSecurityEvent('STRIPE_WEBHOOK_INVALID_SIGNATURE', undefined, request.ip, 'Missing stripe-signature header');
+        return reply.code(400).send({ error: 'Missing stripe-signature header' });
+      }
       const isValid = verifyStripeSignature(rawBody, signature);
       if (!isValid) {
         void logSecurityEvent('STRIPE_WEBHOOK_INVALID_SIGNATURE', undefined, request.ip, 'Invalid webhook signature');

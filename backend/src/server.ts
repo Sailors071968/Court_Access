@@ -31,6 +31,8 @@ import { registerQueueMonitorRoutes } from './admin/queueMonitorRoutes.js';
 import { registerAdminRoutes } from './admin/adminRoutes.js';
 import { registerDiscountRoutes } from './billing/discountRoutes.js';
 import { seedDefaultDiscountCodes } from './billing/discountSeed.js';
+import { registerStripeCheckoutRoutes } from './billing/stripeCheckoutRoutes.js';
+import { acuUploadLockHook } from './billing/acuEnforcementMiddleware.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -87,6 +89,9 @@ async function startServer() {
 
   // Phase 195 — Evidence upload protection
   app.addHook('onRequest', uploadProtectionHook);
+
+  // ACU Upload Lock — Block evidence uploads when credits exhausted
+  app.addHook('onRequest', acuUploadLockHook);
 
   // Phase 197 — Security logging (response tracking)
   await registerSecurityLogging(app);
@@ -165,6 +170,10 @@ async function startServer() {
   // Admin management routes (stats, users, cases, delete endpoints)
   console.log('[Server] Registering admin management routes...');
   await registerAdminRoutes(app);
+
+  // Stripe Checkout & Webhook routes
+  console.log('[Server] Registering Stripe checkout routes...');
+  await registerStripeCheckoutRoutes(app);
 
   // Discount code API routes
   console.log('[Server] Registering discount code routes...');
@@ -254,6 +263,10 @@ async function startServer() {
     console.log('  - DELETE /api/admin/users/:userId');
     console.log('  - DELETE /api/admin/cases/:caseId');
     console.log('  - DELETE /api/admin/evidence/:evidenceId');
+    console.log('  - POST /api/billing/create-checkout-session');
+    console.log('  - POST /api/billing/webhook');
+    console.log('  - GET  /api/billing/checkout-status/:sessionId');
+    console.log('  - GET  /api/billing/acu-packs');
     console.log('[Server] Security hardening active: JWT auth, rate limiting, CSRF, security headers, upload protection, security logging');
   } catch (err) {
     console.error('[Server] Failed to start:', err);

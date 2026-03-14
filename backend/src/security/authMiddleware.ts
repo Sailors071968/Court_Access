@@ -373,41 +373,46 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     const userName = name || email.split('@')[0];
     const tenantId = `tenant-${crypto.randomUUID()}`;
 
-    const user = await prisma.user.create({
-      data: {
-        email,
-        name: userName,
-        passwordHash,
-        role: userRole,
-        tenantId,
-      },
-    });
-
-    // Create default FREE subscription
     const now = new Date();
-    await prisma.subscription.create({
-      data: {
-        userId: user.id,
-        planId: 'FREE',
-        activatedAt: now,
-        billingPeriodStart: now,
-        billingPeriodEnd: new Date(now.getFullYear() + 100, 0, 1),
-        subscriptionStatus: 'active',
-        subscriptionTier: 'free',
-      },
-    });
-
-    // Create default credit balance
     const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-    await prisma.aiCreditBalance.create({
-      data: {
-        userId: user.id,
-        monthlyCredits: 0,
-        purchasedCredits: 0,
-        creditsUsed: 0,
-        billingPeriodStart: now,
-        billingPeriodEnd: endOfMonth,
-      },
+
+    // Atomic transaction: create user + default subscription + credit balance
+    // If any step fails, all are rolled back so the user can retry registration.
+    const user = await prisma.$transaction(async (tx) => {
+      const created = await tx.user.create({
+        data: {
+          email,
+          name: userName,
+          passwordHash,
+          role: userRole,
+          tenantId,
+        },
+      });
+
+      await tx.subscription.create({
+        data: {
+          userId: created.id,
+          planId: 'FREE',
+          activatedAt: now,
+          billingPeriodStart: now,
+          billingPeriodEnd: new Date(now.getFullYear() + 100, 0, 1),
+          subscriptionStatus: 'active',
+          subscriptionTier: 'free',
+        },
+      });
+
+      await tx.aiCreditBalance.create({
+        data: {
+          userId: created.id,
+          monthlyCredits: 0,
+          purchasedCredits: 0,
+          creditsUsed: 0,
+          billingPeriodStart: now,
+          billingPeriodEnd: endOfMonth,
+        },
+      });
+
+      return created;
     });
 
     const tokenPayload = { userId: user.id, tenantId, email, role: userRole };

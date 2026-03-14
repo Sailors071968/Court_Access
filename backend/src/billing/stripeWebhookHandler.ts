@@ -276,6 +276,18 @@ async function handleCheckoutCompleted(session: StripeCheckoutSession): Promise<
     return;
   }
 
+  // Read plan from session metadata (set when creating the checkout session).
+  // Falls back to STARTER only if metadata is missing — callers MUST set planId
+  // in session metadata when creating checkout sessions.
+  const metaPlanId = session.metadata?.planId;
+  const mapped = metaPlanId
+    ? mapStripePriceToTier(metaPlanId)
+    : { planId: 'STARTER', tier: 'starter' };
+
+  if (!metaPlanId) {
+    console.warn(`[StripeWebhook] checkout.session.completed missing planId in metadata for session ${session.id} — defaulting to STARTER`);
+  }
+
   // Update subscription with Stripe IDs
   await prisma.subscription.upsert({
     where: { userId },
@@ -286,11 +298,11 @@ async function handleCheckoutCompleted(session: StripeCheckoutSession): Promise<
     },
     create: {
       userId,
-      planId: 'STARTER',
+      planId: mapped.planId,
       stripeCustomerId: session.customer,
       stripeSubscriptionId: session.subscription,
       subscriptionStatus: 'active',
-      subscriptionTier: 'starter',
+      subscriptionTier: mapped.tier,
       billingPeriodStart: new Date(),
       billingPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
     },
@@ -300,10 +312,10 @@ async function handleCheckoutCompleted(session: StripeCheckoutSession): Promise<
     'STRIPE_CHECKOUT_COMPLETED',
     userId,
     undefined,
-    `Checkout session ${session.id} completed`,
+    `Checkout session ${session.id} completed: ${mapped.tier}`,
   );
 
-  console.log(`[StripeWebhook] Checkout completed: user=${userId} session=${session.id}`);
+  console.log(`[StripeWebhook] Checkout completed: user=${userId} plan=${mapped.planId} session=${session.id}`);
 }
 
 async function handleInvoicePaid(invoice: StripeInvoice): Promise<void> {

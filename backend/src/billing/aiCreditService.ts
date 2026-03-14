@@ -242,7 +242,7 @@ export async function deductCredits(
       },
     });
     return true;
-  });
+  }, { isolationLevel: 'Serializable' });
 
   return result;
 }
@@ -349,6 +349,6 @@ export async function resetMonthlyCredits(userId: string): Promise<AiCreditBalan
         billingPeriodEnd: endOfMonth,
       },
     });
-  });
+  }, { isolationLevel: 'Serializable' });
   return toAiCreditBalance(updated);
 }

@@ -115,7 +115,7 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
           creditsUsed: acuCreditsRequired,
         },
       });
-    });
+    }, { isolationLevel: 'Serializable' });
 
     console.log(
       `[${this.workerName}] Deducted ${acuCreditsRequired} ACU credits from user ${userId} for job ${job.id}`

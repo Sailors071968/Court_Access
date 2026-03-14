@@ -131,13 +131,9 @@ async function handleSubscriptionCreated(sub: StripeSubscriptionObject): Promise
     return;
   }
 
-  // If lookup_key is missing, log a warning — still use mapped values for create
-  // but for update, preserve existing plan to avoid silent downgrade
   if (!priceKey) {
-    console.warn(`[StripeWebhook] subscription.created missing price lookup_key for ${subscriptionId} — defaulting to mapped plan`);
+    console.warn(`[StripeWebhook] subscription.created missing price lookup_key for ${subscriptionId}`);
   }
-  const planId = mapped.planId;
-  const tier = mapped.tier;
 
   const periodStart = sub.current_period_start
     ? new Date(sub.current_period_start * 1000)
@@ -146,25 +142,32 @@ async function handleSubscriptionCreated(sub: StripeSubscriptionObject): Promise
     ? new Date(sub.current_period_end * 1000)
     : new Date(Date.now() + 30 * 24 * 60 * 60 * 1000);
 
+  // For the update path: only overwrite plan/tier if lookup_key is present,
+  // otherwise preserve existing plan to avoid silent downgrade to FREE.
+  // For the create path: use mapped values (FREE is acceptable as a default for new records).
+  const updateData: Record<string, unknown> = {
+    stripeSubscriptionId: subscriptionId,
+    stripeCustomerId: customerId,
+    subscriptionStatus: status,
+    billingPeriodStart: periodStart,
+    billingPeriodEnd: periodEnd,
+    activatedAt: new Date(),
+  };
+  if (priceKey) {
+    updateData.planId = mapped.planId;
+    updateData.subscriptionTier = mapped.tier;
+  }
+
   await prisma.subscription.upsert({
     where: { userId },
-    update: {
-      planId,
-      stripeSubscriptionId: subscriptionId,
-      stripeCustomerId: customerId,
-      subscriptionStatus: status,
-      subscriptionTier: tier,
-      billingPeriodStart: periodStart,
-      billingPeriodEnd: periodEnd,
-      activatedAt: new Date(),
-    },
+    update: updateData,
     create: {
       userId,
-      planId,
+      planId: mapped.planId,
       stripeSubscriptionId: subscriptionId,
       stripeCustomerId: customerId,
       subscriptionStatus: status,
-      subscriptionTier: tier,
+      subscriptionTier: mapped.tier,
       billingPeriodStart: periodStart,
       billingPeriodEnd: periodEnd,
       activatedAt: new Date(),
@@ -175,10 +178,10 @@ async function handleSubscriptionCreated(sub: StripeSubscriptionObject): Promise
     'STRIPE_SUBSCRIPTION_CREATED',
     userId,
     undefined,
-    `Subscription ${subscriptionId} created: ${tier} (${status})`,
+    `Subscription ${subscriptionId} created: ${mapped.tier} (${status})`,
   );
 
-  console.log(`[StripeWebhook] Subscription created: user=${userId} plan=${planId} status=${status}`);
+  console.log(`[StripeWebhook] Subscription created: user=${userId} plan=${mapped.planId} status=${status}`);
 }
 
 async function handleSubscriptionUpdated(sub: StripeSubscriptionObject): Promise<void> {

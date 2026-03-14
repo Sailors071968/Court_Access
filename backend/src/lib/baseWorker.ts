@@ -148,8 +148,18 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
           // Step 2: Execute the actual job logic
           await this.processJob(job);
 
-          // Step 3: Deduct ACU credits AFTER successful processing
-          await this.consumeACU(job);
+          // Step 3: Deduct ACU credits AFTER successful processing.
+          // Do NOT rethrow — processJob already succeeded, retrying would duplicate work.
+          try {
+            await this.consumeACU(job);
+          } catch (creditError) {
+            const msg = creditError instanceof Error ? creditError.message : String(creditError);
+            console.error(
+              `[${this.workerName}] ACU credit deduction failed for job ${job.id} ` +
+              `(job completed successfully): ${msg}`
+            );
+            // TODO: enqueue a separate credit-deduction-retry job or alert for manual resolution
+          }
 
           const durationMs = Date.now() - startTime;
           console.log(`[${this.workerName}] Job ${job.id} completed in ${durationMs}ms`);
@@ -157,7 +167,7 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
           const durationMs = Date.now() - startTime;
           const message = error instanceof Error ? error.message : String(error);
           console.error(`[${this.workerName}] Job ${job.id} failed after ${durationMs}ms: ${message}`);
-          throw error; // Rethrow to trigger BullMQ retry
+          throw error; // Rethrow to trigger BullMQ retry (only for validateACU or processJob failures)
         }
       },
       {

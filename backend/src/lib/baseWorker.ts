@@ -55,16 +55,18 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
 
   /**
    * Reserve ACU credits BEFORE processing (atomic check-and-deduct).
-   * Returns true if credits were reserved, false if no reservation needed.
+   * Returns the usage record ID if credits were reserved, null if no reservation needed.
    * Throws if insufficient credits — prevents the job from running.
    */
-  private async reserveACU(job: Job<TData>): Promise<boolean> {
+  private async reserveACU(job: Job<TData>): Promise<string | null> {
     const { userId, acuCreditsRequired, caseId } = job.data;
     if (!acuCreditsRequired || acuCreditsRequired <= 0) {
-      return false; // No credit reservation needed
+      return null; // No credit reservation needed
     }
 
-    // Atomic check-and-deduct to prevent overdraft from concurrent jobs
+    // Atomic check-and-deduct to prevent overdraft from concurrent jobs.
+    // Returns the created usage record ID for precise refund targeting.
+    let usageRecordId: string | null = null;
     await prisma.$transaction(async (tx) => {
       const balance = await tx.aiCreditBalance.findUnique({ where: { userId } });
       if (!balance) {
@@ -81,7 +83,7 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
         where: { userId },
         data: { creditsUsed: { increment: acuCreditsRequired } },
       });
-      await tx.aiCreditUsage.create({
+      const usage = await tx.aiCreditUsage.create({
         data: {
           userId,
           caseId: caseId ?? null,
@@ -89,19 +91,21 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
           creditsUsed: acuCreditsRequired,
         },
       });
+      usageRecordId = usage.id;
     }, { isolationLevel: 'Serializable' });
 
     console.log(
       `[${this.workerName}] Reserved ${acuCreditsRequired} ACU credits from user ${userId} for job ${job.id}`
     );
-    return true;
+    return usageRecordId;
   }
 
   /**
    * Refund previously reserved ACU credits when processJob fails.
+   * Uses the exact usage record ID from reserveACU for precise deletion.
    * Best-effort — logs error if refund fails but does not rethrow.
    */
-  private async refundACU(job: Job<TData>): Promise<void> {
+  private async refundACU(job: Job<TData>, usageRecordId: string): Promise<void> {
     const { userId, acuCreditsRequired } = job.data;
     if (!acuCreditsRequired || acuCreditsRequired <= 0) {
       return;
@@ -113,19 +117,8 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
           where: { userId },
           data: { creditsUsed: { decrement: acuCreditsRequired } },
         });
-        // Delete the usage record created during reservation
-        // Find the most recent usage record for this worker/user combination
-        const usageRecord = await tx.aiCreditUsage.findFirst({
-          where: {
-            userId,
-            analysisType: this.workerName,
-            creditsUsed: acuCreditsRequired,
-          },
-          orderBy: { createdAt: 'desc' },
-        });
-        if (usageRecord) {
-          await tx.aiCreditUsage.delete({ where: { id: usageRecord.id } });
-        }
+        // Delete the exact usage record created during reservation
+        await tx.aiCreditUsage.delete({ where: { id: usageRecordId } });
       });
       console.log(
         `[${this.workerName}] Refunded ${acuCreditsRequired} ACU credits to user ${userId} for failed job ${job.id}`
@@ -160,7 +153,8 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
 
         // Step 1: Reserve ACU credits BEFORE processing (atomic).
         // Throws if insufficient — prevents job from running.
-        const creditsReserved = await this.reserveACU(job);
+        // Returns the usage record ID for precise refund targeting.
+        const usageRecordId = await this.reserveACU(job);
 
         try {
           // Step 2: Execute the actual job logic
@@ -170,8 +164,8 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
           console.log(`[${this.workerName}] Job ${job.id} completed in ${durationMs}ms`);
         } catch (error) {
           // processJob failed — refund the reserved credits (best-effort)
-          if (creditsReserved) {
-            await this.refundACU(job);
+          if (usageRecordId) {
+            await this.refundACU(job, usageRecordId);
           }
           const durationMs = Date.now() - startTime;
           const message = error instanceof Error ? error.message : String(error);

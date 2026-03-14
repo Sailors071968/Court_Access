@@ -114,6 +114,23 @@ function mapStripePriceToTier(priceKey?: string): { planId: string; tier: string
   return mapping[priceKey ?? ''] ?? { planId: 'FREE', tier: 'free' };
 }
 
+/**
+ * Maps an internal plan ID (e.g. 'STARTER', 'PROFESSIONAL') to its tier string.
+ * Used by handleCheckoutCompleted where session.metadata.planId contains the
+ * internal plan ID — NOT a Stripe price lookup key.
+ */
+function mapPlanIdToTier(planId?: string): { planId: string; tier: string } {
+  const mapping: Record<string, { planId: string; tier: string }> = {
+    'FREE': { planId: 'FREE', tier: 'free' },
+    'STARTER': { planId: 'STARTER', tier: 'starter' },
+    'PROFESSIONAL': { planId: 'PROFESSIONAL', tier: 'professional' },
+    'ADVANCED_INVESTIGATOR': { planId: 'ADVANCED_INVESTIGATOR', tier: 'advanced' },
+    'LITIGATION_INTELLIGENCE_PRO': { planId: 'LITIGATION_INTELLIGENCE_PRO', tier: 'litigation' },
+    'ENTERPRISE_FIRM': { planId: 'ENTERPRISE_FIRM', tier: 'enterprise' },
+  };
+  return mapping[planId ?? ''] ?? { planId: planId ?? 'FREE', tier: 'free' };
+}
+
 // ---------------------------------------------------------------------------
 // Event Handlers — all persist to PostgreSQL
 // ---------------------------------------------------------------------------
@@ -281,7 +298,7 @@ async function handleCheckoutCompleted(session: StripeCheckoutSession): Promise<
   // in session metadata when creating checkout sessions.
   const metaPlanId = session.metadata?.planId;
   const mapped = metaPlanId
-    ? mapStripePriceToTier(metaPlanId)
+    ? mapPlanIdToTier(metaPlanId)
     : { planId: 'STARTER', tier: 'starter' };
 
   if (!metaPlanId) {
@@ -295,6 +312,8 @@ async function handleCheckoutCompleted(session: StripeCheckoutSession): Promise<
       stripeCustomerId: session.customer,
       stripeSubscriptionId: session.subscription,
       subscriptionStatus: 'active',
+      planId: mapped.planId,
+      subscriptionTier: mapped.tier,
     },
     create: {
       userId,

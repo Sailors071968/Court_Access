@@ -123,13 +123,21 @@ async function handleSubscriptionCreated(sub: StripeSubscriptionObject): Promise
   const subscriptionId = sub.id;
   const status = sub.status;
   const priceKey = sub.items?.data?.[0]?.price?.lookup_key;
-  const { planId, tier } = mapStripePriceToTier(priceKey);
+  const mapped = mapStripePriceToTier(priceKey);
   const userId = sub.metadata?.userId;
 
   if (!userId) {
     console.warn(`[StripeWebhook] subscription.created missing userId in metadata for ${subscriptionId}`);
     return;
   }
+
+  // If lookup_key is missing, log a warning — still use mapped values for create
+  // but for update, preserve existing plan to avoid silent downgrade
+  if (!priceKey) {
+    console.warn(`[StripeWebhook] subscription.created missing price lookup_key for ${subscriptionId} — defaulting to mapped plan`);
+  }
+  const planId = mapped.planId;
+  const tier = mapped.tier;
 
   const periodStart = sub.current_period_start
     ? new Date(sub.current_period_start * 1000)
@@ -177,7 +185,7 @@ async function handleSubscriptionUpdated(sub: StripeSubscriptionObject): Promise
   const subscriptionId = sub.id;
   const status = sub.status;
   const priceKey = sub.items?.data?.[0]?.price?.lookup_key;
-  const { planId, tier } = mapStripePriceToTier(priceKey);
+  const mapped = mapStripePriceToTier(priceKey);
 
   // Find subscription by Stripe subscription ID
   const existing = await prisma.subscription.findFirst({
@@ -187,6 +195,15 @@ async function handleSubscriptionUpdated(sub: StripeSubscriptionObject): Promise
   if (!existing) {
     console.warn(`[StripeWebhook] subscription.updated: no local subscription found for ${subscriptionId}`);
     return;
+  }
+
+  // Only update plan/tier if lookup_key is present — otherwise preserve existing
+  // to prevent silent downgrade to FREE on events without full item data
+  const planId = priceKey ? mapped.planId : existing.planId;
+  const tier = priceKey ? mapped.tier : (existing.subscriptionTier ?? 'free');
+
+  if (!priceKey) {
+    console.warn(`[StripeWebhook] subscription.updated missing price lookup_key for ${subscriptionId} — preserving existing plan ${existing.planId}`);
   }
 
   const periodStart = sub.current_period_start

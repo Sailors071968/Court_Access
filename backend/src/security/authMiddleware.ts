@@ -2,11 +2,13 @@
 // Phase 191 — Authentication Middleware
 // JWT authentication, refresh tokens, session expiration, role-based access control
 // Roles: admin, attorney, investigator, staff, defendant
+// Now persisted to PostgreSQL via Prisma (replaces in-memory Maps).
 // ============================================================================
 
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import prisma from '../lib/prisma.js';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -48,17 +50,8 @@ const REFRESH_TOKEN_EXPIRY = '7d';
 const ACCESS_TOKEN_EXPIRY_SECONDS = 15 * 60;
 const REFRESH_TOKEN_EXPIRY_SECONDS = 7 * 24 * 60 * 60;
 
-// In-memory refresh token store (production: use Redis or database)
-const refreshTokenStore = new Map<string, RefreshTokenRecord>();
-
-// Security event log (in-memory, production: use structured logging)
-const securityLog: Array<{
-  timestamp: string;
-  event: string;
-  userId?: string;
-  ip?: string;
-  details?: string;
-}> = [];
+// Refresh tokens and security logs are now persisted to PostgreSQL via Prisma.
+// See models: RefreshToken, SecurityLog in schema.prisma.
 
 // ---------------------------------------------------------------------------
 // Token Generation
@@ -68,19 +61,18 @@ export function generateAccessToken(payload: Omit<JwtPayload, 'iat' | 'exp'>): s
   return jwt.sign(payload, JWT_SECRET, { expiresIn: ACCESS_TOKEN_EXPIRY });
 }
 
-export function generateRefreshToken(payload: Omit<JwtPayload, 'iat' | 'exp'>): string {
+export async function generateRefreshToken(payload: Omit<JwtPayload, 'iat' | 'exp'>): Promise<string> {
   const token = jwt.sign(payload, JWT_REFRESH_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRY });
 
-  const record: RefreshTokenRecord = {
-    token,
-    userId: payload.userId,
-    email: payload.email,
-    role: payload.role,
-    expiresAt: new Date(Date.now() + REFRESH_TOKEN_EXPIRY_SECONDS * 1000),
-    createdAt: new Date(),
-    revoked: false,
-  };
-  refreshTokenStore.set(token, record);
+  await prisma.refreshToken.create({
+    data: {
+      token,
+      userId: payload.userId,
+      email: payload.email,
+      role: payload.role,
+      expiresAt: new Date(Date.now() + REFRESH_TOKEN_EXPIRY_SECONDS * 1000),
+    },
+  });
 
   return token;
 }
@@ -89,55 +81,85 @@ export function verifyAccessToken(token: string): JwtPayload {
   return jwt.verify(token, JWT_SECRET) as JwtPayload;
 }
 
-export function verifyRefreshToken(token: string): JwtPayload {
+export async function verifyRefreshToken(token: string): Promise<JwtPayload> {
   const payload = jwt.verify(token, JWT_REFRESH_SECRET) as JwtPayload;
-  const record = refreshTokenStore.get(token);
+  const record = await prisma.refreshToken.findUnique({ where: { token } });
   if (!record || record.revoked) {
     throw new Error('Refresh token has been revoked');
   }
   return payload;
 }
 
-export function revokeRefreshToken(token: string): boolean {
-  const record = refreshTokenStore.get(token);
-  if (record) {
-    record.revoked = true;
+export async function revokeRefreshToken(token: string): Promise<boolean> {
+  try {
+    await prisma.refreshToken.update({
+      where: { token },
+      data: { revoked: true },
+    });
     return true;
+  } catch {
+    return false;
   }
-  return false;
 }
 
-export function revokeAllUserTokens(userId: string): number {
-  let count = 0;
-  for (const [, record] of refreshTokenStore) {
-    if (record.userId === userId && !record.revoked) {
-      record.revoked = true;
-      count++;
-    }
-  }
-  return count;
+export async function revokeAllUserTokens(userId: string): Promise<number> {
+  const result = await prisma.refreshToken.updateMany({
+    where: { userId, revoked: false },
+    data: { revoked: true },
+  });
+  return result.count;
 }
 
 // ---------------------------------------------------------------------------
 // Security Event Logging
 // ---------------------------------------------------------------------------
 
-export function logSecurityEvent(event: string, userId?: string, ip?: string, details?: string): void {
-  securityLog.push({
-    timestamp: new Date().toISOString(),
-    event,
-    userId,
-    ip,
-    details,
-  });
-  // Keep last 10000 events in memory
-  if (securityLog.length > 10000) {
-    securityLog.splice(0, securityLog.length - 10000);
+export async function logSecurityEvent(event: string, userId?: string, ip?: string, details?: string): Promise<void> {
+  try {
+    await prisma.securityLog.create({
+      data: {
+        event,
+        userId: userId ?? null,
+        ip: ip ?? null,
+        details: details ?? null,
+      },
+    });
+  } catch {
+    // Fallback: log without userId FK if user doesn't exist yet
+    try {
+      await prisma.securityLog.create({
+        data: {
+          event,
+          userId: null,
+          ip: ip ?? null,
+          details: details ? `[uid:${userId}] ${details}` : `[uid:${userId}]`,
+        },
+      });
+    } catch {
+      // Last resort: console log if DB is unavailable
+      console.error(`[SecurityLog] ${event} userId=${userId} ip=${ip} ${details}`);
+    }
   }
 }
 
-export function getSecurityLog(): typeof securityLog {
-  return [...securityLog];
+export async function getSecurityLog(limit = 100): Promise<Array<{
+  timestamp: string;
+  event: string;
+  userId?: string | null;
+  ip?: string | null;
+  details?: string | null;
+}>> {
+  const logs = await prisma.securityLog.findMany({
+    orderBy: { createdAt: 'desc' },
+    take: limit,
+  });
+  return logs.map((l) => ({
+    timestamp: l.createdAt.toISOString(),
+    event: l.event,
+    userId: l.userId,
+    ip: l.ip,
+    details: l.details,
+  }));
 }
 
 // ---------------------------------------------------------------------------
@@ -232,7 +254,7 @@ export async function authenticationHook(
   // Extract token
   const token = extractBearerToken(request.headers.authorization);
   if (!token) {
-    logSecurityEvent('UNAUTHORIZED_ACCESS', undefined, request.ip, `No token provided for ${path}`);
+    void logSecurityEvent('UNAUTHORIZED_ACCESS', undefined, request.ip, `No token provided for ${path}`);
     reply.code(401).send({
       error: 'Authentication required',
       message: 'Please provide a valid Bearer token in the Authorization header',
@@ -248,7 +270,7 @@ export async function authenticationHook(
     // Check role-based permissions
     const requiredRoles = getRequiredRoles(path);
     if (requiredRoles && !hasPermission(payload.role, requiredRoles)) {
-      logSecurityEvent(
+      void logSecurityEvent(
         'FORBIDDEN_ACCESS',
         payload.userId,
         request.ip,
@@ -262,10 +284,10 @@ export async function authenticationHook(
       return;
     }
 
-    logSecurityEvent('AUTHENTICATED_ACCESS', payload.userId, request.ip, path);
+    void logSecurityEvent('AUTHENTICATED_ACCESS', payload.userId, request.ip, path);
   } catch (err) {
     const errorMessage = err instanceof Error ? err.message : 'Invalid token';
-    logSecurityEvent('INVALID_TOKEN', undefined, request.ip, `${errorMessage} for ${path}`);
+    void logSecurityEvent('INVALID_TOKEN', undefined, request.ip, `${errorMessage} for ${path}`);
     reply.code(401).send({
       error: 'Invalid or expired token',
       message: errorMessage,
@@ -278,8 +300,7 @@ export async function authenticationHook(
 // Auth Routes (login, register, refresh, logout)
 // ---------------------------------------------------------------------------
 
-// User store (in-memory; production should use database)
-const userStore = new Map<string, { userId: string; tenantId: string; email: string; name: string; passwordHash: string; role: UserRole }>();
+// User accounts are now persisted to PostgreSQL via Prisma User model.
 
 export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
   // POST /api/auth/login
@@ -287,23 +308,26 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     const { email, password } = request.body as { email: string; password: string };
 
     if (!email || !password) {
-      logSecurityEvent('LOGIN_FAILED', undefined, request.ip, 'Missing email or password');
+      void logSecurityEvent('LOGIN_FAILED', undefined, request.ip, 'Missing email or password');
       return reply.code(400).send({ error: 'Email and password are required' });
     }
 
-    const user = userStore.get(email);
+    const user = await prisma.user.findUnique({ where: { email } });
     const passwordHash = crypto.createHash('sha256').update(password).digest('hex');
 
     if (!user || user.passwordHash !== passwordHash) {
-      logSecurityEvent('LOGIN_FAILED', undefined, request.ip, `Failed login for ${email}`);
+      void logSecurityEvent('LOGIN_FAILED', undefined, request.ip, `Failed login for ${email}`);
       return reply.code(401).send({ error: 'Invalid email or password' });
     }
 
-    const tokenPayload = { userId: user.userId, tenantId: user.tenantId, email: user.email, role: user.role };
+    const tokenPayload = { userId: user.id, tenantId: user.tenantId, email: user.email, role: user.role as UserRole };
     const accessToken = generateAccessToken(tokenPayload);
-    const refreshToken = generateRefreshToken(tokenPayload);
+    const refreshToken = await generateRefreshToken(tokenPayload);
 
-    logSecurityEvent('LOGIN_SUCCESS', user.userId, request.ip, `Login for ${email}`);
+    void logSecurityEvent('LOGIN_SUCCESS', user.id, request.ip, `Login for ${email}`);
+
+    // Get subscription info from DB
+    const sub = await prisma.subscription.findUnique({ where: { userId: user.id } });
 
     // Set refresh token as httpOnly cookie
     reply.setCookie('refreshToken', refreshToken, {
@@ -318,7 +342,15 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       accessToken,
       refreshToken,
       expiresIn: ACCESS_TOKEN_EXPIRY_SECONDS,
-      user: { userId: user.userId, tenantId: user.tenantId, email: user.email, name: user.name, role: user.role, subscriptionStatus: 'trial', subscriptionTier: 'starter' },
+      user: {
+        userId: user.id,
+        tenantId: user.tenantId,
+        email: user.email,
+        name: user.name,
+        role: user.role,
+        subscriptionStatus: sub?.subscriptionStatus ?? 'none',
+        subscriptionTier: sub?.subscriptionTier ?? 'free',
+      },
     };
   });
 
@@ -330,29 +362,64 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       return reply.code(400).send({ error: 'Email and password are required' });
     }
 
-    if (userStore.has(email)) {
+    const existing = await prisma.user.findUnique({ where: { email } });
+    if (existing) {
       return reply.code(409).send({ error: 'User already exists' });
     }
 
-    const userId = `user-${crypto.randomUUID()}`;
-    const tenantId = `tenant-${crypto.randomUUID()}`;
     const passwordHash = crypto.createHash('sha256').update(password).digest('hex');
     const userRole = role || 'staff';
     const userName = name || email.split('@')[0];
+    const tenantId = `tenant-${crypto.randomUUID()}`;
 
-    userStore.set(email, { userId, tenantId, email, name: userName, passwordHash, role: userRole });
+    const user = await prisma.user.create({
+      data: {
+        email,
+        name: userName,
+        passwordHash,
+        role: userRole,
+        tenantId,
+      },
+    });
 
-    const tokenPayload = { userId, tenantId, email, role: userRole };
+    // Create default FREE subscription
+    const now = new Date();
+    await prisma.subscription.create({
+      data: {
+        userId: user.id,
+        planId: 'FREE',
+        activatedAt: now,
+        billingPeriodStart: now,
+        billingPeriodEnd: new Date(now.getFullYear() + 100, 0, 1),
+        subscriptionStatus: 'active',
+        subscriptionTier: 'free',
+      },
+    });
+
+    // Create default credit balance
+    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    await prisma.aiCreditBalance.create({
+      data: {
+        userId: user.id,
+        monthlyCredits: 0,
+        purchasedCredits: 0,
+        creditsUsed: 0,
+        billingPeriodStart: now,
+        billingPeriodEnd: endOfMonth,
+      },
+    });
+
+    const tokenPayload = { userId: user.id, tenantId, email, role: userRole };
     const accessToken = generateAccessToken(tokenPayload);
-    const refreshToken = generateRefreshToken(tokenPayload);
+    const refreshToken = await generateRefreshToken(tokenPayload);
 
-    logSecurityEvent('USER_REGISTERED', userId, request.ip, `Registered ${email} as ${userRole}`);
+    void logSecurityEvent('USER_REGISTERED', user.id, request.ip, `Registered ${email} as ${userRole}`);
 
     return {
       accessToken,
       refreshToken,
       expiresIn: ACCESS_TOKEN_EXPIRY_SECONDS,
-      user: { userId, tenantId, email, name: userName, role: userRole, subscriptionStatus: 'none', subscriptionTier: 'free' },
+      user: { userId: user.id, tenantId, email, name: userName, role: userRole, subscriptionStatus: 'none', subscriptionTier: 'free' },
     };
   });
 
@@ -367,14 +434,14 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     }
 
     try {
-      const payload = verifyRefreshToken(token);
-      revokeRefreshToken(token); // Rotate: revoke old token
+      const payload = await verifyRefreshToken(token);
+      await revokeRefreshToken(token); // Rotate: revoke old token
 
       const newPayload = { userId: payload.userId, tenantId: payload.tenantId, email: payload.email, role: payload.role };
       const newAccessToken = generateAccessToken(newPayload);
-      const newRefreshToken = generateRefreshToken(newPayload);
+      const newRefreshToken = await generateRefreshToken(newPayload);
 
-      logSecurityEvent('TOKEN_REFRESHED', payload.userId, request.ip, 'Token rotated');
+      void logSecurityEvent('TOKEN_REFRESHED', payload.userId, request.ip, 'Token rotated');
 
       reply.setCookie('refreshToken', newRefreshToken, {
         httpOnly: true,
@@ -391,7 +458,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       };
     } catch (err) {
       const errorMessage = err instanceof Error ? err.message : 'Invalid refresh token';
-      logSecurityEvent('TOKEN_REFRESH_FAILED', undefined, request.ip, errorMessage);
+      void logSecurityEvent('TOKEN_REFRESH_FAILED', undefined, request.ip, errorMessage);
       return reply.code(401).send({ error: 'Invalid or expired refresh token' });
     }
   });
@@ -403,7 +470,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     const token = bodyToken || cookieToken;
 
     if (token) {
-      revokeRefreshToken(token);
+      await revokeRefreshToken(token);
     }
 
     // Revoke all tokens if user is authenticated
@@ -411,8 +478,8 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     if (accessToken) {
       try {
         const payload = verifyAccessToken(accessToken);
-        revokeAllUserTokens(payload.userId);
-        logSecurityEvent('LOGOUT', payload.userId, request.ip, 'All tokens revoked');
+        await revokeAllUserTokens(payload.userId);
+        void logSecurityEvent('LOGOUT', payload.userId, request.ip, 'All tokens revoked');
       } catch {
         // Token may already be expired, still clear cookies
       }
@@ -431,7 +498,17 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     }
     try {
       const payload = verifyAccessToken(token);
-      return { user: { userId: payload.userId, tenantId: payload.tenantId, email: payload.email, role: payload.role, subscriptionStatus: 'trial', subscriptionTier: 'starter' } };
+      const sub = await prisma.subscription.findUnique({ where: { userId: payload.userId } });
+      return {
+        user: {
+          userId: payload.userId,
+          tenantId: payload.tenantId,
+          email: payload.email,
+          role: payload.role,
+          subscriptionStatus: sub?.subscriptionStatus ?? 'none',
+          subscriptionTier: sub?.subscriptionTier ?? 'free',
+        },
+      };
     } catch {
       return reply.code(401).send({ error: 'Invalid or expired token' });
     }
@@ -449,8 +526,9 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
         return reply.code(403).send({ error: 'Admin access required' });
       }
       const limit = parseInt((request.query as Record<string, string>).limit || '100', 10);
-      const events = getSecurityLog().slice(-limit);
-      return { events, total: getSecurityLog().length };
+      const events = await getSecurityLog(limit);
+      const total = await prisma.securityLog.count();
+      return { events, total };
     } catch {
       return reply.code(401).send({ error: 'Invalid or expired token' });
     }

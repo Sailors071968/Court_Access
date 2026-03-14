@@ -31,6 +31,7 @@ import { registerQueueMonitorRoutes } from './admin/queueMonitorRoutes.js';
 import { registerAdminRoutes } from './admin/adminRoutes.js';
 import { registerDiscountRoutes } from './billing/discountRoutes.js';
 import { seedDefaultDiscountCodes } from './billing/discountSeed.js';
+import { registerStripeWebhookRoutes } from './billing/stripeWebhookHandler.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -165,6 +166,10 @@ async function startServer() {
   // Admin management routes (stats, users, cases, delete endpoints)
   console.log('[Server] Registering admin management routes...');
   await registerAdminRoutes(app);
+
+  // Stripe Checkout & Webhook routes
+  console.log('[Server] Registering Stripe webhook routes...');
+  await registerStripeWebhookRoutes(app);
 
   // Discount code API routes
   console.log('[Server] Registering discount code routes...');

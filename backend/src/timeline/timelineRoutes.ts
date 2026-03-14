@@ -30,6 +30,13 @@ export async function registerTimelineRoutes(app: FastifyInstance): Promise<void
     return { caseId, status: 'queued', message: 'Timeline reconstruction queued' };
   });
 
+  // POST /api/timeline/process — Trigger timeline processing (stub)
+  app.post('/api/timeline/process', async (request, reply) => {
+    const body = request.body as { caseId?: string } | undefined;
+    const caseId = body?.caseId ?? 'unknown';
+    return { caseId, status: 'queued', message: 'Timeline processing stub — full pipeline not yet deployed' };
+  });
+
   // GET /api/timeline/health — Timeline engine health
   app.get('/api/timeline/health', async () => ({
     status: 'ok',

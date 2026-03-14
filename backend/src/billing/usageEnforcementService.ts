@@ -6,7 +6,7 @@
 
 import prisma from '../lib/prisma.js';
 import { getUserSubscription, getPlanById } from './subscriptionService.js';
-import { getAvailableCredits, hasEnoughCredits, getCreditBalance } from './aiCreditService.js';
+import { getAvailableCredits, getCreditBalance } from './aiCreditService.js';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -211,8 +211,9 @@ export async function checkPageLimit(userId: string, additionalPages: number): P
  */
 export async function checkCreditLimit(userId: string, requiredCredits: number): Promise<CreditLimitCheck> {
   const availableCredits = await getAvailableCredits(userId);
+  const allowed = availableCredits >= requiredCredits;
 
-  if (!(await hasEnoughCredits(userId, requiredCredits))) {
+  if (!allowed) {
     return {
       allowed: false,
       availableCredits,

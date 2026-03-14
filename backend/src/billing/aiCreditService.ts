@@ -324,22 +324,31 @@ export function getCreditPack(packId: string): CreditPackDefinition | null {
  * Reset monthly credits at the start of a new billing period.
  */
 export async function resetMonthlyCredits(userId: string): Promise<AiCreditBalance> {
-  const balance = await getCreditBalance(userId);
+  // Ensure balance exists first
+  await getCreditBalance(userId);
   const now = new Date();
   const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
 
-  // Deduct consumed purchased credits before resetting the usage counter.
-  // Purchased credits are consumed first (per deductCredits contract).
-  const purchasedConsumed = Math.min(balance.purchasedCredits, balance.creditsUsed);
+  // Atomic read-modify-write to prevent TOCTOU races with concurrent deductCredits
+  const updated = await prisma.$transaction(async (tx) => {
+    const balance = await tx.aiCreditBalance.findUnique({ where: { userId } });
+    if (!balance) {
+      throw new Error(`No credit balance found for user ${userId}`);
+    }
 
-  const updated = await prisma.aiCreditBalance.update({
-    where: { userId },
-    data: {
-      purchasedCredits: { decrement: purchasedConsumed },
-      creditsUsed: 0,
-      billingPeriodStart: now,
-      billingPeriodEnd: endOfMonth,
-    },
+    // Deduct consumed purchased credits before resetting the usage counter.
+    // Purchased credits are consumed first (per deductCredits contract).
+    const purchasedConsumed = Math.min(balance.purchasedCredits, balance.creditsUsed);
+
+    return tx.aiCreditBalance.update({
+      where: { userId },
+      data: {
+        purchasedCredits: { decrement: purchasedConsumed },
+        creditsUsed: 0,
+        billingPeriodStart: now,
+        billingPeriodEnd: endOfMonth,
+      },
+    });
   });
   return toAiCreditBalance(updated);
 }

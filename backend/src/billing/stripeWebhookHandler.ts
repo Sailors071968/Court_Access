@@ -75,6 +75,13 @@ function verifyStripeSignature(payload: string | Buffer, signature: string): boo
     return false;
   }
 
+  // Reject events older than 5 minutes to prevent replay attacks
+  const timestamp = parseInt(timestampStr, 10);
+  const tolerance = 300; // 5 minutes, same as Stripe's default
+  if (Math.abs(Math.floor(Date.now() / 1000) - timestamp) > tolerance) {
+    return false;
+  }
+
   const payloadStr = typeof payload === 'string' ? payload : payload.toString('utf8');
   const signedPayload = `${timestampStr}.${payloadStr}`;
   const expectedSignature = crypto

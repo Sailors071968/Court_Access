@@ -148,13 +148,12 @@ function toAiCreditBalance(row: {
 }
 
 export async function getCreditBalance(userId: string): Promise<AiCreditBalance> {
-  const existing = await prisma.aiCreditBalance.findUnique({ where: { userId } });
-  if (existing) return toAiCreditBalance(existing);
-
   const now = new Date();
   const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-  const created = await prisma.aiCreditBalance.create({
-    data: {
+  const record = await prisma.aiCreditBalance.upsert({
+    where: { userId },
+    update: {},
+    create: {
       userId,
       monthlyCredits: 0,
       purchasedCredits: 0,
@@ -163,7 +162,7 @@ export async function getCreditBalance(userId: string): Promise<AiCreditBalance>
       billingPeriodEnd: endOfMonth,
     },
   });
-  return toAiCreditBalance(created);
+  return toAiCreditBalance(record);
 }
 
 /**

@@ -100,9 +100,9 @@ function mapStripePriceToTier(priceKey?: string): { planId: string; tier: string
   const mapping: Record<string, { planId: string; tier: string }> = {
     'starter_monthly': { planId: 'STARTER', tier: 'starter' },
     'professional_monthly': { planId: 'PROFESSIONAL', tier: 'professional' },
-    'advanced_monthly': { planId: 'ADVANCED', tier: 'advanced' },
-    'litigation_monthly': { planId: 'LITIGATION', tier: 'litigation' },
-    'enterprise_monthly': { planId: 'ENTERPRISE', tier: 'enterprise' },
+    'advanced_monthly': { planId: 'ADVANCED_INVESTIGATOR', tier: 'advanced' },
+    'litigation_monthly': { planId: 'LITIGATION_INTELLIGENCE_PRO', tier: 'litigation' },
+    'enterprise_monthly': { planId: 'ENTERPRISE_FIRM', tier: 'enterprise' },
   };
   return mapping[priceKey ?? ''] ?? { planId: 'FREE', tier: 'free' };
 }
@@ -324,24 +324,25 @@ async function handleInvoicePaymentFailed(invoice: StripeInvoice): Promise<void>
 // ---------------------------------------------------------------------------
 
 export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise<void> {
-  // Stripe webhook raw body access — scoped to webhook route only
-  app.addHook('onRequest', (request, _reply, done) => {
-    // Only capture raw body for the Stripe webhook endpoint
-    if (!request.url.startsWith('/api/billing/webhook')) {
-      done();
-      return;
-    }
-    const chunks: Buffer[] = [];
-    request.raw.on('data', (chunk: Buffer) => chunks.push(chunk));
-    request.raw.on('end', () => {
-      (request as unknown as { rawBody?: Buffer }).rawBody = Buffer.concat(chunks);
-      done();
-    });
-    request.raw.on('error', done);
-  });
+  // Encapsulate webhook route in a plugin so the custom content-type parser
+  // only applies to routes registered inside this scope.
+  await app.register(async (webhookScope) => {
+    // Custom JSON parser that captures raw body for signature verification
+    webhookScope.addContentTypeParser(
+      'application/json',
+      { parseAs: 'buffer' },
+      (_req: FastifyRequest, body: Buffer, done: (err: Error | null, result?: unknown) => void) => {
+        try {
+          (_req as unknown as { rawBody?: Buffer }).rawBody = body;
+          done(null, JSON.parse(body.toString()));
+        } catch (err) {
+          done(err as Error);
+        }
+      },
+    );
 
-  // POST /api/billing/webhook — Stripe webhook endpoint
-  app.post('/api/billing/webhook', async (request: FastifyRequest, reply: FastifyReply) => {
+    // POST /api/billing/webhook — Stripe webhook endpoint
+    webhookScope.post('/api/billing/webhook', async (request: FastifyRequest, reply: FastifyReply) => {
     const signature = request.headers['stripe-signature'] as string;
     const rawBody = (request as unknown as { rawBody?: Buffer }).rawBody;
 
@@ -398,6 +399,8 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
       return reply.code(500).send({ error: 'Webhook processing failed' });
     }
   });
+
+  }); // end webhook plugin scope
 
   // POST /api/billing/create-checkout-session — Create Stripe checkout session
   app.post('/api/billing/create-checkout-session', async (request: FastifyRequest, reply: FastifyReply) => {

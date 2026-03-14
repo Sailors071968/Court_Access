@@ -149,23 +149,11 @@ function planIdToTier(planId: SubscriptionPlanId): string {
 // ---------------------------------------------------------------------------
 
 export async function getUserSubscription(userId: string): Promise<UserSubscription> {
-  const existing = await prisma.subscription.findUnique({ where: { userId } });
-  if (existing) {
-    return {
-      userId: existing.userId,
-      planId: existing.planId as SubscriptionPlanId,
-      activatedAt: existing.activatedAt.toISOString(),
-      billingPeriodStart: existing.billingPeriodStart.toISOString(),
-      billingPeriodEnd: existing.billingPeriodEnd.toISOString(),
-      stripeSubscriptionId: existing.stripeSubscriptionId,
-      stripeCustomerId: existing.stripeCustomerId,
-    };
-  }
-
-  // Default to free tier — upsert to DB
   const now = new Date();
-  const created = await prisma.subscription.create({
-    data: {
+  const record = await prisma.subscription.upsert({
+    where: { userId },
+    update: {},
+    create: {
       userId,
       planId: 'FREE',
       activatedAt: now,
@@ -177,13 +165,13 @@ export async function getUserSubscription(userId: string): Promise<UserSubscript
   });
 
   return {
-    userId: created.userId,
-    planId: created.planId as SubscriptionPlanId,
-    activatedAt: created.activatedAt.toISOString(),
-    billingPeriodStart: created.billingPeriodStart.toISOString(),
-    billingPeriodEnd: created.billingPeriodEnd.toISOString(),
-    stripeSubscriptionId: created.stripeSubscriptionId,
-    stripeCustomerId: created.stripeCustomerId,
+    userId: record.userId,
+    planId: record.planId as SubscriptionPlanId,
+    activatedAt: record.activatedAt.toISOString(),
+    billingPeriodStart: record.billingPeriodStart.toISOString(),
+    billingPeriodEnd: record.billingPeriodEnd.toISOString(),
+    stripeSubscriptionId: record.stripeSubscriptionId,
+    stripeCustomerId: record.stripeCustomerId,
   };
 }
 

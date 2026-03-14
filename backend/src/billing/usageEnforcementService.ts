@@ -109,13 +109,10 @@ function toUsageTrackingRecord(row: {
 
 export async function getUserUsageRecord(userId: string): Promise<UsageTrackingRecord> {
   const period = getCurrentBillingPeriod();
-  const existing = await prisma.usageTracking.findUnique({
+  const record = await prisma.usageTracking.upsert({
     where: { userId_billingPeriodStart: { userId, billingPeriodStart: period.start } },
-  });
-  if (existing) return toUsageTrackingRecord(existing);
-
-  const created = await prisma.usageTracking.create({
-    data: {
+    update: {},
+    create: {
       userId,
       organizationId: null,
       billingPeriodStart: period.start,
@@ -124,7 +121,7 @@ export async function getUserUsageRecord(userId: string): Promise<UsageTrackingR
       videoMinutesProcessed: 0,
     },
   });
-  return toUsageTrackingRecord(created);
+  return toUsageTrackingRecord(record);
 }
 
 /**

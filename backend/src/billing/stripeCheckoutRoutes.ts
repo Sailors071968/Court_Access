@@ -252,7 +252,10 @@ export async function registerStripeCheckoutRoutes(app: FastifyInstance): Promis
 
     let event: Stripe.Event;
 
-    if (STRIPE_WEBHOOK_SECRET && sig) {
+    if (STRIPE_WEBHOOK_SECRET) {
+      if (!sig) {
+        return reply.code(400).send({ error: 'Missing stripe-signature header' });
+      }
       try {
         event = stripe.webhooks.constructEvent(
           body as string | Buffer,

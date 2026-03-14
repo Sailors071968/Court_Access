@@ -43,6 +43,16 @@ async function startServer() {
     bodyLimit: 10 * 1024 * 1024, // 10MB
   });
 
+  // Custom JSON parser — preserves raw body for Stripe webhook signature verification
+  app.addContentTypeParser('application/json', { parseAs: 'buffer' }, (_req: { rawBody?: Buffer }, body: Buffer, done: (err: Error | null, result?: unknown) => void) => {
+    (_req as { rawBody?: Buffer }).rawBody = body;
+    try {
+      done(null, JSON.parse(body.toString()));
+    } catch (err) {
+      done(err as Error, undefined);
+    }
+  });
+
   // CORS — production domains + local dev
   const CORS_ORIGINS = process.env.NODE_ENV === 'production'
     ? [

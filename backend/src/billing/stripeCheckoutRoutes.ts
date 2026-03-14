@@ -142,6 +142,13 @@ export async function registerStripeCheckoutRoutes(app: FastifyInstance): Promis
               planId: plan.id,
               type: 'subscription',
             },
+            subscription_data: {
+              metadata: {
+                userId,
+                planId: plan.id,
+                type: 'subscription',
+              },
+            },
             success_url: `${FRONTEND_URL}/dashboard?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
             cancel_url: `${FRONTEND_URL}/pricing?checkout=cancelled`,
             customer_email: user.email,
@@ -164,6 +171,13 @@ export async function registerStripeCheckoutRoutes(app: FastifyInstance): Promis
             userId,
             planId: plan.id,
             type: 'subscription',
+          },
+          subscription_data: {
+            metadata: {
+              userId,
+              planId: plan.id,
+              type: 'subscription',
+            },
           },
           success_url: `${FRONTEND_URL}/dashboard?checkout=success&session_id={CHECKOUT_SESSION_ID}`,
           cancel_url: `${FRONTEND_URL}/pricing?checkout=cancelled`,
@@ -269,6 +283,10 @@ export async function registerStripeCheckoutRoutes(app: FastifyInstance): Promis
       }
     } else {
       // In development without webhook secret, trust the event payload
+      if (process.env.NODE_ENV === 'production') {
+        console.error('[Stripe Webhook] STRIPE_WEBHOOK_SECRET not set in production — rejecting event');
+        return reply.code(500).send({ error: 'Webhook secret not configured' });
+      }
       console.warn('[Stripe Webhook] No webhook secret configured — accepting event without verification');
       event = request.body as Stripe.Event;
     }

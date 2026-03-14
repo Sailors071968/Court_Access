@@ -222,6 +222,7 @@ const PUBLIC_ROUTES = [
   '/api/auth/refresh',
   '/api/auth/logout',
   '/api/discount-codes/validate',
+  '/api/billing/webhook',
 ];
 
 function isPublicRoute(path: string): boolean {

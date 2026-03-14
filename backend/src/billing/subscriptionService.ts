@@ -129,6 +129,22 @@ export function getAllPlans(): readonly SubscriptionPlan[] {
 }
 
 // ---------------------------------------------------------------------------
+// Tier Mapping — canonical short tier names
+// ---------------------------------------------------------------------------
+
+function planIdToTier(planId: SubscriptionPlanId): string {
+  const mapping: Record<SubscriptionPlanId, string> = {
+    FREE: 'free',
+    STARTER: 'starter',
+    PROFESSIONAL: 'professional',
+    ADVANCED_INVESTIGATOR: 'advanced',
+    LITIGATION_INTELLIGENCE_PRO: 'litigation',
+    ENTERPRISE_FIRM: 'enterprise',
+  };
+  return mapping[planId] ?? 'free';
+}
+
+// ---------------------------------------------------------------------------
 // User Subscription Store — persisted to PostgreSQL via Prisma
 // ---------------------------------------------------------------------------
 
@@ -194,7 +210,7 @@ export async function setUserSubscription(
       billingPeriodEnd,
       stripeSubscriptionId: stripeSubscriptionId ?? null,
       stripeCustomerId: stripeCustomerId ?? null,
-      subscriptionTier: planId.toLowerCase(),
+      subscriptionTier: planIdToTier(planId),
     },
     create: {
       userId,
@@ -205,7 +221,7 @@ export async function setUserSubscription(
       stripeSubscriptionId: stripeSubscriptionId ?? null,
       stripeCustomerId: stripeCustomerId ?? null,
       subscriptionStatus: 'active',
-      subscriptionTier: planId.toLowerCase(),
+      subscriptionTier: planIdToTier(planId),
     },
   });
 

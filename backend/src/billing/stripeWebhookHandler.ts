@@ -82,10 +82,14 @@ function verifyStripeSignature(payload: string | Buffer, signature: string): boo
     .update(signedPayload)
     .digest('hex');
 
-  return crypto.timingSafeEqual(
-    Buffer.from(signatureV1, 'hex'),
-    Buffer.from(expectedSignature, 'hex'),
-  );
+  try {
+    return crypto.timingSafeEqual(
+      Buffer.from(signatureV1, 'hex'),
+      Buffer.from(expectedSignature, 'hex'),
+    );
+  } catch {
+    return false;
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -320,8 +324,13 @@ async function handleInvoicePaymentFailed(invoice: StripeInvoice): Promise<void>
 // ---------------------------------------------------------------------------
 
 export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise<void> {
-  // Stripe webhook raw body access via onRequest hook
+  // Stripe webhook raw body access — scoped to webhook route only
   app.addHook('onRequest', (request, _reply, done) => {
+    // Only capture raw body for the Stripe webhook endpoint
+    if (!request.url.startsWith('/api/billing/webhook')) {
+      done();
+      return;
+    }
     const chunks: Buffer[] = [];
     request.raw.on('data', (chunk: Buffer) => chunks.push(chunk));
     request.raw.on('end', () => {

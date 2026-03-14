@@ -221,25 +221,31 @@ export async function deductCredits(
   caseId?: string,
 ): Promise<boolean> {
   if (typeof credits !== 'number' || !Number.isFinite(credits) || credits <= 0) return false;
-  if (!(await hasEnoughCredits(userId, credits))) return false;
 
-  // Use a transaction for atomicity
-  await prisma.$transaction([
-    prisma.aiCreditBalance.update({
+  // Atomic check-and-deduct inside a single interactive transaction to prevent TOCTOU races
+  const result = await prisma.$transaction(async (tx) => {
+    const balance = await tx.aiCreditBalance.findUnique({ where: { userId } });
+    if (!balance) return false;
+
+    const available = (balance.monthlyCredits + balance.purchasedCredits) - balance.creditsUsed;
+    if (available < credits) return false;
+
+    await tx.aiCreditBalance.update({
       where: { userId },
       data: { creditsUsed: { increment: credits } },
-    }),
-    prisma.aiCreditUsage.create({
+    });
+    await tx.aiCreditUsage.create({
       data: {
         userId,
         caseId: caseId ?? null,
         analysisType,
         creditsUsed: credits,
       },
-    }),
-  ]);
+    });
+    return true;
+  });
 
-  return true;
+  return result;
 }
 
 // ---------------------------------------------------------------------------

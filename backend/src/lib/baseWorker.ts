@@ -54,52 +54,26 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
   // -----------------------------------------------------------------------
 
   /**
-   * Pre-execution hook: validate that the user has enough ACU credits.
-   * Throws if credits are insufficient, which prevents the job from running.
+   * Reserve ACU credits BEFORE processing (atomic check-and-deduct).
+   * Returns true if credits were reserved, false if no reservation needed.
+   * Throws if insufficient credits — prevents the job from running.
    */
-  private async validateACU(job: Job<TData>): Promise<void> {
-    const { userId, acuCreditsRequired } = job.data;
-    if (!acuCreditsRequired || acuCreditsRequired <= 0) {
-      return; // No credit check needed
-    }
-
-    const balance = await prisma.aiCreditBalance.findUnique({
-      where: { userId },
-    });
-
-    if (!balance) {
-      throw new Error(`[ACU] No credit balance found for user ${userId}. Job ${job.id} rejected.`);
-    }
-
-    const available = (balance.monthlyCredits + balance.purchasedCredits) - balance.creditsUsed;
-    if (available < acuCreditsRequired) {
-      throw new Error(
-        `[ACU] Insufficient credits for user ${userId}. ` +
-        `Required: ${acuCreditsRequired}, Available: ${available}. Job ${job.id} rejected.`
-      );
-    }
-  }
-
-  /**
-   * Post-execution hook: deduct ACU credits after successful job completion.
-   * Uses a database transaction for atomicity.
-   */
-  private async consumeACU(job: Job<TData>): Promise<void> {
+  private async reserveACU(job: Job<TData>): Promise<boolean> {
     const { userId, acuCreditsRequired, caseId } = job.data;
     if (!acuCreditsRequired || acuCreditsRequired <= 0) {
-      return; // No credit deduction needed
+      return false; // No credit reservation needed
     }
 
     // Atomic check-and-deduct to prevent overdraft from concurrent jobs
     await prisma.$transaction(async (tx) => {
       const balance = await tx.aiCreditBalance.findUnique({ where: { userId } });
       if (!balance) {
-        throw new Error(`[ACU] No credit balance for user ${userId}`);
+        throw new Error(`[ACU] No credit balance found for user ${userId}. Job ${job.id} rejected.`);
       }
       const available = (balance.monthlyCredits + balance.purchasedCredits) - balance.creditsUsed;
       if (available < acuCreditsRequired) {
         throw new Error(
-          `[ACU] Insufficient credits after processing for user ${userId}. ` +
+          `[ACU] Insufficient credits for user ${userId}. ` +
           `Required: ${acuCreditsRequired}, Available: ${available}. Job ${job.id} rejected.`
         );
       }
@@ -118,8 +92,51 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
     }, { isolationLevel: 'Serializable' });
 
     console.log(
-      `[${this.workerName}] Deducted ${acuCreditsRequired} ACU credits from user ${userId} for job ${job.id}`
+      `[${this.workerName}] Reserved ${acuCreditsRequired} ACU credits from user ${userId} for job ${job.id}`
     );
+    return true;
+  }
+
+  /**
+   * Refund previously reserved ACU credits when processJob fails.
+   * Best-effort — logs error if refund fails but does not rethrow.
+   */
+  private async refundACU(job: Job<TData>): Promise<void> {
+    const { userId, acuCreditsRequired } = job.data;
+    if (!acuCreditsRequired || acuCreditsRequired <= 0) {
+      return;
+    }
+
+    try {
+      await prisma.$transaction(async (tx) => {
+        await tx.aiCreditBalance.update({
+          where: { userId },
+          data: { creditsUsed: { decrement: acuCreditsRequired } },
+        });
+        // Delete the usage record created during reservation
+        // Find the most recent usage record for this worker/user combination
+        const usageRecord = await tx.aiCreditUsage.findFirst({
+          where: {
+            userId,
+            analysisType: this.workerName,
+            creditsUsed: acuCreditsRequired,
+          },
+          orderBy: { createdAt: 'desc' },
+        });
+        if (usageRecord) {
+          await tx.aiCreditUsage.delete({ where: { id: usageRecord.id } });
+        }
+      });
+      console.log(
+        `[${this.workerName}] Refunded ${acuCreditsRequired} ACU credits to user ${userId} for failed job ${job.id}`
+      );
+    } catch (refundError) {
+      const msg = refundError instanceof Error ? refundError.message : String(refundError);
+      console.error(
+        `[${this.workerName}] ACU credit refund failed for job ${job.id}: ${msg}. ` +
+        `Manual intervention required: refund ${acuCreditsRequired} credits to user ${userId}.`
+      );
+    }
   }
 
   // -----------------------------------------------------------------------
@@ -141,33 +158,25 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
         const startTime = Date.now();
         console.log(`[${this.workerName}] Processing job ${job.id} (attempt ${job.attemptsMade + 1})`);
 
-        try {
-          // Step 1: Validate ACU credits BEFORE processing
-          await this.validateACU(job);
+        // Step 1: Reserve ACU credits BEFORE processing (atomic).
+        // Throws if insufficient — prevents job from running.
+        const creditsReserved = await this.reserveACU(job);
 
+        try {
           // Step 2: Execute the actual job logic
           await this.processJob(job);
-
-          // Step 3: Deduct ACU credits AFTER successful processing.
-          // Do NOT rethrow — processJob already succeeded, retrying would duplicate work.
-          try {
-            await this.consumeACU(job);
-          } catch (creditError) {
-            const msg = creditError instanceof Error ? creditError.message : String(creditError);
-            console.error(
-              `[${this.workerName}] ACU credit deduction failed for job ${job.id} ` +
-              `(job completed successfully): ${msg}`
-            );
-            // TODO: enqueue a separate credit-deduction-retry job or alert for manual resolution
-          }
 
           const durationMs = Date.now() - startTime;
           console.log(`[${this.workerName}] Job ${job.id} completed in ${durationMs}ms`);
         } catch (error) {
+          // processJob failed — refund the reserved credits (best-effort)
+          if (creditsReserved) {
+            await this.refundACU(job);
+          }
           const durationMs = Date.now() - startTime;
           const message = error instanceof Error ? error.message : String(error);
           console.error(`[${this.workerName}] Job ${job.id} failed after ${durationMs}ms: ${message}`);
-          throw error; // Rethrow to trigger BullMQ retry (only for validateACU or processJob failures)
+          throw error; // Rethrow to trigger BullMQ retry
         }
       },
       {

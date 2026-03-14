@@ -132,11 +132,19 @@ export async function recordPageUpload(userId: string, pageCount: number): Promi
     throw new Error('pageCount must be a positive finite number');
   }
   const period = getCurrentBillingPeriod();
-  // Ensure record exists first
-  await getUserUsageRecord(userId);
-  const updated = await prisma.usageTracking.update({
+  // Single upsert: create-if-missing + increment in one call to avoid
+  // month-boundary TOCTOU where getUserUsageRecord and update use different periods.
+  const updated = await prisma.usageTracking.upsert({
     where: { userId_billingPeriodStart: { userId, billingPeriodStart: period.start } },
-    data: { pagesUploadedTotal: { increment: pageCount } },
+    update: { pagesUploadedTotal: { increment: pageCount } },
+    create: {
+      userId,
+      organizationId: null,
+      billingPeriodStart: period.start,
+      billingPeriodEnd: period.end,
+      pagesUploadedTotal: pageCount,
+      videoMinutesProcessed: 0,
+    },
   });
   return toUsageTrackingRecord(updated);
 }
@@ -149,10 +157,19 @@ export async function recordVideoProcessing(userId: string, minutes: number): Pr
     throw new Error('minutes must be a positive finite number');
   }
   const period = getCurrentBillingPeriod();
-  await getUserUsageRecord(userId);
-  const updated = await prisma.usageTracking.update({
+  // Single upsert: create-if-missing + increment in one call to avoid
+  // month-boundary TOCTOU where getUserUsageRecord and update use different periods.
+  const updated = await prisma.usageTracking.upsert({
     where: { userId_billingPeriodStart: { userId, billingPeriodStart: period.start } },
-    data: { videoMinutesProcessed: { increment: minutes } },
+    update: { videoMinutesProcessed: { increment: minutes } },
+    create: {
+      userId,
+      organizationId: null,
+      billingPeriodStart: period.start,
+      billingPeriodEnd: period.end,
+      pagesUploadedTotal: 0,
+      videoMinutesProcessed: minutes,
+    },
   });
   return toUsageTrackingRecord(updated);
 }

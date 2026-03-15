@@ -14,6 +14,8 @@ import { extractEventsFromText, storeEvents } from '../evidence/eventExtractionS
 import { buildOfficerTimeline } from '../evidence/officerActionTimelineService.js';
 import { buildUnifiedTimeline, findTimelineGaps } from '../contradiction/timelineEngine.js';
 import { TimelineConflictAnalyzer } from '../conflict/timelineConflictAnalyzer.js';
+import { extractEvidenceText } from '../services/evidenceTextExtractionService.js';
+import { normalizeDocumentText } from '../services/documentNormalizationService.js';
 import type { ExtractedEvent as CdeExtractedEvent } from '../contradiction/types.js';
 import type { TimelineEvent as ConflictTimelineEvent } from '../conflict/types.js';
 
@@ -117,14 +119,26 @@ export async function reconstructTimeline(
   // -------------------------------------------------------------------------
   // Step 1: Fetch evidence for the case
   // -------------------------------------------------------------------------
+  console.info('[TimelineReconstruction] Starting pipeline', {
+    caseId,
+    tenantId,
+  });
+
   const evidence = await prisma.evidence.findMany({
     where: { caseId, tenantId },
     select: {
       evidenceId: true,
       evidenceType: true,
       fileName: true,
+      mimeType: true,
+      s3Key: true,
       processingStatus: true,
     },
+  });
+
+  console.info('[TimelineReconstruction] Evidence fetched', {
+    caseId,
+    evidenceCount: evidence.length,
   });
 
   if (evidence.length === 0) {
@@ -152,25 +166,55 @@ export async function reconstructTimeline(
     try {
       const sourceType = mapEvidenceTypeToSourceType(ev.evidenceType);
 
-      // Use evidence filename + type as proxy content for extraction.
-      // In production, this would read the actual file content from R2/S3.
-      // For now, we check if there are already EvidenceEvent records for this
-      // evidence item and skip extraction if so (idempotent).
-      const existingEvents = await prisma.evidenceEvent.count({
+      // -----------------------------------------------------------------
+      // Step 2a: Retrieve real evidence content from R2
+      // -----------------------------------------------------------------
+      const extraction = await extractEvidenceText({
+        evidenceId: ev.evidenceId,
+        fileName: ev.fileName,
+        mimeType: ev.mimeType,
+        s3Key: ev.s3Key,
+        evidenceType: ev.evidenceType,
+      });
+
+      if (!extraction.text) {
+        // Text extraction failed or was skipped (audio/video/unsupported)
+        if (extraction.error) {
+          console.warn('[TimelineReconstruction] Evidence skipped', {
+            evidenceId: ev.evidenceId,
+            mimeType: ev.mimeType,
+            reason: extraction.error,
+          });
+          warnings.push(`Skipped evidence ${ev.evidenceId} (${ev.fileName}): ${extraction.error}`);
+        }
+        continue;
+      }
+
+      // -----------------------------------------------------------------
+      // Step 2b: Normalize document text for better extraction accuracy
+      // -----------------------------------------------------------------
+      const normalizedText = normalizeDocumentText(extraction.text);
+
+      console.info('[TimelineReconstruction] Text extracted', {
+        evidenceId: ev.evidenceId,
+        method: extraction.method,
+        rawChars: extraction.charCount,
+        normalizedChars: normalizedText.length,
+      });
+
+      // -----------------------------------------------------------------
+      // Step 2c: Delete any previously extracted events for this evidence
+      //          to ensure a clean re-extraction on rebuild
+      // -----------------------------------------------------------------
+      await prisma.evidenceEvent.deleteMany({
         where: { caseId, sourceEvidence: ev.evidenceId },
       });
 
-      if (existingEvents > 0) {
-        totalExtracted += existingEvents;
-        totalStored += existingEvents;
-        continue; // Skip re-extraction for already-processed evidence
-      }
-
-      // Extract events from any available text content.
-      // Note: Real file content would come from R2 in production.
-      // The extraction service handles the NLP pattern matching.
+      // -----------------------------------------------------------------
+      // Step 2d: Extract structured events from the normalized text
+      // -----------------------------------------------------------------
       const extractedEvents = extractEventsFromText(
-        `Evidence: ${ev.fileName} (${ev.evidenceType})`,
+        normalizedText,
         caseId,
         ev.evidenceId,
         sourceType,
@@ -181,10 +225,20 @@ export async function reconstructTimeline(
       if (extractedEvents.length > 0) {
         const stored = await storeEvents(extractedEvents);
         totalStored += stored;
+
+        console.info('[TimelineReconstruction] Events stored', {
+          evidenceId: ev.evidenceId,
+          extracted: extractedEvents.length,
+          stored,
+        });
       }
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       warnings.push(`Event extraction failed for evidence ${ev.evidenceId}: ${msg}`);
+      console.warn('[TimelineReconstruction] Evidence processing failed', {
+        evidenceId: ev.evidenceId,
+        error: msg,
+      });
     }
   }
 

@@ -60,6 +60,13 @@ export const EVENT_TYPES = [
   'de_escalation_attempt',
   'pat_down_search',
   'prone_restraint',
+  'traffic_stop',
+  'dispatch_notification',
+  'arrest',
+  'field_sobriety_test',
+  'citation_issued',
+  'backup_requested',
+  'subject_detained',
   'other',
 ] as const;
 
@@ -134,6 +141,36 @@ const EVENT_KEYWORD_PATTERNS: Record<string, RegExp[]> = {
   pat_down_search: [/pat down/i, /frisk/i, /Terry stop/i, /patted.*down/i],
   prone_restraint: [
     /prone/i, /face.*down/i, /stomach.*ground/i, /prone.*position/i,
+  ],
+  traffic_stop: [
+    /traffic stop/i, /initiated.*stop/i, /pulled over/i, /vehicle stop/i,
+    /conducted.*stop/i, /stopped.*vehicle/i, /routine stop/i,
+    /initiated.*traffic/i, /motor vehicle stop/i,
+  ],
+  dispatch_notification: [
+    /dispatch.*notified/i, /notified.*dispatch/i, /dispatch.*advised/i,
+    /contacted.*dispatch/i, /radioed.*dispatch/i, /dispatch.*informed/i,
+    /dispatch.*called/i, /called.*dispatch/i, /dispatch was/i,
+  ],
+  arrest: [
+    /placed.*under arrest/i, /you're under arrest/i, /arrested/i,
+    /taken into custody/i, /effected.*arrest/i,
+  ],
+  field_sobriety_test: [
+    /field sobriety/i, /sobriety test/i, /FST/i, /breathalyzer/i,
+    /DUI.*test/i, /intoxication.*test/i,
+  ],
+  citation_issued: [
+    /citation.*issued/i, /issued.*citation/i, /ticket.*issued/i,
+    /issued.*ticket/i, /written.*warning/i, /verbal.*warning/i,
+  ],
+  backup_requested: [
+    /backup.*requested/i, /requested.*backup/i, /additional.*units/i,
+    /called for.*backup/i, /requesting.*assistance/i,
+  ],
+  subject_detained: [
+    /detained/i, /held.*for.*questioning/i, /investigative.*detention/i,
+    /detain.*subject/i, /subject.*held/i,
   ],
 };
 

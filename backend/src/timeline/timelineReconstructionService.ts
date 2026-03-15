@@ -265,47 +265,47 @@ export async function reconstructTimeline(
   // -------------------------------------------------------------------------
   // Step 6: Persist TimelineEvent records to PostgreSQL
   // -------------------------------------------------------------------------
-  // Delete existing timeline events for this case to allow rebuild
-  await prisma.timelineEvent.deleteMany({
-    where: { caseId, tenantId },
+  // Build all create data objects first, then execute delete + createMany
+  // inside a transaction so the operation is atomic — if any part fails,
+  // the old timeline events are preserved and BullMQ will retry.
+  const createDataList = unifiedTimeline.timeline.map((te) => {
+    const sourceEvent = storedEvents.find((ev) => ev.eventId === te.eventId);
+    return {
+      caseId,
+      tenantId,
+      timestamp: parseTimelineTimestamp(te.canonicalTimestamp),
+      sourceDoc: sourceEvent?.sourceEvidence ?? 'unknown',
+      sourceType: mapToTimelineSourceType(sourceEvent?.sourceType ?? 'police_report'),
+      description: sourceEvent?.description ?? `${sourceEvent?.eventType?.replace(/_/g, ' ') ?? 'Event'} detected`,
+      actor: null as string | null,
+      location: null as string | null,
+      confidence: te.confidence,
+      conflictFlag: false,
+      conflictsWith: null as string | null,
+      metadata: {
+        timelineEventId: te.timelineEventId,
+        originalTimestamp: te.originalTimestamp,
+        timestampSource: te.timestampSource,
+        alignmentMethod: te.alignmentMethod,
+        driftCorrectionMs: te.driftCorrectionMs,
+        officerTimelineEntries: officerTimelineEntryCount,
+      },
+    };
   });
 
   let timelineEventsCreated = 0;
 
-  for (const te of unifiedTimeline.timeline) {
-    try {
-      // Find the original evidence event for source info
-      const sourceEvent = storedEvents.find((ev) => ev.eventId === te.eventId);
-
-      await prisma.timelineEvent.create({
-        data: {
-          caseId,
-          tenantId,
-          timestamp: parseTimelineTimestamp(te.canonicalTimestamp),
-          sourceDoc: sourceEvent?.sourceEvidence ?? 'unknown',
-          sourceType: mapToTimelineSourceType(sourceEvent?.sourceType ?? 'police_report'),
-          description: sourceEvent?.description ?? `${sourceEvent?.eventType?.replace(/_/g, ' ') ?? 'Event'} detected`,
-          actor: null,
-          location: null,
-          confidence: te.confidence,
-          conflictFlag: false,
-          conflictsWith: null,
-          metadata: {
-            timelineEventId: te.timelineEventId,
-            originalTimestamp: te.originalTimestamp,
-            timestampSource: te.timestampSource,
-            alignmentMethod: te.alignmentMethod,
-            driftCorrectionMs: te.driftCorrectionMs,
-            officerTimelineEntries: officerTimelineEntryCount,
-          },
-        },
-      });
-      timelineEventsCreated++;
-    } catch (err) {
-      const msg = err instanceof Error ? err.message : String(err);
-      warnings.push(`Failed to persist timeline event ${te.timelineEventId}: ${msg}`);
-    }
-  }
+  // Atomic transaction: delete old + insert new — rolls back on any failure
+  const txResult = await prisma.$transaction(async (tx) => {
+    await tx.timelineEvent.deleteMany({
+      where: { caseId, tenantId },
+    });
+    const created = await tx.timelineEvent.createMany({
+      data: createDataList,
+    });
+    return created.count;
+  });
+  timelineEventsCreated = txResult;
 
   // If conflicts were detected, mark affected timeline events
   if (conflictsDetected > 0) {

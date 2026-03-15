@@ -312,16 +312,23 @@ async function handleCheckoutCompleted(session: StripeCheckoutSession): Promise<
     console.warn(`[StripeWebhook] checkout.session.completed missing planId in metadata for session ${session.id} — defaulting to STARTER`);
   }
 
-  // Update subscription with Stripe IDs
+  // Update subscription with Stripe IDs.
+  // Only overwrite plan/tier in the update path when metaPlanId is present,
+  // otherwise preserve existing plan to avoid silent downgrade (matches
+  // the guard pattern in handleSubscriptionCreated).
+  const updateData: Record<string, unknown> = {
+    stripeCustomerId: session.customer,
+    stripeSubscriptionId: session.subscription,
+    subscriptionStatus: 'active',
+  };
+  if (metaPlanId) {
+    updateData.planId = mapped.planId;
+    updateData.subscriptionTier = mapped.tier;
+  }
+
   await prisma.subscription.upsert({
     where: { userId },
-    update: {
-      stripeCustomerId: session.customer,
-      stripeSubscriptionId: session.subscription,
-      subscriptionStatus: 'active',
-      planId: mapped.planId,
-      subscriptionTier: mapped.tier,
-    },
+    update: updateData,
     create: {
       userId,
       planId: mapped.planId,

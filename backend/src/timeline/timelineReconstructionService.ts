@@ -370,38 +370,32 @@ export async function reconstructTimeline(
         where: { caseId, tenantId },
       });
 
-      // Build a lookup: conflict analyzer event ID → persisted TimelineEvent DB record.
-      // The conflict analyzer uses ev.eventId (from EvidenceEvent) as the event's `id`.
-      // The persisted TimelineEvent stores the original eventId in metadata.timelineEventId
-      // (which comes from the unified timeline engine) and sourceDoc = sourceEvidence.
-      // We match via sourceDoc (= sourceEvidence = the conflict event's sourceId).
-      const dbEventBySourceEvidence = new Map<string, typeof timelineEvents[number]>();
-      for (const te of timelineEvents) {
-        // Map both by sourceDoc and by metadata.timelineEventId for robust matching
-        dbEventBySourceEvidence.set(te.sourceDoc, te);
-        const meta = te.metadata as Record<string, unknown> | null;
-        if (meta?.timelineEventId) {
-          dbEventBySourceEvidence.set(String(meta.timelineEventId), te);
-        }
+      // Build lookup chain: conflict analyzer event ID → unified timeline eventId
+      //   → unified timeline timelineEventId → DB TimelineEvent.
+      // This avoids non-unique key collisions when multiple events share the
+      // same evidence source (sourceDoc / sourceEvidence).
+
+      // Step A: EvidenceEvent.eventId → unified timeline's timelineEventId
+      const evidenceEventToTimelineId = new Map<string, string>();
+      for (const ute of unifiedTimeline.timeline) {
+        evidenceEventToTimelineId.set(ute.eventId, ute.timelineEventId);
       }
 
-      // Also build a direct ID lookup from conflict analyzer event IDs
-      // The conflict events use ev.eventId from storedEvents as their `id`
-      const dbEventByAnalyzerId = new Map<string, typeof timelineEvents[number]>();
+      // Step B: metadata.timelineEventId → DB TimelineEvent (unique per event)
+      const dbEventByTimelineId = new Map<string, typeof timelineEvents[number]>();
       for (const te of timelineEvents) {
-        // Find the storedEvent whose sourceEvidence matches te.sourceDoc
-        // and use its eventId as the key
-        const matchingStored = storedEvents.find((se) => se.sourceEvidence === te.sourceDoc);
-        if (matchingStored) {
-          dbEventByAnalyzerId.set(matchingStored.eventId, te);
+        const meta = te.metadata as Record<string, unknown> | null;
+        if (meta?.timelineEventId) {
+          dbEventByTimelineId.set(String(meta.timelineEventId), te);
         }
       }
 
       for (const conflict of detectedConflictPairs) {
-        const dbEventA = dbEventByAnalyzerId.get(conflict.eventA.id)
-          ?? dbEventBySourceEvidence.get(conflict.eventA.sourceId);
-        const dbEventB = dbEventByAnalyzerId.get(conflict.eventB.id)
-          ?? dbEventBySourceEvidence.get(conflict.eventB.sourceId);
+        // Map conflict analyzer event IDs through the unified timeline to DB records
+        const timelineIdA = evidenceEventToTimelineId.get(conflict.eventA.id);
+        const dbEventA = timelineIdA ? dbEventByTimelineId.get(timelineIdA) : undefined;
+        const timelineIdB = evidenceEventToTimelineId.get(conflict.eventB.id);
+        const dbEventB = timelineIdB ? dbEventByTimelineId.get(timelineIdB) : undefined;
 
         if (dbEventA) {
           await prisma.timelineEvent.update({

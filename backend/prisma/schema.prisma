@@ -1447,6 +1447,7 @@ model ProcessingJob {
   payload         Json?     // Job-specific input data
   result          Json?     // Job output/result data
   error           String?
+  failureCode     String?   // ACU_EXHAUSTED | PROCESSING_ERROR | TIMEOUT
   acuCredits      Int       @default(0) // ACU credits consumed
 
   createdAt       DateTime  @default(now())

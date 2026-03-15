@@ -32,6 +32,7 @@ import { registerAdminRoutes } from './admin/adminRoutes.js';
 import { registerDiscountRoutes } from './billing/discountRoutes.js';
 import { seedDefaultDiscountCodes } from './billing/discountSeed.js';
 import { registerStripeWebhookRoutes } from './billing/stripeWebhookHandler.js';
+import { startPipelineWorkers, stopPipelineWorkers } from './workers/startPipelineWorkers.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -177,6 +178,10 @@ async function startServer() {
 
   // Seed default discount codes (e.g. HUNT100)
   await seedDefaultDiscountCodes();
+
+  // Start Phase 2 ACU-enforced pipeline workers (BullMQ)
+  startPipelineWorkers();
+
   // Start server
   try {
     await app.listen({ port: PORT, host: HOST });
@@ -267,3 +272,12 @@ async function startServer() {
 }
 
 startServer();
+
+// Graceful shutdown — stop pipeline workers before exit
+const shutdown = async (signal: string) => {
+  console.log(`[Server] Received ${signal}, shutting down pipeline workers...`);
+  await stopPipelineWorkers();
+  process.exit(0);
+};
+process.on('SIGINT', () => void shutdown('SIGINT'));
+process.on('SIGTERM', () => void shutdown('SIGTERM'));

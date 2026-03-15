@@ -23,6 +23,9 @@ export const QUEUE_NAMES = {
   EXPORT_GENERATION: 'court-access:export-generation',
   NIGHTLY_INTEGRITY: 'court-access:nightly-integrity',
   NARRATIVE_PROCESSING: 'court-access:narrative-processing',
+  CONTRADICTION_ANALYSIS: 'court-access:contradiction-analysis',
+  VIDEO_PROCESSING: 'court-access:video-processing',
+  DOCTRINE_ANALYSIS: 'court-access:doctrine-analysis',
 } as const;
 
 export type QueueName = (typeof QUEUE_NAMES)[keyof typeof QUEUE_NAMES];
@@ -60,6 +63,21 @@ export interface NarrativeProcessingJobData extends BaseJobData {
 export interface AiAnalysisJobData extends BaseJobData {
   caseId: string;
   analysisType: string;
+}
+
+export interface ContradictionAnalysisJobData extends BaseJobData {
+  caseId: string;
+}
+
+export interface VideoProcessingJobData extends BaseJobData {
+  caseId: string;
+  evidenceId: string;
+  fileKey: string;
+  mimeType: string;
+}
+
+export interface DoctrineAnalysisJobData extends BaseJobData {
+  caseId: string;
 }
 
 // ---------------------------------------------------------------------------

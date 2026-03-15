@@ -143,6 +143,47 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
   }
 
   // -----------------------------------------------------------------------
+  // ProcessingJob Status Management
+  // -----------------------------------------------------------------------
+
+  /**
+   * Mark the corresponding ProcessingJob as failed with a specific failure code.
+   * Used when ACU credits are exhausted or other non-retryable failures occur.
+   */
+  private async markJobFailed(job: Job<TData>, failureCode: string, errorMessage: string): Promise<void> {
+    const { userId, caseId } = job.data;
+    try {
+      // Find the most recent pending ProcessingJob for this user/case/pipeline
+      const processingJob = await prisma.processingJob.findFirst({
+        where: {
+          userId,
+          caseId: caseId ?? undefined,
+          status: { in: ['pending', 'active'] },
+        },
+        orderBy: { createdAt: 'desc' },
+      });
+
+      if (processingJob) {
+        await prisma.processingJob.update({
+          where: { id: processingJob.id },
+          data: {
+            status: 'failed',
+            failureCode,
+            error: errorMessage,
+            completedAt: new Date(),
+          },
+        });
+        console.log(
+          `[${this.workerName}] ProcessingJob ${processingJob.id} marked failed: ${failureCode}`
+        );
+      }
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error(`[${this.workerName}] Failed to mark ProcessingJob as failed: ${msg}`);
+    }
+  }
+
+  // -----------------------------------------------------------------------
   // BullMQ Worker Lifecycle
   // -----------------------------------------------------------------------
 
@@ -164,7 +205,21 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
         // Step 1: Reserve ACU credits BEFORE processing (atomic).
         // Throws if insufficient — prevents job from running.
         // Returns the usage record ID for precise refund targeting.
-        const usageRecordId = await this.reserveACU(job);
+        let usageRecordId: string | null = null;
+        try {
+          usageRecordId = await this.reserveACU(job);
+        } catch (acuError) {
+          // ACU reservation failed — mark ProcessingJob as failed with ACU_EXHAUSTED
+          const message = acuError instanceof Error ? acuError.message : String(acuError);
+          const isInsufficientCredits = message.includes('[ACU] Insufficient credits') || message.includes('[ACU] No credit balance');
+          if (isInsufficientCredits) {
+            await this.markJobFailed(job, 'ACU_EXHAUSTED', message);
+            console.error(`[${this.workerName}] Job ${job.id} rejected: ACU credits exhausted`);
+            // Do NOT rethrow — job should not retry when credits are exhausted
+            return;
+          }
+          throw acuError; // Rethrow non-ACU errors for retry
+        }
 
         try {
           // Step 2: Execute the actual job logic

@@ -1,31 +1,25 @@
 // ============================================================================
 // CourtAccess — Stripe Checkout Routes
 // POST /api/billing/create-checkout-session  — Create Stripe checkout session
-// POST /api/billing/webhook                  — Stripe webhook handler
 // GET  /api/billing/checkout-status/:sessionId — Check checkout status
+// GET  /api/billing/acu-packs                 — List available ACU credit packs
 // ============================================================================
 
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import Stripe from 'stripe';
 import type { AuthenticatedRequest } from '../security/authMiddleware.js';
 import {
-  setUserSubscription,
   getPlanById,
   SUBSCRIPTION_PLANS,
   type SubscriptionPlanId,
 } from './subscriptionService.js';
-import {
-  addPurchasedCredits,
-  setMonthlyCredits,
-  CREDIT_PACKS,
-} from './aiCreditService.js';
+import { CREDIT_PACKS } from './aiCreditService.js';
 
 // ---------------------------------------------------------------------------
 // Stripe Configuration
 // ---------------------------------------------------------------------------
 
 const STRIPE_SECRET_KEY = process.env.STRIPE_SECRET_KEY || '';
-const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || '';
 const FRONTEND_URL = process.env.FRONTEND_URL || 'https://courtaccess.net';
 
 function getStripe(): Stripe | null {
@@ -245,131 +239,10 @@ export async function registerStripeCheckoutRoutes(app: FastifyInstance): Promis
     });
   });
 
-  // =========================================================================
-  // POST /api/billing/webhook — Stripe Webhook Handler
-  // Processes checkout.session.completed events to activate subscriptions
-  // =========================================================================
-
-  app.post('/api/billing/webhook', {
-    config: {
-      rawBody: true,
-    },
-  }, async (request: FastifyRequest, reply: FastifyReply) => {
-    const stripe = getStripe();
-    if (!stripe) {
-      return reply.code(503).send({ error: 'Stripe not configured' });
-    }
-
-    const sig = request.headers['stripe-signature'] as string | undefined;
-    const rawBody = (request as unknown as Record<string, unknown>).rawBody as string | Buffer | undefined;
-    const body = rawBody || JSON.stringify(request.body);
-
-    let event: Stripe.Event;
-
-    if (STRIPE_WEBHOOK_SECRET) {
-      if (!sig) {
-        return reply.code(400).send({ error: 'Missing stripe-signature header' });
-      }
-      try {
-        event = stripe.webhooks.constructEvent(
-          body as string | Buffer,
-          sig,
-          STRIPE_WEBHOOK_SECRET,
-        );
-      } catch (err) {
-        const message = err instanceof Error ? err.message : 'Unknown error';
-        console.error('[Stripe Webhook] Signature verification failed:', message);
-        return reply.code(400).send({ error: `Webhook signature verification failed: ${message}` });
-      }
-    } else {
-      // In development without webhook secret, trust the event payload
-      if (process.env.NODE_ENV === 'production') {
-        console.error('[Stripe Webhook] STRIPE_WEBHOOK_SECRET not set in production — rejecting event');
-        return reply.code(500).send({ error: 'Webhook secret not configured' });
-      }
-      console.warn('[Stripe Webhook] No webhook secret configured — accepting event without verification');
-      event = request.body as Stripe.Event;
-    }
-
-    console.log(`[Stripe Webhook] Received event: ${event.type}`);
-
-    switch (event.type) {
-      case 'checkout.session.completed': {
-        const session = event.data.object as Stripe.Checkout.Session;
-        const metadata = session.metadata || {};
-        const userId = metadata.userId;
-
-        if (!userId) {
-          console.error('[Stripe Webhook] checkout.session.completed missing userId metadata');
-          break;
-        }
-
-        if (metadata.type === 'subscription') {
-          // Activate subscription
-          const planId = metadata.planId as SubscriptionPlanId;
-          const plan = getPlanById(planId);
-
-          if (plan) {
-            const stripeSubscriptionId = session.subscription as string | undefined;
-            const stripeCustomerId = session.customer as string | undefined;
-
-            setUserSubscription(userId, planId, stripeSubscriptionId ?? undefined, stripeCustomerId ?? undefined);
-            setMonthlyCredits(userId, plan.monthlyAiCredits);
-
-            console.log(`[Stripe Webhook] Subscription activated: userId=${userId}, plan=${planId}, credits=${plan.monthlyAiCredits}`);
-          } else {
-            console.error(`[Stripe Webhook] Unknown planId: ${planId}`);
-          }
-        } else if (metadata.type === 'acu_credits') {
-          // Add ACU credits
-          const credits = parseInt(metadata.credits || '0', 10);
-          if (credits > 0) {
-            addPurchasedCredits(userId, credits);
-            console.log(`[Stripe Webhook] ACU credits added: userId=${userId}, credits=${credits}`);
-          }
-        }
-        break;
-      }
-
-      case 'customer.subscription.updated': {
-        const subscription = event.data.object as Stripe.Subscription;
-        const metadata = subscription.metadata || {};
-        const userId = metadata.userId;
-        const planId = metadata.planId as SubscriptionPlanId;
-
-        if (userId && planId) {
-          const plan = getPlanById(planId);
-          if (plan) {
-            const status = subscription.status;
-            if (status === 'active' || status === 'trialing') {
-              setUserSubscription(userId, planId, subscription.id, subscription.customer as string);
-              setMonthlyCredits(userId, plan.monthlyAiCredits);
-              console.log(`[Stripe Webhook] Subscription updated: userId=${userId}, plan=${planId}, status=${status}`);
-            }
-          }
-        }
-        break;
-      }
-
-      case 'customer.subscription.deleted': {
-        const subscription = event.data.object as Stripe.Subscription;
-        const metadata = subscription.metadata || {};
-        const userId = metadata.userId;
-
-        if (userId) {
-          setUserSubscription(userId, 'FREE');
-          setMonthlyCredits(userId, 0);
-          console.log(`[Stripe Webhook] Subscription cancelled: userId=${userId}, reverted to FREE`);
-        }
-        break;
-      }
-
-      default:
-        console.log(`[Stripe Webhook] Unhandled event type: ${event.type}`);
-    }
-
-    return reply.send({ received: true });
-  });
+  // NOTE: POST /api/billing/webhook is handled by stripeWebhookHandler.ts
+  // which provides more robust HMAC-SHA256 verification with replay protection,
+  // multi-signature rotation support, and handles more event types
+  // (invoice.paid, invoice.payment_failed, subscription.created, etc.)
 
   // =========================================================================
   // GET /api/billing/checkout-status/:sessionId

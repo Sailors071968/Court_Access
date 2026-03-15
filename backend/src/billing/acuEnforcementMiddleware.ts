@@ -22,10 +22,10 @@ export interface ACUValidationResult {
  * Validate that a user has sufficient ACU balance before running a processing job.
  * Returns 402 Payment Required if credits are exhausted.
  */
-export function validateACUBalance(userId: string, requiredCredits = 1): ACUValidationResult {
-  const available = getAvailableCredits(userId);
+export async function validateACUBalance(userId: string, requiredCredits = 1): Promise<ACUValidationResult> {
+  const available = await getAvailableCredits(userId);
 
-  if (!hasEnoughCredits(userId, requiredCredits)) {
+  if (!(await hasEnoughCredits(userId, requiredCredits))) {
     return {
       allowed: false,
       availableCredits: available,
@@ -46,13 +46,13 @@ export function validateACUBalance(userId: string, requiredCredits = 1): ACUVali
  * Deduct ACU credits for a completed processing job.
  * Call this after successful processing.
  */
-export function consumeACU(
+export async function consumeACU(
   userId: string,
   credits: number,
   analysisType: AnalysisType,
   caseId?: string,
-): boolean {
-  return deductCredits(userId, credits, analysisType, caseId);
+): Promise<boolean> {
+  return await deductCredits(userId, credits, analysisType, caseId);
 }
 
 // ---------------------------------------------------------------------------
@@ -80,7 +80,7 @@ export async function acuUploadLockHook(
   const user = (request as AuthenticatedRequest).user;
   if (!user) return; // Auth middleware will handle this
 
-  const validation = validateACUBalance(user.userId, 1);
+  const validation = await validateACUBalance(user.userId, 1);
 
   if (!validation.allowed) {
     reply.code(402).send({
@@ -111,16 +111,16 @@ export const ACU_PIPELINE_COSTS: Record<string, { credits: number; analysisType:
  * Validate ACU balance before a specific pipeline runs.
  * Returns the validation result and the credit cost for the pipeline.
  */
-export function validatePipelineACU(
+export async function validatePipelineACU(
   userId: string,
   pipelineName: string,
-): ACUValidationResult & { creditCost: number; analysisType: AnalysisType } {
+): Promise<ACUValidationResult & { creditCost: number; analysisType: AnalysisType }> {
   const cost = ACU_PIPELINE_COSTS[pipelineName];
   if (!cost) {
     // Unknown pipeline — allow with 0 cost
     return {
       allowed: true,
-      availableCredits: getAvailableCredits(userId),
+      availableCredits: await getAvailableCredits(userId),
       requiredCredits: 0,
       message: 'No ACU cost for this pipeline.',
       creditCost: 0,
@@ -128,7 +128,7 @@ export function validatePipelineACU(
     };
   }
 
-  const validation = validateACUBalance(userId, cost.credits);
+  const validation = await validateACUBalance(userId, cost.credits);
   return {
     ...validation,
     creditCost: cost.credits,
@@ -139,13 +139,13 @@ export function validatePipelineACU(
 /**
  * Consume ACU credits for a completed pipeline job.
  */
-export function consumePipelineACU(
+export async function consumePipelineACU(
   userId: string,
   pipelineName: string,
   caseId?: string,
-): boolean {
+): Promise<boolean> {
   const cost = ACU_PIPELINE_COSTS[pipelineName];
   if (!cost) return true; // No cost pipeline
 
-  return consumeACU(userId, cost.credits, cost.analysisType, caseId);
+  return await consumeACU(userId, cost.credits, cost.analysisType, caseId);
 }

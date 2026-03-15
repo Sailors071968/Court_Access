@@ -472,31 +472,4 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
   });
 
   }); // end webhook plugin scope
-
-  // POST /api/billing/create-checkout-session — Create Stripe checkout session
-  app.post('/api/billing/create-checkout-session', async (request: FastifyRequest, reply: FastifyReply) => {
-    // Always read userId from authenticated JWT — never trust client-supplied userId
-    const userId = ((request as unknown as { user?: { userId: string } }).user)?.userId;
-    if (!userId) {
-      return reply.code(401).send({ error: 'Authentication required' });
-    }
-    // Stub — in production, this would create a Stripe checkout session
-    const { planId } = request.body as { planId: string };
-    return reply.send({
-      message: 'Stripe checkout session creation requires STRIPE_SECRET_KEY to be configured',
-      planId,
-      userId,
-      note: 'Configure STRIPE_SECRET_KEY env var to enable real Stripe checkout',
-    });
-  });
-
-  // GET /api/billing/checkout-status/:sessionId — Check checkout status
-  app.get('/api/billing/checkout-status/:sessionId', async (request: FastifyRequest, reply: FastifyReply) => {
-    const { sessionId } = request.params as { sessionId: string };
-    return reply.send({
-      sessionId,
-      status: 'pending',
-      note: 'Configure STRIPE_SECRET_KEY env var to enable real Stripe checkout status',
-    });
-  });
 }

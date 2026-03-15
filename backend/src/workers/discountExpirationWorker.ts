@@ -35,8 +35,8 @@ export function startExpirationWorker(): void {
   }
 
   console.log('[DiscountExpirationWorker] Starting daily expiration check');
-  void runExpirationCheck();
-  intervalId = setInterval(() => { void runExpirationCheck(); }, ONE_DAY_MS);
+  void runExpirationCheck().catch((err) => console.error('[DiscountExpirationWorker] Expiration check failed:', err));
+  intervalId = setInterval(() => { void runExpirationCheck().catch((err) => console.error('[DiscountExpirationWorker] Expiration check failed:', err)); }, ONE_DAY_MS);
 }
 
 /**

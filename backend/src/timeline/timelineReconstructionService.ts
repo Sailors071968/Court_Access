@@ -243,7 +243,7 @@ export async function reconstructTimeline(
   const conflictEvents: ConflictTimelineEvent[] = storedEvents.map((ev) => ({
     id: ev.eventId,
     description: ev.description ?? ev.eventType.replace(/_/g, ' '),
-    timestamp: ev.createdAt, // Use createdAt as Date for conflict analysis
+    timestamp: parseTimelineTimestamp(ev.timestamp), // Use actual event timestamp for conflict analysis
     precision: 'approximate' as const,
     endTimestamp: null,
     sourceId: ev.sourceEvidence,
@@ -319,12 +319,12 @@ export async function reconstructTimeline(
       // Flag the first N events as having conflicts (simplified — real implementation
       // would match specific conflicting pairs from the conflict analyzer output)
       for (let i = 0; i < Math.min(conflictsDetected, timelineEvents.length); i++) {
-        const partner = timelineEvents[i + 1] ?? timelineEvents[0];
+        const partner = timelineEvents[i + 1] ?? (i > 0 ? timelineEvents[i - 1] : null);
         await prisma.timelineEvent.update({
           where: { id: timelineEvents[i].id },
           data: {
             conflictFlag: true,
-            conflictsWith: partner.id,
+            conflictsWith: partner?.id ?? null,
           },
         });
       }

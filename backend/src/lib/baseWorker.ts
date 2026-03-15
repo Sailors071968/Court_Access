@@ -148,35 +148,28 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
 
   /**
    * Mark the corresponding ProcessingJob as failed with a specific failure code.
+   * Uses processingJobId from job data for direct lookup (no ambiguous findFirst).
    * Used when ACU credits are exhausted or other non-retryable failures occur.
    */
   private async markJobFailed(job: Job<TData>, failureCode: string, errorMessage: string): Promise<void> {
-    const { userId, caseId } = job.data;
+    const { processingJobId } = job.data;
+    if (!processingJobId) {
+      console.warn(`[${this.workerName}] No processingJobId in job ${job.id} — cannot mark failed`);
+      return;
+    }
     try {
-      // Find the most recent pending ProcessingJob for this user/case/pipeline
-      const processingJob = await prisma.processingJob.findFirst({
-        where: {
-          userId,
-          caseId: caseId ?? undefined,
-          status: { in: ['pending', 'active'] },
+      await prisma.processingJob.update({
+        where: { id: processingJobId },
+        data: {
+          status: 'failed',
+          failureCode,
+          error: errorMessage,
+          completedAt: new Date(),
         },
-        orderBy: { createdAt: 'desc' },
       });
-
-      if (processingJob) {
-        await prisma.processingJob.update({
-          where: { id: processingJob.id },
-          data: {
-            status: 'failed',
-            failureCode,
-            error: errorMessage,
-            completedAt: new Date(),
-          },
-        });
-        console.log(
-          `[${this.workerName}] ProcessingJob ${processingJob.id} marked failed: ${failureCode}`
-        );
-      }
+      console.log(
+        `[${this.workerName}] ProcessingJob ${processingJobId} marked failed: ${failureCode}`
+      );
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       console.error(`[${this.workerName}] Failed to mark ProcessingJob as failed: ${msg}`);

@@ -87,11 +87,14 @@ async function createAndEnqueueJob(
     },
   });
 
+  // Inject processingJobId into job data so workers can look up by ID directly
+  const enrichedJobData = { ...jobData, processingJobId: processingJob.id };
+
   // Enqueue the BullMQ job — ACU credit validation happens in the worker
   // via CourtAccessWorker.reserveACU() which does atomic check-and-deduct.
   // If credits are insufficient, reserveACU throws and the job is retried/failed.
   const queue = getQueue(queueName);
-  const bullJob = await queue.add(jobName, jobData, {
+  const bullJob = await queue.add(jobName, enrichedJobData, {
     jobId: `${pipeline.toLowerCase()}-${processingJob.id}`,
   });
 

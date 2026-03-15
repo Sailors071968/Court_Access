@@ -25,22 +25,12 @@ class DoctrineAnalysisWorker extends CourtAccessWorker<DoctrineAnalysisJobData> 
   }
 
   protected async processJob(job: Job<DoctrineAnalysisJobData>): Promise<void> {
-    const { userId, tenantId, caseId } = job.data;
+    const { tenantId, caseId, processingJobId } = job.data;
 
-    // Mark ProcessingJob as active
-    const processingJob = await prisma.processingJob.findFirst({
-      where: {
-        userId,
-        caseId,
-        pipeline: 'DOCTRINE',
-        status: 'pending',
-      },
-      orderBy: { createdAt: 'desc' },
-    });
-
-    if (processingJob) {
+    // Mark ProcessingJob as active (direct ID lookup — safe across retries)
+    if (processingJobId) {
       await prisma.processingJob.update({
-        where: { id: processingJob.id },
+        where: { id: processingJobId },
         data: { status: 'active', startedAt: new Date() },
       });
     }
@@ -62,9 +52,9 @@ class DoctrineAnalysisWorker extends CourtAccessWorker<DoctrineAnalysisJobData> 
       // Actual AI pipeline integration in Phase 3.
 
       // Mark ProcessingJob as completed
-      if (processingJob) {
+      if (processingJobId) {
         await prisma.processingJob.update({
-          where: { id: processingJob.id },
+          where: { id: processingJobId },
           data: {
             status: 'completed',
             completedAt: new Date(),
@@ -81,10 +71,10 @@ class DoctrineAnalysisWorker extends CourtAccessWorker<DoctrineAnalysisJobData> 
       console.log(`[DoctrineAnalysisWorker] Doctrine analysis completed for case ${caseId}`);
     } catch (error) {
       // Mark ProcessingJob as failed
-      if (processingJob) {
+      if (processingJobId) {
         const message = error instanceof Error ? error.message : String(error);
         await prisma.processingJob.update({
-          where: { id: processingJob.id },
+          where: { id: processingJobId },
           data: {
             status: 'failed',
             completedAt: new Date(),

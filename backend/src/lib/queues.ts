@@ -38,6 +38,8 @@ export interface BaseJobData {
   userId: string;
   tenantId: string;
   caseId?: string;
+  /** ProcessingJob record ID for direct lookup (set by pipelineJobService) */
+  processingJobId?: string;
   /** ACU credits required for this job (0 = no credit check) */
   acuCreditsRequired: number;
   /** Timestamp when the job was enqueued */

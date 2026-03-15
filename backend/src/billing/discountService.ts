@@ -71,10 +71,11 @@ export async function applyDiscountCode(codeValue: string, userId: string): Prom
   const MAX_RETRIES = 3;
   for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
     try {
-      const applied = await prisma.$transaction(async (tx) => {
+      const failReason = await prisma.$transaction(async (tx) => {
         const code = await tx.discountCode.findUnique({ where: { id: codeId } });
-        if (!code || !code.active) return false;
-        if (code.usageLimit !== null && code.usageCount >= code.usageLimit) return false;
+        if (!code || !code.active) return 'inactive';
+        if (code.usageLimit !== null && code.usageCount >= code.usageLimit) return 'usage_limit';
+        if (code.expiresAt && code.expiresAt < new Date()) return 'expired';
 
         await tx.discountCode.update({
           where: { id: codeId },
@@ -83,11 +84,16 @@ export async function applyDiscountCode(codeValue: string, userId: string): Prom
         await tx.discountUsage.create({
           data: { discountCodeId: codeId, userId },
         });
-        return true;
+        return null;
       }, { isolationLevel: 'Serializable' });
 
-      if (!applied) {
-        return { valid: false, errorReason: 'This discount code has reached its usage limit' };
+      if (failReason) {
+        const messages: Record<string, string> = {
+          inactive: 'This discount code is no longer active',
+          usage_limit: 'This discount code has reached its usage limit',
+          expired: 'This discount code has expired',
+        };
+        return { valid: false, errorReason: messages[failReason] ?? 'Discount code could not be applied' };
       }
 
       return validation;

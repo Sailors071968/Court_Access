@@ -24,8 +24,17 @@ export async function seedDefaultDiscountCodes(): Promise<void> {
   for (const code of defaults) {
     const existing = await getDiscountCodeByValue(code.codeValue);
     if (!existing) {
-      await createDiscountCode(code);
-      console.log(`[DiscountSeed] Seeded discount code: ${code.codeValue} (${code.codeName})`);
+      try {
+        await createDiscountCode(code);
+        console.log(`[DiscountSeed] Seeded discount code: ${code.codeValue} (${code.codeName})`);
+      } catch (err: unknown) {
+        // P2002 = unique constraint violation (another instance seeded concurrently)
+        if (typeof err === 'object' && err !== null && 'code' in err && (err as { code: string }).code === 'P2002') {
+          console.log(`[DiscountSeed] Discount code already exists (concurrent seed): ${code.codeValue}`);
+        } else {
+          throw err;
+        }
+      }
     } else {
       console.log(`[DiscountSeed] Discount code already exists: ${code.codeValue}`);
     }

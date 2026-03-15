@@ -65,27 +65,47 @@ export async function applyDiscountCode(codeValue: string, userId: string): Prom
 
   // Atomic transaction: conditionally increment usage only if still under limit.
   // Prevents TOCTOU race where two concurrent requests both pass validation.
+  // Retries up to 3 times on P2034 (Serializable write conflict) so that
+  // unlimited codes aren't falsely rejected by transient SSI conflicts.
   const codeId = validation.codeId;
-  const applied = await prisma.$transaction(async (tx) => {
-    const code = await tx.discountCode.findUnique({ where: { id: codeId } });
-    if (!code || !code.active) return false;
-    if (code.usageLimit !== null && code.usageCount >= code.usageLimit) return false;
+  const MAX_RETRIES = 3;
+  for (let attempt = 1; attempt <= MAX_RETRIES; attempt++) {
+    try {
+      const applied = await prisma.$transaction(async (tx) => {
+        const code = await tx.discountCode.findUnique({ where: { id: codeId } });
+        if (!code || !code.active) return false;
+        if (code.usageLimit !== null && code.usageCount >= code.usageLimit) return false;
 
-    await tx.discountCode.update({
-      where: { id: codeId },
-      data: { usageCount: { increment: 1 } },
-    });
-    await tx.discountUsage.create({
-      data: { discountCodeId: codeId, userId },
-    });
-    return true;
-  }, { isolationLevel: 'Serializable' });
+        await tx.discountCode.update({
+          where: { id: codeId },
+          data: { usageCount: { increment: 1 } },
+        });
+        await tx.discountUsage.create({
+          data: { discountCodeId: codeId, userId },
+        });
+        return true;
+      }, { isolationLevel: 'Serializable' });
 
-  if (!applied) {
-    return { valid: false, errorReason: 'This discount code has reached its usage limit' };
+      if (!applied) {
+        return { valid: false, errorReason: 'This discount code has reached its usage limit' };
+      }
+
+      return validation;
+    } catch (err: unknown) {
+      const isP2034 = typeof err === 'object' && err !== null && 'code' in err
+        && (err as { code: string }).code === 'P2034';
+      if (isP2034 && attempt < MAX_RETRIES) {
+        // Transient serialization conflict — wait briefly and retry
+        await new Promise((resolve) => setTimeout(resolve, 50 * attempt));
+        continue;
+      }
+      // Either not a P2034, or we've exhausted retries — re-throw for the route handler
+      throw err;
+    }
   }
 
-  return validation;
+  // Should never reach here, but satisfy TypeScript
+  return { valid: false, errorReason: 'Failed to apply discount code after retries' };
 }
 
 /**

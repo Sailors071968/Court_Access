@@ -14,6 +14,19 @@ import { getR2Object } from '../lib/r2.js';
 import { streamToBuffer } from '../utils/streamToBuffer.js';
 
 // ---------------------------------------------------------------------------
+// Safety Limits
+// ---------------------------------------------------------------------------
+
+/** Maximum file size to load into memory for text extraction (50 MB) */
+const MAX_EXTRACTION_BUFFER_BYTES = 50 * 1024 * 1024;
+
+/** Per-evidence extraction timeout in milliseconds (60 seconds) */
+const EXTRACTION_TIMEOUT_MS = 60_000;
+
+/** Maximum extracted text length to return (2 MB of text) */
+const MAX_EXTRACTED_TEXT_CHARS = 2 * 1024 * 1024;
+
+// ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
 
@@ -84,61 +97,17 @@ export async function extractEvidenceText(
       return outcome;
     }
 
-    // Fetch object from R2
-    const r2Object = await getR2Object(evidence.s3Key);
-    if (!r2Object) {
-      outcome.method = 'failed';
-      outcome.error = 'Object not found in R2';
-      outcome.durationMs = Date.now() - start;
-      console.warn('[EvidenceTextExtraction] R2 object not found', {
-        evidenceId: evidence.evidenceId,
-        s3Key: evidence.s3Key,
-      });
-      return outcome;
-    }
+    // Wrap the entire extraction in a timeout to prevent runaway processing
+    const extractionPromise = extractWithinLimits(evidence, mimeType, outcome);
+    const timeoutPromise = new Promise<never>((_, reject) => {
+      setTimeout(
+        () => reject(new Error(`Extraction timed out after ${EXTRACTION_TIMEOUT_MS}ms`)),
+        EXTRACTION_TIMEOUT_MS,
+      );
+    });
 
-    // Stream → Buffer
-    const buffer = await streamToBuffer(r2Object.body);
-
-    // Route by MIME type
-    if (mimeType === 'text/plain' || mimeType === 'text/csv') {
-      outcome.text = buffer.toString('utf-8');
-      outcome.method = 'direct';
-    } else if (mimeType === 'application/pdf') {
-      outcome.text = await extractFromPdf(buffer);
-      outcome.method = 'pdf-parse';
-    } else if (mimeType.startsWith('image/')) {
-      outcome.text = await extractFromImage(buffer);
-      outcome.method = 'tesseract-ocr';
-    } else {
-      // Attempt plain text read as best-effort fallback
-      const tentative = buffer.toString('utf-8');
-      if (isProbablyText(tentative)) {
-        outcome.text = tentative;
-        outcome.method = 'direct';
-      } else {
-        outcome.method = 'skipped';
-        outcome.error = `Unsupported MIME type: ${mimeType}`;
-        console.warn('[EvidenceTextExtraction] Unsupported MIME type', {
-          evidenceId: evidence.evidenceId,
-          mimeType,
-        });
-      }
-    }
-
-    outcome.charCount = outcome.text?.length ?? 0;
-    outcome.durationMs = Date.now() - start;
-
-    if (outcome.text) {
-      console.info('[EvidenceTextExtraction] Extracted text', {
-        evidenceId: evidence.evidenceId,
-        method: outcome.method,
-        charCount: outcome.charCount,
-        durationMs: outcome.durationMs,
-      });
-    }
-
-    return outcome;
+    const result = await Promise.race([extractionPromise, timeoutPromise]);
+    return result;
   } catch (err) {
     outcome.method = 'failed';
     outcome.error = err instanceof Error ? err.message : String(err);
@@ -146,9 +115,107 @@ export async function extractEvidenceText(
     console.warn('[EvidenceTextExtraction] Extraction failed', {
       evidenceId: evidence.evidenceId,
       error: outcome.error,
+      durationMs: outcome.durationMs,
     });
     return outcome;
   }
+}
+
+// ---------------------------------------------------------------------------
+// Inner extraction (runs under timeout)
+// ---------------------------------------------------------------------------
+
+async function extractWithinLimits(
+  evidence: EvidenceRecord,
+  mimeType: string,
+  outcome: ExtractionOutcome,
+): Promise<ExtractionOutcome> {
+  const start = Date.now();
+
+  // Fetch object from R2
+  const r2Object = await getR2Object(evidence.s3Key!);
+  if (!r2Object) {
+    outcome.method = 'failed';
+    outcome.error = 'Object not found in R2';
+    outcome.durationMs = Date.now() - start;
+    console.warn('[EvidenceTextExtraction] R2 object not found', {
+      evidenceId: evidence.evidenceId,
+      s3Key: evidence.s3Key,
+    });
+    return outcome;
+  }
+
+  // Check content length header before downloading (if available)
+  if (r2Object.contentLength && r2Object.contentLength > MAX_EXTRACTION_BUFFER_BYTES) {
+    outcome.method = 'skipped';
+    outcome.error = `File too large for extraction: ${(r2Object.contentLength / (1024 * 1024)).toFixed(1)} MB exceeds ${(MAX_EXTRACTION_BUFFER_BYTES / (1024 * 1024)).toFixed(0)} MB limit`;
+    outcome.durationMs = Date.now() - start;
+    console.warn('[EvidenceTextExtraction] File too large', {
+      evidenceId: evidence.evidenceId,
+      contentLength: r2Object.contentLength,
+      maxBytes: MAX_EXTRACTION_BUFFER_BYTES,
+    });
+    return outcome;
+  }
+
+  // Stream → Buffer (with size limit enforcement)
+  const buffer = await streamToBuffer(r2Object.body, MAX_EXTRACTION_BUFFER_BYTES);
+
+  console.info('[EvidenceTextExtraction] Buffer loaded', {
+    evidenceId: evidence.evidenceId,
+    bufferSizeKB: (buffer.length / 1024).toFixed(1),
+    mimeType,
+  });
+
+  // Route by MIME type
+  if (mimeType === 'text/plain' || mimeType === 'text/csv') {
+    outcome.text = buffer.toString('utf-8');
+    outcome.method = 'direct';
+  } else if (mimeType === 'application/pdf') {
+    outcome.text = await extractFromPdf(buffer);
+    outcome.method = 'pdf-parse';
+  } else if (mimeType.startsWith('image/')) {
+    outcome.text = await extractFromImage(buffer);
+    outcome.method = 'tesseract-ocr';
+  } else {
+    // Attempt plain text read as best-effort fallback
+    const tentative = buffer.toString('utf-8');
+    if (isProbablyText(tentative)) {
+      outcome.text = tentative;
+      outcome.method = 'direct';
+    } else {
+      outcome.method = 'skipped';
+      outcome.error = `Unsupported MIME type: ${mimeType}`;
+      console.warn('[EvidenceTextExtraction] Unsupported MIME type', {
+        evidenceId: evidence.evidenceId,
+        mimeType,
+      });
+    }
+  }
+
+  // Enforce maximum extracted text length
+  if (outcome.text && outcome.text.length > MAX_EXTRACTED_TEXT_CHARS) {
+    console.warn('[EvidenceTextExtraction] Text truncated', {
+      evidenceId: evidence.evidenceId,
+      originalChars: outcome.text.length,
+      truncatedTo: MAX_EXTRACTED_TEXT_CHARS,
+    });
+    outcome.text = outcome.text.slice(0, MAX_EXTRACTED_TEXT_CHARS);
+  }
+
+  outcome.charCount = outcome.text?.length ?? 0;
+  outcome.durationMs = Date.now() - start;
+
+  if (outcome.text) {
+    console.info('[EvidenceTextExtraction] Extracted text', {
+      evidenceId: evidence.evidenceId,
+      method: outcome.method,
+      charCount: outcome.charCount,
+      durationMs: outcome.durationMs,
+    });
+  }
+
+  return outcome;
 }
 
 // ---------------------------------------------------------------------------

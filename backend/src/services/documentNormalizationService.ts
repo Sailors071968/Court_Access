@@ -54,7 +54,7 @@ export function normalizeDocumentText(text: string): string {
     },
   );
   normalized = normalized.replace(
-    /(\d{4})\s*hrs?/gi,
+    /(\d{4})\s*(?:hours?|hrs?)/gi,
     (_match, time) => {
       const h = time.slice(0, 2);
       const m = time.slice(2, 4);

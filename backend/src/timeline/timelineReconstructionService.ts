@@ -93,6 +93,16 @@ function mapToTimelineSourceType(sourceType: string): string {
 }
 
 // ---------------------------------------------------------------------------
+// Safety Limits
+// ---------------------------------------------------------------------------
+
+/** Maximum total pipeline duration (5 minutes). Prevents runaway jobs. */
+const PIPELINE_TIMEOUT_MS = 5 * 60 * 1000;
+
+/** Maximum number of evidence items to process per pipeline run */
+const MAX_EVIDENCE_PER_RUN = 200;
+
+// ---------------------------------------------------------------------------
 // Core Reconstruction Pipeline
 // ---------------------------------------------------------------------------
 
@@ -108,6 +118,9 @@ function mapToTimelineSourceType(sourceType: string): string {
  *   5. Merge into unified timeline with clock drift correction
  *   6. Detect conflicts between timeline events
  *   7. Persist final TimelineEvent records to PostgreSQL
+ *
+ * Safety: Enforces a 5-minute pipeline timeout, 200 evidence item cap,
+ * and per-evidence extraction timeouts (delegated to extractEvidenceText).
  */
 export async function reconstructTimeline(
   caseId: string,
@@ -156,13 +169,44 @@ export async function reconstructTimeline(
     };
   }
 
+  // Enforce evidence cap to prevent runaway processing
+  const evidenceToProcess = evidence.slice(0, MAX_EVIDENCE_PER_RUN);
+  if (evidence.length > MAX_EVIDENCE_PER_RUN) {
+    warnings.push(
+      `Evidence capped at ${MAX_EVIDENCE_PER_RUN} items (${evidence.length} total). ` +
+      `Remaining evidence will be processed on next pipeline run.`,
+    );
+    console.warn('[TimelineReconstruction] Evidence cap applied', {
+      caseId,
+      total: evidence.length,
+      processing: MAX_EVIDENCE_PER_RUN,
+    });
+  }
+
+  // Pipeline-level timeout: abort processing if total time exceeds limit
+  const pipelineDeadline = startTime + PIPELINE_TIMEOUT_MS;
+
   // -------------------------------------------------------------------------
   // Step 2: Extract events from evidence
   // -------------------------------------------------------------------------
   let totalExtracted = 0;
   let totalStored = 0;
 
-  for (const ev of evidence) {
+  for (const ev of evidenceToProcess) {
+    // Check pipeline timeout before each evidence item
+    if (Date.now() >= pipelineDeadline) {
+      warnings.push(
+        `Pipeline timeout reached (${PIPELINE_TIMEOUT_MS / 1000}s). ` +
+        `Processed ${totalExtracted} events from evidence so far; skipping remaining items.`,
+      );
+      console.warn('[TimelineReconstruction] Pipeline timeout reached', {
+        caseId,
+        elapsedMs: Date.now() - startTime,
+        limitMs: PIPELINE_TIMEOUT_MS,
+      });
+      break;
+    }
+
     try {
       const sourceType = mapEvidenceTypeToSourceType(ev.evidenceType);
 

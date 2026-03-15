@@ -161,7 +161,20 @@ export async function registerDiscountRoutes(app: FastifyInstance): Promise<void
       return reply.code(400).send({ valid: false, errorReason: 'No discount code provided' });
     }
 
-    const result = await applyDiscountCode(code, user.userId);
-    return reply.send(result);
+    try {
+      const result = await applyDiscountCode(code, user.userId);
+      return reply.send(result);
+    } catch (err: unknown) {
+      // P2034 = Serializable transaction write conflict (concurrent redemption race).
+      // Convert to 409 Conflict so the frontend sees a business-rule rejection,
+      // not an opaque 500 Internal Server Error.
+      if (typeof err === 'object' && err !== null && 'code' in err && (err as { code: string }).code === 'P2034') {
+        return reply.code(409).send({
+          error: 'Discount code already redeemed',
+          message: 'This discount code has reached its usage limit.',
+        });
+      }
+      throw err;
+    }
   });
 }

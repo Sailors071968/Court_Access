@@ -459,6 +459,20 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
 
     console.log(`[StripeWebhook] Received event: ${event.type} (${event.id})`);
 
+    // -----------------------------------------------------------------------
+    // Idempotency guard — Stripe may retry webhook events multiple times.
+    // Check if we've already processed this event ID; if so, return 200
+    // immediately to prevent duplicate credit grants and other side effects.
+    // -----------------------------------------------------------------------
+    const alreadyProcessed = await prisma.stripeWebhookEvent.findUnique({
+      where: { eventId: event.id },
+    });
+
+    if (alreadyProcessed) {
+      console.log(`[StripeWebhook] Duplicate event ignored: ${event.type} (${event.id})`);
+      return reply.send({ received: true, duplicate: true });
+    }
+
     try {
       switch (event.type) {
         case 'customer.subscription.created':
@@ -482,6 +496,14 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
         default:
           console.log(`[StripeWebhook] Unhandled event type: ${event.type}`);
       }
+
+      // Record this event as processed for idempotency
+      await prisma.stripeWebhookEvent.create({
+        data: {
+          eventId: event.id,
+          eventType: event.type,
+        },
+      });
 
       return reply.send({ received: true });
     } catch (err) {

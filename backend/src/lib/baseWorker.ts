@@ -113,13 +113,23 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
 
     try {
       await prisma.$transaction(async (tx) => {
-        await tx.aiCreditBalance.update({
-          where: { userId },
-          data: { creditsUsed: { decrement: acuCreditsRequired } },
-        });
+        // Read current balance first to prevent creditsUsed going negative.
+        // If resetMonthlyCredits ran between reserveACU and this refund,
+        // creditsUsed was already reset to 0 — blind decrement would go negative
+        // and inflate available credits (granting free credits).
+        const balance = await tx.aiCreditBalance.findUnique({ where: { userId } });
+        const safeDecrement = balance
+          ? Math.min(acuCreditsRequired, balance.creditsUsed)
+          : 0;
+        if (safeDecrement > 0) {
+          await tx.aiCreditBalance.update({
+            where: { userId },
+            data: { creditsUsed: { decrement: safeDecrement } },
+          });
+        }
         // Delete the exact usage record created during reservation
         await tx.aiCreditUsage.delete({ where: { id: usageRecordId } });
-      });
+      }, { isolationLevel: 'Serializable' });
       console.log(
         `[${this.workerName}] Refunded ${acuCreditsRequired} ACU credits to user ${userId} for failed job ${job.id}`
       );

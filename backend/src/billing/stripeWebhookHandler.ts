@@ -69,9 +69,10 @@ function verifyStripeSignature(payload: string | Buffer, signature: string): boo
 
   const elements = signature.split(',');
   const timestampStr = elements.find(e => e.startsWith('t='))?.slice(2);
-  const signatureV1 = elements.find(e => e.startsWith('v1='))?.slice(3);
+  // Collect ALL v1= signatures — Stripe sends multiple during secret rotation
+  const signaturesV1 = elements.filter(e => e.startsWith('v1=')).map(e => e.slice(3));
 
-  if (!timestampStr || !signatureV1) {
+  if (!timestampStr || signaturesV1.length === 0) {
     return false;
   }
 
@@ -89,14 +90,20 @@ function verifyStripeSignature(payload: string | Buffer, signature: string): boo
     .update(signedPayload)
     .digest('hex');
 
-  try {
-    return crypto.timingSafeEqual(
-      Buffer.from(signatureV1, 'hex'),
-      Buffer.from(expectedSignature, 'hex'),
-    );
-  } catch {
-    return false;
+  // Check each v1= signature — accept if ANY matches (supports secret rotation)
+  for (const sig of signaturesV1) {
+    try {
+      if (crypto.timingSafeEqual(
+        Buffer.from(sig, 'hex'),
+        Buffer.from(expectedSignature, 'hex'),
+      )) {
+        return true;
+      }
+    } catch {
+      continue;
+    }
   }
+  return false;
 }
 
 // ---------------------------------------------------------------------------
@@ -461,8 +468,13 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
 
   // POST /api/billing/create-checkout-session — Create Stripe checkout session
   app.post('/api/billing/create-checkout-session', async (request: FastifyRequest, reply: FastifyReply) => {
+    // Always read userId from authenticated JWT — never trust client-supplied userId
+    const userId = ((request as unknown as { user?: { userId: string } }).user)?.userId;
+    if (!userId) {
+      return reply.code(401).send({ error: 'Authentication required' });
+    }
     // Stub — in production, this would create a Stripe checkout session
-    const { planId, userId } = request.body as { planId: string; userId: string };
+    const { planId } = request.body as { planId: string };
     return reply.send({
       message: 'Stripe checkout session creation requires STRIPE_SECRET_KEY to be configured',
       planId,

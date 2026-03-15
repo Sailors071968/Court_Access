@@ -31,6 +31,8 @@ import { registerQueueMonitorRoutes } from './admin/queueMonitorRoutes.js';
 import { registerAdminRoutes } from './admin/adminRoutes.js';
 import { registerDiscountRoutes } from './billing/discountRoutes.js';
 import { seedDefaultDiscountCodes } from './billing/discountSeed.js';
+import { registerStripeCheckoutRoutes } from './billing/stripeCheckoutRoutes.js';
+import { acuUploadLockHook } from './billing/acuEnforcementMiddleware.js';
 import { registerStripeWebhookRoutes } from './billing/stripeWebhookHandler.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
@@ -41,6 +43,12 @@ async function startServer() {
     logger: true,
     bodyLimit: 10 * 1024 * 1024, // 10MB
   });
+
+  // NOTE: Raw body parsing for Stripe webhook signature verification is handled
+  // inside stripeWebhookHandler.ts via a scoped plugin (app.register), which
+  // correctly overrides the parent JSON parser only for the webhook route.
+  // A global addContentTypeParser('application/json') here would crash with
+  // FST_ERR_CTP_ALREADY_PRESENT since Fastify already registers a default parser.
 
   // CORS — production domains + local dev
   const CORS_ORIGINS = process.env.NODE_ENV === 'production'
@@ -88,6 +96,9 @@ async function startServer() {
 
   // Phase 195 — Evidence upload protection
   app.addHook('onRequest', uploadProtectionHook);
+
+  // ACU Upload Lock — Block evidence uploads when credits exhausted
+  app.addHook('onRequest', acuUploadLockHook);
 
   // Phase 197 — Security logging (response tracking)
   await registerSecurityLogging(app);
@@ -168,6 +179,9 @@ async function startServer() {
   await registerAdminRoutes(app);
 
   // Stripe Checkout & Webhook routes
+  console.log('[Server] Registering Stripe checkout routes...');
+  await registerStripeCheckoutRoutes(app);
+
   console.log('[Server] Registering Stripe webhook routes...');
   await registerStripeWebhookRoutes(app);
 
@@ -259,6 +273,10 @@ async function startServer() {
     console.log('  - DELETE /api/admin/users/:userId');
     console.log('  - DELETE /api/admin/cases/:caseId');
     console.log('  - DELETE /api/admin/evidence/:evidenceId');
+    console.log('  - POST /api/billing/create-checkout-session');
+    console.log('  - POST /api/billing/webhook');
+    console.log('  - GET  /api/billing/checkout-status/:sessionId');
+    console.log('  - GET  /api/billing/acu-packs');
     console.log('[Server] Security hardening active: JWT auth, rate limiting, CSRF, security headers, upload protection, security logging');
   } catch (err) {
     console.error('[Server] Failed to start:', err);

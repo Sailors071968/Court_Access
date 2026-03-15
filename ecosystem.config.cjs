@@ -182,58 +182,118 @@ module.exports = {
     },
 
     // -----------------------------------------------------------------------
-    // Queue Monitor Worker (legacy)
-    // Interval: every 30 seconds
+    // Queue Monitor Worker
+    // Long-running daemon, polls every 30 seconds
     // -----------------------------------------------------------------------
     {
       name: 'queueMonitor',
-      script: 'workers/runners/queueMonitorRunner.mjs',
+      script: 'npx',
+      args: 'tsx workers/runners/queueMonitorRunner.ts',
       cwd: __dirname,
-      cron_restart: '*/1 * * * *',
       env: {
         NODE_ENV: 'production',
-        WORKER_INTERVAL_MS: '30000',
       },
       instances: 1,
       autorestart: true,
       watch: false,
       max_memory_restart: '256M',
+      restart_delay: 5000,
+      error_file: '/var/log/pm2/queue-monitor-error.log',
+      out_file: '/var/log/pm2/queue-monitor-out.log',
+      merge_logs: true,
+      time: true,
     },
 
     // -----------------------------------------------------------------------
     // Graph Integrity Check Worker
-    // Interval: every 15 minutes
+    // Long-running daemon, checks every 6 hours
     // -----------------------------------------------------------------------
     {
       name: 'graphIntegrityCheck',
-      script: 'workers/runners/graphIntegrityRunner.mjs',
+      script: 'npx',
+      args: 'tsx workers/runners/graphIntegrityRunner.ts',
       cwd: __dirname,
       env: {
         NODE_ENV: 'production',
-        WORKER_INTERVAL_MS: '900000',
       },
       instances: 1,
       autorestart: true,
       watch: false,
       max_memory_restart: '256M',
+      restart_delay: 5000,
+      error_file: '/var/log/pm2/graph-integrity-error.log',
+      out_file: '/var/log/pm2/graph-integrity-out.log',
+      merge_logs: true,
+      time: true,
     },
 
     // -----------------------------------------------------------------------
     // System Health Reporter
-    // Interval: every 60 seconds
+    // Long-running daemon, polls every 60 seconds
     // -----------------------------------------------------------------------
     {
       name: 'systemHealth',
-      script: 'workers/runners/systemHealthRunner.mjs',
+      script: 'npx',
+      args: 'tsx workers/runners/systemHealthRunner.ts',
       cwd: __dirname,
       env: {
         NODE_ENV: 'production',
-        WORKER_INTERVAL_MS: '60000',
       },
       instances: 1,
       autorestart: true,
       watch: false,
       max_memory_restart: '256M',
+      restart_delay: 5000,
+      error_file: '/var/log/pm2/system-health-error.log',
+      out_file: '/var/log/pm2/system-health-out.log',
+      merge_logs: true,
+      time: true,
+    },
+
+    // -----------------------------------------------------------------------
+    // Timeline Processing Worker
+    // Long-running daemon, polls for timeline reconstruction jobs
+    // -----------------------------------------------------------------------
+    {
+      name: 'timelineProcessing',
+      script: 'npx',
+      args: 'tsx workers/runners/timelineProcessingRunner.ts',
+      cwd: __dirname,
+      env: {
+        NODE_ENV: 'production',
+      },
+      instances: 1,
+      autorestart: true,
+      watch: false,
+      max_memory_restart: '256M',
+      restart_delay: 5000,
+      error_file: '/var/log/pm2/timeline-processing-error.log',
+      out_file: '/var/log/pm2/timeline-processing-out.log',
+      merge_logs: true,
+      time: true,
+    },
+
+    // -----------------------------------------------------------------------
+    // Narrative Processing Worker
+    // Long-running daemon, polls for narrative deconstruction jobs
+    // -----------------------------------------------------------------------
+    {
+      name: 'narrativeProcessing',
+      script: 'npx',
+      args: 'tsx workers/runners/narrativeProcessingRunner.ts',
+      cwd: __dirname,
+      env: {
+        NODE_ENV: 'production',
+      },
+      instances: 1,
+      autorestart: true,
+      watch: false,
+      max_memory_restart: '256M',
+      restart_delay: 5000,
+      error_file: '/var/log/pm2/narrative-processing-error.log',
+      out_file: '/var/log/pm2/narrative-processing-out.log',
+      merge_logs: true,
+      time: true,
     },
   ],
 };

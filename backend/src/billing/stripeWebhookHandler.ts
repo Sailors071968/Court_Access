@@ -8,6 +8,7 @@ import crypto from 'crypto';
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import prisma from '../lib/prisma.js';
 import { logSecurityEvent } from '../security/authMiddleware.js';
+import { addPurchasedCredits } from './aiCreditService.js';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -300,6 +301,26 @@ async function handleCheckoutCompleted(session: StripeCheckoutSession): Promise<
     return;
   }
 
+  // Handle ACU credit pack purchases (payment-mode sessions, no subscription).
+  // These have metadata.type === 'acu_credits' and metadata.credits set by
+  // stripeCheckoutRoutes.ts when creating the checkout session.
+  if (session.metadata?.type === 'acu_credits') {
+    const credits = parseInt(session.metadata.credits ?? '0', 10);
+    if (credits > 0) {
+      await addPurchasedCredits(userId, credits);
+      void logSecurityEvent(
+        'STRIPE_ACU_CREDITS_PURCHASED',
+        userId,
+        undefined,
+        `ACU credits purchased: ${credits} credits via session ${session.id}`,
+      );
+      console.log(`[StripeWebhook] ACU credits added: user=${userId} credits=${credits} session=${session.id}`);
+    } else {
+      console.warn(`[StripeWebhook] acu_credits checkout with zero/invalid credits for session ${session.id}`);
+    }
+    return; // Do NOT run subscription upsert for credit purchases
+  }
+
   // Read plan from session metadata (set when creating the checkout session).
   // Falls back to STARTER only if metadata is missing — callers MUST set planId
   // in session metadata when creating checkout sessions.
@@ -438,6 +459,40 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
 
     console.log(`[StripeWebhook] Received event: ${event.type} (${event.id})`);
 
+    // -----------------------------------------------------------------------
+    // Idempotency guard — Stripe may retry webhook events multiple times.
+    // We use an atomic insert-first approach: attempt to create the
+    // idempotency record BEFORE processing. If the unique constraint on
+    // eventId rejects the insert, this is a duplicate delivery and we
+    // return 200 immediately. This eliminates the TOCTOU race where two
+    // concurrent deliveries could both pass a findUnique check and both
+    // process the event (granting duplicate ACU credits).
+    // -----------------------------------------------------------------------
+    try {
+      await prisma.stripeWebhookEvent.create({
+        data: {
+          eventId: event.id,
+          eventType: event.type,
+        },
+      });
+    } catch (insertErr) {
+      // Unique constraint violation = duplicate event (P2002 is Prisma's
+      // unique constraint error code)
+      const isPrismaUniqueViolation =
+        insertErr instanceof Error &&
+        'code' in insertErr &&
+        (insertErr as { code: string }).code === 'P2002';
+
+      if (isPrismaUniqueViolation) {
+        console.log(`[StripeWebhook] Duplicate event ignored: ${event.type} (${event.id})`);
+        return reply.send({ received: true, duplicate: true });
+      }
+      // Non-duplicate DB error — log and reject so Stripe retries
+      const msg = insertErr instanceof Error ? insertErr.message : String(insertErr);
+      console.error(`[StripeWebhook] Idempotency record insert failed: ${msg}`);
+      return reply.code(500).send({ error: 'Webhook idempotency check failed' });
+    }
+
     try {
       switch (event.type) {
         case 'customer.subscription.created':
@@ -464,6 +519,19 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
 
       return reply.send({ received: true });
     } catch (err) {
+      // Processing failed — delete the idempotency record so Stripe retry
+      // will re-attempt processing (we only want to block retries for
+      // events that were successfully processed).
+      try {
+        await prisma.stripeWebhookEvent.delete({
+          where: { eventId: event.id },
+        });
+      } catch {
+        // Best-effort cleanup; if delete fails, the event stays recorded
+        // and Stripe retries will be blocked. Manual intervention needed.
+        console.error(`[StripeWebhook] Failed to clean up idempotency record for ${event.id}`);
+      }
+
       const message = err instanceof Error ? err.message : String(err);
       console.error(`[StripeWebhook] Error handling ${event.type}:`, message);
       void logSecurityEvent('STRIPE_WEBHOOK_ERROR', undefined, request.ip, `${event.type}: ${message}`);
@@ -472,31 +540,4 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
   });
 
   }); // end webhook plugin scope
-
-  // POST /api/billing/create-checkout-session — Create Stripe checkout session
-  app.post('/api/billing/create-checkout-session', async (request: FastifyRequest, reply: FastifyReply) => {
-    // Always read userId from authenticated JWT — never trust client-supplied userId
-    const userId = ((request as unknown as { user?: { userId: string } }).user)?.userId;
-    if (!userId) {
-      return reply.code(401).send({ error: 'Authentication required' });
-    }
-    // Stub — in production, this would create a Stripe checkout session
-    const { planId } = request.body as { planId: string };
-    return reply.send({
-      message: 'Stripe checkout session creation requires STRIPE_SECRET_KEY to be configured',
-      planId,
-      userId,
-      note: 'Configure STRIPE_SECRET_KEY env var to enable real Stripe checkout',
-    });
-  });
-
-  // GET /api/billing/checkout-status/:sessionId — Check checkout status
-  app.get('/api/billing/checkout-status/:sessionId', async (request: FastifyRequest, reply: FastifyReply) => {
-    const { sessionId } = request.params as { sessionId: string };
-    return reply.send({
-      sessionId,
-      status: 'pending',
-      note: 'Configure STRIPE_SECRET_KEY env var to enable real Stripe checkout status',
-    });
-  });
 }

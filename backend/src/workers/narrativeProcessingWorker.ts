@@ -31,7 +31,7 @@ class NarrativeProcessingWorker extends CourtAccessWorker<NarrativeProcessingJob
     if (processingJobId) {
       await prisma.processingJob.update({
         where: { id: processingJobId },
-        data: { status: 'active', startedAt: new Date() },
+        data: { status: 'active', startedAt: new Date(), completedAt: null, failureCode: null, error: null },
       });
     }
 
@@ -67,6 +67,8 @@ class NarrativeProcessingWorker extends CourtAccessWorker<NarrativeProcessingJob
             status: 'completed',
             completedAt: new Date(),
             acuCredits: job.data.acuCreditsRequired,
+            failureCode: null,
+            error: null,
             result: {
               narrativeDocuments: narrativeEvidence.length,
               totalEvidence: evidence.length,

@@ -31,7 +31,7 @@ class ContradictionAnalysisWorker extends CourtAccessWorker<ContradictionAnalysi
     if (processingJobId) {
       await prisma.processingJob.update({
         where: { id: processingJobId },
-        data: { status: 'active', startedAt: new Date() },
+        data: { status: 'active', startedAt: new Date(), completedAt: null, failureCode: null, error: null },
       });
     }
 
@@ -62,6 +62,8 @@ class ContradictionAnalysisWorker extends CourtAccessWorker<ContradictionAnalysi
             status: 'completed',
             completedAt: new Date(),
             acuCredits: job.data.acuCreditsRequired,
+            failureCode: null,
+            error: null,
             result: {
               timelineEventsAnalyzed: timelineEvents.length,
               caseId,

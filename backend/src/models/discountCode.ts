@@ -2,7 +2,14 @@
 // CourtAccess — Discount Code Model
 // Phase 221: Flexible discount code management for promotional access
 // Phase 226: Usage tracking per code per user
+// Now persisted to PostgreSQL via Prisma (replaces in-memory arrays).
 // ============================================================================
+
+import prisma from '../lib/prisma.js';
+
+// ---------------------------------------------------------------------------
+// Types (kept for backward compatibility with existing route handlers)
+// ---------------------------------------------------------------------------
 
 export interface DiscountCode {
   codeId: string;
@@ -24,123 +31,185 @@ export interface DiscountUsage {
   usedAt: string;
 }
 
-// In-memory stores (production: migrate to PostgreSQL)
-const discountCodes: DiscountCode[] = [];
-const discountUsages: DiscountUsage[] = [];
-
 // ---------------------------------------------------------------------------
-// Discount Code CRUD
+// Prisma row → interface mapper
 // ---------------------------------------------------------------------------
 
-export function createDiscountCode(
-  data: Omit<DiscountCode, 'codeId' | 'usageCount' | 'createdAt'>
-): DiscountCode {
-  const existing = discountCodes.find(
-    (c) => c.codeValue.toUpperCase() === data.codeValue.toUpperCase()
-  );
-  if (existing) {
-    throw new Error(`Discount code "${data.codeValue}" already exists`);
-  }
-
-  const code: DiscountCode = {
-    ...data,
-    codeId: crypto.randomUUID(),
-    codeValue: data.codeValue.toUpperCase(),
-    usageCount: 0,
-    createdAt: new Date().toISOString(),
+function toDiscountCode(row: {
+  id: string;
+  codeName: string;
+  codeValue: string;
+  discountType: string;
+  discountValue: number;
+  active: boolean;
+  usageLimit: number | null;
+  usageCount: number;
+  expiresAt: Date | null;
+  createdAt: Date;
+}): DiscountCode {
+  return {
+    codeId: row.id,
+    codeName: row.codeName,
+    codeValue: row.codeValue,
+    discountType: row.discountType as 'percent' | 'fixed',
+    discountValue: row.discountValue,
+    active: row.active,
+    usageLimit: row.usageLimit,
+    usageCount: row.usageCount,
+    expiresAt: row.expiresAt ? row.expiresAt.toISOString() : null,
+    createdAt: row.createdAt.toISOString(),
   };
-  discountCodes.push(code);
-  return code;
 }
 
-export function getDiscountCodes(): DiscountCode[] {
-  return [...discountCodes];
+function toDiscountUsage(row: {
+  id: string;
+  discountCodeId: string;
+  userId: string;
+  usedAt: Date;
+}): DiscountUsage {
+  return {
+    usageId: row.id,
+    discountCodeId: row.discountCodeId,
+    userId: row.userId,
+    usedAt: row.usedAt.toISOString(),
+  };
 }
 
-export function getDiscountCodeById(codeId: string): DiscountCode | undefined {
-  return discountCodes.find((c) => c.codeId === codeId);
+// ---------------------------------------------------------------------------
+// Discount Code CRUD — persisted to PostgreSQL via Prisma
+// ---------------------------------------------------------------------------
+
+export async function createDiscountCode(
+  data: Omit<DiscountCode, 'codeId' | 'usageCount' | 'createdAt'>
+): Promise<DiscountCode> {
+  const row = await prisma.discountCode.create({
+    data: {
+      codeName: data.codeName,
+      codeValue: data.codeValue.toUpperCase(),
+      discountType: data.discountType,
+      discountValue: data.discountValue,
+      active: data.active,
+      usageLimit: data.usageLimit,
+      expiresAt: data.expiresAt ? new Date(data.expiresAt) : null,
+    },
+  });
+  return toDiscountCode(row);
 }
 
-export function getDiscountCodeByValue(codeValue: string): DiscountCode | undefined {
-  return discountCodes.find(
-    (c) => c.codeValue.toUpperCase() === codeValue.toUpperCase()
-  );
+export async function getDiscountCodes(): Promise<DiscountCode[]> {
+  const rows = await prisma.discountCode.findMany({ orderBy: { createdAt: 'desc' } });
+  return rows.map(toDiscountCode);
 }
 
-export function updateDiscountCode(
+export async function getDiscountCodeById(codeId: string): Promise<DiscountCode | undefined> {
+  const row = await prisma.discountCode.findUnique({ where: { id: codeId } });
+  return row ? toDiscountCode(row) : undefined;
+}
+
+export async function getDiscountCodeByValue(codeValue: string): Promise<DiscountCode | undefined> {
+  const row = await prisma.discountCode.findUnique({
+    where: { codeValue: codeValue.toUpperCase() },
+  });
+  return row ? toDiscountCode(row) : undefined;
+}
+
+export async function updateDiscountCode(
   codeId: string,
   updates: Partial<Pick<DiscountCode, 'codeName' | 'codeValue' | 'active' | 'expiresAt' | 'usageLimit' | 'discountValue' | 'discountType'>>
-): DiscountCode | undefined {
-  const code = discountCodes.find((c) => c.codeId === codeId);
-  if (!code) return undefined;
+): Promise<DiscountCode | undefined> {
+  try {
+    const data: Record<string, unknown> = {};
+    if (updates.codeName !== undefined) data.codeName = updates.codeName;
+    if (updates.codeValue !== undefined) data.codeValue = updates.codeValue.toUpperCase();
+    if (updates.active !== undefined) data.active = updates.active;
+    if (updates.expiresAt !== undefined) data.expiresAt = updates.expiresAt ? new Date(updates.expiresAt) : null;
+    if (updates.usageLimit !== undefined) data.usageLimit = updates.usageLimit;
+    if (updates.discountValue !== undefined) data.discountValue = updates.discountValue;
+    if (updates.discountType !== undefined) data.discountType = updates.discountType;
 
-  // Prevent duplicate codeValue when renaming
-  if (updates.codeValue !== undefined && updates.codeValue.toUpperCase() !== code.codeValue) {
-    const conflict = discountCodes.find(
-      (c) => c.codeId !== codeId && c.codeValue.toUpperCase() === updates.codeValue!.toUpperCase()
-    );
-    if (conflict) {
-      throw new Error(`Discount code "${updates.codeValue}" already exists`);
+    const row = await prisma.discountCode.update({
+      where: { id: codeId },
+      data,
+    });
+    return toDiscountCode(row);
+  } catch (err: unknown) {
+    // P2025 = record not found → return undefined (caller sends 404)
+    if (typeof err === 'object' && err !== null && 'code' in err && (err as { code: string }).code === 'P2025') {
+      return undefined;
     }
+    // P2002 = unique constraint violation → re-throw so caller can send 409
+    throw err;
   }
-
-  Object.assign(code, updates);
-  return code;
 }
 
-export function deleteDiscountCode(codeId: string): boolean {
-  const idx = discountCodes.findIndex((c) => c.codeId === codeId);
-  if (idx === -1) return false;
-  discountCodes.splice(idx, 1);
-  return true;
+export async function deleteDiscountCode(codeId: string): Promise<boolean> {
+  try {
+    await prisma.discountCode.delete({ where: { id: codeId } });
+    return true;
+  } catch (err: unknown) {
+    // P2025 = record not found → return false (caller sends 404)
+    if (typeof err === 'object' && err !== null && 'code' in err && (err as { code: string }).code === 'P2025') {
+      return false;
+    }
+    // P2003 = FK constraint (has usage records) → throw so caller can handle
+    throw err;
+  }
 }
 
-export function incrementUsageCount(codeId: string): void {
-  const code = discountCodes.find((c) => c.codeId === codeId);
-  if (code) {
-    code.usageCount += 1;
+export async function incrementUsageCount(codeId: string): Promise<void> {
+  try {
+    await prisma.discountCode.update({
+      where: { id: codeId },
+      data: { usageCount: { increment: 1 } },
+    });
+  } catch {
+    // Silently ignore if code not found
   }
 }
 
 // ---------------------------------------------------------------------------
-// Discount Usage Tracking (Phase 226)
+// Discount Usage Tracking (Phase 226) — persisted to PostgreSQL
 // ---------------------------------------------------------------------------
 
-export function recordDiscountUsage(discountCodeId: string, userId: string): DiscountUsage {
-  const usage: DiscountUsage = {
-    usageId: crypto.randomUUID(),
-    discountCodeId,
-    userId,
-    usedAt: new Date().toISOString(),
-  };
-  discountUsages.push(usage);
-  return usage;
+export async function recordDiscountUsage(discountCodeId: string, userId: string): Promise<DiscountUsage> {
+  const row = await prisma.discountUsage.create({
+    data: { discountCodeId, userId },
+  });
+  return toDiscountUsage(row);
 }
 
-export function getDiscountUsages(): DiscountUsage[] {
-  return [...discountUsages];
+export async function getDiscountUsages(): Promise<DiscountUsage[]> {
+  const rows = await prisma.discountUsage.findMany({ orderBy: { usedAt: 'desc' } });
+  return rows.map(toDiscountUsage);
 }
 
-export function getUsagesByCodeId(discountCodeId: string): DiscountUsage[] {
-  return discountUsages.filter((u) => u.discountCodeId === discountCodeId);
+export async function getUsagesByCodeId(discountCodeId: string): Promise<DiscountUsage[]> {
+  const rows = await prisma.discountUsage.findMany({
+    where: { discountCodeId },
+    orderBy: { usedAt: 'desc' },
+  });
+  return rows.map(toDiscountUsage);
 }
 
-export function getUsagesByUserId(userId: string): DiscountUsage[] {
-  return discountUsages.filter((u) => u.userId === userId);
+export async function getUsagesByUserId(userId: string): Promise<DiscountUsage[]> {
+  const rows = await prisma.discountUsage.findMany({
+    where: { userId },
+    orderBy: { usedAt: 'desc' },
+  });
+  return rows.map(toDiscountUsage);
 }
 
 // ---------------------------------------------------------------------------
 // Expiration automation helper (Phase 228)
 // ---------------------------------------------------------------------------
 
-export function deactivateExpiredCodes(): number {
-  const now = new Date();
-  let deactivated = 0;
-  for (const code of discountCodes) {
-    if (code.active && code.expiresAt && new Date(code.expiresAt) < now) {
-      code.active = false;
-      deactivated++;
-    }
-  }
-  return deactivated;
+export async function deactivateExpiredCodes(): Promise<number> {
+  const result = await prisma.discountCode.updateMany({
+    where: {
+      active: true,
+      expiresAt: { lt: new Date() },
+    },
+    data: { active: false },
+  });
+  return result.count;
 }

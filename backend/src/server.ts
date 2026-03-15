@@ -176,7 +176,7 @@ async function startServer() {
   await registerDiscountRoutes(app);
 
   // Seed default discount codes (e.g. HUNT100)
-  seedDefaultDiscountCodes();
+  await seedDefaultDiscountCodes();
   // Start server
   try {
     await app.listen({ port: PORT, host: HOST });

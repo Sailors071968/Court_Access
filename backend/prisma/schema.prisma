@@ -1432,3 +1432,216 @@ model ImpeachmentCandidate {
   @@index([severity])
   @@map("impeachment_candidates")
 }
+
+// ---------------------------------------------------------------------------
+// Processing Job — tracks pipeline processing jobs (replaces in-memory job arrays)
+// ---------------------------------------------------------------------------
+
+model ProcessingJob {
+  id              String    @id @default(uuid())
+  userId          String
+  tenantId        String
+  caseId          String?
+  pipeline        String    // TIMELINE | NARRATIVE | CONTRADICTION | VIDEO | DOCTRINE | EVIDENCE_INGEST
+  status          String    @default("pending") // pending | active | completed | failed
+  payload         Json?     // Job-specific input data
+  result          Json?     // Job output/result data
+  error           String?
+  acuCredits      Int       @default(0) // ACU credits consumed
+
+  createdAt       DateTime  @default(now())
+  startedAt       DateTime?
+  completedAt     DateTime?
+
+  @@index([userId])
+  @@index([tenantId])
+  @@index([caseId])
+  @@index([pipeline])
+  @@index([status])
+  @@index([createdAt])
+  @@map("processing_jobs")
+}
+
+// ---------------------------------------------------------------------------
+// Timeline Event — reconstructed timeline events per case
+// ---------------------------------------------------------------------------
+
+model TimelineEvent {
+  id              String    @id @default(uuid())
+  caseId          String
+  tenantId        String
+  timestamp       DateTime
+  sourceDoc       String    // evidence document that sourced this event
+  sourceType      String    // police_report | bodycam | dispatch | witness | forensic
+  description     String
+  actor           String?   // who performed the action
+  location        String?
+  confidence      Float     @default(0.5) // 0-1 confidence score
+  conflictFlag    Boolean   @default(false) // flagged if conflicts with another event
+  conflictsWith   String?   // ID of conflicting TimelineEvent
+  metadata        Json?
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([timestamp])
+  @@index([sourceType])
+  @@index([confidence])
+  @@index([conflictFlag])
+  @@map("timeline_events")
+}
+
+// ---------------------------------------------------------------------------
+// Discount Code — promotional access codes (replaces in-memory array)
+// ---------------------------------------------------------------------------
+
+model DiscountCode {
+  id              String    @id @default(uuid())
+  codeName        String
+  codeValue       String    @unique // e.g. HUNT100
+  discountType    String    // percent | fixed
+  discountValue   Float
+  active          Boolean   @default(true)
+  usageLimit      Int?
+  usageCount      Int       @default(0)
+  expiresAt       DateTime?
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  usages          DiscountUsage[]
+
+  @@index([codeValue])
+  @@index([active])
+  @@map("discount_codes")
+}
+
+// ---------------------------------------------------------------------------
+// Discount Usage — tracks which users used which codes
+// ---------------------------------------------------------------------------
+
+model DiscountUsage {
+  id              String    @id @default(uuid())
+  discountCodeId  String
+  discountCode    DiscountCode @relation(fields: [discountCodeId], references: [id])
+  userId          String
+
+  usedAt          DateTime  @default(now())
+
+  @@index([discountCodeId])
+  @@index([userId])
+  @@map("discount_usages")
+}
+
+// ---------------------------------------------------------------------------
+// Demo Request — government demonstration requests (replaces in-memory array)
+// ---------------------------------------------------------------------------
+
+model DemoRequest {
+  id              String    @id @default(uuid())
+  name            String
+  organization    String
+  role            String
+  email           String
+  county          String
+  agencyType      String
+  message         String
+  status          String    @default("new") // new | contacted | scheduled | completed | declined
+
+  submittedAt     DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([status])
+  @@index([email])
+  @@index([submittedAt])
+  @@map("demo_requests")
+}
+
+// ---------------------------------------------------------------------------
+// Enterprise License — institutional licensing (replaces in-memory array)
+// ---------------------------------------------------------------------------
+
+model EnterpriseLicense {
+  id                String    @id @default(uuid())
+  organizationName  String
+  agencyType        String    // district_attorney | public_defender | defense_firm | state_agency | federal_defender | investigation_agency | other
+  seatCount         Int
+  licenseStart      DateTime
+  licenseEnd        DateTime
+  billingTier       String    // starter | professional | enterprise | government
+  status            String    @default("pending") // active | expired | suspended | pending
+  adminEmail        String
+  county            String?
+  state             String?
+
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([status])
+  @@index([adminEmail])
+  @@index([organizationName])
+  @@map("enterprise_licenses")
+}
+
+// ---------------------------------------------------------------------------
+// Government Lead — institutional sales tracking (replaces in-memory array)
+// ---------------------------------------------------------------------------
+
+model GovernmentLead {
+  id              String    @id @default(uuid())
+  agencyName      String
+  contactName     String
+  role            String
+  email           String
+  county          String
+  status          String    @default("new") // new | contacted | demo_scheduled | demo_completed | contract_discussion | pilot_active | closed_won | closed_lost
+  notes           String
+  agencyType      String
+  seatEstimate    Int
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([status])
+  @@index([email])
+  @@index([agencyName])
+  @@map("government_leads")
+}
+
+// ---------------------------------------------------------------------------
+// Marketing Event — analytics tracking (replaces in-memory array)
+// ---------------------------------------------------------------------------
+
+model MarketingEvent {
+  id              String    @id @default(uuid())
+  page            String
+  event           String    // page_view | demo_request | signup | cta_click
+  source          String
+  metadata        Json?     // flexible key-value data
+
+  createdAt       DateTime  @default(now())
+
+  @@index([event])
+  @@index([page])
+  @@index([source])
+  @@index([createdAt])
+  @@map("marketing_events")
+}
+
+// ---------------------------------------------------------------------------
+// Stripe Webhook Event — idempotency tracking for webhook delivery
+// ---------------------------------------------------------------------------
+
+model StripeWebhookEvent {
+  id          String   @id @default(uuid())
+  eventId     String   @unique    // Stripe event ID (evt_xxx)
+  eventType   String              // e.g. checkout.session.completed
+  processedAt DateTime @default(now())
+
+  @@index([eventId])
+  @@index([eventType])
+  @@index([processedAt])
+  @@map("stripe_webhook_events")
+}

@@ -9,8 +9,6 @@ import type { AuthenticatedRequest } from '../security/authMiddleware.js';
 import {
   createDiscountCode,
   getDiscountCodes,
-  getDiscountCodeById,
-  getDiscountCodeByValue,
   updateDiscountCode,
   deleteDiscountCode,
 } from '../models/discountCode.js';
@@ -35,7 +33,7 @@ export async function registerDiscountRoutes(app: FastifyInstance): Promise<void
     if (!code) {
       return reply.code(400).send({ valid: false, errorReason: 'No discount code provided' });
     }
-    const result = validateDiscountCode(code);
+    const result = await validateDiscountCode(code);
     return reply.send(result);
   });
 
@@ -49,7 +47,7 @@ export async function registerDiscountRoutes(app: FastifyInstance): Promise<void
     if (!user || (user.role !== 'admin' && user.role !== 'staff')) {
       return reply.code(403).send({ error: 'Admin or staff access required' });
     }
-    const codes = getDiscountCodes();
+    const codes = await getDiscountCodes();
     return { codes };
   });
 
@@ -78,7 +76,7 @@ export async function registerDiscountRoutes(app: FastifyInstance): Promise<void
     }
 
     try {
-      const code = createDiscountCode({
+      const code = await createDiscountCode({
         codeName: body.codeName,
         codeValue: body.codeValue,
         discountType: body.discountType,
@@ -116,7 +114,7 @@ export async function registerDiscountRoutes(app: FastifyInstance): Promise<void
     if (body.discountType !== undefined) sanitized.discountType = body.discountType as 'percent' | 'fixed';
 
     try {
-      const updated = updateDiscountCode(codeId, sanitized);
+      const updated = await updateDiscountCode(codeId, sanitized);
       if (!updated) {
         return reply.code(404).send({ error: 'Discount code not found' });
       }
@@ -137,13 +135,18 @@ export async function registerDiscountRoutes(app: FastifyInstance): Promise<void
     }
 
     const { codeId } = request.params as { codeId: string };
-    const deleted = deleteDiscountCode(codeId);
-    if (!deleted) {
-      return reply.code(404).send({ error: 'Discount code not found' });
-    }
+    try {
+      const deleted = await deleteDiscountCode(codeId);
+      if (!deleted) {
+        return reply.code(404).send({ error: 'Discount code not found' });
+      }
 
-    console.log(`[DiscountRoutes] Deleted discount code: ${codeId}`);
-    return { message: 'Discount code deleted', codeId };
+      console.log(`[DiscountRoutes] Deleted discount code: ${codeId}`);
+      return { message: 'Discount code deleted', codeId };
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Cannot delete discount code with existing usage records';
+      return reply.code(409).send({ error: message });
+    }
   });
 
   // POST /api/discount-codes/apply — apply a code (authenticated, deducts usage)
@@ -158,7 +161,20 @@ export async function registerDiscountRoutes(app: FastifyInstance): Promise<void
       return reply.code(400).send({ valid: false, errorReason: 'No discount code provided' });
     }
 
-    const result = applyDiscountCode(code, user.userId);
-    return reply.send(result);
+    try {
+      const result = await applyDiscountCode(code, user.userId);
+      return reply.send(result);
+    } catch (err: unknown) {
+      // P2034 = Serializable transaction write conflict (concurrent redemption race).
+      // Convert to 409 Conflict so the frontend sees a business-rule rejection,
+      // not an opaque 500 Internal Server Error.
+      if (typeof err === 'object' && err !== null && 'code' in err && (err as { code: string }).code === 'P2034') {
+        return reply.code(409).send({
+          error: 'Discount code already redeemed',
+          message: 'This discount code has reached its usage limit.',
+        });
+      }
+      throw err;
+    }
   });
 }

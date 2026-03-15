@@ -74,16 +74,21 @@ class TimelineProcessingWorker extends CourtAccessWorker<TimelineBuildJobData> {
     } catch (error) {
       // Mark ProcessingJob as failed
       if (processingJobId) {
-        const message = error instanceof Error ? error.message : String(error);
-        await prisma.processingJob.update({
-          where: { id: processingJobId },
-          data: {
-            status: 'failed',
-            completedAt: new Date(),
-            failureCode: 'PROCESSING_ERROR',
-            error: message,
-          },
-        });
+        try {
+          const message = error instanceof Error ? error.message : String(error);
+          await prisma.processingJob.update({
+            where: { id: processingJobId },
+            data: {
+              status: 'failed',
+              completedAt: new Date(),
+              failureCode: 'PROCESSING_ERROR',
+              error: message,
+            },
+          });
+        } catch (dbError) {
+          const dbMsg = dbError instanceof Error ? dbError.message : String(dbError);
+          console.error(`[TimelineProcessingWorker] Failed to update ProcessingJob status: ${dbMsg}`);
+        }
       }
       throw error; // Rethrow to trigger BullMQ retry + ACU refund in base class
     }

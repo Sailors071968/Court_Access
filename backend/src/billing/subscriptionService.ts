@@ -1,7 +1,10 @@
 // ============================================================================
 // CourtAccess — Subscription Plan Service
 // Manages subscription tiers with page limits and AI credits.
+// Now persisted to PostgreSQL via Prisma (replaces in-memory Map).
 // ============================================================================
+
+import prisma from '../lib/prisma.js';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -126,60 +129,107 @@ export function getAllPlans(): readonly SubscriptionPlan[] {
 }
 
 // ---------------------------------------------------------------------------
-// User Subscription Store (in-memory, production uses DB)
+// Tier Mapping — canonical short tier names
 // ---------------------------------------------------------------------------
 
-const userSubscriptions = new Map<string, UserSubscription>();
-
-export function getUserSubscription(userId: string): UserSubscription {
-  const existing = userSubscriptions.get(userId);
-  if (existing) return existing;
-
-  // Default to free tier
-  const now = new Date();
-  const defaultSub: UserSubscription = {
-    userId,
-    planId: 'FREE',
-    activatedAt: now.toISOString(),
-    billingPeriodStart: now.toISOString(),
-    billingPeriodEnd: new Date(now.getFullYear() + 100, 0, 1).toISOString(), // lifetime for free
-    stripeSubscriptionId: null,
-    stripeCustomerId: null,
+function planIdToTier(planId: SubscriptionPlanId): string {
+  const mapping: Record<SubscriptionPlanId, string> = {
+    FREE: 'free',
+    STARTER: 'starter',
+    PROFESSIONAL: 'professional',
+    ADVANCED_INVESTIGATOR: 'advanced',
+    LITIGATION_INTELLIGENCE_PRO: 'litigation',
+    ENTERPRISE_FIRM: 'enterprise',
   };
-  userSubscriptions.set(userId, defaultSub);
-  return defaultSub;
+  return mapping[planId] ?? 'free';
 }
 
-export function setUserSubscription(
+// ---------------------------------------------------------------------------
+// User Subscription Store — persisted to PostgreSQL via Prisma
+// ---------------------------------------------------------------------------
+
+export async function getUserSubscription(userId: string): Promise<UserSubscription> {
+  const now = new Date();
+  const record = await prisma.subscription.upsert({
+    where: { userId },
+    update: {},
+    create: {
+      userId,
+      planId: 'FREE',
+      activatedAt: now,
+      billingPeriodStart: now,
+      billingPeriodEnd: new Date(now.getFullYear() + 100, 0, 1),
+      subscriptionStatus: 'active',
+      subscriptionTier: 'free',
+    },
+  });
+
+  return {
+    userId: record.userId,
+    planId: record.planId as SubscriptionPlanId,
+    activatedAt: record.activatedAt.toISOString(),
+    billingPeriodStart: record.billingPeriodStart.toISOString(),
+    billingPeriodEnd: record.billingPeriodEnd.toISOString(),
+    stripeSubscriptionId: record.stripeSubscriptionId,
+    stripeCustomerId: record.stripeCustomerId,
+  };
+}
+
+export async function setUserSubscription(
   userId: string,
   planId: SubscriptionPlanId,
   stripeSubscriptionId?: string,
   stripeCustomerId?: string,
-): UserSubscription {
+): Promise<UserSubscription> {
   const now = new Date();
   const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
   const plan = getPlanById(planId);
 
-  const sub: UserSubscription = {
-    userId,
-    planId,
-    activatedAt: now.toISOString(),
-    billingPeriodStart: now.toISOString(),
-    billingPeriodEnd: plan?.isLifetime
-      ? new Date(now.getFullYear() + 100, 0, 1).toISOString()
-      : endOfMonth.toISOString(),
-    stripeSubscriptionId: stripeSubscriptionId ?? null,
-    stripeCustomerId: stripeCustomerId ?? null,
+  const billingPeriodEnd = plan?.isLifetime
+    ? new Date(now.getFullYear() + 100, 0, 1)
+    : endOfMonth;
+
+  const sub = await prisma.subscription.upsert({
+    where: { userId },
+    update: {
+      planId,
+      activatedAt: now,
+      billingPeriodStart: now,
+      billingPeriodEnd,
+      stripeSubscriptionId: stripeSubscriptionId ?? null,
+      stripeCustomerId: stripeCustomerId ?? null,
+      subscriptionStatus: 'active',
+      subscriptionTier: planIdToTier(planId),
+    },
+    create: {
+      userId,
+      planId,
+      activatedAt: now,
+      billingPeriodStart: now,
+      billingPeriodEnd,
+      stripeSubscriptionId: stripeSubscriptionId ?? null,
+      stripeCustomerId: stripeCustomerId ?? null,
+      subscriptionStatus: 'active',
+      subscriptionTier: planIdToTier(planId),
+    },
+  });
+
+  return {
+    userId: sub.userId,
+    planId: sub.planId as SubscriptionPlanId,
+    activatedAt: sub.activatedAt.toISOString(),
+    billingPeriodStart: sub.billingPeriodStart.toISOString(),
+    billingPeriodEnd: sub.billingPeriodEnd.toISOString(),
+    stripeSubscriptionId: sub.stripeSubscriptionId,
+    stripeCustomerId: sub.stripeCustomerId,
   };
-  userSubscriptions.set(userId, sub);
-  return sub;
 }
 
 /**
  * Get the effective page limit for a user's current plan.
  */
-export function getUserPageLimit(userId: string): number {
-  const sub = getUserSubscription(userId);
+export async function getUserPageLimit(userId: string): Promise<number> {
+  const sub = await getUserSubscription(userId);
   const plan = getPlanById(sub.planId);
   return plan?.monthlyPageLimit ?? 10;
 }
@@ -187,8 +237,8 @@ export function getUserPageLimit(userId: string): number {
 /**
  * Get the effective AI credit limit for a user's current plan.
  */
-export function getUserCreditLimit(userId: string): number {
-  const sub = getUserSubscription(userId);
+export async function getUserCreditLimit(userId: string): Promise<number> {
+  const sub = await getUserSubscription(userId);
   const plan = getPlanById(sub.planId);
   return plan?.monthlyAiCredits ?? 0;
 }

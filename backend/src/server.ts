@@ -33,6 +33,7 @@ import { registerDiscountRoutes } from './billing/discountRoutes.js';
 import { seedDefaultDiscountCodes } from './billing/discountSeed.js';
 import { registerStripeCheckoutRoutes } from './billing/stripeCheckoutRoutes.js';
 import { acuUploadLockHook } from './billing/acuEnforcementMiddleware.js';
+import { registerStripeWebhookRoutes } from './billing/stripeWebhookHandler.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -184,6 +185,9 @@ async function startServer() {
   // Stripe Checkout & Webhook routes
   console.log('[Server] Registering Stripe checkout routes...');
   await registerStripeCheckoutRoutes(app);
+
+  console.log('[Server] Registering Stripe webhook routes...');
+  await registerStripeWebhookRoutes(app);
 
   // Discount code API routes
   console.log('[Server] Registering discount code routes...');

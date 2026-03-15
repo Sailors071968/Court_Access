@@ -1,11 +1,12 @@
 // ============================================================================
 // CourtAccess — Usage Enforcement Service
 // Enforces page limits and AI credit limits before uploads and analyses.
+// Now persisted to PostgreSQL via Prisma (replaces in-memory Map).
 // ============================================================================
 
-import { v4 as uuidv4 } from 'uuid';
+import prisma from '../lib/prisma.js';
 import { getUserSubscription, getPlanById } from './subscriptionService.js';
-import { getAvailableCredits, hasEnoughCredits, getCreditBalance } from './aiCreditService.js';
+import { getAvailableCredits, getCreditBalance } from './aiCreditService.js';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -68,22 +69,37 @@ export interface UsageDashboard {
 }
 
 // ---------------------------------------------------------------------------
-// In-Memory Usage Store (production uses Prisma UsageTracking model)
+// Usage Store — persisted to PostgreSQL via Prisma UsageTracking model
 // ---------------------------------------------------------------------------
 
-const usageStore = new Map<string, UsageTrackingRecord>();
-
-function usageKey(userId: string, periodStart: string): string {
-  return `${userId}:${periodStart}`;
-}
-
-function getCurrentBillingPeriod(): { start: string; end: string } {
+function getCurrentBillingPeriod(): { start: Date; end: Date } {
   const now = new Date();
   const start = new Date(now.getFullYear(), now.getMonth(), 1);
   const end = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+  return { start, end };
+}
+
+function toUsageTrackingRecord(row: {
+  id: string;
+  userId: string;
+  organizationId: string | null;
+  billingPeriodStart: Date;
+  billingPeriodEnd: Date;
+  pagesUploadedTotal: number;
+  videoMinutesProcessed: number;
+  createdAt: Date;
+  updatedAt: Date;
+}): UsageTrackingRecord {
   return {
-    start: start.toISOString(),
-    end: end.toISOString(),
+    id: row.id,
+    userId: row.userId,
+    organizationId: row.organizationId,
+    billingPeriodStart: row.billingPeriodStart.toISOString(),
+    billingPeriodEnd: row.billingPeriodEnd.toISOString(),
+    pagesUploadedTotal: row.pagesUploadedTotal,
+    videoMinutesProcessed: row.videoMinutesProcessed,
+    createdAt: row.createdAt.toISOString(),
+    updatedAt: row.updatedAt.toISOString(),
   };
 }
 
@@ -91,55 +107,71 @@ function getCurrentBillingPeriod(): { start: string; end: string } {
 // Usage Tracking
 // ---------------------------------------------------------------------------
 
-export function getUserUsageRecord(userId: string): UsageTrackingRecord {
+export async function getUserUsageRecord(userId: string): Promise<UsageTrackingRecord> {
   const period = getCurrentBillingPeriod();
-  const key = usageKey(userId, period.start);
-  const existing = usageStore.get(key);
-  if (existing) return existing;
-
-  const record: UsageTrackingRecord = {
-    id: uuidv4(),
-    userId,
-    organizationId: null,
-    billingPeriodStart: period.start,
-    billingPeriodEnd: period.end,
-    pagesUploadedTotal: 0,
-    videoMinutesProcessed: 0,
-    createdAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
-  };
-  usageStore.set(key, record);
-  return record;
+  const record = await prisma.usageTracking.upsert({
+    where: { userId_billingPeriodStart: { userId, billingPeriodStart: period.start } },
+    update: {},
+    create: {
+      userId,
+      organizationId: null,
+      billingPeriodStart: period.start,
+      billingPeriodEnd: period.end,
+      pagesUploadedTotal: 0,
+      videoMinutesProcessed: 0,
+    },
+  });
+  return toUsageTrackingRecord(record);
 }
 
 /**
  * Record pages uploaded by a user. Called after successful upload.
  */
-export function recordPageUpload(userId: string, pageCount: number): UsageTrackingRecord {
+export async function recordPageUpload(userId: string, pageCount: number): Promise<UsageTrackingRecord> {
   if (typeof pageCount !== 'number' || !Number.isFinite(pageCount) || pageCount <= 0) {
     throw new Error('pageCount must be a positive finite number');
   }
-  const record = getUserUsageRecord(userId);
-  record.pagesUploadedTotal += pageCount;
-  record.updatedAt = new Date().toISOString();
   const period = getCurrentBillingPeriod();
-  usageStore.set(usageKey(userId, period.start), record);
-  return record;
+  // Single upsert: create-if-missing + increment in one call to avoid
+  // month-boundary TOCTOU where getUserUsageRecord and update use different periods.
+  const updated = await prisma.usageTracking.upsert({
+    where: { userId_billingPeriodStart: { userId, billingPeriodStart: period.start } },
+    update: { pagesUploadedTotal: { increment: pageCount } },
+    create: {
+      userId,
+      organizationId: null,
+      billingPeriodStart: period.start,
+      billingPeriodEnd: period.end,
+      pagesUploadedTotal: pageCount,
+      videoMinutesProcessed: 0,
+    },
+  });
+  return toUsageTrackingRecord(updated);
 }
 
 /**
  * Record video minutes processed by a user.
  */
-export function recordVideoProcessing(userId: string, minutes: number): UsageTrackingRecord {
+export async function recordVideoProcessing(userId: string, minutes: number): Promise<UsageTrackingRecord> {
   if (typeof minutes !== 'number' || !Number.isFinite(minutes) || minutes <= 0) {
     throw new Error('minutes must be a positive finite number');
   }
-  const record = getUserUsageRecord(userId);
-  record.videoMinutesProcessed += minutes;
-  record.updatedAt = new Date().toISOString();
   const period = getCurrentBillingPeriod();
-  usageStore.set(usageKey(userId, period.start), record);
-  return record;
+  // Single upsert: create-if-missing + increment in one call to avoid
+  // month-boundary TOCTOU where getUserUsageRecord and update use different periods.
+  const updated = await prisma.usageTracking.upsert({
+    where: { userId_billingPeriodStart: { userId, billingPeriodStart: period.start } },
+    update: { videoMinutesProcessed: { increment: minutes } },
+    create: {
+      userId,
+      organizationId: null,
+      billingPeriodStart: period.start,
+      billingPeriodEnd: period.end,
+      pagesUploadedTotal: 0,
+      videoMinutesProcessed: minutes,
+    },
+  });
+  return toUsageTrackingRecord(updated);
 }
 
 // ---------------------------------------------------------------------------
@@ -156,11 +188,11 @@ function getWarningLevel(percentUsed: number): 'none' | 'approaching' | 'exceede
  * Check if a user can upload more pages.
  * Page limits are cumulative across all cases.
  */
-export function checkPageLimit(userId: string, additionalPages: number): UsageLimitCheck {
-  const sub = getUserSubscription(userId);
+export async function checkPageLimit(userId: string, additionalPages: number): Promise<UsageLimitCheck> {
+  const sub = await getUserSubscription(userId);
   const plan = getPlanById(sub.planId);
   const limit = plan?.monthlyPageLimit ?? 10;
-  const record = getUserUsageRecord(userId);
+  const record = await getUserUsageRecord(userId);
   const currentUsage = record.pagesUploadedTotal;
   const afterUpload = currentUsage + additionalPages;
   const percentUsed = limit > 0 ? Math.round((afterUpload / limit) * 100) : 100;
@@ -194,10 +226,11 @@ export function checkPageLimit(userId: string, additionalPages: number): UsageLi
 /**
  * Check if a user has enough AI credits for an analysis.
  */
-export function checkCreditLimit(userId: string, requiredCredits: number): CreditLimitCheck {
-  const availableCredits = getAvailableCredits(userId);
+export async function checkCreditLimit(userId: string, requiredCredits: number): Promise<CreditLimitCheck> {
+  const availableCredits = await getAvailableCredits(userId);
+  const allowed = availableCredits >= requiredCredits;
 
-  if (!hasEnoughCredits(userId, requiredCredits)) {
+  if (!allowed) {
     return {
       allowed: false,
       availableCredits,
@@ -223,18 +256,18 @@ export function checkCreditLimit(userId: string, requiredCredits: number): Credi
 /**
  * Get a complete usage dashboard for a user.
  */
-export function getUserUsageDashboard(userId: string): UsageDashboard {
-  const sub = getUserSubscription(userId);
+export async function getUserUsageDashboard(userId: string): Promise<UsageDashboard> {
+  const sub = await getUserSubscription(userId);
   const plan = getPlanById(sub.planId);
-  const record = getUserUsageRecord(userId);
-  const availableCredits = getAvailableCredits(userId);
+  const record = await getUserUsageRecord(userId);
+  const availableCredits = await getAvailableCredits(userId);
   const period = getCurrentBillingPeriod();
 
   const pageLimit = plan?.monthlyPageLimit ?? 10;
   const creditLimit = plan?.monthlyAiCredits ?? 0;
   // Use the actual creditsUsed from balance, not derived from available
   // (available = monthly + purchased - used, so deriving from creditLimit - available breaks with purchased credits)
-  const balance = getCreditBalance(userId);
+  const balance = await getCreditBalance(userId);
   const creditsUsed = balance.creditsUsed;
   const pagePercent = pageLimit > 0 ? Math.round((record.pagesUploadedTotal / pageLimit) * 100) : 0;
   const creditPercent = creditLimit > 0 ? Math.round((creditsUsed / creditLimit) * 100) : 0;
@@ -260,8 +293,8 @@ export function getUserUsageDashboard(userId: string): UsageDashboard {
       warningLevel: getWarningLevel(creditPercent),
     },
     billingPeriod: {
-      start: period.start,
-      end: period.end,
+      start: period.start.toISOString(),
+      end: period.end.toISOString(),
     },
   };
 }

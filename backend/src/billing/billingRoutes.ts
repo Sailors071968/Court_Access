@@ -4,6 +4,7 @@
 // ============================================================================
 
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import type { AuthenticatedRequest } from '../security/authMiddleware.js';
 import {
   getAllPlans,
   getPlanById,
@@ -59,15 +60,17 @@ export async function registerBillingRoutes(app: FastifyInstance): Promise<void>
 
   // GET /api/billing/subscription — get current user's subscription
   app.get('/api/billing/subscription', async (req: FastifyRequest, reply: FastifyReply) => {
-    const userId = (req as Record<string, unknown>).userId as string ?? 'demo-user';
-    const subscription = getUserSubscription(userId);
+    const userId = (req as unknown as AuthenticatedRequest).user?.userId;
+    if (!userId) return reply.code(401).send({ error: 'Authentication required' });
+    const subscription = await getUserSubscription(userId);
     const plan = getPlanById(subscription.planId);
     return reply.send({ subscription, plan });
   });
 
   // POST /api/billing/subscription — update user's subscription
   app.post('/api/billing/subscription', async (req: FastifyRequest, reply: FastifyReply) => {
-    const userId = (req as Record<string, unknown>).userId as string ?? 'demo-user';
+    const userId = (req as unknown as AuthenticatedRequest).user?.userId;
+    if (!userId) return reply.code(401).send({ error: 'Authentication required' });
     const body = req.body as {
       planId: SubscriptionPlanId;
       stripeSubscriptionId?: string;
@@ -79,7 +82,7 @@ export async function registerBillingRoutes(app: FastifyInstance): Promise<void>
       return reply.status(400).send({ error: 'Invalid plan ID' });
     }
 
-    const subscription = setUserSubscription(
+    const subscription = await setUserSubscription(
       userId,
       body.planId,
       body.stripeSubscriptionId,
@@ -94,25 +97,28 @@ export async function registerBillingRoutes(app: FastifyInstance): Promise<void>
 
   // GET /api/billing/credits — get user's credit balance
   app.get('/api/billing/credits', async (req: FastifyRequest, reply: FastifyReply) => {
-    const userId = (req as Record<string, unknown>).userId as string ?? 'demo-user';
-    const balance = getCreditBalance(userId);
-    const available = getAvailableCredits(userId);
+    const userId = (req as unknown as AuthenticatedRequest).user?.userId;
+    if (!userId) return reply.code(401).send({ error: 'Authentication required' });
+    const balance = await getCreditBalance(userId);
+    const available = await getAvailableCredits(userId);
     return reply.send({ balance, available });
   });
 
   // GET /api/billing/credits/history — get user's credit usage history
   app.get('/api/billing/credits/history', async (req: FastifyRequest, reply: FastifyReply) => {
-    const userId = (req as Record<string, unknown>).userId as string ?? 'demo-user';
+    const userId = (req as unknown as AuthenticatedRequest).user?.userId;
+    if (!userId) return reply.code(401).send({ error: 'Authentication required' });
     const query = req.query as { limit?: string };
     const limit = query.limit ? parseInt(query.limit, 10) : 50;
-    const history = getUserUsageHistory(userId, limit);
+    const history = await getUserUsageHistory(userId, limit);
     return reply.send({ history, total: history.length });
   });
 
   // GET /api/billing/credits/by-type — get credit usage broken down by analysis type
   app.get('/api/billing/credits/by-type', async (req: FastifyRequest, reply: FastifyReply) => {
-    const userId = (req as Record<string, unknown>).userId as string ?? 'demo-user';
-    const byType = getUserUsageByType(userId);
+    const userId = (req as unknown as AuthenticatedRequest).user?.userId;
+    if (!userId) return reply.code(401).send({ error: 'Authentication required' });
+    const byType = await getUserUsageByType(userId);
     return reply.send({ usage: byType });
   });
 
@@ -130,25 +136,26 @@ export async function registerBillingRoutes(app: FastifyInstance): Promise<void>
 
   // POST /api/billing/credits/deduct — deduct credits for an analysis
   app.post('/api/billing/credits/deduct', async (req: FastifyRequest, reply: FastifyReply) => {
-    const userId = (req as Record<string, unknown>).userId as string ?? 'demo-user';
+    const userId = (req as unknown as AuthenticatedRequest).user?.userId;
+    if (!userId) return reply.code(401).send({ error: 'Authentication required' });
     const body = req.body as {
       credits: number;
       analysisType: AnalysisType;
       caseId?: string;
     };
 
-    const success = deductCredits(userId, body.credits, body.analysisType, body.caseId);
+    const success = await deductCredits(userId, body.credits, body.analysisType, body.caseId);
     if (!success) {
       return reply.status(402).send({
         error: 'Insufficient credits',
-        available: getAvailableCredits(userId),
+        available: await getAvailableCredits(userId),
         required: body.credits,
       });
     }
 
     return reply.send({
       success: true,
-      remaining: getAvailableCredits(userId),
+      remaining: await getAvailableCredits(userId),
     });
   });
 
@@ -163,7 +170,8 @@ export async function registerBillingRoutes(app: FastifyInstance): Promise<void>
 
   // POST /api/billing/credit-packs/purchase — purchase a credit pack
   app.post('/api/billing/credit-packs/purchase', async (req: FastifyRequest, reply: FastifyReply) => {
-    const userId = (req as Record<string, unknown>).userId as string ?? 'demo-user';
+    const userId = (req as unknown as AuthenticatedRequest).user?.userId;
+    if (!userId) return reply.code(401).send({ error: 'Authentication required' });
     const body = req.body as { packId: string };
     const pack = getCreditPack(body.packId);
 
@@ -172,7 +180,7 @@ export async function registerBillingRoutes(app: FastifyInstance): Promise<void>
     }
 
     // In production, this would verify Stripe payment first
-    const balance = addPurchasedCredits(userId, pack.credits);
+    const balance = await addPurchasedCredits(userId, pack.credits);
     return reply.send({
       success: true,
       creditsAdded: pack.credits,
@@ -186,32 +194,36 @@ export async function registerBillingRoutes(app: FastifyInstance): Promise<void>
 
   // GET /api/billing/usage — get user's usage dashboard
   app.get('/api/billing/usage', async (req: FastifyRequest, reply: FastifyReply) => {
-    const userId = (req as Record<string, unknown>).userId as string ?? 'demo-user';
-    const dashboard = getUserUsageDashboard(userId);
+    const userId = (req as unknown as AuthenticatedRequest).user?.userId;
+    if (!userId) return reply.code(401).send({ error: 'Authentication required' });
+    const dashboard = await getUserUsageDashboard(userId);
     return reply.send({ usage: dashboard });
   });
 
   // POST /api/billing/usage/check-pages — check if upload is allowed
   app.post('/api/billing/usage/check-pages', async (req: FastifyRequest, reply: FastifyReply) => {
-    const userId = (req as Record<string, unknown>).userId as string ?? 'demo-user';
+    const userId = (req as unknown as AuthenticatedRequest).user?.userId;
+    if (!userId) return reply.code(401).send({ error: 'Authentication required' });
     const body = req.body as { pageCount: number };
-    const check = checkPageLimit(userId, body.pageCount);
+    const check = await checkPageLimit(userId, body.pageCount);
     return reply.send({ check });
   });
 
   // POST /api/billing/usage/check-credits — check if analysis is allowed
   app.post('/api/billing/usage/check-credits', async (req: FastifyRequest, reply: FastifyReply) => {
-    const userId = (req as Record<string, unknown>).userId as string ?? 'demo-user';
+    const userId = (req as unknown as AuthenticatedRequest).user?.userId;
+    if (!userId) return reply.code(401).send({ error: 'Authentication required' });
     const body = req.body as { requiredCredits: number };
-    const check = checkCreditLimit(userId, body.requiredCredits);
+    const check = await checkCreditLimit(userId, body.requiredCredits);
     return reply.send({ check });
   });
 
   // POST /api/billing/usage/record-upload — record pages uploaded
   app.post('/api/billing/usage/record-upload', async (req: FastifyRequest, reply: FastifyReply) => {
-    const userId = (req as Record<string, unknown>).userId as string ?? 'demo-user';
+    const userId = (req as unknown as AuthenticatedRequest).user?.userId;
+    if (!userId) return reply.code(401).send({ error: 'Authentication required' });
     const body = req.body as { pageCount: number };
-    const record = recordPageUpload(userId, body.pageCount);
+    const record = await recordPageUpload(userId, body.pageCount);
     return reply.send({ record });
   });
 }

@@ -380,15 +380,17 @@ function parseTimelineTimestamp(ts: string): Date {
     return isoDate;
   }
 
-  // Try HH:MM:SS format — normalize to today's date
+  // Try HH:MM:SS format — use fixed reference date (1970-01-01) consistent
+  // with timelineEngine.parseTimestamp to ensure deterministic values across rebuilds
   const match = ts.match(/^(\d{1,2}):(\d{2})(?::(\d{2}))?$/);
   if (match) {
-    const now = new Date();
     const h = parseInt(match[1], 10);
     const m = parseInt(match[2], 10);
     const s = match[3] ? parseInt(match[3], 10) : 0;
-    now.setUTCHours(h, m, s, 0);
-    return now;
+    const d = new Date(`1970-01-01T${String(h).padStart(2, '0')}:${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}Z`);
+    if (!isNaN(d.getTime())) {
+      return d;
+    }
   }
 
   // Fallback to current time

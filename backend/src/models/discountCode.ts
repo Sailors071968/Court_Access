@@ -132,8 +132,13 @@ export async function updateDiscountCode(
       data,
     });
     return toDiscountCode(row);
-  } catch {
-    return undefined;
+  } catch (err: unknown) {
+    // P2025 = record not found → return undefined (caller sends 404)
+    if (typeof err === 'object' && err !== null && 'code' in err && (err as { code: string }).code === 'P2025') {
+      return undefined;
+    }
+    // P2002 = unique constraint violation → re-throw so caller can send 409
+    throw err;
   }
 }
 
@@ -141,8 +146,13 @@ export async function deleteDiscountCode(codeId: string): Promise<boolean> {
   try {
     await prisma.discountCode.delete({ where: { id: codeId } });
     return true;
-  } catch {
-    return false;
+  } catch (err: unknown) {
+    // P2025 = record not found → return false (caller sends 404)
+    if (typeof err === 'object' && err !== null && 'code' in err && (err as { code: string }).code === 'P2025') {
+      return false;
+    }
+    // P2003 = FK constraint (has usage records) → throw so caller can handle
+    throw err;
   }
 }
 

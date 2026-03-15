@@ -135,13 +135,18 @@ export async function registerDiscountRoutes(app: FastifyInstance): Promise<void
     }
 
     const { codeId } = request.params as { codeId: string };
-    const deleted = await deleteDiscountCode(codeId);
-    if (!deleted) {
-      return reply.code(404).send({ error: 'Discount code not found' });
-    }
+    try {
+      const deleted = await deleteDiscountCode(codeId);
+      if (!deleted) {
+        return reply.code(404).send({ error: 'Discount code not found' });
+      }
 
-    console.log(`[DiscountRoutes] Deleted discount code: ${codeId}`);
-    return { message: 'Discount code deleted', codeId };
+      console.log(`[DiscountRoutes] Deleted discount code: ${codeId}`);
+      return { message: 'Discount code deleted', codeId };
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Cannot delete discount code with existing usage records';
+      return reply.code(409).send({ error: message });
+    }
   });
 
   // POST /api/discount-codes/apply — apply a code (authenticated, deducts usage)

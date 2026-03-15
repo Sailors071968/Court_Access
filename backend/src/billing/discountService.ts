@@ -3,10 +3,9 @@
 // Phase 222: Validate discount codes during registration/billing
 // ============================================================================
 
+import prisma from '../lib/prisma.js';
 import {
   getDiscountCodeByValue,
-  incrementUsageCount,
-  recordDiscountUsage,
 } from '../models/discountCode';
 
 export interface DiscountValidationResult {
@@ -64,8 +63,27 @@ export async function applyDiscountCode(codeValue: string, userId: string): Prom
     return validation;
   }
 
-  await incrementUsageCount(validation.codeId);
-  await recordDiscountUsage(validation.codeId, userId);
+  // Atomic transaction: conditionally increment usage only if still under limit.
+  // Prevents TOCTOU race where two concurrent requests both pass validation.
+  const codeId = validation.codeId;
+  const applied = await prisma.$transaction(async (tx) => {
+    const code = await tx.discountCode.findUnique({ where: { id: codeId } });
+    if (!code || !code.active) return false;
+    if (code.usageLimit !== null && code.usageCount >= code.usageLimit) return false;
+
+    await tx.discountCode.update({
+      where: { id: codeId },
+      data: { usageCount: { increment: 1 } },
+    });
+    await tx.discountUsage.create({
+      data: { discountCodeId: codeId, userId },
+    });
+    return true;
+  }, { isolationLevel: 'Serializable' });
+
+  if (!applied) {
+    return { valid: false, errorReason: 'This discount code has reached its usage limit' };
+  }
 
   return validation;
 }

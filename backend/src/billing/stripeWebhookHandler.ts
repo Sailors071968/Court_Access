@@ -8,6 +8,7 @@ import crypto from 'crypto';
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import prisma from '../lib/prisma.js';
 import { logSecurityEvent } from '../security/authMiddleware.js';
+import { addPurchasedCredits } from './aiCreditService.js';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -298,6 +299,26 @@ async function handleCheckoutCompleted(session: StripeCheckoutSession): Promise<
   if (!userId) {
     console.warn(`[StripeWebhook] checkout.session.completed missing userId for session ${session.id}`);
     return;
+  }
+
+  // Handle ACU credit pack purchases (payment-mode sessions, no subscription).
+  // These have metadata.type === 'acu_credits' and metadata.credits set by
+  // stripeCheckoutRoutes.ts when creating the checkout session.
+  if (session.metadata?.type === 'acu_credits') {
+    const credits = parseInt(session.metadata.credits ?? '0', 10);
+    if (credits > 0) {
+      await addPurchasedCredits(userId, credits);
+      void logSecurityEvent(
+        'STRIPE_ACU_CREDITS_PURCHASED',
+        userId,
+        undefined,
+        `ACU credits purchased: ${credits} credits via session ${session.id}`,
+      );
+      console.log(`[StripeWebhook] ACU credits added: user=${userId} credits=${credits} session=${session.id}`);
+    } else {
+      console.warn(`[StripeWebhook] acu_credits checkout with zero/invalid credits for session ${session.id}`);
+    }
+    return; // Do NOT run subscription upsert for credit purchases
   }
 
   // Read plan from session metadata (set when creating the checkout session).

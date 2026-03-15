@@ -17,7 +17,7 @@ import { TimelineConflictAnalyzer } from '../conflict/timelineConflictAnalyzer.j
 import { extractEvidenceText } from '../services/evidenceTextExtractionService.js';
 import { normalizeDocumentText } from '../services/documentNormalizationService.js';
 import type { ExtractedEvent as CdeExtractedEvent } from '../contradiction/types.js';
-import type { TimelineEvent as ConflictTimelineEvent } from '../conflict/types.js';
+import type { TimelineEvent as ConflictTimelineEvent, TimelineConflict } from '../conflict/types.js';
 
 // ---------------------------------------------------------------------------
 // Result Types
@@ -308,9 +308,11 @@ export async function reconstructTimeline(
   }));
 
   let conflictsDetected = 0;
+  let detectedConflictPairs: TimelineConflict[] = [];
   try {
     const conflictResult = conflictAnalyzer.analyzeTimeline(conflictEvents, tenantId);
-    conflictsDetected = conflictResult.timelineConflicts.length;
+    detectedConflictPairs = conflictResult.timelineConflicts;
+    conflictsDetected = detectedConflictPairs.length;
   } catch (err) {
     const msg = err instanceof Error ? err.message : String(err);
     warnings.push(`Conflict analysis failed: ${msg}`);
@@ -361,26 +363,64 @@ export async function reconstructTimeline(
   });
   timelineEventsCreated = txResult;
 
-  // If conflicts were detected, mark affected timeline events
-  if (conflictsDetected > 0) {
+  // If conflicts were detected, mark the actual conflicting timeline event pairs
+  if (detectedConflictPairs.length > 0) {
     try {
       const timelineEvents = await prisma.timelineEvent.findMany({
         where: { caseId, tenantId },
-        orderBy: { timestamp: 'asc' },
-        take: conflictsDetected * 2, // Get enough events to flag
       });
 
-      // Flag the first N events as having conflicts (simplified — real implementation
-      // would match specific conflicting pairs from the conflict analyzer output)
-      for (let i = 0; i < Math.min(conflictsDetected, timelineEvents.length); i++) {
-        const partner = timelineEvents[i + 1] ?? (i > 0 ? timelineEvents[i - 1] : null);
-        await prisma.timelineEvent.update({
-          where: { id: timelineEvents[i].id },
-          data: {
-            conflictFlag: true,
-            conflictsWith: partner?.id ?? null,
-          },
-        });
+      // Build a lookup: conflict analyzer event ID → persisted TimelineEvent DB record.
+      // The conflict analyzer uses ev.eventId (from EvidenceEvent) as the event's `id`.
+      // The persisted TimelineEvent stores the original eventId in metadata.timelineEventId
+      // (which comes from the unified timeline engine) and sourceDoc = sourceEvidence.
+      // We match via sourceDoc (= sourceEvidence = the conflict event's sourceId).
+      const dbEventBySourceEvidence = new Map<string, typeof timelineEvents[number]>();
+      for (const te of timelineEvents) {
+        // Map both by sourceDoc and by metadata.timelineEventId for robust matching
+        dbEventBySourceEvidence.set(te.sourceDoc, te);
+        const meta = te.metadata as Record<string, unknown> | null;
+        if (meta?.timelineEventId) {
+          dbEventBySourceEvidence.set(String(meta.timelineEventId), te);
+        }
+      }
+
+      // Also build a direct ID lookup from conflict analyzer event IDs
+      // The conflict events use ev.eventId from storedEvents as their `id`
+      const dbEventByAnalyzerId = new Map<string, typeof timelineEvents[number]>();
+      for (const te of timelineEvents) {
+        // Find the storedEvent whose sourceEvidence matches te.sourceDoc
+        // and use its eventId as the key
+        const matchingStored = storedEvents.find((se) => se.sourceEvidence === te.sourceDoc);
+        if (matchingStored) {
+          dbEventByAnalyzerId.set(matchingStored.eventId, te);
+        }
+      }
+
+      for (const conflict of detectedConflictPairs) {
+        const dbEventA = dbEventByAnalyzerId.get(conflict.eventA.id)
+          ?? dbEventBySourceEvidence.get(conflict.eventA.sourceId);
+        const dbEventB = dbEventByAnalyzerId.get(conflict.eventB.id)
+          ?? dbEventBySourceEvidence.get(conflict.eventB.sourceId);
+
+        if (dbEventA) {
+          await prisma.timelineEvent.update({
+            where: { id: dbEventA.id },
+            data: {
+              conflictFlag: true,
+              conflictsWith: dbEventB?.id ?? null,
+            },
+          });
+        }
+        if (dbEventB) {
+          await prisma.timelineEvent.update({
+            where: { id: dbEventB.id },
+            data: {
+              conflictFlag: true,
+              conflictsWith: dbEventA?.id ?? null,
+            },
+          });
+        }
       }
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);

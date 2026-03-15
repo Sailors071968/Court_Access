@@ -162,7 +162,7 @@ const EVENT_KEYWORD_PATTERNS: Record<string, RegExp[]> = {
   ],
   citation_issued: [
     /citation.*issued/i, /issued.*citation/i, /ticket.*issued/i,
-    /issued.*ticket/i, /written.*warning/i, /verbal.*warning/i,
+    /issued.*ticket/i, /written.*warning.*(?:issued|given|lieu)/i,
   ],
   backup_requested: [
     /backup.*requested/i, /requested.*backup/i, /additional.*units/i,

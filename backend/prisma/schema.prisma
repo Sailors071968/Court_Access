@@ -11,6 +11,101 @@ datasource db {
 }
 
 // ---------------------------------------------------------------------------
+// User — authentication accounts (replaces in-memory userStore)
+// ---------------------------------------------------------------------------
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  name          String
+  passwordHash  String
+  role          String   @default("staff") // admin | attorney | investigator | staff | defendant
+  tenantId      String
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  subscription  Subscription?
+  refreshTokens RefreshToken[]
+  securityLogs  SecurityLog[]
+
+  @@index([email])
+  @@index([tenantId])
+  @@index([role])
+  @@map("users")
+}
+
+// ---------------------------------------------------------------------------
+// Subscription — user subscription state (replaces in-memory userSubscriptions)
+// ---------------------------------------------------------------------------
+
+model Subscription {
+  id                    String   @id @default(uuid())
+  userId                String   @unique
+  user                  User     @relation(fields: [userId], references: [id])
+  planId                String   @default("FREE")
+  activatedAt           DateTime @default(now())
+  billingPeriodStart    DateTime @default(now())
+  billingPeriodEnd      DateTime
+  stripeSubscriptionId  String?
+  stripeCustomerId      String?
+  subscriptionStatus    String   @default("active") // active | past_due | canceled | trialing
+  subscriptionTier      String   @default("free")   // free | starter | professional | advanced | litigation | enterprise
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([userId])
+  @@index([planId])
+  @@index([stripeSubscriptionId])
+  @@index([stripeCustomerId])
+  @@map("subscriptions")
+}
+
+// ---------------------------------------------------------------------------
+// RefreshToken — JWT refresh tokens (replaces in-memory refreshTokenStore)
+// ---------------------------------------------------------------------------
+
+model RefreshToken {
+  id        String   @id @default(uuid())
+  token     String   @unique
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  email     String
+  role      String
+  expiresAt DateTime
+  revoked   Boolean  @default(false)
+
+  createdAt DateTime @default(now())
+
+  @@index([token])
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("refresh_tokens")
+}
+
+// ---------------------------------------------------------------------------
+// SecurityLog — security event audit trail (replaces in-memory securityLog)
+// ---------------------------------------------------------------------------
+
+model SecurityLog {
+  id        String   @id @default(uuid())
+  event     String
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  ip        String?
+  details   String?
+
+  createdAt DateTime @default(now())
+
+  @@index([event])
+  @@index([userId])
+  @@index([ip])
+  @@index([createdAt])
+  @@map("security_logs")
+}
+
+// ---------------------------------------------------------------------------
 // Corpus Ingestion State — checkpoint/resume system
 // ---------------------------------------------------------------------------
 

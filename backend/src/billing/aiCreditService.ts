@@ -1,9 +1,10 @@
 // ============================================================================
 // CourtAccess — AI Credit Service
 // Manages AI compute credits: balance tracking, usage logging, credit packs.
+// Now persisted to PostgreSQL via Prisma (replaces in-memory Maps).
 // ============================================================================
 
-import { v4 as uuidv4 } from 'uuid';
+import prisma from '../lib/prisma.js';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -119,124 +120,157 @@ export const CREDIT_PACKS: readonly CreditPackDefinition[] = Object.freeze([
 ]);
 
 // ---------------------------------------------------------------------------
-// In-Memory Stores (production uses Prisma)
+// Balance Management — persisted to PostgreSQL via Prisma
 // ---------------------------------------------------------------------------
 
-const balanceStore = new Map<string, AiCreditBalance>();
-const usageStore: AiCreditUsageEntry[] = [];
+function toAiCreditBalance(row: {
+  id: string;
+  userId: string;
+  monthlyCredits: number;
+  purchasedCredits: number;
+  creditsUsed: number;
+  billingPeriodStart: Date;
+  billingPeriodEnd: Date;
+  createdAt: Date;
+  updatedAt: Date;
+}): AiCreditBalance {
+  return {
+    id: row.id,
+    userId: row.userId,
+    monthlyCredits: row.monthlyCredits,
+    purchasedCredits: row.purchasedCredits,
+    creditsUsed: row.creditsUsed,
+    billingPeriodStart: row.billingPeriodStart.toISOString(),
+    billingPeriodEnd: row.billingPeriodEnd.toISOString(),
+    createdAt: row.createdAt.toISOString(),
+    updatedAt: row.updatedAt.toISOString(),
+  };
+}
 
-// ---------------------------------------------------------------------------
-// Balance Management
-// ---------------------------------------------------------------------------
-
-export function getCreditBalance(userId: string): AiCreditBalance {
-  const existing = balanceStore.get(userId);
-  if (existing) return existing;
-
+export async function getCreditBalance(userId: string): Promise<AiCreditBalance> {
   const now = new Date();
   const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
-  const balance: AiCreditBalance = {
-    id: uuidv4(),
-    userId,
-    monthlyCredits: 0,
-    purchasedCredits: 0,
-    creditsUsed: 0,
-    billingPeriodStart: now.toISOString(),
-    billingPeriodEnd: endOfMonth.toISOString(),
-    createdAt: now.toISOString(),
-    updatedAt: now.toISOString(),
-  };
-  balanceStore.set(userId, balance);
-  return balance;
+  const record = await prisma.aiCreditBalance.upsert({
+    where: { userId },
+    update: {},
+    create: {
+      userId,
+      monthlyCredits: 0,
+      purchasedCredits: 0,
+      creditsUsed: 0,
+      billingPeriodStart: now,
+      billingPeriodEnd: endOfMonth,
+    },
+  });
+  return toAiCreditBalance(record);
 }
 
 /**
  * Set monthly credits for a user (called when subscription changes).
  */
-export function setMonthlyCredits(userId: string, monthlyCredits: number): AiCreditBalance {
-  const balance = getCreditBalance(userId);
-  balance.monthlyCredits = monthlyCredits;
-  balance.updatedAt = new Date().toISOString();
-  balanceStore.set(userId, balance);
-  return balance;
+export async function setMonthlyCredits(userId: string, monthlyCredits: number): Promise<AiCreditBalance> {
+  // Ensure balance exists first
+  await getCreditBalance(userId);
+  const updated = await prisma.aiCreditBalance.update({
+    where: { userId },
+    data: { monthlyCredits },
+  });
+  return toAiCreditBalance(updated);
 }
 
 /**
  * Add purchased credits to a user's balance.
  * Purchased credits roll over for 90 days.
  */
-export function addPurchasedCredits(userId: string, credits: number): AiCreditBalance {
-  const balance = getCreditBalance(userId);
-  balance.purchasedCredits += credits;
-  balance.updatedAt = new Date().toISOString();
-  balanceStore.set(userId, balance);
-  return balance;
+export async function addPurchasedCredits(userId: string, credits: number): Promise<AiCreditBalance> {
+  // Ensure balance exists first
+  await getCreditBalance(userId);
+  const updated = await prisma.aiCreditBalance.update({
+    where: { userId },
+    data: { purchasedCredits: { increment: credits } },
+  });
+  return toAiCreditBalance(updated);
 }
 
 /**
  * Get available credits (monthly + purchased - used).
  * Purchased credits are consumed before monthly credits.
  */
-export function getAvailableCredits(userId: string): number {
-  const balance = getCreditBalance(userId);
+export async function getAvailableCredits(userId: string): Promise<number> {
+  const balance = await getCreditBalance(userId);
   return (balance.monthlyCredits + balance.purchasedCredits) - balance.creditsUsed;
 }
 
 /**
  * Check if a user has enough credits for an operation.
  */
-export function hasEnoughCredits(userId: string, requiredCredits: number): boolean {
-  return getAvailableCredits(userId) >= requiredCredits;
+export async function hasEnoughCredits(userId: string, requiredCredits: number): Promise<boolean> {
+  return (await getAvailableCredits(userId)) >= requiredCredits;
 }
 
 /**
- * Deduct credits from a user's balance.
+ * Deduct credits from a user's balance using a database transaction.
  * Purchased credits are consumed first, then monthly.
  * Returns true if deduction succeeded, false if insufficient credits.
  */
-export function deductCredits(
+export async function deductCredits(
   userId: string,
   credits: number,
   analysisType: AnalysisType,
   caseId?: string,
-): boolean {
+): Promise<boolean> {
   if (typeof credits !== 'number' || !Number.isFinite(credits) || credits <= 0) return false;
-  if (!hasEnoughCredits(userId, credits)) return false;
 
-  const balance = getCreditBalance(userId);
-  balance.creditsUsed += credits;
-  balance.updatedAt = new Date().toISOString();
-  balanceStore.set(userId, balance);
+  // Atomic check-and-deduct inside a single interactive transaction to prevent TOCTOU races
+  const result = await prisma.$transaction(async (tx) => {
+    const balance = await tx.aiCreditBalance.findUnique({ where: { userId } });
+    if (!balance) return false;
 
-  // Record usage
-  const usage: AiCreditUsageEntry = {
-    id: uuidv4(),
-    userId,
-    caseId: caseId ?? null,
-    analysisType,
-    creditsUsed: credits,
-    timestamp: new Date().toISOString(),
-  };
-  usageStore.push(usage);
+    const available = (balance.monthlyCredits + balance.purchasedCredits) - balance.creditsUsed;
+    if (available < credits) return false;
 
-  return true;
+    await tx.aiCreditBalance.update({
+      where: { userId },
+      data: { creditsUsed: { increment: credits } },
+    });
+    await tx.aiCreditUsage.create({
+      data: {
+        userId,
+        caseId: caseId ?? null,
+        analysisType,
+        creditsUsed: credits,
+      },
+    });
+    return true;
+  }, { isolationLevel: 'Serializable' });
+
+  return result;
 }
 
 // ---------------------------------------------------------------------------
-// Usage Queries
+// Usage Queries — persisted to PostgreSQL
 // ---------------------------------------------------------------------------
 
-export function getUserUsageHistory(
+export async function getUserUsageHistory(
   userId: string,
   limit = 50,
-): AiCreditUsageEntry[] {
-  return usageStore
-    .filter((u) => u.userId === userId)
-    .sort((a, b) => b.timestamp.localeCompare(a.timestamp))
-    .slice(0, limit);
+): Promise<AiCreditUsageEntry[]> {
+  const rows = await prisma.aiCreditUsage.findMany({
+    where: { userId },
+    orderBy: { timestamp: 'desc' },
+    take: limit,
+  });
+  return rows.map((r) => ({
+    id: r.id,
+    userId: r.userId,
+    caseId: r.caseId,
+    analysisType: r.analysisType as AnalysisType,
+    creditsUsed: r.creditsUsed,
+    timestamp: r.timestamp.toISOString(),
+  }));
 }
 
-export function getUserUsageByType(userId: string): Record<AnalysisType, number> {
+export async function getUserUsageByType(userId: string): Promise<Record<AnalysisType, number>> {
   const result: Record<AnalysisType, number> = {
     VIDEO_PROCESSING: 0,
     CONTRADICTION_ENGINE: 0,
@@ -245,9 +279,15 @@ export function getUserUsageByType(userId: string): Record<AnalysisType, number>
     RELIABILITY_SCORING: 0,
   };
 
-  for (const entry of usageStore) {
-    if (entry.userId === userId) {
-      result[entry.analysisType] += entry.creditsUsed;
+  const rows = await prisma.aiCreditUsage.findMany({
+    where: { userId },
+    select: { analysisType: true, creditsUsed: true },
+  });
+
+  for (const row of rows) {
+    const key = row.analysisType as AnalysisType;
+    if (key in result) {
+      result[key] += row.creditsUsed;
     }
   }
 
@@ -283,19 +323,32 @@ export function getCreditPack(packId: string): CreditPackDefinition | null {
 /**
  * Reset monthly credits at the start of a new billing period.
  */
-export function resetMonthlyCredits(userId: string): AiCreditBalance {
-  const balance = getCreditBalance(userId);
+export async function resetMonthlyCredits(userId: string): Promise<AiCreditBalance> {
+  // Ensure balance exists first
+  await getCreditBalance(userId);
   const now = new Date();
   const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
 
-  // Deduct consumed purchased credits before resetting the usage counter.
-  // Purchased credits are consumed first (per deductCredits contract).
-  const purchasedConsumed = Math.min(balance.purchasedCredits, balance.creditsUsed);
-  balance.purchasedCredits -= purchasedConsumed;
-  balance.creditsUsed = 0;
-  balance.billingPeriodStart = now.toISOString();
-  balance.billingPeriodEnd = endOfMonth.toISOString();
-  balance.updatedAt = now.toISOString();
-  balanceStore.set(userId, balance);
-  return balance;
+  // Atomic read-modify-write to prevent TOCTOU races with concurrent deductCredits
+  const updated = await prisma.$transaction(async (tx) => {
+    const balance = await tx.aiCreditBalance.findUnique({ where: { userId } });
+    if (!balance) {
+      throw new Error(`No credit balance found for user ${userId}`);
+    }
+
+    // Deduct consumed purchased credits before resetting the usage counter.
+    // Purchased credits are consumed first (per deductCredits contract).
+    const purchasedConsumed = Math.min(balance.purchasedCredits, balance.creditsUsed);
+
+    return tx.aiCreditBalance.update({
+      where: { userId },
+      data: {
+        purchasedCredits: { decrement: purchasedConsumed },
+        creditsUsed: 0,
+        billingPeriodStart: now,
+        billingPeriodEnd: endOfMonth,
+      },
+    });
+  }, { isolationLevel: 'Serializable' });
+  return toAiCreditBalance(updated);
 }

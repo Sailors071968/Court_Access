@@ -461,16 +461,36 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
 
     // -----------------------------------------------------------------------
     // Idempotency guard — Stripe may retry webhook events multiple times.
-    // Check if we've already processed this event ID; if so, return 200
-    // immediately to prevent duplicate credit grants and other side effects.
+    // We use an atomic insert-first approach: attempt to create the
+    // idempotency record BEFORE processing. If the unique constraint on
+    // eventId rejects the insert, this is a duplicate delivery and we
+    // return 200 immediately. This eliminates the TOCTOU race where two
+    // concurrent deliveries could both pass a findUnique check and both
+    // process the event (granting duplicate ACU credits).
     // -----------------------------------------------------------------------
-    const alreadyProcessed = await prisma.stripeWebhookEvent.findUnique({
-      where: { eventId: event.id },
-    });
+    try {
+      await prisma.stripeWebhookEvent.create({
+        data: {
+          eventId: event.id,
+          eventType: event.type,
+        },
+      });
+    } catch (insertErr) {
+      // Unique constraint violation = duplicate event (P2002 is Prisma's
+      // unique constraint error code)
+      const isPrismaUniqueViolation =
+        insertErr instanceof Error &&
+        'code' in insertErr &&
+        (insertErr as { code: string }).code === 'P2002';
 
-    if (alreadyProcessed) {
-      console.log(`[StripeWebhook] Duplicate event ignored: ${event.type} (${event.id})`);
-      return reply.send({ received: true, duplicate: true });
+      if (isPrismaUniqueViolation) {
+        console.log(`[StripeWebhook] Duplicate event ignored: ${event.type} (${event.id})`);
+        return reply.send({ received: true, duplicate: true });
+      }
+      // Non-duplicate DB error — log and reject so Stripe retries
+      const msg = insertErr instanceof Error ? insertErr.message : String(insertErr);
+      console.error(`[StripeWebhook] Idempotency record insert failed: ${msg}`);
+      return reply.code(500).send({ error: 'Webhook idempotency check failed' });
     }
 
     try {
@@ -497,16 +517,21 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
           console.log(`[StripeWebhook] Unhandled event type: ${event.type}`);
       }
 
-      // Record this event as processed for idempotency
-      await prisma.stripeWebhookEvent.create({
-        data: {
-          eventId: event.id,
-          eventType: event.type,
-        },
-      });
-
       return reply.send({ received: true });
     } catch (err) {
+      // Processing failed — delete the idempotency record so Stripe retry
+      // will re-attempt processing (we only want to block retries for
+      // events that were successfully processed).
+      try {
+        await prisma.stripeWebhookEvent.delete({
+          where: { eventId: event.id },
+        });
+      } catch {
+        // Best-effort cleanup; if delete fails, the event stays recorded
+        // and Stripe retries will be blocked. Manual intervention needed.
+        console.error(`[StripeWebhook] Failed to clean up idempotency record for ${event.id}`);
+      }
+
       const message = err instanceof Error ? err.message : String(err);
       console.error(`[StripeWebhook] Error handling ${event.type}:`, message);
       void logSecurityEvent('STRIPE_WEBHOOK_ERROR', undefined, request.ip, `${event.type}: ${message}`);

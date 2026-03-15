@@ -77,7 +77,7 @@ function mapToTimelineSourceType(sourceType: string): string {
     case 'bodycam':
       return 'bodycam';
     case 'dashcam':
-      return 'dashcam';
+      return 'bodycam'; // dashcam maps to bodycam per schema + evidenceIntelligenceIntegration pattern
     case 'transcript':
     case 'dispatch_log':
       return 'dispatch';

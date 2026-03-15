@@ -75,6 +75,7 @@ export async function applyDiscountCode(codeValue: string, userId: string): Prom
         const code = await tx.discountCode.findUnique({ where: { id: codeId } });
         if (!code || !code.active) return false;
         if (code.usageLimit !== null && code.usageCount >= code.usageLimit) return false;
+        if (code.expiresAt && code.expiresAt < new Date()) return false;
 
         await tx.discountCode.update({
           where: { id: codeId },

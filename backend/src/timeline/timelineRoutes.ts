@@ -19,7 +19,10 @@ export async function registerTimelineRoutes(app: FastifyInstance): Promise<void
   // GET /api/timeline/:caseId — Full timeline summary with events + conflicts
   app.get('/api/timeline/:caseId', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
-    const tenantId = user?.tenantId ?? 'default';
+    if (!user) {
+      return reply.code(401).send({ error: 'Authentication required' });
+    }
+    const tenantId = user.tenantId;
     const { caseId } = request.params as { caseId: string };
 
     try {
@@ -34,7 +37,10 @@ export async function registerTimelineRoutes(app: FastifyInstance): Promise<void
   // GET /api/timeline/:caseId/events — Timeline events with filtering
   app.get('/api/timeline/:caseId/events', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
-    const tenantId = user?.tenantId ?? 'default';
+    if (!user) {
+      return reply.code(401).send({ error: 'Authentication required' });
+    }
+    const tenantId = user.tenantId;
     const { caseId } = request.params as { caseId: string };
     const query = request.query as {
       sourceType?: string;
@@ -62,7 +68,10 @@ export async function registerTimelineRoutes(app: FastifyInstance): Promise<void
   // GET /api/timeline/:caseId/conflicts — Timeline conflict data
   app.get('/api/timeline/:caseId/conflicts', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
-    const tenantId = user?.tenantId ?? 'default';
+    if (!user) {
+      return reply.code(401).send({ error: 'Authentication required' });
+    }
+    const tenantId = user.tenantId;
     const { caseId } = request.params as { caseId: string };
 
     try {

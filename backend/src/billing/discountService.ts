@@ -22,12 +22,12 @@ export interface DiscountValidationResult {
  * Validates a discount code and returns the discount details if valid.
  * Does NOT consume the code — call applyDiscountCode() after successful validation.
  */
-export function validateDiscountCode(codeValue: string): DiscountValidationResult {
+export async function validateDiscountCode(codeValue: string): Promise<DiscountValidationResult> {
   if (!codeValue || codeValue.trim().length === 0) {
     return { valid: false, errorReason: 'No discount code provided' };
   }
 
-  const code = getDiscountCodeByValue(codeValue.trim());
+  const code = await getDiscountCodeByValue(codeValue.trim());
 
   if (!code) {
     return { valid: false, errorReason: 'Invalid discount code' };
@@ -58,14 +58,14 @@ export function validateDiscountCode(codeValue: string): DiscountValidationResul
  * Applies a validated discount code — increments usage count and records the usage.
  * Call this AFTER validateDiscountCode() returns valid: true.
  */
-export function applyDiscountCode(codeValue: string, userId: string): DiscountValidationResult {
-  const validation = validateDiscountCode(codeValue);
+export async function applyDiscountCode(codeValue: string, userId: string): Promise<DiscountValidationResult> {
+  const validation = await validateDiscountCode(codeValue);
   if (!validation.valid || !validation.codeId) {
     return validation;
   }
 
-  incrementUsageCount(validation.codeId);
-  recordDiscountUsage(validation.codeId, userId);
+  await incrementUsageCount(validation.codeId);
+  await recordDiscountUsage(validation.codeId, userId);
 
   return validation;
 }

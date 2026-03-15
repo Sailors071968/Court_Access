@@ -1,7 +1,14 @@
 // ============================================================================
 // CourtAccess — Demo Request Model
 // Phase 211: Government demonstration request storage
+// Now persisted to PostgreSQL via Prisma (replaces in-memory array).
 // ============================================================================
+
+import prisma from '../lib/prisma.js';
+
+// ---------------------------------------------------------------------------
+// Types (kept for backward compatibility with existing route handlers)
+// ---------------------------------------------------------------------------
 
 export interface DemoRequest {
   id: string;
@@ -17,34 +24,77 @@ export interface DemoRequest {
   updatedAt: string;
 }
 
-// In-memory store (production: migrate to PostgreSQL)
-const demoRequests: DemoRequest[] = [];
+type DemoRequestStatus = DemoRequest['status'];
 
-export function createDemoRequest(data: Omit<DemoRequest, 'id' | 'status' | 'submittedAt' | 'updatedAt'>): DemoRequest {
-  const request: DemoRequest = {
-    ...data,
-    id: crypto.randomUUID(),
-    status: 'new',
-    submittedAt: new Date().toISOString(),
-    updatedAt: new Date().toISOString(),
+// ---------------------------------------------------------------------------
+// Prisma row → interface mapper
+// ---------------------------------------------------------------------------
+
+function toDemoRequest(row: {
+  id: string;
+  name: string;
+  organization: string;
+  role: string;
+  email: string;
+  county: string;
+  agencyType: string;
+  message: string;
+  status: string;
+  submittedAt: Date;
+  updatedAt: Date;
+}): DemoRequest {
+  return {
+    id: row.id,
+    name: row.name,
+    organization: row.organization,
+    role: row.role,
+    email: row.email,
+    county: row.county,
+    agencyType: row.agencyType,
+    message: row.message,
+    status: row.status as DemoRequestStatus,
+    submittedAt: row.submittedAt.toISOString(),
+    updatedAt: row.updatedAt.toISOString(),
   };
-  demoRequests.push(request);
-  return request;
 }
 
-export function getDemoRequests(): DemoRequest[] {
-  return [...demoRequests];
+// ---------------------------------------------------------------------------
+// CRUD — persisted to PostgreSQL via Prisma
+// ---------------------------------------------------------------------------
+
+export async function createDemoRequest(data: Omit<DemoRequest, 'id' | 'status' | 'submittedAt' | 'updatedAt'>): Promise<DemoRequest> {
+  const row = await prisma.demoRequest.create({
+    data: {
+      name: data.name,
+      organization: data.organization,
+      role: data.role,
+      email: data.email,
+      county: data.county,
+      agencyType: data.agencyType,
+      message: data.message,
+    },
+  });
+  return toDemoRequest(row);
 }
 
-export function getDemoRequestById(id: string): DemoRequest | undefined {
-  return demoRequests.find((r) => r.id === id);
+export async function getDemoRequests(): Promise<DemoRequest[]> {
+  const rows = await prisma.demoRequest.findMany({ orderBy: { submittedAt: 'desc' } });
+  return rows.map(toDemoRequest);
 }
 
-export function updateDemoRequestStatus(id: string, status: DemoRequest['status']): DemoRequest | undefined {
-  const request = demoRequests.find((r) => r.id === id);
-  if (request) {
-    request.status = status;
-    request.updatedAt = new Date().toISOString();
+export async function getDemoRequestById(id: string): Promise<DemoRequest | undefined> {
+  const row = await prisma.demoRequest.findUnique({ where: { id } });
+  return row ? toDemoRequest(row) : undefined;
+}
+
+export async function updateDemoRequestStatus(id: string, status: DemoRequestStatus): Promise<DemoRequest | undefined> {
+  try {
+    const row = await prisma.demoRequest.update({
+      where: { id },
+      data: { status },
+    });
+    return toDemoRequest(row);
+  } catch {
+    return undefined;
   }
-  return request;
 }

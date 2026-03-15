@@ -8,7 +8,7 @@ import { createDiscountCode, getDiscountCodeByValue } from '../models/discountCo
 /**
  * Seed default discount codes. Skips any that already exist.
  */
-export function seedDefaultDiscountCodes(): void {
+export async function seedDefaultDiscountCodes(): Promise<void> {
   const defaults = [
     {
       codeName: 'Product Hunt Launch',
@@ -22,9 +22,9 @@ export function seedDefaultDiscountCodes(): void {
   ];
 
   for (const code of defaults) {
-    const existing = getDiscountCodeByValue(code.codeValue);
+    const existing = await getDiscountCodeByValue(code.codeValue);
     if (!existing) {
-      createDiscountCode(code);
+      await createDiscountCode(code);
       console.log(`[DiscountSeed] Seeded discount code: ${code.codeValue} (${code.codeName})`);
     } else {
       console.log(`[DiscountSeed] Discount code already exists: ${code.codeValue}`);

@@ -14,8 +14,8 @@ let intervalId: ReturnType<typeof setInterval> | null = null;
  * Run a single expiration check — deactivates all codes past their expiresAt date.
  * Returns the number of codes deactivated.
  */
-export function runExpirationCheck(): number {
-  const deactivated = deactivateExpiredCodes();
+export async function runExpirationCheck(): Promise<number> {
+  const deactivated = await deactivateExpiredCodes();
   if (deactivated > 0) {
     console.log(
       `[DiscountExpirationWorker] Deactivated ${deactivated} expired discount code(s) at ${new Date().toISOString()}`
@@ -35,8 +35,8 @@ export function startExpirationWorker(): void {
   }
 
   console.log('[DiscountExpirationWorker] Starting daily expiration check');
-  runExpirationCheck();
-  intervalId = setInterval(runExpirationCheck, ONE_DAY_MS);
+  void runExpirationCheck();
+  intervalId = setInterval(() => { void runExpirationCheck(); }, ONE_DAY_MS);
 }
 
 /**

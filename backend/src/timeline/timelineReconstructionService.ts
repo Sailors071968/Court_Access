@@ -393,8 +393,14 @@ function parseTimelineTimestamp(ts: string): Date {
     }
   }
 
-  // Fallback to current time
-  return new Date();
+  // Try offset-seconds format (e.g. "120" → 120 seconds from epoch)
+  const offsetSec = Number(ts);
+  if (!isNaN(offsetSec)) {
+    return new Date(offsetSec * 1000);
+  }
+
+  // Deterministic fallback — epoch start rather than wall-clock time
+  return new Date('1970-01-01T00:00:00Z');
 }
 
 // ---------------------------------------------------------------------------

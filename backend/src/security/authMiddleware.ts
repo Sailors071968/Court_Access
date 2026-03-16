@@ -35,8 +35,26 @@ export interface RefreshTokenRecord {
   revoked: boolean;
 }
 
+export interface RequestContext {
+  tenantId: string;
+  userId: string;
+}
+
 export interface AuthenticatedRequest extends FastifyRequest {
   user?: JwtPayload;
+  context?: RequestContext;
+}
+
+/**
+ * Extract guaranteed RequestContext from an authenticated request.
+ * Returns null if the request is not authenticated or tenantId is missing.
+ * Route handlers should return 401 when this returns null.
+ */
+export function getRequestContext(request: AuthenticatedRequest): RequestContext | null {
+  if (!request.context?.tenantId || !request.context?.userId) {
+    return null;
+  }
+  return request.context;
 }
 
 // ---------------------------------------------------------------------------
@@ -267,6 +285,12 @@ export async function authenticationHook(
   try {
     const payload = verifyAccessToken(token);
     request.user = payload;
+
+    // Attach typed request context for tenant isolation
+    request.context = {
+      tenantId: payload.tenantId,
+      userId: payload.userId,
+    };
 
     // Check role-based permissions
     const requiredRoles = getRequiredRoles(path);

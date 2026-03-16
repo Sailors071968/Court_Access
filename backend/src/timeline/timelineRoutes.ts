@@ -7,6 +7,7 @@
 
 import type { FastifyInstance, FastifyReply } from 'fastify';
 import type { AuthenticatedRequest } from '../security/authMiddleware.js';
+import { getRequestContext } from '../security/authMiddleware.js';
 import {
   getTimeline,
   getTimelineEvents,
@@ -18,11 +19,11 @@ import { getQueueHealth } from '../lib/queues.js';
 export async function registerTimelineRoutes(app: FastifyInstance): Promise<void> {
   // GET /api/timeline/:caseId — Full timeline summary with events + conflicts
   app.get('/api/timeline/:caseId', async (request: AuthenticatedRequest, reply: FastifyReply) => {
-    const user = request.user;
-    if (!user) {
+    const ctx = getRequestContext(request);
+    if (!ctx) {
       return reply.code(401).send({ error: 'Authentication required' });
     }
-    const tenantId = user.tenantId;
+    const tenantId = ctx.tenantId;
     const { caseId } = request.params as { caseId: string };
 
     try {
@@ -36,11 +37,11 @@ export async function registerTimelineRoutes(app: FastifyInstance): Promise<void
 
   // GET /api/timeline/:caseId/events — Timeline events with filtering
   app.get('/api/timeline/:caseId/events', async (request: AuthenticatedRequest, reply: FastifyReply) => {
-    const user = request.user;
-    if (!user) {
+    const ctx = getRequestContext(request);
+    if (!ctx) {
       return reply.code(401).send({ error: 'Authentication required' });
     }
-    const tenantId = user.tenantId;
+    const tenantId = ctx.tenantId;
     const { caseId } = request.params as { caseId: string };
     const query = request.query as {
       sourceType?: string;
@@ -67,11 +68,11 @@ export async function registerTimelineRoutes(app: FastifyInstance): Promise<void
 
   // GET /api/timeline/:caseId/conflicts — Timeline conflict data
   app.get('/api/timeline/:caseId/conflicts', async (request: AuthenticatedRequest, reply: FastifyReply) => {
-    const user = request.user;
-    if (!user) {
+    const ctx = getRequestContext(request);
+    if (!ctx) {
       return reply.code(401).send({ error: 'Authentication required' });
     }
-    const tenantId = user.tenantId;
+    const tenantId = ctx.tenantId;
     const { caseId } = request.params as { caseId: string };
 
     try {
@@ -85,16 +86,16 @@ export async function registerTimelineRoutes(app: FastifyInstance): Promise<void
 
   // POST /api/timeline/rebuild/:caseId — Trigger timeline reconstruction via BullMQ
   app.post('/api/timeline/rebuild/:caseId', async (request: AuthenticatedRequest, reply: FastifyReply) => {
-    const user = request.user;
-    if (!user) {
+    const ctx = getRequestContext(request);
+    if (!ctx) {
       return reply.code(401).send({ error: 'Authentication required' });
     }
     const { caseId } = request.params as { caseId: string };
 
     try {
       const result = await enqueueTimelineProcessing({
-        userId: user.userId,
-        tenantId: user.tenantId,
+        userId: ctx.userId,
+        tenantId: ctx.tenantId,
         caseId,
       });
       return {
@@ -112,8 +113,8 @@ export async function registerTimelineRoutes(app: FastifyInstance): Promise<void
 
   // POST /api/timeline/process — Trigger timeline processing (same as rebuild)
   app.post('/api/timeline/process', async (request: AuthenticatedRequest, reply: FastifyReply) => {
-    const user = request.user;
-    if (!user) {
+    const ctx = getRequestContext(request);
+    if (!ctx) {
       return reply.code(401).send({ error: 'Authentication required' });
     }
     const body = request.body as { caseId?: string } | undefined;
@@ -125,8 +126,8 @@ export async function registerTimelineRoutes(app: FastifyInstance): Promise<void
 
     try {
       const result = await enqueueTimelineProcessing({
-        userId: user.userId,
-        tenantId: user.tenantId,
+        userId: ctx.userId,
+        tenantId: ctx.tenantId,
         caseId,
       });
       return {

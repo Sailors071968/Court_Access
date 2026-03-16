@@ -9,6 +9,7 @@ import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import crypto from 'crypto';
 import type { AuthenticatedRequest } from '../security/authMiddleware.js';
+import { getRequestContext } from '../security/authMiddleware.js';
 import { validateEvidenceUpload } from './evidenceValidation.js';
 import { enqueueEvidenceIngestion } from './evidenceProcessingPipeline.js';
 
@@ -64,10 +65,11 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
 
   // POST /api/evidence/upload-url — Generate presigned S3 upload URL (Part 3)
   app.post('/api/evidence/upload-url', async (request: AuthenticatedRequest, reply: FastifyReply) => {
-    const user = request.user;
-    if (!user) {
+    const ctx = getRequestContext(request);
+    if (!ctx) {
       return reply.code(401).send({ error: 'Authentication required' });
     }
+    const user = request.user!;
 
     const body = request.body as {
       caseId: string;
@@ -155,10 +157,11 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
 
   // POST /api/evidence — Register evidence metadata (Part 4)
   app.post('/api/evidence', async (request: AuthenticatedRequest, reply: FastifyReply) => {
-    const user = request.user;
-    if (!user) {
+    const ctx = getRequestContext(request);
+    if (!ctx) {
       return reply.code(401).send({ error: 'Authentication required' });
     }
+    const user = request.user!;
 
     const body = request.body as {
       caseId: string;
@@ -262,8 +265,8 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
 
   // GET /api/cases/:caseId/evidence — List evidence for a case
   app.get('/api/cases/:caseId/evidence', async (request: AuthenticatedRequest, reply: FastifyReply) => {
-    const user = request.user;
-    if (!user) {
+    const ctx = getRequestContext(request);
+    if (!ctx) {
       return reply.code(401).send({ error: 'Authentication required' });
     }
 
@@ -275,7 +278,7 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
       caseRecord = await prisma.criminalCase.findFirst({
         where: {
           caseId,
-          tenantId: user.tenantId,
+          tenantId: ctx.tenantId,
           deletedAt: null,
         },
       });
@@ -292,7 +295,7 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
       const evidenceList = await prisma.evidence.findMany({
         where: {
           caseId,
-          tenantId: user.tenantId,
+          tenantId: ctx.tenantId,
         },
         orderBy: {
           uploadedAt: 'desc',
@@ -314,8 +317,8 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
 
   // GET /api/evidence/:evidenceId — Get a single evidence record
   app.get('/api/evidence/:evidenceId', async (request: AuthenticatedRequest, reply: FastifyReply) => {
-    const user = request.user;
-    if (!user) {
+    const ctx = getRequestContext(request);
+    if (!ctx) {
       return reply.code(401).send({ error: 'Authentication required' });
     }
 
@@ -325,7 +328,7 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
       const evidence = await prisma.evidence.findFirst({
         where: {
           evidenceId,
-          tenantId: user.tenantId,
+          tenantId: ctx.tenantId,
         },
       });
 
@@ -347,8 +350,8 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
 
   // DELETE /api/evidence/:evidenceId — Delete evidence record
   app.delete('/api/evidence/:evidenceId', async (request: AuthenticatedRequest, reply: FastifyReply) => {
-    const user = request.user;
-    if (!user) {
+    const ctx = getRequestContext(request);
+    if (!ctx) {
       return reply.code(401).send({ error: 'Authentication required' });
     }
 
@@ -358,7 +361,7 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
       const evidence = await prisma.evidence.findFirst({
         where: {
           evidenceId,
-          tenantId: user.tenantId,
+          tenantId: ctx.tenantId,
         },
       });
 
@@ -371,7 +374,7 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
         const s3 = getS3Client();
         const deleteCommand = new DeleteObjectCommand({
           Bucket: R2_BUCKET,
-          Key: evidence.s3Key,
+          Key: evidence.s3Key ?? undefined,
         });
         await s3.send(deleteCommand);
       } catch (s3Err) {

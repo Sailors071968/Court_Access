@@ -7,6 +7,7 @@
 import type { FastifyInstance, FastifyReply } from 'fastify';
 import { PrismaClient } from '@prisma/client';
 import type { AuthenticatedRequest } from '../security/authMiddleware.js';
+import { getRequestContext } from '../security/authMiddleware.js';
 
 const prisma = new PrismaClient();
 
@@ -50,8 +51,8 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
 
   // POST /api/cases — Create a new case
   app.post('/api/cases', async (request: AuthenticatedRequest, reply: FastifyReply) => {
-    const user = request.user;
-    if (!user) {
+    const ctx = getRequestContext(request);
+    if (!ctx) {
       return reply.code(401).send({ error: 'Authentication required' });
     }
 
@@ -74,8 +75,8 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
     try {
       const newCase = await prisma.criminalCase.create({
         data: {
-          tenantId: user.tenantId,
-          ownerId: user.userId,
+          tenantId: ctx.tenantId,
+          ownerId: ctx.userId,
           title: body.title,
           caseNumber: body.caseNumber,
           jurisdiction: body.jurisdiction,
@@ -101,15 +102,15 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
 
   // GET /api/cases — List all cases for the tenant
   app.get('/api/cases', async (request: AuthenticatedRequest, reply: FastifyReply) => {
-    const user = request.user;
-    if (!user) {
+    const ctx = getRequestContext(request);
+    if (!ctx) {
       return reply.code(401).send({ error: 'Authentication required' });
     }
 
     try {
       const cases = await prisma.criminalCase.findMany({
         where: {
-          tenantId: user.tenantId,
+          tenantId: ctx.tenantId,
           deletedAt: null,
         },
         orderBy: {
@@ -131,8 +132,8 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
 
   // GET /api/cases/:caseId — Get a single case
   app.get('/api/cases/:caseId', async (request: AuthenticatedRequest, reply: FastifyReply) => {
-    const user = request.user;
-    if (!user) {
+    const ctx = getRequestContext(request);
+    if (!ctx) {
       return reply.code(401).send({ error: 'Authentication required' });
     }
 
@@ -142,7 +143,7 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
       const foundCase = await prisma.criminalCase.findFirst({
         where: {
           caseId,
-          tenantId: user.tenantId,
+          tenantId: ctx.tenantId,
           deletedAt: null,
         },
         include: {
@@ -165,8 +166,8 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
 
   // PATCH /api/cases/:caseId — Update a case
   app.patch('/api/cases/:caseId', async (request: AuthenticatedRequest, reply: FastifyReply) => {
-    const user = request.user;
-    if (!user) {
+    const ctx = getRequestContext(request);
+    if (!ctx) {
       return reply.code(401).send({ error: 'Authentication required' });
     }
 
@@ -195,7 +196,7 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
       const existing = await prisma.criminalCase.findFirst({
         where: {
           caseId,
-          tenantId: user.tenantId,
+          tenantId: ctx.tenantId,
           deletedAt: null,
         },
       });
@@ -237,8 +238,8 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
 
   // DELETE /api/cases/:caseId — Soft delete a case
   app.delete('/api/cases/:caseId', async (request: AuthenticatedRequest, reply: FastifyReply) => {
-    const user = request.user;
-    if (!user) {
+    const ctx = getRequestContext(request);
+    if (!ctx) {
       return reply.code(401).send({ error: 'Authentication required' });
     }
 
@@ -249,7 +250,7 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
       const existing = await prisma.criminalCase.findFirst({
         where: {
           caseId,
-          tenantId: user.tenantId,
+          tenantId: ctx.tenantId,
           deletedAt: null,
         },
       });

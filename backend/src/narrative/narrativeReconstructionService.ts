@@ -341,7 +341,11 @@ export async function deconstructNarrative(
         { enqueueDownstream: false },
       );
       validationsCreated = valResult.validationsCreated;
-      contradictions = valResult.contradictions;
+      // `valResult.contradictions` only counts newly created validations in this run.
+      // We want the total number of contradicted validations for this case/tenant.
+      contradictions = await prisma.claimValidation.count({
+        where: { caseId, tenantId, status: 'contradicted' },
+      });
 
       console.info('[NarrativeDeconstruction] Stage 3 complete: validation', {
         caseId,

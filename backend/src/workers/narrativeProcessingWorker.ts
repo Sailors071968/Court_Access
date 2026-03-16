@@ -26,7 +26,9 @@ class NarrativeProcessingWorker extends CourtAccessWorker<NarrativeProcessingJob
     super({
       queueName: QUEUE_NAMES.NARRATIVE_PROCESSING,
       workerName: 'NarrativeProcessingWorker',
-      concurrency: 2,
+      // Concurrency is intentionally 1 to prevent overlapping runs for the same
+      // case from interleaving delete+create stages and corrupting results.
+      concurrency: 1,
       lockDuration: 300_000, // 5 minutes for narrative analysis pipeline
     });
   }

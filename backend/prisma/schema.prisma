@@ -608,6 +608,10 @@ model EvidenceEvent {
   eventId         String   @id @default(uuid())
   caseId          String
   timestamp       String   // HH:MM:SS or offset seconds
+  timestampCorrected  String?
+  timePrecision       Int?      @default(1000)
+  sourceClockOffset   Int?
+  extractionMethod    String?
   eventType       String   // suspect_restrained | taser_deployed | neck_restraint | vehicle_search | verbal_command | miranda_warning | weapon_drawn | handcuffing | physical_strike | officer_proximity | threat_language | compliance_command | uof_warning | other
   confidence      Float    @default(0)
   sourceEvidence  String   // reference to evidence document/file

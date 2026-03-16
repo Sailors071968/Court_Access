@@ -304,11 +304,14 @@ export async function deconstructNarrative(
 
   if (totalClaimsExtracted > 0 && Date.now() < pipelineDeadline) {
     try {
-      const normResult = await processClaimNormalization({
-        caseId,
-        tenantId,
-        triggerEvidenceId: 'pipeline',
-      });
+      const normResult = await processClaimNormalization(
+        {
+          caseId,
+          tenantId,
+          triggerEvidenceId: 'pipeline',
+        },
+        { enqueueDownstream: false },
+      );
       claimsNormalized = normResult.eventsNormalized;
 
       console.info('[NarrativeDeconstruction] Stage 2 complete: normalization', {
@@ -330,10 +333,13 @@ export async function deconstructNarrative(
 
   if (totalClaimsExtracted > 0 && Date.now() < pipelineDeadline) {
     try {
-      const valResult = await processEvidenceValidation({
-        caseId,
-        tenantId,
-      });
+      const valResult = await processEvidenceValidation(
+        {
+          caseId,
+          tenantId,
+        },
+        { enqueueDownstream: false },
+      );
       validationsCreated = valResult.validationsCreated;
       contradictions = valResult.contradictions;
 
@@ -475,12 +481,19 @@ export async function getNarrativeClaims(
     })),
   });
 
+  // Back-compat: previous stub used `graph.edges`; new graph uses `relationships`.
+  const graphCompat = {
+    nodes: graph.nodes,
+    edges: graph.relationships,
+    relationships: graph.relationships,
+  };
+
   return {
     claims: claimsWithValidation,
     total,
     limit,
     offset,
-    graph,
+    graph: graphCompat,
   };
 }
 

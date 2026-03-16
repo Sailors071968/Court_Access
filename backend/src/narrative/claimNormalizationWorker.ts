@@ -151,7 +151,10 @@ function normalizeActor(subject: string): string {
 // Worker Processor
 // ---------------------------------------------------------------------------
 
-export async function processClaimNormalization(job: ClaimNormalizationJob): Promise<{
+export async function processClaimNormalization(
+  job: ClaimNormalizationJob,
+  options?: { enqueueDownstream?: boolean },
+): Promise<{
   eventsNormalized: number;
 }> {
   console.log(`[ClaimNormalization] Processing claims for case ${job.caseId}`);
@@ -200,14 +203,16 @@ export async function processClaimNormalization(job: ClaimNormalizationJob): Pro
 
   console.log(`[ClaimNormalization] Normalized ${count} claims for case ${job.caseId}`);
 
-  // Trigger evidence validation
-  try {
-    await enqueueEvidenceValidation({
-      caseId: job.caseId,
-      tenantId: job.tenantId,
-    });
-  } catch (err) {
-    console.error(`[ClaimNormalization] Failed to enqueue validation:`, err);
+  // Trigger evidence validation (queue-chained worker mode)
+  if (options?.enqueueDownstream !== false) {
+    try {
+      await enqueueEvidenceValidation({
+        caseId: job.caseId,
+        tenantId: job.tenantId,
+      });
+    } catch (err) {
+      console.error(`[ClaimNormalization] Failed to enqueue validation:`, err);
+    }
   }
 
   return { eventsNormalized: count };

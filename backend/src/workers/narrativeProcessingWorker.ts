@@ -1,14 +1,21 @@
 // ============================================================================
-// Phase 2 — Narrative Processing Worker (ACU-Enforced)
+// Phase 4 — Narrative Processing Worker (ACU-Enforced)
 // BullMQ worker that processes narrative deconstruction jobs.
 // Extends CourtAccessWorker for automatic ACU credit validation/deduction.
 // Flow: pending → running → completed/failed
+//
+// Replaces Phase 2 stub with real 4-stage pipeline:
+//   1. Claim extraction (R2 → text → atomic claims)
+//   2. Claim normalization (structured ontology events)
+//   3. Evidence validation (cross-reference claims vs evidence)
+//   4. Impeachment detection (contradicted claims → candidates)
 // ============================================================================
 
 import type { Job } from 'bullmq';
 import { CourtAccessWorker } from '../lib/baseWorker.js';
 import { QUEUE_NAMES, type NarrativeProcessingJobData } from '../lib/queues.js';
 import prisma from '../lib/prisma.js';
+import { deconstructNarrative } from '../narrative/narrativeReconstructionService.js';
 
 // ---------------------------------------------------------------------------
 // Narrative Processing Worker
@@ -20,7 +27,7 @@ class NarrativeProcessingWorker extends CourtAccessWorker<NarrativeProcessingJob
       queueName: QUEUE_NAMES.NARRATIVE_PROCESSING,
       workerName: 'NarrativeProcessingWorker',
       concurrency: 2,
-      lockDuration: 120_000, // 2 minutes for narrative analysis
+      lockDuration: 300_000, // 5 minutes for narrative analysis pipeline
     });
   }
 
@@ -36,30 +43,12 @@ class NarrativeProcessingWorker extends CourtAccessWorker<NarrativeProcessingJob
     }
 
     try {
-      // Execute narrative deconstruction pipeline
-      console.log(`[NarrativeProcessingWorker] Deconstructing narratives for case ${caseId}`);
+      // Execute real narrative deconstruction pipeline
+      console.log(`[NarrativeProcessingWorker] Starting narrative deconstruction for case ${caseId}`);
 
-      // Fetch evidence documents for claim extraction
-      const evidence = await prisma.evidence.findMany({
-        where: { caseId, tenantId },
-        select: { evidenceId: true, evidenceType: true, fileName: true },
-      });
+      const result = await deconstructNarrative(caseId, tenantId);
 
-      // Filter to narrative-relevant evidence types
-      const narrativeEvidence = evidence.filter((e) =>
-        ['police_report', 'probable_cause', 'arrest_affidavit', 'supplemental_report', 'incident_report'].includes(e.evidenceType),
-      );
-
-      console.log(`[NarrativeProcessingWorker] Found ${narrativeEvidence.length} narrative documents for case ${caseId}`);
-
-      // In production: runs 4-stage pipeline:
-      // 1. Claim extraction (claimExtractionWorker)
-      // 2. Claim normalization (claimNormalizationWorker)
-      // 3. Evidence validation (evidenceValidationWorker)
-      // 4. Impeachment detection (impeachmentDetectionWorker)
-      // Actual AI pipeline integration in Phase 3.
-
-      // Mark ProcessingJob as completed
+      // Mark ProcessingJob as completed with full pipeline results
       if (processingJobId) {
         await prisma.processingJob.update({
           where: { id: processingJobId },
@@ -70,16 +59,20 @@ class NarrativeProcessingWorker extends CourtAccessWorker<NarrativeProcessingJob
             failureCode: null,
             error: null,
             result: {
-              narrativeDocuments: narrativeEvidence.length,
-              totalEvidence: evidence.length,
-              caseId,
+              ...result,
               completedAt: new Date().toISOString(),
             },
           },
         });
       }
 
-      console.log(`[NarrativeProcessingWorker] Narrative deconstruction completed for case ${caseId}`);
+      console.log(`[NarrativeProcessingWorker] Narrative deconstruction completed for case ${caseId}`, {
+        evidenceProcessed: result.evidenceProcessed,
+        claimsExtracted: result.claimsExtracted,
+        contradictions: result.contradictions,
+        impeachmentCandidates: result.impeachmentCandidates,
+        durationMs: result.durationMs,
+      });
     } catch (error) {
       // Mark ProcessingJob as failed
       if (processingJobId) {

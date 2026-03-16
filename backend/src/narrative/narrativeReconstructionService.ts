@@ -473,10 +473,13 @@ export async function getNarrativeImpeachment(
 ) {
   const candidates = await prisma.impeachmentCandidate.findMany({
     where: { caseId, tenantId },
-    orderBy: [
-      { severity: 'asc' }, // high first (alphabetically: high < low < medium)
-      { confidence: 'desc' },
-    ],
+  });
+
+  // Sort by severity (high → medium → low) then by confidence descending
+  const severityOrder: Record<string, number> = { high: 0, medium: 1, low: 2 };
+  candidates.sort((a, b) => {
+    const sevDiff = (severityOrder[a.severity] ?? 3) - (severityOrder[b.severity] ?? 3);
+    return sevDiff !== 0 ? sevDiff : b.confidence - a.confidence;
   });
 
   const severityCounts = { high: 0, medium: 0, low: 0 };

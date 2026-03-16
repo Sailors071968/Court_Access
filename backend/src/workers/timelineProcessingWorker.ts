@@ -1,14 +1,16 @@
 // ============================================================================
-// Phase 2 — Timeline Processing Worker (ACU-Enforced)
-// BullMQ worker that processes timeline reconstruction jobs.
+// Phase 3 — Timeline Processing Worker (ACU-Enforced)
+// BullMQ worker that runs the full timeline reconstruction pipeline:
+//   Event extraction → Officer timeline → Unified merge → Conflict detection
 // Extends CourtAccessWorker for automatic ACU credit validation/deduction.
-// Flow: pending → running → completed/failed
+// Flow: pending → active → completed/failed
 // ============================================================================
 
 import type { Job } from 'bullmq';
 import { CourtAccessWorker } from '../lib/baseWorker.js';
 import { QUEUE_NAMES, type TimelineBuildJobData } from '../lib/queues.js';
 import prisma from '../lib/prisma.js';
+import { reconstructTimeline } from '../timeline/timelineReconstructionService.js';
 
 // ---------------------------------------------------------------------------
 // Timeline Processing Worker
@@ -36,22 +38,28 @@ class TimelineProcessingWorker extends CourtAccessWorker<TimelineBuildJobData> {
     }
 
     try {
-      // Execute timeline reconstruction pipeline
       console.log(`[TimelineProcessingWorker] Building timeline for case ${caseId}`);
 
-      // Fetch evidence for timeline extraction
-      const evidence = await prisma.evidence.findMany({
-        where: { caseId, tenantId },
-        select: { evidenceId: true, evidenceType: true, fileName: true },
-      });
+      // Execute the full timeline reconstruction pipeline:
+      //   1. Fetch evidence for the case
+      //   2. Extract structured events from evidence
+      //   3. Build officer action timeline
+      //   4. Merge into unified timeline (clock drift correction)
+      //   5. Detect timeline conflicts
+      //   6. Persist TimelineEvent records to PostgreSQL
+      const result = await reconstructTimeline(caseId, tenantId);
 
-      console.log(`[TimelineProcessingWorker] Found ${evidence.length} evidence items for case ${caseId}`);
+      console.log(
+        `[TimelineProcessingWorker] Timeline reconstruction completed for case ${caseId}: ` +
+        `${result.evidenceProcessed} evidence, ${result.eventsExtracted} events extracted, ` +
+        `${result.timelineEventsCreated} timeline events, ${result.conflictsDetected} conflicts`
+      );
 
-      // In production: calls eventExtractionService, officerActionTimelineService,
-      // clock drift correction, and timeline merge pipeline.
-      // For now, log processing intent — actual AI pipeline integration in Phase 3.
+      if (result.warnings.length > 0) {
+        console.warn(`[TimelineProcessingWorker] Warnings for case ${caseId}:`, result.warnings);
+      }
 
-      // Mark ProcessingJob as completed
+      // Mark ProcessingJob as completed with reconstruction results
       if (processingJobId) {
         await prisma.processingJob.update({
           where: { id: processingJobId },
@@ -62,7 +70,14 @@ class TimelineProcessingWorker extends CourtAccessWorker<TimelineBuildJobData> {
             failureCode: null,
             error: null,
             result: {
-              evidenceProcessed: evidence.length,
+              evidenceProcessed: result.evidenceProcessed,
+              eventsExtracted: result.eventsExtracted,
+              eventsStored: result.eventsStored,
+              timelineEventsCreated: result.timelineEventsCreated,
+              conflictsDetected: result.conflictsDetected,
+              gapsDetected: result.gapsDetected,
+              durationMs: result.durationMs,
+              warnings: result.warnings,
               caseId,
               completedAt: new Date().toISOString(),
             },

@@ -152,6 +152,7 @@ export async function deconstructNarrative(
   // Step 2: Extract text and claims from each evidence item
   // -------------------------------------------------------------------------
   let totalClaimsExtracted = 0;
+  let evidenceActuallyProcessed = 0;
 
   for (const ev of evidenceToProcess) {
     // Check pipeline timeout before each evidence item
@@ -194,11 +195,26 @@ export async function deconstructNarrative(
         normalizedChars: normalizedText.length,
       });
 
-      // Step 2c: Delete any previously extracted claims for this evidence
-      // to ensure clean re-extraction on rebuild
-      await prisma.narrativeClaim.deleteMany({
-        where: { caseId, evidenceId: ev.evidenceId },
-      });
+      // Step 2c: Clean up previous claims and associated records for this
+      // evidence to ensure no orphaned data on rebuild.
+      const oldClaimIds = (
+        await prisma.narrativeClaim.findMany({
+          where: { caseId, evidenceId: ev.evidenceId },
+          select: { claimId: true },
+        })
+      ).map((c) => c.claimId);
+
+      if (oldClaimIds.length > 0) {
+        // Delete dependent records first (no cascade in schema)
+        await Promise.all([
+          prisma.claimValidation.deleteMany({ where: { claimId: { in: oldClaimIds } } }),
+          prisma.normalizedClaimEvent.deleteMany({ where: { claimId: { in: oldClaimIds } } }),
+          prisma.impeachmentCandidate.deleteMany({ where: { claimId: { in: oldClaimIds } } }),
+        ]);
+        await prisma.narrativeClaim.deleteMany({
+          where: { caseId, evidenceId: ev.evidenceId },
+        });
+      }
 
       // Step 2d: Extract atomic factual claims from the normalized text
       const claims = extractClaims(normalizedText, ev.evidenceType);
@@ -235,14 +251,51 @@ export async function deconstructNarrative(
         evidenceId: ev.evidenceId,
         error: msg,
       });
+    } finally {
+      // Count each evidence item we attempted to process (even if skipped/errored)
+      evidenceActuallyProcessed++;
     }
   }
 
   console.info('[NarrativeDeconstruction] Stage 1 complete: claim extraction', {
     caseId,
-    evidenceProcessed: evidenceToProcess.length,
+    evidenceProcessed: evidenceActuallyProcessed,
     claimsExtracted: totalClaimsExtracted,
   });
+
+  // Cleanup: remove orphaned dependent records from prior runs.
+  // (Schema has no cascade relations; reruns can leave stale rows behind.)
+  try {
+    const currentClaimIds = (
+      await prisma.narrativeClaim.findMany({
+        where: { caseId, tenantId },
+        select: { claimId: true },
+      })
+    ).map((c) => c.claimId);
+
+    if (currentClaimIds.length === 0) {
+      await Promise.all([
+        prisma.claimValidation.deleteMany({ where: { caseId, tenantId } }),
+        prisma.normalizedClaimEvent.deleteMany({ where: { caseId, tenantId } }),
+        prisma.impeachmentCandidate.deleteMany({ where: { caseId, tenantId } }),
+      ]);
+    } else {
+      await Promise.all([
+        prisma.claimValidation.deleteMany({
+          where: { caseId, tenantId, claimId: { notIn: currentClaimIds } },
+        }),
+        prisma.normalizedClaimEvent.deleteMany({
+          where: { caseId, tenantId, claimId: { notIn: currentClaimIds } },
+        }),
+        prisma.impeachmentCandidate.deleteMany({
+          where: { caseId, tenantId, claimId: { notIn: currentClaimIds } },
+        }),
+      ]);
+    }
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    warnings.push(`Orphan cleanup failed: ${msg}`);
+  }
 
   // -------------------------------------------------------------------------
   // Step 3: Normalize claims into structured ontology events
@@ -331,7 +384,7 @@ export async function deconstructNarrative(
 
   console.info('[NarrativeDeconstruction] Pipeline complete', {
     caseId,
-    evidenceProcessed: evidenceToProcess.length,
+    evidenceProcessed: evidenceActuallyProcessed,
     claimsExtracted: totalClaimsExtracted,
     claimsNormalized,
     validationsCreated,
@@ -345,7 +398,7 @@ export async function deconstructNarrative(
   return {
     caseId,
     tenantId,
-    evidenceProcessed: evidenceToProcess.length,
+    evidenceProcessed: evidenceActuallyProcessed,
     claimsExtracted: totalClaimsExtracted,
     claimsNormalized,
     validationsCreated,

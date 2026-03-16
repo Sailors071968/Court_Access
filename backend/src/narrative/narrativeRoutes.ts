@@ -40,8 +40,8 @@ async function handleGetClaims(
 ) {
   const { caseId } = request.params;
   const tenantId = extractTenantId(request);
-  const limit = parseInt((request.query as Record<string, string>).limit || '100', 10);
-  const offset = parseInt((request.query as Record<string, string>).offset || '0', 10);
+  const limit = Math.max(1, Math.min(parseInt((request.query as Record<string, string>).limit || '100', 10) || 100, 1000));
+  const offset = Math.max(0, parseInt((request.query as Record<string, string>).offset || '0', 10) || 0);
 
   try {
     const result = await fetchClaims(caseId, tenantId, { limit, offset });

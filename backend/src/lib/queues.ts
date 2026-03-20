@@ -26,6 +26,7 @@ export const QUEUE_NAMES = {
   CONTRADICTION_ANALYSIS: 'court-access-contradiction-analysis',
   VIDEO_PROCESSING: 'court-access-video-processing',
   DOCTRINE_ANALYSIS: 'court-access-doctrine-analysis',
+  DEAD_LETTER: 'court-access:dead-letter',
 } as const;
 
 export type QueueName = (typeof QUEUE_NAMES)[keyof typeof QUEUE_NAMES];
@@ -113,6 +114,7 @@ export const evidenceIngestQueue = () => getQueue<EvidenceIngestJobData>(QUEUE_N
 export const timelineBuildQueue = () => getQueue<TimelineBuildJobData>(QUEUE_NAMES.TIMELINE_BUILD);
 export const narrativeProcessingQueue = () => getQueue<NarrativeProcessingJobData>(QUEUE_NAMES.NARRATIVE_PROCESSING);
 export const aiAnalysisQueue = () => getQueue<AiAnalysisJobData>(QUEUE_NAMES.AI_ANALYSIS);
+export const deadLetterQueue = () => getQueue(QUEUE_NAMES.DEAD_LETTER);
 
 // ---------------------------------------------------------------------------
 // Queue Health Check

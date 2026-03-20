@@ -9,6 +9,7 @@ import { Worker, type Job, type ConnectionOptions } from 'bullmq';
 import { redisConnection } from './redis.js';
 import prisma from './prisma.js';
 import type { BaseJobData } from './queues.js';
+import { moveToDeadLetter, getMemorySnapshot } from '../workers/backpressureGuard.js';
 
 // ---------------------------------------------------------------------------
 // Abstract Base Worker
@@ -23,6 +24,12 @@ export interface WorkerOptions {
   concurrency: number;
   /** Lock duration in ms (default: 60s) */
   lockDuration?: number;
+  /** Maximum attempts before moving to DLQ (default: 3) */
+  maxAttempts?: number;
+  /** Stalled job check interval in ms (default: 30s) */
+  stalledInterval?: number;
+  /** Max stalled count before job is considered failed (default: 2) */
+  maxStalledCount?: number;
 }
 
 export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData> {
@@ -31,12 +38,21 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
   protected readonly workerName: string;
   protected readonly concurrency: number;
   protected readonly lockDuration: number;
+  protected readonly maxAttempts: number;
+  protected readonly stalledInterval: number;
+  protected readonly maxStalledCount: number;
+  private jobsProcessed = 0;
+  private jobsFailed = 0;
+  private lastHealthLog = 0;
 
   constructor(options: WorkerOptions) {
     this.queueName = options.queueName;
     this.workerName = options.workerName;
     this.concurrency = options.concurrency;
     this.lockDuration = options.lockDuration ?? 60_000;
+    this.maxAttempts = options.maxAttempts ?? 3;
+    this.stalledInterval = options.stalledInterval ?? 30_000;
+    this.maxStalledCount = options.maxStalledCount ?? 2;
   }
 
   // -----------------------------------------------------------------------
@@ -218,8 +234,10 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
           // Step 2: Execute the actual job logic
           await this.processJob(job);
 
+          this.jobsProcessed++;
           const durationMs = Date.now() - startTime;
           console.log(`[${this.workerName}] Job ${job.id} completed in ${durationMs}ms`);
+          this.logHealthIfDue();
         } catch (error) {
           // processJob failed — refund the reserved credits (best-effort)
           if (usageRecordId) {
@@ -242,13 +260,63 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
       console.error(`[${this.workerName}] Worker error:`, err.message);
     });
 
-    this.worker.on('failed', (job, err) => {
-      console.error(`[${this.workerName}] Job ${job?.id} permanently failed:`, err.message);
+    this.worker.on('failed', async (job, err) => {
+      if (job) {
+        this.jobsFailed++;
+        // If all retries exhausted → move to Dead Letter Queue
+        if (job.attemptsMade >= this.maxAttempts) {
+          console.error(
+            `[${this.workerName}] Job ${job.id} permanently failed after ${job.attemptsMade} attempts: ${err.message}`,
+          );
+          await moveToDeadLetter(
+            this.queueName,
+            job.id ?? 'unknown',
+            job.data as unknown as Record<string, unknown>,
+            err.message,
+            job.attemptsMade,
+          );
+        } else {
+          console.warn(
+            `[${this.workerName}] Job ${job.id} failed (attempt ${job.attemptsMade}/${this.maxAttempts}): ${err.message}`,
+          );
+        }
+      }
+    });
+
+    // Stalled job detection
+    this.worker.on('stalled', (jobId: string) => {
+      console.warn(`[${this.workerName}] Job ${jobId} stalled — BullMQ will retry or fail it`);
     });
 
     console.log(
-      `[${this.workerName}] Started (queue: ${this.queueName}, concurrency: ${this.concurrency})`
+      `[${this.workerName}] Started (queue: ${this.queueName}, concurrency: ${this.concurrency}, stalledInterval: ${this.stalledInterval}ms)`,
     );
+  }
+
+  // -----------------------------------------------------------------------
+  // Health Reporting
+  // -----------------------------------------------------------------------
+
+  /** Log periodic health status (called internally, no-op if called too frequently) */
+  protected logHealthIfDue(): void {
+    const now = Date.now();
+    if (now - this.lastHealthLog < 60_000) return; // max once per minute
+    this.lastHealthLog = now;
+
+    const mem = getMemorySnapshot();
+    console.log(
+      `[${this.workerName}] Health: processed=${this.jobsProcessed} failed=${this.jobsFailed} ` +
+      `heap=${mem.heapUsedMB}MB/${mem.heapTotalMB}MB rss=${mem.rssMB}MB`,
+    );
+  }
+
+  /** Get worker statistics */
+  getStats(): { processed: number; failed: number; running: boolean } {
+    return {
+      processed: this.jobsProcessed,
+      failed: this.jobsFailed,
+      running: this.isRunning(),
+    };
   }
 
   /**

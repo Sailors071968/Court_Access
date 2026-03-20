@@ -24,7 +24,7 @@ class ContradictionAnalysisWorker extends CourtAccessWorker<ContradictionAnalysi
     });
   }
 
-  protected async processJob(job: Job<ContradictionAnalysisJobData>): Promise<void> {
+  protected async processJob(job: Job<ContradictionAnalysisJobData>, signal: AbortSignal): Promise<void> {
     const { tenantId, caseId, processingJobId } = job.data;
 
     // Mark ProcessingJob as active (direct ID lookup — safe across retries)
@@ -54,21 +54,19 @@ class ContradictionAnalysisWorker extends CourtAccessWorker<ContradictionAnalysi
       // 4. Doctrine mapping (POST Learning Domains)
       // Actual AI pipeline integration in Phase 3.
 
-      // Mark ProcessingJob as completed
+      // Check abort signal before writing completion status
+      if (signal.aborted) throw new Error('Job aborted by timeout');
+
+      // Mark ProcessingJob as completed (idempotent — only if still 'active')
       if (processingJobId) {
-        await prisma.processingJob.update({
-          where: { id: processingJobId },
+        await prisma.processingJob.updateMany({
+          where: { id: processingJobId, status: 'active' },
           data: {
             status: 'completed',
             completedAt: new Date(),
             acuCredits: job.data.acuCreditsRequired,
             failureCode: null,
             error: null,
-            result: {
-              timelineEventsAnalyzed: timelineEvents.length,
-              caseId,
-              completedAt: new Date().toISOString(),
-            },
           },
         });
       }

@@ -24,7 +24,7 @@ class DoctrineAnalysisWorker extends CourtAccessWorker<DoctrineAnalysisJobData> 
     });
   }
 
-  protected async processJob(job: Job<DoctrineAnalysisJobData>): Promise<void> {
+  protected async processJob(job: Job<DoctrineAnalysisJobData>, signal: AbortSignal): Promise<void> {
     const { tenantId, caseId, processingJobId } = job.data;
 
     // Mark ProcessingJob as active (direct ID lookup — safe across retries)
@@ -51,21 +51,19 @@ class DoctrineAnalysisWorker extends CourtAccessWorker<DoctrineAnalysisJobData> 
       // Each contradiction is matched to specific training doctrine violations.
       // Actual AI pipeline integration in Phase 3.
 
-      // Mark ProcessingJob as completed
+      // Check abort signal before writing completion status
+      if (signal.aborted) throw new Error('Job aborted by timeout');
+
+      // Mark ProcessingJob as completed (idempotent — only if still 'active')
       if (processingJobId) {
-        await prisma.processingJob.update({
-          where: { id: processingJobId },
+        await prisma.processingJob.updateMany({
+          where: { id: processingJobId, status: 'active' },
           data: {
             status: 'completed',
             completedAt: new Date(),
             acuCredits: job.data.acuCreditsRequired,
             failureCode: null,
             error: null,
-            result: {
-              conflictEventsAnalyzed: conflictEvents.length,
-              caseId,
-              completedAt: new Date().toISOString(),
-            },
           },
         });
       }

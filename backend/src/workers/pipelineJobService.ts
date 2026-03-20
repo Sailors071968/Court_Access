@@ -96,6 +96,11 @@ async function createAndEnqueueJob(
   const queue = getQueue(queueName);
   const bullJob = await queue.add(jobName, enrichedJobData, {
     jobId: `${pipeline.toLowerCase()}-${processingJob.id}`,
+    removeOnComplete: true,
+    removeOnFail: false, // keep for DLQ inspection
+    attempts: 3,
+    backoff: { type: 'exponential', delay: 1000 },
+    timeout: 300_000, // 5 min — BullMQ native timeout (belt-and-suspenders with AbortController)
   });
 
   return {

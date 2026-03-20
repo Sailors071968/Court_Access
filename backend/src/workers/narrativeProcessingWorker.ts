@@ -24,7 +24,7 @@ class NarrativeProcessingWorker extends CourtAccessWorker<NarrativeProcessingJob
     });
   }
 
-  protected async processJob(job: Job<NarrativeProcessingJobData>): Promise<void> {
+  protected async processJob(job: Job<NarrativeProcessingJobData>, signal: AbortSignal): Promise<void> {
     const { tenantId, caseId, processingJobId } = job.data;
 
     // Mark ProcessingJob as active (direct ID lookup — safe across retries)
@@ -59,22 +59,19 @@ class NarrativeProcessingWorker extends CourtAccessWorker<NarrativeProcessingJob
       // 4. Impeachment detection (impeachmentDetectionWorker)
       // Actual AI pipeline integration in Phase 3.
 
-      // Mark ProcessingJob as completed
+      // Check abort signal before writing completion status
+      if (signal.aborted) throw new Error('Job aborted by timeout');
+
+      // Mark ProcessingJob as completed (idempotent — only if still 'active')
       if (processingJobId) {
-        await prisma.processingJob.update({
-          where: { id: processingJobId },
+        await prisma.processingJob.updateMany({
+          where: { id: processingJobId, status: 'active' },
           data: {
             status: 'completed',
             completedAt: new Date(),
             acuCredits: job.data.acuCreditsRequired,
             failureCode: null,
             error: null,
-            result: {
-              narrativeDocuments: narrativeEvidence.length,
-              totalEvidence: evidence.length,
-              caseId,
-              completedAt: new Date().toISOString(),
-            },
           },
         });
       }

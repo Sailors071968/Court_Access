@@ -5,11 +5,12 @@
 // graceful shutdown, structured logging, retry policy.
 // ============================================================================
 
-import { Worker, type Job, type ConnectionOptions } from 'bullmq';
+import { Worker, UnrecoverableError, type Job, type ConnectionOptions } from 'bullmq';
 import { redisConnection } from './redis.js';
 import prisma from './prisma.js';
 import type { BaseJobData } from './queues.js';
 import { moveToDeadLetter, getMemorySnapshot } from '../workers/backpressureGuard.js';
+import { metrics } from '../observability/metricsCollector.js';
 
 // ---------------------------------------------------------------------------
 // Abstract Base Worker
@@ -46,6 +47,7 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
   protected readonly jobTimeoutMs: number;
   private jobsProcessed = 0;
   private jobsFailed = 0;
+  private jobsStalled = 0;
   private lastHealthLog = 0;
 
   constructor(options: WorkerOptions) {
@@ -66,8 +68,12 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
   /**
    * Process a single job. Subclasses implement this.
    * Throw an error to trigger retry; return normally to mark complete.
+   * @param job - The BullMQ job to process
+   * @param signal - AbortSignal that fires when the job timeout expires.
+   *   Workers performing long-running loops SHOULD check `signal.aborted`
+   *   periodically and bail out early when true.
    */
-  protected abstract processJob(job: Job<TData>): Promise<void>;
+  protected abstract processJob(job: Job<TData>, signal: AbortSignal): Promise<void>;
 
   // -----------------------------------------------------------------------
   // ACU Credit Enforcement (Task 3)
@@ -234,30 +240,47 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
           throw acuError; // Rethrow non-ACU errors for retry
         }
 
+        // Step 2: Execute the actual job logic (with AbortController timeout guard)
+        const controller = new AbortController();
+        let timer: ReturnType<typeof setTimeout> | undefined;
+
+        if (this.jobTimeoutMs > 0) {
+          timer = setTimeout(() => controller.abort(), this.jobTimeoutMs);
+        }
+
         try {
-          // Step 2: Execute the actual job logic (with timeout guard)
-          if (this.jobTimeoutMs > 0) {
-            let timer: ReturnType<typeof setTimeout>;
-            const timeoutPromise = new Promise<never>((_, reject) => {
-              timer = setTimeout(() => reject(new Error(
-                `[Timeout] Job ${job.id} exceeded ${this.jobTimeoutMs}ms limit`
-              )), this.jobTimeoutMs);
-            });
-            try {
-              await Promise.race([this.processJob(job), timeoutPromise]);
-            } finally {
-              clearTimeout(timer!);
-            }
-          } else {
-            await this.processJob(job);
-          }
+          await this.processJob(job, controller.signal);
 
           this.jobsProcessed++;
           const durationMs = Date.now() - startTime;
           console.log(`[${this.workerName}] Job ${job.id} completed in ${durationMs}ms`);
+          metrics.observeHistogram('courtaccess_worker_job_duration_ms', durationMs, { worker: this.workerName });
           this.logHealthIfDue();
         } catch (error) {
-          // processJob failed — refund the reserved credits (best-effort)
+          // Check if this is a timeout abort
+          if (controller.signal.aborted) {
+            const durationMs = Date.now() - startTime;
+            console.error(
+              `[${this.workerName}] Job ${job.id} TIMED OUT after ${durationMs}ms (limit: ${this.jobTimeoutMs}ms) — no retry`
+            );
+            metrics.incrementCounter('courtaccess_worker_timeouts_total', { worker: this.workerName });
+
+            // Mark ProcessingJob as failed with TIMEOUT code
+            await this.markJobFailed(job, 'JOB_TIMEOUT', `Job timed out after ${this.jobTimeoutMs}ms`);
+
+            // Refund ACU credits since work did not complete
+            if (usageRecordId) {
+              await this.refundACU(job, usageRecordId);
+            }
+
+            // UnrecoverableError prevents BullMQ retries — timeout is deterministic,
+            // retrying the same job will hit the same timeout.
+            throw new UnrecoverableError(
+              `[Timeout] Job ${job.id} exceeded ${this.jobTimeoutMs}ms limit — no retry`
+            );
+          }
+
+          // Non-timeout failure — refund credits and allow BullMQ retry
           if (usageRecordId) {
             await this.refundACU(job, usageRecordId);
           }
@@ -265,12 +288,16 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
           const message = error instanceof Error ? error.message : String(error);
           console.error(`[${this.workerName}] Job ${job.id} failed after ${durationMs}ms: ${message}`);
           throw error; // Rethrow to trigger BullMQ retry
+        } finally {
+          if (timer) clearTimeout(timer);
         }
       },
       {
         connection: redisConnection as unknown as ConnectionOptions,
         concurrency: this.concurrency,
         lockDuration: this.lockDuration,
+        stalledInterval: this.stalledInterval,
+        maxStalledCount: this.maxStalledCount,
       },
     );
 
@@ -301,9 +328,19 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
       }
     });
 
-    // Stalled job detection
+    // Stalled job detection — track rate for alerting
     this.worker.on('stalled', (jobId: string) => {
-      console.warn(`[${this.workerName}] Job ${jobId} stalled — BullMQ will retry or fail it`);
+      this.jobsStalled++;
+      metrics.incrementCounter('courtaccess_worker_stalled_total', { worker: this.workerName });
+      console.warn(`[${this.workerName}] Job ${jobId} stalled — BullMQ will retry or fail it (total stalls: ${this.jobsStalled})`);
+
+      // Alert if stall rate exceeds 5% of processed jobs
+      const totalProcessed = this.jobsProcessed + this.jobsFailed;
+      if (totalProcessed > 20 && this.jobsStalled / totalProcessed > 0.05) {
+        console.error(
+          `[${this.workerName}] STALL RATE ALERT: ${this.jobsStalled}/${totalProcessed} jobs stalled (>5%)`
+        );
+      }
     });
 
     console.log(
@@ -329,10 +366,11 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
   }
 
   /** Get worker statistics */
-  getStats(): { processed: number; failed: number; running: boolean } {
+  getStats(): { processed: number; failed: number; stalled: number; running: boolean } {
     return {
       processed: this.jobsProcessed,
       failed: this.jobsFailed,
+      stalled: this.jobsStalled,
       running: this.isRunning(),
     };
   }

@@ -24,7 +24,7 @@ class VideoProcessingWorker extends CourtAccessWorker<VideoProcessingJobData> {
     });
   }
 
-  protected async processJob(job: Job<VideoProcessingJobData>): Promise<void> {
+  protected async processJob(job: Job<VideoProcessingJobData>, signal: AbortSignal): Promise<void> {
     const { caseId, evidenceId, processingJobId } = job.data;
 
     // Mark ProcessingJob as active (direct ID lookup — safe across retries)
@@ -57,23 +57,19 @@ class VideoProcessingWorker extends CourtAccessWorker<VideoProcessingJobData> {
       // 4. Event generation (structured timeline events from video)
       // Actual AI pipeline integration in Phase 3.
 
-      // Mark ProcessingJob as completed
+      // Check abort signal before writing completion status
+      if (signal.aborted) throw new Error('Job aborted by timeout');
+
+      // Mark ProcessingJob as completed (idempotent — only if still 'active')
       if (processingJobId) {
-        await prisma.processingJob.update({
-          where: { id: processingJobId },
+        await prisma.processingJob.updateMany({
+          where: { id: processingJobId, status: 'active' },
           data: {
             status: 'completed',
             completedAt: new Date(),
             acuCredits: job.data.acuCreditsRequired,
             failureCode: null,
             error: null,
-            result: {
-              evidenceId,
-              fileName: evidence.fileName,
-              evidenceType: evidence.evidenceType,
-              caseId,
-              completedAt: new Date().toISOString(),
-            },
           },
         });
       }

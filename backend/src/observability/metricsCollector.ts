@@ -95,6 +95,8 @@ export class MetricsCollector {
     this.registerCounter('courtaccess_queue_completed_total', 'Total completed queue jobs');
     this.registerCounter('courtaccess_queue_failed_total', 'Total failed queue jobs');
     this.registerHistogram('courtaccess_worker_job_duration_ms', 'Worker job duration in milliseconds');
+    this.registerCounter('courtaccess_worker_timeouts_total', 'Total job timeouts by worker');
+    this.registerCounter('courtaccess_worker_stalled_total', 'Total stalled jobs by worker');
 
     // Graph metrics
     this.registerHistogram('courtaccess_graph_query_duration_ms', 'Neo4j graph query duration in milliseconds');

@@ -1323,6 +1323,30 @@ model Evidence {
 }
 
 // ---------------------------------------------------------------------------
+// PR 3 — Evidence Chunks — Breaks large evidence into manageable pieces
+// ---------------------------------------------------------------------------
+
+model EvidenceChunk {
+  id             String   @id @default(uuid())
+  evidenceId     String
+  tenantId       String
+  chunkIndex     Int      // Zero-based ordering within the evidence
+  text           String   // The chunk text content
+  startOffset    Int      // Character offset in the original document
+  endOffset      Int      // Character end offset in the original document
+  checksum       String   // SHA-256 truncated to 16 hex chars
+  charCount      Int      // Character count of this chunk
+
+  createdAt      DateTime @default(now())
+
+  @@unique([evidenceId, chunkIndex])
+  @@index([evidenceId])
+  @@index([tenantId])
+  @@index([checksum])
+  @@map("evidence_chunks")
+}
+
+// ---------------------------------------------------------------------------
 // Narrative Deconstruction Engine — Claims extracted from police narratives
 // ---------------------------------------------------------------------------
 

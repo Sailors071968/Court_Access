@@ -100,7 +100,7 @@ async function createAndEnqueueJob(
     removeOnFail: false, // keep for DLQ inspection
     attempts: 3,
     backoff: { type: 'exponential', delay: 1000 },
-    timeout: 300_000, // 5 min — BullMQ native timeout (belt-and-suspenders with AbortController)
+    timeout: 330_000, // 5.5 min — must exceed AbortController's 300s so AbortController fires first
   });
 
   return {

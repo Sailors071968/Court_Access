@@ -14,3 +14,7 @@ export { StructuredLogger, logger, setCorrelationId, getCorrelationId, clearCorr
 export type { LogLevel, LogEntry, LoggerConfig } from './structuredLogger.ts';
 
 export { registerObservabilityRoutes } from './observabilityRoutes.ts';
+
+// NOTE: redisMemoryAlert is NOT re-exported here to avoid triggering a Redis
+// connection during unit tests that import this barrel. Import it directly:
+//   import { ... } from './observability/redisMemoryAlert.ts';

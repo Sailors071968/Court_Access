@@ -35,6 +35,7 @@ import { registerStripeWebhookRoutes } from './billing/stripeWebhookHandler.js';
 import { startPipelineWorkers, stopPipelineWorkers } from './workers/startPipelineWorkers.js';
 import { enforceSchemaOnBoot } from './database/schemaAssert.js';
 import { registerObservabilityRoutes } from './observability/observabilityRoutes.js';
+import { startRedisMemoryMonitor, stopRedisMemoryMonitor } from './observability/redisMemoryAlert.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -190,6 +191,9 @@ async function startServer() {
   // Start Phase 2 ACU-enforced pipeline workers (BullMQ)
   startPipelineWorkers();
 
+  // Scale Validation — Redis memory alert monitor
+  startRedisMemoryMonitor();
+
   // Start server
   try {
     await app.listen({ port: PORT, host: HOST });
@@ -284,6 +288,7 @@ startServer();
 // Graceful shutdown — stop pipeline workers before exit
 const shutdown = async (signal: string) => {
   console.log(`[Server] Received ${signal}, shutting down pipeline workers...`);
+  stopRedisMemoryMonitor();
   await stopPipelineWorkers();
   process.exit(0);
 };

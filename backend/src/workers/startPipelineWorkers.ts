@@ -82,6 +82,7 @@ export function getPipelineWorkerHealth(): Array<{
   name: string;
   processed: number;
   failed: number;
+  stalled: number;
   running: boolean;
 }> {
   return pipelineWorkers.map((w) => ({

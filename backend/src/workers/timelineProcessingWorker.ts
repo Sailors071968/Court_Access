@@ -7,7 +7,7 @@
 // ============================================================================
 
 import type { Job } from 'bullmq';
-import { CourtAccessWorker } from '../lib/baseWorker.js';
+import { CourtAccessWorker, JobTimeoutError } from '../lib/baseWorker.js';
 import { QUEUE_NAMES, type TimelineBuildJobData } from '../lib/queues.js';
 import prisma from '../lib/prisma.js';
 import { reconstructTimeline } from '../timeline/timelineReconstructionService.js';
@@ -26,7 +26,7 @@ class TimelineProcessingWorker extends CourtAccessWorker<TimelineBuildJobData> {
     });
   }
 
-  protected async processJob(job: Job<TimelineBuildJobData>): Promise<void> {
+  protected async processJob(job: Job<TimelineBuildJobData>, signal: AbortSignal): Promise<void> {
     const { tenantId, caseId, processingJobId } = job.data;
 
     // Mark ProcessingJob as active (direct ID lookup — safe across retries)
@@ -59,35 +59,29 @@ class TimelineProcessingWorker extends CourtAccessWorker<TimelineBuildJobData> {
         console.warn(`[TimelineProcessingWorker] Warnings for case ${caseId}:`, result.warnings);
       }
 
-      // Mark ProcessingJob as completed with reconstruction results
+      // Check abort signal before writing completion status
+      if (signal.aborted) throw new JobTimeoutError('Job aborted by timeout');
+
+      // Mark ProcessingJob as completed (idempotent — only if still 'active')
       if (processingJobId) {
-        await prisma.processingJob.update({
-          where: { id: processingJobId },
+        await prisma.processingJob.updateMany({
+          where: { id: processingJobId, status: 'active' },
           data: {
             status: 'completed',
             completedAt: new Date(),
             acuCredits: job.data.acuCreditsRequired,
             failureCode: null,
             error: null,
-            result: {
-              evidenceProcessed: result.evidenceProcessed,
-              eventsExtracted: result.eventsExtracted,
-              eventsStored: result.eventsStored,
-              timelineEventsCreated: result.timelineEventsCreated,
-              conflictsDetected: result.conflictsDetected,
-              gapsDetected: result.gapsDetected,
-              durationMs: result.durationMs,
-              warnings: result.warnings,
-              caseId,
-              completedAt: new Date().toISOString(),
-            },
           },
         });
       }
 
       console.log(`[TimelineProcessingWorker] Timeline build completed for case ${caseId}`);
     } catch (error) {
-      // Mark ProcessingJob as failed
+      // Skip DB write for timeout — base worker handles JOB_TIMEOUT status
+      if (error instanceof JobTimeoutError) throw error;
+
+      // Mark ProcessingJob as failed (non-timeout errors only)
       if (processingJobId) {
         try {
           const message = error instanceof Error ? error.message : String(error);

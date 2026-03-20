@@ -33,6 +33,7 @@ import { registerDiscountRoutes } from './billing/discountRoutes.js';
 import { seedDefaultDiscountCodes } from './billing/discountSeed.js';
 import { registerStripeWebhookRoutes } from './billing/stripeWebhookHandler.js';
 import { startPipelineWorkers, stopPipelineWorkers } from './workers/startPipelineWorkers.js';
+import { registerObservabilityRoutes } from './observability/observabilityRoutes.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -175,6 +176,10 @@ async function startServer() {
   // Discount code API routes
   console.log('[Server] Registering discount code routes...');
   await registerDiscountRoutes(app);
+
+  // PR 6 — Observability: /api/health/deep, /api/metrics, /api/metrics/json
+  console.log('[Server] Registering observability routes...');
+  await registerObservabilityRoutes(app);
 
   // Seed default discount codes (e.g. HUNT100)
   await seedDefaultDiscountCodes();

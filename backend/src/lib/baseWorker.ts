@@ -322,8 +322,11 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
     this.worker.on('failed', async (job, err) => {
       if (job) {
         this.jobsFailed++;
-        // If all retries exhausted → move to Dead Letter Queue
-        if (job.attemptsMade >= this.maxAttempts) {
+        // Move to DLQ if retries exhausted OR permanently failed (UnrecoverableError).
+        // UnrecoverableError (e.g. from JOB_TIMEOUT) sets attemptsMade=1 but skips retries,
+        // so the attemptsMade >= maxAttempts check alone would miss these jobs.
+        const isPermanentlyFailed = err.name === 'UnrecoverableError' || job.attemptsMade >= this.maxAttempts;
+        if (isPermanentlyFailed) {
           console.error(
             `[${this.workerName}] Job ${job.id} permanently failed after ${job.attemptsMade} attempts: ${err.message}`,
           );

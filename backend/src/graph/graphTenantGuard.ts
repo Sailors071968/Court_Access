@@ -28,7 +28,7 @@ const SYSTEM_QUERY_PREFIXES = [
   'CREATE INDEX',
   'DROP CONSTRAINT',
   'DROP INDEX',
-  'CALL db.',
+  'CALL DB.',
   'SHOW ',
   'RETURN 1',
 ] as const;

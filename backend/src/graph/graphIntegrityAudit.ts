@@ -381,8 +381,8 @@ export class GraphIntegrityAudit {
     );
     const relationshipCount = (relResult.records[0]?.['cnt'] as number) ?? 0;
 
-    // Check for edges that cross tenant boundaries
-    const leakResult = await this.neo4jClient.execute(
+    // Check for edges that cross tenant boundaries (both directions)
+    const outgoingLeakResult = await this.neo4jClient.execute(
       `
       MATCH (source {tenantId: $tenantId})-[r]->(target)
       WHERE target.tenantId <> $tenantId OR target.tenantId IS NULL
@@ -390,7 +390,20 @@ export class GraphIntegrityAudit {
       `,
       { tenantId },
     );
-    const leakedEdges = (leakResult.records[0]?.['cnt'] as number) ?? 0;
+    const outgoingLeaks = (outgoingLeakResult.records[0]?.['cnt'] as number) ?? 0;
+
+    // Also check incoming edges from other tenants into this tenant's nodes
+    const incomingLeakResult = await this.neo4jClient.execute(
+      `
+      MATCH (source)-[r]->(target {tenantId: $tenantId})
+      WHERE source.tenantId <> $tenantId OR source.tenantId IS NULL
+      RETURN count(r) AS cnt
+      `,
+      { tenantId },
+    );
+    const incomingLeaks = (incomingLeakResult.records[0]?.['cnt'] as number) ?? 0;
+
+    const leakedEdges = outgoingLeaks + incomingLeaks;
 
     return {
       isolated: leakedEdges === 0,

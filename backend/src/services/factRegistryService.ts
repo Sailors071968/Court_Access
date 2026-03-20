@@ -90,29 +90,23 @@ function computeFactHash(tenantId: string, caseId: string, content: string): str
  * Register a new fact in the registry.
  * If a fact with the same content hash already exists for the case,
  * it will NOT be duplicated — returns the existing fact.
+ * Uses upsert to atomically handle concurrent registrations (no TOCTOU race).
  */
 export async function registerFact(input: FactInput): Promise<VerifiedFactRecord> {
   const contentHash = computeFactHash(input.tenantId, input.caseId, input.content);
 
-  // Check for existing fact with same hash (idempotent registration)
-  const existing = await prisma.verifiedFact.findFirst({
+  // Atomic upsert: if the compound unique key (caseId, tenantId, contentHash)
+  // already exists, return the existing row unchanged. No race condition.
+  const fact = await prisma.verifiedFact.upsert({
     where: {
-      caseId: input.caseId,
-      tenantId: input.tenantId,
-      contentHash,
+      caseId_tenantId_contentHash: {
+        caseId: input.caseId,
+        tenantId: input.tenantId,
+        contentHash,
+      },
     },
-  });
-
-  if (existing) {
-    console.log(
-      `[FactRegistry] Fact already registered: ${existing.factId} (hash: ${contentHash.slice(0, 12)})`,
-    );
-    return existing as VerifiedFactRecord;
-  }
-
-  // Create new fact
-  const fact = await prisma.verifiedFact.create({
-    data: {
+    update: {}, // No-op — existing facts are never mutated via registration
+    create: {
       caseId: input.caseId,
       tenantId: input.tenantId,
       factType: input.factType,
@@ -126,7 +120,7 @@ export async function registerFact(input: FactInput): Promise<VerifiedFactRecord
   });
 
   console.log(
-    `[FactRegistry] Fact registered: ${fact.factId} type=${input.factType} confidence=${input.confidence} hash=${contentHash.slice(0, 12)}`,
+    `[FactRegistry] Fact registered/found: ${fact.factId} type=${input.factType} confidence=${input.confidence} hash=${contentHash.slice(0, 12)}`,
   );
 
   return fact as VerifiedFactRecord;
@@ -143,27 +137,33 @@ export async function registerFactsBatch(
   let skipped = 0;
   const facts: VerifiedFactRecord[] = [];
 
-  // Process in transaction for atomicity
+  // Process in transaction for atomicity, using upsert to avoid TOCTOU races
   await prisma.$transaction(async (tx) => {
     for (const input of inputs) {
       const contentHash = computeFactHash(input.tenantId, input.caseId, input.content);
 
-      const existing = await tx.verifiedFact.findFirst({
+      // Check existence first to track registered vs skipped counts
+      const existing = await tx.verifiedFact.findUnique({
         where: {
-          caseId: input.caseId,
-          tenantId: input.tenantId,
-          contentHash,
+          caseId_tenantId_contentHash: {
+            caseId: input.caseId,
+            tenantId: input.tenantId,
+            contentHash,
+          },
         },
       });
 
-      if (existing) {
-        skipped++;
-        facts.push(existing as VerifiedFactRecord);
-        continue;
-      }
-
-      const fact = await tx.verifiedFact.create({
-        data: {
+      // Use upsert for atomic create-or-return (safe under concurrency)
+      const fact = await tx.verifiedFact.upsert({
+        where: {
+          caseId_tenantId_contentHash: {
+            caseId: input.caseId,
+            tenantId: input.tenantId,
+            contentHash,
+          },
+        },
+        update: {}, // No-op — existing facts are never mutated
+        create: {
           caseId: input.caseId,
           tenantId: input.tenantId,
           factType: input.factType,
@@ -176,7 +176,11 @@ export async function registerFactsBatch(
         },
       });
 
-      registered++;
+      if (existing) {
+        skipped++;
+      } else {
+        registered++;
+      }
       facts.push(fact as VerifiedFactRecord);
     }
   });

@@ -13,6 +13,7 @@
 import { describe, it, beforeEach } from 'node:test';
 import assert from 'node:assert/strict';
 import { MetricsCollector } from '../src/observability/metricsCollector.ts';
+import { JobTimeoutError } from '../src/lib/baseWorker.ts';
 
 // ---------------------------------------------------------------------------
 // AbortController timeout pattern (mirrors baseWorker.ts implementation)
@@ -218,5 +219,69 @@ describe('UnrecoverableError for Timeout', () => {
     const err = new UnrecoverableError('test timeout');
     assert.ok(err instanceof Error, 'Should be an Error subclass');
     assert.equal(err.message, 'test timeout');
+  });
+});
+
+// ---------------------------------------------------------------------------
+// JobTimeoutError — precise instanceof detection (fixes TOCTOU race)
+// ---------------------------------------------------------------------------
+
+describe('JobTimeoutError — Precise Timeout Detection', () => {
+
+  it('should be an instance of Error', () => {
+    const err = new JobTimeoutError('Job aborted by timeout');
+    assert.ok(err instanceof Error, 'JobTimeoutError should extend Error');
+    assert.ok(err instanceof JobTimeoutError, 'Should be instanceof JobTimeoutError');
+    assert.equal(err.name, 'JobTimeoutError');
+    assert.equal(err.message, 'Job aborted by timeout');
+  });
+
+  it('should be distinguishable from generic Error', () => {
+    const timeoutErr = new JobTimeoutError('timeout');
+    const genericErr = new Error('some transient DB failure');
+
+    // This is the key fix: baseWorker uses instanceof, not signal.aborted
+    assert.equal(timeoutErr instanceof JobTimeoutError, true);
+    assert.equal(genericErr instanceof JobTimeoutError, false);
+  });
+
+  it('should prevent misclassification of concurrent transient errors', () => {
+    // Simulate the TOCTOU race:
+    // AbortController fires (signal.aborted=true) but the actual error
+    // is a transient DB failure, not a timeout.
+    const controller = new AbortController();
+    controller.abort(); // signal.aborted = true
+
+    const transientError = new Error('ECONNRESET: connection lost');
+
+    // OLD (buggy): signal.aborted check would misclassify this as timeout
+    const oldBuggyDetection = controller.signal.aborted; // true — WRONG
+    assert.equal(oldBuggyDetection, true, 'Old detection would be fooled');
+
+    // NEW (fixed): instanceof check correctly identifies this as NOT a timeout
+    const newFixedDetection = transientError instanceof JobTimeoutError; // false — CORRECT
+    assert.equal(newFixedDetection, false, 'New detection correctly rejects transient error');
+  });
+
+  it('worker catch block should re-throw JobTimeoutError without writing PROCESSING_ERROR', () => {
+    // Simulate the worker catch block pattern:
+    // if (error instanceof JobTimeoutError) throw error; // skip DB write
+    const timeoutErr = new JobTimeoutError('Job aborted by timeout');
+    let dbWriteAttempted = false;
+
+    try {
+      // Simulate processJob throwing timeout
+      throw timeoutErr;
+    } catch (error) {
+      // Worker catch block pattern
+      if (error instanceof JobTimeoutError) {
+        // Should NOT write PROCESSING_ERROR — base worker handles JOB_TIMEOUT
+        assert.ok(true, 'Correctly skipped DB write for timeout');
+      } else {
+        dbWriteAttempted = true; // Would write PROCESSING_ERROR
+      }
+    }
+
+    assert.equal(dbWriteAttempted, false, 'Should NOT have attempted PROCESSING_ERROR write');
   });
 });

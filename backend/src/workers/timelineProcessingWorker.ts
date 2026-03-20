@@ -7,7 +7,7 @@
 // ============================================================================
 
 import type { Job } from 'bullmq';
-import { CourtAccessWorker } from '../lib/baseWorker.js';
+import { CourtAccessWorker, JobTimeoutError } from '../lib/baseWorker.js';
 import { QUEUE_NAMES, type TimelineBuildJobData } from '../lib/queues.js';
 import prisma from '../lib/prisma.js';
 import { reconstructTimeline } from '../timeline/timelineReconstructionService.js';
@@ -60,7 +60,7 @@ class TimelineProcessingWorker extends CourtAccessWorker<TimelineBuildJobData> {
       }
 
       // Check abort signal before writing completion status
-      if (signal.aborted) throw new Error('Job aborted by timeout');
+      if (signal.aborted) throw new JobTimeoutError('Job aborted by timeout');
 
       // Mark ProcessingJob as completed (idempotent — only if still 'active')
       if (processingJobId) {
@@ -78,7 +78,10 @@ class TimelineProcessingWorker extends CourtAccessWorker<TimelineBuildJobData> {
 
       console.log(`[TimelineProcessingWorker] Timeline build completed for case ${caseId}`);
     } catch (error) {
-      // Mark ProcessingJob as failed
+      // Skip DB write for timeout — base worker handles JOB_TIMEOUT status
+      if (error instanceof JobTimeoutError) throw error;
+
+      // Mark ProcessingJob as failed (non-timeout errors only)
       if (processingJobId) {
         try {
           const message = error instanceof Error ? error.message : String(error);

@@ -13,6 +13,19 @@ import { moveToDeadLetter, getMemorySnapshot } from '../workers/backpressureGuar
 import { metrics } from '../observability/metricsCollector.js';
 
 // ---------------------------------------------------------------------------
+// Custom error class for job timeouts — allows precise instanceof detection
+// in the base worker catch block, avoiding TOCTOU races where signal.aborted
+// could be true but the actual error was a transient DB/network failure.
+// ---------------------------------------------------------------------------
+
+export class JobTimeoutError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'JobTimeoutError';
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Abstract Base Worker
 // ---------------------------------------------------------------------------
 
@@ -257,8 +270,9 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
           metrics.observeHistogram('courtaccess_worker_job_duration_ms', durationMs, { worker: this.workerName });
           this.logHealthIfDue();
         } catch (error) {
-          // Check if this is a timeout abort
-          if (controller.signal.aborted) {
+          // Check if this is a timeout abort (use instanceof, not signal.aborted,
+          // to avoid misclassifying concurrent transient errors as timeouts)
+          if (error instanceof JobTimeoutError) {
             const durationMs = Date.now() - startTime;
             console.error(
               `[${this.workerName}] Job ${job.id} TIMED OUT after ${durationMs}ms (limit: ${this.jobTimeoutMs}ms) — no retry`

@@ -6,7 +6,7 @@
 // ============================================================================
 
 import type { Job } from 'bullmq';
-import { CourtAccessWorker } from '../lib/baseWorker.js';
+import { CourtAccessWorker, JobTimeoutError } from '../lib/baseWorker.js';
 import { QUEUE_NAMES, type VideoProcessingJobData } from '../lib/queues.js';
 import prisma from '../lib/prisma.js';
 
@@ -58,7 +58,7 @@ class VideoProcessingWorker extends CourtAccessWorker<VideoProcessingJobData> {
       // Actual AI pipeline integration in Phase 3.
 
       // Check abort signal before writing completion status
-      if (signal.aborted) throw new Error('Job aborted by timeout');
+      if (signal.aborted) throw new JobTimeoutError('Job aborted by timeout');
 
       // Mark ProcessingJob as completed (idempotent — only if still 'active')
       if (processingJobId) {
@@ -76,7 +76,10 @@ class VideoProcessingWorker extends CourtAccessWorker<VideoProcessingJobData> {
 
       console.log(`[VideoProcessingWorker] Video processing completed for evidence ${evidenceId}`);
     } catch (error) {
-      // Mark ProcessingJob as failed
+      // Skip DB write for timeout — base worker handles JOB_TIMEOUT status
+      if (error instanceof JobTimeoutError) throw error;
+
+      // Mark ProcessingJob as failed (non-timeout errors only)
       if (processingJobId) {
         try {
           const message = error instanceof Error ? error.message : String(error);

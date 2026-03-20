@@ -237,14 +237,17 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
         try {
           // Step 2: Execute the actual job logic (with timeout guard)
           if (this.jobTimeoutMs > 0) {
-            await Promise.race([
-              this.processJob(job),
-              new Promise<never>((_, reject) =>
-                setTimeout(() => reject(new Error(
-                  `[Timeout] Job ${job.id} exceeded ${this.jobTimeoutMs}ms limit`
-                )), this.jobTimeoutMs)
-              ),
-            ]);
+            let timer: ReturnType<typeof setTimeout>;
+            const timeoutPromise = new Promise<never>((_, reject) => {
+              timer = setTimeout(() => reject(new Error(
+                `[Timeout] Job ${job.id} exceeded ${this.jobTimeoutMs}ms limit`
+              )), this.jobTimeoutMs);
+            });
+            try {
+              await Promise.race([this.processJob(job), timeoutPromise]);
+            } finally {
+              clearTimeout(timer!);
+            }
           } else {
             await this.processJob(job);
           }

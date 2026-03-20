@@ -341,21 +341,27 @@ export async function deconstructNarrative(
         { enqueueDownstream: false },
       );
       validationsCreated = valResult.validationsCreated;
-      // `valResult.contradictions` only counts newly created validations in this run.
-      // We want the total number of contradicted validations for this case/tenant.
-      contradictions = await prisma.claimValidation.count({
-        where: { caseId, tenantId, status: 'contradicted' },
-      });
 
       console.info('[NarrativeDeconstruction] Stage 3 complete: validation', {
         caseId,
         validationsCreated,
-        contradictions,
       });
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       warnings.push(`Evidence validation failed: ${msg}`);
       console.warn('[NarrativeDeconstruction] Validation failed', { caseId, error: msg });
+    }
+
+    // Always count contradictions from DB — even if processEvidenceValidation
+    // threw partway through, some contradicted validations may already exist.
+    // This ensures impeachment detection (step 5) still fires for partial results.
+    try {
+      contradictions = await prisma.claimValidation.count({
+        where: { caseId, tenantId, status: 'contradicted' },
+      });
+    } catch (countErr) {
+      const msg = countErr instanceof Error ? countErr.message : String(countErr);
+      warnings.push(`Contradiction count failed: ${msg}`);
     }
   }
 

@@ -10,7 +10,7 @@ export type { MetricLabels } from './metricsCollector.ts';
 export { runDeepHealthCheck } from './deepHealthCheck.ts';
 export type { HealthReport, ComponentHealth, ComponentStatus } from './deepHealthCheck.ts';
 
-export { StructuredLogger, logger, setCorrelationId, getCorrelationId, clearCorrelationId } from './structuredLogger.ts';
+export { StructuredLogger, logger, setCorrelationId, getCorrelationId, clearCorrelationId, runWithCorrelationId } from './structuredLogger.ts';
 export type { LogLevel, LogEntry, LoggerConfig } from './structuredLogger.ts';
 
 export { registerObservabilityRoutes } from './observabilityRoutes.ts';

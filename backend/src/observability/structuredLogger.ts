@@ -57,20 +57,34 @@ const LEVEL_PRIORITY: Record<LogLevel, number> = {
 
 // ---------------------------------------------------------------------------
 // Correlation ID (AsyncLocalStorage for request tracing)
+// Uses AsyncLocalStorage so concurrent async requests don't overwrite
+// each other's correlation IDs.
 // ---------------------------------------------------------------------------
 
-let currentCorrelationId: string | undefined;
+import { AsyncLocalStorage } from 'node:async_hooks';
 
-export function setCorrelationId(id: string): void {
-  currentCorrelationId = id;
+const correlationStore = new AsyncLocalStorage<string>();
+
+/**
+ * Run a function with a correlation ID bound to the async context.
+ * All logs emitted within `fn` (including across awaits) will include
+ * the correlation ID. This is the preferred API for Fastify request hooks.
+ */
+export function runWithCorrelationId<T>(id: string, fn: () => T): T {
+  return correlationStore.run(id, fn);
+}
+
+/** @deprecated Use runWithCorrelationId instead for async safety */
+export function setCorrelationId(_id: string): void {
+  // No-op — kept for backward compatibility. Use runWithCorrelationId.
 }
 
 export function getCorrelationId(): string | undefined {
-  return currentCorrelationId;
+  return correlationStore.getStore();
 }
 
 export function clearCorrelationId(): void {
-  currentCorrelationId = undefined;
+  // No-op — correlation ID is scoped to AsyncLocalStorage context.
 }
 
 // ---------------------------------------------------------------------------
@@ -132,8 +146,9 @@ export class StructuredLogger {
       message,
     };
 
-    if (currentCorrelationId) {
-      entry.correlationId = currentCorrelationId;
+    const corrId = getCorrelationId();
+    if (corrId) {
+      entry.correlationId = corrId;
     }
 
     if (data && Object.keys(data).length > 0) {

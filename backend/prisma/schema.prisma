@@ -1323,6 +1323,61 @@ model Evidence {
 }
 
 // ---------------------------------------------------------------------------
+// PR 3 — Evidence Chunks — Breaks large evidence into manageable pieces
+// ---------------------------------------------------------------------------
+
+model EvidenceChunk {
+  id             String   @id @default(uuid())
+  evidenceId     String
+  tenantId       String
+  chunkIndex     Int      // Zero-based ordering within the evidence
+  text           String   // The chunk text content
+  startOffset    Int      // Character offset in the original document
+  endOffset      Int      // Character end offset in the original document
+  checksum       String   // SHA-256 truncated to 16 hex chars
+  charCount      Int      // Character count of this chunk
+
+  createdAt      DateTime @default(now())
+
+  @@unique([evidenceId, chunkIndex])
+  @@index([evidenceId])
+  @@index([tenantId])
+  @@index([checksum])
+  @@map("evidence_chunks")
+}
+
+// ---------------------------------------------------------------------------
+// PR 4 — Verified Fact Registry — Immutable, SHA-256 hashed, tenant-isolated
+// ---------------------------------------------------------------------------
+
+model VerifiedFact {
+  factId            String    @id @default(uuid())
+  caseId            String
+  tenantId          String
+  factType          String    // event | claim | observation | measurement | identity | location | timestamp_anchor | contradiction
+  content           String    // The fact statement
+  contentHash       String    // SHA-256 hash of tenantId:caseId:content
+  sourceEvidenceId  String    // Which evidence produced this fact
+  sourceType        String    // timeline_event | narrative_claim | evidence_event | manual
+  confidence        Float     @default(0.5)
+  lockedAt          DateTime? // Once set, fact is immutable
+  metadata          String?   // JSON: additional structured data
+
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@unique([caseId, tenantId, contentHash])
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([factType])
+  @@index([contentHash])
+  @@index([sourceEvidenceId])
+  @@index([lockedAt])
+  @@index([confidence])
+  @@map("verified_facts")
+}
+
+// ---------------------------------------------------------------------------
 // Narrative Deconstruction Engine — Claims extracted from police narratives
 // ---------------------------------------------------------------------------
 
@@ -1645,4 +1700,24 @@ model StripeWebhookEvent {
   @@index([eventType])
   @@index([processedAt])
   @@map("stripe_webhook_events")
+}
+
+// ---------------------------------------------------------------------------
+// PR 1 — Schema Version Control (Hardening Core)
+// Tracks schema versions applied to this database.
+// Boot-time assertion compares expected vs actual to hard-fail on drift.
+// ---------------------------------------------------------------------------
+
+model SchemaVersion {
+  id             String   @id @default(uuid())
+  version        String   @unique
+  checksum       String
+  appliedAt      DateTime @default(now())
+  appliedBy      String   @default("prisma-migrate")
+  description    String?
+  migrationName  String
+  driftChecked   Boolean  @default(false)
+
+  @@index([appliedAt])
+  @@map("schema_versions")
 }

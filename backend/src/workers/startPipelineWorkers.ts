@@ -12,6 +12,7 @@ import { narrativeProcessingWorker } from './narrativeProcessingWorker.js';
 import { contradictionAnalysisWorker } from './contradictionAnalysisWorker.js';
 import { videoProcessingWorker } from './videoProcessingWorker.js';
 import { doctrineAnalysisWorker } from './doctrineAnalysisWorker.js';
+import { startBackpressureMonitor, stopBackpressureMonitor } from './backpressureGuard.js';
 
 // ---------------------------------------------------------------------------
 // Worker Registry
@@ -46,7 +47,10 @@ export function startPipelineWorkers(): void {
     worker.start();
   }
 
-  console.log('[PipelineWorkers] All pipeline workers started');
+  // PR 2 — Start backpressure monitor (checks memory + queue depths periodically)
+  startBackpressureMonitor();
+
+  console.log('[PipelineWorkers] All pipeline workers started with backpressure monitoring');
 }
 
 // ---------------------------------------------------------------------------
@@ -60,7 +64,29 @@ export function startPipelineWorkers(): void {
 export async function stopPipelineWorkers(): Promise<void> {
   console.log('[PipelineWorkers] Stopping all pipeline workers...');
 
+  stopBackpressureMonitor();
   await Promise.all(pipelineWorkers.map((w) => w.stop()));
 
   console.log('[PipelineWorkers] All pipeline workers stopped');
+}
+
+// ---------------------------------------------------------------------------
+// Worker Health (PR 2)
+// ---------------------------------------------------------------------------
+
+/**
+ * Get health stats for all pipeline workers.
+ * Used by the admin API and monitoring endpoints.
+ */
+export function getPipelineWorkerHealth(): Array<{
+  name: string;
+  processed: number;
+  failed: number;
+  stalled: number;
+  running: boolean;
+}> {
+  return pipelineWorkers.map((w) => ({
+    name: w.constructor.name,
+    ...w.getStats(),
+  }));
 }

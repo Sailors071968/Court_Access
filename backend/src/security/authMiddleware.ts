@@ -217,6 +217,7 @@ export function getRequiredRoles(path: string): UserRole[] | null {
 // Routes that don't require authentication
 const PUBLIC_ROUTES = [
   '/api/health',
+  '/api/metrics',
   '/api/auth/login',
   '/api/auth/register',
   '/api/auth/refresh',

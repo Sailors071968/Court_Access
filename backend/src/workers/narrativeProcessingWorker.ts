@@ -12,7 +12,7 @@
 // ============================================================================
 
 import type { Job } from 'bullmq';
-import { CourtAccessWorker } from '../lib/baseWorker.js';
+import { CourtAccessWorker, JobTimeoutError } from '../lib/baseWorker.js';
 import { QUEUE_NAMES, type NarrativeProcessingJobData } from '../lib/queues.js';
 import prisma from '../lib/prisma.js';
 import { deconstructNarrative } from '../narrative/narrativeReconstructionService.js';
@@ -33,7 +33,7 @@ class NarrativeProcessingWorker extends CourtAccessWorker<NarrativeProcessingJob
     });
   }
 
-  protected async processJob(job: Job<NarrativeProcessingJobData>): Promise<void> {
+  protected async processJob(job: Job<NarrativeProcessingJobData>, signal: AbortSignal): Promise<void> {
     const { tenantId, caseId, processingJobId } = job.data;
 
     // Mark ProcessingJob as active (direct ID lookup — safe across retries)
@@ -50,10 +50,13 @@ class NarrativeProcessingWorker extends CourtAccessWorker<NarrativeProcessingJob
 
       const result = await deconstructNarrative(caseId, tenantId);
 
-      // Mark ProcessingJob as completed with full pipeline results
+      // Check abort signal before writing completion status
+      if (signal.aborted) throw new JobTimeoutError('Job aborted by timeout');
+
+      // Mark ProcessingJob as completed with full pipeline results (idempotent — only if still 'active')
       if (processingJobId) {
-        await prisma.processingJob.update({
-          where: { id: processingJobId },
+        await prisma.processingJob.updateMany({
+          where: { id: processingJobId, status: 'active' },
           data: {
             status: 'completed',
             completedAt: new Date(),
@@ -76,7 +79,10 @@ class NarrativeProcessingWorker extends CourtAccessWorker<NarrativeProcessingJob
         durationMs: result.durationMs,
       });
     } catch (error) {
-      // Mark ProcessingJob as failed
+      // Skip DB write for timeout — base worker handles JOB_TIMEOUT status
+      if (error instanceof JobTimeoutError) throw error;
+
+      // Mark ProcessingJob as failed (non-timeout errors only)
       if (processingJobId) {
         try {
           const message = error instanceof Error ? error.message : String(error);

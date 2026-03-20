@@ -6,7 +6,7 @@
 // ============================================================================
 
 import type { Job } from 'bullmq';
-import { CourtAccessWorker } from '../lib/baseWorker.js';
+import { CourtAccessWorker, JobTimeoutError } from '../lib/baseWorker.js';
 import { QUEUE_NAMES, type ContradictionAnalysisJobData } from '../lib/queues.js';
 import prisma from '../lib/prisma.js';
 
@@ -24,7 +24,7 @@ class ContradictionAnalysisWorker extends CourtAccessWorker<ContradictionAnalysi
     });
   }
 
-  protected async processJob(job: Job<ContradictionAnalysisJobData>): Promise<void> {
+  protected async processJob(job: Job<ContradictionAnalysisJobData>, signal: AbortSignal): Promise<void> {
     const { tenantId, caseId, processingJobId } = job.data;
 
     // Mark ProcessingJob as active (direct ID lookup — safe across retries)
@@ -54,28 +54,29 @@ class ContradictionAnalysisWorker extends CourtAccessWorker<ContradictionAnalysi
       // 4. Doctrine mapping (POST Learning Domains)
       // Actual AI pipeline integration in Phase 3.
 
-      // Mark ProcessingJob as completed
+      // Check abort signal before writing completion status
+      if (signal.aborted) throw new JobTimeoutError('Job aborted by timeout');
+
+      // Mark ProcessingJob as completed (idempotent — only if still 'active')
       if (processingJobId) {
-        await prisma.processingJob.update({
-          where: { id: processingJobId },
+        await prisma.processingJob.updateMany({
+          where: { id: processingJobId, status: 'active' },
           data: {
             status: 'completed',
             completedAt: new Date(),
             acuCredits: job.data.acuCreditsRequired,
             failureCode: null,
             error: null,
-            result: {
-              timelineEventsAnalyzed: timelineEvents.length,
-              caseId,
-              completedAt: new Date().toISOString(),
-            },
           },
         });
       }
 
       console.log(`[ContradictionAnalysisWorker] Contradiction analysis completed for case ${caseId}`);
     } catch (error) {
-      // Mark ProcessingJob as failed
+      // Skip DB write for timeout — base worker handles JOB_TIMEOUT status
+      if (error instanceof JobTimeoutError) throw error;
+
+      // Mark ProcessingJob as failed (non-timeout errors only)
       if (processingJobId) {
         try {
           const message = error instanceof Error ? error.message : String(error);

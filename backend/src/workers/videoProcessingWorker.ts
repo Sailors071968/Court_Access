@@ -6,7 +6,7 @@
 // ============================================================================
 
 import type { Job } from 'bullmq';
-import { CourtAccessWorker } from '../lib/baseWorker.js';
+import { CourtAccessWorker, JobTimeoutError } from '../lib/baseWorker.js';
 import { QUEUE_NAMES, type VideoProcessingJobData } from '../lib/queues.js';
 import prisma from '../lib/prisma.js';
 
@@ -24,7 +24,7 @@ class VideoProcessingWorker extends CourtAccessWorker<VideoProcessingJobData> {
     });
   }
 
-  protected async processJob(job: Job<VideoProcessingJobData>): Promise<void> {
+  protected async processJob(job: Job<VideoProcessingJobData>, signal: AbortSignal): Promise<void> {
     const { caseId, evidenceId, processingJobId } = job.data;
 
     // Mark ProcessingJob as active (direct ID lookup — safe across retries)
@@ -57,30 +57,29 @@ class VideoProcessingWorker extends CourtAccessWorker<VideoProcessingJobData> {
       // 4. Event generation (structured timeline events from video)
       // Actual AI pipeline integration in Phase 3.
 
-      // Mark ProcessingJob as completed
+      // Check abort signal before writing completion status
+      if (signal.aborted) throw new JobTimeoutError('Job aborted by timeout');
+
+      // Mark ProcessingJob as completed (idempotent — only if still 'active')
       if (processingJobId) {
-        await prisma.processingJob.update({
-          where: { id: processingJobId },
+        await prisma.processingJob.updateMany({
+          where: { id: processingJobId, status: 'active' },
           data: {
             status: 'completed',
             completedAt: new Date(),
             acuCredits: job.data.acuCreditsRequired,
             failureCode: null,
             error: null,
-            result: {
-              evidenceId,
-              fileName: evidence.fileName,
-              evidenceType: evidence.evidenceType,
-              caseId,
-              completedAt: new Date().toISOString(),
-            },
           },
         });
       }
 
       console.log(`[VideoProcessingWorker] Video processing completed for evidence ${evidenceId}`);
     } catch (error) {
-      // Mark ProcessingJob as failed
+      // Skip DB write for timeout — base worker handles JOB_TIMEOUT status
+      if (error instanceof JobTimeoutError) throw error;
+
+      // Mark ProcessingJob as failed (non-timeout errors only)
       if (processingJobId) {
         try {
           const message = error instanceof Error ? error.message : String(error);

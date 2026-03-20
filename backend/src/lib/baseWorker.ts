@@ -5,10 +5,25 @@
 // graceful shutdown, structured logging, retry policy.
 // ============================================================================
 
-import { Worker, type Job, type ConnectionOptions } from 'bullmq';
+import { Worker, UnrecoverableError, type Job, type ConnectionOptions } from 'bullmq';
 import { redisConnection } from './redis.js';
 import prisma from './prisma.js';
 import type { BaseJobData } from './queues.js';
+import { moveToDeadLetter, getMemorySnapshot } from '../workers/backpressureGuard.js';
+import { metrics } from '../observability/metricsCollector.js';
+
+// ---------------------------------------------------------------------------
+// Custom error class for job timeouts — allows precise instanceof detection
+// in the base worker catch block, avoiding TOCTOU races where signal.aborted
+// could be true but the actual error was a transient DB/network failure.
+// ---------------------------------------------------------------------------
+
+export class JobTimeoutError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'JobTimeoutError';
+  }
+}
 
 // ---------------------------------------------------------------------------
 // Abstract Base Worker
@@ -23,6 +38,14 @@ export interface WorkerOptions {
   concurrency: number;
   /** Lock duration in ms (default: 60s) */
   lockDuration?: number;
+  /** Maximum attempts before moving to DLQ (default: 3) */
+  maxAttempts?: number;
+  /** Stalled job check interval in ms (default: 30s) */
+  stalledInterval?: number;
+  /** Max stalled count before job is considered failed (default: 2) */
+  maxStalledCount?: number;
+  /** Job-level timeout in ms (default: 300000 = 5 min). 0 = no timeout. */
+  jobTimeoutMs?: number;
 }
 
 export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData> {
@@ -31,12 +54,24 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
   protected readonly workerName: string;
   protected readonly concurrency: number;
   protected readonly lockDuration: number;
+  protected readonly maxAttempts: number;
+  protected readonly stalledInterval: number;
+  protected readonly maxStalledCount: number;
+  protected readonly jobTimeoutMs: number;
+  private jobsProcessed = 0;
+  private jobsFailed = 0;
+  private jobsStalled = 0;
+  private lastHealthLog = 0;
 
   constructor(options: WorkerOptions) {
     this.queueName = options.queueName;
     this.workerName = options.workerName;
     this.concurrency = options.concurrency;
     this.lockDuration = options.lockDuration ?? 60_000;
+    this.maxAttempts = options.maxAttempts ?? 3;
+    this.stalledInterval = options.stalledInterval ?? 30_000;
+    this.maxStalledCount = options.maxStalledCount ?? 2;
+    this.jobTimeoutMs = options.jobTimeoutMs ?? 300_000; // 5 min default
   }
 
   // -----------------------------------------------------------------------
@@ -46,8 +81,12 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
   /**
    * Process a single job. Subclasses implement this.
    * Throw an error to trigger retry; return normally to mark complete.
+   * @param job - The BullMQ job to process
+   * @param signal - AbortSignal that fires when the job timeout expires.
+   *   Workers performing long-running loops SHOULD check `signal.aborted`
+   *   periodically and bail out early when true.
    */
-  protected abstract processJob(job: Job<TData>): Promise<void>;
+  protected abstract processJob(job: Job<TData>, signal: AbortSignal): Promise<void>;
 
   // -----------------------------------------------------------------------
   // ACU Credit Enforcement (Task 3)
@@ -193,7 +232,7 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
       this.queueName,
       async (job: Job<TData>) => {
         const startTime = Date.now();
-        console.log(`[${this.workerName}] Processing job ${job.id} (attempt ${job.attemptsMade + 1})`);
+        console.log(`[${this.workerName}] Processing job ${job.id} (attempt ${job.attemptsMade + 1}/${this.maxAttempts})`);
 
         // Step 1: Reserve ACU credits BEFORE processing (atomic).
         // Throws if insufficient — prevents job from running.
@@ -214,14 +253,48 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
           throw acuError; // Rethrow non-ACU errors for retry
         }
 
-        try {
-          // Step 2: Execute the actual job logic
-          await this.processJob(job);
+        // Step 2: Execute the actual job logic (with AbortController timeout guard)
+        const controller = new AbortController();
+        let timer: ReturnType<typeof setTimeout> | undefined;
 
+        if (this.jobTimeoutMs > 0) {
+          timer = setTimeout(() => controller.abort(), this.jobTimeoutMs);
+        }
+
+        try {
+          await this.processJob(job, controller.signal);
+
+          this.jobsProcessed++;
           const durationMs = Date.now() - startTime;
           console.log(`[${this.workerName}] Job ${job.id} completed in ${durationMs}ms`);
+          metrics.observeHistogram('courtaccess_worker_job_duration_ms', durationMs, { worker: this.workerName });
+          this.logHealthIfDue();
         } catch (error) {
-          // processJob failed — refund the reserved credits (best-effort)
+          // Check if this is a timeout abort (use instanceof, not signal.aborted,
+          // to avoid misclassifying concurrent transient errors as timeouts)
+          if (error instanceof JobTimeoutError) {
+            const durationMs = Date.now() - startTime;
+            console.error(
+              `[${this.workerName}] Job ${job.id} TIMED OUT after ${durationMs}ms (limit: ${this.jobTimeoutMs}ms) — no retry`
+            );
+            metrics.incrementCounter('courtaccess_worker_timeouts_total', { worker: this.workerName });
+
+            // Mark ProcessingJob as failed with TIMEOUT code
+            await this.markJobFailed(job, 'JOB_TIMEOUT', `Job timed out after ${this.jobTimeoutMs}ms`);
+
+            // Refund ACU credits since work did not complete
+            if (usageRecordId) {
+              await this.refundACU(job, usageRecordId);
+            }
+
+            // UnrecoverableError prevents BullMQ retries — timeout is deterministic,
+            // retrying the same job will hit the same timeout.
+            throw new UnrecoverableError(
+              `[Timeout] Job ${job.id} exceeded ${this.jobTimeoutMs}ms limit — no retry`
+            );
+          }
+
+          // Non-timeout failure — refund credits and allow BullMQ retry
           if (usageRecordId) {
             await this.refundACU(job, usageRecordId);
           }
@@ -229,12 +302,16 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
           const message = error instanceof Error ? error.message : String(error);
           console.error(`[${this.workerName}] Job ${job.id} failed after ${durationMs}ms: ${message}`);
           throw error; // Rethrow to trigger BullMQ retry
+        } finally {
+          if (timer) clearTimeout(timer);
         }
       },
       {
         connection: redisConnection as unknown as ConnectionOptions,
         concurrency: this.concurrency,
         lockDuration: this.lockDuration,
+        stalledInterval: this.stalledInterval,
+        maxStalledCount: this.maxStalledCount,
       },
     );
 
@@ -242,13 +319,77 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
       console.error(`[${this.workerName}] Worker error:`, err.message);
     });
 
-    this.worker.on('failed', (job, err) => {
-      console.error(`[${this.workerName}] Job ${job?.id} permanently failed:`, err.message);
+    this.worker.on('failed', async (job, err) => {
+      if (job) {
+        this.jobsFailed++;
+        // Move to DLQ if retries exhausted OR permanently failed (UnrecoverableError).
+        // UnrecoverableError (e.g. from JOB_TIMEOUT) sets attemptsMade=1 but skips retries,
+        // so the attemptsMade >= maxAttempts check alone would miss these jobs.
+        const isPermanentlyFailed = err.name === 'UnrecoverableError' || job.attemptsMade >= this.maxAttempts;
+        if (isPermanentlyFailed) {
+          console.error(
+            `[${this.workerName}] Job ${job.id} permanently failed after ${job.attemptsMade} attempts: ${err.message}`,
+          );
+          await moveToDeadLetter(
+            this.queueName,
+            job.id ?? 'unknown',
+            job.data as unknown as Record<string, unknown>,
+            err.message,
+            job.attemptsMade,
+          );
+        } else {
+          console.warn(
+            `[${this.workerName}] Job ${job.id} failed (attempt ${job.attemptsMade}/${this.maxAttempts}): ${err.message}`,
+          );
+        }
+      }
+    });
+
+    // Stalled job detection — track rate for alerting
+    this.worker.on('stalled', (jobId: string) => {
+      this.jobsStalled++;
+      metrics.incrementCounter('courtaccess_worker_stalled_total', { worker: this.workerName });
+      console.warn(`[${this.workerName}] Job ${jobId} stalled — BullMQ will retry or fail it (total stalls: ${this.jobsStalled})`);
+
+      // Alert if stall rate exceeds 5% of processed jobs
+      const totalProcessed = this.jobsProcessed + this.jobsFailed;
+      if (totalProcessed > 20 && this.jobsStalled / totalProcessed > 0.05) {
+        console.error(
+          `[${this.workerName}] STALL RATE ALERT: ${this.jobsStalled}/${totalProcessed} jobs stalled (>5%)`
+        );
+      }
     });
 
     console.log(
-      `[${this.workerName}] Started (queue: ${this.queueName}, concurrency: ${this.concurrency})`
+      `[${this.workerName}] Started (queue: ${this.queueName}, concurrency: ${this.concurrency}, stalledInterval: ${this.stalledInterval}ms)`,
     );
+  }
+
+  // -----------------------------------------------------------------------
+  // Health Reporting
+  // -----------------------------------------------------------------------
+
+  /** Log periodic health status (called internally, no-op if called too frequently) */
+  protected logHealthIfDue(): void {
+    const now = Date.now();
+    if (now - this.lastHealthLog < 60_000) return; // max once per minute
+    this.lastHealthLog = now;
+
+    const mem = getMemorySnapshot();
+    console.log(
+      `[${this.workerName}] Health: processed=${this.jobsProcessed} failed=${this.jobsFailed} ` +
+      `heap=${mem.heapUsedMB}MB/${mem.heapTotalMB}MB rss=${mem.rssMB}MB`,
+    );
+  }
+
+  /** Get worker statistics */
+  getStats(): { processed: number; failed: number; stalled: number; running: boolean } {
+    return {
+      processed: this.jobsProcessed,
+      failed: this.jobsFailed,
+      stalled: this.jobsStalled,
+      running: this.isRunning(),
+    };
   }
 
   /**

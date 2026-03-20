@@ -1347,6 +1347,37 @@ model EvidenceChunk {
 }
 
 // ---------------------------------------------------------------------------
+// PR 4 — Verified Fact Registry — Immutable, SHA-256 hashed, tenant-isolated
+// ---------------------------------------------------------------------------
+
+model VerifiedFact {
+  factId            String    @id @default(uuid())
+  caseId            String
+  tenantId          String
+  factType          String    // event | claim | observation | measurement | identity | location | timestamp_anchor | contradiction
+  content           String    // The fact statement
+  contentHash       String    // SHA-256 hash of tenantId:caseId:content
+  sourceEvidenceId  String    // Which evidence produced this fact
+  sourceType        String    // timeline_event | narrative_claim | evidence_event | manual
+  confidence        Float     @default(0.5)
+  lockedAt          DateTime? // Once set, fact is immutable
+  metadata          String?   // JSON: additional structured data
+
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@unique([caseId, tenantId, contentHash])
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([factType])
+  @@index([contentHash])
+  @@index([sourceEvidenceId])
+  @@index([lockedAt])
+  @@index([confidence])
+  @@map("verified_facts")
+}
+
+// ---------------------------------------------------------------------------
 // Narrative Deconstruction Engine — Claims extracted from police narratives
 // ---------------------------------------------------------------------------
 

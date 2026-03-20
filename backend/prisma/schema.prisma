@@ -1646,3 +1646,23 @@ model StripeWebhookEvent {
   @@index([processedAt])
   @@map("stripe_webhook_events")
 }
+
+// ---------------------------------------------------------------------------
+// PR 1 — Schema Version Control (Hardening Core)
+// Tracks schema versions applied to this database.
+// Boot-time assertion compares expected vs actual to hard-fail on drift.
+// ---------------------------------------------------------------------------
+
+model SchemaVersion {
+  id             String   @id @default(uuid())
+  version        String   @unique
+  checksum       String
+  appliedAt      DateTime @default(now())
+  appliedBy      String   @default("prisma-migrate")
+  description    String?
+  migrationName  String
+  driftChecked   Boolean  @default(false)
+
+  @@index([appliedAt])
+  @@map("schema_versions")
+}

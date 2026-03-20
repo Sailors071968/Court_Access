@@ -33,11 +33,14 @@ import { registerDiscountRoutes } from './billing/discountRoutes.js';
 import { seedDefaultDiscountCodes } from './billing/discountSeed.js';
 import { registerStripeWebhookRoutes } from './billing/stripeWebhookHandler.js';
 import { startPipelineWorkers, stopPipelineWorkers } from './workers/startPipelineWorkers.js';
+import { enforceSchemaOnBoot } from './database/schemaAssert.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
 
 async function startServer() {
+  // PR 1 — Hard-fail if schema is drifted or migrations are pending
+  await enforceSchemaOnBoot();
   const app = Fastify({
     logger: true,
     bodyLimit: 10 * 1024 * 1024, // 10MB

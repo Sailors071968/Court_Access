@@ -197,23 +197,37 @@ export async function registerFactsBatch(
  * This is called after the fact has been verified by the pipeline.
  */
 export async function lockFact(factId: string, tenantId: string): Promise<VerifiedFactRecord> {
-  const fact = await prisma.verifiedFact.findFirst({
-    where: { factId, tenantId },
+  // Atomic conditional update — only sets lockedAt when it is currently null.
+  // This eliminates the TOCTOU race between read and write: only one concurrent
+  // caller can ever succeed in setting the lock timestamp.
+  const result = await prisma.verifiedFact.updateMany({
+    where: { factId, tenantId, lockedAt: null },
+    data: { lockedAt: new Date() },
   });
 
-  if (!fact) {
-    throw new Error(`Fact ${factId} not found for tenant ${tenantId}`);
-  }
+  if (result.count === 0) {
+    // Either the fact doesn't exist, or it's already locked.
+    const fact = await prisma.verifiedFact.findFirst({
+      where: { factId, tenantId },
+    });
 
-  if (fact.lockedAt) {
-    console.warn(`[FactRegistry] Fact ${factId} is already locked (at ${fact.lockedAt.toISOString()})`);
+    if (!fact) {
+      throw new Error(`Fact ${factId} not found for tenant ${tenantId}`);
+    }
+
+    // Already locked — return as-is (original lockedAt timestamp preserved)
+    console.warn(`[FactRegistry] Fact ${factId} is already locked (at ${fact.lockedAt!.toISOString()})`);
     return fact as VerifiedFactRecord;
   }
 
-  const locked = await prisma.verifiedFact.update({
-    where: { factId },
-    data: { lockedAt: new Date() },
+  // Fetch the freshly-locked fact to return
+  const locked = await prisma.verifiedFact.findFirst({
+    where: { factId, tenantId },
   });
+
+  if (!locked) {
+    throw new Error(`Fact ${factId} not found after locking`);
+  }
 
   console.log(`[FactRegistry] Fact ${factId} locked`);
   return locked as VerifiedFactRecord;

@@ -130,6 +130,13 @@ export class GraphIntegrityAudit {
    */
   async checkOrphanNodes(): Promise<OrphanNodeCheck> {
     try {
+      // Separate count query for accurate total (not capped by LIMIT)
+      const countResult = await this.neo4jClient.execute(
+        `MATCH (n) WHERE NOT (n)--() AND n.tenantId IS NOT NULL RETURN count(n) AS total`,
+      );
+      const orphanCount = (countResult.records[0]?.['total'] as number) ?? 0;
+
+      // Sample query for details (capped at 50)
       const result = await this.neo4jClient.execute(
         `
         MATCH (n)
@@ -140,7 +147,6 @@ export class GraphIntegrityAudit {
         `,
       );
 
-      const orphanCount = result.records.length;
       const sampleIds = result.records.map(r => r['id'] as string);
 
       return {
@@ -160,6 +166,13 @@ export class GraphIntegrityAudit {
    */
   async checkCrossTenantEdges(): Promise<CrossTenantEdgeCheck> {
     try {
+      // Separate count query for accurate total (not capped by LIMIT)
+      const countResult = await this.neo4jClient.execute(
+        `MATCH (source)-[r]->(target) WHERE source.tenantId IS NOT NULL AND target.tenantId IS NOT NULL AND source.tenantId <> target.tenantId RETURN count(r) AS total`,
+      );
+      const violationCount = (countResult.records[0]?.['total'] as number) ?? 0;
+
+      // Sample query for details (capped at 50)
       const result = await this.neo4jClient.execute(
         `
         MATCH (source)-[r]->(target)
@@ -173,7 +186,6 @@ export class GraphIntegrityAudit {
         `,
       );
 
-      const violationCount = result.records.length;
       const samples = result.records.map(r => ({
         relationshipType: r['relType'] as string,
         sourceTenantId: r['sourceTenant'] as string,
@@ -203,6 +215,13 @@ export class GraphIntegrityAudit {
    */
   async checkMissingTenantId(): Promise<MissingTenantIdCheck> {
     try {
+      // Separate count query for accurate total (not capped by LIMIT)
+      const countResult = await this.neo4jClient.execute(
+        `MATCH (n) WHERE n.tenantId IS NULL RETURN count(n) AS total`,
+      );
+      const count = (countResult.records[0]?.['total'] as number) ?? 0;
+
+      // Sample query for details (capped at 50)
       const result = await this.neo4jClient.execute(
         `
         MATCH (n)
@@ -212,7 +231,6 @@ export class GraphIntegrityAudit {
         `,
       );
 
-      const count = result.records.length;
       const sampleIds = result.records.map(r => r['id'] as string);
 
       if (count > 0) {

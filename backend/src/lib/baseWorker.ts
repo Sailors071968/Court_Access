@@ -30,6 +30,8 @@ export interface WorkerOptions {
   stalledInterval?: number;
   /** Max stalled count before job is considered failed (default: 2) */
   maxStalledCount?: number;
+  /** Job-level timeout in ms (default: 300000 = 5 min). 0 = no timeout. */
+  jobTimeoutMs?: number;
 }
 
 export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData> {
@@ -41,6 +43,7 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
   protected readonly maxAttempts: number;
   protected readonly stalledInterval: number;
   protected readonly maxStalledCount: number;
+  protected readonly jobTimeoutMs: number;
   private jobsProcessed = 0;
   private jobsFailed = 0;
   private lastHealthLog = 0;
@@ -53,6 +56,7 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
     this.maxAttempts = options.maxAttempts ?? 3;
     this.stalledInterval = options.stalledInterval ?? 30_000;
     this.maxStalledCount = options.maxStalledCount ?? 2;
+    this.jobTimeoutMs = options.jobTimeoutMs ?? 300_000; // 5 min default
   }
 
   // -----------------------------------------------------------------------
@@ -209,7 +213,7 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
       this.queueName,
       async (job: Job<TData>) => {
         const startTime = Date.now();
-        console.log(`[${this.workerName}] Processing job ${job.id} (attempt ${job.attemptsMade + 1})`);
+        console.log(`[${this.workerName}] Processing job ${job.id} (attempt ${job.attemptsMade + 1}/${this.maxAttempts})`);
 
         // Step 1: Reserve ACU credits BEFORE processing (atomic).
         // Throws if insufficient — prevents job from running.
@@ -231,8 +235,19 @@ export abstract class CourtAccessWorker<TData extends BaseJobData = BaseJobData>
         }
 
         try {
-          // Step 2: Execute the actual job logic
-          await this.processJob(job);
+          // Step 2: Execute the actual job logic (with timeout guard)
+          if (this.jobTimeoutMs > 0) {
+            await Promise.race([
+              this.processJob(job),
+              new Promise<never>((_, reject) =>
+                setTimeout(() => reject(new Error(
+                  `[Timeout] Job ${job.id} exceeded ${this.jobTimeoutMs}ms limit`
+                )), this.jobTimeoutMs)
+              ),
+            ]);
+          } else {
+            await this.processJob(job);
+          }
 
           this.jobsProcessed++;
           const durationMs = Date.now() - startTime;

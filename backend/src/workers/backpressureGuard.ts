@@ -279,16 +279,28 @@ export async function moveToDeadLetter(
 ): Promise<void> {
   try {
     const dlq = getQueue(DLQ_QUEUE_NAME);
-    await dlq.add('dead-letter', {
+    const snapshot = {
       originalQueue,
       originalJobId: jobId,
       jobData,
       error,
       attemptsMade,
       movedAt: new Date().toISOString(),
-    } as never);
-    console.log(
-      `[DLQ] Job ${jobId} from ${originalQueue} moved to dead letter queue (${attemptsMade} attempts, error: ${error.slice(0, 100)})`,
+      memoryAtFailure: getMemorySnapshot(),
+    };
+
+    await dlq.add('dead-letter', snapshot as never);
+
+    // DLQ Snapshot Logging — capture full payload for post-mortem debugging
+    console.error(
+      `[DLQ] SNAPSHOT — Job ${jobId} from ${originalQueue} permanently failed.\n` +
+      `  Attempts: ${attemptsMade}\n` +
+      `  Error: ${error.slice(0, 500)}\n` +
+      `  UserId: ${jobData.userId ?? 'unknown'}\n` +
+      `  CaseId: ${jobData.caseId ?? 'unknown'}\n` +
+      `  TenantId: ${jobData.tenantId ?? 'unknown'}\n` +
+      `  Memory: heap=${snapshot.memoryAtFailure.heapUsedMB}MB/${snapshot.memoryAtFailure.heapTotalMB}MB rss=${snapshot.memoryAtFailure.rssMB}MB\n` +
+      `  Timestamp: ${snapshot.movedAt}`,
     );
   } catch (dlqError) {
     const msg = dlqError instanceof Error ? dlqError.message : String(dlqError);

@@ -9,6 +9,10 @@ export { GraphRelationshipBuilder } from './graphRelationshipBuilder.ts';
 export { GraphIndexer } from './graphIndexer.ts';
 export type { DocumentInput } from './graphIndexer.ts';
 export { GraphQueryEngine } from './graphQueryEngine.ts';
+export { GraphTenantGuard, GuardedNeo4jSession } from './graphTenantGuard.ts';
+export type { TenantGuardConfig, TenantGuardViolation } from './graphTenantGuard.ts';
+export { GraphIntegrityAudit } from './graphIntegrityAudit.ts';
+export type { AuditResult, OrphanNodeCheck, CrossTenantEdgeCheck, MissingTenantIdCheck, NodeStatsCheck } from './graphIntegrityAudit.ts';
 
 export type {
   // Node & relationship types

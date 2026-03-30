@@ -74,7 +74,7 @@ export async function processEvidenceToChunks(file: {
     // 🔥 Attach source to each chunk (CRITICAL FOR INTELLIGENCE)
     const enrichedChunks: SourcedEvidenceChunk[] = chunks.map((chunk) => ({
       ...chunk,
-      chunkId: `${file.id}-${chunk.index}`,
+      chunkId: `${file.id}-${doc.source}-${chunk.index}`,
       source: doc.source, // 🔥 THIS IS WHAT POWERS CONTRADICTIONS
     }));
 
@@ -94,7 +94,7 @@ try {
   const timelineQueue = getQueue(QUEUE_NAMES.TIMELINE_BUILD);
 
   await timelineQueue.add("timeline-build", {
-    caseId: file.id,
+    caseId: file.caseId,
     chunks: allChunks.map((c) => ({
       text: c.text,
       fileId: file.id,
@@ -102,7 +102,7 @@ try {
       index: c.index,
     })),
     sourceType: "document",
-    tenantId: "default",
+    tenantId,
   });
 
   console.log(`✅ Timeline job queued for file ${file.id}`);
@@ -118,9 +118,9 @@ try {
   const videoQueue = getQueue(QUEUE_NAMES.VIDEO_PROCESSING);
 
   await videoQueue.add("video-analysis", {
-    caseId: file.id,
+    caseId: file.caseId,
     fileId: file.id,
-    tenantId: "default",
+    tenantId,
     videoText: testDocuments.map((d) => d.text).join("\n"),
     sourceType: "video",
   });

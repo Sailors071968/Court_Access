@@ -1,5 +1,5 @@
 import { type EvidenceChunk, chunkText } from './evidenceChunkingService.js';
-import { getQueue, QUEUE_NAMES } from '../lib/queues.js';
+import { getQueue, QUEUE_NAMES, type TimelineBuildJobData, type VideoProcessingJobData } from '../lib/queues.js';
 
 // Extended chunk type with source tracking for contradiction intelligence
 export interface SourcedEvidenceChunk extends EvidenceChunk {
@@ -16,6 +16,7 @@ export async function processEvidenceToChunks(file: {
   s3Key: string;
   mimeType: string;
   tenantId?: string;
+  userId?: string;
 }): Promise<SourcedEvidenceChunk[]> {
 
   console.log("🔥 FILE INPUT RECEIVED:", JSON.stringify(file, null, 2));
@@ -29,6 +30,8 @@ export async function processEvidenceToChunks(file: {
   }
 
   const tenantId = file.tenantId || "default";
+  const userId = file.userId || "system";
+  const enqueuedAt = new Date().toISOString();
 
   console.log("🔥 PROCESS EVIDENCE TO CHUNKS — INTELLIGENCE TEST MODE");
 
@@ -95,15 +98,11 @@ try {
 
   await timelineQueue.add("timeline-build", {
     caseId: file.caseId,
-    chunks: allChunks.map((c) => ({
-      text: c.text,
-      fileId: file.id,
-      chunkId: c.chunkId,
-      index: c.index,
-    })),
-    sourceType: "document",
+    userId,
     tenantId,
-  });
+    acuCreditsRequired: 1,
+    enqueuedAt,
+  } satisfies TimelineBuildJobData);
 
   console.log(`✅ Timeline job queued for file ${file.id}`);
 
@@ -119,11 +118,14 @@ try {
 
   await videoQueue.add("video-analysis", {
     caseId: file.caseId,
-    fileId: file.id,
+    evidenceId: file.id,
+    fileKey: file.s3Key,
+    mimeType: file.mimeType,
+    userId,
     tenantId,
-    videoText: testDocuments.map((d) => d.text).join("\n"),
-    sourceType: "video",
-  });
+    acuCreditsRequired: 2,
+    enqueuedAt,
+  } satisfies VideoProcessingJobData);
 
   console.log(`🎥 Video job queued for file ${file.id}`);
 

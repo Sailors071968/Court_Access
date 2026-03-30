@@ -1,3 +1,12 @@
+import { type EvidenceChunk, chunkText } from './evidenceChunkingService.js';
+import { getQueue, QUEUE_NAMES } from '../lib/queues.js';
+
+// Extended chunk type with source tracking for contradiction intelligence
+export interface SourcedEvidenceChunk extends EvidenceChunk {
+  chunkId: string;
+  source: string;
+}
+
 // ========================================
 // 🚀 MAIN FUNCTION (EXPORT MUST BE EXACT)
 // ========================================
@@ -7,14 +16,14 @@ export async function processEvidenceToChunks(file: {
   s3Key: string;
   mimeType: string;
   tenantId?: string;
-}): Promise<EvidenceChunk[]> {   // ✅ ADD THIS {
+}): Promise<SourcedEvidenceChunk[]> {
 
   console.log("🔥 FILE INPUT RECEIVED:", JSON.stringify(file, null, 2));
 
   // ========================================
   // ✅ VALIDATION
   // ========================================
-    if (!file?.id || !file?.s3Key)
+  if (!file?.id || !file?.s3Key) {
     console.error("❌ INVALID FILE OBJECT:", file);
     throw new Error("Invalid file input");
   }
@@ -41,7 +50,7 @@ export async function processEvidenceToChunks(file: {
     }
   ];
 
-  let allChunks: EvidenceChunk[] = [];
+  let allChunks: SourcedEvidenceChunk[] = [];
 
   // ========================================
   // 🔥 PROCESS EACH DOCUMENT SOURCE
@@ -55,7 +64,7 @@ export async function processEvidenceToChunks(file: {
     }
 
     // 🔥 Chunk the document
-    const chunks: EvidenceChunk[] = chunkText(doc.text, file.id);
+    const chunks: EvidenceChunk[] = chunkText(doc.text);
 
     if (!chunks.length) {
       console.warn(`⚠️ No chunks created for ${doc.source}`);
@@ -63,8 +72,9 @@ export async function processEvidenceToChunks(file: {
     }
 
     // 🔥 Attach source to each chunk (CRITICAL FOR INTELLIGENCE)
-    const enrichedChunks = chunks.map((chunk) => ({
+    const enrichedChunks: SourcedEvidenceChunk[] = chunks.map((chunk) => ({
       ...chunk,
+      chunkId: `${file.id}-${chunk.index}`,
       source: doc.source, // 🔥 THIS IS WHAT POWERS CONTRADICTIONS
     }));
 
@@ -81,7 +91,7 @@ export async function processEvidenceToChunks(file: {
 // 🔥 TIMELINE QUEUE (DOCUMENT PIPELINE)
 // ========================================
 try {
-  const timelineQueue = getQueue(QUEUE_NAMES.TIMELINE);
+  const timelineQueue = getQueue(QUEUE_NAMES.TIMELINE_BUILD);
 
   await timelineQueue.add("timeline-build", {
     caseId: file.id,
@@ -105,7 +115,7 @@ try {
 // 🔥 VIDEO PIPELINE (SIMULATED)
 // ========================================
 try {
-  const videoQueue = getQueue(QUEUE_NAMES.VIDEO);
+  const videoQueue = getQueue(QUEUE_NAMES.VIDEO_PROCESSING);
 
   await videoQueue.add("video-analysis", {
     caseId: file.id,

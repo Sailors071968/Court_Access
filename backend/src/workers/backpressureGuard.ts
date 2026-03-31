@@ -264,7 +264,7 @@ export function stopBackpressureMonitor(): void {
 // Dead Letter Queue (DLQ) — Move permanently failed jobs for inspection
 // ---------------------------------------------------------------------------
 
-export const DLQ_QUEUE_NAME = 'court-access:dead-letter';
+export const DLQ_QUEUE_NAME = 'court-access-dead-letter';
 
 /**
  * Move a permanently failed job to the dead letter queue.

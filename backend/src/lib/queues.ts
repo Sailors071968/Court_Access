@@ -12,21 +12,21 @@ import { redisConnection } from './redis.js';
 // ---------------------------------------------------------------------------
 
 export const QUEUE_NAMES = {
-  EVIDENCE_INGEST: 'court-access:evidence-ingest',
-  FACT_EXTRACTION: 'court-access:fact-extraction',
-  AI_ANALYSIS: 'court-access:ai-analysis',
-  TRANSCRIPTION: 'court-access:transcription',
+  EVIDENCE_INGEST: 'court-access-evidence-ingest',
+  FACT_EXTRACTION: 'court-access-fact-extraction',
+  AI_ANALYSIS: 'court-access-ai-analysis',
+  TRANSCRIPTION: 'court-access-transcription',
   TIMELINE_BUILD: 'court-access-timeline-build',
-  DOCUMENT_INTEGRITY: 'court-access:document-integrity',
-  GRAPH_SYNC: 'court-access:graph-sync',
-  ANCHOR_CHAIN: 'court-access:anchor-chain',
-  EXPORT_GENERATION: 'court-access:export-generation',
-  NIGHTLY_INTEGRITY: 'court-access:nightly-integrity',
+  DOCUMENT_INTEGRITY: 'court-access-document-integrity',
+  GRAPH_SYNC: 'court-access-graph-sync',
+  ANCHOR_CHAIN: 'court-access-anchor-chain',
+  EXPORT_GENERATION: 'court-access-export-generation',
+  NIGHTLY_INTEGRITY: 'court-access-nightly-integrity',
   NARRATIVE_PROCESSING: 'court-access-narrative-processing',
   CONTRADICTION_ANALYSIS: 'court-access-contradiction-analysis',
   VIDEO_PROCESSING: 'court-access-video-processing',
   DOCTRINE_ANALYSIS: 'court-access-doctrine-analysis',
-  DEAD_LETTER: 'court-access:dead-letter',
+  DEAD_LETTER: 'court-access-dead-letter',
 } as const;
 
 export type QueueName = (typeof QUEUE_NAMES)[keyof typeof QUEUE_NAMES];

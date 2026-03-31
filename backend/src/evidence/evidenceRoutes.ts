@@ -11,7 +11,7 @@ import type { AuthenticatedRequest } from '../security/authMiddleware.js';
 import { validateEvidenceUpload } from './evidenceValidation.js';
 import { enqueueEvidenceIngestion } from './evidenceProcessingPipeline.js';
 import prisma from '../lib/prisma.js';
-import { canStartUpload, registerUpload } from '../lib/uploadManager.js';
+import { canStartUpload, registerUpload, completeUpload, failUpload } from '../lib/uploadManager.js';
 
 // ---------------------------------------------------------------------------
 // Cloudflare R2 Configuration (S3-compatible)
@@ -248,8 +248,18 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
         },
       });
     } catch (err) {
+      // Mark upload as failed so the quota slot is freed immediately
+      const failId = body.s3Key.split('/')[3];
+      if (failId) failUpload(failId);
       console.error('[EvidenceRoutes] Failed to create evidence record:', err);
       return reply.code(500).send({ error: 'Failed to register evidence' });
+    }
+
+    // Mark the upload as completed in the upload manager (frees up quota slot)
+    // The s3Key contains the fileId: evidence/<tenantId>/<caseId>/<fileId>/<fileName>
+    const fileIdFromKey = body.s3Key.split('/')[3];
+    if (fileIdFromKey) {
+      completeUpload(fileIdFromKey);
     }
 
     // Enqueue evidence processing (Part 5) — separate try-catch so a queue

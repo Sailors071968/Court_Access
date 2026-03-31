@@ -5,6 +5,7 @@
 // ============================================================================
 
 import IORedis from 'ioredis';
+import { circuitBreakers } from './circuitBreaker.js';
 
 const REDIS_URL = process.env.REDIS_URL || 'redis://localhost:6379';
 const REDIS_MAX_RETRIES = parseInt(process.env.REDIS_MAX_RETRIES || '20', 10);
@@ -48,12 +49,14 @@ export const redisConnection = new IORedis(REDIS_URL, {
 redisConnection.on('error', (err) => {
   connectionState = 'error';
   lastErrorTime = Date.now();
+  circuitBreakers.redis.onFailure();
   console.error('[Redis] Connection error:', err.message);
 });
 
 redisConnection.on('connect', () => {
   connectionState = 'connected';
   reconnectCount = 0;
+  circuitBreakers.redis.onSuccess();
   console.log('[Redis] Connected to', REDIS_URL.replace(/\/\/.*@/, '//***@'));
 });
 

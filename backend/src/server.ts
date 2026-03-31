@@ -55,6 +55,8 @@ const REQUEST_TIMEOUT_MS = parseInt(process.env.REQUEST_TIMEOUT_MS || '120000', 
 /** Keep-alive timeout in ms (default 72s — higher than ALB 60s default) */
 const KEEP_ALIVE_TIMEOUT_MS = parseInt(process.env.KEEP_ALIVE_TIMEOUT_MS || '72000', 10);
 
+let fastifyApp: ReturnType<typeof Fastify> | null = null;
+
 async function startServer() {
   // PR 1 — Hard-fail if schema is drifted or migrations are pending
   await enforceSchemaOnBoot();
@@ -232,6 +234,9 @@ async function startServer() {
   // Scale Validation — Redis memory alert monitor
   startRedisMemoryMonitor();
 
+  // Expose app reference for graceful shutdown
+  fastifyApp = app;
+
   // Start server
   try {
     await app.listen({ port: PORT, host: HOST });
@@ -335,11 +340,15 @@ const shutdown = async (signal: string) => {
 
   console.log(`[Server] Received ${signal} — starting graceful shutdown...`);
 
-  // Phase 1: Stop accepting new requests
-  try {
-    // Fastify close() waits for in-flight requests to complete (up to closeGraceDelay)
-    // We don't have a reference to app here, but the process.exit will handle it
-  } catch { /* ignore */ }
+  // Phase 1: Stop accepting new requests (drain in-flight HTTP requests)
+  if (fastifyApp) {
+    try {
+      await fastifyApp.close();
+      console.log('[Server] Fastify closed — no new requests accepted');
+    } catch (err) {
+      console.error('[Server] Error closing Fastify:', err);
+    }
+  }
 
   // Phase 2: Stop monitoring
   stopRedisMemoryMonitor();
@@ -382,9 +391,11 @@ process.on('SIGINT', () => void shutdown('SIGINT'));
 process.on('SIGTERM', () => void shutdown('SIGTERM'));
 
 // Safety: force exit if graceful shutdown takes too long (30s)
-process.on('SIGINT', () => {
+const forceExitHandler = () => {
   setTimeout(() => {
     console.error('[Server] Forced exit after 30s shutdown timeout');
     process.exit(1);
   }, 30_000).unref();
-});
+};
+process.on('SIGINT', forceExitHandler);
+process.on('SIGTERM', forceExitHandler);

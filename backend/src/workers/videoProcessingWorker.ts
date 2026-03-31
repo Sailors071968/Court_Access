@@ -6,7 +6,7 @@
 // ============================================================================
 
 import type { Job } from 'bullmq';
-import { CourtAccessWorker, JobTimeoutError } from '../lib/baseWorker.js';
+import { CourtAccessWorker, JobTimeoutError, resolveConcurrency } from '../lib/baseWorker.js';
 import { QUEUE_NAMES, type VideoProcessingJobData } from '../lib/queues.js';
 import prisma from '../lib/prisma.js';
 
@@ -19,7 +19,7 @@ class VideoProcessingWorker extends CourtAccessWorker<VideoProcessingJobData> {
     super({
       queueName: QUEUE_NAMES.VIDEO_PROCESSING,
       workerName: 'VideoProcessingWorker',
-      concurrency: 1, // Video processing is resource-intensive
+      concurrency: resolveConcurrency(QUEUE_NAMES.VIDEO_PROCESSING, 1, 0.25),
       lockDuration: 300_000, // 5 minutes for video analysis
     });
   }

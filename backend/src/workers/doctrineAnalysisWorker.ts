@@ -6,7 +6,7 @@
 // ============================================================================
 
 import type { Job } from 'bullmq';
-import { CourtAccessWorker, JobTimeoutError } from '../lib/baseWorker.js';
+import { CourtAccessWorker, JobTimeoutError, resolveConcurrency } from '../lib/baseWorker.js';
 import { QUEUE_NAMES, type DoctrineAnalysisJobData } from '../lib/queues.js';
 import prisma from '../lib/prisma.js';
 
@@ -19,7 +19,7 @@ class DoctrineAnalysisWorker extends CourtAccessWorker<DoctrineAnalysisJobData> 
     super({
       queueName: QUEUE_NAMES.DOCTRINE_ANALYSIS,
       workerName: 'DoctrineAnalysisWorker',
-      concurrency: 2,
+      concurrency: resolveConcurrency(QUEUE_NAMES.DOCTRINE_ANALYSIS, 2),
       lockDuration: 60_000, // 1 minute for doctrine mapping
     });
   }

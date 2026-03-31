@@ -6,7 +6,7 @@
 // ============================================================================
 
 import type { Job } from 'bullmq';
-import { CourtAccessWorker, JobTimeoutError } from '../lib/baseWorker.js';
+import { CourtAccessWorker, JobTimeoutError, resolveConcurrency } from '../lib/baseWorker.js';
 import { QUEUE_NAMES, type ContradictionAnalysisJobData } from '../lib/queues.js';
 import prisma from '../lib/prisma.js';
 
@@ -19,7 +19,7 @@ class ContradictionAnalysisWorker extends CourtAccessWorker<ContradictionAnalysi
     super({
       queueName: QUEUE_NAMES.CONTRADICTION_ANALYSIS,
       workerName: 'ContradictionAnalysisWorker',
-      concurrency: 2,
+      concurrency: resolveConcurrency(QUEUE_NAMES.CONTRADICTION_ANALYSIS, 2),
       lockDuration: 180_000, // 3 minutes for contradiction analysis
     });
   }

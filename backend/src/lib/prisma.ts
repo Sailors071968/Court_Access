@@ -8,6 +8,7 @@
 // ============================================================================
 
 import { PrismaClient } from '@prisma/client';
+import { circuitBreakers } from './circuitBreaker.js';
 
 // ---------------------------------------------------------------------------
 // Timeout Configuration (tuneable via env vars)
@@ -45,8 +46,48 @@ if (process.env.NODE_ENV !== 'production') {
  */
 export async function checkDatabaseHealth(): Promise<{ latencyMs: number }> {
   const start = performance.now();
-  await prisma.$queryRaw`SELECT 1`;
-  return { latencyMs: Math.round(performance.now() - start) };
+  try {
+    await prisma.$queryRaw`SELECT 1`;
+    const latencyMs = Math.round(performance.now() - start);
+    circuitBreakers.database.onSuccess();
+    return { latencyMs };
+  } catch (err) {
+    circuitBreakers.database.onFailure();
+    throw err;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Periodic Database Health Check (wires circuit breaker)
+// ---------------------------------------------------------------------------
+
+let _dbHealthInterval: ReturnType<typeof setInterval> | null = null;
+
+/**
+ * Start periodic database health checks that wire the circuit breaker.
+ * Call once during server startup.
+ */
+export function startDatabaseHealthMonitor(intervalMs = 30_000): void {
+  if (_dbHealthInterval) return;
+  _dbHealthInterval = setInterval(async () => {
+    try {
+      await checkDatabaseHealth();
+    } catch {
+      // checkDatabaseHealth already calls onFailure — just swallow
+    }
+  }, intervalMs);
+  // Don't hold the process open
+  _dbHealthInterval.unref();
+}
+
+/**
+ * Stop the periodic database health monitor.
+ */
+export function stopDatabaseHealthMonitor(): void {
+  if (_dbHealthInterval) {
+    clearInterval(_dbHealthInterval);
+    _dbHealthInterval = null;
+  }
 }
 
 // ---------------------------------------------------------------------------

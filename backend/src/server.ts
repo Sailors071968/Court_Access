@@ -36,7 +36,7 @@ import { startPipelineWorkers, stopPipelineWorkers } from './workers/startPipeli
 import { enforceSchemaOnBoot } from './database/schemaAssert.js';
 import { registerObservabilityRoutes } from './observability/observabilityRoutes.js';
 import { startRedisMemoryMonitor, stopRedisMemoryMonitor } from './observability/redisMemoryAlert.js';
-import { disconnectPrisma } from './lib/prisma.js';
+import { disconnectPrisma, startDatabaseHealthMonitor, stopDatabaseHealthMonitor } from './lib/prisma.js';
 import { disconnectRedis } from './lib/redis.js';
 import { closeAllQueues } from './lib/queues.js';
 import { getCircuitBreakerHealth } from './lib/circuitBreaker.js';
@@ -141,8 +141,8 @@ async function startServer() {
     environment: process.env.NODE_ENV || 'development',
   }));
 
-  // Circuit breaker status endpoint (admin only, no auth check needed on health)
-  app.get('/api/health/circuits', async () => ({
+  // Circuit breaker status endpoint (admin-protected — NOT under /api/health to avoid public route exemption)
+  app.get('/api/admin/circuits', async () => ({
     circuits: getCircuitBreakerHealth(),
     timestamp: new Date().toISOString(),
   }));
@@ -233,6 +233,9 @@ async function startServer() {
 
   // Scale Validation — Redis memory alert monitor
   startRedisMemoryMonitor();
+
+  // Database circuit breaker — periodic health checks wire onSuccess/onFailure
+  startDatabaseHealthMonitor();
 
   // Expose app reference for graceful shutdown
   fastifyApp = app;
@@ -352,6 +355,7 @@ const shutdown = async (signal: string) => {
 
   // Phase 2: Stop monitoring
   stopRedisMemoryMonitor();
+  stopDatabaseHealthMonitor();
 
   // Phase 3: Stop pipeline workers (waits for active jobs to finish)
   try {

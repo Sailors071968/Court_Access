@@ -221,7 +221,9 @@ export const circuitBreakers = {
     name: 'Redis',
     failureThreshold: 5,
     resetTimeoutMs: 15_000,
-    halfOpenSuccessThreshold: 3,
+    // Set to 1 because ioredis 'connect' event fires exactly once per reconnection.
+    // With threshold > 1, the circuit would permanently stay HALF_OPEN after recovery.
+    halfOpenSuccessThreshold: 1,
   }),
   r2: new CircuitBreaker({
     name: 'CloudflareR2',

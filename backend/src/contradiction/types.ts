@@ -179,8 +179,7 @@ export interface TimelineEvent {
   alignmentMethod: AlignmentMethod;
   confidence: number;
   driftCorrectionMs: number;
-  actor: string;              // Who performed/reported this event (officer name, witness name, etc.)
-  actorRole: ActorType;       // Role classification from ActorType enum
+  actorId: string;            // Reference to Actor.id in the ActorRegistry (NEVER a raw string name)
 }
 
 export interface TimelineMergeResult {

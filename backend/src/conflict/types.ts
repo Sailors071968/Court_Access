@@ -117,17 +117,13 @@ export interface Statement {
 // Timeline Event — normalized temporal event
 // ---------------------------------------------------------------------------
 
-export type TimelineActorRole = 'officer' | 'subject' | 'witness' | 'dispatcher' | 'forensic_tech' | 'unknown';
-
 export interface TimelineEvent {
   /** Unique event identifier */
   id: string;
   /** Event description */
   description: string;
-  /** Who performed/reported this event (e.g. "Officer Martinez", "Witness J. Rodriguez") */
-  actor: string;
-  /** Role classification: officer, subject, witness, dispatcher, forensic_tech, unknown */
-  actorRole: TimelineActorRole;
+  /** Reference to Actor.id in the ActorRegistry (NEVER a raw string name) */
+  actorId: string;
   /** Normalized timestamp */
   timestamp: Date;
   /** Precision of the timestamp */

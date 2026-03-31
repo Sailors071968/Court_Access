@@ -15,16 +15,13 @@ export interface EvidenceSummaryItem {
   iconType: string;
 }
 
-export type TimelineActorRole = 'officer' | 'subject' | 'witness' | 'dispatcher' | 'forensic_tech' | 'unknown';
-
 export interface TimelineEvent {
   id: string;
   timestamp: string;
   source: string;
   sourceFileId: string;
   description: string;
-  actor: string;              // Who performed/reported this event
-  actorRole: TimelineActorRole; // Role: officer, subject, witness, dispatcher, forensic_tech, unknown
+  actorId: string;            // Reference to Actor.id in the ActorRegistry (NEVER a raw string name)
   sourceType: 'bodycam' | 'dispatch' | '911' | 'officer_report' | 'witness';
   confidence: number;
 }
@@ -167,70 +164,70 @@ const SAMPLE_ANALYSIS: CaseAnalysisData = {
       id: 't-1', timestamp: '14:22:03', source: 'Dispatch Log',
       sourceFileId: 'ev-dispatch-001',
       description: '911 call received — report of disturbance at 1200 Oak Ave',
-      actor: 'Dispatch', actorRole: 'dispatcher',
+      actorId: 'actor_dispatch_1',
       sourceType: '911', confidence: 0.95,
     },
     {
       id: 't-2', timestamp: '14:24:15', source: 'Dispatch Log',
       sourceFileId: 'ev-dispatch-001',
       description: 'Unit 42 dispatched to scene',
-      actor: 'Dispatch', actorRole: 'dispatcher',
+      actorId: 'actor_dispatch_1',
       sourceType: 'dispatch', confidence: 0.95,
     },
     {
       id: 't-3', timestamp: '14:31:42', source: 'Bodycam — Officer Martinez',
       sourceFileId: 'ev-bodycam-001',
       description: 'Officer Martinez arrives on scene, activates body camera',
-      actor: 'Officer Martinez', actorRole: 'officer',
+      actorId: 'actor_1',
       sourceType: 'bodycam', confidence: 0.92,
     },
     {
       id: 't-4', timestamp: '14:32:18', source: 'Bodycam — Officer Martinez',
       sourceFileId: 'ev-bodycam-001',
       description: 'Initial contact with suspect, verbal commands issued',
-      actor: 'Officer Martinez', actorRole: 'officer',
+      actorId: 'actor_1',
       sourceType: 'bodycam', confidence: 0.88,
     },
     {
       id: 't-5', timestamp: '14:33:05', source: 'Police Report — Officer Martinez',
       sourceFileId: 'ev-report-001',
       description: 'Officer report states suspect began running southbound on Oak Ave',
-      actor: 'Officer Martinez', actorRole: 'officer',
+      actorId: 'actor_1',
       sourceType: 'officer_report', confidence: 0.85,
     },
     {
       id: 't-6', timestamp: '14:33:12', source: 'Bodycam — Officer Martinez',
       sourceFileId: 'ev-bodycam-001',
       description: 'Bodycam shows suspect stationary with hands at sides at this timestamp',
-      actor: 'Subject', actorRole: 'subject',
+      actorId: 'actor_subject_1',
       sourceType: 'bodycam', confidence: 0.91,
     },
     {
       id: 't-7', timestamp: '14:34:30', source: 'Witness Statement — J. Rodriguez',
       sourceFileId: 'ev-witness-001',
       description: 'Witness reports hearing officer commands, states suspect had hands raised',
-      actor: 'Witness J. Rodriguez', actorRole: 'witness',
+      actorId: 'actor_witness_1',
       sourceType: 'witness', confidence: 0.78,
     },
     {
       id: 't-8', timestamp: '14:35:15', source: 'Dispatch Log',
       sourceFileId: 'ev-dispatch-001',
       description: 'Officer Martinez requests backup units to 1200 Oak Ave',
-      actor: 'Officer Martinez', actorRole: 'officer',
+      actorId: 'actor_1',
       sourceType: 'dispatch', confidence: 0.95,
     },
     {
       id: 't-9', timestamp: '14:36:20', source: 'Bodycam — Officer Martinez',
       sourceFileId: 'ev-bodycam-001',
       description: 'Physical restraint applied — suspect taken to ground',
-      actor: 'Officer Martinez', actorRole: 'officer',
+      actorId: 'actor_1',
       sourceType: 'bodycam', confidence: 0.93,
     },
     {
       id: 't-10', timestamp: '14:37:45', source: 'Bodycam — Officer Martinez',
       sourceFileId: 'ev-bodycam-001',
       description: 'Handcuffs applied, suspect placed in custody',
-      actor: 'Officer Martinez', actorRole: 'officer',
+      actorId: 'actor_1',
       sourceType: 'bodycam', confidence: 0.95,
     },
   ],

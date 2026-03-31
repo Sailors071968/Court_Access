@@ -308,8 +308,7 @@ export function buildUnifiedTimeline(caseId: string, events: ExtractedEvent[]): 
       alignmentMethod: resolved.method,
       confidence: Math.max(...cluster.events.map((e) => e.confidence)),
       driftCorrectionMs: resolved.driftMs,
-      actor: cluster.events[0].actor ?? 'Unknown',
-      actorRole: cluster.events[0].actorRole ?? 'unknown',
+      actorId: cluster.events[0].actor ?? 'unknown_actor_1',
     };
 
     timelineEvents.push(timelineEvent);

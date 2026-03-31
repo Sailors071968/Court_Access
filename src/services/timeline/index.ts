@@ -10,3 +10,13 @@ export type {
   TimelineLegalInstrument,
   EvidenceTimeline,
 } from './evidenceTimelineEngine';
+
+export { ActorRegistry, extractActors } from './actorResolutionEngine';
+export type {
+  Actor,
+  ActorType,
+  ActorConfidence,
+  ExtractedActor,
+  ActorValidationEntry,
+  ActorValidationReport,
+} from './actorResolutionEngine';

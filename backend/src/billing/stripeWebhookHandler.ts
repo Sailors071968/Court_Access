@@ -348,15 +348,13 @@ async function handleCheckoutCompleted(session: StripeCheckoutSession): Promise<
     const packId = session.metadata.packId;
     const credits = parseInt(session.metadata.credits ?? '0', 10);
     if (!packId || credits <= 0) {
-      console.error(`[StripeWebhook] Invalid credit pack metadata in session ${session.id}`);
-      return;
+      throw new Error(`Invalid credit pack metadata in session ${session.id}: packId=${packId} credits=${credits}`);
     }
 
     // Validate credits match the pack definition to prevent tampered metadata
     const expectedCredits = CREDIT_PACK_AMOUNTS[packId];
     if (expectedCredits !== credits) {
-      console.error(`[StripeWebhook] Credit mismatch for pack ${packId}: meta=${credits} expected=${expectedCredits}`);
-      return;
+      throw new Error(`Credit mismatch for pack ${packId}: meta=${credits} expected=${expectedCredits} in session ${session.id}`);
     }
 
     // Atomic credit grant inside serializable transaction

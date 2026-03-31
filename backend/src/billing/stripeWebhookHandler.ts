@@ -487,6 +487,33 @@ async function handleInvoicePaymentFailed(invoice: StripeInvoice): Promise<void>
 // Route Registration
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// Origin allowlist — validates redirect URLs against trusted domains to
+// prevent open redirect attacks via crafted Origin/Referer headers.
+// ---------------------------------------------------------------------------
+
+const ALLOWED_ORIGINS = new Set(
+  [
+    process.env.FRONTEND_URL,
+    'https://courtaccess.net',
+    'https://www.courtaccess.net',
+    'https://beta.courtaccess.net',
+    'http://localhost:5173',
+    'http://localhost:4173',
+  ].filter(Boolean),
+);
+
+function getSafeOrigin(request: FastifyRequest): string {
+  const defaultOrigin = process.env.FRONTEND_URL ?? 'http://localhost:5173';
+  const candidate =
+    request.headers.origin ??
+    (request.headers.referer
+      ? new URL(request.headers.referer as string).origin
+      : null);
+  if (candidate && ALLOWED_ORIGINS.has(candidate)) return candidate;
+  return defaultOrigin;
+}
+
 export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise<void> {
   // Encapsulate webhook route in a plugin so the custom content-type parser
   // only applies to routes registered inside this scope.
@@ -633,8 +660,7 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
     }
 
     try {
-      const defaultOrigin = process.env.FRONTEND_URL ?? 'http://localhost:5173';
-      const origin = request.headers.origin ?? (request.headers.referer ? new URL(request.headers.referer as string).origin : defaultOrigin);
+      const origin = getSafeOrigin(request);
       const session = await stripe.checkout.sessions.create({
         mode: 'subscription',
         client_reference_id: userId,
@@ -687,8 +713,7 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
     }
 
     try {
-      const defaultOrigin = process.env.FRONTEND_URL ?? 'http://localhost:5173';
-      const origin = request.headers.origin ?? (request.headers.referer ? new URL(request.headers.referer as string).origin : defaultOrigin);
+      const origin = getSafeOrigin(request);
       const session = await stripe.checkout.sessions.create({
         mode: 'payment',
         client_reference_id: userId,

@@ -4,15 +4,14 @@
 // ============================================================================
 
 import type { FastifyInstance, FastifyReply } from 'fastify';
-import { PrismaClient } from '@prisma/client';
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import crypto from 'crypto';
 import type { AuthenticatedRequest } from '../security/authMiddleware.js';
 import { validateEvidenceUpload } from './evidenceValidation.js';
 import { enqueueEvidenceIngestion } from './evidenceProcessingPipeline.js';
-
-const prisma = new PrismaClient();
+import prisma from '../lib/prisma.js';
+import { canStartUpload, registerUpload } from '../lib/uploadManager.js';
 
 // ---------------------------------------------------------------------------
 // Cloudflare R2 Configuration (S3-compatible)
@@ -110,6 +109,15 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
       return reply.code(500).send({ error: 'Failed to verify case access' });
     }
 
+    // Check concurrent upload quota (per-tenant and global)
+    const uploadCheck = canStartUpload(user.tenantId);
+    if (!uploadCheck.allowed) {
+      return reply.code(429).send({
+        error: 'Too Many Uploads',
+        message: uploadCheck.reason,
+      });
+    }
+
     // Validate evidence upload limits
     const validation = await validateEvidenceUpload(user.tenantId, body.caseId, body.fileSize, body.evidenceType);
     if (!validation.allowed) {
@@ -140,6 +148,19 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
       });
 
       const uploadUrl = await getSignedUrl(s3, command, { expiresIn: PRESIGN_EXPIRY_SECONDS });
+
+      // Track upload for concurrent limiting
+      registerUpload({
+        uploadId: fileId,
+        tenantId: user.tenantId,
+        userId: user.userId,
+        caseId: body.caseId,
+        fileName: body.fileName,
+        fileSize: body.fileSize,
+        mimeType: body.fileType,
+        startedAt: Date.now(),
+        status: 'uploading',
+      });
 
       return {
         uploadUrl,
@@ -371,7 +392,7 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
         const s3 = getS3Client();
         const deleteCommand = new DeleteObjectCommand({
           Bucket: R2_BUCKET,
-          Key: evidence.s3Key,
+          Key: evidence.s3Key as string,
         });
         await s3.send(deleteCommand);
       } catch (s3Err) {

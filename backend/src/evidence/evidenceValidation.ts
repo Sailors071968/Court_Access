@@ -3,9 +3,7 @@
 // Validates file size, count limits, and evidence type constraints.
 // ============================================================================
 
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '../lib/prisma.js';
 
 // ---------------------------------------------------------------------------
 // Evidence Limits (from Part 9 / evidenceIngestionLimits)

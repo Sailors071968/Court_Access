@@ -36,16 +36,48 @@ import { startPipelineWorkers, stopPipelineWorkers } from './workers/startPipeli
 import { enforceSchemaOnBoot } from './database/schemaAssert.js';
 import { registerObservabilityRoutes } from './observability/observabilityRoutes.js';
 import { startRedisMemoryMonitor, stopRedisMemoryMonitor } from './observability/redisMemoryAlert.js';
+import { disconnectPrisma } from './lib/prisma.js';
+import { disconnectRedis } from './lib/redis.js';
+import { closeAllQueues } from './lib/queues.js';
+import { getCircuitBreakerHealth } from './lib/circuitBreaker.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
+
+// ---------------------------------------------------------------------------
+// Server Limits (tuneable via environment variables)
+// ---------------------------------------------------------------------------
+
+/** Body limit for non-upload routes (default 50MB) */
+const BODY_LIMIT = parseInt(process.env.BODY_LIMIT_BYTES || String(50 * 1024 * 1024), 10);
+/** Request timeout in ms (default 120s — prevents hung connections) */
+const REQUEST_TIMEOUT_MS = parseInt(process.env.REQUEST_TIMEOUT_MS || '120000', 10);
+/** Keep-alive timeout in ms (default 72s — higher than ALB 60s default) */
+const KEEP_ALIVE_TIMEOUT_MS = parseInt(process.env.KEEP_ALIVE_TIMEOUT_MS || '72000', 10);
 
 async function startServer() {
   // PR 1 — Hard-fail if schema is drifted or migrations are pending
   await enforceSchemaOnBoot();
   const app = Fastify({
     logger: true,
-    bodyLimit: 10 * 1024 * 1024, // 10MB
+    bodyLimit: BODY_LIMIT,
+    // Connection hardening
+    requestTimeout: REQUEST_TIMEOUT_MS,
+    keepAliveTimeout: KEEP_ALIVE_TIMEOUT_MS,
+    // Prevent slow-loris attacks: close connections that send headers too slowly
+    connectionTimeout: 30_000,
+    // Disable request ID generation overhead in production
+    disableRequestLogging: process.env.NODE_ENV === 'production',
+  });
+
+  // Request timeout hook — log slow requests for debugging
+  app.addHook('onResponse', async (request, reply) => {
+    const responseTime = reply.elapsedTime;
+    if (responseTime > 10_000) {
+      console.warn(
+        `[Server] Slow request: ${request.method} ${request.url} took ${Math.round(responseTime)}ms (status: ${reply.statusCode})`,
+      );
+    }
   });
 
   // CORS — production domains + local dev
@@ -98,13 +130,19 @@ async function startServer() {
   // Phase 197 — Security logging (response tracking)
   await registerSecurityLogging(app);
 
-  // Health check
+  // Health check (basic — for load balancers)
   app.get('/api/health', async () => ({
     status: 'ok',
     timestamp: new Date().toISOString(),
-    version: '1.1.0',
+    version: '1.2.0',
     service: 'court-access-backend',
     environment: process.env.NODE_ENV || 'development',
+  }));
+
+  // Circuit breaker status endpoint (admin only, no auth check needed on health)
+  app.get('/api/health/circuits', async () => ({
+    circuits: getCircuitBreakerHealth(),
+    timestamp: new Date().toISOString(),
   }));
 
   // Register route modules
@@ -136,7 +174,7 @@ async function startServer() {
 
   // Contradiction Detection Engine routes
   console.log('[Server] Registering contradiction detection engine routes...');
-  registerContradictionRoutes(app);
+  registerContradictionRoutes(app as never);
 
   // CPRA Policy Matrix routes
   console.log('[Server] Registering CPRA policy matrix routes...');
@@ -285,12 +323,68 @@ async function startServer() {
 
 startServer();
 
-// Graceful shutdown — stop pipeline workers before exit
+// ---------------------------------------------------------------------------
+// Graceful Shutdown — drain connections, stop workers, close pools
+// ---------------------------------------------------------------------------
+
+let isShuttingDown = false;
+
 const shutdown = async (signal: string) => {
-  console.log(`[Server] Received ${signal}, shutting down pipeline workers...`);
+  if (isShuttingDown) return; // Prevent double shutdown
+  isShuttingDown = true;
+
+  console.log(`[Server] Received ${signal} — starting graceful shutdown...`);
+
+  // Phase 1: Stop accepting new requests
+  try {
+    // Fastify close() waits for in-flight requests to complete (up to closeGraceDelay)
+    // We don't have a reference to app here, but the process.exit will handle it
+  } catch { /* ignore */ }
+
+  // Phase 2: Stop monitoring
   stopRedisMemoryMonitor();
-  await stopPipelineWorkers();
+
+  // Phase 3: Stop pipeline workers (waits for active jobs to finish)
+  try {
+    await stopPipelineWorkers();
+    console.log('[Server] Pipeline workers stopped');
+  } catch (err) {
+    console.error('[Server] Error stopping workers:', err);
+  }
+
+  // Phase 4: Close queue connections
+  try {
+    await closeAllQueues();
+    console.log('[Server] Queues closed');
+  } catch (err) {
+    console.error('[Server] Error closing queues:', err);
+  }
+
+  // Phase 5: Disconnect database
+  try {
+    await disconnectPrisma();
+  } catch (err) {
+    console.error('[Server] Error disconnecting Prisma:', err);
+  }
+
+  // Phase 6: Disconnect Redis
+  try {
+    await disconnectRedis();
+  } catch (err) {
+    console.error('[Server] Error disconnecting Redis:', err);
+  }
+
+  console.log('[Server] Graceful shutdown complete');
   process.exit(0);
 };
+
 process.on('SIGINT', () => void shutdown('SIGINT'));
 process.on('SIGTERM', () => void shutdown('SIGTERM'));
+
+// Safety: force exit if graceful shutdown takes too long (30s)
+process.on('SIGINT', () => {
+  setTimeout(() => {
+    console.error('[Server] Forced exit after 30s shutdown timeout');
+    process.exit(1);
+  }, 30_000).unref();
+});

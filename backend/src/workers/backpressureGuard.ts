@@ -5,6 +5,7 @@
 // ============================================================================
 
 import { getQueue, QUEUE_NAMES } from '../lib/queues.js';
+import { circuitBreakers } from '../lib/circuitBreaker.js';
 
 // ---------------------------------------------------------------------------
 // Configuration — Tuneable via environment variables
@@ -122,15 +123,46 @@ export interface BackpressureDecision {
 /**
  * Decide whether a new job should be accepted into the given queue.
  * Returns accept=false with a reason if backpressure is triggered.
+ *
+ * Checks (in order):
+ *   1. Circuit breakers — reject if Redis or DB circuits are open
+ *   2. Memory pressure — reject if heap usage exceeds threshold (+ trigger GC)
+ *   3. Queue depth — reject if specific queue is over its limit
+ *   4. Global active jobs — reject if total active jobs exceed limit
  */
 export async function shouldAcceptJob(queueName: string): Promise<BackpressureDecision> {
   const memorySnapshot = getMemorySnapshot();
+
+  // Check 0: Circuit breakers — if Redis or DB are tripped, reject early
+  if (!circuitBreakers.redis.isAllowed()) {
+    return {
+      accept: false,
+      reason: `Redis circuit breaker OPEN — service unavailable`,
+      memorySnapshot,
+    };
+  }
+  if (!circuitBreakers.database.isAllowed()) {
+    return {
+      accept: false,
+      reason: `Database circuit breaker OPEN — service unavailable`,
+      memorySnapshot,
+    };
+  }
 
   // Check 1: Memory pressure
   if (memorySnapshot.underPressure) {
     console.warn(
       `[BackpressureGuard] Memory pressure detected: ${memorySnapshot.heapUsedMB}MB / ${memorySnapshot.heapTotalMB}MB (${Math.round(memorySnapshot.usagePct * 100)}%)`,
     );
+
+    // Trigger garbage collection if available (--expose-gc flag)
+    if (typeof globalThis.gc === 'function') {
+      try {
+        globalThis.gc();
+        console.warn('[BackpressureGuard] Triggered manual GC due to memory pressure');
+      } catch { /* GC trigger is best-effort */ }
+    }
+
     return {
       accept: false,
       reason: `Memory pressure: ${Math.round(memorySnapshot.usagePct * 100)}% heap used (threshold: ${Math.round(DEFAULT_CONFIG.memoryThresholdPct * 100)}%)`,

@@ -27,6 +27,7 @@ import {
 } from 'lucide-react';
 import { Card } from '../../components/common/Card';
 import { AnalysisProgressIndicator } from '../../components/common/AnalysisProgressIndicator';
+import { AnalysisOutputWrapper } from '../../components/common/AnalysisOutputWrapper';
 import { caseDataProvider } from '../../services/caseDataProvider';
 import {
   analyzeFullCase,
@@ -257,6 +258,7 @@ export function InconsistenciesTablePage() {
   if (!analysis) return null;
 
   return (
+    <AnalysisOutputWrapper>
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -466,15 +468,7 @@ export function InconsistenciesTablePage() {
         </span>
       </div>
 
-      {/* Disclaimer */}
-      <div className="p-3 bg-blue-50 rounded-lg border border-blue-100 print:block">
-        <p className="text-xs text-blue-700">
-          <strong>Disclaimer:</strong> This inconsistency report is generated for informational and
-          investigative purposes only. It does not constitute legal advice. All findings must be reviewed
-          by a licensed attorney before being used in court proceedings. Scores represent the system's
-          confidence assessment and require human validation.
-        </p>
-      </div>
     </div>
+    </AnalysisOutputWrapper>
   );
 }

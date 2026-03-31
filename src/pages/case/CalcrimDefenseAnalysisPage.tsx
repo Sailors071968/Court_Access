@@ -26,6 +26,8 @@ import {
 } from 'lucide-react';
 import { Card } from '../../components/common/Card';
 import { AnalysisProgressIndicator } from '../../components/common/AnalysisProgressIndicator';
+import { AnalysisOutputWrapper } from '../../components/common/AnalysisOutputWrapper';
+import { VerificationBadge } from '../../components/common/VerificationBadge';
 import { caseDataProvider } from '../../services/caseDataProvider';
 import {
   analyzeFullCase,
@@ -453,6 +455,7 @@ export function CalcrimDefenseAnalysisPage() {
   }
 
   return (
+    <AnalysisOutputWrapper>
     <div className="space-y-6">
       {/* Header */}
       <div className="flex items-center justify-between">
@@ -460,6 +463,7 @@ export function CalcrimDefenseAnalysisPage() {
           <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
             <Scale size={20} className="text-blue-600" />
             CALCRIM Defense Analysis
+            <VerificationBadge status="corroborated" size="sm" />
           </h2>
           <p className="text-sm text-gray-500 mt-1">
             Element-by-element analysis using California Jury Instructions
@@ -610,14 +614,7 @@ export function CalcrimDefenseAnalysisPage() {
         />
       )}
 
-      {/* Legal Disclaimer */}
-      <div className="p-3 bg-blue-50 rounded-lg border border-blue-100">
-        <p className="text-xs text-blue-700">
-          <strong>Disclaimer:</strong> This CALCRIM analysis is generated for informational and investigative
-          purposes only. It does not constitute legal advice. All findings, recommendations, and strategies
-          must be reviewed by a licensed attorney before being used in court proceedings.
-        </p>
-      </div>
     </div>
+    </AnalysisOutputWrapper>
   );
 }

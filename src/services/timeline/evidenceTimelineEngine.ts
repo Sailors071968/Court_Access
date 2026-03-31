@@ -302,6 +302,51 @@ function generateTypeSpecificEvents(doc: DocumentEntity, docIndex: number): Time
 }
 
 // ---------------------------------------------------------------------------
+// Timestamp normalization — parse mixed date formats into epoch ms for
+// correct chronological sorting and comparison.
+// ---------------------------------------------------------------------------
+
+const MONTH_MAP: Record<string, number> = {
+  january: 0, february: 1, march: 2, april: 3, may: 4, june: 5,
+  july: 6, august: 7, september: 8, october: 9, november: 10, december: 11,
+};
+
+function parseTimestampToMs(ts: string): number {
+  // Try native Date.parse first (handles ISO and many standard formats)
+  const native = Date.parse(ts);
+  if (!Number.isNaN(native)) return native;
+
+  // US format: M/D/YYYY or MM/DD/YYYY
+  const usMatch = ts.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})/);
+  if (usMatch) {
+    const d = new Date(Number(usMatch[3]), Number(usMatch[1]) - 1, Number(usMatch[2]));
+    if (!Number.isNaN(d.getTime())) return d.getTime();
+  }
+
+  // Month-name formats: "January 15, 2024" or "15 January 2024"
+  const lower = ts.toLowerCase();
+  for (const [name, idx] of Object.entries(MONTH_MAP)) {
+    if (!lower.includes(name)) continue;
+    const nums = ts.match(/\d+/g);
+    if (nums && nums.length >= 2) {
+      const day = nums.find(n => Number(n) <= 31 && Number(n) >= 1);
+      const year = nums.find(n => Number(n) >= 1900);
+      if (day && year) {
+        const d = new Date(Number(year), idx, Number(day));
+        if (!Number.isNaN(d.getTime())) return d.getTime();
+      }
+    }
+  }
+
+  // Fallback: stable hash so ordering is at least deterministic
+  return stableHash(ts, 1_000_000_000);
+}
+
+function compareTimestamps(a: string, b: string): number {
+  return parseTimestampToMs(a) - parseTimestampToMs(b);
+}
+
+// ---------------------------------------------------------------------------
 // Deterministic scoring helpers — NO randomness (Phase 1 compliance)
 // Scores are structural metrics derived from evidence properties only.
 // ---------------------------------------------------------------------------
@@ -399,7 +444,7 @@ function detectTimelineInconsistencies(events: TimelineEvent[]): TimelineInconsi
       // contradicts expected procedural order, flag it
       if (orderA >= 0 && orderB >= 0 && orderA !== orderB) {
         const aBeforeBExpected = orderA < orderB;
-        const aBeforeBActual = ea.timestamp.localeCompare(eb.timestamp) <= 0;
+        const aBeforeBActual = compareTimestamps(ea.timestamp, eb.timestamp) <= 0;
 
         if (aBeforeBExpected !== aBeforeBActual) {
           incId++;
@@ -791,8 +836,8 @@ export function analyzeEvidenceTimeline(
   // 2. Cross-reference and corroborate events
   allEvents = corroborateEvents(allEvents);
 
-  // 3. Sort events chronologically
-  allEvents.sort((a, b) => a.timestamp.localeCompare(b.timestamp));
+  // 3. Sort events chronologically (using normalized date parsing)
+  allEvents.sort((a, b) => compareTimestamps(a.timestamp, b.timestamp));
 
   // 4. Detect inconsistencies on the timeline
   const inconsistencies = detectTimelineInconsistencies(allEvents);

@@ -505,11 +505,15 @@ const ALLOWED_ORIGINS = new Set(
 
 function getSafeOrigin(request: FastifyRequest): string {
   const defaultOrigin = process.env.FRONTEND_URL ?? 'http://localhost:5173';
-  const candidate =
-    request.headers.origin ??
-    (request.headers.referer
-      ? new URL(request.headers.referer as string).origin
-      : null);
+  let candidate: string | null = request.headers.origin as string | undefined ?? null;
+  if (!candidate && request.headers.referer) {
+    try {
+      candidate = new URL(request.headers.referer as string).origin;
+    } catch {
+      // Malformed Referer — fall through to default
+      candidate = null;
+    }
+  }
   if (candidate && ALLOWED_ORIGINS.has(candidate)) return candidate;
   return defaultOrigin;
 }
@@ -745,6 +749,11 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
 
   // GET /api/billing/checkout-status/:sessionId — Check checkout session status
   app.get('/api/billing/checkout-status/:sessionId', async (request: FastifyRequest, reply: FastifyReply) => {
+    const userId = ((request as unknown as { user?: { userId: string } }).user)?.userId;
+    if (!userId) {
+      return reply.code(401).send({ error: 'Authentication required' });
+    }
+
     const { sessionId } = request.params as { sessionId: string };
 
     const stripe = getStripeClient();
@@ -754,12 +763,23 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
 
     try {
       const session = await stripe.checkout.sessions.retrieve(sessionId);
+
+      // Verify the session belongs to the authenticated user
+      const sessionOwner = session.client_reference_id ?? session.metadata?.userId;
+      if (sessionOwner !== userId) {
+        void logSecurityEvent(
+          'STRIPE_CHECKOUT_STATUS_FORBIDDEN',
+          userId,
+          request.ip,
+          `User attempted to access checkout session ${sessionId} owned by ${sessionOwner ?? 'unknown'}`,
+        );
+        return reply.code(403).send({ error: 'Access denied' });
+      }
+
       return reply.send({
         sessionId: session.id,
         status: session.status,
         paymentStatus: session.payment_status,
-        customerId: session.customer,
-        subscriptionId: session.subscription,
       });
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);

@@ -32,8 +32,7 @@ interface CreditPack {
 }
 
 const CREDIT_PACKS: CreditPack[] = [
-  { id: 'pack_25', credits: 25, priceCents: 1250, perCreditCents: 50, popular: false, savings: '' },
-  { id: 'pack_50', credits: 50, priceCents: 2250, perCreditCents: 45, popular: false, savings: '10% off' },
+  { id: 'pack_50', credits: 50, priceCents: 2250, perCreditCents: 45, popular: false, savings: '' },
   { id: 'pack_150', credits: 150, priceCents: 5250, perCreditCents: 35, popular: true, savings: '30% off' },
   { id: 'pack_500', credits: 500, priceCents: 15000, perCreditCents: 30, popular: false, savings: '40% off' },
   { id: 'pack_1500', credits: 1500, priceCents: 37500, perCreditCents: 25, popular: false, savings: '50% off' },

@@ -8,7 +8,7 @@
 // - Shareable form (text, email, print)
 // ============================================================================
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, Fragment } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   AlertTriangle,
@@ -440,9 +440,8 @@ export function InconsistenciesTablePage() {
             </thead>
             <tbody>
               {sorted.map((inc, idx) => (
-                <>
+                <Fragment key={inc.id}>
                   <tr
-                    key={inc.id}
                     onClick={() => setExpandedRow(expandedRow === inc.id ? null : inc.id)}
                     className={`border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors ${
                       idx < 5 ? 'bg-red-50/30' : ''
@@ -472,7 +471,7 @@ export function InconsistenciesTablePage() {
                     </td>
                   </tr>
                   {expandedRow === inc.id && (
-                    <tr key={`${inc.id}-detail`} className="bg-gray-50">
+                    <tr className="bg-gray-50">
                       <td colSpan={5} className="px-4 py-4">
                         <div className="max-w-3xl">
                           <p className="text-sm text-gray-800 mb-3">{safeText(inc.description)}</p>
@@ -492,7 +491,7 @@ export function InconsistenciesTablePage() {
                       </td>
                     </tr>
                   )}
-                </>
+                </Fragment>
               ))}
             </tbody>
           </table>

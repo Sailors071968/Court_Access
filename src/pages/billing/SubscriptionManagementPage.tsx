@@ -230,7 +230,7 @@ export function SubscriptionManagementPage() {
   const [checkoutMessage, setCheckoutMessage] = useState<string | null>(null);
 
   const tiers = getSubscriptionTierRegistry();
-  const displayTiers = tiers.filter(t => !t.isLifetime); // Exclude legacy lifetime tiers
+  const displayTiers = tiers.filter(t => !t.isLifetime && !t.id.startsWith('TIER_')); // Exclude legacy lifetime and TIER_N tiers
 
   const billingOverview = getBillingOverview(
     'current-tenant',

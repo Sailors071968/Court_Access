@@ -12,6 +12,11 @@ import { Card } from '../common/Card';
 import { AnalysisProgressIndicator } from '../common/AnalysisProgressIndicator';
 import { caseDataProvider } from '../../services/caseDataProvider';
 import { analyzeFullCase, type Inconsistency } from '../../services/calcrim';
+import { filterLegalAdviceLanguage } from '../../services/legalAdviceFilterEngine';
+
+function safeText(text: string): string {
+  return filterLegalAdviceLanguage(text);
+}
 
 interface TopInconsistenciesWidgetProps {
   caseId: string;
@@ -151,7 +156,7 @@ export function TopInconsistenciesWidget({ caseId }: TopInconsistenciesWidgetPro
               <ScoreBadge score={inc.score} />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm text-gray-800 line-clamp-2">{inc.description}</p>
+              <p className="text-sm text-gray-800 line-clamp-2">{safeText(inc.description)}</p>
               <div className="flex items-center gap-2 mt-1.5">
                 <CategoryBadge category={inc.category} />
                 {inc.sources.slice(0, 2).map((s, i) => (

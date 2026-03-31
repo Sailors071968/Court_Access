@@ -165,7 +165,9 @@ export class ActorRegistry {
     }
 
     // Priority 2: Exact normalized name match against any alias
+    // GUARD: Do NOT merge by name when both parties have different badge numbers.
     for (const actor of this.actors.values()) {
+      if (badge && actor.badgeNumber && badge !== actor.badgeNumber) continue;
       for (const alias of actor.aliases) {
         if (this.normalizeName(alias) === normalized && normalized.length > 0) {
           return actor;
@@ -174,9 +176,13 @@ export class ActorRegistry {
     }
 
     // Priority 3: Surname match within same type (only if surname is 3+ chars)
+    // GUARD: Do NOT merge by surname when both parties have different badge numbers.
+    // "Officer Martinez Badge #412" and "Officer Martinez Badge #876" are different people.
     if (surname.length >= 3 && extracted.inferredType !== 'unknown') {
       for (const actor of this.actors.values()) {
         if (actor.type !== extracted.inferredType) continue;
+        // Badge conflict guard: if both have badges and they differ, skip
+        if (badge && actor.badgeNumber && badge !== actor.badgeNumber) continue;
         for (const alias of actor.aliases) {
           const aliasSurname = this.extractSurname(this.normalizeName(alias));
           if (aliasSurname === surname && aliasSurname.length >= 3) {
@@ -486,7 +492,53 @@ export function extractActors(
     }
   }
 
-  // If no named actors found, fall back to category-based inference
+  // If no named actors found, try standalone capitalized surname extraction.
+  // This catches bare surnames like "Martinez applied force..." in officer_action contexts.
+  if (results.length === 0 && (category === 'officer_action' || category === 'witness')) {
+    const surnamePattern = /\b([A-Z][a-z]{2,})\b/g;
+    let surnameMatch: RegExpExecArray | null;
+    // Common words to exclude from surname extraction
+    const EXCLUDED_WORDS = new Set([
+      'the', 'and', 'was', 'were', 'has', 'had', 'been', 'being',
+      'this', 'that', 'with', 'from', 'into', 'onto', 'upon',
+      'after', 'before', 'during', 'while', 'until', 'when',
+      'where', 'which', 'their', 'there', 'here', 'then', 'than',
+      'both', 'each', 'every', 'some', 'any', 'all', 'most',
+      'other', 'another', 'such', 'what', 'about', 'between',
+      'through', 'because', 'since', 'also', 'only', 'just',
+      'very', 'still', 'already', 'even', 'back', 'over',
+      // Common verbs/words that start sentences
+      'applied', 'arrived', 'approached', 'asked', 'began',
+      'called', 'came', 'completed', 'confirmed', 'continued',
+      'described', 'entered', 'exited', 'found', 'gave',
+      'heard', 'indicated', 'left', 'made', 'noted',
+      'observed', 'ordered', 'placed', 'pulled', 'pushed',
+      'reported', 'responded', 'said', 'saw', 'searched',
+      'seized', 'shot', 'showed', 'started', 'stated',
+      'stopped', 'struck', 'took', 'told', 'turned', 'used',
+      // Common nouns
+      'officer', 'sergeant', 'deputy', 'detective', 'subject',
+      'suspect', 'witness', 'victim', 'dispatch', 'badge',
+      'force', 'arrest', 'scene', 'vehicle', 'unit',
+      'evidence', 'report', 'incident', 'area', 'street',
+    ]);
+    while ((surnameMatch = surnamePattern.exec(text)) !== null) {
+      const word = surnameMatch[1];
+      if (word && !EXCLUDED_WORDS.has(word.toLowerCase()) && !seen.has(word.toLowerCase())) {
+        seen.add(word.toLowerCase());
+        const inferredType = category === 'officer_action' ? 'officer' : 'witness';
+        results.push({
+          rawText: inferredType === 'officer' ? `Officer ${word}` : `Witness ${word}`,
+          inferredType,
+          sourceDocumentId,
+          confidence: 'category_inferred',
+          badgeNumber: null,
+        });
+      }
+    }
+  }
+
+  // If still no named actors found, fall back to category-based inference
   if (results.length === 0) {
     if (category === 'officer_action' || OFFICER_PATTERNS.some(p => { p.lastIndex = 0; return p.test(text); })) {
       results.push({

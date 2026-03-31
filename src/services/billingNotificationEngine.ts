@@ -157,12 +157,12 @@ export function calculateSubscriptionStatus(
   const renewalDate = new Date(renewalDateISO);
   const now = new Date();
   const diffMs = renewalDate.getTime() - now.getTime();
-  const daysUntilRenewal = Math.max(0, Math.ceil(diffMs / (1000 * 60 * 60 * 24)));
+  const daysUntilRenewal = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
 
   return {
     tierId,
     renewalDate: renewalDateISO,
-    daysUntilRenewal,
+    daysUntilRenewal: Math.max(0, daysUntilRenewal),
     isApproachingRenewal: daysUntilRenewal <= 7 && daysUntilRenewal > 0,
     isRenewalToday: daysUntilRenewal === 0,
     status,

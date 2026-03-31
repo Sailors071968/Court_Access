@@ -783,7 +783,9 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
       });
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
-      return reply.code(404).send({ error: `Session not found: ${message}` });
+      console.error(`[Stripe] checkout-status error for ${sessionId}: ${message}`);
+      const isNotFound = err instanceof Error && 'statusCode' in err && (err as { statusCode: number }).statusCode === 404;
+      return reply.code(isNotFound ? 404 : 500).send({ error: isNotFound ? 'Session not found' : 'Failed to retrieve session status' });
     }
   });
 }

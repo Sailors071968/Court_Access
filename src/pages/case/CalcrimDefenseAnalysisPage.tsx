@@ -454,7 +454,7 @@ export function CalcrimDefenseAnalysisPage() {
         intervalRef.current = null;
       }
     };
-  }, [charges.length]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [caseId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const activeCharge = analysis?.charges[activeChargeIdx];
 

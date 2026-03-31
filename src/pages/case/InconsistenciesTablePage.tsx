@@ -188,7 +188,7 @@ export function InconsistenciesTablePage() {
         intervalRef.current = null;
       }
     };
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [caseId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Close share menu on outside click
   useEffect(() => {

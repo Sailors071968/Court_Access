@@ -309,7 +309,7 @@ export function EvidenceTimelinePage() {
         intervalRef.current = null;
       }
     };
-  }, [documents.length]); // eslint-disable-line react-hooks/exhaustive-deps
+  }, [caseId]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Empty state
   if (documents.length === 0 && !isAnalyzing) {

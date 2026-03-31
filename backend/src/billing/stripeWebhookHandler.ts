@@ -348,7 +348,7 @@ async function handleCheckoutCompleted(session: StripeCheckoutSession): Promise<
     // For one-time payments, verify payment is actually completed before granting credits.
     // Async payment methods (bank debits, BNPL) fire checkout.session.completed with
     // payment_status='unpaid' — credits should only be granted on 'paid'.
-    if (session.payment_status && session.payment_status !== 'paid') {
+    if (session.payment_status !== 'paid') {
       console.log(`[StripeWebhook] Credit purchase session ${session.id} has payment_status=${session.payment_status} — deferring credit grant until async payment succeeds`);
       return;
     }

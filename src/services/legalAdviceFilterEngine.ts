@@ -132,7 +132,7 @@ export function filterLegalAdviceLanguage(text: string): FilterResult {
  */
 export function isTextFreeOfLegalAdvice(text: string): boolean {
   const lower = text.toLowerCase();
-  return !LEGAL_ADVICE_PATTERNS.some(({ pattern }) => pattern.test(lower));
+  return !LEGAL_ADVICE_PATTERNS.some(({ pattern }) => new RegExp(pattern.source, pattern.flags).test(lower));
 }
 
 /**

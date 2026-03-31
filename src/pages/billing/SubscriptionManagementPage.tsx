@@ -254,6 +254,11 @@ export function SubscriptionManagementPage() {
       });
 
       const data = await res.json();
+      if (!res.ok) {
+        setCheckoutMessage(data.message ?? 'Unable to process plan change. Please try again or contact support.');
+        setShowConfirmation(false);
+        return;
+      }
       if (data.url) {
         window.location.href = data.url;
       } else {

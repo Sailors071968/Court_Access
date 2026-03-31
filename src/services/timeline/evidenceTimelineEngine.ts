@@ -309,28 +309,45 @@ function detectTimelineInconsistencies(events: TimelineEvent[]): TimelineInconsi
   const inconsistencies: TimelineInconsistency[] = [];
   let incId = 0;
 
-  // 1. Temporal sequence violations — events out of expected order
-  const sorted = [...events].sort((a, b) => a.timestamp.localeCompare(b.timestamp));
-  for (let i = 1; i < sorted.length; i++) {
-    const prev = sorted[i - 1];
-    const curr = sorted[i];
+  // 1. Procedural sequence violations — detect events from different documents
+  //    that describe logically-ordered procedures but have timestamps violating
+  //    that expected order (e.g., Miranda before arrest, booking before transport).
+  const EXPECTED_PROCEDURAL_ORDER = [
+    'dispatch', 'arrived', 'detained', 'miranda', 'arrest', 'search',
+    'booking', 'arraignment', 'bail', 'charges filed',
+  ];
 
-    // Check if same-source events have conflicting timestamps
-    if (prev.sourceDocumentId !== curr.sourceDocumentId) {
-      const prevDate = prev.timestamp;
-      const currDate = curr.timestamp;
+  const proceduralEvents = events.filter(e => e.category === 'procedural' && e.significance !== 'routine');
+  for (let i = 0; i < proceduralEvents.length; i++) {
+    for (let j = i + 1; j < proceduralEvents.length; j++) {
+      const ea = proceduralEvents[i];
+      const eb = proceduralEvents[j];
 
-      // Detect procedural events that should follow chronological order
-      if (prev.category === 'procedural' && curr.category === 'procedural') {
-        if (prevDate > currDate && prev.significance !== 'routine') {
+      // Only compare events from different documents
+      if (ea.sourceDocumentId === eb.sourceDocumentId) continue;
+
+      const descA = ea.description.toLowerCase();
+      const descB = eb.description.toLowerCase();
+      const orderA = EXPECTED_PROCEDURAL_ORDER.findIndex(kw => descA.includes(kw));
+      const orderB = EXPECTED_PROCEDURAL_ORDER.findIndex(kw => descB.includes(kw));
+
+      // If both match known procedural steps and their timestamp order
+      // contradicts expected procedural order, flag it
+      if (orderA >= 0 && orderB >= 0 && orderA !== orderB) {
+        const aBeforeBExpected = orderA < orderB;
+        const aBeforeBActual = ea.timestamp.localeCompare(eb.timestamp) <= 0;
+
+        if (aBeforeBExpected !== aBeforeBActual) {
           incId++;
+          const earlier = aBeforeBExpected ? ea : eb;
+          const later = aBeforeBExpected ? eb : ea;
           inconsistencies.push({
             id: `inc-temporal-${incId}`,
-            score: 65 + Math.floor(Math.random() * 20),
+            score: 65 + (incId % 20),
             category: 'sequence',
-            description: `Procedural sequence anomaly: "${curr.description}" appears to precede "${prev.description}" based on document timestamps, despite expected chronological ordering.`,
-            eventIds: [prev.id, curr.id],
-            sourceDocuments: [prev.sourceDocumentName, curr.sourceDocumentName],
+            description: `Procedural sequence anomaly: "${later.description}" has an earlier timestamp than "${earlier.description}" across different documents, despite expected chronological ordering.`,
+            eventIds: [ea.id, eb.id],
+            sourceDocuments: [ea.sourceDocumentName, eb.sourceDocumentName],
             recommendation: 'Review document timestamps and filing dates for accuracy. Cross-reference with court docket for actual sequence of events.',
             admissibilityRating: 'medium',
             verificationStatus: 'pattern_detected',

@@ -566,10 +566,10 @@ function detectTimelineInconsistencies(events: TimelineEvent[]): TimelineInconsi
   }
 
   // 3. Procedural gap detection — missing expected procedural steps
-  const proceduralEvents = events.filter(e => e.category === 'procedural');
-  const hasArrest = proceduralEvents.some(e => e.description.toLowerCase().includes('arrest'));
-  const hasMiranda = proceduralEvents.some(e => e.description.toLowerCase().includes('miranda'));
-  const hasWarrant = proceduralEvents.some(e => e.description.toLowerCase().includes('warrant'));
+  const allProceduralEvents = events.filter(e => e.category === 'procedural');
+  const hasArrest = allProceduralEvents.some(e => e.description.toLowerCase().includes('arrest'));
+  const hasMiranda = allProceduralEvents.some(e => e.description.toLowerCase().includes('miranda'));
+  const hasWarrant = allProceduralEvents.some(e => e.description.toLowerCase().includes('warrant'));
   const hasSearch = events.some(e => e.description.toLowerCase().includes('search'));
 
   if (hasArrest && !hasMiranda) {
@@ -579,8 +579,8 @@ function detectTimelineInconsistencies(events: TimelineEvent[]): TimelineInconsi
       score: 78,
       category: 'procedural',
       description: 'Arrest event documented without corresponding Miranda advisement in uploaded evidence. No Miranda warning documentation found in case file.',
-      eventIds: proceduralEvents.filter(e => e.description.toLowerCase().includes('arrest')).map(e => e.id),
-      sourceDocuments: proceduralEvents.filter(e => e.description.toLowerCase().includes('arrest')).map(e => e.sourceDocumentName),
+      eventIds: allProceduralEvents.filter(e => e.description.toLowerCase().includes('arrest')).map(e => e.id),
+      sourceDocuments: allProceduralEvents.filter(e => e.description.toLowerCase().includes('arrest')).map(e => e.sourceDocumentName),
       recommendation: 'Review all uploaded evidence for Miranda advisement documentation. If absent from case file, this may warrant further investigation.',
       admissibilityRating: 'high',
       verificationStatus: 'pattern_detected',

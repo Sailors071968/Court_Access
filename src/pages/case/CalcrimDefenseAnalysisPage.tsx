@@ -8,7 +8,7 @@
 //   tasks, legal instruments, and defense strategies
 // ============================================================================
 
-import { useState, useEffect, useCallback, useMemo } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Scale,

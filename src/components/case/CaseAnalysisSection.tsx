@@ -26,7 +26,6 @@ import {
   type PipelineStageStatus,
 } from '../../services/caseAnalysisService';
 import { filterLegalAdviceLanguage } from '../../services/legalAdviceFilterEngine';
-import { verifyClaim } from '../../services/aiGuardrailsEngine';
 
 // ---------------------------------------------------------------------------
 // Icon Resolver
@@ -40,15 +39,6 @@ function safeText(text: string): string {
   return filterLegalAdviceLanguage(text).filteredText;
 }
 
-function shouldDisplay(args: { id: string; text: string; sources: string[]; confidence: number }): boolean {
-  return verifyClaim({
-    id: args.id,
-    text: args.text,
-    sources: args.sources,
-    confidence: args.confidence,
-    category: 'analysis',
-  }).approved;
-}
 
 function getIcon(iconType: string, size = 16): React.ReactNode {
   const iconMap: Record<string, React.ReactNode> = {

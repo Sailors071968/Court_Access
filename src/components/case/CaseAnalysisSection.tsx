@@ -37,7 +37,7 @@ import { verifyClaim } from '../../services/aiGuardrailsEngine';
 // ---------------------------------------------------------------------------
 
 function safeText(text: string): string {
-  return filterLegalAdviceLanguage(text);
+  return filterLegalAdviceLanguage(text).filteredText;
 }
 
 function shouldDisplay(args: { id: string; text: string; sources: string[]; confidence: number }): boolean {

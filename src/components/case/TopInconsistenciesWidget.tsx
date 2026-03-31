@@ -15,7 +15,7 @@ import { analyzeFullCase, type Inconsistency } from '../../services/calcrim';
 import { filterLegalAdviceLanguage } from '../../services/legalAdviceFilterEngine';
 
 function safeText(text: string): string {
-  return filterLegalAdviceLanguage(text);
+  return filterLegalAdviceLanguage(text).filteredText;
 }
 
 interface TopInconsistenciesWidgetProps {

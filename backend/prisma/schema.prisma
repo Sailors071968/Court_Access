@@ -1703,6 +1703,160 @@ model StripeWebhookEvent {
 }
 
 // ---------------------------------------------------------------------------
+// Phase B — Video Intelligence Pipeline Models
+// ---------------------------------------------------------------------------
+
+model VideoSegment {
+  id              String    @id @default(uuid())
+  evidenceId      String
+  tenantId        String
+  caseId          String
+  segmentIndex    Int       // Zero-based ordering
+  startTimeSec    Float     // Start time in the original video (seconds)
+  endTimeSec      Float     // End time in the original video (seconds)
+  durationSec     Float     // Segment duration
+  s3Key           String?   // R2 key for the segment file (null if not yet uploaded)
+  fileSize        BigInt    @default(0)
+  status          String    @default("pending") // pending | uploading | ready | failed
+  error           String?
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@unique([evidenceId, segmentIndex])
+  @@index([evidenceId])
+  @@index([tenantId])
+  @@index([caseId])
+  @@index([status])
+  @@map("video_segments")
+}
+
+model VideoTranscript {
+  id              String    @id @default(uuid())
+  evidenceId      String
+  tenantId        String
+  caseId          String
+  segmentIndex    Int?      // null = full-video transcript
+  language        String    @default("en")
+  text            String    // Full transcript text
+  wordCount       Int       @default(0)
+  durationSec     Float     @default(0)
+  confidence      Float     @default(0)
+  provider        String    @default("mock") // mock | whisper | google_stt | deepgram
+  words           Json?     // Word-level timestamps: [{word, start, end, confidence}]
+  status          String    @default("pending") // pending | processing | completed | failed
+  error           String?
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([evidenceId])
+  @@index([tenantId])
+  @@index([caseId])
+  @@index([segmentIndex])
+  @@index([status])
+  @@map("video_transcripts")
+}
+
+model VideoFrame {
+  id              String    @id @default(uuid())
+  evidenceId      String
+  tenantId        String
+  caseId          String
+  frameIndex      Int       // Zero-based ordering
+  timestampSec    Float     // Timestamp in the original video (seconds)
+  s3Key           String?   // R2 key for the frame image
+  width           Int?
+  height          Int?
+  fileSize        Int       @default(0)
+  isKeyFrame      Boolean   @default(false)
+  sceneChangeScore Float?   // 0-1, higher = bigger scene change from previous frame
+
+  createdAt       DateTime  @default(now())
+
+  @@unique([evidenceId, frameIndex])
+  @@index([evidenceId])
+  @@index([tenantId])
+  @@index([caseId])
+  @@index([timestampSec])
+  @@index([isKeyFrame])
+  @@map("video_frames")
+}
+
+model VideoOverlayExtraction {
+  id              String    @id @default(uuid())
+  evidenceId      String
+  tenantId        String
+  caseId          String
+  frameIndex      Int?      // Which frame this was extracted from
+  timestampSec    Float     // Timestamp in the original video
+  overlayTimestamp String?  // Extracted timestamp text from overlay
+  gpsLat          Float?
+  gpsLong         Float?
+  vehicleSpeed    Float?
+  cameraId        String?
+  officerId       String?
+  rawOcrText      String?   // Raw OCR text from the frame
+  confidence      Float     @default(0)
+
+  createdAt       DateTime  @default(now())
+
+  @@index([evidenceId])
+  @@index([tenantId])
+  @@index([caseId])
+  @@index([timestampSec])
+  @@map("video_overlay_extractions")
+}
+
+model VideoPipelineRun {
+  id              String    @id @default(uuid())
+  evidenceId      String
+  tenantId        String
+  caseId          String
+  processingJobId String?   // Links to ProcessingJob
+  status          String    @default("pending") // pending | running | completed | failed | cancelled
+  currentStage    String?   // Which stage is currently running
+  progress        Float     @default(0) // 0-100 overall progress
+
+  // Stage completion tracking
+  stageProbe      String    @default("pending") // pending | running | completed | failed | skipped
+  stageSegment    String    @default("pending")
+  stageFrames     String    @default("pending")
+  stageOcr        String    @default("pending")
+  stageTranscribe String    @default("pending")
+  stageActions    String    @default("pending")
+  stageEvents     String    @default("pending")
+
+  // Probe results (populated after probe stage)
+  durationSec     Float?
+  codec           String?
+  resolution      String?
+  fps             Float?
+  fileSizeBytes   BigInt?
+
+  // Summary stats
+  segmentCount    Int       @default(0)
+  frameCount      Int       @default(0)
+  overlayCount    Int       @default(0)
+  transcriptWords Int       @default(0)
+  actionCount     Int       @default(0)
+  eventCount      Int       @default(0)
+
+  error           String?
+  startedAt       DateTime?
+  completedAt     DateTime?
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@unique([evidenceId])
+  @@index([tenantId])
+  @@index([caseId])
+  @@index([status])
+  @@index([processingJobId])
+  @@map("video_pipeline_runs")
+}
+
+// ---------------------------------------------------------------------------
 // PR 1 — Schema Version Control (Hardening Core)
 // Tracks schema versions applied to this database.
 // Boot-time assertion compares expected vs actual to hard-fail on drift.

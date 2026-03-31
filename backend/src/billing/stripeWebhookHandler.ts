@@ -75,7 +75,7 @@ interface StripeSubscriptionObject {
 interface StripeCheckoutSession {
   id: string;
   customer: string;
-  subscription: string;
+  subscription: string | null;
   client_reference_id?: string;
   metadata?: Record<string, string>;
 }
@@ -396,6 +396,11 @@ async function handleCheckoutCompleted(session: StripeCheckoutSession): Promise<
   // ---------------------------------------------------------------------------
   // Branch: Subscription checkout
   // ---------------------------------------------------------------------------
+  if (!session.subscription) {
+    console.warn(`[StripeWebhook] checkout.session.completed with no subscription ID for session ${session.id} — ignoring`);
+    return;
+  }
+
   const metaPlanId = session.metadata?.planId;
   const mapped = metaPlanId
     ? mapPlanIdToTier(metaPlanId)

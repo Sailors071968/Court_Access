@@ -255,7 +255,7 @@ export function SubscriptionManagementPage() {
 
       const data = await res.json();
       if (!res.ok) {
-        setCheckoutMessage(data.message ?? 'Unable to process plan change. Please try again or contact support.');
+        setCheckoutMessage(data.error ?? 'Unable to process plan change. Please try again or contact support.');
         setShowConfirmation(false);
         return;
       }

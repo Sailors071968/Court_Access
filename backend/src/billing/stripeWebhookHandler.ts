@@ -15,10 +15,12 @@ import { addPurchasedCredits } from './aiCreditService.js';
 // Stripe SDK — initialized lazily when STRIPE_SECRET_KEY is configured
 // ---------------------------------------------------------------------------
 
+let _stripeClient: Stripe | null | undefined;
 function getStripeClient(): Stripe | null {
+  if (_stripeClient !== undefined) return _stripeClient;
   const key = process.env.STRIPE_SECRET_KEY;
-  if (!key) return null;
-  return new Stripe(key, { apiVersion: '2025-03-31.basil' as Stripe.LatestApiVersion });
+  _stripeClient = key ? new Stripe(key, { apiVersion: '2025-03-31.basil' as Stripe.LatestApiVersion }) : null;
+  return _stripeClient;
 }
 
 // ---------------------------------------------------------------------------

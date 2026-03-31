@@ -633,7 +633,8 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
     }
 
     try {
-      const origin = request.headers.origin ?? (request.headers.referer ? new URL(request.headers.referer as string).origin : 'http://localhost:5173');
+      const defaultOrigin = process.env.FRONTEND_URL ?? 'http://localhost:5173';
+      const origin = request.headers.origin ?? (request.headers.referer ? new URL(request.headers.referer as string).origin : defaultOrigin);
       const session = await stripe.checkout.sessions.create({
         mode: 'subscription',
         client_reference_id: userId,
@@ -686,7 +687,8 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
     }
 
     try {
-      const origin = request.headers.origin ?? (request.headers.referer ? new URL(request.headers.referer as string).origin : 'http://localhost:5173');
+      const defaultOrigin = process.env.FRONTEND_URL ?? 'http://localhost:5173';
+      const origin = request.headers.origin ?? (request.headers.referer ? new URL(request.headers.referer as string).origin : defaultOrigin);
       const session = await stripe.checkout.sessions.create({
         mode: 'payment',
         client_reference_id: userId,

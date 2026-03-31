@@ -7,7 +7,7 @@
 // ACU credits + subscription displayed as dual hybrid system.
 // ============================================================================
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from '../../components/common/Card';
 import { LegalDisclaimer } from '../../components/common/LegalDisclaimer';
 import { BillingNotificationBanner } from '../../components/common/BillingNotificationBanner';
@@ -29,6 +29,8 @@ import {
   Crown,
   Shield,
   Star,
+  Loader2,
+  AlertCircle,
 } from 'lucide-react';
 
 // ---------------------------------------------------------------------------
@@ -54,12 +56,28 @@ const TIER_COLORS: Record<string, { bg: string; border: string; text: string; ba
 };
 
 // ---------------------------------------------------------------------------
-// Sample current subscription state
+// Backend response types
 // ---------------------------------------------------------------------------
 
-const CURRENT_PLAN_ID: SubscriptionTierId = 'PROFESSIONAL';
-const CURRENT_CREDIT_BALANCE = 28;
-const RENEWAL_DATE = '2026-04-01T00:00:00Z';
+interface BackendSubscription {
+  userId: string;
+  planId: string;
+  activatedAt: string;
+  billingPeriodStart: string;
+  billingPeriodEnd: string;
+  stripeSubscriptionId: string | null;
+  stripeCustomerId: string | null;
+}
+
+interface BackendCreditBalance {
+  id: string;
+  userId: string;
+  monthlyCredits: number;
+  purchasedCredits: number;
+  creditsUsed: number;
+  billingPeriodStart: string;
+  billingPeriodEnd: string;
+}
 
 // ---------------------------------------------------------------------------
 // Plan Card Component
@@ -229,14 +247,71 @@ export function SubscriptionManagementPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [checkoutMessage, setCheckoutMessage] = useState<string | null>(null);
 
+  // Real backend state — no hardcoded values
+  const [currentPlanId, setCurrentPlanId] = useState<SubscriptionTierId>('FREE');
+  const [creditBalance, setCreditBalance] = useState(0);
+  const [renewalDate, setRenewalDate] = useState<string>(new Date().toISOString());
+  const [loading, setLoading] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
+
   const tiers = getSubscriptionTierRegistry();
   const displayTiers = tiers.filter(t => !t.isLifetime && !t.id.startsWith('TIER_')); // Exclude legacy lifetime and TIER_N tiers
 
+  // Fetch real subscription + credit data from backend on mount
+  useEffect(() => {
+    let cancelled = false;
+    async function loadBillingData() {
+      setLoading(true);
+      setFetchError(null);
+      const token = localStorage.getItem('court-access-token') ?? '';
+      const headers: Record<string, string> = {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      };
+
+      try {
+        const [subRes, creditsRes] = await Promise.all([
+          fetch('/api/billing/subscription', { headers }),
+          fetch('/api/billing/credits', { headers }),
+        ]);
+
+        if (cancelled) return;
+
+        if (subRes.ok) {
+          const subData = await subRes.json() as { subscription: BackendSubscription };
+          setCurrentPlanId(subData.subscription.planId as SubscriptionTierId);
+          setRenewalDate(subData.subscription.billingPeriodEnd);
+        } else if (subRes.status === 401) {
+          setFetchError('Authentication required. Please log in.');
+        } else {
+          console.error('[Billing] Failed to fetch subscription:', subRes.status);
+        }
+
+        if (creditsRes.ok) {
+          const creditsData = await creditsRes.json() as { balance: BackendCreditBalance; available: number };
+          setCreditBalance(creditsData.available);
+        } else if (creditsRes.status !== 401) {
+          console.error('[Billing] Failed to fetch credits:', creditsRes.status);
+        }
+      } catch (err) {
+        if (!cancelled) {
+          console.error('[Billing] Network error fetching billing data:', err);
+          setFetchError('Unable to connect to billing server.');
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    }
+
+    loadBillingData();
+    return () => { cancelled = true; };
+  }, []);
+
   const billingOverview = getBillingOverview(
     'current-tenant',
-    CURRENT_CREDIT_BALANCE,
-    CURRENT_PLAN_ID,
-    RENEWAL_DATE,
+    creditBalance,
+    currentPlanId,
+    renewalDate,
   );
 
   const handleProceedToCheckout = async () => {
@@ -273,8 +348,27 @@ export function SubscriptionManagementPage() {
     }
   };
 
+  if (loading) {
+    return (
+      <div className="max-w-6xl mx-auto px-4 py-8 flex items-center justify-center min-h-[400px]">
+        <div className="flex items-center gap-3 text-gray-500">
+          <Loader2 size={20} className="animate-spin" />
+          <span className="text-sm">Loading billing information...</span>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="max-w-6xl mx-auto space-y-6 px-4 py-8">
+      {/* Fetch error */}
+      {fetchError && (
+        <div className="bg-red-50 border border-red-200 rounded-lg p-4 flex items-center gap-3">
+          <AlertCircle size={18} className="text-red-500 flex-shrink-0" />
+          <p className="text-sm text-red-800">{fetchError}</p>
+        </div>
+      )}
+
       {/* Notifications */}
       <BillingNotificationBanner notifications={billingOverview.notifications} />
 
@@ -289,7 +383,7 @@ export function SubscriptionManagementPage() {
         <CreditWarningWidget
           currentBalance={billingOverview.creditStatus.currentBalance}
           monthlyAllotment={billingOverview.creditStatus.monthlyAllotment}
-          renewalDate={RENEWAL_DATE}
+          renewalDate={renewalDate}
           daysUntilRenewal={billingOverview.subscriptionStatus.daysUntilRenewal}
           className="w-64"
         />
@@ -310,7 +404,7 @@ export function SubscriptionManagementPage() {
             <PlanCard
               key={tier.id}
               tier={tier}
-              isCurrentPlan={tier.id === CURRENT_PLAN_ID}
+              isCurrentPlan={tier.id === currentPlanId}
               isSelected={tier.id === selectedTierId}
               onSelect={() => {
                 setSelectedTierId(tier.id);
@@ -322,7 +416,7 @@ export function SubscriptionManagementPage() {
       </div>
 
       {/* Action */}
-      {selectedTierId && selectedTierId !== CURRENT_PLAN_ID && (
+      {selectedTierId && selectedTierId !== currentPlanId && (
         <div className="flex justify-center">
           <button
             onClick={() => setShowConfirmation(true)}

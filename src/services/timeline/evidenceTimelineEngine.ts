@@ -302,6 +302,70 @@ function generateTypeSpecificEvents(doc: DocumentEntity, docIndex: number): Time
 }
 
 // ---------------------------------------------------------------------------
+// Deterministic scoring helpers — NO randomness (Phase 1 compliance)
+// Scores are structural metrics derived from evidence properties only.
+// ---------------------------------------------------------------------------
+
+/**
+ * Deterministic hash of a string to a number in [0, max).
+ * Used for stable tie-breaking when evidence properties are equal.
+ */
+function stableHash(s: string, max: number): number {
+  let hash = 0;
+  for (let i = 0; i < s.length; i++) {
+    hash = ((hash << 5) - hash + s.charCodeAt(i)) | 0;
+  }
+  return Math.abs(hash) % max;
+}
+
+/**
+ * Cross-document inconsistency score (55-84 range).
+ * Based on: timestamp difference magnitude, word overlap density, significance.
+ */
+function computeCrossDocScore(ea: TimelineEvent, eb: TimelineEvent): number {
+  // Timestamp difference contributes up to 15 points
+  const tsDiff = Math.abs(ea.timestamp.localeCompare(eb.timestamp));
+  const tsPoints = Math.min(15, tsDiff * 5);
+
+  // Word overlap density contributes up to 10 points
+  const wordsA = ea.description.toLowerCase().split(' ').filter(w => w.length > 4);
+  const wordsB = new Set(eb.description.toLowerCase().split(' ').filter(w => w.length > 4));
+  const overlap = wordsA.filter(w => wordsB.has(w)).length;
+  const overlapPoints = Math.min(10, overlap * 3);
+
+  // Significance contributes up to 4 points
+  const sigMap: Record<string, number> = { critical: 4, significant: 3, notable: 2, routine: 0 };
+  const sigPoints = Math.max(sigMap[ea.significance] ?? 0, sigMap[eb.significance] ?? 0);
+
+  // Stable tie-breaker from event IDs (0-4 range)
+  const tieBreaker = stableHash(ea.id + eb.id, 5);
+
+  return Math.min(84, 55 + tsPoints + overlapPoints + sigPoints + tieBreaker);
+}
+
+/**
+ * Witness inconsistency score (50-74 range).
+ * Based on: document type diversity, significance, corroboration status.
+ */
+function computeWitnessScore(ea: TimelineEvent, eb: TimelineEvent): number {
+  // Type diversity: different source types score higher
+  const typeDiversity = ea.sourceDocumentType !== eb.sourceDocumentType ? 8 : 0;
+
+  // Significance contributes up to 6 points
+  const sigMap: Record<string, number> = { critical: 6, significant: 4, notable: 2, routine: 0 };
+  const sigPoints = Math.max(sigMap[ea.significance] ?? 0, sigMap[eb.significance] ?? 0);
+
+  // Corroboration status: single_source or unverified score higher
+  const verifMap: Record<string, number> = { unverified: 6, single_source: 4, conflicting: 3, corroborated: 0 };
+  const verifPoints = Math.max(verifMap[ea.verificationStatus] ?? 0, verifMap[eb.verificationStatus] ?? 0);
+
+  // Stable tie-breaker (0-4 range)
+  const tieBreaker = stableHash(ea.id + eb.id, 5);
+
+  return Math.min(74, 50 + typeDiversity + sigPoints + verifPoints + tieBreaker);
+}
+
+// ---------------------------------------------------------------------------
 // Inconsistency detection on the timeline
 // ---------------------------------------------------------------------------
 
@@ -388,7 +452,7 @@ function detectTimelineInconsistencies(events: TimelineEvent[]): TimelineInconsi
               incId++;
               inconsistencies.push({
                 id: `inc-crossdoc-${incId}`,
-                score: 55 + Math.floor(Math.random() * 30),
+                score: computeCrossDocScore(ea, eb),
                 category: 'temporal',
                 description: `Cross-document timestamp discrepancy: "${ea.sourceDocumentName}" records an event at ${ea.timestamp}, while "${eb.sourceDocumentName}" references a similar event at ${eb.timestamp}.`,
                 eventIds: [ea.id, eb.id],
@@ -450,7 +514,7 @@ function detectTimelineInconsistencies(events: TimelineEvent[]): TimelineInconsi
           incId++;
           inconsistencies.push({
             id: `inc-witness-${incId}`,
-            score: 50 + Math.floor(Math.random() * 25),
+            score: computeWitnessScore(witnessEvents[i], witnessEvents[j]),
             category: 'witness',
             description: `Multiple witness accounts from different sources: "${witnessEvents[i].sourceDocumentName}" and "${witnessEvents[j].sourceDocumentName}" — cross-reference recommended to identify any narrative discrepancies.`,
             eventIds: [witnessEvents[i].id, witnessEvents[j].id],

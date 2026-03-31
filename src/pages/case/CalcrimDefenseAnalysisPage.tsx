@@ -8,7 +8,7 @@
 //   tasks, legal instruments, and defense strategies
 // ============================================================================
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import {
   Scale,
@@ -36,6 +36,45 @@ import {
   type ElementStrength,
   type Inconsistency,
 } from '../../services/calcrim';
+import { filterLegalAdviceLanguage } from '../../services/legalAdviceFilterEngine';
+import { verifyClaim, type AnalysisClaim } from '../../services/aiGuardrailsEngine';
+import { GuardrailStatusBanner } from '../../components/common/VerificationBadge';
+
+// ---------------------------------------------------------------------------
+// Scoring → Enum mapping (Requirement #6)
+// Maps numeric prosecution scores to deterministic evidence status enums.
+// ---------------------------------------------------------------------------
+
+type EvidenceStatusEnum = 'ESTABLISHED' | 'DISPUTED' | 'UNCORROBORATED' | 'NOT_PRESENT';
+
+function scoreToEvidenceStatus(score: number, supportingCount: number, refutingCount: number): EvidenceStatusEnum {
+  if (supportingCount === 0 && refutingCount === 0) return 'NOT_PRESENT';
+  if (supportingCount > 0 && refutingCount > 0) return 'DISPUTED';
+  if (supportingCount >= 2 && score >= 60) return 'ESTABLISHED';
+  if (supportingCount === 1) return 'UNCORROBORATED';
+  return 'NOT_PRESENT';
+}
+
+const EVIDENCE_STATUS_STYLE: Record<EvidenceStatusEnum, { label: string; color: string }> = {
+  ESTABLISHED: { label: 'Established', color: 'bg-green-100 text-green-800' },
+  DISPUTED: { label: 'Disputed', color: 'bg-red-100 text-red-800' },
+  UNCORROBORATED: { label: 'Uncorroborated', color: 'bg-amber-100 text-amber-800' },
+  NOT_PRESENT: { label: 'Not Present', color: 'bg-gray-100 text-gray-600' },
+};
+
+function EvidenceStatusBadge({ status }: { status: EvidenceStatusEnum }) {
+  const s = EVIDENCE_STATUS_STYLE[status];
+  return (
+    <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${s.color}`}>
+      {s.label}
+    </span>
+  );
+}
+
+/** Filter text through legal advice filter before display */
+function safeText(text: string): string {
+  return filterLegalAdviceLanguage(text).filteredText;
+}
 
 // ---------------------------------------------------------------------------
 // Helper Components
@@ -126,10 +165,11 @@ function ElementsSection({ charge }: { charge: ChargeAnalysisResult }) {
                 {el.elementNumber}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-sm font-medium text-gray-900">{el.elementText}</p>
+                <p className="text-sm font-medium text-gray-900">{safeText(el.elementText)}</p>
               </div>
               <div className="flex items-center gap-2 flex-shrink-0">
                 <StrengthBadge strength={el.strength} />
+                <EvidenceStatusBadge status={scoreToEvidenceStatus(el.prosecutionScore, el.supportingEvidence.length, el.refutingEvidence.length)} />
                 <ScoreBadge score={el.prosecutionScore} />
                 {expandedEl === el.elementNumber ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
               </div>
@@ -147,7 +187,7 @@ function ElementsSection({ charge }: { charge: ChargeAnalysisResult }) {
                       <ul className="space-y-1">
                         {el.supportingEvidence.map((ev, i) => (
                           <li key={i} className="text-xs text-gray-600 bg-red-50 rounded p-2">
-                            {ev}
+                            {safeText(ev)}
                           </li>
                         ))}
                       </ul>
@@ -165,7 +205,7 @@ function ElementsSection({ charge }: { charge: ChargeAnalysisResult }) {
                       <ul className="space-y-1">
                         {el.refutingEvidence.map((ev, i) => (
                           <li key={i} className="text-xs text-gray-600 bg-green-50 rounded p-2">
-                            {ev}
+                            {safeText(ev)}
                           </li>
                         ))}
                       </ul>
@@ -178,7 +218,7 @@ function ElementsSection({ charge }: { charge: ChargeAnalysisResult }) {
                 {/* Defense angle */}
                 <div className="mt-3 p-3 bg-blue-50 rounded-lg border border-blue-100">
                   <p className="text-xs font-semibold text-blue-700 mb-1">Defense Strategy</p>
-                  <p className="text-sm text-blue-800">{el.defenseAngle}</p>
+                  <p className="text-sm text-blue-800">{safeText(el.defenseAngle)}</p>
                 </div>
               </div>
             )}
@@ -206,8 +246,8 @@ function InvestigativeTasksSection({ charge }: { charge: ChargeAnalysisResult })
               <PriorityBadge priority={task.priority} />
             </div>
             <div className="flex-1">
-              <p className="text-sm font-semibold text-gray-900">{task.title}</p>
-              <p className="text-xs text-gray-600 mt-1">{task.description}</p>
+              <p className="text-sm font-semibold text-gray-900">{safeText(task.title)}</p>
+              <p className="text-xs text-gray-600 mt-1">{safeText(task.description)}</p>
               <div className="flex items-center gap-2 mt-2">
                 <span className="text-[10px] bg-gray-200 text-gray-600 px-1.5 py-0.5 rounded">
                   {task.category}
@@ -241,8 +281,8 @@ function LegalInstrumentsSection({ charge }: { charge: ChargeAnalysisResult }) {
           <div key={li.id} className="p-3 bg-purple-50 rounded-xl border border-purple-100">
             <div className="flex items-start justify-between gap-2">
               <div className="flex-1">
-                <p className="text-sm font-semibold text-gray-900">{li.title}</p>
-                <p className="text-xs text-gray-600 mt-1">{li.description}</p>
+                <p className="text-sm font-semibold text-gray-900">{safeText(li.title)}</p>
+                <p className="text-xs text-gray-600 mt-1">{safeText(li.description)}</p>
               </div>
               <div className="flex flex-col items-end gap-1 flex-shrink-0">
                 <PriorityBadge priority={li.priority} />
@@ -274,10 +314,10 @@ function DefenseStrategiesSection({ charge }: { charge: ChargeAnalysisResult }) 
             <div className="flex items-start justify-between gap-2">
               <div className="flex-1">
                 <div className="flex items-center gap-2 mb-1">
-                  <p className="text-sm font-semibold text-gray-900">{strategy.title}</p>
+                  <p className="text-sm font-semibold text-gray-900">{safeText(strategy.title)}</p>
                   <CategoryBadge category={strategy.category} />
                 </div>
-                <p className="text-xs text-gray-600">{strategy.description}</p>
+                <p className="text-xs text-gray-600">{safeText(strategy.description)}</p>
               </div>
               <div className="flex-shrink-0">
                 <ScoreBadge score={strategy.confidence} label="confidence" />
@@ -319,7 +359,7 @@ function InconsistenciesPreview({
           <div key={inc.id} className="flex items-start gap-3 p-3 bg-red-50 rounded-lg border border-red-100">
             <ScoreBadge score={inc.score} />
             <div className="flex-1 min-w-0">
-              <p className="text-sm text-gray-800">{inc.description}</p>
+              <p className="text-sm text-gray-800">{safeText(inc.description)}</p>
               <div className="flex items-center gap-2 mt-1">
                 <span className="text-[10px] bg-red-200 text-red-800 px-1.5 py-0.5 rounded capitalize">
                   {inc.category}
@@ -354,18 +394,29 @@ export function CalcrimDefenseAnalysisPage() {
   const charges = caseDataProvider.getCharges(caseId);
   const documents = caseDataProvider.getDocuments(caseId);
 
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
   const runAnalysis = useCallback(() => {
+    // Cancel any in-flight analysis to prevent interval duplication
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+
     setIsAnalyzing(true);
     setProgress(0);
 
-    // Simulate progressive analysis with animated progress
+    // Progressive analysis with animated progress
     const steps = 20;
     let step = 0;
-    const interval = setInterval(() => {
+    intervalRef.current = setInterval(() => {
       step++;
       setProgress(Math.min(95, (step / steps) * 100));
       if (step >= steps) {
-        clearInterval(interval);
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+        }
 
         // Run the actual analysis engine
         const chargeInputs = charges.map((c) => ({
@@ -390,18 +441,50 @@ export function CalcrimDefenseAnalysisPage() {
         }, 500);
       }
     }, 150);
-
-    return () => clearInterval(interval);
   }, [caseId, charges, documents]);
 
-  // Auto-run analysis on mount
+  // Auto-run analysis on mount; cleanup interval on unmount
   useEffect(() => {
     if (charges.length > 0) {
       runAnalysis();
     }
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
   }, [charges.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   const activeCharge = analysis?.charges[activeChargeIdx];
+
+  // Compute guardrail report for the active charge's claims
+  const guardrailStats = useMemo(() => {
+    if (!activeCharge) return { total: 0, verified: 0, rejected: 0, confidence: 0 };
+    const claims: AnalysisClaim[] = [
+      ...activeCharge.elements.map((el, i) => ({
+        id: `el-${i}`,
+        text: el.defenseAngle,
+        sourceDocumentIds: [...el.supportingEvidence, ...el.refutingEvidence].map((_, j) => `doc-${j}`),
+        confidence: el.prosecutionScore,
+        category: 'element',
+      })),
+      ...activeCharge.inconsistencies.map((inc) => ({
+        id: inc.id,
+        text: inc.description,
+        sourceDocumentIds: inc.sources,
+        confidence: inc.score,
+        category: 'inconsistency',
+      })),
+    ];
+    const results = claims.map(c => verifyClaim(c));
+    const passed = results.filter(r => r.passesThreshold);
+    const rejected = results.filter(r => !r.passesThreshold);
+    const avgConf = passed.length > 0
+      ? Math.round(passed.reduce((s, r) => s + r.confidence, 0) / passed.length)
+      : 0;
+    return { total: claims.length, verified: passed.length, rejected: rejected.length, confidence: avgConf };
+  }, [activeCharge]);
 
   // Show empty state when no charges exist
   if (charges.length === 0 && !isAnalyzing) {
@@ -463,7 +546,10 @@ export function CalcrimDefenseAnalysisPage() {
           <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
             <Scale size={20} className="text-blue-600" />
             CALCRIM Defense Analysis
-            <VerificationBadge status="corroborated" size="sm" />
+            <VerificationBadge
+              status={guardrailStats.rejected === 0 && guardrailStats.verified > 0 ? 'verified' : guardrailStats.verified > 0 ? 'corroborated' : 'review_needed'}
+              size="sm"
+            />
           </h2>
           <p className="text-sm text-gray-500 mt-1">
             Element-by-element analysis using California Jury Instructions
@@ -575,6 +661,14 @@ export function CalcrimDefenseAnalysisPage() {
           </div>
         </div>
       </Card>
+
+      {/* Guardrail Status Banner (Req #2) */}
+      <GuardrailStatusBanner
+        totalClaims={guardrailStats.total}
+        verifiedClaims={guardrailStats.verified}
+        rejectedClaims={guardrailStats.rejected}
+        overallConfidence={guardrailStats.confidence}
+      />
 
       {/* Tab Navigation */}
       <div className="flex gap-1 border-b border-gray-200">

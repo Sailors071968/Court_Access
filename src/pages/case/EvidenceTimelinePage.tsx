@@ -7,7 +7,7 @@
 // Includes AI verification badges (Req #2) and legal disclaimers (Req #3).
 // ============================================================================
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   Clock,
@@ -34,6 +34,35 @@ import {
   type TimelineEvent,
   type TimelineInconsistency,
 } from '../../services/timeline';
+import { filterLegalAdviceLanguage } from '../../services/legalAdviceFilterEngine';
+import { verifyClaim } from '../../services/aiGuardrailsEngine';
+
+function safeText(text: string): string {
+  return filterLegalAdviceLanguage(text).filteredText;
+}
+
+function priorityToConfidence(priority: 'critical' | 'high' | 'medium' | 'low'): number {
+  switch (priority) {
+    case 'critical':
+      return 90;
+    case 'high':
+      return 75;
+    case 'medium':
+      return 60;
+    case 'low':
+      return 45;
+  }
+}
+
+function shouldDisplayClaim(args: { id: string; text: string; sources: string[]; confidence: number; category: string }): boolean {
+  return verifyClaim({
+    id: args.id,
+    text: args.text,
+    sourceDocumentIds: args.sources,
+    confidence: args.confidence,
+    category: args.category,
+  }).passesThreshold;
+}
 
 // ---------------------------------------------------------------------------
 // Helper Components
@@ -70,7 +99,7 @@ function InconsistencyMarker({ inconsistency }: { inconsistency: TimelineInconsi
             </span>
             <VerificationBadge status={inconsistency.verificationStatus === 'evidence_based' ? 'verified' : 'review_needed'} size="sm" />
           </div>
-          <p className="text-xs leading-relaxed">{inconsistency.description}</p>
+          <p className="text-xs leading-relaxed">{safeText(inconsistency.description)}</p>
           <p className="text-[10px] mt-1 opacity-75">
             Sources: {inconsistency.sourceDocuments.join(', ')}
           </p>
@@ -150,6 +179,15 @@ function TimelineVisual({
           const isSelected = selectedEventId === event.id;
           const relatedInc = inconsistencies.filter(i => i.eventIds.includes(event.id));
 
+          const isSafe = shouldDisplayClaim({
+            id: event.id,
+            text: event.description,
+            sources: [event.sourceDocumentName],
+            confidence: event.confidence,
+            category: 'timeline_event',
+          });
+          if (!isSafe) return null;
+
           return (
             <div key={event.id}>
               <button
@@ -186,7 +224,7 @@ function TimelineVisual({
                       <span className="text-[10px] text-gray-400 italic">{event.timestampPrecision}</span>
                     )}
                   </div>
-                  <p className="text-sm text-gray-900">{event.description}</p>
+                  <p className="text-sm text-gray-900">{safeText(event.description)}</p>
                   <div className="flex items-center gap-2 mt-1">
                     <FileText size={10} className="text-gray-400" />
                     <span className="text-[10px] text-gray-500">{event.sourceDocumentName}</span>
@@ -230,32 +268,47 @@ export function EvidenceTimelinePage() {
   const [expandedTaskId, setExpandedTaskId] = useState<string | null>(null);
 
   const documents = caseDataProvider.getDocuments(caseId);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const runAnalysis = useCallback(() => {
+    // Cancel any in-flight analysis to prevent interval duplication
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+
     setIsAnalyzing(true);
     setProgress(0);
 
     const steps = 20;
     let step = 0;
-    const interval = setInterval(() => {
+    intervalRef.current = setInterval(() => {
       step++;
       setProgress(Math.min(95, (step / steps) * 100));
       if (step >= steps) {
-        clearInterval(interval);
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+        }
         const result = analyzeEvidenceTimeline(caseId ?? '', documents);
         setTimeline(result);
         setProgress(100);
         setTimeout(() => setIsAnalyzing(false), 500);
       }
     }, 120);
-
-    return () => clearInterval(interval);
   }, [caseId, documents]);
 
+  // Auto-run analysis on mount; cleanup interval on unmount
   useEffect(() => {
     if (documents.length > 0) {
       runAnalysis();
     }
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
   }, [documents.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Empty state
@@ -409,7 +462,17 @@ export function EvidenceTimelinePage() {
               </span>
             </div>
             <div className="space-y-3">
-              {timeline.inconsistencies.map(inc => (
+              {timeline.inconsistencies
+                .filter((inc) =>
+                  shouldDisplayClaim({
+                    id: inc.id,
+                    text: inc.description,
+                    sources: inc.sourceDocuments,
+                    confidence: inc.score,
+                    category: 'timeline_inconsistency',
+                  }),
+                )
+                .map((inc) => (
                 <div key={inc.id} className="border border-gray-200 rounded-xl p-4">
                   <div className="flex items-start gap-3">
                     <div className={`w-12 h-12 rounded-lg flex items-center justify-center flex-shrink-0 ${
@@ -436,10 +499,10 @@ export function EvidenceTimelinePage() {
                           size="sm"
                         />
                       </div>
-                      <p className="text-sm text-gray-800 mb-2">{inc.description}</p>
+                      <p className="text-sm text-gray-800 mb-2">{safeText(inc.description)}</p>
                       <div className="bg-blue-50 border border-blue-100 rounded-lg p-2 mb-2">
                         <p className="text-xs text-blue-800">
-                          <span className="font-semibold">Observation:</span> {inc.recommendation}
+                          <span className="font-semibold">Observation:</span> {safeText(inc.recommendation)}
                         </p>
                       </div>
                       <div className="flex items-center gap-2">
@@ -473,7 +536,17 @@ export function EvidenceTimelinePage() {
               </span>
             </div>
             <div className="space-y-3">
-              {timeline.investigativeTasks.map(task => (
+              {timeline.investigativeTasks
+                .filter((task) =>
+                  shouldDisplayClaim({
+                    id: task.id,
+                    text: task.description,
+                    sources: task.sourceDocuments,
+                    confidence: priorityToConfidence(task.priority),
+                    category: 'timeline_task',
+                  }),
+                )
+                .map((task) => (
                 <div key={task.id} className="border border-gray-200 rounded-xl overflow-hidden">
                   <button
                     onClick={() => setExpandedTaskId(expandedTaskId === task.id ? null : task.id)}
@@ -481,7 +554,7 @@ export function EvidenceTimelinePage() {
                   >
                     <PriorityBadge priority={task.priority} />
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900">{task.title}</p>
+                      <p className="text-sm font-medium text-gray-900">{safeText(task.title)}</p>
                       <div className="flex items-center gap-2 mt-1">
                         <span className="text-[10px] bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded capitalize">
                           {task.category.replace(/_/g, ' ')}
@@ -493,10 +566,10 @@ export function EvidenceTimelinePage() {
                   </button>
                   {expandedTaskId === task.id && (
                     <div className="px-4 pb-4 border-t border-gray-100 bg-gray-50">
-                      <p className="text-sm text-gray-700 mt-3 mb-2">{task.description}</p>
+                      <p className="text-sm text-gray-700 mt-3 mb-2">{safeText(task.description)}</p>
                       <div className="bg-purple-50 border border-purple-100 rounded-lg p-2 mb-2">
                         <p className="text-xs text-purple-800">
-                          <span className="font-semibold">Legal Basis:</span> {task.legalBasis}
+                          <span className="font-semibold">Legal Basis:</span> {safeText(task.legalBasis)}
                         </p>
                       </div>
                       {task.sourceDocuments.length > 0 && (
@@ -527,12 +600,22 @@ export function EvidenceTimelinePage() {
               </span>
             </div>
             <div className="space-y-3">
-              {timeline.legalInstruments.map(inst => (
+              {timeline.legalInstruments
+                .filter((inst) =>
+                  shouldDisplayClaim({
+                    id: inst.id,
+                    text: inst.description,
+                    sources: inst.sourceDocuments,
+                    confidence: priorityToConfidence(inst.priority),
+                    category: 'timeline_instrument',
+                  }),
+                )
+                .map((inst) => (
                 <div key={inst.id} className="p-4 bg-purple-50 rounded-xl border border-purple-100">
                   <div className="flex items-start justify-between gap-2 mb-2">
                     <div className="flex-1">
                       <div className="flex items-center gap-2 mb-1">
-                        <p className="text-sm font-semibold text-gray-900">{inst.title}</p>
+                        <p className="text-sm font-semibold text-gray-900">{safeText(inst.title)}</p>
                         <PriorityBadge priority={inst.priority} />
                       </div>
                       <span className="text-[10px] bg-purple-200 text-purple-800 px-1.5 py-0.5 rounded capitalize">
@@ -541,15 +624,15 @@ export function EvidenceTimelinePage() {
                     </div>
                     <Shield size={16} className="text-purple-500 flex-shrink-0" />
                   </div>
-                  <p className="text-sm text-gray-700 mb-2">{inst.description}</p>
+                  <p className="text-sm text-gray-700 mb-2">{safeText(inst.description)}</p>
                   <div className="bg-white/60 rounded-lg p-2 mb-2">
                     <p className="text-xs text-purple-800">
-                      <span className="font-semibold">Legal Authority:</span> {inst.admissibilityBasis}
+                      <span className="font-semibold">Legal Authority:</span> {safeText(inst.admissibilityBasis)}
                     </p>
                   </div>
                   <div className="bg-amber-50 rounded-lg p-2">
                     <p className="text-xs text-amber-800">
-                      <span className="font-semibold">Filing Note:</span> {inst.filingDeadlineNote}
+                      <span className="font-semibold">Filing Note:</span> {safeText(inst.filingDeadlineNote)}
                     </p>
                   </div>
                   {inst.sourceDocuments.length > 0 && (

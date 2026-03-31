@@ -34,6 +34,23 @@ import {
   type FullCaseAnalysis,
   type Inconsistency,
 } from '../../services/calcrim';
+import { filterLegalAdviceLanguage } from '../../services/legalAdviceFilterEngine';
+import { verifyClaim } from '../../services/aiGuardrailsEngine';
+import { GuardrailStatusBanner } from '../../components/common/VerificationBadge';
+
+function safeText(text: string): string {
+  return filterLegalAdviceLanguage(text).filteredText;
+}
+
+function shouldDisplayClaim(args: { id: string; text: string; sources: string[]; confidence: number; category: string }): boolean {
+  return verifyClaim({
+    id: args.id,
+    text: args.text,
+    sourceDocumentIds: args.sources,
+    confidence: args.confidence,
+    category: args.category,
+  }).passesThreshold;
+}
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -85,9 +102,9 @@ function formatInconsistenciesForText(
 
   for (const [idx, inc] of inconsistencies.entries()) {
     text += `#${idx + 1} — Score: ${inc.score}/100 — [${inc.category.toUpperCase()}]\n`;
-    text += `${inc.description}\n`;
+    text += `${safeText(inc.description)}\n`;
     text += `Sources: ${inc.sources.join(', ')}\n`;
-    text += `Recommendation: ${inc.recommendation}\n`;
+    text += `Recommendation: ${safeText(inc.recommendation)}\n`;
     text += `${'-'.repeat(40)}\n\n`;
   }
 
@@ -118,18 +135,28 @@ export function InconsistenciesTablePage() {
   const charges = caseDataProvider.getCharges(caseId);
   const documents = caseDataProvider.getDocuments(caseId);
   const currentCase = caseDataProvider.getCaseById(caseId ?? '');
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const runAnalysis = useCallback(() => {
+    // Cancel any in-flight analysis to prevent interval duplication
+    if (intervalRef.current) {
+      clearInterval(intervalRef.current);
+      intervalRef.current = null;
+    }
+
     setIsAnalyzing(true);
     setProgress(0);
 
     const steps = 15;
     let step = 0;
-    const interval = setInterval(() => {
+    intervalRef.current = setInterval(() => {
       step++;
       setProgress(Math.min(95, (step / steps) * 100));
       if (step >= steps) {
-        clearInterval(interval);
+        if (intervalRef.current) {
+          clearInterval(intervalRef.current);
+          intervalRef.current = null;
+        }
 
         const chargeInputs = charges.map((c) => ({
           id: c.id,
@@ -150,12 +177,17 @@ export function InconsistenciesTablePage() {
         setTimeout(() => setIsAnalyzing(false), 400);
       }
     }, 120);
-
-    return () => clearInterval(interval);
   }, [caseId, charges, documents]);
 
+  // Auto-run analysis on mount; cleanup interval on unmount
   useEffect(() => {
     runAnalysis();
+    return () => {
+      if (intervalRef.current) {
+        clearInterval(intervalRef.current);
+        intervalRef.current = null;
+      }
+    };
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Close share menu on outside click
@@ -177,9 +209,26 @@ export function InconsistenciesTablePage() {
     ? allInconsistencies
     : allInconsistencies.filter((i) => i.category === filterCategory);
 
-  const sorted = [...filtered].sort((a, b) =>
+  const guardrailFiltered = filtered.filter((inc) =>
+    shouldDisplayClaim({
+      id: inc.id,
+      text: inc.description,
+      sources: inc.sources,
+      confidence: inc.score,
+      category: 'inconsistency',
+    }),
+  );
+
+  const sorted = [...guardrailFiltered].sort((a, b) =>
     sortDir === 'desc' ? b.score - a.score : a.score - b.score
   );
+
+  // Guardrail stats for banner
+  const rejectedCount = filtered.length - guardrailFiltered.length;
+  const verifiedCount = guardrailFiltered.length;
+  const avgConfidence = guardrailFiltered.length > 0
+    ? Math.round(guardrailFiltered.reduce((sum, inc) => sum + inc.score, 0) / guardrailFiltered.length)
+    : 0;
 
   // Share handlers
   const handleCopyToClipboard = () => {
@@ -334,6 +383,14 @@ export function InconsistenciesTablePage() {
         </div>
       </div>
 
+      {/* Guardrail Status Banner */}
+      <GuardrailStatusBanner
+        totalClaims={filtered.length}
+        verifiedClaims={verifiedCount}
+        rejectedClaims={rejectedCount}
+        overallConfidence={avgConfidence}
+      />
+
       {/* Filters & Sort */}
       <div className="flex items-center gap-4">
         <div className="flex items-center gap-2">
@@ -399,7 +456,7 @@ export function InconsistenciesTablePage() {
                       <CategoryBadge category={inc.category} />
                     </td>
                     <td className="py-3 px-4 text-gray-800 max-w-md">
-                      <p className={expandedRow === inc.id ? '' : 'line-clamp-2'}>{inc.description}</p>
+                      <p className={expandedRow === inc.id ? '' : 'line-clamp-2'}>{safeText(inc.description)}</p>
                     </td>
                     <td className="py-3 px-4">
                       <div className="flex flex-wrap gap-1">
@@ -418,10 +475,10 @@ export function InconsistenciesTablePage() {
                     <tr key={`${inc.id}-detail`} className="bg-gray-50">
                       <td colSpan={5} className="px-4 py-4">
                         <div className="max-w-3xl">
-                          <p className="text-sm text-gray-800 mb-3">{inc.description}</p>
+                          <p className="text-sm text-gray-800 mb-3">{safeText(inc.description)}</p>
                           <div className="p-3 bg-blue-50 rounded-lg border border-blue-100 mb-3">
                             <p className="text-xs font-semibold text-blue-700 mb-1">Recommendation</p>
-                            <p className="text-sm text-blue-800">{inc.recommendation}</p>
+                            <p className="text-sm text-blue-800">{safeText(inc.recommendation)}</p>
                           </div>
                           <div className="flex items-center gap-4 text-xs text-gray-500">
                             <span>Sources: {inc.sources.join(', ')}</span>

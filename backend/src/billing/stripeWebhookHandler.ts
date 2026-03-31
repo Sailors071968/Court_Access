@@ -5,9 +5,48 @@
 // ============================================================================
 
 import crypto from 'crypto';
+import Stripe from 'stripe';
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import prisma from '../lib/prisma.js';
 import { logSecurityEvent } from '../security/authMiddleware.js';
+import { addPurchasedCredits } from './aiCreditService.js';
+
+// ---------------------------------------------------------------------------
+// Stripe SDK — initialized lazily when STRIPE_SECRET_KEY is configured
+// ---------------------------------------------------------------------------
+
+function getStripeClient(): Stripe | null {
+  const key = process.env.STRIPE_SECRET_KEY;
+  if (!key) return null;
+  return new Stripe(key, { apiVersion: '2025-03-31.basil' as Stripe.LatestApiVersion });
+}
+
+// ---------------------------------------------------------------------------
+// Stripe Price ID mapping — maps internal plan IDs to Stripe Price IDs.
+// These MUST be populated with real Stripe Price IDs from your dashboard.
+// ---------------------------------------------------------------------------
+
+const PLAN_STRIPE_PRICES: Record<string, string> = {
+  STARTER: process.env.STRIPE_PRICE_STARTER ?? 'price_starter_monthly',
+  PROFESSIONAL: process.env.STRIPE_PRICE_PROFESSIONAL ?? 'price_professional_monthly',
+  ADVANCED_INVESTIGATOR: process.env.STRIPE_PRICE_ADVANCED ?? 'price_advanced_monthly',
+  LITIGATION_INTELLIGENCE_PRO: process.env.STRIPE_PRICE_LITIGATION ?? 'price_litigation_monthly',
+  ENTERPRISE_FIRM: process.env.STRIPE_PRICE_ENTERPRISE ?? 'price_enterprise_monthly',
+};
+
+const CREDIT_PACK_STRIPE_PRICES: Record<string, string> = {
+  pack_50: process.env.STRIPE_PRICE_PACK_50 ?? 'price_pack_50',
+  pack_150: process.env.STRIPE_PRICE_PACK_150 ?? 'price_pack_150',
+  pack_500: process.env.STRIPE_PRICE_PACK_500 ?? 'price_pack_500',
+  pack_1500: process.env.STRIPE_PRICE_PACK_1500 ?? 'price_pack_1500',
+};
+
+const CREDIT_PACK_AMOUNTS: Record<string, number> = {
+  pack_50: 50,
+  pack_150: 150,
+  pack_500: 500,
+  pack_1500: 1500,
+};
 
 // ---------------------------------------------------------------------------
 // Types
@@ -300,9 +339,61 @@ async function handleCheckoutCompleted(session: StripeCheckoutSession): Promise<
     return;
   }
 
-  // Read plan from session metadata (set when creating the checkout session).
-  // Falls back to STARTER only if metadata is missing — callers MUST set planId
-  // in session metadata when creating checkout sessions.
+  // ---------------------------------------------------------------------------
+  // Branch: ACU credit pack purchase (one-time payment)
+  // ---------------------------------------------------------------------------
+  if (session.metadata?.type === 'acu_credits') {
+    const packId = session.metadata.packId;
+    const credits = parseInt(session.metadata.credits ?? '0', 10);
+    if (!packId || credits <= 0) {
+      console.error(`[StripeWebhook] Invalid credit pack metadata in session ${session.id}`);
+      return;
+    }
+
+    // Validate credits match the pack definition to prevent tampered metadata
+    const expectedCredits = CREDIT_PACK_AMOUNTS[packId];
+    if (expectedCredits !== credits) {
+      console.error(`[StripeWebhook] Credit mismatch for pack ${packId}: meta=${credits} expected=${expectedCredits}`);
+      return;
+    }
+
+    // Atomic credit grant inside serializable transaction
+    await prisma.$transaction(async (tx) => {
+      const balance = await tx.aiCreditBalance.findUnique({ where: { userId } });
+      if (!balance) {
+        // Create balance if it doesn't exist
+        await tx.aiCreditBalance.create({
+          data: {
+            userId,
+            monthlyCredits: 0,
+            purchasedCredits: credits,
+            creditsUsed: 0,
+            billingPeriodStart: new Date(),
+            billingPeriodEnd: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000),
+          },
+        });
+      } else {
+        await tx.aiCreditBalance.update({
+          where: { userId },
+          data: { purchasedCredits: { increment: credits } },
+        });
+      }
+    }, { isolationLevel: 'Serializable' });
+
+    void logSecurityEvent(
+      'STRIPE_CREDIT_PURCHASE_COMPLETED',
+      userId,
+      undefined,
+      `Credit purchase completed: ${credits} credits (pack ${packId}) session ${session.id}`,
+    );
+
+    console.log(`[StripeWebhook] Credit purchase completed: user=${userId} pack=${packId} credits=${credits}`);
+    return;
+  }
+
+  // ---------------------------------------------------------------------------
+  // Branch: Subscription checkout
+  // ---------------------------------------------------------------------------
   const metaPlanId = session.metadata?.planId;
   const mapped = metaPlanId
     ? mapPlanIdToTier(metaPlanId)
@@ -314,8 +405,7 @@ async function handleCheckoutCompleted(session: StripeCheckoutSession): Promise<
 
   // Update subscription with Stripe IDs.
   // Only overwrite plan/tier in the update path when metaPlanId is present,
-  // otherwise preserve existing plan to avoid silent downgrade (matches
-  // the guard pattern in handleSubscriptionCreated).
+  // otherwise preserve existing plan to avoid silent downgrade.
   const updateData: Record<string, unknown> = {
     stripeCustomerId: session.customer,
     stripeSubscriptionId: session.subscription,
@@ -438,6 +528,40 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
 
     console.log(`[StripeWebhook] Received event: ${event.type} (${event.id})`);
 
+    // -----------------------------------------------------------------------
+    // Idempotency guard — Stripe may retry webhook events multiple times.
+    // We use an atomic insert-first approach: attempt to create the
+    // idempotency record BEFORE processing. If the unique constraint on
+    // eventId rejects the insert, this is a duplicate delivery and we
+    // return 200 immediately. This eliminates the TOCTOU race where two
+    // concurrent deliveries could both pass a findUnique check and both
+    // process the event (granting duplicate ACU credits).
+    // -----------------------------------------------------------------------
+    try {
+      await prisma.stripeWebhookEvent.create({
+        data: {
+          eventId: event.id,
+          eventType: event.type,
+        },
+      });
+    } catch (insertErr) {
+      // Unique constraint violation = duplicate event (P2002 is Prisma's
+      // unique constraint error code)
+      const isPrismaUniqueViolation =
+        insertErr instanceof Error &&
+        'code' in insertErr &&
+        (insertErr as { code: string }).code === 'P2002';
+
+      if (isPrismaUniqueViolation) {
+        console.log(`[StripeWebhook] Duplicate event ignored: ${event.type} (${event.id})`);
+        return reply.send({ received: true, duplicate: true });
+      }
+      // Non-duplicate DB error — log and reject so Stripe retries
+      const msg = insertErr instanceof Error ? insertErr.message : String(insertErr);
+      console.error(`[StripeWebhook] Idempotency record insert failed: ${msg}`);
+      return reply.code(500).send({ error: 'Webhook idempotency check failed' });
+    }
+
     try {
       switch (event.type) {
         case 'customer.subscription.created':
@@ -464,6 +588,19 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
 
       return reply.send({ received: true });
     } catch (err) {
+      // Processing failed — delete the idempotency record so Stripe retry
+      // will re-attempt processing (we only want to block retries for
+      // events that were successfully processed).
+      try {
+        await prisma.stripeWebhookEvent.delete({
+          where: { eventId: event.id },
+        });
+      } catch {
+        // Best-effort cleanup; if delete fails, the event stays recorded
+        // and Stripe retries will be blocked. Manual intervention needed.
+        console.error(`[StripeWebhook] Failed to clean up idempotency record for ${event.id}`);
+      }
+
       const message = err instanceof Error ? err.message : String(err);
       console.error(`[StripeWebhook] Error handling ${event.type}:`, message);
       void logSecurityEvent('STRIPE_WEBHOOK_ERROR', undefined, request.ip, `${event.type}: ${message}`);
@@ -473,30 +610,131 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
 
   }); // end webhook plugin scope
 
-  // POST /api/billing/create-checkout-session — Create Stripe checkout session
+  // POST /api/billing/create-checkout-session — Create Stripe subscription checkout
   app.post('/api/billing/create-checkout-session', async (request: FastifyRequest, reply: FastifyReply) => {
-    // Always read userId from authenticated JWT — never trust client-supplied userId
     const userId = ((request as unknown as { user?: { userId: string } }).user)?.userId;
     if (!userId) {
       return reply.code(401).send({ error: 'Authentication required' });
     }
-    // Stub — in production, this would create a Stripe checkout session
+
     const { planId } = request.body as { planId: string };
-    return reply.send({
-      message: 'Stripe checkout session creation requires STRIPE_SECRET_KEY to be configured',
-      planId,
-      userId,
-      note: 'Configure STRIPE_SECRET_KEY env var to enable real Stripe checkout',
-    });
+    const stripePriceId = PLAN_STRIPE_PRICES[planId];
+    if (!stripePriceId) {
+      return reply.code(400).send({ error: `Invalid plan ID: ${planId}` });
+    }
+
+    const stripe = getStripeClient();
+    if (!stripe) {
+      return reply.code(503).send({
+        error: 'Stripe is not configured. Set STRIPE_SECRET_KEY environment variable.',
+      });
+    }
+
+    try {
+      const origin = request.headers.origin ?? request.headers.referer ?? 'http://localhost:5173';
+      const session = await stripe.checkout.sessions.create({
+        mode: 'subscription',
+        client_reference_id: userId,
+        metadata: { userId, planId },
+        line_items: [{ price: stripePriceId, quantity: 1 }],
+        success_url: `${origin}/billing?session_id={CHECKOUT_SESSION_ID}&status=success`,
+        cancel_url: `${origin}/billing?status=cancelled`,
+      });
+
+      void logSecurityEvent(
+        'STRIPE_CHECKOUT_CREATED',
+        userId,
+        undefined,
+        `Checkout session ${session.id} created for plan ${planId}`,
+      );
+
+      return reply.send({ url: session.url, sessionId: session.id });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      console.error(`[Stripe] create-checkout-session error: ${message}`);
+      return reply.code(500).send({ error: 'Failed to create checkout session' });
+    }
   });
 
-  // GET /api/billing/checkout-status/:sessionId — Check checkout status
+  // POST /api/billing/purchase-credits — Create Stripe payment checkout for ACU credit pack
+  app.post('/api/billing/purchase-credits', async (request: FastifyRequest, reply: FastifyReply) => {
+    const userId = ((request as unknown as { user?: { userId: string } }).user)?.userId;
+    if (!userId) {
+      return reply.code(401).send({ error: 'Authentication required' });
+    }
+
+    const { packId, credits } = request.body as { packId: string; credits: number; priceCents?: number };
+    const stripePriceId = CREDIT_PACK_STRIPE_PRICES[packId];
+    const packCredits = CREDIT_PACK_AMOUNTS[packId];
+
+    if (!stripePriceId || !packCredits) {
+      return reply.code(400).send({ error: `Invalid credit pack ID: ${packId}` });
+    }
+
+    // Validate that the requested credits match the pack definition
+    if (credits !== packCredits) {
+      return reply.code(400).send({ error: `Credit amount mismatch for pack ${packId}` });
+    }
+
+    const stripe = getStripeClient();
+    if (!stripe) {
+      return reply.code(503).send({
+        error: 'Stripe is not configured. Set STRIPE_SECRET_KEY environment variable.',
+      });
+    }
+
+    try {
+      const origin = request.headers.origin ?? request.headers.referer ?? 'http://localhost:5173';
+      const session = await stripe.checkout.sessions.create({
+        mode: 'payment',
+        client_reference_id: userId,
+        metadata: {
+          userId,
+          type: 'acu_credits',
+          packId,
+          credits: String(packCredits),
+        },
+        line_items: [{ price: stripePriceId, quantity: 1 }],
+        success_url: `${origin}/billing/credits?session_id={CHECKOUT_SESSION_ID}&status=success`,
+        cancel_url: `${origin}/billing/credits?status=cancelled`,
+      });
+
+      void logSecurityEvent(
+        'STRIPE_CREDIT_CHECKOUT_CREATED',
+        userId,
+        undefined,
+        `Credit checkout session ${session.id} created for pack ${packId} (${packCredits} credits)`,
+      );
+
+      return reply.send({ url: session.url, sessionId: session.id });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      console.error(`[Stripe] purchase-credits error: ${message}`);
+      return reply.code(500).send({ error: 'Failed to create credit purchase session' });
+    }
+  });
+
+  // GET /api/billing/checkout-status/:sessionId — Check checkout session status
   app.get('/api/billing/checkout-status/:sessionId', async (request: FastifyRequest, reply: FastifyReply) => {
     const { sessionId } = request.params as { sessionId: string };
-    return reply.send({
-      sessionId,
-      status: 'pending',
-      note: 'Configure STRIPE_SECRET_KEY env var to enable real Stripe checkout status',
-    });
+
+    const stripe = getStripeClient();
+    if (!stripe) {
+      return reply.send({ sessionId, status: 'unknown', note: 'Stripe not configured' });
+    }
+
+    try {
+      const session = await stripe.checkout.sessions.retrieve(sessionId);
+      return reply.send({
+        sessionId: session.id,
+        status: session.status,
+        paymentStatus: session.payment_status,
+        customerId: session.customer,
+        subscriptionId: session.subscription,
+      });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      return reply.code(404).send({ error: `Session not found: ${message}` });
+    }
   });
 }

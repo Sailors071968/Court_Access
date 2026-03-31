@@ -9,7 +9,6 @@ import Stripe from 'stripe';
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import prisma from '../lib/prisma.js';
 import { logSecurityEvent } from '../security/authMiddleware.js';
-import { addPurchasedCredits } from './aiCreditService.js';
 
 // ---------------------------------------------------------------------------
 // Stripe SDK — initialized lazily when STRIPE_SECRET_KEY is configured
@@ -78,6 +77,7 @@ interface StripeCheckoutSession {
   subscription: string | null;
   client_reference_id?: string;
   metadata?: Record<string, string>;
+  payment_status?: string;
 }
 
 interface StripeInvoice {
@@ -345,6 +345,14 @@ async function handleCheckoutCompleted(session: StripeCheckoutSession): Promise<
   // Branch: ACU credit pack purchase (one-time payment)
   // ---------------------------------------------------------------------------
   if (session.metadata?.type === 'acu_credits') {
+    // For one-time payments, verify payment is actually completed before granting credits.
+    // Async payment methods (bank debits, BNPL) fire checkout.session.completed with
+    // payment_status='unpaid' — credits should only be granted on 'paid'.
+    if (session.payment_status && session.payment_status !== 'paid') {
+      console.log(`[StripeWebhook] Credit purchase session ${session.id} has payment_status=${session.payment_status} — deferring credit grant until async payment succeeds`);
+      return;
+    }
+
     const packId = session.metadata.packId;
     const credits = parseInt(session.metadata.credits ?? '0', 10);
     if (!packId || credits <= 0) {
@@ -611,6 +619,12 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
           break;
         case 'checkout.session.completed':
           await handleCheckoutCompleted(event.data.object as StripeCheckoutSession);
+          break;
+        case 'checkout.session.async_payment_succeeded':
+          await handleCheckoutCompleted(event.data.object as StripeCheckoutSession);
+          break;
+        case 'checkout.session.async_payment_failed':
+          console.error(`[StripeWebhook] Async payment failed for session ${(event.data.object as StripeCheckoutSession).id}`);
           break;
         case 'invoice.paid':
           await handleInvoicePaid(event.data.object as StripeInvoice);

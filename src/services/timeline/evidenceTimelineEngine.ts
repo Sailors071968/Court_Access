@@ -15,11 +15,15 @@ import type { DocumentEntity } from '../../models/DocumentModel';
 // Types
 // ---------------------------------------------------------------------------
 
+export type ActorRole = 'officer' | 'subject' | 'witness' | 'dispatcher' | 'forensic_tech' | 'unknown';
+
 export interface TimelineEvent {
   id: string;
   timestamp: string;          // ISO 8601 or descriptive date
   timestampPrecision: 'exact' | 'approximate' | 'inferred';
   description: string;
+  actor: string;              // Who performed/reported this event (e.g. "Officer Martinez", "Witness J. Rodriguez")
+  actorRole: ActorRole;       // Role classification: officer, subject, witness, etc.
   sourceDocumentId: string;
   sourceDocumentName: string;
   sourceDocumentType: string;
@@ -141,6 +145,71 @@ const SIGNIFICANCE_KEYWORDS: Record<TimelineEvent['significance'], string[]> = {
   routine: ['patrol', 'dispatch', 'arrived', 'departed', 'filed', 'logged'],
 };
 
+// ---------------------------------------------------------------------------
+// Actor extraction — identify who performed/reported the event
+// ---------------------------------------------------------------------------
+
+const OFFICER_PATTERNS = [
+  /\b(?:Officer|Deputy|Sergeant|Sgt\.|Lieutenant|Lt\.|Detective|Det\.|Corporal|Cpl\.|Captain|Capt\.|Chief|Commander|Trooper|Agent|Inspector)\s+([A-Z][a-z]+(?:\s+[A-Z][a-z]+)?)/g,
+  /\b([A-Z][a-z]+)\s*(?:#\d+|Badge\s*#?\d+)/g,
+];
+
+const WITNESS_PATTERNS = [
+  /\b(?:Witness|Bystander|Complainant|Caller|Reporting\s+Party)\s+(?:—\s*)?([A-Z][a-z]+(?:\s+[A-Z]\.?\s*[A-Za-z]*)?)\b/g,
+  /\bWitness\s+Statement\s*(?:—|-)\s*([A-Z][a-z]+(?:\s+[A-Z]\.?\s*[A-Za-z]*)?)\b/g,
+];
+
+const SUBJECT_PATTERNS = [
+  /\b(?:suspect|defendant|subject|individual|arrestee)\b/i,
+];
+
+const DISPATCH_PATTERNS = [
+  /\b(?:dispatch|dispatcher|911|CAD|communications?)\b/i,
+];
+
+const FORENSIC_PATTERNS = [
+  /\b(?:forensic|lab|toxicology|DNA|fingerprint|medical examiner|coroner|pathologist|technician|analyst)\b/i,
+];
+
+function extractActor(text: string, category: TimelineEvent['category']): { actor: string; actorRole: ActorRole } {
+  // Try officer name extraction first
+  for (const pattern of OFFICER_PATTERNS) {
+    pattern.lastIndex = 0;
+    const match = pattern.exec(text);
+    if (match && match[1]) {
+      return { actor: `Officer ${match[1].trim()}`, actorRole: 'officer' };
+    }
+  }
+
+  // Try witness name extraction
+  for (const pattern of WITNESS_PATTERNS) {
+    pattern.lastIndex = 0;
+    const match = pattern.exec(text);
+    if (match && match[1]) {
+      return { actor: `Witness ${match[1].trim()}`, actorRole: 'witness' };
+    }
+  }
+
+  // Fall back to category-based actor assignment
+  if (category === 'officer_action' || OFFICER_PATTERNS.some(p => { p.lastIndex = 0; return p.test(text); })) {
+    return { actor: 'Officer (unidentified)', actorRole: 'officer' };
+  }
+  if (category === 'subject_action' || SUBJECT_PATTERNS.some(p => p.test(text))) {
+    return { actor: 'Subject', actorRole: 'subject' };
+  }
+  if (category === 'witness' || WITNESS_PATTERNS.some(p => { p.lastIndex = 0; return p.test(text); })) {
+    return { actor: 'Witness (unidentified)', actorRole: 'witness' };
+  }
+  if (DISPATCH_PATTERNS.some(p => p.test(text))) {
+    return { actor: 'Dispatch', actorRole: 'dispatcher' };
+  }
+  if (category === 'forensic' || FORENSIC_PATTERNS.some(p => p.test(text))) {
+    return { actor: 'Forensic Technician', actorRole: 'forensic_tech' };
+  }
+
+  return { actor: 'Unknown', actorRole: 'unknown' };
+}
+
 function classifyEvent(text: string): { category: TimelineEvent['category']; significance: TimelineEvent['significance'] } {
   const lower = text.toLowerCase();
 
@@ -177,11 +246,14 @@ function generateEventsFromDocument(doc: DocumentEntity, docIndex: number): Time
 
   // Primary event: document filing
   const { category, significance } = classifyEvent(docContent);
+  const { actor, actorRole } = extractActor(docContent, category);
   events.push({
     id: `evt-${doc.id}-filing`,
     timestamp: doc.filedDate,
     timestampPrecision: 'exact',
     description: `${doc.name} — filed as ${doc.type.replace(/_/g, ' ')}`,
+    actor,
+    actorRole,
     sourceDocumentId: doc.id,
     sourceDocumentName: doc.name,
     sourceDocumentType: doc.type,
@@ -207,6 +279,8 @@ function generateEventsFromDocument(doc: DocumentEntity, docIndex: number): Time
       timestamp: fullTimestamp,
       timestampPrecision: timeStr ? 'approximate' : 'inferred',
       description: `Referenced date in ${doc.name}: ${fullTimestamp}`,
+      actor,
+      actorRole,
       sourceDocumentId: doc.id,
       sourceDocumentName: doc.name,
       sourceDocumentType: doc.type,
@@ -227,6 +301,7 @@ function generateEventsFromDocument(doc: DocumentEntity, docIndex: number): Time
 
 function generateTypeSpecificEvents(doc: DocumentEntity, docIndex: number): TimelineEvent[] {
   const events: TimelineEvent[] = [];
+  const docContent = `${doc.name}. ${doc.extractedText ?? ''}`;
   const base = {
     sourceDocumentId: doc.id,
     sourceDocumentName: doc.name,
@@ -236,66 +311,86 @@ function generateTypeSpecificEvents(doc: DocumentEntity, docIndex: number): Time
   };
 
   switch (doc.type) {
-    case 'charging_document':
+    case 'charging_document': {
+      const { actor, actorRole } = extractActor(docContent, 'procedural');
       events.push({
         ...base,
         id: `evt-${doc.id}-charge`,
         timestamp: doc.filedDate,
         timestampPrecision: 'exact',
         description: `Charges filed: ${doc.name}`,
+        actor,
+        actorRole,
         category: 'procedural',
         significance: 'significant',
         confidence: 98,
       });
       break;
-    case 'transcript':
+    }
+    case 'transcript': {
+      const { actor, actorRole } = extractActor(docContent, 'witness');
       events.push({
         ...base,
         id: `evt-${doc.id}-testimony`,
         timestamp: doc.filedDate,
         timestampPrecision: 'exact',
         description: `Testimony/statement recorded: ${doc.name}`,
+        actor,
+        actorRole,
         category: 'witness',
         significance: 'notable',
         confidence: 85,
       });
       break;
+    }
     case 'defense_motion':
-    case 'prosecution_motion':
+    case 'prosecution_motion': {
+      const { actor, actorRole } = extractActor(docContent, 'procedural');
       events.push({
         ...base,
         id: `evt-${doc.id}-motion`,
         timestamp: doc.filedDate,
         timestampPrecision: 'exact',
         description: `Motion filed: ${doc.name}`,
+        actor,
+        actorRole,
         category: 'procedural',
         significance: 'notable',
         confidence: 98,
       });
       break;
-    case 'court_order':
+    }
+    case 'court_order': {
+      const { actor, actorRole } = extractActor(docContent, 'procedural');
       events.push({
         ...base,
         id: `evt-${doc.id}-order`,
         timestamp: doc.filedDate,
         timestampPrecision: 'exact',
         description: `Court order issued: ${doc.name}`,
+        actor,
+        actorRole,
         category: 'procedural',
         significance: 'significant',
         confidence: 99,
       });
       break;
-    default:
+    }
+    default: {
+      const { actor, actorRole } = extractActor(docContent, 'evidentiary');
       events.push({
         ...base,
         id: `evt-${doc.id}-gen-${docIndex}`,
         timestamp: doc.filedDate,
         timestampPrecision: 'exact',
         description: `Document entered: ${doc.name}`,
+        actor,
+        actorRole,
         category: 'evidentiary',
         significance: 'routine',
         confidence: 80,
       });
+    }
   }
 
   return events;

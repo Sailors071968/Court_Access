@@ -13,6 +13,11 @@ import prisma from '../lib/prisma.js';
 
 const BCRYPT_SALT_ROUNDS = 12;
 
+// Pre-computed dummy hash for timing-safe user-not-found responses.
+// Without this, bcrypt.compare (~100ms) only runs when a user exists,
+// creating a measurable timing oracle for user enumeration.
+const DUMMY_BCRYPT_HASH = bcrypt.hashSync('dummy-timing-safe', BCRYPT_SALT_ROUNDS);
+
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
@@ -376,6 +381,9 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     }
 
     if (!user) {
+      // Perform dummy bcrypt compare to equalize response time with the
+      // "user found" path, preventing user-enumeration timing attacks.
+      await bcrypt.compare(password, DUMMY_BCRYPT_HASH);
       console.log(`[Auth:Login] FAILED: user not found for email="${email}"`);
       void logSecurityEvent('LOGIN_FAILED', undefined, request.ip, `Failed login for ${email} — user not found`);
       return reply.code(401).send({ error: 'Invalid email or password' });

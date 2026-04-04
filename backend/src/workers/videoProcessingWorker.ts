@@ -25,7 +25,8 @@ class VideoProcessingWorker extends CourtAccessWorker<VideoProcessingJobData> {
       queueName: QUEUE_NAMES.VIDEO_PROCESSING,
       workerName: 'VideoProcessingWorker',
       concurrency: 1, // Video processing is resource-intensive
-      lockDuration: 300_000, // 5 minutes for video analysis
+      lockDuration: 900_000, // 15 minutes — must exceed jobTimeoutMs
+      jobTimeoutMs: 900_000, // 15 minutes — FFmpeg (3m) + Whisper (5m/chunk × N chunks) + extraction + insertion
     });
   }
 
@@ -116,6 +117,17 @@ class VideoProcessingWorker extends CourtAccessWorker<VideoProcessingJobData> {
 
       console.log(`[VideoProcessingWorker] Video processing completed for evidence ${evidenceId}`);
     } catch (error) {
+      // Convert abort-induced errors from the pipeline into JobTimeoutError
+      // so the base worker correctly marks them as timeouts (non-retryable)
+      // instead of PROCESSING_ERROR (retryable).
+      if (
+        signal.aborted &&
+        error instanceof Error &&
+        !(error instanceof JobTimeoutError)
+      ) {
+        throw new JobTimeoutError(`Job timed out during pipeline: ${error.message}`);
+      }
+
       // Skip DB write for timeout — base worker handles JOB_TIMEOUT status
       if (error instanceof JobTimeoutError) throw error;
 

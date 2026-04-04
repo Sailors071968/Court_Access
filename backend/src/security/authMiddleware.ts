@@ -347,7 +347,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     const email = body.email.trim().toLowerCase();
     const password = body.password;
 
-    console.log(`[Auth:Login] Attempt email="${email}" passwordLength=${password.length}`);
+    console.log(`[Auth:Login] Attempt email="${email}"`);
 
     let user;
     try {
@@ -358,7 +358,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     }
 
     // Debug logging (temporary — remove after production is confirmed working)
-    console.log(`[Auth:Login] Lookup email="${email}" found=${!!user}${user ? ` id=${user.id} role=${user.role} hashPrefix=${user.passwordHash.substring(0, 7)} hashLen=${user.passwordHash.length}` : ''}`);
+    console.log(`[Auth:Login] Lookup email="${email}" found=${!!user}${user ? ` isBcrypt=${user.passwordHash.startsWith('$2')}` : ''}`);
 
     if (!user) {
       // Try case-insensitive lookup as a fallback diagnostic
@@ -386,7 +386,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     let passwordValid = false;
     const isBcryptHash = user.passwordHash.startsWith('$2');
 
-    console.log(`[Auth:Login] email="${email}" hashType=${isBcryptHash ? 'bcrypt' : 'sha256'} hashPrefix="${user.passwordHash.substring(0, 7)}"`);
+    console.log(`[Auth:Login] email="${email}" hashType=${isBcryptHash ? 'bcrypt' : 'sha256'}`);
 
     if (isBcryptHash) {
       try {

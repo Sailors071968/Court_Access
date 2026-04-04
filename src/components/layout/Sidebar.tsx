@@ -55,6 +55,14 @@ const navItems: NavItem[] = [
     icon: 'Shield',
     permission: 'canViewEvidenceManagement',
   },
+  // AI Evidence Requests — separate top-level item for non-admin users with canViewEvidence
+  {
+    id: 'evidence-requests-standalone',
+    label: 'AI Evidence Requests',
+    path: '/dashboard/evidence-requests',
+    icon: 'Shield',
+    permission: 'canViewEvidence',
+  },
   {
     id: 'admin',
     label: 'Admin',
@@ -74,7 +82,7 @@ const navItems: NavItem[] = [
       { id: 'policy-matrix', label: 'Policy Matrix', path: '/dashboard/policy-matrix', icon: <BarChart3 size={16} /> },
       { id: 'cpra-timeline', label: 'CPRA Timeline', path: '/dashboard/cpra-timeline', icon: <Globe size={16} /> },
       { id: 'cpra-autonomous', label: 'CPRA Autonomous', path: '/dashboard/cpra-autonomous', icon: <Globe size={16} /> },
-      { id: 'evidence-requests', label: 'AI Evidence Requests', path: '/dashboard/evidence-requests', icon: <FileQuestion size={16} /> },
+      { id: 'evidence-requests', label: 'AI Evidence Requests', path: '/dashboard/evidence-requests', icon: <FileQuestion size={16} />, permission: 'canViewEvidence' },
     ],
   },
 ];
@@ -132,6 +140,7 @@ export function Sidebar() {
           if (item.permission && !permissions[item.permission]) return null;
           // Hide standalone evidence-mgmt for admins (they see it under Admin sub-nav)
           if (item.id === 'evidence-mgmt-standalone' && permissions.canViewAdmin) return null;
+          if (item.id === 'evidence-requests-standalone' && permissions.canViewAdmin) return null;
 
           const Icon = iconMap[item.icon as keyof typeof iconMap];
           const isActive =

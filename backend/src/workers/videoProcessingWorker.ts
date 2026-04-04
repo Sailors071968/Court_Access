@@ -1,14 +1,19 @@
 // ============================================================================
-// Phase 2 — Video Processing Worker (ACU-Enforced)
-// BullMQ worker that processes video intelligence pipeline jobs.
+// Phase 2 — Video Processing Worker (Real Intelligence Pipeline)
+// BullMQ worker that processes video through a 4-stage intelligence pipeline:
+//   Stage 1 (10%)  — FFmpeg audio extraction
+//   Stage 2 (40%)  — Whisper transcription
+//   Stage 3 (70%)  — Event extraction from transcript
+//   Stage 4 (100%) — Timeline insertion + evidence update
+//
 // Extends CourtAccessWorker for automatic ACU credit validation/deduction.
-// Flow: pending → running → completed/failed
 // ============================================================================
 
 import type { Job } from 'bullmq';
 import { CourtAccessWorker, JobTimeoutError } from '../lib/baseWorker.js';
 import { QUEUE_NAMES, type VideoProcessingJobData } from '../lib/queues.js';
 import prisma from '../lib/prisma.js';
+import { runVideoIntelligencePipeline } from '../services/videoIntelligencePipeline.js';
 
 // ---------------------------------------------------------------------------
 // Video Processing Worker
@@ -25,7 +30,7 @@ class VideoProcessingWorker extends CourtAccessWorker<VideoProcessingJobData> {
   }
 
   protected async processJob(job: Job<VideoProcessingJobData>, signal: AbortSignal): Promise<void> {
-    const { caseId, evidenceId, processingJobId } = job.data;
+    const { caseId, evidenceId, processingJobId, fileKey, mimeType } = job.data;
 
     // Mark ProcessingJob as active (direct ID lookup — safe across retries)
     if (processingJobId) {
@@ -36,8 +41,7 @@ class VideoProcessingWorker extends CourtAccessWorker<VideoProcessingJobData> {
     }
 
     try {
-      // Execute video intelligence pipeline
-      console.log(`[VideoProcessingWorker] Processing video evidence ${evidenceId} for case ${caseId}`);
+      console.log(`[VideoProcessingWorker] Starting real video pipeline for evidence ${evidenceId} (case ${caseId})`);
 
       // Verify evidence exists
       const evidence = await prisma.evidence.findUnique({
@@ -48,19 +52,46 @@ class VideoProcessingWorker extends CourtAccessWorker<VideoProcessingJobData> {
         throw new Error(`Evidence ${evidenceId} not found`);
       }
 
-      console.log(`[VideoProcessingWorker] Processing ${evidence.fileName} (${evidence.evidenceType})`);
+      console.log(`[VideoProcessingWorker] Processing ${evidence.fileName} (${evidence.evidenceType}, mime: ${mimeType})`);
 
-      // In production: runs 4-stage video intelligence pipeline:
-      // 1. Frame extraction (ffmpeg)
-      // 2. Overlay OCR (timestamp, GPS, camera ID extraction)
-      // 3. Action detection (weapon drawn, handcuffing, force used, etc.)
-      // 4. Event generation (structured timeline events from video)
-      // Actual AI pipeline integration in Phase 3.
+      // Use the actual S3/R2 key from evidence record if fileKey not provided
+      const resolvedFileKey = fileKey || evidence.s3Key;
+      if (!resolvedFileKey) {
+        throw new Error(`No file key available for evidence ${evidenceId} — file may not have been uploaded`);
+      }
+
+      // Check abort signal before starting pipeline
+      if (signal.aborted) throw new JobTimeoutError('Job aborted by timeout');
+
+      // Run the real 4-stage video intelligence pipeline
+      // Progress callback reports to BullMQ job for real-time UI updates
+      const pipelineResult = await runVideoIntelligencePipeline(
+        caseId,
+        evidenceId,
+        resolvedFileKey,
+        evidence.evidenceType,
+        signal,
+        async (progress: number, stage: string) => {
+          await job.updateProgress(progress);
+          console.log(`[VideoProcessingWorker] ${evidenceId}: ${progress}% — ${stage}`);
+        },
+      );
+
+      // Log pipeline result summary
+      console.log(`[VideoProcessingWorker] Pipeline complete for ${evidenceId}:`, {
+        audioExtracted: pipelineResult.audioExtracted,
+        transcriptLength: pipelineResult.transcriptLength,
+        eventsExtracted: pipelineResult.eventsExtracted,
+        eventsStored: pipelineResult.eventsStored,
+        speechEventsStored: pipelineResult.speechEventsStored,
+        durationMs: pipelineResult.durationMs,
+        warnings: pipelineResult.warnings,
+      });
 
       // Check abort signal before writing completion status
       if (signal.aborted) throw new JobTimeoutError('Job aborted by timeout');
 
-      // Mark ProcessingJob as completed (idempotent — only if still 'active')
+      // Mark ProcessingJob as completed with pipeline result metadata
       if (processingJobId) {
         await prisma.processingJob.updateMany({
           where: { id: processingJobId, status: 'active' },
@@ -68,6 +99,15 @@ class VideoProcessingWorker extends CourtAccessWorker<VideoProcessingJobData> {
             status: 'completed',
             completedAt: new Date(),
             acuCredits: job.data.acuCreditsRequired,
+            result: {
+              audioExtracted: pipelineResult.audioExtracted,
+              transcriptLength: pipelineResult.transcriptLength,
+              eventsExtracted: pipelineResult.eventsExtracted,
+              eventsStored: pipelineResult.eventsStored,
+              speechEventsStored: pipelineResult.speechEventsStored,
+              durationMs: pipelineResult.durationMs,
+              warnings: pipelineResult.warnings,
+            },
             failureCode: null,
             error: null,
           },
@@ -97,6 +137,21 @@ class VideoProcessingWorker extends CourtAccessWorker<VideoProcessingJobData> {
           console.error(`[VideoProcessingWorker] Failed to update ProcessingJob status: ${dbMsg}`);
         }
       }
+
+      // Also mark evidence as failed
+      try {
+        const message = error instanceof Error ? error.message : String(error);
+        await prisma.evidence.update({
+          where: { evidenceId },
+          data: {
+            processingStatus: 'failed',
+            processingError: message.slice(0, 500),
+          },
+        });
+      } catch {
+        // Best-effort — don't mask the original error
+      }
+
       throw error; // Rethrow to trigger BullMQ retry + ACU refund in base class
     }
   }

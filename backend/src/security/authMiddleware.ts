@@ -468,7 +468,18 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     const name = body.name;
     const role = body.role;
 
-    const existing = await prisma.user.findUnique({ where: { email } });
+    // Check for existing user — also check case-insensitive to prevent duplicates
+    // with legacy mixed-case emails (e.g. Admin@Company.com vs admin@company.com)
+    let existing = await prisma.user.findUnique({ where: { email } });
+    if (!existing) {
+      try {
+        existing = await prisma.user.findFirst({
+          where: { email: { equals: email, mode: 'insensitive' } },
+        });
+      } catch {
+        // mode:'insensitive' may not be supported — ignore
+      }
+    }
     if (existing) {
       return reply.code(409).send({ error: 'User already exists' });
     }
@@ -654,7 +665,17 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       return reply.code(400).send({ error: 'Password must be at least 8 characters' });
     }
 
-    const targetUser = await prisma.user.findUnique({ where: { email } });
+    // Check case-insensitive to find legacy mixed-case emails
+    let targetUser = await prisma.user.findUnique({ where: { email } });
+    if (!targetUser) {
+      try {
+        targetUser = await prisma.user.findFirst({
+          where: { email: { equals: email, mode: 'insensitive' } },
+        });
+      } catch {
+        // mode:'insensitive' may not be supported — ignore
+      }
+    }
     if (!targetUser) {
       return reply.code(404).send({ error: `No user found with email: ${email}` });
     }

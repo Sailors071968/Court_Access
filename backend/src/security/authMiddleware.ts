@@ -341,13 +341,18 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
 
       // Auto-migrate to bcrypt on successful legacy login
       if (passwordValid) {
-        const bcryptHash = await bcrypt.hash(password, BCRYPT_SALT_ROUNDS);
-        await prisma.user.update({ where: { id: user.id }, data: { passwordHash: bcryptHash } });
-        console.log(`[Auth:Login] Auto-migrated ${email} from SHA-256 to bcrypt`);
+        try {
+          const bcryptHash = await bcrypt.hash(password, BCRYPT_SALT_ROUNDS);
+          await prisma.user.update({ where: { id: user.id }, data: { passwordHash: bcryptHash } });
+          console.log(`[Auth:Login] Auto-migrated ${email} from SHA-256 to bcrypt`);
+        } catch (migrationErr) {
+          console.error(`[Auth:Login] Failed to auto-migrate ${email} to bcrypt:`, migrationErr);
+        }
       }
     }
 
-    console.log(`[Auth:Login] email=${email} hashType=${isBcryptHash ? 'bcrypt' : 'sha256'} valid=${passwordValid}`);
+    // Debug: log hash type only (not valid/invalid to avoid auth oracle leak)
+    console.log(`[Auth:Login] email=${email} hashType=${isBcryptHash ? 'bcrypt' : 'sha256'}`);
 
     if (!passwordValid) {
       void logSecurityEvent('LOGIN_FAILED', undefined, request.ip, `Failed login for ${email} — password mismatch`);

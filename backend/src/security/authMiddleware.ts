@@ -594,7 +594,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     // Revoke all existing tokens so the user must re-login with the new password
     await revokeAllUserTokens(targetUser.id);
 
-    void logSecurityEvent('PASSWORD_RESET', targetUser.id, request.ip, `Admin reset password for ${email}`);
+    void logSecurityEvent('PASSWORD_RESET', targetUser.id, request.ip, `Admin ${(request as AuthenticatedRequest).user?.userId} reset password for ${email}`);
 
     return { message: `Password reset successfully for ${email}` };
   });

@@ -322,34 +322,14 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       bcryptLoaded = false;
     }
 
-    // Check if a user exists with the given email (query param)
-    const query = (_request.query || {}) as Record<string, string>;
-    const checkEmail = query.email ? query.email.trim().toLowerCase() : null;
-    let userCheck = null;
-    if (checkEmail) {
-      try {
-        const u = await prisma.user.findUnique({ where: { email: checkEmail } });
-        userCheck = u ? {
-          found: true,
-          id: u.id,
-          email: u.email,
-          role: u.role,
-          hashPrefix: u.passwordHash.substring(0, 7),
-          hashLength: u.passwordHash.length,
-          isBcrypt: u.passwordHash.startsWith('$2'),
-        } : { found: false };
-      } catch (dbErr) {
-        userCheck = { found: false, error: dbErr instanceof Error ? dbErr.message : 'DB query failed' };
-      }
-    }
-
+    // No user-lookup on unauthenticated endpoint — only return version/bcrypt info.
+    // Use PM2 logs or admin endpoints for user-level debugging.
     return {
       authVersion: 'PR74-bcrypt',
       bcryptLoaded,
       hashMethod: 'bcrypt',
       saltRounds: BCRYPT_SALT_ROUNDS,
       timestamp: new Date().toISOString(),
-      userCheck,
     };
   });
 
@@ -432,7 +412,8 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       }
     }
 
-    console.log(`[Auth:Login] email="${email}" authResult=${passwordValid ? 'SUCCESS' : 'FAIL'}`);
+    // Auth result logged only to security event log (not stdout) to avoid auth oracle leak
+    // PM2 logs above already show hash type + lookup result for debugging
 
     if (!passwordValid) {
       void logSecurityEvent('LOGIN_FAILED', undefined, request.ip, `Failed login for ${email} — password mismatch`);

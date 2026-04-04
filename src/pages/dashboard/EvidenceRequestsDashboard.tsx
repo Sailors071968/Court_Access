@@ -387,7 +387,7 @@ export function EvidenceRequestsDashboard() {
                     {/* Action toggle */}
                     {req.status === 'pending' && (
                       <button
-                        onClick={() => setRespondingId(isExpanded ? null : req.id)}
+                        onClick={() => { setRespondingId(isExpanded ? null : req.id); if (!isExpanded) { setDeferDate(''); setResponseNotes(''); } }}
                         className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-amber-700 bg-amber-50 rounded-lg hover:bg-amber-100 transition-colors"
                       >
                         Respond

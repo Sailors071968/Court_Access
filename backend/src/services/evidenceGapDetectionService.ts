@@ -505,17 +505,6 @@ export async function respondToEvidenceRequest(
     throw new Error(`Evidence request ${requestId} not found`);
   }
 
-  // Create the response
-  const response = await prisma.evidenceRequestResponse.create({
-    data: {
-      requestId,
-      respondedBy,
-      responseType,
-      deferUntilDate: opts?.deferUntilDate ?? null,
-      notes: opts?.notes ?? null,
-    },
-  });
-
   // Update request status based on response type
   const statusMap: Record<string, string> = {
     requested: 'acknowledged',
@@ -523,9 +512,24 @@ export async function respondToEvidenceRequest(
     defer: 'deferred',
   };
 
-  await prisma.evidenceRequest.update({
-    where: { id: requestId },
-    data: { status: statusMap[responseType] ?? 'acknowledged' },
+  // Atomic transaction: create response + update status together
+  const response = await prisma.$transaction(async (tx) => {
+    const created = await tx.evidenceRequestResponse.create({
+      data: {
+        requestId,
+        respondedBy,
+        responseType,
+        deferUntilDate: opts?.deferUntilDate ?? null,
+        notes: opts?.notes ?? null,
+      },
+    });
+
+    await tx.evidenceRequest.update({
+      where: { id: requestId },
+      data: { status: statusMap[responseType] ?? 'acknowledged' },
+    });
+
+    return created;
   });
 
   return response;

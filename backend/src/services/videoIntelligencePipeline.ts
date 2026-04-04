@@ -120,13 +120,17 @@ async function extractAudio(
       stderr += data.toString();
     });
 
+    // Settled flag prevents double-rejection from timeout/close/error race
+    let settled = false;
     const timer = setTimeout(() => {
       ffmpeg.kill('SIGKILL');
-      reject(new Error(`FFmpeg timed out after ${FFMPEG_TIMEOUT_MS}ms`));
+      if (!settled) { settled = true; reject(new Error(`FFmpeg timed out after ${FFMPEG_TIMEOUT_MS}ms`)); }
     }, FFMPEG_TIMEOUT_MS);
 
     ffmpeg.on('close', (code) => {
       clearTimeout(timer);
+      if (settled) return;
+      settled = true;
       if (code === 0) {
         resolve();
       } else {
@@ -138,7 +142,7 @@ async function extractAudio(
 
     ffmpeg.on('error', (err) => {
       clearTimeout(timer);
-      reject(new Error(`FFmpeg spawn error: ${err.message}`));
+      if (!settled) { settled = true; reject(new Error(`FFmpeg spawn error: ${err.message}`)); }
     });
   });
 
@@ -178,34 +182,139 @@ async function transcribeAudio(
     audioSizeBytes: audioBuffer.length,
   });
 
-  // If audio exceeds Whisper's 25MB limit, we need to truncate or split.
-  // For now, if too large, we'll just note the limitation.
-  if (audioBuffer.length > MAX_WHISPER_FILE_BYTES) {
-    console.warn('[VideoPipeline] Audio file exceeds Whisper 25MB limit — truncating', {
-      evidenceId,
-      audioSizeBytes: audioBuffer.length,
-      maxBytes: MAX_WHISPER_FILE_BYTES,
-    });
-  }
-
-  // If no OpenAI API key, return structured placeholder
+  // If no OpenAI API key, return empty transcript (no fake events)
   if (!OPENAI_API_KEY) {
-    console.warn('[VideoPipeline] No OPENAI_API_KEY configured — using fallback transcription');
+    console.warn('[VideoPipeline] No OPENAI_API_KEY configured — skipping transcription');
     return {
-      transcript: `[Transcript pending — OpenAI API key not configured]\n` +
-        `Evidence: ${evidenceId}\n` +
-        `Audio size: ${audioBuffer.length} bytes\n` +
-        `00:00:00 Officer initiated traffic stop on vehicle.\n` +
-        `00:00:15 Officer approached the vehicle on the driver side.\n` +
-        `00:00:30 Officer: "License and registration please."\n` +
-        `00:01:00 Subject detained for further investigation.\n` +
-        `00:01:30 Dispatch notified of the stop.\n` +
-        `00:02:00 Backup requested for additional assistance.\n`,
+      transcript: `[Transcript unavailable — OpenAI API key not configured]\nEvidence: ${evidenceId}\nAudio size: ${audioBuffer.length} bytes`,
       segments: undefined,
     };
   }
 
-  // Call OpenAI Whisper API
+  // If audio exceeds Whisper's 25MB limit, split into chunks and
+  // transcribe each separately. 16kHz mono PCM_S16LE = 32000 bytes/sec.
+  // WAV header is 44 bytes. We split raw PCM data into <=24MB chunks
+  // (leaving room for the WAV header) and prepend a valid header to each.
+  if (audioBuffer.length > MAX_WHISPER_FILE_BYTES) {
+    console.info('[VideoPipeline] Audio exceeds 25MB — splitting into chunks for Whisper', {
+      evidenceId,
+      audioSizeBytes: audioBuffer.length,
+    });
+    return transcribeAudioChunked(audioBuffer, evidenceId, signal);
+  }
+
+  // Single-chunk transcription (under 25MB)
+  return callWhisperApi(audioBuffer, evidenceId, signal);
+}
+
+/**
+ * Split oversized audio into WAV chunks under 25MB and transcribe each.
+ * Concatenates transcripts and adjusts segment timestamps.
+ */
+async function transcribeAudioChunked(
+  fullAudioBuffer: Buffer,
+  evidenceId: string,
+  signal: AbortSignal,
+): Promise<{ transcript: string; segments: WhisperResponse['segments'] }> {
+  const WAV_HEADER_SIZE = 44;
+  // PCM data size per chunk: leave room for WAV header within 25MB limit
+  const pcmChunkSize = MAX_WHISPER_FILE_BYTES - WAV_HEADER_SIZE - 1024; // 1KB safety margin
+  const pcmData = fullAudioBuffer.subarray(WAV_HEADER_SIZE); // skip original WAV header
+  const totalChunks = Math.ceil(pcmData.length / pcmChunkSize);
+  const bytesPerSecond = 16000 * 2 * 1; // 16kHz * 16-bit * mono
+
+  let fullTranscript = '';
+  const allSegments: NonNullable<WhisperResponse['segments']> = [];
+
+  console.info('[VideoPipeline] Chunked transcription', {
+    evidenceId,
+    totalChunks,
+    pcmDataSize: pcmData.length,
+  });
+
+  for (let i = 0; i < totalChunks; i++) {
+    if (signal.aborted) throw new Error('Pipeline aborted during chunked transcription');
+
+    const start = i * pcmChunkSize;
+    const end = Math.min(start + pcmChunkSize, pcmData.length);
+    const chunkPcm = pcmData.subarray(start, end);
+    const chunkWav = buildWavBuffer(chunkPcm, 16000, 1, 16);
+    const chunkOffsetSeconds = start / bytesPerSecond;
+
+    console.info(`[VideoPipeline] Transcribing chunk ${i + 1}/${totalChunks}`, {
+      evidenceId,
+      chunkSizeBytes: chunkWav.length,
+      offsetSeconds: chunkOffsetSeconds,
+    });
+
+    const result = await callWhisperApi(chunkWav, evidenceId, signal);
+
+    fullTranscript += (fullTranscript ? ' ' : '') + result.transcript;
+
+    // Adjust segment timestamps by chunk offset
+    if (result.segments) {
+      for (const seg of result.segments) {
+        allSegments.push({
+          ...seg,
+          id: allSegments.length,
+          start: seg.start + chunkOffsetSeconds,
+          end: seg.end + chunkOffsetSeconds,
+        });
+      }
+    }
+  }
+
+  console.info('[VideoPipeline] Chunked transcription complete', {
+    evidenceId,
+    totalChunks,
+    transcriptLength: fullTranscript.length,
+    totalSegments: allSegments.length,
+  });
+
+  return {
+    transcript: fullTranscript,
+    segments: allSegments.length > 0 ? allSegments : undefined,
+  };
+}
+
+/**
+ * Build a valid WAV file buffer from raw PCM data.
+ */
+function buildWavBuffer(
+  pcmData: Buffer,
+  sampleRate: number,
+  numChannels: number,
+  bitsPerSample: number,
+): Buffer {
+  const byteRate = sampleRate * numChannels * (bitsPerSample / 8);
+  const blockAlign = numChannels * (bitsPerSample / 8);
+  const header = Buffer.alloc(44);
+
+  header.write('RIFF', 0);
+  header.writeUInt32LE(36 + pcmData.length, 4); // file size - 8
+  header.write('WAVE', 8);
+  header.write('fmt ', 12);
+  header.writeUInt32LE(16, 16); // fmt chunk size
+  header.writeUInt16LE(1, 20);  // PCM format
+  header.writeUInt16LE(numChannels, 22);
+  header.writeUInt32LE(sampleRate, 24);
+  header.writeUInt32LE(byteRate, 28);
+  header.writeUInt16LE(blockAlign, 32);
+  header.writeUInt16LE(bitsPerSample, 34);
+  header.write('data', 36);
+  header.writeUInt32LE(pcmData.length, 40);
+
+  return Buffer.concat([header, pcmData]);
+}
+
+/**
+ * Call OpenAI Whisper API for a single audio buffer (must be <=25MB).
+ */
+async function callWhisperApi(
+  audioBuffer: Buffer,
+  evidenceId: string,
+  signal: AbortSignal,
+): Promise<{ transcript: string; segments: WhisperResponse['segments'] }> {
   const formData = new FormData();
   const audioBlob = new Blob([audioBuffer], { type: 'audio/wav' });
   formData.append('file', audioBlob, 'audio.wav');
@@ -217,7 +326,6 @@ async function transcribeAudio(
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), WHISPER_TIMEOUT_MS);
 
-  // Link parent signal to our controller
   if (signal.aborted) {
     clearTimeout(timer);
     throw new Error('Pipeline aborted before transcription');

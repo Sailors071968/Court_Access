@@ -11,7 +11,8 @@ const prisma = new PrismaClient();
 
 const BCRYPT_SALT_ROUNDS = 12;
 
-const ADMIN_EMAIL = process.env.ADMIN_EMAIL;
+// Normalize email: trim + lowercase to match login route behavior
+const ADMIN_EMAIL = process.env.ADMIN_EMAIL?.trim().toLowerCase();
 const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD;
 const ADMIN_NAME = process.env.ADMIN_NAME || 'Admin';
 const ADMIN_ROLE = 'admin';

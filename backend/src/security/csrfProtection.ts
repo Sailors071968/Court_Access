@@ -41,6 +41,7 @@ const CSRF_PROTECTED_METHODS = new Set(['POST', 'PUT', 'DELETE', 'PATCH']);
 const CSRF_EXEMPT_ROUTES = [
   '/api/auth/login',
   '/api/auth/register',
+  '/api/auth/debug-check',
   '/api/health',
   '/api/billing/webhook',
 ];

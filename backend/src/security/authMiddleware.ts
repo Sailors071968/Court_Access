@@ -225,6 +225,7 @@ const PUBLIC_ROUTES = [
   '/api/auth/register',
   '/api/auth/refresh',
   '/api/auth/logout',
+  '/api/auth/debug-check',
   '/api/discount-codes/validate',
   '/api/billing/webhook',
 ];
@@ -308,21 +309,94 @@ export async function authenticationHook(
 // User accounts are now persisted to PostgreSQL via Prisma User model.
 
 export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
+  // GET /api/auth/debug-check — deployment verification (no auth required)
+  // Returns which code version is running so you can confirm PR #74 is deployed.
+  // REMOVE THIS ENDPOINT once auth is confirmed working in production.
+  app.get('/api/auth/debug-check', async (_request: FastifyRequest, _reply: FastifyReply) => {
+    let bcryptLoaded = false;
+    try {
+      // Verify bcrypt native module actually loads
+      const testHash = await bcrypt.hash('test', 4);
+      bcryptLoaded = testHash.startsWith('$2');
+    } catch {
+      bcryptLoaded = false;
+    }
+
+    // Check if a user exists with the given email (query param)
+    const query = (_request.query || {}) as Record<string, string>;
+    const checkEmail = query.email ? query.email.trim().toLowerCase() : null;
+    let userCheck = null;
+    if (checkEmail) {
+      try {
+        const u = await prisma.user.findUnique({ where: { email: checkEmail } });
+        userCheck = u ? {
+          found: true,
+          id: u.id,
+          email: u.email,
+          role: u.role,
+          hashPrefix: u.passwordHash.substring(0, 7),
+          hashLength: u.passwordHash.length,
+          isBcrypt: u.passwordHash.startsWith('$2'),
+        } : { found: false };
+      } catch (dbErr) {
+        userCheck = { found: false, error: dbErr instanceof Error ? dbErr.message : 'DB query failed' };
+      }
+    }
+
+    return {
+      authVersion: 'PR74-bcrypt',
+      bcryptLoaded,
+      hashMethod: 'bcrypt',
+      saltRounds: BCRYPT_SALT_ROUNDS,
+      timestamp: new Date().toISOString(),
+      userCheck,
+    };
+  });
+
   // POST /api/auth/login
   app.post('/api/auth/login', async (request: FastifyRequest, reply: FastifyReply) => {
-    const { email, password } = request.body as { email: string; password: string };
+    const body = request.body as { email: string; password: string };
 
-    if (!email || !password) {
+    if (!body?.email || !body?.password) {
+      console.log(`[Auth:Login] REJECTED: missing email or password. body keys=${Object.keys(body || {})}`);
       void logSecurityEvent('LOGIN_FAILED', undefined, request.ip, 'Missing email or password');
       return reply.code(400).send({ error: 'Email and password are required' });
     }
 
-    const user = await prisma.user.findUnique({ where: { email } });
+    // Normalize email: trim whitespace + lowercase (PostgreSQL is case-sensitive)
+    const email = body.email.trim().toLowerCase();
+    const password = body.password;
+
+    console.log(`[Auth:Login] Attempt email="${email}" passwordLength=${password.length}`);
+
+    let user;
+    try {
+      user = await prisma.user.findUnique({ where: { email } });
+    } catch (dbErr) {
+      console.error(`[Auth:Login] DB ERROR during user lookup:`, dbErr);
+      return reply.code(500).send({ error: 'Internal server error during authentication' });
+    }
 
     // Debug logging (temporary — remove after production is confirmed working)
-    console.log(`[Auth:Login] Lookup email=${email} found=${!!user}`);
+    console.log(`[Auth:Login] Lookup email="${email}" found=${!!user}${user ? ` id=${user.id} role=${user.role} hashPrefix=${user.passwordHash.substring(0, 7)} hashLen=${user.passwordHash.length}` : ''}`);
 
     if (!user) {
+      // Try case-insensitive lookup as a fallback diagnostic
+      try {
+        const ciUser = await prisma.user.findFirst({
+          where: { email: { equals: email, mode: 'insensitive' } },
+        });
+        if (ciUser) {
+          console.log(`[Auth:Login] CASE MISMATCH: input="${email}" dbEmail="${ciUser.email}" — using DB email for lookup`);
+          user = ciUser;
+        }
+      } catch {
+        // findFirst with mode:'insensitive' might not be supported — ignore
+      }
+    }
+
+    if (!user) {
+      console.log(`[Auth:Login] FAILED: user not found for email="${email}"`);
       void logSecurityEvent('LOGIN_FAILED', undefined, request.ip, `Failed login for ${email} — user not found`);
       return reply.code(401).send({ error: 'Invalid email or password' });
     }
@@ -332,8 +406,15 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     let passwordValid = false;
     const isBcryptHash = user.passwordHash.startsWith('$2');
 
+    console.log(`[Auth:Login] email="${email}" hashType=${isBcryptHash ? 'bcrypt' : 'sha256'} hashPrefix="${user.passwordHash.substring(0, 7)}"`);
+
     if (isBcryptHash) {
-      passwordValid = await bcrypt.compare(password, user.passwordHash);
+      try {
+        passwordValid = await bcrypt.compare(password, user.passwordHash);
+      } catch (bcryptErr) {
+        console.error(`[Auth:Login] bcrypt.compare THREW for email="${email}":`, bcryptErr);
+        return reply.code(500).send({ error: 'Internal server error during authentication' });
+      }
     } else {
       // Legacy SHA-256 comparison
       const sha256Hash = crypto.createHash('sha256').update(password).digest('hex');
@@ -351,8 +432,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       }
     }
 
-    // Debug: log hash type only (not valid/invalid to avoid auth oracle leak)
-    console.log(`[Auth:Login] email=${email} hashType=${isBcryptHash ? 'bcrypt' : 'sha256'}`);
+    console.log(`[Auth:Login] email="${email}" authResult=${passwordValid ? 'SUCCESS' : 'FAIL'}`);
 
     if (!passwordValid) {
       void logSecurityEvent('LOGIN_FAILED', undefined, request.ip, `Failed login for ${email} — password mismatch`);
@@ -395,11 +475,17 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
 
   // POST /api/auth/register
   app.post('/api/auth/register', async (request: FastifyRequest, reply: FastifyReply) => {
-    const { name, email, password, role } = request.body as { name?: string; email: string; password: string; role?: UserRole };
+    const body = request.body as { name?: string; email: string; password: string; role?: UserRole };
 
-    if (!email || !password) {
+    if (!body?.email || !body?.password) {
       return reply.code(400).send({ error: 'Email and password are required' });
     }
+
+    // Normalize email: trim whitespace + lowercase
+    const email = body.email.trim().toLowerCase();
+    const password = body.password;
+    const name = body.name;
+    const role = body.role;
 
     const existing = await prisma.user.findUnique({ where: { email } });
     if (existing) {
@@ -573,11 +659,15 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       return reply.code(401).send({ error: 'Invalid or expired token' });
     }
 
-    const { email, newPassword } = request.body as { email: string; newPassword: string };
+    const body = request.body as { email: string; newPassword: string };
 
-    if (!email || !newPassword) {
+    if (!body?.email || !body?.newPassword) {
       return reply.code(400).send({ error: 'Email and newPassword are required' });
     }
+
+    // Normalize email
+    const email = body.email.trim().toLowerCase();
+    const newPassword = body.newPassword;
 
     if (newPassword.length < 8) {
       return reply.code(400).send({ error: 'Password must be at least 8 characters' });

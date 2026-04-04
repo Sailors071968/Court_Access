@@ -390,34 +390,55 @@ export async function detectEvidenceGaps(
     }
   }
 
-  // Create EvidenceRequest records (idempotent via unique constraint)
+  // Upsert EvidenceRequest records — create new ones, update stale pending ones,
+  // skip records the user has already acted on (acknowledged/dismissed/deferred).
   let created = 0;
+  let updated = 0;
   let skipped = 0;
 
   for (const gap of allGaps) {
     try {
-      // Use upsert-like pattern: try create, skip on unique constraint violation
-      await prisma.evidenceRequest.create({
-        data: {
-          caseId,
-          tenantId,
-          type: gap.type,
-          title: gap.title,
-          description: gap.description,
-          priority: gap.priority,
-          status: 'pending',
-          sourceEventIds: JSON.stringify(gap.sourceEventIds),
-        },
+      const compositeKey = {
+        caseId_tenantId_type_title: { caseId, tenantId, type: gap.type, title: gap.title },
+      };
+
+      const existing = await prisma.evidenceRequest.findUnique({
+        where: compositeKey,
+        select: { id: true, status: true },
       });
-      created++;
-    } catch (err: unknown) {
-      const prismaError = err as { code?: string };
-      if (prismaError.code === 'P2002') {
-        // Duplicate — already exists, skip
-        skipped++;
+
+      if (!existing) {
+        // New gap — create the request
+        await prisma.evidenceRequest.create({
+          data: {
+            caseId,
+            tenantId,
+            type: gap.type,
+            title: gap.title,
+            description: gap.description,
+            priority: gap.priority,
+            status: 'pending',
+            sourceEventIds: JSON.stringify(gap.sourceEventIds),
+          },
+        });
+        created++;
+      } else if (existing.status === 'pending') {
+        // Existing pending request — update with fresh detection data
+        await prisma.evidenceRequest.update({
+          where: { id: existing.id },
+          data: {
+            description: gap.description,
+            priority: gap.priority,
+            sourceEventIds: JSON.stringify(gap.sourceEventIds),
+          },
+        });
+        updated++;
       } else {
-        console.error('[EvidenceGapDetection] Failed to create request:', err);
+        // User already acted (acknowledged/dismissed/deferred) — don't touch
+        skipped++;
       }
+    } catch (err: unknown) {
+      console.error('[EvidenceGapDetection] Failed to upsert request:', err);
     }
   }
 
@@ -425,6 +446,7 @@ export async function detectEvidenceGaps(
     caseId,
     gapsFound: allGaps.length,
     requestsCreated: created,
+    requestsUpdated: updated,
     requestsSkipped: skipped,
     durationMs: Date.now() - startTime,
   });

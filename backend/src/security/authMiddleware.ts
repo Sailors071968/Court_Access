@@ -417,6 +417,10 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
         } catch (migrationErr) {
           console.error(`[Auth:Login] Failed to auto-migrate ${email} to bcrypt:`, migrationErr);
         }
+      } else {
+        // Run a dummy bcrypt compare to equalize response time with the bcrypt
+        // and "user not found" paths, preventing timing-based user enumeration.
+        await bcrypt.compare(password, DUMMY_BCRYPT_HASH);
       }
     }
 

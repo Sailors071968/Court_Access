@@ -333,7 +333,6 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       authVersion: 'PR74-bcrypt',
       bcryptLoaded,
       hashMethod: 'bcrypt',
-      saltRounds: BCRYPT_SALT_ROUNDS,
       timestamp: new Date().toISOString(),
     };
   });

@@ -327,6 +327,57 @@ const GAP_RULES: GapRule[] = [
       return gaps;
     },
   },
+
+  // Rule 8: Missing aerial surveillance (helicopter / drone footage)
+  {
+    type: 'missing_aerial_footage',
+    title: 'Helicopter / Aerial Footage Missing',
+    detect: (ctx) => {
+      const gaps: DetectedGap[] = [];
+      const hasAerialEvidence = ctx.evidence.some(
+        (e) => e.evidenceType === 'aerial_footage' ||
+               e.fileName.toLowerCase().match(/aerial|helicopter|drone|air.?unit/),
+      );
+      if (hasAerialEvidence) return gaps;
+
+      // Check for pursuit events, multi-unit coordination, or aerial language
+      const pursuitEvents = ctx.events.filter(
+        (e) => e.eventType === 'vehicle_pursuit' || e.eventType === 'foot_pursuit',
+      );
+      const multiUnitEvents = ctx.events.filter(
+        (e) => e.eventType === 'backup_requested' || e.eventType === 'multi_unit_response',
+      );
+
+      // Check event text for aerial support language
+      const aerialPattern = /air\s*unit|helicopter|chopper|aerial|drone|overhead.*unit|sky\s*watch|air\s*support/i;
+      const aerialTextEvents = ctx.events.filter(
+        (e) => (e.rawText && aerialPattern.test(e.rawText)) ||
+               (e.description && aerialPattern.test(e.description)),
+      );
+
+      const triggerEvents = [...pursuitEvents, ...multiUnitEvents, ...aerialTextEvents];
+      // Deduplicate by eventId
+      const uniqueTriggers = [...new Map(triggerEvents.map((e) => [e.eventId, e])).values()];
+
+      if (uniqueTriggers.length === 0) return gaps;
+
+      const reasons: string[] = [];
+      if (pursuitEvents.length > 0) reasons.push(`${pursuitEvents.length} pursuit event(s)`);
+      if (multiUnitEvents.length > 0) reasons.push(`${multiUnitEvents.length} multi-unit coordination event(s)`);
+      if (aerialTextEvents.length > 0) reasons.push(`${aerialTextEvents.length} event(s) referencing aerial support`);
+
+      gaps.push({
+        type: 'missing_aerial_footage',
+        title: 'Helicopter / Aerial Footage Missing',
+        description:
+          `${reasons.join(', ')} detected, but no aerial surveillance footage (helicopter or drone) has been uploaded. ` +
+          `Aerial footage can provide a wide-angle, independent perspective on pursuit routes, geographic movement, and officer positioning.`,
+        priority: 'medium',
+        sourceEventIds: uniqueTriggers.map((e) => e.eventId),
+      });
+      return gaps;
+    },
+  },
 ];
 
 // ---------------------------------------------------------------------------

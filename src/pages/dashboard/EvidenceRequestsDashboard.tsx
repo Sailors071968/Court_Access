@@ -71,6 +71,7 @@ const typeLabels: Record<string, string> = {
   missing_witness_statement: 'Missing Witness Statement',
   timeline_gap: 'Timeline Gap',
   missing_dispatch_log: 'Missing Dispatch Log',
+  missing_aerial_footage: 'Missing Aerial Footage',
   missing_forensic_report: 'Missing Forensic Report',
   missing_corroboration: 'Missing Corroboration',
   other: 'Other',

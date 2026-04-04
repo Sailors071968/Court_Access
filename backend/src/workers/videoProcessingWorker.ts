@@ -120,16 +120,30 @@ class VideoProcessingWorker extends CourtAccessWorker<VideoProcessingJobData> {
       // Convert abort-induced errors from the pipeline into JobTimeoutError
       // so the base worker correctly marks them as timeouts (non-retryable)
       // instead of PROCESSING_ERROR (retryable).
-      if (
-        signal.aborted &&
-        error instanceof Error &&
-        !(error instanceof JobTimeoutError)
-      ) {
-        throw new JobTimeoutError(`Job timed out during pipeline: ${error.message}`);
-      }
+      const isTimeout =
+        error instanceof JobTimeoutError ||
+        (signal.aborted && error instanceof Error);
 
-      // Skip DB write for timeout — base worker handles JOB_TIMEOUT status
-      if (error instanceof JobTimeoutError) throw error;
+      if (isTimeout) {
+        // Best-effort: mark evidence as failed before re-throwing timeout
+        // (base worker only updates ProcessingJob, not Evidence table)
+        try {
+          const msg = error instanceof Error ? error.message : String(error);
+          await prisma.evidence.update({
+            where: { evidenceId },
+            data: {
+              processingStatus: 'failed',
+              processingError: `Job timed out: ${msg}`.slice(0, 500),
+            },
+          });
+        } catch {
+          // Best-effort — don't mask the timeout error
+        }
+
+        throw error instanceof JobTimeoutError
+          ? error
+          : new JobTimeoutError(`Job timed out during pipeline: ${(error as Error).message}`);
+      }
 
       // Mark ProcessingJob as failed (non-timeout errors only)
       if (processingJobId) {

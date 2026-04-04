@@ -538,12 +538,14 @@ export async function runVideoIntelligencePipeline(
     await onProgress(5, 'Downloading video from storage...');
 
     let audioPath: string;
-    let videoPath: string;
+    // Pre-register expected paths so cleanup works even if extractAudio fails
+    // after writing the video file to disk (prevents multi-GB temp file leaks)
+    const expectedVideoPath = join(workDir, 'input_video');
+    const expectedAudioPath = join(workDir, 'extracted_audio.wav');
+    filesToClean.push(expectedVideoPath, expectedAudioPath);
     try {
       const result = await extractAudio(fileKey, workDir, signal);
       audioPath = result.audioPath;
-      videoPath = result.videoPath;
-      filesToClean.push(audioPath, videoPath);
     } catch (err) {
       const msg = err instanceof Error ? err.message : String(err);
       // If FFmpeg is not installed, provide a clear error

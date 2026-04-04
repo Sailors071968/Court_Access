@@ -205,7 +205,7 @@ const GAP_RULES: GapRule[] = [
           const gapMinutes = Math.round(gapMs / 60000);
           gaps.push({
             type: 'timeline_gap',
-            title: `${gapMinutes}-minute gap in timeline`,
+            title: `${gapMinutes}-minute gap in timeline at ${prev.timestamp.toISOString()}`,
             description:
               `A ${gapMinutes}-minute gap was detected between events: ` +
               `"${prev.description}" and "${curr.description}". ` +

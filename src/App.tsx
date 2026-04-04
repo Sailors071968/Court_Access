@@ -274,7 +274,14 @@ function App() {
             }
           />
           <Route path="dashboard/usage" element={<UsageDashboard />} />
-          <Route path="dashboard/video-processing" element={<VideoProcessingPage />} />
+          <Route
+            path="dashboard/video-processing"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <VideoProcessingPage />
+              </ProtectedRoute>
+            }
+          />
           <Route path="cases" element={<CasesListPage />} />
           <Route path="search" element={<SearchPage />} />
           <Route path="notifications" element={<NotificationsPage />} />

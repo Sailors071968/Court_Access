@@ -5,9 +5,7 @@
 // Runs after timeline processing completes.
 // ============================================================================
 
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '../lib/prisma.js';
 
 // ---------------------------------------------------------------------------
 // Types

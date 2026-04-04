@@ -12,9 +12,7 @@ import {
   respondToEvidenceRequest,
   detectEvidenceGaps,
 } from '../services/evidenceGapDetectionService.js';
-import { PrismaClient } from '@prisma/client';
-
-const prisma = new PrismaClient();
+import prisma from '../lib/prisma.js';
 
 // ---------------------------------------------------------------------------
 // Valid response types

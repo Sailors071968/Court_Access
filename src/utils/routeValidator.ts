@@ -45,6 +45,7 @@ export const ROUTE_REGISTRY: RouteDefinition[] = [
   { path: '/dashboard/cpra-timeline', label: 'CPRA Timeline', requiresAuth: true, requiredPermission: 'canViewAdmin', component: 'CpraCampaignTimeline', status: 'active' },
   { path: '/dashboard/government-outreach', label: 'Government Outreach', requiresAuth: true, requiredPermission: 'canViewAdmin', component: 'GovernmentOutreachDashboard', status: 'active' },
   { path: '/dashboard/case-timeline', label: 'Case Timeline', requiresAuth: true, requiredPermission: 'canViewAdmin', component: 'CaseTimelineVisualizer', status: 'active' },
+  { path: '/dashboard/evidence-requests', label: 'AI Evidence Requests', requiresAuth: true, requiredPermission: 'canViewEvidence', component: 'EvidenceRequestsDashboard', status: 'active' },
 
   // Case routes
   { path: '/cases', label: 'Cases List', requiresAuth: true, component: 'CasesListPage', status: 'active' },

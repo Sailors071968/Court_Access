@@ -8,7 +8,7 @@ import { NavLink, useLocation } from 'react-router-dom';
 import {
   LayoutDashboard, Briefcase, Search, Bell, Settings, Shield, LogOut,
   ChevronLeft, ChevronRight, ChevronDown,
-  FileText, Tag, Upload, BarChart3, Globe, Activity, Server, BookOpen, CheckSquare,
+  FileText, Tag, Upload, BarChart3, Globe, Activity, Server, BookOpen, CheckSquare, FileQuestion,
 } from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
 import { ROLE_PERMISSIONS } from '../../constants';
@@ -74,6 +74,7 @@ const navItems: NavItem[] = [
       { id: 'policy-matrix', label: 'Policy Matrix', path: '/dashboard/policy-matrix', icon: <BarChart3 size={16} /> },
       { id: 'cpra-timeline', label: 'CPRA Timeline', path: '/dashboard/cpra-timeline', icon: <Globe size={16} /> },
       { id: 'cpra-autonomous', label: 'CPRA Autonomous', path: '/dashboard/cpra-autonomous', icon: <Globe size={16} /> },
+      { id: 'evidence-requests', label: 'AI Evidence Requests', path: '/dashboard/evidence-requests', icon: <FileQuestion size={16} /> },
     ],
   },
 ];

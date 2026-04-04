@@ -7,8 +7,11 @@
 
 import jwt from 'jsonwebtoken';
 import crypto from 'crypto';
+import bcrypt from 'bcrypt';
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import prisma from '../lib/prisma.js';
+
+const BCRYPT_SALT_ROUNDS = 12;
 
 // ---------------------------------------------------------------------------
 // Types
@@ -315,10 +318,39 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     }
 
     const user = await prisma.user.findUnique({ where: { email } });
-    const passwordHash = crypto.createHash('sha256').update(password).digest('hex');
 
-    if (!user || user.passwordHash !== passwordHash) {
-      void logSecurityEvent('LOGIN_FAILED', undefined, request.ip, `Failed login for ${email}`);
+    // Debug logging (temporary — remove after production is confirmed working)
+    console.log(`[Auth:Login] Lookup email=${email} found=${!!user}`);
+
+    if (!user) {
+      void logSecurityEvent('LOGIN_FAILED', undefined, request.ip, `Failed login for ${email} — user not found`);
+      return reply.code(401).send({ error: 'Invalid email or password' });
+    }
+
+    // Support both bcrypt hashes ($2b$...) and legacy SHA-256 hashes.
+    // If password matches via legacy SHA-256, auto-migrate to bcrypt.
+    let passwordValid = false;
+    const isBcryptHash = user.passwordHash.startsWith('$2');
+
+    if (isBcryptHash) {
+      passwordValid = await bcrypt.compare(password, user.passwordHash);
+    } else {
+      // Legacy SHA-256 comparison
+      const sha256Hash = crypto.createHash('sha256').update(password).digest('hex');
+      passwordValid = user.passwordHash === sha256Hash;
+
+      // Auto-migrate to bcrypt on successful legacy login
+      if (passwordValid) {
+        const bcryptHash = await bcrypt.hash(password, BCRYPT_SALT_ROUNDS);
+        await prisma.user.update({ where: { id: user.id }, data: { passwordHash: bcryptHash } });
+        console.log(`[Auth:Login] Auto-migrated ${email} from SHA-256 to bcrypt`);
+      }
+    }
+
+    console.log(`[Auth:Login] email=${email} hashType=${isBcryptHash ? 'bcrypt' : 'sha256'} valid=${passwordValid}`);
+
+    if (!passwordValid) {
+      void logSecurityEvent('LOGIN_FAILED', undefined, request.ip, `Failed login for ${email} — password mismatch`);
       return reply.code(401).send({ error: 'Invalid email or password' });
     }
 
@@ -369,7 +401,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       return reply.code(409).send({ error: 'User already exists' });
     }
 
-    const passwordHash = crypto.createHash('sha256').update(password).digest('hex');
+    const passwordHash = await bcrypt.hash(password, BCRYPT_SALT_ROUNDS);
     const userRole = role || 'staff';
     const userName = name || email.split('@')[0];
     const tenantId = `tenant-${crypto.randomUUID()}`;
@@ -519,6 +551,47 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     } catch {
       return reply.code(401).send({ error: 'Invalid or expired token' });
     }
+  });
+
+  // POST /api/admin/reset-password — reset any user's password (admin only)
+  app.post('/api/admin/reset-password', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const token = extractBearerToken(request.headers.authorization);
+    if (!token) {
+      return reply.code(401).send({ error: 'Authentication required' });
+    }
+    try {
+      const payload = verifyAccessToken(token);
+      if (payload.role !== 'admin') {
+        return reply.code(403).send({ error: 'Admin access required' });
+      }
+    } catch {
+      return reply.code(401).send({ error: 'Invalid or expired token' });
+    }
+
+    const { email, newPassword } = request.body as { email: string; newPassword: string };
+
+    if (!email || !newPassword) {
+      return reply.code(400).send({ error: 'Email and newPassword are required' });
+    }
+
+    if (newPassword.length < 8) {
+      return reply.code(400).send({ error: 'Password must be at least 8 characters' });
+    }
+
+    const targetUser = await prisma.user.findUnique({ where: { email } });
+    if (!targetUser) {
+      return reply.code(404).send({ error: `No user found with email: ${email}` });
+    }
+
+    const newHash = await bcrypt.hash(newPassword, BCRYPT_SALT_ROUNDS);
+    await prisma.user.update({ where: { id: targetUser.id }, data: { passwordHash: newHash } });
+
+    // Revoke all existing tokens so the user must re-login with the new password
+    await revokeAllUserTokens(targetUser.id);
+
+    void logSecurityEvent('PASSWORD_RESET', targetUser.id, request.ip, `Admin reset password for ${email}`);
+
+    return { message: `Password reset successfully for ${email}` };
   });
 
   // GET /api/security/log — security event log (admin only)

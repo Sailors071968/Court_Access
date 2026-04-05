@@ -93,28 +93,28 @@ export const CREDIT_PACKS: readonly CreditPackDefinition[] = Object.freeze([
     packId: 'pack_50',
     credits: 50,
     priceCents: 2500,
-    stripePriceId: null, // Set after Stripe product creation
+    stripePriceId: process.env.STRIPE_PRICE_PACK_50 ?? null,
     description: '50 AI Credits — $25',
   },
   {
     packId: 'pack_150',
     credits: 150,
     priceCents: 6000,
-    stripePriceId: null,
+    stripePriceId: process.env.STRIPE_PRICE_PACK_150 ?? null,
     description: '150 AI Credits — $60',
   },
   {
     packId: 'pack_500',
     credits: 500,
     priceCents: 17500,
-    stripePriceId: null,
+    stripePriceId: process.env.STRIPE_PRICE_PACK_500 ?? null,
     description: '500 AI Credits — $175',
   },
   {
     packId: 'pack_1500',
     credits: 1500,
     priceCents: 45000,
-    stripePriceId: null,
+    stripePriceId: process.env.STRIPE_PRICE_PACK_1500 ?? null,
     description: '1,500 AI Credits — $450',
   },
 ]);

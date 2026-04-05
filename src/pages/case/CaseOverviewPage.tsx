@@ -12,6 +12,7 @@ import { caseDataProvider } from '../../services/caseDataProvider';
 import { useAuthStore } from '../../stores/authStore';
 import { CaseAnalysisSection } from '../../components/case/CaseAnalysisSection';
 import { LitigationIntelligencePanel } from '../../components/case/LitigationIntelligencePanel';
+import { TopInconsistenciesWidget } from '../../components/case/TopInconsistenciesWidget';
 
 export function CaseOverviewPage() {
   const { caseId } = useParams<{ caseId: string }>();
@@ -145,6 +146,11 @@ export function CaseOverviewPage() {
           </Card>
         </div>
       </div>
+
+      {/* CALCRIM: Top 5 Inconsistencies Widget (Requirement #3) */}
+      {showIntelligence && (
+        <TopInconsistenciesWidget caseId={currentCase.id} />
+      )}
 
       {/* Phase 257: Complete Case Analysis Section */}
       {showIntelligence && (

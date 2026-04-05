@@ -179,6 +179,7 @@ export interface TimelineEvent {
   alignmentMethod: AlignmentMethod;
   confidence: number;
   driftCorrectionMs: number;
+  actorId: string;            // Reference to Actor.id in the ActorRegistry (NEVER a raw string name)
 }
 
 export interface TimelineMergeResult {

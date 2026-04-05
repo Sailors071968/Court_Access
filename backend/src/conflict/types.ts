@@ -122,6 +122,8 @@ export interface TimelineEvent {
   id: string;
   /** Event description */
   description: string;
+  /** Reference to Actor.id in the ActorRegistry (NEVER a raw string name) */
+  actorId: string;
   /** Normalized timestamp */
   timestamp: Date;
   /** Precision of the timestamp */

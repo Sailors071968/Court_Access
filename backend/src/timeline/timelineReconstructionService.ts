@@ -341,6 +341,7 @@ export async function reconstructTimeline(
   const conflictEvents: ConflictTimelineEvent[] = storedEvents.map((ev) => ({
     id: ev.eventId,
     description: ev.description ?? ev.eventType.replace(/_/g, ' '),
+    actorId: 'unknown_actor_1',
     timestamp: parseTimelineTimestamp(ev.timestamp), // Use actual event timestamp for conflict analysis
     precision: 'approximate' as const,
     endTimestamp: null,

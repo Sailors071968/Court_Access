@@ -69,6 +69,13 @@ import { TrialExhibitWorkspace } from './pages/case/TrialExhibitWorkspace';
 import { LitigationStrategyView } from './pages/case/LitigationStrategyView';
 import { ContradictionDashboardPage } from './pages/case/ContradictionDashboardPage';
 import { NarrativeAnalysisPage } from './pages/case/NarrativeAnalysisPage';
+import { CalcrimDefenseAnalysisPage } from './pages/case/CalcrimDefenseAnalysisPage';
+import { InconsistenciesTablePage } from './pages/case/InconsistenciesTablePage';
+import { EvidenceTimelinePage } from './pages/case/EvidenceTimelinePage';
+
+// Billing Pages (Requirement #4)
+import { SubscriptionManagementPage } from './pages/billing/SubscriptionManagementPage';
+import { CreditPurchasePage } from './pages/billing/CreditPurchasePage';
 
 function App() {
   return (
@@ -273,6 +280,8 @@ function App() {
             }
           />
           <Route path="dashboard/usage" element={<UsageDashboard />} />
+          <Route path="billing" element={<SubscriptionManagementPage />} />
+          <Route path="billing/credits" element={<CreditPurchasePage />} />
           <Route path="cases" element={<CasesListPage />} />
           <Route path="search" element={<SearchPage />} />
           <Route path="notifications" element={<NotificationsPage />} />
@@ -390,6 +399,30 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canViewEvidence">
                   <NarrativeAnalysisPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="defense-analysis"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <CalcrimDefenseAnalysisPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="inconsistencies"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <InconsistenciesTablePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="evidence-timeline"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <EvidenceTimelinePage />
                 </ProtectedRoute>
               }
             />

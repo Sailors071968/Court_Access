@@ -16,6 +16,7 @@ interface TimelineEvent {
   timestamp: string;
   eventType: string;
   description: string;
+  actorId: string;            // Reference to Actor.id in the ActorRegistry (NEVER a raw string name)
   sourceType: string;
   confidence: number;
   policyReferences: string[];
@@ -83,6 +84,7 @@ function generateMockTimelineData(): TimelineData {
       timestamp: '00:00:13',
       eventType: 'vehicle_exit',
       description: 'Officer exits patrol vehicle',
+      actorId: 'actor_officer_1',
       sourceType: 'bodycam',
       confidence: 0.92,
       policyReferences: [],
@@ -93,6 +95,7 @@ function generateMockTimelineData(): TimelineData {
       timestamp: '00:00:21',
       eventType: 'verbal_command',
       description: 'Officer issues verbal commands to individual',
+      actorId: 'actor_officer_1',
       sourceType: 'bodycam',
       confidence: 0.88,
       policyReferences: ['Use of Force Policy 3.1'],
@@ -103,6 +106,7 @@ function generateMockTimelineData(): TimelineData {
       timestamp: '00:00:34',
       eventType: 'officer_proximity',
       description: 'Officer approaches within 5 feet of individual',
+      actorId: 'actor_officer_1',
       sourceType: 'bodycam',
       confidence: 0.85,
       policyReferences: [],
@@ -113,6 +117,7 @@ function generateMockTimelineData(): TimelineData {
       timestamp: '00:00:47',
       eventType: 'physical_contact',
       description: 'Physical contact initiated — officer places hand on individual arm',
+      actorId: 'actor_officer_1',
       sourceType: 'bodycam',
       confidence: 0.90,
       policyReferences: ['Use of Force Policy 3.2', 'Arrest Procedures 2.4'],
@@ -123,6 +128,7 @@ function generateMockTimelineData(): TimelineData {
       timestamp: '00:01:02',
       eventType: 'weapon_deployment',
       description: 'Officer draws taser — held at low ready',
+      actorId: 'actor_officer_1',
       sourceType: 'bodycam',
       confidence: 0.93,
       policyReferences: ['Use of Force Policy 4.1', 'Taser Policy 1.2'],
@@ -133,6 +139,7 @@ function generateMockTimelineData(): TimelineData {
       timestamp: '00:01:15',
       eventType: 'de_escalation',
       description: 'Officer holsters taser, issues verbal de-escalation',
+      actorId: 'actor_officer_1',
       sourceType: 'bodycam',
       confidence: 0.87,
       policyReferences: ['De-escalation Policy 2.1'],
@@ -143,6 +150,7 @@ function generateMockTimelineData(): TimelineData {
       timestamp: '00:01:28',
       eventType: 'handcuffing',
       description: 'Individual placed in handcuffs without resistance',
+      actorId: 'actor_subject_1',
       sourceType: 'bodycam',
       confidence: 0.91,
       policyReferences: ['Arrest Procedures 3.1'],
@@ -153,6 +161,7 @@ function generateMockTimelineData(): TimelineData {
       timestamp: '00:01:45',
       eventType: 'pat_down',
       description: 'Officer conducts pat-down search',
+      actorId: 'actor_officer_1',
       sourceType: 'bodycam',
       confidence: 0.86,
       policyReferences: ['Search Policy 1.3'],
@@ -163,6 +172,7 @@ function generateMockTimelineData(): TimelineData {
       timestamp: '00:02:10',
       eventType: 'transport',
       description: 'Individual placed in patrol vehicle',
+      actorId: 'actor_officer_1',
       sourceType: 'bodycam',
       confidence: 0.94,
       policyReferences: [],

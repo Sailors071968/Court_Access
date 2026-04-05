@@ -25,10 +25,20 @@ import {
   type EvidenceSummaryItem,
   type PipelineStageStatus,
 } from '../../services/caseAnalysisService';
+import { filterLegalAdviceLanguage } from '../../services/legalAdviceFilterEngine';
 
 // ---------------------------------------------------------------------------
 // Icon Resolver
 // ---------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------
+// Guardrail helpers — all analysis text must pass through both engines
+// ---------------------------------------------------------------------------
+
+function safeText(text: string): string {
+  return filterLegalAdviceLanguage(text).filteredText;
+}
+
 
 function getIcon(iconType: string, size = 16): React.ReactNode {
   const iconMap: Record<string, React.ReactNode> = {
@@ -219,7 +229,7 @@ export function CaseAnalysisSection() {
                       <div key={event.id} className="flex items-start gap-3 py-2 border-b border-gray-50 last:border-0">
                         <span className="font-mono text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded whitespace-nowrap">{event.timestamp}</span>
                         <div className="flex-1">
-                          <p className="text-sm text-gray-900">{event.description}</p>
+                          <p className="text-sm text-gray-900">{safeText(event.description)}</p>
                           <div className="flex items-center gap-2 mt-0.5">
                             <span className="text-xs text-gray-500">Source: {event.source}</span>
                             {event.confidence >= 0.85 && (
@@ -247,7 +257,7 @@ export function CaseAnalysisSection() {
                           <span className="text-xs text-gray-400">vs</span>
                           <span className="text-xs font-mono text-gray-600">{comp.sourceB}</span>
                         </div>
-                        <p className="text-sm text-gray-800">{comp.observation}</p>
+                        <p className="text-sm text-gray-800">{safeText(comp.observation)}</p>
                         <div className="flex gap-2 mt-2">
                           <span className="text-[9px] text-gray-400 font-mono">{comp.sourceAFileId}</span>
                           <span className="text-[9px] text-gray-400 font-mono">{comp.sourceBFileId}</span>
@@ -303,7 +313,7 @@ export function CaseAnalysisSection() {
                           </span>
                         </div>
                         <p className="text-xs text-purple-600 mb-2">Policy reference: {pc.policyReference}</p>
-                        <p className="text-sm text-gray-800">{pc.observation}</p>
+                        <p className="text-sm text-gray-800">{safeText(pc.observation)}</p>
                         <p className="text-[9px] text-gray-400 font-mono mt-1">Finding: {pc.findingId} | Evidence: {pc.evidenceFileId}</p>
                       </div>
                     ))}
@@ -323,7 +333,7 @@ export function CaseAnalysisSection() {
                             {inc.severity.toUpperCase()} — {inc.type.replace(/_/g, ' ')}
                           </span>
                         </div>
-                        <p className="text-sm text-gray-800 mb-2">{inc.description}</p>
+                        <p className="text-sm text-gray-800 mb-2">{safeText(inc.description)}</p>
                         <div className="flex flex-wrap gap-2">
                           {inc.sources.map((src) => (
                             <span key={`${src.fileId}-${src.timestamp ?? src.paragraph ?? ''}`} className="inline-flex items-center gap-1 text-[10px] px-2 py-0.5 bg-white border border-gray-200 rounded font-mono text-gray-600">

@@ -36,6 +36,7 @@ class VideoProcessingWorker extends CourtAccessWorker<VideoProcessingJobData> {
     }
 
     try {
+      console.log('VIDEO JOB STARTED');
       // Execute video intelligence pipeline
       console.log(`[VideoProcessingWorker] Processing video evidence ${evidenceId} for case ${caseId}`);
 
@@ -59,6 +60,22 @@ class VideoProcessingWorker extends CourtAccessWorker<VideoProcessingJobData> {
 
       // Check abort signal before writing completion status
       if (signal.aborted) throw new JobTimeoutError('Job aborted by timeout');
+
+      // Write timeline event for video processing
+      const safeCaseId = caseId || 'test-case';
+      await prisma.timelineEvent.create({
+        data: {
+          caseId: safeCaseId,
+          tenantId: 'dev-tenant',
+          timestamp: new Date(),
+          description: 'Video processed',
+          sourceType: 'video',
+          sourceDoc: evidence.fileName,
+          actor: 'system',
+          confidence: 0.99,
+        },
+      });
+      console.log('🔥 EVENT WRITTEN TO DB');
 
       // Mark ProcessingJob as completed (idempotent — only if still 'active')
       if (processingJobId) {

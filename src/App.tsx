@@ -69,6 +69,8 @@ import { TrialExhibitWorkspace } from './pages/case/TrialExhibitWorkspace';
 import { LitigationStrategyView } from './pages/case/LitigationStrategyView';
 import { ContradictionDashboardPage } from './pages/case/ContradictionDashboardPage';
 import { NarrativeAnalysisPage } from './pages/case/NarrativeAnalysisPage';
+import { CalcrimDefenseAnalysisPage } from './pages/case/CalcrimDefenseAnalysisPage';
+import { InconsistenciesTablePage } from './pages/case/InconsistenciesTablePage';
 
 function App() {
   return (
@@ -390,6 +392,22 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canViewEvidence">
                   <NarrativeAnalysisPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="defense-analysis"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <CalcrimDefenseAnalysisPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="inconsistencies"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <InconsistenciesTablePage />
                 </ProtectedRoute>
               }
             />

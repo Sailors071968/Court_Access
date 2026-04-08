@@ -201,6 +201,8 @@ export const CASE_TABS = [
   { id: 'litigation-strategy', label: 'Litigation Strategy', path: '/litigation-strategy', permission: 'canViewEvidence' as const },
   { id: 'contradictions', label: 'Contradictions', path: '/contradictions', permission: 'canViewEvidence' as const },
   { id: 'narrative-analysis', label: 'Narrative Analysis', path: '/narrative-analysis', permission: 'canViewEvidence' as const },
+  { id: 'defense-analysis', label: 'Defense Analysis', path: '/defense-analysis', permission: 'canViewEvidence' as const },
+  { id: 'inconsistencies', label: 'Inconsistencies', path: '/inconsistencies', permission: 'canViewEvidence' as const },
   { id: 'settings', label: 'Settings', path: '/settings', permission: 'canManageCases' as const },
 ] as const;
 

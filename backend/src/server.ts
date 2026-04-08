@@ -25,6 +25,7 @@ import { registerAutonomousCpraRoutes } from './cpra/autonomousCpraRoutes.js';
 import { registerBillingRoutes } from './billing/billingRoutes.js';
 import { registerCaseRoutes } from './evidence/caseRoutes.js';
 import { registerEvidenceRoutes } from './evidence/evidenceRoutes.js';
+import { registerVideoIntelligenceRoutes } from './evidence/videoIntelligenceRoutes.js';
 import { registerNarrativeRoutes } from './narrative/narrativeRoutes.js';
 import { registerTimelineRoutes } from './timeline/timelineRoutes.js';
 import { registerQueueMonitorRoutes } from './admin/queueMonitorRoutes.js';
@@ -157,6 +158,10 @@ async function startServer() {
   console.log('[Server] Registering evidence routes...');
   await registerEvidenceRoutes(app);
 
+  // Phase B — Video Intelligence Pipeline routes
+  console.log('[Server] Registering video intelligence routes...');
+  await registerVideoIntelligenceRoutes(app);
+
   // Narrative Deconstruction Engine routes
   console.log('[Server] Registering narrative deconstruction engine routes...');
   await registerNarrativeRoutes(app);
@@ -258,6 +263,13 @@ async function startServer() {
     console.log('  - GET  /api/cases/:caseId/evidence');
     console.log('  - GET  /api/evidence/:evidenceId');
     console.log('  - DELETE /api/evidence/:evidenceId');
+    console.log('  - GET  /api/video/:evidenceId/status');
+    console.log('  - GET  /api/video/:evidenceId/segments');
+    console.log('  - GET  /api/video/:evidenceId/transcript');
+    console.log('  - GET  /api/video/:evidenceId/frames');
+    console.log('  - GET  /api/video/:evidenceId/overlays');
+    console.log('  - GET  /api/video/:evidenceId/actions');
+    console.log('  - GET  /api/video/:evidenceId/timeline');
     console.log('  - GET  /api/timeline/:caseId');
     console.log('  - GET  /api/timeline/:caseId/events');
     console.log('  - GET  /api/timeline/:caseId/conflicts');

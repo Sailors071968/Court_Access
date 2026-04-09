@@ -94,8 +94,8 @@ function extractActions(text: string): string[] {
 
 export function extractTarget(text: string): string | null {
   const patterns = [
-    /(?:at|toward|into|onto|to)\s+(?:the\s+)?([a-zA-Z]+)/i,
-    /(?:against)\s+(?:the\s+)?([a-zA-Z]+)/i,
+    /\b(?:at|toward|into|onto|to)\s+(?:the\s+)?([a-zA-Z]+)/i,
+    /\b(?:against)\s+(?:the\s+)?([a-zA-Z]+)/i,
   ];
 
   for (const p of patterns) {

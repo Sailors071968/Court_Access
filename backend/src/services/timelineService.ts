@@ -24,7 +24,7 @@ export function buildTimeline(events: TimelineEvent[]): TimelineEvent[] {
 function normalizeTimestamp(timestamp: string | null, fallback: number): number {
   if (!timestamp) return 999999999 + fallback;
 
-  const parsed = Date.parse(`1970-01-01T${timestamp}:00Z`);
+  const parsed = Date.parse(`1970-01-01T${timestamp}Z`);
 
   return isNaN(parsed) ? 999999999 + fallback : parsed;
 }

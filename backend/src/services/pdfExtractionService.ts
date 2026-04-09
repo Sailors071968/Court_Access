@@ -111,7 +111,7 @@ function removeStructuredNoise(text: string): string {
     .filter(line => {
       const l = line.trim();
 
-      if (!l) return false;
+      if (!l) return true;
 
       // ❌ Remove CLI / logs
       if (/^\[.*\]$/.test(l)) return false;

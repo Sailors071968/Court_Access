@@ -46,27 +46,7 @@ export function extractTimestamp(text: string): ExtractedTimestamp {
   }
 
   // ---------------------------------------------------
-  // 2. AM/PM FORMAT
-  // ---------------------------------------------------
-  const ampmMatch = text.match(TIME_AMPM);
-  if (ampmMatch) {
-    const [_, hour, minute, period] = ampmMatch;
-
-    let h = parseInt(hour);
-    if (period.toUpperCase() === "PM" && h !== 12) h += 12;
-    if (period.toUpperCase() === "AM" && h === 12) h = 0;
-
-    const formatted = `${String(h).padStart(2, "0")}:${minute}:00`;
-
-    return {
-      value: formatted,
-      confidence: 0.9,
-      method: "explicit",
-    };
-  }
-
-  // ---------------------------------------------------
-  // 3. APPROXIMATE TIME
+  // 2. APPROXIMATE TIME (must check before general AM/PM)
   // ---------------------------------------------------
   const approxMatch = text.match(APPROX);
   if (approxMatch) {
@@ -86,6 +66,26 @@ export function extractTimestamp(text: string): ExtractedTimestamp {
         method: "approximate",
       };
     }
+  }
+
+  // ---------------------------------------------------
+  // 3. AM/PM FORMAT
+  // ---------------------------------------------------
+  const ampmMatch = text.match(TIME_AMPM);
+  if (ampmMatch) {
+    const [_, hour, minute, period] = ampmMatch;
+
+    let h = parseInt(hour);
+    if (period.toUpperCase() === "PM" && h !== 12) h += 12;
+    if (period.toUpperCase() === "AM" && h === 12) h = 0;
+
+    const formatted = `${String(h).padStart(2, "0")}:${minute}:00`;
+
+    return {
+      value: formatted,
+      confidence: 0.9,
+      method: "explicit",
+    };
   }
 
   // ---------------------------------------------------

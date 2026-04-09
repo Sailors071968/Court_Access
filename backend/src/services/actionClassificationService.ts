@@ -75,7 +75,8 @@ export function classifyAction(action?: string, description?: string): Classifie
 
   // Scan description (🔥 NEW)
   for (const key of Object.keys(ACTION_MAP)) {
-    if (normalized.includes(key)) {
+    const wordBoundary = new RegExp(`\\b${key}\\b`);
+    if (wordBoundary.test(normalized)) {
       return {
         raw: source,
         ...ACTION_MAP[key],

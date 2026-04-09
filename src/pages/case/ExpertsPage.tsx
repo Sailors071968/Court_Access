@@ -56,7 +56,7 @@ export function ExpertsPage() {
 
       {/* Case Info */}
       <div>
-        <h2 className="text-xl font-bold text-blue-700">{currentCase.title || currentCase.caseType} - Case #{currentCase.caseId}</h2>
+        <h2 className="text-xl font-bold text-blue-700">{currentCase.title || currentCase.caseType} - Case #{currentCase.caseNumber}</h2>
         <p className="text-sm text-gray-500 mt-1">
           Status: {currentCase.status || 'Pre-Trial Motions'}
         </p>

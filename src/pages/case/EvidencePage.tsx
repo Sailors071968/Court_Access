@@ -223,7 +223,7 @@ export function EvidencePage() {
                       <td className="py-3 px-4 text-gray-500">{formatFileSize(Number(ev.size))}</td>
                       <td className="py-3 px-4">
                         <span className={`text-xs px-2 py-0.5 rounded-full font-medium ${
-                          ev.processingStatus === 'complete' ? 'bg-green-100 text-green-700' :
+                          ev.processingStatus === 'analyzed' ? 'bg-green-100 text-green-700' :
                           ev.processingStatus === 'processing' ? 'bg-blue-100 text-blue-700' :
                           ev.processingStatus === 'failed' ? 'bg-red-100 text-red-700' :
                           'bg-gray-100 text-gray-700'

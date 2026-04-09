@@ -58,7 +58,7 @@ export function MotionsPage() {
         <div>
           <h2 className="text-xl font-bold text-gray-900">Court Attorney - Motion Recommendations</h2>
           <div className="flex items-center gap-2 mt-2 px-4 py-2 bg-purple-600 text-white rounded-lg text-sm">
-            <span>{currentCase.title || currentCase.caseType} - Case #{currentCase.caseId}</span>
+            <span>{currentCase.title || currentCase.caseType} - Case #{currentCase.caseNumber}</span>
             <button aria-label="Edit case"><Pencil size={14} /></button>
           </div>
         </div>

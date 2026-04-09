@@ -13,7 +13,7 @@ export interface ResolvedActor {
 // PRONOUNS
 // ---------------------------------------------------------------------------
 
-const PRONOUNS = ["he", "she", "they", "them", "him", "officer"];
+const PRONOUNS = ["he", "she", "they", "them", "him"];
 
 function isPronoun(actor: string): boolean {
   return PRONOUNS.includes(actor.toLowerCase());

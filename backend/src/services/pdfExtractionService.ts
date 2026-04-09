@@ -173,7 +173,7 @@ export function isValidNarrativeLine(line: string): boolean {
   if (/redis|pm2|localhost|ec2-user/i.test(line)) return false;
 
   // Reject code-like lines
-  if (/[{}<>;$]/.test(line)) return false;
+  if (/[{}<>$]/.test(line)) return false;
 
   return true;
 }

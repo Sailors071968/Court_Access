@@ -19,7 +19,7 @@ const TIME_FULL = /\b((?:[01]?\d|2[0-3]):[0-5]\d:[0-5]\d)\b/;
 const TIME_AMPM = /\b(1[0-2]|0?[1-9]):([0-5]\d)\s?(AM|PM)\b/i;
 
 // "approximately 10:30 PM"
-const APPROX = /(approximately|approx\.?)\s+(.*)/i;
+const APPROX = /(approximately|approx\.?)\s+(.{0,30})/i;
 
 // bodycam style 00:01:32
 const RELATIVE = /\b\d{2}:\d{2}:\d{2}\b/;
@@ -40,17 +40,9 @@ export function extractTimestamp(text: string): ExtractedTimestamp {
   if (approxMatch) {
     const inner = approxMatch[2];
 
-    // Check for HH:MM:SS inside approximate qualifier
-    const nestedFull = inner.match(TIME_FULL);
-    if (nestedFull) {
-      return {
-        value: nestedFull[1],
-        confidence: 0.7,
-        method: "approximate",
-      };
-    }
-
-    // Check for AM/PM inside approximate qualifier
+    // Check for AM/PM inside approximate qualifier (before HH:MM:SS
+    // so that "approximately 10:30 PM, bodycam at 22:41:12" finds the
+    // AM/PM time, not the unrelated HH:MM:SS later in the captured text)
     const nestedAmpm = inner.match(TIME_AMPM);
     if (nestedAmpm) {
       const [_, hour, minute, period] = nestedAmpm;
@@ -61,6 +53,16 @@ export function extractTimestamp(text: string): ExtractedTimestamp {
 
       return {
         value: `${String(h).padStart(2, "0")}:${minute}:00`,
+        confidence: 0.7,
+        method: "approximate",
+      };
+    }
+
+    // Check for HH:MM:SS inside approximate qualifier
+    const nestedFull = inner.match(TIME_FULL);
+    if (nestedFull) {
+      return {
+        value: nestedFull[1],
         confidence: 0.7,
         method: "approximate",
       };

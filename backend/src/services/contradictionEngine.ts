@@ -22,9 +22,9 @@ type Contradiction = {
   eventIds: string[];
 };
 
-export async function detectContradictions(caseId: string) {
+export async function detectContradictions(caseId: string, tenantId?: string) {
   const events: TimelineEvent[] = await prisma.timelineEvent.findMany({
-    where: { caseId },
+    where: { caseId, ...(tenantId ? { tenantId } : {}) },
     orderBy: { createdAt: "asc" },
   });
 

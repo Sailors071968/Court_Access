@@ -3,7 +3,8 @@
 // Deterministic • Court-safe • Node-only • No hallucination
 // ============================================================================
 
-import pdf from "pdf-parse";
+import * as pdfParse from "pdf-parse";
+const pdf = (pdfParse as any).default || pdfParse;
 
 // ============================================================================
 // MAIN EXTRACTION FUNCTION

@@ -4,7 +4,7 @@
 
 import fs from "fs/promises";
 import { chunkText } from "./evidenceChunkingService";
-import { extractEvents } from "./extractEvents";
+import { extractEvents, normalizeEvents } from "./extractEvents";
 import { getQueue, QUEUE_NAMES } from "../lib/queues";
 
 // ----------------------------------------------------------------------------
@@ -59,27 +59,37 @@ export async function processEvidenceToChunks(file: {
     try {
       if (!chunk?.text) continue;
 
+      // Step 1: Extract raw events
       const events = extractEvents(chunk.text);
 
-      console.log(`🧠 Chunk ${chunk.index} → ${events.length} events`);
+      // Step 2: Normalize through full pipeline
+      // (extract → normalize → resolveActor → classifyAction)
+      const normalized = normalizeEvents(events, chunk.text, chunk.index);
+
+      console.log(`🧠 Chunk ${chunk.index} → ${events.length} events → ${normalized.length} normalized`);
 
       // -----------------------------------------------------------------------
-      // DEBUG (SAFE — RAW EXTRACTION ONLY)
+      // DEBUG (SAFE — NORMALIZED OUTPUT)
       // -----------------------------------------------------------------------
-      console.log("🔎 Extracted Events (RAW):", {
+      console.log("🔎 Normalized Events:", {
         chunkId: chunk.index,
-        sample: events.slice(0, 2), // prevent log flooding
+        sample: normalized.slice(0, 2).map(e => ({
+          actor: e.actor,
+          action: e.action,
+          target: e.target,
+          eventId: e.eventId.slice(0, 8) + '...',
+        })),
       });
 
       // -----------------------------------------------------------------------
-      // SEND MULTI-EVENTS TO WORKER (SOURCE OF TRUTH)
+      // SEND NORMALIZED EVENTS TO WORKER (SOURCE OF TRUTH)
       // -----------------------------------------------------------------------
       await timelineQueue.add("process", {
         fileId: id,
         caseId,
         chunkId: chunk.index,
         rawText: chunk.text,
-        events,
+        events: normalized,
       });
 
       totalEvents += events.length;

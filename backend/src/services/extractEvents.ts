@@ -1,6 +1,16 @@
 // ============================================================================
-// MULTI-EVENT EXTRACTION ENGINE (ENHANCED v2)
+// MULTI-EVENT EXTRACTION ENGINE (ENHANCED v3)
+// SINGLE SOURCE OF TRUTH — All actor/action/target extraction originates here.
+// No duplicate extraction logic allowed elsewhere in the pipeline.
 // ============================================================================
+
+import { createHash } from 'crypto';
+import { extractTimestamp } from './timestampExtractionService';
+import { classifyAction, type ClassifiedAction } from './actionClassificationService';
+import {
+  resolveActor as resolveActorFromEngine,
+  createActorMemory,
+} from './actorResolutionEngine';
 
 export interface ExtractedEvent {
   description: string;
@@ -10,33 +20,36 @@ export interface ExtractedEvent {
   timestamp?: string;
 }
 
+export interface NormalizedEvent {
+  eventId: string;
+  actor: string;
+  action: string;
+  actionClassification: ClassifiedAction;
+  target: string | null;
+  timestamp: string | null;
+  timestampConfidence: number;
+  timestampMethod: string;
+  description: string;
+  confidence: number;
+}
+
 // ----------------------------------------------------------------------------
 // ACTION KEYWORDS (EXPANDED)
 // ----------------------------------------------------------------------------
 
 const ACTION_KEYWORDS = [
-  "approach",
-  "exit",
-  "enter",
-  "draw",
-  "fire",
-  "shoot",
-  "detain",
-  "handcuff",
-  "search",
-  "pursue",
-  "chase",
-  "strike",
-  "tase",
-  "yell",
-  "order",
-  "command",
-  "observe",
-  "interview",
-  "respond",
-  "arrive",
-  "leave",
-  "transport",
+  // Base forms
+  "approach", "exit", "enter", "draw", "fire", "shoot",
+  "detain", "handcuff", "search", "pursue", "chase",
+  "strike", "tase", "yell", "order", "command",
+  "observe", "interview", "respond", "arrive", "leave", "transport",
+  // Past tense / conjugated (common in police reports)
+  "approached", "exited", "entered", "drew", "fired", "shot",
+  "detained", "handcuffed", "searched", "pursued", "chased",
+  "struck", "tased", "yelled", "ordered", "commanded",
+  "observed", "interviewed", "responded", "arrived", "left", "transported",
+  // Action-first parsing keywords (from user spec)
+  "ran", "drove", "grabbed", "pointed",
 ];
 
 // ----------------------------------------------------------------------------
@@ -67,10 +80,18 @@ function splitClauses(sentence: string): string[] {
 // ----------------------------------------------------------------------------
 
 export function extractActor(text: string): string {
-  const match = text.match(
-    /(Officer\s+\w+|Deputy\s+\w+|Detective\s+\w+|Suspect|Victim|Defendant)/i
+  // Match titled officers — require capitalized name to avoid
+  // false matches like "Officer approached" (lowercase = verb, not name)
+  const titleMatch = text.match(
+    /\b(Officer|Deputy|Detective|Sgt|Lt)\s+([A-Z][a-zA-Z]+)/
   );
-  return match ? match[0] : "unknown";
+  if (titleMatch) return `${titleMatch[1]} ${titleMatch[2]}`;
+
+  // Match role keywords with word boundaries
+  const roleMatch = text.match(/\b(Suspect|Victim|Defendant)\b/i);
+  if (roleMatch) return roleMatch[0];
+
+  return "unknown";
 }
 
 // ----------------------------------------------------------------------------
@@ -92,15 +113,35 @@ function extractActions(text: string): string[] {
 // Rule C: Fallback → null (court-safe: never hallucinate)
 // ----------------------------------------------------------------------------
 
+// Verbs that commonly follow "to" as infinitives — must NOT be captured as targets
+const INFINITIVE_VERBS = new Set([
+  'search', 'run', 'flee', 'drop', 'resist', 'exit', 'enter', 'leave',
+  'approach', 'pursue', 'chase', 'strike', 'fire', 'shoot', 'draw',
+  'detain', 'handcuff', 'grab', 'tase', 'yell', 'order', 'command',
+  'observe', 'interview', 'respond', 'arrive', 'transport', 'stop',
+  'be', 'get', 'have', 'do', 'make', 'take', 'go', 'come', 'see',
+  'know', 'find', 'give', 'tell', 'say', 'try', 'help', 'keep',
+]);
+
 export function extractTarget(text: string): string | null {
   const patterns = [
-    /\b(?:at|toward|into|onto|to)\s+(?:the\s+)?([a-zA-Z]+)/i,
-    /\b(?:against)\s+(?:the\s+)?([a-zA-Z]+)/i,
+    // Rule A: Direct object after preposition (supports multi-word: "red vehicle", "front door")
+    /\b(?:at|toward|into|onto|to)\s+(?:the\s+)?([a-zA-Z]+(?:\s+[a-zA-Z]+)?)/i,
+    // Rule B: Prepositional "against"
+    /\b(?:against)\s+(?:the\s+)?([a-zA-Z]+(?:\s+[a-zA-Z]+)?)/i,
+    // Rule C: Direct object after action verbs (no preposition needed)
+    /\b(?:approached|searched|entered|exited|grabbed|struck)\s+(?:the\s+)?([a-zA-Z]+(?:\s+[a-zA-Z]+)?)/i,
   ];
 
   for (const p of patterns) {
     const match = text.match(p);
-    if (match) return match[1].toLowerCase();
+    if (match) {
+      const captured = match[1].toLowerCase().trim();
+      // Filter infinitive verbs ("to search", "to run", "to flee")
+      const firstWord = captured.split(/\s+/)[0];
+      if (INFINITIVE_VERBS.has(firstWord)) continue;
+      return captured;
+    }
   }
 
   return null;
@@ -148,4 +189,74 @@ export function extractEvents(chunkText: string): ExtractedEvent[] {
   }
 
   return events;
+}
+
+// ----------------------------------------------------------------------------
+// EVENT NORMALIZATION (PHASE 2 — SINGLE SOURCE OF TRUTH)
+// Pipeline: extractEvents → normalizeEvents → resolveActor → classifyAction
+// ⚠️ DO NOT CHANGE THIS ORDER
+// ----------------------------------------------------------------------------
+
+function computeConfidence(event: ExtractedEvent): number {
+  let score = 0.5;
+  if (event.actor !== 'unknown') score += 0.2;
+  if (event.action !== 'unknown') score += 0.15;
+  if (event.target !== null) score += 0.15;
+  return Math.min(score, 1.0);
+}
+
+function generateEventId(text: string, index: number): string {
+  return createHash('sha256')
+    .update(`${text}|${index}`)
+    .digest('hex');
+}
+
+/**
+ * Normalize a batch of extracted events through the full pipeline:
+ *   1. extractEvents (already done — input to this function)
+ *   2. normalizeEvent (timestamp, confidence)
+ *   3. resolveActor (pronoun → named actor via memory)
+ *   4. classifyAction (raw verb → classified category)
+ *
+ * Actor memory is maintained across the batch for coreference resolution
+ * (e.g. "he" → "Officer Smith" from previous sentence).
+ */
+export function normalizeEvents(
+  events: ExtractedEvent[],
+  chunkText: string,
+  chunkIndex: number,
+): NormalizedEvent[] {
+  const memory = createActorMemory();
+
+  return events.map((event, i) => {
+    // Step 2: Timestamp extraction from description
+    const ts = extractTimestamp(event.description);
+
+    // Step 3: Actor resolution (pronoun → named actor)
+    const actorCandidates = event.actor !== 'unknown' ? [event.actor] : [];
+    const resolvedActor = resolveActorFromEngine(
+      event.description,
+      actorCandidates,
+      memory,
+    );
+
+    // Step 4: Action classification (raw verb → category)
+    const actionClassification = classifyAction(event.action, event.description);
+
+    // Step 5: Traceability — deterministic eventId
+    const eventId = generateEventId(chunkText, chunkIndex * 1000 + i);
+
+    return {
+      eventId,
+      actor: resolvedActor,
+      action: event.action,
+      actionClassification,
+      target: event.target,
+      timestamp: ts.value,
+      timestampConfidence: ts.confidence,
+      timestampMethod: ts.method,
+      description: event.description,
+      confidence: computeConfidence(event),
+    };
+  });
 }

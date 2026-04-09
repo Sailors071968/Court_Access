@@ -88,8 +88,10 @@ export function extractActor(text: string): string {
   );
   if (titleMatch) {
     const name = titleMatch[2];
-    // Require name starts with uppercase OR input is all-caps (OCR/police reports)
-    if (/^[A-Z]/.test(name) || /^[A-Z]+$/.test(name)) {
+    // Require name starts with uppercase — handles both normal ("Smith")
+    // and all-caps OCR text ("SMITH"). But reject known action verbs
+    // (e.g. "OFFICER APPROACHED" → "APPROACHED" is a verb, not a name).
+    if (/^[A-Z]/.test(name) && !ACTION_KEYWORDS.includes(name.toLowerCase())) {
       return `${titleMatch[1]} ${titleMatch[2]}`;
     }
   }

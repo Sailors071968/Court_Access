@@ -80,7 +80,7 @@ function extractActions(text: string): string[] {
   const lower = text.toLowerCase();
 
   return ACTION_KEYWORDS.filter((keyword) =>
-    lower.includes(keyword)
+    new RegExp(`\\b${keyword}\\b`).test(lower)
   );
 }
 

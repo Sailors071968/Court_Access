@@ -42,6 +42,7 @@ export async function detectContradictions(caseId: string) {
 
       if (!a.actor || !b.actor) continue;
       if (!a.action || !b.action) continue;
+      if (!a.target || !b.target) continue;
 
       if (
         a.actor === b.actor &&
@@ -69,6 +70,8 @@ export async function detectContradictions(caseId: string) {
       const b = events[j];
 
       if (!a.action || !b.action) continue;
+      if (!a.actor || !b.actor) continue;
+      if (!a.target || !b.target) continue;
 
       if (
         a.action === b.action &&
@@ -92,7 +95,7 @@ export async function detectContradictions(caseId: string) {
   const unique = new Map<string, Contradiction>();
 
   for (const c of contradictions) {
-    const key = `${c.type}-${c.eventIds.sort().join("-")}`;
+    const key = `${c.type}-${[...c.eventIds].sort().join("-")}`;
     if (!unique.has(key)) {
       unique.set(key, c);
     }

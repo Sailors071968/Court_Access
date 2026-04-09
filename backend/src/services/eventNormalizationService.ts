@@ -19,7 +19,7 @@ export function normalizeEvent(event: any): any[] {
     // ---------------------------------------------------------------------------
     // 🕒 TIME (STRICT 24HR FORMAT ONLY)
     // ---------------------------------------------------------------------------
-    const timeMatch = text.match(/\b(0?[0-9]|1[0-9]|2[0-3])[0-5][0-9]\b/);
+    const timeMatch = text.match(/\b(0?[0-9]|1[0-9]|2[0-3]):[0-5][0-9]\b/);
     if (timeMatch) {
       attributes.push({
         type: "time",
@@ -153,7 +153,7 @@ export function normalizeEvent(event: any): any[] {
     // ---------------------------------------------------------------------------
     // 📏 MEASUREMENTS (VERY IMPORTANT FOR CONTRADICTIONS)
     // ---------------------------------------------------------------------------
-    const inchMatch = text.match(/\b\d+(\.\d+)?\s?(inch|inches|")\b/);
+    const inchMatch = text.match(/\b\d+(\.\d+)?\s?(inch|inches|"(?=\s|$|[^a-zA-Z0-9]))/);
     if (inchMatch) {
       attributes.push({
         type: "measurement",

@@ -34,27 +34,26 @@ export function extractTimestamp(text: string): ExtractedTimestamp {
   }
 
   // ---------------------------------------------------
-  // 1. FULL TIMESTAMP (HH:MM:SS)
-  // ---------------------------------------------------
-  const fullMatch = text.match(TIME_FULL);
-  if (fullMatch) {
-    return {
-      value: fullMatch[1],
-      confidence: 0.95,
-      method: "explicit",
-    };
-  }
-
-  // ---------------------------------------------------
-  // 2. APPROXIMATE TIME (must check before general AM/PM)
+  // 1. APPROXIMATE TIME (must check before all others)
   // ---------------------------------------------------
   const approxMatch = text.match(APPROX);
   if (approxMatch) {
     const inner = approxMatch[2];
-    const nested = inner.match(TIME_AMPM);
 
-    if (nested) {
-      const [_, hour, minute, period] = nested;
+    // Check for HH:MM:SS inside approximate qualifier
+    const nestedFull = inner.match(TIME_FULL);
+    if (nestedFull) {
+      return {
+        value: nestedFull[1],
+        confidence: 0.7,
+        method: "approximate",
+      };
+    }
+
+    // Check for AM/PM inside approximate qualifier
+    const nestedAmpm = inner.match(TIME_AMPM);
+    if (nestedAmpm) {
+      const [_, hour, minute, period] = nestedAmpm;
 
       let h = parseInt(hour);
       if (period.toUpperCase() === "PM" && h !== 12) h += 12;
@@ -66,6 +65,18 @@ export function extractTimestamp(text: string): ExtractedTimestamp {
         method: "approximate",
       };
     }
+  }
+
+  // ---------------------------------------------------
+  // 2. FULL TIMESTAMP (HH:MM:SS)
+  // ---------------------------------------------------
+  const fullMatch = text.match(TIME_FULL);
+  if (fullMatch) {
+    return {
+      value: fullMatch[1],
+      confidence: 0.95,
+      method: "explicit",
+    };
   }
 
   // ---------------------------------------------------

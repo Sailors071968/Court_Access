@@ -11,6 +11,7 @@ import {
   resolveActor as resolveActorFromEngine,
   createActorMemory,
 } from './actorResolutionEngine';
+import { extractAttributes, type ExtractedAttributes } from './attributeExtractionService';
 
 export interface ExtractedEvent {
   description: string;
@@ -31,6 +32,7 @@ export interface NormalizedEvent {
   timestampMethod: string;
   description: string;
   confidence: number;
+  attributes: ExtractedAttributes;
 }
 
 // ----------------------------------------------------------------------------
@@ -312,7 +314,10 @@ export function normalizeEvents(
     // Step 4: Action classification (raw verb → category)
     const actionClassification = classifyAction(event.action, event.description);
 
-    // Step 5: Traceability — deterministic eventId
+    // Step 5: Structured attribute extraction (Phase 3)
+    const attributes = extractAttributes(event.description);
+
+    // Step 6: Traceability — deterministic eventId
     const eventId = generateEventId(chunkText, chunkIndex * 1000 + i);
 
     return {
@@ -326,6 +331,7 @@ export function normalizeEvents(
       timestampMethod: ts.method,
       description: event.description,
       confidence: computeConfidence(event),
+      attributes,
     };
   });
 }

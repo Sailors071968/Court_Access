@@ -1525,14 +1525,24 @@ model ProcessingJob {
 model TimelineEvent {
   id              String    @id @default(uuid())
   caseId          String
-  tenantId        String
-  timestamp       DateTime
-  sourceDoc       String    // evidence document that sourced this event
-  sourceType      String    // police_report | bodycam | dispatch | witness | forensic
-  description     String
+  tenantId        String?
+
+  timestamp       DateTime?
+  timeText        String?   // raw time text from source (e.g. "approximately 10:30 PM")
+
   actor           String?   // who performed the action
+  action          String?   // what was done (raw, human-readable — e.g. "fired", "grabbed")
+  target          String?   // person, object, or location acted upon (e.g. "Suspect", "vehicle")
+  object          String?   // instrument or object used (e.g. "handgun", "taser")
+
+  description     String
+
+  sourceDoc       String?   // evidence document that sourced this event
+  sourceType      String?   // police_report | bodycam | dispatch | witness | forensic
+
   location        String?
-  confidence      Float     @default(0.5) // 0-1 confidence score
+  confidence      Float?    // 0-1 confidence score
+
   conflictFlag    Boolean   @default(false) // flagged if conflicts with another event
   conflictsWith   String?   // ID of conflicting TimelineEvent
   metadata        Json?
@@ -1546,6 +1556,8 @@ model TimelineEvent {
   @@index([sourceType])
   @@index([confidence])
   @@index([conflictFlag])
+  @@index([actor])
+  @@index([action])
   @@map("timeline_events")
 }
 

@@ -47,7 +47,7 @@ const ACTION_KEYWORDS = [
   "approached", "exited", "entered", "drew", "fired", "shot",
   "detained", "handcuffed", "searched", "pursued", "chased",
   "struck", "tased", "yelled", "ordered", "commanded",
-  "observed", "interviewed", "responded", "arrived", "left", "transported",
+  "observed", "interviewed", "responded", "arrived", "transported",
   // Action-first parsing keywords (from user spec)
   "ran", "drove", "grabbed", "pointed",
 ];
@@ -80,12 +80,19 @@ function splitClauses(sentence: string): string[] {
 // ----------------------------------------------------------------------------
 
 export function extractActor(text: string): string {
-  // Match titled officers — require capitalized name to avoid
-  // false matches like "Officer approached" (lowercase = verb, not name)
+  // Match titled officers — case-insensitive title, but require the name
+  // to start with an uppercase letter (prevents "Officer approached" false match).
+  // Two-step: match case-insensitively, then validate name casing.
   const titleMatch = text.match(
-    /\b(Officer|Deputy|Detective\.?|Sgt\.?|Lt\.?)\s+([A-Z][a-zA-Z]+)/
+    /\b(Officer|Deputy|Detective\.?|Sgt\.?|Lt\.?)\s+(\w+)/i
   );
-  if (titleMatch) return `${titleMatch[1]} ${titleMatch[2]}`;
+  if (titleMatch) {
+    const name = titleMatch[2];
+    // Require name starts with uppercase OR input is all-caps (OCR/police reports)
+    if (/^[A-Z]/.test(name) || /^[A-Z]+$/.test(name)) {
+      return `${titleMatch[1]} ${titleMatch[2]}`;
+    }
+  }
 
   // Match role keywords with word boundaries
   const roleMatch = text.match(/\b(Suspect|Victim|Defendant)\b/i);

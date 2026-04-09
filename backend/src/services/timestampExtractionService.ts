@@ -19,7 +19,7 @@ const TIME_FULL = /\b([0-2]?\d:[0-5]\d:[0-5]\d)\b/;
 const TIME_AMPM = /\b(1[0-2]|0?[1-9]):([0-5]\d)\s?(AM|PM)\b/i;
 
 // "approximately 10:30 PM"
-const APPROX = /(approximately|approx\.?|around)\s+(.*)/i;
+const APPROX = /(approximately|approx\.?)\s+(.*)/i;
 
 // bodycam style 00:01:32
 const RELATIVE = /\b\d{2}:\d{2}:\d{2}\b/;

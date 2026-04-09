@@ -1,4 +1,8 @@
 // ============================================================================
+// ⚠️ DEPRECATED — Do not use this module.
+// Use actorResolutionEngine.ts + actorMemoryService.ts instead.
+// This file is kept for reference only and will be removed in a future cleanup.
+// ============================================================================
 // CourtAccess — Actor Resolution Service (SEQUENTIAL CONTEXT ENGINE)
 // ============================================================================
 

@@ -124,22 +124,26 @@ const INFINITIVE_VERBS = new Set([
 ]);
 
 export function extractTarget(text: string): string | null {
-  const patterns = [
+  const patterns: Array<{ regex: RegExp; filterInfinitives: boolean }> = [
     // Rule A: Direct object after preposition (supports multi-word: "red vehicle", "front door")
-    /\b(?:at|toward|into|onto|to)\s+(?:the\s+)?([a-zA-Z]+(?:\s+[a-zA-Z]+)?)/i,
-    // Rule B: Prepositional "against"
-    /\b(?:against)\s+(?:the\s+)?([a-zA-Z]+(?:\s+[a-zA-Z]+)?)/i,
-    // Rule C: Direct object after action verbs (no preposition needed)
-    /\b(?:approached|searched|entered|exited|grabbed|struck)\s+(?:the\s+)?([a-zA-Z]+(?:\s+[a-zA-Z]+)?)/i,
+    // Infinitive filter ONLY applies here ("to search" → null, "to flee" → null)
+    { regex: /\b(?:at|toward|into|onto|to)\s+(?:the\s+)?([a-zA-Z]+(?:\s+[a-zA-Z]+)?)/i, filterInfinitives: true },
+    // Rule B: Prepositional "against" — no infinitive filter
+    { regex: /\b(?:against)\s+(?:the\s+)?([a-zA-Z]+(?:\s+[a-zA-Z]+)?)/i, filterInfinitives: false },
+    // Rule C: Direct object after action verbs — no infinitive filter
+    // ("approached the search area" → "search area" is valid)
+    { regex: /\b(?:approached|searched|entered|exited|grabbed|struck)\s+(?:the\s+)?([a-zA-Z]+(?:\s+[a-zA-Z]+)?)/i, filterInfinitives: false },
   ];
 
-  for (const p of patterns) {
-    const match = text.match(p);
+  for (const { regex, filterInfinitives } of patterns) {
+    const match = text.match(regex);
     if (match) {
       const captured = match[1].toLowerCase().trim();
-      // Filter infinitive verbs ("to search", "to run", "to flee")
-      const firstWord = captured.split(/\s+/)[0];
-      if (INFINITIVE_VERBS.has(firstWord)) continue;
+      // Filter infinitive verbs ONLY for Rule A ("to search", "to run", "to flee")
+      if (filterInfinitives) {
+        const firstWord = captured.split(/\s+/)[0];
+        if (INFINITIVE_VERBS.has(firstWord)) continue;
+      }
       return captured;
     }
   }

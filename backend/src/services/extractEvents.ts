@@ -118,7 +118,7 @@ export function extractActor(text: string): string {
 
   // Match role keywords with word boundaries
   const roleMatch = text.match(/\b(Suspect|Victim|Defendant)\b/i);
-  if (roleMatch) return roleMatch[0];
+  if (roleMatch) return roleMatch[0].charAt(0).toUpperCase() + roleMatch[0].slice(1).toLowerCase();
 
   return "unknown";
 }

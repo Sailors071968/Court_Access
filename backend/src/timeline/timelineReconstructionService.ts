@@ -383,7 +383,11 @@ export async function reconstructTimeline(
     const clauses = rawText
       ? rawText.split(/,| and | then | after | while | when | as | which | who /i).map(s => s.trim()).filter(Boolean)
       : [];
-    const target = clauses.length > 0 ? extractTarget(clauses[0]) : null;
+    let target: string | null = null;
+    for (const clause of clauses) {
+      target = extractTarget(clause);
+      if (target !== null) break;
+    }
 
     return {
       caseId,

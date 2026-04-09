@@ -19,6 +19,7 @@ import { normalizeDocumentText } from '../services/documentNormalizationService.
 import type { ExtractedEvent as CdeExtractedEvent } from '../contradiction/types.js';
 import type { TimelineEvent as ConflictTimelineEvent, TimelineConflict } from '../conflict/types.js';
 import { extractActor, extractTarget } from '../services/extractEvents.js';
+import { extractAttributes } from '../services/attributeExtractionService.js';
 
 // ---------------------------------------------------------------------------
 // Result Types
@@ -410,6 +411,7 @@ export async function reconstructTimeline(
         alignmentMethod: te.alignmentMethod,
         driftCorrectionMs: te.driftCorrectionMs,
         officerTimelineEntries: officerTimelineEntryCount,
+        attributes: extractAttributes(rawText),
       },
     };
   });

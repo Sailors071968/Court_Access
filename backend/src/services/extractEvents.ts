@@ -11,7 +11,7 @@ import {
   resolveActor as resolveActorFromEngine,
   createActorMemory,
 } from './actorResolutionEngine';
-import { extractAttributes, type ExtractedAttributes } from './attributeExtractionService';
+import { extractAttributes, type ExtractedAttributes, VEHICLE_COLORS, VEHICLE_MAKES } from './attributeExtractionService';
 
 export interface ExtractedEvent {
   description: string;
@@ -169,7 +169,11 @@ const TARGET_STOP_WORDS = new Set([
 ]);
 
 // Vehicle-specific pattern: "red Toyota Camry", "blue Honda Civic"
-const VEHICLE_PATTERN = /\b(red|blue|black|gray|grey|white|silver|green|brown|dark|maroon)\s+(Toyota|Honda|Ford|Chevy|Chevrolet|Nissan|BMW|Mercedes|Hyundai|Kia|Dodge|Jeep|Subaru|Volkswagen|VW|Audi|Lexus|Acura)\s+([A-Za-z]+)/i;
+// Uses shared color/make lists from attributeExtractionService for consistency
+const VEHICLE_PATTERN = new RegExp(
+  `\\b(${VEHICLE_COLORS.join("|")})\\s+(${VEHICLE_MAKES.join("|")})\\s+([A-Za-z]+)`,
+  "i",
+);
 
 export function extractTarget(text: string): string | null {
   // Rule V: Vehicle-specific extraction (highest priority — prevents partial captures)

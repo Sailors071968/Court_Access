@@ -36,13 +36,13 @@ const WEAPON_REGEX = new RegExp(
 );
 
 // 3. VEHICLE — color + make + model (reuse from extractTarget)
-const VEHICLE_COLORS = [
+export const VEHICLE_COLORS = [
   "red", "blue", "black", "gray", "grey", "white", "silver",
   "green", "brown", "dark", "maroon", "tan", "beige", "gold",
   "orange", "yellow", "purple",
 ];
 
-const VEHICLE_MAKES = [
+export const VEHICLE_MAKES = [
   "Toyota", "Honda", "Ford", "Chevy", "Chevrolet", "Nissan",
   "BMW", "Mercedes", "Hyundai", "Kia", "Dodge", "Jeep",
   "Subaru", "Volkswagen", "VW", "Audi", "Lexus", "Acura",

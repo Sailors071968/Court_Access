@@ -304,6 +304,19 @@ async function handleCheckoutCompleted(session: StripeCheckoutSession): Promise<
 
   // Credit pack purchases — add credits without touching subscription
   if (metaPlanId && metaPlanId.startsWith('CREDIT_PACK_')) {
+    // Idempotency guard: check if this session was already processed
+    // (Stripe retries webhooks on timeout, so increment must not run twice)
+    const alreadyProcessed = await prisma.securityLog.findFirst({
+      where: {
+        event: 'STRIPE_CREDIT_PACK_PURCHASED',
+        details: { contains: session.id },
+      },
+    });
+    if (alreadyProcessed) {
+      console.log(`[StripeWebhook] Credit pack session ${session.id} already processed — skipping duplicate`);
+      return;
+    }
+
     const CREDIT_AMOUNTS: Record<string, number> = {
       CREDIT_PACK_50: 50,
       CREDIT_PACK_150: 150,
@@ -326,7 +339,8 @@ async function handleCheckoutCompleted(session: StripeCheckoutSession): Promise<
       });
     }
 
-    void logSecurityEvent(
+    // Log AFTER credit increment so the idempotency guard works on retries
+    await logSecurityEvent(
       'STRIPE_CREDIT_PACK_PURCHASED',
       userId,
       undefined,

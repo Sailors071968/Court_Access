@@ -508,9 +508,39 @@ const PLAN_ID_MAP: Record<string, string> = {
   'Enterprise Firm': 'ENTERPRISE_FIRM',
 };
 
+const CREDIT_PACK_ID_MAP: Record<number, string> = {
+  50: 'CREDIT_PACK_50',
+  150: 'CREDIT_PACK_150',
+  500: 'CREDIT_PACK_500',
+  1500: 'CREDIT_PACK_1500',
+};
+
 function PricingSection() {
   const [checkingOut, setCheckingOut] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  const handleCreditPackPurchase = async (credits: number) => {
+    const token = localStorage.getItem('court-access-token');
+    if (!token) {
+      navigate('/register');
+      return;
+    }
+    const packId = CREDIT_PACK_ID_MAP[credits];
+    if (!packId) return;
+    setCheckingOut(`credits-${credits}`);
+    try {
+      const result = await createCheckoutSession(packId);
+      if (result.url) {
+        window.location.href = result.url;
+      } else {
+        navigate('/register');
+      }
+    } catch {
+      navigate('/register');
+    } finally {
+      setCheckingOut(null);
+    }
+  };
 
   const handlePlanSelect = async (planName: string, price: number) => {
     // Free plan → go to register
@@ -702,6 +732,15 @@ function PricingSection() {
               <p className="text-sm text-gray-500 mb-3">credits</p>
               <p className="text-xl font-bold text-blue-600">${pack.price}</p>
               <p className="text-xs text-gray-400 mt-1">${(pack.price / pack.credits * 100).toFixed(0)}c/credit</p>
+              <button
+                onClick={() => handleCreditPackPurchase(pack.credits)}
+                disabled={checkingOut === `credits-${pack.credits}`}
+                className="mt-4 w-full py-2 rounded-lg text-sm font-semibold bg-blue-600 hover:bg-blue-500 text-white transition-colors disabled:opacity-50"
+              >
+                {checkingOut === `credits-${pack.credits}` ? (
+                  <span className="inline-flex items-center justify-center gap-2"><Loader2 size={14} className="animate-spin" /> Processing...</span>
+                ) : 'Buy Credits'}
+              </button>
             </div>
           ))}
         </div>

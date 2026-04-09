@@ -492,7 +492,7 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
     const { planId } = request.body as { planId: string };
 
     // Map plan IDs to Stripe price IDs
-    const PRICE_MAP: Record<string, string> = {
+    const SUBSCRIPTION_PRICES: Record<string, string> = {
       STARTER: process.env.STRIPE_PRICE_STARTER || '',
       PROFESSIONAL: process.env.STRIPE_PRICE_PROFESSIONAL || '',
       ADVANCED_INVESTIGATOR: process.env.STRIPE_PRICE_ADVANCED || '',
@@ -500,7 +500,15 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
       ENTERPRISE_FIRM: process.env.STRIPE_PRICE_ENTERPRISE || '',
     };
 
-    const priceId = PRICE_MAP[planId];
+    const CREDIT_PACK_PRICES: Record<string, string> = {
+      CREDIT_PACK_50: process.env.STRIPE_PRICE_CREDIT_50 || '',
+      CREDIT_PACK_150: process.env.STRIPE_PRICE_CREDIT_150 || '',
+      CREDIT_PACK_500: process.env.STRIPE_PRICE_CREDIT_500 || '',
+      CREDIT_PACK_1500: process.env.STRIPE_PRICE_CREDIT_1500 || '',
+    };
+
+    const isCreditPack = planId.startsWith('CREDIT_PACK_');
+    const priceId = isCreditPack ? CREDIT_PACK_PRICES[planId] : SUBSCRIPTION_PRICES[planId];
     if (!priceId) {
       return reply.code(400).send({ error: `No Stripe price configured for plan: ${planId}` });
     }
@@ -510,7 +518,7 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
 
     // Create Stripe Checkout Session via REST API
     const params = new URLSearchParams();
-    params.append('mode', 'subscription');
+    params.append('mode', isCreditPack ? 'payment' : 'subscription');
     params.append('line_items[0][price]', priceId);
     params.append('line_items[0][quantity]', '1');
     params.append('success_url', `${process.env.FRONTEND_URL || 'https://courtaccess.net'}/dashboard?checkout=success`);

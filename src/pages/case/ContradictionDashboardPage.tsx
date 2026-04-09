@@ -25,6 +25,7 @@ import { Card } from '../../components/common/Card';
 import {
   analyzeContradictions,
   fetchTimelineEvents,
+  fetchContradictionRecommendations,
   type ApiContradiction,
   type ApiTimelineEvent,
   type ApiDoctrineMatch,
@@ -166,27 +167,29 @@ export function ContradictionDashboardPage() {
     try {
       setLoading(true);
       setError(null);
-      const [timelineData, analysisData] = await Promise.allSettled([
+      const [timelineData, recsData] = await Promise.allSettled([
         fetchTimelineEvents(caseId),
-        analyzeContradictions(caseId),
+        fetchContradictionRecommendations(caseId),
       ]);
 
       if (timelineData.status === 'fulfilled') {
         setTimeline(timelineData.value ?? []);
       }
 
-      if (analysisData.status === 'fulfilled') {
-        const analysis = analysisData.value;
-        setContradictions(analysis.analysis?.contradictions ?? []);
-        setRecommendations(analysis.litigationSummary?.recommendations ?? []);
-        const allDoctrineMatches = (analysis.doctrineMatching?.results ?? [])
-          .flatMap((r) => r.doctrineMatches ?? []);
-        setDoctrineMatches(allDoctrineMatches);
+      if (recsData.status === 'fulfilled') {
+        const recs = recsData.value;
+        // fetchContradictionRecommendations returns cached/existing results
+        if (Array.isArray(recs)) {
+          setRecommendations(recs);
+        } else if (recs && typeof recs === 'object') {
+          setContradictions((recs as Record<string, unknown>).contradictions as ContradictionSummary[] ?? []);
+          setRecommendations((recs as Record<string, unknown>).recommendations as RecommendationDisplay[] ?? []);
+        }
       }
 
-      // If both failed, show error
-      if (timelineData.status === 'rejected' && analysisData.status === 'rejected') {
-        setError('Failed to load contradiction data. Upload evidence and process the case first.');
+      // If both failed, show empty state
+      if (timelineData.status === 'rejected' && recsData.status === 'rejected') {
+        setError('No analysis data found. Click "Run Analysis" to analyze contradictions.');
       }
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load data');

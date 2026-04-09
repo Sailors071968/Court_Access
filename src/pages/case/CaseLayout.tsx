@@ -43,7 +43,7 @@ export function CaseLayout() {
         <div>
           <h1 className="text-2xl font-bold text-gray-900">{currentCase.title}</h1>
           <p className="text-sm text-gray-500 mt-1">
-            Case #{currentCase.caseNumber} &middot; {currentCase.jurisdiction}, {currentCase.court}
+            Case #{currentCase.caseNumber} &middot; {currentCase.jurisdiction}{currentCase.court ? `, ${currentCase.court}` : ''}
           </p>
         </div>
         <CaseStatusBadge status={currentCase.status} />

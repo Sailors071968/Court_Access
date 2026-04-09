@@ -5,7 +5,7 @@
 import fs from "fs/promises";
 import { chunkText } from "./evidenceChunkingService";
 import { extractEvents } from "./extractEvents";
-import { getQueue, QUEUE_NAMES } from "../workers/queueManager";
+import { getQueue, QUEUE_NAMES } from "../lib/queues";
 
 // ----------------------------------------------------------------------------
 // MAIN PIPELINE
@@ -48,7 +48,7 @@ export async function processEvidenceToChunks(file: {
   // ---------------------------------------------------------------------------
   // 3. GET QUEUE
   // ---------------------------------------------------------------------------
-  const timelineQueue = getQueue(QUEUE_NAMES.TIMELINE);
+  const timelineQueue = getQueue(QUEUE_NAMES.TIMELINE_BUILD);
 
   let totalEvents = 0;
 
@@ -61,13 +61,13 @@ export async function processEvidenceToChunks(file: {
 
       const events = extractEvents(chunk.text);
 
-      console.log(`🧠 Chunk ${chunk.id} → ${events.length} events`);
+      console.log(`🧠 Chunk ${chunk.index} → ${events.length} events`);
 
       // -----------------------------------------------------------------------
       // DEBUG (SAFE — RAW EXTRACTION ONLY)
       // -----------------------------------------------------------------------
       console.log("🔎 Extracted Events (RAW):", {
-        chunkId: chunk.id,
+        chunkId: chunk.index,
         sample: events.slice(0, 2), // prevent log flooding
       });
 
@@ -77,14 +77,14 @@ export async function processEvidenceToChunks(file: {
       await timelineQueue.add("process", {
         fileId: id,
         caseId,
-        chunkId: chunk.id,
+        chunkId: chunk.index,
         rawText: chunk.text,
         events,
       });
 
       totalEvents += events.length;
     } catch (err) {
-      console.error(`❌ Failed processing chunk ${chunk?.id}:`, err);
+      console.error(`❌ Failed processing chunk ${chunk?.index}:`, err);
     }
   }
 

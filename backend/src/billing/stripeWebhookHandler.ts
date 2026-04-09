@@ -480,23 +480,100 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
     if (!userId) {
       return reply.code(401).send({ error: 'Authentication required' });
     }
-    // Stub — in production, this would create a Stripe checkout session
+
+    const stripeKey = process.env.STRIPE_SECRET_KEY;
+    if (!stripeKey) {
+      return reply.send({
+        message: 'Stripe checkout session creation requires STRIPE_SECRET_KEY to be configured',
+        note: 'Configure STRIPE_SECRET_KEY env var to enable real Stripe checkout',
+      });
+    }
+
     const { planId } = request.body as { planId: string };
-    return reply.send({
-      message: 'Stripe checkout session creation requires STRIPE_SECRET_KEY to be configured',
-      planId,
-      userId,
-      note: 'Configure STRIPE_SECRET_KEY env var to enable real Stripe checkout',
-    });
+
+    // Map plan IDs to Stripe price IDs
+    const PRICE_MAP: Record<string, string> = {
+      STARTER: process.env.STRIPE_PRICE_STARTER || '',
+      PROFESSIONAL: process.env.STRIPE_PRICE_PROFESSIONAL || '',
+      ADVANCED_INVESTIGATOR: process.env.STRIPE_PRICE_ADVANCED || '',
+      LITIGATION_INTELLIGENCE_PRO: process.env.STRIPE_PRICE_LITIGATION || '',
+      ENTERPRISE_FIRM: process.env.STRIPE_PRICE_ENTERPRISE || '',
+    };
+
+    const priceId = PRICE_MAP[planId];
+    if (!priceId) {
+      return reply.code(400).send({ error: `No Stripe price configured for plan: ${planId}` });
+    }
+
+    // Look up user email for Stripe checkout
+    const user = await prisma.user.findUnique({ where: { id: userId }, select: { email: true } });
+
+    // Create Stripe Checkout Session via REST API
+    const params = new URLSearchParams();
+    params.append('mode', 'subscription');
+    params.append('line_items[0][price]', priceId);
+    params.append('line_items[0][quantity]', '1');
+    params.append('success_url', `${process.env.FRONTEND_URL || 'https://courtaccess.net'}/dashboard?checkout=success`);
+    params.append('cancel_url', `${process.env.FRONTEND_URL || 'https://courtaccess.net'}/pricing?checkout=canceled`);
+    params.append('client_reference_id', userId);
+    params.append('metadata[userId]', userId);
+    params.append('metadata[planId]', planId);
+    if (user?.email) {
+      params.append('customer_email', user.email);
+    }
+
+    try {
+      const stripeRes = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${stripeKey}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: params.toString(),
+      });
+
+      const session = await stripeRes.json() as { id?: string; url?: string; error?: { message?: string } };
+
+      if (!stripeRes.ok || session.error) {
+        console.error('[Stripe] Checkout session creation failed:', session.error?.message);
+        return reply.code(500).send({ error: session.error?.message || 'Stripe checkout failed' });
+      }
+
+      return reply.send({ url: session.url, sessionId: session.id });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      console.error('[Stripe] Checkout session error:', message);
+      return reply.code(500).send({ error: 'Failed to create checkout session' });
+    }
   });
 
   // GET /api/billing/checkout-status/:sessionId — Check checkout status
   app.get('/api/billing/checkout-status/:sessionId', async (request: FastifyRequest, reply: FastifyReply) => {
     const { sessionId } = request.params as { sessionId: string };
-    return reply.send({
-      sessionId,
-      status: 'pending',
-      note: 'Configure STRIPE_SECRET_KEY env var to enable real Stripe checkout status',
-    });
+
+    const stripeKey = process.env.STRIPE_SECRET_KEY;
+    if (!stripeKey) {
+      return reply.send({ sessionId, status: 'pending', note: 'Configure STRIPE_SECRET_KEY env var' });
+    }
+
+    try {
+      const stripeRes = await fetch(`https://api.stripe.com/v1/checkout/sessions/${sessionId}`, {
+        headers: { 'Authorization': `Bearer ${stripeKey}` },
+      });
+      const session = await stripeRes.json() as { id?: string; status?: string; payment_status?: string; error?: { message?: string } };
+
+      if (!stripeRes.ok || session.error) {
+        return reply.code(404).send({ error: session.error?.message || 'Session not found' });
+      }
+
+      return reply.send({
+        sessionId: session.id,
+        status: session.status,
+        paymentStatus: session.payment_status,
+      });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      return reply.code(500).send({ error: message });
+    }
   });
 }

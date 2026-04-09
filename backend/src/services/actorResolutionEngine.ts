@@ -29,7 +29,7 @@ function normalizeActor(raw: string): string {
   if (
     text.includes("suspect") ||
     text.includes("robber") ||
-    text.includes("male") ||
+    /\bmale\b/.test(text) ||
     text === "he" ||
     text === "him" ||
     text === "subject"
@@ -77,7 +77,7 @@ export function resolveActor(
   // --------------------------------------------------------------------------
 
   const suspectActor = extractedActors.find((a) =>
-    /suspect|robber|male|subject/i.test(a)
+    /suspect|robber|\bmale\b|subject/i.test(a)
   );
 
   if (suspectActor) {

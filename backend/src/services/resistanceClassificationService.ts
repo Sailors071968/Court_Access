@@ -15,16 +15,12 @@ export function classifyResistanceFromText(text: string): ResistanceLevel {
 
   const t = text.toLowerCase();
 
-  // DEADLY — use word boundaries to prevent "unarmed" matching "armed"
-  if (
-    /\bgun\b/.test(t) ||
-    /\bknife\b/.test(t) ||
-    /\barmed\b/.test(t) ||
-    /\bshoot\b/.test(t) ||
-    /\bweapon\b/.test(t)
-  ) {
-    // Exclude negations like "unarmed"
-    if (/\bunarmed\b/.test(t)) return "NONE";
+  // DEADLY — use word boundaries; handle "unarmed" negation only for "armed" keyword
+  const deadlyKeywords = ["gun", "knife", "shoot", "weapon"];
+  const hasDeadlyKeyword = deadlyKeywords.some((k) => new RegExp(`\\b${k}\\b`).test(t));
+  const hasArmed = /\barmed\b/.test(t) && !/\bunarmed\b/.test(t);
+
+  if (hasDeadlyKeyword || hasArmed) {
     return "DEADLY";
   }
 

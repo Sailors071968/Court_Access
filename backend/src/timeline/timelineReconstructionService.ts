@@ -375,10 +375,15 @@ export async function reconstructTimeline(
     const description = sourceEvent?.description ?? `${sourceEvent?.eventType?.replace(/_/g, ' ') ?? 'Event'} detected`;
 
     // Extract structured fields from source text (deterministic — no guessing)
+    // Clause-split rawText before calling extractTarget to avoid capturing
+    // trailing conjunctions (e.g. "suspect and" from "approached the suspect and drew...")
     const actorResult = rawText ? extractActor(rawText) : null;
     const actor = actorResult === 'unknown' ? null : actorResult;
     const action = sourceEvent?.eventType?.replace(/_/g, ' ') ?? null;
-    const target = rawText ? extractTarget(rawText) : null;
+    const clauses = rawText
+      ? rawText.split(/,| and | then | after | while | when | as | which | who /i).map(s => s.trim()).filter(Boolean)
+      : [];
+    const target = clauses.length > 0 ? extractTarget(clauses[0]) : null;
 
     return {
       caseId,

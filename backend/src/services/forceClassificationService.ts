@@ -19,10 +19,10 @@ export function classifyForceFromText(text: string): ForceLevel {
   // LETHAL FORCE
   // --------------------------------------------------------------------------
   if (
-    t.includes("shot") ||
-    t.includes("firearm") ||
-    t.includes("gun") ||
-    t.includes("killed")
+    /\bshot\b/.test(t) ||
+    /\bfirearm\b/.test(t) ||
+    /\bgun\b/.test(t) ||
+    /\bkilled\b/.test(t)
   ) {
     return "LETHAL";
   }
@@ -31,10 +31,10 @@ export function classifyForceFromText(text: string): ForceLevel {
   // LESS LETHAL
   // --------------------------------------------------------------------------
   if (
-    t.includes("taser") ||
-    t.includes("beanbag") ||
-    t.includes("pepper spray") ||
-    t.includes("rubber bullet")
+    /\btaser\b/.test(t) ||
+    /\bbeanbag\b/.test(t) ||
+    /\bpepper spray\b/.test(t) ||
+    /\brubber bullet\b/.test(t)
   ) {
     return "LESS_LETHAL";
   }
@@ -43,10 +43,10 @@ export function classifyForceFromText(text: string): ForceLevel {
   // CONTROL FORCE
   // --------------------------------------------------------------------------
   if (
-    t.includes("tackled") ||
-    t.includes("restrained") ||
-    t.includes("handcuffed") ||
-    t.includes("grabbed")
+    /\btackled\b/.test(t) ||
+    /\brestrained\b/.test(t) ||
+    /\bhandcuffed\b/.test(t) ||
+    /\bgrabbed\b/.test(t)
   ) {
     return "CONTROL";
   }
@@ -55,9 +55,9 @@ export function classifyForceFromText(text: string): ForceLevel {
   // COMMAND PRESENCE
   // --------------------------------------------------------------------------
   if (
-    t.includes("ordered") ||
-    t.includes("told") ||
-    t.includes("commanded")
+    /\bordered\b/.test(t) ||
+    /\btold\b/.test(t) ||
+    /\bcommanded\b/.test(t)
   ) {
     return "COMMAND";
   }

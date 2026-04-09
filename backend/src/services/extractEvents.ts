@@ -83,7 +83,7 @@ export function extractActor(text: string): string {
   // Match titled officers — require capitalized name to avoid
   // false matches like "Officer approached" (lowercase = verb, not name)
   const titleMatch = text.match(
-    /\b(Officer|Deputy|Detective|Sgt|Lt)\s+([A-Z][a-zA-Z]+)/
+    /\b(Officer|Deputy|Detective\.?|Sgt\.?|Lt\.?)\s+([A-Z][a-zA-Z]+)/
   );
   if (titleMatch) return `${titleMatch[1]} ${titleMatch[2]}`;
 

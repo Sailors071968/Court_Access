@@ -551,6 +551,11 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
   app.get('/api/billing/checkout-status/:sessionId', async (request: FastifyRequest, reply: FastifyReply) => {
     const { sessionId } = request.params as { sessionId: string };
 
+    // Validate sessionId format to prevent SSRF via path traversal
+    if (!/^cs_(test|live)_[a-zA-Z0-9]+$/.test(sessionId)) {
+      return reply.code(400).send({ error: 'Invalid session ID format' });
+    }
+
     const stripeKey = process.env.STRIPE_SECRET_KEY;
     if (!stripeKey) {
       return reply.send({ sessionId, status: 'pending', note: 'Configure STRIPE_SECRET_KEY env var' });

@@ -340,7 +340,7 @@ async function handleCheckoutCompleted(session: StripeCheckoutSession): Promise<
           });
         });
       } catch (err: unknown) {
-        const isDuplicate = err instanceof Error && err.message.includes('Unique constraint');
+        const isDuplicate = typeof err === 'object' && err !== null && 'code' in err && (err as { code: string }).code === 'P2002';
         if (isDuplicate) {
           console.log(`[StripeWebhook] Credit pack session ${session.id} already processed — skipping duplicate`);
           return;

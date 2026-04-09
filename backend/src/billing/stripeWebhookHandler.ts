@@ -536,7 +536,7 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
 
       if (!stripeRes.ok || session.error) {
         console.error('[Stripe] Checkout session creation failed:', session.error?.message);
-        return reply.code(500).send({ error: session.error?.message || 'Stripe checkout failed' });
+        return reply.code(500).send({ error: 'Stripe checkout failed' });
       }
 
       return reply.send({ url: session.url, sessionId: session.id });
@@ -568,7 +568,8 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
       const session = await stripeRes.json() as { id?: string; status?: string; payment_status?: string; error?: { message?: string } };
 
       if (!stripeRes.ok || session.error) {
-        return reply.code(404).send({ error: session.error?.message || 'Session not found' });
+        console.error('[Stripe] Checkout status retrieval failed:', session.error?.message);
+        return reply.code(404).send({ error: 'Session not found' });
       }
 
       return reply.send({

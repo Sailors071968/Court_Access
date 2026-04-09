@@ -578,7 +578,8 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
       });
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
-      return reply.code(500).send({ error: message });
+      console.error('[Stripe] Checkout status error:', message);
+      return reply.code(500).send({ error: 'Failed to retrieve checkout status' });
     }
   });
 }

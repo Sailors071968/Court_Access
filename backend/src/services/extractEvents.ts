@@ -47,7 +47,7 @@ const ACTION_KEYWORDS = [
   "approached", "exited", "entered", "drew", "fired", "shot",
   "detained", "handcuffed", "searched", "pursued", "chased",
   "struck", "tased", "yelled", "ordered", "commanded",
-  "observed", "interviewed", "responded", "arrived", "transported",
+  "observed", "interviewed", "responded", "arrived", "left", "transported",
   // Action-first parsing keywords (from user spec)
   "ran", "drove", "grabbed", "pointed",
 ];

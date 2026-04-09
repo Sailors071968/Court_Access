@@ -312,33 +312,41 @@ async function handleCheckoutCompleted(session: StripeCheckoutSession): Promise<
     };
     const credits = CREDIT_AMOUNTS[metaPlanId] || 0;
     if (credits > 0) {
-      // Atomic idempotency guard using StripeWebhookEvent unique constraint.
-      // If this session was already processed, the create will throw a unique
-      // constraint violation and we skip the duplicate — no TOCTOU race.
+      // Atomic idempotency: both the dedup record and credit increment run
+      // inside a single transaction. If the session was already processed,
+      // the unique constraint on eventId causes the whole transaction to
+      // roll back — no credits added, no partial state. If the credit
+      // upsert fails, the dedup record is also rolled back so Stripe
+      // retries will succeed.
       try {
-        await prisma.stripeWebhookEvent.create({
-          data: {
-            eventId: `credit_pack_${session.id}`,
-            eventType: 'checkout.session.completed.credit_pack',
-          },
+        await prisma.$transaction(async (tx) => {
+          await tx.stripeWebhookEvent.create({
+            data: {
+              eventId: `credit_pack_${session.id}`,
+              eventType: 'checkout.session.completed.credit_pack',
+            },
+          });
+          await tx.aiCreditBalance.upsert({
+            where: { userId },
+            update: { purchasedCredits: { increment: credits } },
+            create: {
+              userId,
+              purchasedCredits: credits,
+              monthlyCredits: 0,
+              creditsUsed: 0,
+              billingPeriodStart: new Date(),
+              billingPeriodEnd: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+            },
+          });
         });
-      } catch {
-        console.log(`[StripeWebhook] Credit pack session ${session.id} already processed — skipping duplicate`);
-        return;
+      } catch (err: unknown) {
+        const isDuplicate = err instanceof Error && err.message.includes('Unique constraint');
+        if (isDuplicate) {
+          console.log(`[StripeWebhook] Credit pack session ${session.id} already processed — skipping duplicate`);
+          return;
+        }
+        throw err; // Re-throw non-duplicate errors so Stripe retries
       }
-
-      await prisma.aiCreditBalance.upsert({
-        where: { userId },
-        update: { purchasedCredits: { increment: credits } },
-        create: {
-          userId,
-          purchasedCredits: credits,
-          monthlyCredits: 0,
-          creditsUsed: 0,
-          billingPeriodStart: new Date(),
-          billingPeriodEnd: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
-        },
-      });
     }
 
     void logSecurityEvent(

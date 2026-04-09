@@ -300,10 +300,43 @@ async function handleCheckoutCompleted(session: StripeCheckoutSession): Promise<
     return;
   }
 
-  // Read plan from session metadata (set when creating the checkout session).
-  // Falls back to STARTER only if metadata is missing — callers MUST set planId
-  // in session metadata when creating checkout sessions.
   const metaPlanId = session.metadata?.planId;
+
+  // Credit pack purchases — add credits without touching subscription
+  if (metaPlanId && metaPlanId.startsWith('CREDIT_PACK_')) {
+    const CREDIT_AMOUNTS: Record<string, number> = {
+      CREDIT_PACK_50: 50,
+      CREDIT_PACK_150: 150,
+      CREDIT_PACK_500: 500,
+      CREDIT_PACK_1500: 1500,
+    };
+    const credits = CREDIT_AMOUNTS[metaPlanId] || 0;
+    if (credits > 0) {
+      await prisma.aiCreditBalance.upsert({
+        where: { userId },
+        update: { purchasedCredits: { increment: credits } },
+        create: {
+          userId,
+          purchasedCredits: credits,
+          monthlyCredits: 0,
+          creditsUsed: 0,
+          billingPeriodStart: new Date(),
+          billingPeriodEnd: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+        },
+      });
+    }
+
+    void logSecurityEvent(
+      'STRIPE_CREDIT_PACK_PURCHASED',
+      userId,
+      undefined,
+      `Credit pack ${metaPlanId} (${credits} credits) purchased via session ${session.id}`,
+    );
+    console.log(`[StripeWebhook] Credit pack purchased: user=${userId} pack=${metaPlanId} credits=${credits} session=${session.id}`);
+    return;
+  }
+
+  // Subscription checkout — update subscription record
   const mapped = metaPlanId
     ? mapPlanIdToTier(metaPlanId)
     : { planId: 'STARTER', tier: 'starter' };
@@ -312,10 +345,6 @@ async function handleCheckoutCompleted(session: StripeCheckoutSession): Promise<
     console.warn(`[StripeWebhook] checkout.session.completed missing planId in metadata for session ${session.id} — defaulting to STARTER`);
   }
 
-  // Update subscription with Stripe IDs.
-  // Only overwrite plan/tier in the update path when metaPlanId is present,
-  // otherwise preserve existing plan to avoid silent downgrade (matches
-  // the guard pattern in handleSubscriptionCreated).
   const updateData: Record<string, unknown> = {
     stripeCustomerId: session.customer,
     stripeSubscriptionId: session.subscription,
@@ -490,6 +519,9 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
     }
 
     const { planId } = request.body as { planId: string };
+    if (!planId || typeof planId !== 'string') {
+      return reply.code(400).send({ error: 'Missing or invalid planId' });
+    }
 
     // Map plan IDs to Stripe price IDs
     const SUBSCRIPTION_PRICES: Record<string, string> = {

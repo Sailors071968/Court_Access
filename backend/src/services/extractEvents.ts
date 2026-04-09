@@ -132,6 +132,16 @@ const INFINITIVE_VERBS = new Set([
   'know', 'find', 'give', 'tell', 'say', 'try', 'help', 'keep',
 ]);
 
+// Stop words that must NOT appear as the second word of a two-word target capture.
+// Prevents false targets like "scene at" from "responded to the scene at 10:30 PM".
+const TARGET_STOP_WORDS = new Set([
+  'at', 'on', 'in', 'by', 'to', 'for', 'of', 'from', 'with', 'into',
+  'approximately', 'around', 'about', 'near', 'before', 'after',
+  'during', 'until', 'since', 'between', 'toward', 'towards',
+  'was', 'were', 'is', 'are', 'has', 'had', 'will', 'would',
+  'who', 'that', 'which', 'where', 'while', 'then', 'but', 'or',
+]);
+
 export function extractTarget(text: string): string | null {
   const patterns: Array<{ regex: RegExp; filterInfinitives: boolean }> = [
     // Rule A: Direct object after preposition (supports multi-word: "red vehicle", "front door")
@@ -152,6 +162,12 @@ export function extractTarget(text: string): string | null {
       if (filterInfinitives) {
         const firstWord = captured.split(/\s+/)[0];
         if (INFINITIVE_VERBS.has(firstWord)) continue;
+      }
+      // Strip trailing stop words from two-word captures
+      // (e.g. "scene at" → "scene", "suspect or" → "suspect")
+      const words = captured.split(/\s+/);
+      if (words.length === 2 && TARGET_STOP_WORDS.has(words[1])) {
+        return words[0];
       }
       return captured;
     }

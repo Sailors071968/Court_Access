@@ -79,6 +79,19 @@ function splitClauses(sentence: string): string[] {
 // ACTOR EXTRACTION
 // ----------------------------------------------------------------------------
 
+// Words that follow "Officer" etc. in headers but are NOT names
+const ACTOR_REJECT_WORDS = new Set([
+  'narrative', 'report', 'statement', 'summary', 'supplemental',
+  'information', 'description', 'badge', 'interview', 'observations',
+]);
+
+/** Normalize actor name to Title Case for consistent deduplication */
+function normalizeActorName(name: string): string {
+  return name
+    .toLowerCase()
+    .replace(/\b\w/g, c => c.toUpperCase());
+}
+
 export function extractActor(text: string): string {
   // Match titled officers — case-insensitive title, but require the name
   // to start with an uppercase letter (prevents "Officer approached" false match).
@@ -88,11 +101,18 @@ export function extractActor(text: string): string {
   );
   if (titleMatch) {
     const name = titleMatch[2];
-    // Require name starts with uppercase — handles both normal ("Smith")
-    // and all-caps OCR text ("SMITH"). But reject known action verbs
-    // (e.g. "OFFICER APPROACHED" → "APPROACHED" is a verb, not a name).
-    if (/^[A-Z]/.test(name) && !ACTION_KEYWORDS.includes(name.toLowerCase())) {
-      return `${titleMatch[1]} ${titleMatch[2]}`;
+    const nameLower = name.toLowerCase();
+    // Reject known action verbs ("OFFICER APPROACHED" → not a name)
+    if (ACTION_KEYWORDS.includes(nameLower)) {
+      // fall through to role/unknown
+    }
+    // Reject header/section words ("OFFICER NARRATIVE" → not a name)
+    else if (ACTOR_REJECT_WORDS.has(nameLower)) {
+      // fall through to role/unknown
+    }
+    // Require name starts with uppercase (handles normal + all-caps OCR)
+    else if (/^[A-Z]/.test(name)) {
+      return normalizeActorName(`${titleMatch[1]} ${titleMatch[2]}`);
     }
   }
 
@@ -132,44 +152,64 @@ const INFINITIVE_VERBS = new Set([
   'know', 'find', 'give', 'tell', 'say', 'try', 'help', 'keep',
 ]);
 
-// Stop words that must NOT appear as the second word of a two-word target capture.
-// Prevents false targets like "scene at" from "responded to the scene at 10:30 PM".
+// Stop words that must NOT appear as captured target words.
+// Used both as first-word filter and trailing-word stripper.
 const TARGET_STOP_WORDS = new Set([
+  // Prepositions / articles
   'at', 'on', 'in', 'by', 'to', 'for', 'of', 'from', 'with', 'into',
+  'a', 'an', 'the',
+  // Adverbs / temporal markers
   'approximately', 'around', 'about', 'near', 'before', 'after',
   'during', 'until', 'since', 'between', 'toward', 'towards',
+  // Auxiliaries / conjunctions
   'was', 'were', 'is', 'are', 'has', 'had', 'will', 'would',
   'who', 'that', 'which', 'where', 'while', 'then', 'but', 'or',
 ]);
 
+// Vehicle-specific pattern: "red Toyota Camry", "blue Honda Civic"
+const VEHICLE_PATTERN = /\b(red|blue|black|gray|grey|white|silver|green|brown|dark|maroon)\s+(Toyota|Honda|Ford|Chevy|Chevrolet|Nissan|BMW|Mercedes|Hyundai|Kia|Dodge|Jeep|Subaru|Volkswagen|VW|Audi|Lexus|Acura)\s+([A-Za-z]+)/i;
+
 export function extractTarget(text: string): string | null {
+  // Rule V: Vehicle-specific extraction (highest priority — prevents partial captures)
+  // "red Toyota Camry" → "red toyota camry" (3 words, high value for contradictions)
+  const vehicleMatch = text.match(VEHICLE_PATTERN);
+  if (vehicleMatch) {
+    return `${vehicleMatch[1]} ${vehicleMatch[2]} ${vehicleMatch[3]}`.toLowerCase();
+  }
+
   const patterns: Array<{ regex: RegExp; filterInfinitives: boolean }> = [
-    // Rule A: Direct object after preposition (supports multi-word: "red vehicle", "front door")
+    // Rule A: Direct object after preposition (supports up to 3 words: "front entrance door")
     // Infinitive filter ONLY applies here ("to search" → null, "to flee" → null)
-    { regex: /\b(?:at|toward|into|onto|to)\s+(?:the\s+)?([a-zA-Z]+(?:\s+[a-zA-Z]+)?)/i, filterInfinitives: true },
+    { regex: /\b(?:at|toward|into|onto|to)\s+(?:the\s+)?([a-zA-Z]+(?:\s+[a-zA-Z]+){0,2})/i, filterInfinitives: true },
     // Rule B: Prepositional "against" — no infinitive filter
-    { regex: /\b(?:against)\s+(?:the\s+)?([a-zA-Z]+(?:\s+[a-zA-Z]+)?)/i, filterInfinitives: false },
+    { regex: /\b(?:against)\s+(?:the\s+)?([a-zA-Z]+(?:\s+[a-zA-Z]+){0,2})/i, filterInfinitives: false },
     // Rule C: Direct object after action verbs — no infinitive filter
     // ("approached the search area" → "search area" is valid)
-    { regex: /\b(?:approached|searched|entered|exited|grabbed|struck)\s+(?:the\s+)?([a-zA-Z]+(?:\s+[a-zA-Z]+)?)/i, filterInfinitives: false },
+    { regex: /\b(?:approached|searched|entered|exited|grabbed|struck)\s+(?:the\s+)?([a-zA-Z]+(?:\s+[a-zA-Z]+){0,2})/i, filterInfinitives: false },
   ];
 
   for (const { regex, filterInfinitives } of patterns) {
     const match = text.match(regex);
     if (match) {
       const captured = match[1].toLowerCase().trim();
+      const words = captured.split(/\s+/);
+
       // Filter infinitive verbs ONLY for Rule A ("to search", "to run", "to flee")
       if (filterInfinitives) {
-        const firstWord = captured.split(/\s+/)[0];
-        if (INFINITIVE_VERBS.has(firstWord)) continue;
+        if (INFINITIVE_VERBS.has(words[0])) continue;
       }
-      // Strip trailing stop words from two-word captures
-      // (e.g. "scene at" → "scene", "suspect or" → "suspect")
-      const words = captured.split(/\s+/);
-      if (words.length === 2 && TARGET_STOP_WORDS.has(words[1])) {
-        return words[0];
+
+      // Reject if first word is a stop word ("approximately", "at", "a", "the")
+      if (TARGET_STOP_WORDS.has(words[0])) continue;
+
+      // Strip trailing stop words from multi-word captures
+      // (e.g. "scene at 10" → "scene", "suspect or" → "suspect")
+      while (words.length > 1 && TARGET_STOP_WORDS.has(words[words.length - 1])) {
+        words.pop();
       }
-      return captured;
+
+      const cleaned = words.join(' ');
+      if (cleaned.length > 0) return cleaned;
     }
   }
 

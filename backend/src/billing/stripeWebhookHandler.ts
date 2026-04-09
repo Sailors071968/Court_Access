@@ -304,19 +304,6 @@ async function handleCheckoutCompleted(session: StripeCheckoutSession): Promise<
 
   // Credit pack purchases — add credits without touching subscription
   if (metaPlanId && metaPlanId.startsWith('CREDIT_PACK_')) {
-    // Idempotency guard: check if this session was already processed
-    // (Stripe retries webhooks on timeout, so increment must not run twice)
-    const alreadyProcessed = await prisma.securityLog.findFirst({
-      where: {
-        event: 'STRIPE_CREDIT_PACK_PURCHASED',
-        details: { contains: session.id },
-      },
-    });
-    if (alreadyProcessed) {
-      console.log(`[StripeWebhook] Credit pack session ${session.id} already processed — skipping duplicate`);
-      return;
-    }
-
     const CREDIT_AMOUNTS: Record<string, number> = {
       CREDIT_PACK_50: 50,
       CREDIT_PACK_150: 150,
@@ -325,6 +312,21 @@ async function handleCheckoutCompleted(session: StripeCheckoutSession): Promise<
     };
     const credits = CREDIT_AMOUNTS[metaPlanId] || 0;
     if (credits > 0) {
+      // Atomic idempotency guard using StripeWebhookEvent unique constraint.
+      // If this session was already processed, the create will throw a unique
+      // constraint violation and we skip the duplicate — no TOCTOU race.
+      try {
+        await prisma.stripeWebhookEvent.create({
+          data: {
+            eventId: `credit_pack_${session.id}`,
+            eventType: 'checkout.session.completed.credit_pack',
+          },
+        });
+      } catch {
+        console.log(`[StripeWebhook] Credit pack session ${session.id} already processed — skipping duplicate`);
+        return;
+      }
+
       await prisma.aiCreditBalance.upsert({
         where: { userId },
         update: { purchasedCredits: { increment: credits } },
@@ -339,8 +341,7 @@ async function handleCheckoutCompleted(session: StripeCheckoutSession): Promise<
       });
     }
 
-    // Log AFTER credit increment so the idempotency guard works on retries
-    await logSecurityEvent(
+    void logSecurityEvent(
       'STRIPE_CREDIT_PACK_PURCHASED',
       userId,
       undefined,

@@ -5,12 +5,12 @@
 // ============================================
 
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
-import { FileText, Calendar, Download, Clock, CheckCircle, User, Scale, Archive } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { FileText, Calendar, Download, Clock, CheckCircle, User, Scale, Archive, Loader2 } from 'lucide-react';
 import { Card, StatCard } from '../../components/common/Card';
 import { STATUS_COLORS } from '../../constants/designTokens';
-import { caseDataProvider } from '../../services/caseDataProvider';
 import { useAuthStore } from '../../stores/authStore';
+import { fetchCases, fetchCaseEvidence, type ApiCase, type ApiEvidence } from '../../services/caseApi';
 
 // Case phase for defendant view
 type CasePhase = 'preliminary' | 'pretrial' | 'trial' | 'sentencing' | 'closed';
@@ -26,10 +26,30 @@ const CASE_PHASE_CONFIG: Record<CasePhase, { label: string; bgColor: string; tex
 export function DefendantDashboard() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const { getPrimaryCase, getDocuments } = caseDataProvider;
-  const primaryCase = getPrimaryCase();
-  const documents = primaryCase ? getDocuments(primaryCase.id) : [];
+  const [primaryCase, setPrimaryCase] = useState<ApiCase | null>(null);
+  const [documents, setDocuments] = useState<ApiEvidence[]>([]);
+  const [loading, setLoading] = useState(true);
   const currentPhase: CasePhase = 'pretrial';
+
+  useEffect(() => {
+    let cancelled = false;
+    (async () => {
+      try {
+        setLoading(true);
+        const allCases = await fetchCases().catch(() => []);
+        if (cancelled) return;
+        const first = allCases?.[0] ?? null;
+        setPrimaryCase(first);
+        if (first) {
+          const docs = await fetchCaseEvidence(first.caseId).catch(() => []);
+          if (!cancelled) setDocuments(docs ?? []);
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, []);
   const phaseConfig = CASE_PHASE_CONFIG[currentPhase];
 
   // Phase 234 — Client Disregard File feature
@@ -56,13 +76,22 @@ export function DefendantDashboard() {
       actionId: crypto.randomUUID(),
       adminUser: user?.name || 'Defendant',
       fileId: docId,
-      fileName: documents.find((d) => d.id === docId)?.name || 'Unknown',
+      fileName: documents.find((d) => d.evidenceId === docId)?.fileName || 'Unknown',
       actionType: updated.has(docId) ? 'disregard' : 'undo_disregard',
       timestamp: new Date().toISOString(),
       notes: `Defendant ${updated.has(docId) ? 'marked' : 'unmarked'} file as disregard`,
     });
     localStorage.setItem(auditKey, JSON.stringify(log));
   };
+
+  if (loading) {
+    return (
+      <div className="max-w-5xl mx-auto text-center py-12">
+        <Loader2 size={24} className="animate-spin text-gray-400 mx-auto mb-2" />
+        <p className="text-gray-500">Loading dashboard...</p>
+      </div>
+    );
+  }
 
   if (!primaryCase) {
     return (
@@ -145,7 +174,7 @@ export function DefendantDashboard() {
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-lg font-semibold text-gray-900">Documents</h2>
             <button
-              onClick={() => navigate(`/cases/${primaryCase.id}/documents`)}
+              onClick={() => navigate(`/cases/${primaryCase.caseId}/documents`)}
               className="text-xs text-blue-600 hover:text-blue-700 font-medium"
             >
               View All
@@ -153,24 +182,24 @@ export function DefendantDashboard() {
           </div>
           <div className="space-y-2">
             {documents.slice(0, 4).map((doc) => {
-              const isDisregarded = disregardedDocs.has(doc.id);
+              const isDisregarded = disregardedDocs.has(doc.evidenceId);
               return (
                 <div
-                  key={doc.id}
+                  key={doc.evidenceId}
                   className={`flex items-center justify-between p-3 rounded-lg border transition-colors ${
                     isDisregarded
                       ? 'border-gray-200 bg-gray-50 opacity-60'
                       : 'border-gray-100 hover:bg-gray-50 cursor-pointer'
                   }`}
-                  onClick={() => !isDisregarded && navigate(`/cases/${primaryCase.id}/documents`)}
+                  onClick={() => !isDisregarded && navigate(`/cases/${primaryCase.caseId}/documents`)}
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${STATUS_COLORS.info}`}>
                       <FileText size={14} />
                     </div>
                     <div className="min-w-0">
-                      <p className={`text-sm font-medium truncate ${isDisregarded ? 'text-gray-400 line-through' : 'text-gray-900'}`}>{doc.name}</p>
-                      <p className="text-xs text-gray-500">{doc.filedDate}</p>
+                      <p className={`text-sm font-medium truncate ${isDisregarded ? 'text-gray-400 line-through' : 'text-gray-900'}`}>{doc.fileName}</p>
+                      <p className="text-xs text-gray-500">{new Date(doc.uploadedAt).toLocaleDateString()}</p>
                       {isDisregarded && (
                         <span className="text-[10px] text-gray-400 font-medium">DISREGARDED — will not be analyzed</span>
                       )}
@@ -178,7 +207,7 @@ export function DefendantDashboard() {
                   </div>
                   <div className="flex items-center gap-1 flex-shrink-0">
                     <button
-                      onClick={(e) => handleDisregard(doc.id, e)}
+                      onClick={(e) => handleDisregard(doc.evidenceId, e)}
                       title={isDisregarded ? 'Undo disregard' : 'Mark as Disregard'}
                       className={`p-1.5 rounded-lg text-xs font-medium transition-colors ${
                         isDisregarded
@@ -200,7 +229,7 @@ export function DefendantDashboard() {
             })}
           </div>
           <button
-            onClick={() => navigate(`/cases/${primaryCase.id}/documents`)}
+            onClick={() => navigate(`/cases/${primaryCase.caseId}/documents`)}
             className="mt-4 w-full flex items-center justify-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-lg text-sm font-medium hover:bg-slate-700 transition-colors"
           >
             <FileText size={16} />
@@ -242,7 +271,7 @@ export function DefendantDashboard() {
         <div className="grid sm:grid-cols-3 gap-4 mb-4">
           <StatCard
             icon={<Scale size={24} className="text-gray-600" />}
-            value={primaryCase.chargesCount}
+            value={primaryCase.caseType || '—'}
             label="Charges"
           />
           <StatCard

@@ -425,3 +425,234 @@ export async function uploadEvidence(params: {
     s3Key: urlResponse.s3Key,
   });
 }
+
+// ---------------------------------------------------------------------------
+// Direct Evidence Upload (multipart — fallback when S3 presigned URLs unavailable)
+// ---------------------------------------------------------------------------
+
+export async function uploadEvidenceDirect(params: {
+  caseId: string;
+  file: File;
+  evidenceType: string;
+  onProgress?: (percent: number) => void;
+}): Promise<ApiEvidence> {
+  const token = localStorage.getItem('court-access-token');
+  const formData = new FormData();
+  formData.append('file', params.file);
+  formData.append('caseId', params.caseId);
+  formData.append('evidenceType', params.evidenceType);
+
+  return new Promise((resolve, reject) => {
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', `${API_BASE}/evidence/upload`, true);
+    if (token) xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+
+    xhr.upload.onprogress = (e) => {
+      if (e.lengthComputable && params.onProgress) {
+        params.onProgress(Math.round((e.loaded / e.total) * 100));
+      }
+    };
+
+    xhr.onload = () => {
+      if (xhr.status >= 200 && xhr.status < 300) {
+        try {
+          const data = JSON.parse(xhr.responseText);
+          resolve(data.evidence ?? data);
+        } catch {
+          reject(new Error('Invalid response from upload'));
+        }
+      } else {
+        reject(new Error(`Upload failed with status ${xhr.status}`));
+      }
+    };
+
+    xhr.onerror = () => reject(new Error('Network error during upload'));
+    xhr.send(formData);
+  });
+}
+
+// ---------------------------------------------------------------------------
+// Timeline API
+// ---------------------------------------------------------------------------
+
+export interface ApiTimelineEvent {
+  eventId: string;
+  eventType: string;
+  canonicalTimestamp: string;
+  timestampSource: string;
+  confidence: number;
+  actor?: string;
+  action?: string;
+  target?: string;
+  description?: string;
+}
+
+export interface ApiTimelineSummary {
+  caseId: string;
+  totalEvents: number;
+  events: ApiTimelineEvent[];
+  conflicts?: ApiTimelineConflict[];
+}
+
+export interface ApiTimelineConflict {
+  conflictId?: string;
+  type: string;
+  description: string;
+  eventIds: string[];
+  severity?: string;
+}
+
+export async function fetchTimelineEvents(caseId: string): Promise<ApiTimelineEvent[]> {
+  const res = await fetch(`${API_BASE}/timeline/${caseId}/events`, { headers: getAuthHeaders() });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to fetch timeline events' }));
+    throw new Error(err.error || 'Failed to fetch timeline events');
+  }
+  const data = await res.json();
+  return data.events ?? data;
+}
+
+export async function fetchTimeline(caseId: string): Promise<ApiTimelineSummary> {
+  const res = await fetch(`${API_BASE}/timeline/${caseId}`, { headers: getAuthHeaders() });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to fetch timeline' }));
+    throw new Error(err.error || 'Failed to fetch timeline');
+  }
+  return res.json();
+}
+
+export async function fetchTimelineConflicts(caseId: string): Promise<ApiTimelineConflict[]> {
+  const res = await fetch(`${API_BASE}/timeline/${caseId}/conflicts`, { headers: getAuthHeaders() });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to fetch timeline conflicts' }));
+    throw new Error(err.error || 'Failed to fetch timeline conflicts');
+  }
+  const data = await res.json();
+  return data.conflicts ?? data;
+}
+
+export async function rebuildTimeline(caseId: string): Promise<{ status: string; jobId?: string; message: string }> {
+  const headers = getAuthHeaders();
+  const { 'Content-Type': _, ...headersWithoutCT } = headers;
+  const res = await fetch(`${API_BASE}/timeline/rebuild/${caseId}`, {
+    method: 'POST',
+    headers: headersWithoutCT,
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to trigger timeline rebuild' }));
+    throw new Error(err.error || 'Failed to trigger timeline rebuild');
+  }
+  return res.json();
+}
+
+// ---------------------------------------------------------------------------
+// Contradiction Detection API
+// ---------------------------------------------------------------------------
+
+export interface ApiContradiction {
+  contradictionId: string;
+  contradictionType: string;
+  description: string;
+  confidence: number;
+  timeRangeStart: string | null;
+  timeRangeEnd: string | null;
+  sourceEvidenceIds: string[];
+}
+
+export interface ApiDoctrineMatch {
+  contradictionId: string;
+  doctrineRuleId: string;
+  matchDescription: string;
+  severity: string;
+}
+
+export interface ApiRecommendation {
+  recommendationId: string;
+  type: string;
+  title: string;
+  description: string;
+  priority: 'critical' | 'high' | 'medium' | 'low';
+  confidence: number;
+}
+
+export interface ApiContradictionAnalysis {
+  caseId: string;
+  analysis: {
+    contradictions: ApiContradiction[];
+    totalContradictions: number;
+  };
+  timeline: {
+    totalEvents: number;
+    mergedEvents: number;
+    gaps: unknown[];
+  };
+  doctrineMatching: {
+    totalMatches: number;
+    caseSeverity: unknown;
+    results: Array<{ doctrineMatches: ApiDoctrineMatch[] }>;
+  };
+  litigationSummary: {
+    recommendations: ApiRecommendation[];
+  };
+}
+
+export async function analyzeContradictions(caseId: string): Promise<ApiContradictionAnalysis> {
+  const headers = getAuthHeaders();
+  const { 'Content-Type': _, ...headersWithoutCT } = headers;
+  const res = await fetch(`${API_BASE}/contradiction/analyze/${caseId}`, {
+    method: 'POST',
+    headers: headersWithoutCT,
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to analyze contradictions' }));
+    throw new Error(err.error || 'Failed to analyze contradictions');
+  }
+  return res.json();
+}
+
+export async function fetchContradictionRecommendations(caseId: string): Promise<{
+  recommendations: ApiRecommendation[];
+}> {
+  const res = await fetch(`${API_BASE}/contradiction/recommendations/${caseId}`, { headers: getAuthHeaders() });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to fetch recommendations' }));
+    throw new Error(err.error || 'Failed to fetch recommendations');
+  }
+  return res.json();
+}
+
+// ---------------------------------------------------------------------------
+// Billing / Stripe API
+// ---------------------------------------------------------------------------
+
+export interface ApiBillingPlan {
+  id: string;
+  name: string;
+  price: number;
+  pages: number;
+  credits: number;
+  features: string[];
+}
+
+export async function fetchBillingPlans(): Promise<ApiBillingPlan[]> {
+  const res = await fetch(`${API_BASE}/billing/plans`, { headers: getAuthHeaders() });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to fetch billing plans' }));
+    throw new Error(err.error || 'Failed to fetch billing plans');
+  }
+  const data = await res.json();
+  return data.plans;
+}
+
+export async function createCheckoutSession(planId: string): Promise<{ url?: string; sessionId?: string; message?: string }> {
+  const res = await fetch(`${API_BASE}/billing/create-checkout-session`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ planId }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to create checkout session' }));
+    throw new Error(err.error || 'Failed to create checkout session');
+  }
+  return res.json();
+}

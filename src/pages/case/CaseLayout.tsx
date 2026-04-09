@@ -3,18 +3,36 @@
 // ============================================
 
 import { NavLink, Outlet, useParams } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { Loader2 } from 'lucide-react';
 import { CASE_TABS, ROLE_PERMISSIONS } from '../../constants';
 import { useAuthStore } from '../../stores/authStore';
 import { CaseStatusBadge } from '../../components/common/StatusBadge';
-import { caseDataProvider } from '../../services/caseDataProvider';
+import { fetchCase, type ApiCase } from '../../services/caseApi';
 
 export function CaseLayout() {
   const { caseId } = useParams<{ caseId: string }>();
   const { user } = useAuthStore();
-  const cases = caseDataProvider.getCases();
-  const currentCase = cases.find((c) => c.id === caseId) || caseDataProvider.getPrimaryCase();
+  const [currentCase, setCurrentCase] = useState<ApiCase | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!caseId) return;
+    let cancelled = false;
+    (async () => {
+      try {
+        setLoading(true);
+        const c = await fetchCase(caseId).catch(() => null);
+        if (!cancelled) setCurrentCase(c);
+      } finally {
+        if (!cancelled) setLoading(false);
+      }
+    })();
+    return () => { cancelled = true; };
+  }, [caseId]);
 
   if (!user) return null;
+  if (loading) return <div className="max-w-7xl mx-auto text-center py-12"><Loader2 size={24} className="animate-spin text-gray-400 mx-auto mb-2" /><p className="text-gray-500">Loading case...</p></div>;
   if (!currentCase) return <div className="max-w-7xl mx-auto p-8 text-center text-gray-500">No cases found.</div>;
   const permissions = ROLE_PERMISSIONS[user.role];
 

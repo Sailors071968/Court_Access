@@ -5,18 +5,35 @@
 import { useState, useEffect } from 'react';
 import { Card } from '../../components/common/Card';
 import { EvidenceStatusBadge } from '../../components/common/StatusBadge';
-import { caseDataProvider } from '../../services/caseDataProvider';
 import { getDefenseInsights } from '../../services/ai/defenseInsights';
 import type { DefenseInsight } from '../../types';
+import type { ChargeEntity } from '../../models/CaseModel';
 import { useParams } from 'react-router-dom';
-import { ArrowRight, AlertTriangle } from 'lucide-react';
+import { ArrowRight, AlertTriangle, Loader2 } from 'lucide-react';
+import { fetchCase } from '../../services/caseApi';
 
 export function ChargesPage() {
   const { caseId } = useParams<{ caseId: string }>();
   const [activeChargeIndex, setActiveChargeIndex] = useState(0);
   const [insights, setInsights] = useState<DefenseInsight[]>([]);
   const [insightsLoading, setInsightsLoading] = useState(true);
-  const charges = caseDataProvider.getCharges(caseId);
+  const [charges, setCharges] = useState<ChargeEntity[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    if (!caseId) return;
+    let cancelled = false;
+    setLoading(true);
+    fetchCase(caseId).then((c) => {
+      if (cancelled) return;
+      // If the backend returns charges for the case, use them; otherwise show empty
+      setCharges((c as unknown as { charges?: ChargeEntity[] }).charges ?? []);
+      setLoading(false);
+    }).catch(() => {
+      if (!cancelled) setLoading(false);
+    });
+    return () => { cancelled = true; };
+  }, [caseId]);
 
   useEffect(() => {
     if (!caseId) return;

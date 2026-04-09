@@ -8,15 +8,23 @@ import { Card } from '../../components/common/Card';
 import { MotionPriorityBadge } from '../../components/common/StatusBadge';
 import { getMotionRecommendations } from '../../services/ai/motionRecommendations';
 import type { Motion } from '../../types';
-import { AlertTriangle, MessageSquare, Pencil } from 'lucide-react';
-import { caseDataProvider } from '../../services/caseDataProvider';
+import { AlertTriangle, MessageSquare, Pencil, Loader2 } from 'lucide-react';
+import { fetchCase, type ApiCase } from '../../services/caseApi';
 
 export function MotionsPage() {
   const { caseId } = useParams<{ caseId: string }>();
   const [motions, setMotions] = useState<Motion[]>([]);
   const [loading, setLoading] = useState(true);
-  const cases = caseDataProvider.getCases();
-  const currentCase = cases.find((c) => c.id === caseId) || caseDataProvider.getPrimaryCase();
+  const [currentCase, setCurrentCase] = useState<ApiCase | null>(null);
+
+  useEffect(() => {
+    if (!caseId) return;
+    let cancelled = false;
+    fetchCase(caseId).then((c) => {
+      if (!cancelled) setCurrentCase(c);
+    }).catch(() => {});
+    return () => { cancelled = true; };
+  }, [caseId]);
 
   useEffect(() => {
     setLoading(true);
@@ -26,6 +34,10 @@ export function MotionsPage() {
       setLoading(false);
     });
   }, [caseId]);
+
+  if (loading && !currentCase) {
+    return <div className="flex items-center justify-center p-12"><Loader2 className="animate-spin text-blue-600" size={32} /></div>;
+  }
 
   if (!currentCase) {
     return <div className="p-8 text-center text-gray-500">No cases found.</div>;
@@ -46,7 +58,7 @@ export function MotionsPage() {
         <div>
           <h2 className="text-xl font-bold text-gray-900">Court Attorney - Motion Recommendations</h2>
           <div className="flex items-center gap-2 mt-2 px-4 py-2 bg-purple-600 text-white rounded-lg text-sm">
-            <span>{currentCase.title} - Case #{currentCase.caseNumber}</span>
+            <span>{currentCase.title || currentCase.caseType} - Case #{currentCase.caseId}</span>
             <button aria-label="Edit case"><Pencil size={14} /></button>
           </div>
         </div>

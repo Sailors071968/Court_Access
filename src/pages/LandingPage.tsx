@@ -3,7 +3,8 @@
 // Public marketing page for courtaccess.com
 // ============================================================================
 
-import { Link } from 'react-router-dom';
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Scale,
   Shield,
@@ -23,7 +24,9 @@ import {
   Users,
   Gavel,
   Play,
+  Loader2,
 } from 'lucide-react';
+import { createCheckoutSession } from '../services/caseApi';
 
 // ---------------------------------------------------------------------------
 // Hero Section
@@ -495,7 +498,55 @@ function FaqSection() {
 // Pricing Section
 // ---------------------------------------------------------------------------
 
+// Map plan names to backend plan IDs for Stripe checkout
+const PLAN_ID_MAP: Record<string, string> = {
+  'Free': 'FREE',
+  'Starter': 'STARTER',
+  'Professional': 'PROFESSIONAL',
+  'Advanced Investigator': 'ADVANCED_INVESTIGATOR',
+  'Litigation Pro': 'LITIGATION_INTELLIGENCE_PRO',
+  'Enterprise Firm': 'ENTERPRISE_FIRM',
+};
+
 function PricingSection() {
+  const [checkingOut, setCheckingOut] = useState<string | null>(null);
+  const navigate = useNavigate();
+
+  const handlePlanSelect = async (planName: string, price: number) => {
+    // Free plan → go to register
+    if (price === 0) {
+      navigate('/register');
+      return;
+    }
+    // Enterprise → contact sales
+    if (planName === 'Enterprise Firm') {
+      navigate('/contact-sales');
+      return;
+    }
+    // Check if user is logged in
+    const token = localStorage.getItem('court-access-token');
+    if (!token) {
+      navigate('/register');
+      return;
+    }
+    // Create Stripe checkout session
+    const planId = PLAN_ID_MAP[planName] || 'STARTER';
+    setCheckingOut(planName);
+    try {
+      const result = await createCheckoutSession(planId);
+      if (result.url) {
+        window.location.href = result.url;
+      } else {
+        // Stripe not configured yet — redirect to register
+        navigate('/register');
+      }
+    } catch {
+      navigate('/register');
+    } finally {
+      setCheckingOut(null);
+    }
+  };
+
   const plans = [
     {
       name: 'Free',
@@ -622,16 +673,19 @@ function PricingSection() {
                   </li>
                 ))}
               </ul>
-              <Link
-                to="/register"
+              <button
+                onClick={() => handlePlanSelect(plan.name, plan.price)}
+                disabled={checkingOut === plan.name}
                 className={`block w-full text-center py-2.5 rounded-lg text-sm font-semibold transition-colors ${
                   plan.highlighted
                     ? 'bg-amber-500 hover:bg-amber-400 text-slate-900'
                     : 'bg-slate-900 hover:bg-slate-800 text-white'
-                }`}
+                } disabled:opacity-50`}
               >
-                {plan.cta}
-              </Link>
+                {checkingOut === plan.name ? (
+                  <span className="inline-flex items-center gap-2"><Loader2 size={14} className="animate-spin" /> Processing...</span>
+                ) : plan.cta}
+              </button>
             </div>
           ))}
         </div>

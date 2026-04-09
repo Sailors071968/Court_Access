@@ -5,7 +5,8 @@
 // doctrine matches, and litigation recommendations.
 // ============================================================================
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useParams } from 'react-router-dom';
 import {
   AlertTriangle,
   Clock,
@@ -17,30 +18,26 @@ import {
   ChevronRight,
   Activity,
   Eye,
+  Loader2,
+  RefreshCw,
 } from 'lucide-react';
 import { Card } from '../../components/common/Card';
+import {
+  analyzeContradictions,
+  fetchTimelineEvents,
+  type ApiContradiction,
+  type ApiTimelineEvent,
+  type ApiDoctrineMatch,
+  type ApiRecommendation,
+} from '../../services/caseApi';
 
 // ---------------------------------------------------------------------------
-// Types (mirroring backend CDE types for frontend display)
+// Types (kept for display compatibility — real data comes from API)
 // ---------------------------------------------------------------------------
 
-interface ContradictionSummary {
-  contradictionId: string;
-  contradictionType: string;
-  description: string;
-  confidence: number;
-  timeRangeStart: string | null;
-  timeRangeEnd: string | null;
-  sourceEvidenceIds: string[];
-}
+type ContradictionSummary = ApiContradiction;
 
-interface TimelineEventDisplay {
-  eventId: string;
-  eventType: string;
-  canonicalTimestamp: string;
-  timestampSource: string;
-  confidence: number;
-}
+type TimelineEventDisplay = ApiTimelineEvent;
 
 interface RecommendationDisplay {
   recommendationId: string;
@@ -51,112 +48,11 @@ interface RecommendationDisplay {
   confidence: number;
 }
 
-interface DoctrineMatchDisplay {
-  contradictionId: string;
-  doctrineRuleId: string;
-  matchDescription: string;
-  severity: string;
-}
+type DoctrineMatchDisplay = ApiDoctrineMatch;
 
 // ---------------------------------------------------------------------------
-// Mock data for initial render
+// No mock data — all data fetched from real backend APIs
 // ---------------------------------------------------------------------------
-
-const MOCK_CONTRADICTIONS: ContradictionSummary[] = [
-  {
-    contradictionId: 'c-001',
-    contradictionType: 'missing_bodycam_activation',
-    description: 'Potential inconsistency: Officer detains person reported in officer narrative but no body-worn camera footage available for this critical event. Warrants further examination.',
-    confidence: 0.85,
-    timeRangeStart: '14:32:00',
-    timeRangeEnd: '14:32:00',
-    sourceEvidenceIds: ['ev-report-001'],
-  },
-  {
-    contradictionId: 'c-002',
-    contradictionType: 'consent_dispute',
-    description: 'Potential inconsistency: Officer report states consent was granted, but witness/subject account indicates consent was denied. Requires human review.',
-    confidence: 0.80,
-    timeRangeStart: '14:35:00',
-    timeRangeEnd: '14:38:00',
-    sourceEvidenceIds: ['ev-report-001', 'ev-witness-001'],
-  },
-  {
-    contradictionId: 'c-003',
-    contradictionType: 'action_sequence_conflict',
-    description: 'Potential deviation: Bodycam activation should precede detention. Timeline indicates reversed order. Requires human review.',
-    confidence: 0.75,
-    timeRangeStart: '14:30:00',
-    timeRangeEnd: '14:33:00',
-    sourceEvidenceIds: ['ev-report-001', 'ev-cad-001'],
-  },
-  {
-    contradictionId: 'c-004',
-    contradictionType: 'search_authority_gap',
-    description: 'Possible procedural gap: Search conducted but no documented search authority found (no consent, warrant, plain view, or incident to arrest). Warrants further examination.',
-    confidence: 0.70,
-    timeRangeStart: '14:40:00',
-    timeRangeEnd: null,
-    sourceEvidenceIds: ['ev-report-001'],
-  },
-];
-
-const MOCK_TIMELINE: TimelineEventDisplay[] = [
-  { eventId: 'te-001', eventType: 'DISPATCH_RECEIVES_911_CALL', canonicalTimestamp: '14:15:00', timestampSource: 'cad_dispatch', confidence: 0.95 },
-  { eventId: 'te-002', eventType: 'DISPATCH_ASSIGNS_UNITS', canonicalTimestamp: '14:17:30', timestampSource: 'cad_dispatch', confidence: 0.95 },
-  { eventId: 'te-003', eventType: 'OFFICER_ARRIVES_AT_SCENE', canonicalTimestamp: '14:28:00', timestampSource: 'cad_dispatch', confidence: 0.90 },
-  { eventId: 'te-004', eventType: 'OFFICER_DETAINS_PERSON', canonicalTimestamp: '14:32:00', timestampSource: 'officer_report', confidence: 0.85 },
-  { eventId: 'te-005', eventType: 'OFFICER_ACTIVATES_BODYCAM', canonicalTimestamp: '14:33:15', timestampSource: 'bodycam_overlay', confidence: 0.95 },
-  { eventId: 'te-006', eventType: 'OFFICER_REQUESTS_CONSENT_SEARCH', canonicalTimestamp: '14:35:00', timestampSource: 'video_transcript', confidence: 0.80 },
-  { eventId: 'te-007', eventType: 'PERSON_GRANTS_CONSENT', canonicalTimestamp: '14:35:30', timestampSource: 'officer_report', confidence: 0.80 },
-  { eventId: 'te-008', eventType: 'OFFICER_SEARCHES_VEHICLE', canonicalTimestamp: '14:40:00', timestampSource: 'officer_report', confidence: 0.85 },
-  { eventId: 'te-009', eventType: 'EVIDENCE_ITEM_COLLECTED', canonicalTimestamp: '14:48:00', timestampSource: 'officer_report', confidence: 0.85 },
-  { eventId: 'te-010', eventType: 'OFFICER_READS_MIRANDA', canonicalTimestamp: '14:52:00', timestampSource: 'video_transcript', confidence: 0.90 },
-  { eventId: 'te-011', eventType: 'OFFICER_ARRESTS_PERSON', canonicalTimestamp: '14:55:00', timestampSource: 'officer_report', confidence: 0.90 },
-  { eventId: 'te-012', eventType: 'OFFICER_TRANSPORTS_ARRESTEE', canonicalTimestamp: '15:10:00', timestampSource: 'cad_dispatch', confidence: 0.90 },
-];
-
-const MOCK_RECOMMENDATIONS: RecommendationDisplay[] = [
-  {
-    recommendationId: 'rec-001',
-    type: 'motion_to_suppress',
-    title: 'Motion to Suppress — Search Without Documented Authority',
-    description: 'Evidence obtained during search may be subject to suppression. Analysis identified potential gap in documented search authority.',
-    priority: 'critical',
-    confidence: 0.80,
-  },
-  {
-    recommendationId: 'rec-002',
-    type: 'motion_for_discovery',
-    title: 'Discovery Motion — Body-Worn Camera Footage',
-    description: 'Critical events lack body-worn camera documentation. Consider filing a motion to compel production of all available video footage and camera activation logs.',
-    priority: 'high',
-    confidence: 0.85,
-  },
-  {
-    recommendationId: 'rec-003',
-    type: 'brady_request',
-    title: 'Brady Disclosure Request — Cross-Source Inconsistencies',
-    description: 'Significant inconsistencies detected between evidence sources. Consider filing a Brady request for all versions of reports and additional witness statements.',
-    priority: 'high',
-    confidence: 0.75,
-  },
-  {
-    recommendationId: 'rec-004',
-    type: 'investigative_task',
-    title: 'Investigative Task — Witness Re-Interview',
-    description: 'Witness account conflicts with official report regarding consent. Consider conducting independent witness interviews to document discrepancies.',
-    priority: 'medium',
-    confidence: 0.70,
-  },
-];
-
-const MOCK_DOCTRINE_MATCHES: DoctrineMatchDisplay[] = [
-  { contradictionId: 'c-002', doctrineRuleId: 'POSTLD16_CONS_001', matchDescription: 'Consent to search disputed. LD-16 consent search requirements implicated.', severity: 'critical' },
-  { contradictionId: 'c-004', doctrineRuleId: 'POSTLD16_SEAR_001', matchDescription: 'No documented legal authority for search. LD-16 search and seizure requirements implicated.', severity: 'critical' },
-  { contradictionId: 'c-003', doctrineRuleId: 'POSTLD15_DETE_001', matchDescription: 'Expected procedural sequence not followed per LD-15 requirements.', severity: 'significant' },
-  { contradictionId: 'c-001', doctrineRuleId: 'BWC_POLICY', matchDescription: 'Body-worn camera not activated during critical event. Agency BWC policy may apply.', severity: 'significant' },
-];
 
 // ---------------------------------------------------------------------------
 // Helper Components
@@ -252,11 +148,77 @@ const TABS: Array<{ id: TabId; label: string; icon: React.ReactNode }> = [
 // ---------------------------------------------------------------------------
 
 export function ContradictionDashboardPage() {
+  const { caseId } = useParams<{ caseId: string }>();
   const [activeTab, setActiveTab] = useState<TabId>('overview');
   const [expandedContradiction, setExpandedContradiction] = useState<string | null>(null);
 
-  const criticalCount = MOCK_CONTRADICTIONS.filter((c) => c.confidence >= 0.80).length;
-  const significantCount = MOCK_CONTRADICTIONS.filter((c) => c.confidence >= 0.60 && c.confidence < 0.80).length;
+  // Real API state
+  const [contradictions, setContradictions] = useState<ContradictionSummary[]>([]);
+  const [timeline, setTimeline] = useState<TimelineEventDisplay[]>([]);
+  const [recommendations, setRecommendations] = useState<RecommendationDisplay[]>([]);
+  const [doctrineMatches, setDoctrineMatches] = useState<DoctrineMatchDisplay[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [analyzing, setAnalyzing] = useState(false);
+
+  const loadData = async () => {
+    if (!caseId) return;
+    try {
+      setLoading(true);
+      setError(null);
+      const [timelineData, analysisData] = await Promise.allSettled([
+        fetchTimelineEvents(caseId),
+        analyzeContradictions(caseId),
+      ]);
+
+      if (timelineData.status === 'fulfilled') {
+        setTimeline(timelineData.value ?? []);
+      }
+
+      if (analysisData.status === 'fulfilled') {
+        const analysis = analysisData.value;
+        setContradictions(analysis.analysis?.contradictions ?? []);
+        setRecommendations(analysis.litigationSummary?.recommendations ?? []);
+        const allDoctrineMatches = (analysis.doctrineMatching?.results ?? [])
+          .flatMap((r) => r.doctrineMatches ?? []);
+        setDoctrineMatches(allDoctrineMatches);
+      }
+
+      // If both failed, show error
+      if (timelineData.status === 'rejected' && analysisData.status === 'rejected') {
+        setError('Failed to load contradiction data. Upload evidence and process the case first.');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load data');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    loadData();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [caseId]);
+
+  const handleRunAnalysis = async () => {
+    if (!caseId) return;
+    try {
+      setAnalyzing(true);
+      const analysis = await analyzeContradictions(caseId);
+      setContradictions(analysis.analysis?.contradictions ?? []);
+      setRecommendations(analysis.litigationSummary?.recommendations ?? []);
+      const allDoctrineMatches = (analysis.doctrineMatching?.results ?? [])
+        .flatMap((r) => r.doctrineMatches ?? []);
+      setDoctrineMatches(allDoctrineMatches);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Analysis failed');
+    } finally {
+      setAnalyzing(false);
+    }
+  };
+
+  const criticalCount = contradictions.filter((c) => c.confidence >= 0.80).length;
+  const significantCount = contradictions.filter((c) => c.confidence >= 0.60 && c.confidence < 0.80).length;
 
   return (
     <div className="space-y-6">
@@ -272,11 +234,35 @@ export function ContradictionDashboardPage() {
           </p>
         </div>
         <div className="flex items-center gap-3">
+          <button
+            onClick={handleRunAnalysis}
+            disabled={analyzing}
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 hover:bg-blue-200 transition-colors disabled:opacity-50"
+          >
+            {analyzing ? <Loader2 size={12} className="animate-spin" /> : <RefreshCw size={12} />}
+            {analyzing ? 'Analyzing...' : 'Run Analysis'}
+          </button>
           <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
             CDE Active
           </span>
         </div>
       </div>
+
+      {/* Loading State */}
+      {loading && (
+        <div className="text-center py-12">
+          <Loader2 size={24} className="animate-spin text-gray-400 mx-auto mb-2" />
+          <p className="text-gray-500">Loading contradiction analysis...</p>
+        </div>
+      )}
+
+      {/* Error State */}
+      {error && !loading && (
+        <div className="text-center py-8 bg-amber-50 rounded-lg border border-amber-200">
+          <p className="text-amber-700 text-sm">{error}</p>
+          <button onClick={loadData} className="mt-2 text-sm text-blue-600 hover:text-blue-700 font-medium">Retry</button>
+        </div>
+      )}
 
       {/* Summary Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -286,7 +272,7 @@ export function ContradictionDashboardPage() {
               <AlertTriangle size={20} className="text-red-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">{MOCK_CONTRADICTIONS.length}</p>
+              <p className="text-2xl font-bold text-gray-900">{contradictions.length}</p>
               <p className="text-xs text-gray-500">Potential Inconsistencies</p>
             </div>
           </div>
@@ -298,7 +284,7 @@ export function ContradictionDashboardPage() {
               <Clock size={20} className="text-orange-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">{MOCK_TIMELINE.length}</p>
+              <p className="text-2xl font-bold text-gray-900">{timeline.length}</p>
               <p className="text-xs text-gray-500">Timeline Events</p>
             </div>
           </div>
@@ -310,7 +296,7 @@ export function ContradictionDashboardPage() {
               <Shield size={20} className="text-purple-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">{MOCK_DOCTRINE_MATCHES.length}</p>
+              <p className="text-2xl font-bold text-gray-900">{doctrineMatches.length}</p>
               <p className="text-xs text-gray-500">Doctrine Matches</p>
             </div>
           </div>
@@ -322,7 +308,7 @@ export function ContradictionDashboardPage() {
               <Scale size={20} className="text-blue-600" />
             </div>
             <div>
-              <p className="text-2xl font-bold text-gray-900">{MOCK_RECOMMENDATIONS.length}</p>
+              <p className="text-2xl font-bold text-gray-900">{recommendations.length}</p>
               <p className="text-xs text-gray-500">Recommendations</p>
             </div>
           </div>
@@ -364,7 +350,7 @@ export function ContradictionDashboardPage() {
               </div>
               <div className="text-center p-4 bg-gray-50 rounded-lg">
                 <p className="text-3xl font-bold text-gray-700">
-                  {MOCK_CONTRADICTIONS.length - criticalCount - significantCount}
+                  {contradictions.length - criticalCount - significantCount}
                 </p>
                 <p className="text-xs text-gray-500 mt-1">Low Confidence (&lt;60%)</p>
               </div>
@@ -375,7 +361,7 @@ export function ContradictionDashboardPage() {
           <Card>
             <h3 className="text-sm font-semibold text-gray-900 mb-4">Top Potential Inconsistencies</h3>
             <div className="space-y-3">
-              {MOCK_CONTRADICTIONS.slice(0, 3).map((c) => (
+              {contradictions.slice(0, 3).map((c) => (
                 <div key={c.contradictionId} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
                   <AlertTriangle size={16} className="text-amber-500 mt-0.5 flex-shrink-0" />
                   <div className="flex-1 min-w-0">
@@ -394,7 +380,7 @@ export function ContradictionDashboardPage() {
           <Card>
             <h3 className="text-sm font-semibold text-gray-900 mb-4">Priority Recommendations</h3>
             <div className="space-y-3">
-              {MOCK_RECOMMENDATIONS.filter((r) => r.priority === 'critical' || r.priority === 'high').map((r) => (
+              {recommendations.filter((r) => r.priority === 'critical' || r.priority === 'high').map((r) => (
                 <div key={r.recommendationId} className="flex items-start gap-3 p-3 bg-gray-50 rounded-lg">
                   <Scale size={16} className="text-blue-500 mt-0.5 flex-shrink-0" />
                   <div className="flex-1 min-w-0">
@@ -422,9 +408,9 @@ export function ContradictionDashboardPage() {
             <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-gray-200" />
 
             <div className="space-y-0">
-              {MOCK_TIMELINE.map((te) => {
+              {timeline.map((te) => {
                 // Check if this event has a contradiction
-                const hasContradiction = MOCK_CONTRADICTIONS.some(
+                const hasContradiction = contradictions.some(
                   (c) =>
                     c.timeRangeStart === te.canonicalTimestamp ||
                     c.timeRangeEnd === te.canonicalTimestamp,
@@ -475,7 +461,7 @@ export function ContradictionDashboardPage() {
 
       {activeTab === 'contradictions' && (
         <div className="space-y-4">
-          {MOCK_CONTRADICTIONS.map((c) => (
+          {contradictions.map((c) => (
             <Card key={c.contradictionId}>
               <button
                 onClick={() => setExpandedContradiction(
@@ -527,11 +513,11 @@ export function ContradictionDashboardPage() {
                   </div>
 
                   {/* Doctrine matches for this contradiction */}
-                  {MOCK_DOCTRINE_MATCHES.filter((d) => d.contradictionId === c.contradictionId).length > 0 && (
+                  {doctrineMatches.filter((d) => d.contradictionId === c.contradictionId).length > 0 && (
                     <div className="mt-4">
                       <h4 className="text-xs font-semibold text-gray-500 uppercase mb-2">Related Doctrine</h4>
                       <div className="space-y-2">
-                        {MOCK_DOCTRINE_MATCHES.filter((d) => d.contradictionId === c.contradictionId).map((d) => (
+                        {doctrineMatches.filter((d) => d.contradictionId === c.contradictionId).map((d) => (
                           <div key={d.doctrineRuleId} className="flex items-center gap-2 p-2 bg-purple-50 rounded">
                             <Shield size={14} className="text-purple-500" />
                             <span className="text-xs font-mono text-purple-700">{d.doctrineRuleId}</span>
@@ -577,7 +563,7 @@ export function ContradictionDashboardPage() {
                 </tr>
               </thead>
               <tbody>
-                {MOCK_DOCTRINE_MATCHES.map((d, idx) => (
+                {doctrineMatches.map((d, idx) => (
                   <tr key={idx} className="border-b border-gray-50 hover:bg-gray-50">
                     <td className="py-3 px-4 font-mono text-blue-700 text-xs">{d.doctrineRuleId}</td>
                     <td className="py-3 px-4"><SeverityBadge severity={d.severity} /></td>
@@ -593,7 +579,7 @@ export function ContradictionDashboardPage() {
 
       {activeTab === 'recommendations' && (
         <div className="space-y-4">
-          {MOCK_RECOMMENDATIONS.map((r) => (
+          {recommendations.map((r) => (
             <Card key={r.recommendationId}>
               <div className="flex items-start gap-3">
                 <Scale size={18} className="text-blue-500 mt-0.5 flex-shrink-0" />

@@ -8,15 +8,23 @@ import { Card } from '../../components/common/Card';
 import { ExpertRecommendationBadge } from '../../components/common/StatusBadge';
 import { getExpertRecommendations } from '../../services/ai/expertRecommendations';
 import type { Expert } from '../../types';
-import { AlertTriangle, MessageSquare } from 'lucide-react';
-import { caseDataProvider } from '../../services/caseDataProvider';
+import { AlertTriangle, MessageSquare, Loader2 } from 'lucide-react';
+import { fetchCase, type ApiCase } from '../../services/caseApi';
 
 export function ExpertsPage() {
   const { caseId } = useParams<{ caseId: string }>();
   const [experts, setExperts] = useState<Expert[]>([]);
   const [loading, setLoading] = useState(true);
-  const cases = caseDataProvider.getCases();
-  const currentCase = cases.find((c) => c.id === caseId) || caseDataProvider.getPrimaryCase();
+  const [currentCase, setCurrentCase] = useState<ApiCase | null>(null);
+
+  useEffect(() => {
+    if (!caseId) return;
+    let cancelled = false;
+    fetchCase(caseId).then((c) => {
+      if (!cancelled) setCurrentCase(c);
+    }).catch(() => {});
+    return () => { cancelled = true; };
+  }, [caseId]);
 
   useEffect(() => {
     setLoading(true);
@@ -26,6 +34,10 @@ export function ExpertsPage() {
       setLoading(false);
     });
   }, [caseId]);
+
+  if (loading && !currentCase) {
+    return <div className="flex items-center justify-center p-12"><Loader2 className="animate-spin text-blue-600" size={32} /></div>;
+  }
 
   if (!currentCase) {
     return <div className="p-8 text-center text-gray-500">No cases found.</div>;
@@ -44,10 +56,9 @@ export function ExpertsPage() {
 
       {/* Case Info */}
       <div>
-        <h2 className="text-xl font-bold text-blue-700">{currentCase.title} - Case #{currentCase.caseNumber}</h2>
+        <h2 className="text-xl font-bold text-blue-700">{currentCase.title || currentCase.caseType} - Case #{currentCase.caseId}</h2>
         <p className="text-sm text-gray-500 mt-1">
-          Jurisdiction: {currentCase.jurisdiction}, {currentCase.court}<br />
-          Status: Pre-Trial Motions
+          Status: {currentCase.status || 'Pre-Trial Motions'}
         </p>
       </div>
 

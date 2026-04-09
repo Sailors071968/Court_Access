@@ -18,6 +18,7 @@ import { extractEvidenceText } from '../services/evidenceTextExtractionService.j
 import { normalizeDocumentText } from '../services/documentNormalizationService.js';
 import type { ExtractedEvent as CdeExtractedEvent } from '../contradiction/types.js';
 import type { TimelineEvent as ConflictTimelineEvent, TimelineConflict } from '../conflict/types.js';
+import { extractActor, extractTarget } from '../services/extractEvents.js';
 
 // ---------------------------------------------------------------------------
 // Result Types
@@ -370,14 +371,25 @@ export async function reconstructTimeline(
   // the old timeline events are preserved and BullMQ will retry.
   const createDataList = unifiedTimeline.timeline.map((te) => {
     const sourceEvent = storedEvents.find((ev) => ev.eventId === te.eventId);
+    const rawText = sourceEvent?.rawText ?? '';
+    const description = sourceEvent?.description ?? `${sourceEvent?.eventType?.replace(/_/g, ' ') ?? 'Event'} detected`;
+
+    // Extract structured fields from source text (deterministic — no guessing)
+    const actorResult = rawText ? extractActor(rawText) : null;
+    const actor = actorResult === 'unknown' ? null : actorResult;
+    const action = sourceEvent?.eventType?.replace(/_/g, ' ') ?? null;
+    const target = rawText ? extractTarget(rawText) : null;
+
     return {
       caseId,
       tenantId,
       timestamp: parseTimelineTimestamp(te.canonicalTimestamp),
       sourceDoc: sourceEvent?.sourceEvidence ?? 'unknown',
       sourceType: mapToTimelineSourceType(sourceEvent?.sourceType ?? 'police_report'),
-      description: sourceEvent?.description ?? `${sourceEvent?.eventType?.replace(/_/g, ' ') ?? 'Event'} detected`,
-      actor: null as string | null,
+      description,
+      actor,
+      action,
+      target,
       location: null as string | null,
       confidence: te.confidence,
       conflictFlag: false,

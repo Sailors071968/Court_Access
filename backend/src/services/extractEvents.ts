@@ -6,6 +6,7 @@ export interface ExtractedEvent {
   description: string;
   action: string;
   actor: string;
+  target: string | null;
   timestamp?: string;
 }
 
@@ -65,7 +66,7 @@ function splitClauses(sentence: string): string[] {
 // ACTOR EXTRACTION
 // ----------------------------------------------------------------------------
 
-function extractActor(text: string): string {
+export function extractActor(text: string): string {
   const match = text.match(
     /(Officer\s+\w+|Deputy\s+\w+|Detective\s+\w+|Suspect|Victim|Defendant)/i
   );
@@ -85,6 +86,27 @@ function extractActions(text: string): string[] {
 }
 
 // ----------------------------------------------------------------------------
+// TARGET EXTRACTION (DETERMINISTIC — NO GUESSING)
+// Rule A: Direct object after preposition (at/toward/into/onto/to)
+// Rule B: "against" prepositional target
+// Rule C: Fallback → null (court-safe: never hallucinate)
+// ----------------------------------------------------------------------------
+
+export function extractTarget(text: string): string | null {
+  const patterns = [
+    /(?:at|toward|into|onto|to)\s+(?:the\s+)?([a-zA-Z]+)/i,
+    /(?:against)\s+(?:the\s+)?([a-zA-Z]+)/i,
+  ];
+
+  for (const p of patterns) {
+    const match = text.match(p);
+    if (match) return match[1].toLowerCase();
+  }
+
+  return null;
+}
+
+// ----------------------------------------------------------------------------
 // MAIN EXTRACTION
 // ----------------------------------------------------------------------------
 
@@ -101,14 +123,16 @@ export function extractEvents(chunkText: string): ExtractedEvent[] {
 
       const actor = extractActor(clause);
       const actions = extractActions(clause);
+      const target = extractTarget(clause);
 
-      // 🔥 MULTI-ACTION PER CLAUSE
+      // MULTI-ACTION PER CLAUSE
       if (actions.length > 0) {
         for (const action of actions) {
           events.push({
             description: clause,
             actor,
             action,
+            target,
           });
         }
       } else {
@@ -117,6 +141,7 @@ export function extractEvents(chunkText: string): ExtractedEvent[] {
           description: clause,
           actor,
           action: "unknown",
+          target,
         });
       }
     }

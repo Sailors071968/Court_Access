@@ -36,6 +36,7 @@ export function EvidencePage() {
   // Process case state
   const [processing, setProcessing] = useState(false);
   const [processResult, setProcessResult] = useState<string | null>(null);
+  const [processIsError, setProcessIsError] = useState(false);
 
   useEffect(() => {
     if (!caseId) return;
@@ -83,9 +84,11 @@ export function EvidencePage() {
     try {
       setProcessing(true);
       setProcessResult(null);
+      setProcessIsError(false);
       const result = await rebuildTimeline(caseId);
       setProcessResult(result.message || 'Processing started');
     } catch (err) {
+      setProcessIsError(true);
       setProcessResult(err instanceof Error ? err.message : 'Processing failed');
     } finally {
       setProcessing(false);
@@ -152,8 +155,12 @@ export function EvidencePage() {
 
       {/* Process Result */}
       {processResult && (
-        <div className="flex items-center gap-2 p-3 rounded-lg bg-blue-50 border border-blue-200 text-sm text-blue-700">
-          <CheckCircle size={16} />
+        <div className={`flex items-center gap-2 p-3 rounded-lg text-sm ${
+          processIsError
+            ? 'bg-red-50 border border-red-200 text-red-700'
+            : 'bg-blue-50 border border-blue-200 text-blue-700'
+        }`}>
+          {processIsError ? <AlertCircle size={16} /> : <CheckCircle size={16} />}
           {processResult}
           <button onClick={() => setProcessResult(null)} className="ml-auto"><X size={14} /></button>
         </div>

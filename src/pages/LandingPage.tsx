@@ -517,6 +517,7 @@ const CREDIT_PACK_ID_MAP: Record<number, string> = {
 
 function PricingSection() {
   const [checkingOut, setCheckingOut] = useState<string | null>(null);
+  const [checkoutError, setCheckoutError] = useState<string | null>(null);
   const navigate = useNavigate();
 
   const handleCreditPackPurchase = async (credits: number) => {
@@ -528,15 +529,16 @@ function PricingSection() {
     const packId = CREDIT_PACK_ID_MAP[credits];
     if (!packId) return;
     setCheckingOut(`credits-${credits}`);
+    setCheckoutError(null);
     try {
       const result = await createCheckoutSession(packId);
       if (result.url) {
         window.location.href = result.url;
       } else {
-        navigate('/register');
+        setCheckoutError('Unable to start checkout. Please try again or contact support.');
       }
     } catch {
-      navigate('/register');
+      setCheckoutError('Checkout failed. Please try again or contact support.');
     } finally {
       setCheckingOut(null);
     }
@@ -562,16 +564,16 @@ function PricingSection() {
     // Create Stripe checkout session
     const planId = PLAN_ID_MAP[planName] || 'STARTER';
     setCheckingOut(planName);
+    setCheckoutError(null);
     try {
       const result = await createCheckoutSession(planId);
       if (result.url) {
         window.location.href = result.url;
       } else {
-        // Stripe not configured yet — redirect to register
-        navigate('/register');
+        setCheckoutError('Unable to start checkout. Please try again or contact support.');
       }
     } catch {
-      navigate('/register');
+      setCheckoutError('Checkout failed. Please try again or contact support.');
     } finally {
       setCheckingOut(null);
     }
@@ -658,6 +660,12 @@ function PricingSection() {
             Every plan includes evidence upload, timeline reconstruction, and contradiction detection. Page limits are cumulative across all your cases.
           </p>
         </div>
+
+        {checkoutError && (
+          <div className="mb-6 p-4 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm text-center">
+            {checkoutError}
+          </div>
+        )}
 
         {/* Plan Cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">

@@ -30,6 +30,8 @@ const ALLOWED_ORIGINS = new Set([
   'http://localhost:4173',
   'http://localhost:3000',
   'http://localhost:3001',
+  'https://courtaccess.net',
+  'https://www.courtaccess.net',
   process.env.FRONTEND_URL || '',
   process.env.BACKEND_URL || '',
 ].filter(Boolean));
@@ -104,14 +106,16 @@ export function validateOrigin(origin: string | undefined, referer: string | und
     if (ALLOWED_ORIGINS.has(origin)) return true;
     // Check for production domain match
     const url = new URL(origin);
-    if (url.protocol === 'https:' && url.hostname.endsWith('.courtaccess.com')) return true;
+    if (url.protocol === 'https:' && (url.hostname === 'courtaccess.net' || url.hostname.endsWith('.courtaccess.net') || url.hostname === 'courtaccess.com' || url.hostname.endsWith('.courtaccess.com'))) return true;
     return false;
   }
 
   if (referer) {
     try {
-      const refererOrigin = new URL(referer).origin;
-      return ALLOWED_ORIGINS.has(refererOrigin);
+      const refUrl = new URL(referer);
+      if (ALLOWED_ORIGINS.has(refUrl.origin)) return true;
+      if (refUrl.protocol === 'https:' && (refUrl.hostname === 'courtaccess.net' || refUrl.hostname.endsWith('.courtaccess.net') || refUrl.hostname === 'courtaccess.com' || refUrl.hostname.endsWith('.courtaccess.com'))) return true;
+      return false;
     } catch {
       return false;
     }

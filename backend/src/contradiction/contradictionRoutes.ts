@@ -188,6 +188,8 @@ export function registerContradictionRoutes(app: FastifyInstance): void {
     const body = req.body as {
       caseId?: string;
       videoId?: string;
+      videoUrl?: string;
+      videoType?: 'bodycam' | 'dashcam' | 'surveillance' | 'other';
       stages?: VideoProcessingStage[];
       ocrText?: string;
       transcript?: string;
@@ -200,9 +202,11 @@ export function registerContradictionRoutes(app: FastifyInstance): void {
       });
     }
 
-    const job = {
+    const job: VideoProcessingJob = {
       caseId: body.caseId,
       videoId: body.videoId,
+      videoUrl: body.videoUrl ?? '',
+      videoType: body.videoType ?? 'other',
       stages: body.stages ?? ['frame_extraction', 'overlay_ocr', 'action_detection', 'event_generation'] as VideoProcessingStage[],
       frameIntervalSec: body.frameIntervalSec ?? 0.5,
     };

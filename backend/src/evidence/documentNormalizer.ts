@@ -199,11 +199,6 @@ export function normalizeDocument(input: DocumentNormalizationInput): Normalizat
 
   // Enforcement: Check against limits
   if (maxMultiplexCount > maxAllowed) {
-    const typeLabel = isTranscript ? 'court reporter transcripts' : 'discovery documents';
-    const limitLabel = isTranscript
-      ? `maximum ${MAX_TRANSCRIPT_MULTIPLEX} pages per sheet`
-      : 'one page per page';
-
     return {
       accepted: false,
       totalPages: input.pageCount,

@@ -371,7 +371,7 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
         const s3 = getS3Client();
         const deleteCommand = new DeleteObjectCommand({
           Bucket: R2_BUCKET,
-          Key: evidence.s3Key,
+          Key: evidence.s3Key ?? undefined,
         });
         await s3.send(deleteCommand);
       } catch (s3Err) {

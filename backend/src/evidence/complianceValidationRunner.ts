@@ -20,8 +20,6 @@ import { join } from 'path';
 
 import {
   VALIDATION_DATASET,
-  type ValidationTestCase,
-  type ExpectedEvent,
 } from './complianceValidationDataset.js';
 
 import {
@@ -31,7 +29,6 @@ import {
 
 import {
   extractRulesFromPolicy,
-  type StructuredRule,
 } from './policyRuleEngine.js';
 
 import {

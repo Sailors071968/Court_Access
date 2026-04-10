@@ -8,7 +8,6 @@ import { v4 as uuidv4 } from 'uuid';
 import type {
   VideoProcessingJob,
   VideoProcessingResult,
-  VideoProcessingStage,
   VideoOverlayMetadata,
   VideoAction,
   ExtractedEvent,
@@ -233,8 +232,7 @@ function detectActions(
   for (const rule of ACTION_DETECTION_RULES) {
     for (const keyword of rule.keywords) {
       const regex = new RegExp(keyword, 'gi');
-      let match: RegExpExecArray | null;
-      while ((match = regex.exec(transcript)) !== null) {
+      while (regex.exec(transcript) !== null) {
         actions.push({
           videoId,
           timestamp: '', // Would be derived from transcript timing

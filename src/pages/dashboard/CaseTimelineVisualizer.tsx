@@ -255,7 +255,7 @@ export function CaseTimelineVisualizer() {
             <div style={{ flex: 1, height: '8px', backgroundColor: '#E5E7EB', borderRadius: '4px', position: 'relative' }}>
               <div
                 style={{
-                  width: `${(playbackPosition / timelineData.totalDurationSeconds) * 100}%`,
+                  width: `${timelineData.totalDurationSeconds > 0 ? (playbackPosition / timelineData.totalDurationSeconds) * 100 : 0}%`,
                   height: '100%', backgroundColor: '#2563EB', borderRadius: '4px',
                   transition: 'width 0.3s',
                 }}

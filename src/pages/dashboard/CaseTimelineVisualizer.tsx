@@ -241,10 +241,10 @@ export function CaseTimelineVisualizer() {
         setTimelineData(data);
       } else {
         // Use mock data in development
-        setTimelineData({ events: [], clusters: [], cameras: [] } as TimelineData);
+        setTimelineData({ events: [], clusters: [], cameras: [], totalDurationSeconds: 0, startTime: '', endTime: '' });
       }
     } catch {
-      setTimelineData({ events: [], clusters: [], cameras: [] } as TimelineData);
+      setTimelineData({ events: [], clusters: [], cameras: [], totalDurationSeconds: 0, startTime: '', endTime: '' });
     }
     setLoading(false);
   }, []);

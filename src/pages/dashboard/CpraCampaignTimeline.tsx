@@ -3,7 +3,7 @@
 // Tracks CPRA request lifecycle per agency with visual timeline
 // ============================================================================
 
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import { Search, Mail, Clock, CheckCircle, AlertTriangle, XCircle, ChevronDown, ChevronUp } from 'lucide-react';
 import { Card } from '../../components/common/Card';
 
@@ -42,40 +42,24 @@ const STATUS_CONFIG: Record<CpraStatus, { label: string; color: string; icon: Re
   appeal: { label: 'Appeal Filed', color: 'bg-orange-100 text-orange-700', icon: <AlertTriangle size={14} /> },
 };
 
-function generateMockRequests(): CpraRequest[] {
-  const agencies = [
-    'Los Angeles PD', 'San Diego PD', 'San Francisco PD', 'Sacramento PD',
-    'Oakland PD', 'Long Beach PD', 'Fresno PD', 'Santa Ana PD',
-    'Anaheim PD', 'Riverside PD', 'Stockton PD', 'Bakersfield PD',
-    'Chula Vista PD', 'Irvine PD', 'Fremont PD', 'San Jose PD',
-  ];
-  const statuses: CpraStatus[] = ['sent', 'acknowledged', 'partial_response', 'complete', 'overdue', 'denied', 'appeal', 'draft'];
 
-  return agencies.map((name, i) => {
-    const status = statuses[i % statuses.length];
-    const daysSent = 10 + i * 3;
-    return {
-      id: `cpra-${i}`,
-      agencyName: name,
-      agencyId: `agency-${i}`,
-      requestDate: `2026-${String(1 + (i % 3)).padStart(2, '0')}-${String(5 + i).padStart(2, '0')}`,
-      acknowledgedDate: ['acknowledged', 'partial_response', 'complete'].includes(status)
-        ? `2026-${String(1 + (i % 3)).padStart(2, '0')}-${String(10 + i).padStart(2, '0')}`
-        : null,
-      dueDate: `2026-${String(2 + (i % 3)).padStart(2, '0')}-${String(5 + i).padStart(2, '0')}`,
-      responseDate: status === 'complete' ? `2026-02-${String(1 + i).padStart(2, '0')}` : null,
-      status,
-      daysSinceSent: daysSent,
-      daysUntilDue: status === 'overdue' ? -(daysSent - 10) : 30 - daysSent,
-      documentsReceived: status === 'complete' ? 12 + i : status === 'partial_response' ? 3 + (i % 5) : 0,
-      totalExpected: 12 + i,
-      notes: status === 'denied' ? 'Claimed exemption under Gov Code 6254(f)' : '',
-    };
-  });
-}
+export function CpraCampaignTimeline()export function CpraCampaignTimeline() {
+  const [allRequests, setAllRequests] = useState<CpraRequest[]>([]);
 
-export function CpraCampaignTimeline() {
-  const allRequests = useMemo(() => generateMockRequests(), []);
+  useEffect(() => {
+    async function fetchRequests() {
+      try {
+        const res = await fetch('/api/operations/cpra-requests');
+        if (res.ok) {
+          const json = await res.json();
+          if (json.data) setAllRequests(json.data);
+        }
+      } catch {
+        // API not available yet
+      }
+    }
+    fetchRequests();
+  }, []);
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [expandedId, setExpandedId] = useState<string | null>(null);

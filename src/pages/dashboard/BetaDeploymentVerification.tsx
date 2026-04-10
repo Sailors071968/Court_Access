@@ -3,8 +3,8 @@
 // Verification checklist for beta deployment readiness
 // ============================================================================
 
-import { useState } from 'react';
-import { CheckCircle, XCircle, Clock, RefreshCw, Shield } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { CheckCircle, XCircle, Clock, RefreshCw, Shield, Loader2 } from 'lucide-react';
 
 interface VerificationCheck {
   id: string;
@@ -15,23 +15,28 @@ interface VerificationCheck {
   category: 'ui' | 'pipeline' | 'worker' | 'data';
 }
 
-const MOCK_CHECKS: VerificationCheck[] = [
-  { id: 'v1', name: 'Trial Exhibit System visible to clients', description: 'Verify trial exhibits tab appears in case layout', status: 'pass', category: 'ui', details: 'Tab renders correctly for all client roles' },
-  { id: 'v2', name: 'Complete Analysis visible on Overview page', description: 'Verify analysis section renders in case overview', status: 'pass', category: 'ui', details: 'All 7 sections render with mock data' },
-  { id: 'v3', name: 'Evidence uploads stable', description: 'Verify evidence upload pipeline processes files', status: 'pass', category: 'pipeline', details: 'Upload + OCR + analysis pipeline operational' },
-  { id: 'v4', name: 'Policy console stable', description: 'Verify policy operations dashboard loads without errors', status: 'pass', category: 'ui', details: 'Inventory and matrix views render correctly' },
-  { id: 'v5', name: 'Worker queues healthy', description: 'Verify all worker queues are processing', status: 'pass', category: 'worker', details: 'All 6 queues operational, 0 failed jobs' },
-  { id: 'v6', name: 'Upload evidence test', description: 'End-to-end evidence upload test', status: 'pass', category: 'pipeline', details: 'PDF upload completed in 3.2s' },
-  { id: 'v7', name: 'Generate analysis test', description: 'Full case analysis generation', status: 'pass', category: 'pipeline', details: 'Analysis generated in 12.4s with 8 timeline events' },
-  { id: 'v8', name: 'Generate exhibit test', description: 'Auto-exhibit generation from analysis', status: 'pass', category: 'pipeline', details: '4 exhibits auto-generated' },
-  { id: 'v9', name: 'Compare policies test', description: 'Policy comparison against agency + CHP fallback', status: 'pass', category: 'data', details: '3 policy observations generated using neutral language' },
-  { id: 'v10', name: 'View timeline test', description: 'Timeline reconstruction from multiple sources', status: 'pass', category: 'data', details: 'Merged timeline from 5 sources, 8 events' },
-  { id: 'v11', name: 'Legal neutrality guard active', description: 'Verify PolicyNarrativeGuard wraps all AI output', status: 'pass', category: 'pipeline', details: 'Guard intercepted 0 forbidden terms in test output' },
-  { id: 'v12', name: 'Evidence hash integrity', description: 'SHA-256 + SHA3-256 computed for all evidence', status: 'pass', category: 'data', details: 'All evidence files hashed and verified' },
-];
 
 export function BetaDeploymentVerification() {
-  const [checks] = useState<VerificationCheck[]>(MOCK_CHECKS);
+  const [checks, setChecks] = useState<VerificationCheck[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchChecks() {
+      setIsLoading(true);
+      try {
+        const res = await fetch('/api/admin/deployment-checks');
+        if (res.ok) {
+          const json = await res.json();
+          if (json.data) setChecks(json.data);
+        }
+      } catch {
+        // API not available yet
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchChecks();
+  }, []);
 
   const passed = checks.filter((c) => c.status === 'pass').length;
   const failed = checks.filter((c) => c.status === 'fail').length;
@@ -78,6 +83,18 @@ export function BetaDeploymentVerification() {
       </div>
 
       {/* Checks List */}
+      {isLoading ? (
+        <div className="flex items-center justify-center py-12">
+          <Loader2 size={20} className="animate-spin text-gray-400" />
+          <span className="ml-2 text-sm text-gray-500">Loading verification checks...</span>
+        </div>
+      ) : checks.length === 0 ? (
+        <div className="text-center py-12 bg-white rounded-xl border border-gray-200">
+          <Shield size={48} className="mx-auto mb-3 text-gray-300" />
+          <p className="text-sm text-gray-500">No deployment checks available.</p>
+          <p className="text-xs text-gray-400 mt-1">Run verification to check deployment readiness.</p>
+        </div>
+      ) : (
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <div className="divide-y divide-gray-100">
           {checks.map((check) => (
@@ -102,6 +119,7 @@ export function BetaDeploymentVerification() {
           ))}
         </div>
       </div>
+      )}
 
       {/* Overall Status */}
       <div className={`p-4 rounded-xl border-2 text-center ${

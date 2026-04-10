@@ -3,8 +3,8 @@
 // Shows processing log for each evidence file
 // ============================================================================
 
-import { useState } from 'react';
-import { Activity, CheckCircle, XCircle, Clock, RefreshCw, Filter } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Activity, CheckCircle, XCircle, Clock, RefreshCw, Filter, Loader2 } from 'lucide-react';
 
 interface ProcessingLogEntry {
   id: string;
@@ -19,24 +19,32 @@ interface ProcessingLogEntry {
 
 const STAGES: ProcessingLogEntry['stage'][] = ['UPLOAD', 'OCR', 'TEXT_EXTRACTION', 'ENTITY_EXTRACTION', 'TIMELINE_BUILD', 'POLICY_COMPARISON', 'AI_ANALYSIS'];
 
-const MOCK_LOGS: ProcessingLogEntry[] = [
-  { id: 'l1', evidenceId: 'ev-1', evidenceName: 'Police Report #2024-1847.pdf', stage: 'UPLOAD', status: 'completed', workerId: 'upload-worker-1', timestamp: '2026-01-15 14:22:03', details: 'File uploaded (2.4 MB)' },
-  { id: 'l2', evidenceId: 'ev-1', evidenceName: 'Police Report #2024-1847.pdf', stage: 'OCR', status: 'completed', workerId: 'ocr-worker-2', timestamp: '2026-01-15 14:22:15', details: 'OCR completed — 12 pages extracted' },
-  { id: 'l3', evidenceId: 'ev-1', evidenceName: 'Police Report #2024-1847.pdf', stage: 'TEXT_EXTRACTION', status: 'completed', workerId: 'text-worker-1', timestamp: '2026-01-15 14:22:30', details: '4,521 words extracted' },
-  { id: 'l4', evidenceId: 'ev-1', evidenceName: 'Police Report #2024-1847.pdf', stage: 'ENTITY_EXTRACTION', status: 'completed', workerId: 'entity-worker-1', timestamp: '2026-01-15 14:23:00', details: '18 entities found (persons: 5, locations: 3, dates: 10)' },
-  { id: 'l5', evidenceId: 'ev-1', evidenceName: 'Police Report #2024-1847.pdf', stage: 'TIMELINE_BUILD', status: 'completed', workerId: 'timeline-worker-1', timestamp: '2026-01-15 14:23:30', details: '8 timeline events generated' },
-  { id: 'l6', evidenceId: 'ev-1', evidenceName: 'Police Report #2024-1847.pdf', stage: 'POLICY_COMPARISON', status: 'completed', workerId: 'policy-worker-1', timestamp: '2026-01-15 14:24:00', details: '3 policy observations generated' },
-  { id: 'l7', evidenceId: 'ev-1', evidenceName: 'Police Report #2024-1847.pdf', stage: 'AI_ANALYSIS', status: 'completed', workerId: 'ai-worker-1', timestamp: '2026-01-15 14:25:00', details: 'Full analysis complete — 2 inconsistencies flagged' },
-  { id: 'l8', evidenceId: 'ev-2', evidenceName: 'Bodycam - Martinez.mp4', stage: 'UPLOAD', status: 'completed', workerId: 'upload-worker-1', timestamp: '2026-01-15 14:30:00', details: 'File uploaded (145 MB)' },
-  { id: 'l9', evidenceId: 'ev-2', evidenceName: 'Bodycam - Martinez.mp4', stage: 'OCR', status: 'completed', workerId: 'ocr-worker-3', timestamp: '2026-01-15 14:32:00', details: 'Video transcription completed — 8:45 duration' },
-  { id: 'l10', evidenceId: 'ev-2', evidenceName: 'Bodycam - Martinez.mp4', stage: 'TEXT_EXTRACTION', status: 'running', workerId: 'text-worker-2', timestamp: '2026-01-15 14:33:00', details: 'Extracting dialogue from transcript...' },
-];
 
 export function EvidenceProcessingTrace() {
   const [filterStage, setFilterStage] = useState<string>('all');
   const [filterStatus, setFilterStatus] = useState<string>('all');
+  const [logs, setLogs] = useState<ProcessingLogEntry[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const filtered = MOCK_LOGS.filter((log) => {
+  useEffect(() => {
+    async function fetchLogs() {
+      setIsLoading(true);
+      try {
+        const res = await fetch('/api/evidence/processing-logs');
+        if (res.ok) {
+          const json = await res.json();
+          if (json.data) setLogs(json.data);
+        }
+      } catch {
+        // API not available yet
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchLogs();
+  }, []);
+
+  const filtered = logs.filter((log) => {
     if (filterStage !== 'all' && log.stage !== filterStage) return false;
     if (filterStatus !== 'all' && log.status !== filterStatus) return false;
     return true;
@@ -88,6 +96,18 @@ export function EvidenceProcessingTrace() {
       </div>
 
       {/* Log Table */}
+      {isLoading ? (
+        <div className="flex items-center justify-center py-12">
+          <Loader2 size={20} className="animate-spin text-gray-400" />
+          <span className="ml-2 text-sm text-gray-500">Loading processing logs...</span>
+        </div>
+      ) : filtered.length === 0 ? (
+        <div className="text-center py-12 bg-white rounded-xl border border-gray-200">
+          <Activity size={48} className="mx-auto mb-3 text-gray-300" />
+          <p className="text-sm text-gray-500">No processing logs available yet.</p>
+          <p className="text-xs text-gray-400 mt-1">Upload evidence to see processing activity.</p>
+        </div>
+      ) : (
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <table className="w-full text-sm">
           <thead>
@@ -116,6 +136,7 @@ export function EvidenceProcessingTrace() {
           </tbody>
         </table>
       </div>
+      )}
     </div>
   );
 }

@@ -43,29 +43,6 @@ const STATUS_LABELS: Record<string, string> = {
   not_applicable: 'N/A',
 };
 
-// Generate mock data
-function generateMockData() {
-  const agencyTypes: Agency['type'][] = ['municipal', 'county', 'state', 'university', 'special_district'];
-  const counties = ['Los Angeles', 'San Diego', 'Orange', 'Riverside', 'San Bernardino', 'Santa Clara', 'Alameda', 'Sacramento', 'San Francisco', 'Contra Costa'];
-  const categories = ['Use of Force', 'Pursuit Policy', 'Body Camera', 'Detention', 'Search & Seizure', 'Miranda', 'Reporting', 'Training', 'Discipline', 'Community Relations'];
-
-  const agencies: Agency[] = Array.from({ length: 488 }, (_, i) => ({
-    id: `agency-${i}`,
-    name: `Agency ${i + 1} PD`,
-    county: counties[i % counties.length],
-    type: agencyTypes[i % agencyTypes.length],
-  }));
-
-  const topics: Topic[] = Array.from({ length: 334 }, (_, i) => ({
-    id: `topic-${i}`,
-    name: `Policy Topic ${i + 1}`,
-    category: categories[i % categories.length],
-  }));
-
-  const statuses: PolicyCell['status'][] = ['compliant', 'non_compliant', 'partial', 'unknown', 'not_applicable'];
-
-  return { agencies, topics, statuses };
-}
 
 const ROW_HEIGHT = 36;
 const VISIBLE_ROWS = 20;
@@ -74,7 +51,25 @@ const AGENCY_COL_WIDTH = 200;
 const CELL_WIDTH = 80;
 
 export function PolicyMatrixVirtualized() {
-  const { agencies, topics, statuses } = useMemo(() => generateMockData(), []);
+  const [agencies, setAgencies] = useState<Agency[]>([]);
+  const [topics, setTopics] = useState<Topic[]>([]);
+  const statuses: PolicyCell['status'][] = ['compliant', 'non_compliant', 'partial', 'unknown', 'not_applicable'];
+
+  useEffect(() => {
+    async function fetchMatrixData() {
+      try {
+        const res = await fetch('/api/operations/policy-matrix');
+        if (res.ok) {
+          const json = await res.json();
+          if (json.agencies) setAgencies(json.agencies);
+          if (json.topics) setTopics(json.topics);
+        }
+      } catch {
+        // API not available yet
+      }
+    }
+    fetchMatrixData();
+  }, []);
   const [searchQuery, setSearchQuery] = useState('');
   const [categoryFilter, setCategoryFilter] = useState<string>('all');
   const [scrollTop, setScrollTop] = useState(0);

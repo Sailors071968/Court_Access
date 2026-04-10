@@ -13,7 +13,7 @@ import {
 import { Card, StatCard } from '../../components/common/Card';
 import { useAuthStore } from '../../stores/authStore';
 import {
-  fetchCases, fetchCaseEvidence, deleteEvidence, uploadEvidenceDirect,
+  fetchCases, fetchCaseEvidence, deleteEvidence, deleteCase, uploadEvidenceDirect,
   fetchContradictionRecommendations, fetchTimelineConflicts,
   type ApiCase, type ApiEvidence, type ApiRecommendation, type ApiTimelineConflict,
   EVIDENCE_TYPES,
@@ -126,6 +126,9 @@ export function DefendantDashboard() {
   const [uploadError, setUploadError] = useState<string | null>(null);
   const [deletingEvidenceId, setDeletingEvidenceId] = useState<string | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
+  const [confirmDeleteCaseId, setConfirmDeleteCaseId] = useState<string | null>(null);
+  const [deletingCaseId, setDeletingCaseId] = useState<string | null>(null);
+  const [deleteCaseError, setDeleteCaseError] = useState<string | null>(null);
   const [caseSearch, setCaseSearch] = useState('');
   const loadIdRef = useRef(0);
 
@@ -218,6 +221,23 @@ export function DefendantDashboard() {
       if (loadIdRef.current === thisLoadId) setSuggestionsLoading(false);
     }
   }, []);
+
+  const handleDeleteCase = async (caseId: string) => {
+    setDeletingCaseId(caseId);
+    setDeleteCaseError(null);
+    try {
+      await deleteCase(caseId);
+      setCases((prev) => prev.filter((c) => c.caseId !== caseId));
+      setConfirmDeleteCaseId(null);
+      if (selectedCase?.caseId === caseId) {
+        setSelectedCase(null);
+      }
+    } catch (err) {
+      setDeleteCaseError(err instanceof Error ? err.message : 'Failed to delete case');
+    } finally {
+      setDeletingCaseId(null);
+    }
+  };
 
   const handleDeleteEvidence = async (evidenceId: string) => {
     setDeletingEvidenceId(evidenceId);
@@ -483,23 +503,32 @@ export function DefendantDashboard() {
                         </div>
                       </div>
                     </div>
-                    <div className="text-right flex-shrink-0">
-                      <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${
-                        c.status === 'active' ? 'bg-green-100 text-green-700' :
-                        c.status === 'closed' ? 'bg-gray-100 text-gray-600' :
-                        'bg-amber-100 text-amber-700'
-                      }`}>
-                        {c.status}
-                      </span>
-                      {c.nextHearing && (
-                        <p className="text-xs text-gray-500 mt-1.5 flex items-center justify-end gap-1">
-                          <Calendar size={10} />
-                          Next: {c.nextHearing}
-                        </p>
-                      )}
-                      {c._count?.evidence !== undefined && (
-                        <p className="text-xs text-gray-400 mt-0.5">{c._count.evidence} evidence items</p>
-                      )}
+                    <div className="flex items-center gap-3 flex-shrink-0">
+                      <div className="text-right">
+                        <span className={`text-xs px-2.5 py-1 rounded-full font-medium ${
+                          c.status === 'active' ? 'bg-green-100 text-green-700' :
+                          c.status === 'closed' ? 'bg-gray-100 text-gray-600' :
+                          'bg-amber-100 text-amber-700'
+                        }`}>
+                          {c.status}
+                        </span>
+                        {c.nextHearing && (
+                          <p className="text-xs text-gray-500 mt-1.5 flex items-center justify-end gap-1">
+                            <Calendar size={10} />
+                            Next: {c.nextHearing}
+                          </p>
+                        )}
+                        {c._count?.evidence !== undefined && (
+                          <p className="text-xs text-gray-400 mt-0.5">{c._count.evidence} evidence items</p>
+                        )}
+                      </div>
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setConfirmDeleteCaseId(c.caseId); setDeleteCaseError(null); }}
+                        className="p-2 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                        title="Delete case"
+                      >
+                        <Trash2 size={16} />
+                      </button>
                     </div>
                   </div>
                 </Card>
@@ -528,11 +557,20 @@ export function DefendantDashboard() {
                   {selectedCase.court ? ` &middot; ${selectedCase.court}` : ''}
                 </p>
               </div>
-              <span className={`text-xs px-3 py-1.5 rounded-full font-medium ${
-                selectedCase.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
-              }`}>
-                {selectedCase.status}
-              </span>
+              <div className="flex items-center gap-2">
+                <span className={`text-xs px-3 py-1.5 rounded-full font-medium ${
+                  selectedCase.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-gray-100 text-gray-700'
+                }`}>
+                  {selectedCase.status}
+                </span>
+                <button
+                  onClick={() => { setConfirmDeleteCaseId(selectedCase.caseId); setDeleteCaseError(null); }}
+                  className="flex items-center gap-1.5 px-3 py-1.5 text-sm font-medium text-red-600 bg-red-50 rounded-lg hover:bg-red-100 transition-colors"
+                >
+                  <Trash2 size={14} />
+                  Delete
+                </button>
+              </div>
             </div>
 
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4 text-sm">
@@ -814,6 +852,69 @@ export function DefendantDashboard() {
       )}
 
       {/* UPLOAD MODAL */}
+      {/* Case Delete Confirmation Modal */}
+      {confirmDeleteCaseId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full mx-4">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center bg-red-100">
+                <AlertTriangle size={20} className="text-red-600" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">Delete Case</h3>
+                <p className="text-sm text-gray-500">This action cannot be undone</p>
+              </div>
+            </div>
+
+            <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+              <p className="text-sm font-medium text-gray-900">
+                {cases.find((c) => c.caseId === confirmDeleteCaseId)?.title}
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                #{cases.find((c) => c.caseId === confirmDeleteCaseId)?.caseNumber}
+              </p>
+            </div>
+
+            <p className="text-sm text-gray-600 mb-4">
+              Are you sure you want to delete this case? All associated evidence, timeline events, and analysis data will be permanently removed.
+            </p>
+
+            {deleteCaseError && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                {deleteCaseError}
+              </div>
+            )}
+
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => { setConfirmDeleteCaseId(null); setDeleteCaseError(null); }}
+                disabled={deletingCaseId === confirmDeleteCaseId}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 disabled:opacity-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleDeleteCase(confirmDeleteCaseId)}
+                disabled={deletingCaseId === confirmDeleteCaseId}
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                {deletingCaseId === confirmDeleteCaseId ? (
+                  <>
+                    <Loader2 size={14} className="animate-spin" />
+                    Deleting...
+                  </>
+                ) : (
+                  <>
+                    <Trash2 size={14} />
+                    Delete Case
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {showUploadModal && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl shadow-2xl max-w-lg w-full p-6">

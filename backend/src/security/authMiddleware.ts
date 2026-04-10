@@ -682,76 +682,82 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       return successResponse;
     }
 
-    // Invalidate any existing reset tokens for this user
-    await prisma.passwordResetToken.updateMany({
-      where: { userId: user.id, usedAt: null },
-      data: { usedAt: new Date() },
-    });
-
-    // Generate a secure random token
-    const rawToken = crypto.randomBytes(32).toString('hex');
-    const tokenHash = crypto.createHash('sha256').update(rawToken).digest('hex');
-    const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
-
-    await prisma.passwordResetToken.create({
-      data: {
-        userId: user.id,
-        tokenHash,
-        expiresAt,
-      },
-    });
-
-    // Build the reset URL
-    const frontendUrl = process.env.FRONTEND_URL || 'https://courtaccess.net';
-    const resetUrl = `${frontendUrl}/reset-password?token=${rawToken}`;
-
-    // Attempt to send email via SES; fall back to console log if not configured
+    // Wrap all DB/email operations in try/catch to prevent user enumeration via 500 errors
     try {
-      const { SESClient, SendEmailCommand } = await import('@aws-sdk/client-ses');
-      const ses = new SESClient({
-        region: process.env.AWS_REGION ?? 'us-west-2',
-        credentials: process.env.AWS_ACCESS_KEY_ID
-          ? {
-              accessKeyId: process.env.AWS_ACCESS_KEY_ID,
-              secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY ?? '',
-            }
-          : undefined,
+      // Invalidate any existing reset tokens for this user
+      await prisma.passwordResetToken.updateMany({
+        where: { userId: user.id, usedAt: null },
+        data: { usedAt: new Date() },
       });
 
-      const senderEmail = process.env.PASSWORD_RESET_FROM_EMAIL || process.env.CPRA_SENDER_EMAIL || 'noreply@courtaccess.net';
+      // Generate a secure random token
+      const rawToken = crypto.randomBytes(32).toString('hex');
+      const tokenHash = crypto.createHash('sha256').update(rawToken).digest('hex');
+      const expiresAt = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
 
-      await ses.send(new SendEmailCommand({
-        Source: senderEmail,
-        Destination: { ToAddresses: [email] },
-        Message: {
-          Subject: { Data: 'Court Access — Password Reset', Charset: 'UTF-8' },
-          Body: {
-            Html: {
-              Data: `
-                <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
-                  <h2 style="color: #1e293b;">Reset your password</h2>
-                  <p>You requested a password reset for your Court Access account.</p>
-                  <p>Click the button below to set a new password. This link expires in 1 hour.</p>
-                  <a href="${resetUrl}" style="display: inline-block; background: #1e293b; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; margin: 16px 0;">Reset Password</a>
-                  <p style="color: #64748b; font-size: 14px;">If you didn't request this, you can safely ignore this email.</p>
-                  <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 24px 0;" />
-                  <p style="color: #94a3b8; font-size: 12px;">Court Access — Legal Intelligence Platform</p>
-                </div>
-              `,
-              Charset: 'UTF-8',
+      await prisma.passwordResetToken.create({
+        data: {
+          userId: user.id,
+          tokenHash,
+          expiresAt,
+        },
+      });
+
+      // Build the reset URL
+      const frontendUrl = process.env.FRONTEND_URL || 'https://courtaccess.net';
+      const resetUrl = `${frontendUrl}/reset-password?token=${rawToken}`;
+
+      // Attempt to send email via SES; fall back to console log if not configured
+      try {
+        const { SESClient, SendEmailCommand } = await import('@aws-sdk/client-ses');
+        const ses = new SESClient({
+          region: process.env.AWS_REGION ?? 'us-west-2',
+          credentials: process.env.AWS_ACCESS_KEY_ID
+            ? {
+                accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+                secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY ?? '',
+              }
+            : undefined,
+        });
+
+        const senderEmail = process.env.PASSWORD_RESET_FROM_EMAIL || process.env.CPRA_SENDER_EMAIL || 'noreply@courtaccess.net';
+
+        await ses.send(new SendEmailCommand({
+          Source: senderEmail,
+          Destination: { ToAddresses: [email] },
+          Message: {
+            Subject: { Data: 'Court Access — Password Reset', Charset: 'UTF-8' },
+            Body: {
+              Html: {
+                Data: `
+                  <div style="font-family: sans-serif; max-width: 600px; margin: 0 auto;">
+                    <h2 style="color: #1e293b;">Reset your password</h2>
+                    <p>You requested a password reset for your Court Access account.</p>
+                    <p>Click the button below to set a new password. This link expires in 1 hour.</p>
+                    <a href="${resetUrl}" style="display: inline-block; background: #1e293b; color: white; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; margin: 16px 0;">Reset Password</a>
+                    <p style="color: #64748b; font-size: 14px;">If you didn't request this, you can safely ignore this email.</p>
+                    <hr style="border: none; border-top: 1px solid #e2e8f0; margin: 24px 0;" />
+                    <p style="color: #94a3b8; font-size: 12px;">Court Access — Legal Intelligence Platform</p>
+                  </div>
+                `,
+                Charset: 'UTF-8',
+              },
             },
           },
-        },
-      }));
+        }));
 
-      console.log(`[Auth:ForgotPassword] Reset email sent to ${email}`);
-    } catch (sesError) {
-      // SES not configured — log the reset URL to console for development/testing
-      console.log(`[Auth:ForgotPassword] SES not available, logging reset link for ${email}`);
-      console.log(`[Auth:ForgotPassword] RESET URL: ${resetUrl}`);
+        console.log(`[Auth:ForgotPassword] Reset email sent to ${email}`);
+      } catch (sesError) {
+        // SES not configured — log the reset URL to console for development/testing
+        console.log(`[Auth:ForgotPassword] SES not available, logging reset link for ${email}`);
+        console.log(`[Auth:ForgotPassword] RESET URL: ${resetUrl}`);
+      }
+
+      void logSecurityEvent('PASSWORD_RESET_REQUESTED', user.id, request.ip, `Password reset requested for ${email}`);
+    } catch (dbError) {
+      // DB or other error — log but always return success to prevent enumeration
+      console.error('[Auth:ForgotPassword] Error processing reset request:', dbError);
     }
-
-    void logSecurityEvent('PASSWORD_RESET_REQUESTED', user.id, request.ip, `Password reset requested for ${email}`);
 
     return successResponse;
   });
@@ -770,38 +776,55 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
 
     const tokenHash = crypto.createHash('sha256').update(body.token).digest('hex');
 
-    // Find valid (unused, unexpired) token
-    const resetRecord = await prisma.passwordResetToken.findFirst({
-      where: {
-        tokenHash,
-        usedAt: null,
-        expiresAt: { gt: new Date() },
-      },
-      include: { user: true },
+    // Hash password before transaction (pure computation, no DB needed)
+    const newHash = await bcrypt.hash(body.newPassword, BCRYPT_SALT_ROUNDS);
+
+    // Use Prisma transaction for atomic token consumption + password update
+    const result = await prisma.$transaction(async (tx) => {
+      // Atomically claim the token: update usedAt WHERE usedAt IS NULL
+      const claimed = await tx.passwordResetToken.updateMany({
+        where: {
+          tokenHash,
+          usedAt: null,
+          expiresAt: { gt: new Date() },
+        },
+        data: { usedAt: new Date() },
+      });
+
+      if (claimed.count === 0) {
+        return null; // Token already used or expired
+      }
+
+      // Fetch the token record to get userId and user email
+      const resetRecord = await tx.passwordResetToken.findFirst({
+        where: { tokenHash },
+        include: { user: true },
+      });
+
+      if (!resetRecord) {
+        return null;
+      }
+
+      // Update the password
+      await tx.user.update({
+        where: { id: resetRecord.userId },
+        data: { passwordHash: newHash },
+      });
+
+      // Revoke all existing sessions so user must re-login
+      await tx.refreshToken.deleteMany({
+        where: { userId: resetRecord.userId },
+      });
+
+      return resetRecord;
     });
 
-    if (!resetRecord) {
+    if (!result) {
       void logSecurityEvent('PASSWORD_RESET_FAILED', undefined, request.ip, 'Invalid or expired reset token');
       return reply.code(400).send({ error: 'Invalid or expired reset link. Please request a new one.' });
     }
 
-    // Update the password
-    const newHash = await bcrypt.hash(body.newPassword, BCRYPT_SALT_ROUNDS);
-    await prisma.user.update({
-      where: { id: resetRecord.userId },
-      data: { passwordHash: newHash },
-    });
-
-    // Mark token as used
-    await prisma.passwordResetToken.update({
-      where: { id: resetRecord.id },
-      data: { usedAt: new Date() },
-    });
-
-    // Revoke all existing sessions so user must re-login
-    await revokeAllUserTokens(resetRecord.userId);
-
-    void logSecurityEvent('PASSWORD_RESET', resetRecord.userId, request.ip, `Password reset via email link for ${resetRecord.user.email}`);
+    void logSecurityEvent('PASSWORD_RESET', result.userId, request.ip, `Password reset via email link for ${result.user.email}`);
 
     return { message: 'Password reset successfully. Please sign in with your new password.' };
   });

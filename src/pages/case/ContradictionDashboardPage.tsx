@@ -29,7 +29,6 @@ import {
   type ApiContradiction,
   type ApiTimelineEvent,
   type ApiDoctrineMatch,
-  type ApiRecommendation,
 } from '../../services/caseApi';
 
 // ---------------------------------------------------------------------------

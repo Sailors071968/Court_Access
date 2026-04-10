@@ -85,7 +85,7 @@ export function ExpertRecommendationBadge({ recommendation }: ExpertBadgeProps) 
 }
 
 interface CaseStatusBadgeProps {
-  status: 'active' | 'closed' | 'pending' | 'archived';
+  status: string;
 }
 
 export function CaseStatusBadge({ status }: CaseStatusBadgeProps) {

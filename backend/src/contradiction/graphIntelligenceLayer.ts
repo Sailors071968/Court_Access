@@ -420,9 +420,9 @@ function buildContradictionClusters(
 
   return Array.from(typeGroups.entries()).map(([type, items]) => ({
     clusterId: uuidv4(),
-    type,
     contradictionIds: items.map((c) => c.contradictionId),
-    severity: Math.max(...items.map((c) => c.confidence)),
+    relatedEventIds: [...new Set(items.flatMap((c) => [c.eventA, c.eventB]))],
+    description: `${type} cluster (${items.length} contradictions, max confidence ${Math.max(...items.map((c) => c.confidence)).toFixed(2)})`,
   }));
 }
 

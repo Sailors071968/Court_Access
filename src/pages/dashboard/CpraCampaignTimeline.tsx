@@ -43,7 +43,7 @@ const STATUS_CONFIG: Record<CpraStatus, { label: string; color: string; icon: Re
 };
 
 
-export function CpraCampaignTimeline()export function CpraCampaignTimeline() {
+export function CpraCampaignTimeline() {
   const [allRequests, setAllRequests] = useState<CpraRequest[]>([]);
 
   useEffect(() => {

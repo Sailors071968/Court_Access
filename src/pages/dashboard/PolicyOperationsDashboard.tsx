@@ -84,6 +84,7 @@ export function PolicyOperationsDashboard() {
   const [data, setData] = useState<DashboardData | null>(null);
   const [page, setPage] = useState(1);
   const [isLoading, setIsLoading] = useState(false);
+  const [loadFailed, setLoadFailed] = useState(false);
   const [searchTerm, setSearchTerm] = useState('');
   const [countyFilter, setCountyFilter] = useState('');
   const [cpraFilter, setCpraFilter] = useState('all');
@@ -92,6 +93,7 @@ export function PolicyOperationsDashboard() {
 
   const fetchData = useCallback(async () => {
     setIsLoading(true);
+    setLoadFailed(false);
     try {
       const params = new URLSearchParams();
       params.set('page', String(page));
@@ -109,6 +111,7 @@ export function PolicyOperationsDashboard() {
       } catch {
         // API not available yet
       }
+      setLoadFailed(true);
     } finally {
       setIsLoading(false);
     }
@@ -120,8 +123,17 @@ export function PolicyOperationsDashboard() {
     return (
       <div className="max-w-7xl mx-auto p-6">
         <div className="flex items-center justify-center h-64">
-          <RefreshCw size={24} className="animate-spin text-gray-400" />
-          <span className="ml-3 text-gray-500">Loading operations dashboard...</span>
+          {loadFailed ? (
+            <div className="text-center">
+              <p className="text-gray-500">No operations data available yet.</p>
+              <button onClick={fetchData} className="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">Retry</button>
+            </div>
+          ) : (
+            <>
+              <RefreshCw size={24} className="animate-spin text-gray-400" />
+              <span className="ml-3 text-gray-500">Loading operations dashboard...</span>
+            </>
+          )}
         </div>
       </div>
     );

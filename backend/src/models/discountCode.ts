@@ -144,14 +144,17 @@ export async function updateDiscountCode(
 
 export async function deleteDiscountCode(codeId: string): Promise<boolean> {
   try {
-    await prisma.discountCode.delete({ where: { id: codeId } });
+    // Delete related usage records first to avoid FK constraint violations
+    await prisma.$transaction(async (tx) => {
+      await tx.discountUsage.deleteMany({ where: { discountCodeId: codeId } });
+      await tx.discountCode.delete({ where: { id: codeId } });
+    });
     return true;
   } catch (err: unknown) {
     // P2025 = record not found → return false (caller sends 404)
     if (typeof err === 'object' && err !== null && 'code' in err && (err as { code: string }).code === 'P2025') {
       return false;
     }
-    // P2003 = FK constraint (has usage records) → throw so caller can handle
     throw err;
   }
 }

@@ -95,15 +95,19 @@ async function apiUpdateCode(codeId: string, payload: Partial<DiscountCodeRecord
   }
 }
 
-async function apiDeleteCode(codeId: string): Promise<boolean> {
+async function apiDeleteCode(codeId: string): Promise<{ ok: boolean; error?: string }> {
   try {
     const res = await fetch(`/api/admin/discount-codes/${codeId}`, {
       method: 'DELETE',
       headers: getAuthHeaders(),
     });
-    return res.ok;
+    if (!res.ok) {
+      const data = await res.json().catch(() => ({ error: 'Failed to delete discount code' }));
+      return { ok: false, error: data.error || 'Failed to delete discount code' };
+    }
+    return { ok: true };
   } catch {
-    return false;
+    return { ok: false, error: 'Network error — could not reach server' };
   }
 }
 
@@ -168,7 +172,10 @@ export function DiscountCodesDashboard() {
 
   const deleteCode = async (codeId: string) => {
     if (!confirm('Delete this discount code? This action cannot be undone.')) return;
-    await apiDeleteCode(codeId);
+    const result = await apiDeleteCode(codeId);
+    if (!result.ok) {
+      alert(result.error || 'Failed to delete discount code');
+    }
     refresh();
   };
 

@@ -73,149 +73,6 @@ const EVENT_CATEGORIES: Record<FilterCategory, string> = {
 };
 
 // ---------------------------------------------------------------------------
-// Mock data for development
-// ---------------------------------------------------------------------------
-
-function { events: [], clusters: [], cameras: [] } as TimelineData: TimelineData {
-  const events: TimelineEvent[] = [
-    {
-      eventId: 'evt-1',
-      timestamp: '00:00:13',
-      eventType: 'vehicle_exit',
-      description: 'Officer exits patrol vehicle',
-      sourceType: 'bodycam',
-      confidence: 0.92,
-      policyReferences: [],
-      significance: 'routine',
-    },
-    {
-      eventId: 'evt-2',
-      timestamp: '00:00:21',
-      eventType: 'verbal_command',
-      description: 'Officer issues verbal commands to individual',
-      sourceType: 'bodycam',
-      confidence: 0.88,
-      policyReferences: ['Use of Force Policy 3.1'],
-      significance: 'notable',
-    },
-    {
-      eventId: 'evt-3',
-      timestamp: '00:00:34',
-      eventType: 'officer_proximity',
-      description: 'Officer approaches within 5 feet of individual',
-      sourceType: 'bodycam',
-      confidence: 0.85,
-      policyReferences: [],
-      significance: 'notable',
-    },
-    {
-      eventId: 'evt-4',
-      timestamp: '00:00:47',
-      eventType: 'physical_contact',
-      description: 'Physical contact initiated — officer places hand on individual arm',
-      sourceType: 'bodycam',
-      confidence: 0.90,
-      policyReferences: ['Use of Force Policy 3.2', 'Arrest Procedures 2.4'],
-      significance: 'significant',
-    },
-    {
-      eventId: 'evt-5',
-      timestamp: '00:01:02',
-      eventType: 'weapon_deployment',
-      description: 'Officer draws taser — held at low ready',
-      sourceType: 'bodycam',
-      confidence: 0.93,
-      policyReferences: ['Use of Force Policy 4.1', 'Taser Policy 1.2'],
-      significance: 'critical',
-    },
-    {
-      eventId: 'evt-6',
-      timestamp: '00:01:15',
-      eventType: 'de_escalation',
-      description: 'Officer holsters taser, issues verbal de-escalation',
-      sourceType: 'bodycam',
-      confidence: 0.87,
-      policyReferences: ['De-escalation Policy 2.1'],
-      significance: 'significant',
-    },
-    {
-      eventId: 'evt-7',
-      timestamp: '00:01:28',
-      eventType: 'handcuffing',
-      description: 'Individual placed in handcuffs without resistance',
-      sourceType: 'bodycam',
-      confidence: 0.91,
-      policyReferences: ['Arrest Procedures 3.1'],
-      significance: 'notable',
-    },
-    {
-      eventId: 'evt-8',
-      timestamp: '00:01:45',
-      eventType: 'pat_down',
-      description: 'Officer conducts pat-down search',
-      sourceType: 'bodycam',
-      confidence: 0.86,
-      policyReferences: ['Search Policy 1.3'],
-      significance: 'notable',
-    },
-    {
-      eventId: 'evt-9',
-      timestamp: '00:02:10',
-      eventType: 'transport',
-      description: 'Individual placed in patrol vehicle',
-      sourceType: 'bodycam',
-      confidence: 0.94,
-      policyReferences: [],
-      significance: 'routine',
-    },
-  ];
-
-  const clusters: TimelineCluster[] = [
-    {
-      clusterId: 'cluster-1',
-      clusterName: 'Initial Contact',
-      timestamp: '00:00:13',
-      durationSeconds: 21,
-      significance: 'notable',
-      description: 'Officer exits vehicle, issues commands, approaches individual',
-      eventCount: 3,
-    },
-    {
-      clusterId: 'cluster-2',
-      clusterName: 'Use of Force Escalation',
-      timestamp: '00:00:47',
-      durationSeconds: 28,
-      significance: 'critical',
-      description: 'Physical contact, weapon deployment, de-escalation sequence',
-      eventCount: 3,
-    },
-    {
-      clusterId: 'cluster-3',
-      clusterName: 'Arrest & Transport',
-      timestamp: '00:01:28',
-      durationSeconds: 42,
-      significance: 'notable',
-      description: 'Handcuffing, search, transport to vehicle',
-      eventCount: 3,
-    },
-  ];
-
-  const cameras: CameraSource[] = [
-    { sourceId: 'cam-bodycam-1', sourceType: 'bodycam', label: 'Officer Bodycam', startTimestamp: '00:00:00', endTimestamp: '00:03:00' },
-    { sourceId: 'cam-dashcam-1', sourceType: 'dashcam', label: 'Patrol Dashcam', startTimestamp: '00:00:00', endTimestamp: '00:03:00' },
-  ];
-
-  return {
-    events,
-    clusters,
-    cameras,
-    totalDurationSeconds: 130,
-    startTime: '00:00:13',
-    endTime: '00:02:10',
-  };
-}
-
-// ---------------------------------------------------------------------------
 // Component
 // ---------------------------------------------------------------------------
 
@@ -241,10 +98,10 @@ export function CaseTimelineVisualizer() {
         setTimelineData(data);
       } else {
         // Use mock data in development
-        setTimelineData({ events: [], clusters: [], cameras: [] } as TimelineData);
+        setTimelineData({ events: [], clusters: [], cameras: [], totalDurationSeconds: 0, startTime: '', endTime: '' });
       }
     } catch {
-      setTimelineData({ events: [], clusters: [], cameras: [] } as TimelineData);
+      setTimelineData({ events: [], clusters: [], cameras: [], totalDurationSeconds: 0, startTime: '', endTime: '' });
     }
     setLoading(false);
   }, []);
@@ -340,7 +197,7 @@ export function CaseTimelineVisualizer() {
           {loading ? 'Loading...' : 'Load Timeline'}
         </button>
         <button
-          onClick={() => setTimelineData({ events: [], clusters: [], cameras: [] } as TimelineData)}
+          onClick={() => setTimelineData({ events: [], clusters: [], cameras: [], totalDurationSeconds: 0, startTime: '', endTime: '' })}
           style={{
             padding: '10px 20px',
             backgroundColor: '#6B7280',
@@ -398,7 +255,7 @@ export function CaseTimelineVisualizer() {
             <div style={{ flex: 1, height: '8px', backgroundColor: '#E5E7EB', borderRadius: '4px', position: 'relative' }}>
               <div
                 style={{
-                  width: `${(playbackPosition / timelineData.totalDurationSeconds) * 100}%`,
+                  width: `${timelineData.totalDurationSeconds > 0 ? (playbackPosition / timelineData.totalDurationSeconds) * 100 : 0}%`,
                   height: '100%', backgroundColor: '#2563EB', borderRadius: '4px',
                   transition: 'width 0.3s',
                 }}

@@ -72,6 +72,11 @@ export function MotionsPage() {
             <div key={i} className="h-40 bg-gray-100 rounded-xl animate-pulse" />
           ))}
         </div>
+      ) : motions.length === 0 ? (
+        <div className="text-center py-12">
+          <AlertTriangle size={48} className="text-gray-300 mx-auto mb-4" />
+          <p className="text-gray-500 text-sm">No motion recommendations yet. Upload evidence and run analysis to generate motion recommendations.</p>
+        </div>
       ) : (
         <div className="grid md:grid-cols-2 gap-4">
           {motions.map((motion) => (

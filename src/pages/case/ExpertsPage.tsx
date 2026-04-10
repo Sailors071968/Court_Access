@@ -70,6 +70,11 @@ export function ExpertsPage() {
             <div key={i} className="h-48 bg-gray-100 rounded-xl animate-pulse" />
           ))}
         </div>
+      ) : experts.length === 0 ? (
+        <div className="text-center py-12">
+          <AlertTriangle size={48} className="text-gray-300 mx-auto mb-4" />
+          <p className="text-gray-500 text-sm">No expert recommendations yet. Upload evidence and run analysis to generate expert witness recommendations.</p>
+        </div>
       ) : (
         <div className="grid md:grid-cols-2 gap-4">
           {experts.map((expert) => (

@@ -176,7 +176,7 @@ export function DefendantDashboard() {
           contradiction: 'contradiction',
         };
         unified.push({
-          id: rec.recommendationId || `rec-${idx}`,
+          id: rec.recommendationId || `${caseItem.caseId}-rec-${idx}`,
           type: typeMap[rec.type] ?? 'legal_instrument',
           title: rec.title,
           description: rec.description,
@@ -191,7 +191,7 @@ export function DefendantDashboard() {
       conflicts.forEach((conflict: ApiTimelineConflict, idx: number) => {
         const severityMap: Record<string, number> = { critical: 0, high: 1, medium: 2, low: 3 };
         unified.push({
-          id: conflict.conflictId || `conflict-${idx}`,
+          id: conflict.conflictId || `${caseItem.caseId}-conflict-${idx}`,
           type: 'inconsistency',
           title: `Timeline ${conflict.type}: ${conflict.description.substring(0, 80)}`,
           description: conflict.description,

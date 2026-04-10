@@ -10,8 +10,9 @@ import { Card, StatCard } from '../../components/common/Card';
 import { DoctrineCompliancePanel } from '../../components/case/DoctrineCompliancePanel';
 import { ROLE_PERMISSIONS } from '../../constants';
 import { useAuthStore } from '../../stores/authStore';
-import { CaseAnalysisSection } from '../../components/case/CaseAnalysisSection';
-import { LitigationIntelligencePanel } from '../../components/case/LitigationIntelligencePanel';
+// CaseAnalysisSection and LitigationIntelligencePanel removed:
+// Backend routes (/api/cases/:id/analysis, /api/cases/:id/recommendations)
+// are not implemented in the repo — data was served by EC2-only files.
 import { fetchCase, fetchCaseEvidence, type ApiCase, type ApiEvidence } from '../../services/caseApi';
 
 export function CaseOverviewPage() {
@@ -178,15 +179,9 @@ export function CaseOverviewPage() {
         </div>
       </div>
 
-      {/* Phase 257: Complete Case Analysis Section */}
-      {showIntelligence && (
-        <CaseAnalysisSection />
-      )}
-
-      {/* Phase 282: Litigation Intelligence Panel */}
-      {showIntelligence && (
-        <LitigationIntelligencePanel />
-      )}
+      {/* Phase 257: Case Analysis + Phase 282: Litigation Intelligence removed.
+         Backend analysis routes are not wired in the repo yet.
+         Re-enable when /api/cases/:id/analysis and /api/cases/:id/recommendations are implemented. */}
 
       {/* Police Training Doctrine Compliance */}
       {showIntelligence && (

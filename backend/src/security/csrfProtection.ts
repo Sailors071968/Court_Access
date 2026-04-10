@@ -153,7 +153,15 @@ export async function csrfProtectionHook(
     return;
   }
 
-  // Step 1: Origin validation
+  // Step 1: Bearer token bypass (must run before origin check)
+  // Bearer tokens are not auto-sent by browsers, so they are inherently CSRF-safe.
+  // Checking this first ensures JWT-authenticated requests are never blocked by origin validation.
+  const authHeader = request.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    return;
+  }
+
+  // Step 2: Origin validation (for cookie-based sessions only)
   const origin = request.headers.origin;
   const referer = request.headers.referer;
 
@@ -162,15 +170,6 @@ export async function csrfProtectionHook(
       error: 'CSRF validation failed',
       message: 'Request origin is not allowed',
     });
-    return;
-  }
-
-  // Step 2: CSRF token validation (for cookie-based sessions)
-  // If the request uses Bearer token auth (API clients), CSRF is less critical
-  // because the token is not automatically sent by the browser.
-  const authHeader = request.headers.authorization;
-  if (authHeader && authHeader.startsWith('Bearer ')) {
-    // Bearer token auth — CSRF not required (token is not auto-sent)
     return;
   }
 

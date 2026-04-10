@@ -6,7 +6,7 @@
 // ============================================================================
 
 import type { Job } from 'bullmq';
-import { CourtAccessWorker, JobTimeoutError } from '../lib/baseWorker.js';
+import { CourtAccessWorker, JobTimeoutError, resolveConcurrency } from '../lib/baseWorker.js';
 import { QUEUE_NAMES, type NarrativeProcessingJobData } from '../lib/queues.js';
 import prisma from '../lib/prisma.js';
 
@@ -19,7 +19,7 @@ class NarrativeProcessingWorker extends CourtAccessWorker<NarrativeProcessingJob
     super({
       queueName: QUEUE_NAMES.NARRATIVE_PROCESSING,
       workerName: 'NarrativeProcessingWorker',
-      concurrency: 2,
+      concurrency: resolveConcurrency(QUEUE_NAMES.NARRATIVE_PROCESSING, 2),
       lockDuration: 120_000, // 2 minutes for narrative analysis
     });
   }

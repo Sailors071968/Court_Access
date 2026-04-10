@@ -6,11 +6,53 @@
 // ============================================================================
 
 import { Worker, UnrecoverableError, type Job, type ConnectionOptions } from 'bullmq';
+import os from 'os';
 import { redisConnection } from './redis.js';
 import prisma from './prisma.js';
 import type { BaseJobData } from './queues.js';
 import { moveToDeadLetter, getMemorySnapshot } from '../workers/backpressureGuard.js';
 import { metrics } from '../observability/metricsCollector.js';
+
+// ---------------------------------------------------------------------------
+// Dynamic Concurrency Scaling
+// Calculates optimal worker concurrency based on available system resources.
+// Can be overridden per-queue via environment variables.
+// ---------------------------------------------------------------------------
+
+/**
+ * Calculate optimal concurrency for a worker queue based on system resources.
+ *
+ * @param queueName - Queue name (used to check for env-var override)
+ * @param defaultConcurrency - Fallback concurrency if no override is set
+ * @param cpuWeight - Fraction of CPU cores to allocate (default 0.5)
+ * @returns Resolved concurrency (at least 1)
+ *
+ * Override via env: `CONCURRENCY_<QUEUE_SUFFIX>=N`
+ *   e.g. CONCURRENCY_TIMELINE_BUILD=4
+ */
+export function resolveConcurrency(
+  queueName: string,
+  defaultConcurrency: number,
+  cpuWeight = 0.5,
+): number {
+  // 1. Check for explicit env-var override
+  const envKey = `CONCURRENCY_${queueName.replace(/[^a-zA-Z0-9]/g, '_').toUpperCase()}`;
+  const envVal = process.env[envKey];
+  if (envVal) {
+    const parsed = parseInt(envVal, 10);
+    if (!isNaN(parsed) && parsed > 0) {
+      return parsed;
+    }
+  }
+
+  // 2. Calculate based on CPU cores
+  const cpuCores = os.cpus().length;
+  const cpuBased = Math.max(1, Math.floor(cpuCores * cpuWeight));
+
+  // 3. Clamp between 1 and the CPU-based value, using the default as a guide
+  const resolved = Math.min(defaultConcurrency, cpuBased);
+  return Math.max(1, resolved);
+}
 
 // ---------------------------------------------------------------------------
 // Custom error class for job timeouts — allows precise instanceof detection

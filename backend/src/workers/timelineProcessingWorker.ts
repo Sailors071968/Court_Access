@@ -7,7 +7,7 @@
 // ============================================================================
 
 import type { Job } from 'bullmq';
-import { CourtAccessWorker, JobTimeoutError } from '../lib/baseWorker.js';
+import { CourtAccessWorker, JobTimeoutError, resolveConcurrency } from '../lib/baseWorker.js';
 import { QUEUE_NAMES, type TimelineBuildJobData } from '../lib/queues.js';
 import prisma from '../lib/prisma.js';
 import { reconstructTimeline } from '../timeline/timelineReconstructionService.js';
@@ -21,7 +21,7 @@ class TimelineProcessingWorker extends CourtAccessWorker<TimelineBuildJobData> {
     super({
       queueName: QUEUE_NAMES.TIMELINE_BUILD,
       workerName: 'TimelineProcessingWorker',
-      concurrency: 2,
+      concurrency: resolveConcurrency(QUEUE_NAMES.TIMELINE_BUILD, 2),
       lockDuration: 120_000, // 2 minutes for timeline builds
     });
   }

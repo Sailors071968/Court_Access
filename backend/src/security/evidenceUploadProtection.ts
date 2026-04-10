@@ -13,11 +13,11 @@ import type { FastifyRequest, FastifyReply } from 'fastify';
 
 // Maximum file sizes by category (in bytes)
 const MAX_FILE_SIZES: Record<string, number> = {
-  document: 50 * 1024 * 1024,   // 50MB for documents (PDF, DOCX)
-  video: 500 * 1024 * 1024,     // 500MB for video evidence
-  image: 25 * 1024 * 1024,      // 25MB for images
-  audio: 100 * 1024 * 1024,     // 100MB for audio
-  default: 50 * 1024 * 1024,    // 50MB default
+  document: 500 * 1024 * 1024,   // 500MB for documents (PDF, DOCX) — large discovery packets
+  video: 10 * 1024 * 1024 * 1024, // 10GB for video evidence (bodycam, dashcam)
+  image: 100 * 1024 * 1024,      // 100MB for images (high-res forensic photos)
+  audio: 500 * 1024 * 1024,      // 500MB for audio (long recordings)
+  default: 500 * 1024 * 1024,    // 500MB default
 };
 
 // Allowed MIME types by category
@@ -328,12 +328,24 @@ export async function uploadProtectionHook(
   const contentType = request.headers['content-type'] || '';
   const contentLength = parseInt(request.headers['content-length'] || '0', 10);
 
-  // Check content length against maximum
-  const maxSize = MAX_FILE_SIZES.default;
+  // Determine max size based on content type
+  let category = 'default';
+  if (contentType.startsWith('video/')) category = 'video';
+  else if (contentType.startsWith('audio/')) category = 'audio';
+  else if (contentType.startsWith('image/')) category = 'image';
+  else if (contentType.includes('pdf') || contentType.includes('document') || contentType.includes('text')) category = 'document';
+
+  const maxSize = MAX_FILE_SIZES[category] || MAX_FILE_SIZES.default;
   if (contentLength > maxSize) {
+    const maxDisplay = maxSize >= 1024 * 1024 * 1024
+      ? `${Math.round(maxSize / (1024 * 1024 * 1024))}GB`
+      : `${Math.round(maxSize / (1024 * 1024))}MB`;
+    const sizeDisplay = contentLength >= 1024 * 1024 * 1024
+      ? `${(contentLength / (1024 * 1024 * 1024)).toFixed(1)}GB`
+      : `${Math.round(contentLength / (1024 * 1024))}MB`;
     reply.code(413).send({
       error: 'Payload Too Large',
-      message: `Upload size (${Math.round(contentLength / (1024 * 1024))}MB) exceeds maximum (${Math.round(maxSize / (1024 * 1024))}MB)`,
+      message: `Upload size (${sizeDisplay}) exceeds maximum (${maxDisplay}) for ${category} files`,
       maxSize,
     });
     return;

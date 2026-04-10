@@ -227,7 +227,13 @@ export function DefendantDashboard() {
     setDeleteCaseError(null);
     try {
       await deleteCase(caseId);
-      setCases((prev) => prev.filter((c) => c.caseId !== caseId));
+      setCases((prev) => {
+        const remaining = prev.filter((c) => c.caseId !== caseId);
+        if (uploadCaseId === caseId) {
+          setUploadCaseId(remaining.length > 0 ? remaining[0].caseId : '');
+        }
+        return remaining;
+      });
       setConfirmDeleteCaseId(null);
       if (selectedCase?.caseId === caseId) {
         setSelectedCase(null);

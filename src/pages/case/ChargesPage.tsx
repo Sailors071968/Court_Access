@@ -9,7 +9,7 @@ import { getDefenseInsights } from '../../services/ai/defenseInsights';
 import type { DefenseInsight } from '../../types';
 import type { ChargeEntity } from '../../models/CaseModel';
 import { useParams } from 'react-router-dom';
-import { ArrowRight, AlertTriangle, Loader2 } from 'lucide-react';
+import { ArrowRight, AlertTriangle } from 'lucide-react';
 import { fetchCase } from '../../services/caseApi';
 
 export function ChargesPage() {
@@ -18,7 +18,7 @@ export function ChargesPage() {
   const [insights, setInsights] = useState<DefenseInsight[]>([]);
   const [insightsLoading, setInsightsLoading] = useState(true);
   const [charges, setCharges] = useState<ChargeEntity[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [_loading, setLoading] = useState(true);
 
   useEffect(() => {
     if (!caseId) return;

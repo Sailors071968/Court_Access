@@ -4,7 +4,7 @@
 // Renders 488 agencies x 334 topics using virtualized rows for performance
 // ============================================================================
 
-import { useState, useMemo, useRef, useCallback } from 'react';
+import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import { Search, Filter, Download } from 'lucide-react';
 import { Card } from '../../components/common/Card';
 

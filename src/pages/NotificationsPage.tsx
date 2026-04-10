@@ -4,7 +4,7 @@
 
 import { useState } from 'react';
 import { Card } from '../components/common/Card';
-import { FileText, Calendar, Lightbulb, Phone, Mail, Bell } from 'lucide-react';
+import { Phone, Mail, Bell } from 'lucide-react';
 
 export function NotificationsPage() {
   const [smsEnabled, setSmsEnabled] = useState(true);

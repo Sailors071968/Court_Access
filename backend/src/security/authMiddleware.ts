@@ -748,9 +748,11 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
 
         console.log(`[Auth:ForgotPassword] Reset email sent to ${email}`);
       } catch (sesError) {
-        // SES not configured — log the reset URL to console for development/testing
-        console.log(`[Auth:ForgotPassword] SES not available, logging reset link for ${email}`);
-        console.log(`[Auth:ForgotPassword] RESET URL: ${resetUrl}`);
+        // SES not configured — log info but only expose raw token in development
+        console.log(`[Auth:ForgotPassword] SES not available for ${email}`);
+        if (process.env.NODE_ENV !== 'production') {
+          console.log(`[Auth:ForgotPassword] RESET URL: ${resetUrl}`);
+        }
       }
 
       void logSecurityEvent('PASSWORD_RESET_REQUESTED', user.id, request.ip, `Password reset requested for ${email}`);

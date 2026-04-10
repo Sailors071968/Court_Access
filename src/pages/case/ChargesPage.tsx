@@ -71,7 +71,12 @@ export function ChargesPage() {
         ))}
       </div>
 
-      {activeChargeIndex >= 0 && activeCharge ? (
+      {charges.length === 0 ? (
+        <div className="text-center py-12">
+          <AlertTriangle size={48} className="text-gray-300 mx-auto mb-4" />
+          <p className="text-gray-500 text-sm">No charges filed yet. Charges will appear here once they are added to the case.</p>
+        </div>
+      ) : activeChargeIndex >= 0 && activeCharge ? (
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Elements Breakdown */}
           <div className="lg:col-span-2 space-y-6">
@@ -130,6 +135,8 @@ export function ChargesPage() {
                     <div key={i} className="h-16 bg-gray-200 rounded-lg animate-pulse" />
                   ))}
                 </div>
+              ) : insights.length === 0 ? (
+                <p className="text-sm text-gray-500 text-center py-4">No defense insights yet. Upload evidence to generate AI analysis.</p>
               ) : (
                 <div className="space-y-3">
                   {insights.map((insight) => (
@@ -174,24 +181,19 @@ export function ChargesPage() {
         </div>
       )}
 
-      {/* Defense Opportunities */}
-      <Card>
-        <h2 className="text-lg font-bold text-gray-900 mb-4">Defense Opportunities</h2>
-        <ul className="space-y-3">
-          <li className="text-sm text-gray-700">
-            <span className="font-semibold">Target Element 2:</span> Challenge knowledge of presence; emphasize lack of direct link to defendant and proximity argument limitations.
-          </li>
-          <li className="text-sm text-gray-700">
-            <span className="font-semibold">Target Element 3:</span> Attack knowledge of substance character; utilize absence of priors and paraphernalia to create reasonable doubt.
-          </li>
-          <li className="text-sm text-gray-700">
-            <span className="font-semibold">Review Lab Results:</span> Scrutinize impending lab report for chain of custody issues or discrepancies regarding the substance and weight.
-          </li>
-          <li className="text-sm text-gray-700">
-            <span className="font-semibold">Motion to Suppress:</span> Evaluate vehicle search legality for potential constitutional violations.
-          </li>
-        </ul>
-      </Card>
+      {/* Defense Opportunities — populated by AI pipeline after evidence upload */}
+      {insights.length > 0 && (
+        <Card>
+          <h2 className="text-lg font-bold text-gray-900 mb-4">Defense Opportunities</h2>
+          <ul className="space-y-3">
+            {insights.map((insight) => (
+              <li key={insight.id} className="text-sm text-gray-700">
+                {insight.content}
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
     </div>
   );
 }

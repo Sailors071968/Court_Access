@@ -15,14 +15,16 @@ export function MotionsPage() {
   const { caseId } = useParams<{ caseId: string }>();
   const [motions, setMotions] = useState<Motion[]>([]);
   const [loading, setLoading] = useState(true);
+  const [caseLoading, setCaseLoading] = useState(true);
   const [currentCase, setCurrentCase] = useState<ApiCase | null>(null);
 
   useEffect(() => {
     if (!caseId) return;
     let cancelled = false;
+    setCaseLoading(true);
     fetchCase(caseId).then((c) => {
-      if (!cancelled) setCurrentCase(c);
-    }).catch(() => {});
+      if (!cancelled) { setCurrentCase(c); setCaseLoading(false); }
+    }).catch(() => { if (!cancelled) setCaseLoading(false); });
     return () => { cancelled = true; };
   }, [caseId]);
 
@@ -35,7 +37,7 @@ export function MotionsPage() {
     });
   }, [caseId]);
 
-  if (loading && !currentCase) {
+  if (caseLoading) {
     return <div className="flex items-center justify-center p-12"><Loader2 className="animate-spin text-blue-600" size={32} /></div>;
   }
 
@@ -71,6 +73,11 @@ export function MotionsPage() {
           {[1, 2, 3, 4].map((i) => (
             <div key={i} className="h-40 bg-gray-100 rounded-xl animate-pulse" />
           ))}
+        </div>
+      ) : motions.length === 0 ? (
+        <div className="text-center py-12">
+          <AlertTriangle size={48} className="text-gray-300 mx-auto mb-4" />
+          <p className="text-gray-500 text-sm">No motion recommendations yet. Upload evidence and run analysis to generate motion recommendations.</p>
         </div>
       ) : (
         <div className="grid md:grid-cols-2 gap-4">

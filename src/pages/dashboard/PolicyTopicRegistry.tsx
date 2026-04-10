@@ -3,8 +3,8 @@
 // Canonical registry for 334 policy topics — single source of truth
 // ============================================================================
 
-import { useState } from 'react';
-import { BookOpen, Search, Plus } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { BookOpen, Search, Plus, Loader2 } from 'lucide-react';
 
 interface PolicyTopic {
   topicId: string;
@@ -15,29 +15,32 @@ interface PolicyTopic {
 
 const CATEGORIES = ['Use of Force', 'Pursuit', 'Detention', 'Search & Seizure', 'Evidence', 'Training', 'Conduct', 'Records', 'Internal Affairs', 'Technology', 'Weapons', 'Community Relations'];
 
-const MOCK_TOPICS: PolicyTopic[] = [
-  { topicId: 'pt-001', canonicalName: 'Use of Force', aliases: ['Force Policy', 'UOF Policy', 'Force Continuum'], category: 'Use of Force' },
-  { topicId: 'pt-002', canonicalName: 'Body-Worn Camera', aliases: ['BWC Policy', 'Body Camera', 'Bodycam Policy'], category: 'Technology' },
-  { topicId: 'pt-003', canonicalName: 'Vehicle Pursuit', aliases: ['Pursuit Policy', 'High-Speed Pursuit', 'Chase Policy'], category: 'Pursuit' },
-  { topicId: 'pt-004', canonicalName: 'Internal Affairs Investigation', aliases: ['IA Policy', 'Internal Investigation', 'Complaint Investigation'], category: 'Internal Affairs' },
-  { topicId: 'pt-005', canonicalName: 'Search and Seizure', aliases: ['Search Policy', 'Fourth Amendment Policy', 'Warrant Policy'], category: 'Search & Seizure' },
-  { topicId: 'pt-006', canonicalName: 'Evidence Collection and Handling', aliases: ['Evidence Policy', 'Chain of Custody', 'Evidence Preservation'], category: 'Evidence' },
-  { topicId: 'pt-007', canonicalName: 'Arrest Procedures', aliases: ['Arrest Policy', 'Booking Procedures', 'Custody Policy'], category: 'Detention' },
-  { topicId: 'pt-008', canonicalName: 'Officer Discipline', aliases: ['Disciplinary Policy', 'Corrective Action', 'Progressive Discipline'], category: 'Conduct' },
-  { topicId: 'pt-009', canonicalName: 'Training Requirements', aliases: ['Training Policy', 'Mandatory Training', 'In-Service Training'], category: 'Training' },
-  { topicId: 'pt-010', canonicalName: 'Miranda Procedures', aliases: ['Miranda Rights', 'Custodial Interrogation', 'Rights Advisory'], category: 'Detention' },
-  { topicId: 'pt-011', canonicalName: 'Foot Pursuit', aliases: ['Foot Chase Policy', 'On-Foot Pursuit'], category: 'Pursuit' },
-  { topicId: 'pt-012', canonicalName: 'Less-Lethal Weapons', aliases: ['Taser Policy', 'OC Spray', 'Bean Bag Rounds', 'Impact Weapons'], category: 'Weapons' },
-  { topicId: 'pt-013', canonicalName: 'Firearms Discharge', aliases: ['Shooting Policy', 'Deadly Force', 'Firearms Policy'], category: 'Weapons' },
-  { topicId: 'pt-014', canonicalName: 'Critical Incident Response', aliases: ['Critical Incident', 'OIS Response', 'Major Incident'], category: 'Use of Force' },
-  { topicId: 'pt-015', canonicalName: 'Records Retention', aliases: ['Record Keeping', 'Document Retention', 'Data Preservation'], category: 'Records' },
-];
 
 export function PolicyTopicRegistry() {
   const [search, setSearch] = useState('');
   const [filterCategory, setFilterCategory] = useState('all');
+  const [topics, setTopics] = useState<PolicyTopic[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const filtered = MOCK_TOPICS.filter((t) => {
+  useEffect(() => {
+    async function fetchTopics() {
+      setIsLoading(true);
+      try {
+        const res = await fetch('/api/operations/topics/registry');
+        if (res.ok) {
+          const json = await res.json();
+          if (json.data) setTopics(json.data);
+        }
+      } catch {
+        // API not available yet
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchTopics();
+  }, []);
+
+  const filtered = topics.filter((t) => {
     if (filterCategory !== 'all' && t.category !== filterCategory) return false;
     if (search && !t.canonicalName.toLowerCase().includes(search.toLowerCase()) && !t.aliases.some(a => a.toLowerCase().includes(search.toLowerCase()))) return false;
     return true;
@@ -50,7 +53,7 @@ export function PolicyTopicRegistry() {
           <BookOpen size={24} className="text-blue-600" />
           <div>
             <h1 className="text-2xl font-bold text-gray-900">Policy Topic Registry</h1>
-            <p className="text-sm text-gray-500">Canonical registry — single source of truth for {MOCK_TOPICS.length} topics</p>
+            <p className="text-sm text-gray-500">Canonical registry — single source of truth for {topics.length} topics</p>
           </div>
         </div>
         <button className="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-lg text-sm font-medium hover:bg-slate-700">
@@ -75,6 +78,17 @@ export function PolicyTopicRegistry() {
         </select>
       </div>
 
+      {isLoading ? (
+        <div className="flex items-center justify-center py-12">
+          <Loader2 size={20} className="animate-spin text-gray-400" />
+          <span className="ml-2 text-sm text-gray-500">Loading topics...</span>
+        </div>
+      ) : filtered.length === 0 ? (
+        <div className="text-center py-12 bg-white rounded-xl border border-gray-200">
+          <BookOpen size={48} className="mx-auto mb-3 text-gray-300" />
+          <p className="text-sm text-gray-500">No policy topics registered yet.</p>
+        </div>
+      ) : (
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <table className="w-full text-sm">
           <thead>
@@ -109,7 +123,8 @@ export function PolicyTopicRegistry() {
           </tbody>
         </table>
       </div>
-      <p className="text-xs text-gray-400 text-center">Showing {filtered.length} of {MOCK_TOPICS.length} registered topics</p>
+      )}
+      <p className="text-xs text-gray-400 text-center">Showing {filtered.length} of {topics.length} registered topics</p>
     </div>
   );
 }

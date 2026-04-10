@@ -76,7 +76,7 @@ const EVENT_CATEGORIES: Record<FilterCategory, string> = {
 // Mock data for development
 // ---------------------------------------------------------------------------
 
-function generateMockTimelineData(): TimelineData {
+function { events: [], clusters: [], cameras: [] } as TimelineData: TimelineData {
   const events: TimelineEvent[] = [
     {
       eventId: 'evt-1',
@@ -241,10 +241,10 @@ export function CaseTimelineVisualizer() {
         setTimelineData(data);
       } else {
         // Use mock data in development
-        setTimelineData(generateMockTimelineData());
+        setTimelineData({ events: [], clusters: [], cameras: [] } as TimelineData);
       }
     } catch {
-      setTimelineData(generateMockTimelineData());
+      setTimelineData({ events: [], clusters: [], cameras: [] } as TimelineData);
     }
     setLoading(false);
   }, []);
@@ -340,7 +340,7 @@ export function CaseTimelineVisualizer() {
           {loading ? 'Loading...' : 'Load Timeline'}
         </button>
         <button
-          onClick={() => setTimelineData(generateMockTimelineData())}
+          onClick={() => setTimelineData({ events: [], clusters: [], cameras: [] } as TimelineData)}
           style={{
             padding: '10px 20px',
             backgroundColor: '#6B7280',

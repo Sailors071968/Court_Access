@@ -5,7 +5,7 @@
 // Phase 271 — Analysis Citation System integrated
 // ============================================================================
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { FileText, Clock, Link2, Highlighter } from 'lucide-react';
 
 interface EvidenceReference {
@@ -27,37 +27,27 @@ interface AnalysisCitation {
   }[];
 }
 
-const MOCK_REFERENCES: EvidenceReference[] = [
-  { id: 'ref1', evidenceId: 'ev-1', evidenceName: 'Police Report #2024-1847', pageOrTimestamp: 'Page 3, Paragraph 6', excerpt: '...officer observed suspect begin to flee on foot...', observationId: 'obs-14' },
-  { id: 'ref2', evidenceId: 'ev-2', evidenceName: 'Bodycam 2 - Officer Chen', pageOrTimestamp: '00:04:22', excerpt: '...suspect appears stationary with hands visible...', observationId: 'obs-14' },
-  { id: 'ref3', evidenceId: 'ev-3', evidenceName: 'Dispatch Log', pageOrTimestamp: '14:33:05', excerpt: 'Unit 42 reports suspect fleeing eastbound', observationId: 'obs-14' },
-];
-
-const MOCK_CITATIONS: AnalysisCitation[] = [
-  {
-    observationId: 'obs-14',
-    observationNumber: 14,
-    description: 'Possible narrative discrepancy between officer report and bodycam footage regarding suspect movement.',
-    citations: [
-      { source: 'Bodycam 2', reference: '00:04:22' },
-      { source: 'Officer Report', reference: 'paragraph 6' },
-      { source: 'Dispatch Log', reference: '14:33:05 timestamp' },
-    ],
-  },
-  {
-    observationId: 'obs-15',
-    observationNumber: 15,
-    description: 'Timeline suggests backup was requested after force application, contrary to report narrative.',
-    citations: [
-      { source: 'Dispatch Log', reference: '14:35:15' },
-      { source: 'Officer Report', reference: 'page 5, paragraph 2' },
-      { source: 'Bodycam 1', reference: '00:06:30' },
-    ],
-  },
-];
 
 export function ClientEvidenceViewer() {
   const [selectedCitation, setSelectedCitation] = useState<string | null>(null);
+  const [references, setReferences] = useState<EvidenceReference[]>([]);
+  const [citations, setCitations] = useState<AnalysisCitation[]>([]);
+
+  useEffect(() => {
+    async function fetchCitations() {
+      try {
+        const res = await fetch('/api/evidence/citations');
+        if (res.ok) {
+          const json = await res.json();
+          if (json.references) setReferences(json.references);
+          if (json.citations) setCitations(json.citations);
+        }
+      } catch {
+        // API not available yet
+      }
+    }
+    fetchCitations();
+  }, []);
 
   return (
     <div className="space-y-4">
@@ -68,7 +58,7 @@ export function ClientEvidenceViewer() {
 
       {/* Analysis Citations (Phase 271) */}
       <div className="space-y-3">
-        {MOCK_CITATIONS.map((citation) => (
+        {citations.map((citation) => (
           <div
             key={citation.observationId}
             className={`p-4 rounded-lg border transition-all cursor-pointer ${
@@ -99,7 +89,7 @@ export function ClientEvidenceViewer() {
             {selectedCitation === citation.observationId && (
               <div className="mt-3 pt-3 border-t border-blue-200 space-y-2">
                 <h4 className="text-xs font-semibold text-blue-700">LINKED EVIDENCE</h4>
-                {MOCK_REFERENCES.filter((r) => r.observationId === citation.observationId).map((ref) => (
+                {references.filter((r) => r.observationId === citation.observationId).map((ref) => (
                   <div key={ref.id} className="flex items-start gap-2 p-2 bg-white rounded border border-blue-100">
                     <FileText size={14} className="text-gray-400 mt-0.5" />
                     <div>

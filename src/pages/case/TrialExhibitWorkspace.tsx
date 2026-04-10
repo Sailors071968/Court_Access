@@ -3,7 +3,7 @@
 // Route: /cases/:caseId/trial-exhibits
 // ============================================================================
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   Layers, Box, MapPin, Play, Download, Image, Video,
@@ -47,28 +47,6 @@ interface ExhibitAnimation {
 
 type WorkspaceTab = 'library' | 'scene' | 'markers' | 'animation' | 'export';
 
-// ---------------------------------------------------------------------------
-// Mock Data
-// ---------------------------------------------------------------------------
-
-const MOCK_EXHIBITS: TrialExhibit[] = [
-  { id: 'ex-1', exhibitNumber: 14, title: 'Officer Timeline vs Radio Traffic', type: 'timeline', generatedDate: 'Jan 12, 2026', sourceCount: 4, status: 'ready', thumbnail: '' },
-  { id: 'ex-2', exhibitNumber: 15, title: 'Use of Force Sequence', type: 'officer_action', generatedDate: 'Jan 13, 2026', sourceCount: 3, status: 'ready', thumbnail: '' },
-  { id: 'ex-3', exhibitNumber: 16, title: 'Pursuit Policy vs Officer Actions', type: 'policy_comparison', generatedDate: 'Jan 14, 2026', sourceCount: 5, status: 'ready', thumbnail: '' },
-  { id: 'ex-4', exhibitNumber: 17, title: 'Intersection 3D Reconstruction', type: 'scene_reconstruction', generatedDate: 'Jan 15, 2026', sourceCount: 7, status: 'generating', thumbnail: '' },
-  { id: 'ex-5', exhibitNumber: 18, title: 'Evidence Chain: BWC to Report', type: 'evidence_relationship', generatedDate: 'Jan 16, 2026', sourceCount: 6, status: 'ready', thumbnail: '' },
-];
-
-const MOCK_MARKERS: ExhibitMarker[] = [
-  { id: 'mk-1', exhibitId: 'ex-4', x: 12.5, y: 0, z: -3.2, label: 'Officer Position A', description: 'Initial contact position per bodycam footage', timestamp: '00:02:14' },
-  { id: 'mk-2', exhibitId: 'ex-4', x: 18.1, y: 0, z: -1.8, label: 'Suspect Vehicle', description: 'Vehicle position at time of stop', timestamp: '00:01:45' },
-  { id: 'mk-3', exhibitId: 'ex-4', x: 5.0, y: 0, z: 2.1, label: 'Witness Location', description: 'Witness statement places them here', timestamp: '00:03:00' },
-];
-
-const MOCK_ANIMATIONS: ExhibitAnimation[] = [
-  { id: 'an-1', exhibitId: 'ex-4', title: 'Officer Movement Sequence', duration: 45, format: 'mp4', status: 'ready' },
-  { id: 'an-2', exhibitId: 'ex-4', title: 'Radio Traffic Overlay', duration: 30, format: 'interactive', status: 'rendering' },
-];
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -101,10 +79,29 @@ function getTypeColor(type: TrialExhibit['type']): string {
 // ---------------------------------------------------------------------------
 
 export function TrialExhibitWorkspace() {
-  const { caseId: _caseId } = useParams<{ caseId: string }>();
-  // _caseId reserved for API integration
+  const { caseId } = useParams<{ caseId: string }>();
   const [activeTab, setActiveTab] = useState<WorkspaceTab>('library');
   const [selectedExhibit, setSelectedExhibit] = useState<TrialExhibit | null>(null);
+  const [exhibits, setExhibits] = useState<TrialExhibit[]>([]);
+  const [markers, setMarkers] = useState<ExhibitMarker[]>([]);
+  const [animations, setAnimations] = useState<ExhibitAnimation[]>([]);
+
+  useEffect(() => {
+    async function fetchExhibits() {
+      try {
+        const res = await fetch(`/api/cases/${caseId}/trial-exhibits`);
+        if (res.ok) {
+          const json = await res.json();
+          if (json.exhibits) setExhibits(json.exhibits);
+          if (json.markers) setMarkers(json.markers);
+          if (json.animations) setAnimations(json.animations);
+        }
+      } catch {
+        // API not available yet
+      }
+    }
+    if (caseId) fetchExhibits();
+  }, [caseId]);
 
   const tabs: { id: WorkspaceTab; label: string; icon: React.ReactNode }[] = [
     { id: 'library', label: 'Exhibit Library', icon: <Layers size={16} /> },
@@ -147,7 +144,7 @@ export function TrialExhibitWorkspace() {
             </button>
           </div>
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {MOCK_EXHIBITS.map((exhibit) => (
+            {exhibits.map((exhibit) => (
               <div
                 key={exhibit.id}
                 onClick={() => setSelectedExhibit(exhibit)}
@@ -252,7 +249,7 @@ export function TrialExhibitWorkspace() {
                 </tr>
               </thead>
               <tbody>
-                {MOCK_MARKERS.map((marker) => (
+                {markers.map((marker) => (
                   <tr key={marker.id} className="border-b border-gray-100 hover:bg-gray-50">
                     <td className="px-4 py-3 font-medium text-gray-900">{marker.label}</td>
                     <td className="px-4 py-3 text-gray-600 font-mono text-xs">({marker.x}, {marker.y}, {marker.z})</td>
@@ -290,7 +287,7 @@ export function TrialExhibitWorkspace() {
             </div>
           </div>
           <div className="space-y-3">
-            {MOCK_ANIMATIONS.map((anim) => (
+            {animations.map((anim) => (
               <div key={anim.id} className="bg-white rounded-xl border border-gray-200 p-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
                   <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">

@@ -2,7 +2,7 @@
 // Court Access — Upload Discovery Materials Tab
 // ============================================
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Upload, FileText, Film, Image, CheckCircle, MoreHorizontal, Eye } from 'lucide-react';
 import { Card } from '../../components/common/Card';
 
@@ -15,14 +15,26 @@ interface UploadedFile {
   type: 'pdf' | 'mp4' | 'jpg';
 }
 
-const MOCK_UPLOADS: UploadedFile[] = [
-  { id: '1', name: 'Police Report - Incident #2024-1847.pdf', size: '2.4 MB', date: 'May 14, 2024', status: 'analyzed', type: 'pdf' },
-  { id: '2', name: 'Body Camera Footage - Officer Martinez.mp4', size: '145 MB', date: 'May 14, 2024', status: 'processing', type: 'mp4' },
-  { id: '3', name: 'Witness Photo - Scene Overview.jpg', size: '5.1 MB', date: 'May 14, 2024', status: 'analyzed', type: 'jpg' },
-];
+
 
 export function DocumentsPage() {
   const [isDragging, setIsDragging] = useState(false);
+  const [uploads, setUploads] = useState<UploadedFile[]>([]);
+
+  useEffect(() => {
+    async function fetchUploads() {
+      try {
+        const res = await fetch("/api/evidence/uploads");
+        if (res.ok) {
+          const json = await res.json();
+          if (json.data) setUploads(json.data);
+        }
+      } catch {
+        // API not available yet
+      }
+    }
+    fetchUploads();
+  }, []);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -48,7 +60,7 @@ export function DocumentsPage() {
           <p className="text-sm text-gray-500 mt-1">Securely add digital evidence, documents, and multimedia for analysis.</p>
           <p className="text-sm text-gray-400">Supported formats: PDF, MP4, JPG/PNG.</p>
         </div>
-        <span className="text-sm text-gray-500">Status: 3 files uploaded, 2 analyzed, 1 processing</span>
+        {uploads.length > 0 && <span className="text-sm text-gray-500">Status: {uploads.length} files uploaded</span>}
       </div>
 
       {/* Upload Zone */}
@@ -78,7 +90,7 @@ export function DocumentsPage() {
       <div>
         <h3 className="text-lg font-semibold text-gray-900 mb-4">Recently Uploaded Files</h3>
         <div className="space-y-3">
-          {MOCK_UPLOADS.map((file) => (
+          {uploads.map((file) => (
             <Card key={file.id} padding="sm">
               <div className="flex items-center gap-4">
                 <div className="w-10 h-10 bg-gray-100 rounded-lg flex items-center justify-center flex-shrink-0">

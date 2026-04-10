@@ -5,12 +5,12 @@
 // Route: /cases/:caseId/litigation-strategy
 // ============================================================================
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import {
   Target, BarChart3, CheckCircle, Clock, AlertTriangle,
   Search, Gavel, Send, Globe, Users, ChevronDown, ChevronRight,
-  Info, TrendingUp, Layers,
+  Info, TrendingUp, Loader2,
 } from 'lucide-react';
 
 // ---------------------------------------------------------------------------
@@ -50,52 +50,6 @@ interface RoadmapStep {
   status: RoadmapStatus;
 }
 
-// ---------------------------------------------------------------------------
-// Mock Data
-// ---------------------------------------------------------------------------
-
-const MOCK_OBSERVATIONS: StrategyObservation[] = [
-  { id: 'obs-1', evidenceSource: 'Bodycam Video #1', observation: 'Officer Martinez uses specific restraint technique at 00:05:30', timestamp: '00:05:30' },
-  { id: 'obs-2', evidenceSource: 'Officer Report pg 3', observation: 'Report states suspect was running; bodycam shows suspect stationary', timestamp: '14:33:05' },
-  { id: 'obs-3', evidenceSource: 'Dispatch Log', observation: 'Radio traffic references additional communications not in evidence file', timestamp: '14:28:00' },
-  { id: 'obs-4', evidenceSource: 'Evidence Log Entry #14', observation: 'Referenced video footage not included in discovery package', timestamp: 'N/A' },
-  { id: 'obs-5', evidenceSource: 'Cross-Case Analysis', observation: 'Officer Martinez has 3 prior use-of-force incidents on file', timestamp: 'N/A' },
-  { id: 'obs-6', evidenceSource: 'Scene Photos', observation: 'Incident at commercial intersection — nearby businesses with cameras', timestamp: 'N/A' },
-];
-
-const MOCK_STRATEGY_RECS: StrategyRecommendation[] = [
-  { id: 'sr-1', type: 'INVESTIGATION', suggestedOpportunity: 'Obtain intersection surveillance footage', evidenceSource: 'Scene Photos', confidenceScore: 0.90, status: 'pending' },
-  { id: 'sr-2', type: 'INVESTIGATION', suggestedOpportunity: 'Interview additional witnesses from dispatch log', evidenceSource: 'Dispatch Log', confidenceScore: 0.80, status: 'pending' },
-  { id: 'sr-3', type: 'MOTION', suggestedOpportunity: 'Evaluate suppression motion for vehicle search', evidenceSource: 'Officer Report pg 3', confidenceScore: 0.85, status: 'pending' },
-  { id: 'sr-4', type: 'MOTION', suggestedOpportunity: 'Request Brady disclosure of missing video evidence', evidenceSource: 'Evidence Log #14', confidenceScore: 0.90, status: 'addressed' },
-  { id: 'sr-5', type: 'MOTION', suggestedOpportunity: 'Consider Pitchess motion for officer personnel records', evidenceSource: 'Cross-Case Analysis', confidenceScore: 0.75, status: 'pending' },
-  { id: 'sr-6', type: 'SUBPOENA', suggestedOpportunity: 'Obtain full dispatch log and CAD records', evidenceSource: 'Radio Traffic Log', confidenceScore: 0.90, status: 'addressed' },
-  { id: 'sr-7', type: 'SUBPOENA', suggestedOpportunity: 'Obtain nearby surveillance camera recordings', evidenceSource: 'Scene Photos', confidenceScore: 0.80, status: 'pending' },
-  { id: 'sr-8', type: 'PUBLIC_RECORD', suggestedOpportunity: 'Request restraint technique training records', evidenceSource: 'Bodycam #1', confidenceScore: 0.85, status: 'pending' },
-  { id: 'sr-9', type: 'PUBLIC_RECORD', suggestedOpportunity: 'Request agency policy manuals for incident date', evidenceSource: 'Officer Report', confidenceScore: 0.90, status: 'addressed' },
-  { id: 'sr-10', type: 'EXPERT', suggestedOpportunity: 'Consult use-of-force expert', evidenceSource: 'Bodycam #1', confidenceScore: 0.90, status: 'pending' },
-  { id: 'sr-11', type: 'EXPERT', suggestedOpportunity: 'Consult video forensic analyst', evidenceSource: 'Surveillance Video', confidenceScore: 0.82, status: 'pending' },
-];
-
-const MOCK_READINESS: ReadinessMetric[] = [
-  { label: 'Evidence Completeness', score: 72, maxScore: 100, icon: <Layers size={16} /> },
-  { label: 'Investigative Opportunities', score: 1, maxScore: 3, icon: <Search size={16} /> },
-  { label: 'Records Obtained', score: 3, maxScore: 7, icon: <Send size={16} /> },
-  { label: 'Expert Consultation', score: 0, maxScore: 2, icon: <Users size={16} /> },
-];
-
-const MOCK_ROADMAP: RoadmapStep[] = [
-  { stepNumber: 1, description: 'Obtain full dispatch records and CAD logs', category: 'SUBPOENA', status: 'completed' },
-  { stepNumber: 2, description: 'Request agency policy manuals effective on incident date', category: 'PUBLIC_RECORD', status: 'completed' },
-  { stepNumber: 3, description: 'File Brady motion for undisclosed video evidence', category: 'MOTION', status: 'completed' },
-  { stepNumber: 4, description: 'Obtain intersection surveillance camera recordings', category: 'SUBPOENA', status: 'in_progress' },
-  { stepNumber: 5, description: 'Review bodycam inconsistencies with officer report narrative', category: 'INVESTIGATION', status: 'in_progress' },
-  { stepNumber: 6, description: 'Request restraint technique training records', category: 'PUBLIC_RECORD', status: 'pending' },
-  { stepNumber: 7, description: 'Consult use-of-force expert for restraint analysis', category: 'EXPERT', status: 'pending' },
-  { stepNumber: 8, description: 'Evaluate suppression motion for pre-probable-cause search', category: 'MOTION', status: 'pending' },
-  { stepNumber: 9, description: 'Consider Pitchess motion for officer personnel records', category: 'MOTION', status: 'pending' },
-  { stepNumber: 10, description: 'Consult video forensic analyst for surveillance enhancement', category: 'EXPERT', status: 'pending' },
-];
 
 // ---------------------------------------------------------------------------
 // Helpers
@@ -128,15 +82,51 @@ const STATUS_COLORS: Record<RoadmapStatus, string> = {
 // ---------------------------------------------------------------------------
 
 export function LitigationStrategyView() {
-  const { caseId: _caseId } = useParams<{ caseId: string }>();
+  const { caseId } = useParams<{ caseId: string }>();
   const [expandedSection, setExpandedSection] = useState<string | null>('roadmap');
+  const [isLoading, setIsLoading] = useState(true);
+  const [observations, setObservations] = useState<StrategyObservation[]>([]);
+  const [recommendations, setRecommendations] = useState<StrategyRecommendation[]>([]);
+  const [readiness, setReadiness] = useState<ReadinessMetric[]>([]);
+  const [roadmap, setRoadmap] = useState<RoadmapStep[]>([]);
 
-  // Phase 289: Calculate readiness score
-  const overallReadiness = Math.round(
-    MOCK_READINESS.reduce((sum, m) => sum + (m.score / m.maxScore) * 100, 0) / MOCK_READINESS.length,
-  );
-  const completedSteps = MOCK_ROADMAP.filter((s) => s.status === 'completed').length;
-  const totalSteps = MOCK_ROADMAP.length;
+  useEffect(() => {
+    async function fetchStrategy() {
+      setIsLoading(true);
+      try {
+        const res = await fetch(`/api/cases/${caseId}/litigation-strategy`);
+        if (res.ok) {
+          const json = await res.json();
+          if (json.observations) setObservations(json.observations);
+          if (json.recommendations) setRecommendations(json.recommendations);
+          if (json.readiness) setReadiness(json.readiness);
+          if (json.roadmap) setRoadmap(json.roadmap);
+        }
+      } catch {
+        // API not available yet
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    if (caseId) fetchStrategy();
+  }, [caseId]);
+
+  const overallReadiness = readiness.length > 0
+    ? Math.round(readiness.reduce((sum, m) => sum + (m.score / m.maxScore) * 100, 0) / readiness.length)
+    : 0;
+  const completedSteps = roadmap.filter((s) => s.status === 'completed').length;
+  const totalSteps = roadmap.length;
+
+  if (isLoading) {
+    return (
+      <div className="flex items-center justify-center py-20">
+        <Loader2 size={24} className="animate-spin text-gray-400" />
+        <span className="ml-2 text-sm text-gray-500">Loading strategy data...</span>
+      </div>
+    );
+  }
+
+  const hasNoData = observations.length === 0 && recommendations.length === 0 && readiness.length === 0 && roadmap.length === 0;
 
   return (
     <div className="space-y-6">
@@ -157,7 +147,16 @@ export function LitigationStrategyView() {
         </p>
       </div>
 
+      {hasNoData && (
+        <div className="text-center py-12 bg-white rounded-xl border border-gray-200">
+          <Target size={48} className="mx-auto mb-3 text-gray-300" />
+          <p className="text-sm text-gray-500">No litigation strategy data available yet.</p>
+          <p className="text-xs text-gray-400 mt-1">Upload evidence to generate strategy recommendations.</p>
+        </div>
+      )}
+
       {/* Phase 289: Case Readiness Score */}
+      {readiness.length > 0 && (
       <div className="bg-white rounded-xl border border-gray-200 p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
@@ -175,7 +174,7 @@ export function LitigationStrategyView() {
           </div>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {MOCK_READINESS.map((metric) => {
+          {readiness.map((metric) => {
             const pct = Math.round((metric.score / metric.maxScore) * 100);
             return (
               <div key={metric.label} className="p-3 bg-gray-50 rounded-lg">
@@ -197,8 +196,10 @@ export function LitigationStrategyView() {
           })}
         </div>
       </div>
+      )}
 
       {/* Phase 290: Litigation Roadmap */}
+      {roadmap.length > 0 && (
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <button
           onClick={() => setExpandedSection(expandedSection === 'roadmap' ? null : 'roadmap')}
@@ -220,16 +221,16 @@ export function LitigationStrategyView() {
             <div className="mb-4">
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-xs text-gray-500">Roadmap Progress</span>
-                <span className="text-xs font-bold text-gray-700">{Math.round((completedSteps / totalSteps) * 100)}%</span>
+                <span className="text-xs font-bold text-gray-700">{totalSteps > 0 ? Math.round((completedSteps / totalSteps) * 100) : 0}%</span>
               </div>
               <div className="bg-gray-200 rounded-full h-2">
-                <div className="bg-indigo-500 h-2 rounded-full" style={{ width: `${(completedSteps / totalSteps) * 100}%` }} />
+                <div className="bg-indigo-500 h-2 rounded-full" style={{ width: `${totalSteps > 0 ? (completedSteps / totalSteps) * 100 : 0}%` }} />
               </div>
             </div>
 
             {/* Steps */}
             <div className="space-y-2">
-              {MOCK_ROADMAP.map((step) => (
+              {roadmap.map((step) => (
                 <div key={step.stepNumber} className="flex items-start gap-3 py-2">
                   {/* Status indicator */}
                   <div className="flex flex-col items-center">
@@ -271,8 +272,10 @@ export function LitigationStrategyView() {
           </div>
         )}
       </div>
+      )}
 
       {/* Evidence Observations */}
+      {observations.length > 0 && (
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <button
           onClick={() => setExpandedSection(expandedSection === 'observations' ? null : 'observations')}
@@ -282,7 +285,7 @@ export function LitigationStrategyView() {
             <AlertTriangle size={18} className="text-amber-600" />
             <span className="font-semibold text-gray-900">Evidence Observations</span>
             <span className="px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full text-[10px] font-bold">
-              {MOCK_OBSERVATIONS.length} detected
+              {observations.length} detected
             </span>
           </div>
           {expandedSection === 'observations' ? <ChevronDown size={16} className="text-gray-400" /> : <ChevronRight size={16} className="text-gray-400" />}
@@ -290,7 +293,7 @@ export function LitigationStrategyView() {
 
         {expandedSection === 'observations' && (
           <div className="px-6 pb-4 space-y-2">
-            {MOCK_OBSERVATIONS.map((obs) => (
+            {observations.map((obs) => (
               <div key={obs.id} className="flex items-start gap-3 py-2 border-b border-gray-50 last:border-0">
                 <span className="font-mono text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded whitespace-nowrap">{obs.timestamp}</span>
                 <div className="flex-1">
@@ -302,8 +305,10 @@ export function LitigationStrategyView() {
           </div>
         )}
       </div>
+      )}
 
       {/* Strategy Recommendations by Type */}
+      {recommendations.length > 0 && (
       <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
         <button
           onClick={() => setExpandedSection(expandedSection === 'recommendations' ? null : 'recommendations')}
@@ -313,7 +318,7 @@ export function LitigationStrategyView() {
             <Target size={18} className="text-indigo-600" />
             <span className="font-semibold text-gray-900">All Recommendations</span>
             <span className="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-full text-[10px] font-bold">
-              {MOCK_STRATEGY_RECS.length} total
+              {recommendations.length} total
             </span>
           </div>
           {expandedSection === 'recommendations' ? <ChevronDown size={16} className="text-gray-400" /> : <ChevronRight size={16} className="text-gray-400" />}
@@ -332,7 +337,7 @@ export function LitigationStrategyView() {
                 </tr>
               </thead>
               <tbody>
-                {MOCK_STRATEGY_RECS.map((rec) => (
+                {recommendations.map((rec) => (
                   <tr key={rec.id} className="border-b border-gray-50">
                     <td className="py-2 px-2">
                       <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-[10px] font-medium ${TYPE_COLORS[rec.type]}`}>
@@ -366,6 +371,7 @@ export function LitigationStrategyView() {
           </div>
         )}
       </div>
+      )}
     </div>
   );
 }

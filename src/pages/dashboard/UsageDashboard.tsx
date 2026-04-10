@@ -3,7 +3,7 @@
 // Shows page usage, AI credit balance, progress bars, purchase modal.
 // ============================================================================
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Card } from '../../components/common/Card';
 import {
   FileText,
@@ -34,26 +34,6 @@ interface CreditPack {
   description: string;
 }
 
-// ---------------------------------------------------------------------------
-// Sample Data
-// ---------------------------------------------------------------------------
-
-const SAMPLE_USAGE: UsageData = {
-  plan: { id: 'PROFESSIONAL', name: 'Professional', priceCents: 12900 },
-  pages: { used: 1650, limit: 2000, remaining: 350, percentUsed: 83, warningLevel: 'approaching' },
-  credits: { used: 72, limit: 100, available: 28, percentUsed: 72, warningLevel: 'none' },
-  billingPeriod: {
-    start: '2026-03-01T00:00:00Z',
-    end: '2026-04-01T00:00:00Z',
-  },
-};
-
-const CREDIT_PACKS: CreditPack[] = [
-  { packId: 'pack_50', credits: 50, priceCents: 2500, description: '50 AI Credits' },
-  { packId: 'pack_150', credits: 150, priceCents: 6000, description: '150 AI Credits' },
-  { packId: 'pack_500', credits: 500, priceCents: 17500, description: '500 AI Credits' },
-  { packId: 'pack_1500', credits: 1500, priceCents: 45000, description: '1,500 AI Credits' },
-];
 
 // ---------------------------------------------------------------------------
 // Progress Bar Component
@@ -231,7 +211,37 @@ function PurchaseModal({
 
 export function UsageDashboard() {
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
-  const usage = SAMPLE_USAGE;
+  const [usage, setUsage] = useState<UsageData | null>(null);
+  const [creditPacks, setCreditPacks] = useState<CreditPack[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchUsage() {
+      setIsLoading(true);
+      try {
+        const res = await fetch('/api/billing/usage');
+        if (res.ok) {
+          const json = await res.json();
+          if (json.usage) setUsage(json.usage);
+          if (json.creditPacks) setCreditPacks(json.creditPacks);
+        }
+      } catch {
+        // API not available yet
+      } finally {
+        setIsLoading(false);
+      }
+    }
+    fetchUsage();
+  }, []);
+
+  if (isLoading || !usage) {
+    return (
+      <div className="max-w-4xl mx-auto text-center py-20">
+        <TrendingUp size={48} className="mx-auto mb-3 text-gray-300" />
+        <p className="text-sm text-gray-500">{isLoading ? 'Loading usage data...' : 'No usage data available yet.'}</p>
+      </div>
+    );
+  }
 
   const billingEnd = new Date(usage.billingPeriod.end);
   const daysLeft = Math.max(
@@ -310,23 +320,7 @@ export function UsageDashboard() {
       {/* Credit Usage Breakdown */}
       <Card>
         <h3 className="font-semibold text-gray-900 mb-4">Credit Usage by Analysis Type</h3>
-        <div className="space-y-3">
-          {[
-            { type: 'Contradiction Engine', credits: 35, icon: '🔍' },
-            { type: 'Doctrine Analysis', credits: 15, icon: '📚' },
-            { type: 'Litigation Intelligence', credits: 12, icon: '⚖️' },
-            { type: 'Reliability Scoring', credits: 7, icon: '📊' },
-            { type: 'Video Processing', credits: 3, icon: '🎥' },
-          ].map((item) => (
-            <div key={item.type} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <div className="flex items-center gap-2">
-                <span>{item.icon}</span>
-                <span className="text-sm text-gray-700">{item.type}</span>
-              </div>
-              <span className="text-sm font-medium text-gray-900">{item.credits} credits</span>
-            </div>
-          ))}
-        </div>
+        <p className="text-sm text-gray-500">Credit breakdown will appear as you use AI features.</p>
       </Card>
 
       {/* Credit Pack Pricing */}
@@ -336,7 +330,7 @@ export function UsageDashboard() {
           <span className="text-xs text-gray-500">Purchased credits roll over for 90 days</span>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-          {CREDIT_PACKS.map((pack) => (
+          {creditPacks.map((pack) => (
             <button
               key={pack.packId}
               onClick={() => setShowPurchaseModal(true)}
@@ -356,7 +350,7 @@ export function UsageDashboard() {
       <PurchaseModal
         isOpen={showPurchaseModal}
         onClose={() => setShowPurchaseModal(false)}
-        packs={CREDIT_PACKS}
+        packs={creditPacks}
       />
     </div>
   );

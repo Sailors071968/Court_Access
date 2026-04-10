@@ -52,65 +52,6 @@ const CANONICAL_TOPICS = [
   'Special_Units', 'Traffic_Enforcement', 'Community_Policing',
 ];
 
-// ---------------------------------------------------------------------------
-// Mock data
-// ---------------------------------------------------------------------------
-
-function getMockAgencySummaries(search: string, county: string): AgencyTopicSummary[] {
-  const counties = [
-    'Los Angeles', 'San Diego', 'Orange', 'Riverside', 'San Bernardino',
-    'Santa Clara', 'Alameda', 'Sacramento', 'Contra Costa', 'Fresno',
-  ];
-  const names = [
-    'Sacramento PD', 'San Diego PD', 'Oakland PD', 'Los Angeles PD',
-    'San Francisco PD', 'San Jose PD', 'Fresno PD', 'Long Beach PD',
-    'Bakersfield PD', 'Anaheim PD', 'Santa Ana PD', 'Riverside PD',
-    'Stockton PD', 'Irvine PD', 'Chula Vista PD', 'Fremont PD',
-    'San Bernardino County Sheriff', 'LA County Sheriff', 'Orange County Sheriff',
-    'Riverside County Sheriff',
-  ];
-
-  return names
-    .filter(n => !search || n.toLowerCase().includes(search.toLowerCase()))
-    .filter((_, i) => !county || counties[i % counties.length] === county)
-    .map((name, i) => {
-      const found = 8 + Math.floor(Math.random() * 12);
-      const missing = CANONICAL_TOPICS.length - found;
-      const cpraReq = Math.min(missing, Math.floor(Math.random() * 3));
-      return {
-        agencyId: `agency-${i}`,
-        agencyName: name,
-        city: name.includes('County') ? null : name.replace(' PD', ''),
-        county: counties[i % counties.length],
-        totalTopics: CANONICAL_TOPICS.length,
-        found,
-        missing: missing - cpraReq,
-        cpraRequested: cpraReq,
-        coveragePercent: Math.round((found / CANONICAL_TOPICS.length) * 1000) / 10,
-      };
-    });
-}
-
-function getMockAgencyDetail(agencyId: string, name: string): AgencyTopicDetail {
-  const topics: TopicDetail[] = CANONICAL_TOPICS.map((topic) => {
-    const rand = Math.random();
-    let status: TopicDetail['status'] = 'MISSING';
-    if (rand > 0.4) status = 'FOUND';
-    else if (rand > 0.3) status = 'CPRA_REQUESTED';
-    else if (rand > 0.25) status = 'RECEIVED';
-    return { topic, status };
-  });
-
-  const summary = { FOUND: 0, MISSING: 0, CPRA_REQUESTED: 0, RECEIVED: 0 };
-  for (const t of topics) summary[t.status]++;
-
-  return {
-    agency: { agencyId, agencyName: name, city: name.replace(' PD', ''), county: 'Sacramento' },
-    topics,
-    summary,
-    coveragePercent: Math.round((summary.FOUND / topics.length) * 1000) / 10,
-  };
-}
 
 // ---------------------------------------------------------------------------
 // Status icon helper
@@ -166,7 +107,7 @@ export function PolicyTopicsViewer() {
         // API not available
       }
 
-      setAgencies(getMockAgencySummaries(searchTerm, countyFilter));
+      setAgencies([]);
     } finally {
       setIsLoading(false);
     }
@@ -194,7 +135,7 @@ export function PolicyTopicsViewer() {
       // API not available
     }
 
-    setAgencyDetail(getMockAgencyDetail(agency.agencyId, agency.agencyName));
+    setAgencyDetail({ agency: { agencyId: agency.agencyId, agencyName: agency.agencyName, city: null, county: '' }, topics: [], summary: { FOUND: 0, MISSING: 0, CPRA_REQUESTED: 0, RECEIVED: 0 }, coveragePercent: 0 });
     setDetailLoading(false);
   };
 

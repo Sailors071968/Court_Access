@@ -42,6 +42,8 @@ const CSRF_EXEMPT_ROUTES = [
   '/api/auth/login',
   '/api/auth/register',
   '/api/auth/debug-check',
+  '/api/auth/forgot-password',
+  '/api/auth/reset-password',
   '/api/health',
   '/api/billing/webhook',
 ];

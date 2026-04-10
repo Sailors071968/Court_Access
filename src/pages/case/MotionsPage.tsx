@@ -15,14 +15,16 @@ export function MotionsPage() {
   const { caseId } = useParams<{ caseId: string }>();
   const [motions, setMotions] = useState<Motion[]>([]);
   const [loading, setLoading] = useState(true);
+  const [caseLoading, setCaseLoading] = useState(true);
   const [currentCase, setCurrentCase] = useState<ApiCase | null>(null);
 
   useEffect(() => {
     if (!caseId) return;
     let cancelled = false;
+    setCaseLoading(true);
     fetchCase(caseId).then((c) => {
-      if (!cancelled) setCurrentCase(c);
-    }).catch(() => {});
+      if (!cancelled) { setCurrentCase(c); setCaseLoading(false); }
+    }).catch(() => { if (!cancelled) setCaseLoading(false); });
     return () => { cancelled = true; };
   }, [caseId]);
 
@@ -35,7 +37,7 @@ export function MotionsPage() {
     });
   }, [caseId]);
 
-  if (loading && !currentCase) {
+  if (caseLoading) {
     return <div className="flex items-center justify-center p-12"><Loader2 className="animate-spin text-blue-600" size={32} /></div>;
   }
 

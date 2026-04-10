@@ -21,6 +21,9 @@ const TIME_AMPM = /\b(1[0-2]|0?[1-9]):([0-5]\d)\s?(AM|PM)\b/i;
 // "approximately 10:30 PM"
 const APPROX = /(approximately|approx\.?)\s+(.{0,30})/i;
 
+// Military time: "22:45 hours", "22:47 hrs"
+const TIME_MILITARY = /\b((?:[01]?\d|2[0-3]):[0-5]\d)\s*(?:hours?|hrs?)\b/i;
+
 // bodycam style 00:01:32
 const RELATIVE = /\b\d{2}:\d{2}:\d{2}\b/;
 
@@ -39,6 +42,17 @@ export function extractTimestamp(text: string): ExtractedTimestamp {
   const approxMatch = text.match(APPROX);
   if (approxMatch) {
     const inner = approxMatch[2];
+
+    // Check for military time inside approximate qualifier
+    // ("approximately 22:45 hours" → 22:45:00, confidence 0.7)
+    const nestedMilitary = inner.match(TIME_MILITARY);
+    if (nestedMilitary) {
+      return {
+        value: `${nestedMilitary[1]}:00`,
+        confidence: 0.7,
+        method: "approximate",
+      };
+    }
 
     // Check for AM/PM inside approximate qualifier (before HH:MM:SS
     // so that "approximately 10:30 PM, bodycam at 22:41:12" finds the
@@ -70,7 +84,19 @@ export function extractTimestamp(text: string): ExtractedTimestamp {
   }
 
   // ---------------------------------------------------
-  // 2. FULL TIMESTAMP (HH:MM:SS)
+  // 2. MILITARY TIME (22:45 hours)
+  // ---------------------------------------------------
+  const militaryMatch = text.match(TIME_MILITARY);
+  if (militaryMatch) {
+    return {
+      value: `${militaryMatch[1]}:00`,
+      confidence: 0.95,
+      method: "explicit",
+    };
+  }
+
+  // ---------------------------------------------------
+  // 3. FULL TIMESTAMP (HH:MM:SS)
   // ---------------------------------------------------
   const fullMatch = text.match(TIME_FULL);
   if (fullMatch) {
@@ -82,7 +108,7 @@ export function extractTimestamp(text: string): ExtractedTimestamp {
   }
 
   // ---------------------------------------------------
-  // 3. AM/PM FORMAT
+  // 4. AM/PM FORMAT
   // ---------------------------------------------------
   const ampmMatch = text.match(TIME_AMPM);
   if (ampmMatch) {
@@ -102,7 +128,7 @@ export function extractTimestamp(text: string): ExtractedTimestamp {
   }
 
   // ---------------------------------------------------
-  // 4. RELATIVE TIME (BODYCAM)
+  // 5. RELATIVE TIME (BODYCAM)
   // ---------------------------------------------------
   const relMatch = text.match(RELATIVE);
   if (relMatch) {
@@ -114,7 +140,7 @@ export function extractTimestamp(text: string): ExtractedTimestamp {
   }
 
   // ---------------------------------------------------
-  // 5. NONE FOUND
+  // 6. NONE FOUND
   // ---------------------------------------------------
   return {
     value: null,

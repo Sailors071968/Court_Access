@@ -4,7 +4,7 @@
 // contradictions/suggestions with status tracking, and upload.
 // ============================================
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   FileText, Calendar, Clock, CheckCircle, Scale, Loader2,
   Briefcase, Upload, Trash2, AlertTriangle, ChevronDown, ChevronUp,
@@ -127,6 +127,7 @@ export function DefendantDashboard() {
   const [deletingEvidenceId, setDeletingEvidenceId] = useState<string | null>(null);
   const [confirmDeleteId, setConfirmDeleteId] = useState<string | null>(null);
   const [caseSearch, setCaseSearch] = useState('');
+  const loadIdRef = useRef(0);
 
   useEffect(() => {
     let cancelled = false;
@@ -148,23 +149,30 @@ export function DefendantDashboard() {
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   const loadCaseDetail = useCallback(async (caseItem: ApiCase) => {
+    const thisLoadId = ++loadIdRef.current;
     setSelectedCase(caseItem);
     setCaseLoading(true);
     setSuggestionsLoading(true);
     try {
       const evidence = await fetchCaseEvidence(caseItem.caseId).catch(() => []);
+      if (loadIdRef.current !== thisLoadId) return;
       setCaseEvidence(evidence ?? []);
     } catch {
+      if (loadIdRef.current !== thisLoadId) return;
       setCaseEvidence([]);
     } finally {
-      setCaseLoading(false);
+      if (loadIdRef.current === thisLoadId) setCaseLoading(false);
     }
+
+    if (loadIdRef.current !== thisLoadId) return;
 
     try {
       const [recsResult, conflictsResult] = await Promise.all([
         fetchContradictionRecommendations(caseItem.caseId).catch(() => ({ recommendations: [] })),
         fetchTimelineConflicts(caseItem.caseId).catch(() => []),
       ]);
+
+      if (loadIdRef.current !== thisLoadId) return;
 
       const unified: UnifiedSuggestion[] = [];
       const recs = recsResult.recommendations ?? [];
@@ -205,9 +213,9 @@ export function DefendantDashboard() {
       unified.sort((a, b) => a.priority - b.priority || b.confidence - a.confidence);
       setSuggestions(unified);
     } catch {
-      setSuggestions([]);
+      if (loadIdRef.current === thisLoadId) setSuggestions([]);
     } finally {
-      setSuggestionsLoading(false);
+      if (loadIdRef.current === thisLoadId) setSuggestionsLoading(false);
     }
   }, []);
 

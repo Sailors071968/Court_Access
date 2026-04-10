@@ -1,6 +1,8 @@
 // ============================================
-// Court Access — Auth Service (Mock)
+// Court Access — Auth Service
 // ============================================
+
+const API_BASE = import.meta.env.VITE_API_URL || '/api';
 
 export interface LoginRequest {
   email: string;
@@ -12,24 +14,48 @@ export interface LoginResponse {
   expiresAt: string;
 }
 
-export async function loginApi(_request: LoginRequest): Promise<LoginResponse> {
-  // Mock implementation — will be replaced with real API
-  await new Promise((resolve) => setTimeout(resolve, 800));
+export async function loginApi(request: LoginRequest): Promise<LoginResponse> {
+  const res = await fetch(`${API_BASE}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(request),
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({ error: 'Login failed' }));
+    throw new Error(data.error || 'Login failed');
+  }
+  const data = await res.json();
   return {
-    token: 'mock-jwt-token-' + Date.now(),
-    expiresAt: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString(),
+    token: data.accessToken,
+    expiresAt: new Date(Date.now() + (data.expiresIn || 900) * 1000).toISOString(),
   };
 }
 
-export async function forgotPasswordApi(_email: string): Promise<{ success: boolean }> {
-  await new Promise((resolve) => setTimeout(resolve, 800));
+export async function forgotPasswordApi(email: string): Promise<{ success: boolean }> {
+  const res = await fetch(`${API_BASE}/auth/forgot-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email }),
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({ error: 'Request failed' }));
+    throw new Error(data.error || 'Request failed');
+  }
   return { success: true };
 }
 
 export async function resetPasswordApi(
-  _token: string,
-  _newPassword: string
+  token: string,
+  newPassword: string
 ): Promise<{ success: boolean }> {
-  await new Promise((resolve) => setTimeout(resolve, 800));
+  const res = await fetch(`${API_BASE}/auth/reset-password`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ token, newPassword }),
+  });
+  if (!res.ok) {
+    const data = await res.json().catch(() => ({ error: 'Reset failed' }));
+    throw new Error(data.error || 'Reset failed');
+  }
   return { success: true };
 }

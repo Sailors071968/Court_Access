@@ -33,6 +33,25 @@ model User {
   @@index([tenantId])
   @@index([role])
   @@map("users")
+  passwordResetTokens PasswordResetToken[]
+}
+
+// ---------------------------------------------------------------------------
+// PasswordResetToken — self-service password reset tokens
+// ---------------------------------------------------------------------------
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  tokenHash String   // SHA-256 hash of the token (never store raw tokens)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([tokenHash])
+  @@index([userId])
+  @@map("password_reset_tokens")
 }
 
 // ---------------------------------------------------------------------------

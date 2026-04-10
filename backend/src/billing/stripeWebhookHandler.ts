@@ -300,10 +300,69 @@ async function handleCheckoutCompleted(session: StripeCheckoutSession): Promise<
     return;
   }
 
-  // Read plan from session metadata (set when creating the checkout session).
-  // Falls back to STARTER only if metadata is missing — callers MUST set planId
-  // in session metadata when creating checkout sessions.
   const metaPlanId = session.metadata?.planId;
+
+  // Credit pack purchases — add credits without touching subscription
+  if (metaPlanId && metaPlanId.startsWith('CREDIT_PACK_')) {
+    const CREDIT_AMOUNTS: Record<string, number> = {
+      CREDIT_PACK_50: 50,
+      CREDIT_PACK_150: 150,
+      CREDIT_PACK_500: 500,
+      CREDIT_PACK_1500: 1500,
+    };
+    const credits = CREDIT_AMOUNTS[metaPlanId] || 0;
+    if (credits <= 0) {
+      console.error(`[StripeWebhook] Unrecognized credit pack ${metaPlanId} for session ${session.id} — no credits added`);
+      throw new Error(`Unrecognized credit pack: ${metaPlanId}`);
+    }
+
+    // Atomic idempotency: both the dedup record and credit increment run
+    // inside a single transaction. If the session was already processed,
+    // the unique constraint on eventId causes the whole transaction to
+    // roll back — no credits added, no partial state. If the credit
+    // upsert fails, the dedup record is also rolled back so Stripe
+    // retries will succeed.
+    try {
+      await prisma.$transaction(async (tx) => {
+        await tx.stripeWebhookEvent.create({
+          data: {
+            eventId: `credit_pack_${session.id}`,
+            eventType: 'checkout.session.completed.credit_pack',
+          },
+        });
+        await tx.aiCreditBalance.upsert({
+          where: { userId },
+          update: { purchasedCredits: { increment: credits } },
+          create: {
+            userId,
+            purchasedCredits: credits,
+            monthlyCredits: 0,
+            creditsUsed: 0,
+            billingPeriodStart: new Date(),
+            billingPeriodEnd: new Date(Date.now() + 90 * 24 * 60 * 60 * 1000),
+          },
+        });
+      });
+    } catch (err: unknown) {
+      const isDuplicate = typeof err === 'object' && err !== null && 'code' in err && (err as { code: string }).code === 'P2002';
+      if (isDuplicate) {
+        console.log(`[StripeWebhook] Credit pack session ${session.id} already processed — skipping duplicate`);
+        return;
+      }
+      throw err; // Re-throw non-duplicate errors so Stripe retries
+    }
+
+    void logSecurityEvent(
+      'STRIPE_CREDIT_PACK_PURCHASED',
+      userId,
+      undefined,
+      `Credit pack ${metaPlanId} (${credits} credits) purchased via session ${session.id}`,
+    );
+    console.log(`[StripeWebhook] Credit pack purchased: user=${userId} pack=${metaPlanId} credits=${credits} session=${session.id}`);
+    return;
+  }
+
+  // Subscription checkout — update subscription record
   const mapped = metaPlanId
     ? mapPlanIdToTier(metaPlanId)
     : { planId: 'STARTER', tier: 'starter' };
@@ -312,10 +371,6 @@ async function handleCheckoutCompleted(session: StripeCheckoutSession): Promise<
     console.warn(`[StripeWebhook] checkout.session.completed missing planId in metadata for session ${session.id} — defaulting to STARTER`);
   }
 
-  // Update subscription with Stripe IDs.
-  // Only overwrite plan/tier in the update path when metaPlanId is present,
-  // otherwise preserve existing plan to avoid silent downgrade (matches
-  // the guard pattern in handleSubscriptionCreated).
   const updateData: Record<string, unknown> = {
     stripeCustomerId: session.customer,
     stripeSubscriptionId: session.subscription,
@@ -480,23 +535,124 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
     if (!userId) {
       return reply.code(401).send({ error: 'Authentication required' });
     }
-    // Stub — in production, this would create a Stripe checkout session
+
+    const stripeKey = process.env.STRIPE_SECRET_KEY;
+    if (!stripeKey) {
+      return reply.send({
+        message: 'Stripe checkout session creation requires STRIPE_SECRET_KEY to be configured',
+        note: 'Configure STRIPE_SECRET_KEY env var to enable real Stripe checkout',
+      });
+    }
+
     const { planId } = request.body as { planId: string };
-    return reply.send({
-      message: 'Stripe checkout session creation requires STRIPE_SECRET_KEY to be configured',
-      planId,
-      userId,
-      note: 'Configure STRIPE_SECRET_KEY env var to enable real Stripe checkout',
-    });
+    if (!planId || typeof planId !== 'string') {
+      return reply.code(400).send({ error: 'Missing or invalid planId' });
+    }
+
+    // Map plan IDs to Stripe price IDs
+    const SUBSCRIPTION_PRICES: Record<string, string> = {
+      STARTER: process.env.STRIPE_PRICE_STARTER || '',
+      PROFESSIONAL: process.env.STRIPE_PRICE_PROFESSIONAL || '',
+      ADVANCED_INVESTIGATOR: process.env.STRIPE_PRICE_ADVANCED || '',
+      LITIGATION_INTELLIGENCE_PRO: process.env.STRIPE_PRICE_LITIGATION || '',
+      ENTERPRISE_FIRM: process.env.STRIPE_PRICE_ENTERPRISE || '',
+    };
+
+    const CREDIT_PACK_PRICES: Record<string, string> = {
+      CREDIT_PACK_50: process.env.STRIPE_PRICE_CREDIT_50 || '',
+      CREDIT_PACK_150: process.env.STRIPE_PRICE_CREDIT_150 || '',
+      CREDIT_PACK_500: process.env.STRIPE_PRICE_CREDIT_500 || '',
+      CREDIT_PACK_1500: process.env.STRIPE_PRICE_CREDIT_1500 || '',
+    };
+
+    const isCreditPack = planId.startsWith('CREDIT_PACK_');
+    const priceId = isCreditPack ? CREDIT_PACK_PRICES[planId] : SUBSCRIPTION_PRICES[planId];
+    if (!priceId) {
+      return reply.code(400).send({ error: `No Stripe price configured for plan: ${planId}` });
+    }
+
+    // Look up user email for Stripe checkout
+    const user = await prisma.user.findUnique({ where: { id: userId }, select: { email: true } });
+
+    // Create Stripe Checkout Session via REST API
+    const params = new URLSearchParams();
+    params.append('mode', isCreditPack ? 'payment' : 'subscription');
+    params.append('line_items[0][price]', priceId);
+    params.append('line_items[0][quantity]', '1');
+    params.append('success_url', `${process.env.FRONTEND_URL || 'https://courtaccess.net'}/dashboard?checkout=success`);
+    params.append('cancel_url', `${process.env.FRONTEND_URL || 'https://courtaccess.net'}/pricing?checkout=canceled`);
+    params.append('client_reference_id', userId);
+    params.append('metadata[userId]', userId);
+    params.append('metadata[planId]', planId);
+    if (user?.email) {
+      params.append('customer_email', user.email);
+    }
+
+    try {
+      const stripeRes = await fetch('https://api.stripe.com/v1/checkout/sessions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${stripeKey}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: params.toString(),
+      });
+
+      const session = await stripeRes.json() as { id?: string; url?: string; error?: { message?: string } };
+
+      if (!stripeRes.ok || session.error) {
+        console.error('[Stripe] Checkout session creation failed:', session.error?.message);
+        return reply.code(500).send({ error: 'Stripe checkout failed' });
+      }
+
+      return reply.send({ url: session.url, sessionId: session.id });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      console.error('[Stripe] Checkout session error:', message);
+      return reply.code(500).send({ error: 'Failed to create checkout session' });
+    }
   });
 
   // GET /api/billing/checkout-status/:sessionId — Check checkout status
   app.get('/api/billing/checkout-status/:sessionId', async (request: FastifyRequest, reply: FastifyReply) => {
+    // Require authentication — same pattern as create-checkout-session
+    const userId = ((request as unknown as { user?: { userId: string } }).user)?.userId;
+    if (!userId) {
+      return reply.code(401).send({ error: 'Authentication required' });
+    }
+
     const { sessionId } = request.params as { sessionId: string };
-    return reply.send({
-      sessionId,
-      status: 'pending',
-      note: 'Configure STRIPE_SECRET_KEY env var to enable real Stripe checkout status',
-    });
+
+    // Validate sessionId format to prevent SSRF via path traversal
+    if (!/^cs_(test|live)_[a-zA-Z0-9]+$/.test(sessionId)) {
+      return reply.code(400).send({ error: 'Invalid session ID format' });
+    }
+
+    const stripeKey = process.env.STRIPE_SECRET_KEY;
+    if (!stripeKey) {
+      return reply.send({ sessionId, status: 'pending', note: 'Configure STRIPE_SECRET_KEY env var' });
+    }
+
+    try {
+      const stripeRes = await fetch(`https://api.stripe.com/v1/checkout/sessions/${sessionId}`, {
+        headers: { 'Authorization': `Bearer ${stripeKey}` },
+      });
+      const session = await stripeRes.json() as { id?: string; status?: string; payment_status?: string; error?: { message?: string } };
+
+      if (!stripeRes.ok || session.error) {
+        console.error('[Stripe] Checkout status retrieval failed:', session.error?.message);
+        return reply.code(404).send({ error: 'Session not found' });
+      }
+
+      return reply.send({
+        sessionId: session.id,
+        status: session.status,
+        paymentStatus: session.payment_status,
+      });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      console.error('[Stripe] Checkout status error:', message);
+      return reply.code(500).send({ error: 'Failed to retrieve checkout status' });
+    }
   });
 }

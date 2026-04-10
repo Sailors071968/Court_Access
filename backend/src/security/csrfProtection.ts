@@ -30,6 +30,7 @@ const ALLOWED_ORIGINS = new Set([
   'http://localhost:4173',
   'http://localhost:3000',
   'http://localhost:3001',
+  'https://courtaccess.net',
   process.env.FRONTEND_URL || '',
   process.env.BACKEND_URL || '',
 ].filter(Boolean));
@@ -102,7 +103,7 @@ export function validateOrigin(origin: string | undefined, referer: string | und
     if (ALLOWED_ORIGINS.has(origin)) return true;
     // Check for production domain match
     const url = new URL(origin);
-    if (url.protocol === 'https:' && url.hostname.endsWith('.courtaccess.com')) return true;
+    if (url.protocol === 'https:' && (url.hostname === 'courtaccess.net' || url.hostname.endsWith('.courtaccess.net') || url.hostname.endsWith('.courtaccess.com'))) return true;
     return false;
   }
 
@@ -147,7 +148,14 @@ export async function csrfProtectionHook(
     return;
   }
 
-  // Step 1: Origin validation
+  // Step 1: Bearer token bypass — CSRF is not needed for Bearer-authenticated
+  // requests because the token is not automatically sent by the browser.
+  const authHeader = request.headers.authorization;
+  if (authHeader && authHeader.startsWith('Bearer ')) {
+    return;
+  }
+
+  // Step 2: Origin validation
   const origin = request.headers.origin;
   const referer = request.headers.referer;
 
@@ -159,14 +167,7 @@ export async function csrfProtectionHook(
     return;
   }
 
-  // Step 2: CSRF token validation (for cookie-based sessions)
-  // If the request uses Bearer token auth (API clients), CSRF is less critical
-  // because the token is not automatically sent by the browser.
-  const authHeader = request.headers.authorization;
-  if (authHeader && authHeader.startsWith('Bearer ')) {
-    // Bearer token auth — CSRF not required (token is not auto-sent)
-    return;
-  }
+  // Step 3: CSRF token validation (for cookie-based sessions)
 
   // For cookie-based sessions, validate CSRF token
   const csrfToken = request.headers[CSRF_HEADER_NAME] as string | undefined;

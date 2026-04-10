@@ -4,11 +4,11 @@
 // ============================================
 
 import { useNavigate } from 'react-router-dom';
-import { Search, Plus, Filter, Loader2 } from 'lucide-react';
+import { Search, Plus, Filter, Loader2, Trash2, AlertTriangle } from 'lucide-react';
 import { useState, useEffect, useCallback } from 'react';
 import { Card } from '../components/common/Card';
 import { CaseStatusBadge } from '../components/common/StatusBadge';
-import { fetchCases, createCase, type ApiCase, CASE_TYPES } from '../services/caseApi';
+import { fetchCases, createCase, deleteCase, type ApiCase, CASE_TYPES } from '../services/caseApi';
 
 export function CasesListPage() {
   const navigate = useNavigate();
@@ -18,6 +18,9 @@ export function CasesListPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [showCreateModal, setShowCreateModal] = useState(false);
+  const [confirmDeleteCaseId, setConfirmDeleteCaseId] = useState<string | null>(null);
+  const [deletingCaseId, setDeletingCaseId] = useState<string | null>(null);
+  const [deleteCaseError, setDeleteCaseError] = useState<string | null>(null);
 
   const loadCases = useCallback(async () => {
     try {
@@ -35,6 +38,20 @@ export function CasesListPage() {
   useEffect(() => {
     loadCases();
   }, [loadCases]);
+
+  const handleDeleteCase = useCallback(async (caseId: string) => {
+    setDeletingCaseId(caseId);
+    setDeleteCaseError(null);
+    try {
+      await deleteCase(caseId);
+      setCases((prev) => prev.filter((c) => c.caseId !== caseId));
+      setConfirmDeleteCaseId(null);
+    } catch (err) {
+      setDeleteCaseError(err instanceof Error ? err.message : 'Failed to delete case');
+    } finally {
+      setDeletingCaseId(null);
+    }
+  }, []);
 
   const filteredCases = cases.filter((c) => {
     const matchesSearch = !searchQuery ||
@@ -116,7 +133,16 @@ export function CasesListPage() {
                   <h3 className="font-semibold text-gray-900">{c.title}</h3>
                   <p className="text-sm text-gray-500">#{c.caseNumber}</p>
                 </div>
-                <CaseStatusBadge status={c.status} />
+                <div className="flex items-center gap-2">
+                  <CaseStatusBadge status={c.status} />
+                  <button
+                    onClick={(e) => { e.stopPropagation(); setConfirmDeleteCaseId(c.caseId); setDeleteCaseError(null); }}
+                    className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                    title="Delete case"
+                  >
+                    <Trash2 size={14} />
+                  </button>
+                </div>
               </div>
               <div className="space-y-2 text-sm text-gray-600">
                 <p><span className="font-medium">Jurisdiction:</span> {c.jurisdiction}</p>
@@ -139,6 +165,69 @@ export function CasesListPage() {
               ? 'No cases yet. Click "New Case" to create your first case.'
               : 'No cases found matching your criteria.'}
           </p>
+        </div>
+      )}
+
+      {/* Delete Confirmation Modal */}
+      {confirmDeleteCaseId && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+          <div className="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full mx-4">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center bg-red-100">
+                <AlertTriangle size={20} className="text-red-600" />
+              </div>
+              <div>
+                <h3 className="text-lg font-semibold text-gray-900">Delete Case</h3>
+                <p className="text-sm text-gray-500">This action cannot be undone</p>
+              </div>
+            </div>
+
+            <div className="mb-4 p-3 bg-gray-50 rounded-lg">
+              <p className="text-sm font-medium text-gray-900">
+                {cases.find((c) => c.caseId === confirmDeleteCaseId)?.title}
+              </p>
+              <p className="text-xs text-gray-500 mt-1">
+                #{cases.find((c) => c.caseId === confirmDeleteCaseId)?.caseNumber}
+              </p>
+            </div>
+
+            <p className="text-sm text-gray-600 mb-4">
+              Are you sure you want to delete this case? All associated evidence, timeline events, and analysis data will be permanently removed.
+            </p>
+
+            {deleteCaseError && (
+              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+                {deleteCaseError}
+              </div>
+            )}
+
+            <div className="flex justify-end gap-3">
+              <button
+                onClick={() => { setConfirmDeleteCaseId(null); setDeleteCaseError(null); }}
+                disabled={deletingCaseId === confirmDeleteCaseId}
+                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 disabled:opacity-50 transition-colors"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={() => handleDeleteCase(confirmDeleteCaseId)}
+                disabled={deletingCaseId === confirmDeleteCaseId}
+                className="flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-red-600 rounded-lg hover:bg-red-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                {deletingCaseId === confirmDeleteCaseId ? (
+                  <>
+                    <Loader2 size={14} className="animate-spin" />
+                    Deleting...
+                  </>
+                ) : (
+                  <>
+                    <Trash2 size={14} />
+                    Delete Case
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
         </div>
       )}
 

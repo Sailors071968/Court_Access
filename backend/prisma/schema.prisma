@@ -1715,6 +1715,57 @@ model StripeWebhookEvent {
 }
 
 // ---------------------------------------------------------------------------
+// Phase 3 — Evidence Request (AI-detected evidence gaps)
+// ---------------------------------------------------------------------------
+
+model EvidenceRequest {
+  id              String    @id @default(uuid())
+  caseId          String
+  tenantId        String
+  type            String    // missing_bodycam | missing_witness_statement | timeline_gap | missing_dashcam | missing_dispatch_log | missing_forensic_report | missing_medical_record | other
+  title           String
+  description     String
+  priority        String    @default("medium") // low | medium | high
+  status          String    @default("pending") // pending | acknowledged | dismissed | deferred
+  sourceEventIds  String?   // JSON array of EvidenceEvent IDs that triggered this request
+  metadata        String?   // JSON: additional structured data
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  responses       EvidenceRequestResponse[]
+
+  @@unique([caseId, tenantId, type, title])
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([status])
+  @@index([priority])
+  @@index([createdAt])
+  @@map("evidence_requests")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 3 — Evidence Request Response (client actions on AI requests)
+// ---------------------------------------------------------------------------
+
+model EvidenceRequestResponse {
+  id              String    @id @default(uuid())
+  requestId       String
+  request         EvidenceRequest @relation(fields: [requestId], references: [id])
+  respondedBy     String    // userId
+  responseType    String    // requested | not_relevant | defer
+  deferUntilDate  DateTime?
+  notes           String?
+
+  createdAt       DateTime  @default(now())
+
+  @@index([requestId])
+  @@index([respondedBy])
+  @@index([responseType])
+  @@map("evidence_request_responses")
+}
+
+// ---------------------------------------------------------------------------
 // PR 1 — Schema Version Control (Hardening Core)
 // Tracks schema versions applied to this database.
 // Boot-time assertion compares expected vs actual to hard-fail on drift.

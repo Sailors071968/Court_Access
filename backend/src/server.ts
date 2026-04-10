@@ -25,6 +25,7 @@ import { registerAutonomousCpraRoutes } from './cpra/autonomousCpraRoutes.js';
 import { registerBillingRoutes } from './billing/billingRoutes.js';
 import { registerCaseRoutes } from './evidence/caseRoutes.js';
 import { registerEvidenceRoutes } from './evidence/evidenceRoutes.js';
+import { registerEvidenceRequestRoutes } from './evidence/evidenceRequestRoutes.js';
 import { registerNarrativeRoutes } from './narrative/narrativeRoutes.js';
 import { registerTimelineRoutes } from './timeline/timelineRoutes.js';
 import { registerQueueMonitorRoutes } from './admin/queueMonitorRoutes.js';
@@ -157,6 +158,10 @@ async function startServer() {
   console.log('[Server] Registering evidence routes...');
   await registerEvidenceRoutes(app);
 
+  // Evidence Gap Detection — AI evidence requests
+  console.log('[Server] Registering evidence request routes...');
+  await registerEvidenceRequestRoutes(app);
+
   // Narrative Deconstruction Engine routes
   console.log('[Server] Registering narrative deconstruction engine routes...');
   await registerNarrativeRoutes(app);
@@ -258,6 +263,9 @@ async function startServer() {
     console.log('  - GET  /api/cases/:caseId/evidence');
     console.log('  - GET  /api/evidence/:evidenceId');
     console.log('  - DELETE /api/evidence/:evidenceId');
+    console.log('  - GET  /api/cases/:caseId/evidence-requests');
+    console.log('  - POST /api/evidence-requests/:id/respond');
+    console.log('  - POST /api/cases/:caseId/evidence-requests/detect');
     console.log('  - GET  /api/timeline/:caseId');
     console.log('  - GET  /api/timeline/:caseId/events');
     console.log('  - GET  /api/timeline/:caseId/conflicts');

@@ -16,6 +16,7 @@ import { buildUnifiedTimeline, findTimelineGaps } from '../contradiction/timelin
 import { TimelineConflictAnalyzer } from '../conflict/timelineConflictAnalyzer.js';
 import { extractEvidenceText } from '../services/evidenceTextExtractionService.js';
 import { normalizeDocumentText } from '../services/documentNormalizationService.js';
+import { detectEvidenceGaps } from '../services/evidenceGapDetectionService.js';
 import type { ExtractedEvent as CdeExtractedEvent } from '../contradiction/types.js';
 import type { TimelineEvent as ConflictTimelineEvent, TimelineConflict } from '../conflict/types.js';
 import { extractActor, extractTarget } from '../services/extractEvents.js';
@@ -40,6 +41,8 @@ export interface TimelineReconstructionResult {
   conflictsDetected: number;
   /** Timeline gaps (periods with no events) */
   gapsDetected: number;
+  /** Evidence requests created by gap detection (Phase 3) */
+  evidenceRequestsCreated: number;
   /** Processing duration in ms */
   durationMs: number;
   /** Any non-fatal errors encountered during processing */
@@ -166,6 +169,7 @@ export async function reconstructTimeline(
       timelineEventsCreated: 0,
       conflictsDetected: 0,
       gapsDetected: 0,
+      evidenceRequestsCreated: 0,
       durationMs: Date.now() - startTime,
       warnings: ['No evidence found for this case'],
     };
@@ -489,6 +493,26 @@ export async function reconstructTimeline(
     }
   }
 
+  // -------------------------------------------------------------------------
+  // Step 7: Run evidence gap detection (Phase 3)
+  // Non-fatal — gaps are informational, not blocking
+  // -------------------------------------------------------------------------
+  let evidenceRequestsCreated = 0;
+  try {
+    const gapResult = await detectEvidenceGaps(caseId, tenantId);
+    evidenceRequestsCreated = gapResult.requestsCreated;
+    console.info('[TimelineReconstruction] Evidence gap detection complete', {
+      caseId,
+      gapsFound: gapResult.gaps.length,
+      requestsCreated: gapResult.requestsCreated,
+      requestsSkipped: gapResult.requestsSkipped,
+    });
+  } catch (err) {
+    const msg = err instanceof Error ? err.message : String(err);
+    warnings.push(`Evidence gap detection failed (non-fatal): ${msg}`);
+    console.warn('[TimelineReconstruction] Evidence gap detection failed', { caseId, error: msg });
+  }
+
   return {
     caseId,
     tenantId,
@@ -498,6 +522,7 @@ export async function reconstructTimeline(
     timelineEventsCreated,
     conflictsDetected,
     gapsDetected: timelineGaps.length,
+    evidenceRequestsCreated,
     durationMs: Date.now() - startTime,
     warnings,
   };

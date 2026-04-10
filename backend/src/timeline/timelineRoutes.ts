@@ -22,7 +22,7 @@ export async function registerTimelineRoutes(app: FastifyInstance): Promise<void
     if (!user) {
       return reply.code(401).send({ error: 'Authentication required' });
     }
-    const tenantId = user.tenantId;
+    const tenantId = user.tenantId || 'dev-tenant';
     const { caseId } = request.params as { caseId: string };
 
     try {
@@ -40,7 +40,7 @@ export async function registerTimelineRoutes(app: FastifyInstance): Promise<void
     if (!user) {
       return reply.code(401).send({ error: 'Authentication required' });
     }
-    const tenantId = user.tenantId;
+    const tenantId = user.tenantId || 'dev-tenant';
     const { caseId } = request.params as { caseId: string };
     const query = request.query as {
       sourceType?: string;
@@ -71,7 +71,7 @@ export async function registerTimelineRoutes(app: FastifyInstance): Promise<void
     if (!user) {
       return reply.code(401).send({ error: 'Authentication required' });
     }
-    const tenantId = user.tenantId;
+    const tenantId = user.tenantId || 'dev-tenant';
     const { caseId } = request.params as { caseId: string };
 
     try {

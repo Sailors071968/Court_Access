@@ -24,7 +24,7 @@ export const QUEUE_NAMES = {
   NIGHTLY_INTEGRITY: 'court-access:nightly-integrity',
   NARRATIVE_PROCESSING: 'court-access-narrative-processing',
   CONTRADICTION_ANALYSIS: 'court-access-contradiction-analysis',
-  VIDEO_PROCESSING: 'court-access-video-processing',
+  VIDEO_PROCESSING: 'video',
   DOCTRINE_ANALYSIS: 'court-access-doctrine-analysis',
   DEAD_LETTER: 'court-access:dead-letter',
 } as const;

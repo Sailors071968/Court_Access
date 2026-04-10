@@ -126,7 +126,7 @@ const MAX_EVIDENCE_PER_RUN = 200;
  */
 export async function reconstructTimeline(
   caseId: string,
-  tenantId: string,
+  tenantId: string = 'dev-tenant',
 ): Promise<TimelineReconstructionResult> {
   const startTime = Date.now();
   const warnings: string[] = [];

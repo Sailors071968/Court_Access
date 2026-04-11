@@ -226,8 +226,10 @@ export async function registerDirectUploadRoutes(app: FastifyInstance): Promise<
     await fs.mkdir(uploadDir, { recursive: true });
 
     const localPath = path.join(uploadDir, `${fileId}_${fileName}`);
-    // Verify resolved path is still within the upload directory (prevent path traversal)
-    if (!localPath.startsWith(uploadDir)) {
+    // Verify resolved path is still within the root upload directory (prevent path traversal)
+    const resolvedLocal = path.resolve(localPath);
+    const resolvedBase = path.resolve(UPLOAD_DIR);
+    if (!resolvedLocal.startsWith(resolvedBase + path.sep)) {
       return reply.code(400).send({ error: 'Invalid filename' });
     }
     const s3Key = `evidence/${user.tenantId}/${caseId}/${fileId}/${fileName}`;

@@ -53,11 +53,14 @@ function HeroSection() {
 
           {/* Headline */}
           <h1 className="text-4xl sm:text-5xl lg:text-6xl font-bold text-white leading-tight mb-6">
-            Discovery Is Overwhelming.{' '}
-            <span className="text-amber-400">CourtAccess Makes It Understandable.</span>
+            Your Criminal Case Has Defenses{' '}
+            <span className="text-amber-400">You Haven't Found Yet.</span>
           </h1>
 
           {/* Subheadline */}
+          <p className="text-xl sm:text-2xl font-semibold text-amber-300 max-w-3xl mx-auto mb-4">
+            Making Swiss Cheese Out of California Prosecutor's Cases.
+          </p>
           <p className="text-lg sm:text-xl text-slate-300 max-w-3xl mx-auto mb-10 leading-relaxed">
             You get thousands of pages of reports, hours of bodycam footage, and conflicting witness statements.
             CourtAccess reads it all, reconstructs what happened, finds the contradictions, and shows you exactly where the prosecution's narrative falls apart.

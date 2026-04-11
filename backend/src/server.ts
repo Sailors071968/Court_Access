@@ -25,6 +25,7 @@ import { registerAutonomousCpraRoutes } from './cpra/autonomousCpraRoutes.js';
 import { registerBillingRoutes } from './billing/billingRoutes.js';
 import { registerCaseRoutes } from './evidence/caseRoutes.js';
 import { registerEvidenceRoutes } from './evidence/evidenceRoutes.js';
+import { registerDirectUploadRoutes } from './evidence/evidenceDirectUpload.js';
 import { registerEvidenceRequestRoutes } from './evidence/evidenceRequestRoutes.js';
 import { registerNarrativeRoutes } from './narrative/narrativeRoutes.js';
 import { registerTimelineRoutes } from './timeline/timelineRoutes.js';
@@ -155,6 +156,9 @@ async function startServer() {
   console.log('[Server] Registering case management routes...');
   await registerCaseRoutes(app);
 
+  console.log('[Server] Registering direct evidence upload routes...');
+  await registerDirectUploadRoutes(app);
+
   console.log('[Server] Registering evidence routes...');
   await registerEvidenceRoutes(app);
 
@@ -258,6 +262,7 @@ async function startServer() {
     console.log('  - GET  /api/cases/:caseId');
     console.log('  - PATCH /api/cases/:caseId');
     console.log('  - DELETE /api/cases/:caseId');
+    console.log('  - POST /api/evidence/upload (direct multipart)');
     console.log('  - POST /api/evidence/upload-url');
     console.log('  - POST /api/evidence');
     console.log('  - GET  /api/cases/:caseId/evidence');

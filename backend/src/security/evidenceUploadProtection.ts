@@ -328,8 +328,11 @@ export async function uploadProtectionHook(
   const contentType = request.headers['content-type'] || '';
   const contentLength = parseInt(request.headers['content-length'] || '0', 10);
 
-  // Check content length against maximum
-  const maxSize = MAX_FILE_SIZES.default;
+  // Determine the appropriate size limit based on content type.
+  // Multipart uploads (direct evidence upload) may contain video files up to 500MB,
+  // so use the video limit for multipart requests instead of the default 50MB.
+  const isMultipart = contentType.includes('multipart/form-data');
+  const maxSize = isMultipart ? MAX_FILE_SIZES.video : MAX_FILE_SIZES.default;
   if (contentLength > maxSize) {
     reply.code(413).send({
       error: 'Payload Too Large',

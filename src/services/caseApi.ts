@@ -14,6 +14,13 @@ function getAuthHeaders(): Record<string, string> {
   };
 }
 
+/** Auth-only headers for requests with no body (e.g. DELETE).
+ *  Omits Content-Type to avoid Fastify rejecting empty JSON bodies. */
+function getAuthHeadersNoBody(): Record<string, string> {
+  const token = localStorage.getItem('court-access-token');
+  return token ? { Authorization: `Bearer ${token}` } : {};
+}
+
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------
@@ -174,7 +181,7 @@ export async function updateCase(caseId: string, payload: Partial<CreateCasePayl
 export async function deleteCase(caseId: string): Promise<void> {
   const res = await fetch(`${API_BASE}/cases/${caseId}`, {
     method: 'DELETE',
-    headers: getAuthHeaders(),
+    headers: getAuthHeadersNoBody(),
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({ error: 'Failed to delete case' }));
@@ -209,7 +216,7 @@ export async function fetchEvidence(evidenceId: string): Promise<ApiEvidence> {
 export async function deleteEvidence(evidenceId: string): Promise<void> {
   const res = await fetch(`${API_BASE}/evidence/${evidenceId}`, {
     method: 'DELETE',
-    headers: getAuthHeaders(),
+    headers: getAuthHeadersNoBody(),
   });
   if (!res.ok) {
     const err = await res.json().catch(() => ({ error: 'Failed to delete evidence' }));

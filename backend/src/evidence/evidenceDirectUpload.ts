@@ -216,7 +216,9 @@ export async function registerDirectUploadRoutes(app: FastifyInstance): Promise<
 
     // Save file to local disk
     const fileId = crypto.randomUUID();
-    const fileName = data.filename || 'unnamed-file';
+    const rawFileName = data.filename || 'unnamed-file';
+    // Sanitize filename: strip path separators and traversal sequences
+    const fileName = path.basename(rawFileName).replace(/\.\.\.+/g, '_');
     const mimeType = data.mimetype || guessMimeType(fileName);
 
     // Create tenant-scoped directory
@@ -224,6 +226,10 @@ export async function registerDirectUploadRoutes(app: FastifyInstance): Promise<
     await fs.mkdir(uploadDir, { recursive: true });
 
     const localPath = path.join(uploadDir, `${fileId}_${fileName}`);
+    // Verify resolved path is still within the upload directory (prevent path traversal)
+    if (!localPath.startsWith(uploadDir)) {
+      return reply.code(400).send({ error: 'Invalid filename' });
+    }
     const s3Key = `evidence/${user.tenantId}/${caseId}/${fileId}/${fileName}`;
 
     let fileSize = 0;

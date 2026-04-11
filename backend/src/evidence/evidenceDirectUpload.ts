@@ -218,7 +218,7 @@ export async function registerDirectUploadRoutes(app: FastifyInstance): Promise<
     const fileId = crypto.randomUUID();
     const rawFileName = data.filename || 'unnamed-file';
     // Sanitize filename: strip path separators and traversal sequences
-    const fileName = path.basename(rawFileName).replace(/\.\.\.+/g, '_');
+    const fileName = path.basename(rawFileName).replace(/\.\./g, '_');
     const mimeType = data.mimetype || guessMimeType(fileName);
 
     // Create tenant-scoped directory
@@ -236,12 +236,25 @@ export async function registerDirectUploadRoutes(app: FastifyInstance): Promise<
     try {
       const writeStream = createWriteStream(localPath);
       await pipeline(data.file, writeStream);
+      // Check if file was truncated due to exceeding the size limit
+      if (data.file.truncated) {
+        await fs.unlink(localPath).catch(() => {});
+        return reply.code(413).send({
+          error: 'File too large',
+          message: `File exceeds maximum upload size of ${MAX_FILE_SIZE / (1024 * 1024)}MB`,
+          maxSize: MAX_FILE_SIZE,
+        });
+      }
       const stat = await fs.stat(localPath);
       fileSize = stat.size;
     } catch (err) {
       console.error('[DirectUpload] Failed to save file:', err);
       // Clean up partial file
       await fs.unlink(localPath).catch(() => {});
+      // Return 413 if the error is a file-too-large error from @fastify/multipart
+      if (err && ((err as { code?: string }).code === 'FST_FILES_LIMIT' || (err as Error)?.message?.includes('Too Large'))) {
+        return reply.code(413).send({ error: 'File too large', maxSize: MAX_FILE_SIZE });
+      }
       return reply.code(500).send({ error: 'Failed to save uploaded file' });
     }
 

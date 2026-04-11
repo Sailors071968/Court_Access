@@ -97,9 +97,13 @@ async function apiUpdateCode(codeId: string, payload: Partial<DiscountCodeRecord
 
 async function apiDeleteCode(codeId: string): Promise<{ ok: boolean; error?: string }> {
   try {
+    // Use auth-only headers (no Content-Type) for DELETE requests with no body.
+    // Sending Content-Type: application/json with an empty body causes Fastify
+    // to attempt JSON parsing and return 400 "Bad Request".
+    const token = localStorage.getItem('court-access-token');
     const res = await fetch(`/api/admin/discount-codes/${codeId}`, {
       method: 'DELETE',
-      headers: getAuthHeaders(),
+      headers: token ? { Authorization: `Bearer ${token}` } : {},
     });
     if (!res.ok) {
       const data = await res.json().catch(() => ({ error: 'Failed to delete discount code' }));

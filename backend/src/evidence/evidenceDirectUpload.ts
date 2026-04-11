@@ -6,7 +6,6 @@
 // ============================================================================
 
 import type { FastifyInstance, FastifyReply } from 'fastify';
-import { PrismaClient } from '@prisma/client';
 import multipart from '@fastify/multipart';
 import fs from 'fs/promises';
 import path from 'path';
@@ -16,8 +15,7 @@ import { pipeline } from 'stream/promises';
 import type { AuthenticatedRequest } from '../security/authMiddleware.js';
 import { validateEvidenceUpload } from './evidenceValidation.js';
 import { chunkAndPersistEvidence } from '../services/evidenceChunkingService.js';
-
-const prisma = new PrismaClient();
+import prisma from '../lib/prisma.js';
 
 // ---------------------------------------------------------------------------
 // Configuration

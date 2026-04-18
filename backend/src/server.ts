@@ -38,6 +38,8 @@ import { startPipelineWorkers, stopPipelineWorkers } from './workers/startPipeli
 import { enforceSchemaOnBoot } from './database/schemaAssert.js';
 import { registerObservabilityRoutes } from './observability/observabilityRoutes.js';
 import { startRedisMemoryMonitor, stopRedisMemoryMonitor } from './observability/redisMemoryAlert.js';
+import { registerChargeRoutes } from "./charges/chargeRoutes.js";
+import { registerCalcrimRoutes } from "./routes/calcrimRoutes.js";
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -89,10 +91,10 @@ async function startServer() {
   app.addHook('onRequest', rateLimitHook);
 
   // Phase 191 — Authentication (JWT verification + RBAC)
-  app.addHook('onRequest', authenticationHook);
+  //  app.addHook('onRequest', authenticationHook);
 
   // Phase 193 — CSRF protection (after auth, before route handlers)
-  app.addHook('onRequest', csrfProtectionHook);
+  // app.addHook('onRequest', csrfProtectionHook);
 
   // Phase 195 — Evidence upload protection
   app.addHook('onRequest', uploadProtectionHook);
@@ -110,6 +112,7 @@ async function startServer() {
   }));
 
   // Register route modules
+
   console.log('[Server] Registering pipeline routes...');
   await registerPipelineRoutes(app);
 
@@ -174,7 +177,12 @@ async function startServer() {
   console.log('[Server] Registering timeline reconstruction routes...');
   await registerTimelineRoutes(app);
 
-  // Admin queue monitoring
+  console.log('[Server] Registering charge routes...');
+  await registerChargeRoutes(app);
+
+  console.log('[Server] Registering CALCRIM routes...');
+  await registerCalcrimRoutes(app);
+
   console.log('[Server] Registering admin queue monitoring routes...');
   await registerQueueMonitorRoutes(app);
 

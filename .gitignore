@@ -22,3 +22,11 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+FULL_BACKEND_DUMP.txt
+THAT_FILE
+backend/FULL_PATH_TO_BAD_FILE
+*.txt
+backend/.env
+backend/.env.save
+backend/.env
+backend/.env.save

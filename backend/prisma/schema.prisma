@@ -1803,3 +1803,16 @@ model SchemaVersion {
   @@index([appliedAt])
   @@map("schema_versions")
 }
+
+model Charge {
+  id             String   @id @default(uuid())
+  caseId         String
+  code           String
+  section        String
+  title          String?
+  dateOfOffense  DateTime?
+  victim         String
+  createdAt      DateTime @default(now())
+
+  @@index([caseId])
+}

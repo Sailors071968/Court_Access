@@ -85,6 +85,20 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
       });
     }
 
+    // ============================================================
+    // 🔒 ENFORCE CHARGES BEFORE GENERATING UPLOAD URL
+    // ============================================================
+    const charges = await prisma.charge.findMany({
+      where: { caseId: body.caseId }
+    });
+
+    if (!charges.length) {
+      return reply.code(400).send({
+        error: 'No charges defined for this case',
+        message: 'You must add at least one charge before uploading evidence'
+      });
+    }
+
     // Validate evidence type
     if (!VALID_EVIDENCE_TYPES.includes(body.evidenceType as EvidenceType)) {
       return reply.code(400).send({
@@ -179,6 +193,20 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
       });
     }
 
+    // ============================================================
+    // 🔒 ENFORCE CHARGES BEFORE EVIDENCE REGISTRATION
+    // ============================================================
+    const charges = await prisma.charge.findMany({
+      where: { caseId: body.caseId }
+    });
+
+    if (!charges.length) {
+      return reply.code(400).send({
+        error: 'No charges defined for this case',
+        message: 'You must add at least one charge before registering evidence'
+      });
+    }
+
     if (!VALID_EVIDENCE_TYPES.includes(body.evidenceType as EvidenceType)) {
       return reply.code(400).send({
         error: `Invalid evidenceType. Must be one of: ${VALID_EVIDENCE_TYPES.join(', ')}`,
@@ -203,13 +231,12 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
       return reply.code(500).send({ error: 'Failed to verify case access' });
     }
 
-    // Validate s3Key matches expected tenant-scoped path (prevent cross-tenant access)
+    // Validate s3Key matches expected tenant-scoped path
     const expectedPrefix = `evidence/${user.tenantId}/${body.caseId}/`;
     if (!body.s3Key.startsWith(expectedPrefix)) {
       return reply.code(403).send({ error: 'Invalid s3Key: does not match expected tenant path' });
     }
 
-    // Create DB record first
     let evidence;
     try {
       evidence = await prisma.evidence.create({
@@ -231,8 +258,6 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
       return reply.code(500).send({ error: 'Failed to register evidence' });
     }
 
-    // Enqueue evidence processing (Part 5) — separate try-catch so a queue
-    // failure doesn't mask the successful DB insert or return a misleading 500.
     let processingWarning: string | undefined;
     try {
       await enqueueEvidenceIngestion({
@@ -250,7 +275,6 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
       processingWarning = 'Evidence registered but processing could not be started. It will be retried automatically.';
     }
 
-    // Serialize BigInt for JSON response
     return reply.code(201).send({
       evidence: {
         ...evidence,

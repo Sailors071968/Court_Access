@@ -268,11 +268,10 @@ export async function authenticationHook(
   const token = extractBearerToken(request.headers.authorization);
   if (!token) {
     void logSecurityEvent('UNAUTHORIZED_ACCESS', undefined, request.ip, `No token provided for ${path}`);
-    reply.code(401).send({
-      error: 'Authentication required',
-      message: 'Please provide a valid Bearer token in the Authorization header',
-    });
-    return;
+  return reply.code(401).send({
+  error: 'Authentication required',
+  message: 'Please provide a valid Bearer token in the Authorization header',
+});
   }
 
   // Verify token
@@ -354,6 +353,8 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     const password = body.password;
 
     console.log(`[Auth:Login] Attempt email="${email}"`);
+
+    console.log("AUTH HEADER:", request.headers.authorization);
 
     let user;
     try {

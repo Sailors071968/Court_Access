@@ -146,7 +146,10 @@ async function validateClaimAgainstEvidence(params: {
 // Worker Processor
 // ---------------------------------------------------------------------------
 
-export async function processEvidenceValidation(job: EvidenceValidationJob): Promise<{
+export async function processEvidenceValidation(
+  job: EvidenceValidationJob,
+  options?: { enqueueDownstream?: boolean },
+): Promise<{
   validationsCreated: number;
   contradictions: number;
 }> {
@@ -208,14 +211,16 @@ export async function processEvidenceValidation(job: EvidenceValidationJob): Pro
 
   console.log(`[EvidenceValidation] Created ${created} validations (${contradictions} contradictions) for case ${job.caseId}`);
 
-  // Trigger impeachment analysis
-  try {
-    await enqueueImpeachmentAnalysis({
-      caseId: job.caseId,
-      tenantId: job.tenantId,
-    });
-  } catch (err) {
-    console.error(`[EvidenceValidation] Failed to enqueue impeachment analysis:`, err);
+  // Trigger impeachment analysis (queue-chained worker mode)
+  if (options?.enqueueDownstream !== false) {
+    try {
+      await enqueueImpeachmentAnalysis({
+        caseId: job.caseId,
+        tenantId: job.tenantId,
+      });
+    } catch (err) {
+      console.error(`[EvidenceValidation] Failed to enqueue impeachment analysis:`, err);
+    }
   }
 
   return { validationsCreated: created, contradictions };

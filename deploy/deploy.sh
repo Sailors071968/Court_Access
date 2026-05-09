@@ -1,15 +1,15 @@
 #!/usr/bin/env bash
 # ===========================================================================
 # CourtAccess — Production Deployment Script
-# Deploys backend (API on port 3001) and frontend (port 3000) via PM2,
-# then configures NGINX as the reverse proxy.
+# Deploys backend API (port 3001) via PM2, builds frontend static files,
+# and configures NGINX to serve static frontend + proxy /api to backend.
 #
 # Target architecture:
 #   Client → https://courtaccess.net
 #                ↓
 #             NGINX
-#          ├── /api → Backend (port 3001)
-#          └── /    → Frontend (port 3000)
+#          ├── /api/* → Backend API (Fastify, port 3001)
+#          └── /*     → Static files (dist/)
 #
 # Usage:
 #   chmod +x deploy/deploy.sh
@@ -19,10 +19,12 @@ set -euo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_DIR="$(dirname "$SCRIPT_DIR")"
+DEPLOY_DIR="/var/www/courtaccess"
 
 echo "============================================"
 echo " CourtAccess — Production Deployment"
 echo " Project dir: $PROJECT_DIR"
+echo " Deploy dir:  $DEPLOY_DIR"
 echo "============================================"
 
 # ------------------------------------------------------------------
@@ -33,7 +35,7 @@ echo "[1/6] Installing backend dependencies..."
 cd "$PROJECT_DIR/backend"
 npm install --production=false
 npx prisma generate
-echo "  ✔ Backend dependencies installed"
+echo "  Done — backend dependencies installed"
 
 # ------------------------------------------------------------------
 # Step 2: Install frontend dependencies and build
@@ -43,41 +45,35 @@ echo "[2/6] Building frontend..."
 cd "$PROJECT_DIR"
 npm install
 npm run build
-echo "  ✔ Frontend built to dist/"
+echo "  Done — frontend built to dist/"
 
 # ------------------------------------------------------------------
-# Step 3: Stop existing PM2 processes (ignore errors)
+# Step 3: Copy built frontend to deployment directory
 # ------------------------------------------------------------------
 echo ""
-echo "[3/6] Stopping existing PM2 processes..."
-pm2 delete courtaccess-api 2>/dev/null || true
-pm2 delete courtaccess-frontend 2>/dev/null || true
-echo "  ✔ Old processes stopped"
+echo "[3/6] Deploying static frontend to $DEPLOY_DIR/dist..."
+sudo mkdir -p "$DEPLOY_DIR"
+sudo rsync -a --delete "$PROJECT_DIR/dist/" "$DEPLOY_DIR/dist/"
+echo "  Done — static files deployed"
 
 # ------------------------------------------------------------------
-# Step 4: Start backend and frontend via PM2
+# Step 4: Stop and restart backend via PM2
 # ------------------------------------------------------------------
 echo ""
-echo "[4/6] Starting services via PM2..."
+echo "[4/6] Starting backend via PM2..."
 cd "$PROJECT_DIR"
+pm2 delete courtaccess-api 2>/dev/null || true
 
-# Start backend (API only, port 3001)
 PORT=3001 pm2 start npx \
   --name courtaccess-api \
   -- tsx backend/src/server.ts
-echo "  ✔ Backend started on port 3001"
-
-# Start frontend (Vite preview, port 3000)
-pm2 start npx \
-  --name courtaccess-frontend \
-  -- vite preview --port 3000
-echo "  ✔ Frontend started on port 3000"
+echo "  Done — backend started on port 3001 (API only)"
 
 pm2 save
-echo "  ✔ PM2 process list saved"
+echo "  Done — PM2 process list saved"
 
 # ------------------------------------------------------------------
-# Step 5: Configure NGINX
+# Step 5: Configure NGINX (static frontend + API proxy)
 # ------------------------------------------------------------------
 echo ""
 echo "[5/6] Configuring NGINX..."
@@ -87,9 +83,9 @@ sudo rm -f /etc/nginx/sites-enabled/default
 
 if sudo nginx -t 2>&1; then
   sudo systemctl reload nginx
-  echo "  ✔ NGINX configured and reloaded"
+  echo "  Done — NGINX configured and reloaded"
 else
-  echo "  ✘ NGINX config test failed — check /etc/nginx/sites-available/courtaccess"
+  echo "  FAILED — NGINX config test failed, check /etc/nginx/sites-available/courtaccess"
   exit 1
 fi
 
@@ -108,25 +104,28 @@ echo ""
 echo "Backend health check:"
 if curl -sf http://localhost:3001/api/health; then
   echo ""
-  echo "  ✔ Backend API is healthy"
+  echo "  Backend API is healthy"
 else
-  echo "  ✘ Backend health check failed"
+  echo "  WARNING: Backend health check failed"
 fi
 
 echo ""
-echo "Frontend check:"
-if curl -sf -o /dev/null http://localhost:3000; then
-  echo "  ✔ Frontend is serving"
+echo "Frontend check (static files):"
+if [ -f "$DEPLOY_DIR/dist/index.html" ]; then
+  echo "  index.html exists at $DEPLOY_DIR/dist/index.html"
 else
-  echo "  ✘ Frontend not responding on port 3000"
+  echo "  WARNING: index.html not found at $DEPLOY_DIR/dist/index.html"
 fi
 
 echo ""
 echo "============================================"
 echo " Deployment complete!"
 echo ""
+echo " Architecture:"
+echo "   NGINX serves static frontend from $DEPLOY_DIR/dist/"
+echo "   NGINX proxies /api/* to backend on port 3001"
+echo ""
 echo " Backend API:  http://localhost:3001/api/health"
-echo " Frontend:     http://localhost:3000"
 echo " External:     http://courtaccess.net"
 echo " External API: http://courtaccess.net/api/health"
 echo ""

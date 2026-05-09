@@ -30,21 +30,9 @@ module.exports = {
     },
 
     // -----------------------------------------------------------------------
-    // Frontend Preview Server (Vite production serve)
+    // Frontend: served as static files by NGINX from dist/
+    // No PM2 process needed — run `npm run build` and point NGINX root to dist/
     // -----------------------------------------------------------------------
-    {
-      name: 'courtaccess-frontend',
-      script: 'npx',
-      args: 'vite preview --port 3000',
-      cwd: __dirname,
-      env: {
-        NODE_ENV: 'production',
-      },
-      instances: 1,
-      autorestart: true,
-      watch: false,
-      max_memory_restart: '512M',
-    },
 
     // -----------------------------------------------------------------------
     // CPRA Email Monitor Worker

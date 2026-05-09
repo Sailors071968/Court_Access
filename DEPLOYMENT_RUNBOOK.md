@@ -162,31 +162,30 @@ chmod +x deploy/deploy.sh
 This handles backend install, frontend build, PM2 setup, and NGINX configuration.
 
 ### 6.2 Manual PM2 Setup
-The PM2 ecosystem file is at `ecosystem.config.cjs`. Key services:
-
-| Service | Port | Purpose |
-|---------|------|---------|
-| `courtaccess-api` | 3001 | Fastify backend (API only) |
-| `courtaccess-frontend` | 3000 | Vite preview (static frontend) |
+The PM2 ecosystem file is at `ecosystem.config.cjs`. Only the backend runs under PM2:
 
 ```bash
 # Start backend (API only, port 3001)
 PORT=3001 pm2 start npx --name courtaccess-api -- tsx backend/src/server.ts
-
-# Start frontend (port 3000)
-pm2 start npx --name courtaccess-frontend -- vite preview --port 3000
-
 pm2 save
+```
+
+The frontend is served as **static files by NGINX** (no PM2 process needed):
+```bash
+# Build frontend
+npm install && npm run build
+
+# Copy to deployment directory
+sudo rsync -a --delete dist/ /var/www/courtaccess/dist/
 ```
 
 ### 6.3 Expected PM2 State
 ```bash
 pm2 status
 ```
-| Name | Port |
-|------|------|
-| courtaccess-api | 3001 |
-| courtaccess-frontend | 3000 |
+| Name | Port | Purpose |
+|------|------|---------|
+| courtaccess-api | 3001 | Fastify backend (API only) |
 
 ---
 
@@ -199,15 +198,16 @@ Client (Browser)
 https://courtaccess.net
       |
    NGINX (port 80/443)
-    ├── /api/* → Backend  (port 3001, Fastify)
-    └── /*     → Frontend (port 3000, Vite preview)
+    ├── /api/* → proxy to Backend (port 3001, Fastify)
+    └── /*     → static files from /var/www/courtaccess/dist/
 ```
 
 **Critical rules:**
 - Backend must NOT serve frontend static files
 - `/api` must never return HTML
-- All API routes go through NGINX to port 3001
-- All other routes go through NGINX to port 3000
+- All API routes go through NGINX proxy to port 3001
+- All other routes served as static files by NGINX (with SPA fallback to index.html)
+- No frontend process (no Vite preview, no Node server for frontend)
 
 ### 7.2 Install Config
 A ready-to-use NGINX config is at `deploy/nginx.conf`. Install it:

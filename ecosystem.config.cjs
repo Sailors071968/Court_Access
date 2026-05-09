@@ -35,7 +35,7 @@ module.exports = {
     {
       name: 'courtaccess-frontend',
       script: 'npx',
-      args: 'vite preview --port 4173',
+      args: 'vite preview --port 3000',
       cwd: __dirname,
       env: {
         NODE_ENV: 'production',

@@ -153,126 +153,85 @@ VITE_APP_NAME=CourtAccess
 
 ## 6. Worker Startup
 
-### 6.1 PM2 Ecosystem File
-Create `ecosystem.config.js`:
-
-```javascript
-module.exports = {
-  apps: [
-    {
-      name: 'courtaccess-api',
-      script: 'backend/dist/server.js',
-      instances: 2,
-      exec_mode: 'cluster',
-      env_production: {
-        NODE_ENV: 'production',
-        PORT: 3001
-      }
-    },
-    {
-      name: 'courtaccess-workers',
-      script: 'backend/dist/policy/workers/startWorkers.js',
-      instances: 1,
-      env_production: {
-        NODE_ENV: 'production'
-      }
-    }
-  ]
-};
-```
-
-### 6.2 Start Services
+### 6.1 Quick Deploy (Recommended)
+Use the automated deployment script:
 ```bash
-# Build TypeScript
-cd backend && npx tsc
+chmod +x deploy/deploy.sh
+./deploy/deploy.sh
+```
+This handles backend install, frontend build, PM2 setup, and NGINX configuration.
 
-# Start with PM2
-pm2 start ecosystem.config.js --env production
+### 6.2 Manual PM2 Setup
+The PM2 ecosystem file is at `ecosystem.config.cjs`. Key services:
+
+| Service | Port | Purpose |
+|---------|------|---------|
+| `courtaccess-api` | 3001 | Fastify backend (API only) |
+| `courtaccess-frontend` | 3000 | Vite preview (static frontend) |
+
+```bash
+# Start backend (API only, port 3001)
+PORT=3001 pm2 start npx --name courtaccess-api -- tsx backend/src/server.ts
+
+# Start frontend (port 3000)
+pm2 start npx --name courtaccess-frontend -- vite preview --port 3000
+
 pm2 save
 ```
+
+### 6.3 Expected PM2 State
+```bash
+pm2 status
+```
+| Name | Port |
+|------|------|
+| courtaccess-api | 3001 |
+| courtaccess-frontend | 3000 |
 
 ---
 
 ## 7. Nginx Configuration
 
-### 7.1 Site Configuration
-Create `/etc/nginx/sites-available/courtaccess`:
-
-```nginx
-server {
-    listen 80;
-    server_name your-domain.com api.your-domain.com;
-    return 301 https://$host$request_uri;
-}
-
-server {
-    listen 443 ssl http2;
-    server_name your-domain.com;
-
-    ssl_certificate /etc/letsencrypt/live/your-domain.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/your-domain.com/privkey.pem;
-
-    # Security headers
-    add_header X-Frame-Options "SAMEORIGIN" always;
-    add_header X-Content-Type-Options "nosniff" always;
-    add_header X-XSS-Protection "1; mode=block" always;
-    add_header Strict-Transport-Security "max-age=31536000; includeSubDomains" always;
-
-    # Frontend (static files)
-    root /opt/courtaccess/dist;
-    index index.html;
-
-    location / {
-        try_files $uri $uri/ /index.html;
-    }
-
-    # Evidence file uploads
-    client_max_body_size 500M;
-}
-
-server {
-    listen 443 ssl http2;
-    server_name api.your-domain.com;
-
-    ssl_certificate /etc/letsencrypt/live/your-domain.com/fullchain.pem;
-    ssl_certificate_key /etc/letsencrypt/live/your-domain.com/privkey.pem;
-
-    # Security headers
-    add_header X-Frame-Options "SAMEORIGIN" always;
-    add_header X-Content-Type-Options "nosniff" always;
-
-    # API proxy
-    location / {
-        proxy_pass http://127.0.0.1:3001;
-        proxy_http_version 1.1;
-        proxy_set_header Upgrade $http_upgrade;
-        proxy_set_header Connection 'upgrade';
-        proxy_set_header Host $host;
-        proxy_set_header X-Real-IP $remote_addr;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-        proxy_cache_bypass $http_upgrade;
-
-        # Timeouts for long-running analysis
-        proxy_read_timeout 300s;
-        proxy_send_timeout 300s;
-    }
-
-    client_max_body_size 500M;
-}
+### 7.1 Architecture
+```
+Client (Browser)
+      |
+https://courtaccess.net
+      |
+   NGINX (port 80/443)
+    ├── /api/* → Backend  (port 3001, Fastify)
+    └── /*     → Frontend (port 3000, Vite preview)
 ```
 
-### 7.2 Enable Site
+**Critical rules:**
+- Backend must NOT serve frontend static files
+- `/api` must never return HTML
+- All API routes go through NGINX to port 3001
+- All other routes go through NGINX to port 3000
+
+### 7.2 Install Config
+A ready-to-use NGINX config is at `deploy/nginx.conf`. Install it:
 ```bash
-sudo ln -s /etc/nginx/sites-available/courtaccess /etc/nginx/sites-enabled/
+sudo cp deploy/nginx.conf /etc/nginx/sites-available/courtaccess
+sudo ln -sf /etc/nginx/sites-available/courtaccess /etc/nginx/sites-enabled/
+sudo rm -f /etc/nginx/sites-enabled/default
 sudo nginx -t
 sudo systemctl reload nginx
 ```
 
 ### 7.3 SSL Certificate
 ```bash
-sudo certbot --nginx -d your-domain.com -d api.your-domain.com
+sudo certbot --nginx -d courtaccess.net -d www.courtaccess.net
 ```
+
+### 7.4 AWS Security Group
+Ensure the following ports are open:
+
+| Port | Purpose |
+|------|---------|
+| 22   | SSH     |
+| 80   | HTTP    |
+| 443  | HTTPS   |
 
 ---
 
@@ -280,29 +239,33 @@ sudo certbot --nginx -d your-domain.com -d api.your-domain.com
 
 ### 8.1 Health Check
 ```bash
-curl https://api.your-domain.com/api/health
-# Expected: {"status":"ok","timestamp":"..."}
+# Internal (direct)
+curl http://localhost:3001/api/health
+# Expected: {"status":"ok","timestamp":"...","version":"1.1.0","service":"court-access-backend"}
+
+# External (through NGINX)
+curl http://courtaccess.net/api/health
 ```
 
 ### 8.2 Database Verification
 ```bash
-cd /opt/courtaccess/backend
+cd backend
 npx prisma db seed  # If seed script exists
 npx prisma studio   # Visual database browser (development only)
 ```
 
 ### 8.3 Frontend Verification
-- Navigate to https://your-domain.com
+- Navigate to http://courtaccess.net
 - Verify login page loads
 - Verify registration flow works
 - Verify dashboard pages load after login
 
 ### 8.4 API Endpoint Verification
 ```bash
-# Test key endpoints
-curl https://api.your-domain.com/api/policy-pipeline/stats
-curl https://api.your-domain.com/api/compliance/dashboard
-curl https://api.your-domain.com/api/operations/dashboard
+# Test key endpoints (through NGINX)
+curl http://courtaccess.net/api/policy-pipeline/stats
+curl http://courtaccess.net/api/compliance/dashboard
+curl http://courtaccess.net/api/operations/dashboard
 ```
 
 ### 8.5 Worker Verification

@@ -5,7 +5,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 
-const API_BASE = import.meta.env.VITE_API_URL ?? 'http://localhost:3001';
+const API_BASE = import.meta.env.VITE_API_URL ?? '/api';
 
 interface PipelineStats {
   totalAgencies: number;
@@ -56,7 +56,7 @@ export function PolicyPipelineDashboard() {
 
   const fetchStats = useCallback(async () => {
     try {
-      const res = await fetch(`${API_BASE}/api/policy-pipeline/stats`);
+      const res = await fetch(`${API_BASE}/policy-pipeline/stats`);
       if (res.ok) {
         const data = await res.json();
         setStats(data);
@@ -78,7 +78,7 @@ export function PolicyPipelineDashboard() {
       if (statusFilter) params.set('crawlStatus', statusFilter);
 
       const res = await fetch(
-        `${API_BASE}/api/policy-pipeline/agencies?${params}`
+        `${API_BASE}/policy-pipeline/agencies?${params}`
       );
       if (res.ok) {
         const data = await res.json();
@@ -102,7 +102,7 @@ export function PolicyPipelineDashboard() {
     setRunningPipeline(true);
     try {
       const res = await fetch(
-        `${API_BASE}/api/policy-pipeline/run/${endpoint}`,
+        `${API_BASE}/policy-pipeline/run/${endpoint}`,
         { method: 'POST', headers: { 'Content-Type': 'application/json' } }
       );
       if (res.ok) {

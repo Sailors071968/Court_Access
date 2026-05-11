@@ -208,8 +208,12 @@ async function startServer() {
   // Start Phase 2 ACU-enforced pipeline workers (BullMQ)
   startPipelineWorkers();
 
-  // Scale Validation — Redis memory alert monitor
-  startRedisMemoryMonitor();
+  // Scale Validation — Redis memory alert monitor (requires Redis)
+  if (process.env.DISABLE_WORKERS !== 'true') {
+    startRedisMemoryMonitor();
+  } else {
+    console.log('[Server] Redis memory monitor disabled (DISABLE_WORKERS=true)');
+  }
 
   // Start server
   try {

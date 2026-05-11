@@ -206,6 +206,11 @@ export async function assertSchemaIntegrity(): Promise<SchemaAssertResult> {
  * Hard-fail wrapper for boot. Logs the result and exits if schema is drifted.
  */
 export async function enforceSchemaOnBoot(): Promise<void> {
+  if (process.env.SKIP_SCHEMA_ASSERT === 'true') {
+    console.warn('[Schema Assert] Skipped via SKIP_SCHEMA_ASSERT env var');
+    return;
+  }
+
   console.log('[Schema Assert] Checking database schema integrity...');
 
   const result = await assertSchemaIntegrity();

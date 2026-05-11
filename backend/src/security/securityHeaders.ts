@@ -68,7 +68,7 @@ const PRODUCTION_OVERRIDES: Partial<Record<string, string>> = {
     "style-src 'self' 'unsafe-inline'",
     "img-src 'self' data: blob: https:",
     "font-src 'self' data:",
-    "connect-src 'self' https://*.courtaccess.com wss://*.courtaccess.com",
+    "connect-src 'self' https://*.courtaccess.net wss://*.courtaccess.net https://*.courtaccess.com wss://*.courtaccess.com",
     "frame-ancestors 'none'",
     "base-uri 'self'",
     "form-action 'self'",

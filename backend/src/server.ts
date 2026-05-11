@@ -110,14 +110,33 @@ async function startServer() {
   // Phase 197 — Security logging (response tracking)
   await registerSecurityLogging(app);
 
-  // Health check
-  app.get('/api/health', async () => ({
-    status: 'ok',
-    timestamp: new Date().toISOString(),
-    version: '1.1.0',
-    service: 'court-access-backend',
-    environment: process.env.NODE_ENV || 'development',
-  }));
+  // Health check (expanded — Stage 1 observability)
+  app.get('/api/health', async () => {
+    const mem = process.memoryUsage();
+    const os = await import('os');
+    return {
+      status: 'ok',
+      timestamp: new Date().toISOString(),
+      version: '1.1.0',
+      service: 'court-access-backend',
+      environment: process.env.NODE_ENV || 'development',
+      uptime: Math.floor(process.uptime()),
+      pid: process.pid,
+      memory: {
+        heapUsedMB: Math.round(mem.heapUsed / 1024 / 1024),
+        heapTotalMB: Math.round(mem.heapTotal / 1024 / 1024),
+        rssMB: Math.round(mem.rss / 1024 / 1024),
+      },
+      cpu: {
+        loadAvg: os.loadavg(),
+        cores: os.cpus().length,
+      },
+      pm2: {
+        instanceId: process.env.pm_id || 'n/a',
+        restartCount: parseInt(process.env.restart_time || '0', 10),
+      },
+    };
+  });
 
   // Register route modules
 

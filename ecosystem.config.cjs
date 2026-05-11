@@ -1,8 +1,32 @@
 // ============================================
-// Court Access — PM2 Ecosystem Configuration
-// Phase 8: Production Worker Management
-// All workers: auto-restart on crash, startup on boot
-// Usage: pm2 start ecosystem.config.cjs && pm2 save && pm2 startup
+// Court Access — PM2 Ecosystem Configuration (Stage 1 Hardened)
+//
+// Production Worker Management with operational hardening:
+//   - Memory ceilings per process
+//   - Restart throttling (delay + max restarts)
+//   - Structured log paths
+//   - ENV injection via DOTENV_CONFIG_PATH
+//   - Safety flags for staged subsystem restoration
+//
+// Usage:
+//   pm2 start ecosystem.config.cjs --only courtaccess-api
+//   pm2 save && pm2 startup
+//
+// Restart:
+//   pm2 restart courtaccess-api
+//
+// Full restart (all workers):
+//   pm2 restart ecosystem.config.cjs
+//
+// Rollback:
+//   pm2 delete courtaccess-api
+//   pm2 start ecosystem.config.cjs.pre-stage1 --only courtaccess-api
+//   pm2 save
+//
+// Crash-loop detection:
+//   pm2 show courtaccess-api | grep -E 'restarts|status|uptime'
+//   If restarts > 10 in quick succession, PM2 stops the process.
+//   Investigate with: pm2 logs courtaccess-api --lines 100 --nostream
 // ============================================
 
 module.exports = {
@@ -20,6 +44,8 @@ module.exports = {
         PORT: '3001',
         HOST: '0.0.0.0',
         DOTENV_CONFIG_PATH: __dirname + '/backend/.env',
+        // Structured logging
+        LOG_LEVEL: 'info',
         // Stage 2 safety flags (remove after full restoration)
         DISABLE_WORKERS: 'true',
         SKIP_SCHEMA_ASSERT: 'true',
@@ -32,6 +58,8 @@ module.exports = {
       restart_delay: 3000,
       max_restarts: 10,
       min_uptime: '10s',
+      kill_timeout: 8000,
+      listen_timeout: 15000,
       error_file: '/var/log/pm2/courtaccess-api-error.log',
       out_file: '/var/log/pm2/courtaccess-api-out.log',
       merge_logs: true,

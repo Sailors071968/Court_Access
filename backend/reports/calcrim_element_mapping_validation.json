@@ -1,0 +1,152 @@
+{
+  "phase": "D.2",
+  "name": "CALCRIM Element Mapping Engine Validation",
+  "generatedAt": "2026-05-12T20:00:00.000Z",
+  "status": "READY_FOR_DEPLOYMENT",
+
+  "implementation": {
+    "service": "backend/src/services/calcrimElementMappingService.ts",
+    "routes": "backend/src/routes/calcrimElementMappingRoutes.ts",
+    "migration": "backend/prisma/migrations/20260512200000_calcrim_element_mapping/migration.sql",
+    "schemaModels": [
+      "CalcrimElementMapping",
+      "CalcrimNarrativeCluster",
+      "NarrativeClusterStatement"
+    ]
+  },
+
+  "apiEndpoints": [
+    {
+      "method": "POST",
+      "path": "/api/calcrim/map-statement",
+      "description": "Map a single statement to CALCRIM elements",
+      "inputFields": ["statementId", "caseId"]
+    },
+    {
+      "method": "POST",
+      "path": "/api/calcrim/map-document",
+      "description": "Map all statements in a document to CALCRIM elements",
+      "inputFields": ["documentId", "caseId", "limit?", "offset?"]
+    },
+    {
+      "method": "GET",
+      "path": "/api/calcrim/mappings/:statementId",
+      "description": "Get all CALCRIM mappings for a statement"
+    },
+    {
+      "method": "GET",
+      "path": "/api/calcrim/narratives/:caseId",
+      "description": "Get narrative clusters for a case"
+    },
+    {
+      "method": "POST",
+      "path": "/api/calcrim/rebuild-mappings/:caseId",
+      "description": "Delete and rebuild all mappings + clusters for a case"
+    },
+    {
+      "method": "GET",
+      "path": "/api/calcrim/prosecutor-theory/:caseId",
+      "description": "Get full prosecutor theory organization with burden analysis"
+    },
+    {
+      "method": "GET",
+      "path": "/api/calcrim/mapping/validation",
+      "description": "Live validation report with mapping metrics"
+    }
+  ],
+
+  "mappingCapabilities": {
+    "lexicalMatching": "Keyword/alias matching against CALCRIM element keywords and aliases from seed data",
+    "phraseMatching": "Alias-based phrase detection for alternate element phrasings",
+    "confidenceScoring": "Deterministic scoring: 70% keyword coverage + 30% classification score",
+    "evidenceClassification": [
+      "act", "intent", "knowledge", "identity", "temporal",
+      "impeachment", "contradiction", "credibility", "procedural"
+    ],
+    "classificationPatterns": "9 classification categories × 3-4 regex patterns each = 32 total patterns",
+    "narrativeTypes": ["timeline", "witness_account", "physical_evidence", "circumstantial", "burden_proof"],
+    "prosecutorTheoryOrganization": "Evidence grouped under CALCRIM instruction → element → burden requirement",
+    "burdenStrengthAssessment": ["strong", "moderate", "weak", "unsupported"]
+  },
+
+  "deterministicConstraints": {
+    "noLLMInference": true,
+    "noGenerativeReasoning": true,
+    "noHallucinatedElementAssignment": true,
+    "noProbabilisticFreeformAI": true,
+    "noSemanticRewriting": true,
+    "allowedMethods": ["lexical", "phrase", "ontology", "keyword", "regex", "manual"],
+    "citationPreservation": "Every mapping preserves exact statement text, page, line range, source document"
+  },
+
+  "performanceTargets": {
+    "statementCapacity": "100k+ evidence statements",
+    "incrementalRemapping": "rebuild-mappings endpoint supports full case remapping",
+    "streamingAnalysis": "Statements processed individually — no full-case in-memory requirement"
+  },
+
+  "migrationSummary": {
+    "migrationName": "20260512200000_calcrim_element_mapping",
+    "newTables": [
+      "calcrim_element_mappings",
+      "calcrim_narrative_clusters",
+      "narrative_cluster_statements"
+    ],
+    "alteredTables": [],
+    "newIndexes": 12,
+    "newForeignKeys": 1,
+    "destructiveOperations": "NONE",
+    "idempotent": true,
+    "rollbackSQL": "DROP TABLE IF EXISTS narrative_cluster_statements CASCADE; DROP TABLE IF EXISTS calcrim_narrative_clusters CASCADE; DROP TABLE IF EXISTS calcrim_element_mappings CASCADE; DELETE FROM _prisma_migrations WHERE migration_name = '20260512200000_calcrim_element_mapping';"
+  },
+
+  "deploymentCommands": {
+    "pull": "cd /var/www/courtaccess_repo && git pull origin devin/1778357361-courtaccess-recovery-stabilization",
+    "install": "cd backend && npm install",
+    "migrate": "DATABASE_URL=\"...\" npx prisma migrate deploy",
+    "restart": "cd .. && pm2 restart courtaccess-api --update-env",
+    "verify": "curl -s localhost:3001/api/calcrim/mapping/validation | jq ."
+  },
+
+  "rollbackProcedure": {
+    "step1": "pm2 stop courtaccess-api",
+    "step2_sql": "DROP TABLE IF EXISTS \"narrative_cluster_statements\" CASCADE; DROP TABLE IF EXISTS \"calcrim_narrative_clusters\" CASCADE; DROP TABLE IF EXISTS \"calcrim_element_mappings\" CASCADE; DELETE FROM \"_prisma_migrations\" WHERE migration_name = '20260512200000_calcrim_element_mapping';",
+    "step3": "git checkout HEAD~N -- backend/",
+    "step4": "pm2 restart courtaccess-api"
+  },
+
+  "riskAssessment": {
+    "overallRisk": "LOW",
+    "details": [
+      {
+        "risk": "3 new tables only — no existing data modified",
+        "level": "NONE"
+      },
+      {
+        "risk": "No existing tables altered",
+        "level": "NONE"
+      },
+      {
+        "risk": "New routes added — no existing routes modified or removed",
+        "level": "NONE"
+      },
+      {
+        "risk": "server.ts modified — single import + single route registration",
+        "level": "LOW"
+      }
+    ]
+  },
+
+  "systemsUnmodified": {
+    "authMiddleware": true,
+    "csrfMiddleware": true,
+    "nginx": true,
+    "pm2": true,
+    "redisArchitecture": true,
+    "existingOCRPipeline": true,
+    "existingIngestionPipeline": true,
+    "existingContradictionEngine": true,
+    "existingD1SegmentationLogic": true,
+    "existingRoutes": true
+  }
+}

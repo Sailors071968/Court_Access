@@ -52,6 +52,7 @@ import { registerEvidenceStatementRoutes } from "./routes/evidenceStatementRoute
 import { registerElementMappingRoutes } from "./routes/elementMappingRoutes.js";
 import { registerContradictionRoutes } from "./routes/contradictionRoutes.js";
 import { registerMaterialityRoutes } from "./routes/materialityRoutes.js";
+import { registerDefenseIntelligenceRoutes } from "./routes/defenseIntelligenceRoutes.js";
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -225,6 +226,9 @@ async function startServer() {
 
   console.log('[Server] Registering materiality scoring routes...');
   await registerMaterialityRoutes(app);
+
+  console.log('[Server] Registering defense intelligence routes...');
+  await registerDefenseIntelligenceRoutes(app);
 
   console.log('[Server] Registering admin queue monitoring routes...');
   await registerQueueMonitorRoutes(app);

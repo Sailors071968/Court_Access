@@ -8038,3 +8038,202 @@ model OperationalMaturityManifest {
   @@index([verified])
   @@map("operational_maturity_manifests")
 }
+
+// ---------------------------------------------------------------------------
+// Phase N.5 — Controlled Production Enablement + Enterprise Rollout Governance
+// Disciplined operational stewardship. No speculative subsystem growth.
+// ---------------------------------------------------------------------------
+
+model StagedRolloutWorkflow {
+  id                    String   @id @default(uuid())
+  caseId                String
+  rolloutStage          String   // canary | internal_pilot | limited_beta | expanded_beta | general_availability
+  targetPercentage      Float    @default(0)
+  currentPercentage     Float    @default(0)
+  governanceApproved    Boolean  @default(false)
+  approvedBy            String?
+  rolloutStatus         String   // pending | active | paused | completed | rolled_back
+  rolloutHash           String   // SHA-256
+  rolloutDetails        String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([rolloutStage])
+  @@index([rolloutStatus])
+  @@map("staged_rollout_workflows")
+}
+
+model EnterpriseOnboardingExecution {
+  id                    String   @id @default(uuid())
+  caseId                String
+  institutionName       String
+  onboardingPhase       String   // contract_review | environment_provisioning | data_migration | user_training | acceptance_testing | go_live | post_launch_support
+  stepsTotal            Int      @default(0)
+  stepsCompleted        Int      @default(0)
+  executionStatus       String   // scheduled | in_progress | completed | blocked | cancelled
+  executionHash         String   // SHA-256
+  executionDetails      String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([institutionName])
+  @@index([executionStatus])
+  @@map("enterprise_onboarding_executions")
+}
+
+model ProductionMonitoringReadiness {
+  id                    String   @id @default(uuid())
+  caseId                String
+  monitoringDomain      String   // uptime | error_rate | latency | throughput | resource_usage | security_events | data_integrity
+  dashboardConfigured   Boolean  @default(false)
+  alertsConfigured      Boolean  @default(false)
+  thresholdDefined      Boolean  @default(false)
+  readinessScore        Float    @default(0)
+  readinessStatus       String   // ready | partial | not_configured | needs_review
+  monitoringDetails     String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([monitoringDomain])
+  @@index([readinessStatus])
+  @@map("production_monitoring_readiness")
+}
+
+model IncidentResponseOrchestration {
+  id                    String   @id @default(uuid())
+  caseId                String
+  incidentType          String   // service_outage | data_breach | performance_degradation | security_incident | data_corruption | deployment_failure
+  severityLevel         String   // critical | high | medium | low
+  responseSteps         Int      @default(0)
+  stepsCompleted        Int      @default(0)
+  responseTimeMs        Int      @default(0)
+  resolutionStatus      String   // detected | triaged | mitigating | resolved | post_mortem
+  responseHash          String   // SHA-256
+  responseDetails       String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([incidentType])
+  @@index([resolutionStatus])
+  @@map("incident_response_orchestrations")
+}
+
+model OperationalSupportWorkflow {
+  id                    String   @id @default(uuid())
+  caseId                String
+  supportCategory       String   // technical | onboarding | training | escalation | maintenance | compliance
+  requestType           String   // bug_report | feature_question | access_request | data_inquiry | performance_issue | security_concern
+  priorityLevel         String   // critical | high | medium | low
+  slaTargetMs           Int      @default(0)
+  actualResponseMs      Int      @default(0)
+  slaMetric             Boolean  @default(false)
+  supportStatus         String   // open | assigned | in_progress | resolved | closed
+  supportHash           String   // SHA-256
+  supportDetails        String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([supportCategory])
+  @@index([supportStatus])
+  @@map("operational_support_workflows")
+}
+
+model EnterpriseRolloutCertification {
+  id                    String   @id @default(uuid())
+  caseId                String
+  certificationGate     String   // security_audit | performance_baseline | stability_verification | compliance_review | data_integrity | rollback_tested | monitoring_verified | support_readiness
+  gateStatus            String   // passed | failed | conditional | pending
+  evidenceHash          String   // SHA-256
+  verifiedBy            String?
+  verifiedAt            String?
+  certificationDetails  String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([certificationGate])
+  @@index([gateStatus])
+  @@map("enterprise_rollout_certifications")
+}
+
+model ProductionRollbackGovernance {
+  id                    String   @id @default(uuid())
+  caseId                String
+  rollbackTrigger       String   // error_threshold | performance_degradation | security_vulnerability | data_integrity_failure | manual_override | compliance_violation
+  rollbackScope         String   // full_system | single_service | database_only | config_only | feature_flag
+  rollbackSteps         Int      @default(0)
+  stepsCompleted        Int      @default(0)
+  dataPreserved         Boolean  @default(false)
+  governanceApproved    Boolean  @default(false)
+  rollbackStatus        String   // triggered | executing | completed | failed | verified
+  rollbackHash          String   // SHA-256
+  rollbackDetails       String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([rollbackTrigger])
+  @@index([rollbackStatus])
+  @@map("production_rollback_governance")
+}
+
+model LongTermSupportTracking {
+  id                    String   @id @default(uuid())
+  caseId                String
+  supportArea           String   // security_patches | dependency_updates | performance_monitoring | compliance_audits | backup_verification | documentation_updates | training_refreshers
+  lastVerifiedAt        String
+  nextScheduledAt       String
+  trackingStatus        String   // current | due_soon | overdue | completed
+  evidenceLinked        Boolean  @default(false)
+  trackingHash          String   // SHA-256
+  trackingDetails       String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([supportArea])
+  @@index([trackingStatus])
+  @@map("long_term_support_tracking")
+}
+
+model InstitutionalEnablementControl {
+  id                    String   @id @default(uuid())
+  caseId                String
+  institutionId         String
+  featureScope          String   // core_litigation | evidence_management | contradiction_analysis | export_workflows | trial_preparation | administrative
+  permissionLevel       String   // full | restricted | read_only | disabled
+  enablementStatus      String   // enabled | staged | pending_approval | disabled | revoked
+  governanceApproved    Boolean  @default(false)
+  enablementHash        String   // SHA-256
+  enablementDetails     String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([institutionId])
+  @@index([enablementStatus])
+  @@map("institutional_enablement_controls")
+}
+
+model ProductionStewardshipManifest {
+  id                    String   @id @default(uuid())
+  caseId                String
+  stewardshipArea       String   // rollout_governance | monitoring_coverage | incident_readiness | support_capacity | compliance_posture | security_stewardship | operational_continuity | stakeholder_communication
+  manifestHash          String   // SHA-256
+  verified              Boolean  @default(false)
+  stewardshipLevel      String   // foundational | operational | mature | exemplary
+  manifestDetails       String   // JSON
+  generatedBy           String
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([stewardshipArea])
+  @@index([verified])
+  @@map("production_stewardship_manifests")
+}

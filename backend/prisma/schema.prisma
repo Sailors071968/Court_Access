@@ -7839,3 +7839,202 @@ model PilotCertificationManifest {
   @@index([certified])
   @@map("pilot_certification_manifests")
 }
+
+// ---------------------------------------------------------------------------
+// Phase N.4 — Controlled Production Readiness + Operational Maturation
+// Operational refinement. No speculative architecture growth.
+// ---------------------------------------------------------------------------
+
+model AttorneyPilotReview {
+  id                    String   @id @default(uuid())
+  caseId                String
+  reviewerId            String
+  reviewerRole          String   // lead_attorney | associate | public_defender | private_counsel
+  workflowReviewed      String   // evidence_review | contradiction_analysis | defense_generation | export_workflow | trial_preparation
+  usabilityScore        Float    @default(0)
+  accuracyScore         Float    @default(0)
+  speedScore            Float    @default(0)
+  overallRating         Float    @default(0)
+  feedbackNotes         String   // JSON
+  reviewHash            String   // SHA-256
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([reviewerId])
+  @@index([workflowReviewed])
+  @@map("attorney_pilot_reviews")
+}
+
+model UiUxOptimizationCycle {
+  id                    String   @id @default(uuid())
+  caseId                String
+  optimizationArea      String   // navigation_speed | visual_clarity | interaction_flow | data_density | responsive_layout | accessibility | error_handling
+  cycleName             String
+  beforeScore           Float    @default(0)
+  afterScore            Float    @default(0)
+  improvementPct        Float    @default(0)
+  cycleStatus           String   // completed | in_progress | planned | reverted
+  cycleDetails          String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([optimizationArea])
+  @@index([cycleStatus])
+  @@map("ui_ux_optimization_cycles")
+}
+
+model InfrastructureTuningEntry {
+  id                    String   @id @default(uuid())
+  caseId                String
+  tuningDomain          String   // database_queries | api_response | cache_efficiency | memory_usage | connection_pooling | disk_io | network_latency
+  metricBefore          Float    @default(0)
+  metricAfter           Float    @default(0)
+  improvementPct        Float    @default(0)
+  tuningStatus          String   // applied | validated | reverted | planned
+  tuningHash            String   // SHA-256
+  tuningDetails         String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([tuningDomain])
+  @@index([tuningStatus])
+  @@map("infrastructure_tuning_entries")
+}
+
+model DeploymentMaturityCheck {
+  id                    String   @id @default(uuid())
+  caseId                String
+  maturityDomain        String   // ci_cd_pipeline | rollback_readiness | monitoring_coverage | alerting_configuration | secret_management | log_aggregation | backup_verification
+  maturityLevel         String   // initial | managed | defined | measured | optimized
+  checksTotal           Int      @default(0)
+  checksPassed          Int      @default(0)
+  maturityScore         Float    @default(0)
+  maturityHash          String   // SHA-256
+  maturityDetails       String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([maturityDomain])
+  @@index([maturityLevel])
+  @@map("deployment_maturity_checks")
+}
+
+model TelemetryRefinementEntry {
+  id                    String   @id @default(uuid())
+  caseId                String
+  telemetryArea         String   // request_tracing | error_tracking | performance_monitoring | usage_analytics | audit_logging | health_checks | capacity_planning
+  signalToNoiseRatio    Float    @default(0)
+  coveragePercentage    Float    @default(0)
+  refinementStatus      String   // refined | noisy | incomplete | optimal
+  refinementHash        String   // SHA-256
+  refinementDetails     String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([telemetryArea])
+  @@index([refinementStatus])
+  @@map("telemetry_refinement_entries")
+}
+
+model MaturationReadinessScore {
+  id                    String   @id @default(uuid())
+  caseId                String
+  scoreDomain           String   // code_quality | test_coverage | security_posture | operational_readiness | documentation | deployment_automation | incident_response | data_integrity
+  score                 Float    @default(0)
+  maxScore              Float    @default(100)
+  threshold             Float    @default(80)
+  meetsThreshold        Boolean  @default(false)
+  scoreStatus           String   // excellent | good | acceptable | needs_work | critical
+  scoreHash             String   // SHA-256
+  scoreDetails          String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([scoreDomain])
+  @@index([scoreStatus])
+  @@map("maturation_readiness_scores")
+}
+
+model InstitutionalOnboardingRehearsal {
+  id                    String   @id @default(uuid())
+  caseId                String
+  onboardingPhase       String   // account_setup | user_provisioning | data_migration | workflow_configuration | training_delivery | compliance_review | go_live_checklist
+  stepsTotal            Int      @default(0)
+  stepsCompleted        Int      @default(0)
+  rehearsalStatus       String   // completed | in_progress | blocked | planned
+  governanceApproved    Boolean  @default(false)
+  rehearsalHash         String   // SHA-256
+  rehearsalDetails      String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([onboardingPhase])
+  @@index([rehearsalStatus])
+  @@map("institutional_onboarding_rehearsals")
+}
+
+model LongDurationStabilityRun {
+  id                    String   @id @default(uuid())
+  caseId                String
+  testDurationHours     Int      @default(0)
+  requestsProcessed     Int      @default(0)
+  errorsEncountered     Int      @default(0)
+  uptimePercentage      Float    @default(100)
+  memoryLeakDetected    Boolean  @default(false)
+  performanceDegraded   Boolean  @default(false)
+  stabilityStatus       String   // stable | degraded | unstable | excellent
+  stabilityHash         String   // SHA-256
+  stabilityDetails      String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([stabilityStatus])
+  @@map("long_duration_stability_runs")
+}
+
+model ProductionCandidateCertification {
+  id                    String   @id @default(uuid())
+  caseId                String
+  candidateVersion      String
+  certificationScope    String   // full_platform | subsystem | security | performance | stability | usability
+  rulesTotal            Int      @default(0)
+  rulesPassed           Int      @default(0)
+  certificationRate     Float    @default(0)
+  certificationStatus   String   // certified | conditional | not_certified | pending
+  certifiedBy           String?
+  certifiedAt           String?
+  certificationHash     String   // SHA-256
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([candidateVersion])
+  @@index([certificationStatus])
+  @@map("production_candidate_certifications")
+}
+
+model OperationalMaturityManifest {
+  id                    String   @id @default(uuid())
+  caseId                String
+  manifestArea          String   // attorney_readiness | infrastructure_maturity | deployment_readiness | telemetry_completeness | onboarding_readiness | stability_certification | security_posture | operational_excellence
+  manifestHash          String   // SHA-256
+  verified              Boolean  @default(false)
+  maturityLevel         String   // initial | developing | mature | optimized | exemplary
+  manifestDetails       String   // JSON
+  generatedBy           String
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([manifestArea])
+  @@index([verified])
+  @@map("operational_maturity_manifests")
+}

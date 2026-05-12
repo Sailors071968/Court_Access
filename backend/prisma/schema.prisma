@@ -5085,3 +5085,216 @@ model EvidenceTransformationLineage {
   @@index([transformationType])
   @@map("evidence_transformation_lineages")
 }
+
+// ---------------------------------------------------------------------------
+// Phase H.3 — Enterprise Scalability + Distributed Reliability Framework
+// ---------------------------------------------------------------------------
+
+model DistributedJobOrchestration {
+  id                    String   @id @default(uuid())
+  jobType               String   // full_analysis | layer_analysis | evidence_ingestion | integrity_check | replay_verification
+  caseId                String?
+  workerNode            String   // worker identifier
+  priority              Int      @default(5) // 1=highest, 10=lowest
+  status                String   // queued | dispatched | running | completed | failed | cancelled
+  inputPayload          String   // JSON
+  outputPayload         String?  // JSON
+  attemptCount          Int      @default(0)
+  maxAttempts           Int      @default(3)
+  startedAt             String?
+  completedAt           String?
+  errorDetails          String?
+  executionDuration     Int?     // ms
+  deterministic         Boolean  @default(true)
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([jobType])
+  @@index([caseId])
+  @@index([status])
+  @@index([workerNode])
+  @@index([priority])
+  @@map("distributed_job_orchestrations")
+}
+
+model QueueIntegrityVerification {
+  id                    String   @id @default(uuid())
+  queueName             String   // evidence_ingestion | analysis_pipeline | integrity_check | export_generation
+  verificationTimestamp String
+  totalEnqueued         Int      @default(0)
+  totalProcessed        Int      @default(0)
+  totalFailed           Int      @default(0)
+  totalOrphaned         Int      @default(0)
+  queueDepth            Int      @default(0)
+  integrityStatus       String   // healthy | degraded | corrupted | recovering
+  checksumValid         Boolean  @default(true)
+  dequeueOrderCorrect   Boolean  @default(true)
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([queueName])
+  @@index([integrityStatus])
+  @@map("queue_integrity_verifications")
+}
+
+model FaultTolerantRecoveryLog {
+  id                    String   @id @default(uuid())
+  caseId                String?
+  faultType             String   // worker_crash | timeout | db_connection_loss | memory_overflow | disk_full | network_partition
+  faultSeverity         String   // critical | high | medium | low
+  affectedComponent     String
+  recoveryAction        String   // retry | checkpoint_restore | queue_replay | manual_intervention | graceful_degradation
+  recoveryStatus        String   // initiated | in_progress | completed | failed | escalated
+  checkpointId          String?
+  preFailureState       String   // JSON snapshot
+  postRecoveryState     String?  // JSON snapshot
+  dataIntegrityVerified Boolean  @default(false)
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([faultType])
+  @@index([recoveryStatus])
+  @@map("fault_tolerant_recovery_logs")
+}
+
+model MultiWorkerSynchronization {
+  id                    String   @id @default(uuid())
+  syncGroupId           String
+  workerNode            String
+  syncType              String   // state_sync | lock_acquisition | lock_release | heartbeat | task_handoff
+  syncStatus            String   // synchronized | desynchronized | pending | conflict
+  lockTarget            String?  // resource being locked
+  lockAcquiredAt        String?
+  lockReleasedAt        String?
+  conflictDetails       String?  // JSON
+  stateHash             String?  // hash of worker state for consistency check
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([syncGroupId])
+  @@index([workerNode])
+  @@index([syncType])
+  @@index([syncStatus])
+  @@map("multi_worker_synchronizations")
+}
+
+model HighVolumeEvidenceBatch {
+  id                    String   @id @default(uuid())
+  caseId                String
+  batchNumber           Int      @default(1)
+  totalStatements       Int      @default(0)
+  processedStatements   Int      @default(0)
+  failedStatements      Int      @default(0)
+  batchStatus           String   // queued | processing | completed | partial_failure | failed
+  startedAt             String?
+  completedAt           String?
+  processingRate        Float    @default(0) // statements per second
+  integrityHashBefore   String?
+  integrityHashAfter    String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([batchStatus])
+  @@index([batchNumber])
+  @@map("high_volume_evidence_batches")
+}
+
+model DistributedReplayVerification {
+  id                    String   @id @default(uuid())
+  caseId                String
+  replayScope           String   // full_case | single_layer | batch
+  workerNode            String
+  originalHash          String
+  replayHash            String
+  hashConsistent        Boolean  @default(true)
+  inconsistencyDetails  String?  // JSON
+  recordsReplayed       Int      @default(0)
+  replayDuration        Int?     // ms
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([replayScope])
+  @@index([hashConsistent])
+  @@map("distributed_replay_verifications")
+}
+
+model RecoveryCheckpoint {
+  id                    String   @id @default(uuid())
+  caseId                String?
+  checkpointType        String   // automatic | manual | pre_migration | pre_analysis | scheduled
+  componentName         String
+  stateSnapshot         String   // JSON — full state at checkpoint
+  stateHash             String
+  recordCounts          String   // JSON — per-table record counts
+  validUntil            String?
+  restoredCount         Int      @default(0)
+  lastRestoredAt        String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([checkpointType])
+  @@index([componentName])
+  @@map("recovery_checkpoints")
+}
+
+model OperationalHealthTelemetry {
+  id                    String   @id @default(uuid())
+  componentName         String
+  metricType            String   // cpu_usage | memory_usage | db_latency | queue_depth | request_rate | error_rate | disk_usage
+  metricValue           Float    @default(0)
+  metricUnit            String   // percent | ms | count | per_second | bytes
+  healthStatus          String   // healthy | warning | critical | unknown
+  threshold             Float?
+  exceededThreshold     Boolean  @default(false)
+  sampledAt             String
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([componentName])
+  @@index([metricType])
+  @@index([healthStatus])
+  @@map("operational_health_telemetries")
+}
+
+model FailureCascadeIsolation {
+  id                    String   @id @default(uuid())
+  originComponent       String
+  failureType           String   // timeout | crash | resource_exhaustion | dependency_failure | data_corruption
+  cascadeDepth          Int      @default(0) // how many levels the failure propagated
+  affectedComponents    String   // JSON array
+  isolationMethod       String   // circuit_breaker | bulkhead | timeout_fence | graceful_degradation | queue_drain
+  isolationStatus       String   // contained | propagating | resolved | monitoring
+  boundaryEnforced      Boolean  @default(true)
+  maxCascadeDepth       Int      @default(3)
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([originComponent])
+  @@index([failureType])
+  @@index([isolationStatus])
+  @@map("failure_cascade_isolations")
+}
+
+model SystemSurvivabilityMetric {
+  id                    String   @id @default(uuid())
+  metricName            String   // uptime | mttr | mtbf | availability | throughput | error_rate | recovery_success_rate
+  metricValue           Float    @default(0)
+  metricUnit            String
+  measurementPeriod     String   // hourly | daily | weekly | monthly
+  periodStart           String
+  periodEnd             String
+  targetValue           Float?
+  targetMet             Boolean  @default(true)
+  trendDirection        String   // improving | stable | degrading | unknown
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([metricName])
+  @@index([measurementPeriod])
+  @@index([targetMet])
+  @@map("system_survivability_metrics")
+}

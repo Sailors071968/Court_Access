@@ -76,6 +76,7 @@ import { registerGovernanceComplianceRoutes } from "./routes/governanceComplianc
 import { registerProductionHardeningRoutes } from "./routes/productionHardeningRoutes.js";
 import { registerInstitutionalResilienceRoutes } from "./routes/institutionalResilienceRoutes.js";
 import { registerEvidentiaryTrustRoutes } from "./routes/evidentiaryTrustRoutes.js";
+import { registerInstitutionalDeploymentRoutes } from "./routes/institutionalDeploymentRoutes.js";
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -321,6 +322,9 @@ async function startServer() {
 
   console.log('[Server] Registering evidentiary trust routes (Phase J.2)...');
   await registerEvidentiaryTrustRoutes(app);
+
+  console.log('[Server] Registering institutional deployment routes (Phase K.1)...');
+  await registerInstitutionalDeploymentRoutes(app);
 
   console.log('[Server] Registering admin queue monitoring routes...');
   await registerQueueMonitorRoutes(app);

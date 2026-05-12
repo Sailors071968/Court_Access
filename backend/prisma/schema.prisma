@@ -3300,3 +3300,219 @@ model ProsecutorialMisconductEntry {
   @@index([preservedForAppeal])
   @@map("prosecutorial_misconduct_entries")
 }
+
+// ---------------------------------------------------------------------------
+// Phase E.2 — Newly Discovered Evidence
+// ---------------------------------------------------------------------------
+
+model NewlyDiscoveredEvidence {
+  id                    String   @id @default(uuid())
+  caseId                String
+  evidenceType          String   // witness_recantation | forensic_retest | dna_evidence | alibi_evidence | third_party_culpability | government_misconduct | new_testimony | documentary | digital
+  description           String
+  discoveryDate         String?
+  discoverySource       String   // defense_investigation | innocence_project | government_disclosure | witness_contact | forensic_lab | public_records
+  materialityAssessment String   // highly_material | material | potentially_material | immaterial
+  unavailableAtTrial    Boolean  @default(true)
+  diligenceShown        Boolean  @default(true)
+  probableOutcomeChange String   // probable | possible | unlikely
+  legalStandard         String   // PC § 1473 | PC § 1181(8) | Brady v. Maryland
+  citations             String   // JSON array
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([evidenceType])
+  @@index([materialityAssessment])
+  @@map("newly_discovered_evidence")
+}
+
+// ---------------------------------------------------------------------------
+// Phase E.2 — Actual Innocence Indicator
+// ---------------------------------------------------------------------------
+
+model ActualInnocenceIndicator {
+  id                    String   @id @default(uuid())
+  caseId                String
+  indicatorType         String   // alibi_evidence | misidentification | false_confession | forensic_invalidity | third_party_guilt | recantation | dna_exclusion | witness_bias | tunnel_vision
+  description           String
+  strength              String   // strong | moderate | weak
+  supportingEvidence    String   // JSON array of evidence references
+  contraryEvidence      String   // JSON array of evidence against this indicator
+  schlupStandard        String   // Meets Schlup gateway | Arguable | Does not meet
+  citations             String   // JSON array
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([indicatorType])
+  @@index([strength])
+  @@map("actual_innocence_indicators")
+}
+
+// ---------------------------------------------------------------------------
+// Phase E.2 — Ineffective Assistance Issue
+// ---------------------------------------------------------------------------
+
+model IneffectiveAssistanceIssue {
+  id                    String   @id @default(uuid())
+  caseId                String
+  deficiencyType        String   // failure_to_investigate | failure_to_object | failure_to_call_witness | failure_to_cross_examine | failure_to_move | inadequate_preparation | conflict_of_interest | failure_to_advise | failure_to_preserve
+  description           String
+  stricklandDeficiency  String   // How counsel's performance fell below objective standard of reasonableness
+  stricklandPrejudice   String   // How deficiency affected outcome — reasonable probability of different result
+  trialPhase            String
+  relatedObjectionId    String?
+  relatedMotionId       String?
+  meritAssessment       String   // strong | moderate | weak
+  citations             String   // JSON array
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([deficiencyType])
+  @@index([meritAssessment])
+  @@map("ineffective_assistance_issues")
+}
+
+// ---------------------------------------------------------------------------
+// Phase E.2 — Brady/Giglio Reassessment
+// ---------------------------------------------------------------------------
+
+model BradyGiglioReassessment {
+  id                    String   @id @default(uuid())
+  caseId                String
+  originalBradyIssueId  String?
+  reassessmentType      String   // undisclosed_evidence | undisclosed_deal | undisclosed_record | giglio_impeachment | new_exculpatory
+  description           String
+  materialityAnalysis   String   // Material — reasonable probability of different result | Not material
+  favorabilityAnalysis  String   // Favorable to defense | Neutral | Unclear
+  suppressionAnalysis   String   // Government knew or should have known | Unknown
+  cumulativeWithOther   Boolean  @default(false)
+  kylesBagleyStandard   String   // Kyles v. Whitley / Bagley analysis
+  citations             String   // JSON array
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([reassessmentType])
+  @@map("brady_giglio_reassessments")
+}
+
+// ---------------------------------------------------------------------------
+// Phase E.2 — Forensic Reliability Reassessment
+// ---------------------------------------------------------------------------
+
+model ForensicReliabilityReassessment {
+  id                    String   @id @default(uuid())
+  caseId                String
+  forensicType          String   // fingerprint | ballistics | bite_mark | hair_comparison | arson_investigation | blood_spatter | fiber_analysis | toolmark | shoeprint | drug_testing | dna
+  originalConclusion    String
+  currentScientificStatus String // validated | questioned | debunked | superseded | under_review
+  reliabilityScore      Float    @default(0.5) // 0.0-1.0
+  nasReport2009Relevant Boolean  @default(false) // NAS 2009 "Strengthening Forensic Science" relevance
+  pcatRelevant          Boolean  @default(false) // PCAST 2016 relevance
+  examinerQualifications String?
+  labAccreditation      String?
+  retestingRecommended  Boolean  @default(false)
+  citations             String   // JSON array
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([forensicType])
+  @@index([currentScientificStatus])
+  @@map("forensic_reliability_reassessments")
+}
+
+// ---------------------------------------------------------------------------
+// Phase E.2 — Witness Recantation
+// ---------------------------------------------------------------------------
+
+model WitnessRecantation {
+  id                    String   @id @default(uuid())
+  caseId                String
+  witnessName           String
+  originalTestimony     String
+  recantedTestimony     String
+  recantationDate       String?
+  recantationContext    String   // voluntary | coerced_original | new_information | conscience | pressure
+  credibilityOfRecantation String // high | medium | low
+  materialityToConviction String // critical | significant | marginal
+  corroboration         String   // JSON array of corroborating evidence
+  citations             String   // JSON array
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([credibilityOfRecantation])
+  @@index([materialityToConviction])
+  @@map("witness_recantations")
+}
+
+// ---------------------------------------------------------------------------
+// Phase E.2 — Cumulative Constitutional Error
+// ---------------------------------------------------------------------------
+
+model CumulativeConstitutionalError {
+  id                    String   @id @default(uuid())
+  caseId                String
+  errorIds              String   // JSON array of error IDs from E.1 + D.6
+  totalErrors           Int      @default(0)
+  cumulativePrejudice   Float    @default(0.0) // 0.0-1.0 composite prejudice score
+  prejudiceLevel        String   // cumulative_reversal | significant_cumulative | moderate_cumulative | minimal_cumulative
+  individuallyHarmless  Int      @default(0) // Count of errors individually harmless
+  collectivelyPrejudicial Boolean @default(false)
+  hillAnalysis          String   // People v. Hill cumulative error analysis
+  citations             String   // JSON array
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([prejudiceLevel])
+  @@map("cumulative_constitutional_errors")
+}
+
+// ---------------------------------------------------------------------------
+// Phase E.2 — Post-Conviction Timeline
+// ---------------------------------------------------------------------------
+
+model PostConvictionTimeline {
+  id                    String   @id @default(uuid())
+  caseId                String
+  eventType             String   // conviction | sentencing | appeal_filed | appeal_decided | habeas_filed | habeas_decided | new_evidence | recantation | forensic_retest | dna_test | resentencing | exoneration
+  eventDate             String
+  description           String
+  legalSignificance     String   // What this means for post-conviction relief
+  deadlineImplication   String?  // Any statute of limitations or filing deadline affected
+  citations             String   // JSON array
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([eventType])
+  @@map("post_conviction_timelines")
+}
+
+// ---------------------------------------------------------------------------
+// Phase E.2 — DNA/Forensic Testing Issue
+// ---------------------------------------------------------------------------
+
+model DnaForensicTestingIssue {
+  id                    String   @id @default(uuid())
+  caseId                String
+  issueType             String   // untested_evidence | retesting_needed | degraded_sample | new_technology | lab_error | contamination | mixture_interpretation | touch_dna | codis_hit | exclusion
+  evidenceDescription   String
+  currentStatus         String   // untested | pending | tested_favorable | tested_unfavorable | inconclusive
+  pc1405Applicable      Boolean  @default(false) // PC § 1405 right to DNA testing
+  testingRecommendation String   // recommended | conditional | not_recommended
+  potentialOutcome      String   // exculpatory | inconclusive | inculpatory | unknown
+  citations             String   // JSON array
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([issueType])
+  @@index([currentStatus])
+  @@map("dna_forensic_testing_issues")
+}

@@ -88,6 +88,7 @@ import { registerOperationalMaturationRoutes } from "./routes/operationalMaturat
 import { registerEnterpriseRolloutRoutes } from "./routes/enterpriseRolloutRoutes.js";
 import { registerStripeBillingRoutes } from "./routes/stripeBillingRoutes.js";
 import { registerStripeActivationRoutes } from "./routes/stripeActivationRoutes.js";
+import { registerLiveBillingEnablementRoutes } from "./routes/liveBillingEnablementRoutes.js";
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -369,6 +370,9 @@ async function startServer() {
 
   console.log('[Server] Registering Stripe activation routes (Phase O.2)...');
   await registerStripeActivationRoutes(app);
+
+  console.log('[Server] Registering LIVE billing enablement routes (Phase O.3)...');
+  await registerLiveBillingEnablementRoutes(app);
 
   console.log('[Server] Registering admin queue monitoring routes...');
   await registerQueueMonitorRoutes(app);

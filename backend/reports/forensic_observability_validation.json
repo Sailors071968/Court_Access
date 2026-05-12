@@ -1,0 +1,155 @@
+{
+  "phase": "L.1",
+  "name": "Full-System Observability + Forensic Telemetry Framework",
+  "generatedAt": "2026-05-12T43:00:00.000Z",
+  "status": "READY_FOR_DEPLOYMENT",
+
+  "subsystems": {
+    "endToEndOperationalTracing": {
+      "description": "Deterministic end-to-end operational tracing",
+      "traceTypes": ["api_request", "background_job", "user_action", "system_event", "integration_call"],
+      "traceOrigins": ["frontend", "backend", "worker", "scheduler", "external"],
+      "deterministic": true
+    },
+    "crossLayerTelemetrySynchronization": {
+      "description": "Immutable cross-layer telemetry synchronization",
+      "layerPairs": ["evidence→contradictions", "contradictions→defense", "defense→trial_prep", "trial_prep→appellate", "appellate→sentencing"],
+      "sha256HashComparison": true,
+      "immutable": true
+    },
+    "incidentReconstructionFramework": {
+      "description": "Reproducible incident reconstruction framework",
+      "incidentTypes": ["data_integrity", "service_outage", "security_event", "performance_degradation", "configuration_drift"],
+      "severityLevels": ["critical", "high", "medium", "low"],
+      "reproducible": true
+    },
+    "integrityEventMonitoring": {
+      "description": "SHA-256 linked integrity event monitoring",
+      "eventTypes": ["hash_mismatch", "unauthorized_access", "data_modification", "schema_drift", "config_change"],
+      "sha256Linked": true
+    },
+    "deterministicObservabilityPipelines": {
+      "description": "Reproducible deterministic observability pipelines",
+      "pipelineNames": ["evidence_pipeline", "analysis_pipeline", "export_pipeline", "integrity_pipeline", "governance_pipeline"],
+      "pipelineStatuses": ["running", "completed", "failed", "stalled"],
+      "reproducible": true
+    },
+    "operationalAnomalyDetection": {
+      "description": "Rule-based operational anomaly detection",
+      "anomalyTypes": ["latency_spike", "error_rate", "throughput_drop", "resource_exhaustion", "integrity_violation"],
+      "detectionRules": ["threshold", "trend", "pattern", "baseline_deviation"],
+      "ruleBased": true
+    },
+    "auditTelemetryManifests": {
+      "description": "Immutable audit telemetry manifests",
+      "manifestScopes": ["full_system", "per_layer", "per_service", "per_endpoint"],
+      "sha256ManifestHashing": true,
+      "immutable": true
+    },
+    "platformWideStateVisibility": {
+      "description": "Evidence-linked platform-wide state visibility",
+      "components": ["api_server", "database", "cache", "worker", "scheduler", "storage"],
+      "componentStatuses": ["healthy", "degraded", "down", "unknown"],
+      "evidenceLinked": true
+    },
+    "telemetryReplayVerification": {
+      "description": "Deterministic telemetry replay verification",
+      "replayScopes": ["full_trace", "single_span", "incident_timeline", "pipeline_execution"],
+      "sha256HashComparison": true,
+      "deterministic": true
+    },
+    "observabilityCertificationTracking": {
+      "description": "Reproducible observability certification tracking",
+      "certificationScopes": ["tracing", "telemetry", "monitoring", "anomaly_detection", "incident_response"],
+      "certificationStatuses": ["certified", "conditional", "not_certified", "pending"],
+      "reproducible": true
+    }
+  },
+
+  "frontendComponent": {
+    "name": "ForensicObservabilityCockpit",
+    "panes": ["operational traces", "telemetry synchronization", "incident reconstruction", "integrity monitoring", "anomaly detection", "audit telemetry", "replay verification", "observability certification"],
+    "theme": "dark",
+    "features": ["trace duration display", "layer sync visualization", "incident timeline", "severity badges", "anomaly baseline comparison", "manifest hash display", "replay match indicators", "certification rate tracking"]
+  },
+
+  "apiEndpoints": {
+    "fullAnalysis": { "method": "POST", "path": "/api/observability/analyze/:caseId" },
+    "traces": [
+      { "method": "POST", "path": "/api/observability/traces/:caseId" },
+      { "method": "GET", "path": "/api/observability/traces/:caseId" }
+    ],
+    "telemetry": [
+      { "method": "POST", "path": "/api/observability/telemetry/:caseId" },
+      { "method": "GET", "path": "/api/observability/telemetry/:caseId" }
+    ],
+    "incidents": [
+      { "method": "POST", "path": "/api/observability/incidents/:caseId" },
+      { "method": "GET", "path": "/api/observability/incidents/:caseId" }
+    ],
+    "integrity": [
+      { "method": "POST", "path": "/api/observability/integrity/:caseId" },
+      { "method": "GET", "path": "/api/observability/integrity/:caseId" }
+    ],
+    "pipelines": [
+      { "method": "POST", "path": "/api/observability/pipelines/:caseId" },
+      { "method": "GET", "path": "/api/observability/pipelines/:caseId" }
+    ],
+    "anomalies": [
+      { "method": "POST", "path": "/api/observability/anomalies/:caseId" },
+      { "method": "GET", "path": "/api/observability/anomalies/:caseId" }
+    ],
+    "manifests": [
+      { "method": "POST", "path": "/api/observability/manifests/:caseId" },
+      { "method": "GET", "path": "/api/observability/manifests/:caseId" }
+    ],
+    "state": [
+      { "method": "POST", "path": "/api/observability/state/:caseId" },
+      { "method": "GET", "path": "/api/observability/state/:caseId" }
+    ],
+    "replay": [
+      { "method": "POST", "path": "/api/observability/replay/:caseId" },
+      { "method": "GET", "path": "/api/observability/replay/:caseId" }
+    ],
+    "certification": [
+      { "method": "POST", "path": "/api/observability/certification/:caseId" },
+      { "method": "GET", "path": "/api/observability/certification/:caseId" }
+    ],
+    "validation": { "method": "GET", "path": "/api/observability/validation" }
+  },
+
+  "prismaModels": [
+    "EndToEndOperationalTrace",
+    "CrossLayerTelemetrySync",
+    "IncidentReconstructionRecord",
+    "IntegrityEventMonitor",
+    "DeterministicObservabilityPipeline",
+    "OperationalAnomalyDetection",
+    "AuditTelemetryManifest",
+    "PlatformStateVisibility",
+    "TelemetryReplayVerification",
+    "ObservabilityCertificationTracking"
+  ],
+
+  "migration": "20260512430000_forensic_observability",
+
+  "constraints": {
+    "noCovertTelemetryCollection": true,
+    "noOpaqueUserAnalytics": true,
+    "noHiddenBehavioralMonitoring": true,
+    "noProbabilisticSurveillanceScoring": true,
+    "noUnverifiableObservabilitySystems": true,
+    "corePrinciple": "CourtAccess maximizes transparent forensic observability and operational traceability. It does NOT create hidden surveillance infrastructure."
+  },
+
+  "systemsUnmodified": {
+    "auth": true,
+    "csrf": true,
+    "nginx": true,
+    "redis": true,
+    "ocr": true,
+    "pm2": true,
+    "ingestion": true,
+    "existingD1toK2Systems": true
+  }
+}

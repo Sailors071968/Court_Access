@@ -1,0 +1,150 @@
+{
+  "phase": "I.2",
+  "name": "Governance, Compliance, and Institutional Trust Framework",
+  "generatedAt": "2026-05-12T37:00:00.000Z",
+  "status": "READY_FOR_DEPLOYMENT",
+
+  "subsystems": {
+    "governancePolicyEngine": {
+      "description": "Deterministic governance policy engine",
+      "policyTypes": ["access_control", "data_retention", "evidence_handling", "ethical_safeguard", "operational", "disclosure"],
+      "enforcementLevels": ["mandatory", "recommended", "advisory"],
+      "scopes": ["system_wide", "per_case", "per_role", "per_layer"]
+    },
+    "permissionAuditTrails": {
+      "description": "Immutable permission audit trails",
+      "actions": ["access_granted", "access_denied", "permission_changed", "role_assigned", "role_revoked"],
+      "resourceTypes": ["case", "evidence", "analysis", "export", "configuration"],
+      "immutable": true
+    },
+    "complianceVerificationWorkflows": {
+      "description": "Reproducible compliance verification workflows",
+      "workflowTypes": ["evidence_handling", "disclosure_compliance", "retention_check", "access_review", "export_audit"],
+      "reproducible": true
+    },
+    "ethicalSafeguardEnforcement": {
+      "description": "Rule-based ethical safeguard enforcement",
+      "safeguardTypes": ["no_autonomous_filing", "no_unverified_claims", "no_ai_replacement", "no_unauthorized_transmission", "no_opaque_mutation"],
+      "ruleBased": true
+    },
+    "operationalAccountabilityLogs": {
+      "description": "Immutable operational accountability logs",
+      "operationTypes": ["system_config_change", "data_access", "analysis_execution", "export_generation", "policy_modification"],
+      "immutable": true
+    },
+    "institutionalOversightReporting": {
+      "description": "Deterministic institutional oversight reporting",
+      "reportTypes": ["daily_summary", "weekly_audit", "monthly_compliance", "incident_report", "ad_hoc"],
+      "complianceScoring": true
+    },
+    "roleBasedGovernanceControls": {
+      "description": "Permission-scoped role-based governance controls",
+      "roles": ["lead_attorney", "associate", "paralegal", "investigator", "expert", "client"],
+      "permissionLevels": ["full", "read_write", "read_only", "none"]
+    },
+    "complianceExceptionTracking": {
+      "description": "Evidence-linked compliance exception tracking",
+      "exceptionTypes": ["policy_override", "deadline_extension", "access_exception", "retention_waiver", "disclosure_delay"],
+      "evidenceLinked": true
+    },
+    "systemPolicyVersioning": {
+      "description": "Immutable system policy versioning",
+      "changeTypes": ["initial", "amendment", "revision", "supersede", "repeal"],
+      "sha256HashVerification": true,
+      "immutable": true
+    },
+    "governanceReviewCertification": {
+      "description": "Reproducible governance review certification",
+      "reviewTypes": ["periodic", "incident_triggered", "pre_deployment", "post_incident", "ad_hoc"],
+      "certificationStatuses": ["certified", "conditional", "failed", "pending"]
+    }
+  },
+
+  "frontendComponent": {
+    "name": "GovernanceComplianceCockpit",
+    "panes": ["governance policies", "permission audits", "compliance workflows", "safeguard enforcement", "accountability logs", "oversight reporting", "exception tracking", "policy versioning"],
+    "theme": "dark",
+    "features": ["enforcement level badges", "audit trail visualization", "compliance score indicators", "safeguard status tracking", "impact level indicators", "version hash display", "exception status management", "oversight score visualization"]
+  },
+
+  "apiEndpoints": {
+    "fullAnalysis": { "method": "POST", "path": "/api/governance/analyze/:caseId" },
+    "policies": [
+      { "method": "POST", "path": "/api/governance/policies/:caseId" },
+      { "method": "GET", "path": "/api/governance/policies/:caseId" }
+    ],
+    "audits": [
+      { "method": "POST", "path": "/api/governance/audits/:caseId" },
+      { "method": "GET", "path": "/api/governance/audits/:caseId" }
+    ],
+    "compliance": [
+      { "method": "POST", "path": "/api/governance/compliance/:caseId" },
+      { "method": "GET", "path": "/api/governance/compliance/:caseId" }
+    ],
+    "safeguards": [
+      { "method": "POST", "path": "/api/governance/safeguards/:caseId" },
+      { "method": "GET", "path": "/api/governance/safeguards/:caseId" }
+    ],
+    "accountability": [
+      { "method": "POST", "path": "/api/governance/accountability/:caseId" },
+      { "method": "GET", "path": "/api/governance/accountability/:caseId" }
+    ],
+    "oversight": [
+      { "method": "POST", "path": "/api/governance/oversight/:caseId" },
+      { "method": "GET", "path": "/api/governance/oversight/:caseId" }
+    ],
+    "exceptions": [
+      { "method": "POST", "path": "/api/governance/exceptions/:caseId" },
+      { "method": "GET", "path": "/api/governance/exceptions/:caseId" }
+    ],
+    "versions": [
+      { "method": "POST", "path": "/api/governance/versions/:caseId" },
+      { "method": "GET", "path": "/api/governance/versions/:caseId" }
+    ],
+    "controls": [
+      { "method": "POST", "path": "/api/governance/controls/:caseId" },
+      { "method": "GET", "path": "/api/governance/controls/:caseId" }
+    ],
+    "certification": [
+      { "method": "POST", "path": "/api/governance/certification/:caseId" },
+      { "method": "GET", "path": "/api/governance/certification/:caseId" }
+    ],
+    "validation": { "method": "GET", "path": "/api/governance/validation" }
+  },
+
+  "prismaModels": [
+    "GovernancePolicy",
+    "PermissionAuditTrail",
+    "ComplianceVerificationWorkflow",
+    "EthicalSafeguardEnforcement",
+    "OperationalAccountabilityLog",
+    "InstitutionalOversightReport",
+    "RoleBasedGovernanceControl",
+    "ComplianceExceptionTracking",
+    "SystemPolicyVersion",
+    "GovernanceReviewCertification"
+  ],
+
+  "migration": "20260512370000_governance_compliance",
+
+  "constraints": {
+    "noHiddenModeration": true,
+    "noOpaqueComplianceScoring": true,
+    "noUnverifiableGovernance": true,
+    "noAutonomousPolicyEnforcement": true,
+    "noSecretSurveillance": true,
+    "noProbabilisticEthicsScoring": true,
+    "corePrinciple": "CourtAccess provides transparent, auditable governance and compliance structures. It does NOT create opaque institutional control systems."
+  },
+
+  "systemsUnmodified": {
+    "auth": true,
+    "csrf": true,
+    "nginx": true,
+    "redis": true,
+    "ocr": true,
+    "pm2": true,
+    "ingestion": true,
+    "existingD1toI1Systems": true
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "generatedAt": "2026-05-09T20:00:00.000Z",
+  "note": "Static validation report — will be regenerated on EC2 after mapping execution",
+  "summary": {
+    "totalLinks": 0,
+    "lowConfidenceLinks": 0,
+    "lowConfidencePercentage": 0
+  },
+  "byMatchMethod": [],
+  "bySupportType": [],
+  "validation": {
+    "deterministicFirstPass": true,
+    "keywordAliasMatching": true,
+    "confidenceScoring": true,
+    "provenancePreserved": true,
+    "noAiInference": true,
+    "matchMethods": ["keyword", "alias", "rule_engine"],
+    "supportTypes": ["supports", "contradicts", "neutral"],
+    "apiEndpoints": [
+      "POST /api/element-mapping/map",
+      "POST /api/element-mapping/map-case",
+      "GET /api/element-mapping/coverage/:chargeId",
+      "GET /api/element-mapping/links/:chargeId",
+      "GET /api/element-mapping/validation"
+    ]
+  }
+}

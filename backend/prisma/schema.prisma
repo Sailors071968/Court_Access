@@ -1287,6 +1287,7 @@ model CriminalCase {
   updatedAt       DateTime @updatedAt
 
   evidence        Evidence[]
+  charges         Charge[]
 
   @@unique([tenantId, caseNumber])
   @@index([tenantId])
@@ -1807,12 +1808,162 @@ model SchemaVersion {
 model Charge {
   id             String   @id @default(uuid())
   caseId         String
-  code           String
-  section        String
+  case           CriminalCase @relation(fields: [caseId], references: [caseId])
+  code           String   // e.g. "PC", "VC", "HSC"
+  section        String   // e.g. "459", "23152(a)"
   title          String?
   dateOfOffense  DateTime?
   victim         String
+  severity       String?  // felony | misdemeanor | wobbler | infraction
   createdAt      DateTime @default(now())
 
+  calcrimInstructionId String?
+  calcrimInstruction   CalcrimInstruction? @relation(fields: [calcrimInstructionId], references: [id])
+
+  elementStatementLinks ElementStatementLink[]
+
   @@index([caseId])
+  @@index([code, section])
+  @@map("charges")
+}
+
+// ---------------------------------------------------------------------------
+// Phase C.1 — CALCRIM Foundation: Prosecution Burden Schema
+// ---------------------------------------------------------------------------
+
+// CalcrimInstruction — represents a single CALCRIM jury instruction
+model CalcrimInstruction {
+  id                String   @id @default(uuid())
+  instructionNumber Int      @unique // e.g. 1700 for Burglary
+  title             String   // e.g. "Burglary (Pen. Code, § 459)"
+  crimeCategory     String   // e.g. "crimes_against_property", "crimes_against_person"
+  description       String?  // Full text summary of the instruction
+  penalCode         String   // e.g. "PC 459"
+  intentType        String   // "specific" | "general" | "strict_liability"
+
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  elements          CalcrimElement[]
+  charges           Charge[]
+
+  @@index([instructionNumber])
+  @@index([penalCode])
+  @@index([crimeCategory])
+  @@map("calcrim_instructions")
+}
+
+// CalcrimElement — ordered element within a CALCRIM instruction
+model CalcrimElement {
+  id                   String   @id @default(uuid())
+  instructionId        String
+  instruction          CalcrimInstruction @relation(fields: [instructionId], references: [id])
+  elementNumber        Int      // Ordered position within instruction (1-based)
+  label                String   // Short canonical label, e.g. "Entry into a structure"
+  description          String   // Full element text as jury would hear it
+  prosecutionBurden    String   // What prosecution must prove for this element
+  isEssential          Boolean  @default(true)  // If false, element is alternative/enhancement
+  weight               Float    @default(1.0)   // Relative importance (0.0-1.0)
+
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  aliases              ElementAlias[]
+  keywords             ElementKeyword[]
+  elementStatementLinks ElementStatementLink[]
+
+  @@unique([instructionId, elementNumber])
+  @@index([instructionId])
+  @@map("calcrim_elements")
+}
+
+// ElementAlias — alternate phrasings for an element
+model ElementAlias {
+  id          String   @id @default(uuid())
+  elementId   String
+  element     CalcrimElement @relation(fields: [elementId], references: [id])
+  alias       String   // e.g. "broke into", "gained entry", "trespassed"
+  source      String   @default("manual") // manual | case_law | statute
+
+  createdAt   DateTime @default(now())
+
+  @@index([elementId])
+  @@index([alias])
+  @@map("element_aliases")
+}
+
+// ElementKeyword — searchable keywords for deterministic matching
+model ElementKeyword {
+  id          String   @id @default(uuid())
+  elementId   String
+  element     CalcrimElement @relation(fields: [elementId], references: [id])
+  keyword     String   // Single keyword or short phrase
+  category    String   @default("action") // action | target | state | qualifier
+  weight      Float    @default(1.0)  // Match weight (higher = stronger signal)
+
+  createdAt   DateTime @default(now())
+
+  @@index([elementId])
+  @@index([keyword])
+  @@index([category])
+  @@map("element_keywords")
+}
+
+// ---------------------------------------------------------------------------
+// Phase C.2 — Evidence Statement (normalized source text segments)
+// ---------------------------------------------------------------------------
+
+model EvidenceStatement {
+  id                   String   @id @default(uuid())
+  caseId               String
+  tenantId             String
+  sourceDocumentId     String   // Evidence.evidenceId
+  page                 Int?     // Source page number (1-based)
+  lineStart            Int?     // Starting line in source
+  lineEnd              Int?     // Ending line in source
+  timestamp            String?  // Timestamp within source (e.g. bodycam timecode)
+  speaker              String?  // Who said/wrote this
+  rawText              String   // Verbatim extracted text
+  normalizedText       String   // Cleaned but not summarized text
+  extractionConfidence Float    @default(1.0) // 0.0-1.0
+  extractionMethod     String   @default("manual") // manual | ocr | transcript_parse | pdf_extract
+
+  createdAt            DateTime @default(now())
+
+  elementStatementLinks ElementStatementLink[]
+
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([sourceDocumentId])
+  @@index([speaker])
+  @@map("evidence_statements")
+}
+
+// ---------------------------------------------------------------------------
+// Phase C.3 — Element-Statement Link (maps statements to CALCRIM elements)
+// ---------------------------------------------------------------------------
+
+model ElementStatementLink {
+  id                String   @id @default(uuid())
+  statementId       String
+  statement         EvidenceStatement @relation(fields: [statementId], references: [id])
+  elementId         String
+  element           CalcrimElement @relation(fields: [elementId], references: [id])
+  chargeId          String
+  charge            Charge @relation(fields: [chargeId], references: [id])
+
+  matchMethod       String   @default("keyword") // keyword | alias | rule_engine | manual
+  confidence        Float    @default(0.0) // 0.0-1.0
+  supportType       String   @default("supports") // supports | contradicts | neutral
+  matchedKeywords   String?  // JSON array of matched keywords
+  explanation       String?  // Why this link exists
+
+  createdAt         DateTime @default(now())
+
+  @@unique([statementId, elementId, chargeId])
+  @@index([statementId])
+  @@index([elementId])
+  @@index([chargeId])
+  @@index([supportType])
+  @@map("element_statement_links")
 }

@@ -1,0 +1,44 @@
+{
+  "generatedAt": "2026-05-09T20:00:00.000Z",
+  "note": "Static validation report — will be regenerated on EC2 after contradiction analysis runs",
+  "summary": {
+    "totalElementStatementLinks": 0,
+    "supportingLinks": 0,
+    "contradictingLinks": 0,
+    "contradictionRate": 0
+  },
+  "validation": {
+    "scopedToSameCharge": true,
+    "scopedToSameElement": true,
+    "scopedToSameFactualDomain": true,
+    "noGlobalComparisons": true,
+    "noSpeculativeContradictions": true,
+    "materialityRequired": true,
+    "preservesSourceStatementIds": true,
+    "preservesPageReferences": true,
+    "preservesTimestamps": true,
+    "preservesSpeakers": true,
+    "preservesContradictionExplanation": true
+  },
+  "contradictionTypes": [
+    "support_contradiction",
+    "speaker_inconsistency",
+    "temporal_incompatibility",
+    "cross_source_contradiction"
+  ],
+  "factualDomains": [
+    "presence_location",
+    "temporal_sequence",
+    "action_description",
+    "identity_attribution",
+    "physical_evidence",
+    "state_condition",
+    "intent_motive",
+    "quantity_measurement"
+  ],
+  "apiEndpoints": [
+    "POST /api/contradictions/analyze-element",
+    "GET /api/contradictions/charge/:chargeId",
+    "GET /api/contradictions/validation"
+  ]
+}

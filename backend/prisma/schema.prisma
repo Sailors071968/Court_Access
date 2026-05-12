@@ -6491,3 +6491,195 @@ model OrganizationalCertificationTracking {
   @@index([certificationStatus])
   @@map("organizational_certification_trackings")
 }
+
+// ---------------------------------------------------------------------------
+// Phase K.2 — Independent Expert Review + Litigation Defensibility Framework
+// ---------------------------------------------------------------------------
+
+model IndependentExpertReviewWorkflow {
+  id                    String   @id @default(uuid())
+  caseId                String
+  expertId              String
+  expertSpecialty       String   // digital_forensics | statistical_analysis | evidence_authentication | chain_of_custody | behavioral_analysis
+  reviewScope           String   // full_case | evidence_specific | analysis_specific | methodology_review
+  reviewStatus          String   // assigned | in_progress | completed | disputed | withdrawn
+  findingsCount         Int      @default(0)
+  criticalFindings      Int      @default(0)
+  reviewResult          String   // validated | concerns_raised | rejected | inconclusive
+  findings              String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([expertId])
+  @@index([reviewStatus])
+  @@map("independent_expert_review_workflows")
+}
+
+model AdversarialChallengeSimulation {
+  id                    String   @id @default(uuid())
+  caseId                String
+  challengeType         String   // daubert | frye | authentication | chain_of_custody | methodology | bias
+  challengeTarget       String   // evidence | analysis | expert_testimony | methodology | conclusion
+  targetRecordId        String
+  simulationResult      String   // withstood | vulnerable | failed | inconclusive
+  vulnerabilitiesFound  Int      @default(0)
+  strengthScore         Float    @default(0)
+  challengeDetails      String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([challengeType])
+  @@index([simulationResult])
+  @@map("adversarial_challenge_simulations")
+}
+
+model LitigationDefensibilityScore {
+  id                    String   @id @default(uuid())
+  caseId                String
+  scoringScope          String   // full_case | evidence_chain | analysis_pipeline | expert_testimony
+  rulesEvaluated        Int      @default(0)
+  rulesPassed           Int      @default(0)
+  rulesFailed           Int      @default(0)
+  defensibilityScore    Float    @default(0)
+  defensibilityStatus   String   // defensible | conditional | vulnerable | indefensible
+  weaknesses            String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([scoringScope])
+  @@index([defensibilityStatus])
+  @@map("litigation_defensibility_scores")
+}
+
+model ExternalReproducibilityReview {
+  id                    String   @id @default(uuid())
+  caseId                String
+  reviewerId            String
+  originalHash          String   // SHA-256
+  reproducedHash        String   // SHA-256
+  hashesMatch           Boolean  @default(false)
+  methodologyVerified   Boolean  @default(false)
+  dataIntegrityVerified Boolean  @default(false)
+  reviewNotes           String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([reviewerId])
+  @@index([hashesMatch])
+  @@map("external_reproducibility_reviews")
+}
+
+model ExpertAuditTraceReconstruction {
+  id                    String   @id @default(uuid())
+  caseId                String
+  traceScope            String   // full_analysis | single_layer | single_record | cross_layer
+  stepsReconstructed    Int      @default(0)
+  stepsVerified         Int      @default(0)
+  gapsFound             Int      @default(0)
+  reconstructionHash    String   // SHA-256
+  reconstructionStatus  String   // complete | partial | failed
+  traceDetails          String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([traceScope])
+  @@index([reconstructionStatus])
+  @@map("expert_audit_trace_reconstructions")
+}
+
+model EvidentiaryChallenge {
+  id                    String   @id @default(uuid())
+  caseId                String
+  challengeSource       String   // prosecution | defense | court | expert | independent
+  challengedRecordId    String
+  challengeBasis        String   // authenticity | relevance | methodology | chain_of_custody | bias | completeness
+  challengeOutcome      String   // sustained | overruled | pending | withdrawn
+  supportingCitations   String   // JSON
+  responseCitations     String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([challengeSource])
+  @@index([challengeOutcome])
+  @@map("evidentiary_challenges")
+}
+
+model CrossExpertVerification {
+  id                    String   @id @default(uuid())
+  caseId                String
+  primaryExpertId       String
+  secondaryExpertId     String
+  verificationScope     String   // methodology | conclusions | data_analysis | evidence_handling
+  agreementLevel        String   // full_agreement | partial_agreement | disagreement | unable_to_verify
+  discrepancies         String?  // JSON
+  verificationHash      String   // SHA-256
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([primaryExpertId])
+  @@index([agreementLevel])
+  @@map("cross_expert_verifications")
+}
+
+model IndependentValidationManifest {
+  id                    String   @id @default(uuid())
+  caseId                String
+  manifestScope         String   // full_case | evidence_chain | analysis_pipeline | export_integrity
+  entriesCount          Int      @default(0)
+  entriesVerified       Int      @default(0)
+  manifestHash          String   // SHA-256
+  manifestComplete      Boolean  @default(false)
+  validatorId           String
+  manifestEntries       String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([manifestScope])
+  @@index([manifestComplete])
+  @@map("independent_validation_manifests")
+}
+
+model DefensibilityExceptionRecord {
+  id                    String   @id @default(uuid())
+  caseId                String
+  exceptionType         String   // methodology_deviation | data_gap | chain_break | reproducibility_failure | expert_disagreement
+  severity              String   // critical | high | medium | low
+  affectedRecordId      String
+  mitigationApplied     Boolean  @default(false)
+  mitigationDescription String?
+  exceptionStatus       String   // open | mitigated | accepted | escalated
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([exceptionType])
+  @@index([exceptionStatus])
+  @@map("defensibility_exception_records")
+}
+
+model ExternalReviewCertification {
+  id                    String   @id @default(uuid())
+  caseId                String
+  certificationScope    String   // daubert_readiness | frye_readiness | expert_methodology | evidence_authentication
+  reviewsCompleted      Int      @default(0)
+  reviewsPassed         Int      @default(0)
+  certificationRate     Float    @default(0)
+  certificationStatus   String   // certified | conditional | not_certified | pending
+  certifiedBy           String?
+  certifiedAt           String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([certificationScope])
+  @@index([certificationStatus])
+  @@map("external_review_certifications")
+}

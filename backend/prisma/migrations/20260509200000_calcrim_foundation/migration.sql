@@ -92,12 +92,67 @@ CREATE TABLE "element_statement_links" (
     CONSTRAINT "element_statement_links_pkey" PRIMARY KEY ("id")
 );
 
--- Alter existing Charge table: add new columns + rename table
-ALTER TABLE "Charge" ADD COLUMN "severity" TEXT;
-ALTER TABLE "Charge" ADD COLUMN "calcrimInstructionId" TEXT;
+-- =========================================================================
+-- Charge table handling: Safe for all 3 production scenarios
+-- Scenario A: "Charge" exists (quoted PascalCase) → add columns + rename
+-- Scenario B: "charge" exists (unquoted lowercase)  → add columns + rename
+-- Scenario C: No Charge table exists               → CREATE TABLE "charges"
+-- =========================================================================
 
--- Rename Charge table to charges (Prisma @@map)
-ALTER TABLE "Charge" RENAME TO "charges";
+DO $$
+BEGIN
+  -- Scenario A: Table exists as "Charge" (quoted PascalCase)
+  IF EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'public' AND tablename = 'Charge') THEN
+    -- Add new columns if they don't already exist
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'Charge' AND column_name = 'severity') THEN
+      ALTER TABLE "Charge" ADD COLUMN "severity" TEXT;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'Charge' AND column_name = 'calcrimInstructionId') THEN
+      ALTER TABLE "Charge" ADD COLUMN "calcrimInstructionId" TEXT;
+    END IF;
+    -- Rename to "charges"
+    ALTER TABLE "Charge" RENAME TO "charges";
+
+  -- Scenario B: Table exists as "charge" (lowercase, unquoted creation)
+  ELSIF EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'public' AND tablename = 'charge') THEN
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'charge' AND column_name = 'severity') THEN
+      ALTER TABLE "charge" ADD COLUMN "severity" TEXT;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'charge' AND column_name = 'calcrimInstructionId') THEN
+      ALTER TABLE "charge" ADD COLUMN "calcrimInstructionId" TEXT;
+    END IF;
+    ALTER TABLE "charge" RENAME TO "charges";
+
+  -- Scenario C: Table does not exist — create fresh
+  ELSIF NOT EXISTS (SELECT 1 FROM pg_tables WHERE schemaname = 'public' AND tablename = 'charges') THEN
+    CREATE TABLE "charges" (
+      "id" TEXT NOT NULL,
+      "caseId" TEXT NOT NULL,
+      "code" TEXT NOT NULL,
+      "section" TEXT NOT NULL,
+      "title" TEXT,
+      "dateOfOffense" TIMESTAMP(3),
+      "victim" TEXT NOT NULL,
+      "severity" TEXT,
+      "calcrimInstructionId" TEXT,
+      "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+      CONSTRAINT "charges_pkey" PRIMARY KEY ("id")
+    );
+    CREATE INDEX "charges_caseId_idx" ON "charges"("caseId");
+
+  -- Scenario D: Table already exists as "charges" (idempotent re-run)
+  ELSE
+    -- Add columns if missing (idempotent)
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'charges' AND column_name = 'severity') THEN
+      ALTER TABLE "charges" ADD COLUMN "severity" TEXT;
+    END IF;
+    IF NOT EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name = 'charges' AND column_name = 'calcrimInstructionId') THEN
+      ALTER TABLE "charges" ADD COLUMN "calcrimInstructionId" TEXT;
+    END IF;
+  END IF;
+END
+$$;
 
 -- Indexes: calcrim_instructions
 CREATE UNIQUE INDEX "calcrim_instructions_instructionNumber_key" ON "calcrim_instructions"("instructionNumber");
@@ -131,12 +186,21 @@ CREATE INDEX "element_statement_links_elementId_idx" ON "element_statement_links
 CREATE INDEX "element_statement_links_chargeId_idx" ON "element_statement_links"("chargeId");
 CREATE INDEX "element_statement_links_supportType_idx" ON "element_statement_links"("supportType");
 
--- Indexes: charges (formerly Charge)
-CREATE INDEX "charges_code_section_idx" ON "charges"("code", "section");
+-- Indexes: charges (formerly Charge) — idempotent
+CREATE INDEX IF NOT EXISTS "charges_code_section_idx" ON "charges"("code", "section");
 
--- Foreign Keys
-ALTER TABLE "charges" ADD CONSTRAINT "charges_caseId_fkey" FOREIGN KEY ("caseId") REFERENCES "criminal_cases"("caseId") ON DELETE RESTRICT ON UPDATE CASCADE;
-ALTER TABLE "charges" ADD CONSTRAINT "charges_calcrimInstructionId_fkey" FOREIGN KEY ("calcrimInstructionId") REFERENCES "calcrim_instructions"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+-- Foreign Keys — idempotent via DO blocks
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'charges_caseId_fkey') THEN
+    ALTER TABLE "charges" ADD CONSTRAINT "charges_caseId_fkey" FOREIGN KEY ("caseId") REFERENCES "criminal_cases"("caseId") ON DELETE RESTRICT ON UPDATE CASCADE;
+  END IF;
+END $$;
+
+DO $$ BEGIN
+  IF NOT EXISTS (SELECT 1 FROM pg_constraint WHERE conname = 'charges_calcrimInstructionId_fkey') THEN
+    ALTER TABLE "charges" ADD CONSTRAINT "charges_calcrimInstructionId_fkey" FOREIGN KEY ("calcrimInstructionId") REFERENCES "calcrim_instructions"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+  END IF;
+END $$;
 
 ALTER TABLE "calcrim_elements" ADD CONSTRAINT "calcrim_elements_instructionId_fkey" FOREIGN KEY ("instructionId") REFERENCES "calcrim_instructions"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 

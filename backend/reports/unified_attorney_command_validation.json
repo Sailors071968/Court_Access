@@ -1,0 +1,142 @@
+{
+  "phase": "H.1",
+  "name": "Full Operational Defense Platform Integration + Unified Attorney Command Environment",
+  "generatedAt": "2026-05-12T33:00:00.000Z",
+  "status": "READY_FOR_DEPLOYMENT",
+
+  "subsystems": {
+    "unifiedCaseStateManagement": {
+      "description": "Deterministic unified case state management across all intelligence layers",
+      "phases": ["intake", "pretrial", "trial", "sentencing", "appellate", "post_conviction"],
+      "riskLevels": ["low", "moderate", "high", "critical"],
+      "crossLayerAggregation": true
+    },
+    "crossLayerOrchestrationEngine": {
+      "description": "Immutable cross-layer orchestration engine — 16 intelligence layers",
+      "layers": ["evidence", "calcrim", "prosecutor_theory", "contradictions", "burden_fractures", "defense_intelligence", "trial_preparation", "evidentiary_objections", "trial_dynamics", "appellate_intelligence", "post_conviction", "sentencing_intelligence", "unified_graph", "live_litigation", "constitutional_litigation", "discovery_integrity"],
+      "orchestrationTypes": ["full_analysis", "incremental_update", "targeted_layer", "phase_transition"],
+      "immutableState": true
+    },
+    "evidenceLifecycleTracking": {
+      "description": "Evidence-linked lifecycle tracking across all intelligence layers",
+      "stages": ["collected", "disclosed", "analyzed", "challenged", "admitted", "excluded", "appealed"],
+      "crossLayerRelevance": ["constitutional", "discovery", "trial", "appellate"]
+    },
+    "litigationMilestoneEngine": {
+      "description": "Deterministic litigation milestone engine — California criminal procedure",
+      "milestoneSequence": ["arraignment", "preliminary_hearing", "information_filing", "trial_date_set", "motions_in_limine", "jury_selection", "prosecution_case", "defense_case", "verdict", "sentencing", "notice_of_appeal", "opening_brief", "oral_argument", "opinion"],
+      "statuses": ["upcoming", "completed", "continued", "vacated"]
+    },
+    "unifiedSearchIndex": {
+      "description": "Citation-preserving unified search across all intelligence layers",
+      "indexedLayers": ["evidence", "constitutional", "contradiction", "defense", "trial", "objection", "appellate", "post_conviction", "sentencing", "intelligence", "litigation", "discovery"],
+      "citationPreserved": true
+    },
+    "evidenceRelationshipExplorer": {
+      "description": "Immutable evidence relationship explorer with provenance chains",
+      "relationshipTypes": ["supports", "contradicts", "impeaches", "corroborates", "supersedes", "depends_on", "references", "challenges"],
+      "provenanceImmutable": true
+    },
+    "workspaceSyncState": {
+      "description": "Real-time state-aware multi-pane synchronized workspace",
+      "panes": ["evidence", "trial", "appellate", "constitutional", "discovery", "sentencing", "litigation", "graph"],
+      "realTimeSync": true
+    },
+    "roleBasedWorkflows": {
+      "description": "Permission-aware role-based operational workflows",
+      "roles": ["lead_attorney", "associate", "paralegal", "investigator", "expert", "client"],
+      "permissionLevels": ["full_access", "analysis_only", "read_only", "restricted"]
+    },
+    "auditGradeActionLogging": {
+      "description": "Immutable audit-grade action logging",
+      "actionTypes": ["analysis_run", "record_created", "record_updated", "evidence_uploaded", "motion_filed", "status_changed", "search_performed", "export_generated", "pane_viewed"],
+      "immutable": true
+    },
+    "litigationLifecycleTracking": {
+      "description": "Deterministic end-to-end litigation lifecycle tracking",
+      "phases": ["investigation", "charging", "arraignment", "pretrial", "trial", "post_trial", "sentencing", "appeal", "post_conviction"],
+      "phaseStatuses": ["active", "completed", "skipped", "pending"]
+    }
+  },
+
+  "frontendComponent": {
+    "name": "UnifiedAttorneyCommandCockpit",
+    "panes": ["evidence intelligence", "trial intelligence", "appellate intelligence", "constitutional intelligence", "discovery intelligence", "sentencing intelligence", "live litigation intelligence", "unified graph intelligence"],
+    "theme": "dark",
+    "features": ["cross-layer state dashboard", "risk level badges", "preservation status", "milestone tracking", "evidence lifecycle stages", "relationship strength indicators", "audit trail"]
+  },
+
+  "apiEndpoints": {
+    "fullAnalysis": { "method": "POST", "path": "/api/command/analyze/:caseId" },
+    "caseState": [
+      { "method": "POST", "path": "/api/command/state/:caseId" },
+      { "method": "GET", "path": "/api/command/state/:caseId" }
+    ],
+    "orchestration": [
+      { "method": "POST", "path": "/api/command/orchestrate/:caseId" },
+      { "method": "GET", "path": "/api/command/orchestrations/:caseId" }
+    ],
+    "lifecycles": [
+      { "method": "POST", "path": "/api/command/lifecycles/:caseId" },
+      { "method": "GET", "path": "/api/command/lifecycles/:caseId" }
+    ],
+    "milestones": [
+      { "method": "POST", "path": "/api/command/milestones/:caseId" },
+      { "method": "GET", "path": "/api/command/milestones/:caseId" }
+    ],
+    "search": [
+      { "method": "POST", "path": "/api/command/search/:caseId" },
+      { "method": "GET", "path": "/api/command/search/:caseId" }
+    ],
+    "relationships": [
+      { "method": "POST", "path": "/api/command/relationships/:caseId" },
+      { "method": "GET", "path": "/api/command/relationships/:caseId" }
+    ],
+    "workspace": { "method": "POST", "path": "/api/command/workspace/:caseId" },
+    "roles": [
+      { "method": "POST", "path": "/api/command/role/:caseId" },
+      { "method": "GET", "path": "/api/command/roles/:caseId" }
+    ],
+    "audit": { "method": "GET", "path": "/api/command/audit/:caseId" },
+    "lifecycle": [
+      { "method": "POST", "path": "/api/command/lifecycle/:caseId" },
+      { "method": "GET", "path": "/api/command/lifecycle/:caseId" }
+    ],
+    "validation": { "method": "GET", "path": "/api/command/validation" }
+  },
+
+  "prismaModels": [
+    "UnifiedCaseState",
+    "CrossLayerOrchestration",
+    "EvidenceLifecycleTracker",
+    "LitigationMilestone",
+    "UnifiedSearchIndex",
+    "EvidenceRelationshipExplorer",
+    "WorkspaceSyncState",
+    "RoleBasedWorkflow",
+    "AuditActionLog",
+    "LitigationLifecycleTracker"
+  ],
+
+  "migration": "20260512330000_unified_attorney_command",
+
+  "constraints": {
+    "noAutonomousLegalStrategy": true,
+    "noAIAttorneyReplacement": true,
+    "noAutonomousCourtroomActions": true,
+    "noAutomatedLegalFilingWithoutReview": true,
+    "noUnsupervisedLegalDecisions": true,
+    "corePrinciple": "CourtAccess augments and organizes attorney litigation operations. It does NOT replace licensed legal counsel."
+  },
+
+  "systemsUnmodified": {
+    "auth": true,
+    "csrf": true,
+    "nginx": true,
+    "redis": true,
+    "ocr": true,
+    "pm2": true,
+    "ingestion": true,
+    "existingD1toG2Systems": true
+  }
+}

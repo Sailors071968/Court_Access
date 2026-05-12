@@ -1,0 +1,155 @@
+{
+  "phase": "H.2",
+  "name": "Enterprise Evidentiary Integrity + Reliability Assurance Framework",
+  "generatedAt": "2026-05-12T34:00:00.000Z",
+  "status": "READY_FOR_DEPLOYMENT",
+
+  "subsystems": {
+    "immutableEvidenceIntegrityHashing": {
+      "description": "Deterministic SHA-256 hashing of all evidence records",
+      "algorithms": ["sha256", "sha512", "sha3_256"],
+      "sourceTypes": ["evidence_statement", "evidence_document", "analysis_record"],
+      "verificationStatuses": ["verified", "unverified", "tampered", "pending"]
+    },
+    "chainOfAnalysisVerification": {
+      "description": "Reproducible chain-of-analysis verification across intelligence layers",
+      "trackedLayers": ["contradictions", "constitutional", "discovery", "burden", "defense"],
+      "hashBased": true,
+      "reproducibilityVerified": true
+    },
+    "deterministicReplayEngine": {
+      "description": "Evidence-linked deterministic replay engine",
+      "replayTypes": ["full_case", "single_layer", "targeted_record"],
+      "matchStatuses": ["exact_match", "minor_deviation", "major_deviation", "mismatch"],
+      "hashComparison": true
+    },
+    "evidenceCorruptionDetection": {
+      "description": "Hash-based evidence corruption detection",
+      "detectionMethods": ["hash_comparison", "length_check", "format_validation", "cross_reference"],
+      "corruptionTypes": ["truncation", "modification", "insertion", "deletion", "encoding_error"],
+      "remediationStatuses": ["unresolved", "investigating", "resolved", "accepted"]
+    },
+    "analysisReproducibilityFramework": {
+      "description": "Immutable analysis reproducibility framework",
+      "reproducibilityScore": "0.0–1.0 where 1.0 = perfectly reproducible",
+      "certificationBased": true,
+      "inputOutputFingerprintComparison": true
+    },
+    "exportVerificationSignatures": {
+      "description": "Deterministic export verification signatures",
+      "exportTypes": ["pdf_report", "json_export", "csv_export", "evidence_package", "case_archive"],
+      "signatureMethods": ["sha256_hmac", "content_hash", "record_count_verification"]
+    },
+    "multiVersionEvidenceTracking": {
+      "description": "Immutable multi-version evidence tracking with provenance chains",
+      "changeTypes": ["initial", "correction", "supplement", "redaction", "restoration"],
+      "provenanceChainImmutable": true
+    },
+    "forensicAuditCertification": {
+      "description": "Evidence-linked forensic audit certification structures",
+      "certificationStatuses": ["certified", "conditional", "failed", "pending"],
+      "integrityScoreBased": true,
+      "hashAndChainVerification": true
+    },
+    "integrityBreachAlerting": {
+      "description": "Deterministic integrity breach alerting",
+      "breachTypes": ["hash_mismatch", "chain_break", "unauthorized_modification", "corruption_detected", "replay_failure", "version_conflict"],
+      "severityLevels": ["critical", "high", "medium", "low"],
+      "acknowledgmentTracking": true
+    },
+    "evidenceTransformationLineage": {
+      "description": "Immutable evidence transformation lineage",
+      "transformationTypes": ["extraction", "analysis", "aggregation", "cross_reference", "indexing", "correlation"],
+      "hashBased": true,
+      "lineagePositionTracking": true
+    }
+  },
+
+  "frontendComponent": {
+    "name": "ForensicIntegrityCockpit",
+    "panes": ["evidence hashes", "chain of analysis", "replay verification", "corruption alerts", "export verification", "provenance lineage", "integrity certification", "reproducibility tracking"],
+    "theme": "dark",
+    "features": ["SHA-256 hash display", "VERIFIED/TAMPERED badges", "REPRODUCIBLE/BROKEN chain indicators", "EXACT MATCH/MISMATCH replay status", "CORRUPTION FOUND alerts", "integrity score visualization", "breach severity coloring"]
+  },
+
+  "apiEndpoints": {
+    "fullAnalysis": { "method": "POST", "path": "/api/integrity/analyze/:caseId" },
+    "hashes": [
+      { "method": "POST", "path": "/api/integrity/hashes/:caseId" },
+      { "method": "GET", "path": "/api/integrity/hashes/:caseId" }
+    ],
+    "chains": [
+      { "method": "POST", "path": "/api/integrity/chains/:caseId" },
+      { "method": "GET", "path": "/api/integrity/chains/:caseId" }
+    ],
+    "replays": [
+      { "method": "POST", "path": "/api/integrity/replays/:caseId" },
+      { "method": "GET", "path": "/api/integrity/replays/:caseId" }
+    ],
+    "corruption": [
+      { "method": "POST", "path": "/api/integrity/corruption/:caseId" },
+      { "method": "GET", "path": "/api/integrity/corruption/:caseId" }
+    ],
+    "reproducibility": [
+      { "method": "POST", "path": "/api/integrity/reproducibility/:caseId" },
+      { "method": "GET", "path": "/api/integrity/reproducibility/:caseId" }
+    ],
+    "exports": [
+      { "method": "POST", "path": "/api/integrity/exports/:caseId" },
+      { "method": "GET", "path": "/api/integrity/exports/:caseId" }
+    ],
+    "versions": [
+      { "method": "POST", "path": "/api/integrity/versions/:caseId" },
+      { "method": "GET", "path": "/api/integrity/versions/:caseId" }
+    ],
+    "certifications": [
+      { "method": "POST", "path": "/api/integrity/certifications/:caseId" },
+      { "method": "GET", "path": "/api/integrity/certifications/:caseId" }
+    ],
+    "breaches": [
+      { "method": "POST", "path": "/api/integrity/breaches/:caseId" },
+      { "method": "GET", "path": "/api/integrity/breaches/:caseId" }
+    ],
+    "lineage": [
+      { "method": "POST", "path": "/api/integrity/lineage/:caseId" },
+      { "method": "GET", "path": "/api/integrity/lineage/:caseId" }
+    ],
+    "validation": { "method": "GET", "path": "/api/integrity/validation" }
+  },
+
+  "prismaModels": [
+    "EvidenceIntegrityHash",
+    "ChainOfAnalysisVerification",
+    "DeterministicReplayRecord",
+    "EvidenceCorruptionDetection",
+    "AnalysisReproducibilityRecord",
+    "ExportVerificationSignature",
+    "MultiVersionEvidenceTracker",
+    "ForensicAuditCertification",
+    "IntegrityBreachAlert",
+    "EvidenceTransformationLineage"
+  ],
+
+  "migration": "20260512340000_evidentiary_integrity",
+
+  "constraints": {
+    "noUnverifiableAITransformations": true,
+    "noOpaqueEvidenceMutation": true,
+    "noProbabilisticEvidenceRewriting": true,
+    "noHiddenEvidenceManipulation": true,
+    "noBlockchainGimmicks": true,
+    "noUnverifiableChainOfCustodyClaims": true,
+    "corePrinciple": "CourtAccess maximizes evidentiary integrity and deterministic reproducibility. It does NOT create unverifiable forensic claims."
+  },
+
+  "systemsUnmodified": {
+    "auth": true,
+    "csrf": true,
+    "nginx": true,
+    "redis": true,
+    "ocr": true,
+    "pm2": true,
+    "ingestion": true,
+    "existingD1toH1Systems": true
+  }
+}

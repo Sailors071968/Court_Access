@@ -67,6 +67,7 @@ import { registerSentencingIntelligenceRoutes } from "./routes/sentencingIntelli
 import { registerUnifiedIntelligenceRoutes } from "./routes/unifiedIntelligenceRoutes.js";
 import { registerLiveLitigationRoutes } from "./routes/liveLitigationRoutes.js";
 import { registerConstitutionalLitigationRoutes } from "./routes/constitutionalLitigationRoutes.js";
+import { registerProsecutorialConductRoutes } from "./routes/prosecutorialConductRoutes.js";
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -285,6 +286,9 @@ async function startServer() {
 
   console.log('[Server] Registering constitutional litigation routes (Phase G.1)...');
   await registerConstitutionalLitigationRoutes(app);
+
+  console.log('[Server] Registering prosecutorial conduct routes (Phase G.2)...');
+  await registerProsecutorialConductRoutes(app);
 
   console.log('[Server] Registering admin queue monitoring routes...');
   await registerQueueMonitorRoutes(app);

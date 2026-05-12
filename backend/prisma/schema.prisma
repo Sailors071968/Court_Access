@@ -3758,3 +3758,215 @@ model PleaConsequence {
   @@index([pleaType])
   @@map("plea_consequences")
 }
+
+// ---------------------------------------------------------------------------
+// Phase F.1 — Unified Intelligence Graph Node
+// ---------------------------------------------------------------------------
+
+model IntelligenceGraphNode {
+  id                    String   @id @default(uuid())
+  caseId                String
+  nodeType              String   // evidence | witness | charge | contradiction | objection | error | brady | forensic | timeline_event | motion
+  sourceTable           String   // The Prisma table this node references
+  sourceId              String   // ID of the record in the source table
+  label                 String   // Human-readable label
+  metadata              String   // JSON — additional node properties
+  createdAt             DateTime @default(now())
+
+  @@unique([sourceTable, sourceId])
+  @@index([caseId])
+  @@index([nodeType])
+  @@map("intelligence_graph_nodes")
+}
+
+// ---------------------------------------------------------------------------
+// Phase F.1 — Intelligence Graph Edge (relationships between nodes)
+// ---------------------------------------------------------------------------
+
+model IntelligenceGraphEdge {
+  id                    String   @id @default(uuid())
+  caseId                String
+  sourceNodeId          String
+  targetNodeId          String
+  edgeType              String   // contradicts | supports | impeaches | preserves | cites | enhances | mitigates | undermines | corroborates | references
+  weight                Float    @default(1.0) // relationship strength
+  metadata              String   // JSON — additional edge properties
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([sourceNodeId])
+  @@index([targetNodeId])
+  @@index([edgeType])
+  @@map("intelligence_graph_edges")
+}
+
+// ---------------------------------------------------------------------------
+// Phase F.1 — Cross-Case Witness Index
+// ---------------------------------------------------------------------------
+
+model CrossCaseWitnessIndex {
+  id                    String   @id @default(uuid())
+  witnessName           String
+  normalizedName        String   // lowercase, trimmed for matching
+  caseIds               String   // JSON array of case IDs where witness appears
+  totalAppearances      Int      @default(1)
+  roles                 String   // JSON array — roles across cases (prosecution_witness, defense_witness, victim, officer, expert)
+  credibilityHistory    String   // JSON array — credibility assessments across cases
+  inconsistencyCount    Int      @default(0) // total inconsistencies across all cases
+  recantationCount      Int      @default(0)
+  citations             String   // JSON array
+  createdAt             DateTime @default(now())
+
+  @@unique([normalizedName])
+  @@index([normalizedName])
+  @@index([totalAppearances])
+  @@map("cross_case_witness_indexes")
+}
+
+// ---------------------------------------------------------------------------
+// Phase F.1 — Cross-Case Forensic Pattern
+// ---------------------------------------------------------------------------
+
+model CrossCaseForensicPattern {
+  id                    String   @id @default(uuid())
+  forensicType          String   // fingerprint | ballistics | dna | bite_mark | hair_comparison | etc.
+  methodologyUsed       String
+  caseIds               String   // JSON array of case IDs using this forensic type
+  totalOccurrences      Int      @default(1)
+  reliabilityRange      String   // e.g. "0.1-0.95" — range of reliability scores across cases
+  challengedCount       Int      @default(0) // how many times challenged across cases
+  excludedCount         Int      @default(0) // how many times excluded
+  currentScientificStatus String // validated | questioned | debunked | under_review
+  citations             String   // JSON array
+  createdAt             DateTime @default(now())
+
+  @@index([forensicType])
+  @@index([totalOccurrences])
+  @@map("cross_case_forensic_patterns")
+}
+
+// ---------------------------------------------------------------------------
+// Phase F.1 — Global Contradiction Network
+// ---------------------------------------------------------------------------
+
+model GlobalContradictionNetwork {
+  id                    String   @id @default(uuid())
+  caseId                String
+  contradictionId       String   // ID of ContradictionPair
+  witnessName           String
+  contradictionType     String   // factual_change | detail_shift | omission | addition | chronology_change | severity_change
+  severity              String   // critical | high | medium | low
+  connectedContradictionIds String // JSON array — other contradictions by same witness or same topic
+  networkSize           Int      @default(1) // total connected contradictions
+  citations             String   // JSON array
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([witnessName])
+  @@index([severity])
+  @@map("global_contradiction_networks")
+}
+
+// ---------------------------------------------------------------------------
+// Phase F.1 — Prosecutor Theory Recurrence (aggregate only)
+// ---------------------------------------------------------------------------
+
+model ProsecutorTheoryRecurrence {
+  id                    String   @id @default(uuid())
+  theoryPattern         String   // e.g. "consciousness_of_guilt", "motive_opportunity", "forensic_match"
+  description           String
+  caseIds               String   // JSON array of case IDs using this theory
+  totalOccurrences      Int      @default(1)
+  successRate           Float    @default(0.0) // aggregate only — NOT individual prosecutor
+  commonWeaknesses      String   // JSON array — patterns where theory fails
+  citations             String   // JSON array
+  createdAt             DateTime @default(now())
+
+  @@index([theoryPattern])
+  @@index([totalOccurrences])
+  @@map("prosecutor_theory_recurrences")
+}
+
+// ---------------------------------------------------------------------------
+// Phase F.1 — Recurring Brady/Giglio Pattern (citation-required)
+// ---------------------------------------------------------------------------
+
+model RecurringBradyPattern {
+  id                    String   @id @default(uuid())
+  patternType           String   // undisclosed_deal | undisclosed_record | late_disclosure | informant_benefit | impeachment_withheld
+  description           String
+  caseIds               String   // JSON array
+  totalOccurrences      Int      @default(1)
+  materialityAssessments String  // JSON array — materiality across cases
+  citations             String   // JSON array — every entry must be citation-backed
+  createdAt             DateTime @default(now())
+
+  @@index([patternType])
+  @@index([totalOccurrences])
+  @@map("recurring_brady_patterns")
+}
+
+// ---------------------------------------------------------------------------
+// Phase F.1 — Law Enforcement Credibility Index (aggregate only)
+// ---------------------------------------------------------------------------
+
+model LawEnforcementCredibilityIndex {
+  id                    String   @id @default(uuid())
+  officerIdentifier     String   // badge number or anonymized ID — NOT personal name unless in public record
+  caseIds               String   // JSON array
+  totalCaseAppearances  Int      @default(1)
+  inconsistencyCount    Int      @default(0)
+  bradyIssueCount       Int      @default(0)
+  pitchessRelevant      Boolean  @default(false) // Pitchess motion relevance (PC § 832.7)
+  aggregateCredibility  String   // aggregate_concern | no_pattern | insufficient_data
+  citations             String   // JSON array — every entry citation-backed
+  createdAt             DateTime @default(now())
+
+  @@unique([officerIdentifier])
+  @@index([officerIdentifier])
+  @@index([aggregateCredibility])
+  @@map("law_enforcement_credibility_indexes")
+}
+
+// ---------------------------------------------------------------------------
+// Phase F.1 — Evidence Provenance Graph (immutable linkage)
+// ---------------------------------------------------------------------------
+
+model EvidenceProvenanceGraph {
+  id                    String   @id @default(uuid())
+  caseId                String
+  evidenceId            String   // ID of the evidence item
+  provenanceChain       String   // JSON array — ordered chain: collection → storage → analysis → court presentation
+  chainLength           Int      @default(0)
+  integrityStatus       String   // intact | broken | questioned | unknown
+  gapLocations          String   // JSON array — where gaps exist in the chain
+  custodyTransfers      Int      @default(0)
+  citations             String   // JSON array
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([integrityStatus])
+  @@map("evidence_provenance_graphs")
+}
+
+// ---------------------------------------------------------------------------
+// Phase F.1 — Multi-Case Timeline Correlation
+// ---------------------------------------------------------------------------
+
+model MultiCaseTimelineCorrelation {
+  id                    String   @id @default(uuid())
+  correlationType       String   // temporal_overlap | witness_reuse | forensic_reuse | geographic_proximity | modus_operandi_similarity
+  caseIdA               String
+  caseIdB               String
+  description           String
+  correlationStrength   Float    @default(0.0) // 0.0-1.0
+  sharedElements        String   // JSON array — what is shared between the cases
+  legalSignificance     String
+  citations             String   // JSON array
+  createdAt             DateTime @default(now())
+
+  @@index([caseIdA])
+  @@index([caseIdB])
+  @@index([correlationType])
+  @@map("multi_case_timeline_correlations")
+}

@@ -9026,3 +9026,204 @@ model EnterpriseReadinessCertification {
   @@index([environment])
   @@map("enterprise_readiness_certifications")
 }
+
+// ---------------------------------------------------------------------------
+// Phase P.2 — Enterprise Scale Operations + Customer Success Governance
+// Disciplined scaling. Institutional reliability. Customer success governance.
+// ---------------------------------------------------------------------------
+
+model EnterpriseAutoscalingGovernance {
+  id                    String   @id @default(uuid())
+  scalingResource       String   // api_instances | database_connections | redis_pools | queue_workers | storage_volumes | cdn_capacity | cache_nodes | load_balancers
+  currentCapacity       Int      @default(0)
+  targetCapacity        Int      @default(0)
+  scalingTrigger        String   // cpu_threshold | memory_threshold | request_rate | queue_depth | connection_saturation | storage_usage | latency_spike | scheduled
+  scalingStatus         String   // idle | scaling_up | scaling_down | completed | failed | governance_hold
+  governanceApproved    Boolean  @default(false)
+  approvedBy            String?
+  scalingHash           String   // SHA-256
+  scalingDetails        String   // JSON
+  environment           String   // production
+  createdAt             DateTime @default(now())
+
+  @@index([scalingResource])
+  @@index([scalingStatus])
+  @@index([environment])
+  @@map("enterprise_autoscaling_governance")
+}
+
+model CustomerSuccessOperation {
+  id                    String   @id @default(uuid())
+  operationType         String   // health_check | satisfaction_survey | usage_review | renewal_preparation | expansion_opportunity | risk_assessment | quarterly_review | success_certification
+  customerId            String
+  customerName          String
+  healthScore           Float    @default(0)
+  operationStatus       String   // scheduled | in_progress | completed | escalated | deferred
+  governanceApproved    Boolean  @default(false)
+  operationHash         String   // SHA-256
+  operationDetails      String   // JSON
+  environment           String   // production
+  createdAt             DateTime @default(now())
+
+  @@index([operationType])
+  @@index([operationStatus])
+  @@index([environment])
+  @@map("customer_success_operations")
+}
+
+model InfrastructureElasticityTest {
+  id                    String   @id @default(uuid())
+  elasticityScenario    String   // burst_traffic | sustained_load | connection_storm | memory_pressure | disk_io_spike | network_saturation | cold_start | graceful_degradation
+  baselineCapacity      Int      @default(0)
+  peakCapacity          Int      @default(0)
+  scaleUpTimeMs         Int      @default(0)
+  scaleDownTimeMs       Int      @default(0)
+  dataIntegrity         Boolean  @default(true)
+  elasticityStatus      String   // passed | failed | degraded | untested
+  elasticityHash        String   // SHA-256
+  elasticityDetails     String   // JSON
+  environment           String   // production
+  createdAt             DateTime @default(now())
+
+  @@index([elasticityScenario])
+  @@index([elasticityStatus])
+  @@index([environment])
+  @@map("infrastructure_elasticity_tests")
+}
+
+model MultiTenantScaleSurvivability {
+  id                    String   @id @default(uuid())
+  tenantCount           Int      @default(0)
+  concurrentUsers       Int      @default(0)
+  survivabilityMetric   String   // query_isolation | resource_fairness | noisy_neighbor_prevention | data_separation | performance_consistency | failover_independence | backup_isolation | compliance_separation
+  metricScore           Float    @default(0)
+  evidenceLink          String   // evidence path
+  survivabilityStatus   String   // verified | degraded | failed | untested
+  survivabilityHash     String   // SHA-256
+  survivabilityDetails  String   // JSON
+  environment           String   // production
+  createdAt             DateTime @default(now())
+
+  @@index([survivabilityMetric])
+  @@index([survivabilityStatus])
+  @@index([environment])
+  @@map("multi_tenant_scale_survivability")
+}
+
+model CapacityPlanningOrchestration {
+  id                    String   @id @default(uuid())
+  planningDomain        String   // compute | storage | database | cache | network | queue | cdn | monitoring
+  currentUsage          Float    @default(0)
+  projectedUsage        Float    @default(0)
+  capacityCeiling       Float    @default(0)
+  headroomPercent       Float    @default(0)
+  planningHorizon       String   // 30d | 90d | 180d | 365d
+  planningStatus        String   // sufficient | approaching_limit | at_risk | exceeded
+  immutable             Boolean  @default(true)
+  planningHash          String   // SHA-256
+  planningDetails       String   // JSON
+  environment           String   // production
+  createdAt             DateTime @default(now())
+
+  @@index([planningDomain])
+  @@index([planningStatus])
+  @@index([environment])
+  @@map("capacity_planning_orchestrations")
+}
+
+model LargeDeploymentOnboarding {
+  id                    String   @id @default(uuid())
+  deploymentId          String
+  institutionName       String
+  deploymentSize        String   // small_10 | medium_50 | large_100 | enterprise_500 | mega_1000
+  onboardingPhase       String   // planning | provisioning | migration | configuration | testing | training | go_live | stabilization
+  phaseOrder            Int      @default(0)
+  phaseStatus           String   // pending | in_progress | completed | blocked
+  seatCount             Int      @default(0)
+  onboardingHash        String   // SHA-256
+  onboardingDetails     String   // JSON
+  environment           String   // production
+  createdAt             DateTime @default(now())
+
+  @@index([deploymentId])
+  @@index([onboardingPhase])
+  @@index([environment])
+  @@map("large_deployment_onboarding")
+}
+
+model EnterpriseObservabilityRefinement {
+  id                    String   @id @default(uuid())
+  observabilityDomain   String   // distributed_tracing | log_aggregation | metric_collection | alerting_rules | dashboard_coverage | anomaly_detection | slo_tracking | incident_correlation
+  refinementAction      String
+  beforeValue           Float    @default(0)
+  afterValue            Float    @default(0)
+  improvementPercent    Float    @default(0)
+  refinementStatus      String   // planned | implemented | validated | rolled_back
+  refinementHash        String   // SHA-256
+  refinementDetails     String   // JSON
+  environment           String   // production
+  createdAt             DateTime @default(now())
+
+  @@index([observabilityDomain])
+  @@index([refinementStatus])
+  @@index([environment])
+  @@map("enterprise_observability_refinements")
+}
+
+model OperationalCostGovernance {
+  id                    String   @id @default(uuid())
+  costCategory          String   // compute | storage | database | network | cdn | monitoring | support | licensing
+  monthlyBudget         Float    @default(0)
+  monthlyActual         Float    @default(0)
+  variancePercent       Float    @default(0)
+  costPerUser           Float    @default(0)
+  costStatus            String   // under_budget | on_budget | over_budget | critical
+  costHash              String   // SHA-256
+  costDetails           String   // JSON
+  environment           String   // production
+  createdAt             DateTime @default(now())
+
+  @@index([costCategory])
+  @@index([costStatus])
+  @@index([environment])
+  @@map("operational_cost_governance")
+}
+
+model ScaleCertificationManifest {
+  id                    String   @id @default(uuid())
+  certificationDomain   String   // horizontal_scaling | vertical_scaling | database_scaling | cache_scaling | queue_scaling | storage_scaling | network_scaling | multi_region_readiness
+  maxTestedLoad         Int      @default(0)
+  targetLoad            Int      @default(0)
+  scalingFactor         Float    @default(0)
+  certificationStatus   String   // certified | conditional | pending | failed
+  certifiedBy           String?
+  certificationHash     String   // SHA-256
+  certificationDetails  String   // JSON
+  environment           String   // production
+  createdAt             DateTime @default(now())
+
+  @@index([certificationDomain])
+  @@index([certificationStatus])
+  @@index([environment])
+  @@map("scale_certification_manifests")
+}
+
+model LongTermStewardshipOperation {
+  id                    String   @id @default(uuid())
+  stewardshipDomain     String   // platform_evolution | dependency_lifecycle | security_patching | compliance_maintenance | performance_tuning | documentation_currency | training_programs | community_engagement
+  operationCycle        String   // weekly | monthly | quarterly | annual
+  lastCompletedDate     String
+  nextScheduledDate     String
+  completionRate        Float    @default(0)
+  stewardshipStatus     String   // on_track | at_risk | overdue | completed
+  immutable             Boolean  @default(true)
+  stewardshipHash       String   // SHA-256
+  stewardshipDetails    String   // JSON
+  environment           String   // production
+  createdAt             DateTime @default(now())
+
+  @@index([stewardshipDomain])
+  @@index([stewardshipStatus])
+  @@index([environment])
+  @@map("long_term_stewardship_operations")
+}

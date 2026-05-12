@@ -60,6 +60,7 @@ import { registerContradictionIntelligenceRoutes } from "./routes/contradictionI
 import { registerDefenseStrategyRoutes } from "./routes/defenseStrategyRoutes.js";
 import { registerTrialPreparationRoutes } from "./routes/trialPreparationRoutes.js";
 import { registerEvidentiaryObjectionRoutes } from "./routes/evidentiaryObjectionRoutes.js";
+import { registerTrialDynamicsRoutes } from "./routes/trialDynamicsRoutes.js";
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -257,6 +258,9 @@ async function startServer() {
 
   console.log('[Server] Registering evidentiary objection + motion intelligence routes (Phase D.6)...');
   await registerEvidentiaryObjectionRoutes(app);
+
+  console.log('[Server] Registering trial dynamics + courtroom presentation routes (Phase D.7)...');
+  await registerTrialDynamicsRoutes(app);
 
   console.log('[Server] Registering admin queue monitoring routes...');
   await registerQueueMonitorRoutes(app);

@@ -5903,3 +5903,200 @@ model ReleaseLineageRecord {
   @@index([previousVersion])
   @@map("release_lineage_records")
 }
+
+// ---------------------------------------------------------------------------
+// Phase J.1 — Long-Term Continuity + Institutional Resilience Framework
+// ---------------------------------------------------------------------------
+
+model LongTermEvidencePreservation {
+  id                    String   @id @default(uuid())
+  caseId                String
+  evidenceRecordId      String
+  preservationType      String   // full_record | metadata_only | hash_only | encrypted_archive
+  preservationFormat    String   // json | encrypted_json | binary_archive
+  contentHash           String   // SHA-256
+  preservedAt           String
+  expiresAt             String?
+  storageLocation       String   // primary | secondary | offsite | cold_storage
+  integrityVerified     Boolean  @default(false)
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([preservationType])
+  @@index([storageLocation])
+  @@map("long_term_evidence_preservations")
+}
+
+model DisasterRecoveryOrchestration {
+  id                    String   @id @default(uuid())
+  scenarioType          String   // full_outage | partial_outage | data_corruption | region_failure | network_partition
+  recoveryPlan          String   // JSON — ordered recovery steps
+  estimatedRecoveryTime String   // e.g. "< 30 minutes"
+  lastTestedAt          String?
+  testResult            String   // passed | failed | partial | untested
+  dataIntegrityCheck    Boolean  @default(false)
+  servicesRecovered     String   // JSON — list of services
+  recoveryPriority      Int      @default(1)  // 1=highest
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([scenarioType])
+  @@index([testResult])
+  @@index([recoveryPriority])
+  @@map("disaster_recovery_orchestrations")
+}
+
+model ContinuityOfOperationsWorkflow {
+  id                    String   @id @default(uuid())
+  workflowName          String
+  workflowType          String   // failover | degraded_mode | manual_override | emergency_shutdown | staged_recovery
+  triggerCondition      String   // JSON — conditions that trigger this workflow
+  executionSteps        String   // JSON — ordered steps
+  stepsPassed           Int      @default(0)
+  stepsFailed           Int      @default(0)
+  workflowStatus        String   // ready | active | completed | failed
+  lastExecutedAt        String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([workflowType])
+  @@index([workflowStatus])
+  @@map("continuity_of_operations_workflows")
+}
+
+model MultiRegionIntegrityVerification {
+  id                    String   @id @default(uuid())
+  primaryRegion         String
+  secondaryRegion       String
+  datasetType           String   // evidence | analysis | configuration | exports | archives
+  primaryHash           String   // SHA-256
+  secondaryHash         String   // SHA-256
+  hashConsistent        Boolean  @default(false)
+  recordCount           Int      @default(0)
+  lastSyncedAt          String?
+  syncLatency           Int      @default(0)  // milliseconds
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([primaryRegion])
+  @@index([datasetType])
+  @@index([hashConsistent])
+  @@map("multi_region_integrity_verifications")
+}
+
+model ArchivalSurvivabilityValidation {
+  id                    String   @id @default(uuid())
+  archiveId             String
+  archiveType           String   // full_case | phase_specific | evidence_only | compliance_records
+  survivabilityScore    Float    @default(100)
+  checksPerformed       String   // JSON — list of survivability checks
+  checksPassed          Int      @default(0)
+  checksFailed          Int      @default(0)
+  integrityHash         String   // SHA-256
+  storageRedundancy     Int      @default(1)  // number of copies
+  lastValidatedAt       String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([archiveId])
+  @@index([archiveType])
+  @@index([survivabilityScore])
+  @@map("archival_survivability_validations")
+}
+
+model RecoveryGovernanceTracking {
+  id                    String   @id @default(uuid())
+  recoveryEventId       String
+  recoveryType          String   // automated | manual | hybrid
+  authorizedBy          String
+  authorizationLevel    String   // lead_attorney | system_admin | emergency
+  recoveryScope         String   // full_system | per_service | per_case | per_layer
+  preRecoveryState      String   // JSON
+  postRecoveryState     String   // JSON
+  dataIntegrityVerified Boolean  @default(false)
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([recoveryEventId])
+  @@index([recoveryType])
+  @@index([authorizationLevel])
+  @@map("recovery_governance_trackings")
+}
+
+model InstitutionalContinuityManifest {
+  id                    String   @id @default(uuid())
+  manifestVersion       String   @default("1.0")
+  systemComponents      String   // JSON — all system components and their status
+  criticalPaths         String   // JSON — critical operational paths
+  singlePointsOfFailure String   // JSON — identified SPOFs
+  redundancyLevel       String   // full | partial | minimal | none
+  lastReviewedAt        String?
+  reviewedBy            String?
+  manifestHash          String   // SHA-256
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([redundancyLevel])
+  @@index([manifestVersion])
+  @@map("institutional_continuity_manifests")
+}
+
+model RetentionLifecycleManagement {
+  id                    String   @id @default(uuid())
+  caseId                String?
+  dataType              String   // evidence | analysis | exports | logs | configurations | archives
+  retentionPolicy       String   // 7_years | 10_years | permanent | case_dependent | regulatory
+  retentionStartDate    String
+  retentionEndDate      String?
+  currentStatus         String   // active | archived | pending_deletion | preserved | extended
+  complianceVerified    Boolean  @default(false)
+  lastAuditedAt         String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([dataType])
+  @@index([currentStatus])
+  @@map("retention_lifecycle_managements")
+}
+
+model RecoverySimulationFramework {
+  id                    String   @id @default(uuid())
+  simulationType        String   // full_disaster | partial_outage | data_corruption | failover | network_partition
+  simulationScope       String   // full_system | database | api | cache | storage
+  startedAt             String
+  completedAt           String?
+  recoveryTimeActual    Int      @default(0)  // seconds
+  dataLossDetected      Boolean  @default(false)
+  servicesImpacted      String   // JSON
+  testsPassed           Int      @default(0)
+  testsFailed           Int      @default(0)
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([simulationType])
+  @@index([simulationScope])
+  @@index([dataLossDetected])
+  @@map("recovery_simulation_frameworks")
+}
+
+model PreservationCertification {
+  id                    String   @id @default(uuid())
+  caseId                String
+  certificationScope    String   // full_case | evidence_only | analysis | exports
+  evidenceRecordsCount  Int      @default(0)
+  preservedRecordsCount Int      @default(0)
+  preservationRate      Float    @default(100)
+  integrityVerified     Boolean  @default(false)
+  certificationStatus   String   // certified | conditional | failed | pending
+  certifiedBy           String?
+  certifiedAt           String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([certificationStatus])
+  @@index([certificationScope])
+  @@map("preservation_certifications")
+}

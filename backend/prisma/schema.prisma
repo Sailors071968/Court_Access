@@ -2611,3 +2611,228 @@ model ExportJob {
   @@index([status])
   @@map("export_jobs")
 }
+
+// ---------------------------------------------------------------------------
+// Phase D.6 — Evidentiary Objection (general objection record)
+// ---------------------------------------------------------------------------
+
+model EvidentiaryObjection {
+  id                  String   @id @default(uuid())
+  caseId              String
+  statementId         String?
+  documentId          String?
+  objectionType       String   // hearsay | foundation | authentication | relevance | prejudice_352 | speculation | leading | compound | argumentative | best_evidence | privilege
+  evidenceCodeSection String   // EC § number
+  title               String
+  description         String
+  citedText           String   // The exact text being objected to
+  citedPage           Int?
+  citedLine           Int?
+  citedSpeaker        String?
+  citedDocument       String?
+  strength            String   // strong | moderate | weak
+  status              String   @default("identified") // identified | raised | sustained | overruled
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([objectionType])
+  @@index([strength])
+  @@index([status])
+  @@map("evidentiary_objections")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.6 — Hearsay Issue
+// ---------------------------------------------------------------------------
+
+model HearsayIssue {
+  id                  String   @id @default(uuid())
+  caseId              String
+  statementId         String?
+  declarant           String   // Person who made the out-of-court statement
+  reportingSpeaker    String?  // Person who reported it in testimony
+  hearsayLevel        String   // single | double | triple (hearsay within hearsay)
+  statementText       String
+  page                Int?
+  lineStart           Int?
+  documentId          String?
+  exceptionClaimed    String?  // EC 1220-1390 exception if prosecution claims one
+  exceptionAnalysis   String?  // Deterministic analysis of whether exception applies
+  objectionBasis      String   // EC § 1200 + specific subsection
+  strength            String   // strong | moderate | weak
+
+  createdAt           DateTime @default(now())
+
+  @@index([caseId])
+  @@index([declarant])
+  @@index([hearsayLevel])
+  @@map("hearsay_issues")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.6 — Foundation Defect
+// ---------------------------------------------------------------------------
+
+model FoundationDefect {
+  id                  String   @id @default(uuid())
+  caseId              String
+  statementId         String?
+  documentId          String?
+  defectType          String   // lack_personal_knowledge | insufficient_expertise | no_chain_established | improper_opinion | speculation
+  evidenceCodeSection String   // EC § 403, 702, 800, 801, etc.
+  affectedText        String
+  page                Int?
+  lineStart           Int?
+  speaker             String?
+  explanation         String
+  strength            String   // strong | moderate | weak
+
+  createdAt           DateTime @default(now())
+
+  @@index([caseId])
+  @@index([defectType])
+  @@map("foundation_defects")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.6 — Authentication Challenge
+// ---------------------------------------------------------------------------
+
+model AuthenticationChallenge {
+  id                  String   @id @default(uuid())
+  caseId              String
+  documentId          String?
+  challengeType       String   // no_witness_foundation | altered_document | incomplete_document | improper_copy | digital_integrity | metadata_conflict
+  evidenceCodeSection String   // EC § 1400, 1401, 1402
+  documentDescription String
+  explanation         String
+  supportingEvidence  String   // JSON array of citations supporting the challenge
+  strength            String   // strong | moderate | weak
+
+  createdAt           DateTime @default(now())
+
+  @@index([caseId])
+  @@index([challengeType])
+  @@map("authentication_challenges")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.6 — Chain of Custody Issue
+// ---------------------------------------------------------------------------
+
+model ChainOfCustodyIssue {
+  id                  String   @id @default(uuid())
+  caseId              String
+  evidenceItem        String   // Description of the physical/digital evidence
+  issueType           String   // gap_in_chain | improper_storage | contamination_risk | missing_log | undocumented_transfer | delayed_processing
+  explanation         String
+  timelineGap         String?  // Description of temporal gap if applicable
+  affectedStatements  String   // JSON array of statement IDs relying on this evidence
+  citations           String   // JSON array of { text, page, line, speaker, document }
+  strength            String   // strong | moderate | weak
+
+  createdAt           DateTime @default(now())
+
+  @@index([caseId])
+  @@index([issueType])
+  @@map("chain_of_custody_issues")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.6 — Constitutional Issue
+// ---------------------------------------------------------------------------
+
+model ConstitutionalIssue {
+  id                  String   @id @default(uuid())
+  caseId              String
+  amendmentBasis      String   // 4th | 5th | 6th | 14th | other
+  issueType           String   // unlawful_search | unlawful_seizure | miranda_violation | right_to_counsel | due_process | confrontation_clause | speedy_trial | double_jeopardy
+  title               String
+  description         String
+  factualBasis        String   // Exact evidence citations proving the issue
+  citations           String   // JSON array of { text, page, line, speaker, document }
+  affectedEvidence    String   // JSON array of evidence IDs potentially suppressible
+  suppressionPotential String  // high | medium | low
+  strength            String   // strong | moderate | weak
+
+  createdAt           DateTime @default(now())
+
+  @@index([caseId])
+  @@index([amendmentBasis])
+  @@index([issueType])
+  @@index([suppressionPotential])
+  @@map("constitutional_issues")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.6 — Discovery Violation
+// ---------------------------------------------------------------------------
+
+model DiscoveryViolation {
+  id                  String   @id @default(uuid())
+  caseId              String
+  violationType       String   // late_disclosure | withheld_evidence | incomplete_production | altered_evidence | lost_evidence | failure_to_preserve
+  penalCodeSection    String?  // PC § 1054 et seq.
+  description         String
+  affectedEvidence    String   // JSON array of evidence IDs
+  discoveryTimeline   String   // JSON: { requestDate, responseDate, disclosureDate, trialDate }
+  prejudiceAnalysis   String   // How this violation prejudices the defense
+  citations           String   // JSON array of { text, page, line, speaker, document }
+  remedySought        String   // continuance | exclusion | mistrial | sanctions | adverse_instruction
+  strength            String   // strong | moderate | weak
+
+  createdAt           DateTime @default(now())
+
+  @@index([caseId])
+  @@index([violationType])
+  @@map("discovery_violations")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.6 — Brady/Giglio Issue (prosecution disclosure failures)
+// ---------------------------------------------------------------------------
+
+model BradyGiglioIssue {
+  id                  String   @id @default(uuid())
+  caseId              String
+  issueType           String   // brady_material | giglio_impeachment | undisclosed_exculpatory | undisclosed_deal | undisclosed_prior_bad_acts
+  title               String
+  description         String
+  materialityAnalysis String   // Why this evidence is material to the defense
+  favorabilityBasis   String   // How this evidence is favorable to the defendant
+  suppressionEvidence String   // Citation evidence that prosecution knew and withheld
+  citations           String   // JSON array of { text, page, line, speaker, document }
+  discoveredVia       String   // How the issue was discovered (cross-reference, testimony conflict, etc.)
+  strength            String   // strong | moderate | weak
+
+  createdAt           DateTime @default(now())
+
+  @@index([caseId])
+  @@index([issueType])
+  @@map("brady_giglio_issues")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.6 — Suppression Issue (evidence to exclude)
+// ---------------------------------------------------------------------------
+
+model SuppressionIssue {
+  id                  String   @id @default(uuid())
+  caseId              String
+  suppressionBasis    String   // 4th_amendment | 5th_amendment | fruit_poisonous_tree | miranda | wong_sun | inevitable_discovery_fail | attenuation_fail
+  evidenceToSuppress  String   // Description of evidence targeted
+  legalBasis          String   // Constitutional/statutory basis
+  factualBasis        String   // Evidence citations proving suppression grounds
+  citations           String   // JSON array of { text, page, line, speaker, document }
+  affectedCharges     String   // JSON array of charge IDs affected if suppressed
+  impactAnalysis      String   // What happens to prosecution case if suppressed
+  strength            String   // strong | moderate | weak
+
+  createdAt           DateTime @default(now())
+
+  @@index([caseId])
+  @@index([suppressionBasis])
+  @@map("suppression_issues")
+}

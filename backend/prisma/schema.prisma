@@ -7645,3 +7645,197 @@ model OperationalReliabilityScore {
   @@index([scoreStatus])
   @@map("operational_reliability_scores")
 }
+
+// ---------------------------------------------------------------------------
+// Phase N.3 — Controlled Pilot Deployment + Real-World Operational Validation
+// Controlled operationalization. No speculative expansion.
+// ---------------------------------------------------------------------------
+
+model HistoricalCaseReplayPilot {
+  id                    String   @id @default(uuid())
+  caseId                String
+  historicalCaseRef     String
+  caseType              String   // dui | domestic_violence | theft | drug_possession | assault | fraud
+  replayStatus          String   // completed | running | failed | pending
+  outputMatchBaseline   Boolean  @default(false)
+  contradictionsFound   Int      @default(0)
+  burdensFound          Int      @default(0)
+  replayHash            String   // SHA-256
+  replayDetails         String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([caseType])
+  @@index([replayStatus])
+  @@map("historical_case_replay_pilots")
+}
+
+model InternalUserPilot {
+  id                    String   @id @default(uuid())
+  caseId                String
+  userId                String
+  userRole              String   // attorney | paralegal | investigator | admin
+  pilotScope            String   // evidence_review | contradiction_analysis | defense_generation | export_workflow | trial_prep
+  permissionLevel       String   // full | restricted | read_only
+  pilotStatus           String   // active | completed | paused | revoked
+  feedbackScore         Float?
+  pilotDetails          String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([userId])
+  @@index([pilotStatus])
+  @@map("internal_user_pilots")
+}
+
+model AttorneyUsabilityTelemetry {
+  id                    String   @id @default(uuid())
+  caseId                String
+  sessionId             String
+  workflowName          String   // evidence_review | contradiction_nav | timeline_analysis | export_generation | defense_review
+  actionCount           Int      @default(0)
+  sessionDurationMs     Int      @default(0)
+  frictionEvents        Int      @default(0)
+  completionRate        Float    @default(0)
+  telemetryHash         String   // SHA-256
+  telemetryDetails      String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([workflowName])
+  @@index([sessionId])
+  @@map("attorney_usability_telemetry")
+}
+
+model WorkflowFrictionEntry {
+  id                    String   @id @default(uuid())
+  caseId                String
+  workflowStep          String   // evidence_upload | contradiction_review | burden_analysis | defense_draft | export_config | timeline_nav
+  frictionType          String   // slow_response | confusing_ui | missing_data | extra_clicks | unclear_output
+  severityLevel         String   // critical | high | medium | low
+  resolved              Boolean  @default(false)
+  resolutionDetails     String?  // JSON
+  frictionDetails       String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([workflowStep])
+  @@index([severityLevel])
+  @@map("workflow_friction_entries")
+}
+
+model RealWorldExportValidation {
+  id                    String   @id @default(uuid())
+  caseId                String
+  exportType            String   // pdf_report | csv_data | json_manifest | evidence_package | trial_binder
+  exportHash            String   // SHA-256
+  baselineHash          String   // SHA-256
+  hashesMatch           Boolean  @default(false)
+  exportSize            Int      @default(0)
+  validationStatus      String   // valid | invalid | partial | pending
+  exportDetails         String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([exportType])
+  @@index([validationStatus])
+  @@map("real_world_export_validations")
+}
+
+model ProductionSurvivabilityDrill {
+  id                    String   @id @default(uuid())
+  caseId                String
+  drillType             String   // graceful_shutdown | crash_recovery | data_restore | failover | capacity_burst | network_partition
+  drillStatus           String   // passed | failed | partial
+  recoveryTimeMs        Int      @default(0)
+  dataIntegrityVerified Boolean  @default(true)
+  servicesContinued     Boolean  @default(true)
+  drillHash             String   // SHA-256
+  drillDetails          String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([drillType])
+  @@index([drillStatus])
+  @@map("production_survivability_drills")
+}
+
+model PilotRollbackRehearsal {
+  id                    String   @id @default(uuid())
+  caseId                String
+  rollbackScope         String   // full_system | single_service | database_only | config_only | feature_flag
+  rollbackSteps         Int      @default(0)
+  stepsCompleted        Int      @default(0)
+  rollbackStatus        String   // completed | failed | partial
+  dataPreserved         Boolean  @default(true)
+  rollbackHash          String   // SHA-256
+  rollbackDetails       String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([rollbackScope])
+  @@index([rollbackStatus])
+  @@map("pilot_rollback_rehearsals")
+}
+
+model PilotFeatureEnablement {
+  id                    String   @id @default(uuid())
+  caseId                String
+  featureName           String
+  featureScope          String   // pilot_only | internal | beta | general_availability
+  governanceApproval    Boolean  @default(false)
+  approvedBy            String?
+  enablementStatus      String   // enabled | disabled | staged | revoked
+  enablementHash        String   // SHA-256
+  enablementDetails     String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([featureName])
+  @@index([enablementStatus])
+  @@map("pilot_feature_enablements")
+}
+
+model OperationalIssueTriage {
+  id                    String   @id @default(uuid())
+  caseId                String
+  issueType             String   // bug | performance | usability | data_integrity | security | workflow
+  issueSeverity         String   // critical | high | medium | low
+  issueStatus           String   // open | investigating | resolved | deferred
+  affectedWorkflow      String   // evidence | analysis | defense | export | trial_prep | governance
+  resolutionHash        String?  // SHA-256
+  issueDetails          String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([issueType])
+  @@index([issueStatus])
+  @@map("operational_issue_triages")
+}
+
+model PilotCertificationManifest {
+  id                    String   @id @default(uuid())
+  caseId                String
+  certificationArea     String   // replay_accuracy | usability_score | export_integrity | survivability | rollback_readiness | feature_governance | issue_resolution | telemetry_coverage
+  certificationHash     String   // SHA-256
+  certified             Boolean  @default(false)
+  certifiedBy           String?
+  certifiedAt           String?
+  manifestDetails       String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([certificationArea])
+  @@index([certified])
+  @@map("pilot_certification_manifests")
+}

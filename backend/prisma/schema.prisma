@@ -6100,3 +6100,201 @@ model PreservationCertification {
   @@index([certificationScope])
   @@map("preservation_certifications")
 }
+
+// ---------------------------------------------------------------------------
+// Phase J.2 — Formal Verification + Evidentiary Trust Assurance Framework
+// ---------------------------------------------------------------------------
+
+model DeterministicVerificationProof {
+  id                    String   @id @default(uuid())
+  caseId                String
+  proofType             String   // full_analysis | layer_specific | evidence_specific | cross_layer
+  inputHash             String   // SHA-256 of input data
+  outputHash            String   // SHA-256 of output data
+  proofResult           String   // verified | failed | inconclusive
+  reproductionCount     Int      @default(1)
+  allReproductionsMatch Boolean  @default(false)
+  verificationMethod    String   // deterministic_replay | hash_comparison | output_diffing
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([proofType])
+  @@index([proofResult])
+  @@map("deterministic_verification_proofs")
+}
+
+model IntegrityAttestationRecord {
+  id                    String   @id @default(uuid())
+  caseId                String
+  attestationTarget     String   // evidence | analysis | export | integrity_chain | governance_record
+  targetRecordId        String
+  contentHash           String   // SHA-256
+  attestedBy            String   // system | external_auditor | attorney
+  attestationResult     String   // attested | disputed | pending
+  linkedProofId         String?  // links to verification proof
+  expiresAt             String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([attestationTarget])
+  @@index([attestationResult])
+  @@map("integrity_attestation_records")
+}
+
+model ReproducibilityProof {
+  id                    String   @id @default(uuid())
+  caseId                String
+  layerName             String   // evidence | contradictions | defense | trial_prep | appellate | etc.
+  originalRunHash       String   // SHA-256
+  reproductionRunHash   String   // SHA-256
+  hashesMatch           Boolean  @default(false)
+  inputParametersHash   String   // SHA-256 of input params
+  reproductionTimestamp String
+  executionDuration     Int      @default(0)  // milliseconds
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([layerName])
+  @@index([hashesMatch])
+  @@map("reproducibility_proofs")
+}
+
+model VerificationChainManifest {
+  id                    String   @id @default(uuid())
+  caseId                String
+  chainLength           Int      @default(0)
+  chainEntries          String   // JSON — ordered verification steps
+  chainHash             String   // SHA-256 of entire chain
+  chainComplete         Boolean  @default(false)
+  brokenLinks           String?  // JSON — any broken chain links
+  firstEntryId          String?
+  lastEntryId           String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([chainComplete])
+  @@map("verification_chain_manifests")
+}
+
+model IndependentAuditVerification {
+  id                    String   @id @default(uuid())
+  caseId                String
+  auditType             String   // internal | external | regulatory | court_ordered
+  auditorId             String
+  scopeDescription      String
+  findingsCount         Int      @default(0)
+  criticalFindings      Int      @default(0)
+  evidenceReviewed      Int      @default(0)
+  auditResult           String   // passed | conditional | failed
+  findings              String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([auditType])
+  @@index([auditResult])
+  @@map("independent_audit_verifications")
+}
+
+model FormalValidationCheckpoint {
+  id                    String   @id @default(uuid())
+  caseId                String
+  checkpointName        String
+  checkpointType        String   // pre_analysis | post_analysis | pre_export | post_export | periodic
+  validationsPassed     Int      @default(0)
+  validationsFailed     Int      @default(0)
+  stateHash             String   // SHA-256 of system state at checkpoint
+  checkpointStatus      String   // passed | failed | skipped
+  restorable            Boolean  @default(true)
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([checkpointType])
+  @@index([checkpointStatus])
+  @@map("formal_validation_checkpoints")
+}
+
+model TrustAssuranceCertification {
+  id                    String   @id @default(uuid())
+  caseId                String
+  certificationScope    String   // full_case | evidence_chain | analysis_pipeline | export_integrity
+  trustScore            Float    @default(100)
+  rulesEvaluated        Int      @default(0)
+  rulesPassed           Int      @default(0)
+  rulesFailed           Int      @default(0)
+  certificationStatus   String   // certified | conditional | failed | pending
+  certifiedBy           String?
+  certifiedAt           String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([certificationScope])
+  @@index([certificationStatus])
+  @@map("trust_assurance_certifications")
+}
+
+model CrossLayerVerificationSync {
+  id                    String   @id @default(uuid())
+  caseId                String
+  sourceLayer           String
+  targetLayer           String
+  sourceHash            String   // SHA-256
+  targetHash            String   // SHA-256
+  syncConsistent        Boolean  @default(false)
+  recordsCompared       Int      @default(0)
+  discrepancies         String?  // JSON
+  lastSyncedAt          String
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([sourceLayer])
+  @@index([syncConsistent])
+  @@map("cross_layer_verification_syncs")
+}
+
+model VerificationReplayRecord {
+  id                    String   @id @default(uuid())
+  caseId                String
+  replayScope           String   // full_case | single_layer | single_record
+  originalHash          String   // SHA-256
+  replayHash            String   // SHA-256
+  hashesMatch           Boolean  @default(false)
+  replayDuration        Int      @default(0)  // milliseconds
+  recordsReplayed       Int      @default(0)
+  discrepancyDetails    String?  // JSON
+  replayedAt            String
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([replayScope])
+  @@index([hashesMatch])
+  @@map("verification_replay_records")
+}
+
+model DefensibilityCertificationRecord {
+  id                    String   @id @default(uuid())
+  caseId                String
+  defensibilityScope    String   // daubert | frye | evidence_authentication | expert_review | appellate
+  evidenceRecordsCount  Int      @default(0)
+  verifiedRecordsCount  Int      @default(0)
+  defensibilityRate     Float    @default(100)
+  integrityChainValid   Boolean  @default(false)
+  certificationStatus   String   // defensible | conditional | not_defensible | pending
+  certifiedBy           String?
+  certifiedAt           String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([defensibilityScope])
+  @@index([certificationStatus])
+  @@map("defensibility_certification_records")
+}

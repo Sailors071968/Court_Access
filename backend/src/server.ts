@@ -50,6 +50,7 @@ import { registerChargeRoutes } from "./charges/chargeRoutes.js";
 import { registerCalcrimRoutes } from "./routes/calcrimRoutes.js";
 import { registerEvidenceStatementRoutes } from "./routes/evidenceStatementRoutes.js";
 import { registerElementMappingRoutes } from "./routes/elementMappingRoutes.js";
+import { registerContradictionRoutes } from "./routes/contradictionRoutes.js";
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -217,6 +218,9 @@ async function startServer() {
 
   console.log('[Server] Registering element mapping routes...');
   await registerElementMappingRoutes(app);
+
+  console.log('[Server] Registering contradiction engine routes...');
+  await registerContradictionRoutes(app);
 
   console.log('[Server] Registering admin queue monitoring routes...');
   await registerQueueMonitorRoutes(app);

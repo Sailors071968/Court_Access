@@ -8825,3 +8825,204 @@ model RevenueStewardshipManifest {
   @@index([environment])
   @@map("revenue_stewardship_manifests")
 }
+
+// ---------------------------------------------------------------------------
+// Phase P.1 — Controlled Enterprise Production Rollout + Operational Stewardship
+// Operational enterprise litigation infrastructure. No speculative expansion.
+// ---------------------------------------------------------------------------
+
+model ControlledInstitutionalRollout {
+  id                    String   @id @default(uuid())
+  institutionId         String
+  institutionName       String
+  rolloutStage          String   // pre_assessment | contract_finalized | environment_provisioned | data_migrated | users_onboarded | training_delivered | acceptance_verified | production_activated | post_launch_monitored | rollout_certified
+  stageOrder            Int      @default(0)
+  stageStatus           String   // pending | in_progress | completed | blocked | deferred
+  governanceApproved    Boolean  @default(false)
+  approvedBy            String?
+  rolloutHash           String   // SHA-256
+  rolloutDetails        String   // JSON
+  environment           String   // production
+  createdAt             DateTime @default(now())
+
+  @@index([institutionId])
+  @@index([rolloutStage])
+  @@index([environment])
+  @@map("controlled_institutional_rollouts")
+}
+
+model ProductionOperationsMonitor {
+  id                    String   @id @default(uuid())
+  operationDomain       String   // api_health | database_performance | cache_efficiency | queue_throughput | error_budget | latency_p99 | resource_utilization | security_posture
+  currentValue          Float    @default(0)
+  targetValue           Float    @default(0)
+  monitorStatus         String   // nominal | warning | critical | degraded
+  trendDirection        String   // improving | stable | degrading
+  alertsTriggered       Int      @default(0)
+  monitorHash           String   // SHA-256
+  monitorDetails        String   // JSON
+  environment           String   // production
+  createdAt             DateTime @default(now())
+
+  @@index([operationDomain])
+  @@index([monitorStatus])
+  @@index([environment])
+  @@map("production_operations_monitors")
+}
+
+model EnterpriseSupportWorkflow {
+  id                    String   @id @default(uuid())
+  supportCategory       String   // technical_support | billing_support | onboarding_assistance | training_request | compliance_inquiry | feature_request | bug_report | escalation
+  priority              String   // critical | high | medium | low
+  requesterId           String
+  assignedTeam          String?
+  workflowStatus        String   // open | triaged | in_progress | pending_review | resolved | closed
+  slaTargetMs           Int      @default(0)
+  slaActualMs           Int      @default(0)
+  immutable             Boolean  @default(true)
+  workflowHash          String   // SHA-256
+  workflowDetails       String   // JSON
+  environment           String   // production
+  createdAt             DateTime @default(now())
+
+  @@index([supportCategory])
+  @@index([workflowStatus])
+  @@index([environment])
+  @@map("enterprise_support_workflows")
+}
+
+model AttorneyOnboardingOperation {
+  id                    String   @id @default(uuid())
+  attorneyId            String
+  attorneyName          String
+  onboardingStep        String   // account_created | credentials_issued | training_assigned | training_completed | workspace_configured | first_case_created | proficiency_verified | onboarding_certified
+  stepOrder             Int      @default(0)
+  stepStatus            String   // pending | in_progress | completed | blocked
+  institutionId         String?
+  onboardingHash        String   // SHA-256
+  onboardingDetails     String   // JSON
+  environment           String   // production
+  createdAt             DateTime @default(now())
+
+  @@index([attorneyId])
+  @@index([onboardingStep])
+  @@index([environment])
+  @@map("attorney_onboarding_operations")
+}
+
+model ProductionIncidentGovernance {
+  id                    String   @id @default(uuid())
+  incidentCategory      String   // service_outage | data_integrity | security_breach | performance_degradation | billing_anomaly | compliance_violation | user_impact | infrastructure_failure
+  severity              String   // critical | high | medium | low
+  incidentStatus        String   // detected | triaged | investigating | mitigating | resolved | post_mortem
+  detectedAt            String
+  resolvedAt            String?
+  responseTimeMs        Int      @default(0)
+  rootCause             String?
+  preventionAction      String?
+  incidentHash          String   // SHA-256
+  incidentDetails       String   // JSON
+  environment           String   // production
+  createdAt             DateTime @default(now())
+
+  @@index([incidentCategory])
+  @@index([severity])
+  @@index([environment])
+  @@map("production_incident_governance")
+}
+
+model OperationalSurvivabilityOversight {
+  id                    String   @id @default(uuid())
+  oversightDomain       String   // uptime_assurance | failover_readiness | backup_integrity | disaster_recovery | capacity_planning | security_resilience | compliance_continuity | operational_redundancy
+  oversightScore        Float    @default(0)
+  evidenceLinks         String   // JSON — links to evidence
+  lastAssessmentDate    String
+  nextAssessmentDate    String
+  oversightStatus       String   // compliant | needs_attention | non_compliant
+  oversightHash         String   // SHA-256
+  oversightDetails      String   // JSON
+  environment           String   // production
+  createdAt             DateTime @default(now())
+
+  @@index([oversightDomain])
+  @@index([oversightStatus])
+  @@index([environment])
+  @@map("operational_survivability_oversight")
+}
+
+model InstitutionalSlaTracking {
+  id                    String   @id @default(uuid())
+  institutionId         String
+  institutionName       String
+  slaMetric             String   // uptime | response_time | resolution_time | data_availability | support_response | report_delivery | training_completion | compliance_audit
+  targetValue           Float    @default(0)
+  actualValue           Float    @default(0)
+  slaMet                Boolean  @default(false)
+  measurementPeriod     String   // monthly | quarterly | annual
+  immutable             Boolean  @default(true)
+  slaHash               String   // SHA-256
+  slaDetails            String   // JSON
+  environment           String   // production
+  createdAt             DateTime @default(now())
+
+  @@index([institutionId])
+  @@index([slaMetric])
+  @@index([environment])
+  @@map("institutional_sla_tracking")
+}
+
+model RealWorldWorkflowTelemetry {
+  id                    String   @id @default(uuid())
+  workflowName          String   // case_creation | evidence_upload | analysis_generation | report_export | search_execution | document_review | contradiction_detection | trial_preparation
+  executionCount        Int      @default(0)
+  avgDurationMs         Int      @default(0)
+  p95DurationMs         Int      @default(0)
+  errorRate             Float    @default(0)
+  userSatisfaction      Float    @default(0)
+  telemetryPeriod       String   // daily | weekly | monthly
+  telemetryHash         String   // SHA-256
+  telemetryDetails      String   // JSON
+  environment           String   // production
+  createdAt             DateTime @default(now())
+
+  @@index([workflowName])
+  @@index([telemetryPeriod])
+  @@index([environment])
+  @@map("real_world_workflow_telemetry")
+}
+
+model ProductionStewardshipManifestP1 {
+  id                    String   @id @default(uuid())
+  stewardshipDomain     String   // platform_governance | institutional_trust | operational_continuity | security_stewardship | compliance_governance | financial_stewardship | user_experience | technical_excellence
+  maturityLevel         String   // initial | developing | defined | managed | optimized
+  currentScore          Float    @default(0)
+  targetScore           Float    @default(0)
+  manifestHash          String   // SHA-256
+  manifestDetails       String   // JSON
+  environment           String   // production
+  createdAt             DateTime @default(now())
+
+  @@index([stewardshipDomain])
+  @@index([maturityLevel])
+  @@index([environment])
+  @@map("production_stewardship_manifests_p1")
+}
+
+model EnterpriseReadinessCertification {
+  id                    String   @id @default(uuid())
+  certificationArea     String   // infrastructure_readiness | security_compliance | operational_maturity | billing_readiness | support_readiness | institutional_onboarding | attorney_experience | governance_compliance | disaster_recovery | performance_baseline
+  certificationStatus   String   // certified | conditional | pending | failed
+  gatesTotal            Int      @default(0)
+  gatesPassed           Int      @default(0)
+  certificationRate     Float    @default(0)
+  certifiedBy           String?
+  certificationHash     String   // SHA-256
+  certificationDetails  String   // JSON
+  environment           String   // production
+  createdAt             DateTime @default(now())
+
+  @@index([certificationArea])
+  @@index([certificationStatus])
+  @@index([environment])
+  @@map("enterprise_readiness_certifications")
+}

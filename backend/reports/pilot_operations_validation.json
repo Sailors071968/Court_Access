@@ -1,0 +1,145 @@
+{
+  "phase": "N.3",
+  "name": "Controlled Pilot Deployment + Real-World Operational Validation",
+  "generatedAt": "2026-05-12T48:00:00.000Z",
+  "status": "CONTROLLED_OPERATIONALIZATION",
+  "strategicDirection": "Controlled operationalization. No speculative expansion.",
+
+  "subsystems": {
+    "historicalCaseReplayPilots": {
+      "description": "Deterministic historical closed-case replay pilots",
+      "caseTypes": ["dui", "domestic_violence", "theft", "drug_possession", "assault", "fraud"],
+      "deterministic": true,
+      "baselineComparison": true
+    },
+    "internalUserPilots": {
+      "description": "Permission-scoped internal-user operational pilots",
+      "roles": ["attorney", "paralegal", "investigator", "admin"],
+      "scopes": ["evidence_review", "contradiction_analysis", "defense_generation", "export_workflow", "trial_prep"],
+      "permissionLevels": ["full", "restricted", "read_only"]
+    },
+    "attorneyUsabilityTelemetry": {
+      "description": "Transparent attorney usability telemetry",
+      "workflows": ["evidence_review", "contradiction_nav", "timeline_analysis", "export_generation", "defense_review"],
+      "metrics": ["actionCount", "sessionDurationMs", "frictionEvents", "completionRate"],
+      "transparent": true,
+      "noHiddenCollection": true
+    },
+    "workflowFrictionTracking": {
+      "description": "Reproducible workflow friction tracking",
+      "steps": ["evidence_upload", "contradiction_review", "burden_analysis", "defense_draft", "export_config", "timeline_nav"],
+      "frictionTypes": ["slow_response", "confusing_ui", "missing_data", "extra_clicks", "unclear_output"],
+      "severityLevels": ["critical", "high", "medium", "low"]
+    },
+    "realWorldExportValidation": {
+      "description": "Evidence-linked real-world export validation",
+      "exportTypes": ["pdf_report", "csv_data", "json_manifest", "evidence_package", "trial_binder"],
+      "sha256HashComparison": true
+    },
+    "productionSurvivabilityDrills": {
+      "description": "Deterministic production survivability drills",
+      "drillTypes": ["graceful_shutdown", "crash_recovery", "data_restore", "failover", "capacity_burst", "network_partition"],
+      "tracks": ["recoveryTimeMs", "dataIntegrityVerified", "servicesContinued"]
+    },
+    "pilotRollbackRehearsals": {
+      "description": "Reproducible pilot rollback rehearsals",
+      "scopes": ["full_system", "single_service", "database_only", "config_only", "feature_flag"],
+      "tracksDataPreservation": true
+    },
+    "controlledFeatureEnablement": {
+      "description": "Governance-controlled feature enablement",
+      "featureScopes": ["pilot_only", "internal", "beta", "general_availability"],
+      "requiresGovernanceApproval": true,
+      "noAutonomousEnablement": true
+    },
+    "operationalIssueTriage": {
+      "description": "Immutable operational issue triage",
+      "issueTypes": ["bug", "performance", "usability", "data_integrity", "security", "workflow"],
+      "severityLevels": ["critical", "high", "medium", "low"],
+      "statuses": ["open", "investigating", "resolved", "deferred"]
+    },
+    "pilotCertificationManifests": {
+      "description": "SHA-256 linked pilot certification manifests",
+      "certificationAreas": ["replay_accuracy", "usability_score", "export_integrity", "survivability", "rollback_readiness", "feature_governance", "issue_resolution", "telemetry_coverage"],
+      "sha256Linked": true
+    }
+  },
+
+  "frontendComponent": {
+    "name": "PilotOperationsCockpit",
+    "panes": ["historical replay", "attorney telemetry", "usability friction", "export verification", "survivability drills", "rollback rehearsals", "issue triage", "pilot certification"],
+    "theme": "dark",
+    "features": ["historical case replay cards with contradiction/burden counts", "attorney workflow telemetry with completion rates", "friction tracking with severity badges", "export hash verification with size display", "survivability drill recovery metrics", "rollback step completion tracking", "issue triage severity/status boards", "pilot certification area badges"]
+  },
+
+  "apiEndpoints": {
+    "fullAnalysis": { "method": "POST", "path": "/api/pilot/analyze/:caseId" },
+    "replay": [
+      { "method": "POST", "path": "/api/pilot/replay/:caseId" },
+      { "method": "GET", "path": "/api/pilot/replay/:caseId" }
+    ],
+    "users": [
+      { "method": "POST", "path": "/api/pilot/users/:caseId" },
+      { "method": "GET", "path": "/api/pilot/users/:caseId" }
+    ],
+    "telemetry": [
+      { "method": "POST", "path": "/api/pilot/telemetry/:caseId" },
+      { "method": "GET", "path": "/api/pilot/telemetry/:caseId" }
+    ],
+    "friction": [
+      { "method": "POST", "path": "/api/pilot/friction/:caseId" },
+      { "method": "GET", "path": "/api/pilot/friction/:caseId" }
+    ],
+    "exports": [
+      { "method": "POST", "path": "/api/pilot/exports/:caseId" },
+      { "method": "GET", "path": "/api/pilot/exports/:caseId" }
+    ],
+    "drills": [
+      { "method": "POST", "path": "/api/pilot/drills/:caseId" },
+      { "method": "GET", "path": "/api/pilot/drills/:caseId" }
+    ],
+    "rollbacks": [
+      { "method": "POST", "path": "/api/pilot/rollbacks/:caseId" },
+      { "method": "GET", "path": "/api/pilot/rollbacks/:caseId" }
+    ],
+    "features": [
+      { "method": "POST", "path": "/api/pilot/features/:caseId" },
+      { "method": "GET", "path": "/api/pilot/features/:caseId" }
+    ],
+    "issues": [
+      { "method": "POST", "path": "/api/pilot/issues/:caseId" },
+      { "method": "GET", "path": "/api/pilot/issues/:caseId" }
+    ],
+    "certification": [
+      { "method": "POST", "path": "/api/pilot/certification/:caseId" },
+      { "method": "GET", "path": "/api/pilot/certification/:caseId" }
+    ],
+    "validation": { "method": "GET", "path": "/api/pilot/validation" }
+  },
+
+  "prismaModels": [
+    "HistoricalCaseReplayPilot",
+    "InternalUserPilot",
+    "AttorneyUsabilityTelemetry",
+    "WorkflowFrictionEntry",
+    "RealWorldExportValidation",
+    "ProductionSurvivabilityDrill",
+    "PilotRollbackRehearsal",
+    "PilotFeatureEnablement",
+    "OperationalIssueTriage",
+    "PilotCertificationManifest"
+  ],
+
+  "migration": "20260512480000_pilot_operations",
+
+  "constraints": {
+    "controlledOperationalization": true,
+    "noSpeculativeExpansion": true,
+    "noUncontrolledRollout": true,
+    "noAutonomousEnablement": true,
+    "noHiddenTelemetry": true,
+    "noSpeculativeIntelligence": true,
+    "noUnverifiablePilotBehavior": true,
+    "corePrinciple": "Controlled operationalization. No speculative expansion."
+  }
+}

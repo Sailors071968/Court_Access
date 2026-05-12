@@ -4666,3 +4666,211 @@ model DiscoveryViolationEscalation {
   @@index([escalationLevel])
   @@map("discovery_violation_escalations")
 }
+
+// ---------------------------------------------------------------------------
+// Phase H.1 — Unified Attorney Command Environment
+// ---------------------------------------------------------------------------
+
+model UnifiedCaseState {
+  id                    String   @id @default(uuid())
+  caseId                String   @unique
+  currentPhase          String   // intake | pretrial | trial | sentencing | appellate | post_conviction
+  evidenceCount         Int      @default(0)
+  contradictionCount    Int      @default(0)
+  burdenFractureCount   Int      @default(0)
+  constitutionalIssueCount Int   @default(0)
+  discoveryIssueCount   Int      @default(0)
+  suppressionIssueCount Int      @default(0)
+  preservationStatus    String   // all_preserved | at_risk | partially_forfeited
+  overallRiskLevel      String   // low | moderate | high | critical
+  lastAnalysisDate      String?
+  stateSnapshot         String   // JSON — full cross-layer state summary
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([currentPhase])
+  @@index([overallRiskLevel])
+  @@map("unified_case_states")
+}
+
+model CrossLayerOrchestration {
+  id                    String   @id @default(uuid())
+  caseId                String
+  orchestrationType     String   // full_analysis | incremental_update | targeted_layer | phase_transition
+  layersExecuted        String   // JSON array of layers run
+  layerResults          String   // JSON summary of each layer's output
+  executionOrder        String   // JSON array — deterministic order
+  totalDuration         Int      @default(0) // ms
+  status                String   // pending | running | completed | failed
+  errorDetails          String?
+  triggeredBy           String   // manual | document_upload | phase_change | scheduled
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([orchestrationType])
+  @@index([status])
+  @@map("cross_layer_orchestrations")
+}
+
+model EvidenceLifecycleTracker {
+  id                    String   @id @default(uuid())
+  caseId                String
+  evidenceId            String
+  evidenceDescription   String
+  currentStage          String   // collected | disclosed | analyzed | challenged | admitted | excluded | appealed
+  stageHistory          String   // JSON array of stage transitions
+  linkedLayers          String   // JSON array — which intelligence layers reference this evidence
+  layerCount            Int      @default(0)
+  constitutionalRelevance Boolean @default(false)
+  discoveryRelevance    Boolean  @default(false)
+  trialRelevance        Boolean  @default(false)
+  appellateRelevance    Boolean  @default(false)
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([currentStage])
+  @@index([evidenceId])
+  @@map("evidence_lifecycle_trackers")
+}
+
+model LitigationMilestone {
+  id                    String   @id @default(uuid())
+  caseId                String
+  milestoneType         String   // arraignment | preliminary_hearing | information_filing | trial_date_set | motions_in_limine | jury_selection | prosecution_case | defense_case | verdict | sentencing | notice_of_appeal | opening_brief | oral_argument | opinion | habeas_filed
+  milestoneDate         String?
+  status                String   // upcoming | completed | continued | vacated
+  description           String
+  prerequisitesMet      Boolean  @default(false)
+  prerequisiteDetails   String?  // JSON
+  nextMilestone         String?
+  daysUntilDeadline     Int?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([milestoneType])
+  @@index([status])
+  @@map("litigation_milestones")
+}
+
+model UnifiedSearchIndex {
+  id                    String   @id @default(uuid())
+  caseId                String
+  sourceLayer           String   // evidence | calcrim | contradiction | defense | trial | objection | appellate | post_conviction | sentencing | intelligence | litigation | constitutional | discovery
+  sourceRecordId        String
+  sourceType            String
+  searchableText        String
+  speakerOrWitness      String?
+  amendment             String?
+  severity              String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([sourceLayer])
+  @@index([speakerOrWitness])
+  @@map("unified_search_indexes")
+}
+
+model EvidenceRelationshipExplorer {
+  id                    String   @id @default(uuid())
+  caseId                String
+  sourceEvidenceId      String
+  targetEvidenceId      String
+  relationshipType      String   // supports | contradicts | impeaches | corroborates | supersedes | depends_on | references | challenges
+  relationshipStrength  Float    @default(0.5) // 0.0–1.0
+  discoveredByLayer     String   // which intelligence layer found this
+  provenanceChain       String   // JSON — immutable chain of discovery
+  bidirectional         Boolean  @default(false)
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([sourceEvidenceId])
+  @@index([targetEvidenceId])
+  @@index([relationshipType])
+  @@map("evidence_relationship_explorers")
+}
+
+model WorkspaceSyncState {
+  id                    String   @id @default(uuid())
+  caseId                String
+  userId                String
+  activePane            String   // evidence | trial | appellate | constitutional | discovery | sentencing | litigation | graph
+  paneStates            String   // JSON — per-pane filter/scroll/selection state
+  lastSyncTimestamp     DateTime @default(now())
+  selectedEvidenceIds   String?  // JSON array
+  selectedWitnesses     String?  // JSON array
+  filterPresets         String?  // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([userId])
+  @@map("workspace_sync_states")
+}
+
+model RoleBasedWorkflow {
+  id                    String   @id @default(uuid())
+  caseId                String
+  userId                String
+  role                  String   // lead_attorney | associate | paralegal | investigator | expert | client
+  permissionLevel       String   // full_access | analysis_only | read_only | restricted
+  allowedLayers         String   // JSON array of intelligence layers accessible
+  workflowStage         String   // active | pending_review | completed | archived
+  assignedTasks         String   // JSON array of task descriptions
+  completedTasks        String   // JSON array
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([userId])
+  @@index([role])
+  @@map("role_based_workflows")
+}
+
+model AuditActionLog {
+  id                    String   @id @default(uuid())
+  caseId                String
+  userId                String
+  actionType            String   // analysis_run | record_created | record_updated | evidence_uploaded | motion_filed | status_changed | search_performed | export_generated | pane_viewed
+  actionTarget          String   // which layer/record
+  actionDetails         String   // JSON — immutable action description
+  ipAddress             String?
+  userAgent             String?
+  previousState         String?  // JSON — state before action
+  newState              String?  // JSON — state after action
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([userId])
+  @@index([actionType])
+  @@index([createdAt])
+  @@map("audit_action_logs")
+}
+
+model LitigationLifecycleTracker {
+  id                    String   @id @default(uuid())
+  caseId                String
+  lifecyclePhase        String   // investigation | charging | arraignment | pretrial | trial | post_trial | sentencing | appeal | post_conviction
+  phaseStatus           String   // active | completed | skipped | pending
+  entryDate             String?
+  exitDate              String?
+  keyEvents             String   // JSON array of events in this phase
+  pendingActions        String   // JSON array of required actions
+  completedActions      String   // JSON array
+  riskFactors           String   // JSON array of risks
+  phaseOutcome          String?  // favorable | unfavorable | neutral | pending
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([lifecyclePhase])
+  @@index([phaseStatus])
+  @@map("litigation_lifecycle_trackers")
+}

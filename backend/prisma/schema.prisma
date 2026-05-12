@@ -7458,3 +7458,190 @@ model RedTeamValidationRecord {
   @@index([systemSurvived])
   @@map("red_team_validation_records")
 }
+
+// ---------------------------------------------------------------------------
+// Phase N.2 — Golden-Case Validation + Operational Reliability Framework
+// Operational excellence over architectural expansion.
+// ---------------------------------------------------------------------------
+
+model GoldenCaseCorpusEntry {
+  id                    String   @id @default(uuid())
+  caseId                String
+  caseType              String   // dui_contradiction | dv_burden_fracture | theft_calcrim | discovery_violation | officer_impeachment | multi_witness_timeline | weak_theory_directed_verdict | export_trial_prep
+  caseName              String
+  expectedContradictions Int     @default(0)
+  expectedBurdenFractures Int   @default(0)
+  expectedCalcrimMappings Int   @default(0)
+  expectedOutputHash    String   // SHA-256
+  expectedExportHash    String   // SHA-256
+  corpusDetails         String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([caseType])
+  @@map("golden_case_corpus_entries")
+}
+
+model DeterministicReplayRun {
+  id                    String   @id @default(uuid())
+  caseId                String
+  corpusEntryId         String
+  replayIteration       Int      @default(1)
+  outputHash            String   // SHA-256
+  exportHash            String   // SHA-256
+  orchestrationHash     String   // SHA-256
+  telemetryHash         String   // SHA-256
+  allHashesMatch        Boolean  @default(false)
+  driftDetected         Boolean  @default(false)
+  replayDetails         String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([corpusEntryId])
+  @@index([driftDetected])
+  @@map("deterministic_replay_runs")
+}
+
+model CrossLayerRegressionRun {
+  id                    String   @id @default(uuid())
+  caseId                String
+  regressionLayer       String   // evidence_segmentation | calcrim_mappings | contradiction_intelligence | burden_fractures | defense_synthesis | trial_preparation | exports | governance | observability | orchestration | interoperability | integrity
+  baselineHash          String   // SHA-256
+  currentHash           String   // SHA-256
+  hashesMatch           Boolean  @default(false)
+  regressionDetected    Boolean  @default(false)
+  layerDetails          String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([regressionLayer])
+  @@index([regressionDetected])
+  @@map("cross_layer_regression_runs")
+}
+
+model LoadStabilityTestRun {
+  id                    String   @id @default(uuid())
+  caseId                String
+  testArea              String   // concurrent_ingestion | export_generation | replay_operations | orchestration_sync | observability_telemetry | tenant_isolation | rollback_recovery | queue_survivability
+  concurrentOps         Int      @default(0)
+  avgLatencyMs          Float    @default(0)
+  p95LatencyMs          Float    @default(0)
+  errorCount            Int      @default(0)
+  testStatus            String   // passed | degraded | failed
+  testHash              String   // SHA-256
+  testDetails           String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([testArea])
+  @@index([testStatus])
+  @@map("load_stability_test_runs")
+}
+
+model SurvivabilityTestRun {
+  id                    String   @id @default(uuid())
+  caseId                String
+  failureScenario       String   // worker_crash | redis_interruption | partial_orchestration_failure | replay_interruption | export_corruption | integrity_mismatch | rollback_rehearsal | recovery_verification
+  injectionType         String   // process_kill | connection_drop | data_corruption | timeout_simulation | resource_exhaustion
+  systemRecovered       Boolean  @default(true)
+  dataIntact            Boolean  @default(true)
+  recoveryTimeMs        Int      @default(0)
+  survivabilityHash     String   // SHA-256
+  testDetails           String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([failureScenario])
+  @@index([systemRecovered])
+  @@map("survivability_test_runs")
+}
+
+model UiUxRefinementEntry {
+  id                    String   @id @default(uuid())
+  caseId                String
+  focusArea             String   // attorney_workflow_speed | contradiction_navigation | evidence_readability | timeline_usability | export_simplicity | workspace_responsiveness | operational_clarity
+  currentScore          Float    @default(0)
+  targetScore           Float    @default(0)
+  improvementApplied    Boolean  @default(false)
+  refinementDetails     String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([focusArea])
+  @@index([improvementApplied])
+  @@map("ui_ux_refinement_entries")
+}
+
+model ReleaseGateCheck {
+  id                    String   @id @default(uuid())
+  caseId                String
+  gateName              String   // golden_corpus_replay | replay_hash_verification | export_manifest_verification | regression_validation | survivability_testing | rollback_rehearsal | governance_validation | observability_replay | tenant_isolation_verification
+  gateStatus            String   // passed | failed | blocked | pending
+  gateHash              String   // SHA-256
+  blockerDetails        String?  // JSON
+  gateDetails           String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([gateName])
+  @@index([gateStatus])
+  @@map("release_gate_checks")
+}
+
+model CertificationManifestEntry {
+  id                    String   @id @default(uuid())
+  caseId                String
+  manifestArea          String   // replay_verification | regression_results | export_validation | telemetry_validation | orchestration_verification | integrity_certification | deployment_rehearsal | rollback_certification
+  manifestHash          String   // SHA-256
+  verified              Boolean  @default(false)
+  manifestDetails       String   // JSON
+  generatedBy           String
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([manifestArea])
+  @@index([verified])
+  @@map("certification_manifest_entries")
+}
+
+model CorpusExpectedOutput {
+  id                    String   @id @default(uuid())
+  caseId                String
+  corpusEntryId         String
+  outputType            String   // contradictions | burden_fractures | calcrim_mappings | replay_hashes | export_manifests | timeline_conflicts
+  expectedValue         String   // JSON
+  expectedHash          String   // SHA-256
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([corpusEntryId])
+  @@index([outputType])
+  @@map("corpus_expected_outputs")
+}
+
+model OperationalReliabilityScore {
+  id                    String   @id @default(uuid())
+  caseId                String
+  scoreDomain           String   // replay_consistency | regression_stability | load_resilience | survivability | security_hardening | export_integrity | governance_compliance | observability_coverage
+  score                 Float    @default(0)
+  maxScore              Float    @default(100)
+  scoreStatus           String   // excellent | good | acceptable | needs_improvement | critical
+  scoreHash             String   // SHA-256
+  scoreDetails          String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([scoreDomain])
+  @@index([scoreStatus])
+  @@map("operational_reliability_scores")
+}

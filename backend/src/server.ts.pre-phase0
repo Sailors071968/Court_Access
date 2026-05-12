@@ -5,14 +5,6 @@
 // Usage: npx tsx backend/src/server.ts
 // ============================================================================
 
-import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
-
-// Load .env from backend/.env regardless of cwd
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-dotenv.config({ path: path.resolve(__dirname, '../.env') });
-
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import cookie from '@fastify/cookie';
@@ -48,11 +40,6 @@ import { registerObservabilityRoutes } from './observability/observabilityRoutes
 import { startRedisMemoryMonitor, stopRedisMemoryMonitor } from './observability/redisMemoryAlert.js';
 import { registerChargeRoutes } from "./charges/chargeRoutes.js";
 import { registerCalcrimRoutes } from "./routes/calcrimRoutes.js";
-import { registerEvidenceStatementRoutes } from "./routes/evidenceStatementRoutes.js";
-import { registerElementMappingRoutes } from "./routes/elementMappingRoutes.js";
-import { registerContradictionRoutes as registerPhaseCContradictionRoutes } from "./routes/contradictionRoutes.js";
-import { registerMaterialityRoutes } from "./routes/materialityRoutes.js";
-import { registerDefenseIntelligenceRoutes } from "./routes/defenseIntelligenceRoutes.js";
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -104,7 +91,7 @@ async function startServer() {
   app.addHook('onRequest', rateLimitHook);
 
   // Phase 191 — Authentication (JWT verification + RBAC)
-  app.addHook('onRequest', authenticationHook);
+  //  app.addHook('onRequest', authenticationHook);
 
   // Phase 193 — CSRF protection (after auth, before route handlers)
   // app.addHook('onRequest', csrfProtectionHook);
@@ -115,33 +102,14 @@ async function startServer() {
   // Phase 197 — Security logging (response tracking)
   await registerSecurityLogging(app);
 
-  // Health check (expanded — Stage 1 observability)
-  app.get('/api/health', async () => {
-    const mem = process.memoryUsage();
-    const os = await import('os');
-    return {
-      status: 'ok',
-      timestamp: new Date().toISOString(),
-      version: '1.1.0',
-      service: 'court-access-backend',
-      environment: process.env.NODE_ENV || 'development',
-      uptime: Math.floor(process.uptime()),
-      pid: process.pid,
-      memory: {
-        heapUsedMB: Math.round(mem.heapUsed / 1024 / 1024),
-        heapTotalMB: Math.round(mem.heapTotal / 1024 / 1024),
-        rssMB: Math.round(mem.rss / 1024 / 1024),
-      },
-      cpu: {
-        loadAvg: os.loadavg(),
-        cores: os.cpus().length,
-      },
-      pm2: {
-        instanceId: process.env.pm_id || 'n/a',
-        restartCount: parseInt(process.env.restart_time || '0', 10),
-      },
-    };
-  });
+  // Health check
+  app.get('/api/health', async () => ({
+    status: 'ok',
+    timestamp: new Date().toISOString(),
+    version: '1.1.0',
+    service: 'court-access-backend',
+    environment: process.env.NODE_ENV || 'development',
+  }));
 
   // Register route modules
 
@@ -214,21 +182,6 @@ async function startServer() {
 
   console.log('[Server] Registering CALCRIM routes...');
   await registerCalcrimRoutes(app);
-
-  console.log('[Server] Registering evidence statement routes...');
-  await registerEvidenceStatementRoutes(app);
-
-  console.log('[Server] Registering element mapping routes...');
-  await registerElementMappingRoutes(app);
-
-  console.log('[Server] Registering contradiction engine routes...');
-  await registerPhaseCContradictionRoutes(app);
-
-  console.log('[Server] Registering materiality scoring routes...');
-  await registerMaterialityRoutes(app);
-
-  console.log('[Server] Registering defense intelligence routes...');
-  await registerDefenseIntelligenceRoutes(app);
 
   console.log('[Server] Registering admin queue monitoring routes...');
   await registerQueueMonitorRoutes(app);

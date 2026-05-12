@@ -5298,3 +5298,205 @@ model SystemSurvivabilityMetric {
   @@index([targetMet])
   @@map("system_survivability_metrics")
 }
+
+// ---------------------------------------------------------------------------
+// Phase I.1 — Judicial / Evidentiary Interoperability + Litigation Exchange
+// ---------------------------------------------------------------------------
+
+model StandardizedExportPackage {
+  id                    String   @id @default(uuid())
+  caseId                String
+  packageType           String   // full_case | evidence_only | motions | exhibits | discovery | appellate_record
+  exportFormat          String   // pdf | json | csv | xml | zip_archive
+  totalRecords          Int      @default(0)
+  layersIncluded        String   // JSON array
+  contentHash           String   // SHA-256 of entire package
+  packageSizeBytes      Int      @default(0)
+  generatedBy           String
+  status                String   // generating | completed | verified | failed
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([packageType])
+  @@index([status])
+  @@map("standardized_export_packages")
+}
+
+model CourtCompatibleDocument {
+  id                    String   @id @default(uuid())
+  caseId                String
+  documentType          String   // motion | brief | exhibit_list | witness_list | evidence_summary | jury_instruction | sentencing_memo
+  title                 String
+  contentSummary        String
+  pageCount             Int      @default(0)
+  citationCount         Int      @default(0)
+  contentHash           String   // SHA-256
+  courtFormat           String   // superior_court_ca | appellate_ca | federal_district | generic
+  complianceStatus      String   // compliant | needs_review | non_compliant
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([documentType])
+  @@index([courtFormat])
+  @@map("court_compatible_documents")
+}
+
+model LitigationInterchangeManifest {
+  id                    String   @id @default(uuid())
+  caseId                String
+  manifestVersion       String   @default("1.0")
+  totalItems            Int      @default(0)
+  itemInventory         String   // JSON — list of all items with types, IDs, hashes
+  integrityHash         String   // SHA-256 of entire manifest
+  generatedAt           String
+  expiresAt             String?
+  recipientType         String   // attorney | court | expert | opposing_counsel | appellate_court
+  status                String   // draft | finalized | transmitted | acknowledged
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([recipientType])
+  @@index([status])
+  @@map("litigation_interchange_manifests")
+}
+
+model EvidencePackageVerification {
+  id                    String   @id @default(uuid())
+  caseId                String
+  packageId             String
+  verificationMethod    String   // sha256_full | sha256_per_item | record_count | cross_reference
+  expectedHash          String
+  actualHash            String
+  hashMatch             Boolean  @default(true)
+  expectedRecordCount   Int      @default(0)
+  actualRecordCount     Int      @default(0)
+  countMatch            Boolean  @default(true)
+  discrepancies         String?  // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([packageId])
+  @@index([hashMatch])
+  @@map("evidence_package_verifications")
+}
+
+model ExternalChainOfCustodyExport {
+  id                    String   @id @default(uuid())
+  caseId                String
+  evidenceId            String
+  custodyChain          String   // JSON — ordered chain of custody entries
+  totalTransfers        Int      @default(0)
+  chainIntegrityHash    String   // SHA-256 of entire chain
+  exportFormat          String   // json | pdf | xml
+  chainComplete         Boolean  @default(true)
+  gapDetected           Boolean  @default(false)
+  gapDetails            String?  // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([evidenceId])
+  @@index([chainComplete])
+  @@map("external_chain_of_custody_exports")
+}
+
+model MultiFormatLitigationExport {
+  id                    String   @id @default(uuid())
+  caseId                String
+  sourceLayer           String   // which intelligence layer
+  exportFormat          String   // pdf | json | csv | xml | docx
+  recordCount           Int      @default(0)
+  contentHash           String   // SHA-256
+  formatCompliance      String   // valid | invalid | needs_conversion
+  fileSize              Int      @default(0)
+  exportedFields        String   // JSON array of field names
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([sourceLayer])
+  @@index([exportFormat])
+  @@map("multi_format_litigation_exports")
+}
+
+model ExhibitBundleValidation {
+  id                    String   @id @default(uuid())
+  caseId                String
+  bundleType            String   // prosecution | defense | joint | rebuttal
+  totalExhibits         Int      @default(0)
+  validatedExhibits     Int      @default(0)
+  failedExhibits        Int      @default(0)
+  exhibitInventory      String   // JSON — exhibit number, description, hash, status
+  bundleHash            String   // SHA-256 of entire bundle
+  sequenceValid         Boolean  @default(true)
+  crossReferenceValid   Boolean  @default(true)
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([bundleType])
+  @@map("exhibit_bundle_validations")
+}
+
+model ExternalIntegrityVerification {
+  id                    String   @id @default(uuid())
+  caseId                String
+  verificationTarget    String   // export_package | exhibit_bundle | custody_chain | manifest | archive
+  targetId              String
+  verifierType          String   // internal_automated | external_tool | manual_review
+  integrityPassed       Boolean  @default(true)
+  checksPerformed       String   // JSON array of check descriptions
+  failedChecks          String?  // JSON array of failures
+  verificationTimestamp String
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([verificationTarget])
+  @@index([integrityPassed])
+  @@map("external_integrity_verifications")
+}
+
+model LitigationArchivePackage {
+  id                    String   @id @default(uuid())
+  caseId                String
+  archiveType           String   // full_case | phase_specific | layer_specific | date_range
+  archiveScope          String?  // JSON — what's included
+  totalRecords          Int      @default(0)
+  totalSizeBytes        Int      @default(0)
+  archiveHash           String   // SHA-256
+  compressionMethod     String   // none | gzip | zip
+  retentionPeriod       String?  // e.g. "7 years"
+  archiveStatus         String   // creating | sealed | verified | expired
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([archiveType])
+  @@index([archiveStatus])
+  @@map("litigation_archive_packages")
+}
+
+model ExportProvenanceManifest {
+  id                    String   @id @default(uuid())
+  caseId                String
+  exportId              String
+  exportType            String
+  provenanceChain       String   // JSON — ordered list of all transformations/exports
+  originLayer           String
+  originRecordCount     Int      @default(0)
+  transformationSteps   Int      @default(0)
+  finalHash             String   // SHA-256 of final export
+  chainVerified         Boolean  @default(true)
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([exportId])
+  @@index([exportType])
+  @@map("export_provenance_manifests")
+}

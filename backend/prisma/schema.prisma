@@ -3516,3 +3516,245 @@ model DnaForensicTestingIssue {
   @@index([currentStatus])
   @@map("dna_forensic_testing_issues")
 }
+
+// ---------------------------------------------------------------------------
+// Phase E.3 — Sentencing Exposure Calculator
+// ---------------------------------------------------------------------------
+
+model SentencingExposure {
+  id                    String   @id @default(uuid())
+  caseId                String
+  chargeId              String?
+  chargeDescription     String
+  penalCodeSection      String   // PC § number
+  offenseCategory       String   // felony | misdemeanor | wobbler | infraction
+  baseTerm              String   // e.g. "2, 3, or 5 years" or "16 months, 2, or 3 years"
+  baseTermMonthsLow     Int      @default(0)
+  baseTermMonthsHigh    Int      @default(0)
+  presumptiveTerm       String?  // middle term if applicable
+  enhancementsApplied   String   // JSON array of enhancement IDs
+  totalExposureMonthsLow  Int    @default(0)
+  totalExposureMonthsHigh Int    @default(0)
+  lifePossible          Boolean  @default(false)
+  lwopPossible          Boolean  @default(false)
+  citations             String   // JSON array
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([penalCodeSection])
+  @@map("sentencing_exposures")
+}
+
+// ---------------------------------------------------------------------------
+// Phase E.3 — Enhancement Stacking
+// ---------------------------------------------------------------------------
+
+model EnhancementStacking {
+  id                    String   @id @default(uuid())
+  caseId                String
+  enhancementType       String   // prior_strike | prior_serious | prior_prison | gang | firearm | great_bodily_injury | vulnerable_victim | hate_crime | large_quantity | financial_loss
+  penalCodeSection      String   // PC § or H&S § number
+  description           String
+  additionalMonths      Int      @default(0)
+  additionalYears       Int      @default(0)
+  mandatory             Boolean  @default(false)
+  strikeable            Boolean  @default(false)
+  appliedToChargeId     String?
+  stackingOrder         Int      @default(1) // order in which enhancements stack
+  citations             String   // JSON array
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([enhancementType])
+  @@map("enhancement_stackings")
+}
+
+// ---------------------------------------------------------------------------
+// Phase E.3 — Consecutive/Concurrent Exposure
+// ---------------------------------------------------------------------------
+
+model ConsecutiveConcurrentExposure {
+  id                    String   @id @default(uuid())
+  caseId                String
+  chargeAId             String?
+  chargeBId             String?
+  chargeADescription    String
+  chargeBDescription    String
+  runType               String   // consecutive | concurrent | mandatory_consecutive | discretionary
+  legalBasis            String   // PC § 667.6(d), PC § 1170.1, PC § 669
+  subordinateTermRule   String?  // one-third middle term for consecutive under PC § 1170.1
+  totalCombinedMonths   Int      @default(0)
+  citations             String   // JSON array
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([runType])
+  @@map("consecutive_concurrent_exposures")
+}
+
+// ---------------------------------------------------------------------------
+// Phase E.3 — Probation Eligibility
+// ---------------------------------------------------------------------------
+
+model ProbationEligibility {
+  id                    String   @id @default(uuid())
+  caseId                String
+  chargeId              String?
+  chargeDescription     String
+  eligibleForProbation  Boolean  @default(false)
+  presumptiveProbation  Boolean  @default(false) // PC § 1203.06 etc.
+  statutoryBar          String?  // Statute that bars probation (if any)
+  unusualCircumstances  Boolean  @default(false) // Unusual circumstances exception
+  conditions            String   // JSON array of potential conditions
+  maxProbationYears     Int      @default(0)
+  citations             String   // JSON array
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([eligibleForProbation])
+  @@map("probation_eligibilities")
+}
+
+// ---------------------------------------------------------------------------
+// Phase E.3 — Mitigation Factor
+// ---------------------------------------------------------------------------
+
+model MitigationFactor {
+  id                    String   @id @default(uuid())
+  caseId                String
+  factorType            String   // age | mental_health | substance_abuse | childhood_trauma | military_service | employment | family_support | remorse | cooperation | first_offense | minor_role | provocation | duress | good_character
+  description           String
+  legalBasis            String   // PC § 1170(b)(6), CRC 4.423
+  strength              String   // strong | moderate | weak
+  supportingEvidence    String   // JSON array of evidence references
+  sentencingImpact      String   // How this factor should affect sentencing
+  citations             String   // JSON array
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([factorType])
+  @@index([strength])
+  @@map("mitigation_factors")
+}
+
+// ---------------------------------------------------------------------------
+// Phase E.3 — Aggravation Factor
+// ---------------------------------------------------------------------------
+
+model AggravationFactor {
+  id                    String   @id @default(uuid())
+  caseId                String
+  factorType            String   // vulnerability | sophistication | position_of_trust | multiple_victims | great_bodily_injury | weapon_use | excessive_cruelty | planning | prior_record | probation_status | gang_motivation
+  description           String
+  legalBasis            String   // CRC 4.421
+  strength              String   // strong | moderate | weak
+  supportingEvidence    String   // JSON array of evidence references
+  sentencingImpact      String
+  citations             String   // JSON array
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([factorType])
+  @@index([strength])
+  @@map("aggravation_factors")
+}
+
+// ---------------------------------------------------------------------------
+// Phase E.3 — Strike/Prior Analysis
+// ---------------------------------------------------------------------------
+
+model StrikePriorAnalysis {
+  id                    String   @id @default(uuid())
+  caseId                String
+  priorType             String   // strike | serious_felony | violent_felony | prison_prior | juvenile_adjudication
+  priorDescription      String
+  penalCodeSection      String
+  qualifiesAsStrike     Boolean  @default(false)
+  secondStrikeDoubling  Boolean  @default(false) // PC § 667(e)(1)
+  thirdStrike25ToLife   Boolean  @default(false) // PC § 667(e)(2)(A)
+  romeroMotionViable    Boolean  @default(false) // People v. Superior Court (Romero)
+  washoutPeriod         String?  // "Washed out" prior — no longer applicable
+  citations             String   // JSON array
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([priorType])
+  @@index([qualifiesAsStrike])
+  @@map("strike_prior_analyses")
+}
+
+// ---------------------------------------------------------------------------
+// Phase E.3 — Custody Credit
+// ---------------------------------------------------------------------------
+
+model CustodyCredit {
+  id                    String   @id @default(uuid())
+  caseId                String
+  actualDays            Int      @default(0)
+  conductCredits        Int      @default(0) // PC § 4019
+  creditRate            String   // day_for_day | two_for_one | fifteen_percent | no_credits
+  creditLimitation      String?  // Statute limiting credits (PC § 2933.1 for violent felonies)
+  totalCredits          Int      @default(0)
+  applicableStatute     String   // PC § 2900.5, PC § 4019
+  citations             String   // JSON array
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@map("custody_credits")
+}
+
+// ---------------------------------------------------------------------------
+// Phase E.3 — Judicial Ruling Trend (anonymized + aggregate)
+// ---------------------------------------------------------------------------
+
+model JudicialRulingTrend {
+  id                    String   @id @default(uuid())
+  caseId                String
+  rulingCategory        String   // sentencing | motion | evidentiary | bail | probation
+  rulingType            String   // granted | denied | modified | deferred
+  legalIssue            String
+  aggregatePattern      String   // Description of pattern (anonymized)
+  sampleSize            Int      @default(0)
+  citations             String   // JSON array
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([rulingCategory])
+  @@map("judicial_ruling_trends")
+}
+
+// ---------------------------------------------------------------------------
+// Phase E.3 — Plea Consequence
+// ---------------------------------------------------------------------------
+
+model PleaConsequence {
+  id                    String   @id @default(uuid())
+  caseId                String
+  chargeId              String?
+  chargeDescription     String
+  pleaType              String   // guilty | no_contest | open_plea | negotiated
+  sentencingExposure    String   // Expected sentencing range
+  immigrationConsequence String? // Deportable | inadmissible | aggravated_felony | CIMT | safe
+  licensingConsequence  String?  // Professional license impact
+  firearmRestriction    Boolean  @default(false)
+  sexRegistration       Boolean  @default(false) // PC § 290
+  strikeConsequence     Boolean  @default(false) // Counts as strike
+  probationLikelihood   String?  // likely | possible | unlikely
+  restitutionExposure   String?
+  citations             String   // JSON array
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([pleaType])
+  @@map("plea_consequences")
+}

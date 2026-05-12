@@ -1,0 +1,165 @@
+{
+  "phase": "O.1",
+  "name": "Stripe Production Billing + Subscription Operations",
+  "generatedAt": "2026-05-12T51:00:00.000Z",
+  "status": "BILLING_OPERATIONS_READY",
+  "strategicDirection": "Implementation infrastructure. Operational commercialization and controlled enterprise enablement.",
+
+  "subsystems": {
+    "stripeWebhookSecurity": {
+      "description": "Stripe signature-verified webhook processing",
+      "eventTypes": ["checkout.session.completed", "invoice.paid", "invoice.payment_failed", "customer.subscription.updated", "customer.subscription.deleted", "charge.refunded"],
+      "signatureVerification": true,
+      "replayProtection": true,
+      "idempotencyProtection": true,
+      "immutableEventLogging": true,
+      "priority": 1
+    },
+    "subscriptionLifecycle": {
+      "description": "Immutable subscription state machine",
+      "planTypes": ["monthly", "annual", "institutional", "trial"],
+      "planTiers": ["starter", "professional", "enterprise", "custom"],
+      "statuses": ["trial", "active", "past_due", "canceled", "paused", "upgraded", "downgraded"],
+      "seatBasedLicensing": true,
+      "usageCaps": true,
+      "priority": 2
+    },
+    "entitlementEnforcement": {
+      "description": "Permission-scoped usage-tier enforcement",
+      "features": ["core_litigation", "evidence_management", "contradiction_analysis", "export_workflows", "trial_preparation", "advanced_analytics"],
+      "tiers": ["starter", "professional", "enterprise"],
+      "noUncontrolledGrants": true,
+      "priority": 3
+    },
+    "billingAuditLogs": {
+      "description": "Immutable billing audit trail",
+      "actionTypes": ["subscription_created", "subscription_updated", "payment_received", "payment_failed", "refund_issued", "entitlement_changed", "invoice_generated", "dispute_opened", "dispute_resolved"],
+      "immutable": true,
+      "priority": 4
+    },
+    "invoiceWorkflows": {
+      "description": "Evidence-linked invoice generation",
+      "invoiceTypes": ["subscription", "one_time", "credit_note", "institutional"],
+      "sha256Hashed": true,
+      "priority": 5
+    },
+    "revenueTelemetry": {
+      "description": "Transparent revenue metrics dashboard",
+      "metricTypes": ["mrr", "arr", "churn_rate", "payment_failure_rate", "conversion_rate", "arpu", "ltv", "institutional_revenue"],
+      "transparent": true,
+      "priority": 6
+    },
+    "institutionalBilling": {
+      "description": "Governance-controlled institutional billing",
+      "phases": ["contract_negotiation", "po_issued", "invoice_sent", "payment_received", "renewal_pending", "renewal_completed", "terminated"],
+      "governanceControlled": true,
+      "priority": 7
+    },
+    "customerOnboarding": {
+      "description": "Reproducible customer onboarding billing flow",
+      "steps": ["signup", "plan_selection", "checkout", "payment_confirmed", "entitlement_activated", "welcome_sent", "first_login"],
+      "reproducible": true
+    },
+    "failedPaymentRecovery": {
+      "description": "Deterministic failed-payment recovery workflows",
+      "failureReasons": ["card_declined", "insufficient_funds", "expired_card", "processing_error", "authentication_required", "bank_decline"],
+      "recoveryActions": ["retry_scheduled", "dunning_email", "grace_period", "account_suspended", "manual_intervention", "recovered"],
+      "deterministic": true
+    },
+    "billingCertification": {
+      "description": "SHA-256 linked billing operations certification",
+      "areas": ["webhook_security", "subscription_integrity", "entitlement_accuracy", "audit_completeness", "invoice_integrity", "recovery_effectiveness", "institutional_billing", "revenue_accuracy"],
+      "sha256Linked": true
+    }
+  },
+
+  "environmentSeparation": {
+    "mandatory": true,
+    "separateApiKeys": true,
+    "separateWebhookSecrets": true,
+    "separateProductsPrices": true,
+    "noTestLiveMixing": true,
+    "currentEnvironment": "test"
+  },
+
+  "frontendComponent": {
+    "name": "BillingOperationsCockpit",
+    "panes": ["subscriptions", "invoices", "webhooks", "entitlements", "institutional billing", "failed-payment recovery", "audit log", "certification"],
+    "theme": "dark",
+    "features": ["subscription lifecycle cards with tier/plan/status", "invoice list with amount and payment status", "webhook event cards with SIG VERIFIED and REPLAY SAFE badges", "entitlement enforcement with ENTITLED/BLOCKED badges", "institutional billing with contract values and seat counts", "failed-payment recovery with retry counts and recovery status", "immutable audit log entries", "billing certification gate status"]
+  },
+
+  "apiEndpoints": {
+    "fullAnalysis": { "method": "POST", "path": "/api/billing/analyze/:customerId" },
+    "webhooks": [
+      { "method": "POST", "path": "/api/billing/webhooks/:customerId" },
+      { "method": "GET", "path": "/api/billing/webhooks/:customerId" }
+    ],
+    "subscriptions": [
+      { "method": "POST", "path": "/api/billing/subscriptions/:customerId" },
+      { "method": "GET", "path": "/api/billing/subscriptions/:customerId" }
+    ],
+    "entitlements": [
+      { "method": "POST", "path": "/api/billing/entitlements/:customerId" },
+      { "method": "GET", "path": "/api/billing/entitlements/:customerId" }
+    ],
+    "audit": [
+      { "method": "POST", "path": "/api/billing/audit/:customerId" },
+      { "method": "GET", "path": "/api/billing/audit/:customerId" }
+    ],
+    "invoices": [
+      { "method": "POST", "path": "/api/billing/invoices/:customerId" },
+      { "method": "GET", "path": "/api/billing/invoices/:customerId" }
+    ],
+    "revenue": [
+      { "method": "POST", "path": "/api/billing/revenue/:customerId" },
+      { "method": "GET", "path": "/api/billing/revenue/:customerId" }
+    ],
+    "institutional": [
+      { "method": "POST", "path": "/api/billing/institutional/:customerId" },
+      { "method": "GET", "path": "/api/billing/institutional/:customerId" }
+    ],
+    "onboarding": [
+      { "method": "POST", "path": "/api/billing/onboarding/:customerId" },
+      { "method": "GET", "path": "/api/billing/onboarding/:customerId" }
+    ],
+    "recovery": [
+      { "method": "POST", "path": "/api/billing/recovery/:customerId" },
+      { "method": "GET", "path": "/api/billing/recovery/:customerId" }
+    ],
+    "certification": [
+      { "method": "POST", "path": "/api/billing/certification/:customerId" },
+      { "method": "GET", "path": "/api/billing/certification/:customerId" }
+    ],
+    "validation": { "method": "GET", "path": "/api/billing/validation" }
+  },
+
+  "prismaModels": [
+    "StripeProductionWebhookEvent",
+    "SubscriptionLifecycle",
+    "InstitutionalBillingWorkflow",
+    "UsageTierEntitlement",
+    "CustomerOnboardingBilling",
+    "FailedPaymentRecovery",
+    "BillingAuditLog",
+    "InvoiceRecord",
+    "RevenueMetric",
+    "BillingOperationsCertification"
+  ],
+
+  "migration": "20260512510000_stripe_billing",
+
+  "constraints": {
+    "testLiveSeparation": true,
+    "webhookSignatureVerification": true,
+    "replayProtection": true,
+    "idempotencyProtection": true,
+    "immutableAuditLogs": true,
+    "noFakeBillingStates": true,
+    "noUnverifiableActivation": true,
+    "noMutableInvoiceHistory": true,
+    "noUncontrolledEntitlementGrants": true,
+    "noTestLiveMixing": true,
+    "corePrinciple": "Deterministic. Auditable. Immutable. Governance-controlled. Operationally survivable. Financially traceable."
+  }
+}

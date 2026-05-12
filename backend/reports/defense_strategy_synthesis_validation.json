@@ -1,0 +1,138 @@
+{
+  "phase": "D.4",
+  "name": "Defense Strategy Synthesis + Attorney Intelligence Workspace",
+  "generatedAt": "2026-05-12T22:00:00.000Z",
+  "status": "READY_FOR_DEPLOYMENT",
+
+  "subsystems": {
+    "defenseIssuePrioritization": {
+      "description": "Deterministic priority scoring from proven intelligence findings",
+      "sourceData": ["burden_fractures", "contradiction_pairs", "witness_inconsistencies", "timeline_incompatibilities"],
+      "issueTypes": ["burden_failure", "contradiction", "witness_credibility", "timeline_impossibility", "procedural_defect", "missing_corroboration", "theory_fracture"],
+      "priorityLevels": "1 (highest) to 4 (lowest), computed from severity",
+      "statusTracking": ["open", "reviewed", "incorporated", "dismissed"]
+    },
+    "motionOpportunityDetection": {
+      "description": "Citation-backed motion basis identification — no fake legal advice",
+      "motionTypes": ["directed_verdict", "suppress_evidence", "dismiss_count", "impeach_witness", "exclude_testimony", "reconsider_bail", "mistrial_basis"],
+      "strengthLevels": ["strong", "moderate", "weak"],
+      "legalBasisRequired": true,
+      "factualBasisRequired": true,
+      "citationSummaryRequired": true
+    },
+    "witnessImpeachmentPackets": {
+      "description": "Per-witness impeachment materials with exact citations",
+      "includes": ["inconsistency items", "contradiction items", "cross-exam topics", "prior statement conflicts"],
+      "credibilityScoring": "Starts at 1.0, reduces by 0.15/inconsistency and 0.2/contradiction",
+      "crossDocumentSupport": true
+    },
+    "burdenCollapseScoring": {
+      "description": "Per-instruction prosecution burden assessment",
+      "formula": "(unsupported×0.4 + contradicted×0.35 + weak×0.15) / totalElements",
+      "collapseLevels": ["collapsed (≥0.7)", "fractured (≥0.4)", "weakened (≥0.2)", "supported (<0.2)"],
+      "perElementBreakdown": true
+    },
+    "juryReasonableDoubtStructures": {
+      "description": "Citation-backed reasonable doubt narratives for jury presentation",
+      "doubtCategories": ["burden_gap", "witness_contradiction", "timeline_impossibility", "missing_evidence", "procedural_violation", "expert_conflict"],
+      "strengthLevels": ["compelling", "significant", "moderate", "marginal"],
+      "calcrimInstructionLinked": true,
+      "citationBacked": true
+    },
+    "attorneyWorkspace": {
+      "description": "Operational defense-analysis cockpit with 7 panes",
+      "panes": [
+        "Evidence — document and statement counts",
+        "CALCRIM — charges, instructions, elements",
+        "Contradictions — proven contradictions by severity",
+        "Prosecutor Theory — attack surfaces by type",
+        "Burden Fractures — collapse scores by instruction",
+        "Timeline — incompatibilities",
+        "Defense — issues, motions, impeachment packets, reasonable doubt structures"
+      ],
+      "frontend": "src/components/case/AttorneyWorkspace.tsx",
+      "darkTheme": true,
+      "synthesisButton": true
+    }
+  },
+
+  "apiEndpoints": [
+    { "method": "POST", "path": "/api/defense/synthesize/:caseId", "description": "Run full defense synthesis (all subsystems)" },
+    { "method": "GET", "path": "/api/defense/workspace/:caseId", "description": "Attorney workspace data (all panes)" },
+    { "method": "POST", "path": "/api/defense/issues/:caseId", "description": "Synthesize defense issues" },
+    { "method": "GET", "path": "/api/defense/issues/:caseId", "description": "Get defense issues with filters" },
+    { "method": "POST", "path": "/api/defense/motions/:caseId", "description": "Detect motion opportunities" },
+    { "method": "GET", "path": "/api/defense/motions/:caseId", "description": "Get motion opportunities" },
+    { "method": "POST", "path": "/api/defense/impeachment/:caseId", "description": "Build impeachment packets" },
+    { "method": "GET", "path": "/api/defense/impeachment/:caseId", "description": "Get impeachment packets" },
+    { "method": "POST", "path": "/api/defense/burden-collapse/:caseId", "description": "Compute burden collapse scores" },
+    { "method": "GET", "path": "/api/defense/burden-collapse/:caseId", "description": "Get burden collapse scores" },
+    { "method": "POST", "path": "/api/defense/reasonable-doubt/:caseId", "description": "Build reasonable doubt structures" },
+    { "method": "GET", "path": "/api/defense/reasonable-doubt/:caseId", "description": "Get reasonable doubt structures" },
+    { "method": "GET", "path": "/api/defense/validation", "description": "Live validation report" }
+  ],
+
+  "prismaModels": [
+    "DefenseIssue",
+    "MotionOpportunity",
+    "ImpeachmentPacket",
+    "BurdenCollapseScore",
+    "JuryReasonableDoubtStructure"
+  ],
+
+  "migration": "20260512220000_defense_strategy_synthesis",
+
+  "deterministicConstraints": {
+    "noFakeLegalAdvice": true,
+    "noHallucinatedMotions": true,
+    "noInventedImpeachment": true,
+    "noUncitedStrategyClaims": true,
+    "noSpeculativeConstitutionalViolations": true,
+    "noGenerativeCaseTheories": true,
+    "corePrinciple": "CourtAccess NEVER acts like a lawyer. It organizes provable litigation intelligence for criminal defendants and defense attorneys."
+  },
+
+  "systemsUnmodified": {
+    "auth": true,
+    "csrf": true,
+    "nginx": true,
+    "redis": true,
+    "ocr": true,
+    "pm2": true,
+    "ingestion": true,
+    "existingD1SegmentationLogic": true,
+    "existingD2ElementMapping": true,
+    "existingD3ContradictionIntelligence": true
+  },
+
+  "deploymentCommands": {
+    "pull": "cd /var/www/courtaccess_repo && git pull origin devin/1778357361-courtaccess-recovery-stabilization",
+    "install": "cd backend && npm install",
+    "migrate": "DATABASE_URL=\"...\" npx prisma migrate deploy",
+    "restart": "cd .. && pm2 restart courtaccess-api --update-env",
+    "verify": "curl -s localhost:3001/api/defense/validation | jq ."
+  },
+
+  "rollbackSQL": {
+    "commands": [
+      "DROP TABLE IF EXISTS \"jury_reasonable_doubt_structures\" CASCADE;",
+      "DROP TABLE IF EXISTS \"burden_collapse_scores\" CASCADE;",
+      "DROP TABLE IF EXISTS \"impeachment_packets\" CASCADE;",
+      "DROP TABLE IF EXISTS \"motion_opportunities\" CASCADE;",
+      "DROP TABLE IF EXISTS \"defense_issues\" CASCADE;",
+      "DELETE FROM \"_prisma_migrations\" WHERE migration_name = '20260512220000_defense_strategy_synthesis';"
+    ]
+  },
+
+  "riskAssessment": {
+    "overallRisk": "LOW",
+    "details": [
+      "5 new tables — additive only, no existing tables modified",
+      "No existing routes modified",
+      "No existing services modified",
+      "server.ts: single import + single route registration",
+      "Auth/CSRF/NGINX/Redis/OCR/PM2/ingestion all untouched",
+      "D.1/D.2/D.3 systems preserved — D.4 reads from D.3 output only"
+    ]
+  }
+}

@@ -1,0 +1,153 @@
+{
+  "phase": "G.1",
+  "name": "Constitutional Litigation Intelligence + Structural Rights Analysis",
+  "generatedAt": "2026-05-12T31:00:00.000Z",
+  "status": "READY_FOR_DEPLOYMENT",
+
+  "subsystems": {
+    "fourthAmendmentIssueFramework": {
+      "description": "Citation-backed Fourth Amendment search and seizure issue framework",
+      "issueTypes": ["warrantless_search", "warrant_deficiency", "consent_issue", "exigent_circumstances", "plain_view", "automobile_exception", "stop_and_frisk", "inventory_search", "border_search"],
+      "legalStandards": ["probable_cause", "reasonable_suspicion", "consent", "exigent_circumstances", "warrant_requirement"],
+      "featuresTracked": ["exclusionary_rule", "fruit_of_poisonous_tree", "good_faith_exception_(Leon)", "warrant_deficiency_types"]
+    },
+    "fifthAmendmentIssueTracking": {
+      "description": "Evidence-linked Fifth Amendment issue tracking including Miranda and self-incrimination",
+      "issueTypes": ["miranda_violation", "compelled_statement", "self_incrimination", "double_jeopardy", "grand_jury_issue", "due_process"],
+      "legalAuthorities": ["Miranda v. Arizona, 384 U.S. 436", "Dickerson v. United States", "Berghuis v. Thompkins", "Fifth Amendment Self-Incrimination Clause"]
+    },
+    "sixthAmendmentConfrontationAnalysis": {
+      "description": "Deterministic Sixth Amendment confrontation clause analysis",
+      "confrontationTypes": ["testimonial_hearsay", "lab_report", "prior_testimony", "co_defendant_statement", "911_call", "forensic_report"],
+      "legalAuthorities": ["Crawford v. Washington", "Bruton v. United States", "Melendez-Diaz v. Massachusetts"]
+    },
+    "dueProcessIntegrityAnalysis": {
+      "description": "Citation-required due process integrity analysis under 5th and 14th Amendments",
+      "issueTypes": ["suggestive_identification", "destroyed_evidence", "delayed_prosecution", "vindictive_prosecution", "outrageous_conduct", "notice_deficiency", "vagueness"],
+      "remedies": ["dismissal", "suppression", "instruction", "mistrial", "new_trial"]
+    },
+    "structuralErrorCategorization": {
+      "description": "Deterministic structural error categorization — auto-reversible constitutional errors",
+      "errorTypes": ["denial_of_counsel", "biased_judge", "racial_discrimination_jury", "denial_public_trial", "defective_reasonable_doubt_instruction", "denial_self_representation"],
+      "legalAuthorities": ["Gideon v. Wainwright", "Tumey v. Ohio", "Batson v. Kentucky", "Waller v. Georgia", "Sullivan v. Louisiana", "Faretta v. California", "Arizona v. Fulminante"]
+    },
+    "suppressionIssueMapping": {
+      "description": "Evidence-linked suppression issue mapping across all constitutional amendments",
+      "constitutionalBases": ["4th", "5th", "6th", "14th"],
+      "suppressionGrounds": ["illegal_search", "miranda_violation", "confrontation", "due_process", "fruit_of_poisonous_tree"],
+      "alternativeAdmission": ["inevitable_discovery", "independent_source", "attenuation", "good_faith"]
+    },
+    "searchSeizureChronology": {
+      "description": "Timeline-linked search and seizure event chronology reconstruction",
+      "eventTypes": ["stop", "detention", "pat_down", "search_person", "search_vehicle", "search_premises", "arrest", "seizure", "inventory"],
+      "sequenceTracking": true
+    },
+    "custodialInterrogationTracking": {
+      "description": "Citation-backed custodial interrogation tracking with Miranda and coercion analysis",
+      "mirandaStates": ["given", "not_given", "incomplete", "unclear"],
+      "coercionFactors": ["threats", "prolonged_interrogation", "deception", "juvenile", "mental_vulnerability"],
+      "voluntarinessAssessments": ["voluntary", "coerced", "ambiguous"],
+      "legalAuthority": "Edwards v. Arizona — post-invocation questioning detection"
+    },
+    "confrontationWitnessIndex": {
+      "description": "Deterministic confrontation clause witness indexing with Crawford/Bruton issue tracking",
+      "witnessTypes": ["testifying", "non_testifying", "unavailable", "deceased", "foreign", "confidential_informant"],
+      "forfeitureTracking": "Giles v. California — forfeiture by wrongdoing"
+    },
+    "constitutionalPreservationGraph": {
+      "description": "Immutable constitutional preservation graph tracking preservation chains across all amendments",
+      "amendments": ["4th", "5th", "6th", "8th", "14th"],
+      "preservationStatuses": ["preserved", "partially_preserved", "forfeited", "renewed"],
+      "riskTracking": true,
+      "immutable": true
+    }
+  },
+
+  "frontendComponent": {
+    "name": "ConstitutionalLitigationCockpit",
+    "panes": ["search & seizure", "custodial interrogation", "confrontation clause", "due process", "suppression structures", "structural error", "preservation status", "constitutional timelines"],
+    "theme": "dark",
+    "features": ["viability badges", "amendment badges", "Crawford/Bruton flags", "fruit-of-poisonous-tree indicators", "auto-reversible markers", "impact badges", "risk-of-forfeiture alerts"]
+  },
+
+  "apiEndpoints": {
+    "fullAnalysis": { "method": "POST", "path": "/api/constitutional/analyze/:caseId" },
+    "fourthAmendment": [
+      { "method": "POST", "path": "/api/constitutional/fourth/:caseId" },
+      { "method": "GET", "path": "/api/constitutional/fourth/:caseId" }
+    ],
+    "fifthAmendment": [
+      { "method": "POST", "path": "/api/constitutional/fifth/:caseId" },
+      { "method": "GET", "path": "/api/constitutional/fifth/:caseId" }
+    ],
+    "sixthAmendment": [
+      { "method": "POST", "path": "/api/constitutional/sixth/:caseId" },
+      { "method": "GET", "path": "/api/constitutional/sixth/:caseId" }
+    ],
+    "dueProcess": [
+      { "method": "POST", "path": "/api/constitutional/dueprocess/:caseId" },
+      { "method": "GET", "path": "/api/constitutional/dueprocess/:caseId" }
+    ],
+    "structural": [
+      { "method": "POST", "path": "/api/constitutional/structural/:caseId" },
+      { "method": "GET", "path": "/api/constitutional/structural/:caseId" }
+    ],
+    "suppression": [
+      { "method": "POST", "path": "/api/constitutional/suppression/:caseId" },
+      { "method": "GET", "path": "/api/constitutional/suppression/:caseId" }
+    ],
+    "searchSeizure": [
+      { "method": "POST", "path": "/api/constitutional/search-seizure/:caseId" },
+      { "method": "GET", "path": "/api/constitutional/search-seizure/:caseId" }
+    ],
+    "interrogation": [
+      { "method": "POST", "path": "/api/constitutional/interrogation/:caseId" },
+      { "method": "GET", "path": "/api/constitutional/interrogation/:caseId" }
+    ],
+    "confrontationIndex": [
+      { "method": "POST", "path": "/api/constitutional/confrontation-index/:caseId" },
+      { "method": "GET", "path": "/api/constitutional/confrontation-index/:caseId" }
+    ],
+    "preservation": [
+      { "method": "POST", "path": "/api/constitutional/preservation/:caseId" },
+      { "method": "GET", "path": "/api/constitutional/preservation/:caseId" }
+    ],
+    "validation": { "method": "GET", "path": "/api/constitutional/validation" }
+  },
+
+  "prismaModels": [
+    "FourthAmendmentIssue",
+    "FifthAmendmentIssue",
+    "SixthAmendmentConfrontation",
+    "DueProcessIntegrity",
+    "StructuralErrorCategory",
+    "SuppressionIssueMap",
+    "SearchSeizureChronology",
+    "CustodialInterrogation",
+    "ConfrontationWitnessIndex",
+    "ConstitutionalPreservationGraph"
+  ],
+
+  "migration": "20260512310000_constitutional_litigation",
+
+  "constraints": {
+    "noFabricatedPoliceMisconduct": true,
+    "noInventedConstitutionalClaims": true,
+    "noHallucinatedSuppressionTheories": true,
+    "noFakeBradyClaims": true,
+    "noSpeculativeRightsViolations": true,
+    "noAIGeneratedConstitutionalOpinions": true,
+    "corePrinciple": "CourtAccess organizes provable constitutional issue structures. It does NOT function as constitutional litigation counsel."
+  },
+
+  "systemsUnmodified": {
+    "auth": true,
+    "csrf": true,
+    "nginx": true,
+    "redis": true,
+    "ocr": true,
+    "pm2": true,
+    "ingestion": true,
+    "existingD1toF2Systems": true
+  }
+}

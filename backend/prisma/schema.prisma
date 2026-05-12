@@ -7074,3 +7074,196 @@ model DoctrineLineageTracking {
   @@index([changeType])
   @@map("doctrine_lineage_trackings")
 }
+
+// ---------------------------------------------------------------------------
+// Phase M.2 — Unified Ecosystem Orchestration + Deterministic Platform Convergence
+// ---------------------------------------------------------------------------
+
+model UnifiedEcosystemOrchestration {
+  id                    String   @id @default(uuid())
+  caseId                String
+  orchestrationScope    String   // full_platform | subsystem_group | single_subsystem | cross_layer
+  subsystemsTotal       Int      @default(0)
+  subsystemsOrchestrated Int     @default(0)
+  orchestrationStatus   String   // running | completed | failed | stalled | converged
+  orchestrationHash     String   // SHA-256
+  orchestrationPlan     String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([orchestrationScope])
+  @@index([orchestrationStatus])
+  @@map("unified_ecosystem_orchestrations")
+}
+
+model CrossSubsystemLifecycleCoordination {
+  id                    String   @id @default(uuid())
+  caseId                String
+  sourceSubsystem       String   // evidence | analysis | defense | trial | appellate | governance | observability
+  targetSubsystem       String
+  coordinationStatus    String   // coordinated | uncoordinated | pending | failed
+  lifecyclePhase        String   // initialization | execution | validation | completion | archival
+  coordinationHash      String   // SHA-256
+  coordinationDetails   String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([sourceSubsystem])
+  @@index([coordinationStatus])
+  @@map("cross_subsystem_lifecycle_coordinations")
+}
+
+model PlatformConvergenceSynchronization {
+  id                    String   @id @default(uuid())
+  caseId                String
+  convergenceDomain     String   // data | api | governance | observability | security
+  layersTotal           Int      @default(0)
+  layersConverged       Int      @default(0)
+  convergenceRate       Float    @default(0)
+  convergenceStatus     String   // converged | partial | divergent | pending
+  convergenceHash       String   // SHA-256
+  convergenceDetails    String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([convergenceDomain])
+  @@index([convergenceStatus])
+  @@map("platform_convergence_synchronizations")
+}
+
+model EcosystemStateHarmonization {
+  id                    String   @id @default(uuid())
+  caseId                String
+  componentName         String   // evidence_engine | analysis_engine | defense_engine | governance_engine | observability_engine
+  componentState        String   // healthy | degraded | recovering | offline
+  stateHash             String   // SHA-256
+  previousStateHash     String?
+  stateConsistent       Boolean  @default(true)
+  harmonizationDetails  String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([componentName])
+  @@index([componentState])
+  @@map("ecosystem_state_harmonizations")
+}
+
+model UnifiedOrchestrationManifest {
+  id                    String   @id @default(uuid())
+  caseId                String
+  manifestScope         String   // full_ecosystem | subsystem_group | single_phase | cross_phase
+  entriesCount          Int      @default(0)
+  entriesVerified       Int      @default(0)
+  manifestHash          String   // SHA-256
+  manifestComplete      Boolean  @default(false)
+  generatedBy           String
+  manifestEntries       String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([manifestScope])
+  @@index([manifestComplete])
+  @@map("unified_orchestration_manifests")
+}
+
+model DeterministicCoordinationReplay {
+  id                    String   @id @default(uuid())
+  caseId                String
+  replayScope           String   // full_orchestration | single_coordination | phase_sequence | cross_layer
+  originalHash          String   // SHA-256
+  replayHash            String   // SHA-256
+  hashesMatch           Boolean  @default(false)
+  stepsReplayed         Int      @default(0)
+  replayDurationMs      Int      @default(0)
+  discrepancies         String?  // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([replayScope])
+  @@index([hashesMatch])
+  @@map("deterministic_coordination_replays")
+}
+
+model CrossLayerOrchestrationValidation {
+  id                    String   @id @default(uuid())
+  caseId                String
+  sourceLayer           String   // evidence | defense | trial | governance | observability | deployment
+  targetLayer           String
+  validationsTotal      Int      @default(0)
+  validationsPassed     Int      @default(0)
+  validationsFailed     Int      @default(0)
+  validationStatus      String   // passed | failed | partial | pending
+  validationHash        String   // SHA-256
+  validationDetails     String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([sourceLayer])
+  @@index([validationStatus])
+  @@map("cross_layer_orchestration_validations")
+}
+
+model FinalConvergenceCertification {
+  id                    String   @id @default(uuid())
+  caseId                String
+  certificationScope    String   // platform_wide | subsystem_group | single_domain | cross_domain
+  rulesTotal            Int      @default(0)
+  rulesPassed           Int      @default(0)
+  rulesFailed           Int      @default(0)
+  convergenceRate       Float    @default(0)
+  certificationStatus   String   // certified | conditional | not_certified | pending
+  certifiedBy           String?
+  certifiedAt           String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([certificationScope])
+  @@index([certificationStatus])
+  @@map("final_convergence_certifications")
+}
+
+model OperationalCompletenessTracking {
+  id                    String   @id @default(uuid())
+  caseId                String
+  domainName            String   // litigation | evidentiary | governance | observability | deployment | defensibility
+  capabilitiesTotal     Int      @default(0)
+  capabilitiesActive    Int      @default(0)
+  completenessRate      Float    @default(0)
+  completenessStatus    String   // complete | near_complete | partial | incomplete
+  domainHash            String   // SHA-256
+  domainDetails         String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([domainName])
+  @@index([completenessStatus])
+  @@map("operational_completeness_trackings")
+}
+
+model EcosystemLineageSynchronization {
+  id                    String   @id @default(uuid())
+  caseId                String
+  lineageSource         String   // doctrine | release | policy | orchestration | certification
+  lineageTarget         String
+  sourceVersion         String
+  targetVersion         String
+  syncStatus            String   // synchronized | desynchronized | pending | failed
+  lineageHash           String   // SHA-256
+  syncDetails           String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([lineageSource])
+  @@index([syncStatus])
+  @@map("ecosystem_lineage_synchronizations")
+}

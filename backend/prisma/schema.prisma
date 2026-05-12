@@ -3970,3 +3970,209 @@ model MultiCaseTimelineCorrelation {
   @@index([correlationType])
   @@map("multi_case_timeline_correlations")
 }
+
+// ---------------------------------------------------------------------------
+// Phase F.2 — Real-Time Transcript Ingestion Event
+// ---------------------------------------------------------------------------
+
+model RealTimeTranscriptEvent {
+  id                    String   @id @default(uuid())
+  caseId                String
+  documentId            String?
+  eventType             String   // transcript_uploaded | transcript_updated | statement_extracted | speaker_identified
+  sourceType            String   // uploaded_document | live_authorized_feed
+  content               String   // The actual content or summary
+  speaker               String?
+  pageNumber            Int?
+  lineNumber            Int?
+  processingStatus      String   @default("pending") // pending | processing | completed | failed
+  metadata              String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([eventType])
+  @@index([processingStatus])
+  @@map("real_time_transcript_events")
+}
+
+// ---------------------------------------------------------------------------
+// Phase F.2 — Live Contradiction Emergence
+// ---------------------------------------------------------------------------
+
+model LiveContradictionEmergence {
+  id                    String   @id @default(uuid())
+  caseId                String
+  contradictionPairId   String?  // links to ContradictionPair if created
+  triggerEventId        String   // RealTimeTranscriptEvent that triggered this
+  emergenceType         String   // new_contradiction | escalated_contradiction | resolved_contradiction
+  severity              String   // critical | high | medium | low
+  statementAText        String
+  statementBText        String
+  speaker               String?
+  detectedAt            DateTime @default(now())
+  acknowledged          Boolean  @default(false)
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([severity])
+  @@index([acknowledged])
+  @@map("live_contradiction_emergences")
+}
+
+// ---------------------------------------------------------------------------
+// Phase F.2 — Dynamic Burden Shift
+// ---------------------------------------------------------------------------
+
+model DynamicBurdenShift {
+  id                    String   @id @default(uuid())
+  caseId                String
+  elementId             String?  // CALCRIM element affected
+  instructionId         String?
+  shiftType             String   // strengthened | weakened | collapsed | restored
+  previousState         String   // burden state before shift
+  newState              String   // burden state after shift
+  triggerEventId        String?  // what caused the shift
+  triggerDescription    String
+  magnitude             Float    @default(0.0) // 0.0-1.0
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([shiftType])
+  @@index([magnitude])
+  @@map("dynamic_burden_shifts")
+}
+
+// ---------------------------------------------------------------------------
+// Phase F.2 — Active Witness Credibility Update
+// ---------------------------------------------------------------------------
+
+model ActiveWitnessCredibilityUpdate {
+  id                    String   @id @default(uuid())
+  caseId                String
+  witnessName           String
+  updateType            String   // credibility_increase | credibility_decrease | impeachment | rehabilitation | new_inconsistency | recantation
+  previousScore         Float    @default(0.0)
+  newScore              Float    @default(0.0)
+  triggerEventId        String?
+  triggerDescription    String
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([witnessName])
+  @@index([updateType])
+  @@map("active_witness_credibility_updates")
+}
+
+// ---------------------------------------------------------------------------
+// Phase F.2 — Real-Time Timeline Update
+// ---------------------------------------------------------------------------
+
+model RealTimeTimelineUpdate {
+  id                    String   @id @default(uuid())
+  caseId                String
+  updateType            String   // new_event | event_modified | gap_detected | conflict_detected | gap_resolved
+  eventDescription      String
+  eventTimestamp        String?  // the time the event refers to (not when detected)
+  previousState         String?  // JSON — previous timeline state if modified
+  newState              String   // JSON — new timeline state
+  triggerEventId        String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([updateType])
+  @@map("real_time_timeline_updates")
+}
+
+// ---------------------------------------------------------------------------
+// Phase F.2 — Live Objection Consequence
+// ---------------------------------------------------------------------------
+
+model LiveObjectionConsequence {
+  id                    String   @id @default(uuid())
+  caseId                String
+  objectionType         String   // hearsay | foundation | relevance | 352 | speculation | leading | confrontation | best_evidence | authentication
+  ruling                String   // sustained | overruled | deferred
+  consequenceType       String   // evidence_excluded | evidence_admitted | limiting_instruction | curative_instruction | mistrial_motion | appeal_preserved
+  impactDescription     String
+  affectedEvidenceIds   String   // JSON array
+  appellatePreservation Boolean  @default(false)
+  triggerEventId        String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([objectionType])
+  @@index([ruling])
+  @@map("live_objection_consequences")
+}
+
+// ---------------------------------------------------------------------------
+// Phase F.2 — Ongoing Appellate Preservation State
+// ---------------------------------------------------------------------------
+
+model OngoingAppellatePreservation {
+  id                    String   @id @default(uuid())
+  caseId                String
+  issueType             String   // constitutional | evidentiary | instructional | prosecutorial_misconduct | sentencing
+  issueDescription      String
+  preservationStatus    String   // preserved | at_risk | forfeited | renewed
+  lastAction            String   // most recent preservation action
+  lastActionTimestamp   DateTime @default(now())
+  requiredFollowUp      String?  // what must happen to maintain preservation
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([preservationStatus])
+  @@map("ongoing_appellate_preservations")
+}
+
+// ---------------------------------------------------------------------------
+// Phase F.2 — Courtroom Event Stream (uploaded-source only)
+// ---------------------------------------------------------------------------
+
+model CourtroomEventStream {
+  id                    String   @id @default(uuid())
+  caseId                String
+  eventType             String   // testimony_start | testimony_end | objection | ruling | sidebar | recess | jury_instruction | verdict | sentencing | motion
+  eventDescription      String
+  speaker               String?
+  trialPhase            String   // pretrial | jury_selection | opening | prosecution_case | defense_case | rebuttal | closing | jury_instructions | deliberation | verdict | sentencing
+  sourceType            String   @default("uploaded_document") // uploaded_document | live_authorized_feed
+  sequenceNumber        Int      @default(0)
+  metadata              String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([eventType])
+  @@index([trialPhase])
+  @@index([sequenceNumber])
+  @@map("courtroom_event_streams")
+}
+
+// ---------------------------------------------------------------------------
+// Phase F.2 — Litigation State Snapshot (immutable)
+// ---------------------------------------------------------------------------
+
+model LitigationStateSnapshot {
+  id                    String   @id @default(uuid())
+  caseId                String
+  snapshotType          String   // periodic | event_triggered | manual | phase_transition
+  litigationPhase       String   // pretrial | trial | post_trial | sentencing | appellate | post_conviction
+  burdenState           String   // JSON — current burden analysis per element
+  contradictionState    String   // JSON — current contradiction summary
+  witnessCredibility    String   // JSON — current credibility scores
+  appellateState        String   // JSON — current appellate preservation summary
+  timelineState         String   // JSON — current timeline summary
+  metadata              String   // JSON — additional state data
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([snapshotType])
+  @@index([litigationPhase])
+  @@map("litigation_state_snapshots")
+}

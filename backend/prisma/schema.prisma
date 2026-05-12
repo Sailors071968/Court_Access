@@ -6683,3 +6683,197 @@ model ExternalReviewCertification {
   @@index([certificationStatus])
   @@map("external_review_certifications")
 }
+
+// ---------------------------------------------------------------------------
+// Phase L.1 — Full-System Observability + Forensic Telemetry Framework
+// ---------------------------------------------------------------------------
+
+model EndToEndOperationalTrace {
+  id                    String   @id @default(uuid())
+  caseId                String
+  traceType             String   // api_request | background_job | user_action | system_event | integration_call
+  traceOrigin           String   // frontend | backend | worker | scheduler | external
+  traceTarget           String   // database | cache | api | storage | export
+  durationMs            Int      @default(0)
+  traceStatus           String   // success | failure | timeout | partial
+  traceHash             String   // SHA-256
+  spanDetails           String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([traceType])
+  @@index([traceStatus])
+  @@map("end_to_end_operational_traces")
+}
+
+model CrossLayerTelemetrySync {
+  id                    String   @id @default(uuid())
+  caseId                String
+  sourceLayer           String   // evidence | contradictions | defense | trial_prep | appellate | sentencing
+  targetLayer           String
+  syncStatus            String   // synchronized | desynchronized | pending | failed
+  sourceHash            String   // SHA-256
+  targetHash            String   // SHA-256
+  hashesMatch           Boolean  @default(false)
+  recordsSynced         Int      @default(0)
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([sourceLayer])
+  @@index([syncStatus])
+  @@map("cross_layer_telemetry_syncs")
+}
+
+model IncidentReconstructionRecord {
+  id                    String   @id @default(uuid())
+  caseId                String
+  incidentType          String   // data_integrity | service_outage | security_event | performance_degradation | configuration_drift
+  incidentSeverity      String   // critical | high | medium | low
+  timelineSteps         Int      @default(0)
+  stepsReconstructed    Int      @default(0)
+  rootCauseIdentified   Boolean  @default(false)
+  reconstructionHash    String   // SHA-256
+  timeline              String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([incidentType])
+  @@index([incidentSeverity])
+  @@map("incident_reconstruction_records")
+}
+
+model IntegrityEventMonitor {
+  id                    String   @id @default(uuid())
+  caseId                String
+  eventType             String   // hash_mismatch | unauthorized_access | data_modification | schema_drift | config_change
+  eventSeverity         String   // critical | warning | info
+  affectedComponent     String   // database | api | cache | storage | export
+  eventHash             String   // SHA-256
+  resolved              Boolean  @default(false)
+  resolvedAt            String?
+  eventDetails          String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([eventType])
+  @@index([eventSeverity])
+  @@map("integrity_event_monitors")
+}
+
+model DeterministicObservabilityPipeline {
+  id                    String   @id @default(uuid())
+  caseId                String
+  pipelineName          String   // evidence_pipeline | analysis_pipeline | export_pipeline | integrity_pipeline | governance_pipeline
+  stagesTotal           Int      @default(0)
+  stagesCompleted       Int      @default(0)
+  stagesFailed          Int      @default(0)
+  pipelineStatus        String   // running | completed | failed | stalled
+  pipelineHash          String   // SHA-256
+  stageDetails          String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([pipelineName])
+  @@index([pipelineStatus])
+  @@map("deterministic_observability_pipelines")
+}
+
+model OperationalAnomalyDetection {
+  id                    String   @id @default(uuid())
+  caseId                String
+  anomalyType           String   // latency_spike | error_rate | throughput_drop | resource_exhaustion | integrity_violation
+  detectionRule         String   // threshold | trend | pattern | baseline_deviation
+  anomalySeverity       String   // critical | high | medium | low
+  detected              Boolean  @default(false)
+  baselineValue         Float    @default(0)
+  observedValue         Float    @default(0)
+  anomalyDetails        String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([anomalyType])
+  @@index([anomalySeverity])
+  @@map("operational_anomaly_detections")
+}
+
+model AuditTelemetryManifest {
+  id                    String   @id @default(uuid())
+  caseId                String
+  manifestScope         String   // full_system | per_layer | per_service | per_endpoint
+  entriesCount          Int      @default(0)
+  entriesVerified       Int      @default(0)
+  manifestHash          String   // SHA-256
+  manifestComplete      Boolean  @default(false)
+  generatedBy           String
+  manifestEntries       String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([manifestScope])
+  @@index([manifestComplete])
+  @@map("audit_telemetry_manifests")
+}
+
+model PlatformStateVisibility {
+  id                    String   @id @default(uuid())
+  caseId                String
+  componentName         String   // api_server | database | cache | worker | scheduler | storage
+  componentStatus       String   // healthy | degraded | down | unknown
+  lastHeartbeat         String
+  uptimePercent         Float    @default(100)
+  activeConnections     Int      @default(0)
+  stateHash             String   // SHA-256
+  stateDetails          String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([componentName])
+  @@index([componentStatus])
+  @@map("platform_state_visibilities")
+}
+
+model TelemetryReplayVerification {
+  id                    String   @id @default(uuid())
+  caseId                String
+  replayScope           String   // full_trace | single_span | incident_timeline | pipeline_execution
+  originalHash          String   // SHA-256
+  replayHash            String   // SHA-256
+  hashesMatch           Boolean  @default(false)
+  eventsReplayed        Int      @default(0)
+  replayDurationMs      Int      @default(0)
+  discrepancies         String?  // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([replayScope])
+  @@index([hashesMatch])
+  @@map("telemetry_replay_verifications")
+}
+
+model ObservabilityCertificationTracking {
+  id                    String   @id @default(uuid())
+  caseId                String
+  certificationScope    String   // tracing | telemetry | monitoring | anomaly_detection | incident_response
+  checksTotal           Int      @default(0)
+  checksPassed          Int      @default(0)
+  certificationRate     Float    @default(0)
+  certificationStatus   String   // certified | conditional | not_certified | pending
+  certifiedBy           String?
+  certifiedAt           String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([certificationScope])
+  @@index([certificationStatus])
+  @@map("observability_certification_trackings")
+}

@@ -4176,3 +4176,253 @@ model LitigationStateSnapshot {
   @@index([litigationPhase])
   @@map("litigation_state_snapshots")
 }
+
+// ---------------------------------------------------------------------------
+// Phase G.1 — Fourth Amendment Issue Framework
+// ---------------------------------------------------------------------------
+
+model FourthAmendmentIssue {
+  id                    String   @id @default(uuid())
+  caseId                String
+  issueType             String   // warrantless_search | warrant_deficiency | consent_issue | exigent_circumstances | plain_view | automobile_exception | stop_and_frisk | inventory_search | border_search
+  description           String
+  legalStandard         String   // probable_cause | reasonable_suspicion | consent | exigent_circumstances | warrant_requirement
+  officerIdentifier     String?  // anonymized
+  locationDescription   String?
+  searchDate            String?
+  warrantPresent        Boolean  @default(false)
+  warrantDeficiency     String?  // overbroad | stale | lacking_particularity | false_affidavit | wrong_address
+  consentVoluntary      Boolean?
+  exclusionaryRuleApplicable Boolean @default(true)
+  fruitOfPoisonousTree  Boolean  @default(false)
+  goodFaithException    Boolean  @default(false) // Leon exception
+  suppressionViability  String   // strong | moderate | weak | unlikely
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([issueType])
+  @@index([suppressionViability])
+  @@map("fourth_amendment_issues")
+}
+
+// ---------------------------------------------------------------------------
+// Phase G.1 — Fifth Amendment Issue Tracking
+// ---------------------------------------------------------------------------
+
+model FifthAmendmentIssue {
+  id                    String   @id @default(uuid())
+  caseId                String
+  issueType             String   // miranda_violation | compelled_statement | self_incrimination | double_jeopardy | grand_jury_issue | due_process
+  description           String
+  mirandaAdvisement     String?  // given | not_given | incomplete | unclear
+  custodialStatus       String?  // in_custody | not_in_custody | ambiguous
+  interrogationContext  String?  // station_house | field | traffic_stop | hospital | jail
+  voluntariness         String?  // voluntary | coerced | ambiguous
+  statementUsed         Boolean  @default(false)
+  suppressionViability  String   // strong | moderate | weak | unlikely
+  legalBasis            String   // Miranda v. Arizona | Dickerson v. United States | Berghuis v. Thompkins | etc.
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([issueType])
+  @@map("fifth_amendment_issues")
+}
+
+// ---------------------------------------------------------------------------
+// Phase G.1 — Sixth Amendment Confrontation Analysis
+// ---------------------------------------------------------------------------
+
+model SixthAmendmentConfrontation {
+  id                    String   @id @default(uuid())
+  caseId                String
+  witnessName           String
+  confrontationType     String   // testimonial_hearsay | lab_report | prior_testimony | co_defendant_statement | 911_call | forensic_report
+  testimonialStatus     String   // testimonial | non_testimonial | disputed
+  crossExaminationAvailable Boolean @default(true)
+  crawfordApplicable    Boolean  @default(false) // Crawford v. Washington
+  brutonIssue           Boolean  @default(false) // Bruton v. United States
+  melbourneIssue        Boolean  @default(false) // Melendez-Diaz v. Massachusetts
+  reliabilityAnalysis   String?
+  confrontationViability String  // strong | moderate | weak
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([witnessName])
+  @@index([confrontationType])
+  @@map("sixth_amendment_confrontations")
+}
+
+// ---------------------------------------------------------------------------
+// Phase G.1 — Due Process Integrity Analysis
+// ---------------------------------------------------------------------------
+
+model DueProcessIntegrity {
+  id                    String   @id @default(uuid())
+  caseId                String
+  issueType             String   // suggestive_identification | destroyed_evidence | delayed_prosecution | vindictive_prosecution | outrageous_conduct | notice_deficiency | vagueness
+  description           String
+  amendment             String   // 5th | 14th
+  substantiveOrProcedural String // substantive | procedural
+  prejudiceLevel        String   // severe | significant | moderate | minimal
+  remedyAvailable       String   // dismissal | suppression | instruction | mistrial | new_trial
+  legalBasis            String
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([issueType])
+  @@index([prejudiceLevel])
+  @@map("due_process_integrity_issues")
+}
+
+// ---------------------------------------------------------------------------
+// Phase G.1 — Structural Error Categorization
+// ---------------------------------------------------------------------------
+
+model StructuralErrorCategory {
+  id                    String   @id @default(uuid())
+  caseId                String
+  errorType             String   // denial_of_counsel | biased_judge | racial_discrimination_jury | denial_public_trial | defective_reasonable_doubt_instruction | denial_self_representation
+  description           String
+  autoReversible        Boolean  @default(true)
+  harmlessAnalysisRequired Boolean @default(false)
+  constitutionalBasis   String   // 6th Amendment | 14th Amendment | etc.
+  caseAuthority         String   // Arizona v. Fulminante | Sullivan v. Louisiana | etc.
+  trialPhase            String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([errorType])
+  @@map("structural_error_categories")
+}
+
+// ---------------------------------------------------------------------------
+// Phase G.1 — Suppression Issue Mapping
+// ---------------------------------------------------------------------------
+
+model SuppressionIssueMap {
+  id                    String   @id @default(uuid())
+  caseId                String
+  evidenceDescription   String
+  evidenceType          String   // physical | testimonial | documentary | digital | identification
+  constitutionalBasis   String   // 4th | 5th | 6th | 14th
+  suppressionGround     String   // illegal_search | miranda_violation | confrontation | due_process | fruit_of_poisonous_tree
+  motionFiled           Boolean  @default(false)
+  motionRuling          String?  // granted | denied | partial | deferred
+  alternativeAdmission  String?  // inevitable_discovery | independent_source | attenuation | good_faith
+  impactIfSuppressed    String   // case_dispositive | significant | moderate | minimal
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([constitutionalBasis])
+  @@index([suppressionGround])
+  @@map("suppression_issue_maps")
+}
+
+// ---------------------------------------------------------------------------
+// Phase G.1 — Search/Seizure Chronology
+// ---------------------------------------------------------------------------
+
+model SearchSeizureChronology {
+  id                    String   @id @default(uuid())
+  caseId                String
+  eventType             String   // stop | detention | pat_down | search_person | search_vehicle | search_premises | arrest | seizure | inventory
+  eventDate             String?
+  eventTime             String?
+  location              String?
+  officerIdentifier     String?  // anonymized
+  legalJustification    String?  // warrant | probable_cause | reasonable_suspicion | consent | exigent | plain_view | incident_to_arrest
+  evidenceObtained      String?
+  sequenceNumber        Int      @default(0)
+  constitutionalIssue   Boolean  @default(false)
+  issueDescription      String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([eventType])
+  @@index([sequenceNumber])
+  @@map("search_seizure_chronologies")
+}
+
+// ---------------------------------------------------------------------------
+// Phase G.1 — Custodial Interrogation Tracking
+// ---------------------------------------------------------------------------
+
+model CustodialInterrogation {
+  id                    String   @id @default(uuid())
+  caseId                String
+  interrogationDate     String?
+  location              String?  // station_house | field | hospital | jail | other
+  officerIdentifier     String?  // anonymized
+  duration              String?
+  mirandaGiven          Boolean  @default(false)
+  mirandaWaiver         String?  // express | implied | ambiguous | invoked
+  invocationOfRights    String?  // silence_invoked | counsel_invoked | neither | ambiguous
+  postInvocationQuestioning Boolean @default(false) // Edwards v. Arizona violation
+  coercionIndicators    String   // JSON array of coercion factors
+  statementObtained     Boolean  @default(false)
+  voluntarinessAssessment String // voluntary | coerced | ambiguous
+  suppressionViability  String   // strong | moderate | weak
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([voluntarinessAssessment])
+  @@map("custodial_interrogations")
+}
+
+// ---------------------------------------------------------------------------
+// Phase G.1 — Confrontation Clause Witness Index
+// ---------------------------------------------------------------------------
+
+model ConfrontationWitnessIndex {
+  id                    String   @id @default(uuid())
+  caseId                String
+  witnessName           String
+  witnessType           String   // testifying | non_testifying | unavailable | deceased | foreign | confidential_informant
+  testimonialStatements Int      @default(0)
+  crossExaminationOccurred Boolean @default(false)
+  confrontationSatisfied Boolean @default(true)
+  crawfordIssue         Boolean  @default(false)
+  brutonIssue           Boolean  @default(false)
+  forfeiture            Boolean  @default(false) // forfeiture by wrongdoing (Giles v. California)
+  reliabilityScore      Float    @default(1.0) // 0.0-1.0
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([witnessName])
+  @@index([confrontationSatisfied])
+  @@map("confrontation_witness_indexes")
+}
+
+// ---------------------------------------------------------------------------
+// Phase G.1 — Constitutional Preservation Graph (immutable)
+// ---------------------------------------------------------------------------
+
+model ConstitutionalPreservationGraph {
+  id                    String   @id @default(uuid())
+  caseId                String
+  amendment             String   // 4th | 5th | 6th | 8th | 14th
+  issueType             String
+  preservationChain     String   // JSON array of preservation events in order
+  chainLength           Int      @default(0)
+  currentStatus         String   // preserved | partially_preserved | forfeited | renewed
+  firstPreservationDate String?
+  lastPreservationDate  String?
+  riskOfForfeiture      Boolean  @default(false)
+  requiredActions       String?  // JSON array of actions needed
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([amendment])
+  @@index([currentStatus])
+  @@map("constitutional_preservation_graphs")
+}

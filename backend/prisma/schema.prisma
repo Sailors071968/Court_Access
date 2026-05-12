@@ -8237,3 +8237,201 @@ model ProductionStewardshipManifest {
   @@index([verified])
   @@map("production_stewardship_manifests")
 }
+
+// ---------------------------------------------------------------------------
+// Phase O.1 — Stripe Production Billing + Subscription Operations
+// Implementation infrastructure. Not new intelligence systems.
+// ---------------------------------------------------------------------------
+
+model StripeProductionWebhookEvent {
+  id                    String   @id @default(uuid())
+  stripeEventId         String   @unique
+  eventType             String   // checkout.session.completed | invoice.paid | invoice.payment_failed | customer.subscription.updated | customer.subscription.deleted | charge.refunded
+  signatureVerified     Boolean  @default(false)
+  idempotencyKey        String?
+  replayProtected       Boolean  @default(false)
+  processingStatus      String   // received | verified | processed | failed | duplicate
+  eventPayload          String   // JSON
+  eventHash             String   // SHA-256
+  environment           String   // test | live
+  createdAt             DateTime @default(now())
+
+  @@index([stripeEventId])
+  @@index([eventType])
+  @@index([processingStatus])
+  @@map("stripe_production_webhook_events")
+}
+
+model SubscriptionLifecycle {
+  id                    String   @id @default(uuid())
+  customerId            String
+  stripeSubscriptionId  String?
+  planType              String   // monthly | annual | institutional | trial
+  planTier              String   // starter | professional | enterprise | custom
+  seatCount             Int      @default(1)
+  usageCap              Int      @default(0)
+  lifecycleStatus       String   // trial | active | past_due | canceled | paused | upgraded | downgraded
+  previousStatus        String?
+  stateTransitionHash   String   // SHA-256
+  lifecycleDetails      String   // JSON
+  environment           String   // test | live
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([customerId])
+  @@index([lifecycleStatus])
+  @@index([environment])
+  @@map("subscription_lifecycles")
+}
+
+model InstitutionalBillingWorkflow {
+  id                    String   @id @default(uuid())
+  institutionId         String
+  institutionName       String
+  billingPhase          String   // contract_negotiation | po_issued | invoice_sent | payment_received | renewal_pending | renewal_completed | terminated
+  contractValue         Float    @default(0)
+  seatsPurchased        Int      @default(0)
+  governanceApproved    Boolean  @default(false)
+  approvedBy            String?
+  billingHash           String   // SHA-256
+  billingDetails        String   // JSON
+  environment           String   // test | live
+  createdAt             DateTime @default(now())
+
+  @@index([institutionId])
+  @@index([billingPhase])
+  @@index([environment])
+  @@map("institutional_billing_workflows")
+}
+
+model UsageTierEntitlement {
+  id                    String   @id @default(uuid())
+  customerId            String
+  featureName           String   // core_litigation | evidence_management | contradiction_analysis | export_workflows | trial_preparation | advanced_analytics
+  tierRequired          String   // starter | professional | enterprise
+  currentTier           String   // starter | professional | enterprise | custom
+  entitled              Boolean  @default(false)
+  usageCount            Int      @default(0)
+  usageLimit            Int      @default(0)
+  entitlementHash       String   // SHA-256
+  entitlementDetails    String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([customerId])
+  @@index([featureName])
+  @@index([entitled])
+  @@map("usage_tier_entitlements")
+}
+
+model CustomerOnboardingBilling {
+  id                    String   @id @default(uuid())
+  customerId            String
+  onboardingStep        String   // signup | plan_selection | checkout | payment_confirmed | entitlement_activated | welcome_sent | first_login
+  stepStatus            String   // pending | completed | failed | skipped
+  stepOrder             Int      @default(0)
+  stripeSessionId       String?
+  onboardingHash        String   // SHA-256
+  onboardingDetails     String   // JSON
+  environment           String   // test | live
+  createdAt             DateTime @default(now())
+
+  @@index([customerId])
+  @@index([onboardingStep])
+  @@index([stepStatus])
+  @@map("customer_onboarding_billing")
+}
+
+model FailedPaymentRecovery {
+  id                    String   @id @default(uuid())
+  customerId            String
+  stripeInvoiceId       String?
+  failureReason         String   // card_declined | insufficient_funds | expired_card | processing_error | authentication_required | bank_decline
+  recoveryAction        String   // retry_scheduled | dunning_email | grace_period | account_suspended | manual_intervention | recovered
+  retryCount            Int      @default(0)
+  maxRetries            Int      @default(3)
+  recoveryStatus        String   // pending | retrying | recovered | failed | escalated
+  recoveryHash          String   // SHA-256
+  recoveryDetails       String   // JSON
+  environment           String   // test | live
+  createdAt             DateTime @default(now())
+
+  @@index([customerId])
+  @@index([recoveryStatus])
+  @@index([environment])
+  @@map("failed_payment_recoveries")
+}
+
+model BillingAuditLog {
+  id                    String   @id @default(uuid())
+  customerId            String
+  actionType            String   // subscription_created | subscription_updated | payment_received | payment_failed | refund_issued | entitlement_changed | invoice_generated | dispute_opened | dispute_resolved
+  actionDetails         String   // JSON
+  previousState         String?  // JSON
+  newState              String?  // JSON
+  auditHash             String   // SHA-256
+  immutable             Boolean  @default(true)
+  environment           String   // test | live
+  createdAt             DateTime @default(now())
+
+  @@index([customerId])
+  @@index([actionType])
+  @@index([environment])
+  @@map("billing_audit_logs")
+}
+
+model InvoiceRecord {
+  id                    String   @id @default(uuid())
+  customerId            String
+  stripeInvoiceId       String?
+  invoiceNumber         String
+  invoiceType           String   // subscription | one_time | credit_note | institutional
+  amountCents           Int      @default(0)
+  currency              String   @default("usd")
+  invoiceStatus         String   // draft | open | paid | void | uncollectible
+  pdfUrl                String?
+  invoiceHash           String   // SHA-256
+  invoiceDetails        String   // JSON
+  environment           String   // test | live
+  createdAt             DateTime @default(now())
+
+  @@index([customerId])
+  @@index([invoiceStatus])
+  @@index([environment])
+  @@map("invoice_records")
+}
+
+model RevenueMetric {
+  id                    String   @id @default(uuid())
+  metricType            String   // mrr | arr | churn_rate | payment_failure_rate | conversion_rate | arpu | ltv | institutional_revenue
+  metricValue           Float    @default(0)
+  periodStart           String
+  periodEnd             String
+  customerCount         Int      @default(0)
+  metricStatus          String   // current | historical | projected
+  metricHash            String   // SHA-256
+  metricDetails         String   // JSON
+  environment           String   // test | live
+  createdAt             DateTime @default(now())
+
+  @@index([metricType])
+  @@index([metricStatus])
+  @@index([environment])
+  @@map("revenue_metrics")
+}
+
+model BillingOperationsCertification {
+  id                    String   @id @default(uuid())
+  certificationArea     String   // webhook_security | subscription_integrity | entitlement_accuracy | audit_completeness | invoice_integrity | recovery_effectiveness | institutional_billing | revenue_accuracy
+  certificationHash     String   // SHA-256
+  certified             Boolean  @default(false)
+  certifiedBy           String?
+  certifiedAt           String?
+  certificationDetails  String   // JSON
+  environment           String   // test | live
+  createdAt             DateTime @default(now())
+
+  @@index([certificationArea])
+  @@index([certified])
+  @@index([environment])
+  @@map("billing_operations_certifications")
+}

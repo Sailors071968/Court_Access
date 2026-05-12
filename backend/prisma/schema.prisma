@@ -5500,3 +5500,203 @@ model ExportProvenanceManifest {
   @@index([exportType])
   @@map("export_provenance_manifests")
 }
+
+// ---------------------------------------------------------------------------
+// Phase I.2 — Governance, Compliance, and Institutional Trust Framework
+// ---------------------------------------------------------------------------
+
+model GovernancePolicy {
+  id                    String   @id @default(uuid())
+  policyName            String
+  policyType            String   // access_control | data_retention | evidence_handling | ethical_safeguard | operational | disclosure
+  policyVersion         Int      @default(1)
+  policyContent         String   // JSON — full policy rules
+  enforcementLevel      String   // mandatory | recommended | advisory
+  scope                 String   // system_wide | per_case | per_role | per_layer
+  isActive              Boolean  @default(true)
+  effectiveDate         String
+  expirationDate        String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([policyType])
+  @@index([enforcementLevel])
+  @@index([isActive])
+  @@map("governance_policies")
+}
+
+model PermissionAuditTrail {
+  id                    String   @id @default(uuid())
+  userId                String
+  userRole              String   // lead_attorney | associate | paralegal | investigator | expert | client
+  action                String   // access_granted | access_denied | permission_changed | role_assigned | role_revoked
+  resource              String   // which resource was accessed
+  resourceType          String   // case | evidence | analysis | export | configuration
+  previousPermission    String?  // JSON
+  newPermission         String?  // JSON
+  reason                String?
+  ipAddress             String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([userId])
+  @@index([action])
+  @@index([resourceType])
+  @@map("permission_audit_trails")
+}
+
+model ComplianceVerificationWorkflow {
+  id                    String   @id @default(uuid())
+  caseId                String?
+  workflowType          String   // evidence_handling | disclosure_compliance | retention_check | access_review | export_audit
+  workflowStatus        String   // pending | in_progress | passed | failed | remediation_required
+  checksPerformed       String   // JSON array
+  checksPassed          Int      @default(0)
+  checksFailed          Int      @default(0)
+  assignedTo            String?
+  completedAt           String?
+  findings              String?  // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([workflowType])
+  @@index([workflowStatus])
+  @@map("compliance_verification_workflows")
+}
+
+model EthicalSafeguardEnforcement {
+  id                    String   @id @default(uuid())
+  safeguardName         String
+  safeguardType         String   // no_autonomous_filing | no_unverified_claims | no_ai_replacement | no_unauthorized_transmission | no_opaque_mutation
+  ruleDefinition        String   // JSON — the rule logic
+  enforcementResult     String   // enforced | violation_detected | waived | not_applicable
+  violationDetails      String?  // JSON
+  triggerContext         String   // what triggered the check
+  remediationAction     String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([safeguardType])
+  @@index([enforcementResult])
+  @@map("ethical_safeguard_enforcements")
+}
+
+model OperationalAccountabilityLog {
+  id                    String   @id @default(uuid())
+  actorId               String
+  actorRole             String
+  operationType         String   // system_config_change | data_access | analysis_execution | export_generation | policy_modification
+  operationTarget       String
+  operationDetails      String   // JSON
+  outcomeStatus         String   // success | failure | partial | denied
+  impactLevel           String   // high | medium | low | none
+  reviewRequired        Boolean  @default(false)
+  reviewedBy            String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([actorId])
+  @@index([operationType])
+  @@index([outcomeStatus])
+  @@map("operational_accountability_logs")
+}
+
+model InstitutionalOversightReport {
+  id                    String   @id @default(uuid())
+  reportType            String   // daily_summary | weekly_audit | monthly_compliance | incident_report | ad_hoc
+  reportPeriodStart     String
+  reportPeriodEnd       String
+  totalActions          Int      @default(0)
+  totalViolations       Int      @default(0)
+  totalExceptions       Int      @default(0)
+  complianceScore       Float    @default(100)
+  reportContent         String   // JSON — full report data
+  generatedBy           String
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([reportType])
+  @@index([complianceScore])
+  @@map("institutional_oversight_reports")
+}
+
+model RoleBasedGovernanceControl {
+  id                    String   @id @default(uuid())
+  role                  String   // lead_attorney | associate | paralegal | investigator | expert | client
+  controlType           String   // data_access | analysis_execution | export_permission | config_modification | audit_access
+  resourceScope         String   // all | case_specific | layer_specific | own_data
+  permissionLevel       String   // full | read_write | read_only | none
+  conditions            String?  // JSON — conditional access rules
+  isActive              Boolean  @default(true)
+  lastReviewedAt        String?
+  reviewedBy            String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([role])
+  @@index([controlType])
+  @@index([isActive])
+  @@map("role_based_governance_controls")
+}
+
+model ComplianceExceptionTracking {
+  id                    String   @id @default(uuid())
+  caseId                String?
+  exceptionType         String   // policy_override | deadline_extension | access_exception | retention_waiver | disclosure_delay
+  policyId              String?
+  requestedBy           String
+  approvedBy            String?
+  justification         String
+  exceptionStatus       String   // requested | approved | denied | expired | revoked
+  validUntil            String?
+  evidenceLinked        Boolean  @default(false)
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([exceptionType])
+  @@index([exceptionStatus])
+  @@map("compliance_exception_trackings")
+}
+
+model SystemPolicyVersion {
+  id                    String   @id @default(uuid())
+  policyId              String
+  versionNumber         Int      @default(1)
+  previousVersionId     String?
+  changeType            String   // initial | amendment | revision | supersede | repeal
+  changeSummary         String
+  fullPolicyContent     String   // JSON — complete policy at this version
+  contentHash           String   // SHA-256
+  effectiveDate         String
+  approvedBy            String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([policyId])
+  @@index([versionNumber])
+  @@index([changeType])
+  @@map("system_policy_versions")
+}
+
+model GovernanceReviewCertification {
+  id                    String   @id @default(uuid())
+  reviewScope           String   // full_system | per_case | per_layer | per_role
+  reviewType            String   // periodic | incident_triggered | pre_deployment | post_incident | ad_hoc
+  reviewPeriodStart     String
+  reviewPeriodEnd       String
+  totalPoliciesReviewed Int      @default(0)
+  totalViolationsFound  Int      @default(0)
+  certificationStatus   String   // certified | conditional | failed | pending
+  certificationScore    Float    @default(100)
+  reviewedBy            String
+  findings              String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([reviewScope])
+  @@index([certificationStatus])
+  @@index([reviewType])
+  @@map("governance_review_certifications")
+}

@@ -80,6 +80,7 @@ import { registerInstitutionalDeploymentRoutes } from "./routes/institutionalDep
 import { registerExpertDefensibilityRoutes } from "./routes/expertDefensibilityRoutes.js";
 import { registerForensicObservabilityRoutes } from "./routes/forensicObservabilityRoutes.js";
 import { registerPlatformGovernanceRoutes } from "./routes/platformGovernanceRoutes.js";
+import { registerEcosystemOrchestrationRoutes } from "./routes/ecosystemOrchestrationRoutes.js";
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -337,6 +338,9 @@ async function startServer() {
 
   console.log('[Server] Registering platform governance routes (Phase M.1)...');
   await registerPlatformGovernanceRoutes(app);
+
+  console.log('[Server] Registering ecosystem orchestration routes (Phase M.2)...');
+  await registerEcosystemOrchestrationRoutes(app);
 
   console.log('[Server] Registering admin queue monitoring routes...');
   await registerQueueMonitorRoutes(app);

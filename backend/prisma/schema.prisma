@@ -8435,3 +8435,196 @@ model BillingOperationsCertification {
   @@index([environment])
   @@map("billing_operations_certifications")
 }
+
+// ---------------------------------------------------------------------------
+// Phase O.2 — Stripe Production Activation + Controlled Billing Validation
+// Full sandbox-to-production rehearsal. No live Stripe without full rehearsal.
+// ---------------------------------------------------------------------------
+
+model StripeActivationWorkflow {
+  id                    String   @id @default(uuid())
+  activationStep        String   // key_rotation | webhook_configuration | product_creation | price_configuration | customer_portal | test_mode_cleanup | live_mode_verification | dns_configuration | ssl_verification | monitoring_setup
+  stepOrder             Int      @default(0)
+  stepStatus            String   // pending | in_progress | completed | failed | rolled_back
+  environment           String   // test | live
+  verifiedBy            String?
+  activationHash        String   // SHA-256
+  activationDetails     String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([activationStep])
+  @@index([stepStatus])
+  @@index([environment])
+  @@map("stripe_activation_workflows")
+}
+
+model ProductionKeyRotation {
+  id                    String   @id @default(uuid())
+  keyType               String   // publishable_key | secret_key | webhook_secret | restricted_key | connect_key
+  rotationReason        String   // scheduled | compromise_suspected | initial_setup | environment_promotion | compliance_requirement
+  previousKeyHash       String   // SHA-256 of old key (never store plaintext)
+  newKeyHash            String   // SHA-256 of new key (never store plaintext)
+  rotationStatus        String   // pending | rotated | verified | failed | rolled_back
+  governanceApproved    Boolean  @default(false)
+  rotationDetails       String   // JSON
+  environment           String   // test | live
+  createdAt             DateTime @default(now())
+
+  @@index([keyType])
+  @@index([rotationStatus])
+  @@index([environment])
+  @@map("production_key_rotations")
+}
+
+model WebhookEndpointHardening {
+  id                    String   @id @default(uuid())
+  endpointUrl           String
+  hardeningCheck        String   // signature_verification | replay_prevention | rate_limiting | ip_allowlist | tls_enforcement | timeout_configuration | retry_policy | dead_letter_queue
+  checkStatus           String   // passed | failed | warning | not_applicable
+  hardeningScore        Float    @default(0)
+  hardeningHash         String   // SHA-256
+  hardeningDetails      String   // JSON
+  environment           String   // test | live
+  createdAt             DateTime @default(now())
+
+  @@index([hardeningCheck])
+  @@index([checkStatus])
+  @@index([environment])
+  @@map("webhook_endpoint_hardening")
+}
+
+model LiveBillingRehearsal {
+  id                    String   @id @default(uuid())
+  rehearsalWorkflow     String   // user_signup | checkout_session | webhook_delivery | entitlement_activation | invoice_generation | subscription_renewal | failed_payment | retry_recovery | downgrade | upgrade | cancellation | refund | replay_attack | duplicate_event | idempotency_check
+  rehearsalOrder        Int      @default(0)
+  inputState            String   // JSON
+  expectedOutput        String   // JSON
+  actualOutput          String?  // JSON
+  outputMatch           Boolean  @default(false)
+  rehearsalStatus       String   // pending | executing | passed | failed | skipped
+  rehearsalHash         String   // SHA-256
+  environment           String   // test | live
+  createdAt             DateTime @default(now())
+
+  @@index([rehearsalWorkflow])
+  @@index([rehearsalStatus])
+  @@index([environment])
+  @@map("live_billing_rehearsals")
+}
+
+model InstitutionalSubscriptionOnboarding {
+  id                    String   @id @default(uuid())
+  institutionId         String
+  institutionName       String
+  onboardingPhase       String   // contract_signed | stripe_customer_created | subscription_activated | seats_provisioned | entitlements_granted | invoice_issued | payment_verified | onboarding_complete
+  phaseOrder            Int      @default(0)
+  phaseStatus           String   // pending | completed | failed | blocked
+  governanceApproved    Boolean  @default(false)
+  onboardingHash        String   // SHA-256
+  onboardingDetails     String   // JSON
+  environment           String   // test | live
+  createdAt             DateTime @default(now())
+
+  @@index([institutionId])
+  @@index([onboardingPhase])
+  @@index([environment])
+  @@map("institutional_subscription_onboarding")
+}
+
+model FinancialSurvivabilityTest {
+  id                    String   @id @default(uuid())
+  testScenario          String   // stripe_outage | webhook_delay | payment_processor_failure | currency_conversion_error | subscription_sync_failure | refund_processing_delay | invoice_generation_failure | entitlement_desync
+  injectionType         String   // timeout | error_response | data_corruption | network_partition | rate_limit | service_unavailable
+  recoveryTimeMs        Int      @default(0)
+  dataIntegrityPreserved Boolean @default(false)
+  serviceResumed        Boolean  @default(false)
+  survivabilityStatus   String   // passed | failed | degraded | recovered
+  survivabilityHash     String   // SHA-256
+  testDetails           String   // JSON
+  environment           String   // test | live
+  createdAt             DateTime @default(now())
+
+  @@index([testScenario])
+  @@index([survivabilityStatus])
+  @@index([environment])
+  @@map("financial_survivability_tests")
+}
+
+model BillingStateTransitionTest {
+  id                    String   @id @default(uuid())
+  fromState             String   // trial | active | past_due | canceled | paused
+  toState               String   // trial | active | past_due | canceled | paused | upgraded | downgraded
+  transitionTrigger     String   // payment_success | payment_failure | user_action | admin_action | expiration | renewal | upgrade_request | downgrade_request
+  transitionValid       Boolean  @default(false)
+  deterministicResult   Boolean  @default(false)
+  replayVerified        Boolean  @default(false)
+  transitionHash        String   // SHA-256
+  transitionDetails     String   // JSON
+  environment           String   // test | live
+  createdAt             DateTime @default(now())
+
+  @@index([fromState])
+  @@index([toState])
+  @@index([environment])
+  @@map("billing_state_transition_tests")
+}
+
+model ReplayAttackSimulation {
+  id                    String   @id @default(uuid())
+  attackType            String   // webhook_replay | duplicate_checkout | subscription_double_create | invoice_duplicate | refund_replay | entitlement_replay
+  eventId               String
+  replayCount           Int      @default(0)
+  blocked               Boolean  @default(false)
+  idempotencyVerified   Boolean  @default(false)
+  simulationStatus      String   // simulated | blocked | leaked | detected
+  simulationHash        String   // SHA-256
+  simulationDetails     String   // JSON
+  environment           String   // test | live
+  createdAt             DateTime @default(now())
+
+  @@index([attackType])
+  @@index([simulationStatus])
+  @@index([environment])
+  @@map("replay_attack_simulations")
+}
+
+model BillingDowngradeUpgradeValidation {
+  id                    String   @id @default(uuid())
+  transitionType        String   // upgrade | downgrade | cancellation | refund | reactivation
+  fromTier              String   // starter | professional | enterprise
+  toTier                String   // starter | professional | enterprise | none
+  prorateAmount         Int      @default(0)
+  entitlementsAdjusted  Boolean  @default(false)
+  invoiceGenerated      Boolean  @default(false)
+  transitionDeterministic Boolean @default(false)
+  validationHash        String   // SHA-256
+  validationDetails     String   // JSON
+  environment           String   // test | live
+  createdAt             DateTime @default(now())
+
+  @@index([transitionType])
+  @@index([fromTier])
+  @@index([environment])
+  @@map("billing_downgrade_upgrade_validations")
+}
+
+model ProductionBillingCertificationManifest {
+  id                    String   @id @default(uuid())
+  certificationArea     String   // activation_readiness | key_security | webhook_hardening | rehearsal_completeness | institutional_onboarding | survivability | state_transitions | replay_protection | tier_transitions | overall_billing
+  manifestHash          String   // SHA-256
+  certified             Boolean  @default(false)
+  certifiedBy           String?
+  certifiedAt           String?
+  gatesTotal            Int      @default(0)
+  gatesPassed           Int      @default(0)
+  certificationRate     Float    @default(0)
+  manifestDetails       String   // JSON
+  environment           String   // test | live
+  createdAt             DateTime @default(now())
+
+  @@index([certificationArea])
+  @@index([certified])
+  @@index([environment])
+  @@map("production_billing_certification_manifests")
+}

@@ -48,6 +48,7 @@ import { registerObservabilityRoutes } from './observability/observabilityRoutes
 import { startRedisMemoryMonitor, stopRedisMemoryMonitor } from './observability/redisMemoryAlert.js';
 import { registerChargeRoutes } from "./charges/chargeRoutes.js";
 import { registerCalcrimRoutes } from "./routes/calcrimRoutes.js";
+import { registerEvidenceStatementRoutes } from "./routes/evidenceStatementRoutes.js";
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -209,6 +210,9 @@ async function startServer() {
 
   console.log('[Server] Registering CALCRIM routes...');
   await registerCalcrimRoutes(app);
+
+  console.log('[Server] Registering evidence statement routes...');
+  await registerEvidenceStatementRoutes(app);
 
   console.log('[Server] Registering admin queue monitoring routes...');
   await registerQueueMonitorRoutes(app);

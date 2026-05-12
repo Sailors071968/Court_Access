@@ -2167,3 +2167,157 @@ model NarrativeClusterStatement {
   @@index([statementId])
   @@map("narrative_cluster_statements")
 }
+
+// ---------------------------------------------------------------------------
+// Phase D.3 — Contradiction Pair (proven factual incompatibility)
+// ---------------------------------------------------------------------------
+
+model ContradictionPair {
+  id                    String   @id @default(uuid())
+  caseId                String
+  statementAId          String
+  statementBId          String
+  contradictionType     String   // factual | temporal | identity | procedural | witness | cross_document
+  severity              String   // critical | high | medium | low
+  elementId             String?  // CALCRIM element this contradiction affects
+  instructionId         String?  // CALCRIM instruction
+  proofMethod           String   // lexical_negation | temporal_impossibility | speaker_conflict | factual_exclusion | numeric_inconsistency | location_conflict
+  proofExplanation      String   // Deterministic explanation of WHY these statements are incompatible
+  statementAText        String   // Exact text of statement A
+  statementBText        String   // Exact text of statement B
+  statementAPage        Int?
+  statementALineStart   Int?
+  statementALineEnd     Int?
+  statementASpeaker     String?
+  statementADocumentId  String?
+  statementBPage        Int?
+  statementBLineStart   Int?
+  statementBLineEnd     Int?
+  statementBSpeaker     String?
+  statementBDocumentId  String?
+  confidence            Float    @default(0.0)
+  burdenImpact          String?  // How this affects prosecution burden
+
+  createdAt             DateTime @default(now())
+
+  @@unique([statementAId, statementBId, contradictionType])
+  @@index([caseId])
+  @@index([contradictionType])
+  @@index([severity])
+  @@index([elementId])
+  @@index([instructionId])
+  @@map("contradiction_pairs")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.3 — Burden Fracture (unsupported CALCRIM element chain)
+// ---------------------------------------------------------------------------
+
+model BurdenFracture {
+  id                  String   @id @default(uuid())
+  caseId              String
+  instructionId       String
+  elementId           String
+  fractureType        String   // unsupported | contradicted | weak_only | missing_corroboration | single_source
+  severity            String   // critical | high | medium | low
+  supportingCount     Int      @default(0)
+  contradictingCount  Int      @default(0)
+  averageConfidence   Float    @default(0.0)
+  explanation         String   // Deterministic explanation of burden failure
+  prosecutionImpact   String   // Element cannot be proven | Element weakened | Element disputed
+
+  createdAt           DateTime @default(now())
+
+  @@unique([caseId, elementId, fractureType])
+  @@index([caseId])
+  @@index([instructionId])
+  @@index([elementId])
+  @@index([fractureType])
+  @@index([severity])
+  @@map("burden_fractures")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.3 — Witness Inconsistency (same speaker, conflicting statements)
+// ---------------------------------------------------------------------------
+
+model WitnessInconsistency {
+  id                  String   @id @default(uuid())
+  caseId              String
+  speaker             String
+  statementAId        String
+  statementBId        String
+  inconsistencyType   String   // factual_change | detail_shift | omission | addition | chronology_change | severity_change
+  statementAText      String
+  statementBText      String
+  statementAPage      Int?
+  statementADocumentId String?
+  statementBPage      Int?
+  statementBDocumentId String?
+  detectedPattern     String   // The specific lexical/temporal pattern that proves inconsistency
+  credibilityImpact   String   // high | medium | low
+  explanation         String
+
+  createdAt           DateTime @default(now())
+
+  @@index([caseId])
+  @@index([speaker])
+  @@index([inconsistencyType])
+  @@map("witness_inconsistencies")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.3 — Timeline Incompatibility (temporal impossibility)
+// ---------------------------------------------------------------------------
+
+model TimelineIncompatibility {
+  id                  String   @id @default(uuid())
+  caseId              String
+  statementAId        String
+  statementBId        String
+  incompatibilityType String   // simultaneous_different_location | impossible_sequence | duration_conflict | before_after_reversal
+  timestampA          String?
+  timestampB          String?
+  locationA           String?
+  locationB           String?
+  statementAText      String
+  statementBText      String
+  statementAPage      Int?
+  statementBPage      Int?
+  statementASpeaker   String?
+  statementBSpeaker   String?
+  explanation         String
+  severity            String   // critical | high | medium | low
+
+  createdAt           DateTime @default(now())
+
+  @@index([caseId])
+  @@index([incompatibilityType])
+  @@index([severity])
+  @@map("timeline_incompatibilities")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.3 — Prosecutor Theory Attack Surface
+// ---------------------------------------------------------------------------
+
+model ProsecutorTheoryAttack {
+  id                  String   @id @default(uuid())
+  caseId              String
+  instructionId       String
+  elementId           String?
+  attackType          String   // burden_failure | contradiction_cluster | witness_unreliability | timeline_impossibility | missing_corroboration | theory_fracture
+  severity            String   // critical | high | medium | low
+  description         String   // Deterministic description of the attack surface
+  supportingEvidence  String   // JSON array of { contradictionPairId?, burdenFractureId?, witnessInconsistencyId?, timelineIncompatibilityId? }
+  prosecutionWeakness String   // Specific prosecution burden weakness
+  defenseOpportunity  String   // Specific defense argument opportunity
+
+  createdAt           DateTime @default(now())
+
+  @@index([caseId])
+  @@index([instructionId])
+  @@index([attackType])
+  @@index([severity])
+  @@map("prosecutor_theory_attacks")
+}

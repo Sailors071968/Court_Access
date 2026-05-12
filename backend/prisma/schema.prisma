@@ -4874,3 +4874,214 @@ model LitigationLifecycleTracker {
   @@index([phaseStatus])
   @@map("litigation_lifecycle_trackers")
 }
+
+// ---------------------------------------------------------------------------
+// Phase H.2 — Enterprise Evidentiary Integrity + Reliability Assurance
+// ---------------------------------------------------------------------------
+
+model EvidenceIntegrityHash {
+  id                    String   @id @default(uuid())
+  caseId                String
+  evidenceId            String
+  hashAlgorithm         String   // sha256 | sha512 | sha3_256
+  hashValue             String
+  contentLength         Int      @default(0)
+  sourceType            String   // evidence_statement | evidence_document | analysis_record
+  verificationStatus    String   // verified | unverified | tampered | pending
+  lastVerifiedAt        String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@unique([evidenceId, hashAlgorithm])
+  @@index([caseId])
+  @@index([evidenceId])
+  @@index([verificationStatus])
+  @@map("evidence_integrity_hashes")
+}
+
+model ChainOfAnalysisVerification {
+  id                    String   @id @default(uuid())
+  caseId                String
+  analysisLayer         String   // which intelligence layer
+  inputRecordIds        String   // JSON array of input record IDs
+  outputRecordId        String
+  analysisFunction      String   // function name that produced the output
+  inputHash             String   // SHA-256 of serialized inputs
+  outputHash            String   // SHA-256 of serialized output
+  reproducible          Boolean  @default(true)
+  verifiedAt            String?
+  chainPosition         Int      @default(0)
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([analysisLayer])
+  @@index([outputRecordId])
+  @@map("chain_of_analysis_verifications")
+}
+
+model DeterministicReplayRecord {
+  id                    String   @id @default(uuid())
+  caseId                String
+  replayType            String   // full_case | single_layer | targeted_record
+  targetLayer           String?
+  targetRecordId        String?
+  originalRunTimestamp  String
+  replayRunTimestamp    String
+  inputSnapshot         String   // JSON — frozen inputs
+  outputSnapshot        String   // JSON — frozen outputs
+  matchStatus           String   // exact_match | minor_deviation | major_deviation | mismatch
+  deviationDetails      String?  // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([replayType])
+  @@index([matchStatus])
+  @@map("deterministic_replay_records")
+}
+
+model EvidenceCorruptionDetection {
+  id                    String   @id @default(uuid())
+  caseId                String
+  evidenceId            String
+  detectionMethod       String   // hash_comparison | length_check | format_validation | cross_reference
+  expectedHash          String
+  actualHash            String
+  corruptionFound       Boolean  @default(false)
+  corruptionType        String?  // truncation | modification | insertion | deletion | encoding_error
+  severity              String   // critical | high | medium | low
+  remediationStatus     String   // unresolved | investigating | resolved | accepted
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([evidenceId])
+  @@index([corruptionFound])
+  @@map("evidence_corruption_detections")
+}
+
+model AnalysisReproducibilityRecord {
+  id                    String   @id @default(uuid())
+  caseId                String
+  analysisType          String   // contradiction_detection | brady_analysis | constitutional_analysis | burden_analysis | etc.
+  originalTimestamp     String
+  reproductionTimestamp String
+  inputFingerprint      String   // hash of all inputs
+  outputFingerprint     String   // hash of all outputs
+  reproducibilityScore  Float    @default(1.0) // 0.0–1.0 where 1.0 = perfectly reproducible
+  discrepancies         String?  // JSON array of any differences
+  certifiedReproducible Boolean  @default(false)
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([analysisType])
+  @@index([certifiedReproducible])
+  @@map("analysis_reproducibility_records")
+}
+
+model ExportVerificationSignature {
+  id                    String   @id @default(uuid())
+  caseId                String
+  exportType            String   // pdf_report | json_export | csv_export | evidence_package | case_archive
+  exportTimestamp        String
+  contentHash           String   // SHA-256 of exported content
+  recordCount           Int      @default(0)
+  layersIncluded        String   // JSON array of layers in export
+  signatureMethod       String   // sha256_hmac | content_hash | record_count_verification
+  verified              Boolean  @default(false)
+  verifiedBy            String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([exportType])
+  @@index([verified])
+  @@map("export_verification_signatures")
+}
+
+model MultiVersionEvidenceTracker {
+  id                    String   @id @default(uuid())
+  caseId                String
+  evidenceId            String
+  versionNumber         Int      @default(1)
+  versionHash           String
+  previousVersionId     String?
+  changeType            String   // initial | correction | supplement | redaction | restoration
+  changeDescription     String
+  changedBy             String
+  provenanceChain       String   // JSON — immutable chain of all versions
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([evidenceId])
+  @@index([versionNumber])
+  @@map("multi_version_evidence_trackers")
+}
+
+model ForensicAuditCertification {
+  id                    String   @id @default(uuid())
+  caseId                String
+  certificationScope    String   // full_case | single_layer | evidence_subset
+  certifiedLayer        String?
+  totalRecordsAudited   Int      @default(0)
+  integrityScore        Float    @default(1.0) // 0.0–1.0
+  hashesVerified        Int      @default(0)
+  hashFailures          Int      @default(0)
+  chainsVerified        Int      @default(0)
+  chainBreaks           Int      @default(0)
+  certificationStatus   String   // certified | conditional | failed | pending
+  certifiedAt           String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([certificationStatus])
+  @@map("forensic_audit_certifications")
+}
+
+model IntegrityBreachAlert {
+  id                    String   @id @default(uuid())
+  caseId                String
+  breachType            String   // hash_mismatch | chain_break | unauthorized_modification | corruption_detected | replay_failure | version_conflict
+  severity              String   // critical | high | medium | low
+  affectedRecordId      String
+  affectedLayer         String
+  detectionMethod       String
+  description           String
+  acknowledged          Boolean  @default(false)
+  acknowledgedBy        String?
+  resolvedAt            String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([breachType])
+  @@index([severity])
+  @@index([acknowledged])
+  @@map("integrity_breach_alerts")
+}
+
+model EvidenceTransformationLineage {
+  id                    String   @id @default(uuid())
+  caseId                String
+  sourceRecordId        String
+  targetRecordId        String
+  transformationType    String   // extraction | analysis | aggregation | cross_reference | indexing | correlation
+  transformationLayer   String   // which intelligence layer performed the transformation
+  inputHash             String
+  outputHash            String
+  transformationDetails String   // JSON — deterministic description of transformation
+  reversible            Boolean  @default(false)
+  lineagePosition       Int      @default(0)
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([sourceRecordId])
+  @@index([targetRecordId])
+  @@index([transformationType])
+  @@map("evidence_transformation_lineages")
+}

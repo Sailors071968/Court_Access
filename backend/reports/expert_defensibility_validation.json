@@ -1,0 +1,156 @@
+{
+  "phase": "K.2",
+  "name": "Independent Expert Review + Litigation Defensibility Framework",
+  "generatedAt": "2026-05-12T42:00:00.000Z",
+  "status": "READY_FOR_DEPLOYMENT",
+
+  "subsystems": {
+    "independentExpertReviewWorkflows": {
+      "description": "Deterministic independent expert review workflows",
+      "expertSpecialties": ["digital_forensics", "statistical_analysis", "evidence_authentication", "chain_of_custody", "behavioral_analysis"],
+      "reviewScopes": ["full_case", "evidence_specific", "analysis_specific", "methodology_review"],
+      "deterministic": true
+    },
+    "adversarialChallengeSimulation": {
+      "description": "Evidence-linked adversarial challenge simulation",
+      "challengeTypes": ["daubert", "frye", "authentication", "chain_of_custody", "methodology", "bias"],
+      "challengeTargets": ["evidence", "analysis", "expert_testimony", "methodology", "conclusion"],
+      "evidenceLinked": true
+    },
+    "litigationDefensibilityScoring": {
+      "description": "Rule-based litigation defensibility scoring",
+      "scoringScopes": ["full_case", "evidence_chain", "analysis_pipeline", "expert_testimony"],
+      "statusLevels": ["defensible", "conditional", "vulnerable", "indefensible"],
+      "ruleBased": true
+    },
+    "externalReproducibilityReview": {
+      "description": "Immutable external reproducibility review",
+      "sha256HashComparison": true,
+      "methodologyVerification": true,
+      "dataIntegrityVerification": true,
+      "immutable": true
+    },
+    "expertAuditTraceReconstruction": {
+      "description": "Deterministic expert audit trace reconstruction",
+      "traceScopes": ["full_analysis", "single_layer", "single_record", "cross_layer"],
+      "reconstructionStatuses": ["complete", "partial", "failed"],
+      "deterministic": true
+    },
+    "evidentiaryChallengTracking": {
+      "description": "Citation-backed evidentiary challenge tracking",
+      "challengeSources": ["prosecution", "defense", "court", "expert", "independent"],
+      "challengeBases": ["authenticity", "relevance", "methodology", "chain_of_custody", "bias", "completeness"],
+      "citationBacked": true
+    },
+    "crossExpertVerificationSupport": {
+      "description": "Reproducible cross-expert verification support",
+      "verificationScopes": ["methodology", "conclusions", "data_analysis", "evidence_handling"],
+      "agreementLevels": ["full_agreement", "partial_agreement", "disagreement", "unable_to_verify"],
+      "reproducible": true
+    },
+    "independentValidationManifests": {
+      "description": "SHA-256 linked independent validation manifests",
+      "manifestScopes": ["full_case", "evidence_chain", "analysis_pipeline", "export_integrity"],
+      "sha256Linked": true
+    },
+    "defensibilityExceptionHandling": {
+      "description": "Immutable defensibility exception handling",
+      "exceptionTypes": ["methodology_deviation", "data_gap", "chain_break", "reproducibility_failure", "expert_disagreement"],
+      "severityLevels": ["critical", "high", "medium", "low"],
+      "immutable": true
+    },
+    "externalReviewCertificationTracking": {
+      "description": "Evidence-linked external review certification tracking",
+      "certificationScopes": ["daubert_readiness", "frye_readiness", "expert_methodology", "evidence_authentication"],
+      "certificationStatuses": ["certified", "conditional", "not_certified", "pending"],
+      "evidenceLinked": true
+    }
+  },
+
+  "frontendComponent": {
+    "name": "ExpertDefensibilityCockpit",
+    "panes": ["expert review workflows", "adversarial simulations", "defensibility scoring", "reproducibility review", "audit trace reconstruction", "evidentiary challenges", "validation manifests", "review certifications"],
+    "theme": "dark",
+    "features": ["expert specialty badges", "challenge strength scores", "defensibility score visualization", "hash match indicators", "trace gap detection", "challenge outcome badges", "manifest completeness tracking", "certification rate display"]
+  },
+
+  "apiEndpoints": {
+    "fullAnalysis": { "method": "POST", "path": "/api/defensibility/analyze/:caseId" },
+    "reviews": [
+      { "method": "POST", "path": "/api/defensibility/reviews/:caseId" },
+      { "method": "GET", "path": "/api/defensibility/reviews/:caseId" }
+    ],
+    "simulations": [
+      { "method": "POST", "path": "/api/defensibility/simulations/:caseId" },
+      { "method": "GET", "path": "/api/defensibility/simulations/:caseId" }
+    ],
+    "scoring": [
+      { "method": "POST", "path": "/api/defensibility/scoring/:caseId" },
+      { "method": "GET", "path": "/api/defensibility/scoring/:caseId" }
+    ],
+    "reproducibility": [
+      { "method": "POST", "path": "/api/defensibility/reproducibility/:caseId" },
+      { "method": "GET", "path": "/api/defensibility/reproducibility/:caseId" }
+    ],
+    "traces": [
+      { "method": "POST", "path": "/api/defensibility/traces/:caseId" },
+      { "method": "GET", "path": "/api/defensibility/traces/:caseId" }
+    ],
+    "challenges": [
+      { "method": "POST", "path": "/api/defensibility/challenges/:caseId" },
+      { "method": "GET", "path": "/api/defensibility/challenges/:caseId" }
+    ],
+    "crossexpert": [
+      { "method": "POST", "path": "/api/defensibility/crossexpert/:caseId" },
+      { "method": "GET", "path": "/api/defensibility/crossexpert/:caseId" }
+    ],
+    "manifests": [
+      { "method": "POST", "path": "/api/defensibility/manifests/:caseId" },
+      { "method": "GET", "path": "/api/defensibility/manifests/:caseId" }
+    ],
+    "exceptions": [
+      { "method": "POST", "path": "/api/defensibility/exceptions/:caseId" },
+      { "method": "GET", "path": "/api/defensibility/exceptions/:caseId" }
+    ],
+    "certification": [
+      { "method": "POST", "path": "/api/defensibility/certification/:caseId" },
+      { "method": "GET", "path": "/api/defensibility/certification/:caseId" }
+    ],
+    "validation": { "method": "GET", "path": "/api/defensibility/validation" }
+  },
+
+  "prismaModels": [
+    "IndependentExpertReviewWorkflow",
+    "AdversarialChallengeSimulation",
+    "LitigationDefensibilityScore",
+    "ExternalReproducibilityReview",
+    "ExpertAuditTraceReconstruction",
+    "EvidentiaryChallenge",
+    "CrossExpertVerification",
+    "IndependentValidationManifest",
+    "DefensibilityExceptionRecord",
+    "ExternalReviewCertification"
+  ],
+
+  "migration": "20260512420000_expert_defensibility",
+
+  "constraints": {
+    "noFakeExpertEndorsements": true,
+    "noFabricatedCertifications": true,
+    "noOpaqueDefensibilityScoring": true,
+    "noSimulatedCourtApproval": true,
+    "noUnverifiableExpertReviewClaims": true,
+    "corePrinciple": "CourtAccess supports independent scrutiny and reproducible expert review. It does NOT manufacture authority or legal legitimacy claims."
+  },
+
+  "systemsUnmodified": {
+    "auth": true,
+    "csrf": true,
+    "nginx": true,
+    "redis": true,
+    "ocr": true,
+    "pm2": true,
+    "ingestion": true,
+    "existingD1toK1Systems": true
+  }
+}

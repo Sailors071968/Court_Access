@@ -1,0 +1,156 @@
+{
+  "phase": "J.2",
+  "name": "Formal Verification + Evidentiary Trust Assurance Framework",
+  "generatedAt": "2026-05-12T40:00:00.000Z",
+  "status": "READY_FOR_DEPLOYMENT",
+
+  "subsystems": {
+    "deterministicVerificationProofs": {
+      "description": "Reproducible deterministic verification proofs",
+      "proofTypes": ["full_analysis", "layer_specific", "evidence_specific", "cross_layer"],
+      "verificationMethods": ["deterministic_replay", "hash_comparison", "output_diffing"],
+      "sha256InputOutputHashing": true
+    },
+    "integrityAttestationFramework": {
+      "description": "SHA-256 linked integrity attestation framework",
+      "attestationTargets": ["evidence", "analysis", "export", "integrity_chain", "governance_record"],
+      "attestedByTypes": ["system", "external_auditor", "attorney"],
+      "sha256Linked": true
+    },
+    "reproducibilityProofEngine": {
+      "description": "Immutable reproducibility proof engine",
+      "layers": ["evidence", "contradictions", "defense", "trial_prep", "appellate", "sentencing"],
+      "hashComparison": true,
+      "immutable": true
+    },
+    "verificationChainManifests": {
+      "description": "Deterministic verification-chain manifests",
+      "chainSteps": ["evidence_ingestion", "element_mapping", "contradiction_detection", "defense_synthesis", "trial_preparation", "integrity_verification"],
+      "chainHashVerification": true,
+      "deterministic": true
+    },
+    "independentAuditVerification": {
+      "description": "Evidence-linked independent audit verification support",
+      "auditTypes": ["internal", "external", "regulatory", "court_ordered"],
+      "findingsTracking": true,
+      "evidenceLinked": true
+    },
+    "formalValidationCheckpoints": {
+      "description": "Reproducible formal validation checkpoints",
+      "checkpointTypes": ["pre_analysis", "post_analysis", "pre_export", "post_export", "periodic"],
+      "stateHashCapture": true,
+      "reproducible": true
+    },
+    "trustAssuranceCertification": {
+      "description": "Rule-based trust assurance certification",
+      "certificationScopes": ["full_case", "evidence_chain", "analysis_pipeline", "export_integrity"],
+      "ruleBasedScoring": true,
+      "noProbabilisticScoring": true
+    },
+    "crossLayerVerificationSync": {
+      "description": "Immutable cross-layer verification synchronization",
+      "layerPairs": ["evidence→contradictions", "contradictions→defense", "defense→trial_prep", "trial_prep→appellate", "appellate→sentencing"],
+      "hashConsistencyCheck": true,
+      "immutable": true
+    },
+    "verificationReplayFramework": {
+      "description": "Deterministic verification replay framework",
+      "replayScopes": ["full_case", "single_layer", "single_record"],
+      "hashComparison": true,
+      "deterministic": true
+    },
+    "defensibilityCertificationTracking": {
+      "description": "Evidence-linked defensibility certification tracking",
+      "defensibilityScopes": ["daubert", "frye", "evidence_authentication", "expert_review", "appellate"],
+      "integrityChainValidation": true,
+      "evidenceLinked": true
+    }
+  },
+
+  "frontendComponent": {
+    "name": "EvidentiaryTrustCockpit",
+    "panes": ["verification proofs", "integrity attestations", "reproducibility proofs", "verification manifests", "audit verification", "validation checkpoints", "trust certifications", "defensibility tracking"],
+    "theme": "dark",
+    "features": ["proof result badges", "attestation hash display", "reproducibility match indicators", "chain completeness status", "audit findings counters", "checkpoint pass/fail tracking", "trust score visualization", "defensibility rate display"]
+  },
+
+  "apiEndpoints": {
+    "fullAnalysis": { "method": "POST", "path": "/api/trust/analyze/:caseId" },
+    "proofs": [
+      { "method": "POST", "path": "/api/trust/proofs/:caseId" },
+      { "method": "GET", "path": "/api/trust/proofs/:caseId" }
+    ],
+    "attestations": [
+      { "method": "POST", "path": "/api/trust/attestations/:caseId" },
+      { "method": "GET", "path": "/api/trust/attestations/:caseId" }
+    ],
+    "reproducibility": [
+      { "method": "POST", "path": "/api/trust/reproducibility/:caseId" },
+      { "method": "GET", "path": "/api/trust/reproducibility/:caseId" }
+    ],
+    "chains": [
+      { "method": "POST", "path": "/api/trust/chains/:caseId" },
+      { "method": "GET", "path": "/api/trust/chains/:caseId" }
+    ],
+    "audits": [
+      { "method": "POST", "path": "/api/trust/audits/:caseId" },
+      { "method": "GET", "path": "/api/trust/audits/:caseId" }
+    ],
+    "checkpoints": [
+      { "method": "POST", "path": "/api/trust/checkpoints/:caseId" },
+      { "method": "GET", "path": "/api/trust/checkpoints/:caseId" }
+    ],
+    "certifications": [
+      { "method": "POST", "path": "/api/trust/certifications/:caseId" },
+      { "method": "GET", "path": "/api/trust/certifications/:caseId" }
+    ],
+    "crosslayer": [
+      { "method": "POST", "path": "/api/trust/crosslayer/:caseId" },
+      { "method": "GET", "path": "/api/trust/crosslayer/:caseId" }
+    ],
+    "replay": [
+      { "method": "POST", "path": "/api/trust/replay/:caseId" },
+      { "method": "GET", "path": "/api/trust/replay/:caseId" }
+    ],
+    "defensibility": [
+      { "method": "POST", "path": "/api/trust/defensibility/:caseId" },
+      { "method": "GET", "path": "/api/trust/defensibility/:caseId" }
+    ],
+    "validation": { "method": "GET", "path": "/api/trust/validation" }
+  },
+
+  "prismaModels": [
+    "DeterministicVerificationProof",
+    "IntegrityAttestationRecord",
+    "ReproducibilityProof",
+    "VerificationChainManifest",
+    "IndependentAuditVerification",
+    "FormalValidationCheckpoint",
+    "TrustAssuranceCertification",
+    "CrossLayerVerificationSync",
+    "VerificationReplayRecord",
+    "DefensibilityCertificationRecord"
+  ],
+
+  "migration": "20260512400000_evidentiary_trust",
+
+  "constraints": {
+    "noFakeForensicCertifications": true,
+    "noProbabilisticTrustScoring": true,
+    "noUnverifiableAIConfidence": true,
+    "noOpaqueEvidentiaryScoring": true,
+    "noFabricatedReliabilityClaims": true,
+    "corePrinciple": "CourtAccess maximizes deterministic verifiability and evidentiary defensibility. It does NOT manufacture unverifiable trust claims."
+  },
+
+  "systemsUnmodified": {
+    "auth": true,
+    "csrf": true,
+    "nginx": true,
+    "redis": true,
+    "ocr": true,
+    "pm2": true,
+    "ingestion": true,
+    "existingD1toJ1Systems": true
+  }
+}

@@ -1,0 +1,153 @@
+{
+  "phase": "F.1",
+  "name": "Unified Criminal Defense Intelligence Graph + Cross-Case Pattern Engine",
+  "generatedAt": "2026-05-12T29:00:00.000Z",
+  "status": "READY_FOR_DEPLOYMENT",
+
+  "subsystems": {
+    "unifiedIntelligenceGraph": {
+      "description": "Deterministic intelligence graph linking all prior analysis layers via nodes and edges",
+      "nodeTypes": ["evidence", "witness", "charge", "contradiction", "objection", "error", "brady", "forensic", "timeline_event", "motion"],
+      "edgeTypes": ["contradicts", "supports", "impeaches", "preserves", "cites", "enhances", "mitigates", "undermines", "corroborates", "references"],
+      "immutableLinkage": true
+    },
+    "crossCaseWitnessIndexing": {
+      "description": "Citation-backed cross-case witness indexing with credibility history tracking",
+      "deduplication": "Normalized name matching (lowercase, trimmed)",
+      "credibilityTracking": true,
+      "inconsistencyAggregation": true,
+      "recantationAggregation": true
+    },
+    "crossCaseForensicPatternDetection": {
+      "description": "Evidence-linked cross-case forensic methodology pattern detection",
+      "scientificStatusTracking": ["validated", "questioned", "debunked", "under_review"],
+      "challengeTracking": true,
+      "nasAndPcastIntegration": true
+    },
+    "globalContradictionGraph": {
+      "description": "Deterministic global contradiction network linking related contradictions by witness and topic",
+      "networkSizeCalculation": true,
+      "severityPropagation": true,
+      "crossContradictionLinking": true
+    },
+    "prosecutorTheoryRecurrenceIndexing": {
+      "description": "Aggregate-only prosecutor theory recurrence indexing — NO individual prosecutor targeting",
+      "theoryPatterns": ["consciousness_of_guilt", "motive_opportunity", "forensic_match", "eyewitness_id", "confession"],
+      "aggregateOnly": true,
+      "noIndividualProsecutorProfiling": true
+    },
+    "recurringBradyGiglioPatternTracking": {
+      "description": "Citation-required recurring Brady/Giglio pattern tracking across cases",
+      "patternTypes": ["undisclosed_deal", "undisclosed_record", "late_disclosure", "informant_benefit", "impeachment_withheld"],
+      "materialityAggregation": true,
+      "citationRequired": true
+    },
+    "lawEnforcementCredibilityIndexing": {
+      "description": "Aggregate-only law enforcement credibility indexing — NOT personal targeting",
+      "aggregateOnly": true,
+      "pitchessRelevance": "PC § 832.7 Pitchess motion relevance flagging",
+      "noPersonalProfiling": true,
+      "credibilityLevels": ["aggregate_concern", "no_pattern", "insufficient_data"]
+    },
+    "forensicMethodologyRecurrence": {
+      "description": "Deterministic forensic methodology recurrence analysis feeding cross-case patterns",
+      "feedsInto": "crossCaseForensicPatternDetection"
+    },
+    "evidenceProvenanceGraph": {
+      "description": "Immutable evidence provenance chain tracking from collection to court presentation",
+      "chainStages": ["collection", "storage", "analysis", "court_presentation"],
+      "integrityStatuses": ["intact", "broken", "questioned", "unknown"],
+      "custodyGapDetection": true
+    },
+    "multiCaseTimelineCorrelation": {
+      "description": "Evidence-linked multi-case timeline correlation analysis",
+      "correlationTypes": ["temporal_overlap", "witness_reuse", "forensic_reuse", "geographic_proximity", "modus_operandi_similarity"],
+      "strengthScoring": true
+    }
+  },
+
+  "frontendComponent": {
+    "name": "UnifiedIntelligenceCockpit",
+    "panes": ["graph relationships", "recurring witnesses", "forensic recurrence", "contradiction networks", "prosecutor theory recurrence", "Brady/Giglio recurrence", "evidence provenance", "multi-case timelines"],
+    "theme": "dark",
+    "features": ["node/edge counts", "severity badges", "scientific status badges", "integrity status indicators", "correlation strength bars"]
+  },
+
+  "apiEndpoints": {
+    "fullAnalysis": { "method": "POST", "path": "/api/intelligence/analyze/:caseId" },
+    "graph": [
+      { "method": "POST", "path": "/api/intelligence/graph/:caseId" },
+      { "method": "GET", "path": "/api/intelligence/graph/nodes/:caseId" },
+      { "method": "GET", "path": "/api/intelligence/graph/edges/:caseId" }
+    ],
+    "witnesses": [
+      { "method": "POST", "path": "/api/intelligence/witnesses/:caseId" },
+      { "method": "GET", "path": "/api/intelligence/witnesses/:caseId" }
+    ],
+    "forensic": [
+      { "method": "POST", "path": "/api/intelligence/forensic/:caseId" },
+      { "method": "GET", "path": "/api/intelligence/forensic/:caseId" }
+    ],
+    "contradictions": [
+      { "method": "POST", "path": "/api/intelligence/contradictions/:caseId" },
+      { "method": "GET", "path": "/api/intelligence/contradictions/:caseId" }
+    ],
+    "theories": [
+      { "method": "POST", "path": "/api/intelligence/theories/:caseId" },
+      { "method": "GET", "path": "/api/intelligence/theories/:caseId" }
+    ],
+    "brady": [
+      { "method": "POST", "path": "/api/intelligence/brady/:caseId" },
+      { "method": "GET", "path": "/api/intelligence/brady/:caseId" }
+    ],
+    "leCredibility": [
+      { "method": "POST", "path": "/api/intelligence/le-credibility/:caseId" },
+      { "method": "GET", "path": "/api/intelligence/le-credibility/:caseId" }
+    ],
+    "provenance": [
+      { "method": "POST", "path": "/api/intelligence/provenance/:caseId" },
+      { "method": "GET", "path": "/api/intelligence/provenance/:caseId" }
+    ],
+    "timelines": [
+      { "method": "POST", "path": "/api/intelligence/timelines/:caseId" },
+      { "method": "GET", "path": "/api/intelligence/timelines/:caseId" }
+    ],
+    "validation": { "method": "GET", "path": "/api/intelligence/validation" }
+  },
+
+  "prismaModels": [
+    "IntelligenceGraphNode",
+    "IntelligenceGraphEdge",
+    "CrossCaseWitnessIndex",
+    "CrossCaseForensicPattern",
+    "GlobalContradictionNetwork",
+    "ProsecutorTheoryRecurrence",
+    "RecurringBradyPattern",
+    "LawEnforcementCredibilityIndex",
+    "EvidenceProvenanceGraph",
+    "MultiCaseTimelineCorrelation"
+  ],
+
+  "migration": "20260512290000_unified_intelligence_graph",
+
+  "deterministicConstraints": {
+    "noPredictivePolicing": true,
+    "noCriminalRiskScoring": true,
+    "noUnlawfulSurveillanceIndexing": true,
+    "noSpeculativeMisconductAllegations": true,
+    "noPersonalProfilingSystems": true,
+    "noHiddenLETargetingDatabases": true,
+    "corePrinciple": "CourtAccess organizes lawful litigation intelligence relationships. It does NOT become a surveillance or predictive-enforcement system."
+  },
+
+  "systemsUnmodified": {
+    "auth": true,
+    "csrf": true,
+    "nginx": true,
+    "redis": true,
+    "ocr": true,
+    "pm2": true,
+    "ingestion": true,
+    "existingD1toE3Systems": true
+  }
+}

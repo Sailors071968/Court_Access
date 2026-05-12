@@ -1,0 +1,154 @@
+{
+  "phase": "M.2",
+  "name": "Unified Ecosystem Orchestration + Deterministic Platform Convergence Framework",
+  "generatedAt": "2026-05-12T45:00:00.000Z",
+  "status": "READY_FOR_DEPLOYMENT",
+
+  "subsystems": {
+    "unifiedEcosystemOrchestrationEngine": {
+      "description": "Deterministic unified ecosystem orchestration engine",
+      "orchestrationScopes": ["full_platform", "subsystem_group", "single_subsystem", "cross_layer"],
+      "orchestrationStatuses": ["running", "completed", "failed", "stalled", "converged"],
+      "deterministic": true
+    },
+    "crossSubsystemLifecycleCoordination": {
+      "description": "Immutable cross-subsystem lifecycle coordination",
+      "subsystemPairs": ["evidence→analysis", "analysis→defense", "defense→trial", "trial→appellate", "appellate→governance", "governance→observability"],
+      "lifecyclePhases": ["initialization", "execution", "validation", "completion", "archival"],
+      "immutable": true
+    },
+    "platformConvergenceSynchronization": {
+      "description": "Reproducible platform convergence synchronization",
+      "convergenceDomains": ["data", "api", "governance", "observability", "security"],
+      "convergenceStatuses": ["converged", "partial", "divergent", "pending"],
+      "reproducible": true
+    },
+    "ecosystemWideStateHarmonization": {
+      "description": "SHA-256 linked ecosystem-wide state harmonization",
+      "components": ["evidence_engine", "analysis_engine", "defense_engine", "governance_engine", "observability_engine"],
+      "sha256Linked": true
+    },
+    "unifiedOrchestrationManifests": {
+      "description": "Immutable unified orchestration manifests",
+      "manifestScopes": ["full_ecosystem", "subsystem_group", "single_phase", "cross_phase"],
+      "sha256ManifestHashing": true,
+      "immutable": true
+    },
+    "deterministicCoordinationReplay": {
+      "description": "Reproducible deterministic coordination replay",
+      "replayScopes": ["full_orchestration", "single_coordination", "phase_sequence", "cross_layer"],
+      "sha256HashComparison": true,
+      "reproducible": true
+    },
+    "crossLayerOrchestrationValidation": {
+      "description": "Evidence-linked cross-layer orchestration validation",
+      "layerPairs": ["evidence→defense", "defense→trial", "trial→governance", "governance→observability", "observability→deployment"],
+      "evidenceLinked": true
+    },
+    "finalConvergenceCertification": {
+      "description": "Rule-based final convergence certification",
+      "certificationScopes": ["platform_wide", "subsystem_group", "single_domain", "cross_domain"],
+      "certificationStatuses": ["certified", "conditional", "not_certified", "pending"],
+      "ruleBased": true
+    },
+    "operationalCompletenessTracking": {
+      "description": "Deterministic operational completeness tracking",
+      "domainNames": ["litigation", "evidentiary", "governance", "observability", "deployment", "defensibility"],
+      "completenessStatuses": ["complete", "near_complete", "partial", "incomplete"],
+      "deterministic": true
+    },
+    "ecosystemLineageSynchronization": {
+      "description": "Immutable ecosystem lineage synchronization",
+      "lineagePairs": ["doctrine→release", "release→policy", "policy→orchestration", "orchestration→certification"],
+      "sha256LineageHashing": true,
+      "immutable": true
+    }
+  },
+
+  "frontendComponent": {
+    "name": "EcosystemOrchestrationCockpit",
+    "panes": ["orchestration engine", "subsystem coordination", "convergence synchronization", "ecosystem harmonization", "orchestration manifests", "replay coordination", "convergence certification", "ecosystem lineage"],
+    "theme": "dark",
+    "features": ["subsystem orchestration progress", "lifecycle phase display", "convergence rate tracking", "component state + consistency", "manifest hash display", "replay match indicators", "certification rate badges", "lineage version chain"]
+  },
+
+  "apiEndpoints": {
+    "fullAnalysis": { "method": "POST", "path": "/api/orchestration/analyze/:caseId" },
+    "ecosystem": [
+      { "method": "POST", "path": "/api/orchestration/ecosystem/:caseId" },
+      { "method": "GET", "path": "/api/orchestration/ecosystem/:caseId" }
+    ],
+    "lifecycles": [
+      { "method": "POST", "path": "/api/orchestration/lifecycles/:caseId" },
+      { "method": "GET", "path": "/api/orchestration/lifecycles/:caseId" }
+    ],
+    "convergence": [
+      { "method": "POST", "path": "/api/orchestration/convergence/:caseId" },
+      { "method": "GET", "path": "/api/orchestration/convergence/:caseId" }
+    ],
+    "state": [
+      { "method": "POST", "path": "/api/orchestration/state/:caseId" },
+      { "method": "GET", "path": "/api/orchestration/state/:caseId" }
+    ],
+    "manifests": [
+      { "method": "POST", "path": "/api/orchestration/manifests/:caseId" },
+      { "method": "GET", "path": "/api/orchestration/manifests/:caseId" }
+    ],
+    "replay": [
+      { "method": "POST", "path": "/api/orchestration/replay/:caseId" },
+      { "method": "GET", "path": "/api/orchestration/replay/:caseId" }
+    ],
+    "validationRun": [
+      { "method": "POST", "path": "/api/orchestration/validation-run/:caseId" },
+      { "method": "GET", "path": "/api/orchestration/validation-run/:caseId" }
+    ],
+    "certification": [
+      { "method": "POST", "path": "/api/orchestration/certification/:caseId" },
+      { "method": "GET", "path": "/api/orchestration/certification/:caseId" }
+    ],
+    "completeness": [
+      { "method": "POST", "path": "/api/orchestration/completeness/:caseId" },
+      { "method": "GET", "path": "/api/orchestration/completeness/:caseId" }
+    ],
+    "lineage": [
+      { "method": "POST", "path": "/api/orchestration/lineage/:caseId" },
+      { "method": "GET", "path": "/api/orchestration/lineage/:caseId" }
+    ],
+    "validation": { "method": "GET", "path": "/api/orchestration/validation" }
+  },
+
+  "prismaModels": [
+    "UnifiedEcosystemOrchestration",
+    "CrossSubsystemLifecycleCoordination",
+    "PlatformConvergenceSynchronization",
+    "EcosystemStateHarmonization",
+    "UnifiedOrchestrationManifest",
+    "DeterministicCoordinationReplay",
+    "CrossLayerOrchestrationValidation",
+    "FinalConvergenceCertification",
+    "OperationalCompletenessTracking",
+    "EcosystemLineageSynchronization"
+  ],
+
+  "migration": "20260512450000_ecosystem_orchestration",
+
+  "constraints": {
+    "noHiddenOrchestrationMutation": true,
+    "noOpaqueSubsystemCoordination": true,
+    "noUnverifiableEcosystemStateChanges": true,
+    "noAutonomousGovernanceDrift": true,
+    "noSecretOrchestrationOverrides": true,
+    "corePrinciple": "CourtAccess orchestrates platform convergence transparently and deterministically. It does NOT create opaque autonomous ecosystem control systems."
+  },
+
+  "systemsUnmodified": {
+    "auth": true,
+    "csrf": true,
+    "nginx": true,
+    "redis": true,
+    "ocr": true,
+    "pm2": true,
+    "ingestion": true,
+    "existingD1toM1Systems": true
+  }
+}

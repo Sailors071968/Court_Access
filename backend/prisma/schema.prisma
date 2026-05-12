@@ -3054,3 +3054,249 @@ model EvidentiaryWeightBalance {
   @@index([netBalance])
   @@map("evidentiary_weight_balances")
 }
+
+// ---------------------------------------------------------------------------
+// Phase E.1 — Error Preservation Record
+// ---------------------------------------------------------------------------
+
+model ErrorPreservationRecord {
+  id                    String   @id @default(uuid())
+  caseId                String
+  errorType             String   // objection_sustained | objection_overruled | motion_denied | motion_granted | instructional | prosecutorial_misconduct | constitutional
+  errorDescription      String
+  preservedBy           String   // defense_objection | motion_in_limine | written_motion | oral_motion | jury_instruction_request | standing_objection
+  preservationStatus    String   // preserved | partially_preserved | forfeited | waived
+  legalBasis            String   // EC section, PC section, or constitutional provision
+  trialPhase            String   // pretrial | jury_selection | opening | prosecution_case | defense_case | rebuttal | closing | jury_instructions | sentencing
+  rulingDescription     String?
+  rulingDate            String?
+  judgeResponse         String?  // sustained | overruled | denied | granted | deferred | noted
+  citedText             String?
+  citedPage             Int?
+  citedLine             Int?
+  citedDocument         String?
+  appellateRelevance    String   // high | medium | low
+  standardOfReview      String?  // de_novo | abuse_of_discretion | substantial_evidence | harmless_error | structural_error
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([errorType])
+  @@index([preservationStatus])
+  @@index([appellateRelevance])
+  @@map("error_preservation_records")
+}
+
+// ---------------------------------------------------------------------------
+// Phase E.1 — Objection History Entry
+// ---------------------------------------------------------------------------
+
+model ObjectionHistoryEntry {
+  id                    String   @id @default(uuid())
+  caseId                String
+  objectionType         String   // hearsay | foundation | relevance | prejudice_352 | speculation | leading | confrontation | best_evidence | privilege | authentication | constitutional
+  evidenceCodeSection   String?
+  objectedTo            String   // What was objected to
+  objectedBy            String   @default("defense") // defense | prosecution
+  ruling                String   // sustained | overruled | withdrawn | deferred
+  trialPhase            String
+  witnessOnStand        String?
+  citedText             String?
+  citedPage             Int?
+  citedLine             Int?
+  citedDocument         String?
+  followUpAction        String?  // motion_to_strike | curative_instruction | mistrial_motion | none
+  preservedForAppeal    Boolean  @default(false)
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([objectionType])
+  @@index([ruling])
+  @@index([preservedForAppeal])
+  @@map("objection_history_entries")
+}
+
+// ---------------------------------------------------------------------------
+// Phase E.1 — Harmless/Prejudicial Error Analysis
+// ---------------------------------------------------------------------------
+
+model HarmlessPrejudicialError {
+  id                    String   @id @default(uuid())
+  caseId                String
+  errorPreservationId   String?
+  errorDescription      String
+  errorClassification   String   // structural | trial | sentencing | instructional | prosecutorial | evidentiary
+  prejudiceLevel        String   // structural (auto-reversible) | prejudicial | harmless_beyond_reasonable_doubt | harmless
+  chapmanAnalysis       String   // Chapman v. California analysis: could error have contributed to verdict?
+  watsonAnalysis        String?  // People v. Watson analysis: reasonable probability of different result?
+  affectedElements      String   // JSON array of CALCRIM element IDs affected
+  strengthOfRemaining   Float    @default(0.0) // strength of remaining evidence without error (0.0-1.0)
+  cumulativeEffect      String   // How this error combines with others
+  citations             String   // JSON array of supporting citations
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([prejudiceLevel])
+  @@index([errorClassification])
+  @@map("harmless_prejudicial_errors")
+}
+
+// ---------------------------------------------------------------------------
+// Phase E.1 — Waiver/Forfeiture Detection
+// ---------------------------------------------------------------------------
+
+model WaiverForfeitureIssue {
+  id                    String   @id @default(uuid())
+  caseId                String
+  issueType             String   // waiver | forfeiture
+  issueDescription      String
+  legalBasis            String   // What right/objection was waived/forfeited
+  detectionMethod       String   // no_objection | late_objection | wrong_grounds | failure_to_renew | consent | stipulation
+  trialPhase            String
+  potentialAppellateIssue String  // What appellate issue is lost
+  exceptionApplicable   String?  // ineffective_assistance | plain_error | structural_error | constitutional_magnitude
+  exceptionAnalysis     String?  // Why exception may or may not apply
+  citations             String   // JSON array of citations
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([issueType])
+  @@index([detectionMethod])
+  @@map("waiver_forfeiture_issues")
+}
+
+// ---------------------------------------------------------------------------
+// Phase E.1 — Constitutional Claim Preservation
+// ---------------------------------------------------------------------------
+
+model ConstitutionalClaimPreservation {
+  id                    String   @id @default(uuid())
+  caseId                String
+  constitutionalIssueId String?  // FK to ConstitutionalIssue from D.6
+  amendment             String   // 4th | 5th | 6th | 8th | 14th
+  claimType             String   // search_seizure | self_incrimination | right_to_counsel | confrontation | due_process | cruel_unusual | equal_protection
+  preservationStatus    String   // preserved | partially_preserved | forfeited
+  preservationMethod    String   // motion_to_suppress | objection | written_motion | habeas_corpus
+  federalStateDistinction String // federal | state | both
+  standardOfReview      String   // de_novo | harmless_beyond_reasonable_doubt | structural
+  appellateStrength     String   // strong | moderate | weak
+  citations             String   // JSON array of citations
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([amendment])
+  @@index([preservationStatus])
+  @@index([appellateStrength])
+  @@map("constitutional_claim_preservations")
+}
+
+// ---------------------------------------------------------------------------
+// Phase E.1 — Record Completeness Entry
+// ---------------------------------------------------------------------------
+
+model RecordCompletenessEntry {
+  id                    String   @id @default(uuid())
+  caseId                String
+  recordType            String   // transcript | exhibit | motion | ruling | jury_instruction | verdict_form | sentencing | clerk_minutes
+  description           String
+  status                String   // present | missing | incomplete | disputed
+  importance            String   // critical | important | routine
+  appellateImpact       String   // If missing, what appellate argument is affected
+  settlementNeeded      Boolean  @default(false) // Whether settled statement needed
+  citations             String   // JSON array
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([recordType])
+  @@index([status])
+  @@map("record_completeness_entries")
+}
+
+// ---------------------------------------------------------------------------
+// Phase E.1 — Appellate Issue Index
+// ---------------------------------------------------------------------------
+
+model AppellateIssueIndex {
+  id                    String   @id @default(uuid())
+  caseId                String
+  issueTitle            String
+  issueCategory         String   // evidentiary | instructional | prosecutorial_misconduct | constitutional | sentencing | procedural | juror_misconduct
+  preservationStatus    String   // preserved | arguable | forfeited
+  standardOfReview      String
+  prejudiceAnalysis     String   // structural | prejudicial | harmless | unknown
+  meritStrength         String   // strong | moderate | weak
+  appellateRanking      Int      @default(0) // priority for appellate brief
+  supportingRecords     String   // JSON array of record references
+  opposingArguments     String   // JSON array of anticipated prosecution responses
+  citations             String   // JSON array
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([issueCategory])
+  @@index([meritStrength])
+  @@index([appellateRanking])
+  @@map("appellate_issue_indexes")
+}
+
+// ---------------------------------------------------------------------------
+// Phase E.1 — Instructional Error
+// ---------------------------------------------------------------------------
+
+model InstructionalError {
+  id                    String   @id @default(uuid())
+  caseId                String
+  instructionId         String?  // FK to CALCRIM instruction
+  instructionNumber     Int?
+  errorType             String   // refused_instruction | modified_instruction | missing_element | incorrect_standard | duplicative | argumentative | pinpoint_refused
+  errorDescription      String
+  requestedInstruction  String?  // What defense requested
+  givenInstruction      String?  // What was actually given
+  legalBasis            String   // CALCRIM number + case law
+  prejudiceLevel        String   // structural | prejudicial | harmless
+  preservedByObjection  Boolean  @default(false)
+  citations             String   // JSON array
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([errorType])
+  @@index([prejudiceLevel])
+  @@map("instructional_errors")
+}
+
+// ---------------------------------------------------------------------------
+// Phase E.1 — Prosecutorial Misconduct Entry
+// ---------------------------------------------------------------------------
+
+model ProsecutorialMisconductEntry {
+  id                    String   @id @default(uuid())
+  caseId                String
+  misconductType        String   // vouching | burden_shifting | golden_rule | facts_not_in_evidence | griffin_error | improper_argument | witness_intimidation | discovery_abuse | brady_violation
+  description           String
+  trialPhase            String
+  citedText             String?
+  citedPage             Int?
+  citedLine             Int?
+  citedDocument         String?
+  objectionMade         Boolean  @default(false)
+  objectionRuling       String?  // sustained | overruled | none
+  curativeInstruction   Boolean  @default(false)
+  prejudiceLevel        String   // structural | prejudicial | harmless
+  preservedForAppeal    Boolean  @default(false)
+  citations             String   // JSON array
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([misconductType])
+  @@index([prejudiceLevel])
+  @@index([preservedForAppeal])
+  @@map("prosecutorial_misconduct_entries")
+}

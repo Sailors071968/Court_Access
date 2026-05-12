@@ -2836,3 +2836,221 @@ model SuppressionIssue {
   @@index([suppressionBasis])
   @@map("suppression_issues")
 }
+
+// ---------------------------------------------------------------------------
+// Phase D.7 — Narrative Coherence Score
+// ---------------------------------------------------------------------------
+
+model NarrativeCoherenceScore {
+  id                    String   @id @default(uuid())
+  caseId                String
+  prosecutionClarity    Float    @default(0.0) // 0.0-1.0 how clear prosecution narrative is
+  defenseClarity        Float    @default(0.0) // 0.0-1.0 how clear defense counter-narrative is
+  internalConsistency   Float    @default(0.0) // 0.0-1.0 internal logical consistency
+  chronologicalFlow     Float    @default(0.0) // 0.0-1.0 temporal ordering clarity
+  witnessAlignment      Float    @default(0.0) // 0.0-1.0 do witnesses tell same story
+  overallCoherence      Float    @default(0.0) // weighted average
+  weakPoints            String   // JSON array of { area, score, explanation, citations }
+  strengthPoints        String   // JSON array of { area, score, explanation, citations }
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([caseId])
+  @@map("narrative_coherence_scores")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.7 — Juror Confusion Zone
+// ---------------------------------------------------------------------------
+
+model JurorConfusionZone {
+  id                    String   @id @default(uuid())
+  caseId                String
+  confusionType         String   // contradictory_testimony | complex_timeline | technical_evidence | multiple_theories | inconsistent_exhibits | overlapping_charges
+  description           String
+  severity              String   // high | medium | low
+  affectedElements      String   // JSON array of CALCRIM element IDs
+  confusingStatements   String   // JSON array of { text, page, line, speaker, document }
+  clarificationNeeded   String   // What defense should clarify
+  citations             String   // JSON array of supporting citations
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([confusionType])
+  @@index([severity])
+  @@map("juror_confusion_zones")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.7 — Contradiction Salience Score
+// ---------------------------------------------------------------------------
+
+model ContradictionSalienceScore {
+  id                    String   @id @default(uuid())
+  caseId                String
+  contradictionId       String   // FK to contradiction pair
+  salienceScore         Float    @default(0.0) // 0.0-1.0 how impactful for jury
+  juryImpact            String   // high | medium | low
+  elementRelevance      Float    @default(0.0) // how relevant to charged elements
+  witnessCredibilityHit Float    @default(0.0) // credibility damage score
+  narrativeDisruption   Float    @default(0.0) // how much it disrupts prosecution story
+  presentationPriority  Int      @default(0) // 1 = present first
+  presentationNotes     String   // How to present this contradiction effectively
+  citations             String   // JSON array of citations
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([salienceScore])
+  @@index([presentationPriority])
+  @@map("contradiction_salience_scores")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.7 — Witness Credibility Impact
+// ---------------------------------------------------------------------------
+
+model WitnessCredibilityImpact {
+  id                    String   @id @default(uuid())
+  caseId                String
+  witnessName           String
+  overallCredibility    Float    @default(1.0) // 0.0-1.0
+  consistencyScore      Float    @default(1.0) // internal consistency
+  corroborationScore    Float    @default(1.0) // how much other evidence supports
+  biasIndicators        String   // JSON array of { type, description, citations }
+  demeanorFlags         String   // JSON array of { flag, evidenceBasis }
+  priorInconsistencies  Int      @default(0)
+  contradictionCount    Int      @default(0)
+  elementDependency     String   // JSON array of CALCRIM elements this witness supports
+  impactIfImpeached     String   // What happens to prosecution if witness is impeached
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@unique([caseId, witnessName])
+  @@index([caseId])
+  @@index([overallCredibility])
+  @@map("witness_credibility_impacts")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.7 — Burden Clarity Analysis
+// ---------------------------------------------------------------------------
+
+model BurdenClarityAnalysis {
+  id                    String   @id @default(uuid())
+  caseId                String
+  instructionId         String
+  instructionNumber     Int
+  chargeTitle           String
+  elementClarityScores  String   // JSON array of { elementId, label, clarityScore, supportingEvidence, contradictingEvidence }
+  overallBurdenClarity  Float    @default(0.0) // 0.0-1.0 how clear prosecution has met burden
+  weakestElement        String?  // Which element is least clear
+  strongestElement      String?  // Which element is most clear
+  juryInstruction       String   // CALCRIM instruction text summary
+  defenseArgument       String   // How defense should frame burden failure
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@unique([caseId, instructionId])
+  @@index([caseId])
+  @@index([overallBurdenClarity])
+  @@map("burden_clarity_analyses")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.7 — Reasonable Doubt Amplifier
+// ---------------------------------------------------------------------------
+
+model ReasonableDoubtAmplifier {
+  id                    String   @id @default(uuid())
+  caseId                String
+  doubtSource           String   // contradiction | burden_gap | witness_credibility | timeline_impossibility | missing_evidence | procedural_defect
+  title                 String
+  description           String
+  amplificationScore    Float    @default(0.0) // 0.0-1.0 how much this amplifies reasonable doubt
+  elementConnection     String   // JSON array of CALCRIM element IDs connected
+  supportingEvidence    String   // JSON array of { text, page, line, speaker, document }
+  presentationOrder     Int      @default(0) // recommended order for trial presentation
+  cumulativeImpact      String   // How this combines with other doubt sources
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([amplificationScore])
+  @@index([doubtSource])
+  @@map("reasonable_doubt_amplifiers")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.7 — Theory Complexity Score
+// ---------------------------------------------------------------------------
+
+model TheoryComplexityScore {
+  id                    String   @id @default(uuid())
+  caseId                String
+  theoryType            String   // prosecution | defense
+  complexityScore       Float    @default(0.0) // 0.0-1.0 (higher = more complex)
+  factorCount           Int      @default(0) // number of moving parts
+  witnessCount          Int      @default(0)
+  documentCount         Int      @default(0)
+  timelineSteps         Int      @default(0)
+  logicalLeaps          String   // JSON array of { from, to, explanation, weakness }
+  simplificationOptions String   // JSON array of ways to simplify for jury
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([theoryType])
+  @@map("theory_complexity_scores")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.7 — Timeline Comprehension Model
+// ---------------------------------------------------------------------------
+
+model TimelineComprehensionModel {
+  id                    String   @id @default(uuid())
+  caseId                String
+  totalEvents           Int      @default(0)
+  clarityScore          Float    @default(0.0) // 0.0-1.0
+  gapCount              Int      @default(0) // number of unexplained gaps
+  conflictCount         Int      @default(0)
+  confusingSegments     String   // JSON array of { startTime, endTime, issue, severity, citations }
+  clearSegments         String   // JSON array of { startTime, endTime, clarity }
+  prosecutionTimeline   String   // JSON summary of prosecution's timeline
+  defenseTimeline       String   // JSON summary of defense's counter-timeline
+  juryPresentation      String   // Recommended timeline presentation approach
+
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@map("timeline_comprehension_models")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.7 — Evidentiary Weight Balance
+// ---------------------------------------------------------------------------
+
+model EvidentiaryWeightBalance {
+  id                    String   @id @default(uuid())
+  caseId                String
+  instructionId         String?
+  prosecutionWeight     Float    @default(0.0) // total evidentiary weight for prosecution
+  defenseWeight         Float    @default(0.0) // total evidentiary weight for defense
+  netBalance            Float    @default(0.0) // positive = prosecution advantage, negative = defense advantage
+  balanceByElement      String   // JSON array of { elementId, label, prosWeight, defWeight, balance }
+  strongestProsEvidence String   // JSON array of top prosecution evidence items
+  strongestDefEvidence  String   // JSON array of top defense evidence items
+  vulnerabilities       String   // JSON array of prosecution vulnerabilities
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([netBalance])
+  @@map("evidentiary_weight_balances")
+}

@@ -1,0 +1,149 @@
+{
+  "phase": "E.2",
+  "name": "Habeas / Post-Conviction Intelligence + Innocence Review Framework",
+  "generatedAt": "2026-05-12T27:00:00.000Z",
+  "status": "READY_FOR_DEPLOYMENT",
+
+  "subsystems": {
+    "newlyDiscoveredEvidenceTracker": {
+      "description": "Citation-backed tracking of newly discovered evidence for post-conviction relief",
+      "evidenceTypes": ["witness_recantation", "forensic_retest", "dna_evidence", "alibi_evidence", "third_party_culpability", "government_misconduct", "new_testimony", "documentary", "digital"],
+      "legalStandards": ["PC § 1473", "PC § 1181(8)", "Brady v. Maryland"],
+      "crossReferencesD6Brady": true
+    },
+    "actualInnocenceIndicatorFramework": {
+      "description": "Deterministic assessment of actual innocence indicators with Schlup gateway analysis",
+      "indicatorTypes": ["alibi_evidence", "misidentification", "false_confession", "forensic_invalidity", "third_party_guilt", "recantation", "dna_exclusion", "witness_bias", "tunnel_vision"],
+      "schlupGatewayAnalysis": true,
+      "strengthAssessment": "Based on contradiction support + burden collapse data"
+    },
+    "ineffectiveAssistanceTracking": {
+      "description": "Citation-required tracking of Strickland v. Washington IAC claims",
+      "deficiencyTypes": ["failure_to_investigate", "failure_to_object", "failure_to_call_witness", "failure_to_cross_examine", "failure_to_move", "inadequate_preparation", "conflict_of_interest", "failure_to_advise", "failure_to_preserve"],
+      "stricklandTwoProngAnalysis": true,
+      "crossReferencesE1Forfeiture": true
+    },
+    "bradyGiglioReassessmentEngine": {
+      "description": "Deterministic post-conviction reassessment of Brady/Giglio issues",
+      "reassessmentTypes": ["undisclosed_evidence", "undisclosed_deal", "undisclosed_record", "giglio_impeachment", "new_exculpatory"],
+      "kylesCumulativeAnalysis": true,
+      "crossReferencesD6Brady": true,
+      "crossReferencesD6DiscoveryViolations": true
+    },
+    "forensicReliabilityReassessment": {
+      "description": "Evidence-linked reassessment of forensic evidence reliability using NAS 2009 and PCAST 2016 standards",
+      "forensicTypes": ["fingerprint", "ballistics", "bite_mark", "hair_comparison", "arson_investigation", "blood_spatter", "fiber_analysis", "toolmark", "shoeprint", "drug_testing", "dna"],
+      "nasReport2009Integration": true,
+      "pcatReport2016Integration": true,
+      "reliabilityScoring": "0.0-1.0 based on current scientific status"
+    },
+    "witnessRecantationAnalysis": {
+      "description": "Citation-backed analysis of witness recantations and inconsistency-based recantation candidates",
+      "recantationContexts": ["voluntary", "coerced_original", "new_information", "conscience", "pressure"],
+      "credibilityAssessment": true,
+      "crossReferencesD3Inconsistencies": true
+    },
+    "cumulativeConstitutionalErrorAnalysis": {
+      "description": "Deterministic analysis of cumulative constitutional error under People v. Hill",
+      "prejudiceFormula": "structural×0.5 + prejudicial×0.3 + harmless_brd×0.15 + harmless×0.1 + misconduct",
+      "hillAnalysis": true,
+      "crossReferencesE1HarmlessErrors": true,
+      "crossReferencesE1ConstitutionalClaims": true
+    },
+    "postConvictionTimelineReconstruction": {
+      "description": "Evidence-linked reconstruction of post-conviction timeline with deadline implications",
+      "eventTypes": ["conviction", "sentencing", "appeal_filed", "appeal_decided", "habeas_filed", "habeas_decided", "new_evidence", "recantation", "forensic_retest", "dna_test", "resentencing", "exoneration"],
+      "deadlineTracking": true,
+      "federalHabeasDeadlines": "28 USC § 2244(d)"
+    },
+    "dnaForensicTestingIssueIndexing": {
+      "description": "Deterministic indexing of DNA/forensic testing issues with PC § 1405 applicability",
+      "issueTypes": ["untested_evidence", "retesting_needed", "degraded_sample", "new_technology", "lab_error", "contamination", "mixture_interpretation", "touch_dna", "codis_hit", "exclusion"],
+      "pc1405Analysis": true,
+      "crossReferencesForensicReassessment": true
+    }
+  },
+
+  "frontendComponent": {
+    "name": "PostConvictionReviewCockpit",
+    "panes": ["innocence indicators", "newly discovered evidence", "Brady/Giglio reassessment", "ineffective assistance", "forensic reliability", "recantations", "cumulative error", "post-conviction timelines"],
+    "theme": "dark",
+    "features": ["strength badges", "Schlup gateway indicators", "reliability scores", "prejudice bars", "timeline visualization", "deadline warnings"]
+  },
+
+  "apiEndpoints": {
+    "fullAnalysis": { "method": "POST", "path": "/api/postconviction/analyze/:caseId" },
+    "evidence": [
+      { "method": "POST", "path": "/api/postconviction/evidence/:caseId" },
+      { "method": "GET", "path": "/api/postconviction/evidence/:caseId" }
+    ],
+    "innocence": [
+      { "method": "POST", "path": "/api/postconviction/innocence/:caseId" },
+      { "method": "GET", "path": "/api/postconviction/innocence/:caseId" }
+    ],
+    "iac": [
+      { "method": "POST", "path": "/api/postconviction/iac/:caseId" },
+      { "method": "GET", "path": "/api/postconviction/iac/:caseId" }
+    ],
+    "brady": [
+      { "method": "POST", "path": "/api/postconviction/brady/:caseId" },
+      { "method": "GET", "path": "/api/postconviction/brady/:caseId" }
+    ],
+    "forensic": [
+      { "method": "POST", "path": "/api/postconviction/forensic/:caseId" },
+      { "method": "GET", "path": "/api/postconviction/forensic/:caseId" }
+    ],
+    "recantation": [
+      { "method": "POST", "path": "/api/postconviction/recantation/:caseId" },
+      { "method": "GET", "path": "/api/postconviction/recantation/:caseId" }
+    ],
+    "cumulative": [
+      { "method": "POST", "path": "/api/postconviction/cumulative/:caseId" },
+      { "method": "GET", "path": "/api/postconviction/cumulative/:caseId" }
+    ],
+    "timeline": [
+      { "method": "POST", "path": "/api/postconviction/timeline/:caseId" },
+      { "method": "GET", "path": "/api/postconviction/timeline/:caseId" }
+    ],
+    "dna": [
+      { "method": "POST", "path": "/api/postconviction/dna/:caseId" },
+      { "method": "GET", "path": "/api/postconviction/dna/:caseId" }
+    ],
+    "validation": { "method": "GET", "path": "/api/postconviction/validation" }
+  },
+
+  "prismaModels": [
+    "NewlyDiscoveredEvidence",
+    "ActualInnocenceIndicator",
+    "IneffectiveAssistanceIssue",
+    "BradyGiglioReassessment",
+    "ForensicReliabilityReassessment",
+    "WitnessRecantation",
+    "CumulativeConstitutionalError",
+    "PostConvictionTimeline",
+    "DnaForensicTestingIssue"
+  ],
+
+  "migration": "20260512270000_habeas_post_conviction",
+
+  "deterministicConstraints": {
+    "noFabricatedInnocenceClaims": true,
+    "noHallucinatedPoliceCorruption": true,
+    "noFakeBradyViolations": true,
+    "noInventedIneffectiveAssistance": true,
+    "noSpeculativeExoneration": true,
+    "noAIGeneratedHabeasOpinions": true,
+    "corePrinciple": "CourtAccess organizes provable post-conviction issue structures. It does NOT act as habeas counsel."
+  },
+
+  "systemsUnmodified": {
+    "auth": true,
+    "csrf": true,
+    "nginx": true,
+    "redis": true,
+    "ocr": true,
+    "pm2": true,
+    "ingestion": true,
+    "existingD1toE1Systems": true
+  }
+}

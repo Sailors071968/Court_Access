@@ -1,0 +1,159 @@
+{
+  "phase": "N.2",
+  "name": "Golden-Case Validation + Operational Reliability Framework",
+  "generatedAt": "2026-05-12T47:00:00.000Z",
+  "status": "OPERATIONAL_READINESS",
+  "strategicDirection": "Operational excellence over architectural expansion",
+
+  "subsystems": {
+    "goldenCaseCorpus": {
+      "description": "Fixed canonical validation corpus with 8 litigation case types",
+      "caseTypes": [
+        "dui_contradiction — People v. Martinez — DUI Field Sobriety Contradictions",
+        "dv_burden_fracture — People v. Johnson — DV Burden-of-Proof Fractures",
+        "theft_calcrim — People v. Williams — Grand Theft CALCRIM Element Mapping",
+        "discovery_violation — People v. Chen — Brady/Pitchess Discovery Violations",
+        "officer_impeachment — People v. Rodriguez — Officer Credibility Impeachment",
+        "multi_witness_timeline — People v. Thompson — Multi-Witness Timeline Conflicts",
+        "weak_theory_directed_verdict — People v. Davis — Weak-Theory Directed Verdict",
+        "export_trial_prep — People v. Garcia — Export-Heavy Trial Preparation"
+      ],
+      "knownOutputs": ["expectedContradictions", "expectedBurdenFractures", "expectedCalcrimMappings", "expectedOutputHash", "expectedExportHash"],
+      "expectedOutputTypes": ["contradictions", "burden_fractures", "calcrim_mappings", "replay_hashes", "export_manifests", "timeline_conflicts"],
+      "deterministic": true,
+      "purpose": "prove deterministic reproducibility, detect regression drift, validate integrity preservation"
+    },
+    "deterministicReplayValidation": {
+      "description": "Replay validation that re-runs same cases repeatedly and compares all outputs/hashes",
+      "comparedHashes": ["outputHash", "exportHash", "orchestrationHash", "telemetryHash"],
+      "iterationsPerCase": 3,
+      "driftDetection": true,
+      "failsOnUnexplainedDrift": true
+    },
+    "crossLayerRegressionTesting": {
+      "description": "Full-system regression validation covering 12 layers",
+      "layers": ["evidence_segmentation", "calcrim_mappings", "contradiction_intelligence", "burden_fractures", "defense_synthesis", "trial_preparation", "exports", "governance", "observability", "orchestration", "interoperability", "integrity"],
+      "sha256BaselineComparison": true
+    },
+    "loadStabilityTesting": {
+      "description": "Deterministic stress testing across 8 operational areas",
+      "areas": ["concurrent_ingestion", "export_generation", "replay_operations", "orchestration_sync", "observability_telemetry", "tenant_isolation", "rollback_recovery", "queue_survivability"],
+      "metrics": ["concurrentOps", "avgLatencyMs", "p95LatencyMs", "errorCount"]
+    },
+    "operationalSurvivabilityTesting": {
+      "description": "Deterministic failure-injection testing across 8 scenarios",
+      "scenarios": ["worker_crash", "redis_interruption", "partial_orchestration_failure", "replay_interruption", "export_corruption", "integrity_mismatch", "rollback_rehearsal", "recovery_verification"],
+      "injectionTypes": ["process_kill", "connection_drop", "data_corruption", "timeout_simulation", "resource_exhaustion"],
+      "tracks": ["systemRecovered", "dataIntact", "recoveryTimeMs"]
+    },
+    "uiUxRefinementTracking": {
+      "description": "UI/UX usability refinement tracking across 7 focus areas",
+      "focusAreas": ["attorney_workflow_speed", "contradiction_navigation", "evidence_readability", "timeline_usability", "export_simplicity", "workspace_responsiveness", "operational_clarity"],
+      "priority": "HIGH",
+      "noArchitecturalRedesigns": true
+    },
+    "releaseGateCertification": {
+      "description": "Mandatory release gates — NO deployment promotion unless ALL pass",
+      "gates": ["golden_corpus_replay", "replay_hash_verification", "export_manifest_verification", "regression_validation", "survivability_testing", "rollback_rehearsal", "governance_validation", "observability_replay", "tenant_isolation_verification"],
+      "mandatory": true
+    },
+    "continuousCertificationPipeline": {
+      "description": "Immutable certification manifests for every release candidate",
+      "manifestAreas": ["replay_verification", "regression_results", "export_validation", "telemetry_validation", "orchestration_verification", "integrity_certification", "deployment_rehearsal", "rollback_certification"],
+      "immutable": true
+    },
+    "corpusExpectedOutputs": {
+      "description": "Known expected outputs per golden corpus case",
+      "outputTypes": ["contradictions", "burden_fractures", "calcrim_mappings", "replay_hashes", "export_manifests", "timeline_conflicts"],
+      "sha256Verified": true
+    },
+    "operationalReliabilityScoring": {
+      "description": "Reliability scoring across 8 operational domains",
+      "scoreDomains": ["replay_consistency", "regression_stability", "load_resilience", "survivability", "security_hardening", "export_integrity", "governance_compliance", "observability_coverage"],
+      "scoreStatuses": ["excellent", "good", "acceptable", "needs_improvement", "critical"]
+    }
+  },
+
+  "frontendComponent": {
+    "name": "OperationalReliabilityCockpit",
+    "panes": ["golden corpus", "replay validation", "regression testing", "load/stability", "survivability", "UI/UX refinement", "release gates", "reliability scores"],
+    "theme": "dark",
+    "features": ["case type corpus cards with known counts", "replay iteration match/drift badges", "12-layer regression hash comparison", "load test latency/throughput metrics", "survivability recovery time tracking", "UI/UX current vs target progress bars", "release gate pass/fail indicators", "reliability score domain gauges"]
+  },
+
+  "apiEndpoints": {
+    "fullAnalysis": { "method": "POST", "path": "/api/reliability/analyze/:caseId" },
+    "corpus": [
+      { "method": "POST", "path": "/api/reliability/corpus/:caseId" },
+      { "method": "GET", "path": "/api/reliability/corpus/:caseId" }
+    ],
+    "replay": [
+      { "method": "POST", "path": "/api/reliability/replay/:caseId" },
+      { "method": "GET", "path": "/api/reliability/replay/:caseId" }
+    ],
+    "regression": [
+      { "method": "POST", "path": "/api/reliability/regression/:caseId" },
+      { "method": "GET", "path": "/api/reliability/regression/:caseId" }
+    ],
+    "loadStability": [
+      { "method": "POST", "path": "/api/reliability/load-stability/:caseId" },
+      { "method": "GET", "path": "/api/reliability/load-stability/:caseId" }
+    ],
+    "survivability": [
+      { "method": "POST", "path": "/api/reliability/survivability/:caseId" },
+      { "method": "GET", "path": "/api/reliability/survivability/:caseId" }
+    ],
+    "uiux": [
+      { "method": "POST", "path": "/api/reliability/uiux/:caseId" },
+      { "method": "GET", "path": "/api/reliability/uiux/:caseId" }
+    ],
+    "gates": [
+      { "method": "POST", "path": "/api/reliability/gates/:caseId" },
+      { "method": "GET", "path": "/api/reliability/gates/:caseId" }
+    ],
+    "manifests": [
+      { "method": "POST", "path": "/api/reliability/manifests/:caseId" },
+      { "method": "GET", "path": "/api/reliability/manifests/:caseId" }
+    ],
+    "scores": [
+      { "method": "POST", "path": "/api/reliability/scores/:caseId" },
+      { "method": "GET", "path": "/api/reliability/scores/:caseId" }
+    ],
+    "validation": { "method": "GET", "path": "/api/reliability/validation" }
+  },
+
+  "prismaModels": [
+    "GoldenCaseCorpusEntry",
+    "DeterministicReplayRun",
+    "CrossLayerRegressionRun",
+    "LoadStabilityTestRun",
+    "SurvivabilityTestRun",
+    "UiUxRefinementEntry",
+    "ReleaseGateCheck",
+    "CertificationManifestEntry",
+    "CorpusExpectedOutput",
+    "OperationalReliabilityScore"
+  ],
+
+  "migration": "20260512470000_operational_reliability",
+
+  "constraints": {
+    "deterministic": true,
+    "reproducible": true,
+    "auditable": true,
+    "transparent": true,
+    "evidenceLinked": true,
+    "hashVerifiable": true,
+    "governanceControlled": true,
+    "operationallyExplainable": true,
+    "operationallySurvivable": true,
+    "noNewSpeculativeLayers": true,
+    "noAutonomousMutation": true,
+    "noProbabilisticBehavior": true,
+    "noOpaqueAnalytics": true,
+    "noUnverifiableOutputs": true,
+    "noHiddenRuntimeMutation": true,
+    "noUncontrolledExpansion": true,
+    "corePrinciple": "Operational excellence over architectural expansion."
+  }
+}

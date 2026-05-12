@@ -62,6 +62,7 @@ import { registerTrialPreparationRoutes } from "./routes/trialPreparationRoutes.
 import { registerEvidentiaryObjectionRoutes } from "./routes/evidentiaryObjectionRoutes.js";
 import { registerTrialDynamicsRoutes } from "./routes/trialDynamicsRoutes.js";
 import { registerAppellateIntelligenceRoutes } from "./routes/appellateIntelligenceRoutes.js";
+import { registerPostConvictionRoutes } from "./routes/postConvictionRoutes.js";
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -265,6 +266,9 @@ async function startServer() {
 
   console.log('[Server] Registering appellate intelligence routes (Phase E.1)...');
   await registerAppellateIntelligenceRoutes(app);
+
+  console.log('[Server] Registering post-conviction intelligence routes (Phase E.2)...');
+  await registerPostConvictionRoutes(app);
 
   console.log('[Server] Registering admin queue monitoring routes...');
   await registerQueueMonitorRoutes(app);

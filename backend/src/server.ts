@@ -57,6 +57,7 @@ import { registerEvidenceSegmentationRoutes } from "./routes/evidenceSegmentatio
 import { registerCalcrimElementMappingRoutes } from "./routes/calcrimElementMappingRoutes.js";
 import { registerChargeIntakeRoutes } from "./routes/chargeIntakeRoutes.js";
 import { registerContradictionIntelligenceRoutes } from "./routes/contradictionIntelligenceRoutes.js";
+import { registerDefenseStrategyRoutes } from "./routes/defenseStrategyRoutes.js";
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -245,6 +246,9 @@ async function startServer() {
 
   console.log('[Server] Registering contradiction intelligence routes (Phase D.3)...');
   await registerContradictionIntelligenceRoutes(app);
+
+  console.log('[Server] Registering defense strategy + attorney workspace routes (Phase D.4)...');
+  await registerDefenseStrategyRoutes(app);
 
   console.log('[Server] Registering admin queue monitoring routes...');
   await registerQueueMonitorRoutes(app);

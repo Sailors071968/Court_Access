@@ -55,6 +55,7 @@ import { registerMaterialityRoutes } from "./routes/materialityRoutes.js";
 import { registerDefenseIntelligenceRoutes } from "./routes/defenseIntelligenceRoutes.js";
 import { registerEvidenceSegmentationRoutes } from "./routes/evidenceSegmentationRoutes.js";
 import { registerCalcrimElementMappingRoutes } from "./routes/calcrimElementMappingRoutes.js";
+import { registerChargeIntakeRoutes } from "./routes/chargeIntakeRoutes.js";
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -237,6 +238,9 @@ async function startServer() {
 
   console.log('[Server] Registering CALCRIM element mapping routes (Phase D.2)...');
   await registerCalcrimElementMappingRoutes(app);
+
+  console.log('[Server] Registering charge intake + California code routes (Phase D.2.5)...');
+  await registerChargeIntakeRoutes(app);
 
   console.log('[Server] Registering admin queue monitoring routes...');
   await registerQueueMonitorRoutes(app);

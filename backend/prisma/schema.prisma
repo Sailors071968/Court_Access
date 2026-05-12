@@ -6298,3 +6298,196 @@ model DefensibilityCertificationRecord {
   @@index([certificationStatus])
   @@map("defensibility_certification_records")
 }
+
+// ---------------------------------------------------------------------------
+// Phase K.1 — Institutional Deployment + Controlled Adoption Framework
+// ---------------------------------------------------------------------------
+
+model InstitutionalOnboardingWorkflow {
+  id                    String   @id @default(uuid())
+  organizationId        String
+  organizationName      String
+  onboardingStatus      String   // initiated | in_progress | completed | suspended | failed
+  stepsCompleted        Int      @default(0)
+  totalSteps            Int      @default(8)
+  currentStep           String   // registration | configuration | tenant_setup | data_migration | verification | training | certification | go_live
+  initiatedBy           String
+  completedAt           String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([organizationId])
+  @@index([onboardingStatus])
+  @@map("institutional_onboarding_workflows")
+}
+
+model TenantIsolationRecord {
+  id                    String   @id @default(uuid())
+  tenantId              String
+  tenantName            String
+  isolationLevel        String   // full | schema_based | row_based | logical
+  dataPartitionHash     String   // SHA-256
+  crossTenantBlocked    Boolean  @default(true)
+  isolationVerified     Boolean  @default(false)
+  verifiedAt            String?
+  resourceLimits        String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([tenantId])
+  @@index([isolationLevel])
+  @@index([isolationVerified])
+  @@map("tenant_isolation_records")
+}
+
+model DeploymentGovernanceControl {
+  id                    String   @id @default(uuid())
+  organizationId        String
+  controlType           String   // access_gate | approval_required | rate_limit | feature_flag | environment_lock
+  controlScope          String   // organization | department | user | environment
+  enforced              Boolean  @default(true)
+  authorizedRoles       String   // JSON array
+  lastModifiedBy        String
+  effectiveFrom         String
+  effectiveUntil        String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([organizationId])
+  @@index([controlType])
+  @@index([enforced])
+  @@map("deployment_governance_controls")
+}
+
+model OrganizationalRolloutTracking {
+  id                    String   @id @default(uuid())
+  organizationId        String
+  rolloutPhase          String   // pilot | limited | general | full
+  usersEnabled          Int      @default(0)
+  totalUsers            Int      @default(0)
+  featuresEnabled       String   // JSON array
+  rolloutPercentage     Float    @default(0)
+  rolloutStatus         String   // active | paused | completed | rolled_back
+  approvedBy            String
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([organizationId])
+  @@index([rolloutPhase])
+  @@index([rolloutStatus])
+  @@map("organizational_rollout_trackings")
+}
+
+model MultiTenantIntegrityBoundary {
+  id                    String   @id @default(uuid())
+  sourceTenantId        String
+  targetTenantId        String
+  boundaryType          String   // data | api | storage | compute | network
+  boundaryHash          String   // SHA-256
+  crossBoundaryBlocked  Boolean  @default(true)
+  breachDetected        Boolean  @default(false)
+  lastVerifiedAt        String
+  verificationMethod    String   // hash_comparison | access_audit | network_scan
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([sourceTenantId])
+  @@index([targetTenantId])
+  @@index([breachDetected])
+  @@map("multi_tenant_integrity_boundaries")
+}
+
+model OperationalEnablementControl {
+  id                    String   @id @default(uuid())
+  organizationId        String
+  featureName           String
+  enablementStatus      String   // enabled | disabled | restricted | pending_approval
+  permissionScope       String   // all_users | role_based | individual | admin_only
+  requiredPermission    String   // JSON
+  enabledBy             String
+  enabledAt             String
+  disabledAt            String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([organizationId])
+  @@index([featureName])
+  @@index([enablementStatus])
+  @@map("operational_enablement_controls")
+}
+
+model AdoptionReadinessVerification {
+  id                    String   @id @default(uuid())
+  organizationId        String
+  verificationType      String   // infrastructure | security | compliance | training | data_migration
+  checksTotal           Int      @default(0)
+  checksPassed          Int      @default(0)
+  checksFailed          Int      @default(0)
+  readinessScore        Float    @default(0)
+  readinessStatus       String   // ready | conditional | not_ready | blocked
+  verifiedBy            String
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([organizationId])
+  @@index([verificationType])
+  @@index([readinessStatus])
+  @@map("adoption_readiness_verifications")
+}
+
+model InstitutionalAuditOnboarding {
+  id                    String   @id @default(uuid())
+  organizationId        String
+  auditPhase            String   // pre_deployment | during_deployment | post_deployment | periodic
+  auditScope            String   // full_system | data_access | compliance | security | performance
+  findingsCount         Int      @default(0)
+  criticalFindings      Int      @default(0)
+  auditResult           String   // passed | conditional | failed
+  auditorId             String
+  findings              String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([organizationId])
+  @@index([auditPhase])
+  @@index([auditResult])
+  @@map("institutional_audit_onboardings")
+}
+
+model DeploymentEnvironmentSegregation {
+  id                    String   @id @default(uuid())
+  organizationId        String
+  environmentName       String   // production | staging | development | sandbox | dr_site
+  environmentHash       String   // SHA-256
+  isolatedFromOthers    Boolean  @default(true)
+  configurationHash     String   // SHA-256
+  lastVerifiedAt        String
+  driftDetected         Boolean  @default(false)
+  resourceAllocation    String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([organizationId])
+  @@index([environmentName])
+  @@index([driftDetected])
+  @@map("deployment_environment_segregations")
+}
+
+model OrganizationalCertificationTracking {
+  id                    String   @id @default(uuid())
+  organizationId        String
+  certificationScope    String   // deployment_readiness | security_compliance | operational_maturity | data_governance
+  evidenceRecordsCount  Int      @default(0)
+  verifiedRecordsCount  Int      @default(0)
+  certificationRate     Float    @default(0)
+  certificationStatus   String   // certified | conditional | not_certified | pending
+  certifiedBy           String?
+  certifiedAt           String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([organizationId])
+  @@index([certificationScope])
+  @@index([certificationStatus])
+  @@map("organizational_certification_trackings")
+}

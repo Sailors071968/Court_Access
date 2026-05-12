@@ -81,6 +81,7 @@ import { registerExpertDefensibilityRoutes } from "./routes/expertDefensibilityR
 import { registerForensicObservabilityRoutes } from "./routes/forensicObservabilityRoutes.js";
 import { registerPlatformGovernanceRoutes } from "./routes/platformGovernanceRoutes.js";
 import { registerEcosystemOrchestrationRoutes } from "./routes/ecosystemOrchestrationRoutes.js";
+import { registerProductionReadinessRoutes } from "./routes/productionReadinessRoutes.js";
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -341,6 +342,9 @@ async function startServer() {
 
   console.log('[Server] Registering ecosystem orchestration routes (Phase M.2)...');
   await registerEcosystemOrchestrationRoutes(app);
+
+  console.log('[Server] Registering production readiness routes (Phase N.1)...');
+  await registerProductionReadinessRoutes(app);
 
   console.log('[Server] Registering admin queue monitoring routes...');
   await registerQueueMonitorRoutes(app);

@@ -52,6 +52,7 @@ module.exports = {
         CPRA_SIMULATION_MODE: 'true',
       },
       instances: 1,
+      exec_mode: 'fork',
       autorestart: true,
       watch: false,
       max_memory_restart: '512M',

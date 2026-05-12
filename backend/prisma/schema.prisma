@@ -7267,3 +7267,194 @@ model EcosystemLineageSynchronization {
   @@index([syncStatus])
   @@map("ecosystem_lineage_synchronizations")
 }
+
+// ---------------------------------------------------------------------------
+// Phase N.1 — Platform Stabilization, Validation & Controlled Production Readiness
+// ---------------------------------------------------------------------------
+
+model IntegrationTestRecord {
+  id                    String   @id @default(uuid())
+  caseId                String
+  testSuite             String   // evidence_pipeline | analysis_pipeline | defense_pipeline | governance_pipeline | observability_pipeline
+  testsTotal            Int      @default(0)
+  testsPassed           Int      @default(0)
+  testsFailed           Int      @default(0)
+  testStatus            String   // passed | failed | partial | running
+  testHash              String   // SHA-256
+  testDetails           String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([testSuite])
+  @@index([testStatus])
+  @@map("integration_test_records")
+}
+
+model RegressionValidationRecord {
+  id                    String   @id @default(uuid())
+  caseId                String
+  validationLayer       String   // evidence | analysis | defense | trial | governance | observability | orchestration
+  baselineHash          String   // SHA-256
+  currentHash           String   // SHA-256
+  hashesMatch           Boolean  @default(false)
+  regressionDetected    Boolean  @default(false)
+  validationDetails     String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([validationLayer])
+  @@index([regressionDetected])
+  @@map("regression_validation_records")
+}
+
+model PerformanceBenchmarkRecord {
+  id                    String   @id @default(uuid())
+  caseId                String
+  benchmarkName         String   // api_throughput | db_query_latency | export_generation | evidence_ingestion | hash_computation
+  operationsCount       Int      @default(0)
+  avgLatencyMs          Float    @default(0)
+  p95LatencyMs          Float    @default(0)
+  throughputPerSec      Float    @default(0)
+  benchmarkStatus       String   // passed | degraded | failed
+  benchmarkDetails      String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([benchmarkName])
+  @@index([benchmarkStatus])
+  @@map("performance_benchmark_records")
+}
+
+model StabilityVerificationRecord {
+  id                    String   @id @default(uuid())
+  caseId                String
+  stabilityDomain       String   // api_server | database | cache | worker | scheduler | storage
+  uptimePercentage      Float    @default(100)
+  errorRate             Float    @default(0)
+  recoveryTimeMs        Int      @default(0)
+  stabilityStatus       String   // stable | degraded | unstable | recovering
+  stabilityHash         String   // SHA-256
+  stabilityDetails      String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([stabilityDomain])
+  @@index([stabilityStatus])
+  @@map("stability_verification_records")
+}
+
+model DeploymentRehearsalRecord {
+  id                    String   @id @default(uuid())
+  caseId                String
+  rehearsalType         String   // full_deploy | rolling_update | rollback | hotfix | canary
+  stepsTotal            Int      @default(0)
+  stepsCompleted        Int      @default(0)
+  rehearsalStatus       String   // completed | failed | partial | running
+  rehearsalHash         String   // SHA-256
+  rehearsalLog          String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([rehearsalType])
+  @@index([rehearsalStatus])
+  @@map("deployment_rehearsal_records")
+}
+
+model WorkflowSimulationRecord {
+  id                    String   @id @default(uuid())
+  caseId                String
+  workflowName          String   // evidence_intake | case_analysis | defense_generation | trial_preparation | export_delivery
+  simulationSteps       Int      @default(0)
+  stepsSucceeded        Int      @default(0)
+  stepsFailed           Int      @default(0)
+  simulationStatus      String   // passed | failed | partial
+  simulationHash        String   // SHA-256
+  simulationDetails     String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([workflowName])
+  @@index([simulationStatus])
+  @@map("workflow_simulation_records")
+}
+
+model SecurityHardeningValidation {
+  id                    String   @id @default(uuid())
+  caseId                String
+  securityDomain        String   // authentication | authorization | data_encryption | input_validation | csrf_protection
+  checksTotal           Int      @default(0)
+  checksPassed          Int      @default(0)
+  checksFailed          Int      @default(0)
+  securityStatus        String   // hardened | vulnerable | partial | pending
+  securityHash          String   // SHA-256
+  securityDetails       String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([securityDomain])
+  @@index([securityStatus])
+  @@map("security_hardening_validations")
+}
+
+model ProductionCertificationRecord {
+  id                    String   @id @default(uuid())
+  caseId                String
+  certificationScope    String   // full_platform | subsystem | security | performance | stability
+  rulesTotal            Int      @default(0)
+  rulesPassed           Int      @default(0)
+  certificationRate     Float    @default(0)
+  certificationStatus   String   // certified | conditional | not_certified | pending
+  certifiedBy           String?
+  certifiedAt           String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([certificationScope])
+  @@index([certificationStatus])
+  @@map("production_certification_records")
+}
+
+model GoldenCaseValidationCorpus {
+  id                    String   @id @default(uuid())
+  caseId                String
+  corpusName            String   // known_contradictions | known_calcrim | known_burdens | known_timelines | known_discovery | known_replays
+  datasetSize           Int      @default(0)
+  expectedOutputHash    String   // SHA-256
+  actualOutputHash      String   // SHA-256
+  hashesMatch           Boolean  @default(false)
+  driftDetected         Boolean  @default(false)
+  corpusDetails         String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([corpusName])
+  @@index([driftDetected])
+  @@map("golden_case_validation_corpus")
+}
+
+model RedTeamValidationRecord {
+  id                    String   @id @default(uuid())
+  caseId                String
+  redTeamArea           String   // replay_consistency | evidence_integrity | queue_survivability | orchestration_resilience | tenant_isolation | export_verification | governance_enforcement | observability_replay
+  attackVector          String
+  systemSurvived        Boolean  @default(true)
+  integrityPreserved    Boolean  @default(true)
+  validationHash        String   // SHA-256
+  validationDetails     String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([redTeamArea])
+  @@index([systemSurvived])
+  @@map("red_team_validation_records")
+}

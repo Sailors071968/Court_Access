@@ -8628,3 +8628,200 @@ model ProductionBillingCertificationManifest {
   @@index([environment])
   @@map("production_billing_certification_manifests")
 }
+
+// ---------------------------------------------------------------------------
+// Phase O.3 — Controlled LIVE Billing Enablement + Revenue Operations Governance
+// No LIVE activation before warning resolution. No TEST/LIVE mixing.
+// ---------------------------------------------------------------------------
+
+model LiveStripeActivationGovernance {
+  id                    String   @id @default(uuid())
+  activationGate        String   // warning_resolution | key_promotion | webhook_live | product_sync | price_sync | customer_portal_live | monitoring_verified | incident_response_ready | rollback_tested | governance_signed_off
+  gateOrder             Int      @default(0)
+  gateStatus            String   // blocked | pending | passed | failed | waived
+  previousWarnings      String   // JSON — resolved warnings from O.2
+  resolutionEvidence    String   // JSON
+  governanceApproved    Boolean  @default(false)
+  approvedBy            String?
+  activationHash        String   // SHA-256
+  environment           String   // live
+  createdAt             DateTime @default(now())
+
+  @@index([activationGate])
+  @@index([gateStatus])
+  @@index([environment])
+  @@map("live_stripe_activation_governance")
+}
+
+model ProductionBillingMonitor {
+  id                    String   @id @default(uuid())
+  monitorDomain         String   // payment_success_rate | webhook_latency | subscription_churn | revenue_trend | error_rate | entitlement_drift | invoice_delivery | institutional_health
+  currentValue          Float    @default(0)
+  thresholdWarning      Float    @default(0)
+  thresholdCritical     Float    @default(0)
+  monitorStatus         String   // healthy | warning | critical | degraded
+  alertsSent            Int      @default(0)
+  monitorHash           String   // SHA-256
+  monitorDetails        String   // JSON
+  environment           String   // live
+  createdAt             DateTime @default(now())
+
+  @@index([monitorDomain])
+  @@index([monitorStatus])
+  @@index([environment])
+  @@map("production_billing_monitors")
+}
+
+model RevenueOperationsWorkflow {
+  id                    String   @id @default(uuid())
+  workflowType          String   // mrr_reconciliation | arr_projection | churn_analysis | payment_recovery | revenue_recognition | dunning_management | refund_governance | subscription_analytics
+  workflowStatus        String   // scheduled | running | completed | failed | paused
+  inputData             String   // JSON
+  outputData            String?  // JSON
+  immutable             Boolean  @default(true)
+  workflowHash          String   // SHA-256
+  workflowDetails       String   // JSON
+  environment           String   // live
+  createdAt             DateTime @default(now())
+
+  @@index([workflowType])
+  @@index([workflowStatus])
+  @@index([environment])
+  @@map("revenue_operations_workflows")
+}
+
+model BillingIncidentResponse {
+  id                    String   @id @default(uuid())
+  incidentType          String   // payment_outage | webhook_failure | subscription_corruption | entitlement_leak | invoice_error | refund_anomaly | revenue_discrepancy | institutional_billing_failure
+  severity              String   // critical | high | medium | low
+  detectedAt            String
+  resolvedAt            String?
+  responseTimeMs        Int      @default(0)
+  rootCause             String?
+  resolutionAction      String?
+  incidentHash          String   // SHA-256
+  incidentDetails       String   // JSON
+  environment           String   // live
+  createdAt             DateTime @default(now())
+
+  @@index([incidentType])
+  @@index([severity])
+  @@index([environment])
+  @@map("billing_incident_responses")
+}
+
+model LiveWebhookObservability {
+  id                    String   @id @default(uuid())
+  webhookEndpoint       String
+  observabilityMetric   String   // delivery_rate | processing_latency | signature_success_rate | replay_block_rate | error_rate | dead_letter_count | retry_success_rate | throughput
+  metricValue           Float    @default(0)
+  metricUnit            String   // percent | ms | count | per_second
+  observabilityStatus   String   // healthy | degraded | critical
+  observabilityHash     String   // SHA-256
+  observabilityDetails  String   // JSON
+  environment           String   // live
+  createdAt             DateTime @default(now())
+
+  @@index([observabilityMetric])
+  @@index([observabilityStatus])
+  @@index([environment])
+  @@map("live_webhook_observability")
+}
+
+model InstitutionalCustomerOnboarding {
+  id                    String   @id @default(uuid())
+  institutionId         String
+  institutionName       String
+  onboardingMilestone   String   // contract_executed | billing_configured | users_provisioned | training_completed | acceptance_signed | live_activated | first_invoice_paid | onboarding_certified
+  milestoneOrder        Int      @default(0)
+  milestoneStatus       String   // pending | completed | blocked | skipped
+  governanceApproved    Boolean  @default(false)
+  approvedBy            String?
+  onboardingHash        String   // SHA-256
+  onboardingDetails     String   // JSON
+  environment           String   // live
+  createdAt             DateTime @default(now())
+
+  @@index([institutionId])
+  @@index([onboardingMilestone])
+  @@index([environment])
+  @@map("institutional_customer_onboarding")
+}
+
+model ProductionRevenueCertification {
+  id                    String   @id @default(uuid())
+  certificationDomain   String   // revenue_accuracy | billing_integrity | subscription_health | entitlement_compliance | institutional_billing | payment_processing | refund_governance | financial_reporting
+  auditPeriodStart      String
+  auditPeriodEnd        String
+  revenueAmount         Float    @default(0)
+  discrepancyAmount     Float    @default(0)
+  certificationStatus   String   // passed | failed | conditional | pending_review
+  certifiedBy           String?
+  certificationHash     String   // SHA-256
+  certificationDetails  String   // JSON
+  environment           String   // live
+  createdAt             DateTime @default(now())
+
+  @@index([certificationDomain])
+  @@index([certificationStatus])
+  @@index([environment])
+  @@map("production_revenue_certifications")
+}
+
+model FinancialRollbackGovernance {
+  id                    String   @id @default(uuid())
+  rollbackTrigger       String   // revenue_anomaly | billing_corruption | entitlement_leak | webhook_compromise | subscription_sync_failure | institutional_billing_error | payment_processing_failure | compliance_violation
+  rollbackScope         String   // single_customer | customer_segment | institutional | feature_flag | full_billing | webhook_only
+  rollbackSteps         Int      @default(0)
+  stepsCompleted        Int      @default(0)
+  dataIntegrityVerified Boolean  @default(false)
+  rollbackStatus        String   // planned | executing | completed | failed | verified
+  rollbackHash          String   // SHA-256
+  rollbackDetails       String   // JSON
+  environment           String   // live
+  createdAt             DateTime @default(now())
+
+  @@index([rollbackTrigger])
+  @@index([rollbackStatus])
+  @@index([environment])
+  @@map("financial_rollback_governance")
+}
+
+model OperationalSupportEscalation {
+  id                    String   @id @default(uuid())
+  escalationType        String   // billing_dispute | payment_failure | subscription_issue | entitlement_complaint | institutional_escalation | refund_request | invoice_discrepancy | compliance_concern
+  escalationSeverity    String   // critical | high | medium | low
+  customerId            String
+  escalationStatus      String   // open | investigating | resolved | escalated_further | closed
+  assignedTo            String?
+  resolutionSummary     String?
+  slaTargetMs           Int      @default(0)
+  slaMetMs              Int      @default(0)
+  escalationHash        String   // SHA-256
+  escalationDetails     String   // JSON
+  environment           String   // live
+  createdAt             DateTime @default(now())
+
+  @@index([escalationType])
+  @@index([escalationStatus])
+  @@index([environment])
+  @@map("operational_support_escalations")
+}
+
+model RevenueStewardshipManifest {
+  id                    String   @id @default(uuid())
+  stewardshipArea       String   // billing_governance | revenue_integrity | subscription_health | webhook_security | institutional_stewardship | payment_survivability | entitlement_governance | financial_compliance
+  stewardshipLevel      String   // initial | developing | operational | mature | exemplary
+  lastAuditDate         String
+  nextAuditDate         String
+  stewardshipScore      Float    @default(0)
+  manifestHash          String   // SHA-256
+  manifestDetails       String   // JSON
+  environment           String   // live
+  createdAt             DateTime @default(now())
+
+  @@index([stewardshipArea])
+  @@index([stewardshipLevel])
+  @@index([environment])
+  @@map("revenue_stewardship_manifests")
+}

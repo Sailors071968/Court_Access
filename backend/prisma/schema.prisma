@@ -4426,3 +4426,243 @@ model ConstitutionalPreservationGraph {
   @@index([currentStatus])
   @@map("constitutional_preservation_graphs")
 }
+
+// ---------------------------------------------------------------------------
+// Phase G.2 — Discovery Disclosure Tracker
+// ---------------------------------------------------------------------------
+
+model DiscoveryDisclosureTracker {
+  id                    String   @id @default(uuid())
+  caseId                String
+  disclosureType        String   // initial_discovery | supplemental | exculpatory | impeachment | expert | witness_list | physical_evidence | digital_evidence
+  itemDescription       String
+  disclosedBy           String   // prosecution | defense | court_ordered
+  disclosureDate        String?
+  dueDate               String?
+  isLate                Boolean  @default(false)
+  daysPastDue           Int      @default(0)
+  completeness          String   // complete | partial | missing | redacted
+  evidenceIds           String   // JSON array of linked evidence IDs
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([disclosureType])
+  @@index([isLate])
+  @@map("discovery_disclosure_trackers")
+}
+
+// ---------------------------------------------------------------------------
+// Phase G.2 — Brady Materiality Framework
+// ---------------------------------------------------------------------------
+
+model BradyMaterialityFramework {
+  id                    String   @id @default(uuid())
+  caseId                String
+  bradyIssueId          String?  // FK to BradyGiglioIssue
+  evidenceItem          String
+  materialityType       String   // exculpatory | impeachment | mitigating
+  materialityLevel      String   // highly_material | material | potentially_material | immaterial
+  favorability          String   // directly_favorable | indirectly_favorable | potentially_favorable
+  suppressionFound      Boolean  @default(false)
+  prejudiceAnalysis     String   // outcome_determinative | reasonable_probability | cumulative_impact | de_minimis
+  kylesAnalysis         String?  // Kyles v. Whitley cumulative materiality
+  legalBasis            String   // Brady v. Maryland | Kyles v. Whitley | Strickler v. Greene | etc.
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([materialityLevel])
+  @@index([suppressionFound])
+  @@map("brady_materiality_frameworks")
+}
+
+// ---------------------------------------------------------------------------
+// Phase G.2 — Giglio Impeachment Disclosure Tracking
+// ---------------------------------------------------------------------------
+
+model GiglioImpeachmentDisclosure {
+  id                    String   @id @default(uuid())
+  caseId                String
+  witnessName           String
+  disclosureType        String   // plea_deal | immunity | payment | pending_charges | prior_inconsistent | bias | motive
+  disclosed             Boolean  @default(false)
+  disclosureTimeliness  String   // timely | late | not_disclosed | partial
+  impeachmentValue      String   // high | medium | low
+  materialityToDefense  String
+  napiueApplicable      Boolean  @default(false) // Napue v. Illinois — false testimony
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([witnessName])
+  @@index([disclosed])
+  @@map("giglio_impeachment_disclosures")
+}
+
+// ---------------------------------------------------------------------------
+// Phase G.2 — Disclosure Chronology (immutable)
+// ---------------------------------------------------------------------------
+
+model DisclosureChronology {
+  id                    String   @id @default(uuid())
+  caseId                String
+  eventType             String   // request_filed | response_due | production_made | supplemental_production | court_order | motion_to_compel | sanctions_motion | in_camera_review
+  eventDate             String?
+  description           String
+  party                 String   // prosecution | defense | court
+  documentsProduced     Int      @default(0)
+  pagesProduced         Int      @default(0)
+  sequenceNumber        Int      @default(0)
+  complianceStatus      String   // compliant | non_compliant | partial | pending
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([eventType])
+  @@index([sequenceNumber])
+  @@map("disclosure_chronologies")
+}
+
+// ---------------------------------------------------------------------------
+// Phase G.2 — Late Disclosure Detection
+// ---------------------------------------------------------------------------
+
+model LateDisclosureDetection {
+  id                    String   @id @default(uuid())
+  caseId                String
+  disclosureTrackerId   String?
+  itemDescription       String
+  originalDueDate       String?
+  actualDisclosureDate  String?
+  daysLate              Int      @default(0)
+  prejudiceToDefense    String   // severe | significant | moderate | minimal
+  trialPhaseAtDisclosure String? // pretrial | jury_selection | prosecution_case | defense_case | rebuttal | closing
+  defenseRemedy         String   // continuance | mistrial | exclusion | instruction | sanctions
+  motionFiled           Boolean  @default(false)
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([daysLate])
+  @@index([prejudiceToDefense])
+  @@map("late_disclosure_detections")
+}
+
+// ---------------------------------------------------------------------------
+// Phase G.2 — Missing Evidence Auditing
+// ---------------------------------------------------------------------------
+
+model MissingEvidenceAudit {
+  id                    String   @id @default(uuid())
+  caseId                String
+  evidenceDescription   String
+  evidenceCategory      String   // physical | testimonial | documentary | digital | forensic
+  expectedSource        String
+  requestedDate         String?
+  responseReceived      Boolean  @default(false)
+  explanationGiven      String?  // lost | destroyed | never_collected | not_applicable | withheld
+  badFaithIndicators    String   // JSON array of indicators
+  arizonaVYoungblood    Boolean  @default(false) // Arizona v. Youngblood — bad faith destruction
+  materialityAssessment String   // highly_material | material | potentially_material | immaterial
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([evidenceCategory])
+  @@index([materialityAssessment])
+  @@map("missing_evidence_audits")
+}
+
+// ---------------------------------------------------------------------------
+// Phase G.2 — Prosecutorial Conduct Index (aggregate + evidence-backed)
+// ---------------------------------------------------------------------------
+
+model ProsecutorialConductIndex {
+  id                    String   @id @default(uuid())
+  caseId                String
+  conductType           String   // discovery_violation | brady_violation | witness_coaching | evidence_misrepresentation | argument_misconduct | plea_coercion | charging_abuse | selective_prosecution
+  description           String
+  severity              String   // severe | significant | moderate | minor
+  evidenceBasis         String   // JSON array of evidence references
+  patternIndicator      Boolean  @default(false) // aggregate pattern across case
+  harmlessOrPrejudicial String   // prejudicial | harmless_beyond_reasonable_doubt | harmless_error
+  legalBasis            String
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([conductType])
+  @@index([severity])
+  @@map("prosecutorial_conduct_indexes")
+}
+
+// ---------------------------------------------------------------------------
+// Phase G.2 — Disclosure Preservation Graph (immutable)
+// ---------------------------------------------------------------------------
+
+model DisclosurePreservationGraph {
+  id                    String   @id @default(uuid())
+  caseId                String
+  disclosureType        String
+  preservationChain     String   // JSON array of preservation events
+  chainLength           Int      @default(0)
+  currentStatus         String   // preserved | at_risk | forfeited | renewed
+  requestDate           String?
+  lastProductionDate    String?
+  outstandingItems      Int      @default(0)
+  riskOfSpoliation      Boolean  @default(false)
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([currentStatus])
+  @@map("disclosure_preservation_graphs")
+}
+
+// ---------------------------------------------------------------------------
+// Phase G.2 — Witness Benefit Disclosure Tracking
+// ---------------------------------------------------------------------------
+
+model WitnessBenefitDisclosure {
+  id                    String   @id @default(uuid())
+  caseId                String
+  witnessName           String
+  benefitType           String   // plea_agreement | immunity | reduced_sentence | dropped_charges | payment | relocation | favorable_treatment | informal_benefit
+  benefitDescription    String
+  disclosed             Boolean  @default(false)
+  disclosureDate        String?
+  disclosureTimeliness  String   // timely | late | not_disclosed
+  impeachmentRelevance  String   // high | medium | low
+  giglioApplicable      Boolean  @default(true)
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([witnessName])
+  @@index([disclosed])
+  @@map("witness_benefit_disclosures")
+}
+
+// ---------------------------------------------------------------------------
+// Phase G.2 — Discovery Violation Escalation Framework
+// ---------------------------------------------------------------------------
+
+model DiscoveryViolationEscalation {
+  id                    String   @id @default(uuid())
+  caseId                String
+  violationType         String   // late_production | non_production | incomplete_production | misleading_production | destruction | bad_faith_withholding
+  severity              String   // critical | high | medium | low
+  escalationLevel       String   // informal_request | formal_motion | sanctions_motion | mistrial_motion | appellate_issue | post_conviction_claim
+  currentPhase          String   // identified | documented | motion_filed | hearing_scheduled | ruling_received | appeal_preserved
+  prejudiceAssessment   String
+  remedySought          String   // production_order | continuance | sanctions | exclusion | dismissal | mistrial | new_trial
+  legalAuthority        String
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([violationType])
+  @@index([escalationLevel])
+  @@map("discovery_violation_escalations")
+}

@@ -2457,3 +2457,157 @@ model JuryReasonableDoubtStructure {
   @@index([strength])
   @@map("jury_reasonable_doubt_structures")
 }
+
+// ---------------------------------------------------------------------------
+// Phase D.5 — Trial Exhibit (citation-linked exhibit for court use)
+// ---------------------------------------------------------------------------
+
+model TrialExhibit {
+  id                  String   @id @default(uuid())
+  caseId              String
+  exhibitNumber       String
+  exhibitType         String   // contradiction | impeachment | timeline | burden_failure | witness_attack | evidence_summary
+  title               String
+  description         String
+  content             String   // Structured exhibit content (JSON)
+  citations           String   // JSON array of { text, page, line, speaker, document }
+  relatedIds          String   // JSON array of source IDs
+  status              String   @default("draft") // draft | finalized | filed
+  generatedAt         DateTime @default(now())
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@unique([caseId, exhibitNumber])
+  @@index([caseId])
+  @@index([exhibitType])
+  @@index([status])
+  @@map("trial_exhibits")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.5 — Witness Attack Sheet (per-witness trial prep)
+// ---------------------------------------------------------------------------
+
+model WitnessAttackSheet {
+  id                    String   @id @default(uuid())
+  caseId                String
+  witnessName           String
+  credibilityScore      Float    @default(1.0)
+  inconsistencySummary  String   // JSON array of { topic, statementA, statementB, page, impact }
+  contradictionSummary  String   // JSON array of { topic, proofMethod, stmtA, stmtB, page }
+  crossExamTopics       String   // JSON array of ordered cross-exam topic areas
+  impeachmentSequence   String   // JSON array of ordered impeachment steps
+  priorStatements       String   // JSON array of { document, page, text }
+  keyQuotations         String   // JSON array of { text, page, line, significance }
+  timelineConflicts     String   // JSON array of { timestampA, timestampB, explanation }
+  overallAssessment     String   // Deterministic witness reliability assessment
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@unique([caseId, witnessName])
+  @@index([caseId])
+  @@index([witnessName])
+  @@map("witness_attack_sheets")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.5 — CALCRIM Failure Matrix (element-by-element prosecution failure)
+// ---------------------------------------------------------------------------
+
+model CalcrimFailureMatrix {
+  id                  String   @id @default(uuid())
+  caseId              String
+  instructionId       String
+  instructionNumber   Int
+  chargeTitle         String
+  totalElements       Int      @default(0)
+  elementAnalysis     String   // JSON array of { elementId, label, status, supportCount, contradictionCount, confidence, citations }
+  overallStatus       String   // collapsed | fractured | weakened | supported
+  prosecutionGaps     String   // JSON array of specific prosecution failures
+  defenseArguments    String   // JSON array of element-specific defense arguments (citation-backed)
+  motionBasis         String?  // If applicable: statutory motion basis
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@unique([caseId, instructionId])
+  @@index([caseId])
+  @@index([overallStatus])
+  @@map("calcrim_failure_matrices")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.5 — Hearing Prep Packet
+// ---------------------------------------------------------------------------
+
+model HearingPrepPacket {
+  id                  String   @id @default(uuid())
+  caseId              String
+  hearingType         String   // preliminary | suppression | trial | sentencing | bail
+  title               String
+  keyIssues           String   // JSON array of { issue, priority, citations }
+  witnessOrder        String   // JSON array of { witness, purpose, attackSheet }
+  exhibitList         String   // JSON array of { exhibitNumber, title, purpose }
+  motionsSummary      String   // JSON array of { motionType, strength, basis }
+  contradictionHighlights String // JSON array of top contradictions for this hearing
+  burdenAnalysis      String   // JSON summary of burden status per instruction
+  timelineIssues      String   // JSON array of timeline problems to raise
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([hearingType])
+  @@map("hearing_prep_packets")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.5 — Trial Notebook (assembled trial preparation package)
+// ---------------------------------------------------------------------------
+
+model TrialNotebook {
+  id                  String   @id @default(uuid())
+  caseId              String
+  title               String
+  sections            String   // JSON array of { sectionName, sectionType, content, citations }
+  exhibitIndex        String   // JSON array of { exhibitNumber, title, type }
+  witnessIndex        String   // JSON array of { name, role, attackSheetId }
+  motionIndex         String   // JSON array of { motionType, title, strength }
+  contradictionIndex  String   // JSON array of { id, type, severity }
+  burdenSummary       String   // JSON overall burden analysis
+  timelineSummary     String   // JSON timeline analysis
+  generatedAt         DateTime @default(now())
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([caseId])
+  @@map("trial_notebooks")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.5 — Export Job (PDF/packet generation tracking)
+// ---------------------------------------------------------------------------
+
+model ExportJob {
+  id                  String   @id @default(uuid())
+  caseId              String
+  exportType          String   // pdf_exhibit | pdf_hearing | pdf_trial_notebook | pdf_witness_attack | pdf_contradiction | pdf_failure_matrix
+  status              String   @default("pending") // pending | processing | completed | failed
+  sourceId            String?  // ID of the source record (exhibit, hearing packet, etc.)
+  fileName            String?
+  filePath            String?
+  fileSize            Int?
+  citationCount       Int      @default(0)
+  error               String?
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([exportType])
+  @@index([status])
+  @@map("export_jobs")
+}

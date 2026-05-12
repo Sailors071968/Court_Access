@@ -1,0 +1,177 @@
+{
+  "phase": "D.3",
+  "name": "Contradiction Pair Intelligence + Burden Fracture Analysis",
+  "generatedAt": "2026-05-12T21:30:00.000Z",
+  "status": "READY_FOR_DEPLOYMENT",
+
+  "subsystems": {
+    "contradictionPairDetection": {
+      "description": "Deterministic contradiction pairing via lexical negation, factual exclusion, numeric inconsistency, location conflict, temporal impossibility",
+      "proofMethods": [
+        "lexical_negation",
+        "temporal_impossibility",
+        "speaker_conflict",
+        "factual_exclusion",
+        "numeric_inconsistency",
+        "location_conflict"
+      ],
+      "contradictionTypes": [
+        "factual",
+        "temporal",
+        "identity",
+        "procedural",
+        "witness",
+        "cross_document"
+      ],
+      "severityLevels": ["critical", "high", "medium", "low"],
+      "topicalOverlapRequired": true,
+      "minimumSharedTerms": 2,
+      "citationPreservation": "mandatory — exact text, page, line, speaker, document preserved"
+    },
+    "burdenFractureDetection": {
+      "description": "CALCRIM-element-aware prosecution burden failure analysis",
+      "fractureTypes": [
+        "unsupported — zero evidence mapped to element",
+        "contradicted — more contradictions than supporting statements",
+        "single_source — element relies on one statement only",
+        "weak_only — all supporting evidence below 40% confidence",
+        "missing_corroboration — disputed with insufficient independent support"
+      ],
+      "calcrimAware": true,
+      "chargeLinked": true,
+      "elementScoped": true
+    },
+    "witnessInconsistencyGraph": {
+      "description": "Same-speaker contradictory statement detection",
+      "inconsistencyTypes": [
+        "factual_change",
+        "detail_shift",
+        "omission",
+        "addition",
+        "chronology_change",
+        "severity_change"
+      ],
+      "crossDocumentSupport": true,
+      "credibilityImpactLevels": ["high", "medium", "low"]
+    },
+    "timelineIncompatibilityDetection": {
+      "description": "Temporal impossibility identification between statements",
+      "incompatibilityTypes": [
+        "simultaneous_different_location — same time, different places",
+        "impossible_sequence — events in wrong order",
+        "duration_conflict — timeline doesn't fit",
+        "before_after_reversal — temporal sequence reversed"
+      ],
+      "temporalPatterns": 5,
+      "locationPatterns": 3,
+      "timeParsing": "deterministic — supports 24h, AM/PM, military, approximate"
+    },
+    "prosecutorTheoryAttackSurfaces": {
+      "description": "Aggregated defense intelligence from all subsystems",
+      "attackTypes": [
+        "burden_failure — from burden fracture data",
+        "contradiction_cluster — multiple contradictions on same element",
+        "witness_unreliability — speaker with internal inconsistencies",
+        "timeline_impossibility — physical impossibility in timeline",
+        "missing_corroboration — insufficient independent evidence",
+        "theory_fracture — systemic prosecution theory weakness"
+      ],
+      "inputSources": [
+        "contradiction_pairs",
+        "burden_fractures",
+        "witness_inconsistencies",
+        "timeline_incompatibilities"
+      ],
+      "outputIncludes": [
+        "prosecutionWeakness — specific burden weakness identified",
+        "defenseOpportunity — specific argument opportunity for defense"
+      ]
+    },
+    "crossDocumentContradictionIndexing": {
+      "description": "Built into contradiction pair detection — cross_document type",
+      "indexedBy": ["caseId", "contradictionType", "elementId", "instructionId"],
+      "filterSupport": ["severity", "type", "elementId"]
+    }
+  },
+
+  "apiEndpoints": [
+    { "method": "POST", "path": "/api/intelligence/analyze/:caseId", "description": "Run full intelligence analysis (all subsystems)" },
+    { "method": "GET", "path": "/api/intelligence/summary/:caseId", "description": "Intelligence summary for a case" },
+    { "method": "POST", "path": "/api/intelligence/contradictions/:caseId", "description": "Detect contradiction pairs" },
+    { "method": "GET", "path": "/api/intelligence/contradictions/:caseId", "description": "Get contradiction pairs with filters" },
+    { "method": "POST", "path": "/api/intelligence/burden-fractures/:caseId", "description": "Detect burden fractures" },
+    { "method": "GET", "path": "/api/intelligence/burden-fractures/:caseId", "description": "Get burden fractures with filters" },
+    { "method": "POST", "path": "/api/intelligence/witness-inconsistencies/:caseId", "description": "Detect witness inconsistencies" },
+    { "method": "GET", "path": "/api/intelligence/witness-inconsistencies/:caseId", "description": "Get witness inconsistencies" },
+    { "method": "POST", "path": "/api/intelligence/timeline/:caseId", "description": "Detect timeline incompatibilities" },
+    { "method": "GET", "path": "/api/intelligence/timeline/:caseId", "description": "Get timeline incompatibilities" },
+    { "method": "POST", "path": "/api/intelligence/theory-attacks/:caseId", "description": "Generate theory attack surfaces" },
+    { "method": "GET", "path": "/api/intelligence/theory-attacks/:caseId", "description": "Get theory attack surfaces" },
+    { "method": "GET", "path": "/api/intelligence/validation", "description": "Live validation report" }
+  ],
+
+  "prismaModels": [
+    "ContradictionPair",
+    "BurdenFracture",
+    "WitnessInconsistency",
+    "TimelineIncompatibility",
+    "ProsecutorTheoryAttack"
+  ],
+
+  "migration": "20260512210000_contradiction_intelligence",
+
+  "deterministicConstraints": {
+    "noGenerativeLegalOpinions": true,
+    "noHallucinatedContradictions": true,
+    "noSpeculativeAttorneyAdvice": true,
+    "noUncitedFactualClaims": true,
+    "noProbabilisticAINarratives": true,
+    "allContradictionsProvenByCitations": true,
+    "allFracturesCALCRIMElementAware": true,
+    "corePrinciple": "CourtAccess NEVER invents contradictions. It PROVES contradictions using exact evidence citations, element relationships, and deterministic logical incompatibility."
+  },
+
+  "systemsUnmodified": {
+    "auth": true,
+    "csrf": true,
+    "nginx": true,
+    "redis": true,
+    "ocr": true,
+    "pm2": true,
+    "ingestion": true,
+    "existingContradictionEngine": true,
+    "existingD1SegmentationLogic": true,
+    "existingD2ElementMapping": true
+  },
+
+  "deploymentCommands": {
+    "pull": "cd /var/www/courtaccess_repo && git pull origin devin/1778357361-courtaccess-recovery-stabilization",
+    "install": "cd backend && npm install",
+    "migrate": "DATABASE_URL=\"...\" npx prisma migrate deploy",
+    "restart": "cd .. && pm2 restart courtaccess-api --update-env",
+    "verify": "curl -s localhost:3001/api/intelligence/validation | jq ."
+  },
+
+  "rollbackSQL": {
+    "commands": [
+      "DROP TABLE IF EXISTS \"prosecutor_theory_attacks\" CASCADE;",
+      "DROP TABLE IF EXISTS \"timeline_incompatibilities\" CASCADE;",
+      "DROP TABLE IF EXISTS \"witness_inconsistencies\" CASCADE;",
+      "DROP TABLE IF EXISTS \"burden_fractures\" CASCADE;",
+      "DROP TABLE IF EXISTS \"contradiction_pairs\" CASCADE;",
+      "DELETE FROM \"_prisma_migrations\" WHERE migration_name = '20260512210000_contradiction_intelligence';"
+    ]
+  },
+
+  "riskAssessment": {
+    "overallRisk": "LOW",
+    "details": [
+      "5 new tables — additive only, no existing tables modified",
+      "No existing routes modified",
+      "No existing services modified",
+      "server.ts: single import + single route registration",
+      "Auth/CSRF/NGINX/Redis/OCR/PM2/ingestion all untouched",
+      "Existing contradiction engine (Phase C.4) preserved — D.3 is parallel, not replacement"
+    ]
+  }
+}

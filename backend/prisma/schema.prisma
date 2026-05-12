@@ -1910,33 +1910,163 @@ model ElementKeyword {
 }
 
 // ---------------------------------------------------------------------------
-// Phase C.2 — Evidence Statement (normalized source text segments)
+// Phase D.1 — Evidence Document (source document metadata)
+// ---------------------------------------------------------------------------
+
+model EvidenceDocument {
+  id               String   @id @default(uuid())
+  caseId           String
+  tenantId         String
+  evidenceId       String?  // FK to Evidence table if applicable
+  fileName         String
+  fileType         String   // pdf | transcript | bodycam_transcript | dispatch_log | witness_statement | interrogation
+  documentType     String   // police_report | transcript | bodycam | interrogation | dispatch | witness_statement
+  totalPages       Int      @default(0)
+  totalLines       Int      @default(0)
+  totalStatements  Int      @default(0)
+  processingStatus String   @default("pending") // pending | processing | completed | failed
+  errorMessage     String?
+  hash             String?  // SHA-256 of original content for dedup
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  pages            EvidencePage[]
+  statements       EvidenceStatement[]
+
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([evidenceId])
+  @@index([documentType])
+  @@index([processingStatus])
+  @@map("evidence_documents")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.1 — Evidence Page (per-page metadata for source documents)
+// ---------------------------------------------------------------------------
+
+model EvidencePage {
+  id               String   @id @default(uuid())
+  documentId       String
+  document         EvidenceDocument @relation(fields: [documentId], references: [id])
+  pageNumber       Int      // 1-based
+  totalLines       Int      @default(0)
+  rawContent       String   // Full raw text of this page
+  contentHash      String?  // SHA-256 of page content
+
+  createdAt        DateTime @default(now())
+
+  @@unique([documentId, pageNumber])
+  @@index([documentId])
+  @@map("evidence_pages")
+}
+
+// ---------------------------------------------------------------------------
+// Phase C.2/D.1 — Evidence Statement (normalized source text segments)
 // ---------------------------------------------------------------------------
 
 model EvidenceStatement {
   id                   String   @id @default(uuid())
   caseId               String
   tenantId             String
-  sourceDocumentId     String   // Evidence.evidenceId
+  sourceDocumentId     String   // Evidence.evidenceId or EvidenceDocument.id
+  documentId           String?  // FK to EvidenceDocument
+  document             EvidenceDocument? @relation(fields: [documentId], references: [id])
   page                 Int?     // Source page number (1-based)
   lineStart            Int?     // Starting line in source
   lineEnd              Int?     // Ending line in source
+  paragraphIndex       Int?     // Paragraph number within page (0-based)
   timestamp            String?  // Timestamp within source (e.g. bodycam timecode)
   speaker              String?  // Who said/wrote this
-  rawText              String   // Verbatim extracted text
+  rawText              String   // Verbatim extracted text — NEVER modified
   normalizedText       String   // Cleaned but not summarized text
+  exactText            String?  // Identical to rawText — preserved for courtroom defensibility
   extractionConfidence Float    @default(1.0) // 0.0-1.0
-  extractionMethod     String   @default("manual") // manual | ocr | transcript_parse | pdf_extract
+  extractionMethod     String   @default("manual") // manual | ocr | transcript_parse | pdf_extract | dispatch_parse | witness_parse
+  statementType        String   @default("narrative") // narrative | question | answer | temporal | directive | observation
+  hash                 String?  // SHA-256 of rawText for dedup/integrity
 
   createdAt            DateTime @default(now())
 
   elementStatementLinks ElementStatementLink[]
+  citations             StatementCitation[]
+  speakers              StatementSpeaker[]
+  timestamps            StatementTimestamp[]
 
   @@index([caseId])
   @@index([tenantId])
   @@index([sourceDocumentId])
+  @@index([documentId])
   @@index([speaker])
+  @@index([statementType])
+  @@index([hash])
   @@map("evidence_statements")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.1 — Statement Citation (exact source references)
+// ---------------------------------------------------------------------------
+
+model StatementCitation {
+  id               String   @id @default(uuid())
+  statementId      String
+  statement        EvidenceStatement @relation(fields: [statementId], references: [id])
+  citationType     String   // page | line_range | paragraph | exhibit | bates_number
+  pageNumber       Int?
+  lineStart        Int?
+  lineEnd          Int?
+  paragraphIndex   Int?
+  exhibitRef       String?  // e.g. "Exhibit A", "People's 1"
+  batesNumber      String?  // Bates stamp reference
+  rawReference     String   // Original citation text as it appears in source
+
+  createdAt        DateTime @default(now())
+
+  @@index([statementId])
+  @@index([citationType])
+  @@map("statement_citations")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.1 — Statement Speaker (attributed speaker metadata)
+// ---------------------------------------------------------------------------
+
+model StatementSpeaker {
+  id               String   @id @default(uuid())
+  statementId      String
+  statement        EvidenceStatement @relation(fields: [statementId], references: [id])
+  speakerName      String   // Detected speaker name/label
+  speakerRole      String?  // officer | witness | defendant | prosecutor | judge | unknown
+  speakerConfidence Float   @default(1.0) // How confident the attribution is
+  detectionMethod  String   @default("pattern") // pattern | header | explicit_label | inferred
+
+  createdAt        DateTime @default(now())
+
+  @@index([statementId])
+  @@index([speakerName])
+  @@index([speakerRole])
+  @@map("statement_speakers")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.1 — Statement Timestamp (temporal references within statements)
+// ---------------------------------------------------------------------------
+
+model StatementTimestamp {
+  id               String   @id @default(uuid())
+  statementId      String
+  statement        EvidenceStatement @relation(fields: [statementId], references: [id])
+  rawTimestamp      String   // Exact timestamp text from source
+  normalizedTime   String?  // ISO 8601 or HH:MM:SS normalized form
+  timestampType    String   @default("event") // event | bodycam | dispatch | statement_time | narrative
+  confidence       Float    @default(1.0)
+
+  createdAt        DateTime @default(now())
+
+  @@index([statementId])
+  @@index([timestampType])
+  @@map("statement_timestamps")
 }
 
 // ---------------------------------------------------------------------------

@@ -1,0 +1,180 @@
+{
+  "phase": "O.2",
+  "name": "Stripe Production Activation + Controlled Billing Validation",
+  "generatedAt": "2026-05-12T52:00:00.000Z",
+  "status": "ACTIVATION_VALIDATION_READY",
+  "strategicDirection": "Full sandbox-to-production rehearsal. No live Stripe without full rehearsal.",
+
+  "subsystems": {
+    "stripeActivationWorkflow": {
+      "description": "Live Stripe activation infrastructure",
+      "steps": ["key_rotation", "webhook_configuration", "product_creation", "price_configuration", "customer_portal", "test_mode_cleanup", "live_mode_verification", "dns_configuration", "ssl_verification", "monitoring_setup"],
+      "governanceControlled": true,
+      "priority": 1
+    },
+    "productionKeyRotation": {
+      "description": "Governance-controlled production key rotation",
+      "keyTypes": ["publishable_key", "secret_key", "webhook_secret", "restricted_key", "connect_key"],
+      "neverStorePlaintext": true,
+      "sha256HashedOnly": true,
+      "priority": 2
+    },
+    "webhookEndpointHardening": {
+      "description": "Webhook endpoint security hardening",
+      "checks": ["signature_verification", "replay_prevention", "rate_limiting", "ip_allowlist", "tls_enforcement", "timeout_configuration", "retry_policy", "dead_letter_queue"],
+      "minimumScore": 80,
+      "priority": 3
+    },
+    "liveBillingRehearsals": {
+      "description": "Full sandbox-to-production billing rehearsal",
+      "mandatoryWorkflows": ["user_signup", "checkout_session", "webhook_delivery", "entitlement_activation", "invoice_generation", "subscription_renewal", "failed_payment", "retry_recovery", "downgrade", "upgrade", "cancellation", "refund", "replay_attack", "duplicate_event", "idempotency_check"],
+      "totalWorkflows": 15,
+      "allMustPass": true,
+      "priority": 4
+    },
+    "institutionalSubscriptionOnboarding": {
+      "description": "Deterministic institutional subscription onboarding",
+      "phases": ["contract_signed", "stripe_customer_created", "subscription_activated", "seats_provisioned", "entitlements_granted", "invoice_issued", "payment_verified", "onboarding_complete"],
+      "governanceApproved": true,
+      "priority": 5
+    },
+    "financialSurvivability": {
+      "description": "Financial survivability validation",
+      "scenarios": ["stripe_outage", "webhook_delay", "payment_processor_failure", "currency_conversion_error", "subscription_sync_failure", "refund_processing_delay", "invoice_generation_failure", "entitlement_desync"],
+      "allMustRecover": true,
+      "priority": 6
+    },
+    "billingStateTransitions": {
+      "description": "Deterministic billing state transition testing",
+      "transitions": ["trial→active", "active→past_due", "past_due→active", "active→canceled", "active→paused", "paused→active", "active→upgraded", "active→downgraded", "trial→canceled", "past_due→canceled"],
+      "allDeterministic": true,
+      "allReplayVerifiable": true,
+      "priority": 7
+    },
+    "replayAttackSimulation": {
+      "description": "Replay attack and duplicate event simulation",
+      "attackTypes": ["webhook_replay", "duplicate_checkout", "subscription_double_create", "invoice_duplicate", "refund_replay", "entitlement_replay"],
+      "allMustBeBlocked": true,
+      "idempotencyVerified": true,
+      "priority": 8
+    },
+    "tierTransitionValidation": {
+      "description": "Downgrade/upgrade/cancellation/refund validation",
+      "transitionTypes": ["upgrade", "downgrade", "cancellation", "refund", "reactivation"],
+      "prorateCalculation": true,
+      "entitlementsAdjusted": true,
+      "invoicesGenerated": true,
+      "priority": 9
+    },
+    "productionBillingCertification": {
+      "description": "Production billing certification manifests",
+      "areas": ["activation_readiness", "key_security", "webhook_hardening", "rehearsal_completeness", "institutional_onboarding", "survivability", "state_transitions", "replay_protection", "tier_transitions", "overall_billing"],
+      "certificationThreshold": 95,
+      "priority": 10
+    }
+  },
+
+  "mandatoryRehearsals": {
+    "count": 15,
+    "workflows": {
+      "user_signup": "required",
+      "checkout_session": "required",
+      "webhook_delivery": "required",
+      "entitlement_activation": "required",
+      "invoice_generation": "required",
+      "subscription_renewal": "required",
+      "failed_payment": "required",
+      "retry_recovery": "required",
+      "downgrade": "required",
+      "upgrade": "required",
+      "cancellation": "required",
+      "refund": "required",
+      "replay_attack": "required",
+      "duplicate_event": "required",
+      "idempotency_check": "required"
+    },
+    "allMustPass": true,
+    "allOutputsMustMatch": true,
+    "allTransitionsDeterministic": true,
+    "allTransitionsReplayVerifiable": true
+  },
+
+  "frontendComponent": {
+    "name": "BillingValidationCockpit",
+    "panes": ["activation workflow", "key rotation", "webhook hardening", "live rehearsals", "institutional onboarding", "survivability testing", "state transitions", "certification"],
+    "theme": "dark",
+    "features": ["activation step tracking with order numbers", "key rotation status with never-store-plaintext", "hardening score progress bars", "15 mandatory rehearsal checklist with MATCH/MISMATCH badges", "institutional onboarding phase tracking", "survivability recovery time display", "state transition diagrams with REPLAY OK badges", "certification gate tracking with pass rates"]
+  },
+
+  "apiEndpoints": {
+    "fullAnalysis": { "method": "POST", "path": "/api/activation/analyze/:customerId" },
+    "workflow": [
+      { "method": "POST", "path": "/api/activation/workflow/:customerId" },
+      { "method": "GET", "path": "/api/activation/workflow/:customerId" }
+    ],
+    "keys": [
+      { "method": "POST", "path": "/api/activation/keys/:customerId" },
+      { "method": "GET", "path": "/api/activation/keys/:customerId" }
+    ],
+    "hardening": [
+      { "method": "POST", "path": "/api/activation/hardening/:customerId" },
+      { "method": "GET", "path": "/api/activation/hardening/:customerId" }
+    ],
+    "rehearsals": [
+      { "method": "POST", "path": "/api/activation/rehearsals/:customerId" },
+      { "method": "GET", "path": "/api/activation/rehearsals/:customerId" }
+    ],
+    "institutional": [
+      { "method": "POST", "path": "/api/activation/institutional/:customerId" },
+      { "method": "GET", "path": "/api/activation/institutional/:customerId" }
+    ],
+    "survivability": [
+      { "method": "POST", "path": "/api/activation/survivability/:customerId" },
+      { "method": "GET", "path": "/api/activation/survivability/:customerId" }
+    ],
+    "transitions": [
+      { "method": "POST", "path": "/api/activation/transitions/:customerId" },
+      { "method": "GET", "path": "/api/activation/transitions/:customerId" }
+    ],
+    "replay": [
+      { "method": "POST", "path": "/api/activation/replay/:customerId" },
+      { "method": "GET", "path": "/api/activation/replay/:customerId" }
+    ],
+    "tiers": [
+      { "method": "POST", "path": "/api/activation/tiers/:customerId" },
+      { "method": "GET", "path": "/api/activation/tiers/:customerId" }
+    ],
+    "certification": [
+      { "method": "POST", "path": "/api/activation/certification/:customerId" },
+      { "method": "GET", "path": "/api/activation/certification/:customerId" }
+    ],
+    "validation": { "method": "GET", "path": "/api/activation/validation" }
+  },
+
+  "prismaModels": [
+    "StripeActivationWorkflow",
+    "ProductionKeyRotation",
+    "WebhookEndpointHardening",
+    "LiveBillingRehearsal",
+    "InstitutionalSubscriptionOnboarding",
+    "FinancialSurvivabilityTest",
+    "BillingStateTransitionTest",
+    "ReplayAttackSimulation",
+    "BillingDowngradeUpgradeValidation",
+    "ProductionBillingCertificationManifest"
+  ],
+
+  "migration": "20260512520000_stripe_activation",
+
+  "constraints": {
+    "noLiveWithoutFullRehearsal": true,
+    "allTransitionsDeterministic": true,
+    "allTransitionsReplayVerifiable": true,
+    "allReplayAttacksBlocked": true,
+    "allIdempotencyVerified": true,
+    "noTestLiveMixing": true,
+    "neverStorePlaintextKeys": true,
+    "minimumCertificationRate": 95,
+    "corePrinciple": "No live Stripe without full rehearsal. Every transition deterministic and replay-verifiable."
+  }
+}

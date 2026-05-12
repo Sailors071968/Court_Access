@@ -2321,3 +2321,139 @@ model ProsecutorTheoryAttack {
   @@index([severity])
   @@map("prosecutor_theory_attacks")
 }
+
+// ---------------------------------------------------------------------------
+// Phase D.4 — Defense Issue (prioritized defense opportunity)
+// ---------------------------------------------------------------------------
+
+model DefenseIssue {
+  id                  String   @id @default(uuid())
+  caseId              String
+  instructionId       String?
+  elementId           String?
+  issueType           String   // burden_failure | contradiction | witness_credibility | timeline_impossibility | procedural_defect | missing_corroboration | theory_fracture
+  priority            Int      @default(0) // 1=highest, computed deterministically
+  severity            String   // critical | high | medium | low
+  title               String
+  description         String
+  legalBasis          String   // Specific CALCRIM element / procedural rule
+  supportingIds       String   // JSON array of source IDs (contradictionPairId, burdenFractureId, etc.)
+  citationCount       Int      @default(0)
+  prosecutionImpact   String
+  defenseAction       String   // Recommended defense action (deterministic, not advice)
+  status              String   @default("open") // open | reviewed | incorporated | dismissed
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([priority])
+  @@index([severity])
+  @@index([issueType])
+  @@index([status])
+  @@map("defense_issues")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.4 — Motion Opportunity (citation-backed motion basis)
+// ---------------------------------------------------------------------------
+
+model MotionOpportunity {
+  id                  String   @id @default(uuid())
+  caseId              String
+  motionType          String   // directed_verdict | suppress_evidence | dismiss_count | impeach_witness | exclude_testimony | reconsider_bail | mistrial_basis
+  title               String
+  legalBasis          String   // Statutory / CALCRIM basis
+  factualBasis        String   // Specific citations proving motion grounds
+  supportingIds       String   // JSON array of source IDs
+  citationSummary     String   // Concatenated page/line citations
+  strength            String   // strong | moderate | weak
+  priority            Int      @default(0)
+  status              String   @default("identified") // identified | drafted | filed | ruled
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([motionType])
+  @@index([strength])
+  @@index([priority])
+  @@map("motion_opportunities")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.4 — Impeachment Packet (per-witness impeachment materials)
+// ---------------------------------------------------------------------------
+
+model ImpeachmentPacket {
+  id                  String   @id @default(uuid())
+  caseId              String
+  witnessName         String
+  totalInconsistencies Int     @default(0)
+  totalContradictions  Int     @default(0)
+  credibilityScore    Float    @default(1.0) // 0.0-1.0, lower = less credible
+  impeachmentItems    String   // JSON array of { type, statementAId, statementBId, statementAText, statementBText, page, explanation }
+  crossExamTopics     String   // JSON array of suggested cross-exam topic areas (deterministic, from evidence)
+  priorStatementConflicts String // JSON array of { priorText, trialText, page, line }
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@unique([caseId, witnessName])
+  @@index([caseId])
+  @@index([witnessName])
+  @@index([credibilityScore])
+  @@map("impeachment_packets")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.4 — Burden Collapse Score (per-instruction burden assessment)
+// ---------------------------------------------------------------------------
+
+model BurdenCollapseScore {
+  id                  String   @id @default(uuid())
+  caseId              String
+  instructionId       String
+  instructionNumber   Int
+  totalElements       Int      @default(0)
+  unsupportedElements Int      @default(0)
+  contradictedElements Int     @default(0)
+  weakElements        Int      @default(0)
+  strongElements      Int      @default(0)
+  collapseScore       Float    @default(0.0) // 0.0-1.0, higher = more collapsed
+  collapseLevel       String   // collapsed | fractured | weakened | supported
+  explanation         String
+  elementDetails      String   // JSON array of { elementId, label, status, supportCount, contradictionCount, confidence }
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@unique([caseId, instructionId])
+  @@index([caseId])
+  @@index([collapseScore])
+  @@index([collapseLevel])
+  @@map("burden_collapse_scores")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.4 — Jury Reasonable Doubt Structure (evidence-backed doubt)
+// ---------------------------------------------------------------------------
+
+model JuryReasonableDoubtStructure {
+  id                  String   @id @default(uuid())
+  caseId              String
+  instructionId       String?
+  doubtCategory       String   // burden_gap | witness_contradiction | timeline_impossibility | missing_evidence | procedural_violation | expert_conflict
+  title               String
+  narrative           String   // Factual narrative of doubt (citation-backed, deterministic)
+  supportingCitations String   // JSON array of { text, page, line, speaker, document }
+  strength            String   // compelling | significant | moderate | marginal
+  juryInstruction     String?  // Related CALCRIM jury instruction text
+
+  createdAt           DateTime @default(now())
+
+  @@index([caseId])
+  @@index([doubtCategory])
+  @@index([strength])
+  @@map("jury_reasonable_doubt_structures")
+}

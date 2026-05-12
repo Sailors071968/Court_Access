@@ -1,0 +1,163 @@
+{
+  "phase": "H.3",
+  "name": "Enterprise Scalability + Distributed Reliability Framework",
+  "generatedAt": "2026-05-12T35:00:00.000Z",
+  "status": "READY_FOR_DEPLOYMENT",
+
+  "subsystems": {
+    "distributedJobOrchestration": {
+      "description": "Deterministic distributed job orchestration",
+      "jobTypes": ["full_analysis", "layer_analysis", "evidence_ingestion", "integrity_check", "replay_verification"],
+      "statuses": ["queued", "dispatched", "running", "completed", "failed", "cancelled"],
+      "priorityRange": "1 (highest) to 10 (lowest)",
+      "retrySupport": true,
+      "maxAttempts": 3
+    },
+    "queueIntegrityVerification": {
+      "description": "Reproducible queue integrity verification",
+      "queueNames": ["evidence_ingestion", "analysis_pipeline", "integrity_check", "export_generation"],
+      "integrityStatuses": ["healthy", "degraded", "corrupted", "recovering"],
+      "checksumVerification": true,
+      "dequeueOrderVerification": true
+    },
+    "faultTolerantRecovery": {
+      "description": "Immutable fault-tolerant ingestion recovery logs",
+      "faultTypes": ["worker_crash", "timeout", "db_connection_loss", "memory_overflow", "disk_full", "network_partition"],
+      "recoveryActions": ["retry", "checkpoint_restore", "queue_replay", "manual_intervention", "graceful_degradation"],
+      "immutableLogs": true,
+      "dataIntegrityVerification": true
+    },
+    "multiWorkerSynchronization": {
+      "description": "Deterministic multi-worker synchronization",
+      "syncTypes": ["state_sync", "lock_acquisition", "lock_release", "heartbeat", "task_handoff"],
+      "stateHashVerification": true,
+      "conflictDetection": true
+    },
+    "highVolumeEvidenceBatching": {
+      "description": "Evidence-linked high-volume evidence batching",
+      "batchProcessing": true,
+      "integrityHashBeforeAfter": true,
+      "processingRateTracking": true,
+      "failureIsolation": true
+    },
+    "distributedReplayVerification": {
+      "description": "Hash-consistent distributed replay verification",
+      "replayScopes": ["full_case", "single_layer", "batch"],
+      "hashConsistencyCheck": true,
+      "inconsistencyTracking": true
+    },
+    "recoveryCheckpointing": {
+      "description": "Immutable recovery checkpointing",
+      "checkpointTypes": ["automatic", "manual", "pre_migration", "pre_analysis", "scheduled"],
+      "stateSnapshotImmutable": true,
+      "restoreCountTracking": true,
+      "validityExpiration": true
+    },
+    "operationalHealthTelemetry": {
+      "description": "Deterministic operational health telemetry",
+      "metricTypes": ["cpu_usage", "memory_usage", "db_latency", "queue_depth", "request_rate", "error_rate", "disk_usage"],
+      "thresholdAlerting": true,
+      "healthStatuses": ["healthy", "warning", "critical", "unknown"]
+    },
+    "failureCascadeIsolation": {
+      "description": "Bounded failure cascade isolation",
+      "isolationMethods": ["circuit_breaker", "bulkhead", "timeout_fence", "graceful_degradation", "queue_drain"],
+      "maxCascadeDepth": 3,
+      "boundaryEnforcement": true
+    },
+    "systemSurvivabilityMetrics": {
+      "description": "Reproducible system survivability metrics",
+      "metricNames": ["uptime", "mttr", "mtbf", "availability", "throughput", "error_rate", "recovery_success_rate"],
+      "measurementPeriods": ["hourly", "daily", "weekly", "monthly"],
+      "trendTracking": true,
+      "targetComparison": true
+    }
+  },
+
+  "frontendComponent": {
+    "name": "EnterpriseOperationsCockpit",
+    "panes": ["distributed workers", "queue integrity", "recovery checkpoints", "replay consistency", "ingestion survivability", "operational telemetry", "failure isolation", "system reproducibility"],
+    "theme": "dark",
+    "features": ["job status badges", "queue depth visualization", "checkpoint hash display", "replay consistency indicators", "batch progress bars", "telemetry health status", "cascade isolation borders", "survivability metric cards"]
+  },
+
+  "apiEndpoints": {
+    "fullAnalysis": { "method": "POST", "path": "/api/scalability/analyze/:caseId" },
+    "jobs": [
+      { "method": "POST", "path": "/api/scalability/jobs/:caseId" },
+      { "method": "GET", "path": "/api/scalability/jobs/:caseId" }
+    ],
+    "queues": [
+      { "method": "POST", "path": "/api/scalability/queues/:caseId" },
+      { "method": "GET", "path": "/api/scalability/queues/:caseId" }
+    ],
+    "recovery": [
+      { "method": "POST", "path": "/api/scalability/recovery/:caseId" },
+      { "method": "GET", "path": "/api/scalability/recovery/:caseId" }
+    ],
+    "sync": [
+      { "method": "POST", "path": "/api/scalability/sync/:caseId" },
+      { "method": "GET", "path": "/api/scalability/sync/:caseId" }
+    ],
+    "batches": [
+      { "method": "POST", "path": "/api/scalability/batches/:caseId" },
+      { "method": "GET", "path": "/api/scalability/batches/:caseId" }
+    ],
+    "replays": [
+      { "method": "POST", "path": "/api/scalability/replays/:caseId" },
+      { "method": "GET", "path": "/api/scalability/replays/:caseId" }
+    ],
+    "checkpoints": [
+      { "method": "POST", "path": "/api/scalability/checkpoints/:caseId" },
+      { "method": "GET", "path": "/api/scalability/checkpoints/:caseId" }
+    ],
+    "telemetry": [
+      { "method": "POST", "path": "/api/scalability/telemetry/:caseId" },
+      { "method": "GET", "path": "/api/scalability/telemetry/:caseId" }
+    ],
+    "isolations": [
+      { "method": "POST", "path": "/api/scalability/isolations/:caseId" },
+      { "method": "GET", "path": "/api/scalability/isolations/:caseId" }
+    ],
+    "metrics": [
+      { "method": "POST", "path": "/api/scalability/metrics/:caseId" },
+      { "method": "GET", "path": "/api/scalability/metrics/:caseId" }
+    ],
+    "validation": { "method": "GET", "path": "/api/scalability/validation" }
+  },
+
+  "prismaModels": [
+    "DistributedJobOrchestration",
+    "QueueIntegrityVerification",
+    "FaultTolerantRecoveryLog",
+    "MultiWorkerSynchronization",
+    "HighVolumeEvidenceBatch",
+    "DistributedReplayVerification",
+    "RecoveryCheckpoint",
+    "OperationalHealthTelemetry",
+    "FailureCascadeIsolation",
+    "SystemSurvivabilityMetric"
+  ],
+
+  "migration": "20260512350000_enterprise_scalability",
+
+  "constraints": {
+    "noOpaqueDistributedMutation": true,
+    "noUnverifiableAsyncProcessing": true,
+    "noHiddenQueueCorruption": true,
+    "noUncontrolledAutoscaling": true,
+    "noProbabilisticDivergence": true,
+    "corePrinciple": "CourtAccess scales deterministically and recovers reproducibly. It does NOT sacrifice evidentiary integrity for distributed throughput."
+  },
+
+  "systemsUnmodified": {
+    "auth": true,
+    "csrf": true,
+    "nginx": true,
+    "redis": true,
+    "ocr": true,
+    "pm2": true,
+    "ingestion": true,
+    "existingD1toH2Systems": true
+  }
+}

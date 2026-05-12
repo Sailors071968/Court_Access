@@ -5700,3 +5700,206 @@ model GovernanceReviewCertification {
   @@index([reviewType])
   @@map("governance_review_certifications")
 }
+
+// ---------------------------------------------------------------------------
+// Phase I.3 — Production Hardening + Operational Certification Framework
+// ---------------------------------------------------------------------------
+
+model DeploymentCertificationWorkflow {
+  id                    String   @id @default(uuid())
+  deploymentId          String
+  environment           String   // production | staging | development
+  certificationSteps    String   // JSON array of steps performed
+  stepsPassed           Int      @default(0)
+  stepsFailed           Int      @default(0)
+  certificationStatus   String   // pending | in_progress | certified | failed | rolled_back
+  certifiedBy           String?
+  certifiedAt           String?
+  releaseVersion        String
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([deploymentId])
+  @@index([environment])
+  @@index([certificationStatus])
+  @@map("deployment_certification_workflows")
+}
+
+model EnvironmentIntegrityVerification {
+  id                    String   @id @default(uuid())
+  environment           String   // production | staging | development
+  configHash            String   // SHA-256 of environment config
+  expectedHash          String   // stored expected hash
+  hashMatch             Boolean  @default(false)
+  componentsVerified    String   // JSON — list of components checked
+  componentsPassed      Int      @default(0)
+  componentsFailed      Int      @default(0)
+  driftDetected         Boolean  @default(false)
+  driftDetails          String?  // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([environment])
+  @@index([hashMatch])
+  @@index([driftDetected])
+  @@map("environment_integrity_verifications")
+}
+
+model ReleaseReproducibilityValidation {
+  id                    String   @id @default(uuid())
+  releaseVersion        String
+  buildHash             String   // SHA-256 of build artifacts
+  sourceBranch          String
+  sourceCommit          String
+  reproducible          Boolean  @default(false)
+  reproductionAttempts  Int      @default(1)
+  reproductionResults   String   // JSON — attempt details
+  artifactInventory     String   // JSON — list of build artifacts
+  validatedAt           String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([releaseVersion])
+  @@index([reproducible])
+  @@index([sourceBranch])
+  @@map("release_reproducibility_validations")
+}
+
+model RollbackAssuranceRecord {
+  id                    String   @id @default(uuid())
+  deploymentId          String
+  rollbackTarget        String   // which version to roll back to
+  rollbackType          String   // full | partial | database_only | config_only
+  preRollbackSnapshot   String   // JSON — system state before rollback
+  rollbackSteps         String   // JSON — ordered rollback procedures
+  rollbackVerified      Boolean  @default(false)
+  estimatedDowntime     String   // e.g. "< 5 minutes"
+  dataPreservation      Boolean  @default(true)
+  lastTestedAt          String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([deploymentId])
+  @@index([rollbackType])
+  @@index([rollbackVerified])
+  @@map("rollback_assurance_records")
+}
+
+model RuntimeConfigurationVerification {
+  id                    String   @id @default(uuid())
+  environment           String
+  configKey             String
+  configValueHash       String   // SHA-256 of config value (never store raw secrets)
+  expectedValueHash     String
+  isMatch               Boolean  @default(false)
+  configCategory        String   // database | redis | api | auth | nginx | pm2 | application
+  isSensitive           Boolean  @default(false)
+  lastVerifiedAt        String
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([environment])
+  @@index([configCategory])
+  @@index([isMatch])
+  @@map("runtime_configuration_verifications")
+}
+
+model ProductionReadinessScore {
+  id                    String   @id @default(uuid())
+  releaseVersion        String
+  overallScore          Float    @default(0)
+  categoryScores        String   // JSON — per-category scores
+  checksPerformed       Int      @default(0)
+  checksPassed          Int      @default(0)
+  checksFailed          Int      @default(0)
+  readinessStatus       String   // ready | conditional | not_ready | blocked
+  blockers              String?  // JSON — list of blockers
+  approvedBy            String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([releaseVersion])
+  @@index([readinessStatus])
+  @@index([overallScore])
+  @@map("production_readiness_scores")
+}
+
+model OperationalValidationSuite {
+  id                    String   @id @default(uuid())
+  suiteName             String
+  suiteType             String   // smoke_test | integration | performance | security | regression | health_check
+  totalTests            Int      @default(0)
+  testsPassed           Int      @default(0)
+  testsFailed           Int      @default(0)
+  testsSkipped          Int      @default(0)
+  executionDuration     Int      @default(0)  // milliseconds
+  testResults           String   // JSON — per-test results
+  environment           String
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([suiteType])
+  @@index([environment])
+  @@map("operational_validation_suites")
+}
+
+model DeploymentAuditManifest {
+  id                    String   @id @default(uuid())
+  deploymentId          String
+  releaseVersion        String
+  deployedBy            String
+  deployedAt            String
+  artifactHashes        String   // JSON — SHA-256 hashes of all deployed artifacts
+  configSnapshot        String   // JSON — non-sensitive config at deployment time
+  migrationHistory      String   // JSON — migrations applied
+  serviceStatuses       String   // JSON — status of each service post-deploy
+  rollbackAvailable     Boolean  @default(true)
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([deploymentId])
+  @@index([releaseVersion])
+  @@index([deployedAt])
+  @@map("deployment_audit_manifests")
+}
+
+model DependencyIntegrityVerification {
+  id                    String   @id @default(uuid())
+  packageName           String
+  packageVersion        String
+  expectedHash          String   // SHA-256
+  actualHash            String   // SHA-256
+  hashMatch             Boolean  @default(false)
+  dependencyType        String   // runtime | devDependency | peerDependency
+  source                String   // npm | pip | system
+  vulnerabilitiesKnown  Int      @default(0)
+  lastVerifiedAt        String
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([packageName])
+  @@index([hashMatch])
+  @@index([dependencyType])
+  @@map("dependency_integrity_verifications")
+}
+
+model ReleaseLineageRecord {
+  id                    String   @id @default(uuid())
+  releaseVersion        String
+  previousVersion       String?
+  changeType            String   // major | minor | patch | hotfix | rollback
+  commitRange           String   // e.g. "abc123..def456"
+  totalCommits          Int      @default(0)
+  totalFilesChanged     Int      @default(0)
+  migrationsIncluded    String   // JSON — list of migration names
+  releaseNotes          String   // JSON
+  releaseHash           String   // SHA-256 of release content
+  approvedBy            String?
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([releaseVersion])
+  @@index([changeType])
+  @@index([previousVersion])
+  @@map("release_lineage_records")
+}

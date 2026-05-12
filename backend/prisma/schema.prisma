@@ -2097,3 +2097,73 @@ model ElementStatementLink {
   @@index([supportType])
   @@map("element_statement_links")
 }
+
+// ---------------------------------------------------------------------------
+// Phase D.2 — CALCRIM Element Mapping (statement → instruction → element)
+// ---------------------------------------------------------------------------
+
+model CalcrimElementMapping {
+  id                    String   @id @default(uuid())
+  statementId           String
+  instructionId         String
+  elementId             String
+  confidence            Float    @default(0.0) // 0.0-1.0
+  mappingMethod         String   @default("lexical") // lexical | phrase | ontology | keyword | regex | manual
+  lexicalTriggers       String?  // JSON array of matched terms
+  semanticCategory      String?  // act | intent | knowledge | identity | temporal | impeachment | contradiction | credibility | procedural
+  prosecutorTheoryWeight Float   @default(0.0) // 0.0-1.0 relevance to prosecution theory
+  evidenceClassification String  @default("act") // act | intent | knowledge | identity | temporal | impeachment | contradiction | credibility | procedural
+
+  createdAt             DateTime @default(now())
+
+  @@index([statementId])
+  @@index([instructionId])
+  @@index([elementId])
+  @@index([semanticCategory])
+  @@index([evidenceClassification])
+  @@index([confidence])
+  @@map("calcrim_element_mappings")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.2 — Prosecutor Narrative Cluster
+// ---------------------------------------------------------------------------
+
+model CalcrimNarrativeCluster {
+  id                String   @id @default(uuid())
+  caseId            String
+  instructionId     String
+  narrativeType     String   // burden_proof | timeline | witness_account | physical_evidence | circumstantial
+  prosecutionTheory String?  // Prosecution's theory of the case for this cluster
+  confidence        Float    @default(0.0)
+  totalStatements   Int      @default(0)
+  elementsCovered   String?  // JSON array of element IDs covered by this cluster
+
+  createdAt         DateTime @default(now())
+
+  clusterStatements NarrativeClusterStatement[]
+
+  @@index([caseId])
+  @@index([instructionId])
+  @@index([narrativeType])
+  @@map("calcrim_narrative_clusters")
+}
+
+// ---------------------------------------------------------------------------
+// Phase D.2 — Narrative Cluster ↔ Statement link
+// ---------------------------------------------------------------------------
+
+model NarrativeClusterStatement {
+  id               String   @id @default(uuid())
+  clusterId        String
+  cluster          CalcrimNarrativeCluster @relation(fields: [clusterId], references: [id])
+  statementId      String
+  relevanceScore   Float    @default(0.0) // 0.0-1.0
+
+  createdAt        DateTime @default(now())
+
+  @@unique([clusterId, statementId])
+  @@index([clusterId])
+  @@index([statementId])
+  @@map("narrative_cluster_statements")
+}

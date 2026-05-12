@@ -1,0 +1,153 @@
+{
+  "phase": "J.1",
+  "name": "Long-Term Continuity + Institutional Resilience Framework",
+  "generatedAt": "2026-05-12T39:00:00.000Z",
+  "status": "READY_FOR_DEPLOYMENT",
+
+  "subsystems": {
+    "longTermEvidencePreservation": {
+      "description": "Immutable long-term evidence preservation",
+      "preservationTypes": ["full_record", "metadata_only", "hash_only", "encrypted_archive"],
+      "storageLocations": ["primary", "secondary", "offsite", "cold_storage"],
+      "sha256ContentHashing": true,
+      "immutable": true
+    },
+    "disasterRecoveryOrchestration": {
+      "description": "Deterministic disaster recovery orchestration",
+      "scenarioTypes": ["full_outage", "partial_outage", "data_corruption", "region_failure", "network_partition"],
+      "recoveryPrioritization": true,
+      "dataIntegrityChecking": true
+    },
+    "continuityOfOperationsWorkflows": {
+      "description": "Reproducible continuity-of-operations workflows",
+      "workflowTypes": ["failover", "degraded_mode", "manual_override", "emergency_shutdown", "staged_recovery"],
+      "stepBasedExecution": true,
+      "reproducible": true
+    },
+    "multiRegionIntegrityVerification": {
+      "description": "Hash-consistent multi-region integrity verification",
+      "datasetTypes": ["evidence", "analysis", "configuration", "exports", "archives"],
+      "sha256HashComparison": true,
+      "syncLatencyTracking": true
+    },
+    "archivalSurvivabilityValidation": {
+      "description": "Deterministic archival survivability validation",
+      "archiveTypes": ["full_case", "phase_specific", "evidence_only", "compliance_records"],
+      "survivabilityScoring": true,
+      "redundancyTracking": true
+    },
+    "recoveryGovernanceTracking": {
+      "description": "Immutable recovery governance tracking",
+      "authorizationLevels": ["lead_attorney", "system_admin", "emergency"],
+      "prePostStateTracking": true,
+      "immutable": true
+    },
+    "institutionalContinuityManifests": {
+      "description": "Reproducible institutional continuity manifests",
+      "components": ["api_server", "database", "redis", "nginx", "pm2", "prisma", "queue_worker"],
+      "spofIdentification": true,
+      "sha256ManifestHashing": true
+    },
+    "retentionLifecycleManagement": {
+      "description": "Rule-based retention lifecycle management",
+      "retentionPolicies": ["7_years", "10_years", "permanent", "case_dependent", "regulatory"],
+      "complianceVerification": true,
+      "ruleBased": true
+    },
+    "recoverySimulationFramework": {
+      "description": "Deterministic recovery simulation framework",
+      "simulationTypes": ["full_disaster", "partial_outage", "data_corruption", "failover", "network_partition"],
+      "dataLossDetection": true,
+      "deterministic": true
+    },
+    "preservationCertification": {
+      "description": "Evidence-linked preservation certification",
+      "certificationStatuses": ["certified", "conditional", "failed", "pending"],
+      "preservationRateComputation": true,
+      "evidenceLinked": true
+    }
+  },
+
+  "frontendComponent": {
+    "name": "InstitutionalResilienceCockpit",
+    "panes": ["evidence preservation", "disaster recovery", "continuity workflows", "archival survivability", "multi-region verification", "recovery governance", "retention lifecycle", "preservation certification"],
+    "theme": "dark",
+    "features": ["preservation hash display", "priority-based disaster badges", "workflow status indicators", "survivability scores", "region consistency checks", "governance authorization badges", "retention policy tracking", "certification rate visualization"]
+  },
+
+  "apiEndpoints": {
+    "fullAnalysis": { "method": "POST", "path": "/api/resilience/analyze/:caseId" },
+    "preservation": [
+      { "method": "POST", "path": "/api/resilience/preservation/:caseId" },
+      { "method": "GET", "path": "/api/resilience/preservation/:caseId" }
+    ],
+    "disaster": [
+      { "method": "POST", "path": "/api/resilience/disaster/:caseId" },
+      { "method": "GET", "path": "/api/resilience/disaster/:caseId" }
+    ],
+    "continuity": [
+      { "method": "POST", "path": "/api/resilience/continuity/:caseId" },
+      { "method": "GET", "path": "/api/resilience/continuity/:caseId" }
+    ],
+    "regions": [
+      { "method": "POST", "path": "/api/resilience/regions/:caseId" },
+      { "method": "GET", "path": "/api/resilience/regions/:caseId" }
+    ],
+    "archival": [
+      { "method": "POST", "path": "/api/resilience/archival/:caseId" },
+      { "method": "GET", "path": "/api/resilience/archival/:caseId" }
+    ],
+    "governance": [
+      { "method": "POST", "path": "/api/resilience/governance/:caseId" },
+      { "method": "GET", "path": "/api/resilience/governance/:caseId" }
+    ],
+    "retention": [
+      { "method": "POST", "path": "/api/resilience/retention/:caseId" },
+      { "method": "GET", "path": "/api/resilience/retention/:caseId" }
+    ],
+    "simulation": [
+      { "method": "POST", "path": "/api/resilience/simulation/:caseId" },
+      { "method": "GET", "path": "/api/resilience/simulation/:caseId" }
+    ],
+    "certification": [
+      { "method": "POST", "path": "/api/resilience/certification/:caseId" },
+      { "method": "GET", "path": "/api/resilience/certification/:caseId" }
+    ],
+    "validation": { "method": "GET", "path": "/api/resilience/validation" }
+  },
+
+  "prismaModels": [
+    "LongTermEvidencePreservation",
+    "DisasterRecoveryOrchestration",
+    "ContinuityOfOperationsWorkflow",
+    "MultiRegionIntegrityVerification",
+    "ArchivalSurvivabilityValidation",
+    "RecoveryGovernanceTracking",
+    "InstitutionalContinuityManifest",
+    "RetentionLifecycleManagement",
+    "RecoverySimulationFramework",
+    "PreservationCertification"
+  ],
+
+  "migration": "20260512390000_institutional_resilience",
+
+  "constraints": {
+    "noHiddenArchivalMutation": true,
+    "noUnverifiableRecovery": true,
+    "noOpaqueContinuityScoring": true,
+    "noAutonomousGovernance": true,
+    "noUndocumentedDeletion": true,
+    "corePrinciple": "CourtAccess preserves institutional continuity and evidentiary survivability deterministically. It does NOT create opaque autonomous recovery systems."
+  },
+
+  "systemsUnmodified": {
+    "auth": true,
+    "csrf": true,
+    "nginx": true,
+    "redis": true,
+    "ocr": true,
+    "pm2": true,
+    "ingestion": true,
+    "existingD1toI3Systems": true
+  }
+}

@@ -85,6 +85,7 @@ import { registerProductionReadinessRoutes } from "./routes/productionReadinessR
 import { registerOperationalReliabilityRoutes } from "./routes/operationalReliabilityRoutes.js";
 import { registerPilotOperationsRoutes } from "./routes/pilotOperationsRoutes.js";
 import { registerOperationalMaturationRoutes } from "./routes/operationalMaturationRoutes.js";
+import { registerEnterpriseRolloutRoutes } from "./routes/enterpriseRolloutRoutes.js";
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -357,6 +358,9 @@ async function startServer() {
 
   console.log('[Server] Registering operational maturation routes (Phase N.4)...');
   await registerOperationalMaturationRoutes(app);
+
+  console.log('[Server] Registering enterprise rollout routes (Phase N.5)...');
+  await registerEnterpriseRolloutRoutes(app);
 
   console.log('[Server] Registering admin queue monitoring routes...');
   await registerQueueMonitorRoutes(app);

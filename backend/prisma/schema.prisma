@@ -6877,3 +6877,200 @@ model ObservabilityCertificationTracking {
   @@index([certificationStatus])
   @@map("observability_certification_trackings")
 }
+
+// ---------------------------------------------------------------------------
+// Phase M.1 — Unified Platform Doctrine + Controlled Release Governance
+// ---------------------------------------------------------------------------
+
+model UnifiedOperationalDoctrine {
+  id                    String   @id @default(uuid())
+  caseId                String
+  doctrineName          String   // evidence_handling | analysis_execution | export_governance | integrity_assurance | access_control
+  doctrineVersion       String
+  doctrineStatus        String   // active | superseded | draft | archived
+  rulesCount            Int      @default(0)
+  rulesEnforced         Int      @default(0)
+  doctrineHash          String   // SHA-256
+  doctrineRules         String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([doctrineName])
+  @@index([doctrineStatus])
+  @@map("unified_operational_doctrines")
+}
+
+model ReleaseGovernanceWorkflow {
+  id                    String   @id @default(uuid())
+  caseId                String
+  releaseVersion        String
+  releaseType           String   // major | minor | patch | hotfix | rollback
+  releaseStatus         String   // proposed | approved | deployed | rolled_back | rejected
+  approvalSteps         Int      @default(0)
+  stepsCompleted        Int      @default(0)
+  releaseHash           String   // SHA-256
+  approvalChain         String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([releaseType])
+  @@index([releaseStatus])
+  @@map("release_governance_workflows")
+}
+
+model ControlledFeatureEnablement {
+  id                    String   @id @default(uuid())
+  caseId                String
+  featureName           String
+  featureScope          String   // global | organization | role | user
+  permissionRequired    String   // admin | operator | analyst | viewer
+  enablementStatus      String   // enabled | disabled | restricted | pending_approval
+  enabledBy             String?
+  enabledAt             String?
+  featureConfig         String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([featureName])
+  @@index([enablementStatus])
+  @@map("controlled_feature_enablements")
+}
+
+model OperationalPolicyHarmonization {
+  id                    String   @id @default(uuid())
+  caseId                String
+  policyDomain          String   // security | data_handling | access_control | retention | export
+  policiesTotal         Int      @default(0)
+  policiesHarmonized    Int      @default(0)
+  conflictsDetected     Int      @default(0)
+  harmonizationStatus   String   // harmonized | conflicts_detected | in_progress | pending
+  policyHash            String   // SHA-256
+  policyDetails         String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([policyDomain])
+  @@index([harmonizationStatus])
+  @@map("operational_policy_harmonizations")
+}
+
+model AdministrativeActionCertification {
+  id                    String   @id @default(uuid())
+  caseId                String
+  actionType            String   // config_change | permission_grant | data_export | system_override | policy_update
+  actionPerformedBy     String
+  actionHash            String   // SHA-256
+  justification         String
+  certificationStatus   String   // certified | pending | rejected | revoked
+  certifiedBy           String?
+  certifiedAt           String?
+  actionDetails         String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([actionType])
+  @@index([certificationStatus])
+  @@map("administrative_action_certifications")
+}
+
+model PlatformStewardshipTracking {
+  id                    String   @id @default(uuid())
+  caseId                String
+  stewardshipArea       String   // data_integrity | system_health | compliance | security | performance
+  stewardStatus         String   // active | review_required | escalated | resolved
+  healthScore           Float    @default(100)
+  issuesOpen            Int      @default(0)
+  issuesResolved        Int      @default(0)
+  stewardHash           String   // SHA-256
+  stewardDetails        String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([stewardshipArea])
+  @@index([stewardStatus])
+  @@map("platform_stewardship_trackings")
+}
+
+model GovernanceSynchronizationEngine {
+  id                    String   @id @default(uuid())
+  caseId                String
+  sourceGovernance      String   // doctrine | release | policy | stewardship | certification
+  targetGovernance      String
+  syncStatus            String   // synchronized | desynchronized | pending | failed
+  sourceHash            String   // SHA-256
+  targetHash            String   // SHA-256
+  hashesMatch           Boolean  @default(false)
+  syncDetails           String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([sourceGovernance])
+  @@index([syncStatus])
+  @@map("governance_synchronization_engines")
+}
+
+model ReleaseIntegrityVerification {
+  id                    String   @id @default(uuid())
+  caseId                String
+  releaseVersion        String
+  verificationScope     String   // code | data | config | schema | dependencies
+  originalHash          String   // SHA-256
+  verifiedHash          String   // SHA-256
+  hashesMatch           Boolean  @default(false)
+  componentsVerified    Int      @default(0)
+  verificationDetails   String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([releaseVersion])
+  @@index([hashesMatch])
+  @@map("release_integrity_verifications")
+}
+
+model CrossLayerPolicyValidation {
+  id                    String   @id @default(uuid())
+  caseId                String
+  sourceLayer           String   // evidence | analysis | export | governance | observability
+  targetLayer           String
+  policiesValidated     Int      @default(0)
+  policiesPassed        Int      @default(0)
+  policiesFailed        Int      @default(0)
+  validationStatus      String   // passed | failed | partial | pending
+  validationHash        String   // SHA-256
+  validationDetails     String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([sourceLayer])
+  @@index([validationStatus])
+  @@map("cross_layer_policy_validations")
+}
+
+model DoctrineLineageTracking {
+  id                    String   @id @default(uuid())
+  caseId                String
+  doctrineName          String
+  lineageVersion        String
+  previousVersion       String?
+  changeType            String   // creation | amendment | supersession | archival
+  changeJustification   String
+  lineageHash           String   // SHA-256
+  previousHash          String?
+  changeDetails         String   // JSON
+  citations             String   // JSON
+  createdAt             DateTime @default(now())
+
+  @@index([caseId])
+  @@index([doctrineName])
+  @@index([changeType])
+  @@map("doctrine_lineage_trackings")
+}

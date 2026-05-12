@@ -1,0 +1,155 @@
+{
+  "phase": "I.3",
+  "name": "Production Hardening + Operational Certification Framework",
+  "generatedAt": "2026-05-12T38:00:00.000Z",
+  "status": "READY_FOR_DEPLOYMENT",
+
+  "subsystems": {
+    "deploymentCertificationWorkflows": {
+      "description": "Deterministic deployment certification workflows",
+      "environments": ["production", "staging", "development"],
+      "certificationStatuses": ["pending", "in_progress", "certified", "failed", "rolled_back"],
+      "stepBasedValidation": true
+    },
+    "environmentIntegrityVerification": {
+      "description": "Hash-based environment integrity verification",
+      "components": ["database", "redis", "nginx", "pm2", "api_server", "prisma_client", "node_runtime"],
+      "sha256ConfigHashing": true,
+      "driftDetection": true
+    },
+    "releaseReproducibilityValidation": {
+      "description": "Immutable release reproducibility validation",
+      "buildHashVerification": true,
+      "artifactInventory": true,
+      "immutable": true
+    },
+    "rollbackAssuranceFramework": {
+      "description": "Deterministic rollback assurance framework",
+      "rollbackTypes": ["full", "partial", "database_only", "config_only"],
+      "preRollbackSnapshots": true,
+      "downtimeEstimation": true
+    },
+    "runtimeConfigurationVerification": {
+      "description": "Immutable runtime configuration verification",
+      "configCategories": ["database", "redis", "api", "auth", "nginx", "pm2", "application"],
+      "sensitiveValueProtection": true,
+      "sha256ValueHashing": true
+    },
+    "productionReadinessScoring": {
+      "description": "Rule-based production readiness scoring",
+      "scoringCategories": ["schema_integrity", "migration_safety", "dependency_security", "env_config", "rollback_readiness", "api_health"],
+      "readinessStatuses": ["ready", "conditional", "not_ready", "blocked"]
+    },
+    "operationalValidationSuites": {
+      "description": "Reproducible operational validation suites",
+      "suiteTypes": ["smoke_test", "integration", "performance", "security", "regression", "health_check"],
+      "testResultTracking": true
+    },
+    "deploymentAuditManifests": {
+      "description": "Immutable deployment audit manifests",
+      "artifactHashTracking": true,
+      "migrationHistory": true,
+      "serviceStatusTracking": true,
+      "immutable": true
+    },
+    "dependencyIntegrityVerification": {
+      "description": "SHA-256 verified dependency integrity verification",
+      "dependencyTypes": ["runtime", "devDependency", "peerDependency"],
+      "vulnerabilityTracking": true,
+      "sha256Verified": true
+    },
+    "releaseLineageTracking": {
+      "description": "Deterministic release lineage tracking",
+      "changeTypes": ["major", "minor", "patch", "hotfix", "rollback"],
+      "commitRangeTracking": true,
+      "migrationInclusion": true
+    }
+  },
+
+  "frontendComponent": {
+    "name": "ProductionOperationsCockpit",
+    "panes": ["deployment certification", "environment integrity", "release reproducibility", "rollback readiness", "runtime validation", "dependency integrity", "deployment lineage", "operational certification"],
+    "theme": "dark",
+    "features": ["certification status badges", "hash match indicators", "drift detection alerts", "rollback verification", "dependency vulnerability tracking", "readiness score visualization", "test suite results", "config match verification"]
+  },
+
+  "apiEndpoints": {
+    "fullAnalysis": { "method": "POST", "path": "/api/production/analyze/:caseId" },
+    "certification": [
+      { "method": "POST", "path": "/api/production/certification/:caseId" },
+      { "method": "GET", "path": "/api/production/certification/:caseId" }
+    ],
+    "environment": [
+      { "method": "POST", "path": "/api/production/environment/:caseId" },
+      { "method": "GET", "path": "/api/production/environment/:caseId" }
+    ],
+    "reproducibility": [
+      { "method": "POST", "path": "/api/production/reproducibility/:caseId" },
+      { "method": "GET", "path": "/api/production/reproducibility/:caseId" }
+    ],
+    "rollback": [
+      { "method": "POST", "path": "/api/production/rollback/:caseId" },
+      { "method": "GET", "path": "/api/production/rollback/:caseId" }
+    ],
+    "runtime": [
+      { "method": "POST", "path": "/api/production/runtime/:caseId" },
+      { "method": "GET", "path": "/api/production/runtime/:caseId" }
+    ],
+    "readiness": [
+      { "method": "POST", "path": "/api/production/readiness/:caseId" },
+      { "method": "GET", "path": "/api/production/readiness/:caseId" }
+    ],
+    "validationSuites": [
+      { "method": "POST", "path": "/api/production/validation-suites/:caseId" },
+      { "method": "GET", "path": "/api/production/validation-suites/:caseId" }
+    ],
+    "manifests": [
+      { "method": "POST", "path": "/api/production/manifests/:caseId" },
+      { "method": "GET", "path": "/api/production/manifests/:caseId" }
+    ],
+    "dependencies": [
+      { "method": "POST", "path": "/api/production/dependencies/:caseId" },
+      { "method": "GET", "path": "/api/production/dependencies/:caseId" }
+    ],
+    "lineage": [
+      { "method": "POST", "path": "/api/production/lineage/:caseId" },
+      { "method": "GET", "path": "/api/production/lineage/:caseId" }
+    ],
+    "validation": { "method": "GET", "path": "/api/production/validation" }
+  },
+
+  "prismaModels": [
+    "DeploymentCertificationWorkflow",
+    "EnvironmentIntegrityVerification",
+    "ReleaseReproducibilityValidation",
+    "RollbackAssuranceRecord",
+    "RuntimeConfigurationVerification",
+    "ProductionReadinessScore",
+    "OperationalValidationSuite",
+    "DeploymentAuditManifest",
+    "DependencyIntegrityVerification",
+    "ReleaseLineageRecord"
+  ],
+
+  "migration": "20260512380000_production_hardening",
+
+  "constraints": {
+    "noHiddenRuntimeMutation": true,
+    "noUnverifiableDeployment": true,
+    "noOpaqueReleaseScoring": true,
+    "noUncontrolledAutoDeployment": true,
+    "noProductionDriftWithoutLogging": true,
+    "corePrinciple": "CourtAccess deploys reproducibly and validates operational integrity deterministically. It does NOT perform opaque autonomous deployment behavior."
+  },
+
+  "systemsUnmodified": {
+    "auth": true,
+    "csrf": true,
+    "nginx": true,
+    "redis": true,
+    "ocr": true,
+    "pm2": true,
+    "ingestion": true,
+    "existingD1toI2Systems": true
+  }
+}

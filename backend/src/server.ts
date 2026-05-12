@@ -74,6 +74,7 @@ import { registerEnterpriseScalabilityRoutes } from "./routes/enterpriseScalabil
 import { registerLitigationInteroperabilityRoutes } from "./routes/litigationInteroperabilityRoutes.js";
 import { registerGovernanceComplianceRoutes } from "./routes/governanceComplianceRoutes.js";
 import { registerProductionHardeningRoutes } from "./routes/productionHardeningRoutes.js";
+import { registerInstitutionalResilienceRoutes } from "./routes/institutionalResilienceRoutes.js";
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -313,6 +314,9 @@ async function startServer() {
 
   console.log('[Server] Registering production hardening routes (Phase I.3)...');
   await registerProductionHardeningRoutes(app);
+
+  console.log('[Server] Registering institutional resilience routes (Phase J.1)...');
+  await registerInstitutionalResilienceRoutes(app);
 
   console.log('[Server] Registering admin queue monitoring routes...');
   await registerQueueMonitorRoutes(app);

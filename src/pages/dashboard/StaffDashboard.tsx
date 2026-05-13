@@ -94,23 +94,21 @@ export function StaffDashboard() {
         />
         <StatCard
           icon={<AlertTriangle size={28} className={TEXT_COLORS.danger} />}
-          value={2}
-          label="Action Required"
-          highlight
+          value={cases.filter(c => c.status === 'active' && c.phase === 'discovery').length}
+          label="In Discovery"
           onClick={() => navigate('/cases?filter=action-needed')}
         />
         <StatCard
           icon={<Calendar size={28} className={TEXT_COLORS.info} />}
-          value="Feb 15"
+          value={primaryCase.nextHearing ? new Date(primaryCase.nextHearing).toLocaleDateString('en-US', { month: 'short', day: 'numeric' }) : '—'}
           label="Next Hearing"
           onClick={() => navigate(`/cases/${primaryCase.caseId}/activity`)}
         />
         <StatCard
           icon={<Lightbulb size={28} className={TEXT_COLORS.warning} />}
-          value={8}
-          label="Intelligence Signals"
-          highlight
-          onClick={() => navigate(`/cases/${primaryCase.caseId}/charges`)}
+          value={evidence.length}
+          label="Evidence Items"
+          onClick={() => navigate(`/cases/${primaryCase.caseId}/evidence`)}
         />
       </div>
 

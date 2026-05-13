@@ -799,6 +799,8 @@ function FinalCtaSection() {
 // ---------------------------------------------------------------------------
 
 function LandingNav() {
+  const [mobileOpen, setMobileOpen] = useState(false);
+
   return (
     <nav className="absolute top-0 left-0 right-0 z-50">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5">
@@ -818,7 +820,7 @@ function LandingNav() {
           <div className="flex items-center gap-3">
             <Link
               to="/login"
-              className="text-sm text-slate-300 hover:text-white font-medium transition-colors"
+              className="text-sm text-slate-300 hover:text-white font-medium transition-colors hidden sm:inline"
             >
               Sign In
             </Link>
@@ -828,8 +830,27 @@ function LandingNav() {
             >
               Get Started
             </Link>
+            <button
+              onClick={() => setMobileOpen(!mobileOpen)}
+              className="md:hidden p-2 text-white hover:bg-white/10 rounded-lg transition-colors"
+              aria-label="Toggle menu"
+            >
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+                {mobileOpen ? <path d="M18 6L6 18M6 6l12 12" /> : <path d="M4 6h16M4 12h16M4 18h16" />}
+              </svg>
+            </button>
           </div>
         </div>
+        {/* Mobile menu */}
+        {mobileOpen && (
+          <div className="md:hidden mt-4 pb-4 border-t border-white/10 pt-4 space-y-3">
+            <a href="#how-it-works" onClick={() => setMobileOpen(false)} className="block text-sm text-slate-300 hover:text-white py-1">How It Works</a>
+            <a href="#features" onClick={() => setMobileOpen(false)} className="block text-sm text-slate-300 hover:text-white py-1">Features</a>
+            <a href="#pricing" onClick={() => setMobileOpen(false)} className="block text-sm text-slate-300 hover:text-white py-1">Pricing</a>
+            <a href="#faq" onClick={() => setMobileOpen(false)} className="block text-sm text-slate-300 hover:text-white py-1">FAQ</a>
+            <Link to="/login" onClick={() => setMobileOpen(false)} className="block text-sm text-slate-300 hover:text-white py-1">Sign In</Link>
+          </div>
+        )}
       </div>
     </nav>
   );

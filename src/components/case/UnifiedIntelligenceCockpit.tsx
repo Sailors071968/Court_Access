@@ -78,7 +78,7 @@ const PANES: Array<{ key: PaneName; label: string; icon: string }> = [
 const severityColor = (s: string) => s === 'critical' ? '#ef4444' : s === 'high' ? '#f59e0b' : s === 'medium' ? '#3b82f6' : '#64748b';
 const statusColor = (s: string) => s === 'debunked' ? '#ef4444' : s === 'questioned' ? '#f59e0b' : s === 'validated' ? '#22c55e' : '#64748b';
 const integrityColor = (s: string) => s === 'intact' ? '#22c55e' : s === 'questioned' ? '#f59e0b' : '#ef4444';
-const credColor = (s: string) => s === 'aggregate_concern' ? '#ef4444' : s === 'no_pattern' ? '#22c55e' : '#64748b';
+
 
 const Badge: React.FC<{ text: string; color: string }> = ({ text, color }) => (
   <span style={{ background: color, color: '#fff', padding: '2px 8px', borderRadius: 4, fontSize: 11, fontWeight: 600, textTransform: 'uppercase' }}>{text}</span>

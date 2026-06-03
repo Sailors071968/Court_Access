@@ -80,7 +80,7 @@ export const UnifiedAttorneyCommandCockpit: React.FC<CommandProps> = ({ caseId }
   const [milestones, setMilestones] = useState<Milestone[]>([]);
   const [searchEntries, setSearchEntries] = useState<SearchEntry[]>([]);
   const [relationships, setRelationships] = useState<Relationship[]>([]);
-  const [auditLogs, setAuditLogs] = useState<AuditLog[]>([]);
+  const [, setAuditLogs] = useState<AuditLog[]>([]);
   const [phases, setPhases] = useState<LifecyclePhase[]>([]);
   const [orchestrations, setOrchestrations] = useState<Orchestration[]>([]);
 

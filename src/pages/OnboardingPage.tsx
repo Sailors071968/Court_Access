@@ -7,7 +7,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import {
   Scale, ArrowRight, ArrowLeft, CheckCircle2, Upload, FileText,
-  Briefcase, Loader2, Shield, BarChart3, Video, Search,
+  Briefcase, Loader2, Search,
 } from 'lucide-react';
 import { useAuthStore } from '../stores/authStore';
 import { createCase, type CreateCasePayload, CASE_TYPES } from '../services/caseApi';

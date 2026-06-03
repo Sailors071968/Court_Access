@@ -5,7 +5,7 @@
 
 import { useEffect, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
-import { CheckCircle2, XCircle, Scale, ArrowRight, Loader2 } from 'lucide-react';
+import { CheckCircle2, XCircle, ArrowRight, Loader2 } from 'lucide-react';
 
 export function CheckoutSuccessPage() {
   const [searchParams] = useSearchParams();

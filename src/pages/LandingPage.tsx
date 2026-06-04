@@ -26,6 +26,8 @@ import {
   Gavel,
   Layers,
   Link2,
+  HardDrive,
+  Play,
 } from 'lucide-react';
 
 // ---------------------------------------------------------------------------
@@ -132,7 +134,7 @@ function HeroSection() {
               to="/register"
               className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-[#0f172a] font-bold px-8 py-4 rounded-xl text-lg transition-colors shadow-lg shadow-amber-500/20"
             >
-              Start My Case Analysis
+              Start Free 30-Day Trial
               <ArrowRight size={20} />
             </Link>
             <a
@@ -391,67 +393,246 @@ function WhoUsesSection() {
 // SECTION 5 — Pricing
 // ---------------------------------------------------------------------------
 
+const allFeatures = [
+  'Charge analysis',
+  'CALCRIM analysis',
+  'Motion analysis',
+  'Authority research',
+  'Contradiction analysis',
+  'Evidence-gap analysis',
+  'Timeline generation',
+  'Attorney report generation',
+  'All platform features',
+];
+
 function PricingSection() {
+  const plans = [
+    {
+      name: 'Free Trial',
+      price: '$0',
+      period: 'for 30 Days',
+      storage: '250 MB',
+      credits: null,
+      extraStorage: null,
+      highlight: false,
+      featured: true,
+      notes: [
+        'No credit card required',
+        'Full functionality',
+        'Data retained for 30 days',
+        'Export reports before expiration',
+      ],
+    },
+    {
+      name: 'Individual',
+      price: '$29',
+      period: '/month',
+      storage: '5 GB',
+      credits: '50 credits',
+      extraStorage: '$3/mo per additional GB',
+      highlight: false,
+      featured: false,
+      notes: ['Long-term storage', 'Full platform access'],
+    },
+    {
+      name: 'Standard',
+      price: '$79',
+      period: '/month',
+      storage: '25 GB',
+      credits: '250 credits',
+      extraStorage: '$2/mo per additional GB',
+      highlight: true,
+      featured: false,
+      notes: ['Full platform access'],
+    },
+    {
+      name: 'Complex Case',
+      price: '$149',
+      period: '/month',
+      storage: '100 GB',
+      credits: '1,000 credits',
+      extraStorage: '$1.50/mo per additional GB',
+      highlight: false,
+      featured: false,
+      notes: ['Full platform access'],
+    },
+    {
+      name: 'Professional',
+      price: '$399',
+      period: '/month',
+      storage: '1 TB',
+      credits: '5,000 credits',
+      extraStorage: '$1/mo per additional GB',
+      highlight: false,
+      featured: false,
+      notes: ['Multi-case support', 'Full platform access'],
+    },
+  ];
+
   return (
     <section id="pricing" className="py-20 lg:py-28 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="text-center mb-16">
+        {/* Header */}
+        <div className="text-center mb-8">
           <h2 className="text-3xl sm:text-4xl font-extrabold text-[#0f172a] mb-4 tracking-tight">
             Simple, Transparent Pricing
           </h2>
           <p className="text-lg text-slate-500 max-w-2xl mx-auto">
-            No hidden fees. No long-term contracts. Cancel anytime.
+            Experience the full CourtAccess platform free for 30 days. No credit card required.
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-          {/* Setup Fee */}
-          <div className="bg-slate-50 rounded-2xl p-8 border border-slate-200">
-            <p className="text-sm font-semibold text-amber-600 uppercase tracking-wide mb-2">One-Time</p>
-            <h3 className="text-4xl font-extrabold text-[#0f172a] mb-1">$275</h3>
-            <p className="text-slate-500 mb-6">Setup Fee</p>
-            <ul className="space-y-3">
-              {[
-                'Case setup & initial review',
-                'Evidence organization',
-                'Intelligence activation',
-              ].map((item) => (
-                <li key={item} className="flex items-center gap-3 text-sm text-slate-700">
-                  <CheckCircle2 size={16} className="text-amber-500 shrink-0" />
-                  {item}
-                </li>
-              ))}
-            </ul>
+        {/* Free trial feature callout */}
+        <div className="max-w-3xl mx-auto mb-14 bg-[#0f172a] rounded-2xl p-8 text-center border border-slate-700/50">
+          <p className="text-amber-400 text-sm font-semibold uppercase tracking-wide mb-3">Free 30-Day Trial</p>
+          <p className="text-white text-lg leading-relaxed mb-6">
+            Analyze charges, jury instructions, motions, authorities, evidence,
+            contradictions, and case intelligence with no credit card required.
+          </p>
+          <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
+            {allFeatures.map((f) => (
+              <span key={f} className="flex items-center gap-1.5 text-sm text-slate-300">
+                <CheckCircle2 size={14} className="text-amber-400 shrink-0" />
+                {f}
+              </span>
+            ))}
+          </div>
+          <Link
+            to="/register"
+            className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-[#0f172a] font-bold px-8 py-4 rounded-xl text-lg transition-colors shadow-lg shadow-amber-500/20"
+          >
+            Start Free 30-Day Trial
+            <ArrowRight size={20} />
+          </Link>
+        </div>
+
+        {/* Plan cards */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-5 mb-16">
+          {plans.map((plan) => (
+            <div
+              key={plan.name}
+              className={`rounded-2xl p-6 border flex flex-col ${
+                plan.highlight
+                  ? 'bg-[#0f172a] border-amber-500/50 shadow-xl shadow-amber-500/10 ring-2 ring-amber-500/30'
+                  : plan.featured
+                    ? 'bg-[#0f172a] border-slate-700/50'
+                    : 'bg-slate-50 border-slate-200'
+              }`}
+            >
+              <p className={`text-xs font-semibold uppercase tracking-wide mb-2 ${
+                plan.highlight || plan.featured ? 'text-amber-400' : 'text-amber-600'
+              }`}>
+                {plan.name}
+              </p>
+              <div className="mb-1">
+                <span className={`text-3xl font-extrabold ${
+                  plan.highlight || plan.featured ? 'text-white' : 'text-[#0f172a]'
+                }`}>
+                  {plan.price}
+                </span>
+                <span className={`text-sm ml-1 ${
+                  plan.highlight || plan.featured ? 'text-slate-400' : 'text-slate-500'
+                }`}>
+                  {plan.period}
+                </span>
+              </div>
+
+              <div className={`flex items-center gap-2 mb-1 text-sm ${
+                plan.highlight || plan.featured ? 'text-slate-300' : 'text-slate-600'
+              }`}>
+                <HardDrive size={14} className="text-amber-500 shrink-0" />
+                {plan.storage} storage
+              </div>
+
+              {plan.credits && (
+                <div className={`flex items-center gap-2 mb-1 text-sm ${
+                  plan.highlight ? 'text-slate-300' : 'text-slate-600'
+                }`}>
+                  <Play size={14} className="text-amber-500 shrink-0" />
+                  {plan.credits}
+                </div>
+              )}
+
+              {plan.extraStorage && (
+                <p className={`text-xs mt-1 ${
+                  plan.highlight ? 'text-slate-500' : 'text-slate-400'
+                }`}>
+                  {plan.extraStorage}
+                </p>
+              )}
+
+              <ul className="mt-4 space-y-2 flex-1">
+                {plan.notes.map((note) => (
+                  <li key={note} className={`flex items-start gap-2 text-xs ${
+                    plan.highlight || plan.featured ? 'text-slate-400' : 'text-slate-500'
+                  }`}>
+                    <CheckCircle2 size={12} className="text-amber-500 shrink-0 mt-0.5" />
+                    {note}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+
+        {/* Video & Large Evidence Processing */}
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center mb-10">
+            <h3 className="text-2xl font-extrabold text-[#0f172a] mb-3 tracking-tight">
+              Video &amp; Large Evidence Processing
+            </h3>
+            <p className="text-slate-500 max-w-2xl mx-auto text-sm leading-relaxed">
+              Storage keeps files available. Processing analyzes large evidence files.
+              Each credit equals 10 minutes of video processing.
+            </p>
           </div>
 
-          {/* Monthly Access */}
-          <div className="bg-[#0f172a] rounded-2xl p-8 border border-slate-700/50 shadow-xl">
-            <p className="text-sm font-semibold text-amber-400 uppercase tracking-wide mb-2">Monthly</p>
-            <h3 className="text-4xl font-extrabold text-white mb-1">$75</h3>
-            <p className="text-slate-400 mb-6">Per Month</p>
-            <ul className="space-y-3">
+          {/* Monthly included credits */}
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-8">
+            {[
+              { plan: 'Individual', credits: '50' },
+              { plan: 'Standard', credits: '250' },
+              { plan: 'Complex Case', credits: '1,000' },
+              { plan: 'Professional', credits: '5,000' },
+            ].map((tier) => (
+              <div key={tier.plan} className="bg-slate-50 rounded-xl p-4 border border-slate-200 text-center">
+                <p className="text-xs text-slate-500 mb-1">{tier.plan}</p>
+                <p className="text-lg font-bold text-[#0f172a]">{tier.credits}</p>
+                <p className="text-xs text-slate-400">credits/month</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Additional credit packs */}
+          <div className="bg-[#0f172a] rounded-2xl p-6 border border-slate-700/50">
+            <h4 className="text-sm font-semibold text-amber-400 uppercase tracking-wide mb-4 text-center">
+              Additional Credit Packs
+            </h4>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
               {[
-                'Case intelligence access',
-                'Contradiction analysis',
-                'Legal research & authorities',
-                'Evidence review tools',
-                'Intelligence reporting',
-              ].map((item) => (
-                <li key={item} className="flex items-center gap-3 text-sm text-slate-300">
-                  <CheckCircle2 size={16} className="text-amber-400 shrink-0" />
-                  {item}
-                </li>
+                { credits: '100 Credits', price: '$10' },
+                { credits: '500 Credits', price: '$40' },
+                { credits: '2,500 Credits', price: '$150' },
+              ].map((pack) => (
+                <div key={pack.credits} className="bg-[#1e293b] rounded-xl p-4 text-center border border-slate-700/30">
+                  <p className="text-white font-bold text-lg">{pack.credits}</p>
+                  <p className="text-amber-400 font-semibold">{pack.price}</p>
+                </div>
               ))}
-            </ul>
+            </div>
+            <p className="text-center text-xs text-slate-500 mt-4">
+              1 Credit = 10 Minutes of Video Processing
+            </p>
           </div>
         </div>
 
-        <div className="text-center mt-12">
+        {/* CTA */}
+        <div className="text-center mt-14">
           <Link
             to="/register"
             className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-[#0f172a] font-bold px-10 py-4 rounded-xl text-lg transition-colors shadow-lg shadow-amber-500/20"
           >
-            Get Started Today
+            Start Free 30-Day Trial
             <ArrowRight size={20} />
           </Link>
         </div>

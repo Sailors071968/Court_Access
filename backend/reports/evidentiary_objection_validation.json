@@ -1,0 +1,188 @@
+{
+  "phase": "D.6",
+  "name": "Judicial Motion Intelligence + Evidentiary Objection Framework",
+  "generatedAt": "2026-05-12T24:00:00.000Z",
+  "status": "READY_FOR_DEPLOYMENT",
+
+  "subsystems": {
+    "hearsayAnalysis": {
+      "description": "Deterministic hearsay detection with EC § 1200 et seq. analysis",
+      "indicators": 7,
+      "levels": ["single", "double"],
+      "exceptions": ["Party Admission (EC § 1220)", "Spontaneous Statement (EC § 1240)", "Business Record (EC § 1271)", "Official Record (EC § 1280)", "Dying Declaration (EC § 1242)", "Prior Inconsistent (EC § 1235)", "Contemporaneous (EC § 1241)"],
+      "citationPreservation": "mandatory — page, line, declarant, document"
+    },
+    "foundationDefects": {
+      "description": "Foundation defect detection (EC § 403, 700, 702, 800, 801)",
+      "patterns": 7,
+      "defectTypes": ["speculation", "improper_opinion", "lack_personal_knowledge", "insufficient_expertise"],
+      "citationPreservation": "mandatory"
+    },
+    "authenticationChallenges": {
+      "description": "Document authentication challenge detection (EC § 1400-1402)",
+      "challengeTypes": ["no_witness_foundation", "altered_document", "incomplete_document", "improper_copy", "digital_integrity", "metadata_conflict"],
+      "citationPreservation": "mandatory"
+    },
+    "chainOfCustody": {
+      "description": "Evidence chain of custody issue detection",
+      "patterns": 6,
+      "issueTypes": ["gap_in_chain", "improper_storage", "contamination_risk", "missing_log", "undocumented_transfer", "delayed_processing"],
+      "citationPreservation": "mandatory"
+    },
+    "constitutionalIssues": {
+      "description": "Constitutional issue detection (4th, 5th, 6th, 14th Amendment)",
+      "patterns": 10,
+      "issueTypes": ["unlawful_search", "unlawful_seizure", "miranda_violation", "right_to_counsel", "confrontation_clause", "speedy_trial", "due_process", "double_jeopardy"],
+      "suppressionTracking": true,
+      "citationPreservation": "mandatory"
+    },
+    "discoveryViolations": {
+      "description": "Discovery violation detection (PC § 1054 et seq.)",
+      "patterns": 6,
+      "violationTypes": ["late_disclosure", "withheld_evidence", "incomplete_production", "altered_evidence", "lost_evidence", "failure_to_preserve"],
+      "remedyTypes": ["continuance", "exclusion", "mistrial", "sanctions", "adverse_instruction"],
+      "citationPreservation": "mandatory"
+    },
+    "bradyGiglio": {
+      "description": "Brady/Giglio issue detection (prosecution disclosure failures)",
+      "patterns": 4,
+      "issueTypes": ["brady_material", "giglio_impeachment", "undisclosed_exculpatory", "undisclosed_deal", "undisclosed_prior_bad_acts"],
+      "crossReferencesWitnessInconsistencies": true,
+      "citationPreservation": "mandatory"
+    },
+    "suppressionIssues": {
+      "description": "Evidence suppression issue identification",
+      "bases": ["4th_amendment", "5th_amendment", "miranda", "6th_amendment", "confrontation_clause", "due_process", "fruit_poisonous_tree"],
+      "derivedFrom": "constitutional issues with high/medium suppression potential",
+      "chargeImpactAnalysis": true
+    },
+    "evidentiaryObjections": {
+      "description": "General evidentiary objection generation",
+      "objectionTypes": ["hearsay", "speculation", "foundation", "relevance", "prejudice_352", "leading"],
+      "evidenceCodeSections": ["EC § 1200", "EC § 702", "EC § 800", "EC § 1101", "EC § 352", "EC § 767"],
+      "statusTracking": ["identified", "raised", "sustained", "overruled"]
+    }
+  },
+
+  "frontendComponent": {
+    "name": "EvidentiaryObjectionCockpit",
+    "panes": ["hearsay", "foundation", "authentication", "relevance", "prejudice (EC 352)", "impeachment", "constitutional", "discovery"],
+    "theme": "dark",
+    "features": ["strength badges", "exception tracking", "suppression potential indicators", "Brady/Giglio integration", "chain of custody panel"]
+  },
+
+  "apiEndpoints": {
+    "fullAnalysis": { "method": "POST", "path": "/api/objections/analyze/:caseId" },
+    "hearsay": [
+      { "method": "POST", "path": "/api/objections/hearsay/:caseId" },
+      { "method": "GET", "path": "/api/objections/hearsay/:caseId" }
+    ],
+    "foundation": [
+      { "method": "POST", "path": "/api/objections/foundation/:caseId" },
+      { "method": "GET", "path": "/api/objections/foundation/:caseId" }
+    ],
+    "authentication": [
+      { "method": "POST", "path": "/api/objections/authentication/:caseId" },
+      { "method": "GET", "path": "/api/objections/authentication/:caseId" }
+    ],
+    "chainOfCustody": [
+      { "method": "POST", "path": "/api/objections/custody/:caseId" },
+      { "method": "GET", "path": "/api/objections/custody/:caseId" }
+    ],
+    "constitutional": [
+      { "method": "POST", "path": "/api/objections/constitutional/:caseId" },
+      { "method": "GET", "path": "/api/objections/constitutional/:caseId" }
+    ],
+    "discovery": [
+      { "method": "POST", "path": "/api/objections/discovery/:caseId" },
+      { "method": "GET", "path": "/api/objections/discovery/:caseId" }
+    ],
+    "bradyGiglio": [
+      { "method": "POST", "path": "/api/objections/brady/:caseId" },
+      { "method": "GET", "path": "/api/objections/brady/:caseId" }
+    ],
+    "suppression": [
+      { "method": "POST", "path": "/api/objections/suppression/:caseId" },
+      { "method": "GET", "path": "/api/objections/suppression/:caseId" }
+    ],
+    "generalObjections": [
+      { "method": "POST", "path": "/api/objections/general/:caseId" },
+      { "method": "GET", "path": "/api/objections/general/:caseId" }
+    ],
+    "validation": { "method": "GET", "path": "/api/objections/validation" }
+  },
+
+  "prismaModels": [
+    "EvidentiaryObjection",
+    "HearsayIssue",
+    "FoundationDefect",
+    "AuthenticationChallenge",
+    "ChainOfCustodyIssue",
+    "ConstitutionalIssue",
+    "DiscoveryViolation",
+    "BradyGiglioIssue",
+    "SuppressionIssue"
+  ],
+
+  "migration": "20260512240000_evidentiary_objection_framework",
+
+  "deterministicConstraints": {
+    "noFabricatedBradyClaims": true,
+    "noInventedConstitutionalViolations": true,
+    "noHallucinatedSuppressionArguments": true,
+    "noFakeCaseLaw": true,
+    "noAIGeneratedLegalOpinions": true,
+    "corePrinciple": "CourtAccess identifies and organizes provable evidentiary and procedural issues. It does NOT act as litigation counsel."
+  },
+
+  "systemsUnmodified": {
+    "auth": true,
+    "csrf": true,
+    "nginx": true,
+    "redis": true,
+    "ocr": true,
+    "pm2": true,
+    "ingestion": true,
+    "existingD1Segmentation": true,
+    "existingD2ElementMapping": true,
+    "existingD3ContradictionIntelligence": true,
+    "existingD4DefenseStrategy": true,
+    "existingD5TrialPreparation": true
+  },
+
+  "deploymentCommands": {
+    "pull": "cd /var/www/courtaccess_repo && git pull origin devin/1778357361-courtaccess-recovery-stabilization",
+    "install": "cd backend && npm install",
+    "migrate": "DATABASE_URL=\"...\" npx prisma migrate deploy",
+    "restart": "cd .. && pm2 restart courtaccess-api --update-env",
+    "verify": "curl -s localhost:3001/api/objections/validation | jq ."
+  },
+
+  "rollbackSQL": {
+    "commands": [
+      "DROP TABLE IF EXISTS \"suppression_issues\" CASCADE;",
+      "DROP TABLE IF EXISTS \"brady_giglio_issues\" CASCADE;",
+      "DROP TABLE IF EXISTS \"discovery_violations\" CASCADE;",
+      "DROP TABLE IF EXISTS \"constitutional_issues\" CASCADE;",
+      "DROP TABLE IF EXISTS \"chain_of_custody_issues\" CASCADE;",
+      "DROP TABLE IF EXISTS \"authentication_challenges\" CASCADE;",
+      "DROP TABLE IF EXISTS \"foundation_defects\" CASCADE;",
+      "DROP TABLE IF EXISTS \"hearsay_issues\" CASCADE;",
+      "DROP TABLE IF EXISTS \"evidentiary_objections\" CASCADE;",
+      "DELETE FROM \"_prisma_migrations\" WHERE migration_name = '20260512240000_evidentiary_objection_framework';"
+    ]
+  },
+
+  "riskAssessment": {
+    "overallRisk": "LOW",
+    "details": [
+      "9 new tables — additive only, no existing tables modified",
+      "No existing routes modified",
+      "No existing services modified",
+      "server.ts: single import + single route registration",
+      "Auth/CSRF/NGINX/Redis/OCR/PM2/ingestion all untouched",
+      "D.1/D.2/D.3/D.4/D.5 systems preserved — D.6 reads from earlier outputs",
+      "Pattern-based detection only — no generative AI"
+    ]
+  }
+}

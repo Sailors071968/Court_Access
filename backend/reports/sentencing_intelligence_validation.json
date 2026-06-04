@@ -1,0 +1,158 @@
+{
+  "phase": "E.3",
+  "name": "Judicial Analytics + Sentencing Intelligence Framework",
+  "generatedAt": "2026-05-12T28:00:00.000Z",
+  "status": "READY_FOR_DEPLOYMENT",
+
+  "subsystems": {
+    "sentencingExposureCalculator": {
+      "description": "Statute-linked sentencing exposure calculator using California Penal Code triad sentencing",
+      "statuteTable": "10 PC sections with base terms, life/LWOP flags, probation eligibility",
+      "triadSentencing": true,
+      "enhancementIntegration": true
+    },
+    "enhancementStackingAnalysis": {
+      "description": "Deterministic enhancement stacking analysis with California enhancement statutes",
+      "enhancementTypes": ["firearm_use", "firearm_discharge", "firearm_gbi", "gbi", "gang", "prior_prison", "prior_serious"],
+      "mandatoryFlags": true,
+      "strikeabilityTracking": true
+    },
+    "consecutiveConcurrentModeling": {
+      "description": "Evidence-linked consecutive/concurrent exposure modeling under PC § 1170.1",
+      "subordinateTermRule": "One-third middle term under PC § 1170.1(a)",
+      "mandatoryConsecutiveDetection": "PC § 667.6(d)",
+      "principalTermIdentification": true
+    },
+    "probationEligibilityAnalysis": {
+      "description": "Statute-aware probation eligibility analysis with statutory bars",
+      "statutoryBars": ["PC § 1203.06", "PC § 1203.065", "PC § 1203.066", "PC § 1203(e)(4)"],
+      "unusualCircumstancesException": true,
+      "felonyProbationMax": "2 years (AB 1950)"
+    },
+    "mitigationFactorOrganization": {
+      "description": "Citation-backed mitigation factor organization using CRC 4.423 and PC § 1170(b)(6)",
+      "factorTypes": ["age", "mental_health", "substance_abuse", "childhood_trauma", "military_service", "cooperation", "remorse", "minor_role", "provocation"],
+      "legalBasisRequired": true,
+      "pc1170b6Integration": "Youth and trauma factors under amended sentencing law"
+    },
+    "aggravationFactorTracking": {
+      "description": "Deterministic aggravation factor tracking using CRC 4.421",
+      "factorTypes": ["vulnerability", "sophistication", "position_of_trust", "multiple_victims", "excessive_cruelty", "weapon_use", "prior_record", "probation_status"],
+      "legalBasisRequired": true
+    },
+    "strikePriorAnalysis": {
+      "description": "California Three Strikes analysis with Romero motion viability assessment",
+      "priorTypes": ["strike", "serious_felony", "violent_felony", "prison_prior", "juvenile_adjudication"],
+      "secondStrikeDoubling": "PC § 667(e)(1)",
+      "thirdStrike25ToLife": "PC § 667(e)(2)(A)",
+      "romeroMotionAnalysis": "People v. Superior Court (Romero), 13 Cal.4th 497",
+      "washoutPeriodTracking": true
+    },
+    "custodyCreditFramework": {
+      "description": "Deterministic custody credit calculation under PC § 2900.5 and PC § 4019",
+      "creditRates": ["day_for_day", "fifteen_percent"],
+      "violentFelonyLimitation": "PC § 2933.1 — 15% maximum",
+      "actualDaysDetection": true
+    },
+    "judicialRulingTrendIndexing": {
+      "description": "Anonymized aggregate judicial ruling trend indexing — NO individual judge prediction",
+      "anonymized": true,
+      "aggregateOnly": true,
+      "noIndividualJudgePrediction": true,
+      "rulingCategories": ["sentencing", "motion", "evidentiary", "bail", "probation"]
+    },
+    "pleaConsequenceModeling": {
+      "description": "Statute-linked plea consequence modeling with collateral consequence analysis",
+      "consequenceTypes": ["immigration", "licensing", "firearm_restriction", "sex_registration", "strike", "probation", "restitution"],
+      "immigrationAnalysis": "INA § 101(a)(43) aggravated felony, CIMT analysis",
+      "statuteLinkedOnly": true
+    }
+  },
+
+  "frontendComponent": {
+    "name": "SentencingIntelligenceCockpit",
+    "panes": ["sentencing exposure", "enhancements", "strikes/priors", "mitigation", "aggravation", "probation eligibility", "custody credits", "plea consequences"],
+    "theme": "dark",
+    "features": ["exposure bars", "mandatory/strikeable badges", "Romero viability", "statutory bar warnings", "immigration consequences", "credit calculations"]
+  },
+
+  "apiEndpoints": {
+    "fullAnalysis": { "method": "POST", "path": "/api/sentencing/analyze/:caseId" },
+    "exposure": [
+      { "method": "POST", "path": "/api/sentencing/exposure/:caseId" },
+      { "method": "GET", "path": "/api/sentencing/exposure/:caseId" }
+    ],
+    "enhancements": [
+      { "method": "POST", "path": "/api/sentencing/enhancements/:caseId" },
+      { "method": "GET", "path": "/api/sentencing/enhancements/:caseId" }
+    ],
+    "consecutive": [
+      { "method": "POST", "path": "/api/sentencing/consecutive/:caseId" },
+      { "method": "GET", "path": "/api/sentencing/consecutive/:caseId" }
+    ],
+    "probation": [
+      { "method": "POST", "path": "/api/sentencing/probation/:caseId" },
+      { "method": "GET", "path": "/api/sentencing/probation/:caseId" }
+    ],
+    "mitigation": [
+      { "method": "POST", "path": "/api/sentencing/mitigation/:caseId" },
+      { "method": "GET", "path": "/api/sentencing/mitigation/:caseId" }
+    ],
+    "aggravation": [
+      { "method": "POST", "path": "/api/sentencing/aggravation/:caseId" },
+      { "method": "GET", "path": "/api/sentencing/aggravation/:caseId" }
+    ],
+    "strikes": [
+      { "method": "POST", "path": "/api/sentencing/strikes/:caseId" },
+      { "method": "GET", "path": "/api/sentencing/strikes/:caseId" }
+    ],
+    "credits": [
+      { "method": "POST", "path": "/api/sentencing/credits/:caseId" },
+      { "method": "GET", "path": "/api/sentencing/credits/:caseId" }
+    ],
+    "trends": [
+      { "method": "POST", "path": "/api/sentencing/trends/:caseId" },
+      { "method": "GET", "path": "/api/sentencing/trends/:caseId" }
+    ],
+    "plea": [
+      { "method": "POST", "path": "/api/sentencing/plea/:caseId" },
+      { "method": "GET", "path": "/api/sentencing/plea/:caseId" }
+    ],
+    "validation": { "method": "GET", "path": "/api/sentencing/validation" }
+  },
+
+  "prismaModels": [
+    "SentencingExposure",
+    "EnhancementStacking",
+    "ConsecutiveConcurrentExposure",
+    "ProbationEligibility",
+    "MitigationFactor",
+    "AggravationFactor",
+    "StrikePriorAnalysis",
+    "CustodyCredit",
+    "JudicialRulingTrend",
+    "PleaConsequence"
+  ],
+
+  "migration": "20260512280000_sentencing_intelligence",
+
+  "deterministicConstraints": {
+    "noPredictingSpecificJudges": true,
+    "noFabricatedMitigation": true,
+    "noHallucinatedSentencing": true,
+    "noSpeculativePleaAdvice": true,
+    "noAISentencingRecommendations": true,
+    "corePrinciple": "CourtAccess organizes sentencing-related legal structures. It does NOT function as sentencing counsel."
+  },
+
+  "systemsUnmodified": {
+    "auth": true,
+    "csrf": true,
+    "nginx": true,
+    "redis": true,
+    "ocr": true,
+    "pm2": true,
+    "ingestion": true,
+    "existingD1toE2Systems": true
+  }
+}

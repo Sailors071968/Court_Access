@@ -5,6 +5,14 @@
 // Usage: npx tsx backend/src/server.ts
 // ============================================================================
 
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+// Load .env from backend/.env regardless of cwd
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.resolve(__dirname, '../.env') });
+
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import cookie from '@fastify/cookie';
@@ -40,6 +48,50 @@ import { registerObservabilityRoutes } from './observability/observabilityRoutes
 import { startRedisMemoryMonitor, stopRedisMemoryMonitor } from './observability/redisMemoryAlert.js';
 import { registerChargeRoutes } from "./charges/chargeRoutes.js";
 import { registerCalcrimRoutes } from "./routes/calcrimRoutes.js";
+import { registerEvidenceStatementRoutes } from "./routes/evidenceStatementRoutes.js";
+import { registerElementMappingRoutes } from "./routes/elementMappingRoutes.js";
+import { registerContradictionRoutes as registerPhaseCContradictionRoutes } from "./routes/contradictionRoutes.js";
+import { registerMaterialityRoutes } from "./routes/materialityRoutes.js";
+import { registerDefenseIntelligenceRoutes } from "./routes/defenseIntelligenceRoutes.js";
+import { registerEvidenceSegmentationRoutes } from "./routes/evidenceSegmentationRoutes.js";
+import { registerCalcrimElementMappingRoutes } from "./routes/calcrimElementMappingRoutes.js";
+import { registerChargeIntakeRoutes } from "./routes/chargeIntakeRoutes.js";
+import { registerContradictionIntelligenceRoutes } from "./routes/contradictionIntelligenceRoutes.js";
+import { registerDefenseStrategyRoutes } from "./routes/defenseStrategyRoutes.js";
+import { registerTrialPreparationRoutes } from "./routes/trialPreparationRoutes.js";
+import { registerEvidentiaryObjectionRoutes } from "./routes/evidentiaryObjectionRoutes.js";
+import { registerTrialDynamicsRoutes } from "./routes/trialDynamicsRoutes.js";
+import { registerAppellateIntelligenceRoutes } from "./routes/appellateIntelligenceRoutes.js";
+import { registerPostConvictionRoutes } from "./routes/postConvictionRoutes.js";
+import { registerSentencingIntelligenceRoutes } from "./routes/sentencingIntelligenceRoutes.js";
+import { registerUnifiedIntelligenceRoutes } from "./routes/unifiedIntelligenceRoutes.js";
+import { registerLiveLitigationRoutes } from "./routes/liveLitigationRoutes.js";
+import { registerConstitutionalLitigationRoutes } from "./routes/constitutionalLitigationRoutes.js";
+import { registerProsecutorialConductRoutes } from "./routes/prosecutorialConductRoutes.js";
+import { registerUnifiedAttorneyCommandRoutes } from "./routes/unifiedAttorneyCommandRoutes.js";
+import { registerEvidentiaryIntegrityRoutes } from "./routes/evidentiaryIntegrityRoutes.js";
+import { registerEnterpriseScalabilityRoutes } from "./routes/enterpriseScalabilityRoutes.js";
+import { registerLitigationInteroperabilityRoutes } from "./routes/litigationInteroperabilityRoutes.js";
+import { registerGovernanceComplianceRoutes } from "./routes/governanceComplianceRoutes.js";
+import { registerProductionHardeningRoutes } from "./routes/productionHardeningRoutes.js";
+import { registerInstitutionalResilienceRoutes } from "./routes/institutionalResilienceRoutes.js";
+import { registerEvidentiaryTrustRoutes } from "./routes/evidentiaryTrustRoutes.js";
+import { registerInstitutionalDeploymentRoutes } from "./routes/institutionalDeploymentRoutes.js";
+import { registerExpertDefensibilityRoutes } from "./routes/expertDefensibilityRoutes.js";
+import { registerForensicObservabilityRoutes } from "./routes/forensicObservabilityRoutes.js";
+import { registerPlatformGovernanceRoutes } from "./routes/platformGovernanceRoutes.js";
+import { registerEcosystemOrchestrationRoutes } from "./routes/ecosystemOrchestrationRoutes.js";
+import { registerProductionReadinessRoutes } from "./routes/productionReadinessRoutes.js";
+import { registerOperationalReliabilityRoutes } from "./routes/operationalReliabilityRoutes.js";
+import { registerPilotOperationsRoutes } from "./routes/pilotOperationsRoutes.js";
+import { registerOperationalMaturationRoutes } from "./routes/operationalMaturationRoutes.js";
+import { registerEnterpriseRolloutRoutes } from "./routes/enterpriseRolloutRoutes.js";
+import { registerStripeBillingRoutes } from "./routes/stripeBillingRoutes.js";
+import { registerStripeActivationRoutes } from "./routes/stripeActivationRoutes.js";
+import { registerLiveBillingEnablementRoutes } from "./routes/liveBillingEnablementRoutes.js";
+// P.1/P.2 enterprise simulation routes removed — replaced with real product execution
+// import { registerEnterpriseProductionRoutes } from "./routes/enterpriseProductionRoutes.js";
+// import { registerEnterpriseScaleRoutes } from "./routes/enterpriseScaleRoutes.js";
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -91,7 +143,7 @@ async function startServer() {
   app.addHook('onRequest', rateLimitHook);
 
   // Phase 191 — Authentication (JWT verification + RBAC)
-  //  app.addHook('onRequest', authenticationHook);
+  app.addHook('onRequest', authenticationHook);
 
   // Phase 193 — CSRF protection (after auth, before route handlers)
   // app.addHook('onRequest', csrfProtectionHook);
@@ -102,14 +154,33 @@ async function startServer() {
   // Phase 197 — Security logging (response tracking)
   await registerSecurityLogging(app);
 
-  // Health check
-  app.get('/api/health', async () => ({
-    status: 'ok',
-    timestamp: new Date().toISOString(),
-    version: '1.1.0',
-    service: 'court-access-backend',
-    environment: process.env.NODE_ENV || 'development',
-  }));
+  // Health check (expanded — Stage 1 observability)
+  app.get('/api/health', async () => {
+    const mem = process.memoryUsage();
+    const os = await import('os');
+    return {
+      status: 'ok',
+      timestamp: new Date().toISOString(),
+      version: '1.1.0',
+      service: 'court-access-backend',
+      environment: process.env.NODE_ENV || 'development',
+      uptime: Math.floor(process.uptime()),
+      pid: process.pid,
+      memory: {
+        heapUsedMB: Math.round(mem.heapUsed / 1024 / 1024),
+        heapTotalMB: Math.round(mem.heapTotal / 1024 / 1024),
+        rssMB: Math.round(mem.rss / 1024 / 1024),
+      },
+      cpu: {
+        loadAvg: os.loadavg(),
+        cores: os.cpus().length,
+      },
+      pm2: {
+        instanceId: process.env.pm_id || 'n/a',
+        restartCount: parseInt(process.env.restart_time || '0', 10),
+      },
+    };
+  });
 
   // Register route modules
 
@@ -183,6 +254,133 @@ async function startServer() {
   console.log('[Server] Registering CALCRIM routes...');
   await registerCalcrimRoutes(app);
 
+  console.log('[Server] Registering evidence statement routes...');
+  await registerEvidenceStatementRoutes(app);
+
+  console.log('[Server] Registering element mapping routes...');
+  await registerElementMappingRoutes(app);
+
+  console.log('[Server] Registering contradiction engine routes...');
+  await registerPhaseCContradictionRoutes(app);
+
+  console.log('[Server] Registering materiality scoring routes...');
+  await registerMaterialityRoutes(app);
+
+  console.log('[Server] Registering defense intelligence routes...');
+  await registerDefenseIntelligenceRoutes(app);
+
+  console.log('[Server] Registering evidence segmentation routes (Phase D.1)...');
+  await registerEvidenceSegmentationRoutes(app);
+
+  console.log('[Server] Registering CALCRIM element mapping routes (Phase D.2)...');
+  await registerCalcrimElementMappingRoutes(app);
+
+  console.log('[Server] Registering charge intake + California code routes (Phase D.2.5)...');
+  await registerChargeIntakeRoutes(app);
+
+  console.log('[Server] Registering contradiction intelligence routes (Phase D.3)...');
+  await registerContradictionIntelligenceRoutes(app);
+
+  console.log('[Server] Registering defense strategy + attorney workspace routes (Phase D.4)...');
+  await registerDefenseStrategyRoutes(app);
+
+  console.log('[Server] Registering trial preparation + export routes (Phase D.5)...');
+  await registerTrialPreparationRoutes(app);
+
+  console.log('[Server] Registering evidentiary objection + motion intelligence routes (Phase D.6)...');
+  await registerEvidentiaryObjectionRoutes(app);
+
+  console.log('[Server] Registering trial dynamics + courtroom presentation routes (Phase D.7)...');
+  await registerTrialDynamicsRoutes(app);
+
+  console.log('[Server] Registering appellate intelligence routes (Phase E.1)...');
+  await registerAppellateIntelligenceRoutes(app);
+
+  console.log('[Server] Registering post-conviction intelligence routes (Phase E.2)...');
+  await registerPostConvictionRoutes(app);
+
+  console.log('[Server] Registering sentencing intelligence routes (Phase E.3)...');
+  await registerSentencingIntelligenceRoutes(app);
+
+  console.log('[Server] Registering unified intelligence graph routes (Phase F.1)...');
+  await registerUnifiedIntelligenceRoutes(app);
+
+  console.log('[Server] Registering live litigation monitoring routes (Phase F.2)...');
+  await registerLiveLitigationRoutes(app);
+
+  console.log('[Server] Registering constitutional litigation routes (Phase G.1)...');
+  await registerConstitutionalLitigationRoutes(app);
+
+  console.log('[Server] Registering prosecutorial conduct routes (Phase G.2)...');
+  await registerProsecutorialConductRoutes(app);
+
+  console.log('[Server] Registering unified attorney command routes (Phase H.1)...');
+  await registerUnifiedAttorneyCommandRoutes(app);
+
+  console.log('[Server] Registering evidentiary integrity routes (Phase H.2)...');
+  await registerEvidentiaryIntegrityRoutes(app);
+
+  console.log('[Server] Registering enterprise scalability routes (Phase H.3)...');
+  await registerEnterpriseScalabilityRoutes(app);
+
+  console.log('[Server] Registering litigation interoperability routes (Phase I.1)...');
+  await registerLitigationInteroperabilityRoutes(app);
+
+  console.log('[Server] Registering governance compliance routes (Phase I.2)...');
+  await registerGovernanceComplianceRoutes(app);
+
+  console.log('[Server] Registering production hardening routes (Phase I.3)...');
+  await registerProductionHardeningRoutes(app);
+
+  console.log('[Server] Registering institutional resilience routes (Phase J.1)...');
+  await registerInstitutionalResilienceRoutes(app);
+
+  console.log('[Server] Registering evidentiary trust routes (Phase J.2)...');
+  await registerEvidentiaryTrustRoutes(app);
+
+  console.log('[Server] Registering institutional deployment routes (Phase K.1)...');
+  await registerInstitutionalDeploymentRoutes(app);
+
+  console.log('[Server] Registering expert defensibility routes (Phase K.2)...');
+  await registerExpertDefensibilityRoutes(app);
+
+  console.log('[Server] Registering forensic observability routes (Phase L.1)...');
+  await registerForensicObservabilityRoutes(app);
+
+  console.log('[Server] Registering platform governance routes (Phase M.1)...');
+  await registerPlatformGovernanceRoutes(app);
+
+  console.log('[Server] Registering ecosystem orchestration routes (Phase M.2)...');
+  await registerEcosystemOrchestrationRoutes(app);
+
+  console.log('[Server] Registering production readiness routes (Phase N.1)...');
+  await registerProductionReadinessRoutes(app);
+
+  console.log('[Server] Registering operational reliability routes (Phase N.2)...');
+  await registerOperationalReliabilityRoutes(app);
+
+  console.log('[Server] Registering pilot operations routes (Phase N.3)...');
+  await registerPilotOperationsRoutes(app);
+
+  console.log('[Server] Registering operational maturation routes (Phase N.4)...');
+  await registerOperationalMaturationRoutes(app);
+
+  console.log('[Server] Registering enterprise rollout routes (Phase N.5)...');
+  await registerEnterpriseRolloutRoutes(app);
+
+  console.log('[Server] Registering Stripe billing routes (Phase O.1)...');
+  await registerStripeBillingRoutes(app);
+
+  console.log('[Server] Registering Stripe activation routes (Phase O.2)...');
+  await registerStripeActivationRoutes(app);
+
+  console.log('[Server] Registering LIVE billing enablement routes (Phase O.3)...');
+  await registerLiveBillingEnablementRoutes(app);
+
+  // P.1/P.2 enterprise simulation routes disabled — real product execution mode
+  // await registerEnterpriseProductionRoutes(app);
+  // await registerEnterpriseScaleRoutes(app);
+
   console.log('[Server] Registering admin queue monitoring routes...');
   await registerQueueMonitorRoutes(app);
 
@@ -208,8 +406,12 @@ async function startServer() {
   // Start Phase 2 ACU-enforced pipeline workers (BullMQ)
   startPipelineWorkers();
 
-  // Scale Validation — Redis memory alert monitor
-  startRedisMemoryMonitor();
+  // Scale Validation — Redis memory alert monitor (requires Redis)
+  if (process.env.DISABLE_WORKERS !== 'true') {
+    startRedisMemoryMonitor();
+  } else {
+    console.log('[Server] Redis memory monitor disabled (DISABLE_WORKERS=true)');
+  }
 
   // Start server
   try {

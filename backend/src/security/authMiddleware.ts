@@ -235,6 +235,7 @@ const PUBLIC_ROUTES = [
   '/api/auth/reset-password',
   '/api/discount-codes/validate',
   '/api/billing/webhook',
+  '/api/auth/csrf-token',
 ];
 
 function isPublicRoute(path: string): boolean {

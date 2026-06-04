@@ -77,7 +77,7 @@ export function RegisterPage() {
         }
       }
 
-      navigate('/pricing');
+      navigate('/onboarding');
     } catch {
       setError('Registration failed. Please try again.');
     }

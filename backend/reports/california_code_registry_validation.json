@@ -1,0 +1,159 @@
+{
+  "phase": "D.2.5",
+  "name": "California Code Registry + Charge-CALCRIM Linkage Validation",
+  "generatedAt": "2026-05-12T21:00:00.000Z",
+  "status": "READY_FOR_DEPLOYMENT",
+
+  "registry": {
+    "totalCodes": 29,
+    "criminalDefenseCodes": 9,
+    "totalStatutes": 37,
+    "statutesByCode": {
+      "PC": 24,
+      "VC": 6,
+      "HSC": 6,
+      "WIC": 1
+    },
+    "totalCalcrimLinks": 48,
+    "unmappedStatutes": 0,
+    "codeCategories": {
+      "criminal": 4,
+      "civil": 3,
+      "regulatory": 11,
+      "administrative": 6,
+      "procedural": 3
+    }
+  },
+
+  "codes": [
+    "PC — Penal Code",
+    "VC — Vehicle Code",
+    "HSC — Health & Safety Code",
+    "WIC — Welfare & Institutions Code",
+    "BPC — Business & Professions Code",
+    "FC — Family Code",
+    "EC — Evidence Code",
+    "GOV — Government Code",
+    "LC — Labor Code",
+    "CC — Civil Code",
+    "CCP — Code of Civil Procedure",
+    "CORP — Corporations Code",
+    "EDC — Education Code",
+    "ELEC — Elections Code",
+    "FIN — Financial Code",
+    "FGC — Fish & Game Code",
+    "FAC — Food & Agricultural Code",
+    "HNC — Harbors & Navigation Code",
+    "IC — Insurance Code",
+    "MVC — Military & Veterans Code",
+    "PCC — Public Contract Code",
+    "PRC — Public Resources Code",
+    "PUC — Public Utilities Code",
+    "RTC — Revenue & Taxation Code",
+    "SHC — Streets & Highways Code",
+    "UIC — Unemployment Insurance Code",
+    "WC — Water Code",
+    "PROB — Probate Code",
+    "CRC — Rules of Court"
+  ],
+
+  "statuteCoverage": {
+    "crimesAgainstPersons": ["PC 187(a)", "PC 192(a)", "PC 192(b)", "PC 245(a)(1)", "PC 245(a)(4)", "PC 243(d)", "PC 243(e)(1)", "PC 273.5(a)", "PC 261(a)", "PC 288(a)", "PC 422", "PC 211"],
+    "crimesAgainstProperty": ["PC 459", "PC 487(a)", "PC 488", "PC 496(a)", "PC 451", "PC 594"],
+    "weapons": ["PC 29800(a)(1)", "PC 25400(a)", "PC 25850(a)"],
+    "other": ["PC 148(a)(1)", "PC 69", "PC 368(b)(1)"],
+    "vehicleCode": ["VC 23152(a)", "VC 23152(b)", "VC 23152(f)", "VC 23153(a)", "VC 20001(a)", "VC 10851(a)"],
+    "healthSafety": ["HSC 11350(a)", "HSC 11351", "HSC 11352(a)", "HSC 11377(a)", "HSC 11378", "HSC 11379(a)"],
+    "welfare": ["WIC 10980(c)(2)"]
+  },
+
+  "legalPipeline": {
+    "requiredSequence": [
+      "Case creation",
+      "Charge entry (California code + statute)",
+      "Charge validation (code + section required)",
+      "CALCRIM instruction linkage (auto or manual)",
+      "CALCRIM element mapping",
+      "Evidence statement extraction",
+      "Prosecutor narrative organization",
+      "Contradiction detection",
+      "Invalid inference generation",
+      "Defense intelligence output"
+    ],
+    "gateCondition": "No CALCRIM mapping allowed without charges"
+  },
+
+  "implementation": {
+    "backendServices": [
+      "backend/src/services/californiaCodeRegistry.ts",
+      "backend/src/services/chargeCalcrimLinker.ts"
+    ],
+    "backendRoutes": "backend/src/routes/chargeIntakeRoutes.ts",
+    "frontendComponent": "src/components/case/ChargeIntakeForm.tsx",
+    "serverRegistration": "backend/src/server.ts"
+  },
+
+  "apiEndpoints": [
+    { "method": "GET", "path": "/api/codes/california", "description": "List all 29 California codes" },
+    { "method": "GET", "path": "/api/codes/california/criminal", "description": "List criminal defense codes" },
+    { "method": "GET", "path": "/api/codes/california/search", "description": "Search codes by name/abbreviation" },
+    { "method": "GET", "path": "/api/codes/california/:code", "description": "Get specific code details" },
+    { "method": "GET", "path": "/api/codes/statutes/:code", "description": "Get statutes for a code" },
+    { "method": "GET", "path": "/api/codes/statutes/search", "description": "Search statutes by section/title" },
+    { "method": "GET", "path": "/api/codes/registry/stats", "description": "Registry statistics" },
+    { "method": "POST", "path": "/api/charges/create", "description": "Create charge with auto-CALCRIM linkage" },
+    { "method": "GET", "path": "/api/charges/validate/:caseId", "description": "Validate charges for CALCRIM readiness" },
+    { "method": "POST", "path": "/api/charges/auto-link/:caseId", "description": "Auto-link charges to CALCRIM instructions" },
+    { "method": "GET", "path": "/api/charges/analysis-ready/:caseId", "description": "Check CALCRIM analysis prerequisites" }
+  ],
+
+  "frontendFeatures": [
+    "Searchable dropdown for all 29 California codes",
+    "Statute section entry with auto-suggest from registry",
+    "Auto-fill title and severity from statute registry",
+    "CALCRIM auto-link preview before save",
+    "Enhancement multi-select from statute registry",
+    "Count numbering (auto-increment)",
+    "Date of offense field",
+    "Victim field (required)",
+    "Default code: Penal Code (PC)"
+  ],
+
+  "deterministicConstraints": {
+    "noLLMInference": true,
+    "noGenerativeReasoning": true,
+    "noHallucinatedLinkage": true,
+    "allLinkagesFromStatuteRegistry": true,
+    "manualOverrideSupported": true
+  },
+
+  "validationConflicts": [],
+
+  "systemsUnmodified": {
+    "auth": true,
+    "csrf": true,
+    "nginx": true,
+    "redis": true,
+    "ocr": true,
+    "pm2": true,
+    "ingestion": true
+  },
+
+  "deploymentCommands": {
+    "pull": "cd /var/www/courtaccess_repo && git pull origin devin/1778357361-courtaccess-recovery-stabilization",
+    "install": "cd backend && npm install",
+    "restart": "cd .. && pm2 restart courtaccess-api --update-env",
+    "verify": "curl -s localhost:3001/api/codes/registry/stats | jq ."
+  },
+
+  "riskAssessment": {
+    "overallRisk": "LOW",
+    "details": [
+      "No database schema changes (uses existing Charge model)",
+      "No existing routes modified",
+      "New frontend component — additive only",
+      "Server.ts: single import + single route registration",
+      "All California code data is static/deterministic"
+    ]
+  }
+}

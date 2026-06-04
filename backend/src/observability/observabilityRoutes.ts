@@ -1,10 +1,11 @@
 // ============================================================================
-// PR 6 — Observability Layer: Routes
+// Observability Layer: Routes (Stage 1 Expansion)
 //
 // Registers observability endpoints on the Fastify server:
 //   GET /api/health/deep      — Deep health check (all dependencies)
 //   GET /api/metrics           — Prometheus exposition format
 //   GET /api/metrics/json      — JSON metrics summary
+//   GET /api/metrics/failures  — Failure visibility report
 //
 // These endpoints are unauthenticated by design (for load balancers,
 // monitoring agents, and Prometheus scrapers). Sensitive data is NOT
@@ -14,6 +15,7 @@
 import type { FastifyInstance } from 'fastify';
 import { runDeepHealthCheck } from './deepHealthCheck.ts';
 import { metrics } from './metricsCollector.ts';
+import { failureVisibility } from './failureVisibility.ts';
 
 // ---------------------------------------------------------------------------
 // Route Registration
@@ -23,7 +25,7 @@ export async function registerObservabilityRoutes(app: FastifyInstance): Promise
   /**
    * GET /api/health/deep
    * Deep health check — verifies connectivity to Postgres, Redis, Neo4j,
-   * and checks memory usage. Returns structured JSON report.
+   * checks memory usage, disk space, OCR dependencies, and queue state.
    *
    * Response codes:
    *   200 — all components healthy
@@ -58,5 +60,16 @@ export async function registerObservabilityRoutes(app: FastifyInstance): Promise
     return metrics.toJSON();
   });
 
-  console.log('[Observability] Routes registered: /api/health/deep, /api/metrics, /api/metrics/json');
+  /**
+   * GET /api/metrics/failures
+   * Failure visibility report — aggregated failure metrics across
+   * ingestion, OCR, queues, and identity subsystems.
+   *
+   * NO automatic remediation — visibility ONLY.
+   */
+  app.get('/api/metrics/failures', async () => {
+    return failureVisibility.getReport();
+  });
+
+  console.log('[Observability] Routes registered: /api/health/deep, /api/metrics, /api/metrics/json, /api/metrics/failures');
 }

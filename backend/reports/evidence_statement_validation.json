@@ -1,0 +1,52 @@
+{
+  "generatedAt": "2026-05-09T20:00:00.000Z",
+  "note": "Static validation report — will be regenerated on EC2 after migration and data population",
+  "summary": {
+    "totalStatements": 0,
+    "lowConfidenceCount": 0,
+    "lowConfidencePercentage": 0
+  },
+  "byExtractionMethod": [],
+  "bySpeaker": [],
+  "validation": {
+    "schemaPresent": true,
+    "noSummarization": true,
+    "noLlmRewriting": true,
+    "deterministicSegmentation": true,
+    "citationsPreserved": true,
+    "supportedExtractionMethods": [
+      "manual",
+      "ocr",
+      "transcript_parse",
+      "pdf_extract"
+    ],
+    "supportedInputSources": [
+      "police_reports",
+      "transcripts",
+      "ocr_text",
+      "bodycam_transcripts",
+      "interrogation_transcripts",
+      "dashcam_transcripts"
+    ],
+    "outputFields": [
+      "statementId",
+      "sourceDocumentId",
+      "page",
+      "lineStart",
+      "lineEnd",
+      "timestamp",
+      "speaker",
+      "rawText",
+      "normalizedText",
+      "extractionConfidence",
+      "extractionMethod"
+    ],
+    "apiEndpoints": [
+      "POST /api/evidence-statements/extract",
+      "POST /api/evidence-statements/create",
+      "POST /api/evidence-statements/preview",
+      "GET /api/evidence-statements/:caseId",
+      "GET /api/evidence-statements/validation"
+    ]
+  }
+}

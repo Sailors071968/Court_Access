@@ -17,6 +17,10 @@ import { ContactSalesPage } from './pages/ContactSalesPage';
 import { CaseStudiesPage } from './pages/CaseStudiesPage';
 import { LegalDisclaimerPage } from './pages/LegalDisclaimerPage';
 
+// Onboarding & Checkout
+import { OnboardingPage } from './pages/OnboardingPage';
+import { CheckoutSuccessPage, CheckoutCancelPage } from './pages/CheckoutResultPage';
+
 // Auth Pages
 import { LoginPage } from './pages/auth/LoginPage';
 import { RegisterPage } from './pages/auth/RegisterPage';
@@ -88,6 +92,11 @@ function App() {
 
         {/* Pricing (accessible to authenticated users without subscription) */}
         <Route path="/pricing" element={<PricingPage />} />
+
+        {/* Onboarding & Checkout Result */}
+        <Route path="/onboarding" element={<OnboardingPage />} />
+        <Route path="/checkout/success" element={<CheckoutSuccessPage />} />
+        <Route path="/checkout/cancel" element={<CheckoutCancelPage />} />
 
         {/* Public Auth Routes */}
         <Route path="/login" element={<LoginPage />} />

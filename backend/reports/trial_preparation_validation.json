@@ -1,0 +1,139 @@
+{
+  "phase": "D.5",
+  "name": "Trial Preparation + Litigation Packet Generation",
+  "generatedAt": "2026-05-12T23:00:00.000Z",
+  "status": "READY_FOR_DEPLOYMENT",
+
+  "subsystems": {
+    "witnessAttackSheets": {
+      "description": "Per-witness trial preparation packages with impeachment sequences and cross-exam topics",
+      "includes": ["inconsistency summary", "contradiction summary", "cross-exam topics (priority ordered)", "impeachment sequence (step-by-step)", "prior statements (cross-document)", "key quotations with page/line", "timeline conflicts", "overall reliability assessment"],
+      "credibilityScoring": "inherited from D.4 impeachment packets",
+      "citationPreservation": "mandatory — page, line, speaker, document"
+    },
+    "calcrimFailureMatrices": {
+      "description": "Element-by-element prosecution failure analysis per CALCRIM instruction",
+      "includes": ["element status (unsupported/contradicted/weak/strong)", "supporting evidence citations", "prosecution gaps", "defense arguments (citation-backed)", "motion basis (PC § 1118.1 if applicable)"],
+      "perElementBreakdown": true,
+      "chargeLinked": true
+    },
+    "trialExhibitGeneration": {
+      "description": "Citation-linked defense exhibits for court presentation",
+      "exhibitTypes": ["contradiction", "impeachment", "timeline", "burden_failure", "witness_attack", "evidence_summary"],
+      "numberingScheme": "D-001, D-002, ...",
+      "statusTracking": ["draft", "finalized", "filed"]
+    },
+    "hearingPrepPackets": {
+      "description": "Hearing-specific preparation packets with key issues, witness order, exhibit lists",
+      "hearingTypes": ["preliminary", "suppression", "trial", "sentencing", "bail"],
+      "includes": ["key issues (priority ordered)", "witness order", "exhibit list", "motions summary", "contradiction highlights", "burden analysis", "timeline issues"]
+    },
+    "trialNotebookAssembly": {
+      "description": "Complete trial preparation notebook with 8 sections",
+      "sections": ["Case Overview", "CALCRIM Failure Analysis", "Prosecution Burden Analysis", "Contradiction Evidence", "Witness Analysis", "Timeline Analysis", "Motion Opportunities", "Reasonable Doubt Structures"],
+      "indexes": ["exhibit index", "witness index", "motion index", "contradiction index"]
+    },
+    "exportArchitecture": {
+      "description": "Structured export of all litigation materials with citation preservation",
+      "exportTypes": ["witness attack sheets", "contradiction packets", "CALCRIM failure matrices", "hearing prep packets", "trial notebooks", "exhibit packets"],
+      "citationPreservation": "page citations, line citations, document linkage, evidence provenance — ALL preserved in exports",
+      "format": "Structured text (PDF-ready) with citation formatting",
+      "jobTracking": "ExportJob model tracks status, file path, citation count"
+    }
+  },
+
+  "apiEndpoints": {
+    "trialPreparation": [
+      { "method": "POST", "path": "/api/trial/prepare/:caseId", "description": "Full trial preparation (all subsystems)" },
+      { "method": "POST", "path": "/api/trial/witness-attack-sheets/:caseId", "description": "Generate witness attack sheets" },
+      { "method": "GET", "path": "/api/trial/witness-attack-sheets/:caseId", "description": "Get witness attack sheets" },
+      { "method": "POST", "path": "/api/trial/failure-matrices/:caseId", "description": "Generate CALCRIM failure matrices" },
+      { "method": "GET", "path": "/api/trial/failure-matrices/:caseId", "description": "Get failure matrices" },
+      { "method": "POST", "path": "/api/trial/exhibits/:caseId", "description": "Generate trial exhibits" },
+      { "method": "GET", "path": "/api/trial/exhibits/:caseId", "description": "Get trial exhibits" },
+      { "method": "POST", "path": "/api/trial/hearing-prep/:caseId", "description": "Generate hearing prep packet" },
+      { "method": "GET", "path": "/api/trial/hearing-prep/:caseId", "description": "Get hearing prep packets" },
+      { "method": "POST", "path": "/api/trial/notebook/:caseId", "description": "Assemble trial notebook" },
+      { "method": "GET", "path": "/api/trial/notebook/:caseId", "description": "Get trial notebook" },
+      { "method": "GET", "path": "/api/trial/validation", "description": "Live validation report" }
+    ],
+    "exports": [
+      { "method": "POST", "path": "/api/export/witness-attack/:caseId", "description": "Export witness attack sheet" },
+      { "method": "POST", "path": "/api/export/contradictions/:caseId", "description": "Export contradiction packet" },
+      { "method": "POST", "path": "/api/export/failure-matrix/:caseId", "description": "Export CALCRIM failure matrix" },
+      { "method": "POST", "path": "/api/export/hearing-prep/:packetId", "description": "Export hearing prep packet" },
+      { "method": "POST", "path": "/api/export/trial-notebook/:caseId", "description": "Export trial notebook" },
+      { "method": "POST", "path": "/api/export/exhibit-packet/:caseId", "description": "Export all exhibits" },
+      { "method": "GET", "path": "/api/export/jobs/:caseId", "description": "Get export jobs" }
+    ]
+  },
+
+  "prismaModels": [
+    "TrialExhibit",
+    "WitnessAttackSheet",
+    "CalcrimFailureMatrix",
+    "HearingPrepPacket",
+    "TrialNotebook",
+    "ExportJob"
+  ],
+
+  "migration": "20260512230000_trial_preparation",
+
+  "deterministicConstraints": {
+    "noFabricatedMotions": true,
+    "noHallucinatedTestimony": true,
+    "noInventedImpeachment": true,
+    "noSpeculativeLegalConclusions": true,
+    "noFakeCaseCitations": true,
+    "noAIWrittenLegalOpinions": true,
+    "corePrinciple": "CourtAccess organizes litigation materials. It does NOT impersonate legal counsel."
+  },
+
+  "systemsUnmodified": {
+    "auth": true,
+    "csrf": true,
+    "nginx": true,
+    "redis": true,
+    "ocr": true,
+    "pm2": true,
+    "ingestion": true,
+    "existingD1Segmentation": true,
+    "existingD2ElementMapping": true,
+    "existingD3ContradictionIntelligence": true,
+    "existingD4DefenseStrategy": true
+  },
+
+  "deploymentCommands": {
+    "pull": "cd /var/www/courtaccess_repo && git pull origin devin/1778357361-courtaccess-recovery-stabilization",
+    "install": "cd backend && npm install",
+    "migrate": "DATABASE_URL=\"...\" npx prisma migrate deploy",
+    "createExportDir": "mkdir -p /var/www/courtaccess_repo/backend/exports",
+    "restart": "cd .. && pm2 restart courtaccess-api --update-env",
+    "verify": "curl -s localhost:3001/api/trial/validation | jq ."
+  },
+
+  "rollbackSQL": {
+    "commands": [
+      "DROP TABLE IF EXISTS \"export_jobs\" CASCADE;",
+      "DROP TABLE IF EXISTS \"trial_notebooks\" CASCADE;",
+      "DROP TABLE IF EXISTS \"hearing_prep_packets\" CASCADE;",
+      "DROP TABLE IF EXISTS \"calcrim_failure_matrices\" CASCADE;",
+      "DROP TABLE IF EXISTS \"witness_attack_sheets\" CASCADE;",
+      "DROP TABLE IF EXISTS \"trial_exhibits\" CASCADE;",
+      "DELETE FROM \"_prisma_migrations\" WHERE migration_name = '20260512230000_trial_preparation';"
+    ]
+  },
+
+  "riskAssessment": {
+    "overallRisk": "LOW",
+    "details": [
+      "6 new tables — additive only, no existing tables modified",
+      "No existing routes modified",
+      "No existing services modified",
+      "server.ts: single import + single route registration",
+      "Auth/CSRF/NGINX/Redis/OCR/PM2/ingestion all untouched",
+      "D.1/D.2/D.3/D.4 systems preserved — D.5 reads from D.4 output",
+      "Export directory created on first use (non-destructive)"
+    ]
+  }
+}

@@ -1,0 +1,145 @@
+{
+  "phase": "F.2",
+  "name": "Real-Time Case Intelligence + Live Litigation Monitoring Framework",
+  "generatedAt": "2026-05-12T30:00:00.000Z",
+  "status": "READY_FOR_DEPLOYMENT",
+
+  "subsystems": {
+    "realTimeTranscriptIngestion": {
+      "description": "Uploaded-source-only real-time transcript processing and statement extraction",
+      "sourceConstraint": "uploaded_document | live_authorized_feed ONLY",
+      "eventTypes": ["transcript_uploaded", "transcript_updated", "statement_extracted", "speaker_identified"],
+      "noCovertCollection": true
+    },
+    "liveContradictionEmergenceTracking": {
+      "description": "Deterministic real-time contradiction detection as new evidence is processed",
+      "emergenceTypes": ["new_contradiction", "escalated_contradiction", "resolved_contradiction"],
+      "severityLevels": ["critical", "high", "medium", "low"],
+      "acknowledgmentTracking": true
+    },
+    "dynamicBurdenShiftMonitoring": {
+      "description": "CALCRIM-aware dynamic burden shift monitoring as contradictions and evidence emerge",
+      "shiftTypes": ["strengthened", "weakened", "collapsed", "restored"],
+      "magnitudeRange": "0.0-1.0",
+      "elementLinking": true
+    },
+    "activeWitnessCredibilityUpdates": {
+      "description": "Citation-backed real-time witness credibility score tracking",
+      "updateTypes": ["credibility_increase", "credibility_decrease", "impeachment", "rehabilitation", "new_inconsistency", "recantation"],
+      "scoreRange": "0.0-1.0",
+      "citationRequired": true
+    },
+    "realTimeTimelineUpdates": {
+      "description": "Evidence-linked timeline updates tracking new events, gaps, and conflicts",
+      "updateTypes": ["new_event", "event_modified", "gap_detected", "conflict_detected", "gap_resolved"],
+      "stateTracking": true
+    },
+    "liveObjectionConsequenceTracking": {
+      "description": "Deterministic tracking of objection outcomes and their consequences",
+      "objectionTypes": ["hearsay", "foundation", "relevance", "352", "speculation", "leading", "confrontation", "best_evidence", "authentication"],
+      "consequenceTypes": ["evidence_excluded", "evidence_admitted", "limiting_instruction", "curative_instruction", "mistrial_motion", "appeal_preserved"],
+      "appellatePreservationTracking": true
+    },
+    "ongoingAppellatePreservationTracking": {
+      "description": "Citation-backed ongoing tracking of appellate preservation status across all issues",
+      "issueTypes": ["constitutional", "evidentiary", "instructional", "prosecutorial_misconduct", "sentencing"],
+      "preservationStatuses": ["preserved", "at_risk", "forfeited", "renewed"],
+      "followUpTracking": true
+    },
+    "courtroomEventStream": {
+      "description": "Uploaded-source-only courtroom event stream reconstruction from transcripts",
+      "eventTypes": ["testimony_start", "testimony_end", "objection", "ruling", "sidebar", "recess", "jury_instruction", "verdict", "sentencing", "motion"],
+      "sourceConstraint": "uploaded_document | live_authorized_feed ONLY",
+      "sequenceTracking": true
+    },
+    "litigationStateSnapshots": {
+      "description": "Immutable point-in-time litigation state snapshots for historical comparison",
+      "snapshotTypes": ["periodic", "event_triggered", "manual", "phase_transition"],
+      "stateCapture": ["burdenState", "contradictionState", "witnessCredibility", "appellateState", "timelineState"],
+      "immutable": true
+    }
+  },
+
+  "frontendComponent": {
+    "name": "LiveLitigationCockpit",
+    "panes": ["active contradictions", "burden shifts", "witness credibility changes", "live objections", "appellate preservation state", "courtroom event timeline", "dynamic theory updates", "litigation snapshots"],
+    "theme": "dark",
+    "features": ["severity badges", "burden shift bars", "credibility score changes", "ruling badges", "preservation status indicators", "sequence numbers", "snapshot comparison"]
+  },
+
+  "apiEndpoints": {
+    "fullAnalysis": { "method": "POST", "path": "/api/litigation/analyze/:caseId" },
+    "transcript": [
+      { "method": "POST", "path": "/api/litigation/transcript/:caseId" },
+      { "method": "GET", "path": "/api/litigation/transcript/:caseId" }
+    ],
+    "contradictions": [
+      { "method": "POST", "path": "/api/litigation/contradictions/:caseId" },
+      { "method": "GET", "path": "/api/litigation/contradictions/:caseId" }
+    ],
+    "burden": [
+      { "method": "POST", "path": "/api/litigation/burden/:caseId" },
+      { "method": "GET", "path": "/api/litigation/burden/:caseId" }
+    ],
+    "credibility": [
+      { "method": "POST", "path": "/api/litigation/credibility/:caseId" },
+      { "method": "GET", "path": "/api/litigation/credibility/:caseId" }
+    ],
+    "timeline": [
+      { "method": "POST", "path": "/api/litigation/timeline/:caseId" },
+      { "method": "GET", "path": "/api/litigation/timeline/:caseId" }
+    ],
+    "objections": [
+      { "method": "POST", "path": "/api/litigation/objections/:caseId" },
+      { "method": "GET", "path": "/api/litigation/objections/:caseId" }
+    ],
+    "appellate": [
+      { "method": "POST", "path": "/api/litigation/appellate/:caseId" },
+      { "method": "GET", "path": "/api/litigation/appellate/:caseId" }
+    ],
+    "events": [
+      { "method": "POST", "path": "/api/litigation/events/:caseId" },
+      { "method": "GET", "path": "/api/litigation/events/:caseId" }
+    ],
+    "snapshots": [
+      { "method": "POST", "path": "/api/litigation/snapshots/:caseId" },
+      { "method": "GET", "path": "/api/litigation/snapshots/:caseId" }
+    ],
+    "validation": { "method": "GET", "path": "/api/litigation/validation" }
+  },
+
+  "prismaModels": [
+    "RealTimeTranscriptEvent",
+    "LiveContradictionEmergence",
+    "DynamicBurdenShift",
+    "ActiveWitnessCredibilityUpdate",
+    "RealTimeTimelineUpdate",
+    "LiveObjectionConsequence",
+    "OngoingAppellatePreservation",
+    "CourtroomEventStream",
+    "LitigationStateSnapshot"
+  ],
+
+  "migration": "20260512300000_live_litigation_monitoring",
+
+  "constraints": {
+    "noCovertMonitoring": true,
+    "noUnauthorizedRecording": true,
+    "noSurveillanceFeatures": true,
+    "noHiddenCourtroomCollection": true,
+    "noExternalScrapingOfProceedings": true,
+    "noPredictiveCourtroomBehaviorSystems": true,
+    "corePrinciple": "CourtAccess analyzes uploaded/live-authorized litigation materials. It does NOT operate as a surveillance system."
+  },
+
+  "systemsUnmodified": {
+    "auth": true,
+    "csrf": true,
+    "nginx": true,
+    "redis": true,
+    "ocr": true,
+    "pm2": true,
+    "ingestion": true,
+    "existingD1toF1Systems": true
+  }
+}

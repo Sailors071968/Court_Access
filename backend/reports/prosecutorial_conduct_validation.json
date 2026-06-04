@@ -1,0 +1,148 @@
+{
+  "phase": "G.2",
+  "name": "Prosecutorial Conduct Intelligence + Discovery Integrity Framework",
+  "generatedAt": "2026-05-12T32:00:00.000Z",
+  "status": "READY_FOR_DEPLOYMENT",
+
+  "subsystems": {
+    "discoveryDisclosureTracker": {
+      "description": "Evidence-linked discovery disclosure tracking",
+      "disclosureTypes": ["initial_discovery", "supplemental", "exculpatory", "impeachment", "expert", "witness_list", "physical_evidence", "digital_evidence"],
+      "completenessStates": ["complete", "partial", "missing", "redacted"]
+    },
+    "bradyMaterialityFramework": {
+      "description": "Citation-backed Brady materiality framework",
+      "materialityTypes": ["exculpatory", "impeachment", "mitigating"],
+      "materialityLevels": ["highly_material", "material", "potentially_material", "immaterial"],
+      "legalAuthorities": ["Brady v. Maryland, 373 U.S. 83 (1963)", "Kyles v. Whitley, 514 U.S. 419 (1995)", "Strickler v. Greene, 527 U.S. 263 (1999)"]
+    },
+    "giglioImpeachmentDisclosureTracking": {
+      "description": "Deterministic Giglio impeachment disclosure tracking",
+      "disclosureTypes": ["plea_deal", "immunity", "payment", "pending_charges", "prior_inconsistent", "bias", "motive"],
+      "legalAuthorities": ["Giglio v. United States, 405 U.S. 150 (1972)", "Napue v. Illinois, 360 U.S. 264 (1959)"]
+    },
+    "disclosureChronologyReconstruction": {
+      "description": "Immutable disclosure chronology reconstruction",
+      "eventTypes": ["request_filed", "response_due", "production_made", "supplemental_production", "court_order", "motion_to_compel", "sanctions_motion", "in_camera_review"],
+      "immutable": true
+    },
+    "lateDisclosureDetection": {
+      "description": "Evidence-linked late disclosure detection",
+      "prejudiceLevels": ["severe", "significant", "moderate", "minimal"],
+      "remedies": ["continuance", "mistrial", "exclusion", "instruction", "sanctions"]
+    },
+    "missingEvidenceAuditing": {
+      "description": "Citation-required missing evidence auditing",
+      "categories": ["physical", "testimonial", "documentary", "digital", "forensic"],
+      "legalAuthority": "Arizona v. Youngblood, 488 U.S. 51 (1988)"
+    },
+    "prosecutorialConductIndexing": {
+      "description": "Aggregate + evidence-backed prosecutorial conduct indexing",
+      "conductTypes": ["discovery_violation", "brady_violation", "witness_coaching", "evidence_misrepresentation", "argument_misconduct", "plea_coercion", "charging_abuse", "selective_prosecution"],
+      "safeguard": "Aggregate + evidence-backed only — no fabricated misconduct allegations"
+    },
+    "disclosurePreservationGraph": {
+      "description": "Immutable disclosure preservation graph",
+      "statuses": ["preserved", "at_risk", "forfeited", "renewed"],
+      "immutable": true
+    },
+    "witnessBenefitDisclosureTracking": {
+      "description": "Citation-backed witness benefit disclosure tracking",
+      "benefitTypes": ["plea_agreement", "immunity", "reduced_sentence", "dropped_charges", "payment", "relocation", "favorable_treatment", "informal_benefit"],
+      "giglioApplicable": true
+    },
+    "discoveryViolationEscalationFramework": {
+      "description": "Deterministic discovery violation escalation framework",
+      "violationTypes": ["late_production", "non_production", "incomplete_production", "misleading_production", "destruction", "bad_faith_withholding"],
+      "escalationLevels": ["informal_request", "formal_motion", "sanctions_motion", "mistrial_motion", "appellate_issue", "post_conviction_claim"],
+      "legalAuthorities": ["PC § 1054 et seq.", "PC § 1054.5", "PC § 1054.1"]
+    }
+  },
+
+  "frontendComponent": {
+    "name": "DiscoveryIntegrityCockpit",
+    "panes": ["disclosure timelines", "Brady materiality", "Giglio impeachment evidence", "missing disclosures", "late productions", "witness benefits", "preservation integrity", "discovery escalation tracking"],
+    "theme": "dark",
+    "features": ["materiality badges", "SUPPRESSION flags", "NOT DISCLOSED alerts", "NAPUE indicators", "YOUNGBLOOD flags", "LATE badges", "UNDISCLOSED warnings", "SPOLIATION RISK alerts"]
+  },
+
+  "apiEndpoints": {
+    "fullAnalysis": { "method": "POST", "path": "/api/discovery/analyze/:caseId" },
+    "disclosures": [
+      { "method": "POST", "path": "/api/discovery/disclosures/:caseId" },
+      { "method": "GET", "path": "/api/discovery/disclosures/:caseId" }
+    ],
+    "brady": [
+      { "method": "POST", "path": "/api/discovery/brady/:caseId" },
+      { "method": "GET", "path": "/api/discovery/brady/:caseId" }
+    ],
+    "giglio": [
+      { "method": "POST", "path": "/api/discovery/giglio/:caseId" },
+      { "method": "GET", "path": "/api/discovery/giglio/:caseId" }
+    ],
+    "chronology": [
+      { "method": "POST", "path": "/api/discovery/chronology/:caseId" },
+      { "method": "GET", "path": "/api/discovery/chronology/:caseId" }
+    ],
+    "late": [
+      { "method": "POST", "path": "/api/discovery/late/:caseId" },
+      { "method": "GET", "path": "/api/discovery/late/:caseId" }
+    ],
+    "missing": [
+      { "method": "POST", "path": "/api/discovery/missing/:caseId" },
+      { "method": "GET", "path": "/api/discovery/missing/:caseId" }
+    ],
+    "conduct": [
+      { "method": "POST", "path": "/api/discovery/conduct/:caseId" },
+      { "method": "GET", "path": "/api/discovery/conduct/:caseId" }
+    ],
+    "preservation": [
+      { "method": "POST", "path": "/api/discovery/preservation/:caseId" },
+      { "method": "GET", "path": "/api/discovery/preservation/:caseId" }
+    ],
+    "benefits": [
+      { "method": "POST", "path": "/api/discovery/benefits/:caseId" },
+      { "method": "GET", "path": "/api/discovery/benefits/:caseId" }
+    ],
+    "escalation": [
+      { "method": "POST", "path": "/api/discovery/escalation/:caseId" },
+      { "method": "GET", "path": "/api/discovery/escalation/:caseId" }
+    ],
+    "validation": { "method": "GET", "path": "/api/discovery/validation" }
+  },
+
+  "prismaModels": [
+    "DiscoveryDisclosureTracker",
+    "BradyMaterialityFramework",
+    "GiglioImpeachmentDisclosure",
+    "DisclosureChronology",
+    "LateDisclosureDetection",
+    "MissingEvidenceAudit",
+    "ProsecutorialConductIndex",
+    "DisclosurePreservationGraph",
+    "WitnessBenefitDisclosure",
+    "DiscoveryViolationEscalation"
+  ],
+
+  "migration": "20260512320000_prosecutorial_conduct_discovery",
+
+  "constraints": {
+    "noFabricatedMisconductAllegations": true,
+    "noInventedBradyViolations": true,
+    "noHallucinatedEthicsClaims": true,
+    "noSpeculativeCorruptionAccusations": true,
+    "noAIGeneratedDisciplinaryConclusions": true,
+    "corePrinciple": "CourtAccess organizes provable disclosure and discovery structures. It does NOT accuse prosecutors of misconduct."
+  },
+
+  "systemsUnmodified": {
+    "auth": true,
+    "csrf": true,
+    "nginx": true,
+    "redis": true,
+    "ocr": true,
+    "pm2": true,
+    "ingestion": true,
+    "existingD1toG1Systems": true
+  }
+}

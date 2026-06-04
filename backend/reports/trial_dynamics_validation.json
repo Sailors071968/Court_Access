@@ -1,0 +1,183 @@
+{
+  "phase": "D.7",
+  "name": "Jury Persuasion Analytics + Trial Dynamics Intelligence",
+  "generatedAt": "2026-05-12T25:00:00.000Z",
+  "status": "READY_FOR_DEPLOYMENT",
+
+  "subsystems": {
+    "narrativeCoherenceScoring": {
+      "description": "Deterministic narrative coherence analysis of prosecution case",
+      "metrics": ["prosecutionClarity", "defenseClarity", "internalConsistency", "chronologicalFlow", "witnessAlignment", "overallCoherence"],
+      "weightedFormula": "prosClarity*0.25 + consistency*0.25 + chronFlow*0.2 + witnessAlign*0.15 + defClarity*0.15",
+      "citationPreservation": "mandatory"
+    },
+    "jurorConfusionDetection": {
+      "description": "Evidence-linked identification of potential juror confusion zones",
+      "confusionTypes": ["contradictory_testimony", "complex_timeline", "technical_evidence", "multiple_theories", "inconsistent_exhibits", "overlapping_charges"],
+      "derivedFrom": "contradictions, timeline issues, witness inconsistencies",
+      "severityLevels": ["high", "medium", "low"]
+    },
+    "contradictionSalienceScoring": {
+      "description": "Citation-backed scoring of how impactful each contradiction is for jury",
+      "scoringFormula": "elementRelevance*0.3 + witnessCredibilityHit*0.3 + narrativeDisruption*0.4",
+      "presentationPrioritization": true,
+      "citationPreservation": "mandatory"
+    },
+    "witnessCredibilityImpact": {
+      "description": "Deterministic modeling of witness credibility based on inconsistencies and contradictions",
+      "metrics": ["overallCredibility", "consistencyScore", "corroborationScore"],
+      "biasDetection": true,
+      "impeachmentImpactAssessment": true
+    },
+    "burdenClarityAnalysis": {
+      "description": "CALCRIM-aware analysis of prosecution burden clarity per element",
+      "perElementClarity": true,
+      "weakestElementIdentification": true,
+      "defenseArgumentGeneration": "deterministic — based on clarity score thresholds"
+    },
+    "reasonableDoubtAmplification": {
+      "description": "Citation-backed identification and ranking of reasonable doubt sources",
+      "doubtSources": ["burden_gap", "contradiction", "witness_credibility", "timeline_impossibility", "missing_evidence", "procedural_defect"],
+      "presentationOrdering": true,
+      "calcrim220Reference": true,
+      "citationPreservation": "mandatory"
+    },
+    "theoryComplexityAnalysis": {
+      "description": "Deterministic analysis of prosecution vs defense theory complexity",
+      "theoryTypes": ["prosecution", "defense"],
+      "metrics": ["complexityScore", "factorCount", "witnessCount", "documentCount", "timelineSteps"],
+      "logicalLeapIdentification": true,
+      "simplificationRecommendations": true
+    },
+    "timelineComprehensionModeling": {
+      "description": "Evidence-linked modeling of timeline clarity and gaps",
+      "metrics": ["clarityScore", "gapCount", "conflictCount"],
+      "juryPresentationRecommendation": true
+    },
+    "evidentiaryWeightBalancing": {
+      "description": "Deterministic balancing of prosecution vs defense evidentiary weight",
+      "perElementBalance": true,
+      "netBalanceCalculation": true,
+      "vulnerabilityIdentification": true
+    }
+  },
+
+  "frontendComponent": {
+    "name": "CourtroomPresentationCockpit",
+    "panes": ["prosecution narrative clarity", "contradiction salience", "burden comprehension", "witness impact", "timeline clarity", "evidentiary weight", "reasonable doubt amplification", "juror confusion zones"],
+    "theme": "dark",
+    "features": ["score bars", "severity badges", "weakness/strength indicators", "defense argument display", "presentation ordering"]
+  },
+
+  "apiEndpoints": {
+    "fullAnalysis": { "method": "POST", "path": "/api/dynamics/analyze/:caseId" },
+    "narrative": [
+      { "method": "POST", "path": "/api/dynamics/narrative/:caseId" },
+      { "method": "GET", "path": "/api/dynamics/narrative/:caseId" }
+    ],
+    "confusion": [
+      { "method": "POST", "path": "/api/dynamics/confusion/:caseId" },
+      { "method": "GET", "path": "/api/dynamics/confusion/:caseId" }
+    ],
+    "salience": [
+      { "method": "POST", "path": "/api/dynamics/salience/:caseId" },
+      { "method": "GET", "path": "/api/dynamics/salience/:caseId" }
+    ],
+    "witness": [
+      { "method": "POST", "path": "/api/dynamics/witness/:caseId" },
+      { "method": "GET", "path": "/api/dynamics/witness/:caseId" }
+    ],
+    "burden": [
+      { "method": "POST", "path": "/api/dynamics/burden/:caseId" },
+      { "method": "GET", "path": "/api/dynamics/burden/:caseId" }
+    ],
+    "doubt": [
+      { "method": "POST", "path": "/api/dynamics/doubt/:caseId" },
+      { "method": "GET", "path": "/api/dynamics/doubt/:caseId" }
+    ],
+    "complexity": [
+      { "method": "POST", "path": "/api/dynamics/complexity/:caseId" },
+      { "method": "GET", "path": "/api/dynamics/complexity/:caseId" }
+    ],
+    "timeline": [
+      { "method": "POST", "path": "/api/dynamics/timeline/:caseId" },
+      { "method": "GET", "path": "/api/dynamics/timeline/:caseId" }
+    ],
+    "weight": [
+      { "method": "POST", "path": "/api/dynamics/weight/:caseId" },
+      { "method": "GET", "path": "/api/dynamics/weight/:caseId" }
+    ],
+    "validation": { "method": "GET", "path": "/api/dynamics/validation" }
+  },
+
+  "prismaModels": [
+    "NarrativeCoherenceScore",
+    "JurorConfusionZone",
+    "ContradictionSalienceScore",
+    "WitnessCredibilityImpact",
+    "BurdenClarityAnalysis",
+    "ReasonableDoubtAmplifier",
+    "TheoryComplexityScore",
+    "TimelineComprehensionModel",
+    "EvidentiaryWeightBalance"
+  ],
+
+  "migration": "20260512250000_jury_trial_dynamics",
+
+  "deterministicConstraints": {
+    "noJuryManipulation": true,
+    "noPsychologicalExploitation": true,
+    "noFabricatedPersuasionTactics": true,
+    "noEmotionalManipulationEngines": true,
+    "noSpeculativeJurorProfiling": true,
+    "noUnethicalAdvocacyGeneration": true,
+    "corePrinciple": "CourtAccess analyzes litigation clarity and evidentiary coherence. It does NOT manipulate juries."
+  },
+
+  "systemsUnmodified": {
+    "auth": true,
+    "csrf": true,
+    "nginx": true,
+    "redis": true,
+    "ocr": true,
+    "pm2": true,
+    "ingestion": true,
+    "existingD1toD6Systems": true
+  },
+
+  "deploymentCommands": {
+    "pull": "cd /var/www/courtaccess_repo && git pull origin devin/1778357361-courtaccess-recovery-stabilization",
+    "install": "cd backend && npm install",
+    "migrate": "DATABASE_URL=\"...\" npx prisma migrate deploy",
+    "restart": "cd .. && pm2 restart courtaccess-api --update-env",
+    "verify": "curl -s localhost:3001/api/dynamics/validation | jq ."
+  },
+
+  "rollbackSQL": {
+    "commands": [
+      "DROP TABLE IF EXISTS \"evidentiary_weight_balances\" CASCADE;",
+      "DROP TABLE IF EXISTS \"timeline_comprehension_models\" CASCADE;",
+      "DROP TABLE IF EXISTS \"theory_complexity_scores\" CASCADE;",
+      "DROP TABLE IF EXISTS \"reasonable_doubt_amplifiers\" CASCADE;",
+      "DROP TABLE IF EXISTS \"burden_clarity_analyses\" CASCADE;",
+      "DROP TABLE IF EXISTS \"witness_credibility_impacts\" CASCADE;",
+      "DROP TABLE IF EXISTS \"contradiction_salience_scores\" CASCADE;",
+      "DROP TABLE IF EXISTS \"juror_confusion_zones\" CASCADE;",
+      "DROP TABLE IF EXISTS \"narrative_coherence_scores\" CASCADE;",
+      "DELETE FROM \"_prisma_migrations\" WHERE migration_name = '20260512250000_jury_trial_dynamics';"
+    ]
+  },
+
+  "riskAssessment": {
+    "overallRisk": "LOW",
+    "details": [
+      "9 new tables — additive only, no existing tables modified",
+      "No existing routes modified",
+      "No existing services modified",
+      "server.ts: single import + single route registration",
+      "Auth/CSRF/NGINX/Redis/OCR/PM2/ingestion all untouched",
+      "D.1-D.6 systems preserved — D.7 reads from earlier outputs",
+      "Deterministic scoring formulas only — no generative AI"
+    ]
+  }
+}

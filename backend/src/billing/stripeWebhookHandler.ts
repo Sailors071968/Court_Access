@@ -579,8 +579,8 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
     params.append('mode', isCreditPack ? 'payment' : 'subscription');
     params.append('line_items[0][price]', priceId);
     params.append('line_items[0][quantity]', '1');
-    params.append('success_url', `${process.env.FRONTEND_URL || 'https://courtaccess.net'}/dashboard?checkout=success`);
-    params.append('cancel_url', `${process.env.FRONTEND_URL || 'https://courtaccess.net'}/pricing?checkout=canceled`);
+    params.append('success_url', `${process.env.FRONTEND_URL || 'https://courtaccess.net'}/checkout/success?session_id={CHECKOUT_SESSION_ID}`);
+    params.append('cancel_url', `${process.env.FRONTEND_URL || 'https://courtaccess.net'}/checkout/cancel`);
     params.append('client_reference_id', userId);
     params.append('metadata[userId]', userId);
     params.append('metadata[planId]', planId);

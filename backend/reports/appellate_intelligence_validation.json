@@ -1,0 +1,160 @@
+{
+  "phase": "E.1",
+  "name": "Appellate Record Intelligence + Error Preservation Framework",
+  "generatedAt": "2026-05-12T26:00:00.000Z",
+  "status": "READY_FOR_DEPLOYMENT",
+
+  "subsystems": {
+    "errorPreservationTracking": {
+      "description": "Citation-backed identification and tracking of trial errors in the record",
+      "errorTypes": ["objection_sustained", "objection_overruled", "motion_denied", "motion_granted", "mistrial_denied"],
+      "preservationMethods": ["defense_objection", "motion_in_limine", "written_motion", "oral_motion", "jury_instruction_request", "standing_objection"],
+      "preservationStatuses": ["preserved", "partially_preserved", "forfeited", "waived"],
+      "citationPreservation": "mandatory"
+    },
+    "objectionHistoryGraph": {
+      "description": "Deterministic reconstruction of objection history from trial record",
+      "objectionTypes": ["hearsay", "foundation", "relevance", "prejudice_352", "speculation", "leading", "confrontation", "best_evidence", "authentication"],
+      "rulingTracking": true,
+      "followUpActions": ["motion_to_strike", "curative_instruction", "mistrial_motion"]
+    },
+    "harmlessPrejudicialErrorModeling": {
+      "description": "Evidence-linked analysis of whether errors were harmless or prejudicial",
+      "analysisFrameworks": ["Chapman v. California (federal)", "People v. Watson (state)"],
+      "prejudiceLevels": ["structural", "prejudicial", "harmless_beyond_reasonable_doubt", "harmless"],
+      "strengthOfRemainingEvidence": "deterministic calculation from burden collapse scores"
+    },
+    "waiverForfeitureDetection": {
+      "description": "Deterministic detection of waived or forfeited appellate issues",
+      "detectionMethods": ["no_objection", "late_objection", "wrong_grounds", "failure_to_renew", "consent", "stipulation"],
+      "exceptionAnalysis": ["ineffective_assistance", "plain_error", "structural_error", "constitutional_magnitude"],
+      "crossReferencesD6": true
+    },
+    "constitutionalClaimPreservation": {
+      "description": "Citation-required tracking of constitutional claim preservation status",
+      "amendments": ["4th", "5th", "6th", "8th", "14th"],
+      "standardsOfReview": ["de_novo", "harmless_beyond_reasonable_doubt", "structural"],
+      "crossReferencesD6ConstitutionalIssues": true
+    },
+    "recordCompletenessAnalysis": {
+      "description": "Citation-backed analysis of whether appellate record is complete",
+      "requiredRecordTypes": ["transcript", "jury_instruction", "verdict_form", "motion", "exhibit", "sentencing", "clerk_minutes", "ruling"],
+      "settlementStatementDetection": true
+    },
+    "appellateIssueIndexing": {
+      "description": "Deterministic priority-ranked index of all appellate issues",
+      "rankingPriority": ["structural_errors", "preserved_constitutional_claims", "prejudicial_errors", "instructional_errors", "prosecutorial_misconduct"],
+      "meritStrengthAssessment": true,
+      "opposingArgumentAnticipation": true
+    },
+    "instructionalErrorTracking": {
+      "description": "CALCRIM-aware detection of jury instruction errors",
+      "errorTypes": ["refused_instruction", "modified_instruction", "missing_element", "incorrect_standard", "pinpoint_refused"],
+      "calcrimAware": true,
+      "burdenCollapseIntegration": true
+    },
+    "prosecutorialMisconductIndexing": {
+      "description": "Citation-required detection of prosecutorial misconduct patterns",
+      "misconductTypes": ["vouching", "burden_shifting", "golden_rule", "facts_not_in_evidence", "griffin_error", "improper_argument"],
+      "griffinErrorSpecialHandling": true,
+      "preservationTracking": true
+    }
+  },
+
+  "frontendComponent": {
+    "name": "AppellateReviewCockpit",
+    "panes": ["preserved objections", "waived issues", "instructional error", "prosecutorial misconduct", "constitutional preservation", "record completeness", "prejudicial impact", "appellate issue ranking"],
+    "theme": "dark",
+    "features": ["preservation badges", "strength indicators", "prejudice level coloring", "ranking display", "settlement needed flags"]
+  },
+
+  "apiEndpoints": {
+    "fullAnalysis": { "method": "POST", "path": "/api/appellate/analyze/:caseId" },
+    "preservation": [
+      { "method": "POST", "path": "/api/appellate/preservation/:caseId" },
+      { "method": "GET", "path": "/api/appellate/preservation/:caseId" }
+    ],
+    "objections": [
+      { "method": "POST", "path": "/api/appellate/objections/:caseId" },
+      { "method": "GET", "path": "/api/appellate/objections/:caseId" }
+    ],
+    "harmless": [
+      { "method": "POST", "path": "/api/appellate/harmless/:caseId" },
+      { "method": "GET", "path": "/api/appellate/harmless/:caseId" }
+    ],
+    "waiver": [
+      { "method": "POST", "path": "/api/appellate/waiver/:caseId" },
+      { "method": "GET", "path": "/api/appellate/waiver/:caseId" }
+    ],
+    "constitutional": [
+      { "method": "POST", "path": "/api/appellate/constitutional/:caseId" },
+      { "method": "GET", "path": "/api/appellate/constitutional/:caseId" }
+    ],
+    "completeness": [
+      { "method": "POST", "path": "/api/appellate/completeness/:caseId" },
+      { "method": "GET", "path": "/api/appellate/completeness/:caseId" }
+    ],
+    "index": [
+      { "method": "POST", "path": "/api/appellate/index/:caseId" },
+      { "method": "GET", "path": "/api/appellate/index/:caseId" }
+    ],
+    "instructional": [
+      { "method": "POST", "path": "/api/appellate/instructional/:caseId" },
+      { "method": "GET", "path": "/api/appellate/instructional/:caseId" }
+    ],
+    "misconduct": [
+      { "method": "POST", "path": "/api/appellate/misconduct/:caseId" },
+      { "method": "GET", "path": "/api/appellate/misconduct/:caseId" }
+    ],
+    "validation": { "method": "GET", "path": "/api/appellate/validation" }
+  },
+
+  "prismaModels": [
+    "ErrorPreservationRecord",
+    "ObjectionHistoryEntry",
+    "HarmlessPrejudicialError",
+    "WaiverForfeitureIssue",
+    "ConstitutionalClaimPreservation",
+    "RecordCompletenessEntry",
+    "AppellateIssueIndex",
+    "InstructionalError",
+    "ProsecutorialMisconductEntry"
+  ],
+
+  "migration": "20260512260000_appellate_record_intelligence",
+
+  "deterministicConstraints": {
+    "noInventedReversibleError": true,
+    "noFabricatedAppellateClaims": true,
+    "noHallucinatedMisconduct": true,
+    "noFakeConstitutionalAnalysis": true,
+    "noAIGeneratedAppellateOpinions": true,
+    "corePrinciple": "CourtAccess organizes provable appellate issue structures. It does NOT function as appellate counsel."
+  },
+
+  "systemsUnmodified": {
+    "auth": true,
+    "csrf": true,
+    "nginx": true,
+    "redis": true,
+    "ocr": true,
+    "pm2": true,
+    "ingestion": true,
+    "existingD1toD7Systems": true
+  },
+
+  "rollbackSQL": {
+    "commands": [
+      "DROP TABLE IF EXISTS \"prosecutorial_misconduct_entries\" CASCADE;",
+      "DROP TABLE IF EXISTS \"instructional_errors\" CASCADE;",
+      "DROP TABLE IF EXISTS \"appellate_issue_indexes\" CASCADE;",
+      "DROP TABLE IF EXISTS \"record_completeness_entries\" CASCADE;",
+      "DROP TABLE IF EXISTS \"constitutional_claim_preservations\" CASCADE;",
+      "DROP TABLE IF EXISTS \"waiver_forfeiture_issues\" CASCADE;",
+      "DROP TABLE IF EXISTS \"harmless_prejudicial_errors\" CASCADE;",
+      "DROP TABLE IF EXISTS \"objection_history_entries\" CASCADE;",
+      "DROP TABLE IF EXISTS \"error_preservation_records\" CASCADE;",
+      "DELETE FROM \"_prisma_migrations\" WHERE migration_name = '20260512260000_appellate_record_intelligence';"
+    ]
+  }
+}

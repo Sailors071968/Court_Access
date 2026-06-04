@@ -5,7 +5,7 @@
 
 import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { FileText, Scale, Calendar, Lightbulb, TrendingUp, Loader2 } from 'lucide-react';
+import { FileText, Scale, Calendar, Lightbulb, TrendingUp, Loader2, Upload, Search, Download, AlertTriangle } from 'lucide-react';
 import { Card, StatCard } from '../../components/common/Card';
 import { DoctrineCompliancePanel } from '../../components/case/DoctrineCompliancePanel';
 import { ROLE_PERMISSIONS } from '../../constants';
@@ -165,6 +165,41 @@ export function CaseOverviewPage() {
               </p>
             </Card>
           )}
+
+          {/* Quick Actions */}
+          <Card>
+            <h2 className="text-lg font-semibold text-gray-900 mb-3">Quick Actions</h2>
+            <div className="space-y-2">
+              <button
+                onClick={() => navigate(`/cases/${currentCase.caseId}/evidence`)}
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-colors"
+              >
+                <Upload size={16} className="text-blue-500" />
+                Upload Evidence
+              </button>
+              <button
+                onClick={() => navigate(`/cases/${currentCase.caseId}/contradictions`)}
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-colors"
+              >
+                <AlertTriangle size={16} className="text-amber-500" />
+                Detect Contradictions
+              </button>
+              <button
+                onClick={() => navigate(`/cases/${currentCase.caseId}/trial-exhibits`)}
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-colors"
+              >
+                <Download size={16} className="text-emerald-500" />
+                Trial Exhibits
+              </button>
+              <button
+                onClick={() => navigate(`/cases/${currentCase.caseId}/narrative-analysis`)}
+                className="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-colors"
+              >
+                <Search size={16} className="text-purple-500" />
+                Narrative Analysis
+              </button>
+            </div>
+          </Card>
 
           <Card>
             <h2 className="text-lg font-semibold text-gray-900 mb-3">Case Timeline</h2>

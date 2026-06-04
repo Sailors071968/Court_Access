@@ -1,0 +1,215 @@
+{
+  "phase": "D.1",
+  "name": "Evidence Segmentation Engine Validation",
+  "generatedAt": "2026-05-10T20:00:00.000Z",
+  "status": "READY_FOR_DEPLOYMENT",
+
+  "implementation": {
+    "service": "backend/src/services/evidenceSegmentationService.ts",
+    "routes": "backend/src/routes/evidenceSegmentationRoutes.ts",
+    "migration": "backend/prisma/migrations/20260510200000_evidence_segmentation/migration.sql",
+    "schemaModels": [
+      "EvidenceDocument",
+      "EvidencePage",
+      "EvidenceStatement (extended)",
+      "StatementCitation",
+      "StatementSpeaker",
+      "StatementTimestamp"
+    ]
+  },
+
+  "apiEndpoints": [
+    {
+      "method": "POST",
+      "path": "/api/evidence/segment",
+      "description": "Segment a full document into normalized evidence statements",
+      "inputFields": ["caseId", "tenantId", "fileName", "fileType", "documentType", "fullText", "evidenceId?"],
+      "outputFields": ["documentId", "totalPages", "totalLines", "totalStatements", "statements[]", "failures[]"]
+    },
+    {
+      "method": "POST",
+      "path": "/api/evidence/extract-statements",
+      "description": "Simplified alias for segment — minimal required fields",
+      "inputFields": ["caseId", "tenantId", "documentType", "fullText"],
+      "outputFields": ["documentId", "totalPages", "totalLines", "totalStatements", "statements[]", "failures[]"]
+    },
+    {
+      "method": "GET",
+      "path": "/api/evidence/statements/:documentId",
+      "description": "Retrieve all statements for a given document with filtering",
+      "queryParams": ["page", "speaker", "statementType", "minConfidence", "limit", "offset"],
+      "outputFields": ["documentId", "total", "statements[]"]
+    },
+    {
+      "method": "GET",
+      "path": "/api/evidence/statement/:statementId",
+      "description": "Retrieve a single statement with full citation, speaker, and timestamp details",
+      "outputFields": ["id", "rawText", "normalizedText", "exactText", "citations[]", "speakers[]", "timestamps[]", "elementStatementLinks[]"]
+    },
+    {
+      "method": "POST",
+      "path": "/api/evidence/rebuild-index",
+      "description": "Re-segment an existing document (delete and recreate all statements)",
+      "inputFields": ["documentId"],
+      "outputFields": ["documentId", "totalPages", "totalLines", "totalStatements", "statements[]", "failures[]"]
+    },
+    {
+      "method": "GET",
+      "path": "/api/evidence/segmentation/validation",
+      "description": "Live validation report with coverage metrics",
+      "outputFields": ["summary", "citationCoverage", "confidenceDistribution", "extractionFailures", "byDocumentType", "byStatementType", "byExtractionMethod", "validation"]
+    }
+  ],
+
+  "documentTypesCovered": [
+    "police_report",
+    "transcript",
+    "bodycam",
+    "interrogation",
+    "dispatch",
+    "witness_statement"
+  ],
+
+  "extractionCapabilities": {
+    "speakerDetection": {
+      "patterns": [
+        "Q:/A: (depositions)",
+        "SPEAKER_NAME: (transcripts)",
+        "BY SPEAKER_NAME: (examinations)",
+        "[SPEAKER_NAME] (bracket format)",
+        "THE WITNESS/THE COURT (formal)",
+        "Officer/Det./Sgt. prefix (law enforcement)"
+      ],
+      "roleDetection": ["officer", "witness", "defendant", "judge", "prosecutor", "defense", "clerk", "interpreter"]
+    },
+    "timestampDetection": {
+      "patterns": [
+        "HH:MM:SS (bodycam/video)",
+        "HH:MM AM/PM (12-hour)",
+        "0300 hours (military time)",
+        "MM/DD/YYYY (date)",
+        "YYYY-MM-DD (ISO date)",
+        "[HH:MM:SS] (dispatch brackets)"
+      ],
+      "normalization": "Deterministic — military to 24hr, AM/PM to 24hr, date passthrough"
+    },
+    "pageDetection": {
+      "patterns": [
+        "--- Page N ---",
+        "=== Page N ===",
+        "PAGE N OF M",
+        "--- N ---",
+        "Form feed character"
+      ]
+    },
+    "statementTypes": [
+      "narrative",
+      "question",
+      "answer",
+      "temporal",
+      "directive",
+      "observation"
+    ]
+  },
+
+  "deterministicConstraints": {
+    "noHallucinatedFacts": true,
+    "noGenerativeSummaries": true,
+    "noSemanticRewriting": true,
+    "noLLMSummarization": true,
+    "noProbabilisticInference": true,
+    "noHallucinatedSpeakerAttribution": true,
+    "noGeneratedFacts": true,
+    "noInferredTimestampsWithoutSourceBasis": true,
+    "allowedMethods": [
+      "regex",
+      "deterministic NLP",
+      "parser logic",
+      "positional indexing",
+      "exact citation preservation",
+      "lexical normalization",
+      "SHA-256 hashing"
+    ]
+  },
+
+  "performanceTargets": {
+    "largeDocumentSupport": "500+ page transcripts",
+    "processingModel": "Page-by-page streaming — memory proportional to page size, not document size",
+    "incrementalIndexing": "rebuild-index endpoint allows re-segmentation without re-upload",
+    "resumableParsing": "Page-level processing; failures on one page do not block others",
+    "memorySafety": "No full-document in-memory requirement — pages processed individually"
+  },
+
+  "migrationSummary": {
+    "migrationName": "20260510200000_evidence_segmentation",
+    "newTables": [
+      "evidence_documents",
+      "evidence_pages",
+      "statement_citations",
+      "statement_speakers",
+      "statement_timestamps"
+    ],
+    "alteredTables": [
+      "evidence_statements (5 new columns: documentId, paragraphIndex, exactText, statementType, hash)"
+    ],
+    "newIndexes": 18,
+    "newForeignKeys": 5,
+    "destructiveOperations": "NONE",
+    "idempotent": true,
+    "rollbackSQL": "DROP TABLE IF EXISTS statement_timestamps, statement_speakers, statement_citations, evidence_pages, evidence_documents CASCADE; ALTER TABLE evidence_statements DROP COLUMN IF EXISTS documentId, DROP COLUMN IF EXISTS paragraphIndex, DROP COLUMN IF EXISTS exactText, DROP COLUMN IF EXISTS statementType, DROP COLUMN IF EXISTS hash; DELETE FROM _prisma_migrations WHERE migration_name = '20260510200000_evidence_segmentation';"
+  },
+
+  "deploymentCommands": {
+    "pull": "cd /var/www/courtaccess_repo && git pull origin devin/1778357361-courtaccess-recovery-stabilization",
+    "install": "cd backend && npm install",
+    "migrate": "DATABASE_URL=\"...\" npx prisma migrate deploy",
+    "restart": "cd .. && pm2 restart courtaccess-api",
+    "verify": "curl -s localhost:3001/api/evidence/segmentation/validation | jq ."
+  },
+
+  "rollbackProcedure": {
+    "step1": "pm2 stop courtaccess-api",
+    "step2_sql": "DROP TABLE IF EXISTS \"statement_timestamps\" CASCADE; DROP TABLE IF EXISTS \"statement_speakers\" CASCADE; DROP TABLE IF EXISTS \"statement_citations\" CASCADE; DROP TABLE IF EXISTS \"evidence_pages\" CASCADE; DROP TABLE IF EXISTS \"evidence_documents\" CASCADE; ALTER TABLE \"evidence_statements\" DROP COLUMN IF EXISTS \"documentId\"; ALTER TABLE \"evidence_statements\" DROP COLUMN IF EXISTS \"paragraphIndex\"; ALTER TABLE \"evidence_statements\" DROP COLUMN IF EXISTS \"exactText\"; ALTER TABLE \"evidence_statements\" DROP COLUMN IF EXISTS \"statementType\"; ALTER TABLE \"evidence_statements\" DROP COLUMN IF EXISTS \"hash\"; DELETE FROM \"_prisma_migrations\" WHERE migration_name = '20260510200000_evidence_segmentation';",
+    "step3": "git checkout HEAD~N -- backend/",
+    "step4": "pm2 restart courtaccess-api"
+  },
+
+  "riskAssessment": {
+    "overallRisk": "LOW",
+    "details": [
+      {
+        "risk": "New tables only — no existing data modified",
+        "level": "NONE"
+      },
+      {
+        "risk": "evidence_statements gets 5 new nullable columns — no existing rows broken",
+        "level": "LOW"
+      },
+      {
+        "risk": "New FK evidence_statements.documentId → evidence_documents — nullable, no constraint violations",
+        "level": "LOW"
+      },
+      {
+        "risk": "New routes added — no existing routes modified or removed",
+        "level": "NONE"
+      },
+      {
+        "risk": "server.ts modified — single import + single route registration added",
+        "level": "LOW"
+      }
+    ]
+  },
+
+  "systemsUnmodified": {
+    "authMiddleware": true,
+    "csrfMiddleware": true,
+    "nginx": true,
+    "redisArchitecture": true,
+    "existingOCRPipeline": true,
+    "existingIngestionPipeline": true,
+    "pm2Ecosystem": true,
+    "productionEnvStructure": true,
+    "existingRoutes": true,
+    "existingServices": true
+  }
+}

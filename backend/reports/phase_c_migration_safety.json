@@ -1,0 +1,229 @@
+{
+  "reportType": "migration_safety_audit",
+  "migrationName": "20260509200000_calcrim_foundation",
+  "generatedAt": "2026-05-09T20:45:00.000Z",
+  "auditor": "Devin",
+  "overallRiskClassification": "HIGH — migration contains Charge table ALTER/RENAME that may fail",
+
+  "1_modified_tables": {
+    "altered": [
+      {
+        "table": "\"Charge\"",
+        "operations": [
+          "ADD COLUMN severity TEXT",
+          "ADD COLUMN calcrimInstructionId TEXT",
+          "RENAME TO \"charges\""
+        ],
+        "risk": "CRITICAL",
+        "details": "No previous migration ever created a 'Charge' table. The model existed in schema.prisma but was never migrated. ALTER TABLE will fail with 'relation \"Charge\" does not exist'."
+      }
+    ],
+    "renamed": [
+      {
+        "from": "\"Charge\"",
+        "to": "\"charges\"",
+        "risk": "CRITICAL",
+        "details": "Rename depends on the table existing. If it doesn't exist, migration fails."
+      }
+    ],
+    "created": [
+      { "table": "calcrim_instructions", "risk": "NONE — new table" },
+      { "table": "calcrim_elements", "risk": "NONE — new table" },
+      { "table": "element_aliases", "risk": "NONE — new table" },
+      { "table": "element_keywords", "risk": "NONE — new table" },
+      { "table": "evidence_statements", "risk": "NONE — new table" },
+      { "table": "element_statement_links", "risk": "NONE — new table" }
+    ],
+    "dropped": []
+  },
+
+  "2_constraints": {
+    "dropped_constraints": [],
+    "new_constraints": {
+      "primary_keys": [
+        "calcrim_instructions_pkey",
+        "calcrim_elements_pkey",
+        "element_aliases_pkey",
+        "element_keywords_pkey",
+        "evidence_statements_pkey",
+        "element_statement_links_pkey"
+      ],
+      "unique_constraints": [
+        "calcrim_instructions_instructionNumber_key",
+        "calcrim_elements_instructionId_elementNumber_key",
+        "element_statement_links_statementId_elementId_chargeId_key"
+      ],
+      "foreign_keys": [
+        {
+          "name": "charges_caseId_fkey",
+          "from": "charges.caseId",
+          "to": "criminal_cases.caseId",
+          "onDelete": "RESTRICT",
+          "risk": "MEDIUM — if charges table has rows with caseId values not in criminal_cases, FK creation fails"
+        },
+        {
+          "name": "charges_calcrimInstructionId_fkey",
+          "from": "charges.calcrimInstructionId",
+          "to": "calcrim_instructions.id",
+          "onDelete": "SET NULL",
+          "risk": "LOW — nullable FK, SET NULL is safe"
+        },
+        {
+          "name": "calcrim_elements_instructionId_fkey",
+          "from": "calcrim_elements.instructionId",
+          "to": "calcrim_instructions.id",
+          "onDelete": "RESTRICT",
+          "risk": "NONE — new-to-new table, no existing data"
+        },
+        {
+          "name": "element_aliases_elementId_fkey",
+          "from": "element_aliases.elementId",
+          "to": "calcrim_elements.id",
+          "onDelete": "RESTRICT",
+          "risk": "NONE — new-to-new table"
+        },
+        {
+          "name": "element_keywords_elementId_fkey",
+          "from": "element_keywords.elementId",
+          "to": "calcrim_elements.id",
+          "onDelete": "RESTRICT",
+          "risk": "NONE — new-to-new table"
+        },
+        {
+          "name": "element_statement_links_statementId_fkey",
+          "from": "element_statement_links.statementId",
+          "to": "evidence_statements.id",
+          "onDelete": "RESTRICT",
+          "risk": "NONE — new-to-new table"
+        },
+        {
+          "name": "element_statement_links_elementId_fkey",
+          "from": "element_statement_links.elementId",
+          "to": "calcrim_elements.id",
+          "onDelete": "RESTRICT",
+          "risk": "NONE — new-to-new table"
+        },
+        {
+          "name": "element_statement_links_chargeId_fkey",
+          "from": "element_statement_links.chargeId",
+          "to": "charges.id",
+          "onDelete": "RESTRICT",
+          "risk": "NONE — new table referencing charges"
+        }
+      ],
+      "indexes": [
+        "calcrim_instructions_instructionNumber_idx",
+        "calcrim_instructions_penalCode_idx",
+        "calcrim_instructions_crimeCategory_idx",
+        "calcrim_elements_instructionId_idx",
+        "element_aliases_elementId_idx",
+        "element_aliases_alias_idx",
+        "element_keywords_elementId_idx",
+        "element_keywords_keyword_idx",
+        "element_keywords_category_idx",
+        "evidence_statements_caseId_idx",
+        "evidence_statements_tenantId_idx",
+        "evidence_statements_sourceDocumentId_idx",
+        "evidence_statements_speaker_idx",
+        "element_statement_links_statementId_idx",
+        "element_statement_links_elementId_idx",
+        "element_statement_links_chargeId_idx",
+        "element_statement_links_supportType_idx",
+        "charges_code_section_idx"
+      ]
+    },
+    "altered_relations": [
+      {
+        "model": "Charge",
+        "change": "Added relation to CriminalCase via caseId FK",
+        "risk": "MEDIUM — requires all existing charge rows to have valid caseId in criminal_cases"
+      },
+      {
+        "model": "Charge",
+        "change": "Added optional relation to CalcrimInstruction via calcrimInstructionId FK",
+        "risk": "LOW — nullable FK, safe for existing rows (will be NULL)"
+      },
+      {
+        "model": "CriminalCase",
+        "change": "Added charges[] back-relation",
+        "risk": "NONE — Prisma relation-level only, no DDL change on criminal_cases table"
+      }
+    ]
+  },
+
+  "3_critical_findings": {
+    "orphan_risk": {
+      "assessment": "MEDIUM",
+      "details": "If production 'Charge' / 'charges' table exists with rows whose caseId does not match criminal_cases.caseId, the charges_caseId_fkey FK creation will fail. Must verify data integrity before migration.",
+      "verification_command": "SELECT c.\"caseId\" FROM \"Charge\" c LEFT JOIN criminal_cases cc ON c.\"caseId\" = cc.\"caseId\" WHERE cc.\"caseId\" IS NULL;"
+    },
+    "destructive_operations": {
+      "DROP_TABLE": false,
+      "DROP_COLUMN": false,
+      "DELETE_DATA": false,
+      "TRUNCATE": false,
+      "assessment": "No destructive operations. Migration is additive + rename."
+    },
+    "charge_table_existence": {
+      "assessment": "CRITICAL",
+      "details": "No previous migration creates a 'Charge' table. The Charge model existed in schema.prisma (without @@map) since the persistence layer migration, but was never included in any CREATE TABLE migration. The migration SQL references ALTER TABLE \"Charge\" which will fail if the table does not exist.",
+      "scenarios": [
+        {
+          "scenario": "Table 'Charge' does NOT exist in production DB",
+          "result": "ALTER TABLE \"Charge\" fails with ERROR: relation \"Charge\" does not exist",
+          "fix": "Replace ALTER+RENAME with CREATE TABLE \"charges\" directly"
+        },
+        {
+          "scenario": "Table 'Charge' exists (created manually or via prisma db push)",
+          "result": "ALTER and RENAME succeed, then FK constraints applied",
+          "risk": "FK on caseId may fail if orphan rows exist"
+        },
+        {
+          "scenario": "Table 'charge' exists (lowercase, unquoted creation)",
+          "result": "ALTER TABLE \"Charge\" fails because PostgreSQL quoted identifiers are case-sensitive. \"Charge\" != \"charge\"",
+          "fix": "Use ALTER TABLE \"charge\" instead, or verify exact table name in production"
+        }
+      ],
+      "recommended_pre_check": "SELECT tablename FROM pg_tables WHERE schemaname = 'public' AND tablename IN ('Charge', 'charge', 'charges');"
+    },
+    "existing_api_impact": {
+      "assessment": "LOW",
+      "details": "All existing APIs use prisma.charge.* which Prisma maps to the @@map table name. After migration, Prisma will query 'charges' table. If migration succeeds, all existing APIs work without code changes.",
+      "affected_files": [
+        "src/charges/chargeRoutes.ts (3 queries)",
+        "src/evidence/evidenceRoutes.ts (2 queries)",
+        "src/services/calcrimEngine.ts (1 query)",
+        "src/workers/videoProcessingWorker.ts (1 query)"
+      ]
+    },
+    "prisma_sql_includes_no_drops": {
+      "DROP_TABLE": "NO — verified by full SQL audit",
+      "DROP_COLUMN": "NO — only ADD COLUMN operations",
+      "DROP_INDEX": "NO — only CREATE INDEX operations",
+      "DROP_CONSTRAINT": "NO — only ADD CONSTRAINT operations"
+    }
+  },
+
+  "4_additive_only_confirmation": {
+    "new_tables_only": true,
+    "new_columns_only": true,
+    "no_existing_auth_modified": true,
+    "no_existing_csrf_modified": true,
+    "no_existing_frontend_flows_modified": true,
+    "no_existing_ingestion_routes_modified": true,
+    "no_pm2_ecosystem_changes": true,
+    "no_nginx_changes": true,
+    "server_ts_changes": "IMPORT + ROUTE REGISTRATION ONLY — 6 new route registrations added, zero existing registrations modified"
+  },
+
+  "5_files_modified_outside_phase_c": {
+    "backend/src/server.ts": {
+      "change": "Added 6 import statements and 6 route registrations",
+      "risk": "LOW — purely additive, no existing routes modified or removed"
+    },
+    "backend/prisma/schema.prisma": {
+      "change": "Added 6 new models, modified Charge model (added severity, calcrimInstructionId, case relation, @@map), added charges[] to CriminalCase",
+      "risk": "See Charge table analysis above"
+    }
+  }
+}

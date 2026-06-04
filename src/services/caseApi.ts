@@ -663,3 +663,43 @@ export async function createCheckoutSession(planId: string): Promise<{ url?: str
   }
   return res.json();
 }
+
+// ---------------------------------------------------------------------------
+// Trial Preparation & Export API
+// ---------------------------------------------------------------------------
+
+export async function runTrialPreparation(caseId: string): Promise<{ status: string; message: string }> {
+  const res = await fetch(`${API_BASE}/trial/prepare/${caseId}`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Trial preparation failed' }));
+    throw new Error(err.error || 'Trial preparation failed');
+  }
+  return res.json();
+}
+
+export async function exportTrialNotebook(caseId: string): Promise<{ status: string; format: string; content: string }> {
+  const res = await fetch(`${API_BASE}/trial/export/notebook/${caseId}`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Export failed' }));
+    throw new Error(err.error || 'Export failed');
+  }
+  return res.json();
+}
+
+export async function exportContradictionPacket(caseId: string): Promise<{ status: string; format: string; content: string }> {
+  const res = await fetch(`${API_BASE}/trial/export/contradictions/${caseId}`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Export failed' }));
+    throw new Error(err.error || 'Export failed');
+  }
+  return res.json();
+}

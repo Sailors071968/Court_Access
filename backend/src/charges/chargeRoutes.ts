@@ -1,73 +1,114 @@
 // ============================================================================
 // CourtAccess — Charge Routes
+// Tenant-isolated charge CRUD for case management.
 // ============================================================================
 
-import { FastifyInstance } from "fastify";
-import prisma from "../lib/prisma.js";
+import type { FastifyInstance, FastifyReply } from 'fastify';
+import prisma from '../lib/prisma.js';
+import type { AuthenticatedRequest } from '../security/authMiddleware.js';
 
-export async function registerChargeRoutes(fastify: FastifyInstance) {
+interface CreateChargeBody {
+  caseId: string;
+  code: string;
+  section: string;
+  title?: string;
+  victim: string;
+  dateOfOffense?: string;
+}
 
-  // CREATE CHARGE
-  fastify.post("/api/charges", async (req, res) => {
+async function verifyCaseAccess(
+  caseId: string,
+  tenantId: string,
+): Promise<boolean> {
+  const caseRecord = await prisma.criminalCase.findFirst({
+    where: { caseId, tenantId, deletedAt: null },
+  });
+  return !!caseRecord;
+}
+
+export async function registerChargeRoutes(fastify: FastifyInstance): Promise<void> {
+  fastify.post('/api/charges', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+    if (!user) {
+      return reply.code(401).send({ error: 'Authentication required' });
+    }
+
+    const body = request.body as CreateChargeBody;
+
+    if (!body.caseId || !body.code || !body.section || !body.victim) {
+      return reply.code(400).send({
+        error: 'Missing required fields',
+        required: ['caseId', 'code', 'section', 'victim'],
+      });
+    }
+
+    if (!(await verifyCaseAccess(body.caseId, user.tenantId))) {
+      return reply.code(403).send({ error: 'Forbidden' });
+    }
+
     try {
-      const { caseId, code, section, title, victim, dateOfOffense } = req.body as any;
-
-      if (!caseId || !code || !section || !victim) {
-        return res.status(400).send({
-          error: "Missing required fields",
-          required: ["caseId", "code", "section", "victim"]
-        });
-      }
-
       const charge = await prisma.charge.create({
         data: {
-          caseId,
-          code,
-          section,
-          title,
-          victim,
-          dateOfOffense: dateOfOffense ? new Date(dateOfOffense) : null,
+          caseId: body.caseId,
+          code: body.code,
+          section: body.section,
+          title: body.title ?? null,
+          victim: body.victim,
+          dateOfOffense: body.dateOfOffense ? new Date(body.dateOfOffense) : null,
         },
       });
 
       return { success: true, charge };
-
     } catch (err) {
-      console.error("CREATE CHARGE ERROR:", err);
-      return res.status(500).send({ error: "Failed to create charge" });
+      console.error('[ChargeRoutes] CREATE CHARGE ERROR:', err);
+      return reply.code(500).send({ error: 'Failed to create charge' });
     }
   });
 
-  // GET CHARGES
-  fastify.get("/api/charges/:caseId", async (req, res) => {
-    try {
-      const { caseId } = req.params as any;
+  fastify.get('/api/charges/:caseId', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+    if (!user) {
+      return reply.code(401).send({ error: 'Authentication required' });
+    }
 
+    const { caseId } = request.params as { caseId: string };
+
+    if (!(await verifyCaseAccess(caseId, user.tenantId))) {
+      return reply.code(403).send({ error: 'Forbidden' });
+    }
+
+    try {
       const charges = await prisma.charge.findMany({
         where: { caseId },
-        orderBy: { createdAt: "desc" },
+        orderBy: { createdAt: 'desc' },
       });
 
       return { success: true, charges };
-
     } catch (err) {
-      console.error("GET CHARGES ERROR:", err);
-      return res.status(500).send({ error: "Failed to fetch charges" });
+      console.error('[ChargeRoutes] GET CHARGES ERROR:', err);
+      return reply.code(500).send({ error: 'Failed to fetch charges' });
     }
   });
 
-  // DELETE CHARGE
-  fastify.delete("/api/charges/:id", async (req, res) => {
+  fastify.delete('/api/charges/:id', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+    if (!user) {
+      return reply.code(401).send({ error: 'Authentication required' });
+    }
+
+    const { id } = request.params as { id: string };
+
     try {
-      const { id } = req.params as any;
+      const existing = await prisma.charge.findUnique({ where: { id } });
+      if (!existing || !(await verifyCaseAccess(existing.caseId, user.tenantId))) {
+        return reply.code(403).send({ error: 'Forbidden' });
+      }
 
       await prisma.charge.delete({ where: { id } });
-
       return { success: true };
-
     } catch (err) {
-      console.error("DELETE CHARGE ERROR:", err);
-      return res.status(500).send({ error: "Failed to delete charge" });
+      console.error('[ChargeRoutes] DELETE CHARGE ERROR:', err);
+      return reply.code(500).send({ error: 'Failed to delete charge' });
     }
   });
 }

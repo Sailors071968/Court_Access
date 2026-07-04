@@ -12,6 +12,7 @@ import {
   Search, Gavel, Send, Globe, Users, ChevronDown, ChevronRight,
   Info, TrendingUp, Loader2,
 } from 'lucide-react';
+import { fetchLitigationStrategy } from '../../services/caseApi';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -89,26 +90,44 @@ export function LitigationStrategyView() {
   const [recommendations, setRecommendations] = useState<StrategyRecommendation[]>([]);
   const [readiness, setReadiness] = useState<ReadinessMetric[]>([]);
   const [roadmap, setRoadmap] = useState<RoadmapStep[]>([]);
+  const [unknowns, setUnknowns] = useState<string[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    async function fetchStrategy() {
+    async function loadStrategy() {
+      if (!caseId) return;
       setIsLoading(true);
+      setError(null);
       try {
-        const res = await fetch(`/api/cases/${caseId}/litigation-strategy`);
-        if (res.ok) {
-          const json = await res.json();
-          if (json.observations) setObservations(json.observations);
-          if (json.recommendations) setRecommendations(json.recommendations);
-          if (json.readiness) setReadiness(json.readiness);
-          if (json.roadmap) setRoadmap(json.roadmap);
-        }
-      } catch {
-        // API not available yet
+        const data = await fetchLitigationStrategy(caseId);
+        setObservations(data.observations ?? []);
+        setRecommendations((data.recommendations ?? []).map((rec) => ({
+          ...rec,
+          type: rec.type as RecommendationType,
+          status: rec.status as StrategyRecommendation['status'],
+        })));
+        setReadiness((data.readiness ?? []).map((metric) => ({
+          ...metric,
+          icon: <BarChart3 size={14} />,
+        })));
+        setRoadmap((data.roadmap ?? []).map((step) => ({
+          ...step,
+          category: step.category as RecommendationType,
+          status: step.status as RoadmapStatus,
+        })));
+        setUnknowns(data.unknowns ?? []);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Litigation strategy unavailable');
+        setObservations([]);
+        setRecommendations([]);
+        setReadiness([]);
+        setRoadmap([]);
+        setUnknowns([]);
       } finally {
         setIsLoading(false);
       }
     }
-    if (caseId) fetchStrategy();
+    void loadStrategy();
   }, [caseId]);
 
   const overallReadiness = readiness.length > 0
@@ -147,7 +166,24 @@ export function LitigationStrategyView() {
         </p>
       </div>
 
-      {hasNoData && (
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-xl p-3 text-sm text-red-700">
+          {error}
+        </div>
+      )}
+
+      {unknowns.length > 0 && (
+        <div className="bg-amber-50 border border-amber-200 rounded-xl p-3">
+          <p className="text-xs font-medium text-amber-800 mb-1">Unknowns requiring investigation</p>
+          <ul className="text-xs text-amber-700 space-y-1 list-disc list-inside">
+            {unknowns.map((item) => (
+              <li key={item}>{item}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {hasNoData && !error && (
         <div className="text-center py-12 bg-white rounded-xl border border-gray-200">
           <Target size={48} className="mx-auto mb-3 text-gray-300" />
           <p className="text-sm text-gray-500">No litigation strategy data available yet.</p>

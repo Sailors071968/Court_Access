@@ -70,7 +70,12 @@ export function generateAccessToken(payload: Omit<JwtPayload, 'iat' | 'exp'>): s
 }
 
 export async function generateRefreshToken(payload: Omit<JwtPayload, 'iat' | 'exp'>): Promise<string> {
-  const token = jwt.sign(payload, JWT_REFRESH_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRY });
+  // Unique jti prevents P2002 collisions when the same user logs in repeatedly within the same second.
+  const token = jwt.sign(
+    { ...payload, jti: crypto.randomUUID() },
+    JWT_REFRESH_SECRET,
+    { expiresIn: REFRESH_TOKEN_EXPIRY },
+  );
 
   await prisma.refreshToken.create({
     data: {

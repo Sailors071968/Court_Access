@@ -119,6 +119,28 @@ export const EVIDENCE_TYPES = [
   { value: 'other_document', label: 'Other Document' },
 ] as const;
 
+/** Terminal processing states — polling stops when reached */
+export const TERMINAL_PROCESSING_STATUSES = ['analyzed', 'failed'] as const;
+
+export function isEvidenceProcessingComplete(status: string): boolean {
+  return (TERMINAL_PROCESSING_STATUSES as readonly string[]).includes(status);
+}
+
+export function mapProcessingStatusForDisplay(status: string): 'analyzed' | 'processing' | 'pending' | 'failed' {
+  if (status === 'analyzed') return 'analyzed';
+  if (status === 'failed') return 'failed';
+  if (status === 'ingesting' || status === 'processing') return 'processing';
+  return 'pending';
+}
+
+export function formatFileSize(bytes: number | string): string {
+  const n = typeof bytes === 'string' ? Number(bytes) : bytes;
+  if (!n || isNaN(n)) return '—';
+  if (n < 1024) return `${n} B`;
+  if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
+  return `${(n / (1024 * 1024)).toFixed(1)} MB`;
+}
+
 export const CASE_TYPES = [
   { value: 'felony', label: 'Felony' },
   { value: 'misdemeanor', label: 'Misdemeanor' },
@@ -211,6 +233,34 @@ export async function fetchEvidence(evidenceId: string): Promise<ApiEvidence> {
   }
   const data = await res.json();
   return data.evidence;
+}
+
+/**
+ * Poll evidence until OCR/processing completes or times out.
+ * Invokes onUpdate on each poll so the attorney sees live progress.
+ */
+export async function pollEvidenceProcessing(
+  evidenceId: string,
+  options?: {
+    intervalMs?: number;
+    timeoutMs?: number;
+    onUpdate?: (evidence: ApiEvidence) => void;
+  },
+): Promise<ApiEvidence> {
+  const intervalMs = options?.intervalMs ?? 1500;
+  const timeoutMs = options?.timeoutMs ?? 120_000;
+  const started = Date.now();
+
+  while (Date.now() - started < timeoutMs) {
+    const evidence = await fetchEvidence(evidenceId);
+    options?.onUpdate?.(evidence);
+    if (isEvidenceProcessingComplete(evidence.processingStatus)) {
+      return evidence;
+    }
+    await new Promise((resolve) => setTimeout(resolve, intervalMs));
+  }
+
+  throw new Error('Processing timed out — check evidence status later');
 }
 
 export async function deleteEvidence(evidenceId: string): Promise<void> {
@@ -469,7 +519,15 @@ export async function uploadEvidenceDirect(params: {
           reject(new Error('Invalid response from upload'));
         }
       } else {
-        reject(new Error(`Upload failed with status ${xhr.status}`));
+        let message = `Upload failed with status ${xhr.status}`;
+        try {
+          const errBody = JSON.parse(xhr.responseText);
+          if (errBody.error) message = errBody.error;
+          if (errBody.message) message = errBody.message;
+        } catch {
+          // use default message
+        }
+        reject(new Error(message));
       }
     };
 
@@ -626,6 +684,252 @@ export async function fetchContradictionRecommendations(caseId: string): Promise
     throw new Error(err.error || 'Failed to fetch recommendations');
   }
   return res.json();
+}
+
+// ---------------------------------------------------------------------------
+// Litigation Strategy API
+// ---------------------------------------------------------------------------
+
+export interface ApiLitigationStrategy {
+  caseId: string;
+  generatedAt: string;
+  disclaimer: string;
+  observations: Array<{
+    id: string;
+    evidenceSource: string;
+    observation: string;
+    timestamp: string;
+  }>;
+  recommendations: Array<{
+    id: string;
+    type: string;
+    suggestedOpportunity: string;
+    evidenceSource: string;
+    confidenceScore: number;
+    status: string;
+  }>;
+  readiness: Array<{ label: string; score: number; maxScore: number }>;
+  roadmap: Array<{
+    stepNumber: number;
+    description: string;
+    category: string;
+    status: string;
+  }>;
+  unknowns: string[];
+}
+
+export async function fetchLitigationStrategy(caseId: string): Promise<ApiLitigationStrategy> {
+  const res = await fetch(`${API_BASE}/cases/${caseId}/litigation-strategy`, { headers: getAuthHeaders() });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to fetch litigation strategy' }));
+    throw new Error(err.error || 'Failed to fetch litigation strategy');
+  }
+  return res.json();
+}
+
+// ---------------------------------------------------------------------------
+// Case Analysis API
+// ---------------------------------------------------------------------------
+
+export interface ApiCaseAnalysis {
+  caseId: string;
+  generatedAt: string;
+  analysisVersion: number;
+  evidenceSummary: Array<{ type: string; count: number; iconType: string }>;
+  timelineEvents: Array<{
+    id: string;
+    timestamp: string;
+    source: string;
+    description: string;
+    sourceType: string;
+    confidence: number;
+  }>;
+  crossDocComparisons: Array<{
+    id: string;
+    observation: string;
+    severity: string;
+    sourceA: string;
+    sourceB: string;
+  }>;
+  officerActions: Array<{
+    id: string;
+    officerId: string;
+    actionType: string;
+    timestamp: string;
+    evidenceSource: string;
+    confidence: number;
+  }>;
+  policyComparisons: Array<{
+    id: string;
+    officerAction: string;
+    policyReference: string;
+    observation: string;
+    confidence: number;
+  }>;
+  inconsistencies: Array<{
+    id: string;
+    type: string;
+    description: string;
+    severity: string;
+  }>;
+  recommendedExhibits: Array<{
+    id: string;
+    title: string;
+    type: string;
+  }>;
+  unknowns: string[];
+  fromCache?: boolean;
+}
+
+export interface ApiCaseRecommendations {
+  caseId: string;
+  generatedAt: string;
+  disclaimer: string;
+  recommendations: Array<{
+    id: string;
+    recommendationType: string;
+    suggestedOpportunity: string;
+    evidenceSource: string;
+    confidenceScore: number;
+    observation: string;
+  }>;
+  unknowns: string[];
+}
+
+export async function fetchCaseAnalysis(caseId: string): Promise<ApiCaseAnalysis> {
+  const res = await fetch(`${API_BASE}/cases/${caseId}/analysis`, { headers: getAuthHeaders() });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to fetch case analysis' }));
+    throw new Error(err.error || 'Failed to fetch case analysis');
+  }
+  return res.json();
+}
+
+export async function fetchCaseRecommendations(caseId: string): Promise<ApiCaseRecommendations> {
+  const res = await fetch(`${API_BASE}/cases/${caseId}/recommendations`, { headers: getAuthHeaders() });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to fetch recommendations' }));
+    throw new Error(err.error || 'Failed to fetch recommendations');
+  }
+  return res.json();
+}
+
+// ---------------------------------------------------------------------------
+// Attorney Reports API
+// ---------------------------------------------------------------------------
+
+export interface ApiComplianceReport {
+  title: string;
+  generatedAt: string;
+  caseId: string;
+  agencyName: string;
+  findings: Array<{
+    number: number;
+    findingType: string;
+    policyReference: string;
+    evidenceTimestamp: string | null;
+    detectedAction: string;
+    confidence: string;
+    explanation: string;
+    reviewStatus: string;
+  }>;
+  summary: {
+    totalFindings: number;
+    potentialInconsistencies: number;
+    consistentFindings: number;
+    averageConfidence: number;
+    topPolicyAreas: string[];
+  };
+}
+
+export interface ApiExpertWitnessPackage {
+  packageTitle?: string;
+  sections?: Array<{ title: string; content: string }>;
+  [key: string]: unknown;
+}
+
+export async function generateComplianceReport(
+  caseId: string,
+  caseName?: string,
+): Promise<ApiComplianceReport> {
+  const res = await fetch(`${API_BASE}/compliance/report/${caseId}`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ caseName }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to generate compliance report' }));
+    throw new Error(err.error || 'Failed to generate compliance report');
+  }
+  const data = await res.json();
+  return data.data;
+}
+
+export async function generateExpertWitnessPackage(caseId: string): Promise<ApiExpertWitnessPackage> {
+  const res = await fetch(`${API_BASE}/compliance/expert/${caseId}`, { headers: getAuthHeaders() });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to generate expert package' }));
+    throw new Error(err.error || 'Failed to generate expert package');
+  }
+  const data = await res.json();
+  return data.data;
+}
+
+// ---------------------------------------------------------------------------
+// Charges API
+// ---------------------------------------------------------------------------
+
+export interface ApiCharge {
+  id: string;
+  caseId: string;
+  code: string;
+  section: string;
+  title: string | null;
+  victim: string;
+  dateOfOffense: string | null;
+  createdAt: string;
+}
+
+export async function fetchCharges(caseId: string): Promise<ApiCharge[]> {
+  const res = await fetch(`${API_BASE}/charges/${caseId}`, { headers: getAuthHeaders() });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to fetch charges' }));
+    throw new Error(err.error || 'Failed to fetch charges');
+  }
+  const data = await res.json();
+  return data.charges ?? [];
+}
+
+export async function createCharge(payload: {
+  caseId: string;
+  code: string;
+  section: string;
+  title?: string;
+  victim: string;
+  dateOfOffense?: string;
+}): Promise<ApiCharge> {
+  const res = await fetch(`${API_BASE}/charges`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to create charge' }));
+    throw new Error(err.error || 'Failed to create charge');
+  }
+  const data = await res.json();
+  return data.charge;
+}
+
+export async function deleteCharge(chargeId: string): Promise<void> {
+  const res = await fetch(`${API_BASE}/charges/${chargeId}`, {
+    method: 'DELETE',
+    headers: getAuthHeadersNoBody(),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to delete charge' }));
+    throw new Error(err.error || 'Failed to delete charge');
+  }
 }
 
 // ---------------------------------------------------------------------------

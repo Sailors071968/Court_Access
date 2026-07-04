@@ -1,87 +1,54 @@
 // ============================================================================
-// CourtAccess — Canonical Contradiction Storage Service (FINAL)
+// CourtAccess — Canonical Contradiction Storage Service
+// Persists contradiction flags on timeline events until dedicated Prisma models exist.
 // ============================================================================
 
-import crypto from "crypto";
-import prisma from "../lib/prisma.js";
-
-// ---------------------------------------------------------------------------
-// TYPES
-// ---------------------------------------------------------------------------
+import crypto from 'crypto';
+import prisma from '../lib/prisma.js';
 
 export interface ContradictionInput {
   caseId: string;
-  type: "TIMESTAMP" | "ACTION" | "ACTOR" | "SEQUENCE";
+  type: 'TIMESTAMP' | 'ACTION' | 'ACTOR' | 'SEQUENCE';
   description: string;
-  severity: "HIGH" | "MEDIUM" | "LOW";
+  severity: 'HIGH' | 'MEDIUM' | 'LOW';
   score: number;
-
   events: {
     eventId: string;
-    role: "PRIMARY" | "CONTRADICTING";
+    role: 'PRIMARY' | 'CONTRADICTING';
   }[];
 }
-
-// ---------------------------------------------------------------------------
-// HASH GENERATION (DETERMINISTIC)
-// ---------------------------------------------------------------------------
 
 function generateHash(input: ContradictionInput): string {
   const sortedEventIds = input.events
     .map((e) => e.eventId)
     .sort()
-    .join("|");
+    .join('|');
 
   const base = `${input.caseId}|${input.type}|${sortedEventIds}`;
-
-  return crypto.createHash("sha256").update(base).digest("hex");
+  return crypto.createHash('sha256').update(base).digest('hex');
 }
-
-// ---------------------------------------------------------------------------
-// MAIN STORAGE FUNCTION
-// ---------------------------------------------------------------------------
 
 export async function storeContradiction(input: ContradictionInput) {
   const hash = generateHash(input);
+  const eventIds = input.events.map((e) => e.eventId);
 
-  // -------------------------------------------------------------------------
-  // UPSERT CONTRADICTION (IDEMPOTENT)
-  // -------------------------------------------------------------------------
-
-  const contradiction = await prisma.contradiction.upsert({
-    where: { hash },
-    update: {},
-
-    create: {
-      caseId: input.caseId,
-      type: input.type,
-      description: input.description,
-      severity: input.severity,
-      score: input.score,
-      hash,
-    },
-  });
-
-  // -------------------------------------------------------------------------
-  // LINK EVENTS (SAFE UPSERT)
-  // -------------------------------------------------------------------------
-
-  for (const e of input.events) {
-    await prisma.contradictionEvent.upsert({
-      where: {
-        contradictionId_eventId: {
-          contradictionId: contradiction.id,
-          eventId: e.eventId,
-        },
-      },
-      update: {},
-      create: {
-        contradictionId: contradiction.id,
-        eventId: e.eventId,
-        role: e.role,
-      },
+  for (let i = 0; i < eventIds.length; i++) {
+    const eventId = eventIds[i];
+    const conflictsWith = eventIds.find((id) => id !== eventId) ?? null;
+    await prisma.timelineEvent.updateMany({
+      where: { id: eventId, caseId: input.caseId },
+      data: { conflictFlag: true, conflictsWith },
     });
   }
 
-  return contradiction;
+  return {
+    id: hash,
+    caseId: input.caseId,
+    type: input.type,
+    description: input.description,
+    severity: input.severity,
+    score: input.score,
+    hash,
+    eventIds,
+  };
 }

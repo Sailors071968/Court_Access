@@ -9,6 +9,7 @@ import type { Job } from 'bullmq';
 import { CourtAccessWorker, JobTimeoutError } from '../lib/baseWorker.js';
 import { QUEUE_NAMES, type NarrativeProcessingJobData } from '../lib/queues.js';
 import prisma from '../lib/prisma.js';
+import { enqueueClaimExtraction } from '../narrative/narrativeProcessingPipeline.js';
 
 // ---------------------------------------------------------------------------
 // Narrative Processing Worker
@@ -42,7 +43,7 @@ class NarrativeProcessingWorker extends CourtAccessWorker<NarrativeProcessingJob
       // Fetch evidence documents for claim extraction
       const evidence = await prisma.evidence.findMany({
         where: { caseId, tenantId },
-        select: { evidenceId: true, evidenceType: true, fileName: true },
+        select: { evidenceId: true, evidenceType: true, fileName: true, s3Key: true },
       });
 
       // Filter to narrative-relevant evidence types
@@ -52,12 +53,16 @@ class NarrativeProcessingWorker extends CourtAccessWorker<NarrativeProcessingJob
 
       console.log(`[NarrativeProcessingWorker] Found ${narrativeEvidence.length} narrative documents for case ${caseId}`);
 
-      // In production: runs 4-stage pipeline:
-      // 1. Claim extraction (claimExtractionWorker)
-      // 2. Claim normalization (claimNormalizationWorker)
-      // 3. Evidence validation (evidenceValidationWorker)
-      // 4. Impeachment detection (impeachmentDetectionWorker)
-      // Actual AI pipeline integration in Phase 3.
+      for (const doc of narrativeEvidence) {
+        await enqueueClaimExtraction({
+          evidenceId: doc.evidenceId,
+          caseId,
+          tenantId,
+          fileName: doc.fileName,
+          evidenceType: doc.evidenceType,
+          s3Key: doc.s3Key ?? doc.evidenceId,
+        });
+      }
 
       // Check abort signal before writing completion status
       if (signal.aborted) throw new JobTimeoutError('Job aborted by timeout');

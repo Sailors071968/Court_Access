@@ -12,7 +12,7 @@ import { matchAllContradictions, assessCaseSeverity } from './doctrineMatchingEn
 import { generateRecommendations, generateLitigationSummary } from './litigationIntelligence.ts';
 import { buildContradictionGraph, generateCypherStatements } from './graphIntelligenceLayer.ts';
 import { getOntologyStats, getEventTypesByCategory, getEventType } from './eventOntology.ts';
-import type { ExtractionJobData, ExtractedEvent, VideoProcessingStage } from './types.ts';
+import type { ExtractionJobData, ExtractedEvent, VideoProcessingStage, VideoProcessingJob } from './types.ts';
 
 // ---------------------------------------------------------------------------
 // Minimal Fastify-compatible type stubs

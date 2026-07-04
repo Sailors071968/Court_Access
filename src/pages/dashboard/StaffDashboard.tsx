@@ -1,18 +1,24 @@
 // ============================================
 // Court Access — Staff Dashboard
-// Operational control center for legal professionals
+// Operational control center — real API data only
 // ============================================
 
 import { useNavigate } from 'react-router-dom';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import {
-  FileText, Scale, Calendar, Lightbulb, AlertTriangle, Search as SearchIcon,
-  Plus, Upload, BarChart3, Users, Clock, TrendingUp, Briefcase, Loader2
+  Scale, Calendar, Lightbulb, AlertTriangle, Search as SearchIcon,
+  Plus, Upload, BarChart3, Users, TrendingUp, Briefcase, Loader2
 } from 'lucide-react';
 import { Card, StatCard } from '../../components/common/Card';
-import { STATUS_COLORS, TEXT_COLORS } from '../../constants/designTokens';
+import { TEXT_COLORS } from '../../constants/designTokens';
 import { useAuthStore } from '../../stores/authStore';
 import { fetchCases, fetchCaseEvidence, type ApiCase, type ApiEvidence } from '../../services/caseApi';
+
+function formatHearingDate(value: string | null | undefined): string {
+  if (!value) return 'TBD';
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? value : date.toLocaleDateString();
+}
 
 export function StaffDashboard() {
   const navigate = useNavigate();
@@ -44,6 +50,49 @@ export function StaffDashboard() {
     return () => { cancelled = true; };
   }, []);
 
+  const stats = useMemo(() => {
+    const newCases = cases.filter((c) => new Date(c.createdAt) > new Date(Date.now() - 7 * 86400000)).length;
+    const pendingEvidence = evidence.filter((e) =>
+      e.processingStatus === 'pending' || e.processingStatus === 'processing' || e.processingStatus === 'ingesting',
+    ).length;
+    const failedEvidence = evidence.filter((e) => e.processingStatus === 'failed').length;
+    const actionRequired = pendingEvidence + failedEvidence;
+    const intelligenceSignals = evidence.filter((e) => e.processingStatus === 'analyzed').length;
+    return { newCases, actionRequired, intelligenceSignals, pendingEvidence, failedEvidence };
+  }, [cases, evidence]);
+
+  const alerts = useMemo(() => {
+    const items: Array<{ type: string; icon: typeof AlertTriangle; color: string; label: string; time: string }> = [];
+    if (stats.failedEvidence > 0) {
+      items.push({
+        type: 'high',
+        icon: AlertTriangle,
+        color: 'bg-red-100 text-red-700',
+        label: `${stats.failedEvidence} evidence file(s) failed processing`,
+        time: 'Requires review',
+      });
+    }
+    if (stats.pendingEvidence > 0) {
+      items.push({
+        type: 'medium',
+        icon: Upload,
+        color: 'bg-blue-100 text-blue-700',
+        label: `${stats.pendingEvidence} evidence file(s) still processing`,
+        time: 'In progress',
+      });
+    }
+    if (primaryCase?.nextHearing) {
+      items.push({
+        type: 'low',
+        icon: Calendar,
+        color: 'bg-gray-100 text-gray-700',
+        label: `Next hearing: ${formatHearingDate(primaryCase.nextHearing)}`,
+        time: primaryCase.nextHearingNote ?? 'Scheduled',
+      });
+    }
+    return items;
+  }, [stats, primaryCase]);
+
   if (loading) {
     return (
       <div className="max-w-7xl mx-auto text-center py-12">
@@ -70,7 +119,6 @@ export function StaffDashboard() {
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
-      {/* Header */}
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-2xl font-bold text-gray-900">Staff Dashboard</h1>
@@ -78,7 +126,6 @@ export function StaffDashboard() {
         </div>
       </div>
 
-      {/* 1. Case Overview Panel */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         <StatCard
           icon={<Briefcase size={28} className={TEXT_COLORS.info} />}
@@ -88,115 +135,112 @@ export function StaffDashboard() {
         />
         <StatCard
           icon={<Plus size={28} className={TEXT_COLORS.success} />}
-          value={cases.filter(c => new Date(c.createdAt) > new Date(Date.now() - 7 * 86400000)).length}
+          value={stats.newCases}
           label="New Cases (7 Days)"
           onClick={() => navigate('/cases?sort=newest')}
         />
         <StatCard
           icon={<AlertTriangle size={28} className={TEXT_COLORS.danger} />}
-          value={2}
+          value={stats.actionRequired}
           label="Action Required"
-          highlight
-          onClick={() => navigate('/cases?filter=action-needed')}
+          highlight={stats.actionRequired > 0}
+          onClick={() => navigate(`/cases/${primaryCase.caseId}/evidence`)}
         />
         <StatCard
           icon={<Calendar size={28} className={TEXT_COLORS.info} />}
-          value="Feb 15"
+          value={formatHearingDate(primaryCase.nextHearing)}
           label="Next Hearing"
-          onClick={() => navigate(`/cases/${primaryCase.caseId}/activity`)}
+          onClick={() => navigate(`/cases/${primaryCase.caseId}`)}
         />
         <StatCard
           icon={<Lightbulb size={28} className={TEXT_COLORS.warning} />}
-          value={8}
-          label="Intelligence Signals"
-          highlight
+          value={stats.intelligenceSignals}
+          label="Analyzed Evidence"
           onClick={() => navigate(`/cases/${primaryCase.caseId}/charges`)}
         />
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
-        {/* 2. Alerts & Action Queue */}
         <div className="lg:col-span-2 space-y-6">
           <Card>
             <div className="flex items-center justify-between mb-4">
               <h2 className="text-lg font-semibold text-gray-900">Alerts & Action Queue</h2>
-              <span className="text-xs text-gray-400">Sorted by urgency</span>
+              <span className="text-xs text-gray-400">From live case data</span>
             </div>
-            <div className="space-y-3">
-              {[
-                { type: 'high', icon: AlertTriangle, color: STATUS_COLORS.danger, label: 'Evidence dispute added — People v. Smith', time: '2 hours ago' },
-                { type: 'high', icon: Lightbulb, color: STATUS_COLORS.warning, label: 'Motion recommendation signal: Motion to Suppress (HIGH)', time: '4 hours ago' },
-                { type: 'medium', icon: Upload, color: STATUS_COLORS.info, label: 'New defendant upload — 3 documents pending review', time: '6 hours ago' },
-                { type: 'medium', icon: Users, color: STATUS_COLORS.accent, label: 'Expert recommendation flagged: Forensic Toxicologist', time: '1 day ago' },
-                { type: 'low', icon: Clock, color: STATUS_COLORS.neutral, label: 'Discovery deadline approaching — Case #2024-CF-001234', time: '2 days ago' },
-              ].map((alert, i) => {
-                const Icon = alert.icon;
-                return (
-                  <div key={i} className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${alert.color}`}>
-                      <Icon size={14} />
+            {alerts.length === 0 ? (
+              <p className="text-sm text-gray-500 py-4 text-center">No alerts — all evidence processing normally.</p>
+            ) : (
+              <div className="space-y-3">
+                {alerts.map((alert, i) => {
+                  const Icon = alert.icon;
+                  return (
+                    <div key={i} className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
+                      <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${alert.color}`}>
+                        <Icon size={14} />
+                      </div>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-sm font-medium text-gray-900">{alert.label}</p>
+                        <p className="text-xs text-gray-500 mt-0.5">{alert.time}</p>
+                      </div>
+                      {alert.type === 'high' && (
+                        <span className="text-xs px-2 py-0.5 bg-red-100 text-red-700 rounded-full font-medium flex-shrink-0">Urgent</span>
+                      )}
                     </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900">{alert.label}</p>
-                      <p className="text-xs text-gray-500 mt-0.5">{alert.time}</p>
-                    </div>
-                    {alert.type === 'high' && (
-                      <span className="text-xs px-2 py-0.5 bg-red-100 text-red-700 rounded-full font-medium flex-shrink-0">Urgent</span>
-                    )}
-                  </div>
-                );
-              })}
-            </div>
+                  );
+                })}
+              </div>
+            )}
           </Card>
 
-          {/* Recent Documents */}
           <Card>
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Documents</h2>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-gray-100">
-                    <th className="text-left py-3 px-2 text-gray-500 font-medium">Document Name</th>
-                    <th className="text-left py-3 px-2 text-gray-500 font-medium">Filed Date</th>
-                    <th className="text-left py-3 px-2 text-gray-500 font-medium">Type</th>
-                    <th className="text-left py-3 px-2 text-gray-500 font-medium">AI Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {evidence.slice(0, 3).map((doc) => (
-                    <tr key={doc.evidenceId} className="border-b border-gray-50 hover:bg-gray-50 cursor-pointer" onClick={() => navigate(`/cases/${primaryCase.caseId}/evidence`)}>
-                      <td className="py-3 px-2 font-medium text-gray-900">{doc.fileName}</td>
-                      <td className="py-3 px-2 text-gray-500">{new Date(doc.uploadedAt).toLocaleDateString()}</td>
-                      <td className="py-3 px-2 text-gray-500">{doc.evidenceType}</td>
-                      <td className="py-3 px-2">
-                        <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                          doc.processingStatus === 'analyzed' ? 'bg-green-100 text-green-700' :
-                          doc.processingStatus === 'processing' ? 'bg-blue-100 text-blue-700' :
-                          doc.processingStatus === 'failed' ? 'bg-red-100 text-red-700' :
-                          'bg-gray-100 text-gray-700'
-                        }`}>
-                          {doc.processingStatus}
-                        </span>
-                      </td>
+            {evidence.length === 0 ? (
+              <p className="text-sm text-gray-500 py-4 text-center">No evidence uploaded for {primaryCase.title}.</p>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-gray-100">
+                      <th className="text-left py-3 px-2 text-gray-500 font-medium">Document Name</th>
+                      <th className="text-left py-3 px-2 text-gray-500 font-medium">Uploaded</th>
+                      <th className="text-left py-3 px-2 text-gray-500 font-medium">Type</th>
+                      <th className="text-left py-3 px-2 text-gray-500 font-medium">AI Status</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {evidence.slice(0, 5).map((doc) => (
+                      <tr key={doc.evidenceId} className="border-b border-gray-50 hover:bg-gray-50 cursor-pointer" onClick={() => navigate(`/cases/${primaryCase.caseId}/evidence`)}>
+                        <td className="py-3 px-2 font-medium text-gray-900">{doc.fileName}</td>
+                        <td className="py-3 px-2 text-gray-500">{new Date(doc.uploadedAt).toLocaleDateString()}</td>
+                        <td className="py-3 px-2 text-gray-500">{doc.evidenceType}</td>
+                        <td className="py-3 px-2">
+                          <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
+                            doc.processingStatus === 'analyzed' ? 'bg-green-100 text-green-700' :
+                            doc.processingStatus === 'processing' ? 'bg-blue-100 text-blue-700' :
+                            doc.processingStatus === 'failed' ? 'bg-red-100 text-red-700' :
+                            'bg-gray-100 text-gray-700'
+                          }`}>
+                            {doc.processingStatus}
+                          </span>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
           </Card>
         </div>
 
-        {/* Right Column */}
         <div className="space-y-6">
-          {/* 3. Case Intelligence Overview */}
           <Card>
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Case Intelligence Overview</h2>
             <div className="space-y-3">
               {[
-                { label: 'Priority cases', value: '1', color: TEXT_COLORS.danger },
-                { label: 'Prosecution Vulnerabilities', value: '3', color: TEXT_COLORS.warning },
-                { label: 'Sentencing Exposure Flags', value: '2', color: TEXT_COLORS.orange },
-                { label: 'Procedural deadline warnings', value: '1', color: TEXT_COLORS.info },
+                { label: 'Total cases', value: String(cases.length), color: TEXT_COLORS.info },
+                { label: 'Evidence files', value: String(evidence.length), color: TEXT_COLORS.warning },
+                { label: 'Analyzed', value: String(stats.intelligenceSignals), color: TEXT_COLORS.success },
+                { label: 'Needs attention', value: String(stats.actionRequired), color: TEXT_COLORS.danger },
               ].map((insight, i) => (
                 <div key={i} className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50">
                   <span className="text-sm text-gray-700">{insight.label}</span>
@@ -205,40 +249,31 @@ export function StaffDashboard() {
               ))}
             </div>
             <button
-              onClick={() => navigate(`/cases/${primaryCase.caseId}/charges`)}
+              onClick={() => navigate(`/cases/${primaryCase.caseId}`)}
               className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-amber-50 text-amber-700 rounded-lg text-sm font-medium hover:bg-amber-100 transition-colors w-full justify-center"
             >
               <TrendingUp size={16} />
-              View Full Analysis
+              View Case Overview
             </button>
           </Card>
 
-          {/* 4. Calendar Widget */}
           <Card>
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Upcoming Schedule</h2>
-            <div className="space-y-3">
-              {[
-                { type: 'hearing', label: 'Hearing — People v. Smith', date: 'Feb 15, 2024', icon: Scale },
-                { type: 'deadline', label: 'Filing Deadline — Motion to Suppress', date: 'Feb 20, 2024', icon: Clock },
-                { type: 'discovery', label: 'Discovery Deadline', date: 'Mar 1, 2024', icon: FileText },
-              ].map((event, i) => {
-                const Icon = event.icon;
-                return (
-                  <div key={i} className="flex items-start gap-3 p-2 rounded-lg hover:bg-gray-50">
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-blue-50 text-blue-600">
-                      <Icon size={14} />
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-gray-900">{event.label}</p>
-                      <p className="text-xs text-gray-500 mt-0.5">{event.date}</p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
+            {primaryCase.nextHearing ? (
+              <div className="flex items-start gap-3 p-2 rounded-lg">
+                <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-blue-50 text-blue-600">
+                  <Scale size={14} />
+                </div>
+                <div>
+                  <p className="text-sm font-medium text-gray-900">{primaryCase.title}</p>
+                  <p className="text-xs text-gray-500 mt-0.5">{formatHearingDate(primaryCase.nextHearing)} — {primaryCase.nextHearingNote ?? 'Hearing'}</p>
+                </div>
+              </div>
+            ) : (
+              <p className="text-sm text-gray-500">No upcoming hearings scheduled.</p>
+            )}
           </Card>
 
-          {/* 6. Quick Actions */}
           <Card>
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
             <div className="grid grid-cols-2 gap-2">
@@ -263,12 +298,11 @@ export function StaffDashboard() {
             </div>
           </Card>
 
-          {/* Recent Activity */}
           <Card>
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Cases</h2>
             <div className="space-y-3">
-              {cases.slice(0, 3).map((c) => (
-                <div key={c.caseId} className="flex gap-3 pb-3 border-b border-gray-50 last:border-0">
+              {cases.slice(0, 5).map((c) => (
+                <div key={c.caseId} className="flex gap-3 pb-3 border-b border-gray-50 last:border-0 cursor-pointer hover:bg-gray-50 rounded p-1" onClick={() => navigate(`/cases/${c.caseId}`)}>
                   <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-blue-100 text-blue-600">
                     <Briefcase size={14} />
                   </div>
@@ -283,7 +317,6 @@ export function StaffDashboard() {
         </div>
       </div>
 
-      {/* 5. Global Search Prompt */}
       <Card>
         <div className="flex items-center gap-3">
           <SearchIcon size={20} className="text-gray-400" />

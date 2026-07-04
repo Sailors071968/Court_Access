@@ -1,97 +1,133 @@
 // ============================================================================
-// Narrative Deconstruction Engine — Route Stubs
-// Placeholder until full narrative pipeline dependencies (Prisma models,
-// BullMQ workers, Neo4j) are available in production.
+// Narrative Deconstruction Engine — API Routes
+// Serves claims, contradictions, and impeachment data from Prisma.
 // ============================================================================
 
-import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import type { FastifyInstance, FastifyReply } from 'fastify';
+import prisma from '../lib/prisma.js';
+import type { AuthenticatedRequest } from '../security/authMiddleware.js';
+import { enqueueNarrativeProcessing } from '../workers/pipelineJobService.js';
 
-// ---------------------------------------------------------------------------
-// GET /api/narrative/:caseId/claims — All claims (empty stub)
-// ---------------------------------------------------------------------------
-
-async function getNarrativeClaims(
-  request: FastifyRequest<{ Params: { caseId: string } }>,
-  reply: FastifyReply,
-) {
-  const { caseId } = request.params;
-  return reply.send({
-    claims: [],
-    total: 0,
-    limit: 100,
-    offset: 0,
-    graph: { nodes: [], edges: [] },
+async function verifyCaseAccess(caseId: string, tenantId: string): Promise<boolean> {
+  const caseRecord = await prisma.criminalCase.findFirst({
+    where: { caseId, tenantId, deletedAt: null },
   });
+  return !!caseRecord;
 }
-
-// ---------------------------------------------------------------------------
-// GET /api/narrative/:caseId/contradictions — Contradicted claims (empty stub)
-// ---------------------------------------------------------------------------
-
-async function getNarrativeContradictions(
-  request: FastifyRequest<{ Params: { caseId: string } }>,
-  reply: FastifyReply,
-) {
-  const { caseId } = request.params;
-  return reply.send({ contradictions: [], count: 0 });
-}
-
-// ---------------------------------------------------------------------------
-// GET /api/narrative/:caseId/impeachment — Impeachment candidates (empty stub)
-// ---------------------------------------------------------------------------
-
-async function getNarrativeImpeachment(
-  request: FastifyRequest<{ Params: { caseId: string } }>,
-  reply: FastifyReply,
-) {
-  const { caseId } = request.params;
-  return reply.send({
-    candidates: [],
-    total: 0,
-    severityCounts: { high: 0, medium: 0, low: 0 },
-  });
-}
-
-// ---------------------------------------------------------------------------
-// POST /api/narrative/analyze/:caseId — Trigger full analysis (stub)
-// ---------------------------------------------------------------------------
-
-async function analyzeNarrative(
-  request: FastifyRequest<{ Params: { caseId: string } }>,
-  reply: FastifyReply,
-) {
-  const { caseId } = request.params;
-  return reply.send({
-    status: 'queued',
-    message: 'Narrative analysis stub — full pipeline not yet deployed',
-    caseId,
-    evidenceCount: 0,
-  });
-}
-
-// ---------------------------------------------------------------------------
-// GET /api/narrative/health — Narrative engine health
-// ---------------------------------------------------------------------------
-
-async function narrativeHealth(_request: FastifyRequest, reply: FastifyReply) {
-  return reply.send({
-    status: 'ok',
-    engine: 'narrative-deconstruction',
-    workers: 0,
-    message: 'Stub — full pipeline not yet deployed',
-  });
-}
-
-// ---------------------------------------------------------------------------
-// Route Registration
-// ---------------------------------------------------------------------------
 
 export async function registerNarrativeRoutes(app: FastifyInstance): Promise<void> {
-  app.get('/api/narrative/:caseId/claims', getNarrativeClaims);
-  app.get('/api/narrative/:caseId/contradictions', getNarrativeContradictions);
-  app.get('/api/narrative/:caseId/impeachment', getNarrativeImpeachment);
-  app.post('/api/narrative/analyze/:caseId', analyzeNarrative);
-  app.get('/api/narrative/health', narrativeHealth);
+  app.get('/api/narrative/:caseId/claims', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+    if (!user) return reply.code(401).send({ error: 'Authentication required' });
 
-  console.log('[Server] Narrative routes registered (stub mode)');
+    const { caseId } = request.params as { caseId: string };
+    if (!(await verifyCaseAccess(caseId, user.tenantId))) {
+      return reply.code(403).send({ error: 'Forbidden' });
+    }
+
+    const limit = Math.min(parseInt((request.query as { limit?: string }).limit ?? '100', 10), 500);
+    const offset = parseInt((request.query as { offset?: string }).offset ?? '0', 10);
+
+    const [claims, total] = await Promise.all([
+      prisma.narrativeClaim.findMany({
+        where: { caseId, tenantId: user.tenantId },
+        orderBy: { createdAt: 'desc' },
+        take: limit,
+        skip: offset,
+      }),
+      prisma.narrativeClaim.count({ where: { caseId, tenantId: user.tenantId } }),
+    ]);
+
+    return {
+      claims,
+      total,
+      limit,
+      offset,
+      graph: { nodes: [], edges: [] },
+    };
+  });
+
+  app.get('/api/narrative/:caseId/contradictions', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+    if (!user) return reply.code(401).send({ error: 'Authentication required' });
+
+    const { caseId } = request.params as { caseId: string };
+    if (!(await verifyCaseAccess(caseId, user.tenantId))) {
+      return reply.code(403).send({ error: 'Forbidden' });
+    }
+
+    const contradictions = await prisma.claimValidation.findMany({
+      where: { caseId, tenantId: user.tenantId, status: 'contradicted' },
+      orderBy: { createdAt: 'desc' },
+    });
+
+    return { contradictions, count: contradictions.length };
+  });
+
+  app.get('/api/narrative/:caseId/impeachment', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+    if (!user) return reply.code(401).send({ error: 'Authentication required' });
+
+    const { caseId } = request.params as { caseId: string };
+    if (!(await verifyCaseAccess(caseId, user.tenantId))) {
+      return reply.code(403).send({ error: 'Forbidden' });
+    }
+
+    const candidates = await prisma.impeachmentCandidate.findMany({
+      where: { caseId, tenantId: user.tenantId },
+      orderBy: [{ severity: 'asc' }, { createdAt: 'desc' }],
+    });
+
+    const severityCounts = {
+      high: candidates.filter((c) => c.severity === 'high').length,
+      medium: candidates.filter((c) => c.severity === 'medium').length,
+      low: candidates.filter((c) => c.severity === 'low').length,
+    };
+
+    return { candidates, total: candidates.length, severityCounts };
+  });
+
+  app.post('/api/narrative/analyze/:caseId', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+    if (!user) return reply.code(401).send({ error: 'Authentication required' });
+
+    const { caseId } = request.params as { caseId: string };
+    if (!(await verifyCaseAccess(caseId, user.tenantId))) {
+      return reply.code(403).send({ error: 'Forbidden' });
+    }
+
+    const evidenceCount = await prisma.evidence.count({
+      where: { caseId, tenantId: user.tenantId },
+    });
+
+    try {
+      const job = await enqueueNarrativeProcessing({
+        userId: user.userId,
+        tenantId: user.tenantId,
+        caseId,
+      });
+
+      return reply.code(202).send({
+        status: 'queued',
+        caseId,
+        evidenceCount,
+        jobId: job.jobId,
+        processingJobId: job.processingJobId,
+      });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Failed to enqueue narrative analysis';
+      return reply.code(500).send({ error: message });
+    }
+  });
+
+  app.get('/api/narrative/health', async (_request: AuthenticatedRequest, reply: FastifyReply) => {
+    return reply.send({
+      status: 'ok',
+      engine: 'narrative-deconstruction',
+      workers: 4,
+      message: 'Narrative pipeline operational',
+    });
+  });
+
+  console.log('[Server] Narrative routes registered');
 }

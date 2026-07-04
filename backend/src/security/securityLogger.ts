@@ -235,7 +235,7 @@ export async function securityLoggingHook(
 
   // Log will be completed in the onResponse hook (see registerSecurityLogging)
   // Store start time for response time calculation
-  (request as Record<string, unknown>)._securityLogStart = Date.now();
+  (request as unknown as Record<string, unknown>)._securityLogStart = Date.now();
 }
 
 // ---------------------------------------------------------------------------
@@ -248,7 +248,7 @@ export async function registerSecurityLogging(app: FastifyInstance): Promise<voi
     const path = request.url.split('?')[0];
     if (path === '/api/health' || !path.startsWith('/api/')) return;
 
-    const startTime = (request as Record<string, unknown>)._securityLogStart as number | undefined;
+    const startTime = (request as unknown as Record<string, unknown>)._securityLogStart as number | undefined;
     const responseTime = startTime ? Date.now() - startTime : undefined;
     const statusCode = reply.statusCode;
 
@@ -261,7 +261,7 @@ export async function registerSecurityLogging(app: FastifyInstance): Promise<voi
 
     // Only log non-success and specific events (reduce noise)
     if (statusCode >= 400 || path.startsWith('/api/auth/') || path.startsWith('/api/security/')) {
-      const user = (request as Record<string, unknown>).user as { userId?: string } | undefined;
+      const user = (request as unknown as Record<string, unknown>).user as { userId?: string } | undefined;
       securityLogger.log(event, {
         userId: user?.userId,
         ip: request.ip,
@@ -277,7 +277,7 @@ export async function registerSecurityLogging(app: FastifyInstance): Promise<voi
   // Error hook — log unhandled errors
   app.addHook('onError', async (request: FastifyRequest, reply: FastifyReply, error: Error) => {
     const path = request.url.split('?')[0];
-    const user = (request as Record<string, unknown>).user as { userId?: string } | undefined;
+    const user = (request as unknown as Record<string, unknown>).user as { userId?: string } | undefined;
 
     securityLogger.log('SYSTEM_EXCEPTION', {
       userId: user?.userId,

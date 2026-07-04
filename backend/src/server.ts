@@ -40,6 +40,7 @@ import { registerObservabilityRoutes } from './observability/observabilityRoutes
 import { startRedisMemoryMonitor, stopRedisMemoryMonitor } from './observability/redisMemoryAlert.js';
 import { registerChargeRoutes } from "./charges/chargeRoutes.js";
 import { registerCalcrimRoutes } from "./routes/calcrimRoutes.js";
+import { registerDoctrineRoutes } from './doctrine/doctrineRoutes.ts';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -91,9 +92,10 @@ async function startServer() {
   app.addHook('onRequest', rateLimitHook);
 
   // Phase 191 — Authentication (JWT verification + RBAC)
-  //  app.addHook('onRequest', authenticationHook);
+  app.addHook('onRequest', authenticationHook);
 
   // Phase 193 — CSRF protection (after auth, before route handlers)
+  // CSRF remains disabled until session store is production-ready (multi-instance).
   // app.addHook('onRequest', csrfProtectionHook);
 
   // Phase 195 — Evidence upload protection
@@ -182,6 +184,9 @@ async function startServer() {
 
   console.log('[Server] Registering CALCRIM routes...');
   await registerCalcrimRoutes(app);
+
+  console.log('[Server] Registering doctrine intelligence routes...');
+  registerDoctrineRoutes(app);
 
   console.log('[Server] Registering admin queue monitoring routes...');
   await registerQueueMonitorRoutes(app);

@@ -8,6 +8,7 @@ import { collectProductionMetrics } from './productionMetrics.ts';
 import { getExtractionAuditStats } from './extractionAuditLog.ts';
 import { collectLiabilityDiscoveryMetrics } from './liabilityDiscovery/metrics.ts';
 import prisma from '../lib/prisma.ts';
+import { runProductionGates } from '../productionGates/runProductionGates.ts';
 
 export interface BacklogItem {
   id: string;
@@ -76,9 +77,21 @@ export interface EngineeringDashboard {
   technicalDebt: string[];
   productionMetrics: Awaited<ReturnType<typeof collectProductionMetrics>>;
   nextRecommendedTasks: Array<{ id: string; priority: string; title: string }>;
+  productionGates: {
+    overallResult: 'READY' | 'NOT_READY';
+    passCount: number;
+    failCount: number;
+    partialCount: number;
+    skipCount: number;
+    deploymentBlocked: boolean;
+    gates: Array<{ id: string; name: string; result: string }>;
+  };
 }
 
-const BACKLOG_PATH = resolve(import.meta.dirname ?? '.', '../../../reports/epic-2a/IMPLEMENTATION_BACKLOG.json');
+const BACKLOG_PATHS = [
+  resolve(import.meta.dirname ?? '.', '../../../reports/epic-2a/IMPLEMENTATION_BACKLOG.json'),
+  resolve(import.meta.dirname ?? '.', '../../../reports/stripe/IMPLEMENTATION_BACKLOG.json'),
+];
 
 async function fileExists(path: string): Promise<boolean> {
   try {
@@ -90,9 +103,14 @@ async function fileExists(path: string): Promise<boolean> {
 }
 
 async function loadBacklog(): Promise<{ items: BacklogItem[] } | null> {
-  if (!(await fileExists(BACKLOG_PATH))) return null;
-  const raw = await readFile(BACKLOG_PATH, 'utf-8');
-  return JSON.parse(raw) as { items: BacklogItem[] };
+  const items: BacklogItem[] = [];
+  for (const path of BACKLOG_PATHS) {
+    if (!(await fileExists(path))) continue;
+    const raw = await readFile(path, 'utf-8');
+    const parsed = JSON.parse(raw) as { items: BacklogItem[] };
+    items.push(...(parsed.items ?? []));
+  }
+  return items.length ? { items } : null;
 }
 
 function computeAttorneyWorkflowCompletion(): EngineeringDashboard['attorneyWorkflows'] {
@@ -159,6 +177,30 @@ export async function generateEngineeringDashboard(): Promise<EngineeringDashboa
   const legislativeOperational =
     metrics.sectionsParsed > 0 && metrics.repositoryIntegrity === 'PASS' ? 'OPERATIONAL' : 'PARTIAL';
 
+  let productionGates: EngineeringDashboard['productionGates'] = {
+    overallResult: 'NOT_READY',
+    passCount: 0,
+    failCount: 0,
+    partialCount: 0,
+    skipCount: 0,
+    deploymentBlocked: true,
+    gates: [],
+  };
+  try {
+    const gatesReport = await runProductionGates();
+    productionGates = {
+      overallResult: gatesReport.overallResult,
+      passCount: gatesReport.passCount,
+      failCount: gatesReport.failCount,
+      partialCount: gatesReport.partialCount,
+      skipCount: gatesReport.skipCount,
+      deploymentBlocked: gatesReport.deploymentBlocked,
+      gates: gatesReport.gates.map((g) => ({ id: g.id, name: g.name, result: g.result })),
+    };
+  } catch {
+    // gates evaluation failed — leave defaults
+  }
+
   return {
     generatedAt: new Date().toISOString(),
     operationalWebsite: {
@@ -197,5 +239,6 @@ export async function generateEngineeringDashboard(): Promise<EngineeringDashboa
     technicalDebt: deriveTechnicalDebt(backlog?.items ?? null),
     productionMetrics: metrics,
     nextRecommendedTasks: nextTasks(backlog?.items ?? null),
+    productionGates,
   };
 }

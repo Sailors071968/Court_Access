@@ -1,0 +1,43 @@
+{
+  "program": "MASTER_PRODUCTION_PROGRAM",
+  "version": "4.0",
+  "updatedAt": "2026-07-04T20:50:00Z",
+  "productionGatesStatus": "NOT_READY",
+  "gatesPass": 11,
+  "gatesPartial": 4,
+  "gatesFail": 0,
+  "items": [
+    {
+      "id": "PG-001-BLOCKER",
+      "gate": "PG-001",
+      "priority": "P0",
+      "title": "Live Stripe Test Mode API certification in staging",
+      "status": "pending",
+      "reason": "Requires STRIPE_SECRET_KEY=sk_test_* and STRIPE_PRICE_STARTER"
+    },
+    {
+      "id": "PG-003-BLOCKER",
+      "gate": "PG-003",
+      "priority": "P1",
+      "title": "Implement dedicated Client entity and /api/clients CRUD",
+      "status": "pending",
+      "reason": "Cases serve as tenant proxy; no Client model or API routes"
+    },
+    {
+      "id": "PG-009-BLOCKER",
+      "gate": "PG-009",
+      "priority": "P1",
+      "title": "Complete narrative deconstruction engine (replace stubs)",
+      "status": "pending",
+      "reason": "narrativeRoutes.ts returns empty stubs"
+    },
+    {
+      "id": "PG-015-BLOCKER",
+      "gate": "PG-015",
+      "priority": "P1",
+      "title": "Automated backup restore drill runner",
+      "status": "pending",
+      "reason": "DISASTER_RECOVERY.md exists but no automated verification"
+    }
+  ]
+}

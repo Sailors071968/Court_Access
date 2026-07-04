@@ -9,6 +9,7 @@ import type { Job } from 'bullmq';
 import { CourtAccessWorker, JobTimeoutError } from '../lib/baseWorker.js';
 import { QUEUE_NAMES, type ContradictionAnalysisJobData } from '../lib/queues.js';
 import prisma from '../lib/prisma.js';
+import { detectContradictions } from '../services/contradictionEngine.js';
 
 // ---------------------------------------------------------------------------
 // Contradiction Analysis Worker
@@ -47,12 +48,24 @@ class ContradictionAnalysisWorker extends CourtAccessWorker<ContradictionAnalysi
 
       console.log(`[ContradictionAnalysisWorker] Found ${timelineEvents.length} timeline events for case ${caseId}`);
 
-      // In production: runs 4-stage CDE pipeline:
-      // 1. Event extraction from evidence
-      // 2. Timeline alignment with clock drift correction
-      // 3. 7-rule contradiction detection
-      // 4. Doctrine mapping (POST Learning Domains)
-      // Actual AI pipeline integration in Phase 3.
+      const contradictions = await detectContradictions(caseId, tenantId);
+      console.log(`[ContradictionAnalysisWorker] Detected ${contradictions.length} contradictions`);
+
+      for (const contradiction of contradictions) {
+        const [eventAId, eventBId] = contradiction.eventIds;
+        if (eventAId) {
+          await prisma.timelineEvent.updateMany({
+            where: { id: eventAId, caseId, tenantId },
+            data: { conflictFlag: true, conflictsWith: eventBId ?? null },
+          });
+        }
+        if (eventBId) {
+          await prisma.timelineEvent.updateMany({
+            where: { id: eventBId, caseId, tenantId },
+            data: { conflictFlag: true, conflictsWith: eventAId ?? null },
+          });
+        }
+      }
 
       // Check abort signal before writing completion status
       if (signal.aborted) throw new JobTimeoutError('Job aborted by timeout');

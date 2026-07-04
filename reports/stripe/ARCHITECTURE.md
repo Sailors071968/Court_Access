@@ -14,6 +14,9 @@ CourtAccess billing uses Stripe Checkout for subscriptions and one-time credit p
 | `aiCreditService.ts` | Credit balances, deduction, monthly reset |
 | `stripeSyncService.ts` | Plan→credit sync, customer lookup |
 | `billingMetricsService.ts` | Production readiness metrics |
+| `billingEmailService.ts` | Subscription lifecycle emails (SES or simulated audit) |
+| `stripeWebhookProcessor.ts` | Webhook event handlers + certification dispatch |
+| `stripeCertification.ts` | Production certification harness |
 | `discountService.ts` | Internal promo codes (not Stripe coupons) |
 
 ## Customer Lifecycle

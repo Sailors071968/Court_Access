@@ -1,8 +1,16 @@
 {
   "epic": "1A",
   "title": "Stripe Production Audit & Completion",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "createdAt": "2026-07-04T20:30:00Z",
+  "updatedAt": "2026-07-04T20:45:00Z",
+  "epic1AFinal": {
+    "status": "INCOMPLETE",
+    "reason": "Live Stripe Test Mode API certification requires sk_test_ credentials in staging",
+    "certificationReport": "reports/stripe/PRODUCTION_CERTIFICATION.md",
+    "simulatedWorkflowsPass": 17,
+    "liveWorkflowsSkip": 1
+  },
   "items": [
     {
       "id": "1A-001",
@@ -64,7 +72,9 @@
       "id": "1A-009",
       "priority": "P2",
       "title": "Billing confirmation emails via SES",
-      "status": "pending"
+      "status": "completed",
+      "completedAt": "2026-07-04T20:45:00Z",
+      "notes": "billingEmailService.ts — SES when configured, simulated audit log otherwise"
     },
     {
       "id": "1A-010",
@@ -77,6 +87,13 @@
       "priority": "P2",
       "title": "Stripe CLI integration tests in CI",
       "status": "pending"
+    },
+    {
+      "id": "1A-012",
+      "priority": "P0",
+      "title": "Live Stripe Test Mode API certification in staging",
+      "status": "pending",
+      "reason": "Requires STRIPE_SECRET_KEY=sk_test_* and STRIPE_PRICE_STARTER in staging environment"
     }
   ]
 }

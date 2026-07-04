@@ -6,6 +6,7 @@ import { readFile, access } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import { collectProductionMetrics } from './productionMetrics.ts';
 import { getExtractionAuditStats } from './extractionAuditLog.ts';
+import { collectLiabilityDiscoveryMetrics } from './liabilityDiscovery/metrics.ts';
 import prisma from '../lib/prisma.ts';
 
 export interface BacklogItem {
@@ -70,6 +71,7 @@ export interface EngineeringDashboard {
     partial: number;
     withOffenses: number;
   };
+  liabilityDiscovery: Awaited<ReturnType<typeof collectLiabilityDiscoveryMetrics>>;
   outstandingBlockers: string[];
   technicalDebt: string[];
   productionMetrics: Awaited<ReturnType<typeof collectProductionMetrics>>;
@@ -190,6 +192,7 @@ export async function generateEngineeringDashboard(): Promise<EngineeringDashboa
       status: 'PARTIAL',
     },
     extractionAudit: auditStats,
+    liabilityDiscovery: metrics.liabilityDiscovery,
     outstandingBlockers: deriveBlockers(backlog?.items ?? null),
     technicalDebt: deriveTechnicalDebt(backlog?.items ?? null),
     productionMetrics: metrics,

@@ -123,8 +123,41 @@ program
     console.log(`Processed: ${result.processed}`);
     console.log(`Rejected: ${result.rejected}`);
     console.log(`Offenses identified: ${result.offenses}`);
+    console.log(`Classified: ${result.classified}`);
+    console.log(`Likely criminal: ${result.likelyCriminal}`);
     console.log(`Repositories: ${result.repositoryDir}`);
     console.log(`Coverage report: ${result.coverageReportPath}`);
+    console.log(`Liability report: ${result.liabilityReportPath}`);
+  });
+
+program
+  .command('classify')
+  .description('Run Criminal Liability Discovery classification on acquired statutes')
+  .requiredOption('-c, --code <abbrev>', 'California code abbreviation')
+  .option('--raw-dir <path>', 'Raw HTML directory', 'data/legislative/raw')
+  .option('--repo-dir <path>', 'Repository output directory', 'data/legislative/repositories')
+  .option('--max-sections <n>', 'Maximum sections to classify', (v) => parseInt(v, 10))
+  .action(async (opts) => {
+    const code = opts.code.toUpperCase();
+    console.log(`\n=== Criminal Liability Discovery for ${code} ===`);
+
+    const { processStatutePipeline } = await import('./knowledgeGraph/pipeline.ts');
+    const { collectLiabilityDiscoveryMetrics } = await import('./liabilityDiscovery/metrics.ts');
+    const prisma = (await import('../lib/prisma.ts')).default;
+    const result = await processStatutePipeline({
+      code,
+      rawHtmlDir: resolve(opts.rawDir),
+      repositoryDir: resolve(opts.repoDir),
+      maxSections: opts.maxSections,
+      prisma,
+    });
+
+    const metrics = await collectLiabilityDiscoveryMetrics({ repositoryDir: resolve(opts.repoDir) });
+    console.log(`Classified: ${result.classified}`);
+    console.log(`Likely criminal statutes: ${metrics.likelyCriminalStatutes}`);
+    console.log(`Confirmed offenses: ${metrics.confirmedCriminalOffenses}`);
+    console.log(`Manual review queue: ${metrics.manualReviewQueue}`);
+    console.log(`Liability report: ${result.liabilityReportPath}`);
   });
 
 program.parseAsync(process.argv).catch((err) => {

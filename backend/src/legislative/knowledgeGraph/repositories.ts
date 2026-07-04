@@ -92,6 +92,7 @@ export const REPOSITORY_NAMES = [
   'regulatory_incorporations',
   'calcrim_links',
   'authorities',
+  'statute_classifications',
 ] as const;
 
 export type RepositoryName = (typeof REPOSITORY_NAMES)[number];

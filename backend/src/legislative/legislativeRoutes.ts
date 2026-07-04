@@ -6,6 +6,7 @@ import type { FastifyInstance } from 'fastify';
 import { collectProductionMetrics } from './productionMetrics.ts';
 import { readCoverageReport } from './legislativeIngestService.ts';
 import { createRepositories, REPOSITORY_NAMES } from './knowledgeGraph/repositories.ts';
+import { collectLiabilityDiscoveryMetrics } from './liabilityDiscovery/metrics.ts';
 import {
   getExtractionAuditStats,
   queryExtractionAudit,
@@ -43,6 +44,39 @@ export async function registerLegislativeRoutes(app: FastifyInstance): Promise<v
     }
 
     return { repositoryDir: repoDir, repositories: inventory };
+  });
+
+  app.get('/api/legislative/liability', async (_req, reply) => {
+    const repoDir = resolve(DEFAULT_REPO_DIR);
+    try {
+      const metrics = await collectLiabilityDiscoveryMetrics({ repositoryDir: repoDir });
+      return metrics;
+    } catch {
+      return reply.status(404).send({ error: 'Liability discovery metrics unavailable. Run leginfo:process first.' });
+    }
+  });
+
+  app.get('/api/legislative/classifications/:code/:section', async (request, reply) => {
+    const { code, section } = request.params as { code: string; section: string };
+    const repoDir = resolve(DEFAULT_REPO_DIR);
+    const recordsPath = join(repoDir, 'statute_classifications', 'records.jsonl');
+
+    try {
+      const raw = await readFile(recordsPath, 'utf-8');
+      const normalizedSection = section.endsWith('.') ? section : `${section}.`;
+      let latest: unknown = null;
+      for (const line of raw.trim().split('\n')) {
+        if (!line) continue;
+        const record = JSON.parse(line) as { code: string; section: string };
+        if (record.code === code.toUpperCase() && record.section === normalizedSection) {
+          latest = record;
+        }
+      }
+      if (!latest) return reply.status(404).send({ error: 'Classification not found' });
+      return latest;
+    } catch {
+      return reply.status(404).send({ error: 'Classification repository not initialized' });
+    }
   });
 
   app.get('/api/legislative/audit', async (request) => {
@@ -97,6 +131,6 @@ export async function registerLegislativeRoutes(app: FastifyInstance): Promise<v
   });
 
   console.log(
-    '[Legislative] Routes registered: /api/legislative/metrics, /coverage, /repositories, /audit, /statutes/:code/:section',
+    '[Legislative] Routes registered: /api/legislative/metrics, /coverage, /liability, /repositories, /audit, /classifications/:code/:section, /statutes/:code/:section',
   );
 }

@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-04T20:06:46.412Z",
+  "generatedAt": "2026-07-04T20:19:24.267Z",
   "operationalWebsite": {
     "backendApi": "OPERATIONAL",
     "legislativePipeline": "OPERATIONAL",
@@ -46,21 +46,64 @@
     "status": "PARTIAL"
   },
   "extractionAudit": {
-    "total": 6,
-    "success": 4,
+    "total": 12,
+    "success": 8,
     "rejected": 0,
-    "partial": 2,
-    "withOffenses": 1
+    "partial": 4,
+    "withOffenses": 2
+  },
+  "liabilityDiscovery": {
+    "generatedAt": "2026-07-04T20:19:24.215Z",
+    "classifierVersion": "1.0.0",
+    "californiaCodesDiscovered": 1,
+    "californiaCodesTotal": 30,
+    "codesAnalyzed": 1,
+    "statutesClassified": 3,
+    "likelyCriminalStatutes": 1,
+    "confirmedCriminalOffenses": 1,
+    "regulatoryIncorporationCandidates": 0,
+    "manualReviewQueue": 2,
+    "unknownClassifications": 0,
+    "byClassification": {
+      "criminal_offense": 1,
+      "criminal_penalty": 0,
+      "criminal_enhancement": 0,
+      "sentencing_provision": 1,
+      "definitions": 0,
+      "procedure": 0,
+      "evidence": 0,
+      "regulatory_incorporation": 0,
+      "licensing": 0,
+      "administrative": 0,
+      "civil": 0,
+      "tax": 0,
+      "environmental": 0,
+      "cross_reference": 1,
+      "unknown": 0
+    },
+    "byPriority": {
+      "critical": 1,
+      "high": 0,
+      "medium": 0,
+      "low": 0,
+      "deferred": 2
+    },
+    "byCode": {
+      "PEN": {
+        "classified": 3,
+        "likelyCriminal": 1,
+        "confirmedOffenses": 1
+      }
+    }
   },
   "outstandingBlockers": [],
   "technicalDebt": [
-    "2A-007: Criminal code filter — PC, EC, H&S, VEH priority",
     "2A-008: Content-hash incremental sync",
     "2A-014: CALCRIM instruction linker",
     "2A-022: Replace searchService.ts stubs with legal_documents query"
   ],
   "productionMetrics": {
-    "generatedAt": "2026-07-04T20:06:46.361Z",
+    "generatedAt": "2026-07-04T20:19:24.215Z",
     "californiaCodes": {
       "discovered": 1,
       "total": 30
@@ -76,7 +119,7 @@
     "calcrimCoveragePercent": 50,
     "repositoryIntegrity": "PASS",
     "parsingFailures": 0,
-    "manualReviewQueue": 0,
+    "manualReviewQueue": 2,
     "repositories": {
       "statutes": 4,
       "offenses": 2,
@@ -87,7 +130,52 @@
       "cross_references": 13,
       "regulatory_incorporations": 2,
       "calcrim_links": 1,
-      "authorities": 13
+      "authorities": 13,
+      "statute_classifications": 3
+    },
+    "liabilityDiscovery": {
+      "generatedAt": "2026-07-04T20:19:24.215Z",
+      "classifierVersion": "1.0.0",
+      "californiaCodesDiscovered": 1,
+      "californiaCodesTotal": 30,
+      "codesAnalyzed": 1,
+      "statutesClassified": 3,
+      "likelyCriminalStatutes": 1,
+      "confirmedCriminalOffenses": 1,
+      "regulatoryIncorporationCandidates": 0,
+      "manualReviewQueue": 2,
+      "unknownClassifications": 0,
+      "byClassification": {
+        "criminal_offense": 1,
+        "criminal_penalty": 0,
+        "criminal_enhancement": 0,
+        "sentencing_provision": 1,
+        "definitions": 0,
+        "procedure": 0,
+        "evidence": 0,
+        "regulatory_incorporation": 0,
+        "licensing": 0,
+        "administrative": 0,
+        "civil": 0,
+        "tax": 0,
+        "environmental": 0,
+        "cross_reference": 1,
+        "unknown": 0
+      },
+      "byPriority": {
+        "critical": 1,
+        "high": 0,
+        "medium": 0,
+        "low": 0,
+        "deferred": 2
+      },
+      "byCode": {
+        "PEN": {
+          "classified": 3,
+          "likelyCriminal": 1,
+          "confirmedOffenses": 1
+        }
+      }
     },
     "backendCompile": "UNKNOWN",
     "frontendCompile": "UNKNOWN",
@@ -98,11 +186,6 @@
     }
   },
   "nextRecommendedTasks": [
-    {
-      "id": "2A-007",
-      "priority": "P1",
-      "title": "Criminal code filter — PC, EC, H&S, VEH priority"
-    },
     {
       "id": "2A-008",
       "priority": "P1",

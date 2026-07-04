@@ -1,21 +1,21 @@
 {
-  "generatedAt": "2026-07-04T20:06:41.748Z",
+  "generatedAt": "2026-07-04T20:19:16.487Z",
   "extractorVersion": "1.0.0",
   "statutes": {
     "repository": "statutes",
     "totalRecords": 4,
-    "unknownFieldCount": 3,
-    "unknownFieldRate": 0.25,
+    "unknownFieldCount": 4,
+    "unknownFieldRate": 0.3333333333333333,
     "statutesCovered": 3,
-    "lastUpdatedAt": "2026-07-04T20:06:41.741Z"
+    "lastUpdatedAt": "2026-07-04T20:19:16.475Z"
   },
   "offenses": {
     "repository": "offenses",
     "totalRecords": 2,
-    "unknownFieldCount": 24,
-    "unknownFieldRate": 4,
+    "unknownFieldCount": 31,
+    "unknownFieldRate": 5.166666666666667,
     "statutesCovered": 3,
-    "lastUpdatedAt": "2026-07-04T20:06:41.742Z"
+    "lastUpdatedAt": "2026-07-04T20:19:16.475Z"
   },
   "elements": {
     "repository": "elements",
@@ -23,15 +23,15 @@
     "unknownFieldCount": 0,
     "unknownFieldRate": 0,
     "statutesCovered": 3,
-    "lastUpdatedAt": "2026-07-04T20:06:41.743Z"
+    "lastUpdatedAt": "2026-07-04T20:19:16.477Z"
   },
   "mensRea": {
     "repository": "mens_rea",
     "totalRecords": 2,
-    "unknownFieldCount": 9,
-    "unknownFieldRate": 1.5,
+    "unknownFieldCount": 12,
+    "unknownFieldRate": 2,
     "statutesCovered": 3,
-    "lastUpdatedAt": "2026-07-04T20:06:41.744Z"
+    "lastUpdatedAt": "2026-07-04T20:19:16.477Z"
   },
   "exceptions": {
     "repository": "exceptions",
@@ -39,7 +39,7 @@
     "unknownFieldCount": 0,
     "unknownFieldRate": 0,
     "statutesCovered": 3,
-    "lastUpdatedAt": "2026-07-04T20:06:41.735Z"
+    "lastUpdatedAt": "2026-07-04T20:19:16.466Z"
   },
   "defenses": {
     "repository": "defenses",
@@ -47,7 +47,7 @@
     "unknownFieldCount": 0,
     "unknownFieldRate": 0,
     "statutesCovered": 3,
-    "lastUpdatedAt": "2026-07-04T20:06:41.750Z"
+    "lastUpdatedAt": "2026-07-04T20:19:16.489Z"
   },
   "crossReferences": {
     "repository": "cross_references",
@@ -55,7 +55,7 @@
     "unknownFieldCount": 0,
     "unknownFieldRate": 0,
     "statutesCovered": 3,
-    "lastUpdatedAt": "2026-07-04T20:06:41.745Z"
+    "lastUpdatedAt": "2026-07-04T20:19:16.478Z"
   },
   "regulatoryIncorporations": {
     "repository": "regulatory_incorporations",
@@ -79,7 +79,7 @@
     "unknownFieldCount": 0,
     "unknownFieldRate": 0,
     "statutesCovered": 3,
-    "lastUpdatedAt": "2026-07-04T20:06:41.745Z"
+    "lastUpdatedAt": "2026-07-04T20:19:16.478Z"
   },
   "criminalOffensesIdentified": 2,
   "calcrimCoveragePercent": 50,

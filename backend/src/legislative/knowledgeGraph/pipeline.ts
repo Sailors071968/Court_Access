@@ -16,6 +16,11 @@ import {
   buildExtractAuditEntry,
   buildParseAuditEntry,
 } from '../extractionAuditLog.ts';
+import { classifyStatute } from '../liabilityDiscovery/classificationEngine.ts';
+import {
+  collectLiabilityDiscoveryMetrics,
+  writeLiabilityDiscoveryReport,
+} from '../liabilityDiscovery/metrics.ts';
 
 export interface ProcessPipelineOptions {
   code: string;
@@ -31,8 +36,11 @@ export interface ProcessPipelineResult {
   processed: number;
   rejected: number;
   offenses: number;
+  classified: number;
+  likelyCriminal: number;
   repositoryDir: string;
   coverageReportPath: string;
+  liabilityReportPath: string;
 }
 
 function countUnknownFields(record: Record<string, unknown>): number {
@@ -102,6 +110,14 @@ export async function updateRepositoriesFromBundle(
   );
 }
 
+export async function updateClassificationRecord(
+  classification: Record<string, unknown> & { id: string },
+  repositoryDir: string,
+): Promise<void> {
+  const repos = createRepositories(repositoryDir);
+  await repos.statute_classifications.upsert(classification);
+}
+
 export async function generateCoverageReport(
   repositoryDir: string,
   statuteIds: Set<string>,
@@ -146,6 +162,8 @@ export async function processStatutePipeline(
   let processed = 0;
   let rejected = 0;
   let offenses = 0;
+  let classified = 0;
+  let likelyCriminal = 0;
 
   let sections = options.sections ?? [];
   if (sections.length === 0) {
@@ -213,6 +231,17 @@ export async function processStatutePipeline(
 
     const bundle = extractCriminalKnowledge(parseResult.record);
     await updateRepositoriesFromBundle(bundle, repoDir);
+
+    const classification = classifyStatute(parseResult.record, {
+      confirmedOffenseCount: bundle.offenses.length,
+    });
+    await updateClassificationRecord(
+      classification as unknown as Record<string, unknown> & { id: string },
+      repoDir,
+    );
+    classified += 1;
+    if (classification.criminalLiabilityLikely) likelyCriminal += 1;
+
     statuteIds.add(parseResult.record.id);
     processed += 1;
     offenses += bundle.offenses.length;
@@ -237,12 +266,18 @@ export async function processStatutePipeline(
   const coverageReportPath = join(repoDir, 'coverage-report.json');
   await writeFile(coverageReportPath, JSON.stringify(report, null, 2), 'utf-8');
 
+  const liabilityMetrics = await collectLiabilityDiscoveryMetrics({ repositoryDir: repoDir });
+  const liabilityReportPath = await writeLiabilityDiscoveryReport(repoDir, liabilityMetrics);
+
   return {
     processed,
     rejected,
     offenses,
+    classified,
+    likelyCriminal,
     repositoryDir: repoDir,
     coverageReportPath,
+    liabilityReportPath,
   };
 }
 

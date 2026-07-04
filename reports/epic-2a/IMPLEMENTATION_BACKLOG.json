@@ -155,13 +155,26 @@
       "id": "2A-007",
       "priority": "P1",
       "tier": 1,
-      "title": "Criminal code filter — PC, EC, H&S, VEH priority",
-      "status": "pending",
-      "dependencies": ["2A-001"],
+      "title": "Criminal Liability Discovery Engine — evidence-based statutory classification",
+      "status": "completed",
+      "completedAt": "2026-07-04T20:20:00Z",
+      "verifiedAt": "2026-07-04T20:20:00Z",
+      "dependencies": ["2A-001", "2A-003"],
       "acceptanceCriteria": [
-        "Discovery limited to criminal-relevant codes",
-        "Coverage report per code"
-      ]
+        "Classify every analyzed statute into statutory categories with evidence",
+        "Detect criminal liability paths beyond Penal Code identity",
+        "Assign discovery priority scores",
+        "Produce liability discovery metrics",
+        "Store classifications in canonical repository with audit trail"
+      ],
+      "evidence": {
+        "module": "backend/src/legislative/liabilityDiscovery/",
+        "cli": "npm run leginfo:classify -- --code PEN",
+        "api": "GET /api/legislative/liability",
+        "repository": "backend/data/legislative/repositories/statute_classifications/",
+        "report": "backend/data/legislative/repositories/liability-discovery-report.json",
+        "tests": "backend/tests/legislative-liability-discovery.test.ts"
+      }
     },
     {
       "id": "2A-008",

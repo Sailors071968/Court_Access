@@ -7,6 +7,8 @@ import { join, resolve } from 'node:path';
 import { CALIFORNIA_CODES, getCriminalPriorityCodes } from './caCodes.ts';
 import { createRepositories, REPOSITORY_NAMES } from './knowledgeGraph/repositories.ts';
 import type { KnowledgeGraphCoverageReport } from './knowledgeGraph/types.ts';
+import { collectLiabilityDiscoveryMetrics } from './liabilityDiscovery/metrics.ts';
+import type { LiabilityDiscoveryMetrics } from './liabilityDiscovery/types.ts';
 
 export interface ProductionMetrics {
   generatedAt: string;
@@ -24,6 +26,7 @@ export interface ProductionMetrics {
   parsingFailures: number;
   manualReviewQueue: number;
   repositories: Record<string, number>;
+  liabilityDiscovery: LiabilityDiscoveryMetrics;
   backendCompile: 'PASS' | 'FAIL' | 'UNKNOWN';
   frontendCompile: 'PASS' | 'FAIL' | 'UNKNOWN';
   e2eWorkflows: { passed: number; total: number; status: 'PASS' | 'FAIL' | 'UNKNOWN' };
@@ -123,6 +126,10 @@ export async function collectProductionMetrics(options?: {
   const mensRea = repositoryCounts.mens_rea ?? 0;
   const authorities = repositoryCounts.authorities ?? 0;
   const calcrim = repositoryCounts.calcrim_links ?? 0;
+  const liabilityDiscovery = await collectLiabilityDiscoveryMetrics({
+    discoveryDir,
+    repositoryDir: repoDir,
+  });
 
   return {
     generatedAt: new Date().toISOString(),
@@ -144,8 +151,9 @@ export async function collectProductionMetrics(options?: {
     calcrimCoveragePercent: coverage?.calcrimCoveragePercent ?? (offenses > 0 ? Math.round((calcrim / offenses) * 100) : 0),
     repositoryIntegrity: await checkRepositoryIntegrity(repoDir),
     parsingFailures: coverage?.parsingFailures ?? 0,
-    manualReviewQueue: coverage?.manualReviewCandidates ?? 0,
+    manualReviewQueue: liabilityDiscovery.manualReviewQueue || coverage?.manualReviewCandidates || 0,
     repositories: repositoryCounts,
+    liabilityDiscovery,
     backendCompile: 'UNKNOWN',
     frontendCompile: 'UNKNOWN',
     e2eWorkflows: { passed: 0, total: 0, status: 'UNKNOWN' },

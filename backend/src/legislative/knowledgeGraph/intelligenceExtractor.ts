@@ -4,6 +4,7 @@
 
 import { createHash } from 'node:crypto';
 import { calcrimElements } from '../../data/calcrimElements.ts';
+import { shouldExtractOffense } from '../liabilityDiscovery/classificationEngine.ts';
 import type {
   AuditMetadata,
   AuthorityRecord,
@@ -282,12 +283,7 @@ function buildElements(
 }
 
 function isCriminalStatute(text: string): boolean {
-  return (
-    /guilty of/i.test(text) ||
-    /commits?\s+(?:a\s+)?(?:crime|felony|misdemeanor)/i.test(text) ||
-    /shall\s+be\s+punished/i.test(text) ||
-    /is\s+punishable/i.test(text)
-  );
+  return shouldExtractOffense(text);
 }
 
 export function extractCriminalKnowledge(statute: StatuteRecord): CriminalKnowledgeBundle {

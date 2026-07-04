@@ -10,7 +10,7 @@
     "statutesInDatabase": 0,
     "calcrimCoveragePercent": 0.5,
     "dataQualityScore": 3.6,
-    "pipelineStagesComplete": 3,
+    "pipelineStagesComplete": 6,
     "penDiscoverySample": {
       "sectionsDiscovered": 207,
       "pagesFetched": 30,
@@ -74,27 +74,40 @@
       "priority": "P0",
       "tier": 0,
       "title": "Leginfo HTML statute parser",
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-07-04T19:52:00Z",
+      "verifiedAt": "2026-07-04T19:52:00Z",
       "dependencies": ["2A-002"],
       "acceptanceCriteria": [
         "Extract code, section, title, full text from leginfo HTML",
         "Handle subdivisions (a), (b)(1) nesting",
         "Reject ambiguous parses to rejection queue (not silent discard)",
         "Unit tests against 20 known sections"
-      ]
+      ],
+      "evidence": {
+        "module": "backend/src/legislative/statuteParser.ts",
+        "tests": "backend/tests/legislative-knowledge-graph.test.ts",
+        "fixture": "backend/tests/fixtures/leginfo/pen-459-section.html"
+      }
     },
     {
       "id": "2A-004",
       "priority": "P0",
       "tier": 0,
       "title": "StatuteRecord schema extension",
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-07-04T19:52:00Z",
+      "verifiedAt": "2026-07-04T19:52:00Z",
       "dependencies": [],
       "acceptanceCriteria": [
         "Prisma migration adds code, section, hierarchy, sourceUrl, retrievedAt, effectiveDate",
         "NormalizedDocument types updated",
         "Backward compatible with existing legal_documents"
-      ]
+      ],
+      "evidence": {
+        "migration": "backend/prisma/migrations/20260704200000_statute_record_extension/",
+        "types": "backend/src/legislative/knowledgeGraph/types.ts"
+      }
     },
     {
       "id": "2A-005",
@@ -150,13 +163,19 @@
       "priority": "P1",
       "tier": 2,
       "title": "Offense discovery from statute text",
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-07-04T19:52:00Z",
+      "verifiedAt": "2026-07-04T19:52:00Z",
       "dependencies": ["2A-003", "2A-004"],
       "acceptanceCriteria": [
         "Identify explicit criminal offenses in Penal Code sections",
         "Link to statute record by code+section",
         "UNKNOWN when ambiguous"
-      ]
+      ],
+      "evidence": {
+        "module": "backend/src/legislative/knowledgeGraph/intelligenceExtractor.ts",
+        "sample": "backend/data/legislative/repositories/offenses/records.jsonl"
+      }
     },
     {
       "id": "2A-014",
@@ -175,13 +194,19 @@
       "priority": "P2",
       "tier": 4,
       "title": "Coverage analytics dashboard",
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-07-04T19:52:00Z",
+      "verifiedAt": "2026-07-04T19:52:00Z",
       "dependencies": ["2A-007"],
       "acceptanceCriteria": [
         "Per-code completion percentage",
         "Failed extraction list",
         "Last sync timestamp"
-      ]
+      ],
+      "evidence": {
+        "module": "backend/src/legislative/knowledgeGraph/pipeline.ts",
+        "report": "backend/data/legislative/repositories/coverage-report.json"
+      }
     },
     {
       "id": "2A-022",
@@ -196,5 +221,5 @@
       ]
     }
   ],
-  "nextItem": "2A-002"
+  "nextItem": "2A-005"
 }

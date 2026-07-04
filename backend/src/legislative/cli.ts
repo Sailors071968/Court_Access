@@ -97,6 +97,34 @@ program
     console.log(`Checkpoint: ${result.checkpointPath}`);
   });
 
+program
+  .command('process')
+  .description('Parse acquired HTML and build California Criminal Knowledge Graph repositories')
+  .requiredOption('-c, --code <abbrev>', 'California code abbreviation')
+  .option('--raw-dir <path>', 'Raw HTML directory', 'data/legislative/raw')
+  .option('--repo-dir <path>', 'Repository output directory', 'data/legislative/repositories')
+  .option('--max-sections <n>', 'Maximum sections to process', (v) => parseInt(v, 10))
+  .option('--section <sections...>', 'Specific sections to process')
+  .action(async (opts) => {
+    const code = opts.code.toUpperCase();
+    console.log(`\n=== Processing ${code} into Criminal Knowledge Graph ===`);
+
+    const { processStatutePipeline } = await import('./knowledgeGraph/pipeline.ts');
+    const result = await processStatutePipeline({
+      code,
+      rawHtmlDir: resolve(opts.rawDir),
+      repositoryDir: resolve(opts.repoDir),
+      sections: opts.section?.length ? opts.section : undefined,
+      maxSections: opts.maxSections,
+    });
+
+    console.log(`Processed: ${result.processed}`);
+    console.log(`Rejected: ${result.rejected}`);
+    console.log(`Offenses identified: ${result.offenses}`);
+    console.log(`Repositories: ${result.repositoryDir}`);
+    console.log(`Coverage report: ${result.coverageReportPath}`);
+  });
+
 program.parseAsync(process.argv).catch((err) => {
   console.error(err);
   process.exit(1);

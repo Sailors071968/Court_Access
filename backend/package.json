@@ -9,6 +9,7 @@
     "ingest-corpus": "tsx src/ingestion/cli.ts",
     "leginfo:discover": "tsx src/legislative/cli.ts discover",
     "leginfo:acquire": "tsx src/legislative/cli.ts acquire",
+    "leginfo:process": "tsx src/legislative/cli.ts process",
     "test": "node --import tsx --test tests/**/*.test.ts",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",

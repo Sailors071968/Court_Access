@@ -184,6 +184,14 @@ model LegalDocument {
   corpusVersion   String?  // Version of the corpus this document belongs to
   documentVersion String   @default("1.0") // Version of this specific document
   supersededBy    String?  // ID of the document that supersedes this one
+  // Epic 2A — statute-specific fields (nullable for backward compatibility)
+  statuteCode     String?
+  statuteSection  String?
+  statuteHierarchy String?  // JSON StatuteHierarchy
+  sourceUrl       String?
+  retrievedAt     DateTime?
+  effectiveDate   String?
+  extractionAudit String?  // JSON AuditMetadata
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -194,6 +202,7 @@ model LegalDocument {
   @@index([jurisdiction])
   @@index([contentHash])
   @@index([supersededBy])
+  @@index([statuteCode, statuteSection])
   @@map("legal_documents")
 }
 

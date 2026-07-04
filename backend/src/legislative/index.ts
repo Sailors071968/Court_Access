@@ -7,3 +7,5 @@ export * from './discoveryManifest.ts';
 export * from './discovery.ts';
 export * from './acquisition.ts';
 export * from './rawHtmlStore.ts';
+export * from './statuteParser.ts';
+export * from './knowledgeGraph/index.ts';

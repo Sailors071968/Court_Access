@@ -46,6 +46,14 @@ export interface NormalizedDocument {
   documentVersion?: string;
   /** ID of the document that supersedes this one */
   supersededBy?: string;
+  /** Epic 2A statute fields */
+  statuteCode?: string;
+  statuteSection?: string;
+  statuteHierarchy?: string;
+  sourceUrl?: string;
+  retrievedAt?: Date;
+  effectiveDate?: string;
+  extractionAudit?: string;
   createdAt: Date;
   updatedAt: Date;
 }

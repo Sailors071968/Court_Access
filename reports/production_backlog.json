@@ -11,8 +11,8 @@
     },
     "californiaLegalIntelligence": {
       "label": "California Legal Intelligence",
-      "percent": 62,
-      "notes": "Doctrine routes, narrative API + sub-workers, timeline cascade partial"
+      "percent": 68,
+      "notes": "Doctrine routes, narrative API + sub-workers, timeline events from DB"
     },
     "evidenceGovernedReasoning": {
       "label": "Evidence-Governed Reasoning",
@@ -31,11 +31,10 @@
     }
   },
   "productionReadiness": {
-    "score": 71,
+    "score": 73,
     "maxScore": 100,
     "level": "APPROACHING_PRODUCTION",
     "blockers": [
-      "Timeline routes use debug test data instead of DB events",
       "Contradiction Prisma models not yet migrated",
       "Production credentials required for deploy (Redis, R2, DB, JWT)"
     ],
@@ -59,7 +58,7 @@
     { "id": "P1-018", "priority": "P1", "title": "Wire pipeline workers to real processing", "status": "completed", "epic": "evidenceGovernedReasoning" },
     { "id": "P1-019", "priority": "P1", "title": "Wire narrative routes to DB", "status": "completed", "epic": "californiaLegalIntelligence" },
     { "id": "P1-020", "priority": "P1", "title": "Register narrative sub-queue workers", "status": "completed", "epic": "evidenceGovernedReasoning" },
-    { "id": "P1-021", "priority": "P1", "title": "Timeline routes use real DB events not debug stubs", "status": "pending", "epic": "californiaLegalIntelligence" },
+    { "id": "P1-021", "priority": "P1", "title": "Timeline routes use real DB events not debug stubs", "status": "completed", "epic": "californiaLegalIntelligence" },
     { "id": "P2-001", "priority": "P2", "title": "Remove StaffDashboard hardcoded stats", "status": "completed", "epic": "operationalWebsite" },
     { "id": "P2-002", "priority": "P2", "title": "Frontend AI engine stubs return empty", "status": "pending", "epic": "evidenceGovernedReasoning" },
     { "id": "P3-001", "priority": "P3", "title": "Consolidate competing queue systems", "status": "pending", "epic": "reliability" }

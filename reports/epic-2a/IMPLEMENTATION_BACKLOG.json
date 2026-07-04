@@ -135,12 +135,21 @@
       "priority": "P1",
       "tier": 1,
       "title": "Per-record extraction audit log",
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-07-04T20:10:00Z",
+      "verifiedAt": "2026-07-04T20:10:00Z",
       "dependencies": ["2A-003"],
       "acceptanceCriteria": [
         "Every extraction attempt logged with success/failure/rejection reason",
         "Queryable via admin API"
-      ]
+      ],
+      "evidence": {
+        "module": "backend/src/legislative/extractionAuditLog.ts",
+        "migration": "backend/prisma/migrations/20260704210000_legislative_extraction_audit",
+        "api": "GET /api/legislative/audit",
+        "tests": "backend/tests/legislative-extraction-audit.test.ts",
+        "auditFile": "backend/data/legislative/audit/extraction-audit.jsonl"
+      }
     },
     {
       "id": "2A-007",

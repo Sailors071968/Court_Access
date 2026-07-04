@@ -4,17 +4,25 @@
 
 import { readFile, writeFile, mkdir } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
+import type { PrismaClient } from '@prisma/client';
 import type { CriminalKnowledgeBundle, KnowledgeGraphCoverageReport, RepositoryCoverageMetrics } from './types.ts';
 import { createRepositories, type RepositoryName } from './repositories.ts';
 import { EXTRACTOR_VERSION } from './intelligenceExtractor.ts';
 import { parseLeginfoStatuteHtml } from '../statuteParser.ts';
 import { extractCriminalKnowledge } from './intelligenceExtractor.ts';
 import { readRawHtml, rawHtmlPath } from '../rawHtmlStore.ts';
+import {
+  appendExtractionAudit,
+  buildExtractAuditEntry,
+  buildParseAuditEntry,
+} from '../extractionAuditLog.ts';
 
 export interface ProcessPipelineOptions {
   code: string;
   rawHtmlDir?: string;
   repositoryDir?: string;
+  auditDir?: string;
+  prisma?: PrismaClient;
   sections?: string[];
   maxSections?: number;
 }
@@ -158,11 +166,17 @@ export async function processStatutePipeline(
   const limit = options.maxSections ?? sections.length;
   const toProcess = sections.slice(0, limit);
 
+  const auditOptions = {
+    auditDir: options.auditDir,
+    prisma: options.prisma,
+  };
+
   for (const section of toProcess) {
+    const sourceUrl = `https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=${options.code}&sectionNum=${section}`;
     const html = await readRawHtml(rawDir, options.code, section);
     const parseResult = parseLeginfoStatuteHtml({
       html,
-      sourceUrl: `https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=${options.code}&sectionNum=${section}`,
+      sourceUrl,
       retrievedAt: new Date().toISOString(),
       code: options.code,
       section,
@@ -171,14 +185,52 @@ export async function processStatutePipeline(
     if (!parseResult.ok) {
       rejected += 1;
       await writeFile(rejectionsPath, `${JSON.stringify(parseResult.rejection)}\n`, { flag: 'a' });
+      await appendExtractionAudit(
+        buildParseAuditEntry({
+          code: parseResult.rejection.code,
+          section: parseResult.rejection.section,
+          sourceUrl: parseResult.rejection.sourceUrl,
+          contentHash: parseResult.rejection.contentHash,
+          status: 'rejected',
+          rejectionReason: parseResult.rejection.reason,
+        }),
+        auditOptions,
+      );
       continue;
     }
+
+    await appendExtractionAudit(
+      buildParseAuditEntry({
+        code: parseResult.record.code,
+        section: parseResult.record.section,
+        sourceUrl,
+        contentHash: parseResult.record.contentHash,
+        status: 'success',
+        sourceStatuteId: parseResult.record.id,
+      }),
+      auditOptions,
+    );
 
     const bundle = extractCriminalKnowledge(parseResult.record);
     await updateRepositoriesFromBundle(bundle, repoDir);
     statuteIds.add(parseResult.record.id);
     processed += 1;
     offenses += bundle.offenses.length;
+
+    const extractStatus = bundle.offenses.length > 0 ? 'success' : 'partial';
+    await appendExtractionAudit(
+      buildExtractAuditEntry({
+        code: parseResult.record.code,
+        section: parseResult.record.section,
+        sourceUrl,
+        contentHash: parseResult.record.contentHash,
+        sourceStatuteId: parseResult.record.id,
+        status: extractStatus,
+        offenseCount: bundle.offenses.length,
+        elementCount: bundle.elements.length,
+      }),
+      auditOptions,
+    );
   }
 
   const report = await generateCoverageReport(repoDir, statuteIds, rejected);

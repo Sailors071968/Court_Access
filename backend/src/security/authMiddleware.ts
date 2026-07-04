@@ -202,6 +202,7 @@ const ROUTE_PERMISSIONS: Record<string, UserRole[]> = {
   '/api/admin': ['admin'],
   '/api/security': ['admin'],
   '/api/corpus': ['admin'],
+  '/api/legislative/audit': ['admin'],
   '/api/legislative': ['admin', 'attorney', 'staff'],
 };
 

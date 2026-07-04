@@ -250,6 +250,34 @@ model CorpusIngestionLock {
 }
 
 // ---------------------------------------------------------------------------
+// Legislative Extraction Audit — per-record parse/extract audit trail (Epic 2A)
+// ---------------------------------------------------------------------------
+
+model LegislativeExtractionAudit {
+  id               String   @id @default(uuid())
+  code             String
+  section          String
+  sourceUrl        String
+  contentHash      String?
+  sourceStatuteId  String?
+  stage            String   // parse | extract
+  status           String   // success | rejected | partial
+  rejectionReason  String?
+  offenseCount     Int      @default(0)
+  elementCount     Int      @default(0)
+  parserVersion    String
+  extractorVersion String
+  metadata         String?  // JSON
+  createdAt        DateTime @default(now())
+
+  @@index([code, section])
+  @@index([status])
+  @@index([createdAt])
+  @@index([sourceStatuteId])
+  @@map("legislative_extraction_audit")
+}
+
+// ---------------------------------------------------------------------------
 // NOTE: Doctrine models (DoctrineRule, DoctrineEmbedding, DoctrineMatchLog)
 // are intentionally NOT added to schema.prisma per SCHEMA_FREEZE.md policy.
 // Runtime storage uses the in-memory DoctrineStore (doctrineStore.ts).

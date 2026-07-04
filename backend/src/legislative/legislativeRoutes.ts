@@ -6,6 +6,13 @@ import type { FastifyInstance } from 'fastify';
 import { collectProductionMetrics } from './productionMetrics.ts';
 import { readCoverageReport } from './legislativeIngestService.ts';
 import { createRepositories, REPOSITORY_NAMES } from './knowledgeGraph/repositories.ts';
+import {
+  getExtractionAuditStats,
+  queryExtractionAudit,
+  type ExtractionAuditStatus,
+  type ExtractionStage,
+} from './extractionAuditLog.ts';
+import prisma from '../lib/prisma.ts';
 import { resolve } from 'node:path';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -38,6 +45,36 @@ export async function registerLegislativeRoutes(app: FastifyInstance): Promise<v
     return { repositoryDir: repoDir, repositories: inventory };
   });
 
+  app.get('/api/legislative/audit', async (request) => {
+    const query = request.query as {
+      code?: string;
+      section?: string;
+      status?: ExtractionAuditStatus;
+      stage?: ExtractionStage;
+      limit?: string;
+      offset?: string;
+      stats?: string;
+    };
+
+    const auditOptions = { prisma };
+
+    if (query.stats === 'true') {
+      return getExtractionAuditStats(auditOptions);
+    }
+
+    return queryExtractionAudit(
+      {
+        code: query.code,
+        section: query.section,
+        status: query.status,
+        stage: query.stage,
+        limit: query.limit ? Number.parseInt(query.limit, 10) : undefined,
+        offset: query.offset ? Number.parseInt(query.offset, 10) : undefined,
+      },
+      auditOptions,
+    );
+  });
+
   app.get('/api/legislative/statutes/:code/:section', async (request, reply) => {
     const { code, section } = request.params as { code: string; section: string };
     const repoDir = resolve(DEFAULT_REPO_DIR);
@@ -60,6 +97,6 @@ export async function registerLegislativeRoutes(app: FastifyInstance): Promise<v
   });
 
   console.log(
-    '[Legislative] Routes registered: /api/legislative/metrics, /coverage, /repositories, /statutes/:code/:section',
+    '[Legislative] Routes registered: /api/legislative/metrics, /coverage, /repositories, /audit, /statutes/:code/:section',
   );
 }

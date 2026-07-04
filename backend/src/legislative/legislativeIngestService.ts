@@ -9,6 +9,7 @@ import { processStatutePipeline } from './knowledgeGraph/pipeline.ts';
 import { createRepositories } from './knowledgeGraph/repositories.ts';
 import { readFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
+import prisma from '../lib/prisma.ts';
 
 export interface LegislativeIngestInput {
   code: string;
@@ -71,6 +72,7 @@ export async function ingestLegislativeCorpus(
       rawHtmlDir: resolve(input.rawHtmlDir ?? 'data/legislative/raw'),
       repositoryDir: resolve(input.repositoryDir ?? 'data/legislative/repositories'),
       maxSections: input.maxSections,
+      prisma,
     });
 
     const repos = createRepositories(resolve(input.repositoryDir ?? 'data/legislative/repositories'));

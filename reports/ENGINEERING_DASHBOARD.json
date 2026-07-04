@@ -1,0 +1,122 @@
+{
+  "generatedAt": "2026-07-04T20:06:46.412Z",
+  "operationalWebsite": {
+    "backendApi": "OPERATIONAL",
+    "legislativePipeline": "OPERATIONAL",
+    "corpusGovernance": "OPERATIONAL"
+  },
+  "attorneyWorkflows": {
+    "authenticate": true,
+    "createClients": true,
+    "createCases": true,
+    "uploadEvidence": true,
+    "processEvidence": true,
+    "reviewFacts": true,
+    "reviewTimelines": true,
+    "reviewContradictions": true,
+    "reviewAuthorities": false,
+    "reviewOffenses": false,
+    "reviewCalcrim": false,
+    "generateReports": true,
+    "exportPackages": true,
+    "completionPercent": 77
+  },
+  "californiaLegalCoverage": {
+    "codesDiscovered": 1,
+    "codesTotal": 30,
+    "sectionsDiscovered": 207,
+    "sectionsAcquired": 3,
+    "sectionsParsed": 4,
+    "criminalOffenses": 2
+  },
+  "repositoryIntegrity": "PASS",
+  "knowledgeGraphCoverage": {
+    "statutes": 4,
+    "offenses": 2,
+    "elements": 4,
+    "mensRea": 2,
+    "crossReferences": 13,
+    "calcrimLinks": 1,
+    "authorities": 13
+  },
+  "calcrimCoveragePercent": 50,
+  "authorityCoveragePercent": 100,
+  "evidenceCoverage": {
+    "repositoryRecords": 4,
+    "status": "PARTIAL"
+  },
+  "extractionAudit": {
+    "total": 6,
+    "success": 4,
+    "rejected": 0,
+    "partial": 2,
+    "withOffenses": 1
+  },
+  "outstandingBlockers": [],
+  "technicalDebt": [
+    "2A-007: Criminal code filter — PC, EC, H&S, VEH priority",
+    "2A-008: Content-hash incremental sync",
+    "2A-014: CALCRIM instruction linker",
+    "2A-022: Replace searchService.ts stubs with legal_documents query"
+  ],
+  "productionMetrics": {
+    "generatedAt": "2026-07-04T20:06:46.361Z",
+    "californiaCodes": {
+      "discovered": 1,
+      "total": 30
+    },
+    "sectionsDiscovered": 207,
+    "sectionsAcquired": 3,
+    "sectionsParsed": 4,
+    "criminalOffenses": 2,
+    "offenseElements": 4,
+    "mensReaCoveragePercent": 100,
+    "authorityCoveragePercent": 100,
+    "calcrimMappings": 1,
+    "calcrimCoveragePercent": 50,
+    "repositoryIntegrity": "PASS",
+    "parsingFailures": 0,
+    "manualReviewQueue": 0,
+    "repositories": {
+      "statutes": 4,
+      "offenses": 2,
+      "elements": 4,
+      "mens_rea": 2,
+      "exceptions": 3,
+      "defenses": 0,
+      "cross_references": 13,
+      "regulatory_incorporations": 2,
+      "calcrim_links": 1,
+      "authorities": 13
+    },
+    "backendCompile": "UNKNOWN",
+    "frontendCompile": "UNKNOWN",
+    "e2eWorkflows": {
+      "passed": 0,
+      "total": 0,
+      "status": "UNKNOWN"
+    }
+  },
+  "nextRecommendedTasks": [
+    {
+      "id": "2A-007",
+      "priority": "P1",
+      "title": "Criminal code filter — PC, EC, H&S, VEH priority"
+    },
+    {
+      "id": "2A-008",
+      "priority": "P1",
+      "title": "Content-hash incremental sync"
+    },
+    {
+      "id": "2A-014",
+      "priority": "P2",
+      "title": "CALCRIM instruction linker"
+    },
+    {
+      "id": "2A-022",
+      "priority": "P2",
+      "title": "Replace searchService.ts stubs with legal_documents query"
+    }
+  ]
+}

@@ -110,12 +110,14 @@ program
     console.log(`\n=== Processing ${code} into Criminal Knowledge Graph ===`);
 
     const { processStatutePipeline } = await import('./knowledgeGraph/pipeline.ts');
+    const prisma = (await import('../lib/prisma.ts')).default;
     const result = await processStatutePipeline({
       code,
       rawHtmlDir: resolve(opts.rawDir),
       repositoryDir: resolve(opts.repoDir),
       sections: opts.section?.length ? opts.section : undefined,
       maxSections: opts.maxSections,
+      prisma,
     });
 
     console.log(`Processed: ${result.processed}`);

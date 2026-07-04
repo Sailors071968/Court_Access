@@ -8,6 +8,7 @@ import { useState, useEffect } from 'react';
 import { FileText, Scale, Calendar, Lightbulb, TrendingUp, Loader2 } from 'lucide-react';
 import { Card, StatCard } from '../../components/common/Card';
 import { DoctrineCompliancePanel } from '../../components/case/DoctrineCompliancePanel';
+import { AttorneyReportPanel } from '../../components/case/AttorneyReportPanel';
 import { ROLE_PERMISSIONS } from '../../constants';
 import { useAuthStore } from '../../stores/authStore';
 // CaseAnalysisSection and LitigationIntelligencePanel removed:
@@ -147,15 +148,24 @@ export function CaseOverviewPage() {
               <p className="text-sm text-gray-600 leading-relaxed">
                 Upload evidence and run analysis to generate intelligence signals.
               </p>
-              {permissions.canViewCharges && (
+              <div className="mt-4 flex flex-wrap gap-2">
                 <button
-                  onClick={() => navigate(`/cases/${currentCase.caseId}/charges`)}
-                  className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-amber-50 text-amber-700 rounded-lg text-sm font-medium hover:bg-amber-100 transition-colors"
+                  onClick={() => navigate(`/cases/${currentCase.caseId}/litigation-strategy`)}
+                  className="inline-flex items-center gap-2 px-4 py-2 bg-indigo-50 text-indigo-700 rounded-lg text-sm font-medium hover:bg-indigo-100 transition-colors"
                 >
                   <TrendingUp size={16} />
-                  View Charges
+                  Litigation Strategy
                 </button>
-              )}
+                {permissions.canViewCharges && (
+                  <button
+                    onClick={() => navigate(`/cases/${currentCase.caseId}/charges`)}
+                    className="inline-flex items-center gap-2 px-4 py-2 bg-amber-50 text-amber-700 rounded-lg text-sm font-medium hover:bg-amber-100 transition-colors"
+                  >
+                    <Scale size={16} />
+                    View Charges
+                  </button>
+                )}
+              </div>
             </Card>
           ) : (
             <Card>
@@ -185,7 +195,10 @@ export function CaseOverviewPage() {
 
       {/* Police Training Doctrine Compliance */}
       {showIntelligence && (
-        <DoctrineCompliancePanel />
+        <>
+          <AttorneyReportPanel caseId={currentCase.caseId} caseTitle={currentCase.title} />
+          <DoctrineCompliancePanel />
+        </>
       )}
     </div>
   );

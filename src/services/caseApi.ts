@@ -670,6 +670,67 @@ export async function fetchLitigationStrategy(caseId: string): Promise<ApiLitiga
 }
 
 // ---------------------------------------------------------------------------
+// Attorney Reports API
+// ---------------------------------------------------------------------------
+
+export interface ApiComplianceReport {
+  title: string;
+  generatedAt: string;
+  caseId: string;
+  agencyName: string;
+  findings: Array<{
+    number: number;
+    findingType: string;
+    policyReference: string;
+    evidenceTimestamp: string | null;
+    detectedAction: string;
+    confidence: string;
+    explanation: string;
+    reviewStatus: string;
+  }>;
+  summary: {
+    totalFindings: number;
+    potentialInconsistencies: number;
+    consistentFindings: number;
+    averageConfidence: number;
+    topPolicyAreas: string[];
+  };
+}
+
+export interface ApiExpertWitnessPackage {
+  packageTitle?: string;
+  sections?: Array<{ title: string; content: string }>;
+  [key: string]: unknown;
+}
+
+export async function generateComplianceReport(
+  caseId: string,
+  caseName?: string,
+): Promise<ApiComplianceReport> {
+  const res = await fetch(`${API_BASE}/compliance/report/${caseId}`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    body: JSON.stringify({ caseName }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to generate compliance report' }));
+    throw new Error(err.error || 'Failed to generate compliance report');
+  }
+  const data = await res.json();
+  return data.data;
+}
+
+export async function generateExpertWitnessPackage(caseId: string): Promise<ApiExpertWitnessPackage> {
+  const res = await fetch(`${API_BASE}/compliance/expert/${caseId}`, { headers: getAuthHeaders() });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to generate expert package' }));
+    throw new Error(err.error || 'Failed to generate expert package');
+  }
+  const data = await res.json();
+  return data.data;
+}
+
+// ---------------------------------------------------------------------------
 // Billing / Stripe API
 // ---------------------------------------------------------------------------
 

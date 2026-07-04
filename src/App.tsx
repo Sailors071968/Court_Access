@@ -24,6 +24,7 @@ import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage';
 import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
 import { VerifyEmailPage } from './pages/auth/VerifyEmailPage';
 import { AcceptInvitationPage } from './pages/auth/AcceptInvitationPage';
+import { FirmOperatingPlatformPage } from './pages/organization/FirmOperatingPlatformPage';
 import { OrganizationSettingsPage } from './pages/organization/OrganizationSettingsPage';
 import { OrganizationOnboardingPage } from './pages/organization/OrganizationOnboardingPage';
 
@@ -309,6 +310,14 @@ function App() {
             element={
               <ProtectedRoute requiredPermission="canViewSettings">
                 <SettingsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="firm"
+            element={
+              <ProtectedRoute requiredPermission="canViewSettings">
+                <FirmOperatingPlatformPage />
               </ProtectedRoute>
             }
           />

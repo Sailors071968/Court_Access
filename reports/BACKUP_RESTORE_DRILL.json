@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-04T23:03:58.331Z",
+  "generatedAt": "2026-07-04T23:12:39.980Z",
   "drillVersion": "1.0.0",
   "overallResult": "PASS",
   "passCount": 9,
@@ -46,13 +46,13 @@
       "id": "critical-tables",
       "label": "Critical tables accessible",
       "result": "PASS",
-      "detail": "users:10, criminal_cases:5, evidence:4, clients:0"
+      "detail": "users:11, criminal_cases:5, evidence:4, clients:0"
     },
     {
       "id": "migration-state",
       "label": "Prisma migrations applied",
       "result": "PASS",
-      "detail": "Latest: 20260704260000_organization_platform"
+      "detail": "Latest: 20260704270000_firm_operating_platform"
     },
     {
       "id": "schema-versions",
@@ -71,39 +71,39 @@
   "auditTrail": [
     {
       "step": "Verify DISASTER_RECOVERY.md",
-      "timestamp": "2026-07-04T23:03:58.325Z"
+      "timestamp": "2026-07-04T23:12:39.976Z"
     },
     {
       "step": "Verify db-safe-migrate.sh",
-      "timestamp": "2026-07-04T23:03:58.325Z"
+      "timestamp": "2026-07-04T23:12:39.976Z"
     },
     {
       "step": "Verify database integrity audit",
-      "timestamp": "2026-07-04T23:03:58.325Z"
+      "timestamp": "2026-07-04T23:12:39.976Z"
     },
     {
       "step": "Verify legislative repository snapshots",
-      "timestamp": "2026-07-04T23:03:58.326Z"
+      "timestamp": "2026-07-04T23:12:39.976Z"
     },
     {
       "step": "Verify configuration template",
-      "timestamp": "2026-07-04T23:03:58.326Z"
+      "timestamp": "2026-07-04T23:12:39.976Z"
     },
     {
       "step": "Verify database connectivity",
-      "timestamp": "2026-07-04T23:03:58.326Z"
+      "timestamp": "2026-07-04T23:12:39.976Z"
     },
     {
       "step": "Verify critical tables accessible",
-      "timestamp": "2026-07-04T23:03:58.327Z"
+      "timestamp": "2026-07-04T23:12:39.976Z"
     },
     {
       "step": "Verify migration state",
-      "timestamp": "2026-07-04T23:03:58.330Z"
+      "timestamp": "2026-07-04T23:12:39.979Z"
     },
     {
       "step": "Verify schema version control",
-      "timestamp": "2026-07-04T23:03:58.330Z"
+      "timestamp": "2026-07-04T23:12:39.980Z"
     }
   ]
 }

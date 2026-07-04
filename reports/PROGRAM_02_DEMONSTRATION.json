@@ -1,0 +1,142 @@
+{
+  "program": "PROGRAM-02",
+  "name": "Law Firm Operating Platform",
+  "version": "11.1",
+  "generatedAt": "2026-07-04T23:13:34.104Z",
+  "completionPercent": 100,
+  "visualDemonstrationRequired": true,
+  "uiRoutes": [
+    {
+      "route": "/organization/onboarding",
+      "page": "src/pages/organization/OrganizationOnboardingPage.tsx",
+      "workflow": "Organization onboarding"
+    },
+    {
+      "route": "/firm",
+      "page": "src/pages/organization/FirmOperatingPlatformPage.tsx",
+      "workflow": "Law Firm Operating Platform"
+    },
+    {
+      "route": "/accept-invitation?token=...",
+      "page": "src/pages/auth/AcceptInvitationPage.tsx",
+      "workflow": "Team invitation & acceptance"
+    },
+    {
+      "route": "/organization/settings",
+      "page": "src/pages/organization/OrganizationSettingsPage.tsx",
+      "workflow": "Organization settings (legacy)"
+    }
+  ],
+  "workflows": [
+    {
+      "id": "WF-P02-01",
+      "name": "Organization onboarding",
+      "route": "/organization/onboarding",
+      "steps": [
+        "Complete firm profile",
+        "Add primary office",
+        "Invite team",
+        "Finish onboarding"
+      ],
+      "ui": "src/pages/organization/OrganizationOnboardingPage.tsx"
+    },
+    {
+      "id": "WF-P02-02",
+      "name": "Law Firm Operating Platform",
+      "route": "/firm",
+      "steps": [
+        "View overview analytics",
+        "Seed CA offices",
+        "Manage departments",
+        "Personnel roster",
+        "Internal messaging",
+        "Conflict check",
+        "Knowledge repository"
+      ],
+      "ui": "src/pages/organization/FirmOperatingPlatformPage.tsx"
+    },
+    {
+      "id": "WF-P02-03",
+      "name": "Team invitation & acceptance",
+      "route": "/accept-invitation?token=...",
+      "steps": [
+        "Admin sends invite",
+        "Invitee opens link",
+        "Creates account",
+        "Joins existing org tenant"
+      ],
+      "ui": "src/pages/auth/AcceptInvitationPage.tsx"
+    },
+    {
+      "id": "WF-P02-04",
+      "name": "Organization settings (legacy)",
+      "route": "/organization/settings",
+      "steps": [
+        "Update branding",
+        "Manage offices",
+        "Send invitations"
+      ],
+      "ui": "src/pages/organization/OrganizationSettingsPage.tsx"
+    }
+  ],
+  "verification": {
+    "compilation": "backend modules present",
+    "tests": true,
+    "apiSurfaces": [
+      "GET /api/firm/analytics",
+      "GET /api/firm/personnel",
+      "POST /api/firm/departments",
+      "PUT /api/firm/clients/:clientId/team",
+      "POST /api/firm/messages",
+      "POST /api/firm/tasks",
+      "POST /api/firm/knowledge",
+      "POST /api/firm/conflicts/check",
+      "POST /api/firm/permissions",
+      "POST /api/firm/offices/seed-california"
+    ],
+    "tenantIsolation": "organization-domain.test.ts + firm-platform.test.ts",
+    "endToEndUserTasks": [
+      "Complete firm profile",
+      "Add primary office",
+      "Invite team",
+      "Finish onboarding",
+      "View overview analytics",
+      "Seed CA offices",
+      "Manage departments",
+      "Personnel roster",
+      "Internal messaging",
+      "Conflict check",
+      "Knowledge repository",
+      "Admin sends invite",
+      "Invitee opens link",
+      "Creates account",
+      "Joins existing org tenant",
+      "Update branding",
+      "Manage offices",
+      "Send invitations"
+    ]
+  },
+  "checks": [
+    {
+      "label": "Firm platform service",
+      "pass": true
+    },
+    {
+      "label": "Firm platform routes",
+      "pass": true
+    },
+    {
+      "label": "Firm operating UI",
+      "pass": true
+    },
+    {
+      "label": "Firm platform tests",
+      "pass": true
+    },
+    {
+      "label": "Organization domain tests",
+      "pass": true
+    }
+  ],
+  "allChecksPass": true
+}

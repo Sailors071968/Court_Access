@@ -38,8 +38,10 @@ model User {
   passwordResetTokens PasswordResetToken[]
   emailVerificationTokens EmailVerificationToken[]
   sentMessages  CaseMessage[] @relation("MessageSender")
+  orgMessages   OrgInternalMessage[] @relation("OrgMessageSender")
   client        Client?  @relation(fields: [clientId], references: [clientId])
   organizationMembership OrganizationMember?
+  personnelProfile PersonnelProfile?
   office        OrganizationOffice? @relation(fields: [officeId], references: [officeId])
   practiceGroup PracticeGroup? @relation(fields: [practiceGroupId], references: [practiceGroupId])
 
@@ -1355,11 +1357,19 @@ model Organization {
   stripeCustomerId String?
   onboardingStep String @default("created") // created | profile | offices | team | complete
   onboardingCompletedAt DateTime?
+  themeSettings Json?  // { fontFamily, accentColor, sidebarStyle }
 
   offices       OrganizationOffice[]
+  departments   OrganizationDepartment[]
   practiceGroups PracticeGroup[]
   members       OrganizationMember[]
   invitations   OrganizationInvitation[]
+  personnelProfiles PersonnelProfile[]
+  knowledgeAssets KnowledgeAsset[]
+  internalMessages OrgInternalMessage[]
+  orgTasks      OrgTask[]
+  conflictRecords ConflictRecord[]
+  permissionGrants PermissionGrant[]
 
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -1379,7 +1389,9 @@ model OrganizationOffice {
   zip            String?
   phone          String?
   isPrimary      Boolean  @default(false)
+  isBranch       Boolean  @default(false)
 
+  departments    OrganizationDepartment[]
   practiceGroups PracticeGroup[]
   members        OrganizationMember[]
   users          User[]
@@ -1420,8 +1432,11 @@ model OrganizationMember {
   userId         String   @unique
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   role           String   // admin | attorney | investigator | staff
+  personnelType  String?  // attorney | investigator | paralegal | legal_assistant | office_admin | receptionist | expert_witness | contract_investigator
   officeId       String?
   office         OrganizationOffice? @relation(fields: [officeId], references: [officeId])
+  departmentId   String?
+  department     OrganizationDepartment? @relation(fields: [departmentId], references: [departmentId])
   practiceGroupId String?
   practiceGroup  PracticeGroup? @relation(fields: [practiceGroupId], references: [practiceGroupId])
   status         String   @default("active") // active | suspended | removed
@@ -1453,6 +1468,200 @@ model OrganizationInvitation {
   @@index([organizationId, email])
   @@index([organizationId, status])
   @@map("organization_invitations")
+}
+
+model OrganizationDepartment {
+  departmentId   String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  officeId       String?
+  office         OrganizationOffice? @relation(fields: [officeId], references: [officeId])
+  name           String
+  description    String?
+
+  members        OrganizationMember[]
+  permissionGrants PermissionGrant[]
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([organizationId])
+  @@index([officeId])
+  @@map("organization_departments")
+}
+
+model PersonnelProfile {
+  profileId      String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  personnelType  String   // attorney | investigator | paralegal | legal_assistant | office_admin | receptionist | expert_witness | contract_investigator
+  jobTitle       String?
+  barNumber      String?
+  phone          String?
+  bio            String?
+  certifications Json?    // [{ name, issuer, issuedAt, expiresAt }]
+  licenses       Json?    // [{ type, number, state, expiresAt }]
+  permissions    Json?    // { canViewEvidence, canAssignCases, ... }
+  calendarSettings Json?
+  isActive       Boolean  @default(true)
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([organizationId])
+  @@index([personnelType])
+  @@map("personnel_profiles")
+}
+
+model ClientTeamAssignment {
+  assignmentId       String   @id @default(uuid())
+  clientId           String   @unique
+  client             Client   @relation(fields: [clientId], references: [clientId], onDelete: Cascade)
+  tenantId           String
+  primaryAttorneyId  String?
+  secondaryAttorneyId String?
+  investigatorId     String?
+  paralegalId        String?
+  legalAssistantId   String?
+  officeId           String?
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([tenantId])
+  @@index([primaryAttorneyId])
+  @@index([officeId])
+  @@map("client_team_assignments")
+}
+
+model OrgInternalMessage {
+  messageId      String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  senderId       String
+  sender         User     @relation("OrgMessageSender", fields: [senderId], references: [id])
+  recipientId    String?
+  channel        String   @default("direct") // direct | team | office | department
+  channelRef     String?  // officeId or departmentId for scoped channels
+  body           String
+  readAt         DateTime?
+
+  createdAt      DateTime @default(now())
+
+  @@index([organizationId])
+  @@index([senderId])
+  @@index([recipientId])
+  @@index([channel, channelRef])
+  @@map("org_internal_messages")
+}
+
+model OrgTask {
+  taskId         String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  tenantId       String
+  title          String
+  description    String?
+  taskType       String   @default("general") // general | case | investigation | motion
+  caseId         String?
+  assigneeId     String?
+  assignerId     String
+  status         String   @default("pending") // pending | in_progress | complete | cancelled
+  dueDate        DateTime?
+  completedAt    DateTime?
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([organizationId])
+  @@index([tenantId])
+  @@index([assigneeId])
+  @@index([caseId])
+  @@index([status])
+  @@map("org_tasks")
+}
+
+model KnowledgeAsset {
+  assetId        String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  tenantId       String
+  assetType      String   // internal_note | research | motion | template | procedure | policy
+  title          String
+  body           String
+  tags           String?
+  createdById    String
+  isPublished    Boolean  @default(true)
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([organizationId])
+  @@index([tenantId, assetType])
+  @@map("knowledge_assets")
+}
+
+model ConflictRecord {
+  recordId       String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  tenantId       String
+  conflictType   String   // client | witness | attorney | organization | related_case
+  entityA        String
+  entityB        String
+  severity       String   @default("review") // clear | review | blocked
+  status         String   @default("open") // open | waived | resolved
+  details        String?
+  detectedAt     DateTime @default(now())
+  resolvedAt     DateTime?
+
+  @@index([organizationId])
+  @@index([tenantId, conflictType])
+  @@index([status])
+  @@map("conflict_records")
+}
+
+model PermissionGrant {
+  grantId        String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String
+  scope          String   // office | department | case | document | evidence | admin
+  resourceId     String?
+  departmentId   String?
+  department     OrganizationDepartment? @relation(fields: [departmentId], references: [departmentId])
+  permission     String   // view | edit | assign | approve | admin
+  grantedById    String
+  expiresAt      DateTime?
+
+  createdAt      DateTime @default(now())
+
+  @@index([organizationId, userId])
+  @@index([scope, resourceId])
+  @@map("permission_grants")
+}
+
+model ApprovalRequest {
+  requestId      String   @id @default(uuid())
+  organizationId String
+  tenantId       String
+  requestType    String   // case_assignment | document_release | billing | personnel
+  resourceType   String
+  resourceId     String
+  requestedById  String
+  approverId     String?
+  status         String   @default("pending") // pending | approved | denied
+  notes          String?
+  decidedAt      DateTime?
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([organizationId])
+  @@index([tenantId, status])
+  @@map("approval_requests")
 }
 
 // ---------------------------------------------------------------------------
@@ -1494,6 +1703,7 @@ model Client {
 
   cases                 CriminalCase[]
   portalUsers           User[]
+  teamAssignment        ClientTeamAssignment?
 
   @@index([tenantId])
   @@index([ownerId])
@@ -1512,6 +1722,7 @@ model CriminalCase {
   ownerId         String
   clientId        String?
   client          Client?  @relation(fields: [clientId], references: [clientId])
+  officeId        String?
   title           String
   caseNumber      String
   jurisdiction    String
@@ -1536,6 +1747,7 @@ model CriminalCase {
   @@index([tenantId])
   @@index([ownerId])
   @@index([clientId])
+  @@index([officeId])
   @@index([status])
   @@index([caseType])
   @@index([createdAt])

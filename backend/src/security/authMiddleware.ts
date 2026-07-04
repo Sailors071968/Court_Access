@@ -194,6 +194,7 @@ const ROUTE_PERMISSIONS: Record<string, UserRole[]> = {
   '/api/compliance': ['admin', 'attorney', 'investigator'],
   '/api/clients': ['admin', 'attorney', 'investigator', 'staff'],
   '/api/organizations': ['admin', 'attorney', 'investigator', 'staff'],
+  '/api/firm': ['admin', 'attorney', 'investigator', 'staff'],
   '/api/policy-intelligence': ['admin', 'attorney', 'staff'],
   '/api/policy-pipeline': ['admin', 'staff'],
   '/api/operations': ['admin', 'staff'],

@@ -46,6 +46,7 @@ const navItems: NavItem[] = [
   { id: 'cases', label: 'Cases', path: '/cases', icon: 'Briefcase', permission: null },
   { id: 'search', label: 'Search', path: '/search', icon: 'Search', permission: null },
   { id: 'notifications', label: 'Notifications & Alerts', path: '/notifications', icon: 'Bell', permission: null },
+  { id: 'firm', label: 'Law Firm Platform', path: '/firm', icon: 'Settings', permission: 'canViewSettings' },
   { id: 'settings', label: 'Settings', path: '/settings', icon: 'Settings', permission: 'canViewSettings' },
   // Evidence Management — separate top-level item for staff who lack canViewAdmin
   {

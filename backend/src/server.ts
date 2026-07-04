@@ -175,6 +175,8 @@ async function startServer() {
   console.log('[Server] Registering organization routes (Program 2)...');
   const { registerOrganizationRoutes } = await import('./organizations/organizationRoutes.js');
   await registerOrganizationRoutes(app);
+  const { registerFirmPlatformRoutes } = await import('./organizations/firmPlatformRoutes.js');
+  await registerFirmPlatformRoutes(app);
 
   console.log('[Server] Registering communications routes (messaging, hearings)...');
   const { registerMessagingRoutes } = await import('./communications/messagingRoutes.js');

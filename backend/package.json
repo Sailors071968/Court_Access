@@ -20,6 +20,7 @@
     "integrity:report": "tsx scripts/generate-repository-integrity.ts",
     "v1:release": "tsx scripts/generate-version1-release.ts",
     "master:program": "tsx scripts/run-master-production-program.ts",
+    "firm:demo": "tsx scripts/generate-program02-demonstration.ts",
     "operations:report": "tsx scripts/run-operations-report.ts",
     "test": "node --import tsx --test tests/**/*.test.ts",
     "db:generate": "prisma generate",

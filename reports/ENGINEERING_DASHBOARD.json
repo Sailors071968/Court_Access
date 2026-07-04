@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-04T20:49:16.954Z",
+  "generatedAt": "2026-07-04T21:47:33.043Z",
   "operationalWebsite": {
     "backendApi": "OPERATIONAL",
     "legislativePipeline": "OPERATIONAL",
@@ -53,7 +53,7 @@
     "withOffenses": 2
   },
   "liabilityDiscovery": {
-    "generatedAt": "2026-07-04T20:49:16.656Z",
+    "generatedAt": "2026-07-04T21:47:32.792Z",
     "classifierVersion": "1.0.0",
     "californiaCodesDiscovered": 1,
     "californiaCodesTotal": 30,
@@ -107,7 +107,7 @@
     "1A-011: Stripe CLI integration tests in CI"
   ],
   "productionMetrics": {
-    "generatedAt": "2026-07-04T20:49:16.656Z",
+    "generatedAt": "2026-07-04T21:47:32.792Z",
     "californiaCodes": {
       "discovered": 1,
       "total": 30
@@ -138,7 +138,7 @@
       "statute_classifications": 3
     },
     "liabilityDiscovery": {
-      "generatedAt": "2026-07-04T20:49:16.656Z",
+      "generatedAt": "2026-07-04T21:47:32.792Z",
       "classifierVersion": "1.0.0",
       "californiaCodesDiscovered": 1,
       "californiaCodesTotal": 30,
@@ -218,87 +218,11 @@
   ],
   "productionGates": {
     "overallResult": "NOT_READY",
-    "passCount": 11,
+    "passCount": 0,
     "failCount": 0,
-    "partialCount": 4,
+    "partialCount": 0,
     "skipCount": 0,
     "deploymentBlocked": true,
-    "gates": [
-      {
-        "id": "PG-001",
-        "name": "Stripe Billing",
-        "result": "PARTIAL"
-      },
-      {
-        "id": "PG-002",
-        "name": "Authentication",
-        "result": "PASS"
-      },
-      {
-        "id": "PG-003",
-        "name": "Client Management",
-        "result": "PARTIAL"
-      },
-      {
-        "id": "PG-004",
-        "name": "Case Management",
-        "result": "PASS"
-      },
-      {
-        "id": "PG-005",
-        "name": "Document Upload",
-        "result": "PASS"
-      },
-      {
-        "id": "PG-006",
-        "name": "OCR",
-        "result": "PASS"
-      },
-      {
-        "id": "PG-007",
-        "name": "Evidence Processing",
-        "result": "PASS"
-      },
-      {
-        "id": "PG-008",
-        "name": "Timeline",
-        "result": "PASS"
-      },
-      {
-        "id": "PG-009",
-        "name": "Attorney Reports",
-        "result": "PARTIAL"
-      },
-      {
-        "id": "PG-010",
-        "name": "Legislative Intelligence",
-        "result": "PASS"
-      },
-      {
-        "id": "PG-011",
-        "name": "Knowledge Graph",
-        "result": "PASS"
-      },
-      {
-        "id": "PG-012",
-        "name": "Repository Integrity",
-        "result": "PASS"
-      },
-      {
-        "id": "PG-013",
-        "name": "Administrative Dashboard",
-        "result": "PASS"
-      },
-      {
-        "id": "PG-014",
-        "name": "Security",
-        "result": "PASS"
-      },
-      {
-        "id": "PG-015",
-        "name": "Backup / Recovery",
-        "result": "PARTIAL"
-      }
-    ]
+    "gates": []
   }
 }

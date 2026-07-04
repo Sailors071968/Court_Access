@@ -1,0 +1,77 @@
+{
+  "program": "VERSION_1.0_FEATURE_REGISTRY",
+  "version": "9.0",
+  "generatedAt": "2026-07-04T22:20:25.491Z",
+  "features": [
+    {
+      "id": "F-001",
+      "domain": "Authentication",
+      "feature": "Login/Register/Password Reset",
+      "gate": "PG-002",
+      "status": "PASS"
+    },
+    {
+      "id": "F-002",
+      "domain": "Client",
+      "feature": "Client CRUD",
+      "gate": "PG-004",
+      "status": "PASS"
+    },
+    {
+      "id": "F-003",
+      "domain": "Case",
+      "feature": "Case Management",
+      "gate": "PG-005",
+      "status": "PASS"
+    },
+    {
+      "id": "F-004",
+      "domain": "Evidence",
+      "feature": "Evidence Platform",
+      "gate": "PG-007",
+      "status": "PASS"
+    },
+    {
+      "id": "F-005",
+      "domain": "Legislative",
+      "feature": "CA Legal Intelligence",
+      "gate": "PG-008",
+      "status": "PASS"
+    },
+    {
+      "id": "F-006",
+      "domain": "Intelligence",
+      "feature": "Attorney Intelligence Engine",
+      "gate": "PG-010",
+      "status": "PASS"
+    },
+    {
+      "id": "F-007",
+      "domain": "Workbench",
+      "feature": "Attorney Workbench",
+      "gate": "PG-011",
+      "status": "PASS"
+    },
+    {
+      "id": "F-008",
+      "domain": "Workbench",
+      "feature": "Investigator Workbench",
+      "gate": "PG-012",
+      "status": "PASS"
+    },
+    {
+      "id": "F-009",
+      "domain": "Billing",
+      "feature": "Stripe Billing",
+      "gate": "PG-001",
+      "status": "PARTIAL"
+    },
+    {
+      "id": "F-010",
+      "domain": "Operations",
+      "feature": "Admin Command Center",
+      "gate": "PG-013",
+      "status": "PASS"
+    }
+  ]
+}

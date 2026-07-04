@@ -1,6 +1,6 @@
 # Program 21 — Production Operations Dashboard
 
-**Generated:** 2026-07-04T21:08:00.609Z
+**Generated:** 2026-07-04T22:00:20.683Z
 **Overall Status:** unhealthy
 **Deployment Blocked:** YES
 
@@ -29,6 +29,6 @@
 
 ## Observability
 
-- Production gates coverage: 73%
+- Production gates coverage: 93%
 - Legislative coverage: 3%
 - Attorney workflow coverage: 77%

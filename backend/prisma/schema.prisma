@@ -1948,6 +1948,88 @@ model InvestigationTask {
 }
 
 // ---------------------------------------------------------------------------
+// Program 12 — Investigator Workbench
+// ---------------------------------------------------------------------------
+
+model CaseWitness {
+  id              String   @id @default(uuid())
+  caseId          String
+  tenantId        String
+  name            String
+  role            String?
+  contactPhone    String?
+  contactEmail    String?
+  status          String   @default("identified") // identified | contacted | interviewed | unavailable
+  interviewStatus String   @default("not_scheduled") // not_scheduled | scheduled | completed | declined
+  notes           String?
+  sourceType      String?  // timeline | manual | discovery
+  sourceId        String?
+  createdBy       String
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([caseId, tenantId])
+  @@map("case_witnesses")
+}
+
+model InvestigationLead {
+  id          String   @id @default(uuid())
+  caseId      String
+  tenantId    String
+  title       String
+  description String?
+  status      String   @default("open") // open | pursuing | closed | unfounded
+  priority    String   @default("medium")
+  assignedTo  String?
+  sourceType  String?
+  sourceId    String?
+  createdBy   String
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([caseId, tenantId])
+  @@map("investigation_leads")
+}
+
+model FieldNote {
+  id         String   @id @default(uuid())
+  caseId     String
+  tenantId   String
+  userId     String
+  title      String?
+  content    String
+  noteType   String   @default("general") // general | interview | surveillance | scene | gps
+  latitude   Float?
+  longitude  Float?
+  evidenceId String?
+  witnessId  String?
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([caseId, tenantId])
+  @@index([userId])
+  @@map("field_notes")
+}
+
+model InvestigationAssignment {
+  id             String   @id @default(uuid())
+  caseId         String
+  tenantId       String
+  investigatorId String
+  role           String   @default("lead") // lead | support | consultant
+  status         String   @default("active") // active | completed | transferred
+  assignedAt     DateTime @default(now())
+  assignedBy     String
+
+  @@unique([caseId, tenantId, investigatorId])
+  @@index([investigatorId])
+  @@map("investigation_assignments")
+}
+
+// ---------------------------------------------------------------------------
 // PR 1 — Schema Version Control (Hardening Core)
 // Tracks schema versions applied to this database.
 // Boot-time assertion compares expected vs actual to hard-fail on drift.

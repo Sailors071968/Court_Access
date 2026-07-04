@@ -1,0 +1,216 @@
+{
+  "program": "VERSION_1.0_RELEASE",
+  "version": "9.0",
+  "generatedAt": "2026-07-04T22:20:50.076Z",
+  "releaseCandidate": true,
+  "overallResult": "NOT_READY",
+  "gatesPass": 16,
+  "gatesPartial": 4,
+  "gatesFail": 0,
+  "gatesTotal": 20,
+  "completionPercent": 80,
+  "deploymentBlocked": true,
+  "blockers": [
+    "PG-001: Live Stripe Test Mode API certification in staging",
+    "PG-014: Secure messaging and SMS not implemented",
+    "PG-017: Performance certification benchmarks not run",
+    "PG-020: PG-001: 1A-012: Live Stripe Test Mode API certification in staging"
+  ],
+  "checklist": [
+    {
+      "id": "PG-001",
+      "name": "Billing",
+      "program": "Program 17",
+      "status": "PARTIAL",
+      "checks": "17/18",
+      "blockers": [
+        "Live Stripe Test Mode API certification in staging"
+      ]
+    },
+    {
+      "id": "PG-002",
+      "name": "Authentication",
+      "program": "Program 2",
+      "status": "PASS",
+      "checks": "5/5",
+      "blockers": []
+    },
+    {
+      "id": "PG-003",
+      "name": "Organizations",
+      "program": "Program 3",
+      "status": "PASS",
+      "checks": "3/3",
+      "blockers": []
+    },
+    {
+      "id": "PG-004",
+      "name": "Clients",
+      "program": "Program 4",
+      "status": "PASS",
+      "checks": "3/3",
+      "blockers": []
+    },
+    {
+      "id": "PG-005",
+      "name": "Cases",
+      "program": "Program 5",
+      "status": "PASS",
+      "checks": "3/3",
+      "blockers": []
+    },
+    {
+      "id": "PG-006",
+      "name": "Documents",
+      "program": "Program 6",
+      "status": "PASS",
+      "checks": "3/3",
+      "blockers": []
+    },
+    {
+      "id": "PG-007",
+      "name": "Evidence",
+      "program": "Program 7",
+      "status": "PASS",
+      "checks": "4/4",
+      "blockers": []
+    },
+    {
+      "id": "PG-008",
+      "name": "Legislative Intelligence",
+      "program": "Program 8",
+      "status": "PASS",
+      "checks": "3/3",
+      "blockers": []
+    },
+    {
+      "id": "PG-009",
+      "name": "Knowledge Graph",
+      "program": "Program 9",
+      "status": "PASS",
+      "checks": "3/3",
+      "blockers": []
+    },
+    {
+      "id": "PG-010",
+      "name": "Attorney Intelligence",
+      "program": "Program 10",
+      "status": "PASS",
+      "checks": "3/3",
+      "blockers": []
+    },
+    {
+      "id": "PG-011",
+      "name": "Attorney Workbench",
+      "program": "Program 11",
+      "status": "PASS",
+      "checks": "4/4",
+      "blockers": []
+    },
+    {
+      "id": "PG-012",
+      "name": "Investigator Workbench",
+      "program": "Program 12",
+      "status": "PASS",
+      "checks": "5/5",
+      "blockers": []
+    },
+    {
+      "id": "PG-013",
+      "name": "Administrative Command Center",
+      "program": "Program 14",
+      "status": "PASS",
+      "checks": "4/4",
+      "blockers": []
+    },
+    {
+      "id": "PG-014",
+      "name": "Communications",
+      "program": "Program 15",
+      "status": "PARTIAL",
+      "checks": "2/3",
+      "blockers": [
+        "Secure messaging and SMS not implemented"
+      ]
+    },
+    {
+      "id": "PG-015",
+      "name": "Security",
+      "program": "Program 19",
+      "status": "PASS",
+      "checks": "4/4",
+      "blockers": []
+    },
+    {
+      "id": "PG-016",
+      "name": "Backup & Recovery",
+      "program": "Program 18",
+      "status": "PASS",
+      "checks": "3/3",
+      "blockers": []
+    },
+    {
+      "id": "PG-017",
+      "name": "Performance",
+      "program": "Program 20",
+      "status": "PARTIAL",
+      "checks": "2/3",
+      "blockers": [
+        "Performance certification benchmarks not run"
+      ]
+    },
+    {
+      "id": "PG-018",
+      "name": "Monitoring",
+      "program": "Program 18",
+      "status": "PASS",
+      "checks": "3/3",
+      "blockers": []
+    },
+    {
+      "id": "PG-019",
+      "name": "Documentation",
+      "program": "Program 21",
+      "status": "PASS",
+      "checks": "3/3",
+      "blockers": []
+    },
+    {
+      "id": "PG-020",
+      "name": "Version 1.0 Release Approval",
+      "program": "Program 23",
+      "status": "PARTIAL",
+      "checks": "14/15",
+      "blockers": [
+        "PG-001: 1A-012: Live Stripe Test Mode API certification in staging"
+      ]
+    }
+  ],
+  "criticalWorkflows": [
+    {
+      "id": "WF-001",
+      "name": "Attorney case intelligence",
+      "status": "PASS"
+    },
+    {
+      "id": "WF-002",
+      "name": "Attorney workbench",
+      "status": "PASS"
+    },
+    {
+      "id": "WF-003",
+      "name": "Investigator workbench",
+      "status": "PASS"
+    },
+    {
+      "id": "WF-004",
+      "name": "Billing lifecycle",
+      "status": "PARTIAL"
+    },
+    {
+      "id": "WF-005",
+      "name": "Backup & recovery",
+      "status": "PASS"
+    }
+  ]
+}

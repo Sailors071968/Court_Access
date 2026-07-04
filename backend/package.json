@@ -18,6 +18,7 @@
     "gates:run": "tsx scripts/run-production-gates.ts",
     "backup:drill": "tsx scripts/run-backup-drill.ts",
     "integrity:report": "tsx scripts/generate-repository-integrity.ts",
+    "v1:release": "tsx scripts/generate-version1-release.ts",
     "operations:report": "tsx scripts/run-operations-report.ts",
     "test": "node --import tsx --test tests/**/*.test.ts",
     "db:generate": "prisma generate",

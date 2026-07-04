@@ -1,60 +1,55 @@
 {
-  "program": "MASTER_PRODUCTION_EXECUTION_PROGRAM",
-  "version": "8.0",
-  "updatedAt": "2026-07-04T22:10:00Z",
+  "program": "VERSION_1.0_RELEASE",
+  "version": "9.0",
+  "updatedAt": "2026-07-04T22:20:00Z",
   "productionGatesStatus": "NOT_READY",
-  "gatesPass": 14,
-  "gatesPartial": 1,
+  "gatesPass": 15,
+  "gatesPartial": 5,
   "gatesFail": 0,
-  "completionPercent": 93.3,
+  "gatesTotal": 20,
+  "completionPercent": 75.0,
+  "legacyGatesPass": 14,
+  "legacyGatesTotal": 15,
   "items": [
     {
       "id": "PG-001-BLOCKER",
       "gate": "PG-001",
       "priority": "P0",
-      "title": "Live Stripe Test Mode API certification in staging",
+      "title": "Stripe Live Certification",
       "status": "pending",
-      "reason": "Requires STRIPE_SECRET_KEY=sk_test_* and STRIPE_PRICE_STARTER"
-    },
-    {
-      "id": "EPIC-H-001",
-      "epic": "Epic H",
-      "priority": "P1",
-      "title": "Repository Integrity Dashboard",
-      "status": "completed",
-      "completedAt": "2026-07-04T22:10:00Z"
-    },
-    {
-      "id": "PG-003-BLOCKER",
-      "gate": "PG-003",
-      "priority": "P1",
-      "title": "Implement dedicated Client entity and /api/clients CRUD",
-      "status": "completed",
-      "completedAt": "2026-07-04T21:20:00Z"
-    },
-    {
-      "id": "PG-009-BLOCKER",
-      "gate": "PG-009",
-      "priority": "P1",
-      "title": "Attorney Intelligence Engine (replace narrative stubs)",
-      "status": "completed",
-      "completedAt": "2026-07-04T21:45:00Z"
-    },
-    {
-      "id": "PG-015-BLOCKER",
-      "gate": "PG-015",
-      "priority": "P1",
-      "title": "Automated backup restore drill runner",
-      "status": "completed",
-      "completedAt": "2026-07-04T21:50:00Z"
+      "reason": "Requires STRIPE_SECRET_KEY=sk_test_*"
     },
     {
       "id": "EPIC-C-001",
-      "epic": "Epic C",
-      "priority": "P2",
+      "epic": "Program 12",
+      "priority": "P1",
       "title": "Investigator Workbench",
+      "status": "completed",
+      "completedAt": "2026-07-04T22:20:00Z"
+    },
+    {
+      "id": "PG-014-PARTIAL",
+      "gate": "PG-014",
+      "priority": "P2",
+      "title": "Communications Platform (secure messaging, SMS)",
       "status": "pending",
-      "reason": "No investigator dashboard, witness model, or field collection UI"
+      "reason": "Email services exist; secure messaging and SMS not implemented"
+    },
+    {
+      "id": "PG-017-PARTIAL",
+      "gate": "PG-017",
+      "priority": "P2",
+      "title": "Performance Certification",
+      "status": "pending",
+      "reason": "Performance benchmarks not run"
+    },
+    {
+      "id": "PROGRAM-1-V9",
+      "program": "Program 1",
+      "priority": "P1",
+      "title": "Version 1.0 Release Management artifacts",
+      "status": "completed",
+      "completedAt": "2026-07-04T22:20:00Z"
     }
   ]
 }

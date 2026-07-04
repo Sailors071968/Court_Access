@@ -1,12 +1,12 @@
 {
   "dashboard": {
-    "generatedAt": "2026-07-04T21:08:00.609Z",
+    "generatedAt": "2026-07-04T22:00:20.683Z",
     "overallStatus": "unhealthy",
     "productionGates": {
       "overallResult": "NOT_READY",
-      "passCount": 11,
+      "passCount": 14,
       "failCount": 0,
-      "partialCount": 4,
+      "partialCount": 1,
       "deploymentBlocked": true,
       "gates": [
         {
@@ -21,8 +21,8 @@
         },
         {
           "id": "PG-003",
-          "name": "Client Management",
-          "result": "PARTIAL"
+          "name": "Client Domain",
+          "result": "PASS"
         },
         {
           "id": "PG-004",
@@ -52,7 +52,7 @@
         {
           "id": "PG-009",
           "name": "Attorney Reports",
-          "result": "PARTIAL"
+          "result": "PASS"
         },
         {
           "id": "PG-010",
@@ -82,7 +82,7 @@
         {
           "id": "PG-015",
           "name": "Backup / Recovery",
-          "result": "PARTIAL"
+          "result": "PASS"
         }
       ]
     },
@@ -96,21 +96,21 @@
     },
     "database": {
       "status": "healthy",
-      "latencyMs": 68
+      "latencyMs": 70
     },
     "redis": {
       "status": "healthy",
       "message": "memory 2MB / ∞MB (0%)",
       "details": {
-        "usedMemoryBytes": 1954216,
+        "usedMemoryBytes": 2204232,
         "usedMemoryMB": 2,
         "maxMemoryBytes": 0,
         "maxMemoryMB": 0,
         "usagePct": 0,
         "status": "unknown",
-        "fragmentation": 4.44,
-        "connectedClients": 22,
-        "timestamp": "2026-07-04T21:08:00.367Z"
+        "fragmentation": 3.98,
+        "connectedClients": 24,
+        "timestamp": "2026-07-04T22:00:20.423Z"
       }
     },
     "queues": {
@@ -247,14 +247,14 @@
     },
     "resources": {
       "cpu": {
-        "userMicros": 1199887,
-        "systemMicros": 155475,
+        "userMicros": 1253046,
+        "systemMicros": 80583,
         "status": "healthy"
       },
       "memory": {
-        "heapUsedMB": 42,
+        "heapUsedMB": 44,
         "heapTotalMB": 66,
-        "rssMB": 171,
+        "rssMB": 179,
         "status": "healthy"
       },
       "disk": {
@@ -278,7 +278,7 @@
         "category": "stripe",
         "message": "Stripe billing integrity FAIL",
         "source": "billing",
-        "triggeredAt": "2026-07-04T21:08:00.609Z",
+        "triggeredAt": "2026-07-04T22:00:20.683Z",
         "recoveryBehavior": "Run npm run billing:certify and fix failing workflows"
       },
       {
@@ -287,12 +287,12 @@
         "category": "email",
         "message": "Billing email delivery not fully configured",
         "source": "email",
-        "triggeredAt": "2026-07-04T21:08:00.609Z",
+        "triggeredAt": "2026-07-04T22:00:20.683Z",
         "recoveryBehavior": "Configure AWS SES or accept simulated audit logging"
       }
     ],
     "observability": {
-      "productionGatesCoverage": 73,
+      "productionGatesCoverage": 93,
       "repositoryCoveragePercent": 100,
       "legislativeCoveragePercent": 3,
       "knowledgeGraphCoveragePercent": 50,
@@ -303,18 +303,34 @@
     }
   },
   "changes": {
-    "generatedAt": "2026-07-04T21:08:00.378Z",
+    "generatedAt": "2026-07-04T22:00:20.433Z",
     "releases": [
       {
         "id": "release-current",
         "type": "release",
         "version": "1.0.0",
         "description": "CourtAccess backend v1.0.0",
-        "timestamp": "2026-07-04T21:08:00.378Z",
+        "timestamp": "2026-07-04T22:00:20.433Z",
         "path": "backend/package.json"
       }
     ],
     "migrations": [
+      {
+        "id": "20260704230000_attorney_workbench",
+        "type": "migration",
+        "version": "20260704230000",
+        "description": "attorney workbench",
+        "timestamp": "2026-07-04T21:37:54.687Z",
+        "path": "backend/prisma/migrations/20260704230000_attorney_workbench/migration.sql"
+      },
+      {
+        "id": "20260704220000_client_domain",
+        "type": "migration",
+        "version": "20260704220000",
+        "description": "client domain",
+        "timestamp": "2026-07-04T21:15:32.096Z",
+        "path": "backend/prisma/migrations/20260704220000_client_domain/migration.sql"
+      },
       {
         "id": "20260704210000_legislative_extraction_audit",
         "type": "migration",
@@ -451,7 +467,7 @@
         "id": "deploy-procedure",
         "type": "deployment",
         "description": "Production deployment via git push + db-safe-migrate.sh deploy",
-        "timestamp": "2026-07-04T21:08:00.378Z",
+        "timestamp": "2026-07-04T22:00:20.433Z",
         "path": "backend/scripts/db-safe-migrate.sh"
       }
     ],
@@ -464,7 +480,7 @@
     ]
   },
   "backup": {
-    "generatedAt": "2026-07-04T21:08:00.364Z",
+    "generatedAt": "2026-07-04T22:00:20.423Z",
     "status": {
       "database": {
         "status": "healthy",
@@ -475,26 +491,24 @@
         "message": "Legislative repository snapshots on disk"
       },
       "knowledgeGraph": {
-        "status": "degraded",
-        "message": "KG snapshots not found"
+        "status": "healthy",
+        "message": "Knowledge graph repository files present"
       },
       "configuration": {
         "status": "healthy",
         "message": "Configuration template available for backup reference"
       },
-      "lastVerifiedAt": "2026-07-04T21:08:00.364Z",
-      "restoreDrillStatus": "NOT_RUN"
+      "lastVerifiedAt": "2026-07-04T21:59:26.838Z",
+      "restoreDrillStatus": "PASS"
     },
     "automated": {
       "databaseBackups": true,
       "repositorySnapshots": true,
-      "knowledgeGraphSnapshots": false,
+      "knowledgeGraphSnapshots": true,
       "configurationBackups": true,
       "restoreVerification": true,
-      "recoveryDrills": false
+      "recoveryDrills": true
     },
-    "blockers": [
-      "Automated restore drill not yet implemented (PG-015)"
-    ]
+    "blockers": []
   }
 }

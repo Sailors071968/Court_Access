@@ -103,6 +103,54 @@ export interface DiscoveryOptions {
   userAgent?: string;
 }
 
+export type AcquisitionStatus = 'success' | 'failed' | 'skipped';
+
+export interface AcquisitionRecord {
+  code: string;
+  section: string;
+  sourceUrl: string;
+  canonicalUrl: string;
+  retrievedAt: string;
+  html: string;
+  httpStatus: number;
+  status: AcquisitionStatus;
+  errorMessage?: string;
+}
+
+export interface AcquisitionCheckpoint {
+  version: string;
+  code: string;
+  manifestPath: string;
+  startedAt: string;
+  updatedAt: string;
+  nextIndex: number;
+  acquired: number;
+  failed: number;
+  skipped: number;
+  lastSection?: string;
+}
+
+export interface AcquisitionResult {
+  code: string;
+  status: 'completed' | 'partial' | 'failed';
+  acquired: number;
+  failed: number;
+  skipped: number;
+  totalSections: number;
+  checkpointPath: string;
+  rawHtmlDir: string;
+  indexPath: string;
+}
+
+export interface AcquisitionOptions {
+  code: string;
+  manifestPath: string;
+  rawHtmlDir?: string;
+  maxSections?: number;
+  resume?: boolean;
+  skipExisting?: boolean;
+}
+
 export interface CaliforniaCode {
   abbrev: string;
   name: string;

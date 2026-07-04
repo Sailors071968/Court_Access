@@ -1,18 +1,24 @@
 #!/usr/bin/env tsx
 // ============================================================================
-// CLI — California leginfo code discovery
-// Usage: npm run leginfo:discover -- --code PEN [--max-pages 100] [--resume path]
+// CLI — California leginfo legislative intelligence
+// Usage:
+//   npm run leginfo:discover -- discover --code PEN
+//   npm run leginfo:discover -- acquire --code PEN --max-sections 5
 // ============================================================================
 
 import { resolve } from 'node:path';
 import { Command } from 'commander';
 import { CALIFORNIA_CODES, getCriminalPriorityCodes } from './caCodes.ts';
 import { discoverCaliforniaCode } from './discovery.ts';
+import { acquireStatuteHtml } from './acquisition.ts';
+import { defaultManifestPaths } from './discoveryManifest.ts';
 
 const program = new Command();
 
+program.name('leginfo').description('California leginfo legislative intelligence CLI');
+
 program
-  .name('leginfo-discover')
+  .command('discover')
   .description('Discover California code sections from leginfo.legislature.ca.gov')
   .option('-c, --code <abbrev>', 'California code abbreviation (e.g. PEN, EVID)')
   .option('--criminal-only', 'Discover all criminal-priority codes (PEN, EVID, HSC, VEH, BPC)')
@@ -53,6 +59,42 @@ program
       console.log(`Checkpoint: ${result.checkpointPath}`);
       console.log(`Audit log: ${result.auditPath}`);
     }
+  });
+
+program
+  .command('acquire')
+  .description('Acquire raw HTML for discovered statute sections')
+  .requiredOption('-c, --code <abbrev>', 'California code abbreviation')
+  .option('--manifest <path>', 'Discovery manifest path')
+  .option('--raw-dir <path>', 'Raw HTML output directory', 'data/legislative/raw')
+  .option('--max-sections <n>', 'Maximum sections to acquire', (v) => parseInt(v, 10))
+  .option('--resume', 'Resume from acquisition checkpoint')
+  .option('--no-skip-existing', 'Re-fetch even if raw HTML already exists')
+  .action(async (opts) => {
+    const code = opts.code.toUpperCase();
+    const paths = defaultManifestPaths('data/legislative/discovery', code);
+    const manifestPath = opts.manifest ? resolve(opts.manifest) : resolve(paths.manifest);
+
+    console.log(`\n=== Acquiring ${code} statute HTML ===`);
+    console.log(`Manifest: ${manifestPath}`);
+
+    const result = await acquireStatuteHtml({
+      code,
+      manifestPath,
+      rawHtmlDir: resolve(opts.rawDir),
+      maxSections: opts.maxSections,
+      resume: opts.resume ?? false,
+      skipExisting: opts.skipExisting,
+    });
+
+    console.log(`Status: ${result.status}`);
+    console.log(`Acquired: ${result.acquired}`);
+    console.log(`Failed: ${result.failed}`);
+    console.log(`Skipped: ${result.skipped}`);
+    console.log(`Total in manifest: ${result.totalSections}`);
+    console.log(`Raw HTML dir: ${result.rawHtmlDir}`);
+    console.log(`Index: ${result.indexPath}`);
+    console.log(`Checkpoint: ${result.checkpointPath}`);
   });
 
 program.parseAsync(process.argv).catch((err) => {

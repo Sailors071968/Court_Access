@@ -52,14 +52,22 @@
       "priority": "P0",
       "tier": 0,
       "title": "Respectful leginfo HTTP acquisition with retry and resume",
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-07-04T19:45:00Z",
+      "verifiedAt": "2026-07-04T19:45:00Z",
       "dependencies": ["2A-001"],
       "acceptanceCriteria": [
         "Uses crawlerSafetyService rate limits (1 req/sec/domain)",
         "Section-level checkpoint in ingestionStateRepository",
         "Retry with exponential backoff on transient failures",
         "Stores raw HTML with retrieval timestamp"
-      ]
+      ],
+      "evidence": {
+        "module": "backend/src/legislative/acquisition.ts",
+        "cli": "npm run leginfo:acquire -- --code PEN --max-sections 3",
+        "tests": "backend/tests/legislative-acquisition.test.ts",
+        "sampleIndex": "backend/data/legislative/raw/PEN/acquisition-index.jsonl"
+      }
     },
     {
       "id": "2A-003",

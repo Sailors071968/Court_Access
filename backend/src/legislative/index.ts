@@ -5,3 +5,5 @@ export * from './htmlParsers.ts';
 export * from './leginfoHttp.ts';
 export * from './discoveryManifest.ts';
 export * from './discovery.ts';
+export * from './acquisition.ts';
+export * from './rawHtmlStore.ts';

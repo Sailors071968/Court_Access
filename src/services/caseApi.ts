@@ -731,6 +731,63 @@ export async function generateExpertWitnessPackage(caseId: string): Promise<ApiE
 }
 
 // ---------------------------------------------------------------------------
+// Charges API
+// ---------------------------------------------------------------------------
+
+export interface ApiCharge {
+  id: string;
+  caseId: string;
+  code: string;
+  section: string;
+  title: string | null;
+  victim: string;
+  dateOfOffense: string | null;
+  createdAt: string;
+}
+
+export async function fetchCharges(caseId: string): Promise<ApiCharge[]> {
+  const res = await fetch(`${API_BASE}/charges/${caseId}`, { headers: getAuthHeaders() });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to fetch charges' }));
+    throw new Error(err.error || 'Failed to fetch charges');
+  }
+  const data = await res.json();
+  return data.charges ?? [];
+}
+
+export async function createCharge(payload: {
+  caseId: string;
+  code: string;
+  section: string;
+  title?: string;
+  victim: string;
+  dateOfOffense?: string;
+}): Promise<ApiCharge> {
+  const res = await fetch(`${API_BASE}/charges`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to create charge' }));
+    throw new Error(err.error || 'Failed to create charge');
+  }
+  const data = await res.json();
+  return data.charge;
+}
+
+export async function deleteCharge(chargeId: string): Promise<void> {
+  const res = await fetch(`${API_BASE}/charges/${chargeId}`, {
+    method: 'DELETE',
+    headers: getAuthHeadersNoBody(),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to delete charge' }));
+    throw new Error(err.error || 'Failed to delete charge');
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Billing / Stripe API
 // ---------------------------------------------------------------------------
 

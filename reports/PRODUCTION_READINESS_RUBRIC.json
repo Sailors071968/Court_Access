@@ -1,0 +1,167 @@
+{
+  "title": "CourtAccess Production Readiness Score",
+  "version": "1.0.0",
+  "effectiveDate": "2026-07-04",
+  "description": "Reproducible scoring rubric. Every point must be verifiable with command output or E2E test.",
+  "maxScore": 100,
+  "calculationMethod": "Sum of (metricWeight × metricScore) where metricScore is 0.0–1.0",
+  "metrics": [
+    {
+      "id": "authentication",
+      "label": "Authentication & Authorization",
+      "weight": 15,
+      "maxPoints": 15,
+      "currentScore": 0.93,
+      "currentPoints": 14,
+      "verification": {
+        "command": "cd backend && npx tsx scripts/production-verification-sprint.ts",
+        "checks": [
+          "Unauthenticated /api/cases returns 401",
+          "Login returns JWT",
+          "/api/auth/me returns role",
+          "Admin /api/security/log returns audit events"
+        ],
+        "verifiedAt": "2026-07-04",
+        "evidence": "reports/verification-sprint/verification-report.json — P0-003 PASS, AUDIT PASS"
+      },
+      "gaps": ["Rate limiting can block rapid login during testing"]
+    },
+    {
+      "id": "clientManagement",
+      "label": "Client Management",
+      "weight": 5,
+      "maxPoints": 5,
+      "currentScore": 0.40,
+      "currentPoints": 2,
+      "verification": {
+        "checks": [
+          "User registration/login works",
+          "Tenant isolation on cases"
+        ],
+        "verifiedAt": "2026-07-04"
+      },
+      "gaps": ["No dedicated client entity UI", "No client-case relationship management screen"]
+    },
+    {
+      "id": "caseManagement",
+      "label": "Case Management",
+      "weight": 10,
+      "maxPoints": 10,
+      "currentScore": 0.90,
+      "currentPoints": 9,
+      "verification": {
+        "checks": [
+          "POST /api/cases creates case",
+          "GET /api/cases/:id retrieves persisted case",
+          "Charges CRUD operational"
+        ],
+        "verifiedAt": "2026-07-04",
+        "evidence": "P1-015 PASS, DB-PERSIST PASS"
+      },
+      "gaps": ["No unified attorney dashboard matching mockup"]
+    },
+    {
+      "id": "documentUpload",
+      "label": "Document Upload & Processing",
+      "weight": 10,
+      "maxPoints": 10,
+      "currentScore": 0.85,
+      "currentPoints": 8.5,
+      "verification": {
+        "checks": [
+          "Multipart upload to /api/evidence/upload",
+          "Evidence persisted with processingStatus",
+          "Background processing completes"
+        ],
+        "verifiedAt": "2026-07-04",
+        "evidence": "P1-001 PASS — processingStatus: analyzed"
+      },
+      "gaps": ["R2 storage not configured in dev", "No OCR for scanned PDFs in dev"]
+    },
+    {
+      "id": "evidencePipeline",
+      "label": "Evidence Pipeline & Workers",
+      "weight": 15,
+      "maxPoints": 15,
+      "currentScore": 0.87,
+      "currentPoints": 13,
+      "verification": {
+        "checks": [
+          "6 pipeline workers start at boot",
+          "4 narrative sub-workers in Redis",
+          "Narrative analyze enqueues job"
+        ],
+        "verifiedAt": "2026-07-04",
+        "evidence": "P1-018 PASS, P1-020 PASS — 31 bull:* Redis keys"
+      },
+      "gaps": ["/api/admin/queues returns stub data"]
+    },
+    {
+      "id": "attorneyReports",
+      "label": "Attorney Reports & Analysis",
+      "weight": 15,
+      "maxPoints": 15,
+      "currentScore": 0.87,
+      "currentPoints": 13,
+      "verification": {
+        "checks": [
+          "Case analysis API returns live data",
+          "Litigation strategy API operational",
+          "Compliance report + expert package generate"
+        ],
+        "verifiedAt": "2026-07-04",
+        "evidence": "P1-010, P1-013, P1-016 PASS"
+      },
+      "gaps": ["Attorney dashboard mockup not fully implemented"]
+    },
+    {
+      "id": "californiaLegislative",
+      "label": "California Legislative Intelligence",
+      "weight": 15,
+      "maxPoints": 15,
+      "currentScore": 0.05,
+      "currentPoints": 0.75,
+      "verification": {
+        "checks": [
+          "legal_documents contains CA statutes",
+          "Leginfo ingestion pipeline operational",
+          "Statute search returns live data"
+        ],
+        "verifiedAt": "2026-07-04",
+        "evidence": "reports/epic-2a/COVERAGE_REPORT.md — 0 statutes, <1% CALCRIM"
+      },
+      "gaps": ["No leginfo acquisition", "No HTML parser", "searchService.ts hardcoded"]
+    },
+    {
+      "id": "reliability",
+      "label": "Reliability & Constitutional Compliance",
+      "weight": 15,
+      "maxPoints": 15,
+      "currentScore": 0.93,
+      "currentPoints": 14,
+      "verification": {
+        "checks": [
+          "Backend tsc clean",
+          "No fabricated doctrine data",
+          "Schema migrations applied",
+          "Audit logging operational"
+        ],
+        "verifiedAt": "2026-07-04",
+        "evidence": "P0-001, P0-002 PASS"
+      },
+      "gaps": ["Production credentials not configured"]
+    }
+  ],
+  "summary": {
+    "totalScore": 74.25,
+    "roundedScore": 74,
+    "level": "APPROACHING_PRODUCTION",
+    "lastCalculated": "2026-07-04T19:15:00Z",
+    "previousScore": 76,
+    "previousScoreNote": "Previous score was subjective estimate. This rubric recalculates with measurable metrics. Legislative intelligence weight exposes true gap."
+  },
+  "recalculate": {
+    "command": "Manual: sum each metric's currentPoints. Automated script TBD.",
+    "formula": "score = sum(metric.weight * metric.currentScore)"
+  }
+}

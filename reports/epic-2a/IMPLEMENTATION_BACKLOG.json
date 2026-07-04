@@ -1,0 +1,176 @@
+{
+  "epic": "2A",
+  "title": "California Legislative Intelligence Engine",
+  "version": "1.0.0",
+  "createdAt": "2026-07-04T19:15:00Z",
+  "assessmentComplete": true,
+  "currentState": {
+    "leginfoIntegration": false,
+    "statutesInDatabase": 0,
+    "calcrimCoveragePercent": 0.5,
+    "dataQualityScore": 3.6,
+    "pipelineStagesComplete": 2
+  },
+  "reports": {
+    "architecture": "reports/epic-2a/ARCHITECTURE.md",
+    "dataQuality": "reports/epic-2a/DATA_QUALITY_REPORT.md",
+    "performance": "reports/epic-2a/PERFORMANCE_REPORT.md",
+    "coverage": "reports/epic-2a/COVERAGE_REPORT.md",
+    "optimization": "reports/epic-2a/OPTIMIZATION_RECOMMENDATIONS.md"
+  },
+  "items": [
+    {
+      "id": "2A-001",
+      "priority": "P0",
+      "tier": 0,
+      "title": "Leginfo code discovery — enumerate CA codes and section URLs from TOC",
+      "status": "pending",
+      "dependencies": [],
+      "acceptanceCriteria": [
+        "Discover all sections for Penal Code from leginfo TOC",
+        "Output discovery manifest with code, section, canonical URL",
+        "Audit log of discovery run with timestamp"
+      ]
+    },
+    {
+      "id": "2A-002",
+      "priority": "P0",
+      "tier": 0,
+      "title": "Respectful leginfo HTTP acquisition with retry and resume",
+      "status": "pending",
+      "dependencies": ["2A-001"],
+      "acceptanceCriteria": [
+        "Uses crawlerSafetyService rate limits (1 req/sec/domain)",
+        "Section-level checkpoint in ingestionStateRepository",
+        "Retry with exponential backoff on transient failures",
+        "Stores raw HTML with retrieval timestamp"
+      ]
+    },
+    {
+      "id": "2A-003",
+      "priority": "P0",
+      "tier": 0,
+      "title": "Leginfo HTML statute parser",
+      "status": "pending",
+      "dependencies": ["2A-002"],
+      "acceptanceCriteria": [
+        "Extract code, section, title, full text from leginfo HTML",
+        "Handle subdivisions (a), (b)(1) nesting",
+        "Reject ambiguous parses to rejection queue (not silent discard)",
+        "Unit tests against 20 known sections"
+      ]
+    },
+    {
+      "id": "2A-004",
+      "priority": "P0",
+      "tier": 0,
+      "title": "StatuteRecord schema extension",
+      "status": "pending",
+      "dependencies": [],
+      "acceptanceCriteria": [
+        "Prisma migration adds code, section, hierarchy, sourceUrl, retrievedAt, effectiveDate",
+        "NormalizedDocument types updated",
+        "Backward compatible with existing legal_documents"
+      ]
+    },
+    {
+      "id": "2A-005",
+      "priority": "P0",
+      "tier": 0,
+      "title": "Mount corpus governance API in server",
+      "status": "pending",
+      "dependencies": [],
+      "acceptanceCriteria": [
+        "registerGovernanceRoutes in server.ts",
+        "POST /api/corpus/ingest triggers pipeline",
+        "Admin auth required"
+      ]
+    },
+    {
+      "id": "2A-006",
+      "priority": "P1",
+      "tier": 1,
+      "title": "Per-record extraction audit log",
+      "status": "pending",
+      "dependencies": ["2A-003"],
+      "acceptanceCriteria": [
+        "Every extraction attempt logged with success/failure/rejection reason",
+        "Queryable via admin API"
+      ]
+    },
+    {
+      "id": "2A-007",
+      "priority": "P1",
+      "tier": 1,
+      "title": "Criminal code filter — PC, EC, H&S, VEH priority",
+      "status": "pending",
+      "dependencies": ["2A-001"],
+      "acceptanceCriteria": [
+        "Discovery limited to criminal-relevant codes",
+        "Coverage report per code"
+      ]
+    },
+    {
+      "id": "2A-008",
+      "priority": "P1",
+      "tier": 1,
+      "title": "Content-hash incremental sync",
+      "status": "pending",
+      "dependencies": ["2A-002", "2A-004"],
+      "acceptanceCriteria": [
+        "Re-run skips sections with unchanged content hash",
+        "Delta report shows added/changed/removed sections"
+      ]
+    },
+    {
+      "id": "2A-011",
+      "priority": "P1",
+      "tier": 2,
+      "title": "Offense discovery from statute text",
+      "status": "pending",
+      "dependencies": ["2A-003", "2A-004"],
+      "acceptanceCriteria": [
+        "Identify explicit criminal offenses in Penal Code sections",
+        "Link to statute record by code+section",
+        "UNKNOWN when ambiguous"
+      ]
+    },
+    {
+      "id": "2A-014",
+      "priority": "P2",
+      "tier": 2,
+      "title": "CALCRIM instruction linker",
+      "status": "pending",
+      "dependencies": ["2A-011"],
+      "acceptanceCriteria": [
+        "Map offenses to CALCRIM instruction numbers",
+        "Replace static calcrimMapping.ts for covered offenses"
+      ]
+    },
+    {
+      "id": "2A-021",
+      "priority": "P2",
+      "tier": 4,
+      "title": "Coverage analytics dashboard",
+      "status": "pending",
+      "dependencies": ["2A-007"],
+      "acceptanceCriteria": [
+        "Per-code completion percentage",
+        "Failed extraction list",
+        "Last sync timestamp"
+      ]
+    },
+    {
+      "id": "2A-022",
+      "priority": "P2",
+      "tier": 4,
+      "title": "Replace searchService.ts stubs with legal_documents query",
+      "status": "pending",
+      "dependencies": ["2A-003"],
+      "acceptanceCriteria": [
+        "Statute search returns live DB results",
+        "No hardcoded PC 459/1538.5/H&S 11350"
+      ]
+    }
+  ]
+}

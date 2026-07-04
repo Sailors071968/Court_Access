@@ -1,7 +1,7 @@
 {
   "title": "CourtAccess Production Implementation Backlog",
-  "version": "1.3.0",
-  "lastUpdated": "2026-07-04T19:10:00Z",
+  "version": "1.4.0",
+  "lastUpdated": "2026-07-04T19:15:00Z",
   "canonical": true,
   "verificationSprint": {
     "completedAt": "2026-07-04T19:09:00Z",
@@ -19,8 +19,8 @@
     },
     "californiaLegalIntelligence": {
       "label": "California Legal Intelligence",
-      "percent": 72,
-      "notes": "E2E verified: narrative API, timeline DB events, doctrine compliance"
+      "percent": 8,
+      "notes": "Epic 2A assessment: 0 statutes ingested, <1% CALCRIM, no leginfo pipeline"
     },
     "evidenceGovernedReasoning": {
       "label": "Evidence-Governed Reasoning",
@@ -39,10 +39,13 @@
     }
   },
   "productionReadiness": {
-    "score": 76,
+    "score": 74,
     "maxScore": 100,
     "level": "APPROACHING_PRODUCTION",
+    "rubricPath": "reports/PRODUCTION_READINESS_RUBRIC.json",
+    "calculationMethod": "Weighted sum of 8 measurable metrics — see rubric for verification commands",
     "blockers": [
+      "Epic 2A: No leginfo.legislature.ca.gov ingestion pipeline (0 statutes in DB)",
       "Production credentials required for deploy (Redis, R2, DB, JWT)",
       "/api/admin/queues returns stub data (monitoring gap, not workflow blocker)"
     ],
@@ -70,5 +73,14 @@
     { "id": "P2-001", "priority": "P2", "title": "Remove StaffDashboard hardcoded stats", "status": "completed", "epic": "operationalWebsite", "verifiedE2E": true, "verifiedAt": "2026-07-04" },
     { "id": "P2-002", "priority": "P2", "title": "Frontend AI engine stubs return empty", "status": "pending", "epic": "evidenceGovernedReasoning" },
     { "id": "P3-001", "priority": "P3", "title": "Consolidate competing queue systems", "status": "pending", "epic": "reliability" }
-  ]
+  ],
+  "epics": {
+    "2A": {
+      "title": "California Legislative Intelligence Engine",
+      "status": "assessment_complete",
+      "backlogPath": "reports/epic-2a/IMPLEMENTATION_BACKLOG.json",
+      "reportsPath": "reports/epic-2a/",
+      "nextItem": "2A-001"
+    }
+  }
 }

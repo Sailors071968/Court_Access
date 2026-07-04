@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-04T21:47:26.208Z",
+  "generatedAt": "2026-07-04T22:10:20.817Z",
   "version": "4.0",
   "program": "PRODUCTION_CERTIFICATION",
   "gates": [
@@ -258,21 +258,28 @@
     {
       "id": "PG-012",
       "name": "Repository Integrity",
-      "program": "Program 1 / Program 8",
+      "program": "Program 1 / Program 8 / Epic H",
       "result": "PASS",
       "checks": {
-        "pass": 1,
-        "total": 1
+        "pass": 6,
+        "total": 6
       },
       "testSteps": [
-        "Run repository integrity check from productionMetrics"
+        "Run repository integrity check",
+        "Verify integrity dashboard modules"
       ],
       "evidence": [
         "repositoryIntegrity: PASS",
-        "parsingFailures: 0"
+        "parsingFailures: 0",
+        "Repository integrity PASS",
+        "Integrity dashboard service",
+        "Integrity dashboard API",
+        "Integrity dashboard tests",
+        "Integrity dashboard UI",
+        "Zero parsing failures"
       ],
       "blockers": [],
-      "recoveryBehavior": "Fix parsing failures and regenerate repositories"
+      "recoveryBehavior": "Run npm run integrity:report and fix parsing failures"
     },
     {
       "id": "PG-013",

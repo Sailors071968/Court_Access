@@ -14,7 +14,7 @@ import {
   type ExtractionAuditStatus,
   type ExtractionStage,
 } from './extractionAuditLog.ts';
-import prisma from '../lib/prisma.ts';
+import { generateRepositoryIntegrityDashboard } from './repositoryIntegrityDashboard.ts';
 import { resolve } from 'node:path';
 import { readFile } from 'node:fs/promises';
 import { join } from 'node:path';
@@ -121,6 +121,10 @@ export async function registerLegislativeRoutes(app: FastifyInstance): Promise<v
     );
   });
 
+  app.get('/api/legislative/repository-integrity', async () => {
+    return generateRepositoryIntegrityDashboard();
+  });
+
   app.get('/api/legislative/statutes/:code/:section', async (request, reply) => {
     const { code, section } = request.params as { code: string; section: string };
     const repoDir = resolve(DEFAULT_REPO_DIR);
@@ -143,6 +147,6 @@ export async function registerLegislativeRoutes(app: FastifyInstance): Promise<v
   });
 
   console.log(
-    '[Legislative] Routes registered: /metrics, /coverage, /liability, /intelligence/:code/:section, /repositories, /audit, /classifications/:code/:section, /statutes/:code/:section',
+    '[Legislative] Routes registered: /metrics, /coverage, /liability, /intelligence/:code/:section, /repositories, /audit, /repository-integrity, /classifications/:code/:section, /statutes/:code/:section',
   );
 }

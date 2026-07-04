@@ -30,6 +30,7 @@ import { GovernmentOutreachDashboard } from './pages/dashboard/GovernmentOutreac
 import { MarketingDashboard } from './pages/dashboard/MarketingDashboard';
 import { PolicyPipelineDashboard } from './pages/dashboard/PolicyPipelineDashboard';
 import { PolicyIntelligenceDashboard } from './pages/dashboard/PolicyIntelligenceDashboard';
+import { RepositoryIntegrityDashboard } from './pages/dashboard/RepositoryIntegrityDashboard';
 import { CpraDashboard } from './pages/dashboard/CpraDashboard';
 import { SystemHealthDashboard } from './pages/dashboard/SystemHealthDashboard';
 import { DiscountCodesDashboard } from './pages/dashboard/DiscountCodesDashboard';
@@ -119,6 +120,14 @@ function App() {
             element={
               <ProtectedRoute requiredPermission="canViewAdmin">
                 <PolicyIntelligenceDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="dashboard/repository-integrity"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <RepositoryIntegrityDashboard />
               </ProtectedRoute>
             }
           />

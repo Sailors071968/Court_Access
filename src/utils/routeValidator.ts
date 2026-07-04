@@ -33,6 +33,7 @@ export const ROUTE_REGISTRY: RouteDefinition[] = [
   { path: '/dashboard/discount-codes', label: 'Discount Codes', requiresAuth: true, requiredPermission: 'canViewAdmin', component: 'DiscountCodesDashboard', status: 'active' },
   { path: '/dashboard/policy-compliance', label: 'Policy Compliance', requiresAuth: true, requiredPermission: 'canViewAdmin', component: 'PolicyComplianceDashboard', status: 'active' },
   { path: '/dashboard/policy-intelligence/coverage', label: 'Policy Intelligence', requiresAuth: true, requiredPermission: 'canViewAdmin', component: 'PolicyIntelligenceDashboard', status: 'active' },
+  { path: '/dashboard/repository-integrity', label: 'Repository Integrity', requiresAuth: true, requiredPermission: 'canViewAdmin', component: 'RepositoryIntegrityDashboard', status: 'active' },
   { path: '/dashboard/policy-operations', label: 'Policy Operations', requiresAuth: true, requiredPermission: 'canViewAdmin', component: 'PolicyOperationsDashboard', status: 'active' },
   { path: '/dashboard/cpra', label: 'CPRA Tracker', requiresAuth: true, requiredPermission: 'canViewAdmin', component: 'CpraDashboard', status: 'active' },
   { path: '/dashboard/system-health', label: 'System Health', requiresAuth: true, requiredPermission: 'canViewAdmin', component: 'SystemHealthDashboard', status: 'active' },

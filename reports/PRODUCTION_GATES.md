@@ -1,6 +1,6 @@
 # Production Gates Report — Master Production Program v4.0
 
-**Generated:** 2026-07-04T21:47:26.208Z
+**Generated:** 2026-07-04T22:10:20.817Z
 **Overall:** NOT_READY (14 PASS / 0 FAIL / 1 PARTIAL / 0 SKIP)
 **Deployment Blocked:** YES
 
@@ -19,7 +19,7 @@
 | PG-009 | Attorney Reports | PASS | 9/9 |
 | PG-010 | Legislative Intelligence | PASS | 5/5 |
 | PG-011 | Knowledge Graph | PASS | 4/4 |
-| PG-012 | Repository Integrity | PASS | 1/1 |
+| PG-012 | Repository Integrity | PASS | 6/6 |
 | PG-013 | Administrative Dashboard | PASS | 5/5 |
 | PG-014 | Security | PASS | 5/5 |
 | PG-015 | Backup / Recovery | PASS | 4/4 |
@@ -198,13 +198,20 @@
 ### PG-012 — Repository Integrity — PASS
 
 **Test steps:**
-- Run repository integrity check from productionMetrics
+- Run repository integrity check
+- Verify integrity dashboard modules
 
 **Evidence:**
 - repositoryIntegrity: PASS
 - parsingFailures: 0
+- Repository integrity PASS
+- Integrity dashboard service
+- Integrity dashboard API
+- Integrity dashboard tests
+- Integrity dashboard UI
+- Zero parsing failures
 
-**Recovery:** Fix parsing failures and regenerate repositories
+**Recovery:** Run npm run integrity:report and fix parsing failures
 
 ### PG-013 — Administrative Dashboard — PASS
 

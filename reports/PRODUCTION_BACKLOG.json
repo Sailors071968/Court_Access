@@ -1,7 +1,7 @@
 {
-  "program": "MASTER_PRODUCTION_PROGRAM",
-  "version": "7.0",
-  "updatedAt": "2026-07-04T21:50:00Z",
+  "program": "MASTER_PRODUCTION_EXECUTION_PROGRAM",
+  "version": "8.0",
+  "updatedAt": "2026-07-04T22:10:00Z",
   "productionGatesStatus": "NOT_READY",
   "gatesPass": 14,
   "gatesPartial": 1,
@@ -15,6 +15,14 @@
       "title": "Live Stripe Test Mode API certification in staging",
       "status": "pending",
       "reason": "Requires STRIPE_SECRET_KEY=sk_test_* and STRIPE_PRICE_STARTER"
+    },
+    {
+      "id": "EPIC-H-001",
+      "epic": "Epic H",
+      "priority": "P1",
+      "title": "Repository Integrity Dashboard",
+      "status": "completed",
+      "completedAt": "2026-07-04T22:10:00Z"
     },
     {
       "id": "PG-003-BLOCKER",
@@ -39,6 +47,14 @@
       "title": "Automated backup restore drill runner",
       "status": "completed",
       "completedAt": "2026-07-04T21:50:00Z"
+    },
+    {
+      "id": "EPIC-C-001",
+      "epic": "Epic C",
+      "priority": "P2",
+      "title": "Investigator Workbench",
+      "status": "pending",
+      "reason": "No investigator dashboard, witness model, or field collection UI"
     }
   ]
 }

@@ -9,6 +9,7 @@ import { queryAuditCenter } from './auditCenter.js';
 import { buildChangeManagementReport } from './changeManagement.js';
 import { buildBackupOperationsReport, runBackupVerificationDrill } from './backupOperations.js';
 import { generateEngineeringDashboard } from '../legislative/engineeringDashboard.js';
+import { generateRepositoryIntegrityDashboard } from '../legislative/repositoryIntegrityDashboard.ts';
 import type { AuditCenterQuery } from './types.js';
 
 function requireAdminStaff(request: AuthenticatedRequest, reply: FastifyReply): boolean {
@@ -81,6 +82,12 @@ export async function registerProductionOperationsRoutes(app: FastifyInstance): 
   app.get('/api/admin/changes', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     if (!requireAdminStaff(request, reply)) return;
     return reply.send(await buildChangeManagementReport());
+  });
+
+  // Repository integrity dashboard (Epic H)
+  app.get('/api/admin/repository-integrity', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!requireAdminStaff(request, reply)) return;
+    return reply.send(await generateRepositoryIntegrityDashboard());
   });
 
   // Backup operations

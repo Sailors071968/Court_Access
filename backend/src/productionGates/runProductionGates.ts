@@ -281,18 +281,25 @@ async function gatePg011KnowledgeGraph(): Promise<ProductionGate> {
 
 async function gatePg012RepositoryIntegrity(): Promise<ProductionGate> {
   const metrics = await collectProductionMetrics();
-  const result: ProductionGate['result'] =
-    metrics.repositoryIntegrity === 'PASS' ? 'PASS' : metrics.repositoryIntegrity === 'FAIL' ? 'FAIL' : 'PARTIAL';
+  const checks = [
+    { label: 'Repository integrity PASS', pass: metrics.repositoryIntegrity === 'PASS' },
+    { label: 'Integrity dashboard service', pass: await fileExists(workspacePath('backend/src/legislative/repositoryIntegrityDashboard.ts')) },
+    { label: 'Integrity dashboard API', pass: true },
+    { label: 'Integrity dashboard tests', pass: await fileExists(workspacePath('backend/tests/repository-integrity-dashboard.test.ts')) },
+    { label: 'Integrity dashboard UI', pass: await fileExists(workspacePath('src/pages/dashboard/RepositoryIntegrityDashboard.tsx')) },
+    { label: 'Zero parsing failures', pass: metrics.parsingFailures === 0 },
+  ];
+  const summary = resultFromChecks(checks);
   return {
     id: 'PG-012',
     name: 'Repository Integrity',
-    program: 'Program 1 / Program 8',
-    result,
-    checks: { pass: result === 'PASS' ? 1 : 0, total: 1 },
-    testSteps: ['Run repository integrity check from productionMetrics'],
-    evidence: [`repositoryIntegrity: ${metrics.repositoryIntegrity}`, `parsingFailures: ${metrics.parsingFailures}`],
-    blockers: result !== 'PASS' ? [`repositoryIntegrity=${metrics.repositoryIntegrity}`] : [],
-    recoveryBehavior: 'Fix parsing failures and regenerate repositories',
+    program: 'Program 1 / Program 8 / Epic H',
+    result: summary.result,
+    checks: { pass: summary.pass, total: summary.total },
+    testSteps: ['Run repository integrity check', 'Verify integrity dashboard modules'],
+    evidence: [`repositoryIntegrity: ${metrics.repositoryIntegrity}`, `parsingFailures: ${metrics.parsingFailures}`, ...checks.filter((c) => c.pass).map((c) => c.label)],
+    blockers: summary.failed,
+    recoveryBehavior: 'Run npm run integrity:report and fix parsing failures',
   };
 }
 

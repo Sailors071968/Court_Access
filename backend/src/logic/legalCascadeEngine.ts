@@ -43,7 +43,7 @@ export function applyInteractionStrength(argumentsList: any[], interactions: any
     const target = state.get(interaction.target);
     if (!target) continue;
 
-    const force = INTERACTION_FORCE[interaction.impact] || 0;
+    const force = INTERACTION_FORCE[interaction.impact as keyof typeof INTERACTION_FORCE] || 0;
 
     target.strength += force;
     target.attacks.push(interaction);
@@ -250,7 +250,12 @@ export function runLegalCascade({
   argumentsList = [],
   interactions = [],
   elements = [],
-  contradictions = []
+  contradictions = [],
+}: {
+  argumentsList?: unknown[];
+  interactions?: unknown[];
+  elements?: unknown[];
+  contradictions?: unknown[];
 }) {
 
   try {
@@ -288,8 +293,8 @@ export function runLegalCascade({
 
       rankedFailures = rankStrongestFailure(
         Array.isArray(cascadedElements) ? cascadedElements : [],
-        safeContradictions,
-        argValues
+        safeContradictions as Parameters<typeof rankStrongestFailure>[1],
+        argValues as Parameters<typeof rankStrongestFailure>[2],
       );
 
       topFailure = rankedFailures && rankedFailures.length > 0
@@ -337,7 +342,7 @@ export function runLegalCascade({
       crossExamination = generateCrossExamination(
         topFailure?.reason || null,
         Array.isArray(rankedFailures) ? rankedFailures : [],
-        Array.isArray(safeContradictions) ? safeContradictions : []
+        Array.isArray(safeContradictions) ? (safeContradictions as Parameters<typeof generateCrossExamination>[2]) : [],
       );
     } catch (err) {
       console.error("⚠️ Cross-examination engine failed:", err);
@@ -349,8 +354,8 @@ export function runLegalCascade({
 
     try {
       impeachment = generateImpeachment(
-        Array.isArray(safeContradictions) ? safeContradictions : [],
-        Array.isArray(rankedFailures) ? rankedFailures : []
+        Array.isArray(safeContradictions) ? (safeContradictions as Parameters<typeof generateImpeachment>[0]) : [],
+        Array.isArray(rankedFailures) ? rankedFailures : [],
       );
     } catch (err) {
       console.error("⚠️ Impeachment engine failed:", err);

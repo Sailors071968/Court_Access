@@ -8,7 +8,7 @@ import { analyzeBodycamFootage, getCaseVisionEvents, getCriticalMoments } from '
 import { computeTrajectoryAnalysis, storeTrajectoryAnalysis, getCaseTrajectoryAnalysis, getBallisticProfiles } from './trajectoryAnalysisService.js';
 import { simulateVisibility, storeVisibilitySimulation, getCaseVisibilitySimulations } from './visibilitySimulationService.js';
 import { analyzeLineOfSight, storeLineOfSightAnalysis, getCaseLineOfSightAnalyses } from './lineOfSightEngine.js';
-import { synchronizeCameras, storeSyncResult, getCaseSyncResults } from './multiCameraSyncService.js';
+import { synchronizeCameras, storeSyncResult, getCaseSyncResults, type CameraSource } from './multiCameraSyncService.js';
 import { buildSceneGeometry, storeSceneGeometry, getCaseSceneGeometry, exportForTrialExhibit } from './sceneGeometryService.js';
 import { buildEvidenceGraph, storeEvidenceGraph, getCaseEvidenceGraphs } from './evidenceSynchronizationEngine.js';
 import { generateExpertWitnessPackage, storeExpertWitnessPackage, getCaseExpertPackages } from './expertWitnessPackageExporter.js';
@@ -36,7 +36,12 @@ export async function registerForensicRoutes(app: FastifyInstance): Promise<void
     ) => {
       try {
         const { caseId, sourceId, durationSeconds, fps, description } = request.body;
-        const result = await analyzeBodycamFootage(caseId, sourceId, durationSeconds, fps, description);
+        const result = await analyzeBodycamFootage(
+          caseId,
+          sourceId,
+          { durationSeconds, description },
+          fps ? { frameRate: fps } : {},
+        );
         return reply.send({ success: true, data: result });
       } catch (error) {
         return reply.status(500).send({ success: false, error: error instanceof Error ? error.message : String(error) });
@@ -66,8 +71,7 @@ export async function registerForensicRoutes(app: FastifyInstance): Promise<void
       reply: FastifyReply,
     ) => {
       try {
-        const threshold = request.query.threshold ? parseFloat(request.query.threshold) : undefined;
-        const moments = await getCriticalMoments(request.params.caseId, threshold);
+        const moments = await getCriticalMoments(request.params.caseId);
         return reply.send({ success: true, data: moments });
       } catch (error) {
         return reply.status(500).send({ success: false, error: error instanceof Error ? error.message : String(error) });
@@ -97,15 +101,23 @@ export async function registerForensicRoutes(app: FastifyInstance): Promise<void
       try {
         const { caseId, sceneId, officerPositions, sceneObstacles, targetPositions, bystanderPositions } = request.body;
         const result = computeTrajectoryAnalysis(
-          officerPositions.map(o => ({
-            ...o,
-            weaponType: (o.weaponType ?? 'glock_17_9mm') as 'glock_17_9mm' | 'glock_22_40sw' | 'sig_p320' | 'ar15_223' | 'remington_870_12ga' | 'taser_x26',
+          caseId,
+          officerPositions.map((o, i) => ({
+            shotId: o.officerId ?? `shot-${i}`,
+            shooterPosition: o.position,
+            aimDirection: o.aimDirection,
+            weaponProfile: o.weaponType,
           })),
-          sceneObstacles ?? [],
-          targetPositions,
-          bystanderPositions,
+          (sceneObstacles ?? []).map((o) => ({
+            obstructionType: o.obstacleId,
+            position: o.position,
+            dimensions: o.dimensions,
+            materialType: 'other' as const,
+            penetrableByProjectile: false,
+          })),
+          sceneId,
         );
-        const analysisId = await storeTrajectoryAnalysis(caseId, result, sceneId);
+        const analysisId = await storeTrajectoryAnalysis(result);
         return reply.send({ success: true, data: { analysisId, ...result } });
       } catch (error) {
         return reply.status(500).send({ success: false, error: error instanceof Error ? error.message : String(error) });
@@ -165,13 +177,47 @@ export async function registerForensicRoutes(app: FastifyInstance): Promise<void
     ) => {
       try {
         const { caseId, sceneId, conditions, observerPosition, subjectPositions, obstacles } = request.body;
+        const weatherMap: Record<string, 'clear' | 'partly_cloudy' | 'overcast' | 'fog' | 'rain'> = {
+          clear: 'clear',
+          cloudy: 'partly_cloudy',
+          overcast: 'overcast',
+          fog: 'fog',
+          rain: 'rain',
+          night: 'clear',
+        };
         const result = simulateVisibility(
-          conditions as Parameters<typeof simulateVisibility>[0],
-          observerPosition,
-          subjectPositions,
-          obstacles ?? [],
+          caseId,
+          {
+            dateTime: conditions.dateTime,
+            latitude: conditions.latitude,
+            longitude: conditions.longitude,
+            weather: weatherMap[conditions.weatherCondition] ?? 'clear',
+            cloudCoverPercent: 0,
+            additionalLightSources: conditions.additionalLightSources?.map((ls) => ({
+              sourceType: 'streetlight' as const,
+              position: ls.position,
+              intensityLumens: ls.intensityLumens,
+              colorTemperatureK: ls.colorTemperature,
+              beamAngleDeg: ls.beamAngleDeg ?? 45,
+              directionVector: ls.direction,
+              isActive: true,
+            })),
+            observerPositions: [{ ...observerPosition, label: 'observer' }],
+            subjectPositions: subjectPositions.map((s) => ({
+              ...s.position,
+              label: s.label,
+            })),
+            obstructions: obstacles?.map((o) => ({
+              x: o.position.x,
+              y: o.position.y,
+              width: o.dimensions.width,
+              height: o.dimensions.height,
+              label: o.obstacleId,
+            })),
+          },
+          sceneId,
         );
-        const simulationId = await storeVisibilitySimulation(caseId, result, sceneId);
+        const simulationId = await storeVisibilitySimulation(result);
         return reply.send({ success: true, data: { simulationId, ...result } });
       } catch (error) {
         return reply.status(500).send({ success: false, error: error instanceof Error ? error.message : String(error) });
@@ -213,8 +259,44 @@ export async function registerForensicRoutes(app: FastifyInstance): Promise<void
     ) => {
       try {
         const { caseId, sceneId, observerPosition, viewDirection, obstacles, targets, fieldOfViewConfig } = request.body;
-        const result = analyzeLineOfSight(observerPosition, viewDirection, obstacles, targets, fieldOfViewConfig);
-        const analysisId = await storeLineOfSightAnalysis(caseId, result, sceneId);
+        const viewDir = {
+          azimuthDeg: (Math.atan2(viewDirection.dx, viewDirection.dy) * 180) / Math.PI,
+          elevationDeg: (Math.atan2(
+            viewDirection.dz,
+            Math.sqrt(viewDirection.dx ** 2 + viewDirection.dy ** 2),
+          ) * 180) / Math.PI,
+          headTurnDeg: 0,
+        };
+        const result = analyzeLineOfSight(
+          caseId,
+          observerPosition,
+          viewDir,
+          obstacles.map((o) => ({
+            obstacleId: o.obstacleId,
+            obstacleType: 'other' as const,
+            position: o.position,
+            dimensions: o.dimensions,
+            isOpaque: o.transparency < 0.5,
+            transparency: o.transparency,
+            label: o.obstacleId,
+          })),
+          targets.map((t) => ({
+            ...t.position,
+            label: t.label,
+            heightFeet: t.heightMeters * 3.28084,
+          })),
+          {
+            fieldOfView: fieldOfViewConfig
+              ? {
+                  horizontalDeg: fieldOfViewConfig.horizontalDeg,
+                  verticalDeg: fieldOfViewConfig.verticalDeg,
+                  focusConeDeg: fieldOfViewConfig.focusConeDeg,
+                }
+              : undefined,
+            sceneId,
+          },
+        );
+        const analysisId = await storeLineOfSightAnalysis(result);
         return reply.send({ success: true, data: { analysisId, ...result } });
       } catch (error) {
         return reply.status(500).send({ success: false, error: error instanceof Error ? error.message : String(error) });
@@ -263,13 +345,38 @@ export async function registerForensicRoutes(app: FastifyInstance): Promise<void
     ) => {
       try {
         const { caseId, sources } = request.body;
+        const sourceTypeMap: Record<string, CameraSource['sourceType']> = {
+          bodycam: 'bodycam',
+          dashcam: 'dashcam',
+          surveillance: 'security',
+          bystander: 'phone',
+        };
         const result = synchronizeCameras(
-          sources.map(s => ({
-            ...s,
-            sourceType: s.sourceType as 'bodycam' | 'dashcam' | 'surveillance' | 'bystander',
-          })),
+          caseId,
+          sources.map((s) => {
+            const start = new Date(s.startTimestamp).getTime();
+            const end = new Date(s.endTimestamp).getTime();
+            return {
+              sourceId: s.sourceId,
+              sourceType: sourceTypeMap[s.sourceType] ?? 'bodycam',
+              startTimestamp: s.startTimestamp,
+              endTimestamp: s.endTimestamp,
+              durationSeconds: Number.isFinite(end - start) ? Math.max(0, (end - start) / 1000) : 0,
+              hasAudio: s.hasAudio,
+              hasGps: !!s.gpsCoordinates,
+              frameRate: s.fps,
+            };
+          }),
+          sources.flatMap((s) =>
+            s.events.map((e) => ({
+              sourceId: s.sourceId,
+              timestamp: e.timestamp,
+              eventType: e.eventType,
+              description: e.description,
+            })),
+          ),
         );
-        const syncId = await storeSyncResult(caseId, result);
+        const syncId = await storeSyncResult(result);
         return reply.send({ success: true, data: { syncId, ...result } });
       } catch (error) {
         return reply.status(500).send({ success: false, error: error instanceof Error ? error.message : String(error) });

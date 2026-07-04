@@ -7,7 +7,8 @@ import {
   propagateToElements,
   evaluateBurden,
   buildFailureExplanation,
-  applyElementDependencies
+  applyElementDependencies,
+  runLegalCascade,
 } from "../logic/legalCascadeEngine";
 
 import {
@@ -90,7 +91,6 @@ export async function registerTimelineRoutes(app: FastifyInstance): Promise<void
         const baseAnalysis = runLegalAnalysis({
           events: eventList,
           contradictions,
-          crimeType: 'burglary'
         });
 
         // --------------------------------------------------

@@ -14,6 +14,7 @@ import { contradictionAnalysisWorker } from './contradictionAnalysisWorker.js';
 import { videoProcessingWorker } from './videoProcessingWorker.js';
 import { doctrineAnalysisWorker } from './doctrineAnalysisWorker.js';
 import { startBackpressureMonitor, stopBackpressureMonitor } from './backpressureGuard.js';
+import { startNarrativeSubWorkers, stopNarrativeSubWorkers } from './narrativeSubWorkers.js';
 
 // ---------------------------------------------------------------------------
 // Worker Registry
@@ -52,6 +53,8 @@ export function startPipelineWorkers(): void {
   // PR 2 — Start backpressure monitor (checks memory + queue depths periodically)
   startBackpressureMonitor();
 
+  startNarrativeSubWorkers();
+
   console.log('[PipelineWorkers] All pipeline workers started with backpressure monitoring');
 }
 
@@ -67,6 +70,7 @@ export async function stopPipelineWorkers(): Promise<void> {
   console.log('[PipelineWorkers] Stopping all pipeline workers...');
 
   stopBackpressureMonitor();
+  await stopNarrativeSubWorkers();
   await Promise.all(pipelineWorkers.map((w) => w.stop()));
 
   console.log('[PipelineWorkers] All pipeline workers stopped');

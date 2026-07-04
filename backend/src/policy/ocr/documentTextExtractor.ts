@@ -33,7 +33,8 @@ export async function extractTextFromPDF(
 
   try {
     const pdfParseModule = await import('pdf-parse');
-    const pdfParse = pdfParseModule.default as (buf: Buffer) => Promise<{ text: string; numpages: number }>;
+    const pdfParse = (pdfParseModule as { default?: (buf: Buffer) => Promise<{ text: string; numpages: number }> }).default
+      ?? (pdfParseModule as unknown as (buf: Buffer) => Promise<{ text: string; numpages: number }>);
     const pdfData = await pdfParse(documentBytes);
 
     const text = pdfData.text?.trim() || '';

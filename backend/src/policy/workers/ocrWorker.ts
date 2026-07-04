@@ -109,8 +109,10 @@ async function extractTextWithTesseract(
     if (mimeType.includes('pdf')) {
       // Attempt to extract text from PDF using pdf-parse
       try {
-        const pdfParse = await import('pdf-parse');
-        const pdfData = await pdfParse.default(documentBytes);
+        const pdfParseMod = await import('pdf-parse');
+        const pdfParseFn = (pdfParseMod as { default?: (buf: Buffer) => Promise<{ text: string }> }).default
+          ?? (pdfParseMod as unknown as (buf: Buffer) => Promise<{ text: string }>);
+        const pdfData = await pdfParseFn(documentBytes);
         if (pdfData.text && pdfData.text.trim().length > 50) {
           await worker.terminate();
           return pdfData.text;

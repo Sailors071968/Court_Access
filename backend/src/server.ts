@@ -144,7 +144,7 @@ async function startServer() {
 
   // Contradiction Detection Engine routes
   console.log('[Server] Registering contradiction detection engine routes...');
-  registerContradictionRoutes(app);
+  registerContradictionRoutes(app as Parameters<typeof registerContradictionRoutes>[0]);
 
   // CPRA Policy Matrix routes
   console.log('[Server] Registering CPRA policy matrix routes...');
@@ -187,7 +187,7 @@ async function startServer() {
   await registerCalcrimRoutes(app);
 
   console.log('[Server] Registering doctrine intelligence routes...');
-  registerDoctrineRoutes(app);
+  registerDoctrineRoutes(app as Parameters<typeof registerDoctrineRoutes>[0]);
 
   console.log('[Server] Registering exhibit routes...');
   await registerExhibitRoutes(app);

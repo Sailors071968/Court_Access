@@ -10,6 +10,7 @@
 // ============================================================================
 
 import prisma from '../lib/prisma.js';
+import type { Prisma } from '@prisma/client';
 import { extractEventsFromText, storeEvents } from '../evidence/eventExtractionService.js';
 import { buildOfficerTimeline } from '../evidence/officerActionTimelineService.js';
 import { buildUnifiedTimeline, findTimelineGaps } from '../contradiction/timelineEngine.js';
@@ -428,7 +429,10 @@ export async function reconstructTimeline(
       where: { caseId, tenantId },
     });
     const created = await tx.timelineEvent.createMany({
-      data: createDataList,
+      data: createDataList.map((item) => ({
+        ...item,
+        metadata: item.metadata as unknown as Prisma.InputJsonValue,
+      })),
     });
     return created.count;
   });

@@ -38,3 +38,26 @@ export async function enqueueEvidenceIngestion(job: EvidenceIngestionJob): Promi
 
   console.log(`[EvidencePipeline] Enqueued ingestion for evidence ${job.evidenceId} (${job.evidenceType})`);
 }
+
+export interface VideoSegmentationJob {
+  evidenceId: string;
+  caseId: string;
+  tenantId: string;
+  s3Key: string;
+  fileName: string;
+}
+
+/** Enqueue video evidence for segmentation via canonical ingest queue. */
+export async function enqueueVideoSegmentation(job: VideoSegmentationJob): Promise<void> {
+  await enqueueEvidenceIngestion({
+    evidenceId: job.evidenceId,
+    caseId: job.caseId,
+    tenantId: job.tenantId,
+    fileName: job.fileName,
+    evidenceType: 'bodycam',
+    s3Key: job.s3Key,
+    size: 0,
+    isVideo: true,
+    userId: 'system',
+  });
+}

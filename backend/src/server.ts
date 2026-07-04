@@ -44,6 +44,7 @@ import { registerCalcrimRoutes } from "./routes/calcrimRoutes.js";
 import { registerGovernanceRoutes } from './governance/governanceRoutes.ts';
 import { registerLegislativeRoutes } from './legislative/legislativeRoutes.ts';
 import { registerProductionGatesRoutes } from './productionGates/productionGatesRoutes.js';
+import { registerProductionOperationsRoutes } from './productionOperations/productionOperationsRoutes.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -196,6 +197,9 @@ async function startServer() {
 
   console.log('[Server] Registering production gates routes...');
   await registerProductionGatesRoutes(app);
+
+  console.log('[Server] Registering production operations routes...');
+  await registerProductionOperationsRoutes(app);
 
   // Stripe Checkout & Webhook routes
   console.log('[Server] Registering Stripe webhook routes...');

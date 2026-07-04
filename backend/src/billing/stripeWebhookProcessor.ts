@@ -96,7 +96,12 @@ export async function isWebhookEventProcessed(eventId: string): Promise<boolean>
 }
 
 export async function markWebhookEventProcessed(eventId: string, eventType: string): Promise<void> {
-  await prisma.stripeWebhookEvent.create({ data: { eventId, eventType } });
+  try {
+    await prisma.stripeWebhookEvent.create({ data: { eventId, eventType } });
+  } catch (err: unknown) {
+    const isDuplicate = typeof err === 'object' && err !== null && 'code' in err && (err as { code: string }).code === 'P2002';
+    if (!isDuplicate) throw err;
+  }
 }
 
 export async function handleSubscriptionCreated(sub: StripeSubscriptionObject): Promise<void> {

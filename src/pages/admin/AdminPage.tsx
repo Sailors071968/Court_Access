@@ -5,7 +5,8 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Card, StatCard } from '../../components/common/Card';
-import { Users, Briefcase, FileText, Shield, Activity, Trash2 } from 'lucide-react';
+import { Users, Briefcase, FileText, Shield, Activity, Trash2, Settings } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 interface AdminStats {
   totalUsers: number;
@@ -93,9 +94,18 @@ export function AdminPage() {
 
   return (
     <div className="max-w-7xl mx-auto space-y-6">
-      <div>
-        <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
-        <p className="text-sm text-gray-500 mt-1">System overview and management</p>
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
+          <p className="text-sm text-gray-500 mt-1">System overview and management</p>
+        </div>
+        <Link
+          to="/admin/operations"
+          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700"
+        >
+          <Settings size={16} />
+          Production Operations
+        </Link>
       </div>
 
       {/* Confirmation Modal */}

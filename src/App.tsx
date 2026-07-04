@@ -54,6 +54,7 @@ import { SearchPage } from './pages/SearchPage';
 import { NotificationsPage } from './pages/NotificationsPage';
 import { SettingsPage } from './pages/SettingsPage';
 import { AdminPage } from './pages/admin/AdminPage';
+import { OperationsCommandCenter } from './pages/admin/OperationsCommandCenter';
 
 // Case Pages
 import { CaseLayout } from './pages/case/CaseLayout';
@@ -298,6 +299,14 @@ function App() {
             element={
               <ProtectedRoute requiredPermission="canViewAdmin">
                 <AdminPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/operations"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <OperationsCommandCenter />
               </ProtectedRoute>
             }
           />

@@ -10,6 +10,7 @@ import type { FastifyInstance, FastifyReply } from 'fastify';
 import { PrismaClient } from '@prisma/client';
 import { S3Client, DeleteObjectCommand, ListObjectsV2Command, DeleteObjectsCommand } from '@aws-sdk/client-s3';
 import type { AuthenticatedRequest } from '../security/authMiddleware.js';
+import { collectBillingReadinessMetrics } from '../billing/billingMetricsService.js';
 
 const prisma = new PrismaClient();
 
@@ -82,6 +83,22 @@ async function deleteS3Object(key: string): Promise<void> {
 // ---------------------------------------------------------------------------
 
 export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
+
+  // =========================================================================
+  // GET /api/admin/billing/metrics — Stripe billing readiness metrics
+  // =========================================================================
+  app.get('/api/admin/billing/metrics', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+    if (!user) return reply.code(401).send({ error: 'Authentication required' });
+
+    try {
+      const metrics = await collectBillingReadinessMetrics();
+      return metrics;
+    } catch (err) {
+      console.error('[AdminRoutes] Failed to fetch billing metrics:', err);
+      return reply.code(500).send({ error: 'Failed to fetch billing metrics' });
+    }
+  });
 
   // =========================================================================
   // GET /api/admin/stats — Dashboard statistics

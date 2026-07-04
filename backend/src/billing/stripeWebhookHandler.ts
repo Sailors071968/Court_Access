@@ -8,6 +8,9 @@ import crypto from 'crypto';
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import prisma from '../lib/prisma.js';
 import { logSecurityEvent } from '../security/authMiddleware.js';
+import { syncPlanCredits, findUserIdByStripeCustomer } from './stripeSyncService.js';
+import type { SubscriptionPlanId } from './subscriptionService.js';
+import { setMonthlyCredits } from './aiCreditService.js';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -47,12 +50,42 @@ interface StripeInvoice {
   amount_paid: number;
 }
 
+interface StripeCharge {
+  id: string;
+  customer?: string;
+  amount_refunded?: number;
+  refunded?: boolean;
+}
+
+interface StripePaymentIntent {
+  id: string;
+  customer?: string;
+  status: string;
+  metadata?: Record<string, string>;
+}
+
 interface StripeEvent {
   id: string;
   type: string;
   data: {
-    object: StripeSubscriptionObject | StripeCheckoutSession | StripeInvoice;
+    object:
+      | StripeSubscriptionObject
+      | StripeCheckoutSession
+      | StripeInvoice
+      | StripeCharge
+      | StripePaymentIntent;
   };
+}
+
+async function isWebhookEventProcessed(eventId: string): Promise<boolean> {
+  const existing = await prisma.stripeWebhookEvent.findUnique({ where: { eventId } });
+  return Boolean(existing);
+}
+
+async function markWebhookEventProcessed(eventId: string, eventType: string): Promise<void> {
+  await prisma.stripeWebhookEvent.create({
+    data: { eventId, eventType },
+  });
 }
 
 // ---------------------------------------------------------------------------
@@ -148,7 +181,7 @@ async function handleSubscriptionCreated(sub: StripeSubscriptionObject): Promise
   const status = sub.status;
   const priceKey = sub.items?.data?.[0]?.price?.lookup_key;
   const mapped = mapStripePriceToTier(priceKey);
-  const userId = sub.metadata?.userId;
+  const userId = sub.metadata?.userId ?? (await findUserIdByStripeCustomer(customerId));
 
   if (!userId) {
     console.warn(`[StripeWebhook] subscription.created missing userId in metadata for ${subscriptionId}`);
@@ -197,6 +230,10 @@ async function handleSubscriptionCreated(sub: StripeSubscriptionObject): Promise
       activatedAt: new Date(),
     },
   });
+
+  if (priceKey && mapped.planId !== 'FREE') {
+    await syncPlanCredits(userId, mapped.planId as SubscriptionPlanId);
+  }
 
   void logSecurityEvent(
     'STRIPE_SUBSCRIPTION_CREATED',
@@ -251,6 +288,10 @@ async function handleSubscriptionUpdated(sub: StripeSubscriptionObject): Promise
     },
   });
 
+  if (priceKey && planId !== 'FREE') {
+    await syncPlanCredits(existing.userId, planId as SubscriptionPlanId);
+  }
+
   void logSecurityEvent(
     'STRIPE_SUBSCRIPTION_UPDATED',
     existing.userId,
@@ -282,6 +323,8 @@ async function handleSubscriptionDeleted(sub: StripeSubscriptionObject): Promise
       stripeSubscriptionId: null,
     },
   });
+
+  await setMonthlyCredits(existing.userId, 0);
 
   void logSecurityEvent(
     'STRIPE_SUBSCRIPTION_CANCELED',
@@ -396,6 +439,10 @@ async function handleCheckoutCompleted(session: StripeCheckoutSession): Promise<
     },
   });
 
+  if (mapped.planId !== 'FREE') {
+    await syncPlanCredits(userId, mapped.planId as SubscriptionPlanId);
+  }
+
   void logSecurityEvent(
     'STRIPE_CHECKOUT_COMPLETED',
     userId,
@@ -418,8 +465,38 @@ async function handleInvoicePaid(invoice: StripeInvoice): Promise<void> {
       where: { id: existing.id },
       data: { subscriptionStatus: 'active' },
     });
+    await syncPlanCredits(existing.userId, existing.planId as SubscriptionPlanId, { resetUsage: true });
     console.log(`[StripeWebhook] Invoice paid: subscription=${invoice.subscription} amount=${invoice.amount_paid}`);
   }
+}
+
+async function handleChargeRefunded(charge: StripeCharge): Promise<void> {
+  const customerId = charge.customer;
+  if (!customerId) return;
+
+  const userId = await findUserIdByStripeCustomer(customerId);
+  void logSecurityEvent(
+    'STRIPE_CHARGE_REFUNDED',
+    userId ?? undefined,
+    undefined,
+    `Charge ${charge.id} refunded: amount=${charge.amount_refunded ?? 0}`,
+  );
+  console.log(`[StripeWebhook] Charge refunded: ${charge.id} customer=${customerId}`);
+}
+
+async function handlePaymentIntentSucceeded(intent: StripePaymentIntent): Promise<void> {
+  console.log(`[StripeWebhook] Payment intent succeeded: ${intent.id} status=${intent.status}`);
+}
+
+async function handlePaymentIntentFailed(intent: StripePaymentIntent): Promise<void> {
+  const userId = intent.metadata?.userId ?? (intent.customer ? await findUserIdByStripeCustomer(intent.customer) : null);
+  void logSecurityEvent(
+    'STRIPE_PAYMENT_INTENT_FAILED',
+    userId ?? undefined,
+    undefined,
+    `Payment intent ${intent.id} failed`,
+  );
+  console.log(`[StripeWebhook] Payment intent failed: ${intent.id}`);
 }
 
 async function handleInvoicePaymentFailed(invoice: StripeInvoice): Promise<void> {
@@ -493,6 +570,11 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
 
     console.log(`[StripeWebhook] Received event: ${event.type} (${event.id})`);
 
+    if (await isWebhookEventProcessed(event.id)) {
+      console.log(`[StripeWebhook] Duplicate event ${event.id} — skipping`);
+      return reply.send({ received: true, duplicate: true });
+    }
+
     try {
       switch (event.type) {
         case 'customer.subscription.created':
@@ -513,10 +595,20 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
         case 'invoice.payment_failed':
           await handleInvoicePaymentFailed(event.data.object as StripeInvoice);
           break;
+        case 'charge.refunded':
+          await handleChargeRefunded(event.data.object as StripeCharge);
+          break;
+        case 'payment_intent.succeeded':
+          await handlePaymentIntentSucceeded(event.data.object as StripePaymentIntent);
+          break;
+        case 'payment_intent.payment_failed':
+          await handlePaymentIntentFailed(event.data.object as StripePaymentIntent);
+          break;
         default:
           console.log(`[StripeWebhook] Unhandled event type: ${event.type}`);
       }
 
+      await markWebhookEventProcessed(event.id, event.type);
       return reply.send({ received: true });
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
@@ -584,6 +676,10 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
     params.append('client_reference_id', userId);
     params.append('metadata[userId]', userId);
     params.append('metadata[planId]', planId);
+    if (!isCreditPack) {
+      params.append('subscription_data[metadata][userId]', userId);
+      params.append('subscription_data[metadata][planId]', planId);
+    }
     if (user?.email) {
       params.append('customer_email', user.email);
     }
@@ -653,6 +749,51 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
       const message = err instanceof Error ? err.message : String(err);
       console.error('[Stripe] Checkout status error:', message);
       return reply.code(500).send({ error: 'Failed to retrieve checkout status' });
+    }
+  });
+
+  // POST /api/billing/create-portal-session — Stripe Customer Billing Portal
+  app.post('/api/billing/create-portal-session', async (request: FastifyRequest, reply: FastifyReply) => {
+    const userId = ((request as unknown as { user?: { userId: string } }).user)?.userId;
+    if (!userId) {
+      return reply.code(401).send({ error: 'Authentication required' });
+    }
+
+    const stripeKey = process.env.STRIPE_SECRET_KEY;
+    if (!stripeKey) {
+      return reply.code(503).send({ error: 'Stripe is not configured' });
+    }
+
+    const sub = await prisma.subscription.findUnique({ where: { userId } });
+    if (!sub?.stripeCustomerId) {
+      return reply.code(400).send({ error: 'No Stripe customer on file. Subscribe to a paid plan first.' });
+    }
+
+    const params = new URLSearchParams();
+    params.append('customer', sub.stripeCustomerId);
+    params.append('return_url', `${process.env.FRONTEND_URL || 'https://courtaccess.net'}/dashboard/usage`);
+
+    try {
+      const stripeRes = await fetch('https://api.stripe.com/v1/billing_portal/sessions', {
+        method: 'POST',
+        headers: {
+          Authorization: `Bearer ${stripeKey}`,
+          'Content-Type': 'application/x-www-form-urlencoded',
+        },
+        body: params.toString(),
+      });
+
+      const session = await stripeRes.json() as { url?: string; error?: { message?: string } };
+      if (!stripeRes.ok || session.error) {
+        console.error('[Stripe] Portal session creation failed:', session.error?.message);
+        return reply.code(500).send({ error: 'Failed to create billing portal session' });
+      }
+
+      return reply.send({ url: session.url });
+    } catch (err) {
+      const message = err instanceof Error ? err.message : String(err);
+      console.error('[Stripe] Portal session error:', message);
+      return reply.code(500).send({ error: 'Failed to create billing portal session' });
     }
   });
 }

@@ -194,6 +194,7 @@ const ROUTE_PERMISSIONS: Record<string, UserRole[]> = {
   '/api/forensic': ['admin', 'attorney', 'investigator'],
   '/api/forensic/expert-package': ['admin', 'attorney'],
   '/api/forensic/jury-view': ['admin', 'attorney'],
+  '/api/admin/billing/metrics': ['admin', 'staff'],
   '/api/admin/discount-codes': ['admin', 'staff'],
   '/api/admin/stats': ['admin', 'staff'],
   '/api/admin/users': ['admin', 'staff'],

@@ -19,7 +19,6 @@ import {
   getUserUsageByType,
   calculateCreditCost,
   deductCredits,
-  addPurchasedCredits,
   getCreditPack,
   CREDIT_COSTS,
   CREDIT_PACKS,
@@ -31,6 +30,7 @@ import {
   getUserUsageDashboard,
   recordPageUpload,
 } from './usageEnforcementService.js';
+import { mapPackIdToStripePlan } from './stripeSyncService.js';
 
 // ---------------------------------------------------------------------------
 // Route Registration
@@ -67,15 +67,24 @@ export async function registerBillingRoutes(app: FastifyInstance): Promise<void>
     return reply.send({ subscription, plan });
   });
 
-  // POST /api/billing/subscription — update user's subscription
+  // POST /api/billing/subscription — admin-only manual subscription override
   app.post('/api/billing/subscription', async (req: FastifyRequest, reply: FastifyReply) => {
-    const userId = (req as unknown as AuthenticatedRequest).user?.userId;
-    if (!userId) return reply.code(401).send({ error: 'Authentication required' });
+    const user = (req as unknown as AuthenticatedRequest).user;
+    if (!user?.userId) return reply.code(401).send({ error: 'Authentication required' });
+    if (user.role !== 'admin') {
+      return reply.code(403).send({ error: 'Subscription changes require Stripe checkout or admin override' });
+    }
+
     const body = req.body as {
+      userId: string;
       planId: SubscriptionPlanId;
       stripeSubscriptionId?: string;
       stripeCustomerId?: string;
     };
+
+    if (!body.userId) {
+      return reply.code(400).send({ error: 'userId required for admin subscription override' });
+    }
 
     const plan = getPlanById(body.planId);
     if (!plan) {
@@ -83,7 +92,7 @@ export async function registerBillingRoutes(app: FastifyInstance): Promise<void>
     }
 
     const subscription = await setUserSubscription(
-      userId,
+      body.userId,
       body.planId,
       body.stripeSubscriptionId,
       body.stripeCustomerId,
@@ -168,7 +177,7 @@ export async function registerBillingRoutes(app: FastifyInstance): Promise<void>
     return reply.send({ packs: CREDIT_PACKS });
   });
 
-  // POST /api/billing/credit-packs/purchase — purchase a credit pack
+  // POST /api/billing/credit-packs/purchase — requires Stripe checkout (no free credits)
   app.post('/api/billing/credit-packs/purchase', async (req: FastifyRequest, reply: FastifyReply) => {
     const userId = (req as unknown as AuthenticatedRequest).user?.userId;
     if (!userId) return reply.code(401).send({ error: 'Authentication required' });
@@ -179,12 +188,12 @@ export async function registerBillingRoutes(app: FastifyInstance): Promise<void>
       return reply.status(400).send({ error: 'Invalid credit pack ID' });
     }
 
-    // In production, this would verify Stripe payment first
-    const balance = await addPurchasedCredits(userId, pack.credits);
-    return reply.send({
-      success: true,
-      creditsAdded: pack.credits,
-      balance,
+    const stripePlanId = mapPackIdToStripePlan(body.packId);
+    return reply.status(402).send({
+      error: 'Payment required',
+      message: 'Credit packs must be purchased via Stripe checkout',
+      checkoutPlanId: stripePlanId,
+      pack,
     });
   });
 
@@ -197,7 +206,7 @@ export async function registerBillingRoutes(app: FastifyInstance): Promise<void>
     const userId = (req as unknown as AuthenticatedRequest).user?.userId;
     if (!userId) return reply.code(401).send({ error: 'Authentication required' });
     const dashboard = await getUserUsageDashboard(userId);
-    return reply.send({ usage: dashboard });
+    return reply.send({ usage: dashboard, creditPacks: CREDIT_PACKS });
   });
 
   // POST /api/billing/usage/check-pages — check if upload is allowed

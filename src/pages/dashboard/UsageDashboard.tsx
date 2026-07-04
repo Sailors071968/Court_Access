@@ -4,7 +4,13 @@
 // ============================================================================
 
 import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { Card } from '../../components/common/Card';
+import {
+  createBillingPortalSession,
+  createCheckoutSession,
+  mapCreditPackToStripePlan,
+} from '../../services/caseApi';
 import {
   FileText,
   Cpu,
@@ -122,23 +128,27 @@ function PurchaseModal({
 }) {
   const [selectedPack, setSelectedPack] = useState<string | null>(null);
   const [purchasing, setPurchasing] = useState(false);
-  const [purchased, setPurchased] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   if (!isOpen) return null;
 
-  const handlePurchase = () => {
+  const handlePurchase = async () => {
     if (!selectedPack) return;
     setPurchasing(true);
-    // Simulate purchase
-    setTimeout(() => {
+    setError(null);
+    try {
+      const stripePlanId = mapCreditPackToStripePlan(selectedPack);
+      const result = await createCheckoutSession(stripePlanId);
+      if (result.url) {
+        window.location.href = result.url;
+        return;
+      }
+      setError(result.message ?? 'Unable to start checkout. Please try again.');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Checkout failed');
+    } finally {
       setPurchasing(false);
-      setPurchased(true);
-      setTimeout(() => {
-        setPurchased(false);
-        setSelectedPack(null);
-        onClose();
-      }, 1500);
-    }, 1000);
+    }
   };
 
   return (
@@ -182,24 +192,23 @@ function PurchaseModal({
           ))}
         </div>
 
-        {purchased ? (
-          <div className="flex items-center justify-center gap-2 p-3 bg-green-50 text-green-700 rounded-lg">
-            <Check size={20} />
-            Credits added successfully!
+        {error && (
+          <div className="flex items-center gap-2 p-3 mb-4 bg-red-50 text-red-700 rounded-lg text-sm">
+            {error}
           </div>
-        ) : (
-          <button
-            onClick={handlePurchase}
-            disabled={!selectedPack || purchasing}
-            className={`w-full py-3 rounded-lg font-medium text-white transition-all ${
-              selectedPack && !purchasing
-                ? 'bg-blue-600 hover:bg-blue-700'
-                : 'bg-gray-300 cursor-not-allowed'
-            }`}
-          >
-            {purchasing ? 'Processing...' : 'Purchase Credits'}
-          </button>
         )}
+
+        <button
+          onClick={handlePurchase}
+          disabled={!selectedPack || purchasing}
+          className={`w-full py-3 rounded-lg font-medium text-white transition-all ${
+            selectedPack && !purchasing
+              ? 'bg-blue-600 hover:bg-blue-700'
+              : 'bg-gray-300 cursor-not-allowed'
+          }`}
+        >
+          {purchasing ? 'Redirecting to checkout...' : 'Purchase Credits'}
+        </button>
       </div>
     </div>
   );
@@ -210,10 +219,19 @@ function PurchaseModal({
 // ---------------------------------------------------------------------------
 
 export function UsageDashboard() {
+  const [searchParams] = useSearchParams();
   const [showPurchaseModal, setShowPurchaseModal] = useState(false);
   const [usage, setUsage] = useState<UsageData | null>(null);
   const [creditPacks, setCreditPacks] = useState<CreditPack[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [checkoutMessage, setCheckoutMessage] = useState<string | null>(null);
+  const [portalLoading, setPortalLoading] = useState(false);
+
+  useEffect(() => {
+    if (searchParams.get('checkout') === 'success') {
+      setCheckoutMessage('Payment successful. Your subscription or credits will appear shortly.');
+    }
+  }, [searchParams]);
 
   useEffect(() => {
     async function fetchUsage() {
@@ -249,8 +267,26 @@ export function UsageDashboard() {
     Math.ceil((billingEnd.getTime() - Date.now()) / (1000 * 60 * 60 * 24)),
   );
 
+  const handleManageBilling = async () => {
+    setPortalLoading(true);
+    try {
+      const result = await createBillingPortalSession();
+      if (result.url) window.location.href = result.url;
+    } catch {
+      window.location.href = '/pricing';
+    } finally {
+      setPortalLoading(false);
+    }
+  };
+
   return (
     <div className="max-w-4xl mx-auto space-y-6">
+      {checkoutMessage && (
+        <div className="flex items-center gap-2 p-3 bg-green-50 text-green-800 rounded-lg text-sm">
+          <Check size={16} />
+          {checkoutMessage}
+        </div>
+      )}
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -284,8 +320,12 @@ export function UsageDashboard() {
               </p>
             </div>
           </div>
-          <button className="text-sm text-blue-600 hover:text-blue-700 font-medium">
-            Upgrade Plan
+          <button
+            onClick={() => void handleManageBilling()}
+            disabled={portalLoading}
+            className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+          >
+            {portalLoading ? 'Opening portal...' : 'Manage Billing'}
           </button>
         </div>
       </Card>

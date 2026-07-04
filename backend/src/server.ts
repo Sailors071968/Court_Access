@@ -33,6 +33,7 @@ import { registerQueueMonitorRoutes } from './admin/queueMonitorRoutes.js';
 import { registerAdminRoutes } from './admin/adminRoutes.js';
 import { registerDiscountRoutes } from './billing/discountRoutes.js';
 import { seedDefaultDiscountCodes } from './billing/discountSeed.js';
+import { startExpirationWorker } from './workers/discountExpirationWorker.js';
 import { registerStripeWebhookRoutes } from './billing/stripeWebhookHandler.js';
 import { startPipelineWorkers, stopPipelineWorkers } from './workers/startPipelineWorkers.js';
 import { enforceSchemaOnBoot } from './database/schemaAssert.js';
@@ -213,6 +214,7 @@ async function startServer() {
 
   // Seed default discount codes (e.g. HUNT100)
   await seedDefaultDiscountCodes();
+  startExpirationWorker();
 
   // Start Phase 2 ACU-enforced pipeline workers (BullMQ)
   startPipelineWorkers();

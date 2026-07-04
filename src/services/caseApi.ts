@@ -663,3 +663,26 @@ export async function createCheckoutSession(planId: string): Promise<{ url?: str
   }
   return res.json();
 }
+
+const PACK_TO_STRIPE: Record<string, string> = {
+  pack_50: 'CREDIT_PACK_50',
+  pack_150: 'CREDIT_PACK_150',
+  pack_500: 'CREDIT_PACK_500',
+  pack_1500: 'CREDIT_PACK_1500',
+};
+
+export function mapCreditPackToStripePlan(packId: string): string {
+  return PACK_TO_STRIPE[packId] ?? packId;
+}
+
+export async function createBillingPortalSession(): Promise<{ url?: string }> {
+  const res = await fetch(`${API_BASE}/billing/create-portal-session`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to open billing portal' }));
+    throw new Error(err.error || 'Failed to open billing portal');
+  }
+  return res.json();
+}

@@ -8,6 +8,7 @@ import { buildOperationsDashboard, buildSystemHealthAdapter } from '../src/produ
 import { queryAuditCenter } from '../src/productionOperations/auditCenter.js';
 import { buildChangeManagementReport } from '../src/productionOperations/changeManagement.js';
 import { buildBackupOperationsReport, runBackupVerificationDrill } from '../src/productionOperations/backupOperations.js';
+import { runBackupRestoreDrill } from '../src/productionOperations/backupRestoreDrill.js';
 import { evaluateOperationsAlerts } from '../src/productionOperations/alertingService.js';
 
 describe('Production Operations', () => {
@@ -50,6 +51,15 @@ describe('Production Operations', () => {
     const drill = await runBackupVerificationDrill();
     assert.ok(['PASS', 'FAIL'].includes(drill.result));
     assert.ok(drill.checks.length > 0);
+    assert.ok(drill.report.checks.length > 0);
+  });
+
+  it('runs full backup restore drill with report', async () => {
+    const report = await runBackupRestoreDrill({ writeReport: true });
+    assert.ok(report.generatedAt);
+    assert.ok(report.checks.length >= 8);
+    assert.ok(['PASS', 'FAIL'].includes(report.overallResult));
+    assert.ok(report.auditTrail.length > 0);
   });
 
   it('evaluates alerting rules', async () => {

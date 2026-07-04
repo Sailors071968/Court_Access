@@ -5,6 +5,7 @@
 import { access, readFile } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import type { BackupOperationsReport, BackupStatus, ComponentHealth } from './types.js';
+import { getLatestDrillReport, runBackupRestoreDrill } from './backupRestoreDrill.js';
 
 const WORKSPACE = resolve(import.meta.dirname ?? '.', '../../..');
 
@@ -22,7 +23,8 @@ export async function buildBackupOperationsReport(): Promise<BackupOperationsRep
   const migrateScript = await exists(join(WORKSPACE, 'backend/scripts/db-safe-migrate.sh'));
   const dbIntegrity = await exists(join(WORKSPACE, 'reports/database_integrity_audit.json'));
   const repoDir = await exists(join(WORKSPACE, 'backend/data/legislative/repositories'));
-  const kgDir = await exists(join(WORKSPACE, 'backend/data/legislative/repositories/offenses.json'));
+  const kgDir = await exists(join(WORKSPACE, 'backend/data/legislative/repositories/offenses/records.jsonl'));
+  const drillReport = await getLatestDrillReport();
 
   const database: ComponentHealth = {
     status: drDoc && migrateScript ? 'healthy' : 'degraded',
@@ -47,15 +49,20 @@ export async function buildBackupOperationsReport(): Promise<BackupOperationsRep
   const blockers: string[] = [];
   if (!drDoc) blockers.push('DISASTER_RECOVERY.md not found');
   if (!migrateScript) blockers.push('db-safe-migrate.sh not found');
-  blockers.push('Automated restore drill not yet implemented (PG-015)');
+  if (drillReport?.overallResult !== 'PASS') {
+    blockers.push('Automated restore drill not passing — run npm run backup:drill');
+  }
+
+  const restoreDrillStatus: BackupStatus['restoreDrillStatus'] =
+    drillReport?.overallResult === 'PASS' ? 'PASS' : drillReport?.overallResult === 'FAIL' ? 'FAIL' : 'NOT_RUN';
 
   const status: BackupStatus = {
     database,
     repositories,
     knowledgeGraph,
     configuration,
-    lastVerifiedAt: new Date().toISOString(),
-    restoreDrillStatus: 'NOT_RUN',
+    lastVerifiedAt: drillReport?.generatedAt ?? new Date().toISOString(),
+    restoreDrillStatus,
   };
 
   return {
@@ -66,39 +73,19 @@ export async function buildBackupOperationsReport(): Promise<BackupOperationsRep
       repositorySnapshots: repoDir,
       knowledgeGraphSnapshots: kgDir,
       configurationBackups: await exists(join(WORKSPACE, 'backend/.env.production.template')),
-      restoreVerification: dbIntegrity,
-      recoveryDrills: false,
+      restoreVerification: dbIntegrity && drillReport?.overallResult === 'PASS',
+      recoveryDrills: drillReport?.overallResult === 'PASS',
     },
     blockers,
   };
 }
 
-export async function runBackupVerificationDrill(): Promise<{ result: 'PASS' | 'FAIL'; checks: string[] }> {
-  const checks: string[] = [];
-  let pass = true;
-
-  const report = await buildBackupOperationsReport();
-  if (report.automated.databaseBackups) checks.push('DR documentation: PASS');
-  else { checks.push('DR documentation: FAIL'); pass = false; }
-
-  if (report.automated.repositorySnapshots) checks.push('Repository snapshots: PASS');
-  else { checks.push('Repository snapshots: FAIL'); pass = false; }
-
-  if (report.automated.restoreVerification) checks.push('Database integrity audit: PASS');
-  else { checks.push('Database integrity audit: FAIL'); pass = false; }
-
-  try {
-    const integrity = JSON.parse(
-      await readFile(join(WORKSPACE, 'reports/database_integrity_audit.json'), 'utf-8'),
-    ) as { status?: string };
-    if (integrity.status === 'PASS' || integrity.status === 'PRODUCTION_READY') {
-      checks.push('Integrity audit status: PASS');
-    } else {
-      checks.push('Integrity audit status: PARTIAL');
-    }
-  } catch {
-    checks.push('Integrity audit read: SKIP');
-  }
-
-  return { result: pass ? 'PASS' : 'FAIL', checks };
+export async function runBackupVerificationDrill(): Promise<{
+  result: 'PASS' | 'FAIL';
+  checks: string[];
+  report: Awaited<ReturnType<typeof runBackupRestoreDrill>>;
+}> {
+  const report = await runBackupRestoreDrill({ writeReport: true });
+  const checks = report.checks.map((c) => `${c.label}: ${c.result} — ${c.detail}`);
+  return { result: report.overallResult, checks, report };
 }

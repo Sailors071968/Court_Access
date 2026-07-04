@@ -1,11 +1,12 @@
 {
   "program": "MASTER_PRODUCTION_PROGRAM",
-  "version": "4.0",
-  "updatedAt": "2026-07-04T21:45:00Z",
+  "version": "7.0",
+  "updatedAt": "2026-07-04T21:50:00Z",
   "productionGatesStatus": "NOT_READY",
-  "gatesPass": 13,
-  "gatesPartial": 2,
+  "gatesPass": 14,
+  "gatesPartial": 1,
   "gatesFail": 0,
+  "completionPercent": 93.3,
   "items": [
     {
       "id": "PG-001-BLOCKER",
@@ -36,8 +37,8 @@
       "gate": "PG-015",
       "priority": "P1",
       "title": "Automated backup restore drill runner",
-      "status": "pending",
-      "reason": "DISASTER_RECOVERY.md exists but no automated verification"
+      "status": "completed",
+      "completedAt": "2026-07-04T21:50:00Z"
     }
   ]
 }

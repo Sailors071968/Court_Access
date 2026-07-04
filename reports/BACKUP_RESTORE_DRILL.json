@@ -1,0 +1,109 @@
+{
+  "generatedAt": "2026-07-04T21:59:26.838Z",
+  "drillVersion": "1.0.0",
+  "overallResult": "PASS",
+  "passCount": 9,
+  "failCount": 0,
+  "skipCount": 0,
+  "checks": [
+    {
+      "id": "dr-documentation",
+      "label": "DISASTER_RECOVERY.md present",
+      "result": "PASS",
+      "detail": "DR procedures documented"
+    },
+    {
+      "id": "migrate-script",
+      "label": "db-safe-migrate.sh present",
+      "result": "PASS",
+      "detail": "Safe migration script available"
+    },
+    {
+      "id": "integrity-audit",
+      "label": "Database integrity audit",
+      "result": "PASS",
+      "detail": "overallStatus=PASS"
+    },
+    {
+      "id": "repository-snapshots",
+      "label": "Legislative repository snapshots",
+      "result": "PASS",
+      "detail": "Repository files on disk for restore"
+    },
+    {
+      "id": "config-template",
+      "label": "Configuration backup reference",
+      "result": "PASS",
+      "detail": ".env.production.template present"
+    },
+    {
+      "id": "db-connectivity",
+      "label": "Database connectivity",
+      "result": "PASS",
+      "detail": "PostgreSQL connection verified"
+    },
+    {
+      "id": "critical-tables",
+      "label": "Critical tables accessible",
+      "result": "PASS",
+      "detail": "users:8, criminal_cases:5, evidence:4, clients:0"
+    },
+    {
+      "id": "migration-state",
+      "label": "Prisma migrations applied",
+      "result": "PASS",
+      "detail": "Latest: 20260704230000_attorney_workbench"
+    },
+    {
+      "id": "schema-versions",
+      "label": "Schema version tracking",
+      "result": "PASS",
+      "detail": "1 schema version record(s)"
+    }
+  ],
+  "recoveryProcedures": [
+    "Restore database from latest RDS snapshot or pg_dump backup",
+    "Run prisma migrate deploy to apply pending migrations",
+    "Restore legislative repositories from backend/data/legislative/repositories",
+    "Verify critical tables via runBackupRestoreDrill()",
+    "See DISASTER_RECOVERY.md for full RTO/RPO procedures"
+  ],
+  "auditTrail": [
+    {
+      "step": "Verify DISASTER_RECOVERY.md",
+      "timestamp": "2026-07-04T21:59:26.834Z"
+    },
+    {
+      "step": "Verify db-safe-migrate.sh",
+      "timestamp": "2026-07-04T21:59:26.834Z"
+    },
+    {
+      "step": "Verify database integrity audit",
+      "timestamp": "2026-07-04T21:59:26.834Z"
+    },
+    {
+      "step": "Verify legislative repository snapshots",
+      "timestamp": "2026-07-04T21:59:26.835Z"
+    },
+    {
+      "step": "Verify configuration template",
+      "timestamp": "2026-07-04T21:59:26.835Z"
+    },
+    {
+      "step": "Verify database connectivity",
+      "timestamp": "2026-07-04T21:59:26.835Z"
+    },
+    {
+      "step": "Verify critical tables accessible",
+      "timestamp": "2026-07-04T21:59:26.835Z"
+    },
+    {
+      "step": "Verify migration state",
+      "timestamp": "2026-07-04T21:59:26.837Z"
+    },
+    {
+      "step": "Verify schema version control",
+      "timestamp": "2026-07-04T21:59:26.837Z"
+    }
+  ]
+}

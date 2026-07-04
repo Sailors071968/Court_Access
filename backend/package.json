@@ -16,6 +16,7 @@
     "billing:readiness": "tsx scripts/generate-billing-readiness.ts",
     "billing:certify": "tsx scripts/stripe-certification.ts",
     "gates:run": "tsx scripts/run-production-gates.ts",
+    "backup:drill": "tsx scripts/run-backup-drill.ts",
     "operations:report": "tsx scripts/run-operations-report.ts",
     "test": "node --import tsx --test tests/**/*.test.ts",
     "db:generate": "prisma generate",

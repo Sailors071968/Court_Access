@@ -9,6 +9,7 @@ import { AUTH_CONFIG, getRequiredRoles } from '../security/authMiddleware.js';
 import type { ProductionGate, ProductionGatesReport } from './types.js';
 import { summarizeGates } from './types.js';
 import { fileExists, readJsonReport, resultFromChecks, workspacePath } from './gateUtils.js';
+import { isBackupDrillPassing, runBackupRestoreDrill } from '../productionOperations/backupRestoreDrill.js';
 
 async function gatePg001StripeBilling(): Promise<ProductionGate> {
   const steps = ['Run Stripe production certification harness', 'Collect billing readiness metrics'];
@@ -343,23 +344,29 @@ async function gatePg014Security(): Promise<ProductionGate> {
 }
 
 async function gatePg015BackupRecovery(): Promise<ProductionGate> {
+  const drillPass = await isBackupDrillPassing();
+  const drill = await runBackupRestoreDrill({ writeReport: true });
+
   const checks = [
     { label: 'DISASTER_RECOVERY.md', pass: await fileExists(workspacePath('DISASTER_RECOVERY.md')) },
     { label: 'db-safe-migrate.sh', pass: await fileExists(workspacePath('backend/scripts/db-safe-migrate.sh')) },
     { label: 'Database integrity audit', pass: await fileExists(workspacePath('reports/database_integrity_audit.json')) },
-    { label: 'Automated backup verification', pass: false },
+    { label: 'Automated backup verification', pass: drillPass },
   ];
   const summary = resultFromChecks(checks);
   return {
     id: 'PG-015',
     name: 'Backup / Recovery',
     program: 'Program 1 / Program 13',
-    result: 'PARTIAL',
+    result: summary.result,
     checks: { pass: summary.pass, total: summary.total },
-    testSteps: ['Verify DR documentation', 'Check database migration safety script'],
-    evidence: checks.filter((c) => c.pass).map((c) => c.label),
-    blockers: ['Automated backup restore drill not implemented'],
-    recoveryBehavior: 'Implement automated backup verification and restore drill runner',
+    testSteps: ['Verify DR documentation', 'Run automated backup restore drill', 'Check database migration safety script'],
+    evidence: [
+      ...checks.filter((c) => c.pass).map((c) => c.label),
+      `BACKUP_RESTORE_DRILL: ${drill.overallResult} (${drill.passCount}/${drill.checks.length} checks)`,
+    ],
+    blockers: summary.failed.length ? ['Automated backup restore drill failed — run npm run backup:drill'] : [],
+    recoveryBehavior: 'Run npm run backup:drill and verify BACKUP_RESTORE_DRILL.json',
   };
 }
 

@@ -670,6 +670,93 @@ export async function fetchLitigationStrategy(caseId: string): Promise<ApiLitiga
 }
 
 // ---------------------------------------------------------------------------
+// Case Analysis API
+// ---------------------------------------------------------------------------
+
+export interface ApiCaseAnalysis {
+  caseId: string;
+  generatedAt: string;
+  analysisVersion: number;
+  evidenceSummary: Array<{ type: string; count: number; iconType: string }>;
+  timelineEvents: Array<{
+    id: string;
+    timestamp: string;
+    source: string;
+    description: string;
+    sourceType: string;
+    confidence: number;
+  }>;
+  crossDocComparisons: Array<{
+    id: string;
+    observation: string;
+    severity: string;
+    sourceA: string;
+    sourceB: string;
+  }>;
+  officerActions: Array<{
+    id: string;
+    officerId: string;
+    actionType: string;
+    timestamp: string;
+    evidenceSource: string;
+    confidence: number;
+  }>;
+  policyComparisons: Array<{
+    id: string;
+    officerAction: string;
+    policyReference: string;
+    observation: string;
+    confidence: number;
+  }>;
+  inconsistencies: Array<{
+    id: string;
+    type: string;
+    description: string;
+    severity: string;
+  }>;
+  recommendedExhibits: Array<{
+    id: string;
+    title: string;
+    type: string;
+  }>;
+  unknowns: string[];
+  fromCache?: boolean;
+}
+
+export interface ApiCaseRecommendations {
+  caseId: string;
+  generatedAt: string;
+  disclaimer: string;
+  recommendations: Array<{
+    id: string;
+    recommendationType: string;
+    suggestedOpportunity: string;
+    evidenceSource: string;
+    confidenceScore: number;
+    observation: string;
+  }>;
+  unknowns: string[];
+}
+
+export async function fetchCaseAnalysis(caseId: string): Promise<ApiCaseAnalysis> {
+  const res = await fetch(`${API_BASE}/cases/${caseId}/analysis`, { headers: getAuthHeaders() });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to fetch case analysis' }));
+    throw new Error(err.error || 'Failed to fetch case analysis');
+  }
+  return res.json();
+}
+
+export async function fetchCaseRecommendations(caseId: string): Promise<ApiCaseRecommendations> {
+  const res = await fetch(`${API_BASE}/cases/${caseId}/recommendations`, { headers: getAuthHeaders() });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to fetch recommendations' }));
+    throw new Error(err.error || 'Failed to fetch recommendations');
+  }
+  return res.json();
+}
+
+// ---------------------------------------------------------------------------
 // Attorney Reports API
 // ---------------------------------------------------------------------------
 

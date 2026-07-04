@@ -9,6 +9,7 @@ import { FileText, Scale, Calendar, Lightbulb, TrendingUp, Loader2 } from 'lucid
 import { Card, StatCard } from '../../components/common/Card';
 import { DoctrineCompliancePanel } from '../../components/case/DoctrineCompliancePanel';
 import { AttorneyReportPanel } from '../../components/case/AttorneyReportPanel';
+import { CaseAnalysisPanel } from '../../components/case/CaseAnalysisPanel';
 import { ROLE_PERMISSIONS } from '../../constants';
 import { useAuthStore } from '../../stores/authStore';
 // CaseAnalysisSection and LitigationIntelligencePanel removed:
@@ -189,13 +190,10 @@ export function CaseOverviewPage() {
         </div>
       </div>
 
-      {/* Phase 257: Case Analysis + Phase 282: Litigation Intelligence removed.
-         Backend analysis routes are not wired in the repo yet.
-         Re-enable when /api/cases/:id/analysis and /api/cases/:id/recommendations are implemented. */}
-
-      {/* Police Training Doctrine Compliance */}
+      {/* Case Analysis + Attorney Reports */}
       {showIntelligence && (
         <>
+          <CaseAnalysisPanel caseId={currentCase.caseId} />
           <AttorneyReportPanel caseId={currentCase.caseId} caseTitle={currentCase.title} />
           <DoctrineCompliancePanel />
         </>

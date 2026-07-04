@@ -1,10 +1,10 @@
 {
   "program": "MASTER_PRODUCTION_PROGRAM",
   "version": "4.0",
-  "updatedAt": "2026-07-04T20:50:00Z",
+  "updatedAt": "2026-07-04T21:45:00Z",
   "productionGatesStatus": "NOT_READY",
-  "gatesPass": 11,
-  "gatesPartial": 4,
+  "gatesPass": 13,
+  "gatesPartial": 2,
   "gatesFail": 0,
   "items": [
     {
@@ -27,9 +27,9 @@
       "id": "PG-009-BLOCKER",
       "gate": "PG-009",
       "priority": "P1",
-      "title": "Complete narrative deconstruction engine (replace stubs)",
-      "status": "pending",
-      "reason": "narrativeRoutes.ts returns empty stubs"
+      "title": "Attorney Intelligence Engine (replace narrative stubs)",
+      "status": "completed",
+      "completedAt": "2026-07-04T21:45:00Z"
     },
     {
       "id": "PG-015-BLOCKER",

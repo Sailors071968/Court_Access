@@ -28,7 +28,7 @@ import { registerClientRoutes } from './clients/clientRoutes.js';
 import { registerEvidenceRoutes } from './evidence/evidenceRoutes.js';
 import { registerDirectUploadRoutes } from './evidence/evidenceDirectUpload.js';
 import { registerEvidenceRequestRoutes } from './evidence/evidenceRequestRoutes.js';
-import { registerNarrativeRoutes } from './narrative/narrativeRoutes.js';
+import { registerIntelligenceRoutes, registerNarrativeIntelligenceRoutes } from './intelligence/intelligenceRoutes.js';
 import { registerTimelineRoutes } from './timeline/timelineRoutes.js';
 import { registerQueueMonitorRoutes } from './admin/queueMonitorRoutes.js';
 import { registerAdminRoutes } from './admin/adminRoutes.js';
@@ -179,8 +179,9 @@ async function startServer() {
   await registerEvidenceRequestRoutes(app);
 
   // Narrative Deconstruction Engine routes
-  console.log('[Server] Registering narrative deconstruction engine routes...');
-  await registerNarrativeRoutes(app);
+  console.log('[Server] Registering Attorney Intelligence routes...');
+  await registerIntelligenceRoutes(app);
+  await registerNarrativeIntelligenceRoutes(app);
 
   // Timeline Reconstruction Engine
   console.log('[Server] Registering timeline reconstruction routes...');

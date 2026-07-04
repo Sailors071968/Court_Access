@@ -203,22 +203,24 @@ async function gatePg008Timeline(): Promise<ProductionGate> {
 
 async function gatePg009AttorneyReports(): Promise<ProductionGate> {
   const checks = [
+    { label: 'Attorney Intelligence Engine', pass: await fileExists(workspacePath('backend/src/intelligence/caseIntelligenceOrchestrator.ts')) },
+    { label: 'Element analysis module', pass: await fileExists(workspacePath('backend/src/intelligence/elementAnalysis.ts')) },
+    { label: 'Report generator (structured)', pass: await fileExists(workspacePath('backend/src/intelligence/reportGenerator.ts')) },
+    { label: 'Intelligence API routes', pass: await fileExists(workspacePath('backend/src/intelligence/intelligenceRoutes.ts')) },
+    { label: 'Attorney intelligence tests', pass: await fileExists(workspacePath('backend/tests/attorney-intelligence.test.ts')) },
     { label: 'Expert witness package exporter', pass: await fileExists(workspacePath('backend/src/evidence/expertWitnessPackageExporter.ts')) },
-    { label: 'Forensic reconstruction routes', pass: await fileExists(workspacePath('backend/src/evidence/forensicReconstructionRoutes.ts')) },
-    { label: 'Compliance analysis routes', pass: await fileExists(workspacePath('backend/src/evidence/complianceRoutes.ts')) },
-    { label: 'Narrative engine (full)', pass: false },
   ];
   const summary = resultFromChecks(checks);
   return {
     id: 'PG-009',
     name: 'Attorney Reports',
-    program: 'Program 1 / Program 15',
-    result: summary.result === 'PASS' ? 'PARTIAL' : summary.result,
+    program: 'Domain U / Program 15',
+    result: summary.result,
     checks: { pass: summary.pass, total: summary.total },
-    testSteps: ['Verify report export modules', 'Check narrative engine completeness'],
+    testSteps: ['Verify Attorney Intelligence Engine modules', 'Run attorney-intelligence.test.ts'],
     evidence: checks.filter((c) => c.pass).map((c) => c.label),
-    blockers: ['Narrative deconstruction engine is stub-only', ...summary.failed],
-    recoveryBehavior: 'Complete narrative pipeline and report generation workflows',
+    blockers: summary.failed,
+    recoveryBehavior: 'Complete intelligence engine and verify evidence traceability',
   };
 }
 

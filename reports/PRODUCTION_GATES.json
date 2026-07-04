@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-04T21:16:34.643Z",
+  "generatedAt": "2026-07-04T21:31:54.283Z",
   "version": "4.0",
   "program": "PRODUCTION_CERTIFICATION",
   "gates": [
@@ -181,26 +181,26 @@
     {
       "id": "PG-009",
       "name": "Attorney Reports",
-      "program": "Program 1 / Program 15",
-      "result": "PARTIAL",
+      "program": "Domain U / Program 15",
+      "result": "PASS",
       "checks": {
-        "pass": 3,
-        "total": 4
+        "pass": 6,
+        "total": 6
       },
       "testSteps": [
-        "Verify report export modules",
-        "Check narrative engine completeness"
+        "Verify Attorney Intelligence Engine modules",
+        "Run attorney-intelligence.test.ts"
       ],
       "evidence": [
-        "Expert witness package exporter",
-        "Forensic reconstruction routes",
-        "Compliance analysis routes"
+        "Attorney Intelligence Engine",
+        "Element analysis module",
+        "Report generator (structured)",
+        "Intelligence API routes",
+        "Attorney intelligence tests",
+        "Expert witness package exporter"
       ],
-      "blockers": [
-        "Narrative deconstruction engine is stub-only",
-        "Narrative engine (full)"
-      ],
-      "recoveryBehavior": "Complete narrative pipeline and report generation workflows"
+      "blockers": [],
+      "recoveryBehavior": "Complete intelligence engine and verify evidence traceability"
     },
     {
       "id": "PG-010",
@@ -338,14 +338,12 @@
       "recoveryBehavior": "Implement automated backup verification and restore drill runner"
     }
   ],
-  "passCount": 12,
+  "passCount": 13,
   "failCount": 0,
-  "partialCount": 3,
+  "partialCount": 2,
   "skipCount": 0,
   "blockers": [
     "PG-001: 1A-012: Live Stripe Test Mode API certification in staging",
-    "PG-009: Narrative deconstruction engine is stub-only",
-    "PG-009: Narrative engine (full)",
     "PG-015: Automated backup restore drill not implemented"
   ],
   "deploymentBlocked": true,

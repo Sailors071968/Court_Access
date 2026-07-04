@@ -40,6 +40,8 @@ import { registerObservabilityRoutes } from './observability/observabilityRoutes
 import { startRedisMemoryMonitor, stopRedisMemoryMonitor } from './observability/redisMemoryAlert.js';
 import { registerChargeRoutes } from "./charges/chargeRoutes.js";
 import { registerCalcrimRoutes } from "./routes/calcrimRoutes.js";
+import { registerGovernanceRoutes } from './governance/governanceRoutes.ts';
+import { registerLegislativeRoutes } from './legislative/legislativeRoutes.ts';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -197,6 +199,13 @@ async function startServer() {
   // Discount code API routes
   console.log('[Server] Registering discount code routes...');
   await registerDiscountRoutes(app);
+
+  // Epic 2A — Corpus governance + legislative intelligence APIs
+  console.log('[Server] Registering corpus governance routes...');
+  await registerGovernanceRoutes(app);
+
+  console.log('[Server] Registering legislative intelligence routes...');
+  await registerLegislativeRoutes(app);
 
   // PR 6 — Observability: /api/health/deep, /api/metrics, /api/metrics/json
   console.log('[Server] Registering observability routes...');

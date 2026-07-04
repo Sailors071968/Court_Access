@@ -10,6 +10,7 @@
     "leginfo:discover": "tsx src/legislative/cli.ts discover",
     "leginfo:acquire": "tsx src/legislative/cli.ts acquire",
     "leginfo:process": "tsx src/legislative/cli.ts process",
+    "metrics:generate": "tsx scripts/generate-production-metrics.ts",
     "test": "node --import tsx --test tests/**/*.test.ts",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",

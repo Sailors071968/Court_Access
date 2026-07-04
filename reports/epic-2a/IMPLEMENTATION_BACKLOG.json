@@ -114,13 +114,21 @@
       "priority": "P0",
       "tier": 0,
       "title": "Mount corpus governance API in server",
-      "status": "pending",
+      "status": "completed",
+      "completedAt": "2026-07-04T20:00:00Z",
+      "verifiedAt": "2026-07-04T20:00:00Z",
       "dependencies": [],
       "acceptanceCriteria": [
         "registerGovernanceRoutes in server.ts",
         "POST /api/corpus/ingest triggers pipeline",
         "Admin auth required"
-      ]
+      ],
+      "evidence": {
+        "module": "backend/src/governance/governanceRoutes.ts",
+        "ingest": "POST /api/corpus/ingest",
+        "metrics": "GET /api/legislative/metrics",
+        "report": "reports/PRODUCTION_METRICS.json"
+      }
     },
     {
       "id": "2A-006",
@@ -221,5 +229,5 @@
       ]
     }
   ],
-  "nextItem": "2A-005"
+  "nextItem": "2A-006"
 }

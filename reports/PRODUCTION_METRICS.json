@@ -1,0 +1,38 @@
+{
+  "generatedAt": "2026-07-04T19:59:43.284Z",
+  "californiaCodes": {
+    "discovered": 1,
+    "total": 30
+  },
+  "sectionsDiscovered": 207,
+  "sectionsAcquired": 3,
+  "sectionsParsed": 4,
+  "criminalOffenses": 2,
+  "offenseElements": 4,
+  "mensReaCoveragePercent": 100,
+  "authorityCoveragePercent": 100,
+  "calcrimMappings": 1,
+  "calcrimCoveragePercent": 50,
+  "repositoryIntegrity": "PASS",
+  "parsingFailures": 0,
+  "manualReviewQueue": 0,
+  "repositories": {
+    "statutes": 4,
+    "offenses": 2,
+    "elements": 4,
+    "mens_rea": 2,
+    "exceptions": 3,
+    "defenses": 0,
+    "cross_references": 13,
+    "regulatory_incorporations": 2,
+    "calcrim_links": 1,
+    "authorities": 13
+  },
+  "backendCompile": "UNKNOWN",
+  "frontendCompile": "UNKNOWN",
+  "e2eWorkflows": {
+    "passed": 0,
+    "total": 0,
+    "status": "UNKNOWN"
+  }
+}

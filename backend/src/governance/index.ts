@@ -9,6 +9,8 @@ export { DuplicateDetector } from './duplicateDetector.ts';
 export { CorpusVersionManager } from './corpusVersioning.ts';
 export { GovernancePipeline } from './governancePipeline.ts';
 export { GovernanceApiHandlers } from './governanceApi.ts';
+export { registerGovernanceRoutes } from './governanceRoutes.ts';
+export { createPrismaRegistryDb, createPrismaLockDb } from './prismaAdapters.ts';
 
 export type {
   CorpusRegistryEntry,

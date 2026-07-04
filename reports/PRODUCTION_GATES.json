@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-04T21:31:54.283Z",
+  "generatedAt": "2026-07-04T21:41:27.221Z",
   "version": "4.0",
   "program": "PRODUCTION_CERTIFICATION",
   "gates": [
@@ -184,8 +184,8 @@
       "program": "Domain U / Program 15",
       "result": "PASS",
       "checks": {
-        "pass": 6,
-        "total": 6
+        "pass": 9,
+        "total": 9
       },
       "testSteps": [
         "Verify Attorney Intelligence Engine modules",
@@ -197,6 +197,9 @@
         "Report generator (structured)",
         "Intelligence API routes",
         "Attorney intelligence tests",
+        "Attorney Workbench service",
+        "Workbench API routes",
+        "Workbench tests",
         "Expert witness package exporter"
       ],
       "blockers": [],

@@ -1883,6 +1883,71 @@ model EvidenceRequestResponse {
 }
 
 // ---------------------------------------------------------------------------
+// Domain V — Attorney Workbench (notes, pins, investigation tasks)
+// ---------------------------------------------------------------------------
+
+model AttorneyNote {
+  id          String   @id @default(uuid())
+  caseId      String
+  tenantId    String
+  userId      String
+  title       String?
+  content     String
+  entityType  String?  // evidence | authority | witness | timeline | unknown | motion | investigation | general
+  entityId    String?
+  isPrivate   Boolean  @default(true)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([caseId, tenantId])
+  @@index([userId])
+  @@index([entityType, entityId])
+  @@map("attorney_notes")
+}
+
+model WorkbenchPin {
+  id          String   @id @default(uuid())
+  caseId      String
+  tenantId    String
+  userId      String
+  pinType     String   // evidence | authority | witness | timeline | unknown | motion | investigation
+  entityId    String
+  label       String?
+  metadata    String?  // JSON
+
+  createdAt   DateTime @default(now())
+
+  @@unique([caseId, tenantId, userId, pinType, entityId])
+  @@index([caseId, tenantId])
+  @@index([userId])
+  @@map("workbench_pins")
+}
+
+model InvestigationTask {
+  id            String    @id @default(uuid())
+  caseId        String
+  tenantId      String
+  title         String
+  description   String?
+  status        String    @default("open") // open | in_progress | completed | deferred
+  priority      String    @default("medium") // low | medium | high
+  assignedTo    String?
+  dueDate       DateTime?
+  sourceType    String?   // evidence_gap | subpoena | discovery | witness | timeline | manual
+  sourceId      String?
+  createdBy     String
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([caseId, tenantId])
+  @@index([status])
+  @@index([assignedTo])
+  @@map("investigation_tasks")
+}
+
+// ---------------------------------------------------------------------------
 // PR 1 — Schema Version Control (Hardening Core)
 // Tracks schema versions applied to this database.
 // Boot-time assertion compares expected vs actual to hard-fail on drift.

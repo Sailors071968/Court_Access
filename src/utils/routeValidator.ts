@@ -51,6 +51,7 @@ export const ROUTE_REGISTRY: RouteDefinition[] = [
   { path: '/cases', label: 'Cases List', requiresAuth: true, component: 'CasesListPage', status: 'active' },
   { path: '/cases/:caseId', label: 'Case Layout', requiresAuth: true, component: 'CaseLayout', status: 'active' },
   { path: '/cases/:caseId/overview', label: 'Case Overview', requiresAuth: true, component: 'CaseOverviewPage', status: 'active' },
+  { path: '/cases/:caseId/attorney-workbench', label: 'Attorney Workbench', requiresAuth: true, requiredPermission: 'canViewEvidence', component: 'AttorneyWorkbenchPage', status: 'active' },
   { path: '/cases/:caseId/evidence', label: 'Evidence', requiresAuth: true, component: 'EvidencePage', status: 'active' },
   { path: '/cases/:caseId/charges', label: 'Charges', requiresAuth: true, component: 'ChargesPage', status: 'active' },
   { path: '/cases/:caseId/documents', label: 'Documents', requiresAuth: true, component: 'DocumentsPage', status: 'active' },

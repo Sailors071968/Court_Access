@@ -208,6 +208,9 @@ async function gatePg009AttorneyReports(): Promise<ProductionGate> {
     { label: 'Report generator (structured)', pass: await fileExists(workspacePath('backend/src/intelligence/reportGenerator.ts')) },
     { label: 'Intelligence API routes', pass: await fileExists(workspacePath('backend/src/intelligence/intelligenceRoutes.ts')) },
     { label: 'Attorney intelligence tests', pass: await fileExists(workspacePath('backend/tests/attorney-intelligence.test.ts')) },
+    { label: 'Attorney Workbench service', pass: await fileExists(workspacePath('backend/src/workbench/workbenchService.ts')) },
+    { label: 'Workbench API routes', pass: await fileExists(workspacePath('backend/src/workbench/workbenchRoutes.ts')) },
+    { label: 'Workbench tests', pass: await fileExists(workspacePath('backend/tests/attorney-workbench.test.ts')) },
     { label: 'Expert witness package exporter', pass: await fileExists(workspacePath('backend/src/evidence/expertWitnessPackageExporter.ts')) },
   ];
   const summary = resultFromChecks(checks);

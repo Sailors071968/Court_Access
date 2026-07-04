@@ -71,6 +71,7 @@ import { TrialExhibitWorkspace } from './pages/case/TrialExhibitWorkspace';
 import { LitigationStrategyView } from './pages/case/LitigationStrategyView';
 import { ContradictionDashboardPage } from './pages/case/ContradictionDashboardPage';
 import { NarrativeAnalysisPage } from './pages/case/NarrativeAnalysisPage';
+import { AttorneyWorkbenchPage } from './pages/case/AttorneyWorkbenchPage';
 
 function App() {
   return (
@@ -376,6 +377,14 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canManageCases">
                   <CaseSettingsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="attorney-workbench"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <AttorneyWorkbenchPage />
                 </ProtectedRoute>
               }
             />

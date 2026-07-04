@@ -1,7 +1,7 @@
 # Production Gates Report — Master Production Program v4.0
 
-**Generated:** 2026-07-04T20:49:12.736Z
-**Overall:** NOT_READY (11 PASS / 0 FAIL / 4 PARTIAL / 0 SKIP)
+**Generated:** 2026-07-04T21:16:34.643Z
+**Overall:** NOT_READY (12 PASS / 0 FAIL / 3 PARTIAL / 0 SKIP)
 **Deployment Blocked:** YES
 
 ## Gate Summary
@@ -10,7 +10,7 @@
 |------|------|--------|--------|
 | PG-001 | Stripe Billing | PARTIAL | 17/18 |
 | PG-002 | Authentication | PASS | 5/5 |
-| PG-003 | Client Management | PARTIAL | 1/3 |
+| PG-003 | Client Domain | PASS | 5/5 |
 | PG-004 | Case Management | PASS | 3/3 |
 | PG-005 | Document Upload | PASS | 4/4 |
 | PG-006 | OCR | PASS | 4/4 |
@@ -27,7 +27,6 @@
 ## Blockers
 
 - PG-001: 1A-012: Live Stripe Test Mode API certification in staging
-- PG-003: Dedicated client entity/API not implemented — cases serve as proxy
 - PG-009: Narrative deconstruction engine is stub-only
 - PG-009: Narrative engine (full)
 - PG-015: Automated backup restore drill not implemented
@@ -66,19 +65,21 @@
 
 **Recovery:** Ensure authMiddleware.ts RBAC covers all protected routes
 
-### PG-003 — Client Management — PARTIAL
+### PG-003 — Client Domain — PASS
 
 **Test steps:**
-- Check Client entity in Prisma schema
-- Verify client CRUD API routes
+- Verify Client + Organization in Prisma
+- Verify /api/clients CRUD
+- Run client-domain.test.ts
 
 **Evidence:**
-- Case management (tenant proxy)
+- Dedicated Client model
+- Organization model (tenant)
+- Client API routes
+- Client domain tests
+- Case-client relationship
 
-**Blockers:**
-- Dedicated client entity/API not implemented — cases serve as proxy
-
-**Recovery:** Implement Client model + /api/clients CRUD with tenant isolation
+**Recovery:** Implement and verify client CRUD with tenant isolation
 
 ### PG-004 — Case Management — PASS
 

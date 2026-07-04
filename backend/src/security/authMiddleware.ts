@@ -185,6 +185,7 @@ const ROLE_HIERARCHY: Record<UserRole, number> = {
 // Route permission map: route prefix → minimum required roles
 const ROUTE_PERMISSIONS: Record<string, UserRole[]> = {
   '/api/compliance': ['admin', 'attorney', 'investigator'],
+  '/api/clients': ['admin', 'attorney', 'investigator', 'staff'],
   '/api/policy-intelligence': ['admin', 'attorney', 'staff'],
   '/api/policy-pipeline': ['admin', 'staff'],
   '/api/operations': ['admin', 'staff'],
@@ -551,6 +552,14 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
           creditsUsed: 0,
           billingPeriodStart: now,
           billingPeriodEnd: endOfMonth,
+        },
+      });
+
+      await tx.organization.create({
+        data: {
+          id: tenantId,
+          name: `${userName}'s Organization`,
+          orgType: userRole === 'attorney' ? 'law_firm' : 'solo',
         },
       });
 

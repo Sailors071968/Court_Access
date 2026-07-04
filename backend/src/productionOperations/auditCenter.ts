@@ -8,6 +8,7 @@ import { queryExtractionAudit } from '../legislative/extractionAuditLog.js';
 import type { AuditCenterQuery, AuditCenterResult, AuditRecord } from './types.js';
 
 const CATEGORY_PATTERNS: Array<{ pattern: RegExp; category: string }> = [
+  { pattern: /^CLIENT_/, category: 'client' },
   { pattern: /^(LOGIN|LOGOUT|TOKEN|USER_REGISTERED|SESSION)/, category: 'authentication' },
   { pattern: /^STRIPE_|^BILLING_/, category: 'billing' },
   { pattern: /^LEGISLATIVE_|extraction/, category: 'legislative' },

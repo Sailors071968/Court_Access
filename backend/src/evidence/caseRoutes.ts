@@ -19,6 +19,7 @@ interface CreateCaseBody {
   caseNumber: string;
   jurisdiction: string;
   caseType: string;
+  clientId?: string;
   court?: string;
   judge?: string;
   department?: string;
@@ -72,10 +73,20 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
     }
 
     try {
+      if (body.clientId) {
+        const client = await prisma.client.findFirst({
+          where: { clientId: body.clientId, tenantId: user.tenantId, deletedAt: null },
+        });
+        if (!client) {
+          return reply.code(400).send({ error: 'Invalid clientId for this tenant' });
+        }
+      }
+
       const newCase = await prisma.criminalCase.create({
         data: {
           tenantId: user.tenantId,
           ownerId: user.userId,
+          clientId: body.clientId ?? null,
           title: body.title,
           caseNumber: body.caseNumber,
           jurisdiction: body.jurisdiction,

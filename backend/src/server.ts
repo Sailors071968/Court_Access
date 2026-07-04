@@ -24,6 +24,7 @@ import { registerPolicyMatrixRoutes } from './cpra/policyMatrixRoutes.js';
 import { registerAutonomousCpraRoutes } from './cpra/autonomousCpraRoutes.js';
 import { registerBillingRoutes } from './billing/billingRoutes.js';
 import { registerCaseRoutes } from './evidence/caseRoutes.js';
+import { registerClientRoutes } from './clients/clientRoutes.js';
 import { registerEvidenceRoutes } from './evidence/evidenceRoutes.js';
 import { registerDirectUploadRoutes } from './evidence/evidenceDirectUpload.js';
 import { registerEvidenceRequestRoutes } from './evidence/evidenceRequestRoutes.js';
@@ -163,6 +164,9 @@ async function startServer() {
   // Core Evidence System — Case Management + Evidence Upload
   console.log('[Server] Registering case management routes...');
   await registerCaseRoutes(app);
+
+  console.log('[Server] Registering client management routes...');
+  await registerClientRoutes(app);
 
   console.log('[Server] Registering direct evidence upload routes...');
   await registerDirectUploadRoutes(app);

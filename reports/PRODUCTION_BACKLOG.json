@@ -20,8 +20,8 @@
       "gate": "PG-003",
       "priority": "P1",
       "title": "Implement dedicated Client entity and /api/clients CRUD",
-      "status": "pending",
-      "reason": "Cases serve as tenant proxy; no Client model or API routes"
+      "status": "completed",
+      "completedAt": "2026-07-04T21:20:00Z"
     },
     {
       "id": "PG-009-BLOCKER",

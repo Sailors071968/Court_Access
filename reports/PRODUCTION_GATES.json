@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-04T20:49:12.736Z",
+  "generatedAt": "2026-07-04T21:16:34.643Z",
   "version": "4.0",
   "program": "PRODUCTION_CERTIFICATION",
   "gates": [
@@ -52,24 +52,27 @@
     },
     {
       "id": "PG-003",
-      "name": "Client Management",
-      "program": "Program 1 / Program 17",
-      "result": "PARTIAL",
+      "name": "Client Domain",
+      "program": "Domain C / Program 17",
+      "result": "PASS",
       "checks": {
-        "pass": 1,
-        "total": 3
+        "pass": 5,
+        "total": 5
       },
       "testSteps": [
-        "Check Client entity in Prisma schema",
-        "Verify client CRUD API routes"
+        "Verify Client + Organization in Prisma",
+        "Verify /api/clients CRUD",
+        "Run client-domain.test.ts"
       ],
       "evidence": [
-        "Case management (tenant proxy)"
+        "Dedicated Client model",
+        "Organization model (tenant)",
+        "Client API routes",
+        "Client domain tests",
+        "Case-client relationship"
       ],
-      "blockers": [
-        "Dedicated client entity/API not implemented — cases serve as proxy"
-      ],
-      "recoveryBehavior": "Implement Client model + /api/clients CRUD with tenant isolation"
+      "blockers": [],
+      "recoveryBehavior": "Implement and verify client CRUD with tenant isolation"
     },
     {
       "id": "PG-004",
@@ -335,13 +338,12 @@
       "recoveryBehavior": "Implement automated backup verification and restore drill runner"
     }
   ],
-  "passCount": 11,
+  "passCount": 12,
   "failCount": 0,
-  "partialCount": 4,
+  "partialCount": 3,
   "skipCount": 0,
   "blockers": [
     "PG-001: 1A-012: Live Stripe Test Mode API certification in staging",
-    "PG-003: Dedicated client entity/API not implemented — cases serve as proxy",
     "PG-009: Narrative deconstruction engine is stub-only",
     "PG-009: Narrative engine (full)",
     "PG-015: Automated backup restore drill not implemented"

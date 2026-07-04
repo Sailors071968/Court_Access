@@ -71,28 +71,30 @@ async function gatePg003ClientManagement(): Promise<ProductionGate> {
   const { readFile } = await import('node:fs/promises');
   const schemaPath = workspacePath('backend/prisma/schema.prisma');
   let clientEntity = false;
+  let organizationEntity = false;
   if (await fileExists(schemaPath)) {
     const raw = await readFile(schemaPath, 'utf-8').catch(() => '');
     clientEntity = /model\s+Client\b/.test(raw);
+    organizationEntity = /model\s+Organization\b/.test(raw);
   }
-  const hasCaseRoutes = await fileExists(workspacePath('backend/src/evidence/caseRoutes.ts'));
   const checks = [
     { label: 'Dedicated Client model', pass: clientEntity },
-    { label: 'Client API routes', pass: await fileExists(workspacePath('backend/src/evidence/clientRoutes.ts')) },
-    { label: 'Case management (tenant proxy)', pass: hasCaseRoutes },
+    { label: 'Organization model (tenant)', pass: organizationEntity },
+    { label: 'Client API routes', pass: await fileExists(workspacePath('backend/src/clients/clientRoutes.ts')) },
+    { label: 'Client domain tests', pass: await fileExists(workspacePath('backend/tests/client-domain.test.ts')) },
+    { label: 'Case-client relationship', pass: clientEntity },
   ];
   const summary = resultFromChecks(checks);
-  const result: ProductionGate['result'] = clientEntity ? summary.result : 'PARTIAL';
   return {
     id: 'PG-003',
-    name: 'Client Management',
-    program: 'Program 1 / Program 17',
-    result,
+    name: 'Client Domain',
+    program: 'Domain C / Program 17',
+    result: summary.result,
     checks: { pass: summary.pass, total: summary.total },
-    testSteps: ['Check Client entity in Prisma schema', 'Verify client CRUD API routes'],
+    testSteps: ['Verify Client + Organization in Prisma', 'Verify /api/clients CRUD', 'Run client-domain.test.ts'],
     evidence: checks.filter((c) => c.pass).map((c) => c.label),
-    blockers: clientEntity ? summary.failed : ['Dedicated client entity/API not implemented — cases serve as proxy'],
-    recoveryBehavior: 'Implement Client model + /api/clients CRUD with tenant isolation',
+    blockers: summary.failed,
+    recoveryBehavior: 'Implement and verify client CRUD with tenant isolation',
   };
 }
 

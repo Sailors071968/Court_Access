@@ -1300,6 +1300,64 @@ model CpraTimelineEvent {
 }
 
 // ---------------------------------------------------------------------------
+// Multi-Tenant Platform — Organization (Domain B)
+// ---------------------------------------------------------------------------
+
+model Organization {
+  id        String   @id // matches User.tenantId
+  name      String
+  orgType   String   @default("law_firm") // law_firm | solo | public_defender | investigator
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("organizations")
+}
+
+// ---------------------------------------------------------------------------
+// Client Domain — Canonical Client (Domain C)
+// ---------------------------------------------------------------------------
+
+model Client {
+  clientId              String    @id @default(uuid())
+  tenantId              String
+  ownerId               String
+
+  firstName             String
+  lastName              String
+  middleName            String?
+  dateOfBirth           DateTime?
+  status                String    @default("prospect") // prospect | intake | active | inactive | closed
+
+  email                 String?
+  phone                 String?
+  phoneAlt              String?
+
+  alternateContacts     Json?     // [{ name, relationship, phone, email }]
+  emergencyContacts     Json?     // [{ name, relationship, phone }]
+  addressHistory        Json?     // [{ line1, line2, city, state, zip, country, from, to }]
+
+  communicationPreference String  @default("email") // email | phone | sms | mail
+  language              String    @default("en")
+  notes                 String?
+
+  intakeDate            DateTime?
+  retentionStatus       String    @default("pending") // pending | retained | declined
+  retainedAt            DateTime?
+
+  deletedAt             DateTime?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  cases                 CriminalCase[]
+
+  @@index([tenantId])
+  @@index([ownerId])
+  @@index([status])
+  @@index([lastName, firstName])
+  @@map("clients")
+}
+
+// ---------------------------------------------------------------------------
 // Core Evidence System — Case Management
 // ---------------------------------------------------------------------------
 
@@ -1307,6 +1365,8 @@ model CriminalCase {
   caseId          String   @id @default(uuid())
   tenantId        String
   ownerId         String
+  clientId        String?
+  client          Client?  @relation(fields: [clientId], references: [clientId])
   title           String
   caseNumber      String
   jurisdiction    String
@@ -1328,6 +1388,7 @@ model CriminalCase {
   @@unique([tenantId, caseNumber])
   @@index([tenantId])
   @@index([ownerId])
+  @@index([clientId])
   @@index([status])
   @@index([caseType])
   @@index([createdAt])

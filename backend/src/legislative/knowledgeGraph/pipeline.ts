@@ -8,15 +8,13 @@ import type { PrismaClient } from '@prisma/client';
 import type { CriminalKnowledgeBundle, KnowledgeGraphCoverageReport, RepositoryCoverageMetrics } from './types.ts';
 import { createRepositories, type RepositoryName } from './repositories.ts';
 import { EXTRACTOR_VERSION } from './intelligenceExtractor.ts';
-import { parseLeginfoStatuteHtml } from '../statuteParser.ts';
-import { extractCriminalKnowledge } from './intelligenceExtractor.ts';
+import { runLegislativePipeline } from '../pipelineStages.ts';
 import { readRawHtml, rawHtmlPath } from '../rawHtmlStore.ts';
 import {
   appendExtractionAudit,
   buildExtractAuditEntry,
   buildParseAuditEntry,
 } from '../extractionAuditLog.ts';
-import { classifyStatute } from '../liabilityDiscovery/classificationEngine.ts';
 import {
   collectLiabilityDiscoveryMetrics,
   writeLiabilityDiscoveryReport,
@@ -192,7 +190,7 @@ export async function processStatutePipeline(
   for (const section of toProcess) {
     const sourceUrl = `https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=${options.code}&sectionNum=${section}`;
     const html = await readRawHtml(rawDir, options.code, section);
-    const parseResult = parseLeginfoStatuteHtml({
+    const pipelineResult = runLegislativePipeline({
       html,
       sourceUrl,
       retrievedAt: new Date().toISOString(),
@@ -200,17 +198,17 @@ export async function processStatutePipeline(
       section,
     });
 
-    if (!parseResult.ok) {
+    if (!pipelineResult.ok) {
       rejected += 1;
-      await writeFile(rejectionsPath, `${JSON.stringify(parseResult.rejection)}\n`, { flag: 'a' });
+      await writeFile(rejectionsPath, `${JSON.stringify(pipelineResult.rejection)}\n`, { flag: 'a' });
       await appendExtractionAudit(
         buildParseAuditEntry({
-          code: parseResult.rejection.code,
-          section: parseResult.rejection.section,
-          sourceUrl: parseResult.rejection.sourceUrl,
-          contentHash: parseResult.rejection.contentHash,
+          code: pipelineResult.rejection.code,
+          section: pipelineResult.rejection.section,
+          sourceUrl: pipelineResult.rejection.sourceUrl,
+          contentHash: pipelineResult.rejection.contentHash,
           status: 'rejected',
-          rejectionReason: parseResult.rejection.reason,
+          rejectionReason: pipelineResult.rejection.reason,
         }),
         auditOptions,
       );
@@ -219,22 +217,18 @@ export async function processStatutePipeline(
 
     await appendExtractionAudit(
       buildParseAuditEntry({
-        code: parseResult.record.code,
-        section: parseResult.record.section,
+        code: pipelineResult.statute.code,
+        section: pipelineResult.statute.section,
         sourceUrl,
-        contentHash: parseResult.record.contentHash,
+        contentHash: pipelineResult.statute.contentHash,
         status: 'success',
-        sourceStatuteId: parseResult.record.id,
+        sourceStatuteId: pipelineResult.statute.id,
       }),
       auditOptions,
     );
 
-    const bundle = extractCriminalKnowledge(parseResult.record);
+    const { bundle, classification } = pipelineResult;
     await updateRepositoriesFromBundle(bundle, repoDir);
-
-    const classification = classifyStatute(parseResult.record, {
-      confirmedOffenseCount: bundle.offenses.length,
-    });
     await updateClassificationRecord(
       classification as unknown as Record<string, unknown> & { id: string },
       repoDir,
@@ -242,18 +236,18 @@ export async function processStatutePipeline(
     classified += 1;
     if (classification.criminalLiabilityLikely) likelyCriminal += 1;
 
-    statuteIds.add(parseResult.record.id);
+    statuteIds.add(pipelineResult.statute.id);
     processed += 1;
     offenses += bundle.offenses.length;
 
     const extractStatus = bundle.offenses.length > 0 ? 'success' : 'partial';
     await appendExtractionAudit(
       buildExtractAuditEntry({
-        code: parseResult.record.code,
-        section: parseResult.record.section,
+        code: pipelineResult.statute.code,
+        section: pipelineResult.statute.section,
         sourceUrl,
-        contentHash: parseResult.record.contentHash,
-        sourceStatuteId: parseResult.record.id,
+        contentHash: pipelineResult.statute.contentHash,
+        sourceStatuteId: pipelineResult.statute.id,
         status: extractStatus,
         offenseCount: bundle.offenses.length,
         elementCount: bundle.elements.length,

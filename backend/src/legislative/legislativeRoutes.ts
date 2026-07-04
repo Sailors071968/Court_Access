@@ -7,6 +7,7 @@ import { collectProductionMetrics } from './productionMetrics.ts';
 import { readCoverageReport } from './legislativeIngestService.ts';
 import { createRepositories, REPOSITORY_NAMES } from './knowledgeGraph/repositories.ts';
 import { collectLiabilityDiscoveryMetrics } from './liabilityDiscovery/metrics.ts';
+import { getAttorneyStatuteIntelligence } from './attorneyIntelligence.ts';
 import {
   getExtractionAuditStats,
   queryExtractionAudit,
@@ -79,6 +80,17 @@ export async function registerLegislativeRoutes(app: FastifyInstance): Promise<v
     }
   });
 
+  app.get('/api/legislative/intelligence/:code/:section', async (request, reply) => {
+    const { code, section } = request.params as { code: string; section: string };
+    const intel = await getAttorneyStatuteIntelligence(code, section, {
+      repositoryDir: resolve(DEFAULT_REPO_DIR),
+    });
+    if (!intel) {
+      return reply.status(404).send({ error: 'Statute intelligence not found. Run leginfo:process first.' });
+    }
+    return intel;
+  });
+
   app.get('/api/legislative/audit', async (request) => {
     const query = request.query as {
       code?: string;
@@ -131,6 +143,6 @@ export async function registerLegislativeRoutes(app: FastifyInstance): Promise<v
   });
 
   console.log(
-    '[Legislative] Routes registered: /api/legislative/metrics, /coverage, /liability, /repositories, /audit, /classifications/:code/:section, /statutes/:code/:section',
+    '[Legislative] Routes registered: /metrics, /coverage, /liability, /intelligence/:code/:section, /repositories, /audit, /classifications/:code/:section, /statutes/:code/:section',
   );
 }

@@ -41,6 +41,7 @@ import { startRedisMemoryMonitor, stopRedisMemoryMonitor } from './observability
 import { registerChargeRoutes } from "./charges/chargeRoutes.js";
 import { registerCalcrimRoutes } from "./routes/calcrimRoutes.js";
 import { registerDoctrineRoutes } from './doctrine/doctrineRoutes.ts';
+import { registerExhibitRoutes } from './exhibits/exhibitRoutes.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -187,6 +188,9 @@ async function startServer() {
 
   console.log('[Server] Registering doctrine intelligence routes...');
   registerDoctrineRoutes(app);
+
+  console.log('[Server] Registering exhibit routes...');
+  await registerExhibitRoutes(app);
 
   console.log('[Server] Registering admin queue monitoring routes...');
   await registerQueueMonitorRoutes(app);

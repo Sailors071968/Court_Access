@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-04T22:54:48.630Z",
+  "generatedAt": "2026-07-04T23:03:58.331Z",
   "version": "9.0",
   "program": "PRODUCTION_CERTIFICATION",
   "gates": [
@@ -50,22 +50,26 @@
     {
       "id": "PG-003",
       "name": "Organizations",
-      "program": "Program 3",
+      "program": "Program 2",
       "result": "PASS",
       "checks": {
-        "pass": 3,
-        "total": 3
+        "pass": 7,
+        "total": 7
       },
       "testSteps": [
-        "Verify org model"
+        "Run organization-domain.test.ts"
       ],
       "evidence": [
         "Organization model",
+        "Organization API",
+        "Offices & practice groups",
+        "Invitations",
+        "Org domain tests",
         "Tenant isolation",
         "RBAC roles"
       ],
       "blockers": [],
-      "recoveryBehavior": "Implement organization CRUD"
+      "recoveryBehavior": "Complete organization platform"
     },
     {
       "id": "PG-004",

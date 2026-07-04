@@ -1,7 +1,7 @@
 {
   "program": "VERSION_1.0_RELEASE",
   "version": "9.0",
-  "generatedAt": "2026-07-04T22:54:48.630Z",
+  "generatedAt": "2026-07-04T23:03:58.331Z",
   "releaseCandidate": true,
   "overallResult": "NOT_READY",
   "gatesPass": 16,
@@ -39,9 +39,9 @@
     {
       "id": "PG-003",
       "name": "Organizations",
-      "program": "Program 3",
+      "program": "Program 2",
       "status": "PASS",
-      "checks": "3/3",
+      "checks": "7/7",
       "blockers": []
     },
     {

@@ -7,6 +7,7 @@ import type { PhaseStatus } from './phaseDefinitions.js';
 import { MASTER_PRODUCTION_PHASES } from './phaseDefinitions.js';
 import { runVersion1ProductionGates } from './version1ProductionGates.js';
 import { runProductionGates } from './runProductionGates.js';
+import { assessProductionPrograms } from './productionCompletionPrograms.js';
 
 export const MASTER_PROGRAM_VERSION = '11.0';
 
@@ -48,6 +49,7 @@ export interface MasterProductionProgramReport {
     legacy: { pass: number; total: number; status: string };
     version1: { pass: number; total: number; status: string };
   };
+  productionPrograms: Array<{ id: string; number: number; name: string; completionPercent: number; capabilitiesComplete: number }>;
   phases: AssessedPhase[];
   topBlockers: string[];
   nextRecommendedTasks: Array<{ priority: string; phase: string; task: string }>;
@@ -93,6 +95,7 @@ export async function assessMasterProductionProgram(): Promise<MasterProductionP
 
   const legacyGates = await runProductionGates();
   const v1Gates = await runVersion1ProductionGates();
+  const { programs: productionPrograms } = await assessProductionPrograms();
 
   const phasesComplete = phases.filter((p) => p.status === 'COMPLETE').length;
   const phasesPartial = phases.filter((p) => p.status === 'PARTIAL').length;
@@ -139,6 +142,7 @@ export async function assessMasterProductionProgram(): Promise<MasterProductionP
       legacy: { pass: legacyGates.passCount, total: legacyGates.gates.length, status: legacyGates.overallResult },
       version1: { pass: v1Gates.passCount, total: v1Gates.gates.length, status: v1Gates.overallResult },
     },
+    productionPrograms,
     phases,
     topBlockers,
     nextRecommendedTasks,

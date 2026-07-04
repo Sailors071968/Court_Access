@@ -22,6 +22,8 @@ model User {
   role          String   @default("staff") // admin | attorney | investigator | staff | defendant
   tenantId      String
   clientId      String?  // Links defendant portal users to Client record
+  officeId      String?
+  practiceGroupId String?
 
   emailVerifiedAt     DateTime?
   mfaEnabled          Boolean  @default(false)
@@ -37,11 +39,16 @@ model User {
   emailVerificationTokens EmailVerificationToken[]
   sentMessages  CaseMessage[] @relation("MessageSender")
   client        Client?  @relation(fields: [clientId], references: [clientId])
+  organizationMembership OrganizationMember?
+  office        OrganizationOffice? @relation(fields: [officeId], references: [officeId])
+  practiceGroup PracticeGroup? @relation(fields: [practiceGroupId], references: [practiceGroupId])
 
   @@index([email])
   @@index([tenantId])
   @@index([role])
   @@index([clientId])
+  @@index([officeId])
+  @@index([practiceGroupId])
   @@map("users")
 }
 
@@ -1335,13 +1342,117 @@ model CpraTimelineEvent {
 // ---------------------------------------------------------------------------
 
 model Organization {
-  id        String   @id // matches User.tenantId
-  name      String
-  orgType   String   @default("law_firm") // law_firm | solo | public_defender | investigator
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          String   @id // matches User.tenantId for org members
+  name        String
+  orgType     String   @default("law_firm") // law_firm | solo | public_defender | investigator
+  settings    Json?    // { timezone, defaultJurisdiction, notificationDefaults }
+  logoUrl     String?
+  primaryColor String? @default("#1e293b")
+  secondaryColor String?
+  tagline     String?
+  website     String?
+  billingEmail String?
+  stripeCustomerId String?
+  onboardingStep String @default("created") // created | profile | offices | team | complete
+  onboardingCompletedAt DateTime?
+
+  offices       OrganizationOffice[]
+  practiceGroups PracticeGroup[]
+  members       OrganizationMember[]
+  invitations   OrganizationInvitation[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@map("organizations")
+}
+
+model OrganizationOffice {
+  officeId       String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  addressLine1   String?
+  addressLine2   String?
+  city           String?
+  state          String?  @default("CA")
+  zip            String?
+  phone          String?
+  isPrimary      Boolean  @default(false)
+
+  practiceGroups PracticeGroup[]
+  members        OrganizationMember[]
+  users          User[]
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([organizationId])
+  @@map("organization_offices")
+}
+
+model PracticeGroup {
+  practiceGroupId String   @id @default(uuid())
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  officeId        String?
+  office          OrganizationOffice? @relation(fields: [officeId], references: [officeId])
+  name            String
+  description     String?
+  practiceArea    String?  // criminal_defense | appellate | juvenile | federal
+
+  members         OrganizationMember[]
+  invitations     OrganizationInvitation[]
+  users           User[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([organizationId])
+  @@index([officeId])
+  @@map("practice_groups")
+}
+
+model OrganizationMember {
+  memberId       String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role           String   // admin | attorney | investigator | staff
+  officeId       String?
+  office         OrganizationOffice? @relation(fields: [officeId], references: [officeId])
+  practiceGroupId String?
+  practiceGroup  PracticeGroup? @relation(fields: [practiceGroupId], references: [practiceGroupId])
+  status         String   @default("active") // active | suspended | removed
+  invitedById    String?
+  joinedAt       DateTime @default(now())
+
+  @@index([organizationId])
+  @@index([organizationId, role])
+  @@map("organization_members")
+}
+
+model OrganizationInvitation {
+  invitationId   String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  email          String
+  role           String   // admin | attorney | investigator | staff
+  officeId       String?
+  practiceGroupId String?
+  practiceGroup  PracticeGroup? @relation(fields: [practiceGroupId], references: [practiceGroupId])
+  tokenHash      String
+  status         String   @default("pending") // pending | accepted | expired | revoked
+  invitedById    String
+  expiresAt      DateTime
+  acceptedAt     DateTime?
+  createdAt      DateTime @default(now())
+
+  @@index([tokenHash])
+  @@index([organizationId, email])
+  @@index([organizationId, status])
+  @@map("organization_invitations")
 }
 
 // ---------------------------------------------------------------------------

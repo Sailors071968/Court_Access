@@ -23,6 +23,9 @@ import { RegisterPage } from './pages/auth/RegisterPage';
 import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage';
 import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
 import { VerifyEmailPage } from './pages/auth/VerifyEmailPage';
+import { AcceptInvitationPage } from './pages/auth/AcceptInvitationPage';
+import { OrganizationSettingsPage } from './pages/organization/OrganizationSettingsPage';
+import { OrganizationOnboardingPage } from './pages/organization/OrganizationOnboardingPage';
 
 // Main Pages — Dashboard Router (role-based)
 import { DashboardRouter } from './pages/dashboard/DashboardRouter';
@@ -100,6 +103,8 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/verify-email" element={<VerifyEmailPage />} />
+        <Route path="/accept-invitation" element={<AcceptInvitationPage />} />
+        <Route path="/organization/onboarding" element={<OrganizationOnboardingPage />} />
 
         {/* Protected App Routes */}
         <Route
@@ -304,6 +309,14 @@ function App() {
             element={
               <ProtectedRoute requiredPermission="canViewSettings">
                 <SettingsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="organization/settings"
+            element={
+              <ProtectedRoute requiredPermission="canViewSettings">
+                <OrganizationSettingsPage />
               </ProtectedRoute>
             }
           />

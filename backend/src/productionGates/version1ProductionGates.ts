@@ -46,11 +46,15 @@ async function gateV1_002Authentication(): Promise<ProductionGate> {
 async function gateV1_003Organizations(): Promise<ProductionGate> {
   const checks = [
     { label: 'Organization model', pass: await fileExists(workspacePath('backend/prisma/schema.prisma')) },
+    { label: 'Organization API', pass: await fileExists(workspacePath('backend/src/organizations/organizationRoutes.ts')) },
+    { label: 'Offices & practice groups', pass: await fileExists(workspacePath('backend/src/organizations/organizationService.ts')) },
+    { label: 'Invitations', pass: await fileExists(workspacePath('backend/src/organizations/organizationService.ts')) },
+    { label: 'Org domain tests', pass: await fileExists(workspacePath('backend/tests/organization-domain.test.ts')) },
     { label: 'Tenant isolation', pass: true },
     { label: 'RBAC roles', pass: Object.keys(AUTH_CONFIG.routePermissions).length > 0 },
   ];
   const summary = resultFromChecks(checks);
-  return { id: 'PG-003', name: 'Organizations', program: 'Program 3', result: summary.result, checks: { pass: summary.pass, total: summary.total }, testSteps: ['Verify org model'], evidence: checks.filter((c) => c.pass).map((c) => c.label), blockers: summary.failed, recoveryBehavior: 'Implement organization CRUD' };
+  return { id: 'PG-003', name: 'Organizations', program: 'Program 2', result: summary.result, checks: { pass: summary.pass, total: summary.total }, testSteps: ['Run organization-domain.test.ts'], evidence: checks.filter((c) => c.pass).map((c) => c.label), blockers: summary.failed, recoveryBehavior: 'Complete organization platform' };
 }
 
 async function gateV1_004Clients(): Promise<ProductionGate> {

@@ -193,6 +193,7 @@ const ROLE_HIERARCHY: Record<UserRole, number> = {
 const ROUTE_PERMISSIONS: Record<string, UserRole[]> = {
   '/api/compliance': ['admin', 'attorney', 'investigator'],
   '/api/clients': ['admin', 'attorney', 'investigator', 'staff'],
+  '/api/organizations': ['admin', 'attorney', 'investigator', 'staff'],
   '/api/policy-intelligence': ['admin', 'attorney', 'staff'],
   '/api/policy-pipeline': ['admin', 'staff'],
   '/api/operations': ['admin', 'staff'],
@@ -255,6 +256,8 @@ const PUBLIC_ROUTES = [
   '/api/auth/reset-password',
   '/api/auth/verify-email',
   '/api/auth/mfa/challenge',
+  '/api/auth/accept-invitation',
+  '/api/organizations/invitations/preview',
   '/api/discount-codes/validate',
   '/api/billing/webhook',
 ];
@@ -587,6 +590,16 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
           id: tenantId,
           name: `${userName}'s Organization`,
           orgType: userRole === 'attorney' ? 'law_firm' : 'solo',
+          onboardingStep: 'created',
+        },
+      });
+
+      await tx.organizationMember.create({
+        data: {
+          organizationId: tenantId,
+          userId: created.id,
+          role: userRole,
+          status: 'active',
         },
       });
 

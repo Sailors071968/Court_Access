@@ -1,12 +1,13 @@
 // ============================================================================
 // Phase 2 — Pipeline Worker Startup
-// Starts all 5 ACU-enforced BullMQ workers during server initialization.
+// Starts all 6 ACU-enforced BullMQ workers during server initialization.
 // Each worker extends CourtAccessWorker which provides:
 //   - Atomic ACU credit reservation before processing
 //   - Automatic refund on processing failure
 //   - Structured logging and graceful shutdown
 // ============================================================================
 
+import { evidenceIngestWorker } from './evidenceIngestWorker.js';
 import { timelineProcessingWorker } from './timelineProcessingWorker.js';
 import { narrativeProcessingWorker } from './narrativeProcessingWorker.js';
 import { contradictionAnalysisWorker } from './contradictionAnalysisWorker.js';
@@ -19,6 +20,7 @@ import { startBackpressureMonitor, stopBackpressureMonitor } from './backpressur
 // ---------------------------------------------------------------------------
 
 const pipelineWorkers = [
+  evidenceIngestWorker,
   timelineProcessingWorker,
   narrativeProcessingWorker,
   contradictionAnalysisWorker,
@@ -41,7 +43,7 @@ export function startPipelineWorkers(): void {
     return;
   }
 
-  console.log('[PipelineWorkers] Starting 5 ACU-enforced pipeline workers...');
+  console.log('[PipelineWorkers] Starting 6 ACU-enforced pipeline workers...');
 
   for (const worker of pipelineWorkers) {
     worker.start();

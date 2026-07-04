@@ -629,6 +629,47 @@ export async function fetchContradictionRecommendations(caseId: string): Promise
 }
 
 // ---------------------------------------------------------------------------
+// Litigation Strategy API
+// ---------------------------------------------------------------------------
+
+export interface ApiLitigationStrategy {
+  caseId: string;
+  generatedAt: string;
+  disclaimer: string;
+  observations: Array<{
+    id: string;
+    evidenceSource: string;
+    observation: string;
+    timestamp: string;
+  }>;
+  recommendations: Array<{
+    id: string;
+    type: string;
+    suggestedOpportunity: string;
+    evidenceSource: string;
+    confidenceScore: number;
+    status: string;
+  }>;
+  readiness: Array<{ label: string; score: number; maxScore: number }>;
+  roadmap: Array<{
+    stepNumber: number;
+    description: string;
+    category: string;
+    status: string;
+  }>;
+  unknowns: string[];
+}
+
+export async function fetchLitigationStrategy(caseId: string): Promise<ApiLitigationStrategy> {
+  const res = await fetch(`${API_BASE}/cases/${caseId}/litigation-strategy`, { headers: getAuthHeaders() });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to fetch litigation strategy' }));
+    throw new Error(err.error || 'Failed to fetch litigation strategy');
+  }
+  return res.json();
+}
+
+// ---------------------------------------------------------------------------
 // Billing / Stripe API
 // ---------------------------------------------------------------------------
 

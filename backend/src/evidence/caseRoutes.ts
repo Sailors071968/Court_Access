@@ -7,6 +7,7 @@
 import type { FastifyInstance, FastifyReply } from 'fastify';
 import { PrismaClient } from '@prisma/client';
 import type { AuthenticatedRequest } from '../security/authMiddleware.js';
+import { buildLitigationStrategyResponse } from '../services/litigationStrategyApiService.js';
 
 const prisma = new PrismaClient();
 
@@ -268,6 +269,32 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
     } catch (err) {
       console.error('[CaseRoutes] Failed to delete case:', err);
       return reply.code(500).send({ error: 'Failed to delete case' });
+    }
+  });
+
+  // GET /api/cases/:caseId/litigation-strategy — Evidence-governed litigation strategy
+  app.get('/api/cases/:caseId/litigation-strategy', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+    if (!user) {
+      return reply.code(401).send({ error: 'Authentication required' });
+    }
+
+    const { caseId } = request.params as { caseId: string };
+
+    const caseRecord = await prisma.criminalCase.findFirst({
+      where: { caseId, tenantId: user.tenantId, deletedAt: null },
+    });
+
+    if (!caseRecord) {
+      return reply.code(403).send({ error: 'Forbidden' });
+    }
+
+    try {
+      const strategy = await buildLitigationStrategyResponse(caseId, user.tenantId);
+      return strategy;
+    } catch (err) {
+      console.error('[CaseRoutes] Failed to build litigation strategy:', err);
+      return reply.code(500).send({ error: 'Failed to generate litigation strategy' });
     }
   });
 }

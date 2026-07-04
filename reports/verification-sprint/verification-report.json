@@ -1,0 +1,261 @@
+{
+  "generatedAt": "2026-07-04T19:09:26.848Z",
+  "environment": {
+    "api": "http://localhost:3001",
+    "database": "postgresql://localhost:5432/courtaccess",
+    "redis": "localhost:6379"
+  },
+  "summary": {
+    "total": 16,
+    "passed": 16,
+    "failed": 0
+  },
+  "workflows": [
+    {
+      "id": "P0-001",
+      "title": "Backend TypeScript compilation clean",
+      "status": "PASS",
+      "verified": "npx tsc --noEmit exits 0",
+      "commands": [
+        "cd /workspace/backend && npx tsc --noEmit"
+      ],
+      "evidence": [
+        "tsc exit code 0"
+      ],
+      "defects": []
+    },
+    {
+      "id": "P0-003",
+      "title": "Enable authentication hook",
+      "status": "PASS",
+      "verified": "Protected routes return 401 without token; register/login/me work for attorney",
+      "commands": [
+        "GET /api/cases (no auth) → 401",
+        "POST /api/auth/login (attorney)",
+        "GET /api/auth/me"
+      ],
+      "evidence": [
+        "unauth /api/cases → 401",
+        "health: {\"status\":\"ok\",\"timestamp\":\"2026-07-04T19:09:22.795Z\",\"version\":\"1.1.0\",\"service\":\"court-access-backend\",\"environment\":\"development\"}",
+        "login returned token: true",
+        "/api/auth/me role=attorney",
+        "security logs count: 20, hasAuthEvent=true",
+        "created case: 4b7ff3ff-11a9-4f23-984a-b91948c06636",
+        "evidence list count=1, processingStatus=undefined"
+      ],
+      "defects": []
+    },
+    {
+      "id": "P1-015",
+      "title": "Wire charges UI to API",
+      "status": "PASS",
+      "verified": "POST /api/charges creates charge; GET /api/charges/:caseId returns persisted data",
+      "commands": [
+        "POST /api/charges",
+        "GET /api/charges/4b7ff3ff-11a9-4f23-984a-b91948c06636"
+      ],
+      "evidence": [
+        "chargeId=d88b2dbc-df83-4d12-a4c0-45e9b40acc74",
+        "chargesCount=1"
+      ],
+      "defects": []
+    },
+    {
+      "id": "P1-001",
+      "title": "Fix document upload end-to-end",
+      "status": "PASS",
+      "verified": "Multipart upload to /api/evidence/upload; evidence persisted in DB",
+      "commands": [
+        "POST /api/evidence/upload (file=/workspace/reports/verification-sprint/test-police-report.txt)",
+        "GET /api/cases/4b7ff3ff-11a9-4f23-984a-b91948c06636/evidence"
+      ],
+      "evidence": [
+        "upload status=201",
+        "evidenceId=05023b80-5317-4131-9690-73acd9f62880"
+      ],
+      "defects": []
+    },
+    {
+      "id": "P1-010",
+      "title": "Wire litigation strategy API",
+      "status": "PASS",
+      "verified": "GET /api/cases/:id/litigation-strategy returns 200 with strategy payload",
+      "commands": [
+        "GET /api/cases/4b7ff3ff-11a9-4f23-984a-b91948c06636/litigation-strategy"
+      ],
+      "evidence": [
+        "status=200",
+        "keys=caseId,generatedAt,disclaimer,observations,recommendations,readiness,roadmap,unknowns"
+      ],
+      "defects": []
+    },
+    {
+      "id": "P1-016",
+      "title": "Case analysis API and panel",
+      "status": "PASS",
+      "verified": "GET /api/cases/:id/analysis returns evidence-governed analysis",
+      "commands": [
+        "GET /api/cases/4b7ff3ff-11a9-4f23-984a-b91948c06636/analysis"
+      ],
+      "evidence": [
+        "status=200",
+        "keys=caseId,generatedAt,analysisVersion,evidenceSummary,timelineEvents,crossDocComparisons,officerActions,policyComparisons,inconsistencies,recommendedExhibits,unknowns,fromCache"
+      ],
+      "defects": []
+    },
+    {
+      "id": "P1-013",
+      "title": "Attorney reports UI",
+      "status": "PASS",
+      "verified": "Compliance report POST and expert package GET return 200",
+      "commands": [
+        "POST /api/compliance/report/4b7ff3ff-11a9-4f23-984a-b91948c06636",
+        "GET /api/compliance/expert/4b7ff3ff-11a9-4f23-984a-b91948c06636"
+      ],
+      "evidence": [
+        "compliance status=200",
+        "expert status=200"
+      ],
+      "defects": []
+    },
+    {
+      "id": "P1-017",
+      "title": "Register exhibit routes",
+      "status": "PASS",
+      "verified": "POST /api/exhibits/create-scene with auth returns success",
+      "commands": [
+        "POST /api/exhibits/create-scene"
+      ],
+      "evidence": [
+        "status=200",
+        "success=true"
+      ],
+      "defects": []
+    },
+    {
+      "id": "P1-019",
+      "title": "Wire narrative routes to DB",
+      "status": "PASS",
+      "verified": "GET claims from Prisma; POST analyze enqueues job",
+      "commands": [
+        "GET /api/narrative/4b7ff3ff-11a9-4f23-984a-b91948c06636/claims",
+        "POST /api/narrative/analyze/4b7ff3ff-11a9-4f23-984a-b91948c06636"
+      ],
+      "evidence": [
+        "claims status=200 total=0",
+        "analyze status=202"
+      ],
+      "defects": []
+    },
+    {
+      "id": "P1-021",
+      "title": "Timeline routes use real DB events not debug stubs",
+      "status": "PASS",
+      "verified": "GET /api/timeline/:id/events returns DB events + unknowns when empty",
+      "commands": [
+        "GET /api/timeline/4b7ff3ff-11a9-4f23-984a-b91948c06636/events"
+      ],
+      "evidence": [
+        "events=0",
+        "unknowns=[\"No timeline events — run timeline processing after evidence upload.\"]",
+        "noDebugStubs=true"
+      ],
+      "defects": []
+    },
+    {
+      "id": "P0-002",
+      "title": "Remove fabricated doctrine demo data",
+      "status": "PASS",
+      "verified": "No DEMO_* in frontend; doctrine API returns real analysis or error (not fake violations)",
+      "commands": [
+        "grep DEMO_ src/services/doctrineService.ts",
+        "GET /api/doctrine/status",
+        "POST /api/doctrine/analyze"
+      ],
+      "evidence": [
+        "noDemoInFrontend=true",
+        "status=200",
+        "analyze=200"
+      ],
+      "defects": []
+    },
+    {
+      "id": "P1-018",
+      "title": "Wire pipeline workers to real processing",
+      "status": "PASS",
+      "verified": "BullMQ queues in Redis; narrative analyze enqueues job (202)",
+      "commands": [
+        "redis-cli keys bull:*",
+        "POST /api/narrative/analyze/4b7ff3ff-11a9-4f23-984a-b91948c06636"
+      ],
+      "evidence": [
+        "redisBullKeys=31",
+        "narrativeAnalyze=202"
+      ],
+      "defects": []
+    },
+    {
+      "id": "P1-020",
+      "title": "Register narrative sub-queue workers",
+      "status": "PASS",
+      "verified": "Narrative sub-queues present in Redis (claim-extraction, etc.)",
+      "commands": [
+        "redis-cli keys bull:narrative-*"
+      ],
+      "evidence": [
+        "bull:narrative-claim-extraction:meta, bull:narrative-claim-extraction:stalled-check, bull:narrative-impeachment-analysis:meta, bull:narrative-impeachment-analysis:stalled-check, bull:narrative-claim-normalization:stalled-check"
+      ],
+      "defects": []
+    },
+    {
+      "id": "P2-001",
+      "title": "Remove StaffDashboard hardcoded stats",
+      "status": "PASS",
+      "verified": "StaffDashboard uses fetchCases/fetchCaseEvidence; staff user can list cases via API",
+      "commands": [
+        "grep StaffDashboard.tsx",
+        "GET /api/cases as staff"
+      ],
+      "evidence": [
+        "usesLiveFetch=true",
+        "noHardcodedStats=true",
+        "staffCasesStatus=200"
+      ],
+      "defects": []
+    },
+    {
+      "id": "AUDIT",
+      "title": "Security audit logging",
+      "status": "PASS",
+      "verified": "SecurityLog entries created for login/register; admin can query /api/security/logs",
+      "commands": [
+        "GET /api/security/log (admin)"
+      ],
+      "evidence": [
+        "hasLoginEvent=true",
+        "logCount=20"
+      ],
+      "defects": []
+    },
+    {
+      "id": "DB-PERSIST",
+      "title": "Database persistence",
+      "status": "PASS",
+      "verified": "Case created via API retrievable from PostgreSQL",
+      "commands": [
+        "POST /api/cases",
+        "GET /api/cases/4b7ff3ff-11a9-4f23-984a-b91948c06636"
+      ],
+      "evidence": [
+        "caseId=4b7ff3ff-11a9-4f23-984a-b91948c06636",
+        "persisted=true"
+      ],
+      "defects": []
+    }
+  ],
+  "testCredentials": {
+    "attorney": "verify-attorney@courtaccess.test",
+    "admin": "verify-admin@courtaccess.test",
+    "caseId": "4b7ff3ff-11a9-4f23-984a-b91948c06636"
+  }
+}

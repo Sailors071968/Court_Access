@@ -69,7 +69,10 @@ export function generateAccessToken(payload: Omit<JwtPayload, 'iat' | 'exp'>): s
   return jwt.sign(payload, JWT_SECRET, { expiresIn: ACCESS_TOKEN_EXPIRY });
 }
 
-export async function generateRefreshToken(payload: Omit<JwtPayload, 'iat' | 'exp'>): Promise<string> {
+export async function generateRefreshToken(
+  payload: Omit<JwtPayload, 'iat' | 'exp'>,
+  device?: { userAgent?: string; ipAddress?: string; deviceLabel?: string },
+): Promise<string> {
   const token = jwt.sign(payload, JWT_REFRESH_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRY });
 
   await prisma.refreshToken.create({
@@ -79,6 +82,10 @@ export async function generateRefreshToken(payload: Omit<JwtPayload, 'iat' | 'ex
       email: payload.email,
       role: payload.role,
       expiresAt: new Date(Date.now() + REFRESH_TOKEN_EXPIRY_SECONDS * 1000),
+      userAgent: device?.userAgent,
+      ipAddress: device?.ipAddress,
+      deviceLabel: device?.deviceLabel,
+      lastSeenAt: new Date(),
     },
   });
 
@@ -246,6 +253,8 @@ const PUBLIC_ROUTES = [
   '/api/auth/debug-check',
   '/api/auth/forgot-password',
   '/api/auth/reset-password',
+  '/api/auth/verify-email',
+  '/api/auth/mfa/challenge',
   '/api/discount-codes/validate',
   '/api/billing/webhook',
 ];
@@ -447,9 +456,25 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       return reply.code(401).send({ error: 'Invalid email or password' });
     }
 
+    // MFA challenge required
+    if (user.mfaEnabled) {
+      const { createMfaSessionToken } = await import('./identityService.js');
+      void logSecurityEvent('MFA_CHALLENGE_REQUIRED', user.id, request.ip);
+      return {
+        mfaRequired: true,
+        mfaSessionToken: createMfaSessionToken(user.id),
+        message: 'MFA verification required',
+      };
+    }
+
+    const device = {
+      userAgent: request.headers['user-agent'],
+      ipAddress: request.ip,
+      deviceLabel: (await import('./identityService.js')).parseDeviceLabel(request.headers['user-agent']),
+    };
     const tokenPayload = { userId: user.id, tenantId: user.tenantId, email: user.email, role: user.role as UserRole };
     const accessToken = generateAccessToken(tokenPayload);
-    const refreshToken = await generateRefreshToken(tokenPayload);
+    const refreshToken = await generateRefreshToken(tokenPayload, device);
 
     void logSecurityEvent('LOGIN_SUCCESS', user.id, request.ip, `Login for ${email}`);
 
@@ -477,6 +502,8 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
         role: user.role,
         subscriptionStatus: sub?.subscriptionStatus ?? 'none',
         subscriptionTier: sub?.subscriptionTier ?? 'free',
+        emailVerified: Boolean(user.emailVerifiedAt),
+        mfaEnabled: user.mfaEnabled,
       },
     };
   });
@@ -566,9 +593,18 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       return created;
     });
 
+    const { createEmailVerificationToken, sendVerificationEmail } = await import('./identityService.js');
+    const verifyToken = await createEmailVerificationToken(user.id);
+    await sendVerificationEmail(email, verifyToken, request.ip);
+
+    const device = {
+      userAgent: request.headers['user-agent'],
+      ipAddress: request.ip,
+      deviceLabel: (await import('./identityService.js')).parseDeviceLabel(request.headers['user-agent']),
+    };
     const tokenPayload = { userId: user.id, tenantId, email, role: userRole };
     const accessToken = generateAccessToken(tokenPayload);
-    const refreshToken = await generateRefreshToken(tokenPayload);
+    const refreshToken = await generateRefreshToken(tokenPayload, device);
 
     void logSecurityEvent('USER_REGISTERED', user.id, request.ip, `Registered ${email} as ${userRole}`);
 
@@ -576,11 +612,21 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       accessToken,
       refreshToken,
       expiresIn: ACCESS_TOKEN_EXPIRY_SECONDS,
-      user: { userId: user.id, tenantId, email, name: userName, role: userRole, subscriptionStatus: 'none', subscriptionTier: 'free' },
+      user: {
+        userId: user.id,
+        tenantId,
+        email,
+        name: userName,
+        role: userRole,
+        subscriptionStatus: 'none',
+        subscriptionTier: 'free',
+        emailVerified: false,
+      },
+      message: 'Registration successful. Please verify your email.',
     };
   });
 
-  // POST /api/auth/refresh
+  // POST /api/auth/refresh — duplicate block removed below
   app.post('/api/auth/refresh', async (request: FastifyRequest, reply: FastifyReply) => {
     const { refreshToken: bodyToken } = (request.body || {}) as { refreshToken?: string };
     const cookieToken = (request.cookies as Record<string, string>)?.refreshToken;

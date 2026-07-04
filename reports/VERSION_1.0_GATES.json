@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-04T22:20:50.076Z",
+  "generatedAt": "2026-07-04T22:54:48.630Z",
   "version": "9.0",
   "program": "PRODUCTION_CERTIFICATION",
   "gates": [
@@ -271,23 +271,25 @@
     {
       "id": "PG-014",
       "name": "Communications",
-      "program": "Program 15",
+      "program": "Program 13",
       "result": "PARTIAL",
       "checks": {
-        "pass": 2,
-        "total": 3
+        "pass": 3,
+        "total": 4
       },
       "testSteps": [
-        "Verify email services"
+        "Verify email and messaging services"
       ],
       "evidence": [
         "Billing emails",
-        "CPRA email"
+        "CPRA email",
+        "Secure messaging"
       ],
       "blockers": [
-        "Secure messaging and SMS not implemented"
+        "SMS",
+        "SMS not implemented"
       ],
-      "recoveryBehavior": "Implement communication platform"
+      "recoveryBehavior": "Implement SMS delivery"
     },
     {
       "id": "PG-015",
@@ -418,7 +420,8 @@
   "skipCount": 0,
   "blockers": [
     "PG-001: Live Stripe Test Mode API certification in staging",
-    "PG-014: Secure messaging and SMS not implemented",
+    "PG-014: SMS",
+    "PG-014: SMS not implemented",
     "PG-017: Performance certification benchmarks not run",
     "PG-020: PG-001: 1A-012: Live Stripe Test Mode API certification in staging"
   ],

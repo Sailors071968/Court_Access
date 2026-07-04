@@ -12,7 +12,9 @@ export function LoginPage() {
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
-  const { login, isLoading } = useAuthStore();
+  const [mfaSessionToken, setMfaSessionToken] = useState<string | null>(null);
+  const [mfaCode, setMfaCode] = useState('');
+  const { login, completeMfaLogin, isLoading } = useAuthStore();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -23,13 +25,60 @@ export function LoginPage() {
       return;
     }
     try {
-      await login(email, password);
+      const result = await login(email, password);
+      if (result.mfaRequired && result.mfaSessionToken) {
+        setMfaSessionToken(result.mfaSessionToken);
+        return;
+      }
       navigate('/dashboard');
     } catch {
       setError('Invalid credentials. Please try again.');
     }
   };
 
+  const handleMfaSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    if (!mfaSessionToken || !mfaCode) {
+      setError('Enter your authenticator code.');
+      return;
+    }
+    try {
+      await completeMfaLogin(mfaSessionToken, mfaCode);
+      navigate('/dashboard');
+    } catch {
+      setError('Invalid MFA code. Please try again.');
+    }
+  };
+
+  if (mfaSessionToken) {
+    return (
+      <div className="min-h-screen bg-slate-800 flex items-center justify-center px-4">
+        <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
+          <h2 className="text-xl font-semibold text-gray-900 mb-2">Two-factor authentication</h2>
+          <p className="text-sm text-gray-600 mb-6">Enter the 6-digit code from your authenticator app.</p>
+          {error && (
+            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm">{error}</div>
+          )}
+          <form onSubmit={handleMfaSubmit} className="space-y-4">
+            <input
+              type="text"
+              inputMode="numeric"
+              maxLength={6}
+              value={mfaCode}
+              onChange={(e) => setMfaCode(e.target.value.replace(/\D/g, ''))}
+              className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm tracking-widest text-center"
+              placeholder="000000"
+              autoComplete="one-time-code"
+            />
+            <button type="submit" disabled={isLoading} className="w-full bg-slate-800 text-white py-2.5 rounded-lg font-medium">
+              {isLoading ? 'Verifying…' : 'Verify'}
+            </button>
+          </form>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-slate-800 flex items-center justify-center px-4">

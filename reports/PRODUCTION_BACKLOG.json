@@ -1,11 +1,11 @@
 {
   "program": "COURTACCESS_MASTER_PRODUCTION_PROGRAM",
-  "version": "10.0",
-  "updatedAt": "2026-07-04T22:28:46.613Z",
+  "version": "11.0",
+  "updatedAt": "2026-07-04T22:54:47.539Z",
   "overallStatus": "RELEASE_CANDIDATE",
-  "completionPercent": 84,
-  "phasesComplete": 7,
-  "phasesPartial": 15,
+  "completionPercent": 89.7,
+  "phasesComplete": 9,
+  "phasesPartial": 13,
   "phasesTotal": 22,
   "releaseGates": {
     "legacy": {
@@ -23,51 +23,49 @@
     {
       "id": "MPP-001",
       "priority": "P0",
-      "title": "MFA not implemented",
+      "title": "Client-level billing not wired",
       "status": "pending"
     },
     {
       "id": "MPP-002",
       "priority": "P1",
-      "title": "Device management not implemented",
+      "title": "Prosecutor field not persisted",
       "status": "pending"
     },
     {
       "id": "MPP-003",
       "priority": "P1",
-      "title": "Email verification not implemented",
+      "title": "Document versioning not implemented",
       "status": "pending"
     },
     {
       "id": "MPP-004",
       "priority": "P1",
-      "title": "Client messaging not implemented",
+      "title": "Interview scheduling not implemented",
       "status": "pending"
     },
     {
       "id": "MPP-005",
       "priority": "P1",
-      "title": "Court reminders not implemented",
+      "title": "Investigator report generator not implemented",
       "status": "pending"
     }
   ],
   "completedPhases": [
+    "PHASE-01",
     "PHASE-05",
     "PHASE-07",
     "PHASE-08",
     "PHASE-09",
+    "PHASE-11",
     "PHASE-16",
     "PHASE-18",
     "PHASE-20"
   ],
   "partialPhases": [
     {
-      "id": "PHASE-01",
-      "percent": 75
-    },
-    {
       "id": "PHASE-02",
-      "percent": 67
+      "percent": 89
     },
     {
       "id": "PHASE-03",
@@ -86,10 +84,6 @@
       "percent": 67
     },
     {
-      "id": "PHASE-11",
-      "percent": 67
-    },
-    {
       "id": "PHASE-12",
       "percent": 71
     },
@@ -99,7 +93,7 @@
     },
     {
       "id": "PHASE-14",
-      "percent": 40
+      "percent": 60
     },
     {
       "id": "PHASE-15",
@@ -107,7 +101,7 @@
     },
     {
       "id": "PHASE-17",
-      "percent": 71
+      "percent": 86
     },
     {
       "id": "PHASE-19",

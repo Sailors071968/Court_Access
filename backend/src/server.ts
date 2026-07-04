@@ -139,6 +139,8 @@ async function startServer() {
   // Phase 191 — Auth routes (login, register, refresh, logout)
   console.log('[Server] Registering authentication routes...');
   await registerAuthRoutes(app);
+  const { registerIdentityRoutes } = await import('./security/identityRoutes.js');
+  await registerIdentityRoutes(app);
 
   // Phase 192 — Rate limit admin routes
   console.log('[Server] Registering rate limit admin routes...');
@@ -169,6 +171,12 @@ async function startServer() {
 
   console.log('[Server] Registering client management routes...');
   await registerClientRoutes(app);
+
+  console.log('[Server] Registering communications routes (messaging, hearings)...');
+  const { registerMessagingRoutes } = await import('./communications/messagingRoutes.js');
+  const { registerHearingRoutes } = await import('./communications/hearingRoutes.js');
+  await registerMessagingRoutes(app);
+  await registerHearingRoutes(app);
 
   console.log('[Server] Registering direct evidence upload routes...');
   await registerDirectUploadRoutes(app);

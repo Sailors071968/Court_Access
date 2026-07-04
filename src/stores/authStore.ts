@@ -14,7 +14,8 @@ interface AuthState {
   isAuthenticated: boolean;
   isLoading: boolean;
   subscriptionStatus: SubscriptionStatus;
-  login: (email: string, password: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<{ mfaRequired?: boolean; mfaSessionToken?: string }>;
+  completeMfaLogin: (mfaSessionToken: string, code: string) => Promise<void>;
   register: (name: string, email: string, password: string, role: UserRole) => Promise<void>;
   logout: () => void;
   switchRole: (role: UserRole) => void;
@@ -43,6 +44,10 @@ export const useAuthStore = create<AuthState>()(persist((set, get) => ({
         throw new Error(err.error || 'Invalid credentials');
       }
       const data = await res.json();
+      if (data.mfaRequired && data.mfaSessionToken) {
+        set({ isLoading: false });
+        return { mfaRequired: true, mfaSessionToken: data.mfaSessionToken };
+      }
       // Store the access token for authenticated API calls
       if (data.accessToken) {
         localStorage.setItem('court-access-token', data.accessToken);
@@ -50,6 +55,39 @@ export const useAuthStore = create<AuthState>()(persist((set, get) => ({
       if (data.refreshToken) {
         localStorage.setItem('court-access-refresh-token', data.refreshToken);
       }
+      set({
+        user: {
+          id: data.user.userId,
+          name: data.user.name || data.user.email.split('@')[0],
+          email: data.user.email,
+          role: data.user.role,
+        },
+        isAuthenticated: true,
+        isLoading: false,
+        subscriptionStatus: (data.user.subscriptionStatus as SubscriptionStatus) || 'none',
+      });
+      return {};
+    } catch (err) {
+      set({ isLoading: false });
+      throw err;
+    }
+  },
+
+  completeMfaLogin: async (mfaSessionToken: string, code: string) => {
+    set({ isLoading: true });
+    try {
+      const res = await fetch(`${API_BASE}/auth/mfa/challenge`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mfaSessionToken, code }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: 'MFA verification failed' }));
+        throw new Error(err.error || 'Invalid code');
+      }
+      const data = await res.json();
+      if (data.accessToken) localStorage.setItem('court-access-token', data.accessToken);
+      if (data.refreshToken) localStorage.setItem('court-access-refresh-token', data.refreshToken);
       set({
         user: {
           id: data.user.userId,

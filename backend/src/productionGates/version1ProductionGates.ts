@@ -164,9 +164,15 @@ async function gateV1_014Communications(): Promise<ProductionGate> {
   const checks = [
     { label: 'Billing emails', pass: await fileExists(workspacePath('backend/src/billing/billingEmailService.ts')) },
     { label: 'CPRA email', pass: await fileExists(workspacePath('backend/src/cpra/services/cpraEmailSender.ts')) },
+    { label: 'Secure messaging', pass: await fileExists(workspacePath('backend/src/communications/messagingRoutes.ts')) },
+    { label: 'SMS', pass: false },
   ];
   const summary = resultFromChecks(checks);
-  return { id: 'PG-014', name: 'Communications', program: 'Program 15', result: summary.result === 'PASS' ? 'PARTIAL' : summary.result, checks: { pass: summary.pass, total: summary.total + 1 }, testSteps: ['Verify email services'], evidence: checks.filter((c) => c.pass).map((c) => c.label), blockers: ['Secure messaging and SMS not implemented'], recoveryBehavior: 'Implement communication platform' };
+  const blockers = summary.failed.length ? summary.failed : [];
+  if (!checks.find((c) => c.label === 'SMS')?.pass) blockers.push('SMS not implemented');
+  const result: ProductionGate['result'] =
+    summary.pass === checks.length ? 'PASS' : summary.pass >= 3 ? 'PARTIAL' : summary.result;
+  return { id: 'PG-014', name: 'Communications', program: 'Program 13', result, checks: { pass: summary.pass, total: checks.length }, testSteps: ['Verify email and messaging services'], evidence: checks.filter((c) => c.pass).map((c) => c.label), blockers, recoveryBehavior: 'Implement SMS delivery' };
 }
 
 async function gateV1_015Security(): Promise<ProductionGate> {

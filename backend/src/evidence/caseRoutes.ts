@@ -43,6 +43,18 @@ const VALID_CASE_TYPES = ['felony', 'misdemeanor', 'infraction', 'federal'];
 const VALID_STATUSES = ['active', 'pending', 'closed', 'archived'];
 const VALID_PHASES = ['intake', 'preliminary', 'pretrial', 'trial', 'sentencing', 'appeal', 'closed'];
 
+async function buildCaseScopeFilter(user: { userId: string; tenantId: string; role: string }) {
+  const base = { tenantId: user.tenantId, deletedAt: null as null };
+  if (user.role !== 'defendant') return base;
+
+  const dbUser = await prisma.user.findUnique({
+    where: { id: user.userId },
+    select: { clientId: true },
+  });
+  if (!dbUser?.clientId) return { ...base, clientId: '__no_portal_client__' };
+  return { ...base, clientId: dbUser.clientId };
+}
+
 // ---------------------------------------------------------------------------
 // Route Registration
 // ---------------------------------------------------------------------------
@@ -118,11 +130,9 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
     }
 
     try {
+      const scope = await buildCaseScopeFilter(user);
       const cases = await prisma.criminalCase.findMany({
-        where: {
-          tenantId: user.tenantId,
-          deletedAt: null,
-        },
+        where: scope,
         orderBy: {
           createdAt: 'desc',
         },
@@ -150,11 +160,11 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
     const { caseId } = request.params as { caseId: string };
 
     try {
+      const scope = await buildCaseScopeFilter(user);
       const foundCase = await prisma.criminalCase.findFirst({
         where: {
           caseId,
-          tenantId: user.tenantId,
-          deletedAt: null,
+          ...scope,
         },
         include: {
           _count: {

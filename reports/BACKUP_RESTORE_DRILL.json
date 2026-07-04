@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-04T22:28:50.422Z",
+  "generatedAt": "2026-07-04T22:54:48.630Z",
   "drillVersion": "1.0.0",
   "overallResult": "PASS",
   "passCount": 9,
@@ -52,7 +52,7 @@
       "id": "migration-state",
       "label": "Prisma migrations applied",
       "result": "PASS",
-      "detail": "Latest: 20260704240000_investigator_workbench"
+      "detail": "Latest: 20260704250000_identity_security_messaging"
     },
     {
       "id": "schema-versions",
@@ -71,39 +71,39 @@
   "auditTrail": [
     {
       "step": "Verify DISASTER_RECOVERY.md",
-      "timestamp": "2026-07-04T22:28:50.417Z"
+      "timestamp": "2026-07-04T22:54:48.623Z"
     },
     {
       "step": "Verify db-safe-migrate.sh",
-      "timestamp": "2026-07-04T22:28:50.417Z"
+      "timestamp": "2026-07-04T22:54:48.623Z"
     },
     {
       "step": "Verify database integrity audit",
-      "timestamp": "2026-07-04T22:28:50.417Z"
+      "timestamp": "2026-07-04T22:54:48.623Z"
     },
     {
       "step": "Verify legislative repository snapshots",
-      "timestamp": "2026-07-04T22:28:50.417Z"
+      "timestamp": "2026-07-04T22:54:48.623Z"
     },
     {
       "step": "Verify configuration template",
-      "timestamp": "2026-07-04T22:28:50.417Z"
+      "timestamp": "2026-07-04T22:54:48.623Z"
     },
     {
       "step": "Verify database connectivity",
-      "timestamp": "2026-07-04T22:28:50.417Z"
+      "timestamp": "2026-07-04T22:54:48.623Z"
     },
     {
       "step": "Verify critical tables accessible",
-      "timestamp": "2026-07-04T22:28:50.418Z"
+      "timestamp": "2026-07-04T22:54:48.624Z"
     },
     {
       "step": "Verify migration state",
-      "timestamp": "2026-07-04T22:28:50.420Z"
+      "timestamp": "2026-07-04T22:54:48.628Z"
     },
     {
       "step": "Verify schema version control",
-      "timestamp": "2026-07-04T22:28:50.421Z"
+      "timestamp": "2026-07-04T22:54:48.629Z"
     }
   ]
 }

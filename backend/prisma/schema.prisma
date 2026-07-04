@@ -21,6 +21,11 @@ model User {
   passwordHash  String
   role          String   @default("staff") // admin | attorney | investigator | staff | defendant
   tenantId      String
+  clientId      String?  // Links defendant portal users to Client record
+
+  emailVerifiedAt     DateTime?
+  mfaEnabled          Boolean  @default(false)
+  mfaSecretEncrypted  String?
 
   createdAt     DateTime @default(now())
   updatedAt     DateTime @updatedAt
@@ -28,12 +33,16 @@ model User {
   subscription  Subscription?
   refreshTokens RefreshToken[]
   securityLogs  SecurityLog[]
+  passwordResetTokens PasswordResetToken[]
+  emailVerificationTokens EmailVerificationToken[]
+  sentMessages  CaseMessage[] @relation("MessageSender")
+  client        Client?  @relation(fields: [clientId], references: [clientId])
 
   @@index([email])
   @@index([tenantId])
   @@index([role])
+  @@index([clientId])
   @@map("users")
-  passwordResetTokens PasswordResetToken[]
 }
 
 // ---------------------------------------------------------------------------
@@ -52,6 +61,24 @@ model PasswordResetToken {
   @@index([tokenHash])
   @@index([userId])
   @@map("password_reset_tokens")
+}
+
+// ---------------------------------------------------------------------------
+// EmailVerificationToken — email verification for new registrations
+// ---------------------------------------------------------------------------
+
+model EmailVerificationToken {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  tokenHash String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([tokenHash])
+  @@index([userId])
+  @@map("email_verification_tokens")
 }
 
 // ---------------------------------------------------------------------------
@@ -86,14 +113,18 @@ model Subscription {
 // ---------------------------------------------------------------------------
 
 model RefreshToken {
-  id        String   @id @default(uuid())
-  token     String   @unique
-  userId    String
-  user      User     @relation(fields: [userId], references: [id])
-  email     String
-  role      String
-  expiresAt DateTime
-  revoked   Boolean  @default(false)
+  id          String   @id @default(uuid())
+  token       String   @unique
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  email       String
+  role        String
+  expiresAt   DateTime
+  revoked     Boolean  @default(false)
+  userAgent   String?
+  ipAddress   String?
+  deviceLabel String?
+  lastSeenAt  DateTime @default(now())
 
   createdAt DateTime @default(now())
 
@@ -1344,11 +1375,14 @@ model Client {
   retentionStatus       String    @default("pending") // pending | retained | declined
   retainedAt            DateTime?
 
+  portalUserId          String?   // Linked defendant User.id
+
   deletedAt             DateTime?
   createdAt             DateTime  @default(now())
   updatedAt             DateTime  @updatedAt
 
   cases                 CriminalCase[]
+  portalUsers           User[]
 
   @@index([tenantId])
   @@index([ownerId])
@@ -1384,6 +1418,8 @@ model CriminalCase {
   updatedAt       DateTime @updatedAt
 
   evidence        Evidence[]
+  hearings        CaseHearing[]
+  messages        CaseMessage[]
 
   @@unique([tenantId, caseNumber])
   @@index([tenantId])
@@ -1393,6 +1429,54 @@ model CriminalCase {
   @@index([caseType])
   @@index([createdAt])
   @@map("criminal_cases")
+}
+
+// ---------------------------------------------------------------------------
+// CaseHearing — court dates and hearing schedule
+// ---------------------------------------------------------------------------
+
+model CaseHearing {
+  hearingId     String   @id @default(uuid())
+  caseId        String
+  case          CriminalCase @relation(fields: [caseId], references: [caseId])
+  tenantId      String
+  hearingDate   DateTime
+  hearingType   String?  // arraignment | pretrial | trial | sentencing | status
+  location      String?
+  notes         String?
+  reminderSentAt DateTime?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([hearingDate])
+  @@map("case_hearings")
+}
+
+// ---------------------------------------------------------------------------
+// CaseMessage — secure attorney-client messaging per case
+// ---------------------------------------------------------------------------
+
+model CaseMessage {
+  messageId   String   @id @default(uuid())
+  caseId      String
+  case        CriminalCase @relation(fields: [caseId], references: [caseId])
+  tenantId    String
+  senderId    String
+  sender      User     @relation("MessageSender", fields: [senderId], references: [id])
+  body        String
+  readAt      DateTime?
+  deliveredAt DateTime @default(now())
+
+  createdAt   DateTime @default(now())
+
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([senderId])
+  @@index([createdAt])
+  @@map("case_messages")
 }
 
 // ---------------------------------------------------------------------------

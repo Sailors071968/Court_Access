@@ -1,7 +1,7 @@
 {
   "program": "VERSION_1.0_RELEASE",
   "version": "9.0",
-  "generatedAt": "2026-07-04T22:20:50.076Z",
+  "generatedAt": "2026-07-04T22:54:48.630Z",
   "releaseCandidate": true,
   "overallResult": "NOT_READY",
   "gatesPass": 16,
@@ -12,7 +12,8 @@
   "deploymentBlocked": true,
   "blockers": [
     "PG-001: Live Stripe Test Mode API certification in staging",
-    "PG-014: Secure messaging and SMS not implemented",
+    "PG-014: SMS",
+    "PG-014: SMS not implemented",
     "PG-017: Performance certification benchmarks not run",
     "PG-020: PG-001: 1A-012: Live Stripe Test Mode API certification in staging"
   ],
@@ -126,11 +127,12 @@
     {
       "id": "PG-014",
       "name": "Communications",
-      "program": "Program 15",
+      "program": "Program 13",
       "status": "PARTIAL",
-      "checks": "2/3",
+      "checks": "3/4",
       "blockers": [
-        "Secure messaging and SMS not implemented"
+        "SMS",
+        "SMS not implemented"
       ]
     },
     {

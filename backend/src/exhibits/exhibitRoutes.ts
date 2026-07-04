@@ -5,6 +5,8 @@
 // ============================================================================
 
 import { PrismaClient } from '@prisma/client';
+import type { FastifyInstance, FastifyReply } from 'fastify';
+import type { AuthenticatedRequest } from '../security/authMiddleware.js';
 import { create3DScene, geocodeAddress } from './sceneBuilderService.js';
 import { exportAsPng, exportAsHtml } from './export/exhibitExporter.js';
 import type { SceneCoordinates } from './sceneBuilderService.js';
@@ -311,4 +313,89 @@ export async function handleExportHtml(body: {
   } catch (error) {
     return { success: false, data: null, error: error instanceof Error ? error.message : String(error) };
   }
+}
+
+// ---------------------------------------------------------------------------
+// Fastify Route Registration
+// ---------------------------------------------------------------------------
+
+async function verifyCaseAccess(caseId: string, tenantId: string): Promise<boolean> {
+  const caseRecord = await prisma.criminalCase.findFirst({
+    where: { caseId, tenantId, deletedAt: null },
+  });
+  return !!caseRecord;
+}
+
+export async function registerExhibitRoutes(app: FastifyInstance): Promise<void> {
+  app.post('/api/exhibits/create-scene', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!request.user) return reply.code(401).send({ error: 'Authentication required' });
+    const result = await handleCreateScene(request.body as Parameters<typeof handleCreateScene>[0]);
+    return result.success ? result : reply.code(400).send(result);
+  });
+
+  app.post('/api/exhibits/geocode', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!request.user) return reply.code(401).send({ error: 'Authentication required' });
+    const result = await handleGeocode(request.body as { address: string });
+    return result.success ? result : reply.code(400).send(result);
+  });
+
+  app.post('/api/exhibits/scenes', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+    if (!user) return reply.code(401).send({ error: 'Authentication required' });
+    const body = request.body as Parameters<typeof handleSaveScene>[0];
+    if (body.caseId && !(await verifyCaseAccess(body.caseId, user.tenantId))) {
+      return reply.code(403).send({ error: 'Forbidden' });
+    }
+    const result = await handleSaveScene({ ...body, createdBy: body.createdBy ?? user.userId });
+    return result.success ? result : reply.code(400).send(result);
+  });
+
+  app.get('/api/exhibits/scenes', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+    if (!user) return reply.code(401).send({ error: 'Authentication required' });
+    const query = request.query as Parameters<typeof handleListScenes>[0];
+    if (query.caseId && !(await verifyCaseAccess(query.caseId, user.tenantId))) {
+      return reply.code(403).send({ error: 'Forbidden' });
+    }
+    const result = await handleListScenes(query);
+    return result.success ? result : reply.code(500).send(result);
+  });
+
+  app.get('/api/exhibits/scenes/:sceneId', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!request.user) return reply.code(401).send({ error: 'Authentication required' });
+    const { sceneId } = request.params as { sceneId: string };
+    const result = await handleGetScene(sceneId);
+    return result.success ? result : reply.code(404).send(result);
+  });
+
+  app.put('/api/exhibits/scenes/:sceneId', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+    if (!user) return reply.code(401).send({ error: 'Authentication required' });
+    const { sceneId } = request.params as { sceneId: string };
+    const body = request.body as Parameters<typeof handleUpdateScene>[1];
+    if (body.caseId && !(await verifyCaseAccess(body.caseId, user.tenantId))) {
+      return reply.code(403).send({ error: 'Forbidden' });
+    }
+    const result = await handleUpdateScene(sceneId, body);
+    return result.success ? result : reply.code(400).send(result);
+  });
+
+  app.delete('/api/exhibits/scenes/:sceneId', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!request.user) return reply.code(401).send({ error: 'Authentication required' });
+    const { sceneId } = request.params as { sceneId: string };
+    const result = await handleDeleteScene(sceneId);
+    return result.success ? result : reply.code(404).send(result);
+  });
+
+  app.post('/api/exhibits/export/png', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!request.user) return reply.code(401).send({ error: 'Authentication required' });
+    const result = await handleExportPng(request.body as Parameters<typeof handleExportPng>[0]);
+    return result.success ? result : reply.code(400).send(result);
+  });
+
+  app.post('/api/exhibits/export/html', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!request.user) return reply.code(401).send({ error: 'Authentication required' });
+    const result = await handleExportHtml(request.body as Parameters<typeof handleExportHtml>[0]);
+    return result.success ? result : reply.code(400).send(result);
+  });
 }

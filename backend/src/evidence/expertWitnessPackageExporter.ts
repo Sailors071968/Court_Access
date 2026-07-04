@@ -309,7 +309,14 @@ export async function generateExpertWitnessPackage(
   const timeline = buildTimelineSection(evidenceEvents, findings);
 
   // Build policy analysis section
-  const policyAnalysis = buildPolicyAnalysisSection(findings, policyRules);
+  const mappedPolicyRules = policyRules.map((r) => ({
+    ruleId: r.ruleId,
+    ruleName: r.ruleName,
+    category: r.category,
+    description: r.ruleText,
+    agencyId: r.agencyId,
+  }));
+  const policyAnalysis = buildPolicyAnalysisSection(findings, mappedPolicyRules);
 
   // Build evidence clips section
   const evidenceClips = buildEvidenceClipsSection(evidenceEvents);
@@ -318,7 +325,7 @@ export async function generateExpertWitnessPackage(
   const analysisReport = buildAnalysisReport(caseId, evidenceEvents, findings, visionEvents, config);
 
   // Build appendices
-  const appendices = buildAppendices(policyRules, evidenceEvents);
+  const appendices = buildAppendices(mappedPolicyRules, evidenceEvents);
 
   // Metadata
   const totalPages = sections.reduce((sum, s) => sum + s.pageEstimate, 0) +

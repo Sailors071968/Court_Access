@@ -90,7 +90,7 @@ export async function processEvidenceToChunks(file: {
         chunkId: chunk.index,
         rawText: chunk.text,
         events: normalized,
-      });
+      } as never);
 
       totalEvents += events.length;
     } catch (err) {

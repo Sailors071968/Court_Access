@@ -185,7 +185,7 @@ export function createManagedWorker<T = unknown>(
   const worker = new Worker<T>(
     config.name,
     processor,
-    workerOpts as Parameters<typeof Worker<T>>[2],
+    workerOpts as unknown as ConstructorParameters<typeof Worker<T>>[2],
   );
 
   worker.on('completed', (job) => {

@@ -7,7 +7,8 @@ import {
   propagateToElements,
   evaluateBurden,
   buildFailureExplanation,
-  applyElementDependencies
+  applyElementDependencies,
+  runLegalCascade,
 } from "../logic/legalCascadeEngine";
 
 import {
@@ -53,35 +54,36 @@ function resolveContext(request: AuthenticatedRequest) {
 export async function registerTimelineRoutes(app: FastifyInstance): Promise<void> {
 
   // --------------------------------------------------------------------------
-  // GET /events (DEBUG MODE - AUTH DISABLED)
+  // GET /api/timeline/:caseId/events — Evidence-governed timeline + legal analysis
   // --------------------------------------------------------------------------
   app.get(
     '/api/timeline/:caseId/events',
-    {}, // 🔥 TEMP disable auth
-    async (_request: AuthenticatedRequest, reply: FastifyReply) => {
+    async (request: AuthenticatedRequest, reply: FastifyReply) => {
+      const user = request.user;
+      if (!user) {
+        return reply.code(401).send({ error: 'Authentication required' });
+      }
 
-      console.log("🚀 EVENTS ROUTE HIT (DEBUG)");
+      const { caseId } = request.params as { caseId: string };
 
       try {
-        // --------------------------------------------------
-        // TEST EVENTS
-        // --------------------------------------------------
-        const eventList = [
-          {
-            description: "Defendant entered the house",
-            action: "enter",
-            target: "house"
-          },
-          {
-            description: "Defendant was not present at the house",
-            action: "deny",
-            target: "presence"
-          }
-        ];
+        const timelineData = await getTimelineEvents(caseId, user.tenantId, { limit: 500 });
+        const eventList = timelineData.events.map((ev) => ({
+          id: ev.id,
+          description: ev.description,
+          action: ev.action ?? undefined,
+          target: ev.target ?? undefined,
+          actor: ev.actor ?? undefined,
+          timestamp: ev.timestamp?.toISOString() ?? ev.timeText ?? 'UNKNOWN',
+          sourceType: ev.sourceType ?? undefined,
+          conflictFlag: ev.conflictFlag,
+        }));
 
-        // --------------------------------------------------
-        // CONTRADICTIONS
-        // --------------------------------------------------
+        const unknowns: string[] = [];
+        if (eventList.length === 0) {
+          unknowns.push('No timeline events — run timeline processing after evidence upload.');
+        }
+
         const contradictions = extractContradictions(eventList);
 
         // --------------------------------------------------
@@ -90,7 +92,6 @@ export async function registerTimelineRoutes(app: FastifyInstance): Promise<void
         const baseAnalysis = runLegalAnalysis({
           events: eventList,
           contradictions,
-          crimeType: 'burglary'
         });
 
         // --------------------------------------------------
@@ -185,6 +186,8 @@ export async function registerTimelineRoutes(app: FastifyInstance): Promise<void
         // --------------------------------------------------
         return {
           events: eventList,
+          total: timelineData.total,
+          unknowns,
           analysis,
           arguments: Array.from(argumentState?.values?.() || []),
           argumentInteractions: interactions,
@@ -272,5 +275,5 @@ export async function registerTimelineRoutes(app: FastifyInstance): Promise<void
     };
   });
 
-  console.log('🔥 Timeline routes loaded (DEBUG MODE ACTIVE)');
+  console.log('[Server] Timeline routes registered');
 }

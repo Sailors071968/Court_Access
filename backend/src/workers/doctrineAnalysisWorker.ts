@@ -9,6 +9,7 @@ import type { Job } from 'bullmq';
 import { CourtAccessWorker, JobTimeoutError } from '../lib/baseWorker.js';
 import { QUEUE_NAMES, type DoctrineAnalysisJobData } from '../lib/queues.js';
 import prisma from '../lib/prisma.js';
+import { DoctrineComplianceEngine } from '../doctrine/doctrineComplianceEngine.js';
 
 // ---------------------------------------------------------------------------
 // Doctrine Analysis Worker
@@ -47,9 +48,26 @@ class DoctrineAnalysisWorker extends CourtAccessWorker<DoctrineAnalysisJobData> 
 
       console.log(`[DoctrineAnalysisWorker] Found ${conflictEvents.length} conflict events for case ${caseId}`);
 
-      // In production: maps contradictions to POST Learning Domain rules (LD-15 through LD-30).
-      // Each contradiction is matched to specific training doctrine violations.
-      // Actual AI pipeline integration in Phase 3.
+      const evidenceIds = (await prisma.evidence.findMany({
+        where: { caseId, tenantId },
+        select: { evidenceId: true },
+      })).map((e) => e.evidenceId);
+
+      const chunks = evidenceIds.length > 0
+        ? await prisma.evidenceChunk.findMany({
+            where: { tenantId, evidenceId: { in: evidenceIds } },
+            orderBy: { chunkIndex: 'asc' },
+            take: 200,
+          })
+        : [];
+
+      const combinedText = chunks.map((c) => c.text).join('\n').slice(0, 50000);
+      if (combinedText.trim()) {
+        const result = await DoctrineComplianceEngine.analyzeCompliance(combinedText);
+        console.log(`[DoctrineAnalysisWorker] Doctrine scan: ${result.violations.length} violations, ${result.concerns.length} concerns`);
+      } else {
+        console.warn(`[DoctrineAnalysisWorker] No evidence text available for doctrine analysis on case ${caseId}`);
+      }
 
       // Check abort signal before writing completion status
       if (signal.aborted) throw new JobTimeoutError('Job aborted by timeout');

@@ -1,14 +1,9 @@
 // ============================================================================
 // Core Evidence System — Evidence Processing Pipeline (Part 5)
-// Enqueues evidence for ingestion, normalization, OCR, video segmentation,
-// and graph node creation. All processing runs through queues.
+// Enqueues evidence for ingestion via canonical BullMQ queue (lib/queues).
 // ============================================================================
 
-import { QUEUE_CONFIGS, getQueue } from '../workers/queueManager.js';
-
-// ---------------------------------------------------------------------------
-// Pipeline Job Types
-// ---------------------------------------------------------------------------
+import { evidenceIngestQueue, type EvidenceIngestJobData } from '../lib/queues.js';
 
 export interface EvidenceIngestionJob {
   evidenceId: string;
@@ -19,104 +14,50 @@ export interface EvidenceIngestionJob {
   s3Key: string;
   size: number;
   isVideo: boolean;
+  mimeType?: string;
+  userId: string;
 }
-
-export interface VideoSegmentJob {
-  evidenceId: string;
-  caseId: string;
-  tenantId: string;
-  s3Key: string;
-  fileName: string;
-}
-
-export interface DocumentAnalysisJob {
-  evidenceId: string;
-  caseId: string;
-  tenantId: string;
-  s3Key: string;
-  fileName: string;
-  evidenceType: string;
-  pageCount?: number;
-}
-
-// ---------------------------------------------------------------------------
-// Register Queue Configs (Part 14)
-// ---------------------------------------------------------------------------
-
-// Extend QUEUE_CONFIGS with evidence processing queues
-if (!QUEUE_CONFIGS.evidenceIngestion) {
-  QUEUE_CONFIGS.evidenceIngestion = {
-    name: 'evidence-ingestion-queue',
-    concurrency: 3,
-    maxRetries: 3,
-    retryBackoffMs: 10_000,
-    timeoutMs: 300_000,
-    enabled: true,
-    description: 'Initial evidence ingestion: file validation, type detection, routing',
-  };
-}
-
-if (!QUEUE_CONFIGS.videoSegment) {
-  QUEUE_CONFIGS.videoSegment = {
-    name: 'video-segment-queue',
-    concurrency: 2,
-    maxRetries: 2,
-    retryBackoffMs: 30_000,
-    timeoutMs: 600_000, // 10 minutes per video
-    enabled: true,
-    description: 'Video segmentation: split into 30-second chunks for analysis',
-  };
-}
-
-if (!QUEUE_CONFIGS.documentAnalysis) {
-  QUEUE_CONFIGS.documentAnalysis = {
-    name: 'document-analysis-queue',
-    concurrency: 3,
-    maxRetries: 3,
-    retryBackoffMs: 10_000,
-    timeoutMs: 180_000,
-    enabled: true,
-    description: 'Document analysis: normalization, OCR, multiplex detection',
-  };
-}
-
-if (!QUEUE_CONFIGS.contradictionAnalysis) {
-  QUEUE_CONFIGS.contradictionAnalysis = {
-    name: 'contradiction-analysis-queue',
-    concurrency: 2,
-    maxRetries: 2,
-    retryBackoffMs: 15_000,
-    timeoutMs: 300_000,
-    enabled: true,
-    description: 'Cross-evidence contradiction detection and analysis',
-  };
-}
-
-// ---------------------------------------------------------------------------
-// Enqueue Functions
-// ---------------------------------------------------------------------------
 
 export async function enqueueEvidenceIngestion(job: EvidenceIngestionJob): Promise<void> {
-  const queue = getQueue<EvidenceIngestionJob>('evidenceIngestion');
-  await queue.add('evidence-ingest', job, {
-    jobId: `evidence-${job.evidenceId}`,
-    priority: job.isVideo ? 2 : 1, // Documents processed first
+  const jobData: EvidenceIngestJobData = {
+    userId: job.userId,
+    tenantId: job.tenantId,
+    caseId: job.caseId,
+    evidenceId: job.evidenceId,
+    fileKey: job.s3Key,
+    mimeType: job.mimeType ?? 'application/octet-stream',
+    acuCreditsRequired: 0,
+    enqueuedAt: new Date().toISOString(),
+  };
+
+  const queue = evidenceIngestQueue();
+  await queue.add('evidence-ingest', jobData, {
+    jobId: `evidence-ingest-${job.evidenceId}`,
+    priority: job.isVideo ? 2 : 1,
   });
+
   console.log(`[EvidencePipeline] Enqueued ingestion for evidence ${job.evidenceId} (${job.evidenceType})`);
 }
 
-export async function enqueueVideoSegmentation(job: VideoSegmentJob): Promise<void> {
-  const queue = getQueue<VideoSegmentJob>('videoSegment');
-  await queue.add('video-segment', job, {
-    jobId: `video-segment-${job.evidenceId}`,
-  });
-  console.log(`[EvidencePipeline] Enqueued video segmentation for evidence ${job.evidenceId}`);
+export interface VideoSegmentationJob {
+  evidenceId: string;
+  caseId: string;
+  tenantId: string;
+  s3Key: string;
+  fileName: string;
 }
 
-export async function enqueueDocumentAnalysis(job: DocumentAnalysisJob): Promise<void> {
-  const queue = getQueue<DocumentAnalysisJob>('documentAnalysis');
-  await queue.add('document-analyze', job, {
-    jobId: `doc-analysis-${job.evidenceId}`,
+/** Enqueue video evidence for segmentation via canonical ingest queue. */
+export async function enqueueVideoSegmentation(job: VideoSegmentationJob): Promise<void> {
+  await enqueueEvidenceIngestion({
+    evidenceId: job.evidenceId,
+    caseId: job.caseId,
+    tenantId: job.tenantId,
+    fileName: job.fileName,
+    evidenceType: 'bodycam',
+    s3Key: job.s3Key,
+    size: 0,
+    isVideo: true,
+    userId: 'system',
   });
-  console.log(`[EvidencePipeline] Enqueued document analysis for evidence ${job.evidenceId}`);
 }

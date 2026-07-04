@@ -83,11 +83,21 @@ export function DoctrineCompliancePanel({
   const [isLoading, setIsLoading] = useState(false);
   const [compliance, setCompliance] = useState<DoctrineComplianceResponse | null>(null);
   const [status, setStatus] = useState<DoctrineStatusResponse | null>(null);
+  const [statusError, setStatusError] = useState<string | null>(null);
+  const [analysisError, setAnalysisError] = useState<string | null>(null);
   const [activeFilter, setActiveFilter] = useState<string>('all');
 
   // Load status on mount
   useEffect(() => {
-    fetchDoctrineStatus().then(setStatus).catch(() => {});
+    fetchDoctrineStatus()
+      .then((s) => {
+        setStatus(s);
+        setStatusError(null);
+      })
+      .catch((err) => {
+        setStatus(null);
+        setStatusError(err instanceof Error ? err.message : 'Doctrine status unavailable');
+      });
   }, []);
 
   // Auto-analyze if evidence text is provided
@@ -101,9 +111,13 @@ export function DoctrineCompliancePanel({
   async function runAnalysis() {
     if (!evidenceText) return;
     setIsLoading(true);
+    setAnalysisError(null);
     try {
       const result = await analyzeDoctrineCompliance(evidenceText);
       setCompliance(result);
+    } catch (err) {
+      setCompliance(null);
+      setAnalysisError(err instanceof Error ? err.message : 'Doctrine analysis unavailable');
     } finally {
       setIsLoading(false);
     }
@@ -165,6 +179,15 @@ export function DoctrineCompliancePanel({
       {/* Expanded Content */}
       {isExpanded && (
         <div className="px-5 pb-5 border-t border-gray-100">
+          {/* Status unavailable — constitutional UNKNOWN state */}
+          {statusError && !status && !compliance && (
+            <div className="mt-4 bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm text-amber-800">
+              <p className="font-medium">Doctrine intelligence unavailable</p>
+              <p className="mt-1 text-amber-700">{statusError}</p>
+              <p className="mt-2 text-xs text-amber-600">No compliance conclusions can be shown until the doctrine API is reachable.</p>
+            </div>
+          )}
+
           {/* Status Overview */}
           {status && !compliance && (
             <div className="mt-4">
@@ -227,7 +250,22 @@ export function DoctrineCompliancePanel({
           {isLoading && !compliance && (
             <div className="mt-4 flex items-center justify-center py-8 text-sm text-indigo-600">
               <Loader2 size={20} className="animate-spin mr-2" />
-              Analyzing evidence against {status?.totalRules ?? 45} doctrine rules...
+              Analyzing evidence against {status?.totalRules ?? 'available'} doctrine rules...
+            </div>
+          )}
+
+          {analysisError && !isLoading && (
+            <div className="mt-4 bg-amber-50 border border-amber-200 rounded-lg p-4 text-sm text-amber-800">
+              <p className="font-medium">Analysis unavailable — UNKNOWN</p>
+              <p className="mt-1 text-amber-700">{analysisError}</p>
+              {evidenceText && (
+                <button
+                  onClick={runAnalysis}
+                  className="mt-3 text-xs font-medium text-indigo-700 hover:text-indigo-800"
+                >
+                  Retry analysis
+                </button>
+              )}
             </div>
           )}
 

@@ -198,69 +198,11 @@ export function CpraAutonomousDashboard() {
       setNotifications(notifData.notifications);
       setError(null);
       setLastRefresh(new Date());
-    } catch {
-      // If API not available, use demo data
-      setStatus({
-        workers: {
-          emailMonitor: { running: false },
-          followUp: { running: false },
-          ingestion: { running: false },
-        },
-        acquisition: {
-          totalAgencies: 612,
-          totalTopics: 44,
-          statusBreakdown: {
-            NOT_REQUESTED: 24528,
-            REQUESTED: 1800,
-            RECEIVED: 420,
-            UPLOADED: 105,
-            IN_USE: 75,
-          },
-          coverage: 0.022,
-        },
-        emails: {
-          totalOutbound: 1800,
-          totalInbound: 312,
-          unprocessedInbound: 8,
-          todayOutbound: 45,
-          todayInbound: 12,
-        },
-        notifications: {
-          total: 2400,
-          unread: 23,
-          byEventType: {
-            EMAIL_SENT: 1800,
-            EMAIL_RECEIVED: 312,
-            DOCUMENT_UPLOADED: 105,
-            POLICY_PARSED: 75,
-            POLICY_ACTIVE: 75,
-            FOLLOW_UP_SENT: 33,
-          },
-        },
-        timestamp: new Date().toISOString(),
-      });
-
-      // Demo timeline events
-      setTimeline([
-        { eventId: 'e1', agencyId: 'a1', eventType: 'REQUEST_SENT', title: 'CPRA request sent to Sacramento PD', description: 'Initial request sent for 44 policy topics', metadata: null, createdAt: new Date(Date.now() - 3600000).toISOString() },
-        { eventId: 'e2', agencyId: 'a2', eventType: 'EMAIL_RECEIVED', title: 'Email received from LAPD', description: 'Subject: RE: CPRA Request | 3 attachments', metadata: null, createdAt: new Date(Date.now() - 7200000).toISOString() },
-        { eventId: 'e3', agencyId: 'a2', eventType: 'ATTACHMENT_DETECTED', title: 'Attachment: Use_of_Force_Policy.pdf', description: 'Document type: policy_document', metadata: null, createdAt: new Date(Date.now() - 7100000).toISOString() },
-        { eventId: 'e4', agencyId: 'a2', eventType: 'POLICY_UPLOADED', title: 'Policy classified: Use of Force', description: '"Use of Force General Order" matched with 92% confidence', metadata: null, createdAt: new Date(Date.now() - 7000000).toISOString() },
-        { eventId: 'e5', agencyId: 'a3', eventType: 'FOLLOW_UP_SENT', title: 'Follow-up #1 sent to SFPD', description: 'Automated follow-up after 14 days without response', metadata: null, createdAt: new Date(Date.now() - 10800000).toISOString() },
-        { eventId: 'e6', agencyId: 'a4', eventType: 'POLICY_INGESTED', title: 'Policy ingested: Body Worn Cameras', description: '12 sections extracted, status updated to IN_USE', metadata: null, createdAt: new Date(Date.now() - 14400000).toISOString() },
-        { eventId: 'e7', agencyId: 'a5', eventType: 'REQUEST_SENT', title: 'CPRA request sent to San Jose PD', description: 'Initial request sent for 44 policy topics', metadata: null, createdAt: new Date(Date.now() - 18000000).toISOString() },
-        { eventId: 'e8', agencyId: 'a6', eventType: 'EMAIL_RECEIVED', title: 'Email received from Oakland PD', description: 'Subject: Records Request Response | 5 attachments', metadata: null, createdAt: new Date(Date.now() - 21600000).toISOString() },
-      ]);
-
-      // Demo notifications
-      setNotifications([
-        { notificationId: 'n1', agencyId: 'a2', eventType: 'EMAIL_RECEIVED', title: 'Email received from LAPD', message: 'Subject: "RE: CPRA Request" | 3 attachment(s)', metadata: null, read: false, dismissed: false, createdAt: new Date(Date.now() - 7200000).toISOString() },
-        { notificationId: 'n2', agencyId: 'a2', eventType: 'POLICY_PARSED', title: 'Policy classified: Use of Force', message: 'Topic: Use of Force (confidence: 92%)', metadata: null, read: false, dismissed: false, createdAt: new Date(Date.now() - 7000000).toISOString() },
-        { notificationId: 'n3', agencyId: 'a3', eventType: 'FOLLOW_UP_SENT', title: 'Follow-up #1 sent to SFPD', message: 'Automated follow-up sent. 1 of 3 follow-ups used.', metadata: null, read: true, dismissed: false, createdAt: new Date(Date.now() - 10800000).toISOString() },
-        { notificationId: 'n4', agencyId: 'a4', eventType: 'POLICY_ACTIVE', title: 'Policy ingested: Body Worn Cameras', message: '"BWC Policy" has been processed and is now active.', metadata: null, read: true, dismissed: false, createdAt: new Date(Date.now() - 14400000).toISOString() },
-      ]);
-
-      setError(null);
+    } catch (err) {
+      setStatus(null);
+      setTimeline([]);
+      setNotifications([]);
+      setError(err instanceof Error ? err.message : 'CPRA system status unavailable');
     } finally {
       setIsLoading(false);
     }

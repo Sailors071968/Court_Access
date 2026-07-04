@@ -1,198 +1,177 @@
 // ============================================
-// Court Access — Charges Analysis Tab
+// Court Access — Charges Tab
+// Wired to canonical /api/charges backend
 // ============================================
 
 import { useState, useEffect } from 'react';
 import { Card } from '../../components/common/Card';
-import { EvidenceStatusBadge } from '../../components/common/StatusBadge';
-import { getDefenseInsights } from '../../services/ai/defenseInsights';
-import type { DefenseInsight } from '../../types';
-import type { ChargeEntity } from '../../models/CaseModel';
 import { useParams } from 'react-router-dom';
-import { ArrowRight, AlertTriangle } from 'lucide-react';
-import { fetchCase } from '../../services/caseApi';
+import { AlertTriangle, Loader2, Plus, Trash2 } from 'lucide-react';
+import { fetchCharges, createCharge, deleteCharge, type ApiCharge } from '../../services/caseApi';
 
 export function ChargesPage() {
   const { caseId } = useParams<{ caseId: string }>();
   const [activeChargeIndex, setActiveChargeIndex] = useState(0);
-  const [insights, setInsights] = useState<DefenseInsight[]>([]);
-  const [insightsLoading, setInsightsLoading] = useState(true);
-  const [charges, setCharges] = useState<ChargeEntity[]>([]);
-  const [_loading, setLoading] = useState(true);
+  const [charges, setCharges] = useState<ApiCharge[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [showForm, setShowForm] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const [form, setForm] = useState({
+    code: '',
+    section: '',
+    title: '',
+    victim: '',
+    dateOfOffense: '',
+  });
 
-  useEffect(() => {
+  const loadCharges = async () => {
     if (!caseId) return;
-    let cancelled = false;
     setLoading(true);
-    fetchCase(caseId).then((c) => {
-      if (cancelled) return;
-      // If the backend returns charges for the case, use them; otherwise show empty
-      setCharges((c as unknown as { charges?: ChargeEntity[] }).charges ?? []);
+    setError(null);
+    try {
+      const data = await fetchCharges(caseId);
+      setCharges(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to load charges');
+      setCharges([]);
+    } finally {
       setLoading(false);
-    }).catch(() => {
-      if (!cancelled) setLoading(false);
-    });
-    return () => { cancelled = true; };
-  }, [caseId]);
+    }
+  };
 
   useEffect(() => {
-    if (!caseId) return;
-    setInsightsLoading(true);
-    getDefenseInsights({ caseId }).then((res) => {
-      setInsights(res.insights);
-      setInsightsLoading(false);
-    });
+    void loadCharges();
   }, [caseId]);
+
+  const handleCreate = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!caseId) return;
+    try {
+      setSaving(true);
+      setError(null);
+      await createCharge({
+        caseId,
+        code: form.code,
+        section: form.section,
+        title: form.title || undefined,
+        victim: form.victim,
+        dateOfOffense: form.dateOfOffense || undefined,
+      });
+      setForm({ code: '', section: '', title: '', victim: '', dateOfOffense: '' });
+      setShowForm(false);
+      await loadCharges();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to create charge');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const handleDelete = async (chargeId: string) => {
+    try {
+      await deleteCharge(chargeId);
+      await loadCharges();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to delete charge');
+    }
+  };
 
   const activeCharge = charges[activeChargeIndex];
 
+  if (loading) {
+    return (
+      <div className="text-center py-12">
+        <Loader2 size={24} className="animate-spin text-gray-400 mx-auto mb-2" />
+        <p className="text-gray-500 text-sm">Loading charges...</p>
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-6">
-      {/* Charge Tabs */}
-      <div className="flex gap-2 overflow-x-auto pb-2">
+      <div className="flex items-center justify-between">
+        <div>
+          <h2 className="text-xl font-bold text-gray-900">Charges</h2>
+          <p className="text-sm text-gray-500 mt-1">{charges.length} charge(s) on this case</p>
+        </div>
         <button
-          onClick={() => setActiveChargeIndex(-1)}
-          className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
-            activeChargeIndex === -1 ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-          }`}
+          onClick={() => setShowForm(!showForm)}
+          className="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-lg text-sm font-medium hover:bg-slate-700"
         >
-          All Charges ({charges.length})
+          <Plus size={16} />
+          Add Charge
         </button>
-        {charges.map((charge, idx) => (
-          <button
-            key={charge.id}
-            onClick={() => setActiveChargeIndex(idx)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
-              activeChargeIndex === idx ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
-          >
-            {charge.code} {charge.title}
-          </button>
-        ))}
       </div>
+
+      {error && (
+        <div className="p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">{error}</div>
+      )}
+
+      {showForm && (
+        <Card>
+          <form onSubmit={handleCreate} className="grid sm:grid-cols-2 gap-4">
+            <input required placeholder="Code (e.g. PC 245)" value={form.code} onChange={(e) => setForm({ ...form, code: e.target.value })} className="px-3 py-2 border rounded-lg text-sm" />
+            <input required placeholder="Section" value={form.section} onChange={(e) => setForm({ ...form, section: e.target.value })} className="px-3 py-2 border rounded-lg text-sm" />
+            <input placeholder="Title (optional)" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} className="px-3 py-2 border rounded-lg text-sm" />
+            <input required placeholder="Victim" value={form.victim} onChange={(e) => setForm({ ...form, victim: e.target.value })} className="px-3 py-2 border rounded-lg text-sm" />
+            <input type="date" value={form.dateOfOffense} onChange={(e) => setForm({ ...form, dateOfOffense: e.target.value })} className="px-3 py-2 border rounded-lg text-sm" />
+            <div className="sm:col-span-2 flex justify-end gap-2">
+              <button type="button" onClick={() => setShowForm(false)} className="px-4 py-2 text-sm text-gray-600">Cancel</button>
+              <button type="submit" disabled={saving} className="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm disabled:opacity-50">
+                {saving ? 'Saving...' : 'Save Charge'}
+              </button>
+            </div>
+          </form>
+        </Card>
+      )}
 
       {charges.length === 0 ? (
         <div className="text-center py-12">
           <AlertTriangle size={48} className="text-gray-300 mx-auto mb-4" />
-          <p className="text-gray-500 text-sm">No charges filed yet. Charges will appear here once they are added to the case.</p>
-        </div>
-      ) : activeChargeIndex >= 0 && activeCharge ? (
-        <div className="grid lg:grid-cols-3 gap-6">
-          {/* Elements Breakdown */}
-          <div className="lg:col-span-2 space-y-6">
-            <Card>
-              <h2 className="text-xl font-bold text-gray-900 mb-1">
-                {activeCharge.code} {activeCharge.title} analysis
-              </h2>
-              {activeCharge.calcrimNumber && (
-                <p className="text-sm font-semibold text-gray-700 mb-6">
-                  {activeCharge.calcrimNumber} - Elements the Prosecution Must Prove
-                </p>
-              )}
-
-              <div className="space-y-4">
-                {activeCharge.elements.map((element) => (
-                  <div key={element.number} className="flex gap-4 p-4 bg-gray-50 rounded-xl">
-                    <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold text-sm">
-                      {element.number}
-                    </div>
-                    <div className="flex-1">
-                      <div className="flex items-start justify-between gap-3">
-                        <p className="font-medium text-gray-900">{element.description}</p>
-                        <EvidenceStatusBadge status={element.status} />
-                      </div>
-                      <p className="text-sm text-gray-500 mt-1">{element.details}</p>
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              {/* Sentencing Info */}
-              {activeCharge.potentialSentence && (
-                <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-xl">
-                  <p className="text-sm">
-                    <span className="font-bold text-gray-900">Potential Maximum Sentence:</span>{' '}
-                    <span className="text-gray-700">{activeCharge.potentialSentence}</span>
-                  </p>
-                  {activeCharge.enhancement && (
-                    <p className="text-sm mt-1">
-                      <span className="font-bold text-gray-900">Enhancement:</span>{' '}
-                      <span className="text-gray-700">{activeCharge.enhancement}</span>
-                    </p>
-                  )}
-                </div>
-              )}
-            </Card>
-          </div>
-
-          {/* AI Defense Insights */}
-          <div>
-            <Card className="bg-slate-50 border-slate-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">AI Defense Insights</h3>
-              {insightsLoading ? (
-                <div className="space-y-3">
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} className="h-16 bg-gray-200 rounded-lg animate-pulse" />
-                  ))}
-                </div>
-              ) : insights.length === 0 ? (
-                <p className="text-sm text-gray-500 text-center py-4">No defense insights yet. Upload evidence to generate AI analysis.</p>
-              ) : (
-                <div className="space-y-3">
-                  {insights.map((insight) => (
-                    <div key={insight.id} className="flex gap-2">
-                      <ArrowRight size={16} className="text-blue-600 mt-0.5 flex-shrink-0" />
-                      <p className="text-sm text-gray-700">{insight.content}</p>
-                    </div>
-                  ))}
-                </div>
-              )}
-            </Card>
-          </div>
+          <p className="text-gray-500 text-sm">No charges on this case yet. Add at least one charge before uploading evidence via presigned URL.</p>
         </div>
       ) : (
-        /* All Charges View */
-        <div className="space-y-4">
-          {charges.map((charge, idx) => (
-            <Card key={charge.id} hover className="cursor-pointer" onClick={() => setActiveChargeIndex(idx)}>
-              <div className="flex items-start justify-between">
+        <>
+          <div className="flex gap-2 overflow-x-auto pb-2">
+            {charges.map((charge, idx) => (
+              <button
+                key={charge.id}
+                onClick={() => setActiveChargeIndex(idx)}
+                className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
+                  activeChargeIndex === idx ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                }`}
+              >
+                {charge.code} {charge.title ?? charge.section}
+              </button>
+            ))}
+          </div>
+
+          {activeCharge && (
+            <Card>
+              <div className="flex items-start justify-between gap-4">
                 <div>
-                  <h3 className="font-semibold text-gray-900">{charge.code} — {charge.title}</h3>
-                  {charge.potentialSentence && (
-                    <p className="text-sm text-gray-500 mt-1">Potential: {charge.potentialSentence}</p>
+                  <h3 className="text-lg font-semibold text-gray-900">{activeCharge.code} — {activeCharge.title ?? activeCharge.section}</h3>
+                  <p className="text-sm text-gray-500 mt-1">Section: {activeCharge.section}</p>
+                  <p className="text-sm text-gray-500">Victim: {activeCharge.victim}</p>
+                  {activeCharge.dateOfOffense && (
+                    <p className="text-sm text-gray-500">Date of offense: {new Date(activeCharge.dateOfOffense).toLocaleDateString()}</p>
                   )}
+                  <p className="text-xs text-amber-700 mt-3">
+                    Element-level CALCRIM analysis requires evidence processing — UNKNOWN until intelligence pipeline completes.
+                  </p>
                 </div>
-                <div className="flex items-center gap-2">
-                  {charge.elements.some(e => e.status === 'disputed') && (
-                    <span className="inline-flex items-center gap-1 text-xs text-amber-600">
-                      <AlertTriangle size={12} />
-                      Disputed elements
-                    </span>
-                  )}
-                </div>
-              </div>
-              <div className="mt-3 flex flex-wrap gap-2">
-                {charge.elements.map((el) => (
-                  <EvidenceStatusBadge key={el.number} status={el.status} />
-                ))}
+                <button
+                  onClick={() => handleDelete(activeCharge.id)}
+                  className="p-2 text-red-500 hover:bg-red-50 rounded-lg"
+                  aria-label="Delete charge"
+                >
+                  <Trash2 size={16} />
+                </button>
               </div>
             </Card>
-          ))}
-        </div>
-      )}
-
-      {/* Defense Opportunities — populated by AI pipeline after evidence upload */}
-      {insights.length > 0 && (
-        <Card>
-          <h2 className="text-lg font-bold text-gray-900 mb-4">Defense Opportunities</h2>
-          <ul className="space-y-3">
-            {insights.map((insight) => (
-              <li key={insight.id} className="text-sm text-gray-700">
-                {insight.content}
-              </li>
-            ))}
-          </ul>
-        </Card>
+          )}
+        </>
       )}
     </div>
   );

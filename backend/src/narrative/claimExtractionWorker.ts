@@ -244,10 +244,41 @@ export async function processClaimExtraction(job: ClaimExtractionJob): Promise<{
     return { claimsExtracted: 0 };
   }
 
-  // In production: download document from R2, extract text using PDF/DOCX parser.
-  // For now, log the processing intent and trigger downstream normalization.
-  console.log(`[ClaimExtraction] Would extract claims from ${job.fileName} (${job.evidenceType})`);
-  console.log(`[ClaimExtraction] S3 key: ${job.s3Key}`);
+  // Extract claims from stored evidence chunks (post-ingest text).
+  const chunks = await prisma.evidenceChunk.findMany({
+    where: { evidenceId: job.evidenceId, tenantId: job.tenantId },
+    orderBy: { chunkIndex: 'asc' },
+  });
+
+  const text = chunks.map((c) => c.text).join('\n');
+  if (!text.trim()) {
+    console.warn(`[ClaimExtraction] No text chunks for evidence ${job.evidenceId}`);
+    return { claimsExtracted: 0 };
+  }
+
+  const extracted = extractClaims(text, job.evidenceType);
+  let claimsExtracted = 0;
+
+  for (const claim of extracted) {
+    await prisma.narrativeClaim.create({
+      data: {
+        caseId: job.caseId,
+        tenantId: job.tenantId,
+        evidenceId: job.evidenceId,
+        claimText: claim.claimText,
+        subject: claim.subject,
+        action: claim.action,
+        object: claim.object,
+        target: claim.target,
+        timestampReference: claim.timestampReference,
+        confidence: claim.confidence,
+        sentenceIndex: claim.sentenceIndex,
+      },
+    });
+    claimsExtracted++;
+  }
+
+  console.log(`[ClaimExtraction] Extracted ${claimsExtracted} claims from ${job.fileName}`);
 
   // After extraction, trigger normalization
   try {
@@ -260,5 +291,5 @@ export async function processClaimExtraction(job: ClaimExtractionJob): Promise<{
     console.error(`[ClaimExtraction] Failed to enqueue normalization:`, err);
   }
 
-  return { claimsExtracted: 0 };
+  return { claimsExtracted };
 }

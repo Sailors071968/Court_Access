@@ -1,24 +1,27 @@
 // ============================================================================
 // Phase 2 — Pipeline Worker Startup
-// Starts all 5 ACU-enforced BullMQ workers during server initialization.
+// Starts all 6 ACU-enforced BullMQ workers during server initialization.
 // Each worker extends CourtAccessWorker which provides:
 //   - Atomic ACU credit reservation before processing
 //   - Automatic refund on processing failure
 //   - Structured logging and graceful shutdown
 // ============================================================================
 
+import { evidenceIngestWorker } from './evidenceIngestWorker.js';
 import { timelineProcessingWorker } from './timelineProcessingWorker.js';
 import { narrativeProcessingWorker } from './narrativeProcessingWorker.js';
 import { contradictionAnalysisWorker } from './contradictionAnalysisWorker.js';
 import { videoProcessingWorker } from './videoProcessingWorker.js';
 import { doctrineAnalysisWorker } from './doctrineAnalysisWorker.js';
 import { startBackpressureMonitor, stopBackpressureMonitor } from './backpressureGuard.js';
+import { startNarrativeSubWorkers, stopNarrativeSubWorkers } from './narrativeSubWorkers.js';
 
 // ---------------------------------------------------------------------------
 // Worker Registry
 // ---------------------------------------------------------------------------
 
 const pipelineWorkers = [
+  evidenceIngestWorker,
   timelineProcessingWorker,
   narrativeProcessingWorker,
   contradictionAnalysisWorker,
@@ -41,7 +44,7 @@ export function startPipelineWorkers(): void {
     return;
   }
 
-  console.log('[PipelineWorkers] Starting 5 ACU-enforced pipeline workers...');
+  console.log('[PipelineWorkers] Starting 6 ACU-enforced pipeline workers...');
 
   for (const worker of pipelineWorkers) {
     worker.start();
@@ -49,6 +52,8 @@ export function startPipelineWorkers(): void {
 
   // PR 2 — Start backpressure monitor (checks memory + queue depths periodically)
   startBackpressureMonitor();
+
+  startNarrativeSubWorkers();
 
   console.log('[PipelineWorkers] All pipeline workers started with backpressure monitoring');
 }
@@ -65,6 +70,7 @@ export async function stopPipelineWorkers(): Promise<void> {
   console.log('[PipelineWorkers] Stopping all pipeline workers...');
 
   stopBackpressureMonitor();
+  await stopNarrativeSubWorkers();
   await Promise.all(pipelineWorkers.map((w) => w.stop()));
 
   console.log('[PipelineWorkers] All pipeline workers stopped');

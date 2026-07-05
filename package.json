@@ -10,6 +10,7 @@
     "preview": "vite preview",
     "program-00:verify": "node scripts/program-00-verify.mjs",
     "verify:production": "node scripts/verify-production-website.mjs",
+    "screenshots:phase1": "node scripts/capture-phase1-screenshots.mjs",
     "dashboard:executive": "node scripts/generate-executive-dashboard.mjs"
   },
   "dependencies": {

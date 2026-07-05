@@ -8,18 +8,23 @@ import { readFileSync, writeFileSync, existsSync } from 'fs';
 const assessmentPath = '/workspace/reports/MASTER_PRODUCTION_ASSESSMENT.json';
 const productionPath = '/workspace/reports/PRODUCTION_WEBSITE_VERIFY.json';
 const outPath = '/workspace/reports/EXECUTIVE_DASHBOARD.md';
+const blockersPath = '/workspace/reports/PRODUCTION_BLOCKERS.json';
 const outJsonPath = '/workspace/reports/EXECUTIVE_DASHBOARD.json';
 
 const generatedAt = new Date().toISOString();
 
 let assessment = { summary: { overallCompletionPercent: 79.4, verifiedCapabilities: 158, totalCapabilities: 199, productionReadiness: 'RELEASE_CANDIDATE' }, programs: [] };
 let production = { status: 'UNKNOWN', url: 'https://courtaccess.net', errors: ['No production verify report'] };
+let blockersDoc = { blockers: [], blockerCount: 0 };
 
 if (existsSync(assessmentPath)) {
   assessment = JSON.parse(readFileSync(assessmentPath, 'utf8'));
 }
 if (existsSync(productionPath)) {
   production = JSON.parse(readFileSync(productionPath, 'utf8'));
+}
+if (existsSync(blockersPath)) {
+  blockersDoc = JSON.parse(readFileSync(blockersPath, 'utf8'));
 }
 
 const productionDeployed = production.status === 'PASS';
@@ -44,18 +49,26 @@ const subsystems = [
   { name: 'Operations', code: 76, production: 76, blocker: null },
 ];
 
-const blockers = [
+const blockers = blockersDoc.blockers?.length
+  ? blockersDoc.blockers.map((b) => ({
+      priority: b.priority,
+      item: b.name,
+      status: b.status,
+      impact: b.description,
+    }))
+  : [
   { priority: 1, item: 'Production website deploy', impact: 'courtaccess.net stale — blocks all production verification' },
   { priority: 2, item: 'GitHub deploy secrets', impact: 'CI cannot SSH deploy' },
   { priority: 3, item: 'Database migration deploy', impact: 'defaultRole, publication tables, multi-org' },
   { priority: 4, item: 'Stripe production certification', impact: 'Billing not production-ready' },
   { priority: 5, item: 'OCR/AI redaction', impact: 'Program 7 incomplete' },
-  { priority: 6, item: 'California legal coverage', impact: '12% — 29 codes remain' },
-].filter((b) => b.priority <= 6);
+    { priority: 6, item: 'California legal coverage', impact: '12% — 29 codes remain' },
+  ].filter((b) => b.priority <= 6);
 
 const dashboard = {
-  directive: 'Master Production Directive v18.0',
+  directive: 'Master Production Directive v19.0',
   generatedAt,
+  blockerCount: blockersDoc.blockerCount ?? blockers.length,
   overallCompletionPercent: assessment.summary?.overallCompletionPercent ?? 79.4,
   productionWebsitePercent: websiteCompletion,
   productionDeployed,
@@ -67,7 +80,9 @@ const dashboard = {
   releaseRecommendation: productionDeployed
     ? 'PROCEED to Stripe certification and dashboard production verification'
     : 'HOLD — deploy production website first (Priority Zero)',
-  highestPriorityUnfinished: 'Priority Zero — Production Website Deploy',
+  highestPriorityUnfinished: blockersDoc.highestPriority
+    ? `BLK-${String(blockersDoc.highestPriority).replace('BLK-', '')} — ${blockers.find((b) => b.item)?.item ?? 'Production deployment'}`
+    : 'Priority Zero — Production Website Deploy',
   technicalDebt: [
     'Documents page uses mock data — not linked to redaction routes',
     'Disclosure publish UI not wired to API',
@@ -75,10 +90,11 @@ const dashboard = {
   ],
 };
 
-const md = `# CourtAccess Executive Dashboard — v18.0
+const md = `# CourtAccess Executive Dashboard — v19.0
 
 **Generated:** ${generatedAt}  
-**Directive:** Master Production Directive v18.0 — FINAL PRODUCTION MODE
+**Directive:** Master Production Directive v19.0 — FINAL COMPLETION MODE  
+**Active Blockers:** ${blockersDoc.blockerCount ?? blockers.length}
 
 ---
 
@@ -130,7 +146,7 @@ ${blockers.map((b) => `${b.priority}. **${b.item}** — ${b.impact}`).join('\n')
 
 ## Deployment Readiness
 
-**BLOCKED** — CI deploy workflow exists; secrets and merge to \`dev\` required.
+**${productionDeployed ? 'READY' : 'BLOCKED'}** — dev merged ${productionDeployed ? '' : '(lockfile fix + deploy secrets or manual artifact deploy required)'}.
 
 ---
 

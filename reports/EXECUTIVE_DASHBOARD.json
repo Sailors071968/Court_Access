@@ -1,6 +1,7 @@
 {
-  "directive": "Master Production Directive v18.0",
-  "generatedAt": "2026-07-05T16:48:41.599Z",
+  "directive": "Master Production Directive v19.0",
+  "generatedAt": "2026-07-05T17:07:35.754Z",
+  "blockerCount": 6,
   "overallCompletionPercent": 79.4,
   "productionWebsitePercent": 0,
   "productionDeployed": false,
@@ -108,37 +109,49 @@
   "blockers": [
     {
       "priority": 1,
-      "item": "Production website deploy",
-      "impact": "courtaccess.net stale — blocks all production verification"
+      "item": "Production deployment",
+      "status": "in_progress",
+      "impact": "courtaccess.net serves stale June 26 build. dev merged and pushed; CI deploy failed on lockfile sync."
     },
     {
       "priority": 2,
-      "item": "GitHub deploy secrets",
-      "impact": "CI cannot SSH deploy"
+      "item": "GitHub Actions CI lockfile",
+      "status": "resolved",
+      "impact": "npm ci failed: playwright@1.61.1 missing from package-lock.json — fixed in dev push"
     },
     {
       "priority": 3,
-      "item": "Database migration deploy",
-      "impact": "defaultRole, publication tables, multi-org"
+      "item": "Production database migrations",
+      "status": "pending",
+      "impact": "Migrations for defaultRole, publication engine, multi-org membership not deployed to production DB"
     },
     {
       "priority": 4,
       "item": "Stripe production certification",
-      "impact": "Billing not production-ready"
+      "status": "pending",
+      "impact": "Live Stripe Test Mode and production certification incomplete"
     },
     {
       "priority": 5,
-      "item": "OCR/AI redaction",
-      "impact": "Program 7 incomplete"
+      "item": "OCR / AI redaction",
+      "status": "pending",
+      "impact": "Document redaction UI exists; OCR integration and AI suggestions not production-complete"
     },
     {
       "priority": 6,
       "item": "California legal coverage",
-      "impact": "12% — 29 codes remain"
+      "status": "pending",
+      "impact": "Approximately 12% of 29 California Codes analyzed"
+    },
+    {
+      "priority": 7,
+      "item": "Authenticated dashboard production verification",
+      "status": "pending",
+      "impact": "Attorney/investigator/defendant/admin dashboard screenshots require post-deploy auth flows"
     }
   ],
   "releaseRecommendation": "HOLD — deploy production website first (Priority Zero)",
-  "highestPriorityUnfinished": "Priority Zero — Production Website Deploy",
+  "highestPriorityUnfinished": "BLK-001 — Production deployment",
   "technicalDebt": [
     "Documents page uses mock data — not linked to redaction routes",
     "Disclosure publish UI not wired to API",

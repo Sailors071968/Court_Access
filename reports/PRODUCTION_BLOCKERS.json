@@ -1,0 +1,80 @@
+{
+  "directive": "Master Production Directive v19.0",
+  "generatedAt": "2026-07-05T17:08:00Z",
+  "blockerCount": 6,
+  "resolvedThisSession": ["missing-frontend-merge-to-dev", "BLK-002-ci-lockfile-sync"],
+  "blockers": [
+    {
+      "id": "BLK-001",
+      "priority": 1,
+      "name": "Production deployment",
+      "status": "in_progress",
+      "description": "courtaccess.net serves stale June 26 build. dev merged and pushed; CI deploy failed on lockfile sync.",
+      "resolution": "Fix package-lock.json, re-push dev, configure DEPLOY_HOST/DEPLOY_USER/DEPLOY_SSH_KEY, or run scripts/deploy-production-website.sh on server",
+      "owner": "engineering",
+      "blocks": ["production-verification", "dashboard-screenshots", "v1-certification"]
+    },
+    {
+      "id": "BLK-002",
+      "priority": 2,
+      "name": "GitHub Actions CI lockfile",
+      "status": "resolved",
+      "description": "npm ci failed: playwright@1.61.1 missing from package-lock.json — fixed in dev push",
+      "resolution": "Committed synced package-lock.json with playwright@1.61.1",
+      "owner": "engineering",
+      "blocks": []
+    },
+    {
+      "id": "BLK-003",
+      "priority": 3,
+      "name": "Production database migrations",
+      "status": "pending",
+      "description": "Migrations for defaultRole, publication engine, multi-org membership not deployed to production DB",
+      "resolution": "npx prisma migrate deploy on production server",
+      "owner": "operations",
+      "blocks": ["role-onboarding-production", "publication-engine-production"]
+    },
+    {
+      "id": "BLK-004",
+      "priority": 4,
+      "name": "Stripe production certification",
+      "status": "pending",
+      "description": "Live Stripe Test Mode and production certification incomplete",
+      "resolution": "Configure STRIPE_SECRET_KEY, run npm run billing:certify",
+      "owner": "billing",
+      "blocks": ["hybrid-billing-production"]
+    },
+    {
+      "id": "BLK-005",
+      "priority": 5,
+      "name": "OCR / AI redaction",
+      "status": "pending",
+      "description": "Document redaction UI exists; OCR integration and AI suggestions not production-complete",
+      "resolution": "Complete redaction pipeline with Textract/OCR and rendered publication copies",
+      "owner": "engineering",
+      "blocks": ["document-redaction-certification"]
+    },
+    {
+      "id": "BLK-006",
+      "priority": 6,
+      "name": "California legal coverage",
+      "status": "pending",
+      "description": "Approximately 12% of 29 California Codes analyzed",
+      "resolution": "Continue legislative ingestion pipeline per Program 15",
+      "owner": "legal-intelligence",
+      "blocks": ["legal-intelligence-v1"]
+    },
+    {
+      "id": "BLK-007",
+      "priority": 7,
+      "name": "Authenticated dashboard production verification",
+      "status": "pending",
+      "description": "Attorney/investigator/defendant/admin dashboard screenshots require post-deploy auth flows",
+      "resolution": "Deploy website, run production acceptance test with seeded accounts",
+      "owner": "engineering",
+      "blocks": ["phase-22-acceptance-test"]
+    }
+  ],
+  "highestPriority": "BLK-001",
+  "releaseRecommendation": "HOLD — resolve BLK-001 production deployment before v1.0"
+}

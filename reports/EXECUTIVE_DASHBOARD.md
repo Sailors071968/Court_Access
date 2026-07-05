@@ -1,7 +1,8 @@
-# CourtAccess Executive Dashboard — v18.0
+# CourtAccess Executive Dashboard — v19.0
 
-**Generated:** 2026-07-05T16:48:41.599Z  
-**Directive:** Master Production Directive v18.0 — FINAL PRODUCTION MODE
+**Generated:** 2026-07-05T17:07:35.754Z  
+**Directive:** Master Production Directive v19.0 — FINAL COMPLETION MODE  
+**Active Blockers:** 6
 
 ---
 
@@ -41,12 +42,13 @@
 
 ## Production Blockers
 
-1. **Production website deploy** — courtaccess.net stale — blocks all production verification
-2. **GitHub deploy secrets** — CI cannot SSH deploy
-3. **Database migration deploy** — defaultRole, publication tables, multi-org
-4. **Stripe production certification** — Billing not production-ready
-5. **OCR/AI redaction** — Program 7 incomplete
-6. **California legal coverage** — 12% — 29 codes remain
+1. **Production deployment** — courtaccess.net serves stale June 26 build. dev merged and pushed; CI deploy failed on lockfile sync.
+2. **GitHub Actions CI lockfile** — npm ci failed: playwright@1.61.1 missing from package-lock.json — fixed in dev push
+3. **Production database migrations** — Migrations for defaultRole, publication engine, multi-org membership not deployed to production DB
+4. **Stripe production certification** — Live Stripe Test Mode and production certification incomplete
+5. **OCR / AI redaction** — Document redaction UI exists; OCR integration and AI suggestions not production-complete
+6. **California legal coverage** — Approximately 12% of 29 California Codes analyzed
+7. **Authenticated dashboard production verification** — Attorney/investigator/defendant/admin dashboard screenshots require post-deploy auth flows
 
 ---
 
@@ -73,7 +75,7 @@
 
 ## Deployment Readiness
 
-**BLOCKED** — CI deploy workflow exists; secrets and merge to `dev` required.
+**BLOCKED** — dev merged (lockfile fix + deploy secrets or manual artifact deploy required).
 
 ---
 
@@ -98,4 +100,4 @@
 
 ## Highest Priority Unfinished Subsystem
 
-**Priority Zero — Production Website Deploy**
+**BLK-001 — Production deployment**

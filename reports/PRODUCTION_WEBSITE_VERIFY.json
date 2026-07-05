@@ -1,6 +1,6 @@
 {
   "program": "PRIORITY-ZERO",
-  "verifiedAt": "2026-07-05T16:40:03.204Z",
+  "verifiedAt": "2026-07-05T17:07:36.126Z",
   "url": "https://courtaccess.net",
   "checks": [
     {
@@ -40,6 +40,10 @@
   ],
   "screenshots": [
     "/workspace/reports/screenshots/production/production-landing-desktop.png",
+    "/workspace/reports/screenshots/production/production-pricing-desktop.png",
+    "/workspace/reports/screenshots/production/production-signup-desktop.png",
+    "/workspace/reports/screenshots/production/production-features-desktop.png",
+    "/workspace/reports/screenshots/production/production-attorneys-desktop.png",
     "/workspace/reports/screenshots/production/production-landing-mobile.png"
   ],
   "status": "FAIL",

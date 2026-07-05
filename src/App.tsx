@@ -94,6 +94,8 @@ function App() {
         <Route path="/contact" element={<ContactSalesPage />} />
         <Route path="/case-studies" element={<CaseStudiesPage />} />
         <Route path="/legal-disclaimer" element={<LegalDisclaimerPage />} />
+        <Route path="/privacy" element={<LegalDisclaimerPage />} />
+        <Route path="/terms" element={<LegalDisclaimerPage />} />
 
         {/* Pricing (accessible to authenticated users without subscription) */}
         <Route path="/pricing" element={<PricingPage />} />

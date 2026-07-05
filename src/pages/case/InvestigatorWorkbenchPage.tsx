@@ -6,8 +6,8 @@
 import { useState, useEffect, useCallback } from 'react';
 import { useParams } from 'react-router-dom';
 import {
-  Search, Loader2, RefreshCw, Users, ClipboardList, MapPin,
-  Camera, Video, Mic, AlertTriangle, Clock, FileText, Plus,
+  Search, Loader2, RefreshCw, Users, ClipboardList,
+  Camera, Video, Mic, AlertTriangle, Clock, Plus,
 } from 'lucide-react';
 import { Card, CardHeader, StatCard } from '../../components/common/Card';
 import {

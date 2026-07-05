@@ -72,14 +72,13 @@ export function AdminPage() {
     if (!deleteConfirm) return;
     setDeleting(true);
     try {
-      const headers = getAuthHeaders();
       const endpoint = deleteConfirm.type === 'user'
         ? `/api/admin/users/${deleteConfirm.id}`
         : `/api/admin/cases/${deleteConfirm.id}`;
       // Use auth-only headers for DELETE (no Content-Type) to avoid
       // Fastify rejecting empty JSON body with 400 Bad Request.
       const token = localStorage.getItem('court-access-token');
-      const deleteHeaders = token ? { Authorization: `Bearer ${token}` } : {};
+      const deleteHeaders: Record<string, string> = token ? { Authorization: `Bearer ${token}` } : {};
       const res = await fetch(endpoint, { method: 'DELETE', headers: deleteHeaders });
       if (res.ok) {
         setDeleteConfirm(null);

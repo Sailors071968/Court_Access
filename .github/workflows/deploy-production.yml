@@ -16,6 +16,7 @@ on:
       - 'vite.config.ts'
       - 'public/**'
       - 'scripts/deploy-production-website.sh'
+      - 'scripts/program-00-verify.mjs'
   workflow_dispatch:
 
 concurrency:

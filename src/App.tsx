@@ -28,6 +28,8 @@ import { KnowledgeBasePage } from './pages/marketing/KnowledgeBasePage';
 import { SupportPage } from './pages/marketing/SupportPage';
 import { AccessibilityPage } from './pages/marketing/AccessibilityPage';
 import { SitemapPage } from './pages/marketing/SitemapPage';
+import { PressPage } from './pages/marketing/PressPage';
+import { CareersPage } from './pages/marketing/CareersPage';
 import {
   AttorneyPage,
   InvestigatorPage,
@@ -150,6 +152,8 @@ function App() {
         <Route path="/support" element={<SupportPage />} />
         <Route path="/accessibility" element={<AccessibilityPage />} />
         <Route path="/sitemap" element={<SitemapPage />} />
+        <Route path="/press" element={<PressPage />} />
+        <Route path="/careers" element={<CareersPage />} />
 
         {/* Pricing (accessible to authenticated users without subscription) */}
         <Route path="/pricing" element={<PricingPage />} />

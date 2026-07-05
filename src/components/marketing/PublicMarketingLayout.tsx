@@ -155,6 +155,8 @@ export function PublicMarketingFooter() {
             <ul className="space-y-2">
               <li><Link to="/about" className="text-sm text-slate-400 hover:text-white transition-colors">About</Link></li>
               <li><Link to="/blog" className="text-sm text-slate-400 hover:text-white transition-colors">Blog</Link></li>
+              <li><Link to="/press" className="text-sm text-slate-400 hover:text-white transition-colors">Press</Link></li>
+              <li><Link to="/careers" className="text-sm text-slate-400 hover:text-white transition-colors">Careers</Link></li>
               <li><Link to="/support" className="text-sm text-slate-400 hover:text-white transition-colors">Support</Link></li>
               <li><Link to="/contact" className="text-sm text-slate-400 hover:text-white transition-colors">Contact</Link></li>
               <li><Link to="/login" className="text-sm text-slate-400 hover:text-white transition-colors">Login</Link></li>

@@ -39,6 +39,11 @@ const PROGRAM_00_ROUTES = [
   '/accessibility',
   '/legal-disclaimer',
   '/sitemap',
+  '/press',
+  '/careers',
+  '/attorneys',
+  '/investigators',
+  '/defendants',
 ];
 
 async function startPreview() {

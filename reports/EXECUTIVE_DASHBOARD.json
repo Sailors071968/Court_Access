@@ -1,0 +1,147 @@
+{
+  "directive": "Master Production Directive v18.0",
+  "generatedAt": "2026-07-05T16:48:41.599Z",
+  "overallCompletionPercent": 79.4,
+  "productionWebsitePercent": 0,
+  "productionDeployed": false,
+  "productionReadiness": "RELEASE_CANDIDATE",
+  "verifiedCapabilities": 158,
+  "totalCapabilities": 199,
+  "subsystems": [
+    {
+      "name": "Operational Website",
+      "code": 100,
+      "production": 0,
+      "blocker": "Stale June 26 build on courtaccess.net"
+    },
+    {
+      "name": "Universal Membership",
+      "code": 90,
+      "production": 70,
+      "blocker": null
+    },
+    {
+      "name": "Role-Based Onboarding",
+      "code": 95,
+      "production": 0,
+      "blocker": "Not deployed"
+    },
+    {
+      "name": "Organizations",
+      "code": 88,
+      "production": 0,
+      "blocker": "Migration not deployed"
+    },
+    {
+      "name": "Case Permission Engine",
+      "code": 100,
+      "production": 85,
+      "blocker": null
+    },
+    {
+      "name": "Publication Engine",
+      "code": 75,
+      "production": 0,
+      "blocker": "Publish UI incomplete"
+    },
+    {
+      "name": "Redaction System",
+      "code": 71,
+      "production": 0,
+      "blocker": "OCR/AI redaction blocked"
+    },
+    {
+      "name": "Attorney Command Center",
+      "code": 82,
+      "production": 0,
+      "blocker": null
+    },
+    {
+      "name": "Investigator Command Center",
+      "code": 78,
+      "production": 0,
+      "blocker": null
+    },
+    {
+      "name": "Defendant Portal",
+      "code": 85,
+      "production": 0,
+      "blocker": null
+    },
+    {
+      "name": "Stripe Billing",
+      "code": 83,
+      "production": 0,
+      "blocker": "Stripe keys + certification"
+    },
+    {
+      "name": "California Legal Intelligence",
+      "code": 12,
+      "production": 12,
+      "blocker": "29 codes incomplete"
+    },
+    {
+      "name": "Knowledge Graph",
+      "code": 68,
+      "production": 68,
+      "blocker": "Orphan cleanup ongoing"
+    },
+    {
+      "name": "Security",
+      "code": 88,
+      "production": 88,
+      "blocker": null
+    },
+    {
+      "name": "Performance",
+      "code": 74,
+      "production": 74,
+      "blocker": "Load testing incomplete"
+    },
+    {
+      "name": "Operations",
+      "code": 76,
+      "production": 76,
+      "blocker": null
+    }
+  ],
+  "blockers": [
+    {
+      "priority": 1,
+      "item": "Production website deploy",
+      "impact": "courtaccess.net stale — blocks all production verification"
+    },
+    {
+      "priority": 2,
+      "item": "GitHub deploy secrets",
+      "impact": "CI cannot SSH deploy"
+    },
+    {
+      "priority": 3,
+      "item": "Database migration deploy",
+      "impact": "defaultRole, publication tables, multi-org"
+    },
+    {
+      "priority": 4,
+      "item": "Stripe production certification",
+      "impact": "Billing not production-ready"
+    },
+    {
+      "priority": 5,
+      "item": "OCR/AI redaction",
+      "impact": "Program 7 incomplete"
+    },
+    {
+      "priority": 6,
+      "item": "California legal coverage",
+      "impact": "12% — 29 codes remain"
+    }
+  ],
+  "releaseRecommendation": "HOLD — deploy production website first (Priority Zero)",
+  "highestPriorityUnfinished": "Priority Zero — Production Website Deploy",
+  "technicalDebt": [
+    "Documents page uses mock data — not linked to redaction routes",
+    "Disclosure publish UI not wired to API",
+    "Dashboard screenshots require post-deploy auth flow"
+  ]
+}

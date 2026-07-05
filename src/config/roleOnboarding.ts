@@ -20,6 +20,11 @@ export const DEFAULT_ROLES = [
 
 export type DefaultRole = (typeof DEFAULT_ROLES)[number];
 
+export const FUTURE_REGISTRATION_ROLES = [
+  { value: 'judge', label: 'Judge (coming soon)', description: 'Judicial participant — future release', disabled: true },
+  { value: 'prosecutor', label: 'Prosecutor (coming soon)', description: 'Prosecutorial participant — future release', disabled: true },
+] as const;
+
 export const REGISTRATION_ROLE_OPTIONS: { value: DefaultRole; label: string; description: string }[] = [
   { value: 'attorney', label: 'Attorney', description: 'Criminal defense attorney or counsel of record' },
   { value: 'criminal_investigator', label: 'Criminal Investigator', description: 'Private or defense investigator' },

@@ -1,8 +1,7 @@
-# CourtAccess Executive Dashboard — v17.0
+# CourtAccess Executive Dashboard — v18.0
 
-**Generated:** 2026-07-05  
-**Directive:** Master Production Directive v17.0  
-**Branch:** `cursor/programs-2a-4a-5a-6a-b98a`
+**Generated:** 2026-07-05T16:48:41.599Z  
+**Directive:** Master Production Directive v18.0 — FINAL PRODUCTION MODE
 
 ---
 
@@ -10,108 +9,93 @@
 
 | Metric | Value |
 |--------|-------|
-| **Overall Platform** | **79.4%** (158/199 capabilities verified) |
-| **Production Readiness** | RELEASE_CANDIDATE (code) / **BLOCKED** (deploy) |
-| **Programs READY** | 6 of 25 |
+| **Platform (code)** | **79.4%** (158/199 capabilities) |
+| **Production Website** | **0%** |
+| **Production Readiness** | RELEASE_CANDIDATE |
+| **Release Recommendation** | **HOLD — deploy production website first (Priority Zero)** |
 
 ---
 
-## Domain Completion
+## Completion by Subsystem
 
-| Domain | Code | Production | Status |
-|--------|------|------------|--------|
-| **Operational Website** | 100% | **0%** | BLOCKED — stale June 26 build live |
-| Attorney Platform | 82% | — | In progress |
-| Investigator Platform | 78% | — | In progress |
-| Defendant Platform | 85% | — | Client portal + role onboarding |
-| Administration | 76% | — | In progress |
-| Stripe / Billing | 83% | — | Certification blocked (env) |
-| California Legal Intelligence | 12% | — | Active ingestion |
-| Knowledge Graph | 68% | — | Verification ongoing |
-| Repository Integrity | 71% | — | Monitoring active |
-| Security | 88% | — | Release candidate |
-| Performance | 74% | — | Benchmarking needed |
-
----
-
-## Priority Zero — Production Website
-
-### Production status (2026-07-05)
-
-| Check | Result |
-|-------|--------|
-| URL | https://courtaccess.net |
-| Title | **FAIL** — `Court Access System` (stale) |
-| Bundle | **FAIL** — `index-HSm04BBy.js` (June 26, 2026) |
-| Expected | `Criminal Case Intelligence Platform` + current bundle |
-| Last-Modified | `Fri, 26 Jun 2026 19:17:43 GMT` |
-
-### Root cause
-
-Missing merge to `dev` + no production redeploy. Codebase is correct; origin is stale.
-
-### Resolution path
-
-1. Merge PRs #112, #113 to `dev`
-2. Configure GitHub secrets: `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_SSH_KEY`
-3. Push to `dev` → CI deploys via `.github/workflows/deploy-production.yml`
-4. Verify: `npm run verify:production`
-5. Scheduled monitor: `.github/workflows/verify-production.yml` (every 6 hours)
-
-### Local verification (PASS)
-
-- 26/26 public routes (`npm run program-00:verify`)
-- Build stamp in `dist/index.html`
-- Screenshots: `reports/screenshots/program-00/`
+| Subsystem | Code % | Production % | Blocker |
+|-----------|--------|--------------|---------|
+| Operational Website | 100 | 0 | Stale June 26 build on courtaccess.net |
+| Universal Membership | 90 | 70 | — |
+| Role-Based Onboarding | 95 | 0 | Not deployed |
+| Organizations | 88 | 0 | Migration not deployed |
+| Case Permission Engine | 100 | 85 | — |
+| Publication Engine | 75 | 0 | Publish UI incomplete |
+| Redaction System | 71 | 0 | OCR/AI redaction blocked |
+| Attorney Command Center | 82 | 0 | — |
+| Investigator Command Center | 78 | 0 | — |
+| Defendant Portal | 85 | 0 | — |
+| Stripe Billing | 83 | 0 | Stripe keys + certification |
+| California Legal Intelligence | 12 | 12 | 29 codes incomplete |
+| Knowledge Graph | 68 | 68 | Orphan cleanup ongoing |
+| Security | 88 | 88 | — |
+| Performance | 74 | 74 | Load testing incomplete |
+| Operations | 76 | 76 | — |
 
 ---
 
-## Program 1 — Public Website
+## Production Blockers
 
-**21/21 pages** implemented. Route aliases added: `/attorneys`, `/investigators`, `/defendants`.
-
----
-
-## Program 2 / 2A — Universal Membership + Role Registration
-
-- **13 registration roles** (v17.0): Attorney through Other
-- Role configures dashboard/onboarding — **never** limits capabilities
-- Unlimited org members (Program 4)
-- 10-level permission engine (Program 5)
-- Publication engine with audit trail (Program 6)
+1. **Production website deploy** — courtaccess.net stale — blocks all production verification
+2. **GitHub deploy secrets** — CI cannot SSH deploy
+3. **Database migration deploy** — defaultRole, publication tables, multi-org
+4. **Stripe production certification** — Billing not production-ready
+5. **OCR/AI redaction** — Program 7 incomplete
+6. **California legal coverage** — 12% — 29 codes remain
 
 ---
 
-## Critical Blockers
+## Repository Health
 
-| # | Blocker | Impact |
-|---|---------|--------|
-| 1 | **Production deploy not executed** | courtaccess.net stale |
-| 2 | GitHub deploy secrets not configured | CI deploy cannot run |
-| 3 | DB migration not deployed | `defaultRole`, publication tables |
-| 4 | Stripe live keys | Billing certification |
-| 5 | `users.termsAcceptedAt` migration | Gate refresh |
+- Assessment: `reports/MASTER_PRODUCTION_ASSESSMENT.json`
+- Production verify: `reports/PRODUCTION_WEBSITE_VERIFY.json` — **FAIL**
+- Legal coverage: `reports/LEGAL_COVERAGE.json`
+- Knowledge graph: `reports/REPOSITORY_INTEGRITY.json`
 
 ---
 
-## Release Recommendation
+## Stripe Readiness
 
-**HOLD v1.0 release** until Priority Zero production deploy passes `npm run verify:production`.
+83% — Test Mode certification pending. Production keys not configured.
 
-**Next engineering actions:**
-1. Merge and deploy to production
-2. Run `npx prisma migrate deploy` on production DB
-3. Stripe Test Mode certification
-4. Attorney Command Center completion (Program 8)
+## Security Readiness
+
+88% — RBAC, tenant isolation, audit logging implemented. Penetration testing incomplete.
+
+## Performance Readiness
+
+74% — Caching partial. Load/stress testing incomplete.
+
+## Deployment Readiness
+
+**BLOCKED** — CI deploy workflow exists; secrets and merge to `dev` required.
 
 ---
 
-## Session Deliverables
+## Estimated Work Remaining
 
-- [x] Production verification script (`scripts/verify-production-website.mjs`)
-- [x] Scheduled production monitor workflow
-- [x] Program 2A expanded to 13 v17.0 roles
-- [x] Public page route aliases
-- [x] Executive dashboard v17
-- [ ] Production deploy PASS
-- [ ] Production screenshots PASS
+1. Deploy production website (Priority Zero)
+2. Run `npx prisma migrate deploy` on production
+3. Stripe Test Mode + Production certification
+4. Complete redaction OCR/AI pipeline
+5. California legal intelligence — 29 codes
+6. Dashboard production screenshots with auth
+
+---
+
+## New Technical Debt
+
+- Documents page uses mock data — not linked to redaction routes
+- Disclosure publish UI not wired to API
+- Dashboard screenshots require post-deploy auth flow
+
+---
+
+## Highest Priority Unfinished Subsystem
+
+**Priority Zero — Production Website Deploy**

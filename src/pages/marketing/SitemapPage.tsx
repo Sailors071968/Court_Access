@@ -35,6 +35,8 @@ const SITEMAP_SECTIONS = [
       { label: 'Knowledge Base', href: '/knowledge-base' },
       { label: 'Contact', href: '/contact' },
       { label: 'Support', href: '/support' },
+      { label: 'Press', href: '/press' },
+      { label: 'Careers', href: '/careers' },
       { label: 'Case Studies', href: '/case-studies' },
     ],
   },

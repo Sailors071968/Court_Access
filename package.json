@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "program-00:verify": "node scripts/program-00-verify.mjs",
-    "verify:production": "node scripts/verify-production-website.mjs"
+    "verify:production": "node scripts/verify-production-website.mjs",
+    "dashboard:executive": "node scripts/generate-executive-dashboard.mjs"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",

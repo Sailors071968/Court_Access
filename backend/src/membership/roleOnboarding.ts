@@ -4,6 +4,11 @@
 // Every subscriber receives the complete CourtAccess platform.
 // ============================================================================
 
+export const FUTURE_ROLES = [
+  { id: 'judge', label: 'Judge', description: 'Judicial participant (coming soon)' },
+  { id: 'prosecutor', label: 'Prosecutor', description: 'Prosecutorial participant (coming soon)' },
+] as const;
+
 export const DEFAULT_ROLES = [
   'attorney',
   'criminal_investigator',

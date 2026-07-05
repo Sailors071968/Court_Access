@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 import { Scale, Tag, CheckCircle2, XCircle } from 'lucide-react';
-import { REGISTRATION_ROLE_OPTIONS, type DefaultRole } from '../../config/roleOnboarding';
+import { REGISTRATION_ROLE_OPTIONS, FUTURE_REGISTRATION_ROLES, type DefaultRole } from '../../config/roleOnboarding';
 
 interface DiscountValidation {
   valid: boolean;
@@ -128,6 +128,9 @@ export function RegisterPage() {
               >
                 {REGISTRATION_ROLE_OPTIONS.map((opt) => (
                   <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
+                {FUTURE_REGISTRATION_ROLES.map((opt) => (
+                  <option key={opt.value} value={opt.value} disabled>{opt.label}</option>
                 ))}
               </select>
               {selectedRole && (

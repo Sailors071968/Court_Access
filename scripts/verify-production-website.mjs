@@ -62,9 +62,20 @@ try {
     const heroOk = Boolean(bodyText?.includes(CHECKS.heroText) || bodyText?.includes(CHECKS.title));
     result.checks.push({ name: 'hero_content', pass: heroOk });
 
-    const desktopPath = `${OUT_DIR}/production-landing-desktop.png`;
-    await page.screenshot({ path: desktopPath, fullPage: true });
-    result.screenshots.push(desktopPath);
+    const pagesToCapture = [
+      { path: '/', name: 'landing-desktop' },
+      { path: '/pricing', name: 'pricing-desktop' },
+      { path: '/register', name: 'signup-desktop' },
+      { path: '/features', name: 'features-desktop' },
+      { path: '/attorney', name: 'attorneys-desktop' },
+    ];
+
+    for (const { path, name } of pagesToCapture) {
+      await page.goto(`${PRODUCTION_URL}${path}`, { waitUntil: 'networkidle', timeout: 60000 });
+      const shotPath = `${OUT_DIR}/production-${name}.png`;
+      await page.screenshot({ path: shotPath, fullPage: true });
+      result.screenshots.push(shotPath);
+    }
 
     const mobilePage = await browser.newPage({ viewport: { width: 390, height: 844 } });
     await mobilePage.goto(PRODUCTION_URL, { waitUntil: 'networkidle', timeout: 60000 });

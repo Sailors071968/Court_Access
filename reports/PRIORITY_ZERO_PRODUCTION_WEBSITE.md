@@ -145,10 +145,14 @@ Production screenshots require post-deploy capture on courtaccess.net.
 ## Checklist
 
 - [x] Root cause identified
-- [x] Local build verified
+- [x] Local build verified (26/26 routes)
 - [x] Deploy script created (`scripts/deploy-production-website.sh`)
+- [x] CI/CD workflow created (`.github/workflows/deploy-production.yml`)
+- [x] Build stamp in `dist/index.html` (git SHA + timestamp)
 - [x] index.html branding updated
+- [x] Program 1 public pages complete (21 pages)
 - [x] Local screenshots captured
+- [ ] GitHub deploy secrets configured (`DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_SSH_KEY`)
 - [ ] Merge to `dev`
 - [ ] Production deploy executed
 - [ ] Production screenshots captured

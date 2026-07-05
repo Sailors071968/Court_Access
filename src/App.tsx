@@ -21,6 +21,20 @@ import { FeaturesPage } from './pages/marketing/FeaturesPage';
 import { FAQPage } from './pages/marketing/FAQPage';
 import { PrivacyPolicyPage } from './pages/marketing/PrivacyPolicyPage';
 import { TermsOfServicePage } from './pages/marketing/TermsOfServicePage';
+import { HowItWorksPage } from './pages/marketing/HowItWorksPage';
+import { SecurityPage } from './pages/marketing/SecurityPage';
+import { BlogPage } from './pages/marketing/BlogPage';
+import { KnowledgeBasePage } from './pages/marketing/KnowledgeBasePage';
+import { SupportPage } from './pages/marketing/SupportPage';
+import { AccessibilityPage } from './pages/marketing/AccessibilityPage';
+import { SitemapPage } from './pages/marketing/SitemapPage';
+import {
+  AttorneyPage,
+  InvestigatorPage,
+  DefendantPage,
+  FamiliesPage,
+  ExpertsPage as ExpertsAudiencePage,
+} from './pages/marketing/AudiencePages';
 
 // Auth Pages
 import { LoginPage } from './pages/auth/LoginPage';
@@ -120,6 +134,18 @@ function App() {
         <Route path="/legal-disclaimer" element={<LegalDisclaimerPage />} />
         <Route path="/privacy" element={<PrivacyPolicyPage />} />
         <Route path="/terms" element={<TermsOfServicePage />} />
+        <Route path="/how-it-works" element={<HowItWorksPage />} />
+        <Route path="/attorney" element={<AttorneyPage />} />
+        <Route path="/investigator" element={<InvestigatorPage />} />
+        <Route path="/defendant" element={<DefendantPage />} />
+        <Route path="/families" element={<FamiliesPage />} />
+        <Route path="/experts" element={<ExpertsAudiencePage />} />
+        <Route path="/security" element={<SecurityPage />} />
+        <Route path="/blog" element={<BlogPage />} />
+        <Route path="/knowledge-base" element={<KnowledgeBasePage />} />
+        <Route path="/support" element={<SupportPage />} />
+        <Route path="/accessibility" element={<AccessibilityPage />} />
+        <Route path="/sitemap" element={<SitemapPage />} />
 
         {/* Pricing (accessible to authenticated users without subscription) */}
         <Route path="/pricing" element={<PricingPage />} />

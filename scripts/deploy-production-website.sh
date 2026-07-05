@@ -35,6 +35,9 @@ grep -q "Criminal Case Intelligence Platform" dist/index.html || {
   echo "ERROR: dist/index.html missing Criminal Case Intelligence Platform branding"
   exit 1
 }
+grep -q "CourtAccess build:" dist/index.html || {
+  echo "WARN: dist/index.html missing build stamp (non-fatal)"
+}
 ! grep -q "Loading Court Access" dist/assets/*.js 2>/dev/null || {
   echo "ERROR: stale Loading Court Access bundle detected"
   exit 1

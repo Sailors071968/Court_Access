@@ -17,6 +17,17 @@ const PROGRAM_00_ROUTES = [
   '/pricing',
   '/about',
   '/features',
+  '/how-it-works',
+  '/attorney',
+  '/investigator',
+  '/defendant',
+  '/families',
+  '/experts',
+  '/government',
+  '/security',
+  '/blog',
+  '/knowledge-base',
+  '/support',
   '/faq',
   '/contact',
   '/login',
@@ -25,7 +36,9 @@ const PROGRAM_00_ROUTES = [
   '/verify-email',
   '/privacy',
   '/terms',
+  '/accessibility',
   '/legal-disclaimer',
+  '/sitemap',
 ];
 
 async function startPreview() {
@@ -90,7 +103,7 @@ try {
   }
 
   // Key pages screenshots
-  for (const route of ['/about', '/features', '/faq', '/privacy']) {
+  for (const route of ['/about', '/features', '/how-it-works', '/attorney', '/security', '/faq', '/privacy']) {
     await page.goto(`${BASE}${route}`, { waitUntil: 'networkidle' });
     const slug = route.slice(1);
     const path = `${OUT_DIR}/${slug}-desktop.png`;

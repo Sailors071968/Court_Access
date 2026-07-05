@@ -8,6 +8,7 @@ import { Shield, Mail } from 'lucide-react';
 
 const NAV_LINKS = [
   { href: '/features', label: 'Features', isRoute: true },
+  { href: '/how-it-works', label: 'How It Works', isRoute: true },
   { href: '/pricing', label: 'Pricing', isRoute: true },
   { href: '/about', label: 'About', isRoute: true },
   { href: '/faq', label: 'FAQ', isRoute: true },
@@ -113,7 +114,7 @@ export function PublicMarketingFooter() {
   return (
     <footer className="bg-[#0f172a] border-t border-slate-800 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 mb-10">
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-9 h-9 bg-amber-500 rounded-lg flex items-center justify-center">
@@ -131,8 +132,21 @@ export function PublicMarketingFooter() {
             <ul className="space-y-2">
               <li><Link to="/" className="text-sm text-slate-400 hover:text-white transition-colors">Home</Link></li>
               <li><Link to="/features" className="text-sm text-slate-400 hover:text-white transition-colors">Features</Link></li>
+              <li><Link to="/how-it-works" className="text-sm text-slate-400 hover:text-white transition-colors">How It Works</Link></li>
               <li><Link to="/pricing" className="text-sm text-slate-400 hover:text-white transition-colors">Pricing</Link></li>
               <li><Link to="/faq" className="text-sm text-slate-400 hover:text-white transition-colors">FAQ</Link></li>
+              <li><Link to="/knowledge-base" className="text-sm text-slate-400 hover:text-white transition-colors">Knowledge Base</Link></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-sm font-semibold text-white mb-4">Audiences</h4>
+            <ul className="space-y-2">
+              <li><Link to="/attorney" className="text-sm text-slate-400 hover:text-white transition-colors">Attorneys</Link></li>
+              <li><Link to="/investigator" className="text-sm text-slate-400 hover:text-white transition-colors">Investigators</Link></li>
+              <li><Link to="/defendant" className="text-sm text-slate-400 hover:text-white transition-colors">Defendants</Link></li>
+              <li><Link to="/families" className="text-sm text-slate-400 hover:text-white transition-colors">Families</Link></li>
+              <li><Link to="/experts" className="text-sm text-slate-400 hover:text-white transition-colors">Experts</Link></li>
             </ul>
           </div>
 
@@ -140,6 +154,8 @@ export function PublicMarketingFooter() {
             <h4 className="text-sm font-semibold text-white mb-4">Company</h4>
             <ul className="space-y-2">
               <li><Link to="/about" className="text-sm text-slate-400 hover:text-white transition-colors">About</Link></li>
+              <li><Link to="/blog" className="text-sm text-slate-400 hover:text-white transition-colors">Blog</Link></li>
+              <li><Link to="/support" className="text-sm text-slate-400 hover:text-white transition-colors">Support</Link></li>
               <li><Link to="/contact" className="text-sm text-slate-400 hover:text-white transition-colors">Contact</Link></li>
               <li><Link to="/login" className="text-sm text-slate-400 hover:text-white transition-colors">Login</Link></li>
               <li><Link to="/register" className="text-sm text-slate-400 hover:text-white transition-colors">Free Trial</Link></li>
@@ -149,9 +165,12 @@ export function PublicMarketingFooter() {
           <div>
             <h4 className="text-sm font-semibold text-white mb-4">Legal</h4>
             <ul className="space-y-2">
+              <li><Link to="/security" className="text-sm text-slate-400 hover:text-white transition-colors">Security</Link></li>
               <li><Link to="/privacy" className="text-sm text-slate-400 hover:text-white transition-colors">Privacy Policy</Link></li>
               <li><Link to="/terms" className="text-sm text-slate-400 hover:text-white transition-colors">Terms of Service</Link></li>
+              <li><Link to="/accessibility" className="text-sm text-slate-400 hover:text-white transition-colors">Accessibility</Link></li>
               <li><Link to="/legal-disclaimer" className="text-sm text-slate-400 hover:text-white transition-colors">Legal Disclaimer</Link></li>
+              <li><Link to="/sitemap" className="text-sm text-slate-400 hover:text-white transition-colors">Sitemap</Link></li>
               <li>
                 <a href="mailto:support@courtaccess.net" className="text-sm text-slate-400 hover:text-white transition-colors flex items-center gap-2">
                   <Mail size={14} />

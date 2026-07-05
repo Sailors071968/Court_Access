@@ -137,8 +137,11 @@ function App() {
         <Route path="/terms" element={<TermsOfServicePage />} />
         <Route path="/how-it-works" element={<HowItWorksPage />} />
         <Route path="/attorney" element={<AttorneyPage />} />
+        <Route path="/attorneys" element={<Navigate to="/attorney" replace />} />
         <Route path="/investigator" element={<InvestigatorPage />} />
+        <Route path="/investigators" element={<Navigate to="/investigator" replace />} />
         <Route path="/defendant" element={<DefendantPage />} />
+        <Route path="/defendants" element={<Navigate to="/defendant" replace />} />
         <Route path="/families" element={<FamiliesPage />} />
         <Route path="/experts" element={<ExpertsAudiencePage />} />
         <Route path="/security" element={<SecurityPage />} />

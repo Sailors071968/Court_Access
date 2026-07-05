@@ -590,7 +590,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       });
 
       let clientId: string | null = null;
-      if (onboarding.defaultRole === 'criminal_defendant') {
+      if (onboarding.defaultRole === 'criminal_defendant' || onboarding.defaultRole === 'self_represented_litigant') {
         const client = await tx.client.create({
           data: {
             tenantId,

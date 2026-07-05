@@ -85,11 +85,15 @@ export type DefaultRole =
   | 'attorney'
   | 'criminal_investigator'
   | 'criminal_defendant'
+  | 'self_represented_litigant'
   | 'paralegal'
   | 'secretary'
+  | 'legal_assistant'
+  | 'law_office_administrator'
   | 'expert_witness'
   | 'family_member'
-  | 'law_office_administrator'
+  | 'interpreter'
+  | 'consultant'
   | 'other';
 
 export interface User {

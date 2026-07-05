@@ -1,0 +1,62 @@
+# Priority Zero — Production Website Verification
+# Scheduled check that courtaccess.net matches repository branding.
+# Fails workflow when production serves stale build.
+
+name: Verify Production Website
+
+on:
+  schedule:
+    - cron: '0 */6 * * *'
+  workflow_dispatch:
+  push:
+    branches: [dev]
+    paths:
+      - 'scripts/verify-production-website.mjs'
+      - '.github/workflows/verify-production.yml'
+
+jobs:
+  verify-production:
+    name: Verify courtaccess.net
+    runs-on: ubuntu-latest
+    continue-on-error: true
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Install Playwright
+        run: npx playwright install chromium --with-deps
+
+      - name: Verify production website
+        id: verify
+        run: node scripts/verify-production-website.mjs || echo "status=FAIL" >> $GITHUB_OUTPUT
+
+      - name: Upload production screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-website-screenshots
+          path: reports/screenshots/production/
+          retention-days: 30
+
+      - name: Upload verification report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-verify-report
+          path: reports/PRODUCTION_WEBSITE_VERIFY.json
+          retention-days: 90
+
+      - name: Production status summary
+        if: always()
+        run: |
+          echo "## Production Website Status" >> $GITHUB_STEP_SUMMARY
+          if [ -f reports/PRODUCTION_WEBSITE_VERIFY.json ]; then
+            cat reports/PRODUCTION_WEBSITE_VERIFY.json >> $GITHUB_STEP_SUMMARY
+          fi

@@ -12,11 +12,12 @@ import {
 } from '../src/membership/roleOnboarding.js';
 
 describe('Program 2A — Role-Based Onboarding', () => {
-  it('defines all 9 default registration roles', () => {
-    assert.equal(DEFAULT_ROLES.length, 9);
-    assert.ok(validateDefaultRole('attorney'));
-    assert.ok(validateDefaultRole('criminal_defendant'));
-    assert.ok(validateDefaultRole('law_office_administrator'));
+  it('defines all 13 v17.0 default registration roles', () => {
+    assert.equal(DEFAULT_ROLES.length, 13);
+    assert.ok(validateDefaultRole('legal_assistant'));
+    assert.ok(validateDefaultRole('interpreter'));
+    assert.ok(validateDefaultRole('consultant'));
+    assert.ok(validateDefaultRole('self_represented_litigant'));
     assert.equal(validateDefaultRole('invalid'), false);
   });
 
@@ -28,8 +29,8 @@ describe('Program 2A — Role-Based Onboarding', () => {
     assert.ok(config.onboardingSteps.length >= 3);
   });
 
-  it('maps criminal defendant to client portal dashboard', () => {
-    const config = resolveRoleOnboarding('criminal_defendant');
+  it('maps self-represented litigant to client portal', () => {
+    const config = resolveRoleOnboarding('self_represented_litigant');
     assert.equal(config.platformRole, 'defendant');
     assert.equal(config.defaultDashboard, '/client-portal');
   });

@@ -1,7 +1,7 @@
 # CourtAccess Master Production Program
 
-**Version:** 11.0
-**Generated:** 2026-07-04T23:12:39.982Z
+**Version:** 12.0
+**Generated:** 2026-07-05T13:53:34.627Z
 **Status:** RELEASE_CANDIDATE
 **Completion:** 89.7% (140/156 capabilities)
 

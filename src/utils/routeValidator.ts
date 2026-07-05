@@ -18,10 +18,21 @@ export interface RouteDefinition {
  * If a route is added to App.tsx, it MUST be registered here.
  */
 export const ROUTE_REGISTRY: RouteDefinition[] = [
-  // Public routes
+  // Public routes — Program 0 Production Website
   { path: '/', label: 'Landing', requiresAuth: false, component: 'LandingPage', status: 'active' },
+  { path: '/pricing', label: 'Pricing', requiresAuth: false, component: 'PricingPage', status: 'active' },
+  { path: '/about', label: 'About', requiresAuth: false, component: 'AboutPage', status: 'active' },
+  { path: '/features', label: 'Features', requiresAuth: false, component: 'FeaturesPage', status: 'active' },
+  { path: '/faq', label: 'FAQ', requiresAuth: false, component: 'FAQPage', status: 'active' },
+  { path: '/contact', label: 'Contact', requiresAuth: false, component: 'ContactSalesPage', status: 'active' },
+  { path: '/privacy', label: 'Privacy Policy', requiresAuth: false, component: 'PrivacyPolicyPage', status: 'active' },
+  { path: '/terms', label: 'Terms of Service', requiresAuth: false, component: 'TermsOfServicePage', status: 'active' },
+  { path: '/legal-disclaimer', label: 'Legal Disclaimer', requiresAuth: false, component: 'LegalDisclaimerPage', status: 'active' },
   { path: '/login', label: 'Login', requiresAuth: false, component: 'LoginPage', status: 'active' },
   { path: '/register', label: 'Register', requiresAuth: false, component: 'RegisterPage', status: 'active' },
+  { path: '/forgot-password', label: 'Forgot Password', requiresAuth: false, component: 'ForgotPasswordPage', status: 'active' },
+  { path: '/reset-password', label: 'Reset Password', requiresAuth: false, component: 'ResetPasswordPage', status: 'active' },
+  { path: '/verify-email', label: 'Verify Email', requiresAuth: false, component: 'VerifyEmailPage', status: 'active' },
   { path: '/for-defense', label: 'For Defense', requiresAuth: false, component: 'ForDefensePage', status: 'active' },
 
   // Dashboard routes

@@ -53,10 +53,11 @@ function LandingNav() {
           </div>
 
           <div className="hidden md:flex items-center gap-8">
+            <Link to="/features" className="text-sm text-slate-400 hover:text-white transition-colors">Features</Link>
             <a href="#intelligence" className="text-sm text-slate-400 hover:text-white transition-colors">Case Intelligence</a>
-            <a href="#legal-analysis" className="text-sm text-slate-400 hover:text-white transition-colors">Legal Analysis</a>
             <a href="#pricing" className="text-sm text-slate-400 hover:text-white transition-colors">Pricing</a>
-            <a href="#who" className="text-sm text-slate-400 hover:text-white transition-colors">Who Uses It</a>
+            <Link to="/about" className="text-sm text-slate-400 hover:text-white transition-colors">About</Link>
+            <Link to="/faq" className="text-sm text-slate-400 hover:text-white transition-colors">FAQ</Link>
           </div>
 
           <div className="flex items-center gap-3">
@@ -87,9 +88,11 @@ function LandingNav() {
         {mobileOpen && (
           <div className="md:hidden mt-4 pb-4 border-t border-white/10 pt-4 space-y-3">
             <a href="#intelligence" onClick={() => setMobileOpen(false)} className="block text-sm text-slate-300 hover:text-white py-1">Case Intelligence</a>
-            <a href="#legal-analysis" onClick={() => setMobileOpen(false)} className="block text-sm text-slate-300 hover:text-white py-1">Legal Analysis</a>
+            <Link to="/features" onClick={() => setMobileOpen(false)} className="block text-sm text-slate-300 hover:text-white py-1">Features</Link>
             <a href="#pricing" onClick={() => setMobileOpen(false)} className="block text-sm text-slate-300 hover:text-white py-1">Pricing</a>
-            <a href="#who" onClick={() => setMobileOpen(false)} className="block text-sm text-slate-300 hover:text-white py-1">Who Uses It</a>
+            <Link to="/about" onClick={() => setMobileOpen(false)} className="block text-sm text-slate-300 hover:text-white py-1">About</Link>
+            <Link to="/faq" onClick={() => setMobileOpen(false)} className="block text-sm text-slate-300 hover:text-white py-1">FAQ</Link>
+            <Link to="/contact" onClick={() => setMobileOpen(false)} className="block text-sm text-slate-300 hover:text-white py-1">Contact</Link>
             <Link to="/login" onClick={() => setMobileOpen(false)} className="block text-sm text-slate-300 hover:text-white py-1">Login</Link>
           </div>
         )}
@@ -731,7 +734,7 @@ function LandingFooter() {
   return (
     <footer className="bg-[#0f172a] border-t border-slate-800 py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-10">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-8 mb-10">
           <div className="col-span-2 md:col-span-1">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-9 h-9 bg-amber-500 rounded-lg flex items-center justify-center">
@@ -745,10 +748,19 @@ function LandingFooter() {
           </div>
 
           <div>
-            <h4 className="text-sm font-semibold text-white mb-4">Navigation</h4>
+            <h4 className="text-sm font-semibold text-white mb-4">Product</h4>
             <ul className="space-y-2">
               <li><Link to="/" className="text-sm text-slate-400 hover:text-white transition-colors">Home</Link></li>
-              <li><a href="#pricing" className="text-sm text-slate-400 hover:text-white transition-colors">Pricing</a></li>
+              <li><Link to="/features" className="text-sm text-slate-400 hover:text-white transition-colors">Features</Link></li>
+              <li><Link to="/pricing" className="text-sm text-slate-400 hover:text-white transition-colors">Pricing</Link></li>
+              <li><Link to="/faq" className="text-sm text-slate-400 hover:text-white transition-colors">FAQ</Link></li>
+            </ul>
+          </div>
+          <div>
+            <h4 className="text-sm font-semibold text-white mb-4">Company</h4>
+            <ul className="space-y-2">
+              <li><Link to="/about" className="text-sm text-slate-400 hover:text-white transition-colors">About</Link></li>
+              <li><Link to="/contact" className="text-sm text-slate-400 hover:text-white transition-colors">Contact</Link></li>
               <li><Link to="/login" className="text-sm text-slate-400 hover:text-white transition-colors">Login</Link></li>
             </ul>
           </div>
@@ -757,6 +769,7 @@ function LandingFooter() {
             <ul className="space-y-2">
               <li><Link to="/privacy" className="text-sm text-slate-400 hover:text-white transition-colors">Privacy Policy</Link></li>
               <li><Link to="/terms" className="text-sm text-slate-400 hover:text-white transition-colors">Terms of Service</Link></li>
+              <li><Link to="/legal-disclaimer" className="text-sm text-slate-400 hover:text-white transition-colors">Legal Disclaimer</Link></li>
             </ul>
           </div>
           <div>

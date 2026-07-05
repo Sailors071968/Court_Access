@@ -2,7 +2,7 @@
 // Court Access — Email Verification Page
 // ============================================
 
-import { useState } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { Scale } from 'lucide-react';
 
@@ -14,7 +14,7 @@ export function VerifyEmailPage() {
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
   const [message, setMessage] = useState('');
 
-  const verify = async () => {
+  const verify = useCallback(async () => {
     if (!token) {
       setStatus('error');
       setMessage('Missing verification token.');
@@ -35,7 +35,13 @@ export function VerifyEmailPage() {
       setStatus('error');
       setMessage(err instanceof Error ? err.message : 'Verification failed');
     }
-  };
+  }, [token]);
+
+  useEffect(() => {
+    if (token && status === 'idle') {
+      void verify();
+    }
+  }, [token, status, verify]);
 
   return (
     <div className="min-h-screen bg-slate-800 flex items-center justify-center px-4">

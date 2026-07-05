@@ -14,6 +14,28 @@ export interface ProgramDefinition {
 
 export const PRODUCTION_COMPLETION_PROGRAMS: ProgramDefinition[] = [
   {
+    id: 'PROGRAM-00',
+    number: 0,
+    name: 'Production Website',
+    capabilities: [
+      { id: 'P00-01', name: 'Landing page', path: 'src/pages/LandingPage.tsx' },
+      { id: 'P00-02', name: 'Pricing page', path: 'src/pages/LandingPage.tsx' },
+      { id: 'P00-03', name: 'About page', path: 'src/pages/marketing/AboutPage.tsx' },
+      { id: 'P00-04', name: 'Features page', path: 'src/pages/marketing/FeaturesPage.tsx' },
+      { id: 'P00-05', name: 'FAQ page', path: 'src/pages/marketing/FAQPage.tsx' },
+      { id: 'P00-06', name: 'Contact page', path: 'src/pages/ContactSalesPage.tsx' },
+      { id: 'P00-07', name: 'Contact API', path: 'backend/src/marketing/contactRoutes.ts' },
+      { id: 'P00-08', name: 'Login page', path: 'src/pages/auth/LoginPage.tsx' },
+      { id: 'P00-09', name: 'Registration page', path: 'src/pages/auth/RegisterPage.tsx' },
+      { id: 'P00-10', name: 'Password reset', path: 'src/pages/auth/ForgotPasswordPage.tsx' },
+      { id: 'P00-11', name: 'Email verification', path: 'src/pages/auth/VerifyEmailPage.tsx' },
+      { id: 'P00-12', name: 'Privacy policy', path: 'src/pages/marketing/PrivacyPolicyPage.tsx' },
+      { id: 'P00-13', name: 'Terms of service', path: 'src/pages/marketing/TermsOfServicePage.tsx' },
+      { id: 'P00-14', name: 'Public marketing layout', path: 'src/components/marketing/PublicMarketingLayout.tsx' },
+      { id: 'P00-15', name: 'Website verification report', path: 'reports/PROGRAM_00_PRODUCTION_WEBSITE.md' },
+    ],
+  },
+  {
     id: 'PROGRAM-02',
     number: 2,
     name: 'Law Firm Operating Platform',

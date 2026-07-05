@@ -16,6 +16,11 @@ import { GovernmentPage } from './pages/GovernmentPage';
 import { ContactSalesPage } from './pages/ContactSalesPage';
 import { CaseStudiesPage } from './pages/CaseStudiesPage';
 import { LegalDisclaimerPage } from './pages/LegalDisclaimerPage';
+import { AboutPage } from './pages/marketing/AboutPage';
+import { FeaturesPage } from './pages/marketing/FeaturesPage';
+import { FAQPage } from './pages/marketing/FAQPage';
+import { PrivacyPolicyPage } from './pages/marketing/PrivacyPolicyPage';
+import { TermsOfServicePage } from './pages/marketing/TermsOfServicePage';
 
 // Auth Pages
 import { LoginPage } from './pages/auth/LoginPage';
@@ -92,10 +97,13 @@ function App() {
         <Route path="/for-prosecutors" element={<ForProsecutorsPage />} />
         <Route path="/government" element={<GovernmentPage />} />
         <Route path="/contact" element={<ContactSalesPage />} />
+        <Route path="/about" element={<AboutPage />} />
+        <Route path="/features" element={<FeaturesPage />} />
+        <Route path="/faq" element={<FAQPage />} />
         <Route path="/case-studies" element={<CaseStudiesPage />} />
         <Route path="/legal-disclaimer" element={<LegalDisclaimerPage />} />
-        <Route path="/privacy" element={<LegalDisclaimerPage />} />
-        <Route path="/terms" element={<LegalDisclaimerPage />} />
+        <Route path="/privacy" element={<PrivacyPolicyPage />} />
+        <Route path="/terms" element={<TermsOfServicePage />} />
 
         {/* Pricing (accessible to authenticated users without subscription) */}
         <Route path="/pricing" element={<PricingPage />} />

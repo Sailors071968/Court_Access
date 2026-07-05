@@ -260,6 +260,7 @@ const PUBLIC_ROUTES = [
   '/api/auth/accept-invitation',
   '/api/organizations/invitations/preview',
   '/api/discount-codes/validate',
+  '/api/contact',
   '/api/billing/webhook',
 ];
 

@@ -9,7 +9,7 @@ import { runVersion1ProductionGates } from './version1ProductionGates.js';
 import { runProductionGates } from './runProductionGates.js';
 import { assessProductionPrograms } from './productionCompletionPrograms.js';
 
-export const MASTER_PROGRAM_VERSION = '11.0';
+export const MASTER_PROGRAM_VERSION = '12.0';
 
 export interface AssessedCapability {
   id: string;

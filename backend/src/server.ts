@@ -142,6 +142,10 @@ async function startServer() {
   const { registerIdentityRoutes } = await import('./security/identityRoutes.js');
   await registerIdentityRoutes(app);
 
+  // Program 0 — Public contact form
+  const { registerContactRoutes } = await import('./marketing/contactRoutes.js');
+  await registerContactRoutes(app);
+
   // Phase 192 — Rate limit admin routes
   console.log('[Server] Registering rate limit admin routes...');
   await registerRateLimitRoutes(app);

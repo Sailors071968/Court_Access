@@ -52,26 +52,43 @@ export function ContactSalesPage() {
     e.preventDefault();
     setIsSubmitting(true);
 
-    // Store as GovernmentLead in localStorage (visible in /dashboard/government-outreach)
-    const existing = JSON.parse(localStorage.getItem('courtaccess_government_leads') || '[]');
-    existing.push({
-      id: crypto.randomUUID(),
-      agencyName: form.organization,
-      contactName: form.name,
-      role: form.role,
-      email: form.email,
-      county: '',
-      status: 'new',
-      notes: form.message,
-      agencyType: form.agencyType,
-      seatEstimate: 0,
-      createdAt: new Date().toISOString(),
-    });
-    localStorage.setItem('courtaccess_government_leads', JSON.stringify(existing));
-
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    setIsSubmitting(false);
-    setSubmitted(true);
+    try {
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: form.name,
+          organization: form.organization,
+          role: form.role,
+          email: form.email,
+          agencyType: form.agencyType,
+          message: form.message,
+        }),
+      });
+      const data = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(data.error || 'Submission failed');
+      setSubmitted(true);
+    } catch {
+      // Fallback: persist locally if API unavailable (offline dev)
+      const existing = JSON.parse(localStorage.getItem('courtaccess_government_leads') || '[]');
+      existing.push({
+        id: crypto.randomUUID(),
+        agencyName: form.organization,
+        contactName: form.name,
+        role: form.role,
+        email: form.email,
+        county: '',
+        status: 'new',
+        notes: form.message,
+        agencyType: form.agencyType,
+        seatEstimate: 0,
+        createdAt: new Date().toISOString(),
+      });
+      localStorage.setItem('courtaccess_government_leads', JSON.stringify(existing));
+      setSubmitted(true);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   if (submitted) {

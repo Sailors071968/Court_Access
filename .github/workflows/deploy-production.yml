@@ -17,6 +17,7 @@ on:
       - 'public/**'
       - 'scripts/deploy-production-website.sh'
       - 'scripts/program-00-verify.mjs'
+      - '.github/workflows/deploy-production.yml'
   workflow_dispatch:
 
 concurrency:

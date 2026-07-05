@@ -2,6 +2,7 @@
 /**
  * Program 0 — Production Website Verification
  * Routes, responsive screenshots, landing headline assertion
+ * CI: uses local vite binary (spawn npx fails on GitHub Actions)
  */
 import { chromium } from 'playwright';
 import { spawn } from 'child_process';
@@ -15,6 +16,7 @@ const VITE_BIN = path.join(ROOT, 'node_modules', 'vite', 'bin', 'vite.js');
 const PORT = 4173;
 const BASE = `http://127.0.0.1:${PORT}`;
 const OUT_DIR = path.join(ROOT, 'reports/screenshots/program-00');
+mkdirSync(OUT_DIR, { recursive: true });
 
 const PROGRAM_00_ROUTES = [
   '/',

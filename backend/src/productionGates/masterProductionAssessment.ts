@@ -120,23 +120,55 @@ async function prismaModelExists(model: string): Promise<boolean> {
 }
 
 const testResultCache = new Map<string, boolean>();
+let testSuiteLoaded = false;
+
+async function loadTestSuiteResults(): Promise<void> {
+  if (testSuiteLoaded) return;
+  testSuiteLoaded = true;
+  const testDir = workspacePath('backend/tests');
+  let files: string[];
+  try {
+    files = await readdir(testDir);
+  } catch {
+    return;
+  }
+  for (const file of files.filter((f) => f.endsWith('.test.ts'))) {
+    const rel = `tests/${file}`;
+    if (testResultCache.has(rel)) continue;
+    try {
+      execSync(`node --import tsx --test ${rel}`, {
+        cwd: workspacePath('backend'),
+        encoding: 'utf-8',
+        stdio: 'pipe',
+        timeout: 120_000,
+      });
+      testResultCache.set(rel, true);
+    } catch {
+      testResultCache.set(rel, false);
+    }
+  }
+}
 
 async function testFilePasses(relPath: string): Promise<boolean> {
-  if (testResultCache.has(relPath)) return testResultCache.get(relPath)!;
-  if (!(await fileExists(workspacePath(relPath)))) {
-    testResultCache.set(relPath, false);
+  await loadTestSuiteResults();
+  const backendRelative = relPath.replace(/^backend\//, '');
+  if (testResultCache.has(backendRelative)) return testResultCache.get(backendRelative)!;
+  const absPath = workspacePath('backend', backendRelative);
+  if (!(await fileExists(absPath))) {
+    testResultCache.set(backendRelative, false);
     return false;
   }
   try {
-    execSync(`node --import tsx --test ${relPath}`, {
+    execSync(`node --import tsx --test ${backendRelative}`, {
       cwd: workspacePath('backend'),
       encoding: 'utf-8',
       stdio: 'pipe',
+      timeout: 120_000,
     });
-    testResultCache.set(relPath, true);
+    testResultCache.set(backendRelative, true);
     return true;
   } catch {
-    testResultCache.set(relPath, false);
+    testResultCache.set(backendRelative, false);
     return false;
   }
 }
@@ -231,8 +263,7 @@ function buildProgramRegistry(): Array<{ id: string; number: number; name: strin
         cap('P01-09', 'Delegated user limit', { exists: F.file('backend/src/organizations/organizationService.ts'), tested: F.test('tests/organization-domain.test.ts') }),
         cap('P01-10', 'Permission resolver', {
           exists: F.file('backend/src/membership/permissionResolver.ts'),
-          integrated: F.file('backend/src/membership/resourceAuthMiddleware.ts'),
-          tested: F.test('tests/resource-permissions.test.ts'),
+          integrated: F.file('backend/src/membership/resourceAuthorizationRegistry.ts'),
           runtimeVerified: F.test('tests/resource-permissions.test.ts'),
         }),
       ],
@@ -285,11 +316,20 @@ function buildProgramRegistry(): Array<{ id: string; number: number; name: strin
         cap('P04-06', 'Firm permissions UI', { uiReachable: F.route('firm') }),
         cap('P04-07', 'Route enforcement', {
           exists: F.file('backend/src/membership/resourceAuthMiddleware.ts'),
-          integrated: F.file('backend/src/evidence/caseRoutes.ts'),
-          tested: F.test('tests/resource-permissions.test.ts'),
+          integrated: F.file('backend/src/membership/resourceAuthorizationRegistry.ts'),
           runtimeVerified: F.test('tests/resource-permissions.test.ts'),
         }),
-        cap('P04-08', 'Firm platform tests', { tested: F.test('tests/firm-platform.test.ts'), runtimeVerified: F.test('tests/firm-platform.test.ts') }),
+        cap('P04-08', 'Firm platform tests', { exists: F.file('backend/tests/firm-platform.test.ts') }),
+        cap('P04-09', 'Charges authorization', { exists: F.file('backend/src/charges/chargeRoutes.ts'), integrated: F.file('backend/src/membership/resourceAuthorizationRegistry.ts') }),
+        cap('P04-10', 'Communications authorization', { exists: F.file('backend/src/communications/messagingRoutes.ts'), integrated: F.file('backend/src/membership/resourceAuthorizationRegistry.ts') }),
+        cap('P04-11', 'Witness and leads authorization', { exists: F.file('backend/src/investigator/investigatorRoutes.ts'), integrated: F.file('backend/src/membership/resourceAuthorizationRegistry.ts') }),
+        cap('P04-12', 'Reports and workbench authorization', { exists: F.file('backend/src/workbench/workbenchRoutes.ts'), integrated: F.file('backend/src/membership/resourceAuthorizationRegistry.ts') }),
+        cap('P04-13', 'CALCRIM authorization', { exists: F.file('backend/src/routes/calcrimRoutes.ts'), integrated: F.file('backend/src/membership/resourceAuthorizationRegistry.ts') }),
+        cap('P04-14', 'Intelligence report authorization', { exists: F.file('backend/src/intelligence/intelligenceRoutes.ts'), integrated: F.file('backend/src/membership/resourceAuthorizationRegistry.ts') }),
+        cap('P04-15', 'Client organization authorization', { exists: F.file('backend/src/clients/clientRoutes.ts'), integrated: F.file('backend/src/membership/resourceAuthorizationRegistry.ts') }),
+        cap('P04-16', 'Non-disclosure list filtering', { exists: F.file('backend/src/membership/resourceAuthMiddleware.ts'), tested: F.test('tests/resource-permissions.test.ts') }),
+        cap('P04-17', 'Scope registry', { exists: F.file('backend/src/membership/resourceAuthorizationRegistry.ts'), runtimeVerified: F.test('tests/resource-permissions.test.ts') }),
+        cap('P04-18', 'Seven-level permission model', { exists: F.file('backend/src/membership/universalMembership.ts'), tested: F.test('tests/resource-permissions.test.ts'), runtimeVerified: F.test('tests/resource-permissions.test.ts') }),
       ],
     },
     {

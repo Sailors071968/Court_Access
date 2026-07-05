@@ -6,35 +6,15 @@ import type { FastifyInstance, FastifyReply } from 'fastify';
 import prisma from '../lib/prisma.js';
 import { logSecurityEvent } from '../security/authMiddleware.js';
 import type { AuthenticatedRequest } from '../security/authMiddleware.js';
-
-async function ensureCaseAccess(
-  caseId: string,
-  tenantId: string,
-  role: string,
-  userId: string,
-): Promise<boolean> {
-  const caseRecord = await prisma.criminalCase.findFirst({
-    where: { caseId, tenantId, deletedAt: null },
-    select: { caseId: true, clientId: true },
-  });
-  if (!caseRecord) return false;
-
-  if (role === 'defendant') {
-    const user = await prisma.user.findUnique({ where: { id: userId }, select: { clientId: true } });
-    return Boolean(user?.clientId && user.clientId === caseRecord.clientId);
-  }
-  return true;
-}
+import { guardAuth, guardCaseAccess, sendForbidden } from '../membership/resourceAuthMiddleware.js';
 
 export async function registerHearingRoutes(app: FastifyInstance): Promise<void> {
-  // GET /api/cases/:caseId/hearings
   app.get('/api/cases/:caseId/hearings', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
-    if (!user) return reply.code(401).send({ error: 'Authentication required' });
+    if (!(await guardAuth(user, reply))) return;
 
     const { caseId } = request.params as { caseId: string };
-    const allowed = await ensureCaseAccess(caseId, user.tenantId, user.role, user.userId);
-    if (!allowed) return reply.code(404).send({ error: 'Case not found' });
+    if (!(await guardCaseAccess(user!, caseId, 'view', reply))) return;
 
     const hearings = await prisma.caseHearing.findMany({
       where: { caseId, tenantId: user.tenantId },
@@ -60,8 +40,7 @@ export async function registerHearingRoutes(app: FastifyInstance): Promise<void>
     };
     if (!body.hearingDate) return reply.code(400).send({ error: 'hearingDate is required' });
 
-    const allowed = await ensureCaseAccess(caseId, user.tenantId, user.role, user.userId);
-    if (!allowed) return reply.code(404).send({ error: 'Case not found' });
+    if (!(await guardCaseAccess(user!, caseId, 'edit', reply))) return;
 
     const hearing = await prisma.caseHearing.create({
       data: {

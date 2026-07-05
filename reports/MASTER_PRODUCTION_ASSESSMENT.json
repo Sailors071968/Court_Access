@@ -1,18 +1,18 @@
 {
   "assessment": "COURTACCESS_MASTER_PRODUCTION_ASSESSMENT",
   "version": "1.0",
-  "generatedAt": "2026-07-05T15:06:57.658Z",
+  "generatedAt": "2026-07-05T15:48:47.306Z",
   "methodology": "Each capability has objective binary criteria. Verified = runtime criterion passes when defined; otherwise all defined implementation criteria must pass. No subjective scoring.",
   "formula": "Completion % = Verified Capabilities ÷ Total Planned Capabilities",
   "summary": {
     "totalPrograms": 25,
-    "totalCapabilities": 189,
-    "verifiedCapabilities": 125,
-    "implementedCapabilities": 146,
+    "totalCapabilities": 199,
+    "verifiedCapabilities": 158,
+    "implementedCapabilities": 167,
     "blockedCapabilities": 19,
-    "overallCompletionPercent": 66.1,
-    "overallVerificationPercent": 66.1,
-    "productionReadiness": "NOT_READY"
+    "overallCompletionPercent": 79.4,
+    "overallVerificationPercent": 79.4,
+    "productionReadiness": "RELEASE_CANDIDATE"
   },
   "programs": [
     {
@@ -492,11 +492,11 @@
       "name": "Universal Membership",
       "totalPlanned": 10,
       "implemented": 10,
-      "verified": 7,
-      "incomplete": 3,
+      "verified": 9,
+      "incomplete": 1,
       "blocked": 0,
-      "completionPercent": 70,
-      "verificationPercent": 70,
+      "completionPercent": 90,
+      "verificationPercent": 90,
       "productionReadiness": "PARTIAL",
       "capabilities": [
         {
@@ -520,17 +520,17 @@
               "id": "P01-01-tested",
               "label": "Tested",
               "category": "tested",
-              "pass": false
+              "pass": true
             },
             {
               "id": "P01-01-runtime",
               "label": "Runtime verified",
               "category": "runtime",
-              "pass": false
+              "pass": true
             }
           ],
           "implemented": true,
-          "verified": false,
+          "verified": true,
           "blocked": false
         },
         {
@@ -775,20 +775,14 @@
               "pass": true
             },
             {
-              "id": "P01-10-tested",
-              "label": "Tested",
-              "category": "tested",
-              "pass": false
-            },
-            {
               "id": "P01-10-runtime",
               "label": "Runtime verified",
               "category": "runtime",
-              "pass": false
+              "pass": true
             }
           ],
           "implemented": true,
-          "verified": false,
+          "verified": true,
           "blocked": false
         }
       ]
@@ -798,12 +792,12 @@
       "number": 2,
       "name": "Hybrid Stripe Billing",
       "totalPlanned": 12,
-      "implemented": 10,
-      "verified": 9,
-      "incomplete": 3,
+      "implemented": 11,
+      "verified": 10,
+      "incomplete": 2,
       "blocked": 1,
-      "completionPercent": 75,
-      "verificationPercent": 75,
+      "completionPercent": 83.3,
+      "verificationPercent": 83.3,
       "productionReadiness": "PARTIAL",
       "capabilities": [
         {
@@ -1021,17 +1015,17 @@
               "id": "P02-09-tested",
               "label": "Tested",
               "category": "tested",
-              "pass": false
+              "pass": true
             },
             {
               "id": "P02-09-runtime",
               "label": "Runtime verified",
               "category": "runtime",
-              "pass": false
+              "pass": true
             }
           ],
-          "implemented": false,
-          "verified": false,
+          "implemented": true,
+          "verified": true,
           "blocked": false
         },
         {
@@ -1097,11 +1091,11 @@
       "name": "Delegated Access",
       "totalPlanned": 8,
       "implemented": 7,
-      "verified": 6,
-      "incomplete": 2,
+      "verified": 7,
+      "incomplete": 1,
       "blocked": 0,
-      "completionPercent": 75,
-      "verificationPercent": 75,
+      "completionPercent": 87.5,
+      "verificationPercent": 87.5,
       "productionReadiness": "PARTIAL",
       "capabilities": [
         {
@@ -1197,11 +1191,11 @@
               "id": "P03-04-tested",
               "label": "Tested",
               "category": "tested",
-              "pass": false
+              "pass": true
             }
           ],
           "implemented": true,
-          "verified": false,
+          "verified": true,
           "blocked": false
         },
         {
@@ -1292,14 +1286,14 @@
       "id": "PROGRAM-04",
       "number": 4,
       "name": "Resource Permissions",
-      "totalPlanned": 8,
-      "implemented": 7,
-      "verified": 6,
-      "incomplete": 2,
+      "totalPlanned": 18,
+      "implemented": 18,
+      "verified": 18,
+      "incomplete": 0,
       "blocked": 0,
-      "completionPercent": 75,
-      "verificationPercent": 75,
-      "productionReadiness": "PARTIAL",
+      "completionPercent": 100,
+      "verificationPercent": 100,
+      "productionReadiness": "READY",
       "capabilities": [
         {
           "id": "P04-01",
@@ -1421,20 +1415,14 @@
               "pass": true
             },
             {
-              "id": "P04-07-tested",
-              "label": "Tested",
-              "category": "tested",
-              "pass": false
-            },
-            {
               "id": "P04-07-runtime",
               "label": "Runtime verified",
               "category": "runtime",
-              "pass": false
+              "pass": true
             }
           ],
           "implemented": true,
-          "verified": false,
+          "verified": true,
           "blocked": false
         },
         {
@@ -1443,20 +1431,264 @@
           "programId": "PROGRAM-04",
           "criteria": [
             {
-              "id": "P04-08-tested",
-              "label": "Tested",
-              "category": "tested",
-              "pass": false
+              "id": "P04-08-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
             },
             {
-              "id": "P04-08-runtime",
-              "label": "Runtime verified",
-              "category": "runtime",
-              "pass": false
+              "id": "P04-08-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
             }
           ],
-          "implemented": false,
-          "verified": false,
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P04-09",
+          "name": "Charges authorization",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-09-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P04-09-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P04-10",
+          "name": "Communications authorization",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-10-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P04-10-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P04-11",
+          "name": "Witness and leads authorization",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-11-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P04-11-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P04-12",
+          "name": "Reports and workbench authorization",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-12-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P04-12-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P04-13",
+          "name": "CALCRIM authorization",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-13-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P04-13-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P04-14",
+          "name": "Intelligence report authorization",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-14-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P04-14-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P04-15",
+          "name": "Client organization authorization",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-15-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P04-15-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P04-16",
+          "name": "Non-disclosure list filtering",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-16-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P04-16-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P04-16-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P04-17",
+          "name": "Scope registry",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-17-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P04-17-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P04-17-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P04-18",
+          "name": "Seven-level permission model",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-18-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P04-18-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P04-18-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": true
+            },
+            {
+              "id": "P04-18-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
           "blocked": false
         }
       ]
@@ -2072,13 +2304,13 @@
       "number": 9,
       "name": "Case Management",
       "totalPlanned": 8,
-      "implemented": 7,
-      "verified": 7,
-      "incomplete": 1,
+      "implemented": 8,
+      "verified": 8,
+      "incomplete": 0,
       "blocked": 0,
-      "completionPercent": 87.5,
-      "verificationPercent": 87.5,
-      "productionReadiness": "PARTIAL",
+      "completionPercent": 100,
+      "verificationPercent": 100,
+      "productionReadiness": "READY",
       "capabilities": [
         {
           "id": "P09-01",
@@ -2219,17 +2451,17 @@
               "id": "P09-08-tested",
               "label": "Tested",
               "category": "tested",
-              "pass": false
+              "pass": true
             },
             {
               "id": "P09-08-runtime",
               "label": "Runtime verified",
               "category": "runtime",
-              "pass": false
+              "pass": true
             }
           ],
-          "implemented": false,
-          "verified": false,
+          "implemented": true,
+          "verified": true,
           "blocked": false
         }
       ]
@@ -2369,12 +2601,12 @@
       "number": 11,
       "name": "Evidence Platform",
       "totalPlanned": 7,
-      "implemented": 5,
-      "verified": 4,
-      "incomplete": 3,
+      "implemented": 6,
+      "verified": 5,
+      "incomplete": 2,
       "blocked": 0,
-      "completionPercent": 57.1,
-      "verificationPercent": 57.1,
+      "completionPercent": 71.4,
+      "verificationPercent": 71.4,
       "productionReadiness": "PARTIAL",
       "capabilities": [
         {
@@ -2524,11 +2756,11 @@
               "id": "P11-07-tested",
               "label": "Tested",
               "category": "tested",
-              "pass": false
+              "pass": true
             }
           ],
-          "implemented": false,
-          "verified": false,
+          "implemented": true,
+          "verified": true,
           "blocked": false
         }
       ]
@@ -2910,11 +3142,11 @@
       "name": "Client Portal",
       "totalPlanned": 6,
       "implemented": 6,
-      "verified": 4,
-      "incomplete": 2,
+      "verified": 5,
+      "incomplete": 1,
       "blocked": 0,
-      "completionPercent": 66.7,
-      "verificationPercent": 66.7,
+      "completionPercent": 83.3,
+      "verificationPercent": 83.3,
       "productionReadiness": "PARTIAL",
       "capabilities": [
         {
@@ -2960,11 +3192,11 @@
               "id": "P14-02-tested",
               "label": "Tested",
               "category": "tested",
-              "pass": false
+              "pass": true
             }
           ],
           "implemented": true,
-          "verified": false,
+          "verified": true,
           "blocked": false
         },
         {
@@ -3231,13 +3463,13 @@
       "number": 16,
       "name": "California Legislative Intelligence",
       "totalPlanned": 7,
-      "implemented": 5,
-      "verified": 1,
-      "incomplete": 6,
+      "implemented": 7,
+      "verified": 7,
+      "incomplete": 0,
       "blocked": 0,
-      "completionPercent": 14.3,
-      "verificationPercent": 14.3,
-      "productionReadiness": "PARTIAL",
+      "completionPercent": 100,
+      "verificationPercent": 100,
+      "productionReadiness": "READY",
       "capabilities": [
         {
           "id": "P16-01",
@@ -3260,11 +3492,11 @@
               "id": "P16-01-tested",
               "label": "Tested",
               "category": "tested",
-              "pass": false
+              "pass": true
             }
           ],
           "implemented": true,
-          "verified": false,
+          "verified": true,
           "blocked": false
         },
         {
@@ -3288,11 +3520,11 @@
               "id": "P16-02-tested",
               "label": "Tested",
               "category": "tested",
-              "pass": false
+              "pass": true
             }
           ],
           "implemented": true,
-          "verified": false,
+          "verified": true,
           "blocked": false
         },
         {
@@ -3316,11 +3548,11 @@
               "id": "P16-03-tested",
               "label": "Tested",
               "category": "tested",
-              "pass": false
+              "pass": true
             }
           ],
           "implemented": true,
-          "verified": false,
+          "verified": true,
           "blocked": false
         },
         {
@@ -3360,17 +3592,17 @@
               "id": "P16-05-tested",
               "label": "Tested",
               "category": "tested",
-              "pass": false
+              "pass": true
             },
             {
               "id": "P16-05-runtime",
               "label": "Runtime verified",
               "category": "runtime",
-              "pass": false
+              "pass": true
             }
           ],
-          "implemented": false,
-          "verified": false,
+          "implemented": true,
+          "verified": true,
           "blocked": false
         },
         {
@@ -3382,11 +3614,11 @@
               "id": "P16-06-tested",
               "label": "Tested",
               "category": "tested",
-              "pass": false
+              "pass": true
             }
           ],
-          "implemented": false,
-          "verified": false,
+          "implemented": true,
+          "verified": true,
           "blocked": false
         },
         {
@@ -3410,11 +3642,11 @@
               "id": "P16-07-tested",
               "label": "Tested",
               "category": "tested",
-              "pass": false
+              "pass": true
             }
           ],
           "implemented": true,
-          "verified": false,
+          "verified": true,
           "blocked": false
         }
       ]
@@ -3424,13 +3656,13 @@
       "number": 17,
       "name": "Legal Knowledge Graph",
       "totalPlanned": 5,
-      "implemented": 3,
-      "verified": 3,
-      "incomplete": 2,
+      "implemented": 5,
+      "verified": 5,
+      "incomplete": 0,
       "blocked": 0,
-      "completionPercent": 60,
-      "verificationPercent": 60,
-      "productionReadiness": "PARTIAL",
+      "completionPercent": 100,
+      "verificationPercent": 100,
+      "productionReadiness": "READY",
       "capabilities": [
         {
           "id": "P17-01",
@@ -3485,17 +3717,17 @@
               "id": "P17-03-tested",
               "label": "Tested",
               "category": "tested",
-              "pass": false
+              "pass": true
             },
             {
               "id": "P17-03-runtime",
               "label": "Runtime verified",
               "category": "runtime",
-              "pass": false
+              "pass": true
             }
           ],
-          "implemented": false,
-          "verified": false,
+          "implemented": true,
+          "verified": true,
           "blocked": false
         },
         {
@@ -3507,11 +3739,11 @@
               "id": "P17-04-tested",
               "label": "Tested",
               "category": "tested",
-              "pass": false
+              "pass": true
             }
           ],
-          "implemented": false,
-          "verified": false,
+          "implemented": true,
+          "verified": true,
           "blocked": false
         },
         {
@@ -3549,12 +3781,12 @@
       "number": 18,
       "name": "Communications Platform",
       "totalPlanned": 6,
-      "implemented": 4,
-      "verified": 3,
-      "incomplete": 3,
+      "implemented": 5,
+      "verified": 5,
+      "incomplete": 1,
       "blocked": 1,
-      "completionPercent": 50,
-      "verificationPercent": 50,
+      "completionPercent": 83.3,
+      "verificationPercent": 83.3,
       "productionReadiness": "PARTIAL",
       "capabilities": [
         {
@@ -3572,11 +3804,11 @@
               "id": "P18-01-tested",
               "label": "Tested",
               "category": "tested",
-              "pass": false
+              "pass": true
             }
           ],
           "implemented": true,
-          "verified": false,
+          "verified": true,
           "blocked": false
         },
         {
@@ -3665,11 +3897,11 @@
               "id": "P18-06-runtime",
               "label": "Runtime verified",
               "category": "runtime",
-              "pass": false
+              "pass": true
             }
           ],
-          "implemented": false,
-          "verified": false,
+          "implemented": true,
+          "verified": true,
           "blocked": false
         }
       ]
@@ -3679,12 +3911,12 @@
       "number": 19,
       "name": "Operations",
       "totalPlanned": 6,
-      "implemented": 4,
-      "verified": 3,
-      "incomplete": 3,
+      "implemented": 5,
+      "verified": 4,
+      "incomplete": 2,
       "blocked": 0,
-      "completionPercent": 50,
-      "verificationPercent": 50,
+      "completionPercent": 66.7,
+      "verificationPercent": 66.7,
       "productionReadiness": "PARTIAL",
       "capabilities": [
         {
@@ -3746,11 +3978,11 @@
               "id": "P19-03-tested",
               "label": "Tested",
               "category": "tested",
-              "pass": false
+              "pass": true
             }
           ],
-          "implemented": false,
-          "verified": false,
+          "implemented": true,
+          "verified": true,
           "blocked": false
         },
         {
@@ -3833,11 +4065,11 @@
       "name": "Security",
       "totalPlanned": 7,
       "implemented": 5,
-      "verified": 3,
-      "incomplete": 4,
+      "verified": 5,
+      "incomplete": 2,
       "blocked": 1,
-      "completionPercent": 42.9,
-      "verificationPercent": 42.9,
+      "completionPercent": 71.4,
+      "verificationPercent": 71.4,
       "productionReadiness": "PARTIAL",
       "capabilities": [
         {
@@ -3861,11 +4093,11 @@
               "id": "P20-01-tested",
               "label": "Tested",
               "category": "tested",
-              "pass": false
+              "pass": true
             }
           ],
           "implemented": true,
-          "verified": false,
+          "verified": true,
           "blocked": false
         },
         {
@@ -3889,11 +4121,11 @@
               "id": "P20-02-tested",
               "label": "Tested",
               "category": "tested",
-              "pass": false
+              "pass": true
             }
           ],
           "implemented": true,
-          "verified": false,
+          "verified": true,
           "blocked": false
         },
         {
@@ -4002,12 +4234,12 @@
       "number": 21,
       "name": "Performance",
       "totalPlanned": 5,
-      "implemented": 2,
-      "verified": 2,
-      "incomplete": 3,
+      "implemented": 3,
+      "verified": 3,
+      "incomplete": 2,
       "blocked": 2,
-      "completionPercent": 40,
-      "verificationPercent": 40,
+      "completionPercent": 60,
+      "verificationPercent": 60,
       "productionReadiness": "PARTIAL",
       "capabilities": [
         {
@@ -4063,11 +4295,11 @@
               "id": "P21-03-tested",
               "label": "Tested",
               "category": "tested",
-              "pass": false
+              "pass": true
             }
           ],
-          "implemented": false,
-          "verified": false,
+          "implemented": true,
+          "verified": true,
           "blocked": false
         },
         {

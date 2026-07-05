@@ -1,7 +1,7 @@
 # CourtAccess Master Production Assessment
 
 **Version:** 1.0
-**Generated:** 2026-07-05T15:06:36.826Z
+**Generated:** 2026-07-05T15:43:27.353Z
 **Methodology:** Each capability has objective binary criteria. Verified = runtime criterion passes when defined; otherwise all defined implementation criteria must pass. No subjective scoring.
 **Formula:** Completion % = Verified Capabilities ÷ Total Planned Capabilities
 
@@ -10,39 +10,39 @@
 | Metric | Value |
 |--------|-------|
 | Programs | 25 |
-| Total Capabilities | 189 |
-| Verified Capabilities | 125 |
-| Implemented Capabilities | 146 |
+| Total Capabilities | 199 |
+| Verified Capabilities | 158 |
+| Implemented Capabilities | 167 |
 | Blocked Capabilities | 19 |
-| Overall Completion | 66.1% |
-| Production Readiness | NOT_READY |
+| Overall Completion | 79.4% |
+| Production Readiness | RELEASE_CANDIDATE |
 
 ## Program Completion (Programs 0–24)
 
 | Program | Name | Verified | Total | Completion % | Readiness |
 |---------|------|----------|-------|--------------|-----------|
 | 0 | Production Website | 15 | 15 | 100% | READY |
-| 1 | Universal Membership | 7 | 10 | 70% | PARTIAL |
-| 2 | Hybrid Stripe Billing | 9 | 12 | 75% | PARTIAL |
-| 3 | Delegated Access | 6 | 8 | 75% | PARTIAL |
-| 4 | Resource Permissions | 6 | 8 | 75% | PARTIAL |
+| 1 | Universal Membership | 9 | 10 | 90% | PARTIAL |
+| 2 | Hybrid Stripe Billing | 10 | 12 | 83.3% | PARTIAL |
+| 3 | Delegated Access | 7 | 8 | 87.5% | PARTIAL |
+| 4 | Resource Permissions | 18 | 18 | 100% | READY |
 | 5 | Document Redaction | 5 | 7 | 71.4% | PARTIAL |
 | 6 | Disclosure Manager | 6 | 6 | 100% | READY |
 | 7 | Organizations | 6 | 8 | 75% | PARTIAL |
 | 8 | Client Management | 2 | 5 | 40% | PARTIAL |
-| 9 | Case Management | 7 | 8 | 87.5% | PARTIAL |
+| 9 | Case Management | 8 | 8 | 100% | READY |
 | 10 | Document Platform | 5 | 6 | 83.3% | PARTIAL |
-| 11 | Evidence Platform | 4 | 7 | 57.1% | PARTIAL |
+| 11 | Evidence Platform | 5 | 7 | 71.4% | PARTIAL |
 | 12 | Investigator Workbench | 6 | 9 | 66.7% | PARTIAL |
 | 13 | Attorney Workbench | 5 | 8 | 62.5% | PARTIAL |
-| 14 | Client Portal | 4 | 6 | 66.7% | PARTIAL |
+| 14 | Client Portal | 5 | 6 | 83.3% | PARTIAL |
 | 15 | Administrative Command Center | 3 | 8 | 37.5% | PARTIAL |
-| 16 | California Legislative Intelligence | 1 | 7 | 14.3% | PARTIAL |
-| 17 | Legal Knowledge Graph | 3 | 5 | 60% | PARTIAL |
-| 18 | Communications Platform | 3 | 6 | 50% | PARTIAL |
-| 19 | Operations | 3 | 6 | 50% | PARTIAL |
-| 20 | Security | 3 | 7 | 42.9% | PARTIAL |
-| 21 | Performance | 2 | 5 | 40% | PARTIAL |
+| 16 | California Legislative Intelligence | 7 | 7 | 100% | READY |
+| 17 | Legal Knowledge Graph | 5 | 5 | 100% | READY |
+| 18 | Communications Platform | 5 | 6 | 83.3% | PARTIAL |
+| 19 | Operations | 4 | 6 | 66.7% | PARTIAL |
+| 20 | Security | 5 | 7 | 71.4% | PARTIAL |
+| 21 | Performance | 3 | 5 | 60% | PARTIAL |
 | 22 | Documentation | 4 | 6 | 66.7% | PARTIAL |
 | 23 | Version 1.0 Certification | 2 | 6 | 33.3% | PARTIAL |
 | 24 | Self-Demonstrating Product | 8 | 10 | 80% | PARTIAL |
@@ -102,7 +102,7 @@ Total routes: 82 | Exists: 70 | Verified public: 20
 
 ## API Inventory
 
-Total endpoints: 347 | Authenticated: 34 | DB integrated: 130
+Total endpoints: 351 | Authenticated: 34 | DB integrated: 133
 
 ## Database Inventory
 
@@ -132,9 +132,9 @@ Verified: 15/15 (100%) — READY
 
 ### Program 1 — Universal Membership
 
-Verified: 7/10 (70%) — PARTIAL
+Verified: 9/10 (90%) — PARTIAL
 
-- [ ] **P01-01** Universal membership model
+- [x] **P01-01** Universal membership model
 - [x] **P01-02** Account provisioning
 - [x] **P01-03** Terms acceptance
 - [x] **P01-04** 30-day trial
@@ -143,11 +143,11 @@ Verified: 7/10 (70%) — PARTIAL
 - [x] **P01-07** Shared access dashboard
 - [x] **P01-08** Stripe checkout wiring
 - [ ] **P01-09** Delegated user limit
-- [ ] **P01-10** Permission resolver
+- [x] **P01-10** Permission resolver
 
 ### Program 2 — Hybrid Stripe Billing
 
-Verified: 9/12 (75%) — PARTIAL
+Verified: 10/12 (83.3%) — PARTIAL
 
 - [x] **P02-01** Stripe checkout
 - [x] **P02-02** Webhook processor
@@ -157,19 +157,19 @@ Verified: 9/12 (75%) — PARTIAL
 - [x] **P02-06** Discount codes
 - [x] **P02-07** Billing emails
 - [ ] **P02-08** Stripe certification harness
-- [ ] **P02-09** Stripe billing tests
+- [x] **P02-09** Stripe billing tests
 - [ ] **P02-10** Live Stripe env configured — *STRIPE_SECRET_KEY not configured*
 - [x] **P02-11** Annual billing
 - [x] **P02-12** Production certification report
 
 ### Program 3 — Delegated Access
 
-Verified: 6/8 (75%) — PARTIAL
+Verified: 7/8 (87.5%) — PARTIAL
 
 - [x] **P03-01** Invitation create
 - [x] **P03-02** Invitation accept
 - [x] **P03-03** Invitation preview
-- [ ] **P03-04** 5-user limit
+- [x] **P03-04** 5-user limit
 - [x] **P03-05** MFA for delegates
 - [x] **P03-06** Session history
 - [x] **P03-07** Org member list
@@ -177,7 +177,7 @@ Verified: 6/8 (75%) — PARTIAL
 
 ### Program 4 — Resource Permissions
 
-Verified: 6/8 (75%) — PARTIAL
+Verified: 18/18 (100%) — READY
 
 - [x] **P04-01** PermissionGrant model
 - [x] **P04-02** Permission grant API
@@ -185,8 +185,18 @@ Verified: 6/8 (75%) — PARTIAL
 - [x] **P04-04** Case-level filtering
 - [x] **P04-05** Permission check API
 - [x] **P04-06** Firm permissions UI
-- [ ] **P04-07** Route enforcement
-- [ ] **P04-08** Firm platform tests
+- [x] **P04-07** Route enforcement
+- [x] **P04-08** Firm platform tests
+- [x] **P04-09** Charges authorization
+- [x] **P04-10** Communications authorization
+- [x] **P04-11** Witness and leads authorization
+- [x] **P04-12** Reports and workbench authorization
+- [x] **P04-13** CALCRIM authorization
+- [x] **P04-14** Intelligence report authorization
+- [x] **P04-15** Client organization authorization
+- [x] **P04-16** Non-disclosure list filtering
+- [x] **P04-17** Scope registry
+- [x] **P04-18** Seven-level permission model
 
 ### Program 5 — Document Redaction
 
@@ -236,7 +246,7 @@ Verified: 2/5 (40%) — PARTIAL
 
 ### Program 9 — Case Management
 
-Verified: 7/8 (87.5%) — PARTIAL
+Verified: 8/8 (100%) — READY
 
 - [x] **P09-01** Case CRUD API
 - [x] **P09-02** Cases list UI
@@ -245,7 +255,7 @@ Verified: 7/8 (87.5%) — PARTIAL
 - [x] **P09-05** Hearings
 - [x] **P09-06** Motions UI
 - [x] **P09-07** Discovery requests
-- [ ] **P09-08** Case tests
+- [x] **P09-08** Case tests
 
 ### Program 10 — Document Platform
 
@@ -260,7 +270,7 @@ Verified: 5/6 (83.3%) — PARTIAL
 
 ### Program 11 — Evidence Platform
 
-Verified: 4/7 (57.1%) — PARTIAL
+Verified: 5/7 (71.4%) — PARTIAL
 
 - [x] **P11-01** Evidence repository
 - [x] **P11-02** Timeline API
@@ -268,7 +278,7 @@ Verified: 4/7 (57.1%) — PARTIAL
 - [ ] **P11-04** Evidence gaps
 - [x] **P11-05** Forensic reconstruction
 - [x] **P11-06** Contradiction UI
-- [ ] **P11-07** Evidence tests
+- [x] **P11-07** Evidence tests
 
 ### Program 12 — Investigator Workbench
 
@@ -299,10 +309,10 @@ Verified: 5/8 (62.5%) — PARTIAL
 
 ### Program 14 — Client Portal
 
-Verified: 4/6 (66.7%) — PARTIAL
+Verified: 5/6 (83.3%) — PARTIAL
 
 - [ ] **P14-01** Defendant dashboard
-- [ ] **P14-02** Secure messaging
+- [x] **P14-02** Secure messaging
 - [x] **P14-03** Court dates portal
 - [x] **P14-04** Document access
 - [x] **P14-05** Evidence upload panel
@@ -323,54 +333,54 @@ Verified: 3/8 (37.5%) — PARTIAL
 
 ### Program 16 — California Legislative Intelligence
 
-Verified: 1/7 (14.3%) — PARTIAL
+Verified: 7/7 (100%) — READY
 
-- [ ] **P16-01** Discovery pipeline
-- [ ] **P16-02** Acquisition pipeline
-- [ ] **P16-03** Extraction audit
+- [x] **P16-01** Discovery pipeline
+- [x] **P16-02** Acquisition pipeline
+- [x] **P16-03** Extraction audit
 - [x] **P16-04** Legislative API
-- [ ] **P16-05** Pipeline stages tests
-- [ ] **P16-06** Liability discovery
-- [ ] **P16-07** Production metrics
+- [x] **P16-05** Pipeline stages tests
+- [x] **P16-06** Liability discovery
+- [x] **P16-07** Production metrics
 
 ### Program 17 — Legal Knowledge Graph
 
-Verified: 3/5 (60%) — PARTIAL
+Verified: 5/5 (100%) — READY
 
 - [x] **P17-01** KG pipeline
 - [x] **P17-02** Repositories
-- [ ] **P17-03** KG tests
-- [ ] **P17-04** Repository integrity
+- [x] **P17-03** KG tests
+- [x] **P17-04** Repository integrity
 - [x] **P17-05** Doctrine routes registered
 
 ### Program 18 — Communications Platform
 
-Verified: 3/6 (50%) — PARTIAL
+Verified: 5/6 (83.3%) — PARTIAL
 
-- [ ] **P18-01** Secure messaging
+- [x] **P18-01** Secure messaging
 - [x] **P18-02** Hearings API
 - [x] **P18-03** Billing emails
 - [x] **P18-04** CPRA email
 - [ ] **P18-05** SMS — *SMS not implemented*
-- [ ] **P18-06** Communications tests
+- [x] **P18-06** Communications tests
 
 ### Program 19 — Operations
 
-Verified: 3/6 (50%) — PARTIAL
+Verified: 4/6 (66.7%) — PARTIAL
 
 - [x] **P19-01** Operations dashboard
 - [ ] **P19-02** Queue monitoring
-- [ ] **P19-03** Backup drill
+- [x] **P19-03** Backup drill
 - [x] **P19-04** Observability
 - [x] **P19-05** Disaster recovery doc
 - [ ] **P19-06** Production ops tests
 
 ### Program 20 — Security
 
-Verified: 3/7 (42.9%) — PARTIAL
+Verified: 5/7 (71.4%) — PARTIAL
 
-- [ ] **P20-01** RBAC
-- [ ] **P20-02** MFA
+- [x] **P20-01** RBAC
+- [x] **P20-02** MFA
 - [x] **P20-03** Rate limiting
 - [x] **P20-04** CSRF
 - [x] **P20-05** Security readiness report
@@ -379,11 +389,11 @@ Verified: 3/7 (42.9%) — PARTIAL
 
 ### Program 21 — Performance
 
-Verified: 2/5 (40%) — PARTIAL
+Verified: 3/5 (60%) — PARTIAL
 
 - [x] **P21-01** Performance benchmark report
 - [x] **P21-02** Lighthouse scores
-- [ ] **P21-03** Deep health check
+- [x] **P21-03** Deep health check
 - [ ] **P21-04** Load testing — *Load test suite not implemented*
 - [ ] **P21-05** Stress testing — *Stress test suite not implemented*
 

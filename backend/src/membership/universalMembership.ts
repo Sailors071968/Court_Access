@@ -156,11 +156,15 @@ export type PermissionLevel = (typeof PERMISSION_LEVELS)[number];
 
 export const RESOURCE_SCOPES = [
   'organization',
+  'office',
   'case',
+  'charge',
   'document',
+  'ocr',
   'evidence',
   'timeline',
   'witness',
+  'lead',
   'report',
   'authority',
   'calcrim',
@@ -181,6 +185,8 @@ const LEVEL_RANK: Record<PermissionLevel, number> = {
   approve: 5,
   admin: 6,
 };
+
+export { LEVEL_RANK };
 
 export function permissionSatisfies(granted: string, required: PermissionLevel): boolean {
   const g = granted as PermissionLevel;

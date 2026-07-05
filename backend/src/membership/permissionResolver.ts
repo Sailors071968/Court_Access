@@ -3,7 +3,7 @@
 // ============================================================================
 
 import prisma from '../lib/prisma.js';
-import { permissionSatisfies, type PermissionLevel } from './universalMembership.js';
+import { permissionSatisfies, LEVEL_RANK, type PermissionLevel } from './universalMembership.js';
 
 export async function isOrganizationOwner(userId: string, tenantId: string): Promise<boolean> {
   const member = await prisma.organizationMember.findFirst({
@@ -43,7 +43,7 @@ export async function getEffectivePermission(
   let highest: PermissionLevel = 'none';
   for (const g of grants) {
     const level = g.permission as PermissionLevel;
-    if (permissionSatisfies(level, highest === 'none' ? 'view' : highest)) {
+    if ((LEVEL_RANK[level] ?? 0) > (LEVEL_RANK[highest] ?? 0)) {
       highest = level;
     }
   }

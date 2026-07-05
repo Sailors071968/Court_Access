@@ -1,8 +1,8 @@
 {
   "assessment": "TOP_100_BACKLOG",
   "version": "1.0",
-  "generatedAt": "2026-07-05T15:06:36.826Z",
-  "totalIncomplete": 64,
+  "generatedAt": "2026-07-05T15:43:27.353Z",
+  "totalIncomplete": 41,
   "items": [
     {
       "rank": 1,
@@ -19,45 +19,6 @@
     },
     {
       "rank": 2,
-      "id": "P19-03",
-      "title": "Backup drill (Operations)",
-      "programId": "PROGRAM-19",
-      "programName": "Operations",
-      "blocker": "Criteria not verified",
-      "productionImpact": "critical",
-      "attorneyImpact": "medium",
-      "userImpact": "medium",
-      "operationalRisk": "high",
-      "dependencyOrder": 10
-    },
-    {
-      "rank": 3,
-      "id": "P20-01",
-      "title": "RBAC (Security)",
-      "programId": "PROGRAM-20",
-      "programName": "Security",
-      "blocker": "Criteria not verified",
-      "productionImpact": "critical",
-      "attorneyImpact": "medium",
-      "userImpact": "medium",
-      "operationalRisk": "high",
-      "dependencyOrder": 10
-    },
-    {
-      "rank": 4,
-      "id": "P20-02",
-      "title": "MFA (Security)",
-      "programId": "PROGRAM-20",
-      "programName": "Security",
-      "blocker": "Criteria not verified",
-      "productionImpact": "critical",
-      "attorneyImpact": "medium",
-      "userImpact": "medium",
-      "operationalRisk": "high",
-      "dependencyOrder": 10
-    },
-    {
-      "rank": 5,
       "id": "P20-06",
       "title": "Tenant isolation tests (Security)",
       "programId": "PROGRAM-20",
@@ -70,7 +31,7 @@
       "dependencyOrder": 10
     },
     {
-      "rank": 6,
+      "rank": 3,
       "id": "P20-07",
       "title": "Penetration testing (Security)",
       "programId": "PROGRAM-20",
@@ -83,20 +44,7 @@
       "dependencyOrder": 10
     },
     {
-      "rank": 7,
-      "id": "P01-10",
-      "title": "Permission resolver (Universal Membership)",
-      "programId": "PROGRAM-01",
-      "programName": "Universal Membership",
-      "blocker": "Criteria not verified",
-      "productionImpact": "high",
-      "attorneyImpact": "medium",
-      "userImpact": "high",
-      "operationalRisk": "medium",
-      "dependencyOrder": 20
-    },
-    {
-      "rank": 8,
+      "rank": 4,
       "id": "P02-08",
       "title": "Stripe certification harness (Hybrid Stripe Billing)",
       "programId": "PROGRAM-02",
@@ -109,20 +57,7 @@
       "dependencyOrder": 20
     },
     {
-      "rank": 9,
-      "id": "P02-09",
-      "title": "Stripe billing tests (Hybrid Stripe Billing)",
-      "programId": "PROGRAM-02",
-      "programName": "Hybrid Stripe Billing",
-      "blocker": "Criteria not verified",
-      "productionImpact": "high",
-      "attorneyImpact": "medium",
-      "userImpact": "medium",
-      "operationalRisk": "high",
-      "dependencyOrder": 20
-    },
-    {
-      "rank": 10,
+      "rank": 5,
       "id": "P02-10",
       "title": "Live Stripe env configured (Hybrid Stripe Billing)",
       "programId": "PROGRAM-02",
@@ -135,7 +70,7 @@
       "dependencyOrder": 20
     },
     {
-      "rank": 11,
+      "rank": 6,
       "id": "P05-06",
       "title": "OCR text redaction (Document Redaction)",
       "programId": "PROGRAM-05",
@@ -148,7 +83,7 @@
       "dependencyOrder": 20
     },
     {
-      "rank": 12,
+      "rank": 7,
       "id": "P05-07",
       "title": "AI redaction suggestions (Document Redaction)",
       "programId": "PROGRAM-05",
@@ -161,7 +96,7 @@
       "dependencyOrder": 20
     },
     {
-      "rank": 13,
+      "rank": 8,
       "id": "P24-07",
       "title": "Redaction UI (Self-Demonstrating Product)",
       "programId": "PROGRAM-24",
@@ -174,20 +109,7 @@
       "dependencyOrder": 20
     },
     {
-      "rank": 14,
-      "id": "P09-08",
-      "title": "Case tests (Case Management)",
-      "programId": "PROGRAM-09",
-      "programName": "Case Management",
-      "blocker": "Criteria not verified",
-      "productionImpact": "medium",
-      "attorneyImpact": "high",
-      "userImpact": "medium",
-      "operationalRisk": "medium",
-      "dependencyOrder": 50
-    },
-    {
-      "rank": 15,
+      "rank": 9,
       "id": "P11-03",
       "title": "Contradiction engine (Evidence Platform)",
       "programId": "PROGRAM-11",
@@ -200,7 +122,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 16,
+      "rank": 10,
       "id": "P11-04",
       "title": "Evidence gaps (Evidence Platform)",
       "programId": "PROGRAM-11",
@@ -213,20 +135,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 17,
-      "id": "P11-07",
-      "title": "Evidence tests (Evidence Platform)",
-      "programId": "PROGRAM-11",
-      "programName": "Evidence Platform",
-      "blocker": "Criteria not verified",
-      "productionImpact": "medium",
-      "attorneyImpact": "high",
-      "userImpact": "medium",
-      "operationalRisk": "medium",
-      "dependencyOrder": 50
-    },
-    {
-      "rank": 18,
+      "rank": 11,
       "id": "P13-06",
       "title": "Attorney workbench tests (Attorney Workbench)",
       "programId": "PROGRAM-13",
@@ -239,7 +148,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 19,
+      "rank": 12,
       "id": "P13-07",
       "title": "Attorney intelligence tests (Attorney Workbench)",
       "programId": "PROGRAM-13",
@@ -252,7 +161,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 20,
+      "rank": 13,
       "id": "P13-08",
       "title": "Voir dire workspace (Attorney Workbench)",
       "programId": "PROGRAM-13",
@@ -265,20 +174,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 21,
-      "id": "P01-01",
-      "title": "Universal membership model (Universal Membership)",
-      "programId": "PROGRAM-01",
-      "programName": "Universal Membership",
-      "blocker": "Criteria not verified",
-      "productionImpact": "medium",
-      "attorneyImpact": "medium",
-      "userImpact": "high",
-      "operationalRisk": "medium",
-      "dependencyOrder": 50
-    },
-    {
-      "rank": 22,
+      "rank": 14,
       "id": "P01-09",
       "title": "Delegated user limit (Universal Membership)",
       "programId": "PROGRAM-01",
@@ -291,7 +187,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 23,
+      "rank": 15,
       "id": "P14-01",
       "title": "Defendant dashboard (Client Portal)",
       "programId": "PROGRAM-14",
@@ -304,33 +200,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 24,
-      "id": "P14-02",
-      "title": "Secure messaging (Client Portal)",
-      "programId": "PROGRAM-14",
-      "programName": "Client Portal",
-      "blocker": "Criteria not verified",
-      "productionImpact": "medium",
-      "attorneyImpact": "medium",
-      "userImpact": "high",
-      "operationalRisk": "medium",
-      "dependencyOrder": 50
-    },
-    {
-      "rank": 25,
-      "id": "P03-04",
-      "title": "5-user limit (Delegated Access)",
-      "programId": "PROGRAM-03",
-      "programName": "Delegated Access",
-      "blocker": "Criteria not verified",
-      "productionImpact": "medium",
-      "attorneyImpact": "medium",
-      "userImpact": "medium",
-      "operationalRisk": "medium",
-      "dependencyOrder": 50
-    },
-    {
-      "rank": 26,
+      "rank": 16,
       "id": "P03-08",
       "title": "Invitation tests (Delegated Access)",
       "programId": "PROGRAM-03",
@@ -343,33 +213,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 27,
-      "id": "P04-07",
-      "title": "Route enforcement (Resource Permissions)",
-      "programId": "PROGRAM-04",
-      "programName": "Resource Permissions",
-      "blocker": "Criteria not verified",
-      "productionImpact": "medium",
-      "attorneyImpact": "medium",
-      "userImpact": "medium",
-      "operationalRisk": "medium",
-      "dependencyOrder": 50
-    },
-    {
-      "rank": 28,
-      "id": "P04-08",
-      "title": "Firm platform tests (Resource Permissions)",
-      "programId": "PROGRAM-04",
-      "programName": "Resource Permissions",
-      "blocker": "Criteria not verified",
-      "productionImpact": "medium",
-      "attorneyImpact": "medium",
-      "userImpact": "medium",
-      "operationalRisk": "medium",
-      "dependencyOrder": 50
-    },
-    {
-      "rank": 29,
+      "rank": 17,
       "id": "P07-06",
       "title": "Tenant isolation (Organizations)",
       "programId": "PROGRAM-07",
@@ -382,7 +226,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 30,
+      "rank": 18,
       "id": "P07-07",
       "title": "Firm platform tests (Organizations)",
       "programId": "PROGRAM-07",
@@ -395,7 +239,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 31,
+      "rank": 19,
       "id": "P08-03",
       "title": "Client tests (Client Management)",
       "programId": "PROGRAM-08",
@@ -408,7 +252,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 32,
+      "rank": 20,
       "id": "P08-04",
       "title": "Client intake UI (Client Management)",
       "programId": "PROGRAM-08",
@@ -421,7 +265,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 33,
+      "rank": 21,
       "id": "P10-05",
       "title": "Document versioning (Document Platform)",
       "programId": "PROGRAM-10",
@@ -434,7 +278,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 34,
+      "rank": 22,
       "id": "P12-07",
       "title": "Investigator tests (Investigator Workbench)",
       "programId": "PROGRAM-12",
@@ -447,7 +291,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 35,
+      "rank": 23,
       "id": "P12-08",
       "title": "GPS mapping (Investigator Workbench)",
       "programId": "PROGRAM-12",
@@ -460,7 +304,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 36,
+      "rank": 24,
       "id": "P12-09",
       "title": "Surveillance logs (Investigator Workbench)",
       "programId": "PROGRAM-12",
@@ -473,7 +317,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 37,
+      "rank": 25,
       "id": "P15-01",
       "title": "Admin page (Administrative Command Center)",
       "programId": "PROGRAM-15",
@@ -486,7 +330,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 38,
+      "rank": 26,
       "id": "P15-04",
       "title": "Repository dashboard (Administrative Command Center)",
       "programId": "PROGRAM-15",
@@ -499,7 +343,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 39,
+      "rank": 27,
       "id": "P15-06",
       "title": "CRM (Administrative Command Center)",
       "programId": "PROGRAM-15",
@@ -512,7 +356,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 40,
+      "rank": 28,
       "id": "P15-07",
       "title": "Customer support (Administrative Command Center)",
       "programId": "PROGRAM-15",
@@ -525,7 +369,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 41,
+      "rank": 29,
       "id": "P15-08",
       "title": "Production ops tests (Administrative Command Center)",
       "programId": "PROGRAM-15",
@@ -538,124 +382,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 42,
-      "id": "P16-01",
-      "title": "Discovery pipeline (California Legislative Intelligence)",
-      "programId": "PROGRAM-16",
-      "programName": "California Legislative Intelligence",
-      "blocker": "Criteria not verified",
-      "productionImpact": "medium",
-      "attorneyImpact": "medium",
-      "userImpact": "medium",
-      "operationalRisk": "medium",
-      "dependencyOrder": 50
-    },
-    {
-      "rank": 43,
-      "id": "P16-02",
-      "title": "Acquisition pipeline (California Legislative Intelligence)",
-      "programId": "PROGRAM-16",
-      "programName": "California Legislative Intelligence",
-      "blocker": "Criteria not verified",
-      "productionImpact": "medium",
-      "attorneyImpact": "medium",
-      "userImpact": "medium",
-      "operationalRisk": "medium",
-      "dependencyOrder": 50
-    },
-    {
-      "rank": 44,
-      "id": "P16-03",
-      "title": "Extraction audit (California Legislative Intelligence)",
-      "programId": "PROGRAM-16",
-      "programName": "California Legislative Intelligence",
-      "blocker": "Criteria not verified",
-      "productionImpact": "medium",
-      "attorneyImpact": "medium",
-      "userImpact": "medium",
-      "operationalRisk": "medium",
-      "dependencyOrder": 50
-    },
-    {
-      "rank": 45,
-      "id": "P16-05",
-      "title": "Pipeline stages tests (California Legislative Intelligence)",
-      "programId": "PROGRAM-16",
-      "programName": "California Legislative Intelligence",
-      "blocker": "Criteria not verified",
-      "productionImpact": "medium",
-      "attorneyImpact": "medium",
-      "userImpact": "medium",
-      "operationalRisk": "medium",
-      "dependencyOrder": 50
-    },
-    {
-      "rank": 46,
-      "id": "P16-06",
-      "title": "Liability discovery (California Legislative Intelligence)",
-      "programId": "PROGRAM-16",
-      "programName": "California Legislative Intelligence",
-      "blocker": "Criteria not verified",
-      "productionImpact": "medium",
-      "attorneyImpact": "medium",
-      "userImpact": "medium",
-      "operationalRisk": "medium",
-      "dependencyOrder": 50
-    },
-    {
-      "rank": 47,
-      "id": "P16-07",
-      "title": "Production metrics (California Legislative Intelligence)",
-      "programId": "PROGRAM-16",
-      "programName": "California Legislative Intelligence",
-      "blocker": "Criteria not verified",
-      "productionImpact": "medium",
-      "attorneyImpact": "medium",
-      "userImpact": "medium",
-      "operationalRisk": "medium",
-      "dependencyOrder": 50
-    },
-    {
-      "rank": 48,
-      "id": "P17-03",
-      "title": "KG tests (Legal Knowledge Graph)",
-      "programId": "PROGRAM-17",
-      "programName": "Legal Knowledge Graph",
-      "blocker": "Criteria not verified",
-      "productionImpact": "medium",
-      "attorneyImpact": "medium",
-      "userImpact": "medium",
-      "operationalRisk": "medium",
-      "dependencyOrder": 50
-    },
-    {
-      "rank": 49,
-      "id": "P17-04",
-      "title": "Repository integrity (Legal Knowledge Graph)",
-      "programId": "PROGRAM-17",
-      "programName": "Legal Knowledge Graph",
-      "blocker": "Criteria not verified",
-      "productionImpact": "medium",
-      "attorneyImpact": "medium",
-      "userImpact": "medium",
-      "operationalRisk": "medium",
-      "dependencyOrder": 50
-    },
-    {
-      "rank": 50,
-      "id": "P18-01",
-      "title": "Secure messaging (Communications Platform)",
-      "programId": "PROGRAM-18",
-      "programName": "Communications Platform",
-      "blocker": "Criteria not verified",
-      "productionImpact": "medium",
-      "attorneyImpact": "medium",
-      "userImpact": "medium",
-      "operationalRisk": "medium",
-      "dependencyOrder": 50
-    },
-    {
-      "rank": 51,
+      "rank": 30,
       "id": "P18-05",
       "title": "SMS (Communications Platform)",
       "programId": "PROGRAM-18",
@@ -668,20 +395,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 52,
-      "id": "P18-06",
-      "title": "Communications tests (Communications Platform)",
-      "programId": "PROGRAM-18",
-      "programName": "Communications Platform",
-      "blocker": "Criteria not verified",
-      "productionImpact": "medium",
-      "attorneyImpact": "medium",
-      "userImpact": "medium",
-      "operationalRisk": "medium",
-      "dependencyOrder": 50
-    },
-    {
-      "rank": 53,
+      "rank": 31,
       "id": "P19-02",
       "title": "Queue monitoring (Operations)",
       "programId": "PROGRAM-19",
@@ -694,7 +408,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 54,
+      "rank": 32,
       "id": "P19-06",
       "title": "Production ops tests (Operations)",
       "programId": "PROGRAM-19",
@@ -707,20 +421,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 55,
-      "id": "P21-03",
-      "title": "Deep health check (Performance)",
-      "programId": "PROGRAM-21",
-      "programName": "Performance",
-      "blocker": "Criteria not verified",
-      "productionImpact": "medium",
-      "attorneyImpact": "medium",
-      "userImpact": "medium",
-      "operationalRisk": "medium",
-      "dependencyOrder": 50
-    },
-    {
-      "rank": 56,
+      "rank": 33,
       "id": "P21-04",
       "title": "Load testing (Performance)",
       "programId": "PROGRAM-21",
@@ -733,7 +434,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 57,
+      "rank": 34,
       "id": "P21-05",
       "title": "Stress testing (Performance)",
       "programId": "PROGRAM-21",
@@ -746,7 +447,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 58,
+      "rank": 35,
       "id": "P22-05",
       "title": "User guide (Documentation)",
       "programId": "PROGRAM-22",
@@ -759,7 +460,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 59,
+      "rank": 36,
       "id": "P22-06",
       "title": "API documentation (Documentation)",
       "programId": "PROGRAM-22",
@@ -772,7 +473,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 60,
+      "rank": 37,
       "id": "P23-01",
       "title": "Production gates runner (Version 1.0 Certification)",
       "programId": "PROGRAM-23",
@@ -785,7 +486,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 61,
+      "rank": 38,
       "id": "P23-03",
       "title": "Master program assessor (Version 1.0 Certification)",
       "programId": "PROGRAM-23",
@@ -798,7 +499,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 62,
+      "rank": 39,
       "id": "P23-05",
       "title": "Backend compile gate (Version 1.0 Certification)",
       "programId": "PROGRAM-23",
@@ -811,7 +512,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 63,
+      "rank": 40,
       "id": "P23-06",
       "title": "E2E workflow demo (Version 1.0 Certification)",
       "programId": "PROGRAM-23",
@@ -824,7 +525,7 @@
       "dependencyOrder": 50
     },
     {
-      "rank": 64,
+      "rank": 41,
       "id": "P24-10",
       "title": "End-to-end walkthrough doc (Self-Demonstrating Product)",
       "programId": "PROGRAM-24",

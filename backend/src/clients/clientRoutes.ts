@@ -16,6 +16,7 @@ import {
   CLIENT_STATUSES,
   RETENTION_STATUSES,
 } from './clientTypes.js';
+import { guardAuth, guardScopeAccess, sanitizeClientCases } from '../membership/resourceAuthMiddleware.js';
 
 async function ensureClientAccess(
   clientId: string,
@@ -31,7 +32,8 @@ export async function registerClientRoutes(app: FastifyInstance): Promise<void> 
   // POST /api/clients
   app.post('/api/clients', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
-    if (!user) return reply.code(401).send({ error: 'Authentication required' });
+    if (!(await guardAuth(user, reply))) return;
+    if (!(await guardScopeAccess(user!, 'organization', null, 'edit', reply))) return;
 
     const body = request.body as CreateClientBody;
     if (!body.firstName?.trim() || !body.lastName?.trim()) {
@@ -84,7 +86,8 @@ export async function registerClientRoutes(app: FastifyInstance): Promise<void> 
   // GET /api/clients
   app.get('/api/clients', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
-    if (!user) return reply.code(401).send({ error: 'Authentication required' });
+    if (!(await guardAuth(user, reply))) return;
+    if (!(await guardScopeAccess(user!, 'organization', null, 'view', reply))) return;
 
     const { status, search } = request.query as { status?: string; search?: string };
 
@@ -105,7 +108,6 @@ export async function registerClientRoutes(app: FastifyInstance): Promise<void> 
             : {}),
         },
         orderBy: [{ lastName: 'asc' }, { firstName: 'asc' }],
-        include: { _count: { select: { cases: true } } },
       });
 
       return { clients };
@@ -140,7 +142,8 @@ export async function registerClientRoutes(app: FastifyInstance): Promise<void> 
       });
 
       if (!client) return reply.code(403).send({ error: 'Forbidden' });
-      return { client };
+      const sanitized = await sanitizeClientCases(user!, client);
+      return { client: sanitized };
     } catch (err) {
       console.error('[ClientRoutes] Failed to get client:', err);
       return reply.code(500).send({ error: 'Failed to get client' });

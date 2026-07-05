@@ -8,14 +8,7 @@ import { logSecurityEvent } from '../security/authMiddleware.js';
 import prisma from '../lib/prisma.js';
 import { buildInvestigatorWorkbench } from './investigatorWorkbenchService.js';
 import { INVESTIGATOR_WORKBENCH_VERSION } from './types.js';
-
-async function ensureCaseAccess(caseId: string, tenantId: string): Promise<boolean> {
-  const found = await prisma.criminalCase.findFirst({
-    where: { caseId, tenantId, deletedAt: null },
-    select: { caseId: true },
-  });
-  return Boolean(found);
-}
+import { guardAuth, guardCaseAccess } from '../membership/resourceAuthMiddleware.js';
 
 function requireInvestigatorRole(user: { role: string } | undefined): boolean {
   return user?.role === 'investigator' || user?.role === 'attorney' || user?.role === 'admin' || user?.role === 'staff';
@@ -24,13 +17,11 @@ function requireInvestigatorRole(user: { role: string } | undefined): boolean {
 export async function registerInvestigatorRoutes(app: FastifyInstance): Promise<void> {
   app.get('/api/cases/:caseId/investigator-workbench', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
-    if (!user) return reply.code(401).send({ error: 'Authentication required' });
+    if (!(await guardAuth(user, reply))) return;
     if (!requireInvestigatorRole(user)) return reply.code(403).send({ error: 'Investigator access required' });
 
     const { caseId } = request.params as { caseId: string };
-    if (!(await ensureCaseAccess(caseId, user.tenantId))) {
-      return reply.code(403).send({ error: 'Forbidden' });
-    }
+    if (!(await guardCaseAccess(user!, caseId, 'view', reply))) return;
 
     const workbench = await buildInvestigatorWorkbench(caseId, user.tenantId);
     if (!workbench) return reply.code(404).send({ error: 'Case not found' });
@@ -45,7 +36,7 @@ export async function registerInvestigatorRoutes(app: FastifyInstance): Promise<
     const { caseId } = request.params as { caseId: string };
     const body = request.body as { name?: string; role?: string; contactPhone?: string; notes?: string };
     if (!body.name?.trim()) return reply.code(400).send({ error: 'name is required' });
-    if (!(await ensureCaseAccess(caseId, user.tenantId))) return reply.code(403).send({ error: 'Forbidden' });
+    if (!(await guardCaseAccess(user!, caseId, 'edit', reply))) return;
 
     const witness = await prisma.caseWitness.create({
       data: {
@@ -70,7 +61,7 @@ export async function registerInvestigatorRoutes(app: FastifyInstance): Promise<
     const { caseId } = request.params as { caseId: string };
     const body = request.body as { title?: string; description?: string; priority?: string; assignedTo?: string };
     if (!body.title?.trim()) return reply.code(400).send({ error: 'title is required' });
-    if (!(await ensureCaseAccess(caseId, user.tenantId))) return reply.code(403).send({ error: 'Forbidden' });
+    if (!(await guardCaseAccess(user!, caseId, 'edit', reply))) return;
 
     const lead = await prisma.investigationLead.create({
       data: {
@@ -102,7 +93,7 @@ export async function registerInvestigatorRoutes(app: FastifyInstance): Promise<
       witnessId?: string;
     };
     if (!body.content?.trim()) return reply.code(400).send({ error: 'content is required' });
-    if (!(await ensureCaseAccess(caseId, user.tenantId))) return reply.code(403).send({ error: 'Forbidden' });
+    if (!(await guardCaseAccess(user!, caseId, 'edit', reply))) return;
 
     const note = await prisma.fieldNote.create({
       data: {
@@ -130,7 +121,7 @@ export async function registerInvestigatorRoutes(app: FastifyInstance): Promise<
     const { caseId } = request.params as { caseId: string };
     const body = request.body as { investigatorId?: string; role?: string };
     if (!body.investigatorId) return reply.code(400).send({ error: 'investigatorId is required' });
-    if (!(await ensureCaseAccess(caseId, user.tenantId))) return reply.code(403).send({ error: 'Forbidden' });
+    if (!(await guardCaseAccess(user!, caseId, 'edit', reply))) return;
 
     const assignment = await prisma.investigationAssignment.upsert({
       where: {

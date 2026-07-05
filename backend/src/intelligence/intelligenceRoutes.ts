@@ -10,25 +10,15 @@ import { buildCaseIntelligence } from './caseIntelligenceOrchestrator.js';
 import { generateAttorneyReport } from './reportGenerator.js';
 import { INTELLIGENCE_VERSION } from './types.js';
 import prisma from '../lib/prisma.js';
-
-async function ensureCaseAccess(caseId: string, tenantId: string): Promise<boolean> {
-  const found = await prisma.criminalCase.findFirst({
-    where: { caseId, tenantId, deletedAt: null },
-    select: { caseId: true },
-  });
-  return Boolean(found);
-}
+import { guardAuth, guardCaseAccess } from '../membership/resourceAuthMiddleware.js';
 
 export async function registerIntelligenceRoutes(app: FastifyInstance): Promise<void> {
-  // Primary intelligence endpoint
   app.get('/api/cases/:caseId/intelligence', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
-    if (!user) return reply.code(401).send({ error: 'Authentication required' });
+    if (!(await guardAuth(user, reply))) return;
 
     const { caseId } = request.params as { caseId: string };
-    if (!(await ensureCaseAccess(caseId, user.tenantId))) {
-      return reply.code(403).send({ error: 'Forbidden' });
-    }
+    if (!(await guardCaseAccess(user!, caseId, 'view', reply))) return;
 
     const intelligence = await buildCaseIntelligence(caseId, user.tenantId);
     if (!intelligence) return reply.code(404).send({ error: 'Case not found' });
@@ -42,9 +32,7 @@ export async function registerIntelligenceRoutes(app: FastifyInstance): Promise<
     if (!user) return reply.code(401).send({ error: 'Authentication required' });
 
     const { caseId } = request.params as { caseId: string };
-    if (!(await ensureCaseAccess(caseId, user.tenantId))) {
-      return reply.code(403).send({ error: 'Forbidden' });
-    }
+    if (!(await guardCaseAccess(user!, caseId, 'view', reply))) return;
 
     const intelligence = await buildCaseIntelligence(caseId, user.tenantId);
     if (!intelligence) return reply.code(404).send({ error: 'Case not found' });
@@ -59,9 +47,7 @@ export async function registerIntelligenceRoutes(app: FastifyInstance): Promise<
     if (!user) return reply.code(401).send({ error: 'Authentication required' });
 
     const { caseId } = request.params as { caseId: string };
-    if (!(await ensureCaseAccess(caseId, user.tenantId))) {
-      return reply.code(403).send({ error: 'Forbidden' });
-    }
+    if (!(await guardCaseAccess(user!, caseId, 'view', reply))) return;
 
     const intelligence = await buildCaseIntelligence(caseId, user.tenantId);
     if (!intelligence) return reply.code(404).send({ error: 'Case not found' });

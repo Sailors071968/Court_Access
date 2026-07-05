@@ -10,6 +10,7 @@ import { buildAttorneyWorkbench } from './workbenchService.js';
 import { generateWorkbenchExport } from './exportService.js';
 import type { ExportPackageType } from './types.js';
 import { WORKBENCH_VERSION } from './types.js';
+import { guardAuth, guardCaseAccess } from '../membership/resourceAuthMiddleware.js';
 
 const EXPORT_TYPES: ExportPackageType[] = [
   'attorney_report',
@@ -23,23 +24,13 @@ const EXPORT_TYPES: ExportPackageType[] = [
   'chronology',
 ];
 
-async function ensureCaseAccess(caseId: string, tenantId: string): Promise<boolean> {
-  const found = await prisma.criminalCase.findFirst({
-    where: { caseId, tenantId, deletedAt: null },
-    select: { caseId: true },
-  });
-  return Boolean(found);
-}
-
 export async function registerWorkbenchRoutes(app: FastifyInstance): Promise<void> {
   app.get('/api/cases/:caseId/workbench', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
-    if (!user) return reply.code(401).send({ error: 'Authentication required' });
+    if (!(await guardAuth(user, reply))) return;
 
     const { caseId } = request.params as { caseId: string };
-    if (!(await ensureCaseAccess(caseId, user.tenantId))) {
-      return reply.code(403).send({ error: 'Forbidden' });
-    }
+    if (!(await guardCaseAccess(user!, caseId, 'view', reply))) return;
 
     const workbench = await buildAttorneyWorkbench(caseId, user.tenantId, user.userId);
     if (!workbench) return reply.code(404).send({ error: 'Case not found' });
@@ -52,9 +43,7 @@ export async function registerWorkbenchRoutes(app: FastifyInstance): Promise<voi
     if (!user) return reply.code(401).send({ error: 'Authentication required' });
 
     const { caseId } = request.params as { caseId: string };
-    if (!(await ensureCaseAccess(caseId, user.tenantId))) {
-      return reply.code(403).send({ error: 'Forbidden' });
-    }
+    if (!(await guardCaseAccess(user!, caseId, 'view', reply))) return;
 
     const workbench = await buildAttorneyWorkbench(caseId, user.tenantId, user.userId);
     if (!workbench) return reply.code(404).send({ error: 'Case not found' });
@@ -67,9 +56,7 @@ export async function registerWorkbenchRoutes(app: FastifyInstance): Promise<voi
     if (!user) return reply.code(401).send({ error: 'Authentication required' });
 
     const { caseId } = request.params as { caseId: string };
-    if (!(await ensureCaseAccess(caseId, user.tenantId))) {
-      return reply.code(403).send({ error: 'Forbidden' });
-    }
+    if (!(await guardCaseAccess(user!, caseId, 'view', reply))) return;
 
     const workbench = await buildAttorneyWorkbench(caseId, user.tenantId, user.userId);
     if (!workbench) return reply.code(404).send({ error: 'Case not found' });
@@ -86,9 +73,7 @@ export async function registerWorkbenchRoutes(app: FastifyInstance): Promise<voi
       return reply.code(400).send({ error: 'Invalid export type', validTypes: EXPORT_TYPES });
     }
 
-    if (!(await ensureCaseAccess(caseId, user.tenantId))) {
-      return reply.code(403).send({ error: 'Forbidden' });
-    }
+    if (!(await guardCaseAccess(user!, caseId, 'view', reply))) return;
 
     const workbench = await buildAttorneyWorkbench(caseId, user.tenantId, user.userId);
     if (!workbench) return reply.code(404).send({ error: 'Case not found' });
@@ -105,9 +90,7 @@ export async function registerWorkbenchRoutes(app: FastifyInstance): Promise<voi
     if (!user) return reply.code(401).send({ error: 'Authentication required' });
 
     const { caseId } = request.params as { caseId: string };
-    if (!(await ensureCaseAccess(caseId, user.tenantId))) {
-      return reply.code(403).send({ error: 'Forbidden' });
-    }
+    if (!(await guardCaseAccess(user!, caseId, 'view', reply))) return;
 
     const notes = await prisma.attorneyNote.findMany({
       where: { caseId, tenantId: user.tenantId, userId: user.userId },
@@ -126,9 +109,7 @@ export async function registerWorkbenchRoutes(app: FastifyInstance): Promise<voi
     if (!body.content?.trim()) {
       return reply.code(400).send({ error: 'content is required' });
     }
-    if (!(await ensureCaseAccess(caseId, user.tenantId))) {
-      return reply.code(403).send({ error: 'Forbidden' });
-    }
+    if (!(await guardCaseAccess(user!, caseId, 'view', reply))) return;
 
     const note = await prisma.attorneyNote.create({
       data: {
@@ -188,9 +169,7 @@ export async function registerWorkbenchRoutes(app: FastifyInstance): Promise<voi
     if (!user) return reply.code(401).send({ error: 'Authentication required' });
 
     const { caseId } = request.params as { caseId: string };
-    if (!(await ensureCaseAccess(caseId, user.tenantId))) {
-      return reply.code(403).send({ error: 'Forbidden' });
-    }
+    if (!(await guardCaseAccess(user!, caseId, 'view', reply))) return;
 
     const pins = await prisma.workbenchPin.findMany({
       where: { caseId, tenantId: user.tenantId, userId: user.userId },
@@ -209,9 +188,7 @@ export async function registerWorkbenchRoutes(app: FastifyInstance): Promise<voi
     if (!body.pinType || !body.entityId) {
       return reply.code(400).send({ error: 'pinType and entityId are required' });
     }
-    if (!(await ensureCaseAccess(caseId, user.tenantId))) {
-      return reply.code(403).send({ error: 'Forbidden' });
-    }
+    if (!(await guardCaseAccess(user!, caseId, 'view', reply))) return;
 
     const pin = await prisma.workbenchPin.upsert({
       where: {
@@ -257,9 +234,7 @@ export async function registerWorkbenchRoutes(app: FastifyInstance): Promise<voi
     if (!user) return reply.code(401).send({ error: 'Authentication required' });
 
     const { caseId } = request.params as { caseId: string };
-    if (!(await ensureCaseAccess(caseId, user.tenantId))) {
-      return reply.code(403).send({ error: 'Forbidden' });
-    }
+    if (!(await guardCaseAccess(user!, caseId, 'view', reply))) return;
 
     const tasks = await prisma.investigationTask.findMany({
       where: { caseId, tenantId: user.tenantId },
@@ -286,9 +261,7 @@ export async function registerWorkbenchRoutes(app: FastifyInstance): Promise<voi
     if (!body.title?.trim()) {
       return reply.code(400).send({ error: 'title is required' });
     }
-    if (!(await ensureCaseAccess(caseId, user.tenantId))) {
-      return reply.code(403).send({ error: 'Forbidden' });
-    }
+    if (!(await guardCaseAccess(user!, caseId, 'view', reply))) return;
 
     const task = await prisma.investigationTask.create({
       data: {

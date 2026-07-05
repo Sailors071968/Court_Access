@@ -1,12 +1,12 @@
 {
   "assessment": "API_COMPLETION",
   "version": "1.0",
-  "generatedAt": "2026-07-05T15:06:36.826Z",
+  "generatedAt": "2026-07-05T15:43:27.353Z",
   "summary": {
-    "total": 347,
+    "total": 351,
     "authenticated": 34,
     "authorized": 63,
-    "databaseIntegrated": 130
+    "databaseIntegrated": 133
   },
   "endpoints": [
     {
@@ -398,6 +398,39 @@
       "method": "POST",
       "path": "/api/billing/create-portal-session",
       "file": "backend/src/billing/stripeWebhookHandler.ts",
+      "exists": true,
+      "authenticated": false,
+      "authorized": false,
+      "databaseIntegrated": true,
+      "tested": false,
+      "verified": false
+    },
+    {
+      "method": "POST",
+      "path": "/api/charges",
+      "file": "backend/src/charges/chargeRoutes.ts",
+      "exists": true,
+      "authenticated": false,
+      "authorized": false,
+      "databaseIntegrated": true,
+      "tested": false,
+      "verified": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/charges/:caseId",
+      "file": "backend/src/charges/chargeRoutes.ts",
+      "exists": true,
+      "authenticated": false,
+      "authorized": false,
+      "databaseIntegrated": true,
+      "tested": false,
+      "verified": false
+    },
+    {
+      "method": "DELETE",
+      "path": "/api/charges/:id",
+      "file": "backend/src/charges/chargeRoutes.ts",
       "exists": true,
       "authenticated": false,
       "authorized": false,
@@ -3335,6 +3368,17 @@
       "method": "GET",
       "path": "/api/admin/alerts",
       "file": "backend/src/productionOperations/productionOperationsRoutes.ts",
+      "exists": true,
+      "authenticated": false,
+      "authorized": false,
+      "databaseIntegrated": false,
+      "tested": false,
+      "verified": false
+    },
+    {
+      "method": "GET",
+      "path": "/api/calcrim/analyze/:caseId",
+      "file": "backend/src/routes/calcrimRoutes.ts",
       "exists": true,
       "authenticated": false,
       "authorized": false,

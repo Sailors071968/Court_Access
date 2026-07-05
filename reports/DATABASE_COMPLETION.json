@@ -1,0 +1,842 @@
+{
+  "assessment": "DATABASE_COMPLETION",
+  "version": "1.0",
+  "generatedAt": "2026-07-05T14:46:18.003Z",
+  "summary": {
+    "total": 99,
+    "used": 95,
+    "unused": 4,
+    "deprecated": 0
+  },
+  "tables": [
+    {
+      "model": "User",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "PasswordResetToken",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "EmailVerificationToken",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "Subscription",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "RefreshToken",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "SecurityLog",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "CorpusIngestionState",
+      "used": false,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "CorpusIngestionLog",
+      "used": false,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "LegalDocument",
+      "used": false,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "CorpusRegistry",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "CorpusIngestionLock",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "LegislativeExtractionAudit",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "Agency",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "PolicyTopic",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "PolicyDocument",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "PolicyCoverage",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "CPRARequestCampaign",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "CPRAAgencyRequest",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "CPRAAnnualUpdate",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "AgencyPolicyStatus",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "PolicyInventory",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "PolicyTopicCoverage",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "CpraRequestLog",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "TrialExhibitScene",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": [
+        "no @@index or @unique detected"
+      ]
+    },
+    {
+      "model": "EvidenceEvent",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "PolicyRule",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "PolicyActionMapping",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "ComplianceFinding",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "EvidenceLink",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "ComplianceReviewQueue",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "CrossAgencyComparison",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "PolicyEvolution",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "ComplianceAuditTrail",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "VisionEvent",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "TrajectoryAnalysis",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "VisibilitySimulation",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "LineOfSightAnalysis",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "CameraSyncResult",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "SceneGeometry",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "EvidenceGraph",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "ExpertWitnessPackage",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "JuryVisualization",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "AgencyPolicyMatrix",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "CpraRequest",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "AiCreditBalance",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "AiCreditUsage",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "UsageTracking",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "CpraEmailLog",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "CpraEmailAttachment",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "CpraNotification",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "CpraTimelineEvent",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "Organization",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": [
+        "no @@index or @unique detected"
+      ]
+    },
+    {
+      "model": "OrganizationOffice",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "PracticeGroup",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "OrganizationMember",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "OrganizationInvitation",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "OrganizationDepartment",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "PersonnelProfile",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "ClientTeamAssignment",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "OrgInternalMessage",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "OrgTask",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "KnowledgeAsset",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "ConflictRecord",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "PermissionGrant",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "ApprovalRequest",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "Client",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": [
+        "no @@index or @unique detected"
+      ]
+    },
+    {
+      "model": "CriminalCase",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "CaseHearing",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "CaseMessage",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "Evidence",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "EvidenceChunk",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "VerifiedFact",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "NarrativeClaim",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "NormalizedClaimEvent",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "ClaimValidation",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "ImpeachmentCandidate",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "ProcessingJob",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "TimelineEvent",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "DiscountCode",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "DiscountUsage",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "DemoRequest",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "EnterpriseLicense",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "GovernmentLead",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "MarketingEvent",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "StripeWebhookEvent",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "EvidenceRequest",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "EvidenceRequestResponse",
+      "used": false,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "AttorneyNote",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "WorkbenchPin",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "InvestigationTask",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "CaseWitness",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "InvestigationLead",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "FieldNote",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "InvestigationAssignment",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "SchemaVersion",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "Charge",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "UserAccountSettings",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [],
+      "missingIndexes": []
+    },
+    {
+      "model": "DocumentRedactionVersion",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    },
+    {
+      "model": "DisclosurePackage",
+      "used": true,
+      "deprecated": false,
+      "missingRelationships": [
+        "no @relation fields detected"
+      ],
+      "missingIndexes": []
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 # CourtAccess Executive Dashboard — v19.0
 
-**Generated:** 2026-07-05T17:07:35.754Z  
+**Generated:** 2026-07-05T17:14:09.686Z  
 **Directive:** Master Production Directive v19.0 — FINAL COMPLETION MODE  
 **Active Blockers:** 6
 
@@ -42,7 +42,7 @@
 
 ## Production Blockers
 
-1. **Production deployment** — courtaccess.net serves stale June 26 build. dev merged and pushed; CI deploy failed on lockfile sync.
+1. **Production deployment** — courtaccess.net serves stale June 26 build. CI Build & Verify PASS; SSH deploy fails (missing DEPLOY_HOST). Use Publish Dist Artifact workflow artifact + scripts/deploy-dist-artifact.sh on server.
 2. **GitHub Actions CI lockfile** — npm ci failed: playwright@1.61.1 missing from package-lock.json — fixed in dev push
 3. **Production database migrations** — Migrations for defaultRole, publication engine, multi-org membership not deployed to production DB
 4. **Stripe production certification** — Live Stripe Test Mode and production certification incomplete

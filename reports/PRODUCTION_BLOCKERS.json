@@ -1,16 +1,20 @@
 {
   "directive": "Master Production Directive v19.0",
-  "generatedAt": "2026-07-05T17:08:00Z",
+  "generatedAt": "2026-07-05T17:15:00Z",
   "blockerCount": 6,
-  "resolvedThisSession": ["missing-frontend-merge-to-dev", "BLK-002-ci-lockfile-sync"],
+  "resolvedThisSession": [
+    "missing-frontend-merge-to-dev",
+    "BLK-002-ci-lockfile-sync",
+    "BLK-002b-program-00-npx-spawn"
+  ],
   "blockers": [
     {
       "id": "BLK-001",
       "priority": 1,
       "name": "Production deployment",
       "status": "in_progress",
-      "description": "courtaccess.net serves stale June 26 build. CI verify fixed; deploy requires DEPLOY_HOST/DEPLOY_USER/DEPLOY_SSH_KEY or manual artifact deploy",
-      "resolution": "Fix package-lock.json, re-push dev, configure DEPLOY_HOST/DEPLOY_USER/DEPLOY_SSH_KEY, or run scripts/deploy-production-website.sh on server",
+      "description": "courtaccess.net serves stale June 26 build. CI Build & Verify PASS; SSH deploy fails (missing DEPLOY_HOST). Use Publish Dist Artifact workflow artifact + scripts/deploy-dist-artifact.sh on server.",
+      "resolution": "Configure DEPLOY_HOST/DEPLOY_USER/DEPLOY_SSH_KEY in GitHub production environment, OR download courtaccess-dist artifact from Actions run 28748522014 and run deploy-dist-artifact.sh on server",
       "owner": "engineering",
       "blocks": ["production-verification", "dashboard-screenshots", "v1-certification"]
     },

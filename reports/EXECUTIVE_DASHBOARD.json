@@ -1,6 +1,6 @@
 {
   "directive": "Master Production Directive v19.0",
-  "generatedAt": "2026-07-05T17:07:35.754Z",
+  "generatedAt": "2026-07-05T17:14:09.686Z",
   "blockerCount": 6,
   "overallCompletionPercent": 79.4,
   "productionWebsitePercent": 0,
@@ -111,7 +111,7 @@
       "priority": 1,
       "item": "Production deployment",
       "status": "in_progress",
-      "impact": "courtaccess.net serves stale June 26 build. dev merged and pushed; CI deploy failed on lockfile sync."
+      "impact": "courtaccess.net serves stale June 26 build. CI Build & Verify PASS; SSH deploy fails (missing DEPLOY_HOST). Use Publish Dist Artifact workflow artifact + scripts/deploy-dist-artifact.sh on server."
     },
     {
       "priority": 2,

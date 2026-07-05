@@ -14,18 +14,19 @@ import {
 import { workspacePath, fileExists } from '../src/productionGates/gateUtils.js';
 
 describe('Release Wave 1 — Resource Permissions', () => {
-  it('defines all seven permission levels', () => {
+  it('defines Program 5A permission levels (10 actionable + none + admin alias)', () => {
     assert.deepEqual([...PERMISSION_LEVELS], [
-      'none', 'view', 'comment', 'upload', 'edit', 'approve', 'admin',
+      'none', 'view', 'comment', 'upload', 'edit', 'approve',
+      'publish', 'export', 'share', 'delete', 'administer', 'admin',
     ]);
   });
 
-  it('defines expanded resource scopes', () => {
+  it('defines expanded resource scopes including Program 5A hierarchy', () => {
     assert.ok(RESOURCE_SCOPES.includes('case'));
-    assert.ok(RESOURCE_SCOPES.includes('charge'));
-    assert.ok(RESOURCE_SCOPES.includes('lead'));
-    assert.ok(RESOURCE_SCOPES.includes('ocr'));
-    assert.ok(RESOURCE_SCOPES.includes('office'));
+    assert.ok(RESOURCE_SCOPES.includes('folder'));
+    assert.ok(RESOURCE_SCOPES.includes('knowledge_graph'));
+    assert.ok(RESOURCE_SCOPES.includes('data_result'));
+    assert.ok(RESOURCE_SCOPES.includes('workspace'));
     assert.equal(ENFORCED_RESOURCE_SCOPES.length, 17);
   });
 

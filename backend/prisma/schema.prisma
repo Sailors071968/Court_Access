@@ -20,6 +20,7 @@ model User {
   name          String
   passwordHash  String
   role          String   @default("staff") // admin | attorney | investigator | staff | defendant
+  defaultRole   String?  // Program 2A onboarding role (attorney | criminal_investigator | ...)
   tenantId      String
   clientId      String?  // Links defendant portal users to Client record
   officeId      String?
@@ -42,7 +43,7 @@ model User {
   sentMessages  CaseMessage[] @relation("MessageSender")
   orgMessages   OrgInternalMessage[] @relation("OrgMessageSender")
   client        Client?  @relation(fields: [clientId], references: [clientId])
-  organizationMembership OrganizationMember?
+  organizationMemberships OrganizationMember[]
   personnelProfile PersonnelProfile?
   accountSettings UserAccountSettings?
   office        OrganizationOffice? @relation(fields: [officeId], references: [officeId])
@@ -1434,9 +1435,10 @@ model OrganizationMember {
   memberId       String   @id @default(uuid())
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  userId         String   @unique
+  userId         String
   user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   role           String   // admin | attorney | investigator | staff
+  caseRole       String?  // Program 4A — role within a specific case context
   personnelType  String?  // attorney | investigator | paralegal | legal_assistant | office_admin | receptionist | expert_witness | contract_investigator
   officeId       String?
   office         OrganizationOffice? @relation(fields: [officeId], references: [officeId])
@@ -1448,7 +1450,9 @@ model OrganizationMember {
   invitedById    String?
   joinedAt       DateTime @default(now())
 
+  @@unique([organizationId, userId])
   @@index([organizationId])
+  @@index([userId])
   @@index([organizationId, role])
   @@map("organization_members")
 }
@@ -2541,4 +2545,71 @@ model DisclosurePackage {
   @@index([tenantId, caseId])
   @@index([recipientUserId])
   @@map("disclosure_packages")
+}
+
+// ---------------------------------------------------------------------------
+// Program 6A — Publication Engine (document copies, sets, audit)
+// ---------------------------------------------------------------------------
+
+model DocumentCopy {
+  copyId           String   @id @default(uuid())
+  tenantId         String
+  caseId           String
+  documentId       String
+  copyType         String   // original | working | redacted | publication
+  s3Key            String?
+  parentCopyId     String?
+  redactionId      String?
+  publicationSetId String?
+  immutable        Boolean  @default(false)
+  createdById      String
+  createdAt        DateTime @default(now())
+
+  @@index([tenantId, caseId, documentId])
+  @@index([copyType])
+  @@map("document_copies")
+}
+
+model PublicationSet {
+  setId         String   @id @default(uuid())
+  tenantId      String
+  caseId        String
+  name          String
+  profileName   String
+  status        String   @default("draft")
+  publishedById String?
+  publishedAt   DateTime?
+  createdAt     DateTime @default(now())
+  items         PublicationSetItem[]
+
+  @@index([tenantId, caseId])
+  @@map("publication_sets")
+}
+
+model PublicationSetItem {
+  itemId            String   @id @default(uuid())
+  setId             String
+  set               PublicationSet @relation(fields: [setId], references: [setId], onDelete: Cascade)
+  documentId        String
+  redactionId       String?
+  publicationCopyId String?
+
+  @@index([setId])
+  @@map("publication_set_items")
+}
+
+model PublicationAuditLog {
+  auditId    String   @id @default(uuid())
+  tenantId   String
+  caseId     String
+  action     String
+  entityType String
+  entityId   String
+  actorId    String
+  metadata   String   @default("{}")
+  createdAt  DateTime @default(now())
+
+  @@index([tenantId, caseId])
+  @@index([entityType, entityId])
+  @@map("publication_audit_logs")
 }

@@ -42,6 +42,7 @@ import { RegisterPage } from './pages/auth/RegisterPage';
 import { ForgotPasswordPage } from './pages/auth/ForgotPasswordPage';
 import { ResetPasswordPage } from './pages/auth/ResetPasswordPage';
 import { VerifyEmailPage } from './pages/auth/VerifyEmailPage';
+import { RoleOnboardingPage } from './pages/onboarding/RoleOnboardingPage';
 import { AcceptInvitationPage } from './pages/auth/AcceptInvitationPage';
 import { FirmOperatingPlatformPage } from './pages/organization/FirmOperatingPlatformPage';
 import { OrganizationSettingsPage } from './pages/organization/OrganizationSettingsPage';
@@ -156,6 +157,7 @@ function App() {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/reset-password" element={<ResetPasswordPage />} />
         <Route path="/verify-email" element={<VerifyEmailPage />} />
+        <Route path="/onboarding" element={<RoleOnboardingPage />} />
         <Route path="/accept-invitation" element={<AcceptInvitationPage />} />
         <Route path="/organization/onboarding" element={<OrganizationOnboardingPage />} />
 

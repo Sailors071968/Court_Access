@@ -11,6 +11,8 @@ import {
   mapSubscriptionStatusForClient,
   permissionSatisfies,
   UNIVERSAL_PLATFORM_CAPABILITIES,
+  PERMISSION_LEVELS,
+  RESOURCE_SCOPES,
 } from '../src/membership/universalMembership.js';
 
 describe('Program 1 — Universal Membership Model', () => {
@@ -20,8 +22,8 @@ describe('Program 1 — Universal Membership Model', () => {
     assert.equal(UNIVERSAL_PLATFORM_CAPABILITIES.length >= 15, true);
   });
 
-  it('delegated user limit is 5', () => {
-    assert.equal(DELEGATED_USER_LIMIT, 5);
+  it('organizations support unlimited members (Program 4A)', () => {
+    assert.equal(DELEGATED_USER_LIMIT, null);
   });
 
   it('normalizes legacy plan IDs', () => {
@@ -40,9 +42,15 @@ describe('Program 1 — Universal Membership Model', () => {
     assert.equal(mapSubscriptionStatusForClient('active'), 'active');
   });
 
-  it('evaluates permission levels', () => {
-    assert.equal(permissionSatisfies('admin', 'view'), true);
+  it('evaluates permission levels including Program 5A publish/export', () => {
+    assert.equal(permissionSatisfies('administer', 'view'), true);
+    assert.equal(permissionSatisfies('admin', 'publish'), true);
     assert.equal(permissionSatisfies('view', 'edit'), false);
-    assert.equal(permissionSatisfies('edit', 'edit'), true);
+    assert.equal(permissionSatisfies('publish', 'export'), false);
+    assert.equal(permissionSatisfies('export', 'publish'), true);
+    assert.ok(PERMISSION_LEVELS.includes('publish'));
+    assert.ok(PERMISSION_LEVELS.includes('administer'));
+    assert.ok(RESOURCE_SCOPES.includes('folder'));
+    assert.ok(RESOURCE_SCOPES.includes('knowledge_graph'));
   });
 });

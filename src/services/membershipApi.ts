@@ -33,7 +33,7 @@ export interface MembershipAccount {
   } | null;
   settings: Record<string, unknown> | null;
   delegatedUsers: number;
-  delegatedUserLimit: number;
+  delegatedUserLimit: number | null;
   universalCapabilities: boolean;
   plans: Array<{
     id: string;

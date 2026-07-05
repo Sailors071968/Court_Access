@@ -1,16 +1,12 @@
 // ============================================
-// Court Access — Register Page
+// Court Access — Register Page (Program 2A)
 // ============================================
 
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 import { Scale, Tag, CheckCircle2, XCircle } from 'lucide-react';
-import type { UserRole } from '../../types';
-
-// ---------------------------------------------------------------------------
-// Discount code validation via backend API
-// ---------------------------------------------------------------------------
+import { REGISTRATION_ROLE_OPTIONS, type DefaultRole } from '../../config/roleOnboarding';
 
 interface DiscountValidation {
   valid: boolean;
@@ -38,7 +34,7 @@ export function RegisterPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [role, setRole] = useState<UserRole>('attorney');
+  const [defaultRole, setDefaultRole] = useState<DefaultRole>('attorney');
   const [discountCode, setDiscountCode] = useState('');
   const [discountResult, setDiscountResult] = useState<DiscountValidation | null>(null);
   const [validatingDiscount, setValidatingDiscount] = useState(false);
@@ -47,6 +43,8 @@ export function RegisterPage() {
   const [error, setError] = useState('');
   const { register, isLoading } = useAuthStore();
   const navigate = useNavigate();
+
+  const selectedRole = REGISTRATION_ROLE_OPTIONS.find((r) => r.value === defaultRole);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -64,9 +62,8 @@ export function RegisterPage() {
       return;
     }
     try {
-      await register(name, email, password, role, { termsAccepted, privacyAccepted });
+      const result = await register(name, email, password, defaultRole, { termsAccepted, privacyAccepted });
 
-      // Apply discount code via backend (deducts usage)
       if (discountCode.trim() && discountResult?.valid) {
         try {
           const token = localStorage.getItem('court-access-token');
@@ -79,11 +76,12 @@ export function RegisterPage() {
             body: JSON.stringify({ code: discountCode.trim() }),
           });
         } catch {
-          // Non-critical — discount was validated, apply failure is logged server-side
+          /* non-critical */
         }
       }
 
-      navigate('/pricing');
+      const nextRoute = result?.onboarding?.postRegistrationRoute ?? '/onboarding';
+      navigate(nextRoute);
     } catch {
       setError('Registration failed. Please try again.');
     }
@@ -99,7 +97,7 @@ export function RegisterPage() {
             </div>
             <h1 className="text-3xl font-bold text-white">Court Access</h1>
           </div>
-          <p className="text-slate-400">Create your account</p>
+          <p className="text-slate-400">Create your account — full platform access for every subscriber</p>
         </div>
 
         <div className="bg-white rounded-2xl shadow-xl p-8">
@@ -119,13 +117,25 @@ export function RegisterPage() {
               <input id="reg-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="you@courtaccess.com" required />
             </div>
             <div>
-              <label htmlFor="role" className="block text-sm font-medium text-gray-700 mb-1">Role</label>
-              <select id="role" value={role} onChange={(e) => setRole(e.target.value as UserRole)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
-                <option value="attorney">Attorney</option>
-                <option value="investigator">Investigator</option>
-                <option value="staff">Staff</option>
-                <option value="defendant">Defendant</option>
+              <label htmlFor="defaultRole" className="block text-sm font-medium text-gray-700 mb-1">
+                Your role
+              </label>
+              <select
+                id="defaultRole"
+                value={defaultRole}
+                onChange={(e) => setDefaultRole(e.target.value as DefaultRole)}
+                className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+              >
+                {REGISTRATION_ROLE_OPTIONS.map((opt) => (
+                  <option key={opt.value} value={opt.value}>{opt.label}</option>
+                ))}
               </select>
+              {selectedRole && (
+                <p className="mt-1.5 text-xs text-gray-500">{selectedRole.description}</p>
+              )}
+              <p className="mt-1 text-xs text-amber-700">
+                Your role configures your dashboard and onboarding — it does not limit platform capabilities.
+              </p>
             </div>
             <div>
               <label htmlFor="reg-password" className="block text-sm font-medium text-gray-700 mb-1">Password</label>
@@ -135,7 +145,6 @@ export function RegisterPage() {
               <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700 mb-1">Confirm password</label>
               <input id="confirm-password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Re-enter password" required autoComplete="new-password" />
             </div>
-            {/* Phase 223: Discount code field */}
             <div>
               <label htmlFor="discount-code" className="block text-sm font-medium text-gray-700 mb-1">Discount code <span className="text-gray-400 font-normal">(optional)</span></label>
               <div className="flex gap-2">
@@ -180,30 +189,12 @@ export function RegisterPage() {
 
             <div className="space-y-3 pt-2 border-t border-gray-100">
               <label className="flex items-start gap-3 text-sm text-gray-600">
-                <input
-                  type="checkbox"
-                  checked={termsAccepted}
-                  onChange={(e) => setTermsAccepted(e.target.checked)}
-                  className="mt-1 rounded border-gray-300 text-amber-600 focus:ring-amber-500"
-                  required
-                />
-                <span>
-                  I agree to the{' '}
-                  <Link to="/terms" target="_blank" className="text-amber-600 hover:underline">Terms of Service</Link>
-                </span>
+                <input type="checkbox" checked={termsAccepted} onChange={(e) => setTermsAccepted(e.target.checked)} className="mt-1 rounded border-gray-300 text-amber-600 focus:ring-amber-500" required />
+                <span>I agree to the <Link to="/terms" target="_blank" className="text-amber-600 hover:underline">Terms of Service</Link></span>
               </label>
               <label className="flex items-start gap-3 text-sm text-gray-600">
-                <input
-                  type="checkbox"
-                  checked={privacyAccepted}
-                  onChange={(e) => setPrivacyAccepted(e.target.checked)}
-                  className="mt-1 rounded border-gray-300 text-amber-600 focus:ring-amber-500"
-                  required
-                />
-                <span>
-                  I agree to the{' '}
-                  <Link to="/privacy" target="_blank" className="text-amber-600 hover:underline">Privacy Policy</Link>
-                </span>
+                <input type="checkbox" checked={privacyAccepted} onChange={(e) => setPrivacyAccepted(e.target.checked)} className="mt-1 rounded border-gray-300 text-amber-600 focus:ring-amber-500" required />
+                <span>I agree to the <Link to="/privacy" target="_blank" className="text-amber-600 hover:underline">Privacy Policy</Link></span>
               </label>
             </div>
 

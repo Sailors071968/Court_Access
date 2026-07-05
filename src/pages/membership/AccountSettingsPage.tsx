@@ -156,7 +156,9 @@ export function AccountSettingsPage() {
           <h2 className="text-lg font-semibold text-gray-900">Delegated Access</h2>
         </div>
         <p className="text-sm text-gray-600 mb-4">
-          Invite up to {account?.delegatedUserLimit ?? 5} additional users with individual permissions.
+          {account?.delegatedUserLimit == null
+            ? 'Invite unlimited users with individual permissions.'
+            : `Invite up to ${account.delegatedUserLimit} additional users with individual permissions.`}
           Currently: {account?.delegatedUsers ?? 0} delegated user(s).
         </p>
         <div className="flex flex-wrap gap-3">

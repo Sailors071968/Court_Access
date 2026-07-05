@@ -4,7 +4,7 @@
 
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import type { User, UserRole } from '../types';
+import type { User, UserRole, DefaultRole } from '../types';
 import { ROLE_PERMISSIONS } from '../constants';
 
 type SubscriptionStatus = 'active' | 'trial' | 'trialing' | 'past_due' | 'cancelled' | 'none';
@@ -16,7 +16,7 @@ interface AuthState {
   subscriptionStatus: SubscriptionStatus;
   login: (email: string, password: string) => Promise<{ mfaRequired?: boolean; mfaSessionToken?: string }>;
   completeMfaLogin: (mfaSessionToken: string, code: string) => Promise<void>;
-  register: (name: string, email: string, password: string, role: UserRole, options?: { termsAccepted?: boolean; privacyAccepted?: boolean }) => Promise<void>;
+  register: (name: string, email: string, password: string, defaultRole: DefaultRole, options?: { termsAccepted?: boolean; privacyAccepted?: boolean }) => Promise<{ onboarding?: { postRegistrationRoute?: string; defaultDashboard?: string } } | void>;
   logout: () => void;
   switchRole: (role: UserRole) => void;
   setSubscriptionStatus: (status: SubscriptionStatus) => void;
@@ -105,7 +105,7 @@ export const useAuthStore = create<AuthState>()(persist((set, get) => ({
     }
   },
 
-  register: async (name, email, password, role, options) => {
+  register: async (name, email, password, defaultRole, options) => {
     set({ isLoading: true });
     try {
       const res = await fetch(`${API_BASE}/auth/register`, {
@@ -115,7 +115,7 @@ export const useAuthStore = create<AuthState>()(persist((set, get) => ({
           name,
           email,
           password,
-          role,
+          defaultRole,
           termsAccepted: options?.termsAccepted ?? false,
           privacyAccepted: options?.privacyAccepted ?? false,
         }),
@@ -132,11 +132,18 @@ export const useAuthStore = create<AuthState>()(persist((set, get) => ({
         localStorage.setItem('court-access-refresh-token', data.refreshToken);
       }
       set({
-        user: { id: data.user.userId, name: data.user.name || name, email: data.user.email, role: data.user.role },
+        user: {
+          id: data.user.userId,
+          name: data.user.name || name,
+          email: data.user.email,
+          role: data.user.role,
+          defaultRole: data.user.defaultRole,
+        },
         isAuthenticated: true,
         isLoading: false,
         subscriptionStatus: (data.user.subscriptionStatus as SubscriptionStatus) || 'none',
       });
+      return { onboarding: data.onboarding };
     } catch (err) {
       set({ isLoading: false });
       throw err;

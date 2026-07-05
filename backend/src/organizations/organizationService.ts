@@ -169,15 +169,22 @@ export async function createInvitation(
   const pendingInvites = await prisma.organizationInvitation.count({
     where: { organizationId: tenantId, status: 'pending' },
   });
-  const additionalMembers = Math.max(0, memberCount - 1);
-  if (additionalMembers + pendingInvites >= DELEGATED_USER_LIMIT) {
-    throw new Error(`Delegated user limit reached (${DELEGATED_USER_LIMIT} additional users)`);
+  if (DELEGATED_USER_LIMIT !== null) {
+    const additionalMembers = Math.max(0, memberCount - 1);
+    if (additionalMembers + pendingInvites >= DELEGATED_USER_LIMIT) {
+      throw new Error(`Delegated user limit reached (${DELEGATED_USER_LIMIT} additional users)`);
+    }
   }
 
   const email = body.email.trim().toLowerCase();
   const existingUser = await prisma.user.findUnique({ where: { email } });
-  if (existingUser?.tenantId === tenantId) {
-    throw new Error('User is already a member of this organization');
+  if (existingUser) {
+    const existingMember = await prisma.organizationMember.findFirst({
+      where: { organizationId: tenantId, userId: existingUser.id, status: 'active' },
+    });
+    if (existingMember) {
+      throw new Error('User is already a member of this organization');
+    }
   }
 
   await prisma.organizationInvitation.updateMany({

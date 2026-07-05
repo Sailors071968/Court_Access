@@ -11,6 +11,10 @@ import bcrypt from 'bcrypt';
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import prisma from '../lib/prisma.js';
 import { mapSubscriptionStatusForClient } from '../membership/universalMembership.js';
+import {
+  validateDefaultRole,
+  resolveRoleOnboarding,
+} from '../membership/roleOnboarding.js';
 
 const BCRYPT_SALT_ROUNDS = 12;
 
@@ -521,6 +525,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
       email: string;
       password: string;
       role?: UserRole;
+      defaultRole?: string;
       termsAccepted?: boolean;
       privacyAccepted?: boolean;
     };
@@ -555,9 +560,16 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     }
 
     const passwordHash = await bcrypt.hash(password, BCRYPT_SALT_ROUNDS);
-    const userRole = role || 'staff';
+
+    const defaultRoleInput = body.defaultRole ?? body.role ?? 'other';
+    const onboarding = validateDefaultRole(defaultRoleInput)
+      ? resolveRoleOnboarding(defaultRoleInput)
+      : resolveRoleOnboarding('other');
+    const userRole = onboarding.platformRole as UserRole;
     const userName = name || email.split('@')[0];
     const tenantId = `tenant-${crypto.randomUUID()}`;
+    const memberOrgRole =
+      userRole === 'defendant' || userRole === 'staff' ? 'staff' : userRole === 'admin' ? 'admin' : userRole;
 
     const now = new Date();
     const trialEnd = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
@@ -570,11 +582,31 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
           name: userName,
           passwordHash,
           role: userRole,
+          defaultRole: onboarding.defaultRole,
           tenantId,
           termsAcceptedAt: now,
           privacyAcceptedAt: now,
         },
       });
+
+      let clientId: string | null = null;
+      if (onboarding.defaultRole === 'criminal_defendant') {
+        const client = await tx.client.create({
+          data: {
+            tenantId,
+            ownerId: created.id,
+            firstName: userName.split(' ')[0] ?? userName,
+            lastName: userName.split(' ').slice(1).join(' ') || 'Defendant',
+            email,
+            status: 'active',
+          },
+        });
+        clientId = client.clientId;
+        await tx.user.update({
+          where: { id: created.id },
+          data: { clientId: client.clientId },
+        });
+      }
 
       await tx.subscription.create({
         data: {
@@ -609,8 +641,8 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
         data: {
           id: tenantId,
           name: `${userName}'s Organization`,
-          orgType: userRole === 'attorney' ? 'law_firm' : 'solo',
-          onboardingStep: 'provisioned',
+          orgType: onboarding.orgType,
+          onboardingStep: 'created',
         },
       });
 
@@ -618,12 +650,13 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
         data: {
           organizationId: tenantId,
           userId: created.id,
-          role: userRole,
+          role: memberOrgRole,
+          personnelType: onboarding.personnelType,
           status: 'active',
         },
       });
 
-      return created;
+      return { ...created, clientId };
     });
 
     const { createEmailVerificationToken, sendVerificationEmail } = await import('./identityService.js');
@@ -651,10 +684,20 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
         email,
         name: userName,
         role: userRole,
+        defaultRole: onboarding.defaultRole,
         subscriptionStatus: mapSubscriptionStatusForClient('trialing'),
         subscriptionTier: 'trial',
         emailVerified: false,
         mfaEnabled: false,
+      },
+      onboarding: {
+        defaultRole: onboarding.defaultRole,
+        label: onboarding.label,
+        postRegistrationRoute: onboarding.postRegistrationRoute,
+        defaultDashboard: onboarding.defaultDashboard,
+        onboardingSteps: onboarding.onboardingSteps,
+        recommendedWorkflows: onboarding.recommendedWorkflows,
+        navigationHighlights: onboarding.navigationHighlights,
       },
       message: 'Registration successful. Please verify your email.',
     };

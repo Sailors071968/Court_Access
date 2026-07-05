@@ -13,6 +13,7 @@ import {
   filterByAccessibleCases,
 } from './permissionResolver.js';
 import type { PermissionLevel, ResourceScope } from './universalMembership.js';
+import { LEVEL_RANK } from './universalMembership.js';
 
 export interface AuthUser {
   userId: string;
@@ -141,10 +142,7 @@ export async function requireScopeAccess(
 }
 
 function minLevel(a: PermissionLevel, b: PermissionLevel): PermissionLevel {
-  const ranks: Record<PermissionLevel, number> = {
-    none: 0, view: 1, comment: 2, upload: 3, edit: 4, approve: 5, admin: 6,
-  };
-  return (ranks[a] ?? 0) <= (ranks[b] ?? 0) ? a : b;
+  return (LEVEL_RANK[a] ?? 0) <= (LEVEL_RANK[b] ?? 0) ? a : b;
 }
 
 /** Prisma where clause for listing cases with permission + defendant portal scoping. */

@@ -4,7 +4,8 @@
 // Access restrictions apply only through ownership and delegated permissions.
 // ============================================================================
 
-export const DELEGATED_USER_LIMIT = 5;
+/** Program 4A — Organizations support unlimited members. No artificial cap. */
+export const DELEGATED_USER_LIMIT: number | null = null;
 export const TRIAL_PERIOD_DAYS = 30;
 
 /** Every subscriber receives all platform capabilities regardless of plan. */
@@ -142,6 +143,7 @@ export function mapSubscriptionStatusForClient(status: string): string {
   return status;
 }
 
+/** Program 5A — Case-level permission engine (10 actionable levels + none). */
 export const PERMISSION_LEVELS = [
   'none',
   'view',
@@ -149,25 +151,37 @@ export const PERMISSION_LEVELS = [
   'upload',
   'edit',
   'approve',
-  'admin',
+  'publish',
+  'export',
+  'share',
+  'delete',
+  'administer',
+  'admin', // legacy alias for administer
 ] as const;
 
 export type PermissionLevel = (typeof PERMISSION_LEVELS)[number];
 
+/** Program 5A — Permission scopes from organization through specific data results. */
 export const RESOURCE_SCOPES = [
   'organization',
+  'workspace',
   'office',
   'case',
+  'folder',
   'charge',
   'document',
+  'page',
   'ocr',
   'evidence',
   'timeline',
   'witness',
   'lead',
   'report',
+  'ai_analysis',
   'authority',
   'calcrim',
+  'knowledge_graph',
+  'data_result',
   'notes',
   'communications',
   'billing',
@@ -183,7 +197,12 @@ const LEVEL_RANK: Record<PermissionLevel, number> = {
   upload: 3,
   edit: 4,
   approve: 5,
-  admin: 6,
+  publish: 6,
+  export: 7,
+  share: 8,
+  delete: 9,
+  administer: 10,
+  admin: 10,
 };
 
 export { LEVEL_RANK };

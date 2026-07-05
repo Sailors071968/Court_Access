@@ -81,11 +81,23 @@ export type {
 
 export type UserRole = 'investigator' | 'attorney' | 'admin' | 'staff' | 'defendant';
 
+export type DefaultRole =
+  | 'attorney'
+  | 'criminal_investigator'
+  | 'criminal_defendant'
+  | 'paralegal'
+  | 'secretary'
+  | 'expert_witness'
+  | 'family_member'
+  | 'law_office_administrator'
+  | 'other';
+
 export interface User {
   id: string;
   name: string;
   email: string;
   role: UserRole;
+  defaultRole?: DefaultRole;
   avatar?: string;
   phone?: string;
 }

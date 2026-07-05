@@ -16,6 +16,17 @@ import { listAccessibleCaseIds, getEffectivePermission } from './permissionResol
 import { requireCaseAccess, sendForbidden } from './resourceAuthMiddleware.js';
 import { createRedactionVersion, listRedactionVersions } from './redactionService.js';
 import { createDisclosurePackage, listDisclosurePackages, listSharedAccessForUser } from './disclosureService.js';
+import { resolveRoleOnboarding } from './roleOnboarding.js';
+import {
+  createPublicationSet,
+  listPublicationSets,
+  publishPublicationSet,
+  listDocumentCopies,
+  ensureDocumentCopyChain,
+  publishDisclosurePackageWithAudit,
+  publishRedactionWithAudit,
+} from './publicationService.js';
+import { PERMISSION_LEVELS, RESOURCE_SCOPES } from './universalMembership.js';
 
 function authCtx(request: AuthenticatedRequest) {
   const user = request.user;
@@ -32,7 +43,7 @@ export async function registerMembershipRoutes(app: FastifyInstance): Promise<vo
         prisma.user.findUnique({
           where: { id: ctx.userId },
           select: {
-            id: true, email: true, name: true, role: true,
+            id: true, email: true, name: true, role: true, defaultRole: true,
             emailVerifiedAt: true, termsAcceptedAt: true, privacyAcceptedAt: true, mfaEnabled: true,
           },
         }),
@@ -234,6 +245,155 @@ export async function registerMembershipRoutes(app: FastifyInstance): Promise<vo
       return reply.code(201).send({ package: pkg });
     } catch (err) {
       return reply.code(400).send({ error: err instanceof Error ? err.message : 'Disclosure failed' });
+    }
+  });
+
+  // POST /api/cases/:caseId/disclosures/:packageId/publish
+  app.post('/api/cases/:caseId/disclosures/:packageId/publish', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    try {
+      const ctx = authCtx(request);
+      const { caseId, packageId } = request.params as { caseId: string; packageId: string };
+      if (!(await requireCaseAccess(ctx, caseId, 'publish'))) return sendForbidden(reply);
+      const pkg = await publishDisclosurePackageWithAudit(packageId, ctx.userId);
+      return { package: pkg };
+    } catch (err) {
+      return reply.code(400).send({ error: err instanceof Error ? err.message : 'Publish failed' });
+    }
+  });
+
+  // POST /api/cases/:caseId/documents/:documentId/redactions/:redactionId/publish
+  app.post('/api/cases/:caseId/documents/:documentId/redactions/:redactionId/publish', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    try {
+      const ctx = authCtx(request);
+      const { caseId } = request.params as { caseId: string; redactionId: string };
+      if (!(await requireCaseAccess(ctx, caseId, 'publish'))) return sendForbidden(reply);
+      const { redactionId } = request.params as { redactionId: string };
+      const redaction = await publishRedactionWithAudit(redactionId, ctx.userId);
+      return { redaction };
+    } catch (err) {
+      return reply.code(400).send({ error: err instanceof Error ? err.message : 'Publish failed' });
+    }
+  });
+
+  // GET /api/membership/onboarding — Program 2A role-based onboarding config
+  app.get('/api/membership/onboarding', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    try {
+      const ctx = authCtx(request);
+      const user = await prisma.user.findUnique({
+        where: { id: ctx.userId },
+        select: { defaultRole: true, role: true },
+      });
+      if (!user) return reply.code(404).send({ error: 'User not found' });
+      const config = resolveRoleOnboarding(user.defaultRole ?? user.role ?? 'other');
+      return {
+        defaultRole: config.defaultRole,
+        label: config.label,
+        description: config.description,
+        platformRole: config.platformRole,
+        defaultDashboard: config.defaultDashboard,
+        postRegistrationRoute: config.postRegistrationRoute,
+        onboardingSteps: config.onboardingSteps,
+        recommendedWorkflows: config.recommendedWorkflows,
+        navigationHighlights: config.navigationHighlights,
+        universalCapabilities: true,
+      };
+    } catch {
+      return reply.code(401).send({ error: 'Unauthorized' });
+    }
+  });
+
+  // GET /api/membership/permission-model — Program 5A
+  app.get('/api/membership/permission-model', async () => ({
+    levels: PERMISSION_LEVELS,
+    scopes: RESOURCE_SCOPES,
+    hierarchy: [
+      'organization', 'workspace', 'case', 'folder', 'evidence', 'document',
+      'page', 'ai_analysis', 'report', 'knowledge_graph', 'data_result',
+    ],
+  }));
+
+  // Publication sets — Program 6A
+  app.get('/api/cases/:caseId/publication-sets', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    try {
+      const ctx = authCtx(request);
+      const { caseId } = request.params as { caseId: string };
+      if (!(await requireCaseAccess(ctx, caseId, 'view'))) return sendForbidden(reply);
+      const sets = await listPublicationSets(ctx.tenantId, caseId);
+      return { sets };
+    } catch {
+      return reply.code(401).send({ error: 'Unauthorized' });
+    }
+  });
+
+  app.post('/api/cases/:caseId/publication-sets', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    try {
+      const ctx = authCtx(request);
+      const { caseId } = request.params as { caseId: string };
+      if (!(await requireCaseAccess(ctx, caseId, 'approve'))) return sendForbidden(reply);
+      const body = request.body as {
+        name: string;
+        profileName: string;
+        documentIds: string[];
+        redactionIds?: Record<string, string>;
+      };
+      const set = await createPublicationSet({
+        tenantId: ctx.tenantId,
+        caseId,
+        name: body.name,
+        profileName: body.profileName,
+        documentIds: body.documentIds,
+        redactionIds: body.redactionIds,
+        createdById: ctx.userId,
+      });
+      return reply.code(201).send({ set });
+    } catch (err) {
+      return reply.code(400).send({ error: err instanceof Error ? err.message : 'Publication set failed' });
+    }
+  });
+
+  app.post('/api/cases/:caseId/publication-sets/:setId/publish', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    try {
+      const ctx = authCtx(request);
+      const { caseId, setId } = request.params as { caseId: string; setId: string };
+      if (!(await requireCaseAccess(ctx, caseId, 'publish'))) return sendForbidden(reply);
+      const result = await publishPublicationSet(setId, ctx.userId);
+      return result;
+    } catch (err) {
+      return reply.code(400).send({ error: err instanceof Error ? err.message : 'Publish failed' });
+    }
+  });
+
+  app.get('/api/cases/:caseId/documents/:documentId/copies', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    try {
+      const ctx = authCtx(request);
+      const { caseId, documentId } = request.params as { caseId: string; documentId: string };
+      if (!(await requireCaseAccess(ctx, caseId, 'view'))) return sendForbidden(reply);
+      const copies = await listDocumentCopies(ctx.tenantId, caseId, documentId);
+      return { copies };
+    } catch {
+      return reply.code(401).send({ error: 'Unauthorized' });
+    }
+  });
+
+  app.post('/api/cases/:caseId/documents/:documentId/copies/original', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    try {
+      const ctx = authCtx(request);
+      const { caseId, documentId } = request.params as { caseId: string; documentId: string };
+      if (!(await requireCaseAccess(ctx, caseId, 'upload'))) return sendForbidden(reply);
+      const body = request.body as { s3Key?: string };
+      const evidence = await prisma.evidence.findFirst({
+        where: { evidenceId: documentId, caseId, tenantId: ctx.tenantId },
+      });
+      const copy = await ensureDocumentCopyChain(
+        ctx.tenantId,
+        caseId,
+        documentId,
+        body.s3Key ?? evidence?.s3Key ?? null,
+        ctx.userId,
+      );
+      return reply.code(201).send({ copy });
+    } catch (err) {
+      return reply.code(400).send({ error: err instanceof Error ? err.message : 'Copy creation failed' });
     }
   });
 }

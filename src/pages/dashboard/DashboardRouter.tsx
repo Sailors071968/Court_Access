@@ -1,23 +1,35 @@
 // ============================================
-// Court Access — Dashboard Router
-// Role-based dashboard rendering
-// No duplicated layout trees — shared AppLayout wrapper
+// Court Access — Dashboard Router (Program 2A)
+// Role-based default dashboard — capabilities are never restricted.
 // ============================================
 
+import { Navigate } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 import { StaffDashboard } from './StaffDashboard';
-import { DefendantDashboard } from './DefendantDashboard';
+import { getDefaultDashboardForRole } from '../../config/roleOnboarding';
 
 export function DashboardRouter() {
   const { user } = useAuthStore();
 
   if (!user) return null;
 
-  // Defendant role gets simplified transparency dashboard
-  if (user.role === 'defendant') {
-    return <DefendantDashboard />;
+  const defaultRole = user.defaultRole;
+  const portalRoles = new Set(['criminal_defendant', 'family_member']);
+
+  if (defaultRole && portalRoles.has(defaultRole)) {
+    return <Navigate to="/client-portal" replace />;
   }
 
-  // All staff roles (investigator, attorney, admin, staff) get operational dashboard
+  if (user.role === 'defendant') {
+    return <Navigate to="/client-portal" replace />;
+  }
+
+  if (defaultRole) {
+    const dashboard = getDefaultDashboardForRole(defaultRole);
+    if (dashboard === '/client-portal') {
+      return <Navigate to="/client-portal" replace />;
+    }
+  }
+
   return <StaffDashboard />;
 }

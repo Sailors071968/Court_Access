@@ -14,6 +14,26 @@ export interface ProgramDefinition {
 
 export const PRODUCTION_COMPLETION_PROGRAMS: ProgramDefinition[] = [
   {
+    id: 'PROGRAM-01',
+    number: 1,
+    name: 'Universal Membership Platform',
+    capabilities: [
+      { id: 'P01-01', name: 'Universal membership model', path: 'backend/src/membership/universalMembership.ts' },
+      { id: 'P01-02', name: 'Account provisioning', path: 'backend/src/membership/accountProvisioningService.ts' },
+      { id: 'P01-03', name: 'Permission resolver', path: 'backend/src/membership/permissionResolver.ts' },
+      { id: 'P01-04', name: 'Membership API routes', path: 'backend/src/membership/membershipRoutes.ts' },
+      { id: 'P01-05', name: 'Document redaction service', path: 'backend/src/membership/redactionService.ts' },
+      { id: 'P01-06', name: 'Disclosure manager service', path: 'backend/src/membership/disclosureService.ts' },
+      { id: 'P01-07', name: 'Terms acceptance at registration', path: 'src/pages/auth/RegisterPage.tsx' },
+      { id: 'P01-08', name: 'Account settings UI', path: 'src/pages/membership/AccountSettingsPage.tsx' },
+      { id: 'P01-09', name: 'Shared access dashboard', path: 'src/pages/membership/SharedAccessPage.tsx' },
+      { id: 'P01-10', name: 'Membership API client', path: 'src/services/membershipApi.ts' },
+      { id: 'P01-11', name: 'Stripe checkout wiring', path: 'src/pages/LandingPage.tsx' },
+      { id: 'P01-12', name: 'Delegated user limit', path: 'backend/src/organizations/organizationService.ts' },
+      { id: 'P01-13', name: 'Program 1 verification report', path: 'reports/PROGRAM_01_UNIVERSAL_MEMBERSHIP.md' },
+    ],
+  },
+  {
     id: 'PROGRAM-00',
     number: 0,
     name: 'Production Website',

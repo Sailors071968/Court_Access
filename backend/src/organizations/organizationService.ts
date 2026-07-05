@@ -6,6 +6,7 @@
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 import prisma from '../lib/prisma.js';
+import { DELEGATED_USER_LIMIT } from '../membership/universalMembership.js';
 import { logSecurityEvent } from '../security/authMiddleware.js';
 import type { UserRole } from '../security/authMiddleware.js';
 import {
@@ -161,6 +162,17 @@ export async function createInvitation(
   body: CreateInvitationBody,
 ) {
   if (!validateMemberRole(body.role)) throw new Error('Invalid invitation role');
+
+  const memberCount = await prisma.organizationMember.count({
+    where: { organizationId: tenantId, status: 'active' },
+  });
+  const pendingInvites = await prisma.organizationInvitation.count({
+    where: { organizationId: tenantId, status: 'pending' },
+  });
+  const additionalMembers = Math.max(0, memberCount - 1);
+  if (additionalMembers + pendingInvites >= DELEGATED_USER_LIMIT) {
+    throw new Error(`Delegated user limit reached (${DELEGATED_USER_LIMIT} additional users)`);
+  }
 
   const email = body.email.trim().toLowerCase();
   const existingUser = await prisma.user.findUnique({ where: { email } });

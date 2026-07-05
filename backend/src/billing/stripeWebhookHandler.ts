@@ -98,12 +98,27 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
       });
     }
 
-    const { planId } = request.body as { planId: string };
+    const { planId, billingInterval } = request.body as { planId: string; billingInterval?: 'month' | 'year' };
     if (!planId) return reply.code(400).send({ error: 'Missing planId' });
 
+    const interval = billingInterval === 'year' ? 'year' : 'month';
+
     const SUBSCRIPTION_PRICES: Record<string, string> = {
+      INDIVIDUAL: interval === 'year'
+        ? (process.env.STRIPE_PRICE_INDIVIDUAL_ANNUAL || process.env.STRIPE_PRICE_INDIVIDUAL || '')
+        : (process.env.STRIPE_PRICE_INDIVIDUAL_MONTHLY || process.env.STRIPE_PRICE_STARTER || ''),
+      STANDARD: interval === 'year'
+        ? (process.env.STRIPE_PRICE_STANDARD_ANNUAL || process.env.STRIPE_PRICE_STANDARD || '')
+        : (process.env.STRIPE_PRICE_STANDARD_MONTHLY || process.env.STRIPE_PRICE_PROFESSIONAL || ''),
+      COMPLEX_CASE: interval === 'year'
+        ? (process.env.STRIPE_PRICE_COMPLEX_ANNUAL || process.env.STRIPE_PRICE_COMPLEX || '')
+        : (process.env.STRIPE_PRICE_COMPLEX_MONTHLY || process.env.STRIPE_PRICE_ADVANCED || ''),
+      PROFESSIONAL: interval === 'year'
+        ? (process.env.STRIPE_PRICE_PROFESSIONAL_ANNUAL || process.env.STRIPE_PRICE_PROFESSIONAL_PLAN || '')
+        : (process.env.STRIPE_PRICE_PROFESSIONAL_MONTHLY || process.env.STRIPE_PRICE_LITIGATION || ''),
+      // Legacy plan IDs
       STARTER: process.env.STRIPE_PRICE_STARTER || '',
-      PROFESSIONAL: process.env.STRIPE_PRICE_PROFESSIONAL || '',
+      PROFESSIONAL_LEGACY: process.env.STRIPE_PRICE_PROFESSIONAL || '',
       ADVANCED_INVESTIGATOR: process.env.STRIPE_PRICE_ADVANCED || '',
       LITIGATION_INTELLIGENCE_PRO: process.env.STRIPE_PRICE_LITIGATION || '',
       ENTERPRISE_FIRM: process.env.STRIPE_PRICE_ENTERPRISE || '',
@@ -129,6 +144,7 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
     params.append('client_reference_id', userId);
     params.append('metadata[userId]', userId);
     params.append('metadata[planId]', planId);
+    params.append('metadata[billingInterval]', interval);
     if (!isCreditPack) {
       params.append('subscription_data[metadata][userId]', userId);
       params.append('subscription_data[metadata][planId]', planId);

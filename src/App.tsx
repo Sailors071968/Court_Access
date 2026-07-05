@@ -63,7 +63,8 @@ import { EvidenceRequestsDashboard } from './pages/dashboard/EvidenceRequestsDas
 import { CasesListPage } from './pages/CasesListPage';
 import { SearchPage } from './pages/SearchPage';
 import { NotificationsPage } from './pages/NotificationsPage';
-import { SettingsPage } from './pages/SettingsPage';
+import { AccountSettingsPage } from './pages/membership/AccountSettingsPage';
+import { SharedAccessPage } from './pages/membership/SharedAccessPage';
 import { AdminPage } from './pages/admin/AdminPage';
 import { OperationsCommandCenter } from './pages/admin/OperationsCommandCenter';
 
@@ -318,8 +319,16 @@ function App() {
           <Route
             path="settings"
             element={
-              <ProtectedRoute requiredPermission="canViewSettings">
-                <SettingsPage />
+              <ProtectedRoute>
+                <AccountSettingsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="shared-access"
+            element={
+              <ProtectedRoute>
+                <SharedAccessPage />
               </ProtectedRoute>
             }
           />

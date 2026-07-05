@@ -8,7 +8,8 @@ import { syncPlanCredits, findUserIdByStripeCustomer } from './stripeSyncService
 import type { SubscriptionPlanId } from './subscriptionService.js';
 import { setMonthlyCredits } from './aiCreditService.js';
 import { sendBillingEmail } from './billingEmailService.js';
-import { getPlanById } from './subscriptionService.js';
+import { mapPlanToTier, normalizePlanId, getUniversalPlan } from '../membership/universalMembership.js';
+import { provisionAfterPaidSubscription } from '../membership/accountProvisioningService.js';
 
 export interface StripeSubscriptionObject {
   id: string;
@@ -79,15 +80,8 @@ function mapStripePriceToTier(priceKey?: string): { planId: string; tier: string
 }
 
 function mapPlanIdToTier(planId?: string): { planId: string; tier: string } {
-  const mapping: Record<string, { planId: string; tier: string }> = {
-    FREE: { planId: 'FREE', tier: 'free' },
-    STARTER: { planId: 'STARTER', tier: 'starter' },
-    PROFESSIONAL: { planId: 'PROFESSIONAL', tier: 'professional' },
-    ADVANCED_INVESTIGATOR: { planId: 'ADVANCED_INVESTIGATOR', tier: 'advanced' },
-    LITIGATION_INTELLIGENCE_PRO: { planId: 'LITIGATION_INTELLIGENCE_PRO', tier: 'litigation' },
-    ENTERPRISE_FIRM: { planId: 'ENTERPRISE_FIRM', tier: 'enterprise' },
-  };
-  return mapping[planId ?? ''] ?? { planId: planId ?? 'FREE', tier: 'free' };
+  const normalized = normalizePlanId(planId ?? 'TRIAL');
+  return { planId: normalized, tier: mapPlanToTier(normalized) };
 }
 
 export async function isWebhookEventProcessed(eventId: string): Promise<boolean> {
@@ -153,8 +147,9 @@ export async function handleSubscriptionCreated(sub: StripeSubscriptionObject): 
   }
 
   void logSecurityEvent('STRIPE_SUBSCRIPTION_CREATED', userId, undefined, `Subscription ${subscriptionId}: ${mapped.tier}`);
-  const plan = getPlanById(mapped.planId as SubscriptionPlanId);
+  const plan = getUniversalPlan(mapped.planId);
   await sendBillingEmail(userId, 'subscription_created', { planName: plan?.name ?? mapped.tier, tier: mapped.tier });
+  await provisionAfterPaidSubscription(userId, mapped.planId);
 }
 
 export async function handleSubscriptionUpdated(sub: StripeSubscriptionObject): Promise<void> {
@@ -271,8 +266,9 @@ export async function handleCheckoutCompleted(session: StripeCheckoutSession): P
   }
 
   void logSecurityEvent('STRIPE_CHECKOUT_COMPLETED', userId, undefined, `Session ${session.id}: ${mapped.tier}`);
-  const plan = getPlanById(mapped.planId as SubscriptionPlanId);
+  const plan = getUniversalPlan(mapped.planId);
   await sendBillingEmail(userId, 'checkout_completed', { planId: mapped.planId, planName: plan?.name ?? mapped.tier });
+  await provisionAfterPaidSubscription(userId, mapped.planId);
 }
 
 export async function handleInvoicePaid(invoice: StripeInvoice): Promise<void> {

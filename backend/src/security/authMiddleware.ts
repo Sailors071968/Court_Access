@@ -10,6 +10,7 @@ import crypto from 'crypto';
 import bcrypt from 'bcrypt';
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import prisma from '../lib/prisma.js';
+import { mapSubscriptionStatusForClient } from '../membership/universalMembership.js';
 
 const BCRYPT_SALT_ROUNDS = 12;
 
@@ -505,7 +506,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
         email: user.email,
         name: user.name,
         role: user.role,
-        subscriptionStatus: sub?.subscriptionStatus ?? 'none',
+        subscriptionStatus: mapSubscriptionStatusForClient(sub?.subscriptionStatus ?? 'none'),
         subscriptionTier: sub?.subscriptionTier ?? 'free',
         emailVerified: Boolean(user.emailVerifiedAt),
         mfaEnabled: user.mfaEnabled,
@@ -515,10 +516,20 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
 
   // POST /api/auth/register
   app.post('/api/auth/register', async (request: FastifyRequest, reply: FastifyReply) => {
-    const body = request.body as { name?: string; email: string; password: string; role?: UserRole };
+    const body = request.body as {
+      name?: string;
+      email: string;
+      password: string;
+      role?: UserRole;
+      termsAccepted?: boolean;
+      privacyAccepted?: boolean;
+    };
 
     if (!body?.email || !body?.password) {
       return reply.code(400).send({ error: 'Email and password are required' });
+    }
+    if (!body.termsAccepted || !body.privacyAccepted) {
+      return reply.code(400).send({ error: 'You must accept the Terms of Service and Privacy Policy' });
     }
 
     // Normalize email: trim whitespace + lowercase
@@ -549,10 +560,9 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     const tenantId = `tenant-${crypto.randomUUID()}`;
 
     const now = new Date();
-    const endOfMonth = new Date(now.getFullYear(), now.getMonth() + 1, 1);
+    const trialEnd = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
 
-    // Atomic transaction: create user + default subscription + credit balance
-    // If any step fails, all are rolled back so the user can retry registration.
+    // Atomic transaction: create user + trial subscription + org
     const user = await prisma.$transaction(async (tx) => {
       const created = await tx.user.create({
         data: {
@@ -561,30 +571,38 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
           passwordHash,
           role: userRole,
           tenantId,
+          termsAcceptedAt: now,
+          privacyAcceptedAt: now,
         },
       });
 
       await tx.subscription.create({
         data: {
           userId: created.id,
-          planId: 'FREE',
+          planId: 'TRIAL',
           activatedAt: now,
           billingPeriodStart: now,
-          billingPeriodEnd: new Date(now.getFullYear() + 100, 0, 1),
-          subscriptionStatus: 'active',
-          subscriptionTier: 'free',
+          billingPeriodEnd: trialEnd,
+          subscriptionStatus: 'trialing',
+          subscriptionTier: 'trial',
+          trialEndsAt: trialEnd,
+          billingInterval: 'month',
         },
       });
 
       await tx.aiCreditBalance.create({
         data: {
           userId: created.id,
-          monthlyCredits: 0,
+          monthlyCredits: 50,
           purchasedCredits: 0,
           creditsUsed: 0,
           billingPeriodStart: now,
-          billingPeriodEnd: endOfMonth,
+          billingPeriodEnd: trialEnd,
         },
+      });
+
+      await tx.userAccountSettings.create({
+        data: { userId: created.id },
       });
 
       await tx.organization.create({
@@ -592,7 +610,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
           id: tenantId,
           name: `${userName}'s Organization`,
           orgType: userRole === 'attorney' ? 'law_firm' : 'solo',
-          onboardingStep: 'created',
+          onboardingStep: 'provisioned',
         },
       });
 
@@ -633,9 +651,10 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
         email,
         name: userName,
         role: userRole,
-        subscriptionStatus: 'none',
-        subscriptionTier: 'free',
+        subscriptionStatus: mapSubscriptionStatusForClient('trialing'),
+        subscriptionTier: 'trial',
         emailVerified: false,
+        mfaEnabled: false,
       },
       message: 'Registration successful. Please verify your email.',
     };
@@ -723,7 +742,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
           tenantId: payload.tenantId,
           email: payload.email,
           role: payload.role,
-          subscriptionStatus: sub?.subscriptionStatus ?? 'none',
+          subscriptionStatus: mapSubscriptionStatusForClient(sub?.subscriptionStatus ?? 'none'),
           subscriptionTier: sub?.subscriptionTier ?? 'free',
         },
       };

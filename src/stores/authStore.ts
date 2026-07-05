@@ -7,7 +7,7 @@ import { persist } from 'zustand/middleware';
 import type { User, UserRole } from '../types';
 import { ROLE_PERMISSIONS } from '../constants';
 
-type SubscriptionStatus = 'active' | 'trial' | 'past_due' | 'cancelled' | 'none';
+type SubscriptionStatus = 'active' | 'trial' | 'trialing' | 'past_due' | 'cancelled' | 'none';
 
 interface AuthState {
   user: User | null;
@@ -16,7 +16,7 @@ interface AuthState {
   subscriptionStatus: SubscriptionStatus;
   login: (email: string, password: string) => Promise<{ mfaRequired?: boolean; mfaSessionToken?: string }>;
   completeMfaLogin: (mfaSessionToken: string, code: string) => Promise<void>;
-  register: (name: string, email: string, password: string, role: UserRole) => Promise<void>;
+  register: (name: string, email: string, password: string, role: UserRole, options?: { termsAccepted?: boolean; privacyAccepted?: boolean }) => Promise<void>;
   logout: () => void;
   switchRole: (role: UserRole) => void;
   setSubscriptionStatus: (status: SubscriptionStatus) => void;
@@ -105,13 +105,20 @@ export const useAuthStore = create<AuthState>()(persist((set, get) => ({
     }
   },
 
-  register: async (name: string, email: string, password: string, role: UserRole) => {
+  register: async (name, email, password, role, options) => {
     set({ isLoading: true });
     try {
       const res = await fetch(`${API_BASE}/auth/register`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ name, email, password, role }),
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          role,
+          termsAccepted: options?.termsAccepted ?? false,
+          privacyAccepted: options?.privacyAccepted ?? false,
+        }),
       });
       if (!res.ok) {
         const err = await res.json().catch(() => ({ error: 'Registration failed' }));

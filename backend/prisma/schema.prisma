@@ -26,6 +26,8 @@ model User {
   practiceGroupId String?
 
   emailVerifiedAt     DateTime?
+  termsAcceptedAt     DateTime?
+  privacyAcceptedAt   DateTime?
   mfaEnabled          Boolean  @default(false)
   mfaSecretEncrypted  String?
 
@@ -42,6 +44,7 @@ model User {
   client        Client?  @relation(fields: [clientId], references: [clientId])
   organizationMembership OrganizationMember?
   personnelProfile PersonnelProfile?
+  accountSettings UserAccountSettings?
   office        OrganizationOffice? @relation(fields: [officeId], references: [officeId])
   practiceGroup PracticeGroup? @relation(fields: [practiceGroupId], references: [practiceGroupId])
 
@@ -105,7 +108,9 @@ model Subscription {
   stripeSubscriptionId  String?
   stripeCustomerId      String?
   subscriptionStatus    String   @default("active") // active | past_due | canceled | trialing
-  subscriptionTier      String   @default("free")   // free | starter | professional | advanced | litigation | enterprise
+  subscriptionTier      String   @default("free")   // free | individual | standard | complex | professional
+  trialEndsAt           DateTime?
+  billingInterval       String   @default("month") // month | year
 
   createdAt             DateTime @default(now())
   updatedAt             DateTime @updatedAt
@@ -2467,4 +2472,73 @@ model Charge {
   createdAt      DateTime @default(now())
 
   @@index([caseId])
+}
+
+// ---------------------------------------------------------------------------
+// Program 1 — User account settings (auto-provisioned)
+// ---------------------------------------------------------------------------
+
+model UserAccountSettings {
+  id                    String   @id @default(uuid())
+  userId                String   @unique
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notifyEmail           Boolean  @default(true)
+  notifyCaseUpdates     Boolean  @default(true)
+  notifyBilling         Boolean  @default(true)
+  notifyInvitations     Boolean  @default(true)
+  aiInsightsEnabled     Boolean  @default(true)
+  autoDocumentAnalysis  Boolean  @default(true)
+  compactSidebar        Boolean  @default(false)
+  timezone              String   @default("America/Los_Angeles")
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@map("user_account_settings")
+}
+
+// ---------------------------------------------------------------------------
+// Program 1 — Document redaction (immutable original, versioned redacted copies)
+// ---------------------------------------------------------------------------
+
+model DocumentRedactionVersion {
+  redactionId    String   @id @default(uuid())
+  tenantId       String
+  caseId         String
+  documentId     String
+  profileName    String
+  versionNumber  Int      @default(1)
+  s3KeyRedacted  String?
+  status         String   @default("draft")
+  createdById    String
+  approvedById   String?
+  redactionData  String   @default("[]")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([tenantId, caseId, documentId])
+  @@index([profileName])
+  @@map("document_redaction_versions")
+}
+
+// ---------------------------------------------------------------------------
+// Program 1 — Disclosure manager (controlled publication packages)
+// ---------------------------------------------------------------------------
+
+model DisclosurePackage {
+  packageId       String   @id @default(uuid())
+  tenantId        String
+  caseId          String
+  documentId      String
+  redactionId     String?
+  recipientType   String
+  recipientUserId String?
+  recipientEmail  String?
+  status          String   @default("draft")
+  publishedById   String
+  publishedAt     DateTime?
+  createdAt       DateTime @default(now())
+
+  @@index([tenantId, caseId])
+  @@index([recipientUserId])
+  @@map("disclosure_packages")
 }

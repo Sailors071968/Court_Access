@@ -42,6 +42,8 @@ export function RegisterPage() {
   const [discountCode, setDiscountCode] = useState('');
   const [discountResult, setDiscountResult] = useState<DiscountValidation | null>(null);
   const [validatingDiscount, setValidatingDiscount] = useState(false);
+  const [termsAccepted, setTermsAccepted] = useState(false);
+  const [privacyAccepted, setPrivacyAccepted] = useState(false);
   const [error, setError] = useState('');
   const { register, isLoading } = useAuthStore();
   const navigate = useNavigate();
@@ -57,8 +59,12 @@ export function RegisterPage() {
       setError('Password must be at least 8 characters.');
       return;
     }
+    if (!termsAccepted || !privacyAccepted) {
+      setError('You must accept the Terms of Service and Privacy Policy.');
+      return;
+    }
     try {
-      await register(name, email, password, role);
+      await register(name, email, password, role, { termsAccepted, privacyAccepted });
 
       // Apply discount code via backend (deducts usage)
       if (discountCode.trim() && discountResult?.valid) {
@@ -172,7 +178,36 @@ export function RegisterPage() {
               )}
             </div>
 
-            <button type="submit" disabled={isLoading} className="w-full bg-slate-800 text-white py-2.5 rounded-lg font-medium text-sm hover:bg-slate-700 transition-colors disabled:opacity-50">
+            <div className="space-y-3 pt-2 border-t border-gray-100">
+              <label className="flex items-start gap-3 text-sm text-gray-600">
+                <input
+                  type="checkbox"
+                  checked={termsAccepted}
+                  onChange={(e) => setTermsAccepted(e.target.checked)}
+                  className="mt-1 rounded border-gray-300 text-amber-600 focus:ring-amber-500"
+                  required
+                />
+                <span>
+                  I agree to the{' '}
+                  <Link to="/terms" target="_blank" className="text-amber-600 hover:underline">Terms of Service</Link>
+                </span>
+              </label>
+              <label className="flex items-start gap-3 text-sm text-gray-600">
+                <input
+                  type="checkbox"
+                  checked={privacyAccepted}
+                  onChange={(e) => setPrivacyAccepted(e.target.checked)}
+                  className="mt-1 rounded border-gray-300 text-amber-600 focus:ring-amber-500"
+                  required
+                />
+                <span>
+                  I agree to the{' '}
+                  <Link to="/privacy" target="_blank" className="text-amber-600 hover:underline">Privacy Policy</Link>
+                </span>
+              </label>
+            </div>
+
+            <button type="submit" disabled={isLoading || !termsAccepted || !privacyAccepted} className="w-full bg-slate-800 text-white py-2.5 rounded-lg font-medium text-sm hover:bg-slate-700 transition-colors disabled:opacity-50">
               {isLoading ? 'Creating account...' : 'Create account'}
             </button>
           </form>

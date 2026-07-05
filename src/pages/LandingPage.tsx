@@ -5,6 +5,8 @@
 
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuthStore } from '../stores/authStore';
+import { startSubscriptionCheckout } from '../services/membershipApi';
 import {
   FileText,
   Search,
@@ -408,10 +410,43 @@ const allFeatures = [
   'All platform features',
 ];
 
+function PlanSubscribeButton({ planId, label }: { planId: string; label: string }) {
+  const { isAuthenticated } = useAuthStore();
+  const [loading, setLoading] = useState(false);
+
+  const handleCheckout = async () => {
+    if (!isAuthenticated) {
+      window.location.href = '/register';
+      return;
+    }
+    setLoading(true);
+    try {
+      const { url } = await startSubscriptionCheckout(planId, 'month');
+      if (url) window.location.href = url;
+    } catch {
+      window.location.href = '/pricing';
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <button
+      type="button"
+      onClick={handleCheckout}
+      disabled={loading}
+      className="mt-4 w-full py-2.5 rounded-lg text-sm font-semibold bg-amber-500 hover:bg-amber-400 text-slate-900 transition-colors disabled:opacity-50"
+    >
+      {loading ? 'Redirecting…' : label}
+    </button>
+  );
+}
+
 function PricingSection() {
   const plans = [
     {
       name: 'Free Trial',
+      planId: 'TRIAL',
       price: '$0',
       period: 'for 30 Days',
       storage: '250 MB',
@@ -428,6 +463,7 @@ function PricingSection() {
     },
     {
       name: 'Individual',
+      planId: 'INDIVIDUAL',
       price: '$29',
       period: '/month',
       storage: '5 GB',
@@ -439,6 +475,7 @@ function PricingSection() {
     },
     {
       name: 'Standard',
+      planId: 'STANDARD',
       price: '$79',
       period: '/month',
       storage: '25 GB',
@@ -450,6 +487,7 @@ function PricingSection() {
     },
     {
       name: 'Complex Case',
+      planId: 'COMPLEX_CASE',
       price: '$149',
       period: '/month',
       storage: '100 GB',
@@ -461,6 +499,7 @@ function PricingSection() {
     },
     {
       name: 'Professional',
+      planId: 'PROFESSIONAL',
       price: '$399',
       period: '/month',
       storage: '1 TB',
@@ -574,6 +613,16 @@ function PricingSection() {
                   </li>
                 ))}
               </ul>
+              {plan.planId === 'TRIAL' ? (
+                <Link
+                  to="/register"
+                  className="mt-4 w-full py-2.5 rounded-lg text-sm font-semibold bg-amber-500 hover:bg-amber-400 text-slate-900 transition-colors text-center block"
+                >
+                  Start Free Trial
+                </Link>
+              ) : (
+                <PlanSubscribeButton planId={plan.planId} label="Subscribe" />
+              )}
             </div>
           ))}
         </div>

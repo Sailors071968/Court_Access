@@ -146,6 +146,9 @@ async function startServer() {
   const { registerContactRoutes } = await import('./marketing/contactRoutes.js');
   await registerContactRoutes(app);
 
+  const { registerMembershipRoutes } = await import('./membership/membershipRoutes.js');
+  await registerMembershipRoutes(app);
+
   // Phase 192 — Rate limit admin routes
   console.log('[Server] Registering rate limit admin routes...');
   await registerRateLimitRoutes(app);

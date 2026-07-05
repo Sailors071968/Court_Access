@@ -26,7 +26,7 @@ export function ProtectedRoute({ children, requiredPermission, skipSubscriptionC
   // Skip this check for admin/staff roles (they manage the platform, not clients)
   const { user } = useAuthStore.getState();
   const isStaffOrAdmin = user?.role === 'admin' || user?.role === 'staff';
-  if (!skipSubscriptionCheck && !isStaffOrAdmin && subscriptionStatus !== 'active' && subscriptionStatus !== 'trial') {
+  if (!skipSubscriptionCheck && !isStaffOrAdmin && subscriptionStatus !== 'active' && subscriptionStatus !== 'trial' && subscriptionStatus !== 'trialing') {
     return <Navigate to="/pricing" replace />;
   }
 

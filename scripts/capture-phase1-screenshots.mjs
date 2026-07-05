@@ -7,11 +7,15 @@
 import { chromium } from 'playwright';
 import { spawn } from 'child_process';
 import { mkdirSync, writeFileSync } from 'fs';
+import { fileURLToPath } from 'url';
+import path from 'path';
 import { setTimeout as sleep } from 'timers/promises';
 
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const VITE_BIN = path.join(ROOT, 'node_modules', 'vite', 'bin', 'vite.js');
 const PORT = 4173;
 const BASE = `http://127.0.0.1:${PORT}`;
-const OUT_DIR = '/workspace/reports/screenshots/phase-01';
+const OUT_DIR = path.join(ROOT, 'reports/screenshots/phase-01');
 
 const ROUTES = [
   { path: '/', name: 'landing' },
@@ -26,8 +30,8 @@ const ROUTES = [
 ];
 
 async function startPreview() {
-  const proc = spawn('npx', ['vite', 'preview', '--port', String(PORT), '--host', '127.0.0.1'], {
-    cwd: '/workspace',
+  const proc = spawn(process.execPath, [VITE_BIN, 'preview', '--port', String(PORT), '--host', '127.0.0.1'], {
+    cwd: ROOT,
     stdio: ['ignore', 'pipe', 'pipe'],
   });
   for (let i = 0; i < 30; i++) {

@@ -9,7 +9,7 @@
       "priority": 1,
       "name": "Production deployment",
       "status": "in_progress",
-      "description": "courtaccess.net serves stale June 26 build. dev merged and pushed; CI deploy failed on lockfile sync.",
+      "description": "courtaccess.net serves stale June 26 build. CI verify fixed; deploy requires DEPLOY_HOST/DEPLOY_USER/DEPLOY_SSH_KEY or manual artifact deploy",
       "resolution": "Fix package-lock.json, re-push dev, configure DEPLOY_HOST/DEPLOY_USER/DEPLOY_SSH_KEY, or run scripts/deploy-production-website.sh on server",
       "owner": "engineering",
       "blocks": ["production-verification", "dashboard-screenshots", "v1-certification"]

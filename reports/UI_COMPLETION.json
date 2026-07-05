@@ -1,13 +1,13 @@
 {
   "assessment": "UI_COMPLETION",
   "version": "1.0",
-  "generatedAt": "2026-07-05T14:46:18.003Z",
+  "generatedAt": "2026-07-05T15:06:36.826Z",
   "summary": {
-    "total": 71,
-    "exists": 69,
-    "reachable": 71,
-    "functional": 69,
-    "verified": 19
+    "total": 82,
+    "exists": 70,
+    "reachable": 82,
+    "functional": 70,
+    "verified": 20
   },
   "pages": [
     {
@@ -212,6 +212,106 @@
     },
     {
       "path": "dashboard",
+      "component": "ClientPortalDashboardPage",
+      "exists": false,
+      "reachable": true,
+      "functional": false,
+      "responsive": false,
+      "integrated": false,
+      "verified": false
+    },
+    {
+      "path": "court-dates",
+      "component": "ClientPortalCourtDatesPage",
+      "exists": false,
+      "reachable": true,
+      "functional": false,
+      "responsive": false,
+      "integrated": false,
+      "verified": false
+    },
+    {
+      "path": "messages",
+      "component": "ClientPortalMessagesPage",
+      "exists": false,
+      "reachable": true,
+      "functional": false,
+      "responsive": false,
+      "integrated": false,
+      "verified": false
+    },
+    {
+      "path": "documents",
+      "component": "ClientPortalDocumentsPage",
+      "exists": false,
+      "reachable": true,
+      "functional": false,
+      "responsive": false,
+      "integrated": false,
+      "verified": false
+    },
+    {
+      "path": "evidence",
+      "component": "ClientPortalEvidencePage",
+      "exists": false,
+      "reachable": true,
+      "functional": false,
+      "responsive": false,
+      "integrated": false,
+      "verified": false
+    },
+    {
+      "path": "timeline",
+      "component": "ClientPortalTimelinePage",
+      "exists": false,
+      "reachable": true,
+      "functional": false,
+      "responsive": false,
+      "integrated": false,
+      "verified": false
+    },
+    {
+      "path": "tasks",
+      "component": "ClientPortalTasksPage",
+      "exists": false,
+      "reachable": true,
+      "functional": false,
+      "responsive": false,
+      "integrated": false,
+      "verified": false
+    },
+    {
+      "path": "billing",
+      "component": "ClientPortalBillingPage",
+      "exists": false,
+      "reachable": true,
+      "functional": false,
+      "responsive": false,
+      "integrated": false,
+      "verified": false
+    },
+    {
+      "path": "notifications",
+      "component": "ClientPortalNotificationsPage",
+      "exists": false,
+      "reachable": true,
+      "functional": false,
+      "responsive": false,
+      "integrated": false,
+      "verified": false
+    },
+    {
+      "path": "uploads",
+      "component": "ClientPortalUploadsPage",
+      "exists": false,
+      "reachable": true,
+      "functional": false,
+      "responsive": false,
+      "integrated": false,
+      "verified": false
+    },
+    {
+      "path": "dashboard",
       "component": "DashboardRouter",
       "exists": true,
       "reachable": true,
@@ -299,6 +399,16 @@
       "responsive": false,
       "integrated": false,
       "verified": false
+    },
+    {
+      "path": "/client-portal",
+      "component": "unknown",
+      "exists": true,
+      "reachable": true,
+      "functional": true,
+      "responsive": true,
+      "integrated": true,
+      "verified": true
     },
     {
       "path": "dashboard/policy-acquisition/agencies",
@@ -601,7 +711,7 @@
       "verified": false
     },
     {
-      "path": "evidence",
+      "path": "documents/:documentId/redact",
       "component": "unknown",
       "exists": true,
       "reachable": true,
@@ -611,7 +721,7 @@
       "verified": false
     },
     {
-      "path": "documents",
+      "path": "disclosures",
       "component": "unknown",
       "exists": true,
       "reachable": true,

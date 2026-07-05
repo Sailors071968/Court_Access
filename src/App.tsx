@@ -85,6 +85,21 @@ import { ContradictionDashboardPage } from './pages/case/ContradictionDashboardP
 import { NarrativeAnalysisPage } from './pages/case/NarrativeAnalysisPage';
 import { AttorneyWorkbenchPage } from './pages/case/AttorneyWorkbenchPage';
 import { InvestigatorWorkbenchPage } from './pages/case/InvestigatorWorkbenchPage';
+import { ClientPortalLayout, ClientPortalIndex } from './pages/client-portal/ClientPortalLayout';
+import {
+  ClientPortalDashboardPage,
+  ClientPortalCourtDatesPage,
+  ClientPortalMessagesPage,
+  ClientPortalDocumentsPage,
+  ClientPortalEvidencePage,
+  ClientPortalTimelinePage,
+  ClientPortalTasksPage,
+  ClientPortalBillingPage,
+  ClientPortalNotificationsPage,
+  ClientPortalUploadsPage,
+} from './pages/client-portal/ClientPortalPages';
+import { DocumentRedactionPage } from './pages/redaction/DocumentRedactionPage';
+import { DisclosureManagerPage } from './pages/disclosure/DisclosureManagerPage';
 
 function App() {
   return (
@@ -117,6 +132,28 @@ function App() {
         <Route path="/verify-email" element={<VerifyEmailPage />} />
         <Route path="/accept-invitation" element={<AcceptInvitationPage />} />
         <Route path="/organization/onboarding" element={<OrganizationOnboardingPage />} />
+
+        {/* Client Portal — dedicated defendant/client experience */}
+        <Route
+          path="/client-portal"
+          element={
+            <ProtectedRoute>
+              <ClientPortalLayout />
+            </ProtectedRoute>
+          }
+        >
+          <Route index element={<ClientPortalIndex />} />
+          <Route path="dashboard" element={<ClientPortalDashboardPage />} />
+          <Route path="court-dates" element={<ClientPortalCourtDatesPage />} />
+          <Route path="messages" element={<ClientPortalMessagesPage />} />
+          <Route path="documents" element={<ClientPortalDocumentsPage />} />
+          <Route path="evidence" element={<ClientPortalEvidencePage />} />
+          <Route path="timeline" element={<ClientPortalTimelinePage />} />
+          <Route path="tasks" element={<ClientPortalTasksPage />} />
+          <Route path="billing" element={<ClientPortalBillingPage />} />
+          <Route path="notifications" element={<ClientPortalNotificationsPage />} />
+          <Route path="uploads" element={<ClientPortalUploadsPage />} />
+        </Route>
 
         {/* Protected App Routes */}
         <Route
@@ -390,6 +427,22 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canViewDocuments">
                   <DocumentsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="documents/:documentId/redact"
+              element={
+                <ProtectedRoute requiredPermission="canViewDocuments">
+                  <DocumentRedactionPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="disclosures"
+              element={
+                <ProtectedRoute requiredPermission="canViewDocuments">
+                  <DisclosureManagerPage />
                 </ProtectedRoute>
               }
             />

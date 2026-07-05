@@ -112,3 +112,85 @@ export async function startSubscriptionCheckout(
   }
   return res.json();
 }
+
+export const PUBLICATION_PROFILES = [
+  'attorney', 'client', 'investigator', 'secretary', 'family', 'expert', 'court', 'public',
+] as const;
+
+export interface RedactionVersion {
+  redactionId: string;
+  profileName: string;
+  versionNumber: number;
+  status: string;
+  createdAt: string;
+  approvedById?: string | null;
+}
+
+export async function fetchRedactionVersions(
+  caseId: string,
+  documentId: string,
+): Promise<{ versions: RedactionVersion[] }> {
+  const res = await fetch(
+    `${API_BASE}/cases/${caseId}/documents/${documentId}/redactions`,
+    { headers: authHeaders() },
+  );
+  if (!res.ok) throw new Error('Failed to load redactions');
+  return res.json();
+}
+
+export async function createRedactionVersion(
+  caseId: string,
+  documentId: string,
+  data: { profileName: string; redactionData: unknown[] },
+): Promise<void> {
+  const res = await fetch(
+    `${API_BASE}/cases/${caseId}/documents/${documentId}/redactions`,
+    {
+      method: 'POST',
+      headers: authHeaders(),
+      body: JSON.stringify(data),
+    },
+  );
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || 'Redaction save failed');
+  }
+}
+
+export interface DisclosurePackage {
+  packageId: string;
+  caseId: string;
+  documentId: string;
+  recipientType: string;
+  status: string;
+  publishedAt?: string | null;
+  redactionId?: string | null;
+}
+
+export async function fetchDisclosurePackages(
+  caseId: string,
+): Promise<{ packages: DisclosurePackage[] }> {
+  const res = await fetch(`${API_BASE}/cases/${caseId}/disclosures`, { headers: authHeaders() });
+  if (!res.ok) throw new Error('Failed to load disclosures');
+  return res.json();
+}
+
+export async function createDisclosurePackage(
+  caseId: string,
+  data: {
+    documentId: string;
+    recipientType: string;
+    recipientEmail?: string;
+    redactionId?: string;
+  },
+): Promise<void> {
+  const res = await fetch(`${API_BASE}/cases/${caseId}/disclosures`, {
+    method: 'POST',
+    headers: authHeaders(),
+    body: JSON.stringify(data),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || 'Disclosure create failed');
+  }
+}

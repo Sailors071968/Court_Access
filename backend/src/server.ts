@@ -46,6 +46,7 @@ import { registerChargeRoutes } from "./charges/chargeRoutes.js";
 import { registerCalcrimRoutes } from "./routes/calcrimRoutes.js";
 import { registerGovernanceRoutes } from './governance/governanceRoutes.ts';
 import { registerLegislativeRoutes } from './legislative/legislativeRoutes.ts';
+import { registerDoctrineRoutes } from './doctrine/doctrineRoutes.ts';
 import { registerProductionGatesRoutes } from './productionGates/productionGatesRoutes.js';
 import { registerProductionOperationsRoutes } from './productionOperations/productionOperationsRoutes.js';
 
@@ -249,6 +250,9 @@ async function startServer() {
 
   console.log('[Server] Registering legislative intelligence routes...');
   await registerLegislativeRoutes(app);
+
+  console.log('[Server] Registering doctrine intelligence routes...');
+  registerDoctrineRoutes(app);
 
   // PR 6 — Observability: /api/health/deep, /api/metrics, /api/metrics/json
   console.log('[Server] Registering observability routes...');

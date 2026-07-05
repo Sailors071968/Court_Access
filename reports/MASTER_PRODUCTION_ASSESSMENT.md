@@ -1,7 +1,7 @@
 # CourtAccess Master Production Assessment
 
 **Version:** 1.0
-**Generated:** 2026-07-05T14:46:18.003Z
+**Generated:** 2026-07-05T15:06:36.826Z
 **Methodology:** Each capability has objective binary criteria. Verified = runtime criterion passes when defined; otherwise all defined implementation criteria must pass. No subjective scoring.
 **Formula:** Completion % = Verified Capabilities ÷ Total Planned Capabilities
 
@@ -11,10 +11,10 @@
 |--------|-------|
 | Programs | 25 |
 | Total Capabilities | 189 |
-| Verified Capabilities | 120 |
-| Implemented Capabilities | 139 |
-| Blocked Capabilities | 27 |
-| Overall Completion | 63.5% |
+| Verified Capabilities | 125 |
+| Implemented Capabilities | 146 |
+| Blocked Capabilities | 19 |
+| Overall Completion | 66.1% |
 | Production Readiness | NOT_READY |
 
 ## Program Completion (Programs 0–24)
@@ -26,8 +26,8 @@
 | 2 | Hybrid Stripe Billing | 9 | 12 | 75% | PARTIAL |
 | 3 | Delegated Access | 6 | 8 | 75% | PARTIAL |
 | 4 | Resource Permissions | 6 | 8 | 75% | PARTIAL |
-| 5 | Document Redaction | 4 | 7 | 57.1% | PARTIAL |
-| 6 | Disclosure Manager | 4 | 6 | 66.7% | PARTIAL |
+| 5 | Document Redaction | 5 | 7 | 71.4% | PARTIAL |
+| 6 | Disclosure Manager | 6 | 6 | 100% | READY |
 | 7 | Organizations | 6 | 8 | 75% | PARTIAL |
 | 8 | Client Management | 2 | 5 | 40% | PARTIAL |
 | 9 | Case Management | 7 | 8 | 87.5% | PARTIAL |
@@ -35,10 +35,10 @@
 | 11 | Evidence Platform | 4 | 7 | 57.1% | PARTIAL |
 | 12 | Investigator Workbench | 6 | 9 | 66.7% | PARTIAL |
 | 13 | Attorney Workbench | 5 | 8 | 62.5% | PARTIAL |
-| 14 | Client Portal | 3 | 6 | 50% | PARTIAL |
+| 14 | Client Portal | 4 | 6 | 66.7% | PARTIAL |
 | 15 | Administrative Command Center | 3 | 8 | 37.5% | PARTIAL |
 | 16 | California Legislative Intelligence | 1 | 7 | 14.3% | PARTIAL |
-| 17 | Legal Knowledge Graph | 2 | 5 | 40% | PARTIAL |
+| 17 | Legal Knowledge Graph | 3 | 5 | 60% | PARTIAL |
 | 18 | Communications Platform | 3 | 6 | 50% | PARTIAL |
 | 19 | Operations | 3 | 6 | 50% | PARTIAL |
 | 20 | Security | 3 | 7 | 42.9% | PARTIAL |
@@ -98,7 +98,7 @@
 
 ## UI Inventory
 
-Total routes: 71 | Exists: 69 | Verified public: 19
+Total routes: 82 | Exists: 70 | Verified public: 20
 
 ## API Inventory
 
@@ -143,7 +143,7 @@ Verified: 7/10 (70%) — PARTIAL
 - [x] **P01-07** Shared access dashboard
 - [x] **P01-08** Stripe checkout wiring
 - [ ] **P01-09** Delegated user limit
-- [ ] **P01-10** Permission resolver — *Not integrated into case routes*
+- [ ] **P01-10** Permission resolver
 
 ### Program 2 — Hybrid Stripe Billing
 
@@ -185,31 +185,31 @@ Verified: 6/8 (75%) — PARTIAL
 - [x] **P04-04** Case-level filtering
 - [x] **P04-05** Permission check API
 - [x] **P04-06** Firm permissions UI
-- [ ] **P04-07** Route enforcement — *PermissionGrant not enforced on resource routes*
+- [ ] **P04-07** Route enforcement
 - [ ] **P04-08** Firm platform tests
 
 ### Program 5 — Document Redaction
 
-Verified: 4/7 (57.1%) — PARTIAL
+Verified: 5/7 (71.4%) — PARTIAL
 
 - [x] **P05-01** Redaction schema
 - [x] **P05-02** Redaction service
 - [x] **P05-03** Redaction API
 - [x] **P05-04** Publication profiles
-- [ ] **P05-05** Redaction UI — *Visual redaction workspace not built*
+- [x] **P05-05** Redaction UI
 - [ ] **P05-06** OCR text redaction — *OCR layer redaction not implemented*
 - [ ] **P05-07** AI redaction suggestions — *AI suggestion engine not implemented*
 
 ### Program 6 — Disclosure Manager
 
-Verified: 4/6 (66.7%) — PARTIAL
+Verified: 6/6 (100%) — READY
 
 - [x] **P06-01** Disclosure schema
 - [x] **P06-02** Disclosure service
 - [x] **P06-03** Disclosure API
 - [x] **P06-04** Shared access view
-- [ ] **P06-05** Preview as recipient — *Preview UI not built*
-- [ ] **P06-06** Version comparison — *Version comparison not built*
+- [x] **P06-05** Preview as recipient
+- [x] **P06-06** Version comparison
 
 ### Program 7 — Organizations
 
@@ -299,14 +299,14 @@ Verified: 5/8 (62.5%) — PARTIAL
 
 ### Program 14 — Client Portal
 
-Verified: 3/6 (50%) — PARTIAL
+Verified: 4/6 (66.7%) — PARTIAL
 
 - [ ] **P14-01** Defendant dashboard
 - [ ] **P14-02** Secure messaging
 - [x] **P14-03** Court dates portal
 - [x] **P14-04** Document access
 - [x] **P14-05** Evidence upload panel
-- [ ] **P14-06** Dedicated client portal route — *No /client-portal route*
+- [x] **P14-06** Dedicated client portal route
 
 ### Program 15 — Administrative Command Center
 
@@ -335,13 +335,13 @@ Verified: 1/7 (14.3%) — PARTIAL
 
 ### Program 17 — Legal Knowledge Graph
 
-Verified: 2/5 (40%) — PARTIAL
+Verified: 3/5 (60%) — PARTIAL
 
 - [x] **P17-01** KG pipeline
 - [x] **P17-02** Repositories
 - [ ] **P17-03** KG tests
 - [ ] **P17-04** Repository integrity
-- [ ] **P17-05** Doctrine routes registered — *doctrineRoutes.ts not registered in server.ts*
+- [x] **P17-05** Doctrine routes registered
 
 ### Program 18 — Communications Platform
 
@@ -419,7 +419,7 @@ Verified: 8/10 (80%) — PARTIAL
 - [x] **P24-04** Case creation reachable
 - [x] **P24-05** Evidence upload reachable
 - [x] **P24-06** Invite users reachable
-- [ ] **P24-07** Redaction UI — *Redaction UI not built*
+- [ ] **P24-07** Redaction UI
 - [x] **P24-08** Program 02 demonstration
 - [x] **P24-09** Screenshot evidence
 - [ ] **P24-10** End-to-end walkthrough doc — *E2E walkthrough not published*

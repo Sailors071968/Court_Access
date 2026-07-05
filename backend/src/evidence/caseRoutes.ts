@@ -7,6 +7,11 @@
 import type { FastifyInstance, FastifyReply } from 'fastify';
 import { PrismaClient } from '@prisma/client';
 import type { AuthenticatedRequest } from '../security/authMiddleware.js';
+import {
+  buildAuthorizedCaseFilter,
+  requireCaseAccess,
+  sendForbidden,
+} from '../membership/resourceAuthMiddleware.js';
 
 const prisma = new PrismaClient();
 
@@ -44,15 +49,7 @@ const VALID_STATUSES = ['active', 'pending', 'closed', 'archived'];
 const VALID_PHASES = ['intake', 'preliminary', 'pretrial', 'trial', 'sentencing', 'appeal', 'closed'];
 
 async function buildCaseScopeFilter(user: { userId: string; tenantId: string; role: string }) {
-  const base = { tenantId: user.tenantId, deletedAt: null as null };
-  if (user.role !== 'defendant') return base;
-
-  const dbUser = await prisma.user.findUnique({
-    where: { id: user.userId },
-    select: { clientId: true },
-  });
-  if (!dbUser?.clientId) return { ...base, clientId: '__no_portal_client__' };
-  return { ...base, clientId: dbUser.clientId };
+  return buildAuthorizedCaseFilter(user);
 }
 
 // ---------------------------------------------------------------------------
@@ -212,7 +209,10 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
     }
 
     try {
-      // Verify ownership via tenant
+      if (!(await requireCaseAccess(user, caseId, 'edit'))) {
+        return sendForbidden(reply);
+      }
+
       const existing = await prisma.criminalCase.findFirst({
         where: {
           caseId,
@@ -222,7 +222,7 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
       });
 
       if (!existing) {
-        return reply.code(403).send({ error: 'Forbidden' });
+        return sendForbidden(reply);
       }
 
       const updateData: Record<string, unknown> = {};
@@ -266,7 +266,10 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
     const { caseId } = request.params as { caseId: string };
 
     try {
-      // Verify ownership via tenant
+      if (!(await requireCaseAccess(user, caseId, 'edit'))) {
+        return sendForbidden(reply);
+      }
+
       const existing = await prisma.criminalCase.findFirst({
         where: {
           caseId,
@@ -276,7 +279,7 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
       });
 
       if (!existing) {
-        return reply.code(403).send({ error: 'Forbidden' });
+        return sendForbidden(reply);
       }
 
       // Soft delete

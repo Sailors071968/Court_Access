@@ -13,6 +13,7 @@ import {
   normalizePlanId,
 } from './universalMembership.js';
 import { listAccessibleCaseIds, getEffectivePermission } from './permissionResolver.js';
+import { requireCaseAccess, sendForbidden } from './resourceAuthMiddleware.js';
 import { createRedactionVersion, listRedactionVersions } from './redactionService.js';
 import { createDisclosurePackage, listDisclosurePackages, listSharedAccessForUser } from './disclosureService.js';
 
@@ -167,6 +168,7 @@ export async function registerMembershipRoutes(app: FastifyInstance): Promise<vo
     try {
       const ctx = authCtx(request);
       const { caseId, documentId } = request.params as { caseId: string; documentId: string };
+      if (!(await requireCaseAccess(ctx, caseId, 'view'))) return sendForbidden(reply);
       const versions = await listRedactionVersions(ctx.tenantId, caseId, documentId);
       return { versions };
     } catch {
@@ -178,6 +180,7 @@ export async function registerMembershipRoutes(app: FastifyInstance): Promise<vo
     try {
       const ctx = authCtx(request);
       const { caseId, documentId } = request.params as { caseId: string; documentId: string };
+      if (!(await requireCaseAccess(ctx, caseId, 'edit'))) return sendForbidden(reply);
       const body = request.body as { profileName: string; redactionData?: unknown[] };
       const version = await createRedactionVersion({
         tenantId: ctx.tenantId,
@@ -198,6 +201,7 @@ export async function registerMembershipRoutes(app: FastifyInstance): Promise<vo
     try {
       const ctx = authCtx(request);
       const { caseId } = request.params as { caseId: string };
+      if (!(await requireCaseAccess(ctx, caseId, 'view'))) return sendForbidden(reply);
       const packages = await listDisclosurePackages(ctx.tenantId, caseId);
       return { packages };
     } catch {
@@ -209,6 +213,7 @@ export async function registerMembershipRoutes(app: FastifyInstance): Promise<vo
     try {
       const ctx = authCtx(request);
       const { caseId } = request.params as { caseId: string };
+      if (!(await requireCaseAccess(ctx, caseId, 'approve'))) return sendForbidden(reply);
       const body = request.body as {
         documentId: string;
         redactionId?: string;

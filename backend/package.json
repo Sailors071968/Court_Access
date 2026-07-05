@@ -19,6 +19,7 @@
     "backup:drill": "tsx scripts/run-backup-drill.ts",
     "integrity:report": "tsx scripts/generate-repository-integrity.ts",
     "v1:release": "tsx scripts/generate-version1-release.ts",
+    "v1:readiness": "tsx scripts/generate-version1-release-readiness.ts",
     "master:program": "tsx scripts/run-master-production-program.ts",
     "master:assessment": "tsx scripts/run-master-production-assessment.ts",
     "firm:demo": "tsx scripts/generate-program02-demonstration.ts",

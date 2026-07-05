@@ -9,6 +9,7 @@ import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client
 import { getSignedUrl } from '@aws-sdk/s3-request-presigner';
 import crypto from 'crypto';
 import type { AuthenticatedRequest } from '../security/authMiddleware.js';
+import { requireCaseAccess, sendForbidden } from '../membership/resourceAuthMiddleware.js';
 import { validateEvidenceUpload } from './evidenceValidation.js';
 import { enqueueEvidenceIngestion } from './evidenceProcessingPipeline.js';
 
@@ -106,22 +107,9 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
       });
     }
 
-    // Validate case access (tenant isolation)
-    try {
-      const caseRecord = await prisma.criminalCase.findFirst({
-        where: {
-          caseId: body.caseId,
-          tenantId: user.tenantId,
-          deletedAt: null,
-        },
-      });
-
-      if (!caseRecord) {
-        return reply.code(403).send({ error: 'Forbidden: case not found or access denied' });
-      }
-    } catch (err) {
-      console.error('[EvidenceRoutes] Case access check failed:', err);
-      return reply.code(500).send({ error: 'Failed to verify case access' });
+    // Validate case access (permission enforcement)
+    if (!(await requireCaseAccess(user, body.caseId, 'upload'))) {
+      return sendForbidden(reply);
     }
 
     // Validate evidence upload limits
@@ -213,22 +201,8 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
       });
     }
 
-    // Verify case access
-    try {
-      const caseRecord = await prisma.criminalCase.findFirst({
-        where: {
-          caseId: body.caseId,
-          tenantId: user.tenantId,
-          deletedAt: null,
-        },
-      });
-
-      if (!caseRecord) {
-        return reply.code(403).send({ error: 'Forbidden: case not found or access denied' });
-      }
-    } catch (err) {
-      console.error('[EvidenceRoutes] Case access check failed:', err);
-      return reply.code(500).send({ error: 'Failed to verify case access' });
+    if (!(await requireCaseAccess(user, body.caseId, 'upload'))) {
+      return sendForbidden(reply);
     }
 
     // Validate s3Key matches expected tenant-scoped path
@@ -293,23 +267,8 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
 
     const { caseId } = request.params as { caseId: string };
 
-    // Verify case access
-    let caseRecord;
-    try {
-      caseRecord = await prisma.criminalCase.findFirst({
-        where: {
-          caseId,
-          tenantId: user.tenantId,
-          deletedAt: null,
-        },
-      });
-    } catch (err) {
-      console.error('[EvidenceRoutes] Case access check failed:', err);
-      return reply.code(500).send({ error: 'Failed to verify case access' });
-    }
-
-    if (!caseRecord) {
-      return reply.code(403).send({ error: 'Forbidden' });
+    if (!(await requireCaseAccess(user, caseId, 'view'))) {
+      return sendForbidden(reply);
     }
 
     try {
@@ -354,7 +313,11 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
       });
 
       if (!evidence) {
-        return reply.code(403).send({ error: 'Forbidden' });
+        return sendForbidden(reply);
+      }
+
+      if (!(await requireCaseAccess(user, evidence.caseId, 'view'))) {
+        return sendForbidden(reply);
       }
 
       return {
@@ -387,7 +350,11 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
       });
 
       if (!evidence) {
-        return reply.code(403).send({ error: 'Forbidden' });
+        return sendForbidden(reply);
+      }
+
+      if (!(await requireCaseAccess(user, evidence.caseId, 'edit'))) {
+        return sendForbidden(reply);
       }
 
       // Delete S3 object first, then DB record

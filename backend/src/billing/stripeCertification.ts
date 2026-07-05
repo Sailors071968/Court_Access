@@ -50,6 +50,8 @@ async function createCertUser(suffix: string): Promise<{ userId: string; email: 
       passwordHash: await bcrypt.hash('CertTest123!', 10),
       role: 'attorney',
       tenantId: `tenant-${randomUUID().slice(0, 8)}`,
+      termsAcceptedAt: now,
+      privacyAcceptedAt: now,
     },
   });
   await prisma.subscription.create({

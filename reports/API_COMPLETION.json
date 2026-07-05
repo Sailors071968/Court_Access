@@ -1,11 +1,11 @@
 {
   "assessment": "API_COMPLETION",
   "version": "1.0",
-  "generatedAt": "2026-07-05T14:46:18.003Z",
+  "generatedAt": "2026-07-05T15:06:36.826Z",
   "summary": {
     "total": 347,
     "authenticated": 34,
-    "authorized": 58,
+    "authorized": 63,
     "databaseIntegrated": 130
   },
   "endpoints": [
@@ -1654,7 +1654,7 @@
       "file": "backend/src/evidence/evidenceRoutes.ts",
       "exists": true,
       "authenticated": false,
-      "authorized": false,
+      "authorized": true,
       "databaseIntegrated": true,
       "tested": false,
       "verified": false
@@ -1665,7 +1665,7 @@
       "file": "backend/src/evidence/evidenceRoutes.ts",
       "exists": true,
       "authenticated": false,
-      "authorized": false,
+      "authorized": true,
       "databaseIntegrated": true,
       "tested": false,
       "verified": false
@@ -1676,7 +1676,7 @@
       "file": "backend/src/evidence/evidenceRoutes.ts",
       "exists": true,
       "authenticated": false,
-      "authorized": false,
+      "authorized": true,
       "databaseIntegrated": true,
       "tested": false,
       "verified": false
@@ -1687,7 +1687,7 @@
       "file": "backend/src/evidence/evidenceRoutes.ts",
       "exists": true,
       "authenticated": false,
-      "authorized": false,
+      "authorized": true,
       "databaseIntegrated": true,
       "tested": false,
       "verified": false
@@ -1698,7 +1698,7 @@
       "file": "backend/src/evidence/evidenceRoutes.ts",
       "exists": true,
       "authenticated": false,
-      "authorized": false,
+      "authorized": true,
       "databaseIntegrated": true,
       "tested": false,
       "verified": false

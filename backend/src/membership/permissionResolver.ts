@@ -66,11 +66,23 @@ export async function listAccessibleCaseIds(userId: string, tenantId: string): P
   if (await isOrganizationOwner(userId, tenantId)) return 'all';
 
   const caseGrants = await prisma.permissionGrant.findMany({
-    where: { organizationId: tenantId, userId, scope: 'case', resourceId: { not: null } },
+    where: { organizationId: tenantId, userId, scope: 'case' },
     select: { resourceId: true, permission: true },
   });
 
-  if (caseGrants.length === 0) {
+  const orgWide = caseGrants.find((g) => !g.resourceId && g.permission !== 'none');
+  if (orgWide) return 'all';
+
+  const specific = caseGrants
+    .filter((g) => g.resourceId && g.permission !== 'none')
+    .map((g) => g.resourceId as string);
+
+  if (specific.length > 0) return specific;
+
+  const member = await prisma.organizationMember.findFirst({
+    where: { organizationId: tenantId, userId, status: 'active' },
+  });
+  if (member && ['owner', 'admin', 'attorney', 'investigator', 'paralegal'].includes(member.role)) {
     const cases = await prisma.criminalCase.findMany({
       where: { tenantId },
       select: { caseId: true },
@@ -78,9 +90,7 @@ export async function listAccessibleCaseIds(userId: string, tenantId: string): P
     return cases.map((c) => c.caseId);
   }
 
-  return caseGrants
-    .filter((g) => g.permission !== 'none' && g.resourceId)
-    .map((g) => g.resourceId as string);
+  return [];
 }
 
 export function filterByAccessibleCases<T extends { caseId: string }>(

@@ -1,5 +1,5 @@
 // ============================================================================
-// Sprint 1 — Client Portal Layout
+// CourtAccess — Client Portal Layout (Program 41 — dark design system)
 // Dedicated /client-portal route for criminal defendants and authorized clients.
 // ============================================================================
 
@@ -8,6 +8,8 @@ import {
   LayoutDashboard, Calendar, MessageSquare, FileText, FolderOpen,
   Clock, CheckSquare, CreditCard, Bell, Upload,
 } from 'lucide-react';
+import { BrandLogo } from '../../components/brand/BrandLogo';
+import { TrustBar } from '../../components/brand/TrustBar';
 
 const NAV = [
   { to: '/client-portal/dashboard', label: 'Dashboard', icon: LayoutDashboard },
@@ -24,23 +26,23 @@ const NAV = [
 
 export function ClientPortalLayout() {
   return (
-    <div className="min-h-screen bg-slate-50 flex flex-col lg:flex-row">
-      <aside className="lg:w-64 bg-white border-b lg:border-b-0 lg:border-r border-gray-200 shrink-0">
-        <div className="p-6 border-b border-gray-100">
-          <h1 className="text-lg font-bold text-gray-900">Client Portal</h1>
-          <p className="text-xs text-gray-500 mt-1">Your case information</p>
+    <div className="min-h-screen bg-navy-800 text-slate-200 flex flex-col lg:flex-row">
+      <aside className="lg:w-64 bg-navy-900 border-b lg:border-b-0 lg:border-r border-white/5 shrink-0">
+        <div className="p-6 border-b border-white/5">
+          <BrandLogo variant="light" size="sm" linkTo="/client-portal/dashboard" />
+          <p className="text-xs text-slate-500 mt-3">Your case information</p>
         </div>
-        <nav className="p-3 flex lg:flex-col gap-1 overflow-x-auto">
+        <nav className="p-3 flex lg:flex-col gap-1 overflow-x-auto" aria-label="Client portal navigation">
           {NAV.map(({ to, label, icon: Icon }) => (
             <NavLink
               key={to}
               to={to}
               end={to === '/client-portal/dashboard'}
               className={({ isActive }) =>
-                `flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
+                `flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors border ${
                   isActive
-                    ? 'bg-amber-50 text-amber-800 border border-amber-200'
-                    : 'text-gray-600 hover:bg-gray-50'
+                    ? 'bg-gold/10 text-gold-light border-gold/20'
+                    : 'text-slate-400 hover:bg-white/5 hover:text-white border-transparent'
                 }`
               }
             >
@@ -50,9 +52,12 @@ export function ClientPortalLayout() {
           ))}
         </nav>
       </aside>
-      <main className="flex-1 p-4 lg:p-8 overflow-auto">
-        <Outlet />
-      </main>
+      <div className="flex-1 flex flex-col min-w-0">
+        <main className="flex-1 p-4 lg:p-8 overflow-auto">
+          <Outlet />
+        </main>
+        <TrustBar />
+      </div>
     </div>
   );
 }

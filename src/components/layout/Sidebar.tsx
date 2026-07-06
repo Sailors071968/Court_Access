@@ -14,6 +14,8 @@ import { useAuthStore } from '../../stores/authStore';
 import { ROLE_PERMISSIONS } from '../../constants';
 import type { RolePermissions } from '../../types';
 import { useState } from 'react';
+import { BrandLogo } from '../brand/BrandLogo';
+import { cn } from '../../lib/utils';
 
 const iconMap = {
   LayoutDashboard,
@@ -104,27 +106,26 @@ export function Sidebar() {
 
   return (
     <aside
-      className={`fixed left-0 top-0 h-screen bg-slate-800 text-white flex flex-col z-40 transition-all duration-300 ${
-        collapsed ? 'w-16' : 'w-64'
-      }`}
+      className={cn(
+        'fixed left-0 top-0 h-screen bg-navy-900 text-slate-200 flex flex-col z-40 transition-all duration-300 border-r border-white/5',
+        collapsed ? 'w-16' : 'w-64',
+      )}
     >
-      {/* Logo */}
-      <div className="flex items-center gap-3 px-4 py-5 border-b border-slate-700">
-        <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center flex-shrink-0">
-          <span className="text-white font-bold text-sm">CA</span>
-        </div>
-        {!collapsed && (
-          <div>
-            <h1 className="text-lg font-bold text-white tracking-tight">Court Access</h1>
+      <div className={cn('flex items-center px-4 py-5 border-b border-white/5', collapsed ? 'justify-center' : '')}>
+        {collapsed ? (
+          <div className="w-8 h-8 bg-gold-light rounded-xl flex items-center justify-center">
+            <span className="text-navy font-bold text-xs">CA</span>
           </div>
+        ) : (
+          <BrandLogo variant="light" size="sm" linkTo="/dashboard" />
         )}
       </div>
 
       {/* User Info */}
       {!collapsed && (
-        <div className="px-4 py-3 border-b border-slate-700">
+        <div className="px-4 py-3 border-b border-white/5">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-slate-600 rounded-full flex items-center justify-center flex-shrink-0">
+            <div className="w-9 h-9 bg-navy rounded-xl flex items-center justify-center flex-shrink-0 ring-1 ring-white/10">
               <span className="text-sm font-medium">{user.name.charAt(0)}</span>
             </div>
             <div className="min-w-0">
@@ -161,8 +162,8 @@ export function Sidebar() {
                     onClick={() => toggleSection(item.id)}
                     className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors w-full ${
                       isActive || childActive
-                        ? 'bg-slate-700 text-white'
-                        : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                        ? 'bg-gold/10 text-gold-light border border-gold/20'
+                        : 'text-slate-300 hover:bg-white/5 hover:text-white border border-transparent'
                     }`}
                     title={collapsed ? item.label : undefined}
                   >
@@ -178,7 +179,7 @@ export function Sidebar() {
                     )}
                   </button>
                   {!collapsed && isExpanded && (
-                    <div className="ml-4 mt-1 space-y-0.5 border-l border-slate-700 pl-3">
+                    <div className="ml-4 mt-1 space-y-0.5 border-l border-white/10 pl-3">
                       {visibleChildren?.map((child) => {
                         const isChildActive = location.pathname === child.path;
                         return (
@@ -187,8 +188,8 @@ export function Sidebar() {
                             to={child.path}
                             className={`flex items-center gap-2.5 px-2.5 py-2 rounded-md text-xs font-medium transition-colors ${
                               isChildActive
-                                ? 'bg-slate-700 text-white'
-                                : 'text-slate-400 hover:bg-slate-700/50 hover:text-white'
+                                ? 'bg-gold/10 text-gold-light'
+                                : 'text-slate-400 hover:bg-white/5 hover:text-white'
                             }`}
                           >
                             <span className="flex-shrink-0">{child.icon}</span>
@@ -202,10 +203,10 @@ export function Sidebar() {
               ) : (
                 <NavLink
                   to={item.path}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors border ${
                     isActive
-                      ? 'bg-slate-700 text-white'
-                      : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                      ? 'bg-gold/10 text-gold-light border-gold/20'
+                      : 'text-slate-300 hover:bg-white/5 hover:text-white border-transparent'
                   }`}
                   title={collapsed ? item.label : undefined}
                 >
@@ -219,17 +220,17 @@ export function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="px-2 py-3 border-t border-slate-700 space-y-1">
+      <div className="px-2 py-3 border-t border-white/5 space-y-1">
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-700/50 hover:text-white transition-colors w-full"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:bg-white/5 hover:text-white transition-colors w-full"
         >
           {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
           {!collapsed && <span>Collapse</span>}
         </button>
         <button
           onClick={logout}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-700/50 hover:text-white transition-colors w-full"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:bg-white/5 hover:text-white transition-colors w-full"
         >
           <LogOut size={20} className="flex-shrink-0" />
           {!collapsed && <span>Logout</span>}

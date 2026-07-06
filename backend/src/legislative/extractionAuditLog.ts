@@ -72,25 +72,33 @@ export async function appendExtractionAudit(
   await appendFile(auditFilePath(auditDir), `${JSON.stringify(record)}\n`, 'utf-8');
 
   if (options?.prisma) {
-    await options.prisma.legislativeExtractionAudit.create({
-      data: {
-        id: record.id,
-        code: record.code,
-        section: record.section,
-        sourceUrl: record.sourceUrl,
-        contentHash: record.contentHash,
-        sourceStatuteId: record.sourceStatuteId,
-        stage: record.stage,
-        status: record.status,
-        rejectionReason: record.rejectionReason,
-        offenseCount: record.offenseCount,
-        elementCount: record.elementCount,
-        parserVersion: record.parserVersion,
-        extractorVersion: record.extractorVersion,
-        metadata: record.metadata ? JSON.stringify(record.metadata) : null,
-        createdAt: new Date(record.createdAt),
-      },
-    });
+    // The file-based audit above is authoritative; the DB mirror is best-effort so
+    // ingestion can run offline / without DATABASE_URL. Never fail the pipeline on it.
+    try {
+      await options.prisma.legislativeExtractionAudit.create({
+        data: {
+          id: record.id,
+          code: record.code,
+          section: record.section,
+          sourceUrl: record.sourceUrl,
+          contentHash: record.contentHash,
+          sourceStatuteId: record.sourceStatuteId,
+          stage: record.stage,
+          status: record.status,
+          rejectionReason: record.rejectionReason,
+          offenseCount: record.offenseCount,
+          elementCount: record.elementCount,
+          parserVersion: record.parserVersion,
+          extractorVersion: record.extractorVersion,
+          metadata: record.metadata ? JSON.stringify(record.metadata) : null,
+          createdAt: new Date(record.createdAt),
+        },
+      });
+    } catch (err) {
+      console.warn(
+        `[extractionAudit] DB mirror skipped (${err instanceof Error ? err.message.split('\n')[0] : 'unknown'}); file audit retained.`,
+      );
+    }
   }
 
   return record;

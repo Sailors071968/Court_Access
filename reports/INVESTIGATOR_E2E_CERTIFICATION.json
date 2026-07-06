@@ -1,0 +1,215 @@
+{
+  "program": "PROGRAM-40-INVESTIGATOR-CERTIFICATION",
+  "generatedAt": "2026-07-06T19:45:43.586Z",
+  "baseUrl": "https://courtaccess.net",
+  "databaseConfigured": false,
+  "overallResult": "UNKNOWN",
+  "summary": {
+    "pass": 0,
+    "fail": 0,
+    "unknown": 13,
+    "total": 13
+  },
+  "steps": [
+    {
+      "step": "Login",
+      "result": "UNKNOWN",
+      "api": "UNKNOWN",
+      "database": "SKIP",
+      "worker": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "repository": "UNKNOWN",
+      "evidenceIds": [],
+      "auditIds": [],
+      "executionTimeMs": null,
+      "warnings": [
+        "E2E automation pending — manual certification required on the deployed V1 stack"
+      ]
+    },
+    {
+      "step": "Create Investigation",
+      "result": "UNKNOWN",
+      "api": "UNKNOWN",
+      "database": "SKIP",
+      "worker": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "repository": "UNKNOWN",
+      "evidenceIds": [],
+      "auditIds": [],
+      "executionTimeMs": null,
+      "warnings": [
+        "E2E automation pending — manual certification required on the deployed V1 stack"
+      ]
+    },
+    {
+      "step": "Upload Photos",
+      "result": "UNKNOWN",
+      "api": "UNKNOWN",
+      "database": "SKIP",
+      "worker": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "repository": "UNKNOWN",
+      "evidenceIds": [],
+      "auditIds": [],
+      "executionTimeMs": null,
+      "warnings": [
+        "E2E automation pending — manual certification required on the deployed V1 stack"
+      ]
+    },
+    {
+      "step": "Upload Video",
+      "result": "UNKNOWN",
+      "api": "UNKNOWN",
+      "database": "SKIP",
+      "worker": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "repository": "UNKNOWN",
+      "evidenceIds": [],
+      "auditIds": [],
+      "executionTimeMs": null,
+      "warnings": [
+        "E2E automation pending — manual certification required on the deployed V1 stack"
+      ]
+    },
+    {
+      "step": "Upload Audio",
+      "result": "UNKNOWN",
+      "api": "UNKNOWN",
+      "database": "SKIP",
+      "worker": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "repository": "UNKNOWN",
+      "evidenceIds": [],
+      "auditIds": [],
+      "executionTimeMs": null,
+      "warnings": [
+        "E2E automation pending — manual certification required on the deployed V1 stack"
+      ]
+    },
+    {
+      "step": "GPS Evidence",
+      "result": "UNKNOWN",
+      "api": "UNKNOWN",
+      "database": "SKIP",
+      "worker": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "repository": "UNKNOWN",
+      "evidenceIds": [],
+      "auditIds": [],
+      "executionTimeMs": null,
+      "warnings": [
+        "E2E automation pending — manual certification required on the deployed V1 stack"
+      ]
+    },
+    {
+      "step": "Chain of Custody",
+      "result": "UNKNOWN",
+      "api": "UNKNOWN",
+      "database": "SKIP",
+      "worker": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "repository": "UNKNOWN",
+      "evidenceIds": [],
+      "auditIds": [],
+      "executionTimeMs": null,
+      "warnings": [
+        "E2E automation pending — manual certification required on the deployed V1 stack"
+      ]
+    },
+    {
+      "step": "Witness Notes",
+      "result": "UNKNOWN",
+      "api": "UNKNOWN",
+      "database": "SKIP",
+      "worker": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "repository": "UNKNOWN",
+      "evidenceIds": [],
+      "auditIds": [],
+      "executionTimeMs": null,
+      "warnings": [
+        "E2E automation pending — manual certification required on the deployed V1 stack"
+      ]
+    },
+    {
+      "step": "Timeline",
+      "result": "UNKNOWN",
+      "api": "UNKNOWN",
+      "database": "SKIP",
+      "worker": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "repository": "UNKNOWN",
+      "evidenceIds": [],
+      "auditIds": [],
+      "executionTimeMs": null,
+      "warnings": [
+        "E2E automation pending — manual certification required on the deployed V1 stack"
+      ]
+    },
+    {
+      "step": "Evidence Review",
+      "result": "UNKNOWN",
+      "api": "UNKNOWN",
+      "database": "SKIP",
+      "worker": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "repository": "UNKNOWN",
+      "evidenceIds": [],
+      "auditIds": [],
+      "executionTimeMs": null,
+      "warnings": [
+        "E2E automation pending — manual certification required on the deployed V1 stack"
+      ]
+    },
+    {
+      "step": "Assignments",
+      "result": "UNKNOWN",
+      "api": "UNKNOWN",
+      "database": "SKIP",
+      "worker": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "repository": "UNKNOWN",
+      "evidenceIds": [],
+      "auditIds": [],
+      "executionTimeMs": null,
+      "warnings": [
+        "E2E automation pending — manual certification required on the deployed V1 stack"
+      ]
+    },
+    {
+      "step": "Export",
+      "result": "UNKNOWN",
+      "api": "UNKNOWN",
+      "database": "SKIP",
+      "worker": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "repository": "UNKNOWN",
+      "evidenceIds": [],
+      "auditIds": [],
+      "executionTimeMs": null,
+      "warnings": [
+        "E2E automation pending — manual certification required on the deployed V1 stack"
+      ]
+    },
+    {
+      "step": "Logout",
+      "result": "UNKNOWN",
+      "api": "UNKNOWN",
+      "database": "SKIP",
+      "worker": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "repository": "UNKNOWN",
+      "evidenceIds": [],
+      "auditIds": [],
+      "executionTimeMs": null,
+      "warnings": [
+        "E2E automation pending — manual certification required on the deployed V1 stack"
+      ]
+    }
+  ],
+  "evidence": [
+    "backend/src/services/investigatorApi (fetchInvestigatorWorkbench, createWitness, createLead, createFieldNote)",
+    "backend/src/evidence/evidenceProcessingPipeline.ts (photo/video/audio ingestion queues)"
+  ],
+  "nextAction": "On the deployed V1 stack: CERT_BASE_URL=http://127.0.0.1:3101 DATABASE_URL=... tsx scripts/run-investigator-e2e-certification.ts"
+}

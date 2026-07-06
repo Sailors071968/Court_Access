@@ -1,7 +1,7 @@
 {
   "blocker": "BLOCKER-2-ATTORNEY-E2E",
-  "generatedAt": "2026-07-06T13:58:55.097Z",
-  "baseUrl": null,
+  "generatedAt": "2026-07-06T19:41:00.244Z",
+  "baseUrl": "https://courtaccess.net",
   "databaseConfigured": false,
   "overallResult": "UNKNOWN",
   "summary": {
@@ -21,7 +21,7 @@
       "evidenceIds": [],
       "executionTimeMs": null,
       "warnings": [
-        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+        "E2E automation pending — manual certification required on EC2 V1 stack"
       ]
     },
     {
@@ -34,7 +34,7 @@
       "evidenceIds": [],
       "executionTimeMs": null,
       "warnings": [
-        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+        "E2E automation pending — manual certification required on EC2 V1 stack"
       ]
     },
     {
@@ -47,7 +47,7 @@
       "evidenceIds": [],
       "executionTimeMs": null,
       "warnings": [
-        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+        "E2E automation pending — manual certification required on EC2 V1 stack"
       ]
     },
     {
@@ -60,7 +60,7 @@
       "evidenceIds": [],
       "executionTimeMs": null,
       "warnings": [
-        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+        "E2E automation pending — manual certification required on EC2 V1 stack"
       ]
     },
     {
@@ -73,7 +73,7 @@
       "evidenceIds": [],
       "executionTimeMs": null,
       "warnings": [
-        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+        "E2E automation pending — manual certification required on EC2 V1 stack"
       ]
     },
     {
@@ -86,7 +86,7 @@
       "evidenceIds": [],
       "executionTimeMs": null,
       "warnings": [
-        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+        "E2E automation pending — manual certification required on EC2 V1 stack"
       ]
     },
     {
@@ -99,7 +99,7 @@
       "evidenceIds": [],
       "executionTimeMs": null,
       "warnings": [
-        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+        "E2E automation pending — manual certification required on EC2 V1 stack"
       ]
     },
     {
@@ -112,7 +112,7 @@
       "evidenceIds": [],
       "executionTimeMs": null,
       "warnings": [
-        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+        "E2E automation pending — manual certification required on EC2 V1 stack"
       ]
     },
     {
@@ -125,7 +125,7 @@
       "evidenceIds": [],
       "executionTimeMs": null,
       "warnings": [
-        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+        "E2E automation pending — manual certification required on EC2 V1 stack"
       ]
     },
     {
@@ -138,7 +138,7 @@
       "evidenceIds": [],
       "executionTimeMs": null,
       "warnings": [
-        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+        "E2E automation pending — manual certification required on EC2 V1 stack"
       ]
     },
     {
@@ -151,7 +151,7 @@
       "evidenceIds": [],
       "executionTimeMs": null,
       "warnings": [
-        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+        "E2E automation pending — manual certification required on EC2 V1 stack"
       ]
     },
     {
@@ -164,7 +164,7 @@
       "evidenceIds": [],
       "executionTimeMs": null,
       "warnings": [
-        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+        "E2E automation pending — manual certification required on EC2 V1 stack"
       ]
     },
     {
@@ -177,7 +177,7 @@
       "evidenceIds": [],
       "executionTimeMs": null,
       "warnings": [
-        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+        "E2E automation pending — manual certification required on EC2 V1 stack"
       ]
     },
     {
@@ -190,7 +190,7 @@
       "evidenceIds": [],
       "executionTimeMs": null,
       "warnings": [
-        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+        "E2E automation pending — manual certification required on EC2 V1 stack"
       ]
     }
   ],

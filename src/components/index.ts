@@ -1,0 +1,50 @@
+// =============================================================================
+// CourtAccess — Master Component Library (Program 18)
+// Single import surface for the entire design system.
+// =============================================================================
+
+// Core UI primitives
+export * from './ui';
+
+// Brand
+export { BrandLogo } from './brand/BrandLogo';
+export { TrustBar } from './brand/TrustBar';
+
+// Iconography (Program 19)
+export { Icon, ICON_REGISTRY, ICON_LABELS, ICON_VARIANT_CLASS, type IconName, type IconVariant } from './icons/registry';
+
+// Intelligence panels (Program 8)
+export { IntelligencePanel, IntelligenceGrid, PANEL_META } from './intelligence/IntelligencePanel';
+
+// Indicators
+export {
+  ConfidenceIndicator,
+  RiskIndicator,
+  StatusBadge,
+  OcrStatus,
+  EvidenceStatus,
+  HumanReviewBanner,
+  UnknownIndicator,
+  CitationIndicator,
+} from './indicators/indicators';
+
+// Cards
+export { ExpandableCard } from './cards/ExpandableCard';
+export {
+  ProgressCard,
+  TimelineCard,
+  EvidenceCard,
+  DocumentCard,
+  WitnessCard,
+  AuthorityCard,
+  ReportCard,
+} from './cards/domain-cards';
+
+// Data
+export { DataTable, Pagination, type Column } from './data/data-table';
+
+// Charts & containers
+export { Sparkline, BarChart, DonutChart, KnowledgeGraphContainer, TimelineContainer } from './charts/charts';
+
+// Layout
+export { SplitPane } from './layout/split-pane';

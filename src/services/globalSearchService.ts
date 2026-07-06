@@ -196,7 +196,12 @@ export async function globalSearch(
     caseResults = [];
   }
 
-  let pool = [...caseResults, ...CORPUS];
+  let pool = [...caseResults];
+  // Representative non-case corpus is DEV-only; production never shows fabricated
+  // results. Wire real evidence/witness/statute indexes here when available.
+  if (import.meta.env.DEV) {
+    pool = [...pool, ...CORPUS];
+  }
 
   if (options.types && options.types.length > 0) {
     pool = pool.filter((r) => options.types!.includes(r.type));

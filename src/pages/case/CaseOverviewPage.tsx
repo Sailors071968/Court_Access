@@ -125,15 +125,15 @@ export function CaseOverviewPage() {
         }
       />
 
-      {/* Intelligence headline (hidden for defendant) */}
+      {/* Intelligence headline — computed from the repository; UNKNOWN until processed */}
       {showIntelligence && (
         <IntelligenceGrid
           columns={4}
           panels={[
-            { type: 'case_strength', value: '94%', status: 'success', onClick: () => go('charges') },
-            { type: 'evidence_confidence', value: `${evStats.confidence}%`, status: evStats.confidence > 70 ? 'success' : 'warning', subtitle: `${evStats.analyzed}/${evStats.total} analyzed`, onClick: () => go('evidence') },
-            { type: 'repository_integrity', value: '91%', status: 'info', onClick: () => go('evidence') },
-            { type: 'contradictions', value: 2, status: 'warning', onClick: () => go('contradictions') },
+            { type: 'case_strength', value: 'UNKNOWN', onClick: () => go('charges') },
+            { type: 'evidence_confidence', value: evStats.total > 0 ? `${evStats.confidence}%` : 'UNKNOWN', status: evStats.confidence > 70 ? 'success' : 'warning', subtitle: `${evStats.analyzed}/${evStats.total} analyzed`, onClick: () => go('evidence') },
+            { type: 'repository_integrity', value: 'UNKNOWN', onClick: () => go('evidence') },
+            { type: 'contradictions', value: 'UNKNOWN', onClick: () => go('contradictions') },
           ]}
         />
       )}
@@ -162,14 +162,12 @@ export function CaseOverviewPage() {
         {/* Primary column */}
         <div className="lg:col-span-2 space-y-6">
           <ExpandableCard title="Recent Activity" icon={<Icon name="timeline" size={18} />} subtitle="Latest case events">
-            <div className="space-y-1">
-              <TimelineCard title="Evidence uploaded" date="2 hours ago" tag="Evidence" />
-              <TimelineCard title="Motion recommendation generated" date="4 hours ago" tag="AI" />
-              <TimelineCard title="Discovery request acknowledged" date="1 day ago" tag="Discovery" />
-            </div>
-            <Button variant="ghost" size="sm" className="mt-2" onClick={() => go('activity')}>
-              View full timeline <ArrowRight size={14} />
-            </Button>
+            <EmptyState
+              icon={<Icon name="timeline" size={20} />}
+              title="Activity builds from the record"
+              description="Case events appear here once evidence is processed."
+              action={<Button variant="secondary" size="sm" onClick={() => go('activity')}>View timeline</Button>}
+            />
           </ExpandableCard>
 
           <ExpandableCard title="Evidence Summary" icon={<Icon name="evidence" size={18} />} subtitle={`${evStats.total} items`}>
@@ -191,14 +189,15 @@ export function CaseOverviewPage() {
             <ExpandableCard title="Unknowns & Contradictions" icon={<Icon name="unknown" size={18} />} defaultExpanded={false}>
               <div className="grid sm:grid-cols-2 gap-3">
                 <button onClick={() => go('narrative-analysis')} className="ca-panel ca-panel-hover p-4 text-left">
-                  <p className="text-2xl font-bold text-white">5</p>
+                  <p className="text-2xl font-bold text-white">UNKNOWN</p>
                   <p className="text-xs text-slate-400 mt-1">Open unknowns</p>
                 </button>
                 <button onClick={() => go('contradictions')} className="ca-panel ca-panel-hover p-4 text-left">
-                  <p className="text-2xl font-bold text-white">2</p>
+                  <p className="text-2xl font-bold text-white">UNKNOWN</p>
                   <p className="text-xs text-slate-400 mt-1">Contradictions</p>
                 </button>
               </div>
+              <p className="text-xs text-slate-500 mt-3">Counts populate from evidence-governed analysis; no values are estimated.</p>
             </ExpandableCard>
           )}
         </div>
@@ -209,25 +208,19 @@ export function CaseOverviewPage() {
             <Card>
               <h3 className="text-base font-semibold text-white mb-4">Case Strength</h3>
               <div className="flex flex-col items-center">
-                <ProgressRing value={94} sublabel="High" />
-                <p className="text-xs text-slate-400 mt-3 text-center">Strong likelihood of a favorable outcome.</p>
+                <ProgressRing value={0} label="UNKNOWN" />
+                <p className="text-xs text-slate-400 mt-3 text-center">Computed from the record once the case is processed.</p>
               </div>
             </Card>
           )}
 
           <Card>
             <h3 className="text-base font-semibold text-white mb-4">Upcoming Hearings</h3>
-            <div className="space-y-1">
-              {currentCase.nextHearing ? (
-                <TimelineCard title={currentCase.nextHearingNote ?? 'Hearing'} date={new Date(currentCase.nextHearing).toLocaleString()} />
-              ) : (
-                <>
-                  <TimelineCard title="Hearing" date="Feb 15, 2026" />
-                  <TimelineCard title="Filing deadline" date="Feb 20, 2026" />
-                </>
-              )}
-            </div>
-            <Button variant="ghost" size="sm" className="mt-1" onClick={() => go('activity')}>View calendar <ArrowRight size={14} /></Button>
+            {currentCase.nextHearing ? (
+              <TimelineCard title={currentCase.nextHearingNote ?? 'Hearing'} date={new Date(currentCase.nextHearing).toLocaleString()} />
+            ) : (
+              <EmptyState icon={<Icon name="calendar" size={20} />} title="No scheduled hearings" description="Hearing dates appear here when set on the case." />
+            )}
           </Card>
 
           <Card>
@@ -265,7 +258,7 @@ export function CaseOverviewPage() {
           title={currentCase.title}
           open={presenting}
           onClose={() => setPresenting(false)}
-          slides={buildCourtroomDeck({ caseTitle: currentCase.title, caseStrength: 94, evidenceConfidence: evStats.confidence })}
+          slides={buildCourtroomDeck({ caseTitle: currentCase.title, evidenceConfidence: evStats.total > 0 ? evStats.confidence : undefined })}
         />
       )}
     </div>

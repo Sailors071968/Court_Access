@@ -10,12 +10,7 @@ import { Tabs } from '../ui/tabs';
 import { Badge } from '../ui/badge';
 import { ProgressRing } from '../ui/progress';
 import { EmptyState } from '../ui/empty-state';
-import {
-  ConfidenceIndicator,
-  CitationIndicator,
-  UnknownIndicator,
-  StatusBadge,
-} from '../indicators/indicators';
+import { UnknownIndicator, StatusBadge } from '../indicators/indicators';
 import type { ApiEvidence } from '../../services/caseApi';
 
 type PanelTab = 'overview' | 'entities' | 'citations' | 'issues' | 'annotations' | 'audit';
@@ -56,8 +51,8 @@ export function DocumentAnalysisPanel({ evidence, className }: DocumentAnalysisP
         {tab === 'overview' && (
           <div className="space-y-5">
             <div className="flex flex-col items-center py-2">
-              <ProgressRing value={analyzed ? 92 : 0} sublabel={analyzed ? 'Extracted' : 'Pending'} tone="gold" />
-              <p className="text-xs text-slate-400 mt-3 text-center">Overall extraction confidence</p>
+              <ProgressRing value={0} label="UNKNOWN" tone="gold" />
+              <p className="text-xs text-slate-400 mt-3 text-center">Extraction confidence is computed from the record; no value is estimated.</p>
             </div>
             <div className="space-y-2">
               <Row label="OCR" value={<StatusBadge status={evidence.processingStatus} />} />
@@ -74,7 +69,7 @@ export function DocumentAnalysisPanel({ evidence, className }: DocumentAnalysisP
                 <span className="flex items-center gap-2 text-sm text-slate-200">
                   <Icon name={cat.icon} size={15} variant="selected" /> {cat.label}
                 </span>
-                {analyzed ? <ConfidenceIndicator score={88} showLabel={false} /> : <Badge variant="default">Pending</Badge>}
+                {analyzed ? <Badge variant="success">Processed</Badge> : <Badge variant="default">Pending</Badge>}
               </div>
             ))}
           </div>
@@ -83,14 +78,7 @@ export function DocumentAnalysisPanel({ evidence, className }: DocumentAnalysisP
         {tab === 'citations' && (
           <div className="space-y-3">
             <p className="text-xs text-slate-500">Citations mapped from this document (side-by-side verifiable).</p>
-            {analyzed ? (
-              <div className="flex flex-wrap gap-1.5">
-                <CitationIndicator source={`DOC-${evidence.evidenceId.slice(0, 6)} p.1`} />
-                <CitationIndicator source={`DOC-${evidence.evidenceId.slice(0, 6)} p.4`} />
-              </div>
-            ) : (
-              <EmptyState icon={<Icon name="statutes" size={20} />} title="No citations yet" description="Citations map after extraction." />
-            )}
+            <EmptyState icon={<Icon name="statutes" size={20} />} title="No mapped citations" description="Verified citations populate from extraction output — none are fabricated." />
           </div>
         )}
 
@@ -98,11 +86,11 @@ export function DocumentAnalysisPanel({ evidence, className }: DocumentAnalysisP
           <div className="space-y-3">
             <div className="flex items-center justify-between p-3 rounded-lg bg-white/[0.03]">
               <span className="text-sm text-slate-200">Contradictions</span>
-              {analyzed ? <Badge variant="warning">Review</Badge> : <Badge variant="default">Pending</Badge>}
+              <Badge variant="default">UNKNOWN</Badge>
             </div>
             <div className="flex items-center justify-between p-3 rounded-lg bg-white/[0.03]">
               <span className="text-sm text-slate-200">Issue detection</span>
-              {analyzed ? <Badge variant="info">Active</Badge> : <Badge variant="default">Pending</Badge>}
+              <Badge variant="default">{analyzed ? 'Processed' : 'Pending'}</Badge>
             </div>
             <div className="p-3 rounded-lg bg-white/[0.03]">
               <UnknownIndicator label="Unknowns flagged during extraction appear here" />

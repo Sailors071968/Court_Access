@@ -24,7 +24,8 @@ export function fromWorkbenchGraph(graph: {
   };
 }
 
-/** Representative case graph for demonstration when live graph data is absent. */
+// Representative case graph — DEV/demo only. Production renders live graph data
+// (fromWorkbenchGraph) or an explicit empty state; never a fabricated graph.
 export const SAMPLE_GRAPH: KnowledgeGraphData = {
   nodes: [
     { id: 'def', type: 'person', label: 'Defendant — J. Smith', confidence: 95, repositorySource: 'Case Repository', evidenceCitations: ['DOC-001'], auditHistory: [{ at: '2026-01-04T10:00:00Z', event: 'Node created from intake' }] },

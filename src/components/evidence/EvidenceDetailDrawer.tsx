@@ -8,7 +8,7 @@ import { MediaPreview } from './MediaPreview';
 import { Accordion } from '../ui/accordion';
 import { Badge } from '../ui/badge';
 import { Icon } from '../icons/registry';
-import { EvidenceStatus, OcrStatus, ConfidenceIndicator, CitationIndicator, UnknownIndicator } from '../indicators/indicators';
+import { EvidenceStatus, OcrStatus, CitationIndicator, UnknownIndicator } from '../indicators/indicators';
 import type { ApiEvidence } from '../../services/caseApi';
 import { cn } from '../../lib/utils';
 
@@ -91,7 +91,7 @@ export function EvidenceDetailDrawer({ evidence, onClose }: EvidenceDetailDrawer
                 icon: <Icon name="contradiction" size={15} />,
                 content: (
                   <div className="space-y-2">
-                    <div className="flex items-center gap-2"><ConfidenceIndicator score={evidence.processingStatus === 'analyzed' ? 88 : 0} /></div>
+                    <p className="text-xs text-slate-500">Findings populate from evidence-governed analysis once extraction completes.</p>
                     <UnknownIndicator label="No unknowns flagged" />
                   </div>
                 ),

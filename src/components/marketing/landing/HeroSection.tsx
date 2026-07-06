@@ -97,23 +97,29 @@ export function HeroSection() {
           </div>
         </div>
 
-        {/* Intelligence stat cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-12">
-          {HERO_STATS.map((stat) => (
-            <div key={stat.label} className="ca-panel p-5">
-              <div className="flex items-center gap-3 mb-3">
-                <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center', stat.tile)}>
-                  <stat.icon size={18} />
+        {/* Intelligence stat cards — illustrative product preview (not real case data) */}
+        <div className="mt-12">
+          <div className="flex items-center gap-2 mb-3">
+            <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">Illustrative preview</span>
+            <span className="h-px flex-1 bg-white/5" />
+          </div>
+          <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            {HERO_STATS.map((stat) => (
+              <div key={stat.label} className="ca-panel p-5">
+                <div className="flex items-center gap-3 mb-3">
+                  <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center', stat.tile)}>
+                    <stat.icon size={18} />
+                  </div>
+                  <div>
+                    <div className="text-xl font-bold text-white leading-none">{stat.value}</div>
+                    <div className="text-[10px] font-semibold text-gold-light uppercase tracking-wide mt-1">{stat.tag}</div>
+                  </div>
                 </div>
-                <div>
-                  <div className="text-xl font-bold text-white leading-none">{stat.value}</div>
-                  <div className="text-[10px] font-semibold text-gold-light uppercase tracking-wide mt-1">{stat.tag}</div>
-                </div>
+                <p className="text-sm font-medium text-slate-200">{stat.label}</p>
+                <p className="text-xs text-slate-500 mt-0.5">{stat.sub}</p>
               </div>
-              <p className="text-sm font-medium text-slate-200">{stat.label}</p>
-              <p className="text-xs text-slate-500 mt-0.5">{stat.sub}</p>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </div>
     </section>

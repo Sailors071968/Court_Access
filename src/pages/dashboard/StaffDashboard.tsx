@@ -11,20 +11,16 @@ import { PageHeader } from '../../components/ui/page-header';
 import { Button } from '../../components/ui/button';
 import { Card } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
-import { ProgressRing, ProgressBar } from '../../components/ui/progress';
+import { ProgressRing } from '../../components/ui/progress';
 import { SkeletonStatGrid } from '../../components/ui/skeleton';
 import { EmptyState } from '../../components/ui/empty-state';
 import { Icon } from '../../components/icons/registry';
 import { ExpandableCard } from '../../components/cards/ExpandableCard';
 import { TimelineCard, EvidenceCard, ReportCard } from '../../components/cards/domain-cards';
-import { HumanReviewBanner } from '../../components/indicators/indicators';
 import { IntelligencePanel } from '../../components/intelligence/IntelligencePanel';
-import { Sparkline } from '../../components/charts/charts';
 import { SPACING } from '../../constants/designTokens';
 import { useAuthStore } from '../../stores/authStore';
 import { fetchCases, fetchCaseEvidence, type ApiCase, type ApiEvidence } from '../../services/caseApi';
-
-const CONFIDENCE_TREND = [62, 68, 71, 75, 79, 84, 88, 91];
 
 export function StaffDashboard() {
   const navigate = useNavigate();
@@ -102,41 +98,19 @@ export function StaffDashboard() {
         }
       />
 
-      {/* One primary decision surfaced first: items needing review */}
-      <HumanReviewBanner count={1} onReview={() => navigate(`/cases/${caseId}/narrative`)} />
-
-      {/* Intelligence headline metrics */}
+      {/* Intelligence headline — analytics compute from the repository; shown as
+          UNKNOWN until the case is processed (never fabricated). */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <IntelligencePanel type="case_strength" value="94%" status="success" subtitle="Strong posture" onClick={() => navigate(`/cases/${caseId}/charges`)} />
-        <IntelligencePanel type="evidence_confidence" value="98%" status="success" subtitle="106 items reviewed" onClick={() => navigate(`/cases/${caseId}/evidence`)} />
-        <IntelligencePanel type="repository_integrity" value="91%" status="info" subtitle="Chain intact" onClick={() => navigate(`/cases/${caseId}/evidence`)} />
-        <IntelligencePanel type="contradictions" value={2} status="warning" subtitle="Needs review" onClick={() => navigate(`/cases/${caseId}/narrative`)} />
+        <IntelligencePanel type="case_strength" value="UNKNOWN" subtitle="Process case to compute" onClick={() => navigate(`/cases/${caseId}/charges`)} />
+        <IntelligencePanel type="evidence_confidence" value="UNKNOWN" subtitle="Awaiting analysis" onClick={() => navigate(`/cases/${caseId}/evidence`)} />
+        <IntelligencePanel type="repository_integrity" value="UNKNOWN" subtitle="Awaiting analysis" onClick={() => navigate(`/cases/${caseId}/evidence`)} />
+        <IntelligencePanel type="contradictions" value="UNKNOWN" subtitle="Awaiting analysis" onClick={() => navigate(`/cases/${caseId}/narrative`)} />
       </div>
 
       {/* Main two-column layout — collapses to one column on tablet/mobile */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
         {/* Left / primary column */}
         <div className="lg:col-span-2 space-y-6">
-          <ExpandableCard title="Today's Priorities" icon={<Icon name="tasks" size={18} />} subtitle="3 items">
-            <div className="space-y-2">
-              {[
-                { label: 'Review Motion to Suppress recommendation (HIGH)', tone: 'warning' as const },
-                { label: 'Resolve evidence dispute — People v. Smith', tone: 'danger' as const },
-                { label: 'Approve discovery request draft', tone: 'info' as const },
-              ].map((item, i) => (
-                <button
-                  key={i}
-                  onClick={() => navigate(`/cases/${caseId}/charges`)}
-                  className="flex w-full items-center gap-3 p-3 rounded-lg text-left hover:bg-white/5 transition-colors"
-                >
-                  <span className={`w-2 h-2 rounded-full ${item.tone === 'danger' ? 'bg-red-400' : item.tone === 'warning' ? 'bg-gold-light' : 'bg-blue-400'}`} />
-                  <span className="text-sm text-slate-200 flex-1">{item.label}</span>
-                  <ArrowRight size={14} className="text-slate-500" />
-                </button>
-              ))}
-            </div>
-          </ExpandableCard>
-
           <ExpandableCard title="Recent Evidence" icon={<Icon name="evidence" size={18} />} subtitle={`${evidence.length} items`}>
             {evidence.length === 0 ? (
               <EmptyState
@@ -161,20 +135,20 @@ export function StaffDashboard() {
           </ExpandableCard>
 
           <ExpandableCard title="AI Findings" icon={<Icon name="aiAnalysis" size={18} />} subtitle="Contradictions, gaps & unknowns">
-            <div className="grid sm:grid-cols-2 gap-3">
-              <IntelligencePanel type="contradictions" value={2} status="warning" compact />
-              <IntelligencePanel type="evidence_gaps" value={3} status="danger" compact />
-              <IntelligencePanel type="unknowns" value={5} status="info" compact />
-              <IntelligencePanel type="authorities" value={8} status="success" compact />
-            </div>
+            <EmptyState
+              icon={<Icon name="aiAnalysis" size={20} />}
+              title="No findings computed yet"
+              description="AI findings are derived from processed evidence. Process the case to populate contradictions, gaps, and unknowns."
+            />
           </ExpandableCard>
 
-          <ExpandableCard title="Timeline" icon={<Icon name="timeline" size={18} />} subtitle="Recent case events">
-            <div className="space-y-1">
-              <TimelineCard title="Evidence dispute added" date="2 hours ago" tag="Evidence" description="People v. Smith — body-cam metadata conflict" />
-              <TimelineCard title="Motion recommendation generated" date="4 hours ago" tag="AI" description="Motion to Suppress flagged HIGH" />
-              <TimelineCard title="3 documents uploaded" date="6 hours ago" tag="Discovery" />
-            </div>
+          <ExpandableCard title="Timeline" icon={<Icon name="timeline" size={18} />} subtitle="Case events">
+            <EmptyState
+              icon={<Icon name="timeline" size={20} />}
+              title="Timeline builds from the record"
+              description="Open the case timeline to view citation-backed events."
+              action={<Button variant="secondary" onClick={() => navigate(`/cases/${caseId}/activity`)}>View timeline</Button>}
+            />
           </ExpandableCard>
         </div>
 
@@ -198,41 +172,23 @@ export function StaffDashboard() {
 
           <ExpandableCard title="Case Strength" icon={<Icon name="caseStrength" size={18} />}>
             <div className="flex flex-col items-center py-2">
-              <ProgressRing value={94} sublabel="High" />
-              <p className="text-xs text-slate-400 mt-3 text-center">Strong likelihood of a favorable outcome based on current record.</p>
+              <ProgressRing value={0} label="UNKNOWN" />
+              <p className="text-xs text-slate-400 mt-3 text-center">Case strength is computed from the record once the case is processed.</p>
             </div>
           </ExpandableCard>
 
-          <ExpandableCard title="Evidence Confidence" icon={<Icon name="evidenceConfidence" size={18} />}>
-            <Sparkline data={CONFIDENCE_TREND} />
-            <div className="mt-3">
-              <ProgressBar value={98} tone="emerald" label="Overall confidence" showValue />
-            </div>
-          </ExpandableCard>
-
-          <ExpandableCard title="Upcoming Hearings" icon={<Icon name="calendar" size={18} />} subtitle="Next 30 days">
-            <div className="space-y-1">
-              <TimelineCard title="Hearing — People v. Smith" date="Feb 15, 2026" />
-              <TimelineCard title="Filing deadline — Motion to Suppress" date="Feb 20, 2026" />
-            </div>
-          </ExpandableCard>
-
-          <ExpandableCard title="Discovery Status" icon={<Icon name="discovery" size={18} />}>
-            <ProgressBar value={72} tone="blue" label="Discovery reviewed" showValue />
-            <p className="text-xs text-slate-500 mt-2">18 of 25 items processed.</p>
-          </ExpandableCard>
-
-          <ExpandableCard title="Investigation Tasks" icon={<Icon name="tasks" size={18} />} subtitle="2 open" defaultExpanded={false}>
-            <div className="space-y-2 text-sm text-slate-300">
-              <p className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-gold-light" /> Interview forensic toxicologist</p>
-              <p className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-blue-400" /> Subpoena dispatch logs</p>
-            </div>
+          <ExpandableCard title="Upcoming Hearings" icon={<Icon name="calendar" size={18} />} subtitle="From case record">
+            {primaryCase.nextHearing ? (
+              <TimelineCard title={primaryCase.nextHearingNote ?? 'Hearing'} date={new Date(primaryCase.nextHearing).toLocaleString()} />
+            ) : (
+              <EmptyState icon={<Icon name="calendar" size={20} />} title="No scheduled hearings" description="Hearing dates appear here when set on the case." />
+            )}
           </ExpandableCard>
 
           <ExpandableCard title="Reports" icon={<Icon name="reports" size={18} />} subtitle="Generate & export" defaultExpanded={false}>
             <div className="space-y-3">
-              <ReportCard title="Attorney Report" description="Full case intelligence" format="PDF / Word" onGenerate={() => navigate(`/cases/${caseId}/attorney-workbench`)} />
-              <ReportCard title="Chronology" description="Timeline export" format="PDF" onGenerate={() => navigate(`/cases/${caseId}/attorney-workbench`)} />
+              <ReportCard title="Attorney Report" description="Full case intelligence" format="PDF / Word" onGenerate={() => navigate(`/cases/${caseId}/reports`)} />
+              <ReportCard title="Chronology" description="Timeline export" format="PDF" onGenerate={() => navigate(`/cases/${caseId}/reports`)} />
             </div>
           </ExpandableCard>
         </div>

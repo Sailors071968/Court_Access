@@ -10,12 +10,10 @@ import { useNavigate } from 'react-router-dom';
 import { ArrowRight, CheckCircle2, Circle } from 'lucide-react';
 import { Card } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';
-import { Badge } from '../../components/ui/badge';
 import { ProgressBar } from '../../components/ui/progress';
 import { Spinner } from '../../components/ui/spinner';
 import { EmptyState } from '../../components/ui/empty-state';
 import { Icon } from '../../components/icons/registry';
-import { TimelineCard } from '../../components/cards/domain-cards';
 import { useAuthStore } from '../../stores/authStore';
 import { fetchCases, type ApiCase } from '../../services/caseApi';
 
@@ -79,12 +77,6 @@ export function DefendantWorkspace() {
     { label: 'Complete Tasks', icon: 'tasks' as const, to: '/client-portal/tasks' },
   ];
 
-  const todayTasks = [
-    { label: 'Upload your pay stubs (requested by your attorney)', done: false },
-    { label: 'Confirm your next court date', done: false },
-    { label: 'Read the message from your attorney', done: true },
-  ];
-
   return (
     <div className="max-w-5xl mx-auto space-y-6">
       {/* Warm, reassuring header */}
@@ -138,11 +130,11 @@ export function DefendantWorkspace() {
           <h2 className="text-base font-semibold text-white mb-4 flex items-center gap-2">
             <Icon name="timeline" size={16} variant="selected" /> What's happened
           </h2>
-          <div className="space-y-1">
-            <TimelineCard title="Attorney reviewed your evidence" date="Yesterday" />
-            <TimelineCard title="3 documents uploaded" date="3 days ago" />
-            <TimelineCard title="Case opened" date="2 weeks ago" />
-          </div>
+          <EmptyState
+            icon={<Icon name="timeline" size={20} />}
+            title="Your case activity will appear here"
+            description="As your attorney works your case, updates show up in this space."
+          />
         </Card>
 
         {/* What's next */}
@@ -151,11 +143,14 @@ export function DefendantWorkspace() {
             <Icon name="calendar" size={16} variant="selected" /> What happens next
           </h2>
           <div className="space-y-3">
-            <div className="p-3 rounded-lg bg-white/[0.03]">
-              <p className="text-sm font-medium text-white">Upcoming Court Date</p>
-              <p className="text-xs text-slate-400 mt-1">Hearing · Feb 15, 2026 · 9:00 AM</p>
-              <Badge variant="gold" className="mt-2">In 12 days</Badge>
-            </div>
+            {primaryCase.nextHearing ? (
+              <div className="p-3 rounded-lg bg-white/[0.03]">
+                <p className="text-sm font-medium text-white">{primaryCase.nextHearingNote ?? 'Upcoming Court Date'}</p>
+                <p className="text-xs text-slate-400 mt-1">{new Date(primaryCase.nextHearing).toLocaleString()}</p>
+              </div>
+            ) : (
+              <EmptyState icon={<Icon name="calendar" size={20} />} title="No court dates scheduled" description="Your next court date will appear here when set." />
+            )}
             <button
               onClick={() => navigate('/client-portal/court-dates')}
               className="text-sm text-gold-light hover:text-gold-bright flex items-center gap-1"
@@ -170,22 +165,12 @@ export function DefendantWorkspace() {
           <h2 className="text-base font-semibold text-white mb-4 flex items-center gap-2">
             <Icon name="tasks" size={16} variant="selected" /> What to do today
           </h2>
-          <div className="space-y-2">
-            {todayTasks.map((task, i) => (
-              <button
-                key={i}
-                onClick={() => navigate('/client-portal/tasks')}
-                className="flex w-full items-start gap-2.5 p-2.5 rounded-lg text-left hover:bg-white/5 transition-colors"
-              >
-                {task.done ? (
-                  <CheckCircle2 size={16} className="text-emerald-400 flex-shrink-0 mt-0.5" />
-                ) : (
-                  <Circle size={16} className="text-slate-500 flex-shrink-0 mt-0.5" />
-                )}
-                <span className={`text-sm ${task.done ? 'text-slate-500 line-through' : 'text-slate-200'}`}>{task.label}</span>
-              </button>
-            ))}
-          </div>
+          <EmptyState
+            icon={<Icon name="tasks" size={20} />}
+            title="No tasks assigned yet"
+            description="When your attorney requests something, it will appear here."
+            action={<Button variant="secondary" size="sm" onClick={() => navigate('/client-portal/tasks')}>Open tasks</Button>}
+          />
         </Card>
       </div>
 
@@ -200,14 +185,11 @@ export function DefendantWorkspace() {
               View all
             </Button>
           </div>
-          <div className="space-y-2">
-            {['Pay stubs (last 3 months)', 'Proof of residence'].map((doc) => (
-              <div key={doc} className="flex items-center justify-between p-3 rounded-lg bg-white/[0.03]">
-                <span className="text-sm text-slate-200">{doc}</span>
-                <Button variant="secondary" size="sm" onClick={() => navigate('/client-portal/uploads')}>Upload</Button>
-              </div>
-            ))}
-          </div>
+          <EmptyState
+            icon={<Icon name="documents" size={20} />}
+            title="No document requests"
+            description="Documents your attorney needs will be listed here."
+          />
         </Card>
 
         <Card>
@@ -219,13 +201,11 @@ export function DefendantWorkspace() {
               Open messages
             </Button>
           </div>
-          <div className="p-3 rounded-lg bg-white/[0.03]">
-            <p className="text-sm text-slate-200">“Can you confirm where you were on the evening of Jan 3rd?”</p>
-            <p className="text-xs text-slate-500 mt-2">From your attorney · 2 days ago</p>
-            <Button variant="primary" size="sm" className="mt-3" onClick={() => navigate('/client-portal/messages')}>
-              Reply securely
-            </Button>
-          </div>
+          <EmptyState
+            icon={<Icon name="messages" size={20} />}
+            title="No new questions"
+            description="Secure messages from your attorney will appear here."
+          />
         </Card>
       </div>
     </div>

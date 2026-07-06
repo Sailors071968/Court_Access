@@ -7,7 +7,6 @@
 
 import type { ReactNode } from 'react';
 import { KnowledgeGraph } from '../graph/KnowledgeGraph';
-import { SAMPLE_GRAPH } from '../graph/adapters';
 import type { KnowledgeGraphData } from '../graph/types';
 import { BarChart, DonutChart } from '../charts/charts';
 import { ProgressRing, ProgressBar } from '../ui/progress';
@@ -30,17 +29,25 @@ interface DeckInput {
   graph?: KnowledgeGraphData;
   caseStrength?: number;
   evidenceConfidence?: number;
+  chargeMap?: { label: string; value: number }[];
+  confidenceDistribution?: { label: string; value: number }[];
+  discoveryReviewed?: number;
+}
+
+function pendingNote(label: string): ReactNode {
+  return <p className="text-slate-400 text-lg">{label} populates from the case record — no values are estimated.</p>;
 }
 
 /**
  * Build a full courtroom deck from case data. Every slide reuses design-system
- * visualizations. Audience notes tailor the same facts for juror/judge/client.
+ * visualizations. Values are shown only when provided from real data; otherwise
+ * the slide shows an explicit "pending" note (never fabricated numbers).
  */
 export function buildCourtroomDeck(input: DeckInput): Slide[] {
   const timeline = input.timeline ?? [];
-  const graph = input.graph ?? SAMPLE_GRAPH;
-  const strength = input.caseStrength ?? 94;
-  const confidence = input.evidenceConfidence ?? 98;
+  const graph = input.graph;
+  const strength = input.caseStrength;
+  const confidence = input.evidenceConfidence;
 
   return [
     {
@@ -67,19 +74,22 @@ export function buildCourtroomDeck(input: DeckInput): Slide[] {
         judge: 'Chronology with source citations and flagged conflicts.',
         client: 'A step-by-step story of your case.',
       },
-      content: (
-        <div className="space-y-3 max-h-[46vh] overflow-y-auto pr-2">
-          {(timeline.length ? timeline : PLACEHOLDER_TIMELINE).slice(0, 8).map((e) => (
-            <div key={e.id} className="flex gap-4 items-start">
-              <span className="text-gold-light text-sm w-40 flex-shrink-0">{e.timestamp ? new Date(e.timestamp).toLocaleString() : 'UNKNOWN'}</span>
-              <span className="text-lg text-white">{e.actor ? `${e.actor}: ` : ''}{e.title}</span>
-            </div>
-          ))}
-        </div>
-      ),
+      content:
+        timeline.length > 0 ? (
+          <div className="space-y-3 max-h-[46vh] overflow-y-auto pr-2">
+            {timeline.slice(0, 8).map((e) => (
+              <div key={e.id} className="flex gap-4 items-start">
+                <span className="text-gold-light text-sm w-40 flex-shrink-0">{e.timestamp ? new Date(e.timestamp).toLocaleString() : 'UNKNOWN'}</span>
+                <span className="text-lg text-white">{e.actor ? `${e.actor}: ` : ''}{e.title}</span>
+              </div>
+            ))}
+          </div>
+        ) : (
+          pendingNote('The timeline')
+        ),
     },
     {
-      id: 'witnesses',
+      id: 'relationships',
       title: 'Relationships',
       subtitle: 'How people, evidence & events connect',
       audienceNote: {
@@ -87,7 +97,9 @@ export function buildCourtroomDeck(input: DeckInput): Slide[] {
         judge: 'Entity-relationship graph derived from the record.',
         client: 'Who and what is connected in your case.',
       },
-      content: <KnowledgeGraph data={graph} height={380} className="!bg-transparent !border-0 !shadow-none" />,
+      content: graph && graph.nodes.length > 0
+        ? <KnowledgeGraph data={graph} height={380} className="!bg-transparent !border-0 !shadow-none" />
+        : pendingNote('The relationship graph'),
     },
     {
       id: 'charges',
@@ -98,17 +110,7 @@ export function buildCourtroomDeck(input: DeckInput): Slide[] {
         judge: 'Charges mapped to elements and CALCRIM instructions.',
         client: 'What the prosecution must prove for each charge.',
       },
-      content: (
-        <BarChart
-          data={[
-            { label: 'PC 459', value: 5 },
-            { label: 'Elements', value: 4 },
-            { label: 'CALCRIM', value: 3 },
-            { label: 'Authorities', value: 8 },
-          ]}
-          height={220}
-        />
-      ),
+      content: input.chargeMap && input.chargeMap.length > 0 ? <BarChart data={input.chargeMap} height={220} /> : pendingNote('The charge map'),
     },
     {
       id: 'discovery',
@@ -118,12 +120,15 @@ export function buildCourtroomDeck(input: DeckInput): Slide[] {
         judge: 'Discovery review status and outstanding requests.',
         client: 'How much of the evidence has been reviewed.',
       },
-      content: (
-        <div className="max-w-xl space-y-4">
-          <ProgressBar value={72} tone="blue" label="Discovery reviewed" showValue />
-          <ProgressBar value={confidence} tone="emerald" label="Evidence confidence" showValue />
-        </div>
-      ),
+      content:
+        input.discoveryReviewed !== undefined || confidence !== undefined ? (
+          <div className="max-w-xl space-y-4">
+            {input.discoveryReviewed !== undefined && <ProgressBar value={input.discoveryReviewed} tone="blue" label="Discovery reviewed" showValue />}
+            {confidence !== undefined && <ProgressBar value={confidence} tone="emerald" label="Evidence confidence" showValue />}
+          </div>
+        ) : (
+          pendingNote('Discovery progress')
+        ),
     },
     {
       id: 'confidence',
@@ -133,16 +138,7 @@ export function buildCourtroomDeck(input: DeckInput): Slide[] {
         juror: 'The strength and reliability of the evidence presented.',
         judge: 'Evidence confidence distribution across the record.',
       },
-      content: (
-        <DonutChart
-          data={[
-            { label: 'High', value: 62 },
-            { label: 'Medium', value: 28 },
-            { label: 'Low', value: 10 },
-          ]}
-          size={200}
-        />
-      ),
+      content: input.confidenceDistribution && input.confidenceDistribution.length > 0 ? <DonutChart data={input.confidenceDistribution} size={200} /> : pendingNote('Evidence confidence'),
     },
     {
       id: 'strength',
@@ -154,17 +150,10 @@ export function buildCourtroomDeck(input: DeckInput): Slide[] {
       },
       content: (
         <div className="flex items-center justify-center gap-16">
-          <ProgressRing value={strength} sublabel="High" size={180} />
-          {bigStat(`${confidence}%`, 'Evidence confidence', 'text-emerald-400')}
+          <ProgressRing value={strength ?? 0} label={strength !== undefined ? undefined : 'UNKNOWN'} sublabel={strength !== undefined ? 'Strength' : undefined} size={180} />
+          {confidence !== undefined ? bigStat(`${confidence}%`, 'Evidence confidence', 'text-emerald-400') : bigStat('UNKNOWN', 'Evidence confidence', 'text-slate-400')}
         </div>
       ),
     },
   ];
 }
-
-const PLACEHOLDER_TIMELINE: TimelineEvent[] = [
-  { id: '1', timestamp: '2026-01-03T21:40:00Z', title: 'Arrest', actor: 'Officer Reyes' },
-  { id: '2', timestamp: '2026-01-04T10:00:00Z', title: 'Booking & intake' },
-  { id: '3', timestamp: '2026-01-05T14:22:00Z', title: 'Body-cam footage reviewed' },
-  { id: '4', timestamp: null, title: 'Dispatch-log time conflict flagged' },
-];

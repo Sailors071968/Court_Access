@@ -1,88 +1,88 @@
 {
-  "generatedAt": "2026-07-04T20:19:16.487Z",
+  "generatedAt": "2026-07-06T20:12:32.231Z",
   "extractorVersion": "1.0.0",
   "statutes": {
     "repository": "statutes",
-    "totalRecords": 4,
-    "unknownFieldCount": 4,
-    "unknownFieldRate": 0.3333333333333333,
-    "statutesCovered": 3,
-    "lastUpdatedAt": "2026-07-04T20:19:16.475Z"
+    "totalRecords": 189,
+    "unknownFieldCount": 48,
+    "unknownFieldRate": 0.08465608465608465,
+    "statutesCovered": 188,
+    "lastUpdatedAt": "2026-07-06T20:12:32.222Z"
   },
   "offenses": {
     "repository": "offenses",
-    "totalRecords": 2,
-    "unknownFieldCount": 31,
-    "unknownFieldRate": 5.166666666666667,
-    "statutesCovered": 3,
-    "lastUpdatedAt": "2026-07-04T20:19:16.475Z"
+    "totalRecords": 90,
+    "unknownFieldCount": 368,
+    "unknownFieldRate": 1.362962962962963,
+    "statutesCovered": 188,
+    "lastUpdatedAt": "2026-07-06T20:12:31.990Z"
   },
   "elements": {
     "repository": "elements",
-    "totalRecords": 4,
+    "totalRecords": 234,
     "unknownFieldCount": 0,
     "unknownFieldRate": 0,
-    "statutesCovered": 3,
-    "lastUpdatedAt": "2026-07-04T20:19:16.477Z"
+    "statutesCovered": 188,
+    "lastUpdatedAt": "2026-07-06T20:12:32.018Z"
   },
   "mensRea": {
     "repository": "mens_rea",
-    "totalRecords": 2,
-    "unknownFieldCount": 12,
-    "unknownFieldRate": 2,
-    "statutesCovered": 3,
-    "lastUpdatedAt": "2026-07-04T20:19:16.477Z"
+    "totalRecords": 90,
+    "unknownFieldCount": 87,
+    "unknownFieldRate": 0.32222222222222224,
+    "statutesCovered": 188,
+    "lastUpdatedAt": "2026-07-06T20:12:32.019Z"
   },
   "exceptions": {
     "repository": "exceptions",
-    "totalRecords": 3,
+    "totalRecords": 71,
     "unknownFieldCount": 0,
     "unknownFieldRate": 0,
-    "statutesCovered": 3,
-    "lastUpdatedAt": "2026-07-04T20:19:16.466Z"
+    "statutesCovered": 188,
+    "lastUpdatedAt": "2026-07-06T20:12:32.192Z"
   },
   "defenses": {
     "repository": "defenses",
-    "totalRecords": 0,
+    "totalRecords": 4,
     "unknownFieldCount": 0,
     "unknownFieldRate": 0,
-    "statutesCovered": 3,
-    "lastUpdatedAt": "2026-07-04T20:19:16.489Z"
+    "statutesCovered": 188,
+    "lastUpdatedAt": "2026-07-06T20:12:31.407Z"
   },
   "crossReferences": {
     "repository": "cross_references",
-    "totalRecords": 13,
+    "totalRecords": 349,
     "unknownFieldCount": 0,
     "unknownFieldRate": 0,
-    "statutesCovered": 3,
-    "lastUpdatedAt": "2026-07-04T20:19:16.478Z"
+    "statutesCovered": 188,
+    "lastUpdatedAt": "2026-07-06T20:12:32.205Z"
   },
   "regulatoryIncorporations": {
     "repository": "regulatory_incorporations",
-    "totalRecords": 2,
+    "totalRecords": 227,
     "unknownFieldCount": 0,
     "unknownFieldRate": 0,
-    "statutesCovered": 3,
-    "lastUpdatedAt": "2026-07-04T19:51:21.844Z"
+    "statutesCovered": 188,
+    "lastUpdatedAt": "2026-07-06T20:12:32.207Z"
   },
   "calcrimLinks": {
     "repository": "calcrim_links",
-    "totalRecords": 1,
-    "unknownFieldCount": 1,
+    "totalRecords": 4,
+    "unknownFieldCount": 4,
     "unknownFieldRate": 0.3333333333333333,
-    "statutesCovered": 3,
-    "lastUpdatedAt": "2026-07-04T19:51:21.844Z"
+    "statutesCovered": 188,
+    "lastUpdatedAt": "2026-07-06T20:12:31.272Z"
   },
   "authorities": {
     "repository": "authorities",
-    "totalRecords": 13,
+    "totalRecords": 162,
     "unknownFieldCount": 0,
     "unknownFieldRate": 0,
-    "statutesCovered": 3,
-    "lastUpdatedAt": "2026-07-04T20:19:16.478Z"
+    "statutesCovered": 188,
+    "lastUpdatedAt": "2026-07-06T20:12:32.038Z"
   },
-  "criminalOffensesIdentified": 2,
-  "calcrimCoveragePercent": 50,
-  "parsingFailures": 0,
-  "manualReviewCandidates": 0
+  "criminalOffensesIdentified": 90,
+  "calcrimCoveragePercent": 4.444444444444445,
+  "parsingFailures": 19,
+  "manualReviewCandidates": 19
 }

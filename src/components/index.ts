@@ -64,3 +64,7 @@ export type { GraphNode, GraphEdge, GraphNodeType, KnowledgeGraphData } from './
 // Evidence workspace (Program 28)
 export { MediaPreview, mediaKind } from './evidence/MediaPreview';
 export { EvidenceDetailDrawer } from './evidence/EvidenceDetailDrawer';
+
+// Document workspace (Program 29)
+export { DocumentReader } from './document/DocumentReader';
+export { DocumentAnalysisPanel } from './document/DocumentAnalysisPanel';

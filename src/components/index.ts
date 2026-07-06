@@ -56,3 +56,7 @@ export { SearchResultRow } from './search/SearchResultRow';
 // Timeline engine (Program 26)
 export { TimelineEngine, fromApiTimelineEvents, fromGenericEvents } from './timeline';
 export type { TimelineEvent, TimelineVariant, TimelineGrouping } from './timeline';
+
+// Knowledge Graph engine (Program 27)
+export { KnowledgeGraph, KnowledgeGraphWorkspace, NodeDetailPanel, fromWorkbenchGraph, SAMPLE_GRAPH, analyzeGraph } from './graph';
+export type { GraphNode, GraphEdge, GraphNodeType, KnowledgeGraphData } from './graph';

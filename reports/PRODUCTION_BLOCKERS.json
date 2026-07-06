@@ -1,6 +1,6 @@
 {
   "directive": "Master Production Directive v19.0",
-  "generatedAt": "2026-07-05T17:15:00Z",
+  "generatedAt": "2026-07-06T12:40:00Z",
   "blockerCount": 6,
   "resolvedThisSession": [
     "missing-frontend-merge-to-dev",
@@ -13,8 +13,8 @@
       "priority": 1,
       "name": "Production deployment",
       "status": "in_progress",
-      "description": "courtaccess.net serves stale June 26 build. CI Build & Verify PASS; SSH deploy fails (missing DEPLOY_HOST). Use Publish Dist Artifact workflow artifact + scripts/deploy-dist-artifact.sh on server.",
-      "resolution": "Configure DEPLOY_HOST/DEPLOY_USER/DEPLOY_SSH_KEY in GitHub production environment, OR download courtaccess-dist artifact from Actions run 28748522014 and run deploy-dist-artifact.sh on server",
+      "description": "courtaccess.net serves stale June 26 build. V1 greenfield scripts prepared on dev: parallel install to /var/www/courtaccess-v1 (ports 3101/8080), verify, then cutover. Legacy production untouched until cutover PASS.",
+      "resolution": "Server operator: follow GREENFIELD_V1_DEPLOYMENT.md — run v1-greenfield-install.sh, v1-greenfield-verify.sh, then v1-production-cutover.sh. Alternative: configure DEPLOY_HOST/DEPLOY_USER/DEPLOY_SSH_KEY for CI artifact deploy.",
       "owner": "engineering",
       "blocks": ["production-verification", "dashboard-screenshots", "v1-certification"]
     },

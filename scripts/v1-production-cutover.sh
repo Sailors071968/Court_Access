@@ -150,11 +150,9 @@ set -a && source .env && set +a
 npm run db:migrate:deploy
 cd "${PROD_DIR}"
 
-log "Publishing frontend to production nginx root"
-NGINX_ROOT="${PROD_DIR}/dist/public"
-mkdir -p "${NGINX_ROOT}"
-rm -rf "${NGINX_ROOT:?}"/*
-cp -a "${PROD_DIR}/dist/." "${NGINX_ROOT}/"
+log "Verifying frontend build at production path"
+test -f "${PROD_DIR}/dist/index.html"
+grep -q "Criminal Case Intelligence Platform" "${PROD_DIR}/dist/index.html"
 
 log "Updating production nginx"
 if [[ -f "${NGINX_PROD_SITE}" ]]; then
@@ -175,7 +173,7 @@ server {
     ssl_certificate     /etc/letsencrypt/live/courtaccess.net/fullchain.pem;
     ssl_certificate_key /etc/letsencrypt/live/courtaccess.net/privkey.pem;
 
-    root /var/www/courtaccess/dist/public;
+    root /var/www/courtaccess/dist;
     index index.html;
 
     client_max_body_size 500M;

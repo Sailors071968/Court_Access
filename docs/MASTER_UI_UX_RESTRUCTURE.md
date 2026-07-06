@@ -25,6 +25,8 @@
 | **29** | **Document Workspace** | **DONE** | `DocumentsPage` rebuilt; `DocumentReader` + `DocumentAnalysisPanel` reusable |
 | **30** | **Report Engine** | **DONE** | `components/report/*` (builder + engine); new `ReportsPage` + `/reports` route |
 | **31** | **Case Command Center** | **DONE** | `CaseOverviewPage` rebuilt — one-click hub, progressive disclosure, responsive |
+| **32** | **Collaboration** | **DONE** | `components/collaboration/*`; `SharedAccessPage` rebuilt; reuses permission engine |
+| **33** | **Presentation Visualizations** | **DONE** | `components/presentation/*`; courtroom deck launched from Case Command Center |
 | **24** | **Repository Audit** | **DONE** | `docs/DESIGN_DEBT_REPORT.md` |
 
 ## Design Philosophy

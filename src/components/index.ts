@@ -72,3 +72,11 @@ export { DocumentAnalysisPanel } from './document/DocumentAnalysisPanel';
 // Report engine (Program 30)
 export { ReportEngine, buildReport, REPORT_TYPES } from './report';
 export type { ReportType, ReportDoc, ReportSection, ReportBlock } from './report';
+
+// Collaboration (Program 32) — authorization reuses membershipApi permission engine
+export { PresenceBar, ActivityFeed, CommentThread, CollaboratorList, ROLE_LABELS } from './collaboration';
+export type { Collaborator, CollaboratorRole, Comment, ActivityItem } from './collaboration';
+
+// Presentation (Program 33)
+export { PresentationDeck, buildCourtroomDeck } from './presentation';
+export type { Slide, AudienceMode } from './presentation';

@@ -18,6 +18,7 @@ import { Icon, type IconName } from '../../components/icons/registry';
 import { ExpandableCard } from '../../components/cards/ExpandableCard';
 import { IntelligenceGrid } from '../../components/intelligence/IntelligencePanel';
 import { TimelineCard } from '../../components/cards/domain-cards';
+import { PresentationDeck, buildCourtroomDeck } from '../../components/presentation';
 import { DoctrineCompliancePanel } from '../../components/case/DoctrineCompliancePanel';
 import { ROLE_PERMISSIONS } from '../../constants';
 import { useAuthStore } from '../../stores/authStore';
@@ -53,6 +54,7 @@ export function CaseOverviewPage() {
   const [evidence, setEvidence] = useState<ApiEvidence[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [presenting, setPresenting] = useState(false);
 
   useEffect(() => {
     if (!caseId) return;
@@ -111,6 +113,11 @@ export function CaseOverviewPage() {
         action={
           <div className="flex items-center gap-2">
             <Badge variant="gold">{currentCase.phase ?? 'Active'}</Badge>
+            {showIntelligence && (
+              <Button variant="secondary" size="sm" onClick={() => setPresenting(true)}>
+                <Icon name="reports" size={15} /> Present
+              </Button>
+            )}
             <Button variant="primary" size="sm" onClick={() => go('evidence')}>
               <Icon name="upload" size={15} /> Upload
             </Button>
@@ -252,6 +259,15 @@ export function CaseOverviewPage() {
       </div>
 
       <DoctrineCompliancePanel />
+
+      {showIntelligence && (
+        <PresentationDeck
+          title={currentCase.title}
+          open={presenting}
+          onClose={() => setPresenting(false)}
+          slides={buildCourtroomDeck({ caseTitle: currentCase.title, caseStrength: 94, evidenceConfidence: evStats.confidence })}
+        />
+      )}
     </div>
   );
 }

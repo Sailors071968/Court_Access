@@ -160,6 +160,101 @@ program
     console.log(`Liability report: ${result.liabilityReportPath}`);
   });
 
+program
+  .command('discover-criminal')
+  .description('Criminal Liability Discovery Engine — targeted acquisition of high-criminality sections first (no sequential crawl)')
+  .requiredOption('-c, --code <abbrev>', 'California code abbreviation (VEH, HSC, BPC, PEN, WIC)')
+  .option('--raw-dir <path>', 'Raw HTML output directory', 'data/legislative/raw')
+  .option('--repo-dir <path>', 'Repository output directory', 'data/legislative/repositories')
+  .option('--output-dir <path>', 'Manifest output directory', 'data/legislative/discovery')
+  .option('--acquire', 'Acquire the targeted sections after writing the manifest', false)
+  .option('--process', 'Process acquired sections into the knowledge graph', false)
+  .action(async (opts) => {
+    const code = opts.code.toUpperCase();
+    const { writeCriminalManifest, buildCriminalManifest } = await import('./criminalDiscoveryEngine.ts');
+    const manifest = buildCriminalManifest(code);
+    const manifestPath = await writeCriminalManifest(code, resolve(opts.outputDir));
+
+    console.log(`\n=== Criminal Liability Discovery — ${manifest.codeName} (${code}) ===`);
+    console.log(`Targeted criminal-priority seed sections: ${manifest.sections.length}`);
+    console.log(`Manifest: ${manifestPath}`);
+
+    if (opts.acquire) {
+      console.log(`\n--- Acquiring ${manifest.sections.length} targeted sections directly ---`);
+      const acq = await acquireStatuteHtml({
+        code,
+        manifestPath,
+        rawHtmlDir: resolve(opts.rawDir),
+        resume: false,
+        skipExisting: true,
+      });
+      console.log(`Acquired: ${acq.acquired}  Failed: ${acq.failed}  Skipped: ${acq.skipped}`);
+    }
+
+    if (opts.process) {
+      console.log(`\n--- Processing into Criminal Knowledge Graph ---`);
+      const { processStatutePipeline } = await import('./knowledgeGraph/pipeline.ts');
+      const prisma = (await import('../lib/prisma.ts')).default;
+      const result = await processStatutePipeline({
+        code,
+        rawHtmlDir: resolve(opts.rawDir),
+        repositoryDir: resolve(opts.repoDir),
+        prisma,
+      });
+      console.log(`Processed: ${result.processed}  Offenses: ${result.offenses}  Likely criminal: ${result.likelyCriminal}`);
+    }
+  });
+
+program
+  .command('expand-criminal')
+  .description('Phase 3 — Discover cross-reference expansion targets from confirmed criminal statutes')
+  .option('-c, --code <abbrev>', 'Restrict targets to a single code')
+  .option('--repo-dir <path>', 'Repository directory', 'data/legislative/repositories')
+  .option('--only-from-criminal', 'Only expand references originating from confirmed criminal statutes', false)
+  .option('--write-manifest', 'Write discovered targets into that code\'s discovery manifest for acquisition', false)
+  .action(async (opts) => {
+    const { discoverCrossReferenceTargets } = await import('./criminalLiabilityRegistry.ts');
+    const { targets, alreadyAcquired, total } = await discoverCrossReferenceTargets(resolve(opts.repoDir), {
+      code: opts.code,
+      onlyFromCriminal: opts.onlyFromCriminal,
+    });
+
+    console.log(`\n=== Cross-reference Expansion ===`);
+    console.log(`Cross-references scanned: ${total}`);
+    console.log(`Already acquired: ${alreadyAcquired}`);
+    console.log(`New criminal-code targets to expand: ${targets.length}`);
+    const byCode = new Map<string, number>();
+    for (const t of targets) byCode.set(t.code, (byCode.get(t.code) ?? 0) + 1);
+    for (const [c, n] of [...byCode.entries()].sort((a, b) => b[1] - a[1])) {
+      console.log(`  ${c}: ${n} sections`);
+    }
+    if (targets.length) {
+      console.log('Sample targets:', targets.slice(0, 15).map((t) => `${t.code} ${t.section}`).join(', '));
+    }
+  });
+
+program
+  .command('dashboard')
+  .description('Phase 5 — Build the Criminal Liability Coverage Dashboard + repository intelligence registry')
+  .option('--repo-dir <path>', 'Repository directory', 'data/legislative/repositories')
+  .action(async (opts) => {
+    const { buildCoverageDashboard } = await import('./criminalLiabilityRegistry.ts');
+    const { dashboard, jsonPath, markdownPath } = await buildCoverageDashboard(resolve(opts.repoDir));
+
+    console.log(`\n=== Criminal Liability Coverage Dashboard ===`);
+    console.log(`Sections classified: ${dashboard.totals.total}`);
+    console.log(`Known criminal: ${dashboard.totals.criminalSections}`);
+    console.log(`Known administrative: ${dashboard.totals.administrativeSections}`);
+    console.log(`Pending review: ${dashboard.totals.pending}`);
+    console.log(`Unknown: ${dashboard.totals.unknown}`);
+    console.log(`Offenses: ${dashboard.totals.offenses}`);
+    console.log(`Discovery rate: ${dashboard.totals.discoveryRate}`);
+    console.log(`Hash verification: ${(dashboard.totals.hashVerification * 100).toFixed(1)}%`);
+    console.log(`Cross-reference completeness: ${(dashboard.totals.crossReferenceCompleteness * 100).toFixed(1)}%`);
+    console.log(`JSON: ${jsonPath}`);
+    console.log(`Markdown: ${markdownPath}`);
+  });
+
 program.parseAsync(process.argv).catch((err) => {
   console.error(err);
   process.exit(1);

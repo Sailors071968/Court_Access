@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "code": "VEH",
+  "manifestPath": "/workspace/backend/data/legislative/discovery/VEH-discovery-manifest.json",
+  "startedAt": "2026-07-06T21:06:36.514Z",
+  "updatedAt": "2026-07-06T21:09:08.674Z",
+  "nextIndex": 150,
+  "acquired": 150,
+  "failed": 0,
+  "skipped": 0,
+  "lastSection": "400."
+}

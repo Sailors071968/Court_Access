@@ -94,6 +94,7 @@ import { ExpertsPage } from './pages/case/ExpertsPage';
 import { MotionsPage } from './pages/case/MotionsPage';
 import { ResearchPage } from './pages/case/ResearchPage';
 import { ActivityPage } from './pages/case/ActivityPage';
+import { ReportsPage } from './pages/case/ReportsPage';
 import { DocumentsPage } from './pages/case/DocumentsPage';
 import { CaseSettingsPage } from './pages/case/CaseSettingsPage';
 import { TrialExhibitWorkspace } from './pages/case/TrialExhibitWorkspace';
@@ -510,6 +511,14 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canViewActivity">
                   <ActivityPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="reports"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <ReportsPage />
                 </ProtectedRoute>
               }
             />

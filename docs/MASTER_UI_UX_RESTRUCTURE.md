@@ -23,6 +23,7 @@
 | **27** | **Production Knowledge Graph** | **DONE** | `components/graph/*` engine + workspace; wired into `ResearchPage` |
 | **28** | **Evidence Workspace** | **DONE** | `EvidencePage` rebuilt; `MediaPreview` + `EvidenceDetailDrawer` reusable |
 | **29** | **Document Workspace** | **DONE** | `DocumentsPage` rebuilt; `DocumentReader` + `DocumentAnalysisPanel` reusable |
+| **30** | **Report Engine** | **DONE** | `components/report/*` (builder + engine); new `ReportsPage` + `/reports` route |
 | **24** | **Repository Audit** | **DONE** | `docs/DESIGN_DEBT_REPORT.md` |
 
 ## Design Philosophy

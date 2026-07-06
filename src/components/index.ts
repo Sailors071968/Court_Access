@@ -68,3 +68,7 @@ export { EvidenceDetailDrawer } from './evidence/EvidenceDetailDrawer';
 // Document workspace (Program 29)
 export { DocumentReader } from './document/DocumentReader';
 export { DocumentAnalysisPanel } from './document/DocumentAnalysisPanel';
+
+// Report engine (Program 30)
+export { ReportEngine, buildReport, REPORT_TYPES } from './report';
+export type { ReportType, ReportDoc, ReportSection, ReportBlock } from './report';

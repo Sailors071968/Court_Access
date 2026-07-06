@@ -3,6 +3,23 @@
 **Branch:** `cursor/master-ui-ux-restructure-48a3`  
 **Status:** Dark design language established — Programs 1–3, 6, 8 (foundation)
 
+## Program Status
+
+| Program | Name | Status | Evidence |
+|---------|------|--------|----------|
+| 1 | Global Design System | **DONE (foundation)** | tokens, `ca-*` utilities |
+| 2 | Global Navigation | **IN_PROGRESS** | `navigation.ts`, `BrandLogo`, `TrustBar` |
+| 3 | Landing Page | **DONE (foundation)** | dark `HeroSection`, full token migration |
+| 6 | Workspace Design | **IN_PROGRESS** | dark `AppLayout`, `Sidebar`, `Header` |
+| 8 | Intelligence Panels | **DONE** | `IntelligencePanel` / `IntelligenceGrid` |
+| **18** | **Master Component Library** | **DONE** | `docs/COMPONENT_LIBRARY.md`, 45+ components |
+| **19** | **Iconography System** | **DONE** | `docs/ICON_USAGE_GUIDE.md`, `icons/registry.tsx` |
+| **20** | **Attorney Workspace (flagship)** | **DONE (v1)** | `StaffDashboard.tsx` rebuilt on library |
+| 21 | Investigator Workspace | **PENDING** | components ready |
+| 22 | Defendant Workspace | **PENDING** | components ready |
+| 23 | Operations Command Center | **PENDING** | components ready |
+| **24** | **Repository Audit** | **DONE** | `docs/DESIGN_DEBT_REPORT.md` |
+
 ## Design Philosophy
 
 CourtAccess uses **one dark navy visual language** across the entire platform —

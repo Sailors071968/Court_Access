@@ -1,29 +1,35 @@
-// ============================================
-// Court Access — Staff Dashboard
-// Operational control center for legal professionals
-// ============================================
+// ============================================================================
+// CourtAccess — Attorney Workspace (Program 20, flagship)
+// Calm, premium, progressive-disclosure dashboard built entirely on the
+// master component library. Responsive: desktop / tablet / mobile.
+// ============================================================================
 
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import {
-  FileText, Scale, AlertTriangle,
-  Plus, Upload, BarChart3, Users, Clock, TrendingUp, Briefcase, Lightbulb
-} from 'lucide-react';
-import { Card, StatCard } from '../../components/common/Card';
+import { Upload, ArrowRight } from 'lucide-react';
 import { PageHeader } from '../../components/ui/page-header';
 import { Button } from '../../components/ui/button';
+import { Card } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
+import { ProgressRing, ProgressBar } from '../../components/ui/progress';
 import { SkeletonStatGrid } from '../../components/ui/skeleton';
-import { IntelligenceGrid } from '../../components/intelligence/IntelligencePanel';
-import { SPACING, STATUS_COLORS, TEXT_COLORS } from '../../constants/designTokens';
+import { EmptyState } from '../../components/ui/empty-state';
+import { Icon } from '../../components/icons/registry';
+import { ExpandableCard } from '../../components/cards/ExpandableCard';
+import { TimelineCard, EvidenceCard, ReportCard } from '../../components/cards/domain-cards';
+import { HumanReviewBanner } from '../../components/indicators/indicators';
+import { IntelligencePanel } from '../../components/intelligence/IntelligencePanel';
+import { Sparkline } from '../../components/charts/charts';
+import { SPACING } from '../../constants/designTokens';
 import { useAuthStore } from '../../stores/authStore';
 import { fetchCases, fetchCaseEvidence, type ApiCase, type ApiEvidence } from '../../services/caseApi';
+
+const CONFIDENCE_TREND = [62, 68, 71, 75, 79, 84, 88, 91];
 
 export function StaffDashboard() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
 
-  const [cases, setCases] = useState<ApiCase[]>([]);
   const [primaryCase, setPrimaryCase] = useState<ApiCase | null>(null);
   const [evidence, setEvidence] = useState<ApiEvidence[]>([]);
   const [loading, setLoading] = useState(true);
@@ -35,7 +41,6 @@ export function StaffDashboard() {
         setLoading(true);
         const allCases = await fetchCases().catch(() => []);
         if (cancelled) return;
-        setCases(allCases ?? []);
         const first = allCases?.[0] ?? null;
         setPrimaryCase(first);
         if (first) {
@@ -46,13 +51,16 @@ export function StaffDashboard() {
         if (!cancelled) setLoading(false);
       }
     })();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   if (loading) {
     return (
-      <div className={SPACING.container}>
-        <SkeletonStatGrid count={5} />
+      <div className={`${SPACING.container} space-y-6`}>
+        <SkeletonStatGrid count={4} />
+        <SkeletonStatGrid count={2} />
       </div>
     );
   }
@@ -60,261 +68,173 @@ export function StaffDashboard() {
   if (!primaryCase) {
     return (
       <div className={`${SPACING.container} ${SPACING.stack}`}>
-        <PageHeader
-          title="Attorney Workspace"
-          subtitle={`Welcome back, ${user?.name}`}
-          overline="Dashboard"
-        />
-        <Card className="text-center py-12">
-          <p className="text-slate-500 mb-6">No cases yet. Create your first case to begin building case intelligence.</p>
-          <Button variant="navy" onClick={() => navigate('/cases')}>Go to Cases</Button>
+        <PageHeader title="Attorney Workspace" subtitle={`Welcome back, ${user?.name}`} overline="Dashboard" />
+        <Card>
+          <EmptyState
+            icon={<Icon name="attorney" size={24} />}
+            title="Create your first case"
+            description="Open a case to begin building citation-backed intelligence, evidence maps, and reports."
+            action={<Button variant="primary" onClick={() => navigate('/cases')}>Go to Cases</Button>}
+          />
         </Card>
       </div>
     );
   }
 
+  const caseId = primaryCase.caseId;
+  const caseTitle = primaryCase.title || primaryCase.caseNumber;
+
   return (
-    <div className={`${SPACING.container} ${SPACING.stackLg}`}>
+    <div className={`${SPACING.container} space-y-6`}>
       <PageHeader
         title="Attorney Workspace"
-        subtitle={`Welcome back, ${user?.name} — ${primaryCase.title ?? primaryCase.caseId}`}
         overline="Dashboard"
-        action={<Button variant="navy" onClick={() => navigate(`/cases/${primaryCase.caseId}`)}>Open Case</Button>}
+        subtitle={`Welcome back, ${user?.name}`}
+        action={
+          <div className="flex items-center gap-3">
+            <Button variant="secondary" onClick={() => navigate(`/cases/${caseId}/evidence`)}>
+              <Upload size={16} /> Upload
+            </Button>
+            <Button variant="primary" onClick={() => navigate(`/cases/${caseId}`)}>
+              Open Case <ArrowRight size={16} />
+            </Button>
+          </div>
+        }
       />
 
-      <IntelligenceGrid
-        columns={4}
-        panels={[
-          { type: 'case_strength', value: cases.length, status: 'info' },
-          { type: 'contradictions', value: 2, status: 'warning' },
-          { type: 'evidence_gaps', value: 3, status: 'danger' },
-          { type: 'authorities', value: 8, status: 'success' },
-        ]}
-      />
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <StatCard
-          tile="blue"
-          icon={<Briefcase size={20} />}
-          value={cases.length}
-          label="Active Cases"
-          sublabel="Across your workspace"
-          onClick={() => navigate('/cases?status=active')}
-        />
-        <StatCard
-          tile="emerald"
-          icon={<Plus size={20} />}
-          value={cases.filter((c) => new Date(c.createdAt) > new Date(Date.now() - 7 * 86400000)).length}
-          label="New This Week"
-          sublabel="Recently opened"
-          onClick={() => navigate('/cases?sort=newest')}
-        />
-        <StatCard
-          tile="gold"
-          icon={<AlertTriangle size={20} />}
-          value={2}
-          label="Action Required"
-          sublabel="Needs your attention"
-          onClick={() => navigate('/cases?filter=action-needed')}
-        />
-        <StatCard
-          tile="violet"
-          icon={<Lightbulb size={20} />}
-          value={8}
-          label="Intelligence Signals"
-          sublabel="Review recommended"
-          onClick={() => navigate(`/cases/${primaryCase.caseId}/charges`)}
-        />
+      {/* One primary decision surfaced first: items needing review */}
+      <HumanReviewBanner count={1} onReview={() => navigate(`/cases/${caseId}/narrative`)} />
+
+      {/* Intelligence headline metrics */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <IntelligencePanel type="case_strength" value="94%" status="success" subtitle="Strong posture" onClick={() => navigate(`/cases/${caseId}/charges`)} />
+        <IntelligencePanel type="evidence_confidence" value="98%" status="success" subtitle="106 items reviewed" onClick={() => navigate(`/cases/${caseId}/evidence`)} />
+        <IntelligencePanel type="repository_integrity" value="91%" status="info" subtitle="Chain intact" onClick={() => navigate(`/cases/${caseId}/evidence`)} />
+        <IntelligencePanel type="contradictions" value={2} status="warning" subtitle="Needs review" onClick={() => navigate(`/cases/${caseId}/narrative`)} />
       </div>
 
-      <div className="grid lg:grid-cols-3 gap-6">
-        {/* Alerts & Action Queue */}
+      {/* Main two-column layout — collapses to one column on tablet/mobile */}
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+        {/* Left / primary column */}
         <div className="lg:col-span-2 space-y-6">
-          <Card>
-            <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-white">Recent Activity</h2>
-              <span className="text-xs text-slate-500">Sorted by urgency</span>
-            </div>
+          <ExpandableCard title="Today's Priorities" icon={<Icon name="tasks" size={18} />} subtitle="3 items">
             <div className="space-y-2">
               {[
-                { type: 'high', icon: AlertTriangle, color: STATUS_COLORS.danger, label: 'Evidence dispute added — People v. Smith', time: '2 hours ago' },
-                { type: 'high', icon: Lightbulb, color: STATUS_COLORS.warning, label: 'Motion recommendation signal: Motion to Suppress (HIGH)', time: '4 hours ago' },
-                { type: 'medium', icon: Upload, color: STATUS_COLORS.info, label: 'New defendant upload — 3 documents pending review', time: '6 hours ago' },
-                { type: 'medium', icon: Users, color: STATUS_COLORS.accent, label: 'Expert recommendation flagged: Forensic Toxicologist', time: '1 day ago' },
-                { type: 'low', icon: Clock, color: STATUS_COLORS.neutral, label: 'Discovery deadline approaching — Case #2024-CF-001234', time: '2 days ago' },
-              ].map((alert, i) => {
-                const Icon = alert.icon;
-                return (
-                  <div key={i} className="flex items-start gap-3 p-3 rounded-lg hover:bg-white/5 cursor-pointer transition-colors">
-                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 border ${alert.color}`}>
-                      <Icon size={14} />
-                    </div>
-                    <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-slate-200">{alert.label}</p>
-                      <p className="text-xs text-slate-500 mt-0.5">{alert.time}</p>
-                    </div>
-                    {alert.type === 'high' && <Badge variant="danger" className="flex-shrink-0">Urgent</Badge>}
-                  </div>
-                );
-              })}
-            </div>
-          </Card>
-
-          {/* Recent Documents */}
-          <Card>
-            <h2 className="text-lg font-semibold text-white mb-4">Recent Documents</h2>
-            <div className="overflow-x-auto">
-              <table className="w-full text-sm">
-                <thead>
-                  <tr className="border-b border-white/10">
-                    <th className="text-left py-3 px-2 text-slate-400 font-medium">Document Name</th>
-                    <th className="text-left py-3 px-2 text-slate-400 font-medium">Filed Date</th>
-                    <th className="text-left py-3 px-2 text-slate-400 font-medium">Type</th>
-                    <th className="text-left py-3 px-2 text-slate-400 font-medium">AI Status</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {evidence.slice(0, 3).map((doc) => (
-                    <tr
-                      key={doc.evidenceId}
-                      className="border-b border-white/5 hover:bg-white/5 cursor-pointer"
-                      onClick={() => navigate(`/cases/${primaryCase.caseId}/evidence`)}
-                    >
-                      <td className="py-3 px-2 font-medium text-slate-200">{doc.fileName}</td>
-                      <td className="py-3 px-2 text-slate-400">{new Date(doc.uploadedAt).toLocaleDateString()}</td>
-                      <td className="py-3 px-2 text-slate-400">{doc.evidenceType}</td>
-                      <td className="py-3 px-2">
-                        <Badge
-                          variant={
-                            doc.processingStatus === 'analyzed'
-                              ? 'success'
-                              : doc.processingStatus === 'processing'
-                                ? 'info'
-                                : doc.processingStatus === 'failed'
-                                  ? 'danger'
-                                  : 'default'
-                          }
-                        >
-                          {doc.processingStatus}
-                        </Badge>
-                      </td>
-                    </tr>
-                  ))}
-                  {evidence.length === 0 && (
-                    <tr>
-                      <td colSpan={4} className="py-6 text-center text-slate-500 text-sm">
-                        No documents uploaded yet.
-                      </td>
-                    </tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </Card>
-        </div>
-
-        {/* Right Column */}
-        <div className="space-y-6">
-          {/* Case Strength */}
-          <Card>
-            <h2 className="text-lg font-semibold text-white mb-4">Case Strength</h2>
-            <div className="flex flex-col items-center text-center py-2">
-              <div className="relative w-28 h-28 mb-3">
-                <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
-                  <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="8" />
-                  <circle
-                    cx="50"
-                    cy="50"
-                    r="42"
-                    fill="none"
-                    stroke="#C8963E"
-                    strokeWidth="8"
-                    strokeLinecap="round"
-                    strokeDasharray={`${2 * Math.PI * 42 * 0.94} ${2 * Math.PI * 42}`}
-                  />
-                </svg>
-                <div className="absolute inset-0 flex flex-col items-center justify-center">
-                  <span className="text-2xl font-bold text-white">94%</span>
-                  <span className="text-[10px] font-semibold text-gold-light uppercase tracking-wide">High</span>
-                </div>
-              </div>
-              <p className="text-xs text-slate-400">Strong likelihood of favorable outcome</p>
-              <button
-                onClick={() => navigate(`/cases/${primaryCase.caseId}/charges`)}
-                className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-gold/10 text-gold-light rounded-lg text-sm font-medium hover:bg-gold/20 transition-colors w-full justify-center border border-gold/20"
-              >
-                <TrendingUp size={16} />
-                View Full Analysis
-              </button>
-            </div>
-          </Card>
-
-          {/* Case Intelligence Overview */}
-          <Card>
-            <h2 className="text-lg font-semibold text-white mb-4">Case Intelligence</h2>
-            <div className="space-y-1">
-              {[
-                { label: 'Priority cases', value: '1', color: TEXT_COLORS.danger },
-                { label: 'Prosecution Vulnerabilities', value: '3', color: TEXT_COLORS.warning },
-                { label: 'Sentencing Exposure Flags', value: '2', color: TEXT_COLORS.orange },
-                { label: 'Procedural deadline warnings', value: '1', color: TEXT_COLORS.info },
-              ].map((insight, i) => (
-                <div key={i} className="flex items-center justify-between p-2 rounded-lg hover:bg-white/5">
-                  <span className="text-sm text-slate-300">{insight.label}</span>
-                  <span className={`text-sm font-bold ${insight.color}`}>{insight.value}</span>
-                </div>
+                { label: 'Review Motion to Suppress recommendation (HIGH)', tone: 'warning' as const },
+                { label: 'Resolve evidence dispute — People v. Smith', tone: 'danger' as const },
+                { label: 'Approve discovery request draft', tone: 'info' as const },
+              ].map((item, i) => (
+                <button
+                  key={i}
+                  onClick={() => navigate(`/cases/${caseId}/charges`)}
+                  className="flex w-full items-center gap-3 p-3 rounded-lg text-left hover:bg-white/5 transition-colors"
+                >
+                  <span className={`w-2 h-2 rounded-full ${item.tone === 'danger' ? 'bg-red-400' : item.tone === 'warning' ? 'bg-gold-light' : 'bg-blue-400'}`} />
+                  <span className="text-sm text-slate-200 flex-1">{item.label}</span>
+                  <ArrowRight size={14} className="text-slate-500" />
+                </button>
               ))}
             </div>
-          </Card>
+          </ExpandableCard>
 
-          {/* Upcoming Schedule */}
-          <Card>
-            <h2 className="text-lg font-semibold text-white mb-4">Upcoming Schedule</h2>
-            <div className="space-y-2">
-              {[
-                { label: 'Hearing — People v. Smith', date: 'Feb 15, 2024', icon: Scale },
-                { label: 'Filing Deadline — Motion to Suppress', date: 'Feb 20, 2024', icon: Clock },
-                { label: 'Discovery Deadline', date: 'Mar 1, 2024', icon: FileText },
-              ].map((event, i) => {
-                const Icon = event.icon;
-                return (
-                  <div key={i} className="flex items-start gap-3 p-2 rounded-lg hover:bg-white/5">
-                    <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ca-icon-blue text-blue-300">
-                      <Icon size={14} />
-                    </div>
-                    <div>
-                      <p className="text-sm font-medium text-slate-200">{event.label}</p>
-                      <p className="text-xs text-slate-500 mt-0.5">{event.date}</p>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          </Card>
+          <ExpandableCard title="Recent Evidence" icon={<Icon name="evidence" size={18} />} subtitle={`${evidence.length} items`}>
+            {evidence.length === 0 ? (
+              <EmptyState
+                icon={<Icon name="upload" size={20} />}
+                title="No evidence yet"
+                description="Upload discovery to start OCR and evidence extraction."
+                action={<Button variant="primary" onClick={() => navigate(`/cases/${caseId}/evidence`)}>Upload Evidence</Button>}
+              />
+            ) : (
+              <div className="grid sm:grid-cols-2 gap-3">
+                {evidence.slice(0, 4).map((doc) => (
+                  <EvidenceCard
+                    key={doc.evidenceId}
+                    title={doc.fileName}
+                    type={doc.evidenceType}
+                    status={doc.processingStatus}
+                    onClick={() => navigate(`/cases/${caseId}/evidence`)}
+                  />
+                ))}
+              </div>
+            )}
+          </ExpandableCard>
 
-          {/* Quick Actions */}
-          <Card>
-            <h2 className="text-lg font-semibold text-white mb-4">Quick Actions</h2>
-            <div className="grid grid-cols-2 gap-2">
-              {[
-                { label: 'New Case', icon: Plus, action: () => navigate('/cases') },
-                { label: 'Upload Evidence', icon: Upload, action: () => navigate(`/cases/${primaryCase.caseId}/evidence`) },
-                { label: 'Charge Analysis', icon: BarChart3, action: () => navigate(`/cases/${primaryCase.caseId}/charges`) },
-                { label: 'Expert Review', icon: Users, action: () => navigate(`/cases/${primaryCase.caseId}/experts`) },
-              ].map((action, i) => {
-                const Icon = action.icon;
-                return (
-                  <button
-                    key={i}
-                    onClick={action.action}
-                    className="flex items-center gap-2 p-3 rounded-lg border border-white/10 text-sm font-medium text-slate-300 hover:bg-white/5 hover:border-gold/30 hover:text-white transition-colors"
-                  >
-                    <Icon size={16} className="text-gold-light/80" />
-                    {action.label}
-                  </button>
-                );
-              })}
+          <ExpandableCard title="AI Findings" icon={<Icon name="aiAnalysis" size={18} />} subtitle="Contradictions, gaps & unknowns">
+            <div className="grid sm:grid-cols-2 gap-3">
+              <IntelligencePanel type="contradictions" value={2} status="warning" compact />
+              <IntelligencePanel type="evidence_gaps" value={3} status="danger" compact />
+              <IntelligencePanel type="unknowns" value={5} status="info" compact />
+              <IntelligencePanel type="authorities" value={8} status="success" compact />
             </div>
-          </Card>
+          </ExpandableCard>
+
+          <ExpandableCard title="Timeline" icon={<Icon name="timeline" size={18} />} subtitle="Recent case events">
+            <div className="space-y-1">
+              <TimelineCard title="Evidence dispute added" date="2 hours ago" tag="Evidence" description="People v. Smith — body-cam metadata conflict" />
+              <TimelineCard title="Motion recommendation generated" date="4 hours ago" tag="AI" description="Motion to Suppress flagged HIGH" />
+              <TimelineCard title="3 documents uploaded" date="6 hours ago" tag="Discovery" />
+            </div>
+          </ExpandableCard>
+        </div>
+
+        {/* Right / context column */}
+        <div className="space-y-6">
+          <ExpandableCard title="Current Case" icon={<Icon name="attorney" size={18} />}>
+            <div className="space-y-3">
+              <div>
+                <p className="text-sm font-semibold text-white">{caseTitle}</p>
+                <p className="text-xs text-slate-500 mt-0.5">{primaryCase.jurisdiction} · {primaryCase.status}</p>
+              </div>
+              <div className="flex flex-wrap gap-2">
+                <Badge variant="gold">{primaryCase.phase ?? 'Active'}</Badge>
+                {primaryCase.court && <Badge variant="default">{primaryCase.court}</Badge>}
+              </div>
+              <Button variant="navy" className="w-full" onClick={() => navigate(`/cases/${caseId}`)}>
+                Open case
+              </Button>
+            </div>
+          </ExpandableCard>
+
+          <ExpandableCard title="Case Strength" icon={<Icon name="caseStrength" size={18} />}>
+            <div className="flex flex-col items-center py-2">
+              <ProgressRing value={94} sublabel="High" />
+              <p className="text-xs text-slate-400 mt-3 text-center">Strong likelihood of a favorable outcome based on current record.</p>
+            </div>
+          </ExpandableCard>
+
+          <ExpandableCard title="Evidence Confidence" icon={<Icon name="evidenceConfidence" size={18} />}>
+            <Sparkline data={CONFIDENCE_TREND} />
+            <div className="mt-3">
+              <ProgressBar value={98} tone="emerald" label="Overall confidence" showValue />
+            </div>
+          </ExpandableCard>
+
+          <ExpandableCard title="Upcoming Hearings" icon={<Icon name="calendar" size={18} />} subtitle="Next 30 days">
+            <div className="space-y-1">
+              <TimelineCard title="Hearing — People v. Smith" date="Feb 15, 2026" />
+              <TimelineCard title="Filing deadline — Motion to Suppress" date="Feb 20, 2026" />
+            </div>
+          </ExpandableCard>
+
+          <ExpandableCard title="Discovery Status" icon={<Icon name="discovery" size={18} />}>
+            <ProgressBar value={72} tone="blue" label="Discovery reviewed" showValue />
+            <p className="text-xs text-slate-500 mt-2">18 of 25 items processed.</p>
+          </ExpandableCard>
+
+          <ExpandableCard title="Investigation Tasks" icon={<Icon name="tasks" size={18} />} subtitle="2 open" defaultExpanded={false}>
+            <div className="space-y-2 text-sm text-slate-300">
+              <p className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-gold-light" /> Interview forensic toxicologist</p>
+              <p className="flex items-center gap-2"><span className="w-1.5 h-1.5 rounded-full bg-blue-400" /> Subpoena dispatch logs</p>
+            </div>
+          </ExpandableCard>
+
+          <ExpandableCard title="Reports" icon={<Icon name="reports" size={18} />} subtitle="Generate & export" defaultExpanded={false}>
+            <div className="space-y-3">
+              <ReportCard title="Attorney Report" description="Full case intelligence" format="PDF / Word" onGenerate={() => navigate(`/cases/${caseId}/attorney-workbench`)} />
+              <ReportCard title="Chronology" description="Timeline export" format="PDF" onGenerate={() => navigate(`/cases/${caseId}/attorney-workbench`)} />
+            </div>
+          </ExpandableCard>
         </div>
       </div>
     </div>

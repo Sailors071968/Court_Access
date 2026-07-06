@@ -1,0 +1,15 @@
+{
+  "blocker": "BLOCKER-4-UNLIMITED-COLLABORATION",
+  "generatedAt": "2026-07-06T13:58:54.925Z",
+  "delegatedUserLimit": null,
+  "unlimitedMembers": true,
+  "overallResult": "PASS",
+  "evidence": [
+    "backend/src/membership/universalMembership.ts DELEGATED_USER_LIMIT",
+    "backend/src/organizations/organizationService.ts createInvitation",
+    "backend/tests/universal-membership.test.ts"
+  ],
+  "testExitCode": 0,
+  "integrationTestExitCode": null,
+  "integrationTestNote": "organization-domain.test.ts skipped (DATABASE_URL not set)"
+}

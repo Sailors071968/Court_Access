@@ -1,8 +1,10 @@
 # CourtAccess Version 1.0 — Master Production Completion Assessment
 
-**Generated:** 2026-07-06T13:35:00Z  
+**Generated:** 2026-07-06T14:00:00Z  
 **Method:** Evidence-backed review of repository artifacts, reports, scripts, and production HTTP probes. No fabricated completion.  
 **Verdict:** **Version 1.0 is NOT COMPLETE**
+
+**Release Wave 3 update:** Blockers 3 (authentication) and 4 (unlimited collaboration) **PASS** in repository. See `reports/VERSION_1_0_CERTIFICATION.json`.
 
 ---
 
@@ -30,14 +32,14 @@
 | 3 | Public website | HIGH | **78%** | PARTIAL | Local PASS; production FAIL |
 | 4 | Universal membership | HIGH | **85%** | PARTIAL | `PROGRAM_01_UNIVERSAL_MEMBERSHIP.md`, 13 roles |
 | 5 | Role dashboards | HIGH | **58%** | PARTIAL | Workbenches exist; prod auth unverified |
-| 6 | Case access control | HIGH | **85%** | PARTIAL | `resource-permissions.test.ts`; 5-user delegate limit |
+| 6 | Case access control | HIGH | **88%** | PARTIAL | `resource-permissions.test.ts`; unlimited collaborators (BLK-4 PASS) |
 | 7 | Document redaction | HIGH | **52%** | FAIL | BLK-005; OCR/AI not production-complete |
 | 8 | Legal intelligence | HIGH | **68%** | PARTIAL | Pipeline PASS; coverage engines partial |
 | 9 | California knowledge platform | HIGH | **22%** | FAIL | BLK-006; ~4 sections / 30 codes |
 | 10 | Stripe hybrid billing | HIGH | **68%** | PARTIAL | BLK-004; live cert SKIP |
 | 11 | Collaboration platform | HIGH | **70%** | PARTIAL | Invites + permissions; tests gaps |
 | 12 | Administrative command center | HIGH | **55%** | PARTIAL | Ops center exists; CRM/support missing |
-| 13 | Security | HIGH | **58%** | PARTIAL | Modules exist; auth/CSRF hooks disabled |
+| 13 | Security | HIGH | **82%** | PARTIAL | Auth/CSRF hooks **enabled** (`server.ts:103–106`); `SECURITY_CERTIFICATION_BLOCKER3.json` PASS |
 | 14 | Performance | MEDIUM | **55%** | PARTIAL | PG-017 PARTIAL; no load cert |
 | 15 | Observability | MEDIUM | **65%** | PARTIAL | Health/deep health; queue monitoring gap |
 | 16 | AI orchestration | HIGH | **70%** | PARTIAL | Orchestrator exists; E2E unverified |
@@ -100,7 +102,7 @@ Required workflow (Attorney → Login → Case → Upload → OCR → … → Ex
 
 | Step | Code exists | E2E certified | Evidence |
 |------|-------------|---------------|----------|
-| Login | Yes | **UNKNOWN** | `authMiddleware.ts`; global hook **disabled** (`server.ts:103`) |
+| Login | Yes | **UNKNOWN** | `authMiddleware.ts`; global hook **enabled** (`server.ts:103`) |
 | Create case | Yes | **UNKNOWN** | `caseRoutes.ts` |
 | Upload PDF/Image | Yes | **UNKNOWN** | `evidenceDirectUpload.ts`, tesseract.js |
 | OCR | Partial | **UNKNOWN** | BLK-005 |
@@ -127,13 +129,13 @@ Required workflow (Attorney → Login → Case → Upload → OCR → … → Ex
 | 5 | BLK-005 | 7 | OCR/AI redaction not production-complete | **BLOCKING** |
 | 6 | BLK-006 | 9 | ~12% California code coverage | **BLOCKING** |
 | 7 | BLK-007 | 2, 5 | Authenticated dashboard production verification | **BLOCKING** |
-| 8 | SEC-001 | 13 | `authenticationHook` commented out (`server.ts:103`) | **BLOCKING** |
-| 9 | SEC-002 | 13 | `csrfProtectionHook` commented out (`server.ts:106`) | **BLOCKING** |
+| 8 | SEC-001 | 13 | `authenticationHook` enabled (`server.ts:103`) | **RESOLVED** |
+| 9 | SEC-002 | 13 | `csrfProtectionHook` enabled (`server.ts:106`) | **RESOLVED** |
 | 10 | P23-06 | 2, 20 | Full E2E demonstration not recorded | **BLOCKING** |
 | 11 | P20-06 | 13 | Tenant isolation tests not verified | **BLOCKING** |
 | 12 | P20-07 | 13 | Penetration test not documented | **BLOCKING** |
 | 13 | P03-08 | 11 | Invitation flow tests missing | **HIGH** |
-| 14 | P01-09 | 4, 11 | Unlimited designees not implemented (5-user limit) | **HIGH** |
+| 14 | P01-09 | 4, 11 | Unlimited designees (`DELEGATED_USER_LIMIT=null`) | **RESOLVED** |
 | 15 | P15-04 | 12 | Repository dashboard not implemented | **HIGH** |
 | 16 | P15-06 | 12 | CRM dashboard not implemented | **HIGH** |
 | 17 | P15-07 | 12 | Support dashboard not implemented | **HIGH** |
@@ -150,7 +152,7 @@ Required workflow (Attorney → Login → Case → Upload → OCR → … → Ex
 | Risk | Severity | Likelihood | Mitigation |
 |------|----------|------------|------------|
 | Deploying to production repo breaks live site | High | Medium | Program 1A frozen-repo architecture |
-| Auth bypass with hooks disabled | Critical | High | Enable `authenticationHook` before certification |
+| Auth bypass with hooks disabled | Critical | Low | **RESOLVED** — hooks enabled; `security:certify` PASS |
 | Stripe billing failure at launch | High | High | Complete BLK-004 before cutover |
 | Legal coverage insufficient for CA product | High | Certain | BLK-006 — scope V1 or continue ingestion |
 | Fabricated readiness reports | Medium | Low | This assessment uses PASS/FAIL/UNKNOWN only |
@@ -165,7 +167,7 @@ Required workflow (Attorney → Login → Case → Upload → OCR → … → Ex
 | Production deployment verified | Yes | **NO** |
 | E2E evidence workflow certified | Yes | **NO** |
 | Stripe production certified | Yes | **NO** |
-| Security hooks active | Yes | **NO** |
+| Security hooks active | Yes | **YES** — `reports/SECURITY_CERTIFICATION_BLOCKER3.json` |
 | All subsystems documented | Partial | Reports exist; gaps listed above |
 
 **Version 1.0 certification: DENIED**
@@ -177,7 +179,7 @@ Required workflow (Attorney → Login → Case → Upload → OCR → … → Ex
 1. Merge PR #117 → `dev`
 2. EC2 Phase 0: `v1-greenfield-preflight.sh` from `/tmp` clone → **PASS**
 3. EC2 Phase 1–2: install + verify at `/var/www/courtaccess-v1` → **PASS**
-4. Enable `authenticationHook` + `csrfProtectionHook`; re-run security tests
+4. ~~Enable `authenticationHook` + `csrfProtectionHook`; re-run security tests~~ **DONE** (Wave 3)
 5. Program 2: Execute and record full attorney evidence workflow on V1 (port 8080)
 6. BLK-004: Stripe test-mode certification
 7. BLK-005/007: OCR + dashboard verification
@@ -188,7 +190,10 @@ Required workflow (Attorney → Login → Case → Upload → OCR → … → Ex
 
 ## Evidence sources
 
-- `reports/VERSION_1_RELEASE_READINESS.json`
+- `reports/VERSION_1_0_CERTIFICATION.json`
+- `reports/SECURITY_CERTIFICATION_BLOCKER3.json`
+- `reports/COLLABORATION_CERTIFICATION_BLOCKER4.json`
+- `reports/DEPLOYMENT_READINESS_CERTIFICATE.json`
 - `reports/PRODUCTION_BLOCKERS.json`
 - `reports/PRODUCTION_WEBSITE_VERIFY.json`
 - `reports/VERSION_1.0_GATES.json`

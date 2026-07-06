@@ -1,0 +1,25 @@
+{
+  "certificate": "CourtAccess V1 Deployment Readiness",
+  "blocker": "BLOCKER-1-GREENFIELD",
+  "issuedAt": "2026-07-06T13:57:49Z",
+  "readiness": "FAIL",
+  "preflightExitCode": 1,
+  "summary": { "pass": 19, "warn": 16, "fail": 20 },
+  "architecture": {
+    "v1Path": "/var/www/courtaccess-v1",
+    "productionFrozen": "/var/www/courtaccess",
+    "cloneSource": "origin/dev"
+  },
+  "prerequisites": [
+    "PostgreSQL courtaccess_v1",
+    "Redis (optional REDIS_URL)",
+    "Upload directories writable",
+    "OCR tesseract.js + optional system binaries",
+    "PM2 courtaccess-v1 on ports 3101/8080",
+    "Nginx courtaccess-v1 site",
+    "ENV_SOURCE read-only from production .env",
+    "Stripe keys for billing:readiness (optional at install)"
+  ],
+  "preflightReport": "/tmp/tmp.osmqicgfV2",
+  "nextPhase": "bash scripts/v1-greenfield-install.sh (from /tmp clone bootstrap)"
+}

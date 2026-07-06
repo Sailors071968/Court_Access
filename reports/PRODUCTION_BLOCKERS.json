@@ -5,7 +5,10 @@
   "resolvedThisSession": [
     "missing-frontend-merge-to-dev",
     "BLK-002-ci-lockfile-sync",
-    "BLK-002b-program-00-npx-spawn"
+    "BLK-002b-program-00-npx-spawn",
+    "SEC-001-authentication-hook-enabled",
+    "SEC-002-csrf-hook-enabled",
+    "BLK-4-unlimited-collaboration-verified"
   ],
   "blockers": [
     {

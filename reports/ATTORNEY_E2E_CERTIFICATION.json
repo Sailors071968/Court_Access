@@ -1,0 +1,203 @@
+{
+  "blocker": "BLOCKER-2-ATTORNEY-E2E",
+  "generatedAt": "2026-07-06T13:58:55.097Z",
+  "baseUrl": null,
+  "databaseConfigured": false,
+  "overallResult": "UNKNOWN",
+  "summary": {
+    "pass": 0,
+    "fail": 0,
+    "unknown": 14,
+    "total": 14
+  },
+  "steps": [
+    {
+      "step": "Attorney Login",
+      "result": "UNKNOWN",
+      "api": "UNKNOWN",
+      "worker": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "database": "SKIP",
+      "evidenceIds": [],
+      "executionTimeMs": null,
+      "warnings": [
+        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+      ]
+    },
+    {
+      "step": "Create Case",
+      "result": "UNKNOWN",
+      "api": "UNKNOWN",
+      "worker": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "database": "SKIP",
+      "evidenceIds": [],
+      "executionTimeMs": null,
+      "warnings": [
+        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+      ]
+    },
+    {
+      "step": "Upload Discovery",
+      "result": "UNKNOWN",
+      "api": "UNKNOWN",
+      "worker": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "database": "SKIP",
+      "evidenceIds": [],
+      "executionTimeMs": null,
+      "warnings": [
+        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+      ]
+    },
+    {
+      "step": "OCR",
+      "result": "UNKNOWN",
+      "api": "UNKNOWN",
+      "worker": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "database": "SKIP",
+      "evidenceIds": [],
+      "executionTimeMs": null,
+      "warnings": [
+        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+      ]
+    },
+    {
+      "step": "Evidence Extraction",
+      "result": "UNKNOWN",
+      "api": "UNKNOWN",
+      "worker": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "database": "SKIP",
+      "evidenceIds": [],
+      "executionTimeMs": null,
+      "warnings": [
+        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+      ]
+    },
+    {
+      "step": "Knowledge Graph",
+      "result": "UNKNOWN",
+      "api": "UNKNOWN",
+      "worker": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "database": "SKIP",
+      "evidenceIds": [],
+      "executionTimeMs": null,
+      "warnings": [
+        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+      ]
+    },
+    {
+      "step": "Timeline",
+      "result": "UNKNOWN",
+      "api": "UNKNOWN",
+      "worker": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "database": "SKIP",
+      "evidenceIds": [],
+      "executionTimeMs": null,
+      "warnings": [
+        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+      ]
+    },
+    {
+      "step": "Charges",
+      "result": "UNKNOWN",
+      "api": "UNKNOWN",
+      "worker": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "database": "SKIP",
+      "evidenceIds": [],
+      "executionTimeMs": null,
+      "warnings": [
+        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+      ]
+    },
+    {
+      "step": "Contradictions",
+      "result": "UNKNOWN",
+      "api": "UNKNOWN",
+      "worker": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "database": "SKIP",
+      "evidenceIds": [],
+      "executionTimeMs": null,
+      "warnings": [
+        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+      ]
+    },
+    {
+      "step": "Attorney Report",
+      "result": "UNKNOWN",
+      "api": "UNKNOWN",
+      "worker": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "database": "SKIP",
+      "evidenceIds": [],
+      "executionTimeMs": null,
+      "warnings": [
+        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+      ]
+    },
+    {
+      "step": "PDF Export",
+      "result": "UNKNOWN",
+      "api": "UNKNOWN",
+      "worker": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "database": "SKIP",
+      "evidenceIds": [],
+      "executionTimeMs": null,
+      "warnings": [
+        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+      ]
+    },
+    {
+      "step": "Word Export",
+      "result": "UNKNOWN",
+      "api": "UNKNOWN",
+      "worker": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "database": "SKIP",
+      "evidenceIds": [],
+      "executionTimeMs": null,
+      "warnings": [
+        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+      ]
+    },
+    {
+      "step": "Case Dashboard",
+      "result": "UNKNOWN",
+      "api": "UNKNOWN",
+      "worker": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "database": "SKIP",
+      "evidenceIds": [],
+      "executionTimeMs": null,
+      "warnings": [
+        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+      ]
+    },
+    {
+      "step": "Logout",
+      "result": "UNKNOWN",
+      "api": "UNKNOWN",
+      "worker": "UNKNOWN",
+      "queue": "UNKNOWN",
+      "database": "SKIP",
+      "evidenceIds": [],
+      "executionTimeMs": null,
+      "warnings": [
+        "CERT_BASE_URL not set — run on deployed V1 stack (e.g. http://127.0.0.1:3101)"
+      ]
+    }
+  ],
+  "evidence": [
+    "backend/src/intelligence/reportGenerator.ts",
+    "backend/src/workbench/exportService.ts",
+    "backend/src/evidence/evidenceDirectUpload.ts"
+  ],
+  "nextAction": "On EC2 after Phase 2 verify PASS: CERT_BASE_URL=http://127.0.0.1:3101 DATABASE_URL=... tsx scripts/run-attorney-e2e-certification.ts"
+}

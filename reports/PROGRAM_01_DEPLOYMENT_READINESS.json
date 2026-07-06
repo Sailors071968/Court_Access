@@ -1,0 +1,45 @@
+{
+  "program": "PROGRAM-01-GREENFIELD-DEPLOYMENT",
+  "generatedAt": "2026-07-06T13:35:00Z",
+  "architecture": "Program 1A — clone origin/dev only to /var/www/courtaccess-v1; production frozen until cutover",
+  "overallResult": "FAIL",
+  "completionPercent": 70,
+  "productionUntouched": true,
+  "evidence": {
+    "scriptsOnDev": {
+      "v1-greenfield-preflight.sh": true,
+      "v1-greenfield-install.sh": true,
+      "v1-greenfield-verify.sh": true,
+      "v1-production-cutover.sh": true,
+      "originDevMerge": "b8e6d5d (PR #115); Program 1A in PR #117 draft"
+    },
+    "productionHttp": {
+      "url": "https://courtaccess.net",
+      "landingTitle": "Court Access System",
+      "lastModified": "Fri, 26 Jun 2026 19:17:43 GMT",
+      "apiHealthVersion": null,
+      "source": "reports/PRODUCTION_WEBSITE_VERIFY.json"
+    }
+  },
+  "checklist": [
+    { "item": "Phase 0 preflight", "result": "UNKNOWN", "notes": "Script ready; EC2 execution not evidenced" },
+    { "item": "PostgreSQL verification", "result": "UNKNOWN", "notes": "courtaccess_v1 existence requires EC2 preflight" },
+    { "item": "Redis verification", "result": "UNKNOWN", "notes": "REDIS_URL optional; preflight checks ping" },
+    { "item": "OCR dependency verification", "result": "UNKNOWN", "notes": "tesseract.js in package.json; system binary optional" },
+    { "item": "Upload directory verification", "result": "UNKNOWN", "notes": "Preflight discovers paths read-only" },
+    { "item": "Stripe verification", "result": "UNKNOWN", "notes": "Verify script SKIPs if STRIPE_SECRET_KEY unset" },
+    { "item": "Build verification", "result": "PASS", "notes": "Local npm run build PASS in workspace; V1 build not evidenced" },
+    { "item": "Authentication verification", "result": "UNKNOWN", "notes": "V1 stack not deployed; auth hook disabled in server.ts" },
+    { "item": "PM2 verification", "result": "UNKNOWN", "notes": "Requires EC2 after install" },
+    { "item": "Nginx verification", "result": "UNKNOWN", "notes": "Requires EC2 after install" },
+    { "item": "SSL verification", "result": "PARTIAL", "notes": "Production SSL works (HTTPS 200); V1 parallel SSL N/A (localhost :8080)" }
+  ],
+  "phases": {
+    "phase0_preflight": { "result": "NOT_RUN", "blocking": true },
+    "phase1_install": { "result": "NOT_RUN", "blocking": true },
+    "phase2_verify": { "result": "NOT_RUN", "blocking": true },
+    "phase3_cutover": { "result": "NOT_RUN", "blocking": false }
+  },
+  "nextAction": "Merge PR #117; run GREENFIELD_V1_DEPLOYMENT.md sequence on EC2 from /tmp clone",
+  "releaseRecommendation": "HOLD — complete Phases 0–2 before cutover"
+}

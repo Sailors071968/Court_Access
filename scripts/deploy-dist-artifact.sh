@@ -1,11 +1,20 @@
 #!/usr/bin/env bash
 # Fast frontend-only deploy from CI artifact tarball
+# DEPRECATED for V1 greenfield when DEPLOY_DIR=/var/www/courtaccess (production frozen).
 # Usage: bash scripts/deploy-dist-artifact.sh /path/to/courtaccess-dist.tar.gz
 set -euo pipefail
 
 ARTIFACT="${1:?Usage: deploy-dist-artifact.sh <courtaccess-dist.tar.gz>}"
 DEPLOY_DIR="${DEPLOY_DIR:-/opt/courtaccess}"
+PROTECTED_PROD_DIR="${PROTECTED_PROD_DIR:-/var/www/courtaccess}"
 DIST_DIR="${DIST_DIR:-$DEPLOY_DIR/dist}"
+
+resolve_path() { readlink -f "$1" 2>/dev/null || realpath "$1" 2>/dev/null || echo "$1"; }
+if [[ "$(resolve_path "$DEPLOY_DIR")" == "$(resolve_path "$PROTECTED_PROD_DIR")" ]]; then
+  echo "ERROR: deploy-dist-artifact.sh must not run on ${PROTECTED_PROD_DIR} during greenfield."
+  echo "       Use GREENFIELD_V1_DEPLOYMENT.md greenfield sequence."
+  exit 1
+fi
 
 echo "==> Deploy dist artifact to $DIST_DIR"
 mkdir -p "$DIST_DIR"

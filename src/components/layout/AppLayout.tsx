@@ -9,11 +9,13 @@ import { Header } from './Header';
 import { useState } from 'react';
 import { TrustBar } from '../brand/TrustBar';
 import { GlobalSearchProvider } from '../search/GlobalSearch';
+import { ToastProvider } from '../ui/toast';
 
 export function AppLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
+    <ToastProvider>
     <GlobalSearchProvider>
       <div className="min-h-screen bg-navy-800 text-slate-200">
         {mobileMenuOpen && (
@@ -43,5 +45,6 @@ export function AppLayout() {
         </div>
       </div>
     </GlobalSearchProvider>
+    </ToastProvider>
   );
 }

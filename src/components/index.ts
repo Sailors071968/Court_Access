@@ -60,3 +60,7 @@ export type { TimelineEvent, TimelineVariant, TimelineGrouping } from './timelin
 // Knowledge Graph engine (Program 27)
 export { KnowledgeGraph, KnowledgeGraphWorkspace, NodeDetailPanel, fromWorkbenchGraph, SAMPLE_GRAPH, analyzeGraph } from './graph';
 export type { GraphNode, GraphEdge, GraphNodeType, KnowledgeGraphData } from './graph';
+
+// Evidence workspace (Program 28)
+export { MediaPreview, mediaKind } from './evidence/MediaPreview';
+export { EvidenceDetailDrawer } from './evidence/EvidenceDetailDrawer';

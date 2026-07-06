@@ -21,6 +21,7 @@
 | **25** | **Global Legal Intelligence Search** | **DONE** | `GlobalSearch` palette + `SearchPage` + `globalSearchService` |
 | **26** | **Unified Timeline Engine** | **DONE** | `components/timeline/TimelineEngine.tsx` + adapters; migrated `ActivityPage` & Investigator |
 | **27** | **Production Knowledge Graph** | **DONE** | `components/graph/*` engine + workspace; wired into `ResearchPage` |
+| **28** | **Evidence Workspace** | **DONE** | `EvidencePage` rebuilt; `MediaPreview` + `EvidenceDetailDrawer` reusable |
 | **24** | **Repository Audit** | **DONE** | `docs/DESIGN_DEBT_REPORT.md` |
 
 ## Design Philosophy

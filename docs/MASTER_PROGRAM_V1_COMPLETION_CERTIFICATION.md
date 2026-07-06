@@ -1,10 +1,10 @@
 # CourtAccess — Master Program (100–120) Version 1.0 Completion Certification
 
 **Scope:** Programs 100–120 ("World's Best Litigation Intelligence Platform / Version 1.0 Completion").
-**Method:** Evidence-based static audit of the actual repository (backend Fastify monolith under `backend/src`, frontend React app under `src`), plus one concrete increment implemented and type-verified in this program (Program 115 search API).
+**Method:** Evidence-based static audit of the actual repository (backend Fastify monolith under `backend/src`, frontend React app under `src`), plus concrete increments implemented and type-verified across this effort (Program 115 search API; Program 118 AI safety envelope; Program 108 litigation assistant).
 **Constitution:** This certification obeys the CourtAccess Engineering Constitution. It does **not** claim completion it cannot substantiate. Where a subsystem could not be verified at runtime (no deployed stack / database / credentials in this environment), the verdict is **UNKNOWN**, never PASS.
 
-> **Honesty statement.** A 21-program platform-wide "completion" cannot be truthfully delivered as 21 finished subsystems in a single change. What follows is (1) the true, cited state of each program, (2) the one gap closed for real this round, and (3) a prioritized gap register. Fabricating green checkmarks would itself violate the Constitution this mission demands.
+> **Honesty statement.** A 21-program platform-wide "completion" cannot be truthfully delivered as 21 finished subsystems in a single change. What follows is (1) the true, cited state of each program, (2) the gaps closed for real this effort, and (3) a prioritized gap register. Fabricating green checkmarks would itself violate the Constitution this mission demands.
 
 ## Verdict legend
 
@@ -27,7 +27,7 @@
 | 105 | Automatic evidence extraction (NER) | **PARTIAL** | `backend/src/services/extractEvents.ts`, `attributeExtractionService.ts`, `actorExtractionService.ts`, `graph/graphEntityExtractor.ts`. Deterministic regex/keyword extraction, not full NER; VIN/plate/phone/DNA/money not first-class; audio/video transcript stubbed. |
 | 106 | Discovery intelligence | **PARTIAL** | `backend/src/services/evidenceGapDetectionService.ts`, `contradiction/eventExtractionEngine.ts` (CAD), `evidence/evidenceRequestRoutes.ts`. No automated Brady/Giglio/late-discovery engine; chain-of-custody is status field, not automated audit. |
 | 107 | Constitutional intelligence | **PARTIAL** | `backend/src/doctrine/doctrineComplianceEngine.ts`, `doctrine/doctrineRoutes.ts`, seeded rules `doctrine/seedLD1*`. Regex indicators for Miranda/search/arrest; no structured 4th/5th/6th/14th API surface. |
-| 108 | Litigation assistant (evidence-governed Q&A) | **PARTIAL** | `backend/src/intelligence/intelligenceRoutes.ts`, `caseIntelligenceOrchestrator.ts`, `reportGenerator.ts`. Structured, citation-carrying intelligence exists; **no interactive citation-backed Q&A/chat endpoint**. |
+| 108 | Litigation assistant (evidence-governed Q&A) | **PARTIAL → improved this program** | **New:** `backend/src/assistant/litigationAssistantService.ts` + `litigationAssistantRoutes.ts` (`POST /api/cases/:caseId/assistant`). Deterministic, citation-backed answers to 7 intents (supporting/contradicting evidence, unsupported elements, applicable authority, missing evidence, witnesses, documents) over the attorney intelligence bundle + unified search; every answer wrapped in the AI Safety Envelope, UNKNOWN when unsupported. No free-form/LLM generation. Frontend chat UI not yet built. |
 | 109 | Attorney workbench | **PARTIAL** | `src/pages/case/AttorneyWorkbenchPage.tsx`, `CaseOverviewPage.tsx`, `EvidencePage.tsx`, `ReportsPage.tsx`, `components/report/ReportEngine.tsx`, `components/graph/`. Dashboard/evidence/report/graph PRESENT; motion **builder**, legal research, task board are recommendation/partial. |
 | 110 | Investigator workbench | **PARTIAL** | `src/pages/case/InvestigatorWorkbenchPage.tsx`, `backend/src/investigator/investigatorRoutes.ts`. Dashboard/leads/timeline/evidence PRESENT; scene reconstruction absent in workbench; interview mgmt thin. |
 | 111 | Defendant portal | **PARTIAL** | `src/pages/client-portal/ClientPortalLayout.tsx`, `DefendantWorkspace.tsx`, `ClientPortalPages.tsx`. Case status PRESENT; messages/evidence-view/education pages are stubs/redirects; `ClientEvidenceViewer.tsx` built but unwired. |
@@ -37,15 +37,19 @@
 | 115 | Advanced search | **PARTIAL → improved this program** | **New:** `backend/src/search/searchService.ts` + `searchRoutes.ts` (`GET /api/search`, `GET /api/cases/:caseId/search`) — real, permission-scoped, deterministic search over cases/evidence/OCR chunks/timeline/messages, wired to `src/services/globalSearchService.ts`. Statutes/case-law/graph/NL semantics not yet backed by a real index. |
 | 116 | Collaboration | **PARTIAL** | `backend/src/membership/universalMembership.ts` (7-level permissions), `communications/messagingRoutes.ts`, `src/components/collaboration/*`. **No real-time transport** (no WebSocket/SSE); comments partly local-state. |
 | 117 | Executive dashboards / UX | **PARTIAL** | `src/pages/dashboard/StaffDashboard.tsx`, `admin/OperationsCommandCenter.tsx`, `components/ui/` design system, `components/cards/ExpandableCard.tsx`. Progressive disclosure/responsive PRESENT; design-system consistency incomplete (legacy light-theme pages remain). |
-| 118 | AI safety envelope | **PARTIAL** | `backend/src/intelligence/types.ts` (`IntelligenceAudit`), `services/policyNarrativeGuard.ts`, `services/evidenceHashIntegrity.ts`, version constants. Envelope (evidence+authority+confidence+hash+version+audit) applied **inconsistently** across engines. |
+| 118 | AI safety envelope | **PARTIAL → improved this program** | **New:** `backend/src/ai/aiSafetyEnvelope.ts` — canonical `AiSafetyEnvelope` (evidence, authorities, confidence, audit, version, repositorySources, deterministic SHA-256 hash) with `buildEnvelope` (Constitution rules: no citation→UNKNOWN, low confidence→human review) and `validateEnvelope` (continuous validation + tamper detection). 21/21 self-tests pass. Adopted by the litigation assistant; **adoption across all other engines still pending**. |
 | 119 | Production certification (E2E runtime) | **UNKNOWN** | Auth/Stripe/OCR/exports code PRESENT (`security/`, `billing/`, `workbench/exportService.ts`), but **no runtime execution** possible here (no deployed stack, DB, or Stripe/secrets). Cannot assert PASS/FAIL. |
 | 120 | Version 1.0 release certification (docs) | **PARTIAL** | Existing: `DEPLOYMENT_RUNBOOK.md`, `DISASTER_RECOVERY.md`, `SCHEMA_FREEZE.md`, `docs/VERSION_1.0_FINAL_CERTIFICATION.md`, `docs/VERSION_1.0_RELEASE_CANDIDATE.md`, `docs/SECURITY_CERTIFICATION_REPORT.md`. Guide set largely exists; not all guides (Administrator/Developer/Operations) are consolidated/current. |
 
-**Tally:** PASS 0 · PARTIAL 18 · ABSENT 0 · UNKNOWN 2 (Programs 119 runtime, and any claim requiring a live environment). Program 115 moved from effectively ABSENT-backend to PARTIAL this round.
+**Tally:** PASS 0 · PARTIAL 18 · ABSENT 0 · UNKNOWN 2 (Programs 119 runtime, and any claim requiring a live environment). Programs 115, 108, and 118 were materially advanced this effort (search API; litigation assistant; AI safety envelope).
 
 ---
 
-## What was implemented this program (real, verified)
+## What was implemented (real, verified)
+
+**Program 118 — AI Safety Envelope (`backend/src/ai/aiSafetyEnvelope.ts`).** A canonical, dependency-free wrapper enforcing the Constitution on any analytical output: it carries evidence, authorities, confidence, audit (version + reasoning + repository sources), and a deterministic SHA-256 `contentHash`. `buildEnvelope` applies the rules *no citation → UNKNOWN* and *low/unknown confidence → human review required*; `validateEnvelope` re-hashes to detect tampering and rejects internally inconsistent envelopes. Verified by 21/21 deterministic self-tests (status derivation, contradiction→review, order-independent hashing, tamper detection).
+
+**Program 108 — Evidence-Governed Litigation Assistant (`backend/src/assistant/`).** `POST /api/cases/:caseId/assistant` answers seven fixed, litigation-relevant intents by assembling **only** real records from the attorney intelligence bundle (element matrices, contradiction analysis, authority matrix, investigative gaps, trial-prep witness list) and the unified search. It is fully deterministic — no LLM, no free-form generation — and every answer is returned inside a validated AI Safety Envelope, defaulting to UNKNOWN with human-review when nothing supports it. Case access is guarded by `guardCaseAccess`. Verified: type-clean, modules load, intent classifier self-tested; runtime behavior against live case rows is UNKNOWN pending a database.
 
 **Program 115 — Unified Case Search API.** The frontend already shipped a full search page + Cmd/Ctrl+K palette, but only live cases came from the API and all other result types were a DEV-only representative corpus; there was **no backend `/api/search`**.
 
@@ -61,8 +65,8 @@ Verification performed: TypeScript `--noEmit` clean for the new backend files an
 ## Prioritized gap register (to reach true Version 1.0)
 
 1. **Runtime production certification (Program 119)** — stand up a staging stack (DB + Stripe test keys + object storage) and execute the E2E checklist. Currently UNKNOWN.
-2. **AI safety envelope unification (Program 118)** — wrap every AI/analysis output in a single `{evidence, authorities, confidence, audit, version, repositorySource, hash}` envelope; several engines return confidence without citations/hashes.
-3. **Motion + Q&A generation depth (Programs 108, 113)** — add real document generation (PDF/DOCX) and an interactive citation-backed litigation-assistant endpoint; today these are recommendations/batch structured output only.
+2. **AI safety envelope adoption (Program 118)** — the canonical envelope now exists and is used by the litigation assistant; **migrate the remaining engines** (motion recommendations, intelligence findings, doctrine/compliance) to emit it so every AI output is uniformly wrapped.
+3. **Assistant + motion generation depth (Programs 108, 113)** — the assistant Q&A endpoint now exists (backend, deterministic, citation-backed); still needed: a frontend chat UI, broader intent coverage, and real motion **document** generation (PDF/DOCX) rather than recommendations only.
 4. **Real-time collaboration transport (Program 116)** — add WebSocket/SSE for presence and live updates; persist comments.
 5. **Extraction depth (Program 105)** — first-class extractors for VIN, license plate, phone, DNA, money, organizations; wire audio/video transcription.
 6. **Repository completeness (Program 102)** — continue targeted criminal-liability discovery + cross-reference expansion (305 pending targets) toward full offense/enhancement/CALCRIM/appellate coverage.

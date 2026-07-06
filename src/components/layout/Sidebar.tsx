@@ -14,6 +14,8 @@ import { useAuthStore } from '../../stores/authStore';
 import { ROLE_PERMISSIONS } from '../../constants';
 import type { RolePermissions } from '../../types';
 import { useState } from 'react';
+import { BrandLogo } from '../brand/BrandLogo';
+import { cn } from '../../lib/utils';
 
 const iconMap = {
   LayoutDashboard,
@@ -104,27 +106,26 @@ export function Sidebar() {
 
   return (
     <aside
-      className={`fixed left-0 top-0 h-screen bg-slate-800 text-white flex flex-col z-40 transition-all duration-300 ${
-        collapsed ? 'w-16' : 'w-64'
-      }`}
+      className={cn(
+        'fixed left-0 top-0 h-screen bg-navy-light text-white flex flex-col z-40 transition-all duration-300 border-r border-white/5',
+        collapsed ? 'w-16' : 'w-64',
+      )}
     >
-      {/* Logo */}
-      <div className="flex items-center gap-3 px-4 py-5 border-b border-slate-700">
-        <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center flex-shrink-0">
-          <span className="text-white font-bold text-sm">CA</span>
-        </div>
-        {!collapsed && (
-          <div>
-            <h1 className="text-lg font-bold text-white tracking-tight">Court Access</h1>
+      <div className={cn('flex items-center px-4 py-5 border-b border-white/5', collapsed ? 'justify-center' : '')}>
+        {collapsed ? (
+          <div className="w-8 h-8 bg-gold-light rounded-xl flex items-center justify-center">
+            <span className="text-navy font-bold text-xs">CA</span>
           </div>
+        ) : (
+          <BrandLogo variant="light" size="sm" linkTo="/dashboard" />
         )}
       </div>
 
       {/* User Info */}
       {!collapsed && (
-        <div className="px-4 py-3 border-b border-slate-700">
+        <div className="px-4 py-3 border-b border-white/5">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-slate-600 rounded-full flex items-center justify-center flex-shrink-0">
+            <div className="w-9 h-9 bg-navy rounded-xl flex items-center justify-center flex-shrink-0 ring-1 ring-white/10">
               <span className="text-sm font-medium">{user.name.charAt(0)}</span>
             </div>
             <div className="min-w-0">

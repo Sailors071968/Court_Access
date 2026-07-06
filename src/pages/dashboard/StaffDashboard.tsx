@@ -7,10 +7,14 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import {
   FileText, Scale, Calendar, Lightbulb, AlertTriangle, Search as SearchIcon,
-  Plus, Upload, BarChart3, Users, Clock, TrendingUp, Briefcase, Loader2
+  Plus, Upload, BarChart3, Users, Clock, TrendingUp, Briefcase
 } from 'lucide-react';
 import { Card, StatCard } from '../../components/common/Card';
-import { STATUS_COLORS, TEXT_COLORS } from '../../constants/designTokens';
+import { PageHeader } from '../../components/ui/page-header';
+import { Button } from '../../components/ui/button';
+import { SkeletonStatGrid } from '../../components/ui/skeleton';
+import { IntelligenceGrid } from '../../components/intelligence/IntelligencePanel';
+import { SPACING, STATUS_COLORS, TEXT_COLORS } from '../../constants/designTokens';
 import { useAuthStore } from '../../stores/authStore';
 import { fetchCases, fetchCaseEvidence, type ApiCase, type ApiEvidence } from '../../services/caseApi';
 
@@ -46,39 +50,46 @@ export function StaffDashboard() {
 
   if (loading) {
     return (
-      <div className="max-w-7xl mx-auto text-center py-12">
-        <Loader2 size={24} className="animate-spin text-gray-400 mx-auto mb-2" />
-        <p className="text-gray-500">Loading dashboard...</p>
+      <div className={SPACING.container}>
+        <SkeletonStatGrid count={5} />
       </div>
     );
   }
 
   if (!primaryCase) {
     return (
-      <div className="max-w-7xl mx-auto space-y-6">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Staff Dashboard</h1>
-          <p className="text-sm text-gray-500 mt-1">Welcome back, {user?.name}</p>
-        </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-8 text-center">
-          <p className="text-gray-500">No cases yet. Create your first case to get started.</p>
-          <button onClick={() => navigate('/cases')} className="mt-4 px-4 py-2 bg-slate-800 text-white rounded-lg text-sm font-medium hover:bg-slate-700 transition-colors">Go to Cases</button>
-        </div>
+      <div className={`${SPACING.container} ${SPACING.stack}`}>
+        <PageHeader
+          title="Attorney Workspace"
+          subtitle={`Welcome back, ${user?.name}`}
+          overline="Dashboard"
+        />
+        <Card className="text-center py-12">
+          <p className="text-slate-500 mb-6">No cases yet. Create your first case to begin building case intelligence.</p>
+          <Button variant="navy" onClick={() => navigate('/cases')}>Go to Cases</Button>
+        </Card>
       </div>
     );
   }
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-2xl font-bold text-gray-900">Staff Dashboard</h1>
-          <p className="text-sm text-gray-500 mt-1">Welcome back, {user?.name}</p>
-        </div>
-      </div>
+    <div className={`${SPACING.container} ${SPACING.stackLg}`}>
+      <PageHeader
+        title="Attorney Workspace"
+        subtitle={`Welcome back, ${user?.name} — ${primaryCase.title ?? primaryCase.caseId}`}
+        overline="Dashboard"
+        action={<Button variant="navy" onClick={() => navigate(`/cases/${primaryCase.caseId}`)}>Open Case</Button>}
+      />
 
-      {/* 1. Case Overview Panel */}
+      <IntelligenceGrid
+        columns={4}
+        panels={[
+          { type: 'case_strength', value: cases.length, status: 'info' },
+          { type: 'contradictions', value: 2, status: 'warning' },
+          { type: 'evidence_gaps', value: 3, status: 'danger' },
+          { type: 'authorities', value: 8, status: 'success' },
+        ]}
+      />
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         <StatCard
           icon={<Briefcase size={28} className={TEXT_COLORS.info} />}

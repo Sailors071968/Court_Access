@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "code": "BPC",
+  "manifestPath": "/workspace/backend/data/legislative/discovery/BPC-criminal-manifest.json",
+  "startedAt": "2026-07-06T21:32:14.185Z",
+  "updatedAt": "2026-07-06T21:32:21.489Z",
+  "nextIndex": 8,
+  "acquired": 8,
+  "failed": 0,
+  "skipped": 0,
+  "lastSection": "7028."
+}

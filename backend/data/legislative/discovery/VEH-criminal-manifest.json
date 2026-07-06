@@ -1,0 +1,224 @@
+{
+  "version": "1.0.0-criminal",
+  "code": "VEH",
+  "codeName": "Vehicle Code",
+  "discoveredAt": "2026-07-06T21:30:57.966Z",
+  "completedAt": "2026-07-06T21:30:57.966Z",
+  "status": "completed",
+  "audit": [
+    {
+      "timestamp": "2026-07-06T21:30:57.966Z",
+      "action": "criminal_seed_targeting",
+      "detail": "15 seed sections"
+    }
+  ],
+  "hierarchyNodes": [],
+  "sections": [
+    {
+      "code": "VEH",
+      "section": "23152.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=23152.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=23152."
+    },
+    {
+      "code": "VEH",
+      "section": "23153.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=23153.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=23153."
+    },
+    {
+      "code": "VEH",
+      "section": "23103.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=23103.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=23103."
+    },
+    {
+      "code": "VEH",
+      "section": "2800.1.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=2800.1.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=2800.1."
+    },
+    {
+      "code": "VEH",
+      "section": "2800.2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=2800.2.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=2800.2."
+    },
+    {
+      "code": "VEH",
+      "section": "2800.3.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=2800.3.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=2800.3."
+    },
+    {
+      "code": "VEH",
+      "section": "14601.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=14601.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=14601."
+    },
+    {
+      "code": "VEH",
+      "section": "14601.1.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=14601.1.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=14601.1."
+    },
+    {
+      "code": "VEH",
+      "section": "14601.2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=14601.2.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=14601.2."
+    },
+    {
+      "code": "VEH",
+      "section": "20001.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=20001.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=20001."
+    },
+    {
+      "code": "VEH",
+      "section": "20002.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=20002.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=20002."
+    },
+    {
+      "code": "VEH",
+      "section": "10851.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=10851.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=10851."
+    },
+    {
+      "code": "VEH",
+      "section": "2800.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=2800.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=2800."
+    },
+    {
+      "code": "VEH",
+      "section": "23140.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=23140.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=23140."
+    },
+    {
+      "code": "VEH",
+      "section": "23103.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=23103.5.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=23103.5."
+    }
+  ],
+  "stats": {
+    "pagesFetched": 0,
+    "expandedBranchPages": 0,
+    "displayTextPages": 0,
+    "hierarchyNodes": 0,
+    "sectionsDiscovered": 15,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 0,
+    "anomalies": 0
+  },
+  "anomalies": []
+}

@@ -1,0 +1,68 @@
+{
+  "version": "1.0.0",
+  "generatedAt": "2026-07-06T21:32:22.091Z",
+  "totals": {
+    "total": 378,
+    "criminalSections": 167,
+    "administrativeSections": 27,
+    "pending": 91,
+    "unknown": 93,
+    "offenses": 123,
+    "hashedSections": 378,
+    "discoveryRate": 0.325,
+    "crossReferenceCompleteness": 0.182,
+    "hashVerification": 1
+  },
+  "byCode": [
+    {
+      "code": "PEN",
+      "total": 188,
+      "criminalSections": 130,
+      "administrativeSections": 4,
+      "pending": 54,
+      "unknown": 0,
+      "offenses": 89,
+      "discoveryRate": 0.473,
+      "hashedSections": 188
+    },
+    {
+      "code": "HSC",
+      "total": 18,
+      "criminalSections": 16,
+      "administrativeSections": 0,
+      "pending": 0,
+      "unknown": 2,
+      "offenses": 15,
+      "discoveryRate": 0.833,
+      "hashedSections": 18
+    },
+    {
+      "code": "VEH",
+      "total": 164,
+      "criminalSections": 13,
+      "administrativeSections": 23,
+      "pending": 37,
+      "unknown": 91,
+      "offenses": 12,
+      "discoveryRate": 0.073,
+      "hashedSections": 164
+    },
+    {
+      "code": "BPC",
+      "total": 8,
+      "criminalSections": 8,
+      "administrativeSections": 0,
+      "pending": 0,
+      "unknown": 0,
+      "offenses": 7,
+      "discoveryRate": 0.875,
+      "hashedSections": 8
+    }
+  ],
+  "crossReference": {
+    "total": 373,
+    "acquired": 68,
+    "pending": 305,
+    "completeness": 0.182
+  }
+}

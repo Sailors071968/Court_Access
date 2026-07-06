@@ -1,0 +1,133 @@
+{
+  "version": "1.0.0-criminal",
+  "code": "BPC",
+  "codeName": "Business and Professions Code",
+  "discoveredAt": "2026-07-06T21:32:14.183Z",
+  "completedAt": "2026-07-06T21:32:14.183Z",
+  "status": "completed",
+  "audit": [
+    {
+      "timestamp": "2026-07-06T21:32:14.183Z",
+      "action": "criminal_seed_targeting",
+      "detail": "8 seed sections"
+    }
+  ],
+  "hierarchyNodes": [],
+  "sections": [
+    {
+      "code": "BPC",
+      "section": "25658.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=25658.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=25658."
+    },
+    {
+      "code": "BPC",
+      "section": "25661.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=25661.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=25661."
+    },
+    {
+      "code": "BPC",
+      "section": "25662.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=25662.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=25662."
+    },
+    {
+      "code": "BPC",
+      "section": "25663.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=25663.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=25663."
+    },
+    {
+      "code": "BPC",
+      "section": "25665.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=25665.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=25665."
+    },
+    {
+      "code": "BPC",
+      "section": "4324.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=4324.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=4324."
+    },
+    {
+      "code": "BPC",
+      "section": "2052.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=2052.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=2052."
+    },
+    {
+      "code": "BPC",
+      "section": "7028.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=7028.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=7028."
+    }
+  ],
+  "stats": {
+    "pagesFetched": 0,
+    "expandedBranchPages": 0,
+    "displayTextPages": 0,
+    "hierarchyNodes": 0,
+    "sectionsDiscovered": 8,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 0,
+    "anomalies": 0
+  },
+  "anomalies": []
+}

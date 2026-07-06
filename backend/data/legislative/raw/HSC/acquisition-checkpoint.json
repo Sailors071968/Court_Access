@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "code": "HSC",
+  "manifestPath": "/workspace/backend/data/legislative/discovery/HSC-criminal-manifest.json",
+  "startedAt": "2026-07-06T21:31:47.328Z",
+  "updatedAt": "2026-07-06T21:32:04.686Z",
+  "nextIndex": 18,
+  "acquired": 18,
+  "failed": 0,
+  "skipped": 0,
+  "lastSection": "11550."
+}

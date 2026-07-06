@@ -75,6 +75,20 @@ export GIT_REMOTE=https://github.com/Sailors071968/Court_Access.git
 
 ---
 
+## Phase 0 — Preflight (read-only)
+
+On the production EC2 server:
+
+```bash
+cd /var/www/courtaccess   # or your discovered production path
+git fetch origin dev && git checkout dev && git pull origin dev
+bash scripts/v1-greenfield-preflight.sh
+# Optional JSON report:
+bash scripts/v1-greenfield-preflight.sh --json /tmp/v1-preflight-report.json
+```
+
+**READINESS: PASS** required before Phase 1. The script makes no modifications.
+
 ## Phase 1 — Greenfield install
 
 ```bash
@@ -137,7 +151,7 @@ For frontend-only hotfixes after cutover, either:
 ## Checklist
 
 - [ ] `origin/dev` at expected commit (see `V1_INSTALL_MANIFEST.json` after install)
-- [ ] `courtaccess_v1` database created
+- [ ] `v1-greenfield-preflight.sh` PASS
 - [ ] `v1-greenfield-install.sh` completed
 - [ ] `v1-greenfield-verify.sh` PASS
 - [ ] Stripe billing readiness (if billing required at launch)
@@ -151,6 +165,7 @@ For frontend-only hotfixes after cutover, either:
 
 | File | Purpose |
 |------|---------|
+| `scripts/v1-greenfield-preflight.sh` | Read-only Phase 0 audit (runtime, DB, PM2, nginx, ports) |
 | `scripts/v1-greenfield-install.sh` | Fresh clone, build, nginx :8080, PM2 :3101 |
 | `scripts/v1-greenfield-verify.sh` | End-to-end verification without prod changes |
 | `scripts/v1-production-cutover.sh` | Promote V1 to production with rollback |

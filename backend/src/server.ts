@@ -215,6 +215,11 @@ async function startServer() {
   const { registerSearchRoutes } = await import('./search/searchRoutes.js');
   await registerSearchRoutes(app);
 
+  // Program 108/118 — Evidence-governed Litigation Assistant (AI Safety Envelope)
+  console.log('[Server] Registering litigation assistant routes...');
+  const { registerLitigationAssistantRoutes } = await import('./assistant/litigationAssistantRoutes.js');
+  await registerLitigationAssistantRoutes(app);
+
   console.log('[Server] Registering Investigator Workbench routes...');
   await registerInvestigatorRoutes(app);
 

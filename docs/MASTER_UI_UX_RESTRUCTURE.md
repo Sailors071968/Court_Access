@@ -24,6 +24,7 @@
 | **28** | **Evidence Workspace** | **DONE** | `EvidencePage` rebuilt; `MediaPreview` + `EvidenceDetailDrawer` reusable |
 | **29** | **Document Workspace** | **DONE** | `DocumentsPage` rebuilt; `DocumentReader` + `DocumentAnalysisPanel` reusable |
 | **30** | **Report Engine** | **DONE** | `components/report/*` (builder + engine); new `ReportsPage` + `/reports` route |
+| **31** | **Case Command Center** | **DONE** | `CaseOverviewPage` rebuilt — one-click hub, progressive disclosure, responsive |
 | **24** | **Repository Audit** | **DONE** | `docs/DESIGN_DEBT_REPORT.md` |
 
 ## Design Philosophy

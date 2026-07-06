@@ -1,14 +1,22 @@
 // ============================================================================
-// Program 21 — Production Operations Command Center
+// CourtAccess — Operations Command Center (Program 23)
+// Premium dark operational nerve center on the unified design system.
 // Route: /admin/operations
 // ============================================================================
 
 import { useState, useEffect, useCallback } from 'react';
-import {
-  Activity, AlertTriangle, CheckCircle, RefreshCw, Shield, Server,
-  Database, Mail, CreditCard, GitBranch, Archive, Bell,
-} from 'lucide-react';
-import { Card } from '../../components/common/Card';
+import { RefreshCw, Server, Database, Mail, CreditCard, GitBranch, Archive, Bell, Activity } from 'lucide-react';
+import { PageHeader } from '../../components/ui/page-header';
+import { Button } from '../../components/ui/button';
+import { Card } from '../../components/ui/card';
+import { StatCard } from '../../components/ui/card';
+import { Badge } from '../../components/ui/badge';
+import { Spinner } from '../../components/ui/spinner';
+import { EmptyState } from '../../components/ui/empty-state';
+import { SearchBar } from '../../components/ui/input';
+import { ProgressBar } from '../../components/ui/progress';
+import { Icon } from '../../components/icons/registry';
+import { SPACING } from '../../constants/designTokens';
 
 interface ComponentHealth {
   status: string;
@@ -53,26 +61,26 @@ function getAuthHeaders(): Record<string, string> {
   return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
-function statusColor(status: string): string {
-  if (status === 'healthy' || status === 'PASS' || status === 'READY') return 'text-green-700 bg-green-50';
-  if (status === 'degraded' || status === 'PARTIAL' || status === 'degraded') return 'text-yellow-700 bg-yellow-50';
-  if (status === 'unhealthy' || status === 'FAIL' || status === 'NOT_READY') return 'text-red-700 bg-red-50';
-  return 'text-gray-600 bg-gray-50';
+type HealthTone = 'success' | 'warning' | 'danger' | 'default';
+
+function healthTone(status: string): HealthTone {
+  if (['healthy', 'PASS', 'READY', 'ok'].includes(status)) return 'success';
+  if (['degraded', 'PARTIAL'].includes(status)) return 'warning';
+  if (['unhealthy', 'FAIL', 'NOT_READY'].includes(status)) return 'danger';
+  return 'default';
 }
 
-function StatusBadge({ status }: { status: string }) {
-  return (
-    <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${statusColor(status)}`}>
-      {status === 'healthy' || status === 'PASS' ? <CheckCircle size={12} /> : <AlertTriangle size={12} />}
-      {status}
-    </span>
-  );
+function HealthBadge({ status }: { status: string }) {
+  const tone = healthTone(status);
+  const variant = tone === 'success' ? 'success' : tone === 'warning' ? 'warning' : tone === 'danger' ? 'danger' : 'default';
+  return <Badge variant={variant}>{status}</Badge>;
 }
 
 export function OperationsCommandCenter() {
   const [dashboard, setDashboard] = useState<OperationsDashboard | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [filter, setFilter] = useState('');
 
   const fetchDashboard = useCallback(async () => {
     setLoading(true);
@@ -88,22 +96,23 @@ export function OperationsCommandCenter() {
     }
   }, []);
 
-  useEffect(() => { fetchDashboard(); }, [fetchDashboard]);
+  useEffect(() => {
+    fetchDashboard();
+  }, [fetchDashboard]);
 
-  if (loading && !dashboard) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <RefreshCw className="animate-spin text-gray-400" size={24} />
-        <span className="ml-3 text-gray-500">Loading operations dashboard...</span>
-      </div>
-    );
-  }
+  if (loading && !dashboard) return <Spinner label="Loading operations dashboard…" />;
 
   if (error && !dashboard) {
     return (
-      <div className="text-center p-8">
-        <p className="text-red-600">{error}</p>
-        <button onClick={fetchDashboard} className="mt-4 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm">Retry</button>
+      <div className={SPACING.container}>
+        <Card>
+          <EmptyState
+            icon={<Icon name="repositoryIntegrity" size={24} />}
+            title="Unable to load operations dashboard"
+            description={error}
+            action={<Button variant="primary" onClick={fetchDashboard}>Retry</Button>}
+          />
+        </Card>
       </div>
     );
   }
@@ -121,51 +130,69 @@ export function OperationsCommandCenter() {
     { label: 'Legislative', icon: GitBranch, health: dashboard.legislativePipeline },
     { label: 'Knowledge Graph', icon: GitBranch, health: dashboard.knowledgeGraph },
     { label: 'Repositories', icon: Archive, health: dashboard.repositoryIntegrity },
-  ];
+  ].filter((c) => c.label.toLowerCase().includes(filter.toLowerCase()));
+
+  const queueEntries = Object.entries(dashboard.queues.queues ?? {});
+
+  const exportJson = () => {
+    const blob = new Blob([JSON.stringify(dashboard, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `operations-${new Date().toISOString().slice(0, 10)}.json`;
+    a.click();
+    URL.revokeObjectURL(url);
+  };
 
   return (
-    <div className="max-w-7xl mx-auto space-y-6 p-6">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <Shield size={28} className="text-blue-600" />
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">Production Operations</h1>
-            <p className="text-sm text-gray-500">
-              Last updated: {new Date(dashboard.generatedAt).toLocaleString()}
-            </p>
+    <div className={`${SPACING.container} space-y-6`}>
+      <PageHeader
+        title="Operations Command Center"
+        overline="Production"
+        subtitle={`Last updated ${new Date(dashboard.generatedAt).toLocaleString()}`}
+        action={
+          <div className="flex items-center gap-3">
+            <HealthBadge status={dashboard.overallStatus} />
+            <Button variant="secondary" onClick={exportJson}>Export</Button>
+            <Button variant="primary" onClick={fetchDashboard} disabled={loading}>
+              <RefreshCw size={15} className={loading ? 'animate-spin' : ''} /> Refresh
+            </Button>
           </div>
-        </div>
-        <div className="flex items-center gap-3">
-          <StatusBadge status={dashboard.overallStatus} />
-          <button
-            onClick={fetchDashboard}
-            disabled={loading}
-            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
-          >
-            <RefreshCw size={14} className={loading ? 'animate-spin' : ''} />
-            Refresh
-          </button>
-        </div>
+        }
+      />
+
+      {/* Headline metrics */}
+      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+        <StatCard tile="emerald" icon={<Icon name="repositoryIntegrity" size={20} />} value={dashboard.observability.systemAvailability} label="System Availability" />
+        <StatCard tile="blue" icon={<Activity size={20} />} value={`${dashboard.performance.responseTimeP95Ms}ms`} label="Response p95" />
+        <StatCard tile="gold" icon={<CreditCard size={20} />} value={dashboard.observability.billingAvailability} label="Billing Availability" />
+        <StatCard
+          tile="violet"
+          icon={<Bell size={20} />}
+          value={dashboard.alerts.length}
+          label="Active Alerts"
+          highlight={dashboard.alerts.length > 0}
+        />
       </div>
 
       {/* Production Gates */}
       <Card>
-        <h2 className="text-lg font-semibold mb-3">Production Gates</h2>
-        <div className="flex items-center gap-4 mb-4">
-          <StatusBadge status={dashboard.productionGates.overallResult} />
-          <span className="text-sm text-gray-600">
-            {dashboard.productionGates.passCount} PASS / {dashboard.productionGates.partialCount} PARTIAL / {dashboard.productionGates.failCount} FAIL
-          </span>
-          {dashboard.productionGates.deploymentBlocked && (
-            <span className="text-sm font-medium text-red-600">Deployment Blocked</span>
-          )}
+        <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
+          <h2 className="text-lg font-semibold text-white">Production Gates</h2>
+          <div className="flex items-center gap-3">
+            <HealthBadge status={dashboard.productionGates.overallResult} />
+            <span className="text-sm text-slate-400">
+              {dashboard.productionGates.passCount} PASS / {dashboard.productionGates.partialCount} PARTIAL / {dashboard.productionGates.failCount} FAIL
+            </span>
+            {dashboard.productionGates.deploymentBlocked && <Badge variant="danger">Deployment Blocked</Badge>}
+          </div>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-2">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
           {dashboard.productionGates.gates.map((g) => (
-            <div key={g.id} className="p-2 bg-gray-50 rounded text-xs">
-              <span className="font-mono text-gray-500">{g.id}</span>
-              <p className="font-medium truncate">{g.name}</p>
-              <StatusBadge status={g.result} />
+            <div key={g.id} className="p-3 rounded-lg bg-white/[0.03] border border-white/5">
+              <span className="font-mono text-[10px] text-slate-500">{g.id}</span>
+              <p className="text-xs font-medium text-slate-200 truncate">{g.name}</p>
+              <div className="mt-1.5"><HealthBadge status={g.result} /></div>
             </div>
           ))}
         </div>
@@ -174,67 +201,112 @@ export function OperationsCommandCenter() {
       {/* Alerts */}
       {dashboard.alerts.length > 0 && (
         <Card>
-          <div className="flex items-center gap-2 mb-3">
-            <Bell size={18} className="text-orange-500" />
-            <h2 className="text-lg font-semibold">Active Alerts ({dashboard.alerts.length})</h2>
+          <div className="flex items-center gap-2 mb-4">
+            <Bell size={18} className="text-gold-light" />
+            <h2 className="text-lg font-semibold text-white">Active Alerts ({dashboard.alerts.length})</h2>
           </div>
           <div className="space-y-2">
             {dashboard.alerts.map((a) => (
-              <div key={a.id} className={`p-3 rounded-lg text-sm ${a.severity === 'critical' ? 'bg-red-50 border border-red-200' : 'bg-yellow-50 border border-yellow-200'}`}>
-                <span className="font-medium uppercase text-xs">{a.severity}</span>
-                <span className="mx-2 text-gray-400">|</span>
-                <span className="text-gray-600">{a.category}</span>
-                <p className="mt-1 text-gray-900">{a.message}</p>
+              <div
+                key={a.id}
+                className={`p-3 rounded-lg border ${a.severity === 'critical' ? 'bg-red-500/10 border-red-500/20' : 'bg-gold/10 border-gold/20'}`}
+              >
+                <div className="flex items-center gap-2">
+                  <Badge variant={a.severity === 'critical' ? 'danger' : 'warning'}>{a.severity}</Badge>
+                  <span className="text-xs text-slate-400">{a.category}</span>
+                </div>
+                <p className="mt-1.5 text-sm text-slate-200">{a.message}</p>
               </div>
             ))}
           </div>
         </Card>
       )}
 
-      {/* Component Health Grid */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
-        {components.map(({ label, icon: Icon, health }) => (
-          <Card key={label} padding="sm">
-            <div className="flex items-center gap-2 mb-2">
-              <Icon size={16} className="text-gray-500" />
-              <span className="text-sm font-medium text-gray-700">{label}</span>
+      {/* Component health with search/filter */}
+      <Card>
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+          <h2 className="text-lg font-semibold text-white">Component Health</h2>
+          <SearchBar placeholder="Filter components…" value={filter} onChange={(e) => setFilter(e.target.value)} className="sm:w-64" />
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          {components.map(({ label, icon: CompIcon, health }) => (
+            <div key={label} className="ca-panel p-4">
+              <div className="flex items-center gap-2 mb-2">
+                <CompIcon size={16} className="text-gold-light" />
+                <span className="text-sm font-medium text-slate-200">{label}</span>
+              </div>
+              <HealthBadge status={health.status} />
+              {health.latencyMs !== undefined && <p className="mt-2 text-xs text-slate-500">{health.latencyMs}ms latency</p>}
+              {health.message && <p className="mt-1 text-xs text-slate-500 truncate">{health.message}</p>}
             </div>
-            <StatusBadge status={health.status} />
-            {health.message && <p className="mt-2 text-xs text-gray-500 truncate">{health.message}</p>}
-          </Card>
-        ))}
-      </div>
+          ))}
+          {components.length === 0 && <p className="text-sm text-slate-500 col-span-full py-4 text-center">No components match “{filter}”.</p>}
+        </div>
+      </Card>
 
-      {/* Observability Metrics */}
-      <div className="grid md:grid-cols-2 gap-6">
+      {/* Queue depths */}
+      {queueEntries.length > 0 && (
         <Card>
-          <h2 className="text-lg font-semibold mb-4">Observability</h2>
-          <div className="space-y-3">
-            {[
-              ['Production Gates', `${dashboard.observability.productionGatesCoverage}%`],
-              ['Legislative Coverage', `${dashboard.observability.legislativeCoveragePercent}%`],
-              ['Attorney Workflows', `${dashboard.observability.attorneyWorkflowCoveragePercent}%`],
-              ['System Availability', dashboard.observability.systemAvailability],
-              ['Billing Availability', dashboard.observability.billingAvailability],
-            ].map(([label, value]) => (
-              <div key={label} className="flex justify-between p-2 bg-gray-50 rounded">
-                <span className="text-sm text-gray-600">{label}</span>
-                <span className="text-sm font-medium">{value}</span>
+          <h2 className="text-lg font-semibold text-white mb-4">Queue Depths &amp; Background Jobs</h2>
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+            {queueEntries.map(([name, q]) => (
+              <div key={name} className="ca-panel p-4">
+                <p className="text-sm font-medium text-white mb-3 capitalize">{name.replace(/[-_]/g, ' ')}</p>
+                <div className="grid grid-cols-3 gap-2 text-center">
+                  <div>
+                    <p className="text-lg font-bold text-blue-400 tabular-nums">{q.waiting}</p>
+                    <p className="text-[10px] text-slate-500 uppercase">Waiting</p>
+                  </div>
+                  <div>
+                    <p className="text-lg font-bold text-emerald-400 tabular-nums">{q.active}</p>
+                    <p className="text-[10px] text-slate-500 uppercase">Active</p>
+                  </div>
+                  <div>
+                    <p className="text-lg font-bold text-red-400 tabular-nums">{q.failed}</p>
+                    <p className="text-[10px] text-slate-500 uppercase">Failed</p>
+                  </div>
+                </div>
               </div>
             ))}
           </div>
         </Card>
+      )}
+
+      {/* Observability + Performance */}
+      <div className="grid md:grid-cols-2 gap-6">
         <Card>
-          <h2 className="text-lg font-semibold mb-4">Performance</h2>
+          <h2 className="text-lg font-semibold text-white mb-4">Observability</h2>
+          <div className="space-y-4">
+            <ProgressBar value={dashboard.observability.productionGatesCoverage} tone="gold" label="Production Gates Coverage" showValue />
+            <ProgressBar value={dashboard.observability.legislativeCoveragePercent} tone="blue" label="Legislative Coverage" showValue />
+            <ProgressBar value={dashboard.observability.attorneyWorkflowCoveragePercent} tone="violet" label="Attorney Workflows" showValue />
+            <div className="flex justify-between p-2.5 rounded-lg bg-white/[0.03]">
+              <span className="text-sm text-slate-400">System Availability</span>
+              <span className="text-sm font-medium text-white">{dashboard.observability.systemAvailability}</span>
+            </div>
+            <div className="flex justify-between p-2.5 rounded-lg bg-white/[0.03]">
+              <span className="text-sm text-slate-400">Billing Availability</span>
+              <span className="text-sm font-medium text-white">{dashboard.observability.billingAvailability}</span>
+            </div>
+          </div>
+        </Card>
+        <Card>
+          <h2 className="text-lg font-semibold text-white mb-4">Performance</h2>
           <div className="space-y-3">
-            <div className="flex justify-between p-2 bg-gray-50 rounded">
-              <span className="text-sm text-gray-600">Error Rate</span>
-              <span className="text-sm font-medium">{(dashboard.performance.errorRate * 100).toFixed(2)}%</span>
+            <div className="flex justify-between p-2.5 rounded-lg bg-white/[0.03]">
+              <span className="text-sm text-slate-400">Error Rate</span>
+              <span className="text-sm font-medium text-white tabular-nums">{(dashboard.performance.errorRate * 100).toFixed(2)}%</span>
             </div>
-            <div className="flex justify-between p-2 bg-gray-50 rounded">
-              <span className="text-sm text-gray-600">Response Time (p95)</span>
-              <span className="text-sm font-medium">{dashboard.performance.responseTimeP95Ms}ms</span>
+            <div className="flex justify-between p-2.5 rounded-lg bg-white/[0.03]">
+              <span className="text-sm text-slate-400">Response Time (p95)</span>
+              <span className="text-sm font-medium text-white tabular-nums">{dashboard.performance.responseTimeP95Ms}ms</span>
             </div>
+            <ProgressBar
+              value={Math.max(0, 100 - dashboard.performance.errorRate * 100 * 10)}
+              tone={dashboard.performance.errorRate > 0.02 ? 'red' : 'emerald'}
+              label="Error budget remaining"
+              showValue
+            />
           </div>
         </Card>
       </div>

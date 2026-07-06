@@ -15,9 +15,9 @@
 | **18** | **Master Component Library** | **DONE** | `docs/COMPONENT_LIBRARY.md`, 45+ components |
 | **19** | **Iconography System** | **DONE** | `docs/ICON_USAGE_GUIDE.md`, `icons/registry.tsx` |
 | **20** | **Attorney Workspace (flagship)** | **DONE (v1)** | `StaffDashboard.tsx` rebuilt on library |
-| 21 | Investigator Workspace | **PENDING** | components ready |
-| 22 | Defendant Workspace | **PENDING** | components ready |
-| 23 | Operations Command Center | **PENDING** | components ready |
+| **21** | **Investigator Workspace** | **DONE** | `InvestigatorWorkbenchPage.tsx` on library |
+| **22** | **Defendant Workspace** | **DONE** | `client-portal/DefendantWorkspace.tsx` |
+| **23** | **Operations Command Center** | **DONE** | `OperationsCommandCenter.tsx` on library |
 | **24** | **Repository Audit** | **DONE** | `docs/DESIGN_DEBT_REPORT.md` |
 
 ## Design Philosophy

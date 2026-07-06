@@ -5,13 +5,13 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Loader2, Calendar, MessageSquare, FileText, Bell } from 'lucide-react';
-import { DefendantDashboard } from '../dashboard/DefendantDashboard';
+import { DefendantWorkspace } from './DefendantWorkspace';
 import { useAuthStore } from '../../stores/authStore';
 import { fetchCases, type ApiCase } from '../../services/caseApi';
 import { fetchMembershipAccount } from '../../services/membershipApi';
 
 export function ClientPortalDashboardPage() {
-  return <DefendantDashboard />;
+  return <DefendantWorkspace />;
 }
 
 export function ClientPortalCourtDatesPage() {

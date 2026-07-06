@@ -119,6 +119,28 @@ export const EVIDENCE_TYPES = [
   { value: 'other_document', label: 'Other Document' },
 ] as const;
 
+/** Terminal processing states — polling stops when reached */
+export const TERMINAL_PROCESSING_STATUSES = ['analyzed', 'failed'] as const;
+
+export function isEvidenceProcessingComplete(status: string): boolean {
+  return (TERMINAL_PROCESSING_STATUSES as readonly string[]).includes(status);
+}
+
+export function mapProcessingStatusForDisplay(status: string): 'analyzed' | 'processing' | 'pending' | 'failed' {
+  if (status === 'analyzed') return 'analyzed';
+  if (status === 'failed') return 'failed';
+  if (status === 'ingesting' || status === 'processing') return 'processing';
+  return 'pending';
+}
+
+export function formatFileSize(bytes: number | string): string {
+  const n = typeof bytes === 'string' ? Number(bytes) : bytes;
+  if (!n || isNaN(n)) return '—';
+  if (n < 1024) return `${n} B`;
+  if (n < 1024 * 1024) return `${(n / 1024).toFixed(1)} KB`;
+  return `${(n / (1024 * 1024)).toFixed(1)} MB`;
+}
+
 export const CASE_TYPES = [
   { value: 'felony', label: 'Felony' },
   { value: 'misdemeanor', label: 'Misdemeanor' },
@@ -211,6 +233,34 @@ export async function fetchEvidence(evidenceId: string): Promise<ApiEvidence> {
   }
   const data = await res.json();
   return data.evidence;
+}
+
+/**
+ * Poll evidence until OCR/processing completes or times out.
+ * Invokes onUpdate on each poll so the attorney sees live progress.
+ */
+export async function pollEvidenceProcessing(
+  evidenceId: string,
+  options?: {
+    intervalMs?: number;
+    timeoutMs?: number;
+    onUpdate?: (evidence: ApiEvidence) => void;
+  },
+): Promise<ApiEvidence> {
+  const intervalMs = options?.intervalMs ?? 1500;
+  const timeoutMs = options?.timeoutMs ?? 120_000;
+  const started = Date.now();
+
+  while (Date.now() - started < timeoutMs) {
+    const evidence = await fetchEvidence(evidenceId);
+    options?.onUpdate?.(evidence);
+    if (isEvidenceProcessingComplete(evidence.processingStatus)) {
+      return evidence;
+    }
+    await new Promise((resolve) => setTimeout(resolve, intervalMs));
+  }
+
+  throw new Error('Processing timed out — check evidence status later');
 }
 
 export async function deleteEvidence(evidenceId: string): Promise<void> {
@@ -469,7 +519,15 @@ export async function uploadEvidenceDirect(params: {
           reject(new Error('Invalid response from upload'));
         }
       } else {
-        reject(new Error(`Upload failed with status ${xhr.status}`));
+        let message = `Upload failed with status ${xhr.status}`;
+        try {
+          const errBody = JSON.parse(xhr.responseText);
+          if (errBody.error) message = errBody.error;
+          if (errBody.message) message = errBody.message;
+        } catch {
+          // use default message
+        }
+        reject(new Error(message));
       }
     };
 

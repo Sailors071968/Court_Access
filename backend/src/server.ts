@@ -100,9 +100,10 @@ async function startServer() {
   app.addHook('onRequest', rateLimitHook);
 
   // Phase 191 — Authentication (JWT verification + RBAC)
-  //  app.addHook('onRequest', authenticationHook);
+  app.addHook('onRequest', authenticationHook);
 
   // Phase 193 — CSRF protection (after auth, before route handlers)
+  // CSRF remains disabled until session store is production-ready (multi-instance).
   // app.addHook('onRequest', csrfProtectionHook);
 
   // Phase 195 — Evidence upload protection

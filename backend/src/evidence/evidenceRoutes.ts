@@ -225,6 +225,8 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
           evidenceType: body.evidenceType,
           s3Key: body.s3Key,
           uploadedBy: user.userId,
+          processingStatus: 'ingesting',
+          analysisStatus: 'processing',
         },
       });
     } catch (err) {
@@ -238,10 +240,12 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
         evidenceId: evidence.evidenceId,
         caseId: body.caseId,
         tenantId: user.tenantId,
+        userId: user.userId,
         fileName: body.fileName,
         evidenceType: body.evidenceType,
         s3Key: body.s3Key,
         size: body.size,
+        mimeType: body.mimeType,
         isVideo: VIDEO_EVIDENCE_TYPES.includes(body.evidenceType as EvidenceType),
       });
     } catch (queueErr) {

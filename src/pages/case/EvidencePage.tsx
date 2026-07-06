@@ -11,8 +11,10 @@ import { DoctrineCompliancePanel } from '../../components/case/DoctrineComplianc
 import {
   fetchCaseEvidence,
   uploadEvidenceDirect,
+  pollEvidenceProcessing,
   rebuildTimeline,
   EVIDENCE_TYPES,
+  formatFileSize,
   type ApiEvidence,
 } from '../../services/caseApi';
 
@@ -69,6 +71,18 @@ export function EvidencePage() {
         onProgress: setUploadProgress,
       });
       setEvidence((prev) => [newEvidence, ...prev]);
+
+      const finalEvidence = await pollEvidenceProcessing(newEvidence.evidenceId, {
+        onUpdate: (ev) => {
+          setEvidence((prev) =>
+            prev.map((item) => (item.evidenceId === ev.evidenceId ? ev : item)),
+          );
+        },
+      });
+      setEvidence((prev) =>
+        prev.map((item) => (item.evidenceId === finalEvidence.evidenceId ? finalEvidence : item)),
+      );
+
       setShowUploadModal(false);
       setSelectedFile(null);
       setUploadProgress(0);
@@ -289,8 +303,16 @@ export function EvidencePage() {
                 />
               </div>
               {uploading && (
-                <div className="w-full bg-gray-200 rounded-full h-2">
-                  <div className="bg-blue-600 h-2 rounded-full transition-all" style={{ width: `${uploadProgress}%` }} />
+                <div className="space-y-2">
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div className="bg-blue-600 h-2 rounded-full transition-all" style={{ width: `${uploadProgress}%` }} />
+                  </div>
+                  {uploadProgress >= 100 && (
+                    <p className="text-xs text-blue-600 flex items-center gap-1">
+                      <Loader2 size={12} className="animate-spin" />
+                      Running OCR and text extraction...
+                    </p>
+                  )}
                 </div>
               )}
               <div className="flex justify-end gap-3 pt-2">
@@ -300,7 +322,7 @@ export function EvidencePage() {
                   disabled={!selectedFile || uploading}
                   className="px-4 py-2 bg-slate-800 text-white rounded-lg text-sm font-medium hover:bg-slate-700 transition-colors disabled:opacity-50"
                 >
-                  {uploading ? `Uploading ${uploadProgress}%...` : 'Upload'}
+                  {uploading ? (uploadProgress >= 100 ? 'Processing...' : `Uploading ${uploadProgress}%...`) : 'Upload'}
                 </button>
               </div>
             </div>
@@ -311,9 +333,3 @@ export function EvidencePage() {
   );
 }
 
-function formatFileSize(bytes: number): string {
-  if (!bytes || isNaN(bytes)) return '—';
-  if (bytes < 1024) return `${bytes} B`;
-  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
-}

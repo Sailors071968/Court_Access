@@ -1,6 +1,6 @@
 {
   "directive": "Master Production Directive v19.0",
-  "generatedAt": "2026-07-06T12:40:00Z",
+  "generatedAt": "2026-07-06T13:05:00Z",
   "blockerCount": 6,
   "resolvedThisSession": [
     "missing-frontend-merge-to-dev",
@@ -14,7 +14,7 @@
       "name": "Production deployment",
       "status": "in_progress",
       "description": "courtaccess.net serves stale June 26 build. V1 greenfield scripts prepared on dev: parallel install to /var/www/courtaccess-v1 (ports 3101/8080), verify, then cutover. Legacy production untouched until cutover PASS.",
-      "resolution": "Server operator: follow GREENFIELD_V1_DEPLOYMENT.md — run v1-greenfield-install.sh, v1-greenfield-verify.sh, then v1-production-cutover.sh. Alternative: configure DEPLOY_HOST/DEPLOY_USER/DEPLOY_SSH_KEY for CI artifact deploy.",
+      "resolution": "EC2: bash scripts/v1-greenfield-preflight.sh (read-only). On PASS: v1-greenfield-install.sh → v1-greenfield-verify.sh → v1-production-cutover.sh. See GREENFIELD_V1_DEPLOYMENT.md.",
       "owner": "engineering",
       "blocks": ["production-verification", "dashboard-screenshots", "v1-certification"]
     },

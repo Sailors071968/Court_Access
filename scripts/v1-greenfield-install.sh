@@ -94,8 +94,15 @@ upsert_env "HOST" "0.0.0.0" "${BACKEND_ENV}"
 upsert_env "FRONTEND_URL" "${V1_URL}" "${BACKEND_ENV}"
 upsert_env "EVIDENCE_UPLOAD_DIR" "${INSTALL_DIR}/uploads/evidence" "${BACKEND_ENV}"
 
-# Use separate database if not already set
-if ! grep -q '^DATABASE_URL=' "${BACKEND_ENV}" || grep -q 'REPLACE_WITH' "${BACKEND_ENV}"; then
+# Always point V1 at separate database (never reuse legacy courtaccess DB)
+if [[ -n "${ENV_SOURCE}" && -f "${ENV_SOURCE}" ]]; then
+  SRC_DB="$(grep -E '^DATABASE_URL=' "${ENV_SOURCE}" | head -1 | sed -E 's/^DATABASE_URL=//; s/^["'\'']//; s/["'\'']$//')"
+  if [[ -n "$SRC_DB" ]]; then
+    V1_DB_URL="$(echo "$SRC_DB" | sed -E 's|/[^/?]+(\?|$)|/courtaccess_v1\1|')"
+    upsert_env "DATABASE_URL" "${V1_DB_URL}" "${BACKEND_ENV}"
+    log "DATABASE_URL set to courtaccess_v1 (derived from ENV_SOURCE)"
+  fi
+elif ! grep -q '^DATABASE_URL=' "${BACKEND_ENV}" || grep -q 'REPLACE_WITH' "${BACKEND_ENV}"; then
   upsert_env "DATABASE_URL" "postgresql://courtaccess:CHANGE_ME@localhost:5432/courtaccess_v1?schema=public" "${BACKEND_ENV}"
   log "WARN: DATABASE_URL needs real credentials for courtaccess_v1"
 fi

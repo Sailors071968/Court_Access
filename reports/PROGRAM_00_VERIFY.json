@@ -1,0 +1,87 @@
+{
+  "program": "PROGRAM-00",
+  "name": "Production Website",
+  "verifiedAt": "2026-07-05T13:52:54.032Z",
+  "routesTotal": 13,
+  "routesPass": 13,
+  "headlineCheck": true,
+  "buildSourceCheck": true,
+  "screenshots": [
+    "/workspace/reports/screenshots/program-00/landing-desktop.png",
+    "/workspace/reports/screenshots/program-00/landing-tablet.png",
+    "/workspace/reports/screenshots/program-00/landing-mobile.png",
+    "/workspace/reports/screenshots/program-00/about-desktop.png",
+    "/workspace/reports/screenshots/program-00/features-desktop.png",
+    "/workspace/reports/screenshots/program-00/faq-desktop.png",
+    "/workspace/reports/screenshots/program-00/privacy-desktop.png"
+  ],
+  "routes": [
+    {
+      "route": "/",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "route": "/pricing",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "route": "/about",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "route": "/features",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "route": "/faq",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "route": "/contact",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "route": "/login",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "route": "/register",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "route": "/forgot-password",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "route": "/verify-email",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "route": "/privacy",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "route": "/terms",
+      "status": 200,
+      "ok": true
+    },
+    {
+      "route": "/legal-disclaimer",
+      "status": 200,
+      "ok": true
+    }
+  ],
+  "errors": [],
+  "status": "PASS"
+}

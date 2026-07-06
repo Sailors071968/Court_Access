@@ -4,8 +4,7 @@
 
 import { useState } from 'react';
 import { Card } from '../components/common/Card';
-import { MOCK_NOTIFICATIONS } from '../constants/mockData';
-import { FileText, Calendar, Lightbulb, Phone, Mail } from 'lucide-react';
+import { Phone, Mail, Bell } from 'lucide-react';
 
 export function NotificationsPage() {
   const [smsEnabled, setSmsEnabled] = useState(true);
@@ -65,36 +64,16 @@ export function NotificationsPage() {
       <div className="grid lg:grid-cols-3 gap-6">
         {/* Notification Feed */}
         <div className="lg:col-span-2 space-y-3">
-          {MOCK_NOTIFICATIONS.map((notif) => (
-            <Card key={notif.id} hover>
-              <div className="flex gap-4">
-                <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 ${
-                  notif.type === 'document' ? 'bg-orange-100 text-orange-600' :
-                  notif.type === 'hearing' ? 'bg-blue-100 text-blue-600' :
-                  'bg-green-100 text-green-600'
-                }`}>
-                  {notif.type === 'document' ? <FileText size={18} /> :
-                   notif.type === 'hearing' ? <Calendar size={18} /> :
-                   <Lightbulb size={18} />}
-                </div>
-                <div className="flex-1">
-                  <div className="flex items-start justify-between">
-                    <h3 className="font-semibold text-gray-900">{notif.title}</h3>
-                    {!notif.read && <span className="w-2 h-2 bg-blue-600 rounded-full mt-2" />}
-                  </div>
-                  <p className="text-sm text-gray-600 mt-1">{notif.description}</p>
-                  <div className="flex items-center gap-4 mt-2">
-                    <span className="text-xs text-gray-400">{notif.timestamp}</span>
-                    {notif.actionLabel && (
-                      <button className="text-xs text-blue-600 hover:text-blue-700 font-medium">
-                        {notif.actionLabel}
-                      </button>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </Card>
-          ))}
+          <Card>
+            <div className="text-center py-12">
+              <Bell size={32} className="text-gray-300 mx-auto mb-3" />
+              <h3 className="text-lg font-semibold text-gray-700 mb-2">No Notifications Yet</h3>
+              <p className="text-sm text-gray-500">
+                Notifications will appear here when there are updates to your cases,
+                new evidence uploads, or AI analysis results.
+              </p>
+            </div>
+          </Card>
         </div>
 
         {/* Notification Settings */}

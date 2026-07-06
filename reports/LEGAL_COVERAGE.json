@@ -1,0 +1,37 @@
+{
+  "assessment": "LEGAL_COVERAGE",
+  "version": "1.0",
+  "generatedAt": "2026-07-05T15:43:27.369Z",
+  "californiaCodesDiscovered": 1,
+  "californiaCodesTotal": 30,
+  "californiaCodesProcessed": 4,
+  "sectionsDiscovered": 207,
+  "sectionsParsed": 4,
+  "offensesDiscovered": 2,
+  "offenseElements": 4,
+  "mensReaRecovered": 2,
+  "mensReaCoveragePercent": 100,
+  "authoritiesLinked": 13,
+  "authorityCoveragePercent": 100,
+  "calcrimMapped": 1,
+  "calcrimCoveragePercent": 50,
+  "repositoryIntegrity": "PASS",
+  "manualReviewQueue": 2,
+  "parsingFailures": 0,
+  "repositories": {
+    "statutes": 4,
+    "offenses": 2,
+    "elements": 4,
+    "mens_rea": 2,
+    "exceptions": 3,
+    "defenses": 0,
+    "cross_references": 13,
+    "regulatory_incorporations": 2,
+    "calcrim_links": 1,
+    "authorities": 13,
+    "statute_classifications": 3
+  },
+  "unknowns": [
+    "E2E workflow status unknown"
+  ]
+}

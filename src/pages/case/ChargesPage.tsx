@@ -5,27 +5,46 @@
 import { useState, useEffect } from 'react';
 import { Card } from '../../components/common/Card';
 import { EvidenceStatusBadge } from '../../components/common/StatusBadge';
-import { MOCK_CHARGES } from '../../constants/mockData';
 import { getDefenseInsights } from '../../services/ai/defenseInsights';
 import type { DefenseInsight } from '../../types';
+import type { ChargeEntity } from '../../models/CaseModel';
 import { useParams } from 'react-router-dom';
 import { ArrowRight, AlertTriangle } from 'lucide-react';
+import { fetchCase } from '../../services/caseApi';
 
 export function ChargesPage() {
   const { caseId } = useParams<{ caseId: string }>();
   const [activeChargeIndex, setActiveChargeIndex] = useState(0);
   const [insights, setInsights] = useState<DefenseInsight[]>([]);
   const [insightsLoading, setInsightsLoading] = useState(true);
+  const [charges, setCharges] = useState<ChargeEntity[]>([]);
+  const [_loading, setLoading] = useState(true);
 
   useEffect(() => {
+    if (!caseId) return;
+    let cancelled = false;
+    setLoading(true);
+    fetchCase(caseId).then((c) => {
+      if (cancelled) return;
+      // If the backend returns charges for the case, use them; otherwise show empty
+      setCharges((c as unknown as { charges?: ChargeEntity[] }).charges ?? []);
+      setLoading(false);
+    }).catch(() => {
+      if (!cancelled) setLoading(false);
+    });
+    return () => { cancelled = true; };
+  }, [caseId]);
+
+  useEffect(() => {
+    if (!caseId) return;
     setInsightsLoading(true);
-    getDefenseInsights({ caseId: caseId || '1' }).then((res) => {
+    getDefenseInsights({ caseId }).then((res) => {
       setInsights(res.insights);
       setInsightsLoading(false);
     });
   }, [caseId]);
 
-  const activeCharge = MOCK_CHARGES[activeChargeIndex];
+  const activeCharge = charges[activeChargeIndex];
 
   return (
     <div className="space-y-6">
@@ -37,9 +56,9 @@ export function ChargesPage() {
             activeChargeIndex === -1 ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
           }`}
         >
-          All Charges ({MOCK_CHARGES.length})
+          All Charges ({charges.length})
         </button>
-        {MOCK_CHARGES.map((charge, idx) => (
+        {charges.map((charge, idx) => (
           <button
             key={charge.id}
             onClick={() => setActiveChargeIndex(idx)}
@@ -52,7 +71,12 @@ export function ChargesPage() {
         ))}
       </div>
 
-      {activeChargeIndex >= 0 && activeCharge ? (
+      {charges.length === 0 ? (
+        <div className="text-center py-12">
+          <AlertTriangle size={48} className="text-gray-300 mx-auto mb-4" />
+          <p className="text-gray-500 text-sm">No charges filed yet. Charges will appear here once they are added to the case.</p>
+        </div>
+      ) : activeChargeIndex >= 0 && activeCharge ? (
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Elements Breakdown */}
           <div className="lg:col-span-2 space-y-6">
@@ -111,6 +135,8 @@ export function ChargesPage() {
                     <div key={i} className="h-16 bg-gray-200 rounded-lg animate-pulse" />
                   ))}
                 </div>
+              ) : insights.length === 0 ? (
+                <p className="text-sm text-gray-500 text-center py-4">No defense insights yet. Upload evidence to generate AI analysis.</p>
               ) : (
                 <div className="space-y-3">
                   {insights.map((insight) => (
@@ -127,7 +153,7 @@ export function ChargesPage() {
       ) : (
         /* All Charges View */
         <div className="space-y-4">
-          {MOCK_CHARGES.map((charge, idx) => (
+          {charges.map((charge, idx) => (
             <Card key={charge.id} hover className="cursor-pointer" onClick={() => setActiveChargeIndex(idx)}>
               <div className="flex items-start justify-between">
                 <div>
@@ -155,24 +181,19 @@ export function ChargesPage() {
         </div>
       )}
 
-      {/* Defense Opportunities */}
-      <Card>
-        <h2 className="text-lg font-bold text-gray-900 mb-4">Defense Opportunities</h2>
-        <ul className="space-y-3">
-          <li className="text-sm text-gray-700">
-            <span className="font-semibold">Target Element 2:</span> Challenge knowledge of presence; emphasize lack of direct link to defendant and proximity argument limitations.
-          </li>
-          <li className="text-sm text-gray-700">
-            <span className="font-semibold">Target Element 3:</span> Attack knowledge of substance character; utilize absence of priors and paraphernalia to create reasonable doubt.
-          </li>
-          <li className="text-sm text-gray-700">
-            <span className="font-semibold">Review Lab Results:</span> Scrutinize impending lab report for chain of custody issues or discrepancies regarding the substance and weight.
-          </li>
-          <li className="text-sm text-gray-700">
-            <span className="font-semibold">Motion to Suppress:</span> Evaluate vehicle search legality for potential constitutional violations.
-          </li>
-        </ul>
-      </Card>
+      {/* Defense Opportunities — populated by AI pipeline after evidence upload */}
+      {insights.length > 0 && (
+        <Card>
+          <h2 className="text-lg font-bold text-gray-900 mb-4">Defense Opportunities</h2>
+          <ul className="space-y-3">
+            {insights.map((insight) => (
+              <li key={insight.id} className="text-sm text-gray-700">
+                {insight.content}
+              </li>
+            ))}
+          </ul>
+        </Card>
+      )}
     </div>
   );
 }

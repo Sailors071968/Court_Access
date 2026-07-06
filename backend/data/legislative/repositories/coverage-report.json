@@ -1,0 +1,88 @@
+{
+  "generatedAt": "2026-07-04T20:19:16.487Z",
+  "extractorVersion": "1.0.0",
+  "statutes": {
+    "repository": "statutes",
+    "totalRecords": 4,
+    "unknownFieldCount": 4,
+    "unknownFieldRate": 0.3333333333333333,
+    "statutesCovered": 3,
+    "lastUpdatedAt": "2026-07-04T20:19:16.475Z"
+  },
+  "offenses": {
+    "repository": "offenses",
+    "totalRecords": 2,
+    "unknownFieldCount": 31,
+    "unknownFieldRate": 5.166666666666667,
+    "statutesCovered": 3,
+    "lastUpdatedAt": "2026-07-04T20:19:16.475Z"
+  },
+  "elements": {
+    "repository": "elements",
+    "totalRecords": 4,
+    "unknownFieldCount": 0,
+    "unknownFieldRate": 0,
+    "statutesCovered": 3,
+    "lastUpdatedAt": "2026-07-04T20:19:16.477Z"
+  },
+  "mensRea": {
+    "repository": "mens_rea",
+    "totalRecords": 2,
+    "unknownFieldCount": 12,
+    "unknownFieldRate": 2,
+    "statutesCovered": 3,
+    "lastUpdatedAt": "2026-07-04T20:19:16.477Z"
+  },
+  "exceptions": {
+    "repository": "exceptions",
+    "totalRecords": 3,
+    "unknownFieldCount": 0,
+    "unknownFieldRate": 0,
+    "statutesCovered": 3,
+    "lastUpdatedAt": "2026-07-04T20:19:16.466Z"
+  },
+  "defenses": {
+    "repository": "defenses",
+    "totalRecords": 0,
+    "unknownFieldCount": 0,
+    "unknownFieldRate": 0,
+    "statutesCovered": 3,
+    "lastUpdatedAt": "2026-07-04T20:19:16.489Z"
+  },
+  "crossReferences": {
+    "repository": "cross_references",
+    "totalRecords": 13,
+    "unknownFieldCount": 0,
+    "unknownFieldRate": 0,
+    "statutesCovered": 3,
+    "lastUpdatedAt": "2026-07-04T20:19:16.478Z"
+  },
+  "regulatoryIncorporations": {
+    "repository": "regulatory_incorporations",
+    "totalRecords": 2,
+    "unknownFieldCount": 0,
+    "unknownFieldRate": 0,
+    "statutesCovered": 3,
+    "lastUpdatedAt": "2026-07-04T19:51:21.844Z"
+  },
+  "calcrimLinks": {
+    "repository": "calcrim_links",
+    "totalRecords": 1,
+    "unknownFieldCount": 1,
+    "unknownFieldRate": 0.3333333333333333,
+    "statutesCovered": 3,
+    "lastUpdatedAt": "2026-07-04T19:51:21.844Z"
+  },
+  "authorities": {
+    "repository": "authorities",
+    "totalRecords": 13,
+    "unknownFieldCount": 0,
+    "unknownFieldRate": 0,
+    "statutesCovered": 3,
+    "lastUpdatedAt": "2026-07-04T20:19:16.478Z"
+  },
+  "criminalOffensesIdentified": 2,
+  "calcrimCoveragePercent": 50,
+  "parsingFailures": 0,
+  "manualReviewCandidates": 0
+}

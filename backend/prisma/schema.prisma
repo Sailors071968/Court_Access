@@ -1,0 +1,2615 @@
+// Court Access — Backend Prisma Schema
+// Manages corpus ingestion state, audit logs, and legal document storage.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ---------------------------------------------------------------------------
+// User — authentication accounts (replaces in-memory userStore)
+// ---------------------------------------------------------------------------
+
+model User {
+  id            String   @id @default(uuid())
+  email         String   @unique
+  name          String
+  passwordHash  String
+  role          String   @default("staff") // admin | attorney | investigator | staff | defendant
+  defaultRole   String?  // Program 2A onboarding role (attorney | criminal_investigator | ...)
+  tenantId      String
+  clientId      String?  // Links defendant portal users to Client record
+  officeId      String?
+  practiceGroupId String?
+
+  emailVerifiedAt     DateTime?
+  termsAcceptedAt     DateTime?
+  privacyAcceptedAt   DateTime?
+  mfaEnabled          Boolean  @default(false)
+  mfaSecretEncrypted  String?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  subscription  Subscription?
+  refreshTokens RefreshToken[]
+  securityLogs  SecurityLog[]
+  passwordResetTokens PasswordResetToken[]
+  emailVerificationTokens EmailVerificationToken[]
+  sentMessages  CaseMessage[] @relation("MessageSender")
+  orgMessages   OrgInternalMessage[] @relation("OrgMessageSender")
+  client        Client?  @relation(fields: [clientId], references: [clientId])
+  organizationMemberships OrganizationMember[]
+  personnelProfile PersonnelProfile?
+  accountSettings UserAccountSettings?
+  office        OrganizationOffice? @relation(fields: [officeId], references: [officeId])
+  practiceGroup PracticeGroup? @relation(fields: [practiceGroupId], references: [practiceGroupId])
+
+  @@index([email])
+  @@index([tenantId])
+  @@index([role])
+  @@index([clientId])
+  @@index([officeId])
+  @@index([practiceGroupId])
+  @@map("users")
+}
+
+// ---------------------------------------------------------------------------
+// PasswordResetToken — self-service password reset tokens
+// ---------------------------------------------------------------------------
+
+model PasswordResetToken {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  tokenHash String   // SHA-256 hash of the token (never store raw tokens)
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([tokenHash])
+  @@index([userId])
+  @@map("password_reset_tokens")
+}
+
+// ---------------------------------------------------------------------------
+// EmailVerificationToken — email verification for new registrations
+// ---------------------------------------------------------------------------
+
+model EmailVerificationToken {
+  id        String   @id @default(uuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id])
+  tokenHash String
+  expiresAt DateTime
+  usedAt    DateTime?
+  createdAt DateTime @default(now())
+
+  @@index([tokenHash])
+  @@index([userId])
+  @@map("email_verification_tokens")
+}
+
+// ---------------------------------------------------------------------------
+// Subscription — user subscription state (replaces in-memory userSubscriptions)
+// ---------------------------------------------------------------------------
+
+model Subscription {
+  id                    String   @id @default(uuid())
+  userId                String   @unique
+  user                  User     @relation(fields: [userId], references: [id])
+  planId                String   @default("FREE")
+  activatedAt           DateTime @default(now())
+  billingPeriodStart    DateTime @default(now())
+  billingPeriodEnd      DateTime
+  stripeSubscriptionId  String?
+  stripeCustomerId      String?
+  subscriptionStatus    String   @default("active") // active | past_due | canceled | trialing
+  subscriptionTier      String   @default("free")   // free | individual | standard | complex | professional
+  trialEndsAt           DateTime?
+  billingInterval       String   @default("month") // month | year
+
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@index([userId])
+  @@index([planId])
+  @@index([stripeSubscriptionId])
+  @@index([stripeCustomerId])
+  @@map("subscriptions")
+}
+
+// ---------------------------------------------------------------------------
+// RefreshToken — JWT refresh tokens (replaces in-memory refreshTokenStore)
+// ---------------------------------------------------------------------------
+
+model RefreshToken {
+  id          String   @id @default(uuid())
+  token       String   @unique
+  userId      String
+  user        User     @relation(fields: [userId], references: [id])
+  email       String
+  role        String
+  expiresAt   DateTime
+  revoked     Boolean  @default(false)
+  userAgent   String?
+  ipAddress   String?
+  deviceLabel String?
+  lastSeenAt  DateTime @default(now())
+
+  createdAt DateTime @default(now())
+
+  @@index([token])
+  @@index([userId])
+  @@index([expiresAt])
+  @@map("refresh_tokens")
+}
+
+// ---------------------------------------------------------------------------
+// SecurityLog — security event audit trail (replaces in-memory securityLog)
+// ---------------------------------------------------------------------------
+
+model SecurityLog {
+  id        String   @id @default(uuid())
+  event     String
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  ip        String?
+  details   String?
+
+  createdAt DateTime @default(now())
+
+  @@index([event])
+  @@index([userId])
+  @@index([ip])
+  @@index([createdAt])
+  @@map("security_logs")
+}
+
+// ---------------------------------------------------------------------------
+// Corpus Ingestion State — checkpoint/resume system
+// ---------------------------------------------------------------------------
+
+model CorpusIngestionState {
+  id                   String   @id @default(uuid())
+  corpusName           String
+  fileName             String
+  lastProcessedOffset  Int      @default(0)
+  recordsProcessed     Int      @default(0)
+  totalRecords         Int?
+  status               String   @default("pending") // pending | in_progress | completed | failed | paused
+  errorMessage         String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+
+  @@unique([corpusName, fileName])
+  @@index([corpusName])
+  @@index([status])
+  @@map("corpus_ingestion_state")
+}
+
+// ---------------------------------------------------------------------------
+// Corpus Ingestion Log — batch-level audit trail
+// ---------------------------------------------------------------------------
+
+model CorpusIngestionLog {
+  id              String   @id @default(uuid())
+  corpusName      String
+  batchNumber     Int
+  recordsInserted Int
+  durationMs      Int
+  status          String   // success | failed | skipped
+  errorMessage    String?
+  timestamp       DateTime @default(now())
+
+  @@index([corpusName])
+  @@index([timestamp])
+  @@map("corpus_ingestion_log")
+}
+
+// ---------------------------------------------------------------------------
+// Legal Document — normalized corpus storage
+// ---------------------------------------------------------------------------
+
+model LegalDocument {
+  id              String   @id @default(uuid())
+  tenantId        String
+  title           String
+  content         String
+  jurisdiction    String
+  documentType    String   // policy | statute | case_law | transcript | evidence | investigative_report
+  source          String
+  version         String   @default("1.0")
+  corpusName      String?
+  sourceFile      String?
+  contentHash     String   // SHA-256 of content for dedup
+  corpusVersion   String?  // Version of the corpus this document belongs to
+  documentVersion String   @default("1.0") // Version of this specific document
+  supersededBy    String?  // ID of the document that supersedes this one
+  // Epic 2A — statute-specific fields (nullable for backward compatibility)
+  statuteCode     String?
+  statuteSection  String?
+  statuteHierarchy String?  // JSON StatuteHierarchy
+  sourceUrl       String?
+  retrievedAt     DateTime?
+  effectiveDate   String?
+  extractionAudit String?  // JSON AuditMetadata
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([contentHash, tenantId])
+  @@index([tenantId])
+  @@index([documentType])
+  @@index([corpusName])
+  @@index([jurisdiction])
+  @@index([contentHash])
+  @@index([supersededBy])
+  @@index([statuteCode, statuteSection])
+  @@map("legal_documents")
+}
+
+// ---------------------------------------------------------------------------
+// Corpus Registry — tracks all registered corpora and their versions
+// ---------------------------------------------------------------------------
+
+model CorpusRegistry {
+  id               String   @id @default(uuid())
+  corpusName       String
+  jurisdiction     String
+  sourceAuthority  String   // e.g. "California Legislature", "US Congress"
+  version          String   @default("1.0")
+  releaseDate      DateTime?
+  ingestionStatus  String   @default("pending") // pending | in_progress | completed | failed
+  totalDocuments   Int      @default(0)
+  totalBytes       BigInt   @default(0)
+  checksum         String?  // SHA-256 of the entire corpus file
+  metadata         String?  // JSON string for extensible metadata
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@unique([corpusName, version])
+  @@index([corpusName])
+  @@index([jurisdiction])
+  @@index([ingestionStatus])
+  @@map("corpus_registry")
+}
+
+// ---------------------------------------------------------------------------
+// Corpus Ingestion Lock — prevents concurrent ingestion of the same corpus
+// ---------------------------------------------------------------------------
+
+model CorpusIngestionLock {
+  id          String   @id @default(uuid())
+  corpusName  String   @unique
+  workerId    String
+  lockedAt    DateTime @default(now())
+  expiresAt   DateTime // Auto-expire to prevent deadlocks
+  metadata    String?  // JSON string for worker info
+
+  @@index([corpusName])
+  @@index([expiresAt])
+  @@map("corpus_ingestion_lock")
+}
+
+// ---------------------------------------------------------------------------
+// Legislative Extraction Audit — per-record parse/extract audit trail (Epic 2A)
+// ---------------------------------------------------------------------------
+
+model LegislativeExtractionAudit {
+  id               String   @id @default(uuid())
+  code             String
+  section          String
+  sourceUrl        String
+  contentHash      String?
+  sourceStatuteId  String?
+  stage            String   // parse | extract
+  status           String   // success | rejected | partial
+  rejectionReason  String?
+  offenseCount     Int      @default(0)
+  elementCount     Int      @default(0)
+  parserVersion    String
+  extractorVersion String
+  metadata         String?  // JSON
+  createdAt        DateTime @default(now())
+
+  @@index([code, section])
+  @@index([status])
+  @@index([createdAt])
+  @@index([sourceStatuteId])
+  @@map("legislative_extraction_audit")
+}
+
+// ---------------------------------------------------------------------------
+// NOTE: Doctrine models (DoctrineRule, DoctrineEmbedding, DoctrineMatchLog)
+// are intentionally NOT added to schema.prisma per SCHEMA_FREEZE.md policy.
+// Runtime storage uses the in-memory DoctrineStore (doctrineStore.ts).
+// When SCHEMA_FREEZE is lifted, these models can be migrated to Prisma.
+// ---------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------
+// Agency — California law enforcement agency registry (POST directory)
+// ---------------------------------------------------------------------------
+
+model Agency {
+  agencyId            String   @id @default(uuid())
+  agencyName          String
+  agencyType          String?  // Police | Sheriff | State | TaskForce | Probation | Corrections | District_Attorney | University | Transit | Communications | Coroner | Other
+  city                String?
+  county              String?
+  populationEstimate  Int?
+  jurisdictionRank    Int?
+
+  website             String?
+  postDirectoryUrl    String?
+
+  recordsRequestUrl   String?
+  policyCollectionUrl String?
+
+  policiesDiscovered  Boolean  @default(false)
+
+  crawlStatus         String   @default("pending") // pending | in_progress | completed | failed | skipped
+  crawlError          String?
+  lastCrawledAt       DateTime?
+  pagesFound          Int      @default(0)
+  policyPagesFound    Int      @default(0)
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  PolicyDocuments     PolicyDocument[]
+  PolicyCoverage      PolicyCoverage[]
+  CPRAAgencyRequests  CPRAAgencyRequest[]
+  CPRAAnnualUpdates   CPRAAnnualUpdate[]
+  AgencyPolicyStatus  AgencyPolicyStatus?
+
+  @@unique([agencyName, county])
+  @@index([county])
+  @@index([agencyType])
+  @@index([crawlStatus])
+  @@index([jurisdictionRank])
+  @@map("agencies")
+}
+
+// ---------------------------------------------------------------------------
+// PolicyTopic — normalized policy topic taxonomy (derived from CHP corpus)
+// ---------------------------------------------------------------------------
+
+model PolicyTopic {
+  id           String   @id @default(uuid())
+  topicName    String   @unique
+  category     String   // Use_of_Force | Officer_Conduct | Internal_Affairs | Discipline | Arrest | Search_Seizure | Pursuit | Body_Camera | Evidence_Handling | Interrogation | Traffic | Training | Informants | Records | Custody | OIS | Critical_Incident | Special_Units
+  keywords     String   // JSON array of search terms
+  description  String?
+  chpReference String?  // CHP policy number reference (e.g. HPM 100.68)
+  sortOrder    Int      @default(0)
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  PolicyDocuments     PolicyDocument[]
+  PolicyCoverage      PolicyCoverage[]
+
+  @@index([category])
+  @@map("policy_topics")
+}
+
+// ---------------------------------------------------------------------------
+// PolicyDocument — discovered policy documents from agency websites
+// ---------------------------------------------------------------------------
+
+model PolicyDocument {
+  documentId     String   @id @default(uuid())
+
+  agencyId       String
+  Agency         Agency   @relation(fields: [agencyId], references: [agencyId])
+
+  topicId        String?
+  Topic          PolicyTopic? @relation(fields: [topicId], references: [id])
+
+  documentType   String?  // USE_OF_FORCE | INTERNAL_AFFAIRS | BODY_CAMERA | DISCIPLINE | TRAINING | GENERAL_POLICY
+  title          String?
+  policyNumber   String?  // e.g. HPM 100.68
+
+  sourceUrl      String
+  s3Url          String?
+
+  mimeType       String?
+  fileSizeBytes  Int?
+
+  textExtracted  Boolean  @default(false)
+  textContent    String?
+  ocrStatus      String   @default("pending") // pending | in_progress | completed | failed | skipped
+  ocrError       String?
+
+  classificationStatus String @default("pending") // pending | completed | failed
+  classificationScore  Float?
+
+  isChpCanonical Boolean  @default(false) // true for CHP reference policies
+  matchedTopicConfidence Float? // confidence of topic matching (0-1)
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([agencyId])
+  @@index([topicId])
+  @@index([documentType])
+  @@index([ocrStatus])
+  @@index([classificationStatus])
+  @@index([isChpCanonical])
+  @@map("policy_documents")
+}
+
+// ---------------------------------------------------------------------------
+// PolicyCoverage — tracks which topics each agency has policies for
+// ---------------------------------------------------------------------------
+
+model PolicyCoverage {
+  id          String   @id @default(uuid())
+  agencyId    String
+  Agency      Agency   @relation(fields: [agencyId], references: [agencyId])
+
+  topicId     String
+  Topic       PolicyTopic @relation(fields: [topicId], references: [id])
+
+  policyFound Boolean  @default(false)
+  documentId  String?  // reference to the discovered PolicyDocument
+  sourceUrl   String?
+  notes       String?
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([agencyId, topicId])
+  @@index([agencyId])
+  @@index([topicId])
+  @@index([policyFound])
+  @@map("policy_coverage")
+}
+
+// ---------------------------------------------------------------------------
+// CPRA Request Campaign — tracks CPRA request campaigns
+// ---------------------------------------------------------------------------
+
+model CPRARequestCampaign {
+  campaignId   String   @id @default(uuid())
+  campaignName String
+  createdAt    DateTime @default(now())
+  active       Boolean  @default(true)
+
+  requests     CPRAAgencyRequest[]
+
+  @@index([active])
+  @@map("cpra_request_campaigns")
+}
+
+// ---------------------------------------------------------------------------
+// CPRA Agency Request — tracks individual CPRA requests per agency
+// ---------------------------------------------------------------------------
+
+model CPRAAgencyRequest {
+  requestId          String   @id @default(uuid())
+
+  campaignId         String
+  Campaign           CPRARequestCampaign @relation(fields: [campaignId], references: [campaignId])
+
+  agencyId           String
+  Agency             Agency @relation(fields: [agencyId], references: [agencyId])
+
+  status             String   @default("draft") // draft | sent | awaiting_response | follow_up_1 | follow_up_2 | follow_up_final | documents_received | closed
+
+  sentAt             DateTime?
+  lastFollowUpAt     DateTime?
+
+  responseReceived   Boolean  @default(false)
+  responseReceivedAt DateTime?
+
+  policyReceivedAt   DateTime?
+  annualUpdateDue    DateTime?
+
+  closed             Boolean  @default(false)
+
+  followUpCount      Int      @default(0)
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([campaignId])
+  @@index([agencyId])
+  @@index([status])
+  @@index([closed])
+  @@index([responseReceived])
+  @@index([annualUpdateDue])
+  @@map("cpra_agency_requests")
+}
+
+// ---------------------------------------------------------------------------
+// CPRA Annual Update — tracks yearly policy update request cycles
+// ---------------------------------------------------------------------------
+
+model CPRAAnnualUpdate {
+  updateId           String   @id @default(uuid())
+
+  agencyId           String
+  Agency             Agency @relation(fields: [agencyId], references: [agencyId])
+
+  requestedAt        DateTime
+  responseReceived   Boolean  @default(false)
+  responseReceivedAt DateTime?
+
+  policyReceivedAt   DateTime?
+  annualUpdateDue    DateTime?
+
+  followUpCount      Int      @default(0)
+  lastFollowUpAt     DateTime?
+
+  closed             Boolean  @default(false)
+  status             String   @default("scheduled") // scheduled | sent | follow_up_1 | follow_up_2 | follow_up_final | received | closed
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([agencyId])
+  @@index([annualUpdateDue])
+  @@index([status])
+  @@index([closed])
+  @@map("cpra_annual_updates")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 121 — Agency Policy Status (operational intelligence)
+// ---------------------------------------------------------------------------
+
+model AgencyPolicyStatus {
+  id                    String    @id @default(uuid())
+  agencyId              String    @unique
+  Agency                Agency    @relation(fields: [agencyId], references: [agencyId])
+
+  agencyName            String
+  city                  String?
+  county                String?
+  website               String?
+
+  lastCrawledAt         DateTime?
+  policiesDiscovered    Int       @default(0)
+  policiesDownloaded    Int       @default(0)
+  policiesIngested      Int       @default(0)
+  coverageScore         Float     @default(0)   // 0-100 percentage
+
+  cpraStatus            String    @default("none") // none | draft | sent | awaiting_response | follow_up | received | closed
+  lastCpraEmailSent     DateTime?
+  cpraDeadline          DateTime?
+  annualUpdateDeadline  DateTime?
+
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([county])
+  @@index([cpraStatus])
+  @@index([coverageScore])
+  @@index([cpraDeadline])
+  @@map("agency_policy_status")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 122 — Policy Inventory (every policy obtained)
+// ---------------------------------------------------------------------------
+
+model PolicyInventory {
+  id                        String    @id @default(uuid())
+  policyId                  String    // reference to PolicyDocument.documentId
+  agencyId                  String
+  policyTitle               String?
+  policyTopic               String?   // topic category
+  sourceUrl                 String
+  fileHash                  String?
+  discoveredAt              DateTime  @default(now())
+  downloadedAt              DateTime?
+  ocrProcessedAt            DateTime?
+  classificationConfidence  Float?
+  ingestionStatus           String    @default("discovered") // discovered | downloaded | ocr_complete | classified | ingested | failed
+
+  createdAt                 DateTime  @default(now())
+  updatedAt                 DateTime  @updatedAt
+
+  @@index([agencyId])
+  @@index([ingestionStatus])
+  @@index([policyTopic])
+  @@map("policy_inventory")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 123 — Policy Topic Coverage Matrix (topic × agency status)
+// ---------------------------------------------------------------------------
+
+model PolicyTopicCoverage {
+  id        String   @id @default(uuid())
+  agencyId  String
+  topic     String   // topic name
+  status    String   @default("MISSING") // FOUND | MISSING | CPRA_REQUESTED | RECEIVED
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([agencyId, topic])
+  @@index([agencyId])
+  @@index([topic])
+  @@index([status])
+  @@map("policy_topic_coverage")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 124 — CPRA Request Log (campaign tracking)
+// ---------------------------------------------------------------------------
+
+model CpraRequestLog {
+  id                  String    @id @default(uuid())
+  requestId           String    // reference to CPRAAgencyRequest.requestId
+  agencyId            String
+  emailSentDate       DateTime?
+  emailTemplateUsed   String?
+  recipientEmail      String?
+  responseReceived    Boolean   @default(false)
+  responseDate        DateTime?
+  documentsReceived   Int       @default(0)
+  followUpRequired    Boolean   @default(false)
+  followUpDate        DateTime?
+
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@index([agencyId])
+  @@index([requestId])
+  @@index([responseReceived])
+  @@index([followUpRequired])
+  @@map("cpra_request_log")
+}
+
+// ---------------------------------------------------------------------------
+// Trial Exhibit Scene — saved 3D courtroom exhibit scenes (Phase 63)
+// ---------------------------------------------------------------------------
+
+model TrialExhibitScene {
+  sceneId         String   @id @default(uuid())
+  caseId          String?
+  name            String
+  description     String?
+
+  // Location data
+  latitude        Float
+  longitude       Float
+  address         String?
+
+  // Scene configuration (stored as JSON strings)
+  objectSettings  String   // JSON: { showTrees, showBushes, showVehicles, ... }
+  cameraSettings  String?  // JSON: { position, target, preset }
+  markers         String?  // JSON: array of scene markers
+  sceneData       String?  // JSON: buildings, roads, sidewalks, etc.
+  animationData   String?  // JSON: timeline keyframes
+
+  // Metadata
+  createdBy       String?
+  thumbnail       String?  // base64 PNG thumbnail
+  isPublic        Boolean  @default(false)
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([createdBy])
+  @@map("trial_exhibit_scenes")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 129 — Evidence Events (extracted from bodycam, dashcam, audio, transcripts, reports)
+// ---------------------------------------------------------------------------
+
+model EvidenceEvent {
+  eventId         String   @id @default(uuid())
+  caseId          String
+  timestamp       String   // HH:MM:SS or offset seconds
+  eventType       String   // suspect_restrained | taser_deployed | neck_restraint | vehicle_search | verbal_command | miranda_warning | weapon_drawn | handcuffing | physical_strike | officer_proximity | threat_language | compliance_command | uof_warning | other
+  confidence      Float    @default(0)
+  sourceEvidence  String   // reference to evidence document/file
+  sourceType      String   @default("bodycam") // bodycam | dashcam | audio | transcript | police_report
+  description     String?
+  rawText         String?  // extracted text snippet if applicable
+  metadata        String?  // JSON: additional structured data
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([eventType])
+  @@index([sourceType])
+  @@index([confidence])
+  @@map("evidence_events")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 133 — Policy Rules (structured rules from policy documents)
+// ---------------------------------------------------------------------------
+
+model PolicyRule {
+  ruleId          String   @id @default(uuid())
+  policyId        String   // reference to PolicyDocument
+  agencyId        String
+  ruleType        String   // prohibition | requirement | permission | conditional | escalation
+  ruleName        String
+  ruleText        String   // full text of the rule
+  conditions      String?  // JSON: conditions under which rule applies
+  exceptions      String?  // JSON: exceptions to the rule
+  category        String   // Use_of_Force | Pursuit | Body_Camera | Search_Seizure | Arrest | Interrogation | Custody | Officer_Conduct
+  severity        String   @default("standard") // critical | high | standard | low
+  effectiveDate   DateTime?
+  supersededDate  DateTime?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([policyId])
+  @@index([agencyId])
+  @@index([ruleType])
+  @@index([category])
+  @@index([severity])
+  @@map("policy_rules")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 134 — Policy Action Mapping (maps detected actions to policy rules)
+// ---------------------------------------------------------------------------
+
+model PolicyActionMapping {
+  mappingId       String   @id @default(uuid())
+  eventType       String   // matches EvidenceEvent.eventType
+  ruleId          String   // reference to PolicyRule
+  relevanceScore  Float    @default(0) // 0-1 how relevant this rule is to the action
+  mappingReason   String?  // why this rule maps to this action
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@unique([eventType, ruleId])
+  @@index([eventType])
+  @@index([ruleId])
+  @@map("policy_action_mappings")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 135 — Compliance Findings (analysis results)
+// ---------------------------------------------------------------------------
+
+model ComplianceFinding {
+  findingId           String   @id @default(uuid())
+  caseId              String
+  agencyId            String
+  findingType         String   @default("potential_inconsistency") // potential_inconsistency | consistent | insufficient_evidence | requires_review
+  policyReference     String   // e.g. "Use-of-Force Section 3.2"
+  ruleId              String?  // reference to PolicyRule
+  evidenceTimestamp   String   // timestamp from evidence
+  evidenceEventId     String?  // reference to EvidenceEvent
+  detectedAction      String   // what was detected
+  ruleDescription     String   // what the rule states
+  confidence          Float    @default(0) // 0-1 overall confidence
+  evidenceConfidence  Float    @default(0) // confidence in evidence detection
+  ruleConfidence      Float    @default(0) // confidence in rule matching
+  analysisConfidence  Float    @default(0) // confidence in analysis
+  explanation         String?  // plain-language explanation (Phase 145)
+  safetyLanguage      String   @default("potential_policy_inconsistency") // Phase 150 guardrail
+
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([agencyId])
+  @@index([findingType])
+  @@index([confidence])
+  @@map("compliance_findings")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 136 — Evidence Links (every finding linked to source evidence)
+// ---------------------------------------------------------------------------
+
+model EvidenceLink {
+  linkId          String   @id @default(uuid())
+  findingId       String   // reference to ComplianceFinding
+  linkType        String   // video_timestamp | transcript_excerpt | policy_section | document_source | scene_reconstruction
+  sourceReference String   // the actual reference (timestamp, section number, etc.)
+  sourceContent   String?  // excerpt or description
+  sourceUrl       String?  // URL to source if applicable
+  metadata        String?  // JSON: additional data
+
+  createdAt       DateTime @default(now())
+
+  @@index([findingId])
+  @@index([linkType])
+  @@map("evidence_links")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 137 — Compliance Review Queue (human review layer)
+// ---------------------------------------------------------------------------
+
+model ComplianceReviewQueue {
+  reviewId        String    @id @default(uuid())
+  findingId       String    @unique // reference to ComplianceFinding
+  reviewStatus    String    @default("pending") // pending | in_review | approved | rejected | needs_more_info
+  reviewerNotes   String?
+  reviewerId      String?   // staff member reviewing
+  approvedForReport Boolean @default(false)
+  priority        Int       @default(0) // 0=normal, 1=high, 2=urgent
+  assignedAt      DateTime?
+  reviewedAt      DateTime?
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([reviewStatus])
+  @@index([priority])
+  @@index([approvedForReport])
+  @@map("compliance_review_queue")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 142 — Cross-Agency Policy Comparison
+// ---------------------------------------------------------------------------
+
+model CrossAgencyComparison {
+  comparisonId    String   @id @default(uuid())
+  topic           String   // policy topic being compared
+  agencyAId       String
+  agencyAName     String
+  agencyAPolicy   String   // summary of agency A's policy
+  agencyBId       String
+  agencyBName     String
+  agencyBPolicy   String   // summary of agency B's policy
+  differenceType  String   // prohibits_vs_allows | stricter | less_strict | same | no_policy
+  summary         String   // plain-language comparison
+
+  createdAt       DateTime @default(now())
+
+  @@index([topic])
+  @@index([agencyAId])
+  @@index([agencyBId])
+  @@map("cross_agency_comparisons")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 144 — Policy Evolution (track changes over time)
+// ---------------------------------------------------------------------------
+
+model PolicyEvolution {
+  evolutionId     String    @id @default(uuid())
+  agencyId        String
+  policyTopic     String
+  previousVersion String?   // previous policy text/summary
+  currentVersion  String    // current policy text/summary
+  changeType      String    // added | modified | removed | strengthened | weakened
+  changeSummary   String    // plain-language description of change
+  effectiveDate   DateTime?
+  detectedAt      DateTime  @default(now())
+
+  createdAt       DateTime  @default(now())
+
+  @@index([agencyId])
+  @@index([policyTopic])
+  @@index([changeType])
+  @@map("policy_evolution")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 147 — Compliance Audit Trail (every analysis step logged)
+// ---------------------------------------------------------------------------
+
+model ComplianceAuditTrail {
+  auditId         String   @id @default(uuid())
+  caseId          String
+  findingId       String?  // reference to ComplianceFinding if applicable
+  stepName        String   // evidence_upload | event_extraction | action_detection | policy_matching | compliance_analysis | review | report_generation
+  stepDescription String
+  inputData       String?  // JSON: what went in
+  outputData      String?  // JSON: what came out
+  durationMs      Int?
+  status          String   @default("completed") // completed | failed | skipped
+
+  createdAt       DateTime @default(now())
+
+  @@index([caseId])
+  @@index([findingId])
+  @@index([stepName])
+  @@map("compliance_audit_trail")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 167 — Vision Events (bodycam vision analysis results)
+// ---------------------------------------------------------------------------
+
+model VisionEvent {
+  eventId          String   @id @default(uuid())
+  caseId           String
+  sourceId         String
+  timestamp        String
+  frameNumber      Int
+  eventCategory    String   // officer_posture | hand_movement | weapon_deployment | physical_contact | subject_distance | suspect_position | restraint_technique | de_escalation_posture | crowd_formation | vehicle_interaction
+  detections       String   // JSON: VisionDetection[]
+  poseEstimates    String   // JSON: PoseEstimate[]
+  distanceEstimates String  // JSON: DistanceEstimate[]
+  confidence       Float    @default(0)
+  metadata         String?  // JSON
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([sourceId])
+  @@index([eventCategory])
+  @@index([confidence])
+  @@map("vision_events")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 168 — Trajectory Analysis (ballistic/projectile analysis results)
+// ---------------------------------------------------------------------------
+
+model TrajectoryAnalysis {
+  analysisId       String   @id @default(uuid())
+  caseId           String
+  sceneId          String?
+  trajectories     String   // JSON: TrajectoryVector[]
+  impactPredictions String  // JSON: ImpactPrediction[]
+  lineOfFire       String   // JSON: LineOfFire[]
+  ballisticParams  String   // JSON: BallisticParameters
+  summary          String   // JSON: TrajectorySummary
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([sceneId])
+  @@map("trajectory_analyses")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 169 — Visibility Simulation (lighting/visibility results)
+// ---------------------------------------------------------------------------
+
+model VisibilitySimulation {
+  simulationId     String   @id @default(uuid())
+  caseId           String
+  sceneId          String?
+  inputConditions  String   // JSON: LightingConditions
+  visibilityMap    String   // JSON: VisibilityMap
+  shadowMap        String   // JSON: ShadowMap
+  lightSources     String   // JSON: LightSource[]
+  subjectVisibility String  // JSON: SubjectVisibility[]
+  summary          String   // JSON: VisibilitySummary
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([sceneId])
+  @@map("visibility_simulations")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 170 — Line-of-Sight Analysis
+// ---------------------------------------------------------------------------
+
+model LineOfSightAnalysis {
+  analysisId       String   @id @default(uuid())
+  caseId           String
+  sceneId          String?
+  observerPosition String   // JSON: Position3D
+  viewDirection    String   // JSON: ViewDirection
+  fieldOfView      String   // JSON: FieldOfView
+  obstacles        String   // JSON: SceneObstacle[]
+  visibilityResults String  // JSON: VisibilityResult[]
+  obstructionMap   String   // JSON: ObstructionMap
+  summary          String   // JSON: LineOfSightSummary
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([sceneId])
+  @@map("line_of_sight_analyses")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 171 — Camera Sync Results
+// ---------------------------------------------------------------------------
+
+model CameraSyncResult {
+  syncId           String   @id @default(uuid())
+  caseId           String
+  sources          String   // JSON: CameraSource[]
+  syncPairs        String   // JSON: SyncPair[]
+  masterTimeline   String   // JSON: MasterTimelineEvent[]
+  syncQuality      String   // JSON: SyncQuality
+  summary          String   // JSON: SyncSummary
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@map("camera_sync_results")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 172 — Scene Geometry
+// ---------------------------------------------------------------------------
+
+model SceneGeometry {
+  geometryId       String   @id @default(uuid())
+  caseId           String
+  sceneId          String?
+  bounds           String   // JSON: SceneBounds
+  buildings        String   // JSON: Building[]
+  roads            String   // JSON: Road[]
+  sidewalks        String   // JSON: Sidewalk[]
+  vehicles         String   // JSON: Vehicle[]
+  vegetation       String   // JSON: Vegetation[]
+  obstacles        String   // JSON: GeometryObstacle[]
+  terrain          String   // JSON: TerrainData
+  metadata         String   // JSON: SceneMetadata
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([sceneId])
+  @@map("scene_geometries")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 174 — Evidence Graph (unified event graph)
+// ---------------------------------------------------------------------------
+
+model EvidenceGraph {
+  graphId          String   @id @default(uuid())
+  caseId           String
+  nodes            String   // JSON: EvidenceNode[]
+  edges            String   // JSON: EvidenceEdge[]
+  clusters         String   // JSON: EvidenceCluster[]
+  timeline         String   // JSON: UnifiedTimelineEntry[]
+  summary          String   // JSON: GraphSummary
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@map("evidence_graphs")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 175 — Expert Witness Package
+// ---------------------------------------------------------------------------
+
+model ExpertWitnessPackage {
+  packageId        String   @id @default(uuid())
+  caseId           String
+  packageVersion   String
+  expertInfo       String   // JSON: ExpertInfo
+  sections         String   // JSON: PackageSection[]
+  sceneReconstruction String // JSON: SceneReconstructionSection
+  timeline         String   // JSON: TimelineSection
+  policyAnalysis   String   // JSON: PolicyAnalysisSection
+  evidenceClips    String   // JSON: EvidenceClipSection
+  analysisReport   String   // JSON: AnalysisReportSection
+  appendices       String   // JSON: Appendix[]
+  metadata         String   // JSON: PackageMetadata
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@map("expert_witness_packages")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 176 — Jury Visualization
+// ---------------------------------------------------------------------------
+
+model JuryVisualization {
+  visualizationId  String   @id @default(uuid())
+  caseId           String
+  title            String
+  sceneView        String   // JSON: JurySceneView
+  timeline         String   // JSON: JuryTimeline
+  highlightedEvents String  // JSON: JuryHighlight[]
+  narrativeCards   String   // JSON: NarrativeCard[]
+  viewerSettings   String   // JSON: ViewerSettings
+  metadata         String   // JSON: JuryViewMetadata
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@map("jury_visualizations")
+}
+
+// ---------------------------------------------------------------------------
+// CPRA Policy Status Matrix — tracks policy status per agency per topic
+// ---------------------------------------------------------------------------
+
+model AgencyPolicyMatrix {
+  id              String    @id @default(uuid())
+  agencyId        String
+  topicId         String
+  status          String    @default("NOT_REQUESTED") // NOT_REQUESTED | REQUESTED | RECEIVED | UPLOADED | IN_USE
+  requestDate     DateTime?
+  receivedDate    DateTime?
+  uploadedDate    DateTime?
+  inUseDate       DateTime?
+  fileUrl         String?
+  notes           String?
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@unique([agencyId, topicId])
+  @@index([agencyId])
+  @@index([topicId])
+  @@index([status])
+  @@map("agency_policy_matrix")
+}
+
+// ---------------------------------------------------------------------------
+// CPRA Request Tracking — outgoing CPRA requests per agency per topic
+// ---------------------------------------------------------------------------
+
+model CpraRequest {
+  id                String    @id @default(uuid())
+  agencyId          String
+  topicId           String
+  dateSent          DateTime?
+  status            String    @default("draft") // draft | sent | awaiting_response | follow_up | documents_received | closed
+  responseReceived  Boolean   @default(false)
+  followupDate      DateTime?
+
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([agencyId])
+  @@index([topicId])
+  @@index([status])
+  @@map("cpra_requests_v2")
+}
+
+// ---------------------------------------------------------------------------
+// AI Credit Balance — tracks monthly + purchased credits per user
+// ---------------------------------------------------------------------------
+
+model AiCreditBalance {
+  id                  String    @id @default(uuid())
+  userId              String    @unique
+  monthlyCredits      Int       @default(0)
+  purchasedCredits    Int       @default(0)
+  creditsUsed         Int       @default(0)
+  billingPeriodStart  DateTime
+  billingPeriodEnd    DateTime
+
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([billingPeriodEnd])
+  @@map("ai_credit_balances")
+}
+
+// ---------------------------------------------------------------------------
+// AI Credit Usage — audit trail of every credit deduction
+// ---------------------------------------------------------------------------
+
+model AiCreditUsage {
+  id              String    @id @default(uuid())
+  userId          String
+  caseId          String?
+  analysisType    String    // VIDEO_PROCESSING | CONTRADICTION_ENGINE | DOCTRINE_ANALYSIS | LITIGATION_INTELLIGENCE | RELIABILITY_SCORING
+  creditsUsed     Int
+  timestamp       DateTime  @default(now())
+
+  createdAt       DateTime  @default(now())
+
+  @@index([userId])
+  @@index([caseId])
+  @@index([analysisType])
+  @@index([timestamp])
+  @@map("ai_credit_usage")
+}
+
+// ---------------------------------------------------------------------------
+// Usage Tracking — cumulative page + video usage per billing period
+// ---------------------------------------------------------------------------
+
+model UsageTracking {
+  id                      String    @id @default(uuid())
+  userId                  String
+  organizationId          String?
+  billingPeriodStart      DateTime
+  billingPeriodEnd        DateTime
+  pagesUploadedTotal      Int       @default(0)
+  videoMinutesProcessed   Int       @default(0)
+
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
+
+  @@unique([userId, billingPeriodStart])
+  @@index([userId])
+  @@index([organizationId])
+  @@index([billingPeriodEnd])
+  @@map("usage_tracking")
+}
+
+// ---------------------------------------------------------------------------
+// Autonomous CPRA System — Email Log (outbound + inbound)
+// ---------------------------------------------------------------------------
+
+model CpraEmailLog {
+  emailId         String    @id @default(uuid())
+  agencyId        String?
+  direction       String    // OUTBOUND | INBOUND
+  emailAddress    String
+  fromAddress     String?
+  subject         String
+  body            String
+  sentTimestamp   DateTime  @default(now())
+  requestId       String?   // reference to CPRAAgencyRequest.requestId
+  policyTopics    String?   // JSON array of requested policy topics
+  sesMessageId    String?   // AWS SES message ID for outbound
+  processed       Boolean   @default(false) // whether inbound email has been processed
+
+  attachments     CpraEmailAttachment[]
+
+  createdAt       DateTime  @default(now())
+
+  @@index([agencyId])
+  @@index([direction])
+  @@index([requestId])
+  @@index([processed])
+  @@index([sentTimestamp])
+  @@map("cpra_email_log")
+}
+
+// ---------------------------------------------------------------------------
+// Autonomous CPRA System — Email Attachments
+// ---------------------------------------------------------------------------
+
+model CpraEmailAttachment {
+  attachmentId    String    @id @default(uuid())
+  emailId         String
+  Email           CpraEmailLog @relation(fields: [emailId], references: [emailId])
+  fileName        String
+  fileType        String?   // application/pdf, image/png, etc.
+  fileSizeBytes   Int?
+  fileUrl         String?   // R2 URL after upload
+  uploadTimestamp DateTime?
+  documentType    String?   // policy_document | procedural_manual | training_bulletin | general_response | non_policy
+  classificationConfidence Float?
+  policyTopicDetected      String? // detected policy topic name
+  processingStatus         String  @default("pending") // pending | uploaded | classified | ingested | failed
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([emailId])
+  @@index([processingStatus])
+  @@index([documentType])
+  @@map("cpra_email_attachments")
+}
+
+// ---------------------------------------------------------------------------
+// Autonomous CPRA System — Dashboard Notifications
+// ---------------------------------------------------------------------------
+
+model CpraNotification {
+  notificationId  String    @id @default(uuid())
+  agencyId        String?
+  eventType       String    // EMAIL_SENT | EMAIL_RECEIVED | DOCUMENT_UPLOADED | POLICY_PARSED | POLICY_ACTIVE | FOLLOW_UP_SENT | REQUEST_CREATED
+  title           String
+  message         String
+  metadata        String?   // JSON: additional event data
+  read            Boolean   @default(false)
+  dismissed       Boolean   @default(false)
+
+  createdAt       DateTime  @default(now())
+
+  @@index([agencyId])
+  @@index([eventType])
+  @@index([read])
+  @@index([createdAt])
+  @@map("cpra_notifications")
+}
+
+// ---------------------------------------------------------------------------
+// Autonomous CPRA System — Agency Timeline Events
+// ---------------------------------------------------------------------------
+
+model CpraTimelineEvent {
+  eventId         String    @id @default(uuid())
+  agencyId        String
+  eventType       String    // REQUEST_SENT | EMAIL_RECEIVED | ATTACHMENT_DETECTED | POLICY_UPLOADED | POLICY_INGESTED | FOLLOW_UP_SENT | STATUS_CHANGED
+  title           String
+  description     String?
+  metadata        String?   // JSON: attachments, policy topics, subjects, etc.
+
+  createdAt       DateTime  @default(now())
+
+  @@index([agencyId])
+  @@index([eventType])
+  @@index([createdAt])
+  @@map("cpra_timeline_events")
+}
+
+// ---------------------------------------------------------------------------
+// Multi-Tenant Platform — Organization (Domain B)
+// ---------------------------------------------------------------------------
+
+model Organization {
+  id          String   @id // matches User.tenantId for org members
+  name        String
+  orgType     String   @default("law_firm") // law_firm | solo | public_defender | investigator
+  settings    Json?    // { timezone, defaultJurisdiction, notificationDefaults }
+  logoUrl     String?
+  primaryColor String? @default("#1e293b")
+  secondaryColor String?
+  tagline     String?
+  website     String?
+  billingEmail String?
+  stripeCustomerId String?
+  onboardingStep String @default("created") // created | profile | offices | team | complete
+  onboardingCompletedAt DateTime?
+  themeSettings Json?  // { fontFamily, accentColor, sidebarStyle }
+
+  offices       OrganizationOffice[]
+  departments   OrganizationDepartment[]
+  practiceGroups PracticeGroup[]
+  members       OrganizationMember[]
+  invitations   OrganizationInvitation[]
+  personnelProfiles PersonnelProfile[]
+  knowledgeAssets KnowledgeAsset[]
+  internalMessages OrgInternalMessage[]
+  orgTasks      OrgTask[]
+  conflictRecords ConflictRecord[]
+  permissionGrants PermissionGrant[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("organizations")
+}
+
+model OrganizationOffice {
+  officeId       String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  addressLine1   String?
+  addressLine2   String?
+  city           String?
+  state          String?  @default("CA")
+  zip            String?
+  phone          String?
+  isPrimary      Boolean  @default(false)
+  isBranch       Boolean  @default(false)
+
+  departments    OrganizationDepartment[]
+  practiceGroups PracticeGroup[]
+  members        OrganizationMember[]
+  users          User[]
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([organizationId])
+  @@map("organization_offices")
+}
+
+model PracticeGroup {
+  practiceGroupId String   @id @default(uuid())
+  organizationId  String
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  officeId        String?
+  office          OrganizationOffice? @relation(fields: [officeId], references: [officeId])
+  name            String
+  description     String?
+  practiceArea    String?  // criminal_defense | appellate | juvenile | federal
+
+  members         OrganizationMember[]
+  invitations     OrganizationInvitation[]
+  users           User[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([organizationId])
+  @@index([officeId])
+  @@map("practice_groups")
+}
+
+model OrganizationMember {
+  memberId       String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role           String   // admin | attorney | investigator | staff
+  caseRole       String?  // Program 4A — role within a specific case context
+  personnelType  String?  // attorney | investigator | paralegal | legal_assistant | office_admin | receptionist | expert_witness | contract_investigator
+  officeId       String?
+  office         OrganizationOffice? @relation(fields: [officeId], references: [officeId])
+  departmentId   String?
+  department     OrganizationDepartment? @relation(fields: [departmentId], references: [departmentId])
+  practiceGroupId String?
+  practiceGroup  PracticeGroup? @relation(fields: [practiceGroupId], references: [practiceGroupId])
+  status         String   @default("active") // active | suspended | removed
+  invitedById    String?
+  joinedAt       DateTime @default(now())
+
+  @@unique([organizationId, userId])
+  @@index([organizationId])
+  @@index([userId])
+  @@index([organizationId, role])
+  @@map("organization_members")
+}
+
+model OrganizationInvitation {
+  invitationId   String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  email          String
+  role           String   // admin | attorney | investigator | staff
+  officeId       String?
+  practiceGroupId String?
+  practiceGroup  PracticeGroup? @relation(fields: [practiceGroupId], references: [practiceGroupId])
+  tokenHash      String
+  status         String   @default("pending") // pending | accepted | expired | revoked
+  invitedById    String
+  expiresAt      DateTime
+  acceptedAt     DateTime?
+  createdAt      DateTime @default(now())
+
+  @@index([tokenHash])
+  @@index([organizationId, email])
+  @@index([organizationId, status])
+  @@map("organization_invitations")
+}
+
+model OrganizationDepartment {
+  departmentId   String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  officeId       String?
+  office         OrganizationOffice? @relation(fields: [officeId], references: [officeId])
+  name           String
+  description    String?
+
+  members        OrganizationMember[]
+  permissionGrants PermissionGrant[]
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([organizationId])
+  @@index([officeId])
+  @@map("organization_departments")
+}
+
+model PersonnelProfile {
+  profileId      String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  personnelType  String   // attorney | investigator | paralegal | legal_assistant | office_admin | receptionist | expert_witness | contract_investigator
+  jobTitle       String?
+  barNumber      String?
+  phone          String?
+  bio            String?
+  certifications Json?    // [{ name, issuer, issuedAt, expiresAt }]
+  licenses       Json?    // [{ type, number, state, expiresAt }]
+  permissions    Json?    // { canViewEvidence, canAssignCases, ... }
+  calendarSettings Json?
+  isActive       Boolean  @default(true)
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([organizationId])
+  @@index([personnelType])
+  @@map("personnel_profiles")
+}
+
+model ClientTeamAssignment {
+  assignmentId       String   @id @default(uuid())
+  clientId           String   @unique
+  client             Client   @relation(fields: [clientId], references: [clientId], onDelete: Cascade)
+  tenantId           String
+  primaryAttorneyId  String?
+  secondaryAttorneyId String?
+  investigatorId     String?
+  paralegalId        String?
+  legalAssistantId   String?
+  officeId           String?
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([tenantId])
+  @@index([primaryAttorneyId])
+  @@index([officeId])
+  @@map("client_team_assignments")
+}
+
+model OrgInternalMessage {
+  messageId      String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  senderId       String
+  sender         User     @relation("OrgMessageSender", fields: [senderId], references: [id])
+  recipientId    String?
+  channel        String   @default("direct") // direct | team | office | department
+  channelRef     String?  // officeId or departmentId for scoped channels
+  body           String
+  readAt         DateTime?
+
+  createdAt      DateTime @default(now())
+
+  @@index([organizationId])
+  @@index([senderId])
+  @@index([recipientId])
+  @@index([channel, channelRef])
+  @@map("org_internal_messages")
+}
+
+model OrgTask {
+  taskId         String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  tenantId       String
+  title          String
+  description    String?
+  taskType       String   @default("general") // general | case | investigation | motion
+  caseId         String?
+  assigneeId     String?
+  assignerId     String
+  status         String   @default("pending") // pending | in_progress | complete | cancelled
+  dueDate        DateTime?
+  completedAt    DateTime?
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([organizationId])
+  @@index([tenantId])
+  @@index([assigneeId])
+  @@index([caseId])
+  @@index([status])
+  @@map("org_tasks")
+}
+
+model KnowledgeAsset {
+  assetId        String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  tenantId       String
+  assetType      String   // internal_note | research | motion | template | procedure | policy
+  title          String
+  body           String
+  tags           String?
+  createdById    String
+  isPublished    Boolean  @default(true)
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([organizationId])
+  @@index([tenantId, assetType])
+  @@map("knowledge_assets")
+}
+
+model ConflictRecord {
+  recordId       String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  tenantId       String
+  conflictType   String   // client | witness | attorney | organization | related_case
+  entityA        String
+  entityB        String
+  severity       String   @default("review") // clear | review | blocked
+  status         String   @default("open") // open | waived | resolved
+  details        String?
+  detectedAt     DateTime @default(now())
+  resolvedAt     DateTime?
+
+  @@index([organizationId])
+  @@index([tenantId, conflictType])
+  @@index([status])
+  @@map("conflict_records")
+}
+
+model PermissionGrant {
+  grantId        String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String
+  scope          String   // office | department | case | document | evidence | admin
+  resourceId     String?
+  departmentId   String?
+  department     OrganizationDepartment? @relation(fields: [departmentId], references: [departmentId])
+  permission     String   // view | edit | assign | approve | admin
+  grantedById    String
+  expiresAt      DateTime?
+
+  createdAt      DateTime @default(now())
+
+  @@index([organizationId, userId])
+  @@index([scope, resourceId])
+  @@map("permission_grants")
+}
+
+model ApprovalRequest {
+  requestId      String   @id @default(uuid())
+  organizationId String
+  tenantId       String
+  requestType    String   // case_assignment | document_release | billing | personnel
+  resourceType   String
+  resourceId     String
+  requestedById  String
+  approverId     String?
+  status         String   @default("pending") // pending | approved | denied
+  notes          String?
+  decidedAt      DateTime?
+
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([organizationId])
+  @@index([tenantId, status])
+  @@map("approval_requests")
+}
+
+// ---------------------------------------------------------------------------
+// Client Domain — Canonical Client (Domain C)
+// ---------------------------------------------------------------------------
+
+model Client {
+  clientId              String    @id @default(uuid())
+  tenantId              String
+  ownerId               String
+
+  firstName             String
+  lastName              String
+  middleName            String?
+  dateOfBirth           DateTime?
+  status                String    @default("prospect") // prospect | intake | active | inactive | closed
+
+  email                 String?
+  phone                 String?
+  phoneAlt              String?
+
+  alternateContacts     Json?     // [{ name, relationship, phone, email }]
+  emergencyContacts     Json?     // [{ name, relationship, phone }]
+  addressHistory        Json?     // [{ line1, line2, city, state, zip, country, from, to }]
+
+  communicationPreference String  @default("email") // email | phone | sms | mail
+  language              String    @default("en")
+  notes                 String?
+
+  intakeDate            DateTime?
+  retentionStatus       String    @default("pending") // pending | retained | declined
+  retainedAt            DateTime?
+
+  portalUserId          String?   // Linked defendant User.id
+
+  deletedAt             DateTime?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  cases                 CriminalCase[]
+  portalUsers           User[]
+  teamAssignment        ClientTeamAssignment?
+
+  @@index([tenantId])
+  @@index([ownerId])
+  @@index([status])
+  @@index([lastName, firstName])
+  @@map("clients")
+}
+
+// ---------------------------------------------------------------------------
+// Core Evidence System — Case Management
+// ---------------------------------------------------------------------------
+
+model CriminalCase {
+  caseId          String   @id @default(uuid())
+  tenantId        String
+  ownerId         String
+  clientId        String?
+  client          Client?  @relation(fields: [clientId], references: [clientId])
+  officeId        String?
+  title           String
+  caseNumber      String
+  jurisdiction    String
+  caseType        String   // felony | misdemeanor | infraction | federal
+  status          String   @default("active") // active | pending | closed | archived
+  phase           String   @default("intake") // intake | preliminary | pretrial | trial | sentencing | appeal | closed
+  court           String?
+  judge           String?
+  department      String?
+  nextHearing     DateTime?
+  nextHearingNote String?
+  deletedAt       DateTime?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  evidence        Evidence[]
+  hearings        CaseHearing[]
+  messages        CaseMessage[]
+
+  @@unique([tenantId, caseNumber])
+  @@index([tenantId])
+  @@index([ownerId])
+  @@index([clientId])
+  @@index([officeId])
+  @@index([status])
+  @@index([caseType])
+  @@index([createdAt])
+  @@map("criminal_cases")
+}
+
+// ---------------------------------------------------------------------------
+// CaseHearing — court dates and hearing schedule
+// ---------------------------------------------------------------------------
+
+model CaseHearing {
+  hearingId     String   @id @default(uuid())
+  caseId        String
+  case          CriminalCase @relation(fields: [caseId], references: [caseId])
+  tenantId      String
+  hearingDate   DateTime
+  hearingType   String?  // arraignment | pretrial | trial | sentencing | status
+  location      String?
+  notes         String?
+  reminderSentAt DateTime?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([hearingDate])
+  @@map("case_hearings")
+}
+
+// ---------------------------------------------------------------------------
+// CaseMessage — secure attorney-client messaging per case
+// ---------------------------------------------------------------------------
+
+model CaseMessage {
+  messageId   String   @id @default(uuid())
+  caseId      String
+  case        CriminalCase @relation(fields: [caseId], references: [caseId])
+  tenantId    String
+  senderId    String
+  sender      User     @relation("MessageSender", fields: [senderId], references: [id])
+  body        String
+  readAt      DateTime?
+  deliveredAt DateTime @default(now())
+
+  createdAt   DateTime @default(now())
+
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([senderId])
+  @@index([createdAt])
+  @@map("case_messages")
+}
+
+// ---------------------------------------------------------------------------
+// Core Evidence System — Evidence Metadata
+// ---------------------------------------------------------------------------
+
+model Evidence {
+  evidenceId      String   @id @default(uuid())
+  caseId          String
+  case            CriminalCase @relation(fields: [caseId], references: [caseId])
+  tenantId        String
+  fileName        String
+  mimeType        String?
+  size            BigInt   @default(0)
+  duration        Int?     // seconds, for video
+  pageCount       Int?     // for documents
+  evidenceType    String   // transcript | police_report | bodycam | dashcam | witness_video | photo | dispatch_log | forensic_report | autopsy_report | other_document
+  s3Key           String?
+  uploadedBy      String
+  uploadedAt      DateTime @default(now())
+
+  // Processing status
+  processingStatus String  @default("pending") // pending | ingesting | normalized | analyzed | failed
+  processingError  String?
+
+  // Document normalization
+  multiplexDetected Boolean @default(false)
+  multiplexCount    Int?
+  normalizedPageCount Int?
+
+  // ACU compute preparation (Part 15)
+  acuCost          Float?
+  acuConsumed      Float    @default(0)
+  analysisStatus   String   @default("pending") // pending | queued | processing | completed | failed
+
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([evidenceType])
+  @@index([processingStatus])
+  @@index([analysisStatus])
+  @@map("evidence")
+}
+
+// ---------------------------------------------------------------------------
+// PR 3 — Evidence Chunks — Breaks large evidence into manageable pieces
+// ---------------------------------------------------------------------------
+
+model EvidenceChunk {
+  id             String   @id @default(uuid())
+  evidenceId     String
+  tenantId       String
+  chunkIndex     Int      // Zero-based ordering within the evidence
+  text           String   // The chunk text content
+  startOffset    Int      // Character offset in the original document
+  endOffset      Int      // Character end offset in the original document
+  checksum       String   // SHA-256 truncated to 16 hex chars
+  charCount      Int      // Character count of this chunk
+
+  createdAt      DateTime @default(now())
+
+  @@unique([evidenceId, chunkIndex])
+  @@index([evidenceId])
+  @@index([tenantId])
+  @@index([checksum])
+  @@map("evidence_chunks")
+}
+
+// ---------------------------------------------------------------------------
+// PR 4 — Verified Fact Registry — Immutable, SHA-256 hashed, tenant-isolated
+// ---------------------------------------------------------------------------
+
+model VerifiedFact {
+  factId            String    @id @default(uuid())
+  caseId            String
+  tenantId          String
+  factType          String    // event | claim | observation | measurement | identity | location | timestamp_anchor | contradiction
+  content           String    // The fact statement
+  contentHash       String    // SHA-256 hash of tenantId:caseId:content
+  sourceEvidenceId  String    // Which evidence produced this fact
+  sourceType        String    // timeline_event | narrative_claim | evidence_event | manual
+  confidence        Float     @default(0.5)
+  lockedAt          DateTime? // Once set, fact is immutable
+  metadata          String?   // JSON: additional structured data
+
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@unique([caseId, tenantId, contentHash])
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([factType])
+  @@index([contentHash])
+  @@index([sourceEvidenceId])
+  @@index([lockedAt])
+  @@index([confidence])
+  @@map("verified_facts")
+}
+
+// ---------------------------------------------------------------------------
+// Narrative Deconstruction Engine — Claims extracted from police narratives
+// ---------------------------------------------------------------------------
+
+model NarrativeClaim {
+  claimId            String   @id @default(uuid())
+  caseId             String
+  tenantId           String
+  evidenceId         String
+  claimText          String
+  subject            String
+  action             String
+  object             String?
+  target             String?
+  timestampReference String?
+  confidence         Float    @default(0.5)
+  sentenceIndex      Int      @default(0)
+  metadata           Json?
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([evidenceId])
+  @@index([caseId, evidenceId])
+  @@index([confidence])
+  @@map("narrative_claims")
+}
+
+// ---------------------------------------------------------------------------
+// Narrative Deconstruction Engine — Normalized claim events
+// ---------------------------------------------------------------------------
+
+model NormalizedClaimEvent {
+  eventId       String   @id @default(uuid())
+  claimId       String
+  caseId        String
+  tenantId      String
+  eventType     String
+  actor         String
+  actionNorm    String
+  object        String?
+  target        String?
+  timestamp     DateTime?
+  confidence    Float    @default(0.5)
+  metadata      Json?
+
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  @@index([claimId])
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([eventType])
+  @@map("normalized_claim_events")
+}
+
+// ---------------------------------------------------------------------------
+// Narrative Deconstruction Engine — Claim validation results
+// ---------------------------------------------------------------------------
+
+model ClaimValidation {
+  validationId            String   @id @default(uuid())
+  claimId                 String
+  caseId                  String
+  tenantId                String
+  status                  String   @default("pending") // supported | contradicted | unverified | pending
+  supportingEvidenceIds   Json     @default("[]")
+  contradictingEvidenceIds Json    @default("[]")
+  confidence              Float    @default(0.5)
+  reasoning               String?
+  metadata                Json?
+
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
+
+  @@index([claimId])
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([status])
+  @@map("claim_validations")
+}
+
+// ---------------------------------------------------------------------------
+// Narrative Deconstruction Engine — Impeachment candidates
+// ---------------------------------------------------------------------------
+
+model ImpeachmentCandidate {
+  impeachmentId          String   @id @default(uuid())
+  claimId                String
+  caseId                 String
+  tenantId               String
+  severity               String   @default("medium") // high | medium | low
+  contradictionType      String
+  claimText              String
+  contradictingEvidence  String
+  suggestedQuestion      String?
+  confidence             Float    @default(0.5)
+  metadata               Json?
+
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  @@index([claimId])
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([severity])
+  @@map("impeachment_candidates")
+}
+
+// ---------------------------------------------------------------------------
+// Processing Job — tracks pipeline processing jobs (replaces in-memory job arrays)
+// ---------------------------------------------------------------------------
+
+model ProcessingJob {
+  id              String    @id @default(uuid())
+  userId          String
+  tenantId        String
+  caseId          String?
+  pipeline        String    // TIMELINE | NARRATIVE | CONTRADICTION | VIDEO | DOCTRINE | EVIDENCE_INGEST
+  status          String    @default("pending") // pending | active | completed | failed
+  payload         Json?     // Job-specific input data
+  result          Json?     // Job output/result data
+  error           String?
+  failureCode     String?   // ACU_EXHAUSTED | PROCESSING_ERROR | TIMEOUT
+  acuCredits      Int       @default(0) // ACU credits consumed
+
+  createdAt       DateTime  @default(now())
+  startedAt       DateTime?
+  completedAt     DateTime?
+
+  @@index([userId])
+  @@index([tenantId])
+  @@index([caseId])
+  @@index([pipeline])
+  @@index([status])
+  @@index([createdAt])
+  @@map("processing_jobs")
+}
+
+// ---------------------------------------------------------------------------
+// Timeline Event — reconstructed timeline events per case
+// ---------------------------------------------------------------------------
+
+model TimelineEvent {
+  id              String    @id @default(uuid())
+  caseId          String
+  tenantId        String?
+
+  timestamp       DateTime?
+  timeText        String?   // raw time text from source (e.g. "approximately 10:30 PM")
+
+  actor           String?   // who performed the action
+  action          String?   // what was done (raw, human-readable — e.g. "fired", "grabbed")
+  target          String?   // person, object, or location acted upon (e.g. "Suspect", "vehicle")
+  object          String?   // instrument or object used (e.g. "handgun", "taser")
+
+  description     String
+
+  sourceDoc       String?   // evidence document that sourced this event
+  sourceType      String?   // police_report | bodycam | dispatch | witness | forensic
+
+  location        String?
+  confidence      Float?    // 0-1 confidence score
+
+  conflictFlag    Boolean   @default(false) // flagged if conflicts with another event
+  conflictsWith   String?   // ID of conflicting TimelineEvent
+  metadata        Json?
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([timestamp])
+  @@index([sourceType])
+  @@index([confidence])
+  @@index([conflictFlag])
+  @@index([actor])
+  @@index([action])
+  @@map("timeline_events")
+}
+
+// ---------------------------------------------------------------------------
+// Discount Code — promotional access codes (replaces in-memory array)
+// ---------------------------------------------------------------------------
+
+model DiscountCode {
+  id              String    @id @default(uuid())
+  codeName        String
+  codeValue       String    @unique // e.g. HUNT100
+  discountType    String    // percent | fixed
+  discountValue   Float
+  active          Boolean   @default(true)
+  usageLimit      Int?
+  usageCount      Int       @default(0)
+  expiresAt       DateTime?
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  usages          DiscountUsage[]
+
+  @@index([codeValue])
+  @@index([active])
+  @@map("discount_codes")
+}
+
+// ---------------------------------------------------------------------------
+// Discount Usage — tracks which users used which codes
+// ---------------------------------------------------------------------------
+
+model DiscountUsage {
+  id              String    @id @default(uuid())
+  discountCodeId  String
+  discountCode    DiscountCode @relation(fields: [discountCodeId], references: [id])
+  userId          String
+
+  usedAt          DateTime  @default(now())
+
+  @@index([discountCodeId])
+  @@index([userId])
+  @@map("discount_usages")
+}
+
+// ---------------------------------------------------------------------------
+// Demo Request — government demonstration requests (replaces in-memory array)
+// ---------------------------------------------------------------------------
+
+model DemoRequest {
+  id              String    @id @default(uuid())
+  name            String
+  organization    String
+  role            String
+  email           String
+  county          String
+  agencyType      String
+  message         String
+  status          String    @default("new") // new | contacted | scheduled | completed | declined
+
+  submittedAt     DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([status])
+  @@index([email])
+  @@index([submittedAt])
+  @@map("demo_requests")
+}
+
+// ---------------------------------------------------------------------------
+// Enterprise License — institutional licensing (replaces in-memory array)
+// ---------------------------------------------------------------------------
+
+model EnterpriseLicense {
+  id                String    @id @default(uuid())
+  organizationName  String
+  agencyType        String    // district_attorney | public_defender | defense_firm | state_agency | federal_defender | investigation_agency | other
+  seatCount         Int
+  licenseStart      DateTime
+  licenseEnd        DateTime
+  billingTier       String    // starter | professional | enterprise | government
+  status            String    @default("pending") // active | expired | suspended | pending
+  adminEmail        String
+  county            String?
+  state             String?
+
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([status])
+  @@index([adminEmail])
+  @@index([organizationName])
+  @@map("enterprise_licenses")
+}
+
+// ---------------------------------------------------------------------------
+// Government Lead — institutional sales tracking (replaces in-memory array)
+// ---------------------------------------------------------------------------
+
+model GovernmentLead {
+  id              String    @id @default(uuid())
+  agencyName      String
+  contactName     String
+  role            String
+  email           String
+  county          String
+  status          String    @default("new") // new | contacted | demo_scheduled | demo_completed | contract_discussion | pilot_active | closed_won | closed_lost
+  notes           String
+  agencyType      String
+  seatEstimate    Int
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  @@index([status])
+  @@index([email])
+  @@index([agencyName])
+  @@map("government_leads")
+}
+
+// ---------------------------------------------------------------------------
+// Marketing Event — analytics tracking (replaces in-memory array)
+// ---------------------------------------------------------------------------
+
+model MarketingEvent {
+  id              String    @id @default(uuid())
+  page            String
+  event           String    // page_view | demo_request | signup | cta_click
+  source          String
+  metadata        Json?     // flexible key-value data
+
+  createdAt       DateTime  @default(now())
+
+  @@index([event])
+  @@index([page])
+  @@index([source])
+  @@index([createdAt])
+  @@map("marketing_events")
+}
+
+// ---------------------------------------------------------------------------
+// Stripe Webhook Event — idempotency tracking for webhook delivery
+// ---------------------------------------------------------------------------
+
+model StripeWebhookEvent {
+  id          String   @id @default(uuid())
+  eventId     String   @unique    // Stripe event ID (evt_xxx)
+  eventType   String              // e.g. checkout.session.completed
+  processedAt DateTime @default(now())
+
+  @@index([eventId])
+  @@index([eventType])
+  @@index([processedAt])
+  @@map("stripe_webhook_events")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 3 — Evidence Request (AI-detected evidence gaps)
+// ---------------------------------------------------------------------------
+
+model EvidenceRequest {
+  id              String    @id @default(uuid())
+  caseId          String
+  tenantId        String
+  type            String    // missing_bodycam | missing_witness_statement | timeline_gap | missing_dashcam | missing_dispatch_log | missing_forensic_report | missing_medical_record | other
+  title           String
+  description     String
+  priority        String    @default("medium") // low | medium | high
+  status          String    @default("pending") // pending | acknowledged | dismissed | deferred
+  sourceEventIds  String?   // JSON array of EvidenceEvent IDs that triggered this request
+  metadata        String?   // JSON: additional structured data
+
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
+
+  responses       EvidenceRequestResponse[]
+
+  @@unique([caseId, tenantId, type, title])
+  @@index([caseId])
+  @@index([tenantId])
+  @@index([status])
+  @@index([priority])
+  @@index([createdAt])
+  @@map("evidence_requests")
+}
+
+// ---------------------------------------------------------------------------
+// Phase 3 — Evidence Request Response (client actions on AI requests)
+// ---------------------------------------------------------------------------
+
+model EvidenceRequestResponse {
+  id              String    @id @default(uuid())
+  requestId       String
+  request         EvidenceRequest @relation(fields: [requestId], references: [id])
+  respondedBy     String    // userId
+  responseType    String    // requested | not_relevant | defer
+  deferUntilDate  DateTime?
+  notes           String?
+
+  createdAt       DateTime  @default(now())
+
+  @@index([requestId])
+  @@index([respondedBy])
+  @@index([responseType])
+  @@map("evidence_request_responses")
+}
+
+// ---------------------------------------------------------------------------
+// Domain V — Attorney Workbench (notes, pins, investigation tasks)
+// ---------------------------------------------------------------------------
+
+model AttorneyNote {
+  id          String   @id @default(uuid())
+  caseId      String
+  tenantId    String
+  userId      String
+  title       String?
+  content     String
+  entityType  String?  // evidence | authority | witness | timeline | unknown | motion | investigation | general
+  entityId    String?
+  isPrivate   Boolean  @default(true)
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([caseId, tenantId])
+  @@index([userId])
+  @@index([entityType, entityId])
+  @@map("attorney_notes")
+}
+
+model WorkbenchPin {
+  id          String   @id @default(uuid())
+  caseId      String
+  tenantId    String
+  userId      String
+  pinType     String   // evidence | authority | witness | timeline | unknown | motion | investigation
+  entityId    String
+  label       String?
+  metadata    String?  // JSON
+
+  createdAt   DateTime @default(now())
+
+  @@unique([caseId, tenantId, userId, pinType, entityId])
+  @@index([caseId, tenantId])
+  @@index([userId])
+  @@map("workbench_pins")
+}
+
+model InvestigationTask {
+  id            String    @id @default(uuid())
+  caseId        String
+  tenantId      String
+  title         String
+  description   String?
+  status        String    @default("open") // open | in_progress | completed | deferred
+  priority      String    @default("medium") // low | medium | high
+  assignedTo    String?
+  dueDate       DateTime?
+  sourceType    String?   // evidence_gap | subpoena | discovery | witness | timeline | manual
+  sourceId      String?
+  createdBy     String
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([caseId, tenantId])
+  @@index([status])
+  @@index([assignedTo])
+  @@map("investigation_tasks")
+}
+
+// ---------------------------------------------------------------------------
+// Program 12 — Investigator Workbench
+// ---------------------------------------------------------------------------
+
+model CaseWitness {
+  id              String   @id @default(uuid())
+  caseId          String
+  tenantId        String
+  name            String
+  role            String?
+  contactPhone    String?
+  contactEmail    String?
+  status          String   @default("identified") // identified | contacted | interviewed | unavailable
+  interviewStatus String   @default("not_scheduled") // not_scheduled | scheduled | completed | declined
+  notes           String?
+  sourceType      String?  // timeline | manual | discovery
+  sourceId        String?
+  createdBy       String
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+
+  @@index([caseId, tenantId])
+  @@map("case_witnesses")
+}
+
+model InvestigationLead {
+  id          String   @id @default(uuid())
+  caseId      String
+  tenantId    String
+  title       String
+  description String?
+  status      String   @default("open") // open | pursuing | closed | unfounded
+  priority    String   @default("medium")
+  assignedTo  String?
+  sourceType  String?
+  sourceId    String?
+  createdBy   String
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([caseId, tenantId])
+  @@map("investigation_leads")
+}
+
+model FieldNote {
+  id         String   @id @default(uuid())
+  caseId     String
+  tenantId   String
+  userId     String
+  title      String?
+  content    String
+  noteType   String   @default("general") // general | interview | surveillance | scene | gps
+  latitude   Float?
+  longitude  Float?
+  evidenceId String?
+  witnessId  String?
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([caseId, tenantId])
+  @@index([userId])
+  @@map("field_notes")
+}
+
+model InvestigationAssignment {
+  id             String   @id @default(uuid())
+  caseId         String
+  tenantId       String
+  investigatorId String
+  role           String   @default("lead") // lead | support | consultant
+  status         String   @default("active") // active | completed | transferred
+  assignedAt     DateTime @default(now())
+  assignedBy     String
+
+  @@unique([caseId, tenantId, investigatorId])
+  @@index([investigatorId])
+  @@map("investigation_assignments")
+}
+
+// ---------------------------------------------------------------------------
+// PR 1 — Schema Version Control (Hardening Core)
+// Tracks schema versions applied to this database.
+// Boot-time assertion compares expected vs actual to hard-fail on drift.
+// ---------------------------------------------------------------------------
+
+model SchemaVersion {
+  id             String   @id @default(uuid())
+  version        String   @unique
+  checksum       String
+  appliedAt      DateTime @default(now())
+  appliedBy      String   @default("prisma-migrate")
+  description    String?
+  migrationName  String
+  driftChecked   Boolean  @default(false)
+
+  @@index([appliedAt])
+  @@map("schema_versions")
+}
+
+model Charge {
+  id             String   @id @default(uuid())
+  caseId         String
+  code           String
+  section        String
+  title          String?
+  dateOfOffense  DateTime?
+  victim         String
+  createdAt      DateTime @default(now())
+
+  @@index([caseId])
+}
+
+// ---------------------------------------------------------------------------
+// Program 1 — User account settings (auto-provisioned)
+// ---------------------------------------------------------------------------
+
+model UserAccountSettings {
+  id                    String   @id @default(uuid())
+  userId                String   @unique
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notifyEmail           Boolean  @default(true)
+  notifyCaseUpdates     Boolean  @default(true)
+  notifyBilling         Boolean  @default(true)
+  notifyInvitations     Boolean  @default(true)
+  aiInsightsEnabled     Boolean  @default(true)
+  autoDocumentAnalysis  Boolean  @default(true)
+  compactSidebar        Boolean  @default(false)
+  timezone              String   @default("America/Los_Angeles")
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  @@map("user_account_settings")
+}
+
+// ---------------------------------------------------------------------------
+// Program 1 — Document redaction (immutable original, versioned redacted copies)
+// ---------------------------------------------------------------------------
+
+model DocumentRedactionVersion {
+  redactionId    String   @id @default(uuid())
+  tenantId       String
+  caseId         String
+  documentId     String
+  profileName    String
+  versionNumber  Int      @default(1)
+  s3KeyRedacted  String?
+  status         String   @default("draft")
+  createdById    String
+  approvedById   String?
+  redactionData  String   @default("[]")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+
+  @@index([tenantId, caseId, documentId])
+  @@index([profileName])
+  @@map("document_redaction_versions")
+}
+
+// ---------------------------------------------------------------------------
+// Program 1 — Disclosure manager (controlled publication packages)
+// ---------------------------------------------------------------------------
+
+model DisclosurePackage {
+  packageId       String   @id @default(uuid())
+  tenantId        String
+  caseId          String
+  documentId      String
+  redactionId     String?
+  recipientType   String
+  recipientUserId String?
+  recipientEmail  String?
+  status          String   @default("draft")
+  publishedById   String
+  publishedAt     DateTime?
+  createdAt       DateTime @default(now())
+
+  @@index([tenantId, caseId])
+  @@index([recipientUserId])
+  @@map("disclosure_packages")
+}
+
+// ---------------------------------------------------------------------------
+// Program 6A — Publication Engine (document copies, sets, audit)
+// ---------------------------------------------------------------------------
+
+model DocumentCopy {
+  copyId           String   @id @default(uuid())
+  tenantId         String
+  caseId           String
+  documentId       String
+  copyType         String   // original | working | redacted | publication
+  s3Key            String?
+  parentCopyId     String?
+  redactionId      String?
+  publicationSetId String?
+  immutable        Boolean  @default(false)
+  createdById      String
+  createdAt        DateTime @default(now())
+
+  @@index([tenantId, caseId, documentId])
+  @@index([copyType])
+  @@map("document_copies")
+}
+
+model PublicationSet {
+  setId         String   @id @default(uuid())
+  tenantId      String
+  caseId        String
+  name          String
+  profileName   String
+  status        String   @default("draft")
+  publishedById String?
+  publishedAt   DateTime?
+  createdAt     DateTime @default(now())
+  items         PublicationSetItem[]
+
+  @@index([tenantId, caseId])
+  @@map("publication_sets")
+}
+
+model PublicationSetItem {
+  itemId            String   @id @default(uuid())
+  setId             String
+  set               PublicationSet @relation(fields: [setId], references: [setId], onDelete: Cascade)
+  documentId        String
+  redactionId       String?
+  publicationCopyId String?
+
+  @@index([setId])
+  @@map("publication_set_items")
+}
+
+model PublicationAuditLog {
+  auditId    String   @id @default(uuid())
+  tenantId   String
+  caseId     String
+  action     String
+  entityType String
+  entityId   String
+  actorId    String
+  metadata   String   @default("{}")
+  createdAt  DateTime @default(now())
+
+  @@index([tenantId, caseId])
+  @@index([entityType, entityId])
+  @@map("publication_audit_logs")
+}

@@ -1,0 +1,238 @@
+// ============================================================================
+// CourtAccess — Billing & Usage Routes (Fastify)
+// Subscription plans, AI credits, usage enforcement, credit packs.
+// ============================================================================
+
+import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import type { AuthenticatedRequest } from '../security/authMiddleware.js';
+import {
+  getAllPlans,
+  getPlanById,
+  getUserSubscription,
+  setUserSubscription,
+  type SubscriptionPlanId,
+} from './subscriptionService.js';
+import {
+  getCreditBalance,
+  getAvailableCredits,
+  getUserUsageHistory,
+  getUserUsageByType,
+  calculateCreditCost,
+  deductCredits,
+  getCreditPack,
+  CREDIT_COSTS,
+  CREDIT_PACKS,
+  type AnalysisType,
+} from './aiCreditService.js';
+import {
+  checkPageLimit,
+  checkCreditLimit,
+  getUserUsageDashboard,
+  recordPageUpload,
+} from './usageEnforcementService.js';
+import { mapPackIdToStripePlan } from './stripeSyncService.js';
+
+// ---------------------------------------------------------------------------
+// Route Registration
+// ---------------------------------------------------------------------------
+
+export async function registerBillingRoutes(app: FastifyInstance): Promise<void> {
+
+  // =========================================================================
+  // Subscription Plans
+  // =========================================================================
+
+  // GET /api/billing/plans — list all subscription plans
+  app.get('/api/billing/plans', async (_req: FastifyRequest, reply: FastifyReply) => {
+    const plans = getAllPlans();
+    return reply.send({ plans });
+  });
+
+  // GET /api/billing/plans/:planId — get a specific plan
+  app.get('/api/billing/plans/:planId', async (req: FastifyRequest, reply: FastifyReply) => {
+    const { planId } = req.params as { planId: string };
+    const plan = getPlanById(planId as SubscriptionPlanId);
+    if (!plan) {
+      return reply.status(404).send({ error: 'Plan not found' });
+    }
+    return reply.send({ plan });
+  });
+
+  // GET /api/billing/subscription — get current user's subscription
+  app.get('/api/billing/subscription', async (req: FastifyRequest, reply: FastifyReply) => {
+    const userId = (req as unknown as AuthenticatedRequest).user?.userId;
+    if (!userId) return reply.code(401).send({ error: 'Authentication required' });
+    const subscription = await getUserSubscription(userId);
+    const plan = getPlanById(subscription.planId);
+    return reply.send({ subscription, plan });
+  });
+
+  // POST /api/billing/subscription — admin-only manual subscription override
+  app.post('/api/billing/subscription', async (req: FastifyRequest, reply: FastifyReply) => {
+    const user = (req as unknown as AuthenticatedRequest).user;
+    if (!user?.userId) return reply.code(401).send({ error: 'Authentication required' });
+    if (user.role !== 'admin') {
+      return reply.code(403).send({ error: 'Subscription changes require Stripe checkout or admin override' });
+    }
+
+    const body = req.body as {
+      userId: string;
+      planId: SubscriptionPlanId;
+      stripeSubscriptionId?: string;
+      stripeCustomerId?: string;
+    };
+
+    if (!body.userId) {
+      return reply.code(400).send({ error: 'userId required for admin subscription override' });
+    }
+
+    const plan = getPlanById(body.planId);
+    if (!plan) {
+      return reply.status(400).send({ error: 'Invalid plan ID' });
+    }
+
+    const subscription = await setUserSubscription(
+      body.userId,
+      body.planId,
+      body.stripeSubscriptionId,
+      body.stripeCustomerId,
+    );
+    return reply.send({ subscription, plan });
+  });
+
+  // =========================================================================
+  // AI Credits
+  // =========================================================================
+
+  // GET /api/billing/credits — get user's credit balance
+  app.get('/api/billing/credits', async (req: FastifyRequest, reply: FastifyReply) => {
+    const userId = (req as unknown as AuthenticatedRequest).user?.userId;
+    if (!userId) return reply.code(401).send({ error: 'Authentication required' });
+    const balance = await getCreditBalance(userId);
+    const available = await getAvailableCredits(userId);
+    return reply.send({ balance, available });
+  });
+
+  // GET /api/billing/credits/history — get user's credit usage history
+  app.get('/api/billing/credits/history', async (req: FastifyRequest, reply: FastifyReply) => {
+    const userId = (req as unknown as AuthenticatedRequest).user?.userId;
+    if (!userId) return reply.code(401).send({ error: 'Authentication required' });
+    const query = req.query as { limit?: string };
+    const limit = query.limit ? parseInt(query.limit, 10) : 50;
+    const history = await getUserUsageHistory(userId, limit);
+    return reply.send({ history, total: history.length });
+  });
+
+  // GET /api/billing/credits/by-type — get credit usage broken down by analysis type
+  app.get('/api/billing/credits/by-type', async (req: FastifyRequest, reply: FastifyReply) => {
+    const userId = (req as unknown as AuthenticatedRequest).user?.userId;
+    if (!userId) return reply.code(401).send({ error: 'Authentication required' });
+    const byType = await getUserUsageByType(userId);
+    return reply.send({ usage: byType });
+  });
+
+  // GET /api/billing/credits/costs — get credit cost configuration
+  app.get('/api/billing/credits/costs', async (_req: FastifyRequest, reply: FastifyReply) => {
+    return reply.send({ costs: CREDIT_COSTS });
+  });
+
+  // POST /api/billing/credits/calculate — calculate credit cost for an operation
+  app.post('/api/billing/credits/calculate', async (req: FastifyRequest, reply: FastifyReply) => {
+    const body = req.body as { analysisType: AnalysisType; units: number };
+    const cost = calculateCreditCost(body.analysisType, body.units);
+    return reply.send({ analysisType: body.analysisType, units: body.units, creditCost: cost });
+  });
+
+  // POST /api/billing/credits/deduct — deduct credits for an analysis
+  app.post('/api/billing/credits/deduct', async (req: FastifyRequest, reply: FastifyReply) => {
+    const userId = (req as unknown as AuthenticatedRequest).user?.userId;
+    if (!userId) return reply.code(401).send({ error: 'Authentication required' });
+    const body = req.body as {
+      credits: number;
+      analysisType: AnalysisType;
+      caseId?: string;
+    };
+
+    const success = await deductCredits(userId, body.credits, body.analysisType, body.caseId);
+    if (!success) {
+      return reply.status(402).send({
+        error: 'Insufficient credits',
+        available: await getAvailableCredits(userId),
+        required: body.credits,
+      });
+    }
+
+    return reply.send({
+      success: true,
+      remaining: await getAvailableCredits(userId),
+    });
+  });
+
+  // =========================================================================
+  // Credit Packs
+  // =========================================================================
+
+  // GET /api/billing/credit-packs — list available credit packs
+  app.get('/api/billing/credit-packs', async (_req: FastifyRequest, reply: FastifyReply) => {
+    return reply.send({ packs: CREDIT_PACKS });
+  });
+
+  // POST /api/billing/credit-packs/purchase — requires Stripe checkout (no free credits)
+  app.post('/api/billing/credit-packs/purchase', async (req: FastifyRequest, reply: FastifyReply) => {
+    const userId = (req as unknown as AuthenticatedRequest).user?.userId;
+    if (!userId) return reply.code(401).send({ error: 'Authentication required' });
+    const body = req.body as { packId: string };
+    const pack = getCreditPack(body.packId);
+
+    if (!pack) {
+      return reply.status(400).send({ error: 'Invalid credit pack ID' });
+    }
+
+    const stripePlanId = mapPackIdToStripePlan(body.packId);
+    return reply.status(402).send({
+      error: 'Payment required',
+      message: 'Credit packs must be purchased via Stripe checkout',
+      checkoutPlanId: stripePlanId,
+      pack,
+    });
+  });
+
+  // =========================================================================
+  // Usage Enforcement
+  // =========================================================================
+
+  // GET /api/billing/usage — get user's usage dashboard
+  app.get('/api/billing/usage', async (req: FastifyRequest, reply: FastifyReply) => {
+    const userId = (req as unknown as AuthenticatedRequest).user?.userId;
+    if (!userId) return reply.code(401).send({ error: 'Authentication required' });
+    const dashboard = await getUserUsageDashboard(userId);
+    return reply.send({ usage: dashboard, creditPacks: CREDIT_PACKS });
+  });
+
+  // POST /api/billing/usage/check-pages — check if upload is allowed
+  app.post('/api/billing/usage/check-pages', async (req: FastifyRequest, reply: FastifyReply) => {
+    const userId = (req as unknown as AuthenticatedRequest).user?.userId;
+    if (!userId) return reply.code(401).send({ error: 'Authentication required' });
+    const body = req.body as { pageCount: number };
+    const check = await checkPageLimit(userId, body.pageCount);
+    return reply.send({ check });
+  });
+
+  // POST /api/billing/usage/check-credits — check if analysis is allowed
+  app.post('/api/billing/usage/check-credits', async (req: FastifyRequest, reply: FastifyReply) => {
+    const userId = (req as unknown as AuthenticatedRequest).user?.userId;
+    if (!userId) return reply.code(401).send({ error: 'Authentication required' });
+    const body = req.body as { requiredCredits: number };
+    const check = await checkCreditLimit(userId, body.requiredCredits);
+    return reply.send({ check });
+  });
+
+  // POST /api/billing/usage/record-upload — record pages uploaded
+  app.post('/api/billing/usage/record-upload', async (req: FastifyRequest, reply: FastifyReply) => {
+    const userId = (req as unknown as AuthenticatedRequest).user?.userId;
+    if (!userId) return reply.code(401).send({ error: 'Authentication required' });
+    const body = req.body as { pageCount: number };
+    const record = await recordPageUpload(userId, body.pageCount);
+    return reply.send({ record });
+  });
+}

@@ -1,0 +1,96 @@
+# Deploy Production Website
+# Program 21 — Continuous deployment for courtaccess.net
+# Requires repository secrets: DEPLOY_HOST, DEPLOY_USER, DEPLOY_SSH_KEY
+# Optional: CF_ZONE_ID, CF_API_TOKEN (passed to deploy script on server)
+
+name: Deploy Production Website
+
+on:
+  push:
+    branches: [dev]
+    paths:
+      - 'src/**'
+      - 'index.html'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'vite.config.ts'
+      - 'public/**'
+      - 'scripts/deploy-production-website.sh'
+      - 'scripts/program-00-verify.mjs'
+      - '.github/workflows/deploy-production.yml'
+  workflow_dispatch:
+
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  verify:
+    name: Build & Verify
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build frontend
+        run: npm run build
+
+      - name: Verify build branding
+        run: |
+          grep -q "Criminal Case Intelligence Platform" dist/index.html
+          ! grep -q "Loading Court Access" dist/assets/*.js
+          grep -q "CourtAccess build:" dist/index.html
+
+      - name: Install Playwright
+        run: npx playwright install chromium --with-deps
+
+      - name: Program 0 route verification
+        run: npm run program-00:verify
+
+      - name: Upload screenshots
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: program-00-screenshots
+          path: reports/screenshots/program-00/
+          retention-days: 30
+
+  deploy:
+    name: Deploy to Production
+    needs: verify
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/dev'
+    environment: production
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.2.0
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script_stop: true
+          script: |
+            export DEPLOY_DIR=/opt/courtaccess
+            export DEPLOY_BRANCH=dev
+            export CF_ZONE_ID="${{ secrets.CF_ZONE_ID }}"
+            export CF_API_TOKEN="${{ secrets.CF_API_TOKEN }}"
+            cd "$DEPLOY_DIR"
+            git fetch origin dev
+            git checkout dev
+            git pull origin dev
+            bash scripts/deploy-production-website.sh
+
+      - name: Smoke test production
+        run: |
+          sleep 10
+          curl -fsS https://courtaccess.net/ | grep -q "Criminal Case Intelligence Platform"
+          echo "Production smoke test PASS"

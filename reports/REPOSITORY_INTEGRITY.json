@@ -1,0 +1,241 @@
+{
+  "generatedAt": "2026-07-04T22:10:13.018Z",
+  "version": "1.0.0",
+  "overallIntegrity": "PASS",
+  "overallCompletionPercent": 47,
+  "repositoryIntegrity": "PASS",
+  "parsingFailures": 0,
+  "manualReviewQueue": 50,
+  "coverageAnalytics": {
+    "codesDiscovered": 1,
+    "codesTotal": 30,
+    "sectionsDiscovered": 207,
+    "sectionsAcquired": 3,
+    "sectionsParsed": 4,
+    "criminalOffenses": 2,
+    "offenseElements": 4,
+    "mensReaCoveragePercent": 100,
+    "authorityCoveragePercent": 100,
+    "calcrimMappings": 1,
+    "calcrimCoveragePercent": 50
+  },
+  "knowledgeGraph": {
+    "totalRecords": 47,
+    "repositoriesHealthy": 11,
+    "repositoriesTotal": 11,
+    "integrity": "PASS"
+  },
+  "repositories": [
+    {
+      "name": "statutes",
+      "displayName": "Statute Repository",
+      "recordCount": 4,
+      "integrity": "PASS",
+      "integrityDetail": "4 records, index consistent",
+      "coverage": {
+        "statutesCovered": 3,
+        "unknownFieldCount": 4,
+        "unknownFieldRate": 0.3333333333333333,
+        "totalRecords": 4
+      },
+      "unknowns": [
+        "4 unknown field(s) in extraction"
+      ],
+      "manualReviewCount": 4,
+      "auditStatus": "PARTIAL",
+      "lastSynchronization": "2026-07-04T20:19:16.475Z",
+      "completionPercent": 100
+    },
+    {
+      "name": "offenses",
+      "displayName": "Offense Repository",
+      "recordCount": 2,
+      "integrity": "PASS",
+      "integrityDetail": "2 records, index consistent",
+      "coverage": {
+        "statutesCovered": 3,
+        "unknownFieldCount": 31,
+        "unknownFieldRate": 5.166666666666667,
+        "totalRecords": 2
+      },
+      "unknowns": [
+        "31 unknown field(s) in extraction"
+      ],
+      "manualReviewCount": 31,
+      "auditStatus": "PARTIAL",
+      "lastSynchronization": "2026-07-04T20:19:16.475Z",
+      "completionPercent": 33
+    },
+    {
+      "name": "elements",
+      "displayName": "Element Repository",
+      "recordCount": 4,
+      "integrity": "PASS",
+      "integrityDetail": "4 records, index consistent",
+      "coverage": {
+        "statutesCovered": 3,
+        "unknownFieldCount": 0,
+        "unknownFieldRate": 0,
+        "totalRecords": 4
+      },
+      "unknowns": [],
+      "manualReviewCount": 0,
+      "auditStatus": "PARTIAL",
+      "lastSynchronization": "2026-07-04T20:19:16.477Z",
+      "completionPercent": 33
+    },
+    {
+      "name": "mens_rea",
+      "displayName": "Mens Rea Repository",
+      "recordCount": 2,
+      "integrity": "PASS",
+      "integrityDetail": "2 records, index consistent",
+      "coverage": {
+        "statutesCovered": 3,
+        "unknownFieldCount": 12,
+        "unknownFieldRate": 2,
+        "totalRecords": 2
+      },
+      "unknowns": [
+        "12 unknown field(s) in extraction"
+      ],
+      "manualReviewCount": 12,
+      "auditStatus": "PARTIAL",
+      "lastSynchronization": "2026-07-04T20:19:16.477Z",
+      "completionPercent": 20
+    },
+    {
+      "name": "exceptions",
+      "displayName": "Exception Repository",
+      "recordCount": 3,
+      "integrity": "PASS",
+      "integrityDetail": "3 records, index consistent",
+      "coverage": {
+        "statutesCovered": 3,
+        "unknownFieldCount": 0,
+        "unknownFieldRate": 0,
+        "totalRecords": 3
+      },
+      "unknowns": [],
+      "manualReviewCount": 0,
+      "auditStatus": "PARTIAL",
+      "lastSynchronization": "2026-07-04T20:19:16.466Z",
+      "completionPercent": 30
+    },
+    {
+      "name": "defenses",
+      "displayName": "Defense Repository",
+      "recordCount": 0,
+      "integrity": "PASS",
+      "integrityDetail": "0 records, index consistent",
+      "coverage": {
+        "statutesCovered": 3,
+        "unknownFieldCount": 0,
+        "unknownFieldRate": 0,
+        "totalRecords": 0
+      },
+      "unknowns": [],
+      "manualReviewCount": 0,
+      "auditStatus": "PARTIAL",
+      "lastSynchronization": "2026-07-04T20:19:16.489Z",
+      "completionPercent": 0
+    },
+    {
+      "name": "cross_references",
+      "displayName": "Cross Reference Repository",
+      "recordCount": 13,
+      "integrity": "PASS",
+      "integrityDetail": "13 records, index consistent",
+      "coverage": {
+        "statutesCovered": 3,
+        "unknownFieldCount": 0,
+        "unknownFieldRate": 0,
+        "totalRecords": 13
+      },
+      "unknowns": [],
+      "manualReviewCount": 0,
+      "auditStatus": "PARTIAL",
+      "lastSynchronization": "2026-07-04T20:19:16.478Z",
+      "completionPercent": 100
+    },
+    {
+      "name": "regulatory_incorporations",
+      "displayName": "Regulatory Incorporation Repository",
+      "recordCount": 2,
+      "integrity": "PASS",
+      "integrityDetail": "2 records, index consistent",
+      "coverage": {
+        "statutesCovered": 3,
+        "unknownFieldCount": 0,
+        "unknownFieldRate": 0,
+        "totalRecords": 2
+      },
+      "unknowns": [],
+      "manualReviewCount": 0,
+      "auditStatus": "PARTIAL",
+      "lastSynchronization": "2026-07-04T19:51:21.844Z",
+      "completionPercent": 20
+    },
+    {
+      "name": "calcrim_links",
+      "displayName": "CALCRIM Repository",
+      "recordCount": 1,
+      "integrity": "PASS",
+      "integrityDetail": "1 records, index consistent",
+      "coverage": {
+        "statutesCovered": 3,
+        "unknownFieldCount": 1,
+        "unknownFieldRate": 0.3333333333333333,
+        "totalRecords": 1
+      },
+      "unknowns": [
+        "1 unknown field(s) in extraction"
+      ],
+      "manualReviewCount": 1,
+      "auditStatus": "PARTIAL",
+      "lastSynchronization": "2026-07-04T19:51:21.844Z",
+      "completionPercent": 33
+    },
+    {
+      "name": "authorities",
+      "displayName": "Authority Repository",
+      "recordCount": 13,
+      "integrity": "PASS",
+      "integrityDetail": "13 records, index consistent",
+      "coverage": {
+        "statutesCovered": 3,
+        "unknownFieldCount": 0,
+        "unknownFieldRate": 0,
+        "totalRecords": 13
+      },
+      "unknowns": [],
+      "manualReviewCount": 0,
+      "auditStatus": "PARTIAL",
+      "lastSynchronization": "2026-07-04T20:19:16.478Z",
+      "completionPercent": 100
+    },
+    {
+      "name": "statute_classifications",
+      "displayName": "Statute Classification Repository",
+      "recordCount": 3,
+      "integrity": "PASS",
+      "integrityDetail": "3 records, index consistent",
+      "coverage": null,
+      "unknowns": [],
+      "manualReviewCount": 0,
+      "auditStatus": "PARTIAL",
+      "lastSynchronization": "2026-07-04T20:19:16.480Z",
+      "completionPercent": 50
+    }
+  ],
+  "globalUnknowns": [
+    "Defense repository empty — coverage UNKNOWN"
+  ],
+  "auditSummary": {
+    "total": 74,
+    "success": 50,
+    "rejected": 0,
+    "partial": 24,
+    "withOffenses": 13
+  }
+}

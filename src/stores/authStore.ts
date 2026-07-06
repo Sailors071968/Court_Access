@@ -3,92 +3,165 @@
 // ============================================
 
 import { create } from 'zustand';
-import type { User, UserRole } from '../types';
+import { persist } from 'zustand/middleware';
+import type { User, UserRole, DefaultRole } from '../types';
 import { ROLE_PERMISSIONS } from '../constants';
+
+type SubscriptionStatus = 'active' | 'trial' | 'trialing' | 'past_due' | 'cancelled' | 'none';
 
 interface AuthState {
   user: User | null;
   isAuthenticated: boolean;
   isLoading: boolean;
-  login: (email: string, password: string) => Promise<void>;
-  register: (name: string, email: string, password: string, role: UserRole) => Promise<void>;
+  subscriptionStatus: SubscriptionStatus;
+  login: (email: string, password: string) => Promise<{ mfaRequired?: boolean; mfaSessionToken?: string }>;
+  completeMfaLogin: (mfaSessionToken: string, code: string) => Promise<void>;
+  register: (name: string, email: string, password: string, defaultRole: DefaultRole, options?: { termsAccepted?: boolean; privacyAccepted?: boolean }) => Promise<{ onboarding?: { postRegistrationRoute?: string; defaultDashboard?: string } } | void>;
   logout: () => void;
   switchRole: (role: UserRole) => void;
+  setSubscriptionStatus: (status: SubscriptionStatus) => void;
   hasPermission: (permission: keyof typeof ROLE_PERMISSIONS.admin) => boolean;
 }
 
-// Mock users for development
-const MOCK_USERS: Record<string, User> = {
-  'attorney@courtaccess.com': {
-    id: '1',
-    name: 'Attorney Jane Doe',
-    email: 'attorney@courtaccess.com',
-    role: 'attorney',
-    avatar: undefined,
-  },
-  'investigator@courtaccess.com': {
-    id: '2',
-    name: 'Agent J. Doe',
-    email: 'investigator@courtaccess.com',
-    role: 'investigator',
-    avatar: undefined,
-  },
-  'admin@courtaccess.com': {
-    id: '3',
-    name: 'Admin User',
-    email: 'admin@courtaccess.com',
-    role: 'admin',
-    avatar: undefined,
-  },
-  'staff@courtaccess.com': {
-    id: '4',
-    name: 'Staff Member',
-    email: 'staff@courtaccess.com',
-    role: 'staff',
-    avatar: undefined,
-  },
-};
+const API_BASE = '/api';
 
-export const useAuthStore = create<AuthState>((set, get) => ({
+export const useAuthStore = create<AuthState>()(persist((set, get) => ({
   user: null,
   isAuthenticated: false,
   isLoading: false,
+  subscriptionStatus: 'none',
 
-  login: async (email: string, _password: string) => {
+  login: async (email: string, password: string) => {
     set({ isLoading: true });
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 800));
-
-    const mockUser = MOCK_USERS[email];
-    if (mockUser) {
-      set({ user: mockUser, isAuthenticated: true, isLoading: false });
-    } else {
-      // Default to attorney role for any email
+    try {
+      const res = await fetch(`${API_BASE}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: 'Login failed' }));
+        throw new Error(err.error || 'Invalid credentials');
+      }
+      const data = await res.json();
+      if (data.mfaRequired && data.mfaSessionToken) {
+        set({ isLoading: false });
+        return { mfaRequired: true, mfaSessionToken: data.mfaSessionToken };
+      }
+      // Store the access token for authenticated API calls
+      if (data.accessToken) {
+        localStorage.setItem('court-access-token', data.accessToken);
+      }
+      if (data.refreshToken) {
+        localStorage.setItem('court-access-refresh-token', data.refreshToken);
+      }
       set({
         user: {
-          id: '99',
-          name: email.split('@')[0],
-          email,
-          role: 'attorney',
+          id: data.user.userId,
+          name: data.user.name || data.user.email.split('@')[0],
+          email: data.user.email,
+          role: data.user.role,
         },
         isAuthenticated: true,
         isLoading: false,
+        subscriptionStatus: (data.user.subscriptionStatus as SubscriptionStatus) || 'none',
       });
+      return {};
+    } catch (err) {
+      set({ isLoading: false });
+      throw err;
     }
   },
 
-  register: async (name: string, email: string, _password: string, role: UserRole) => {
+  completeMfaLogin: async (mfaSessionToken: string, code: string) => {
     set({ isLoading: true });
-    await new Promise((resolve) => setTimeout(resolve, 800));
-    set({
-      user: { id: Date.now().toString(), name, email, role },
-      isAuthenticated: true,
-      isLoading: false,
-    });
+    try {
+      const res = await fetch(`${API_BASE}/auth/mfa/challenge`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ mfaSessionToken, code }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: 'MFA verification failed' }));
+        throw new Error(err.error || 'Invalid code');
+      }
+      const data = await res.json();
+      if (data.accessToken) localStorage.setItem('court-access-token', data.accessToken);
+      if (data.refreshToken) localStorage.setItem('court-access-refresh-token', data.refreshToken);
+      set({
+        user: {
+          id: data.user.userId,
+          name: data.user.name || data.user.email.split('@')[0],
+          email: data.user.email,
+          role: data.user.role,
+        },
+        isAuthenticated: true,
+        isLoading: false,
+        subscriptionStatus: (data.user.subscriptionStatus as SubscriptionStatus) || 'none',
+      });
+    } catch (err) {
+      set({ isLoading: false });
+      throw err;
+    }
+  },
+
+  register: async (name, email, password, defaultRole, options) => {
+    set({ isLoading: true });
+    try {
+      const res = await fetch(`${API_BASE}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name,
+          email,
+          password,
+          defaultRole,
+          termsAccepted: options?.termsAccepted ?? false,
+          privacyAccepted: options?.privacyAccepted ?? false,
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({ error: 'Registration failed' }));
+        throw new Error(err.error || 'Registration failed');
+      }
+      const data = await res.json();
+      if (data.accessToken) {
+        localStorage.setItem('court-access-token', data.accessToken);
+      }
+      if (data.refreshToken) {
+        localStorage.setItem('court-access-refresh-token', data.refreshToken);
+      }
+      set({
+        user: {
+          id: data.user.userId,
+          name: data.user.name || name,
+          email: data.user.email,
+          role: data.user.role,
+          defaultRole: data.user.defaultRole,
+        },
+        isAuthenticated: true,
+        isLoading: false,
+        subscriptionStatus: (data.user.subscriptionStatus as SubscriptionStatus) || 'none',
+      });
+      return { onboarding: data.onboarding };
+    } catch (err) {
+      set({ isLoading: false });
+      throw err;
+    }
   },
 
   logout: () => {
-    set({ user: null, isAuthenticated: false });
+    // Attempt to call backend logout (fire-and-forget)
+    const token = localStorage.getItem('court-access-token');
+    if (token) {
+      fetch(`${API_BASE}/auth/logout`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+      }).catch(() => { /* ignore */ });
+    }
+    localStorage.removeItem('court-access-token');
+    localStorage.removeItem('court-access-refresh-token');
+    set({ user: null, isAuthenticated: false, subscriptionStatus: 'none' });
   },
 
   switchRole: (role: UserRole) => {
@@ -98,9 +171,20 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
   },
 
+  setSubscriptionStatus: (status: SubscriptionStatus) => {
+    set({ subscriptionStatus: status });
+  },
+
   hasPermission: (permission) => {
     const { user } = get();
     if (!user) return false;
     return ROLE_PERMISSIONS[user.role][permission];
   },
+}), {
+  name: 'court-access-auth',
+  partialize: (state) => ({
+    user: state.user,
+    isAuthenticated: state.isAuthenticated,
+    subscriptionStatus: state.subscriptionStatus,
+  }),
 }));

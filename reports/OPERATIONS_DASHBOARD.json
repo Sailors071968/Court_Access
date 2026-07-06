@@ -1,0 +1,514 @@
+{
+  "dashboard": {
+    "generatedAt": "2026-07-04T22:00:20.683Z",
+    "overallStatus": "unhealthy",
+    "productionGates": {
+      "overallResult": "NOT_READY",
+      "passCount": 14,
+      "failCount": 0,
+      "partialCount": 1,
+      "deploymentBlocked": true,
+      "gates": [
+        {
+          "id": "PG-001",
+          "name": "Stripe Billing",
+          "result": "PARTIAL"
+        },
+        {
+          "id": "PG-002",
+          "name": "Authentication",
+          "result": "PASS"
+        },
+        {
+          "id": "PG-003",
+          "name": "Client Domain",
+          "result": "PASS"
+        },
+        {
+          "id": "PG-004",
+          "name": "Case Management",
+          "result": "PASS"
+        },
+        {
+          "id": "PG-005",
+          "name": "Document Upload",
+          "result": "PASS"
+        },
+        {
+          "id": "PG-006",
+          "name": "OCR",
+          "result": "PASS"
+        },
+        {
+          "id": "PG-007",
+          "name": "Evidence Processing",
+          "result": "PASS"
+        },
+        {
+          "id": "PG-008",
+          "name": "Timeline",
+          "result": "PASS"
+        },
+        {
+          "id": "PG-009",
+          "name": "Attorney Reports",
+          "result": "PASS"
+        },
+        {
+          "id": "PG-010",
+          "name": "Legislative Intelligence",
+          "result": "PASS"
+        },
+        {
+          "id": "PG-011",
+          "name": "Knowledge Graph",
+          "result": "PASS"
+        },
+        {
+          "id": "PG-012",
+          "name": "Repository Integrity",
+          "result": "PASS"
+        },
+        {
+          "id": "PG-013",
+          "name": "Administrative Dashboard",
+          "result": "PASS"
+        },
+        {
+          "id": "PG-014",
+          "name": "Security",
+          "result": "PASS"
+        },
+        {
+          "id": "PG-015",
+          "name": "Backup / Recovery",
+          "result": "PASS"
+        }
+      ]
+    },
+    "systemHealth": {
+      "status": "healthy",
+      "message": "uptime=0s env=development"
+    },
+    "apiHealth": {
+      "status": "healthy",
+      "message": "errorRate=0.00% p95=0ms"
+    },
+    "database": {
+      "status": "healthy",
+      "latencyMs": 70
+    },
+    "redis": {
+      "status": "healthy",
+      "message": "memory 2MB / ∞MB (0%)",
+      "details": {
+        "usedMemoryBytes": 2204232,
+        "usedMemoryMB": 2,
+        "maxMemoryBytes": 0,
+        "maxMemoryMB": 0,
+        "usagePct": 0,
+        "status": "unknown",
+        "fragmentation": 3.98,
+        "connectedClients": 24,
+        "timestamp": "2026-07-04T22:00:20.423Z"
+      }
+    },
+    "queues": {
+      "status": "healthy",
+      "queues": {
+        "EVIDENCE_INGEST": {
+          "waiting": 0,
+          "active": 0,
+          "completed": 0,
+          "failed": 0
+        },
+        "FACT_EXTRACTION": {
+          "waiting": 0,
+          "active": 0,
+          "completed": 0,
+          "failed": 0
+        },
+        "AI_ANALYSIS": {
+          "waiting": 0,
+          "active": 0,
+          "completed": 0,
+          "failed": 0
+        },
+        "TRANSCRIPTION": {
+          "waiting": 0,
+          "active": 0,
+          "completed": 0,
+          "failed": 0
+        },
+        "TIMELINE_BUILD": {
+          "waiting": 0,
+          "active": 0,
+          "completed": 0,
+          "failed": 0
+        },
+        "DOCUMENT_INTEGRITY": {
+          "waiting": 0,
+          "active": 0,
+          "completed": 0,
+          "failed": 0
+        },
+        "GRAPH_SYNC": {
+          "waiting": 0,
+          "active": 0,
+          "completed": 0,
+          "failed": 0
+        },
+        "ANCHOR_CHAIN": {
+          "waiting": 0,
+          "active": 0,
+          "completed": 0,
+          "failed": 0
+        },
+        "EXPORT_GENERATION": {
+          "waiting": 0,
+          "active": 0,
+          "completed": 0,
+          "failed": 0
+        },
+        "NIGHTLY_INTEGRITY": {
+          "waiting": 0,
+          "active": 0,
+          "completed": 0,
+          "failed": 0
+        },
+        "NARRATIVE_PROCESSING": {
+          "waiting": 0,
+          "active": 0,
+          "completed": 0,
+          "failed": 0
+        },
+        "CONTRADICTION_ANALYSIS": {
+          "waiting": 0,
+          "active": 0,
+          "completed": 0,
+          "failed": 0
+        },
+        "VIDEO_PROCESSING": {
+          "waiting": 0,
+          "active": 0,
+          "completed": 0,
+          "failed": 0
+        },
+        "DOCTRINE_ANALYSIS": {
+          "waiting": 0,
+          "active": 0,
+          "completed": 0,
+          "failed": 0
+        },
+        "DEAD_LETTER": {
+          "waiting": 0,
+          "active": 0,
+          "completed": 0,
+          "failed": 0
+        }
+      },
+      "message": "0 waiting, 0 failed"
+    },
+    "ocrWorkers": {
+      "status": "healthy",
+      "message": "EVIDENCE_INGEST waiting=0 failed=0"
+    },
+    "aiWorkers": {
+      "status": "healthy",
+      "message": "AI_ANALYSIS waiting=0 failed=0"
+    },
+    "legislativePipeline": {
+      "status": "healthy",
+      "message": "parsed=4 offenses=2"
+    },
+    "knowledgeGraph": {
+      "status": "healthy",
+      "message": "offenses=2 elements=4"
+    },
+    "repositoryIntegrity": {
+      "status": "healthy",
+      "message": "integrity=PASS"
+    },
+    "stripeHealth": {
+      "status": "unhealthy",
+      "message": "integrity=FAIL webhooks24h=0"
+    },
+    "emailHealth": {
+      "status": "degraded",
+      "message": "emailSync=NOT_IMPLEMENTED"
+    },
+    "backgroundJobs": {
+      "status": "healthy",
+      "message": "15 queues monitored"
+    },
+    "storage": {
+      "status": "degraded",
+      "message": "R2 not configured"
+    },
+    "resources": {
+      "cpu": {
+        "userMicros": 1253046,
+        "systemMicros": 80583,
+        "status": "healthy"
+      },
+      "memory": {
+        "heapUsedMB": 44,
+        "heapTotalMB": 66,
+        "rssMB": 179,
+        "status": "healthy"
+      },
+      "disk": {
+        "status": "unknown",
+        "message": "Disk metrics require host agent"
+      },
+      "network": {
+        "status": "unknown",
+        "message": "Network metrics require host agent"
+      }
+    },
+    "performance": {
+      "errorRate": 0,
+      "responseTimeP50Ms": 0,
+      "responseTimeP95Ms": 0
+    },
+    "alerts": [
+      {
+        "id": "stripe-failures",
+        "severity": "critical",
+        "category": "stripe",
+        "message": "Stripe billing integrity FAIL",
+        "source": "billing",
+        "triggeredAt": "2026-07-04T22:00:20.683Z",
+        "recoveryBehavior": "Run npm run billing:certify and fix failing workflows"
+      },
+      {
+        "id": "email-not-configured",
+        "severity": "warning",
+        "category": "email",
+        "message": "Billing email delivery not fully configured",
+        "source": "email",
+        "triggeredAt": "2026-07-04T22:00:20.683Z",
+        "recoveryBehavior": "Configure AWS SES or accept simulated audit logging"
+      }
+    ],
+    "observability": {
+      "productionGatesCoverage": 93,
+      "repositoryCoveragePercent": 100,
+      "legislativeCoveragePercent": 3,
+      "knowledgeGraphCoveragePercent": 50,
+      "attorneyWorkflowCoveragePercent": 77,
+      "systemAvailability": "healthy",
+      "apiAvailability": "healthy",
+      "billingAvailability": "unhealthy"
+    }
+  },
+  "changes": {
+    "generatedAt": "2026-07-04T22:00:20.433Z",
+    "releases": [
+      {
+        "id": "release-current",
+        "type": "release",
+        "version": "1.0.0",
+        "description": "CourtAccess backend v1.0.0",
+        "timestamp": "2026-07-04T22:00:20.433Z",
+        "path": "backend/package.json"
+      }
+    ],
+    "migrations": [
+      {
+        "id": "20260704230000_attorney_workbench",
+        "type": "migration",
+        "version": "20260704230000",
+        "description": "attorney workbench",
+        "timestamp": "2026-07-04T21:37:54.687Z",
+        "path": "backend/prisma/migrations/20260704230000_attorney_workbench/migration.sql"
+      },
+      {
+        "id": "20260704220000_client_domain",
+        "type": "migration",
+        "version": "20260704220000",
+        "description": "client domain",
+        "timestamp": "2026-07-04T21:15:32.096Z",
+        "path": "backend/prisma/migrations/20260704220000_client_domain/migration.sql"
+      },
+      {
+        "id": "20260704210000_legislative_extraction_audit",
+        "type": "migration",
+        "version": "20260704210000",
+        "description": "legislative extraction audit",
+        "timestamp": "2026-07-04T20:03:48.583Z",
+        "path": "backend/prisma/migrations/20260704210000_legislative_extraction_audit/migration.sql"
+      },
+      {
+        "id": "20260704200000_statute_record_extension",
+        "type": "migration",
+        "version": "20260704200000",
+        "description": "statute record extension",
+        "timestamp": "2026-07-04T19:50:22.448Z",
+        "path": "backend/prisma/migrations/20260704200000_statute_record_extension/migration.sql"
+      },
+      {
+        "id": "20260309154000_add_cpra_tables",
+        "type": "migration",
+        "version": "20260309154000",
+        "description": "add cpra tables",
+        "timestamp": "2026-07-04T17:54:49.190Z",
+        "path": "backend/prisma/migrations/20260309154000_add_cpra_tables/migration.sql"
+      },
+      {
+        "id": "20260309162000_add_cpra_annual_updates",
+        "type": "migration",
+        "version": "20260309162000",
+        "description": "add cpra annual updates",
+        "timestamp": "2026-07-04T17:54:49.190Z",
+        "path": "backend/prisma/migrations/20260309162000_add_cpra_annual_updates/migration.sql"
+      },
+      {
+        "id": "20260312194705_autonomous_cpra_system",
+        "type": "migration",
+        "version": "20260312194705",
+        "description": "autonomous cpra system",
+        "timestamp": "2026-07-04T17:54:49.190Z",
+        "path": "backend/prisma/migrations/20260312194705_autonomous_cpra_system/migration.sql"
+      },
+      {
+        "id": "20260314164356_add_persistence_models",
+        "type": "migration",
+        "version": "20260314164356",
+        "description": "add persistence models",
+        "timestamp": "2026-07-04T17:54:49.190Z",
+        "path": "backend/prisma/migrations/20260314164356_add_persistence_models/migration.sql"
+      },
+      {
+        "id": "20260315175413_persistence_layer_models",
+        "type": "migration",
+        "version": "20260315175413",
+        "description": "persistence layer models",
+        "timestamp": "2026-07-04T17:54:49.190Z",
+        "path": "backend/prisma/migrations/20260315175413_persistence_layer_models/migration.sql"
+      },
+      {
+        "id": "20260320133000_schema_version_control",
+        "type": "migration",
+        "version": "20260320133000",
+        "description": "schema version control",
+        "timestamp": "2026-07-04T17:54:49.190Z",
+        "path": "backend/prisma/migrations/20260320133000_schema_version_control/migration.sql"
+      },
+      {
+        "id": "20260320155000_evidence_chunks",
+        "type": "migration",
+        "version": "20260320155000",
+        "description": "evidence chunks",
+        "timestamp": "2026-07-04T17:54:49.190Z",
+        "path": "backend/prisma/migrations/20260320155000_evidence_chunks/migration.sql"
+      },
+      {
+        "id": "20260320160000_verified_facts",
+        "type": "migration",
+        "version": "20260320160000",
+        "description": "verified facts",
+        "timestamp": "2026-07-04T17:54:49.190Z",
+        "path": "backend/prisma/migrations/20260320160000_verified_facts/migration.sql"
+      },
+      {
+        "id": "20260410135120_add_password_reset_tokens",
+        "type": "migration",
+        "version": "20260410135120",
+        "description": "add password reset tokens",
+        "timestamp": "2026-07-04T17:54:49.190Z",
+        "path": "backend/prisma/migrations/20260410135120_add_password_reset_tokens/migration.sql"
+      },
+      {
+        "id": "20260308130109_corpus_governance_layer",
+        "type": "migration",
+        "version": "20260308130109",
+        "description": "corpus governance layer",
+        "timestamp": "2026-07-04T17:54:49.186Z",
+        "path": "backend/prisma/migrations/20260308130109_corpus_governance_layer/migration.sql"
+      },
+      {
+        "id": "20260309143552_add_policy_taxonomy_system",
+        "type": "migration",
+        "version": "20260309143552",
+        "description": "add policy taxonomy system",
+        "timestamp": "2026-07-04T17:54:49.186Z",
+        "path": "backend/prisma/migrations/20260309143552_add_policy_taxonomy_system/migration.sql"
+      }
+    ],
+    "schemaHistory": [
+      {
+        "id": "20260314164356_add_persistence_models",
+        "type": "migration",
+        "version": "20260314164356",
+        "description": "add persistence models",
+        "timestamp": "2026-07-04T17:54:49.190Z",
+        "path": "backend/prisma/migrations/20260314164356_add_persistence_models/migration.sql"
+      },
+      {
+        "id": "20260315175413_persistence_layer_models",
+        "type": "migration",
+        "version": "20260315175413",
+        "description": "persistence layer models",
+        "timestamp": "2026-07-04T17:54:49.190Z",
+        "path": "backend/prisma/migrations/20260315175413_persistence_layer_models/migration.sql"
+      },
+      {
+        "id": "20260320133000_schema_version_control",
+        "type": "migration",
+        "version": "20260320133000",
+        "description": "schema version control",
+        "timestamp": "2026-07-04T17:54:49.190Z",
+        "path": "backend/prisma/migrations/20260320133000_schema_version_control/migration.sql"
+      }
+    ],
+    "deployments": [
+      {
+        "id": "deploy-procedure",
+        "type": "deployment",
+        "description": "Production deployment via git push + db-safe-migrate.sh deploy",
+        "timestamp": "2026-07-04T22:00:20.433Z",
+        "path": "backend/scripts/db-safe-migrate.sh"
+      }
+    ],
+    "rollbackProcedures": [
+      "Restore database from latest RDS snapshot or pg_dump backup",
+      "Revert application to previous container image / git tag",
+      "Run prisma migrate resolve if migration partially applied",
+      "Verify production gates: npm run gates:run",
+      "See DISASTER_RECOVERY.md for full RTO/RPO procedures"
+    ]
+  },
+  "backup": {
+    "generatedAt": "2026-07-04T22:00:20.423Z",
+    "status": {
+      "database": {
+        "status": "healthy",
+        "message": "DR documentation present"
+      },
+      "repositories": {
+        "status": "healthy",
+        "message": "Legislative repository snapshots on disk"
+      },
+      "knowledgeGraph": {
+        "status": "healthy",
+        "message": "Knowledge graph repository files present"
+      },
+      "configuration": {
+        "status": "healthy",
+        "message": "Configuration template available for backup reference"
+      },
+      "lastVerifiedAt": "2026-07-04T21:59:26.838Z",
+      "restoreDrillStatus": "PASS"
+    },
+    "automated": {
+      "databaseBackups": true,
+      "repositorySnapshots": true,
+      "knowledgeGraphSnapshots": true,
+      "configurationBackups": true,
+      "restoreVerification": true,
+      "recoveryDrills": true
+    },
+    "blockers": []
+  }
+}

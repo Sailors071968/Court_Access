@@ -1,0 +1,78 @@
+# CI — Build and verify on every pull request
+name: CI Build & Verify
+
+on:
+  pull_request:
+    branches: [dev, main]
+  push:
+    branches: [cursor/**]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  frontend:
+    name: Frontend Build & Program 0
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+      - run: npm run build
+      - run: |
+          grep -q "Criminal Case Intelligence Platform" dist/index.html
+          grep -q "CourtAccess build:" dist/index.html
+          ! grep -q "Loading Court Access" dist/assets/*.js
+
+      - run: npx playwright install chromium --with-deps
+      - run: npm run program-00:verify
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: program-00-screenshots-${{ github.sha }}
+          path: reports/screenshots/program-00/
+          retention-days: 14
+
+  backend:
+    name: Backend Tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: cd backend && npm ci
+      - run: cd backend && npx prisma generate
+      - run: |
+          cd backend && node --import tsx --test \
+            tests/role-onboarding.test.ts \
+            tests/universal-membership.test.ts \
+            tests/resource-permissions.test.ts
+
+  executive-dashboard:
+    name: Generate Executive Dashboard
+    runs-on: ubuntu-latest
+    needs: [frontend]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - run: npm run dashboard:executive
+      - uses: actions/upload-artifact@v4
+        with:
+          name: executive-dashboard
+          path: |
+            reports/EXECUTIVE_DASHBOARD.md
+            reports/EXECUTIVE_DASHBOARD.json
+          retention-days: 30

@@ -1,0 +1,255 @@
+{
+  "epic": "2A",
+  "title": "California Legislative Intelligence Engine",
+  "version": "1.0.0",
+  "createdAt": "2026-07-04T19:15:00Z",
+  "assessmentComplete": true,
+  "currentState": {
+    "leginfoIntegration": true,
+    "discoveryModule": "backend/src/legislative/",
+    "statutesInDatabase": 0,
+    "calcrimCoveragePercent": 0.5,
+    "dataQualityScore": 3.6,
+    "pipelineStagesComplete": 6,
+    "penDiscoverySample": {
+      "sectionsDiscovered": 207,
+      "pagesFetched": 30,
+      "status": "partial",
+      "manifest": "backend/data/legislative/discovery/PEN-discovery-manifest.json"
+    }
+  },
+  "reports": {
+    "architecture": "reports/epic-2a/ARCHITECTURE.md",
+    "dataQuality": "reports/epic-2a/DATA_QUALITY_REPORT.md",
+    "performance": "reports/epic-2a/PERFORMANCE_REPORT.md",
+    "coverage": "reports/epic-2a/COVERAGE_REPORT.md",
+    "optimization": "reports/epic-2a/OPTIMIZATION_RECOMMENDATIONS.md"
+  },
+  "items": [
+    {
+      "id": "2A-001",
+      "priority": "P0",
+      "tier": 0,
+      "title": "Leginfo code discovery — enumerate CA codes and section URLs from TOC",
+      "status": "completed",
+      "completedAt": "2026-07-04T19:37:00Z",
+      "verifiedAt": "2026-07-04T19:37:00Z",
+      "dependencies": [],
+      "acceptanceCriteria": [
+        "Discover all sections for Penal Code from leginfo TOC",
+        "Output discovery manifest with code, section, canonical URL",
+        "Audit log of discovery run with timestamp"
+      ],
+      "evidence": {
+        "module": "backend/src/legislative/",
+        "cli": "npm run leginfo:discover -- --code PEN",
+        "tests": "backend/tests/legislative-discovery.test.ts",
+        "sampleManifest": "backend/data/legislative/discovery/PEN-discovery-manifest.json"
+      }
+    },
+    {
+      "id": "2A-002",
+      "priority": "P0",
+      "tier": 0,
+      "title": "Respectful leginfo HTTP acquisition with retry and resume",
+      "status": "completed",
+      "completedAt": "2026-07-04T19:45:00Z",
+      "verifiedAt": "2026-07-04T19:45:00Z",
+      "dependencies": ["2A-001"],
+      "acceptanceCriteria": [
+        "Uses crawlerSafetyService rate limits (1 req/sec/domain)",
+        "Section-level checkpoint in ingestionStateRepository",
+        "Retry with exponential backoff on transient failures",
+        "Stores raw HTML with retrieval timestamp"
+      ],
+      "evidence": {
+        "module": "backend/src/legislative/acquisition.ts",
+        "cli": "npm run leginfo:acquire -- --code PEN --max-sections 3",
+        "tests": "backend/tests/legislative-acquisition.test.ts",
+        "sampleIndex": "backend/data/legislative/raw/PEN/acquisition-index.jsonl"
+      }
+    },
+    {
+      "id": "2A-003",
+      "priority": "P0",
+      "tier": 0,
+      "title": "Leginfo HTML statute parser",
+      "status": "completed",
+      "completedAt": "2026-07-04T19:52:00Z",
+      "verifiedAt": "2026-07-04T19:52:00Z",
+      "dependencies": ["2A-002"],
+      "acceptanceCriteria": [
+        "Extract code, section, title, full text from leginfo HTML",
+        "Handle subdivisions (a), (b)(1) nesting",
+        "Reject ambiguous parses to rejection queue (not silent discard)",
+        "Unit tests against 20 known sections"
+      ],
+      "evidence": {
+        "module": "backend/src/legislative/statuteParser.ts",
+        "tests": "backend/tests/legislative-knowledge-graph.test.ts",
+        "fixture": "backend/tests/fixtures/leginfo/pen-459-section.html"
+      }
+    },
+    {
+      "id": "2A-004",
+      "priority": "P0",
+      "tier": 0,
+      "title": "StatuteRecord schema extension",
+      "status": "completed",
+      "completedAt": "2026-07-04T19:52:00Z",
+      "verifiedAt": "2026-07-04T19:52:00Z",
+      "dependencies": [],
+      "acceptanceCriteria": [
+        "Prisma migration adds code, section, hierarchy, sourceUrl, retrievedAt, effectiveDate",
+        "NormalizedDocument types updated",
+        "Backward compatible with existing legal_documents"
+      ],
+      "evidence": {
+        "migration": "backend/prisma/migrations/20260704200000_statute_record_extension/",
+        "types": "backend/src/legislative/knowledgeGraph/types.ts"
+      }
+    },
+    {
+      "id": "2A-005",
+      "priority": "P0",
+      "tier": 0,
+      "title": "Mount corpus governance API in server",
+      "status": "completed",
+      "completedAt": "2026-07-04T20:00:00Z",
+      "verifiedAt": "2026-07-04T20:00:00Z",
+      "dependencies": [],
+      "acceptanceCriteria": [
+        "registerGovernanceRoutes in server.ts",
+        "POST /api/corpus/ingest triggers pipeline",
+        "Admin auth required"
+      ],
+      "evidence": {
+        "module": "backend/src/governance/governanceRoutes.ts",
+        "ingest": "POST /api/corpus/ingest",
+        "metrics": "GET /api/legislative/metrics",
+        "report": "reports/PRODUCTION_METRICS.json"
+      }
+    },
+    {
+      "id": "2A-006",
+      "priority": "P1",
+      "tier": 1,
+      "title": "Per-record extraction audit log",
+      "status": "completed",
+      "completedAt": "2026-07-04T20:10:00Z",
+      "verifiedAt": "2026-07-04T20:10:00Z",
+      "dependencies": ["2A-003"],
+      "acceptanceCriteria": [
+        "Every extraction attempt logged with success/failure/rejection reason",
+        "Queryable via admin API"
+      ],
+      "evidence": {
+        "module": "backend/src/legislative/extractionAuditLog.ts",
+        "migration": "backend/prisma/migrations/20260704210000_legislative_extraction_audit",
+        "api": "GET /api/legislative/audit",
+        "tests": "backend/tests/legislative-extraction-audit.test.ts",
+        "auditFile": "backend/data/legislative/audit/extraction-audit.jsonl"
+      }
+    },
+    {
+      "id": "2A-007",
+      "priority": "P1",
+      "tier": 1,
+      "title": "Criminal Liability Discovery Engine — evidence-based statutory classification",
+      "status": "completed",
+      "completedAt": "2026-07-04T20:20:00Z",
+      "verifiedAt": "2026-07-04T20:20:00Z",
+      "dependencies": ["2A-001", "2A-003"],
+      "acceptanceCriteria": [
+        "Classify every analyzed statute into statutory categories with evidence",
+        "Detect criminal liability paths beyond Penal Code identity",
+        "Assign discovery priority scores",
+        "Produce liability discovery metrics",
+        "Store classifications in canonical repository with audit trail"
+      ],
+      "evidence": {
+        "module": "backend/src/legislative/liabilityDiscovery/",
+        "cli": "npm run leginfo:classify -- --code PEN",
+        "api": "GET /api/legislative/liability",
+        "repository": "backend/data/legislative/repositories/statute_classifications/",
+        "report": "backend/data/legislative/repositories/liability-discovery-report.json",
+        "tests": "backend/tests/legislative-liability-discovery.test.ts"
+      }
+    },
+    {
+      "id": "2A-008",
+      "priority": "P1",
+      "tier": 1,
+      "title": "Content-hash incremental sync",
+      "status": "pending",
+      "dependencies": ["2A-002", "2A-004"],
+      "acceptanceCriteria": [
+        "Re-run skips sections with unchanged content hash",
+        "Delta report shows added/changed/removed sections"
+      ]
+    },
+    {
+      "id": "2A-011",
+      "priority": "P1",
+      "tier": 2,
+      "title": "Offense discovery from statute text",
+      "status": "completed",
+      "completedAt": "2026-07-04T19:52:00Z",
+      "verifiedAt": "2026-07-04T19:52:00Z",
+      "dependencies": ["2A-003", "2A-004"],
+      "acceptanceCriteria": [
+        "Identify explicit criminal offenses in Penal Code sections",
+        "Link to statute record by code+section",
+        "UNKNOWN when ambiguous"
+      ],
+      "evidence": {
+        "module": "backend/src/legislative/knowledgeGraph/intelligenceExtractor.ts",
+        "sample": "backend/data/legislative/repositories/offenses/records.jsonl"
+      }
+    },
+    {
+      "id": "2A-014",
+      "priority": "P2",
+      "tier": 2,
+      "title": "CALCRIM instruction linker",
+      "status": "pending",
+      "dependencies": ["2A-011"],
+      "acceptanceCriteria": [
+        "Map offenses to CALCRIM instruction numbers",
+        "Replace static calcrimMapping.ts for covered offenses"
+      ]
+    },
+    {
+      "id": "2A-021",
+      "priority": "P2",
+      "tier": 4,
+      "title": "Coverage analytics dashboard",
+      "status": "completed",
+      "completedAt": "2026-07-04T19:52:00Z",
+      "verifiedAt": "2026-07-04T19:52:00Z",
+      "dependencies": ["2A-007"],
+      "acceptanceCriteria": [
+        "Per-code completion percentage",
+        "Failed extraction list",
+        "Last sync timestamp"
+      ],
+      "evidence": {
+        "module": "backend/src/legislative/knowledgeGraph/pipeline.ts",
+        "report": "backend/data/legislative/repositories/coverage-report.json"
+      }
+    },
+    {
+      "id": "2A-022",
+      "priority": "P2",
+      "tier": 4,
+      "title": "Replace searchService.ts stubs with legal_documents query",
+      "status": "pending",
+      "dependencies": ["2A-003"],
+      "acceptanceCriteria": [
+        "Statute search returns live DB results",
+        "No hardcoded PC 459/1538.5/H&S 11350"
+      ]
+    }
+  ],
+  "nextItem": "2A-006"
+}

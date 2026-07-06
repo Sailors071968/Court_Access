@@ -1,8 +1,10 @@
 // ============================================
 // Court Access — AI Defense Insights Service
+// Returns empty results — real AI analysis will populate
+// data only after evidence is uploaded and processed.
 // ============================================
 
-import type { DefenseInsight } from '../../types';
+import type { DefenseInsight } from '../../models/IntelligenceModel';
 
 export interface DefenseInsightsRequest {
   caseId: string;
@@ -15,26 +17,11 @@ export interface DefenseInsightsResponse {
 }
 
 export async function getDefenseInsights(
-  request: DefenseInsightsRequest
+  _request: DefenseInsightsRequest
 ): Promise<DefenseInsightsResponse> {
-  // Mock implementation — will be replaced with real API
-  await new Promise((resolve) => setTimeout(resolve, 500));
-
+  // No mock data — returns empty until real AI pipeline is wired
   return {
-    insights: [
-      {
-        id: '1',
-        content: `Element 2 (intent) is the weakest point in prosecution case for case ${request.caseId}`,
-      },
-      {
-        id: '2',
-        content: 'Motion to suppress may eliminate key evidence for Element 1',
-      },
-      {
-        id: '3',
-        content: 'Consider challenging nighttime enhancement if time cannot be proven',
-      },
-    ],
+    insights: [],
     generatedAt: new Date().toISOString(),
   };
 }

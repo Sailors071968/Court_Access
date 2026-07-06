@@ -1,0 +1,859 @@
+{
+  "phase": 87,
+  "title": "Classification Accuracy Report",
+  "generatedAt": "2026-03-09T19:58:40.511Z",
+  "summary": {
+    "totalDocumentsClassified": 1701,
+    "documentsWithTopic": 1701,
+    "documentsWithoutTopic": 0,
+    "averageConfidence": 0.96,
+    "medianConfidence": 0.95,
+    "accuracyEstimate": 97.35,
+    "aboveThreshold": true,
+    "documentsFlaggedForReview": 45,
+    "validationRuntimeMs": 186
+  },
+  "confidenceDistribution": {
+    "high": 1701,
+    "medium": 0,
+    "low": 0,
+    "veryLow": 0
+  },
+  "confidenceScoreBuckets": {
+    "0.90-1.00": 1701,
+    "0.80-0.89": 0,
+    "0.70-0.79": 0,
+    "0.65-0.69": 0,
+    "below_0.65_flagged": 0
+  },
+  "topicDistribution": {
+    "Use_of_Force": 9,
+    "Officer_Conduct": 7,
+    "Internal_Affairs": 7,
+    "Discipline": 6,
+    "Arrest": 7,
+    "Records": 1,
+    "Search_Seizure": 7,
+    "Pursuit": 6
+  },
+  "categoryBreakdown": [
+    {
+      "category": "USE_OF_FORCE",
+      "totalDocuments": 102,
+      "averageConfidence": 0.98,
+      "highConfidenceCount": 102,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 55.88
+    },
+    {
+      "category": "Use_of_Force",
+      "totalDocuments": 91,
+      "averageConfidence": 0.96,
+      "highConfidenceCount": 91,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "Internal_Affairs",
+      "totalDocuments": 79,
+      "averageConfidence": 0.96,
+      "highConfidenceCount": 79,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "Training",
+      "totalDocuments": 67,
+      "averageConfidence": 0.97,
+      "highConfidenceCount": 67,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "Discipline",
+      "totalDocuments": 64,
+      "averageConfidence": 0.96,
+      "highConfidenceCount": 64,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "Officer_Conduct",
+      "totalDocuments": 63,
+      "averageConfidence": 0.96,
+      "highConfidenceCount": 63,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "Pursuit",
+      "totalDocuments": 62,
+      "averageConfidence": 0.96,
+      "highConfidenceCount": 62,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "Traffic",
+      "totalDocuments": 62,
+      "averageConfidence": 0.96,
+      "highConfidenceCount": 62,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "Arrest",
+      "totalDocuments": 60,
+      "averageConfidence": 0.96,
+      "highConfidenceCount": 60,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "BODY_CAMERA",
+      "totalDocuments": 58,
+      "averageConfidence": 0.97,
+      "highConfidenceCount": 58,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "Search_Seizure",
+      "totalDocuments": 54,
+      "averageConfidence": 0.96,
+      "highConfidenceCount": 54,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "Body_Camera",
+      "totalDocuments": 54,
+      "averageConfidence": 0.96,
+      "highConfidenceCount": 54,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "Evidence_Handling",
+      "totalDocuments": 54,
+      "averageConfidence": 0.96,
+      "highConfidenceCount": 54,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "OIS",
+      "totalDocuments": 49,
+      "averageConfidence": 0.97,
+      "highConfidenceCount": 49,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "PURSUIT",
+      "totalDocuments": 48,
+      "averageConfidence": 0.96,
+      "highConfidenceCount": 48,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "DISCIPLINE",
+      "totalDocuments": 48,
+      "averageConfidence": 0.96,
+      "highConfidenceCount": 48,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "OFFICER_INVOLVED_SHOOTING",
+      "totalDocuments": 48,
+      "averageConfidence": 0.96,
+      "highConfidenceCount": 48,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "TRAINING",
+      "totalDocuments": 48,
+      "averageConfidence": 0.96,
+      "highConfidenceCount": 48,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "INTERNAL_AFFAIRS",
+      "totalDocuments": 48,
+      "averageConfidence": 0.96,
+      "highConfidenceCount": 48,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "Critical_Incident",
+      "totalDocuments": 47,
+      "averageConfidence": 0.97,
+      "highConfidenceCount": 47,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "Records",
+      "totalDocuments": 46,
+      "averageConfidence": 0.97,
+      "highConfidenceCount": 46,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "FTO",
+      "totalDocuments": 45,
+      "averageConfidence": 0.96,
+      "highConfidenceCount": 45,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "Interrogation",
+      "totalDocuments": 42,
+      "averageConfidence": 0.96,
+      "highConfidenceCount": 42,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "Special_Units",
+      "totalDocuments": 40,
+      "averageConfidence": 0.96,
+      "highConfidenceCount": 40,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "K9",
+      "totalDocuments": 36,
+      "averageConfidence": 0.97,
+      "highConfidenceCount": 36,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "RECORDS",
+      "totalDocuments": 36,
+      "averageConfidence": 0.97,
+      "highConfidenceCount": 36,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "BRADY",
+      "totalDocuments": 36,
+      "averageConfidence": 0.97,
+      "highConfidenceCount": 36,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "TRAFFIC",
+      "totalDocuments": 36,
+      "averageConfidence": 0.97,
+      "highConfidenceCount": 36,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "DUI_ENFORCEMENT",
+      "totalDocuments": 36,
+      "averageConfidence": 0.97,
+      "highConfidenceCount": 36,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "ACTIVE_SHOOTER",
+      "totalDocuments": 36,
+      "averageConfidence": 0.97,
+      "highConfidenceCount": 36,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "SWAT",
+      "totalDocuments": 36,
+      "averageConfidence": 0.97,
+      "highConfidenceCount": 36,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "Informants",
+      "totalDocuments": 35,
+      "averageConfidence": 0.96,
+      "highConfidenceCount": 35,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    },
+    {
+      "category": "Custody",
+      "totalDocuments": 35,
+      "averageConfidence": 0.96,
+      "highConfidenceCount": 35,
+      "lowConfidenceCount": 0,
+      "estimatedAccuracy": 100
+    }
+  ],
+  "flaggedForReview": [
+    {
+      "documentId": "0012edaf-7d3a-45d2-a772-05d221def62d",
+      "title": "Stockton Police Department — Search and Seizure Policy",
+      "agencyName": "Stockton Police Department",
+      "topicName": "Use of Force — Force Review Board Procedures",
+      "category": "USE_OF_FORCE",
+      "confidence": 1,
+      "isCorrect": false,
+      "matchReason": "No keyword overlap between title and assigned topic"
+    },
+    {
+      "documentId": "e71cbe55-1068-45b7-95e9-ba8894f86bea",
+      "title": "Santa Ana Police Department — Duty to Intervene Policy",
+      "agencyName": "Santa Ana Police Department",
+      "topicName": "Use of Force — Force Review Board Procedures",
+      "category": "USE_OF_FORCE",
+      "confidence": 1,
+      "isCorrect": false,
+      "matchReason": "No keyword overlap between title and assigned topic"
+    },
+    {
+      "documentId": "9bd65d99-b5bd-4d70-a3fe-8df89bb2594a",
+      "title": "Oakland Police Department — Search and Seizure Policy",
+      "agencyName": "Oakland Police Department",
+      "topicName": "Use of Force — Force Review Board Procedures",
+      "category": "USE_OF_FORCE",
+      "confidence": 1,
+      "isCorrect": false,
+      "matchReason": "No keyword overlap between title and assigned topic"
+    },
+    {
+      "documentId": "b2af7ac5-b33c-4f31-b3d6-8f3a5309a7e7",
+      "title": "Long Beach Police Department — K-9 Unit Policy",
+      "agencyName": "Long Beach Police Department",
+      "topicName": "Use of Force — Force Review Board Procedures",
+      "category": "USE_OF_FORCE",
+      "confidence": 1,
+      "isCorrect": false,
+      "matchReason": "No keyword overlap between title and assigned topic"
+    },
+    {
+      "documentId": "48152ba0-48d1-4167-805b-0cd324361389",
+      "title": "Los Angeles Police Department — Duty to Intervene Policy",
+      "agencyName": "Los Angeles Police Department",
+      "topicName": "Use of Force — Force Review Board Procedures",
+      "category": "USE_OF_FORCE",
+      "confidence": 1,
+      "isCorrect": false,
+      "matchReason": "No keyword overlap between title and assigned topic"
+    },
+    {
+      "documentId": "6403409c-655f-4c1f-9bb6-4a905cbd06ae",
+      "title": "Los Angeles Police Department — De-escalation Policy",
+      "agencyName": "Los Angeles Police Department",
+      "topicName": "Use of Force — Force Review Board Procedures",
+      "category": "USE_OF_FORCE",
+      "confidence": 1,
+      "isCorrect": false,
+      "matchReason": "No keyword overlap between title and assigned topic"
+    },
+    {
+      "documentId": "8db162f2-739b-46d9-8846-1b76997de9ec",
+      "title": "Los Angeles Police Department — Taser/Electronic Control Weapon Policy",
+      "agencyName": "Los Angeles Police Department",
+      "topicName": "Use of Force — Force Review Board Procedures",
+      "category": "USE_OF_FORCE",
+      "confidence": 1,
+      "isCorrect": false,
+      "matchReason": "No keyword overlap between title and assigned topic"
+    },
+    {
+      "documentId": "698ef257-70bd-4fad-8d6b-b082aa0233ba",
+      "title": "San Diego Police Department — Duty to Intervene Policy",
+      "agencyName": "San Diego Police Department",
+      "topicName": "Use of Force — Force Review Board Procedures",
+      "category": "USE_OF_FORCE",
+      "confidence": 1,
+      "isCorrect": false,
+      "matchReason": "No keyword overlap between title and assigned topic"
+    },
+    {
+      "documentId": "6ee1b44b-8af2-4dd2-83b3-5c3aa942517f",
+      "title": "San Diego Police Department — De-escalation Policy",
+      "agencyName": "San Diego Police Department",
+      "topicName": "Use of Force — Force Review Board Procedures",
+      "category": "USE_OF_FORCE",
+      "confidence": 1,
+      "isCorrect": false,
+      "matchReason": "No keyword overlap between title and assigned topic"
+    },
+    {
+      "documentId": "8ef33f70-82fe-4b9a-9ce8-0eb938fe71aa",
+      "title": "San Diego Police Department — Mental Health Crisis Response",
+      "agencyName": "San Diego Police Department",
+      "topicName": "Use of Force — Force Review Board Procedures",
+      "category": "USE_OF_FORCE",
+      "confidence": 1,
+      "isCorrect": false,
+      "matchReason": "No keyword overlap between title and assigned topic"
+    },
+    {
+      "documentId": "ef3796a2-817a-42c7-847f-979311bd96f1",
+      "title": "San Jose Police Department — De-escalation Policy",
+      "agencyName": "San Jose Police Department",
+      "topicName": "Use of Force — Force Review Board Procedures",
+      "category": "USE_OF_FORCE",
+      "confidence": 1,
+      "isCorrect": false,
+      "matchReason": "No keyword overlap between title and assigned topic"
+    },
+    {
+      "documentId": "db427ed3-cd1d-462b-a5b6-497eaf2a9ffb",
+      "title": "San Jose Police Department — Taser/Electronic Control Weapon Policy",
+      "agencyName": "San Jose Police Department",
+      "topicName": "Use of Force — Force Review Board Procedures",
+      "category": "USE_OF_FORCE",
+      "confidence": 1,
+      "isCorrect": false,
+      "matchReason": "No keyword overlap between title and assigned topic"
+    },
+    {
+      "documentId": "08630ec0-7452-49d8-97cd-013a91092977",
+      "title": "San Jose Police Department — Community Policing Policy",
+      "agencyName": "San Jose Police Department",
+      "topicName": "Use of Force — Force Review Board Procedures",
+      "category": "USE_OF_FORCE",
+      "confidence": 1,
+      "isCorrect": false,
+      "matchReason": "No keyword overlap between title and assigned topic"
+    },
+    {
+      "documentId": "6b91eccd-fc27-4cd7-8c15-ed883f2d7945",
+      "title": "San Jose Police Department — K-9 Unit Policy",
+      "agencyName": "San Jose Police Department",
+      "topicName": "Use of Force — Force Review Board Procedures",
+      "category": "USE_OF_FORCE",
+      "confidence": 1,
+      "isCorrect": false,
+      "matchReason": "No keyword overlap between title and assigned topic"
+    },
+    {
+      "documentId": "61ba4682-0b35-4f00-9e64-1250156d8e0b",
+      "title": "Sacramento Police Department — Community Policing Policy",
+      "agencyName": "Sacramento Police Department",
+      "topicName": "Use of Force — Force Review Board Procedures",
+      "category": "USE_OF_FORCE",
+      "confidence": 1,
+      "isCorrect": false,
+      "matchReason": "No keyword overlap between title and assigned topic"
+    },
+    {
+      "documentId": "aab66f94-8ca2-4d7d-93f0-c5ffd933cd0a",
+      "title": "San Jose Police Department — Search and Seizure Policy",
+      "agencyName": "San Jose Police Department",
+      "topicName": "Use of Force — Force Review Board Procedures",
+      "category": "USE_OF_FORCE",
+      "confidence": 1,
+      "isCorrect": false,
+      "matchReason": "No keyword overlap between title and assigned topic"
+    },
+    {
+      "documentId": "5c7e4cbc-4308-4205-b64e-d20d4e49e24c",
+      "title": "Sacramento Police Department — Search and Seizure Policy",
+      "agencyName": "Sacramento Police Department",
+      "topicName": "Use of Force — Force Review Board Procedures",
+      "category": "USE_OF_FORCE",
+      "confidence": 1,
+      "isCorrect": false,
+      "matchReason": "No keyword overlap between title and assigned topic"
+    },
+    {
+      "documentId": "3fd163df-3823-4a7b-8ebf-bcc7a0906fde",
+      "title": "Sacramento Police Department — De-escalation Policy",
+      "agencyName": "Sacramento Police Department",
+      "topicName": "Use of Force — Force Review Board Procedures",
+      "category": "USE_OF_FORCE",
+      "confidence": 1,
+      "isCorrect": false,
+      "matchReason": "No keyword overlap between title and assigned topic"
+    },
+    {
+      "documentId": "8e20724c-adf5-46fa-9028-50dbcd3be083",
+      "title": "Sacramento Police Department — Taser/Electronic Control Weapon Policy",
+      "agencyName": "Sacramento Police Department",
+      "topicName": "Use of Force — Force Review Board Procedures",
+      "category": "USE_OF_FORCE",
+      "confidence": 1,
+      "isCorrect": false,
+      "matchReason": "No keyword overlap between title and assigned topic"
+    },
+    {
+      "documentId": "da68eef5-d56c-41c4-bb3f-27433b1636e3",
+      "title": "Sacramento Police Department — Mental Health Crisis Response",
+      "agencyName": "Sacramento Police Department",
+      "topicName": "Use of Force — Force Review Board Procedures",
+      "category": "USE_OF_FORCE",
+      "confidence": 1,
+      "isCorrect": false,
+      "matchReason": "No keyword overlap between title and assigned topic"
+    }
+  ],
+  "samplePolicies": [
+    {
+      "policyTitle": "CHP: Less-Lethal Weapons Deployment",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Less-Lethal Weapons Deployment",
+      "topicCategory": "Use_of_Force",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: De-Escalation Requirements",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "De-Escalation Requirements",
+      "topicCategory": "Use_of_Force",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Force Continuum / Force Options",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Force Continuum / Force Options",
+      "topicCategory": "Use_of_Force",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: OC Spray / Chemical Agents",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "OC Spray / Chemical Agents",
+      "topicCategory": "Use_of_Force",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Force Reporting Requirements",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Force Reporting Requirements",
+      "topicCategory": "Use_of_Force",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Force Review Board Process",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Force Review Board Process",
+      "topicCategory": "Use_of_Force",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Taser / CEW Policy",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Taser / CEW Policy",
+      "topicCategory": "Use_of_Force",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Warning Requirements Before Force",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Warning Requirements Before Force",
+      "topicCategory": "Use_of_Force",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Code of Ethics / Standards of Conduct",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Code of Ethics / Standards of Conduct",
+      "topicCategory": "Officer_Conduct",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Bias-Free Policing / Racial Profiling Prohibition",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Bias-Free Policing / Racial Profiling Prohibition",
+      "topicCategory": "Officer_Conduct",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Off-Duty Conduct Standards",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Off-Duty Conduct Standards",
+      "topicCategory": "Officer_Conduct",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Conflict of Interest / Gratuities",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Conflict of Interest / Gratuities",
+      "topicCategory": "Officer_Conduct",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Truthfulness / Brady Disclosure Obligations",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Truthfulness / Brady Disclosure Obligations",
+      "topicCategory": "Officer_Conduct",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Secondary Employment Rules",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Secondary Employment Rules",
+      "topicCategory": "Officer_Conduct",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Courtesy and Professionalism",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Courtesy and Professionalism",
+      "topicCategory": "Officer_Conduct",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Duty to Intervene",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Duty to Intervene",
+      "topicCategory": "Use_of_Force",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Administrative vs Criminal Investigations",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Administrative vs Criminal Investigations",
+      "topicCategory": "Internal_Affairs",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Sustained / Exonerated / Unfounded Findings",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Sustained / Exonerated / Unfounded Findings",
+      "topicCategory": "Internal_Affairs",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: POBR (Peace Officer Bill of Rights) Compliance",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "POBR (Peace Officer Bill of Rights) Compliance",
+      "topicCategory": "Internal_Affairs",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Early Warning System / At-Risk Officer Tracking",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Early Warning System / At-Risk Officer Tracking",
+      "topicCategory": "Internal_Affairs",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Investigation Timeline Requirements",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Investigation Timeline Requirements",
+      "topicCategory": "Internal_Affairs",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Witness Interview Procedures (IA)",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Witness Interview Procedures (IA)",
+      "topicCategory": "Internal_Affairs",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Progressive Discipline Framework",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Progressive Discipline Framework",
+      "topicCategory": "Discipline",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Skelly Hearing Procedures",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Skelly Hearing Procedures",
+      "topicCategory": "Discipline",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Warrantless Arrest Procedures",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Warrantless Arrest Procedures",
+      "topicCategory": "Arrest",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Termination Criteria and Process",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Termination Criteria and Process",
+      "topicCategory": "Discipline",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Mitigating / Aggravating Factors",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Mitigating / Aggravating Factors",
+      "topicCategory": "Discipline",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Grievance and Appeal Process",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Grievance and Appeal Process",
+      "topicCategory": "Discipline",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Written Reprimand Standards",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Written Reprimand Standards",
+      "topicCategory": "Discipline",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Arrest Authority and Standards",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Arrest Authority and Standards",
+      "topicCategory": "Arrest",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Probable Cause Determination",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Probable Cause Determination",
+      "topicCategory": "Arrest",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "San Jose Police Department — Records Release and Transparency",
+      "agencyName": "San Jose Police Department",
+      "detectedTopic": "CPRA (California Public Records Act) Compliance",
+      "topicCategory": "Records",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Citizen Complaint Intake Process",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Citizen Complaint Intake Process",
+      "topicCategory": "Internal_Affairs",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Custodial Arrest and Transport",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Custodial Arrest and Transport",
+      "topicCategory": "Arrest",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Handcuffing and Restraint During Arrest",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Handcuffing and Restraint During Arrest",
+      "topicCategory": "Arrest",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Arrest Documentation Requirements",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Arrest Documentation Requirements",
+      "topicCategory": "Arrest",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Juvenile Arrest Procedures",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Juvenile Arrest Procedures",
+      "topicCategory": "Arrest",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Search Warrant Procedures",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Search Warrant Procedures",
+      "topicCategory": "Search_Seizure",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Consent Search Protocols",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Consent Search Protocols",
+      "topicCategory": "Search_Seizure",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Stop-and-Frisk / Pat Down Standards",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Stop-and-Frisk / Pat Down Standards",
+      "topicCategory": "Search_Seizure",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Digital Device Search Requirements",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Digital Device Search Requirements",
+      "topicCategory": "Search_Seizure",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Strip Search / Body Cavity Search Restrictions",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Strip Search / Body Cavity Search Restrictions",
+      "topicCategory": "Search_Seizure",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Exigent Circumstances Searches",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Exigent Circumstances Searches",
+      "topicCategory": "Search_Seizure",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Inventory Search Procedures",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Inventory Search Procedures",
+      "topicCategory": "Search_Seizure",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Pursuit Termination Criteria",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Pursuit Termination Criteria",
+      "topicCategory": "Pursuit",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: PIT Maneuver Authorization",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "PIT Maneuver Authorization",
+      "topicCategory": "Pursuit",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Spike Strip / Tire Deflation Policy",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Spike Strip / Tire Deflation Policy",
+      "topicCategory": "Pursuit",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Pursuit Supervisor Responsibilities",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Pursuit Supervisor Responsibilities",
+      "topicCategory": "Pursuit",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Emergency Vehicle Operation",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Emergency Vehicle Operation",
+      "topicCategory": "Pursuit",
+      "confidenceScore": 1
+    },
+    {
+      "policyTitle": "CHP: Pursuit Reporting Requirements",
+      "agencyName": "California Highway Patrol",
+      "detectedTopic": "Pursuit Reporting Requirements",
+      "topicCategory": "Pursuit",
+      "confidenceScore": 1
+    }
+  ]
+}

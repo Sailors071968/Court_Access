@@ -59,11 +59,19 @@ interface StatCardProps {
   label: string;
   trend?: string;
   highlight?: boolean;
+  onClick?: () => void;
 }
 
-export function StatCard({ icon, value, label, trend, highlight = false }: StatCardProps) {
+export function StatCard({ icon, value, label, trend, highlight = false, onClick }: StatCardProps) {
   return (
-    <div className={`rounded-xl border p-5 ${highlight ? 'bg-amber-50 border-amber-200' : 'bg-white border-gray-200'}`}>
+    <div
+      className={`rounded-xl border p-5 ${highlight ? 'bg-amber-50 border-amber-200' : 'bg-white border-gray-200'} ${onClick ? 'cursor-pointer hover:shadow-md transition-shadow' : ''}`}
+      onClick={onClick}
+      role={onClick ? 'button' : undefined}
+      aria-label={label}
+      tabIndex={onClick ? 0 : undefined}
+      onKeyDown={onClick ? (e) => { if (e.key === 'Enter' || e.key === ' ') onClick(); } : undefined}
+    >
       <div className="flex items-center justify-center mb-3 text-slate-600">
         {icon}
       </div>

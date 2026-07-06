@@ -1,0 +1,228 @@
+{
+  "generatedAt": "2026-07-04T21:47:33.043Z",
+  "operationalWebsite": {
+    "backendApi": "OPERATIONAL",
+    "legislativePipeline": "OPERATIONAL",
+    "corpusGovernance": "OPERATIONAL"
+  },
+  "attorneyWorkflows": {
+    "authenticate": true,
+    "createClients": true,
+    "createCases": true,
+    "uploadEvidence": true,
+    "processEvidence": true,
+    "reviewFacts": true,
+    "reviewTimelines": true,
+    "reviewContradictions": true,
+    "reviewAuthorities": false,
+    "reviewOffenses": false,
+    "reviewCalcrim": false,
+    "generateReports": true,
+    "exportPackages": true,
+    "completionPercent": 77
+  },
+  "californiaLegalCoverage": {
+    "codesDiscovered": 1,
+    "codesTotal": 30,
+    "sectionsDiscovered": 207,
+    "sectionsAcquired": 3,
+    "sectionsParsed": 4,
+    "criminalOffenses": 2
+  },
+  "repositoryIntegrity": "PASS",
+  "knowledgeGraphCoverage": {
+    "statutes": 4,
+    "offenses": 2,
+    "elements": 4,
+    "mensRea": 2,
+    "crossReferences": 13,
+    "calcrimLinks": 1,
+    "authorities": 13
+  },
+  "calcrimCoveragePercent": 50,
+  "authorityCoveragePercent": 100,
+  "evidenceCoverage": {
+    "repositoryRecords": 4,
+    "status": "PARTIAL"
+  },
+  "extractionAudit": {
+    "total": 12,
+    "success": 8,
+    "rejected": 0,
+    "partial": 4,
+    "withOffenses": 2
+  },
+  "liabilityDiscovery": {
+    "generatedAt": "2026-07-04T21:47:32.792Z",
+    "classifierVersion": "1.0.0",
+    "californiaCodesDiscovered": 1,
+    "californiaCodesTotal": 30,
+    "codesAnalyzed": 1,
+    "statutesClassified": 3,
+    "likelyCriminalStatutes": 1,
+    "confirmedCriminalOffenses": 1,
+    "regulatoryIncorporationCandidates": 0,
+    "manualReviewQueue": 2,
+    "unknownClassifications": 0,
+    "byClassification": {
+      "criminal_offense": 1,
+      "criminal_penalty": 0,
+      "criminal_enhancement": 0,
+      "sentencing_provision": 1,
+      "definitions": 0,
+      "procedure": 0,
+      "evidence": 0,
+      "regulatory_incorporation": 0,
+      "licensing": 0,
+      "administrative": 0,
+      "civil": 0,
+      "tax": 0,
+      "environmental": 0,
+      "cross_reference": 1,
+      "unknown": 0
+    },
+    "byPriority": {
+      "critical": 1,
+      "high": 0,
+      "medium": 0,
+      "low": 0,
+      "deferred": 2
+    },
+    "byCode": {
+      "PEN": {
+        "classified": 3,
+        "likelyCriminal": 1,
+        "confirmedOffenses": 1
+      }
+    }
+  },
+  "outstandingBlockers": [
+    "1A-012: Live Stripe Test Mode API certification in staging"
+  ],
+  "technicalDebt": [
+    "2A-008: Content-hash incremental sync",
+    "2A-014: CALCRIM instruction linker",
+    "2A-022: Replace searchService.ts stubs with legal_documents query",
+    "1A-010: Wire internal discount codes to Stripe checkout prices",
+    "1A-011: Stripe CLI integration tests in CI"
+  ],
+  "productionMetrics": {
+    "generatedAt": "2026-07-04T21:47:32.792Z",
+    "californiaCodes": {
+      "discovered": 1,
+      "total": 30
+    },
+    "sectionsDiscovered": 207,
+    "sectionsAcquired": 3,
+    "sectionsParsed": 4,
+    "criminalOffenses": 2,
+    "offenseElements": 4,
+    "mensReaCoveragePercent": 100,
+    "authorityCoveragePercent": 100,
+    "calcrimMappings": 1,
+    "calcrimCoveragePercent": 50,
+    "repositoryIntegrity": "PASS",
+    "parsingFailures": 0,
+    "manualReviewQueue": 2,
+    "repositories": {
+      "statutes": 4,
+      "offenses": 2,
+      "elements": 4,
+      "mens_rea": 2,
+      "exceptions": 3,
+      "defenses": 0,
+      "cross_references": 13,
+      "regulatory_incorporations": 2,
+      "calcrim_links": 1,
+      "authorities": 13,
+      "statute_classifications": 3
+    },
+    "liabilityDiscovery": {
+      "generatedAt": "2026-07-04T21:47:32.792Z",
+      "classifierVersion": "1.0.0",
+      "californiaCodesDiscovered": 1,
+      "californiaCodesTotal": 30,
+      "codesAnalyzed": 1,
+      "statutesClassified": 3,
+      "likelyCriminalStatutes": 1,
+      "confirmedCriminalOffenses": 1,
+      "regulatoryIncorporationCandidates": 0,
+      "manualReviewQueue": 2,
+      "unknownClassifications": 0,
+      "byClassification": {
+        "criminal_offense": 1,
+        "criminal_penalty": 0,
+        "criminal_enhancement": 0,
+        "sentencing_provision": 1,
+        "definitions": 0,
+        "procedure": 0,
+        "evidence": 0,
+        "regulatory_incorporation": 0,
+        "licensing": 0,
+        "administrative": 0,
+        "civil": 0,
+        "tax": 0,
+        "environmental": 0,
+        "cross_reference": 1,
+        "unknown": 0
+      },
+      "byPriority": {
+        "critical": 1,
+        "high": 0,
+        "medium": 0,
+        "low": 0,
+        "deferred": 2
+      },
+      "byCode": {
+        "PEN": {
+          "classified": 3,
+          "likelyCriminal": 1,
+          "confirmedOffenses": 1
+        }
+      }
+    },
+    "backendCompile": "UNKNOWN",
+    "frontendCompile": "UNKNOWN",
+    "e2eWorkflows": {
+      "passed": 0,
+      "total": 0,
+      "status": "UNKNOWN"
+    }
+  },
+  "nextRecommendedTasks": [
+    {
+      "id": "1A-012",
+      "priority": "P0",
+      "title": "Live Stripe Test Mode API certification in staging"
+    },
+    {
+      "id": "2A-008",
+      "priority": "P1",
+      "title": "Content-hash incremental sync"
+    },
+    {
+      "id": "2A-014",
+      "priority": "P2",
+      "title": "CALCRIM instruction linker"
+    },
+    {
+      "id": "2A-022",
+      "priority": "P2",
+      "title": "Replace searchService.ts stubs with legal_documents query"
+    },
+    {
+      "id": "1A-010",
+      "priority": "P2",
+      "title": "Wire internal discount codes to Stripe checkout prices"
+    }
+  ],
+  "productionGates": {
+    "overallResult": "NOT_READY",
+    "passCount": 0,
+    "failCount": 0,
+    "partialCount": 0,
+    "skipCount": 0,
+    "deploymentBlocked": true,
+    "gates": []
+  }
+}

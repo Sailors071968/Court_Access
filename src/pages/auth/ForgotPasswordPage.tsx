@@ -6,13 +6,37 @@ import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Scale, ArrowLeft } from 'lucide-react';
 
+const API_BASE = import.meta.env.VITE_API_URL || '/api';
+
 export function ForgotPasswordPage() {
   const [email, setEmail] = useState('');
   const [submitted, setSubmitted] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    setError('');
+    setLoading(true);
+
+    try {
+      const res = await fetch(`${API_BASE}/auth/forgot-password`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email.trim().toLowerCase() }),
+      });
+
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({ error: 'Request failed' }));
+        throw new Error(data.error || 'Request failed');
+      }
+
+      setSubmitted(true);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -34,7 +58,7 @@ export function ForgotPasswordPage() {
                 <span className="text-2xl">✉️</span>
               </div>
               <h2 className="text-xl font-semibold text-gray-900 mb-2">Check your email</h2>
-              <p className="text-gray-500 text-sm mb-6">We sent a password reset link to <strong>{email}</strong></p>
+              <p className="text-gray-500 text-sm mb-6">If an account exists for <strong>{email}</strong>, we sent a password reset link.</p>
               <Link to="/login" className="text-blue-600 hover:text-blue-700 font-medium text-sm">
                 <ArrowLeft size={14} className="inline mr-1" />
                 Back to sign in
@@ -44,13 +68,14 @@ export function ForgotPasswordPage() {
             <>
               <h2 className="text-xl font-semibold text-gray-900 mb-2">Forgot your password?</h2>
               <p className="text-gray-500 text-sm mb-6">Enter your email and we'll send you a reset link.</p>
+              {error && <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm">{error}</div>}
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label htmlFor="forgot-email" className="block text-sm font-medium text-gray-700 mb-1">Email address</label>
                   <input id="forgot-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required />
                 </div>
-                <button type="submit" className="w-full bg-slate-800 text-white py-2.5 rounded-lg font-medium text-sm hover:bg-slate-700 transition-colors">
-                  Send reset link
+                <button type="submit" disabled={loading} className="w-full bg-slate-800 text-white py-2.5 rounded-lg font-medium text-sm hover:bg-slate-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+                  {loading ? 'Sending...' : 'Send reset link'}
                 </button>
               </form>
               <div className="mt-4 text-center">

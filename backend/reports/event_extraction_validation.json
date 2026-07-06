@@ -1,0 +1,1487 @@
+{
+  "phase": "Phase 160 — Event Extraction Validation",
+  "generatedAt": "2026-03-10T13:46:47.385Z",
+  "totalTestCases": 50,
+  "aggregateMetrics": {
+    "totalExpectedEvents": 173,
+    "totalDetectedEvents": 262,
+    "totalTruePositives": 162,
+    "totalFalsePositives": 1,
+    "totalMissedEvents": 11,
+    "overallPrecision": 0.9938650306748467,
+    "overallRecall": 0.9364161849710982,
+    "overallF1Score": 0.9642857142857142,
+    "averageConfidence": 0.7256297709923666,
+    "confidenceDistribution": {
+      "high": 25,
+      "medium": 237,
+      "low": 0
+    }
+  },
+  "eventTypeAccuracy": {
+    "verbal_command": {
+      "expected": 23,
+      "detected": 21,
+      "truePositives": 19,
+      "precision": 0.9047619047619048,
+      "recall": 0.8260869565217391
+    },
+    "uof_warning": {
+      "expected": 5,
+      "detected": 5,
+      "truePositives": 4,
+      "precision": 0.8,
+      "recall": 0.8
+    },
+    "taser_deployed": {
+      "expected": 4,
+      "detected": 5,
+      "truePositives": 4,
+      "precision": 0.8,
+      "recall": 1
+    },
+    "suspect_restrained": {
+      "expected": 14,
+      "detected": 15,
+      "truePositives": 14,
+      "precision": 0.9333333333333333,
+      "recall": 1
+    },
+    "handcuffing": {
+      "expected": 26,
+      "detected": 26,
+      "truePositives": 26,
+      "precision": 1,
+      "recall": 1
+    },
+    "medical_attention": {
+      "expected": 24,
+      "detected": 25,
+      "truePositives": 24,
+      "precision": 0.96,
+      "recall": 1
+    },
+    "prone_restraint": {
+      "expected": 3,
+      "detected": 3,
+      "truePositives": 3,
+      "precision": 1,
+      "recall": 1
+    },
+    "compliance_command": {
+      "expected": 9,
+      "detected": 10,
+      "truePositives": 9,
+      "precision": 0.9,
+      "recall": 1
+    },
+    "neck_restraint": {
+      "expected": 1,
+      "detected": 1,
+      "truePositives": 1,
+      "precision": 1,
+      "recall": 1
+    },
+    "physical_strike": {
+      "expected": 7,
+      "detected": 6,
+      "truePositives": 6,
+      "precision": 1,
+      "recall": 0.8571428571428571
+    },
+    "pepper_spray": {
+      "expected": 2,
+      "detected": 2,
+      "truePositives": 2,
+      "precision": 1,
+      "recall": 1
+    },
+    "officer_proximity": {
+      "expected": 7,
+      "detected": 7,
+      "truePositives": 5,
+      "precision": 0.7142857142857143,
+      "recall": 0.7142857142857143
+    },
+    "weapon_drawn": {
+      "expected": 7,
+      "detected": 7,
+      "truePositives": 7,
+      "precision": 1,
+      "recall": 1
+    },
+    "shots_fired": {
+      "expected": 2,
+      "detected": 2,
+      "truePositives": 2,
+      "precision": 1,
+      "recall": 1
+    },
+    "baton_strike": {
+      "expected": 2,
+      "detected": 2,
+      "truePositives": 2,
+      "precision": 1,
+      "recall": 1
+    },
+    "foot_pursuit": {
+      "expected": 4,
+      "detected": 4,
+      "truePositives": 4,
+      "precision": 1,
+      "recall": 1
+    },
+    "k9_deployment": {
+      "expected": 1,
+      "detected": 1,
+      "truePositives": 1,
+      "precision": 1,
+      "recall": 1
+    },
+    "de_escalation_attempt": {
+      "expected": 4,
+      "detected": 1,
+      "truePositives": 1,
+      "precision": 1,
+      "recall": 0.25
+    },
+    "vehicle_search": {
+      "expected": 4,
+      "detected": 4,
+      "truePositives": 4,
+      "precision": 1,
+      "recall": 1
+    },
+    "pat_down_search": {
+      "expected": 7,
+      "detected": 7,
+      "truePositives": 7,
+      "precision": 1,
+      "recall": 1
+    },
+    "miranda_warning": {
+      "expected": 10,
+      "detected": 12,
+      "truePositives": 10,
+      "precision": 0.8333333333333334,
+      "recall": 1
+    },
+    "de_escalation": {
+      "expected": 0,
+      "detected": 1,
+      "truePositives": 0,
+      "precision": 0,
+      "recall": 0
+    },
+    "threat_language": {
+      "expected": 2,
+      "detected": 4,
+      "truePositives": 2,
+      "precision": 0.5,
+      "recall": 1
+    },
+    "vehicle_pursuit": {
+      "expected": 5,
+      "detected": 5,
+      "truePositives": 5,
+      "precision": 1,
+      "recall": 1
+    }
+  },
+  "testCaseResults": [
+    {
+      "testCaseId": "VAL-001",
+      "title": "Taser Deployment During Traffic Stop",
+      "sourceType": "bodycam",
+      "expectedEvents": 6,
+      "detectedEvents": 9,
+      "truePositives": 6,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 9,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "verbal_command",
+        "taser_deployed",
+        "uof_warning",
+        "suspect_restrained",
+        "medical_attention",
+        "handcuffing"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-002",
+      "title": "Prone Restraint with Subject Distress",
+      "sourceType": "bodycam",
+      "expectedEvents": 6,
+      "detectedEvents": 10,
+      "truePositives": 6,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 1,
+        "medium": 9,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "verbal_command",
+        "prone_restraint",
+        "compliance_command",
+        "suspect_restrained",
+        "handcuffing",
+        "medical_attention"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-003",
+      "title": "Neck Restraint Application",
+      "sourceType": "bodycam",
+      "expectedEvents": 6,
+      "detectedEvents": 7,
+      "truePositives": 5,
+      "falsePositives": 0,
+      "missedEvents": 1,
+      "precision": 1,
+      "recall": 0.8333333333333334,
+      "f1Score": 0.9090909090909091,
+      "confidenceDistribution": {
+        "high": 1,
+        "medium": 6,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "verbal_command",
+        "suspect_restrained",
+        "neck_restraint",
+        "handcuffing",
+        "medical_attention"
+      ],
+      "missedEventTypes": [
+        "physical_strike"
+      ],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-004",
+      "title": "Pepper Spray Deployment at Protest",
+      "sourceType": "bodycam",
+      "expectedEvents": 5,
+      "detectedEvents": 3,
+      "truePositives": 2,
+      "falsePositives": 0,
+      "missedEvents": 3,
+      "precision": 1,
+      "recall": 0.4,
+      "f1Score": 0.5714285714285715,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 3,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "pepper_spray",
+        "medical_attention"
+      ],
+      "missedEventTypes": [
+        "verbal_command",
+        "officer_proximity",
+        "uof_warning"
+      ],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-005",
+      "title": "Officer-Involved Shooting",
+      "sourceType": "bodycam",
+      "expectedEvents": 4,
+      "detectedEvents": 7,
+      "truePositives": 4,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 1,
+        "medium": 6,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "verbal_command",
+        "weapon_drawn",
+        "shots_fired",
+        "medical_attention"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-006",
+      "title": "Baton Strike During Arrest",
+      "sourceType": "bodycam",
+      "expectedEvents": 7,
+      "detectedEvents": 11,
+      "truePositives": 7,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 11,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "verbal_command",
+        "compliance_command",
+        "physical_strike",
+        "baton_strike",
+        "suspect_restrained",
+        "handcuffing",
+        "medical_attention"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-007",
+      "title": "K-9 Deployment During Suspect Search",
+      "sourceType": "bodycam",
+      "expectedEvents": 5,
+      "detectedEvents": 11,
+      "truePositives": 5,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 11,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "foot_pursuit",
+        "k9_deployment",
+        "suspect_restrained",
+        "medical_attention",
+        "handcuffing"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-008",
+      "title": "De-escalation Success — No Force Used",
+      "sourceType": "bodycam",
+      "expectedEvents": 3,
+      "detectedEvents": 5,
+      "truePositives": 2,
+      "falsePositives": 0,
+      "missedEvents": 1,
+      "precision": 1,
+      "recall": 0.6666666666666666,
+      "f1Score": 0.8,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 5,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "officer_proximity",
+        "compliance_command",
+        "suspect_restrained"
+      ],
+      "missedEventTypes": [
+        "de_escalation_attempt"
+      ],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-009",
+      "title": "Multiple Force Escalation Steps",
+      "sourceType": "transcript",
+      "expectedEvents": 7,
+      "detectedEvents": 12,
+      "truePositives": 7,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 2,
+        "medium": 10,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "compliance_command",
+        "uof_warning",
+        "pepper_spray",
+        "verbal_command",
+        "taser_deployed",
+        "handcuffing",
+        "medical_attention"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-010",
+      "title": "Physical Strike Without Warning",
+      "sourceType": "bodycam",
+      "expectedEvents": 4,
+      "detectedEvents": 5,
+      "truePositives": 3,
+      "falsePositives": 0,
+      "missedEvents": 1,
+      "precision": 1,
+      "recall": 0.75,
+      "f1Score": 0.8571428571428571,
+      "confidenceDistribution": {
+        "high": 1,
+        "medium": 4,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "officer_proximity",
+        "physical_strike",
+        "handcuffing",
+        "medical_attention"
+      ],
+      "missedEventTypes": [
+        "verbal_command"
+      ],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-011",
+      "title": "Vehicle Search Without Consent",
+      "sourceType": "bodycam",
+      "expectedEvents": 1,
+      "detectedEvents": 4,
+      "truePositives": 1,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 4,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "vehicle_search"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-012",
+      "title": "Pat Down / Terry Stop",
+      "sourceType": "bodycam",
+      "expectedEvents": 2,
+      "detectedEvents": 4,
+      "truePositives": 2,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 4,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "officer_proximity",
+        "pat_down_search"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-013",
+      "title": "Consent Search of Residence",
+      "sourceType": "police_report",
+      "expectedEvents": 0,
+      "detectedEvents": 0,
+      "truePositives": 0,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 0,
+        "low": 0
+      },
+      "detectedEventTypes": [],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-014",
+      "title": "Warrant-Based Vehicle Search",
+      "sourceType": "police_report",
+      "expectedEvents": 1,
+      "detectedEvents": 1,
+      "truePositives": 1,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 1,
+        "medium": 0,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "vehicle_search"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-015",
+      "title": "Exigent Circumstances Entry",
+      "sourceType": "police_report",
+      "expectedEvents": 4,
+      "detectedEvents": 4,
+      "truePositives": 4,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 4,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "officer_proximity",
+        "suspect_restrained",
+        "handcuffing",
+        "medical_attention"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-016",
+      "title": "Plain View Doctrine Seizure",
+      "sourceType": "bodycam",
+      "expectedEvents": 3,
+      "detectedEvents": 2,
+      "truePositives": 2,
+      "falsePositives": 0,
+      "missedEvents": 1,
+      "precision": 1,
+      "recall": 0.6666666666666666,
+      "f1Score": 0.8,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 2,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "pat_down_search",
+        "handcuffing"
+      ],
+      "missedEventTypes": [
+        "verbal_command"
+      ],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-017",
+      "title": "Inventory Search of Impounded Vehicle",
+      "sourceType": "police_report",
+      "expectedEvents": 1,
+      "detectedEvents": 1,
+      "truePositives": 1,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 1,
+        "medium": 0,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "vehicle_search"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-018",
+      "title": "School Resource Officer Locker Search",
+      "sourceType": "police_report",
+      "expectedEvents": 0,
+      "detectedEvents": 0,
+      "truePositives": 0,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 0,
+        "low": 0
+      },
+      "detectedEventTypes": [],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-019",
+      "title": "Miranda Warning Before Custodial Interrogation",
+      "sourceType": "audio",
+      "expectedEvents": 1,
+      "detectedEvents": 4,
+      "truePositives": 1,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 4,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "miranda_warning",
+        "de_escalation"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-020",
+      "title": "Custodial Interrogation Without Miranda",
+      "sourceType": "audio",
+      "expectedEvents": 0,
+      "detectedEvents": 1,
+      "truePositives": 0,
+      "falsePositives": 1,
+      "missedEvents": 0,
+      "precision": 0,
+      "recall": 1,
+      "f1Score": 0,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 1,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "miranda_warning"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": [
+        "miranda_warning"
+      ]
+    },
+    {
+      "testCaseId": "VAL-021",
+      "title": "Felony Traffic Stop Arrest",
+      "sourceType": "bodycam",
+      "expectedEvents": 5,
+      "detectedEvents": 8,
+      "truePositives": 5,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 2,
+        "medium": 6,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "verbal_command",
+        "weapon_drawn",
+        "officer_proximity",
+        "handcuffing",
+        "pat_down_search",
+        "miranda_warning"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-022",
+      "title": "DUI Arrest with Field Sobriety Tests",
+      "sourceType": "bodycam",
+      "expectedEvents": 3,
+      "detectedEvents": 3,
+      "truePositives": 2,
+      "falsePositives": 0,
+      "missedEvents": 1,
+      "precision": 1,
+      "recall": 0.6666666666666666,
+      "f1Score": 0.8,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 3,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "handcuffing",
+        "miranda_warning"
+      ],
+      "missedEventTypes": [
+        "verbal_command"
+      ],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-023",
+      "title": "Resisting Arrest — Escalating Force",
+      "sourceType": "bodycam",
+      "expectedEvents": 7,
+      "detectedEvents": 8,
+      "truePositives": 7,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 3,
+        "medium": 5,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "foot_pursuit",
+        "physical_strike",
+        "suspect_restrained",
+        "verbal_command",
+        "compliance_command",
+        "handcuffing",
+        "medical_attention"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-024",
+      "title": "Juvenile Arrest Procedures",
+      "sourceType": "police_report",
+      "expectedEvents": 2,
+      "detectedEvents": 2,
+      "truePositives": 2,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 2,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "handcuffing",
+        "miranda_warning"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-025",
+      "title": "Domestic Violence Mandatory Arrest",
+      "sourceType": "police_report",
+      "expectedEvents": 3,
+      "detectedEvents": 4,
+      "truePositives": 3,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 4,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "officer_proximity",
+        "handcuffing",
+        "miranda_warning",
+        "medical_attention"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-026",
+      "title": "Mental Health Crisis Response",
+      "sourceType": "bodycam",
+      "expectedEvents": 3,
+      "detectedEvents": 1,
+      "truePositives": 1,
+      "falsePositives": 0,
+      "missedEvents": 2,
+      "precision": 1,
+      "recall": 0.3333333333333333,
+      "f1Score": 0.5,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 1,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "medical_attention"
+      ],
+      "missedEventTypes": [
+        "de_escalation_attempt",
+        "officer_proximity"
+      ],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-027",
+      "title": "Witness Interview During Investigation",
+      "sourceType": "audio",
+      "expectedEvents": 1,
+      "detectedEvents": 2,
+      "truePositives": 1,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 2,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "threat_language"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-028",
+      "title": "Booking Process at County Jail",
+      "sourceType": "police_report",
+      "expectedEvents": 2,
+      "detectedEvents": 3,
+      "truePositives": 2,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 3,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "pat_down_search",
+        "medical_attention",
+        "miranda_warning"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-029",
+      "title": "High-Speed Vehicle Pursuit",
+      "sourceType": "dashcam",
+      "expectedEvents": 3,
+      "detectedEvents": 6,
+      "truePositives": 3,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 1,
+        "medium": 5,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "vehicle_pursuit",
+        "verbal_command",
+        "handcuffing"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-030",
+      "title": "Foot Pursuit Through Residential Area",
+      "sourceType": "bodycam",
+      "expectedEvents": 3,
+      "detectedEvents": 7,
+      "truePositives": 3,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 7,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "foot_pursuit",
+        "verbal_command",
+        "handcuffing"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-031",
+      "title": "Pursuit Termination — Safety Concerns",
+      "sourceType": "dashcam",
+      "expectedEvents": 1,
+      "detectedEvents": 3,
+      "truePositives": 1,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 3,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "vehicle_pursuit"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-032",
+      "title": "PIT Maneuver to End Pursuit",
+      "sourceType": "dashcam",
+      "expectedEvents": 5,
+      "detectedEvents": 8,
+      "truePositives": 5,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 8,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "vehicle_pursuit",
+        "verbal_command",
+        "weapon_drawn",
+        "handcuffing",
+        "medical_attention"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-033",
+      "title": "Unauthorized Pursuit — Policy Threshold Not Met",
+      "sourceType": "dashcam",
+      "expectedEvents": 1,
+      "detectedEvents": 3,
+      "truePositives": 1,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 3,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "vehicle_pursuit"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-034",
+      "title": "Multi-Agency Pursuit Coordination",
+      "sourceType": "dashcam",
+      "expectedEvents": 3,
+      "detectedEvents": 5,
+      "truePositives": 3,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 1,
+        "medium": 4,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "vehicle_pursuit",
+        "verbal_command",
+        "handcuffing"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-035",
+      "title": "Body Camera Activation Failure",
+      "sourceType": "police_report",
+      "expectedEvents": 1,
+      "detectedEvents": 1,
+      "truePositives": 1,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 1,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "suspect_restrained"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-036",
+      "title": "Racial Profiling Complaint — Traffic Stop",
+      "sourceType": "bodycam",
+      "expectedEvents": 0,
+      "detectedEvents": 0,
+      "truePositives": 0,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 0,
+        "low": 0
+      },
+      "detectedEventTypes": [],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-037",
+      "title": "Welfare Check — Subject with Firearm",
+      "sourceType": "bodycam",
+      "expectedEvents": 4,
+      "detectedEvents": 3,
+      "truePositives": 3,
+      "falsePositives": 0,
+      "missedEvents": 1,
+      "precision": 1,
+      "recall": 0.75,
+      "f1Score": 0.8571428571428571,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 3,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "verbal_command",
+        "weapon_drawn",
+        "medical_attention"
+      ],
+      "missedEventTypes": [
+        "de_escalation_attempt"
+      ],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-038",
+      "title": "Mass Casualty Incident Response",
+      "sourceType": "bodycam",
+      "expectedEvents": 1,
+      "detectedEvents": 4,
+      "truePositives": 1,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 4,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "medical_attention"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-039",
+      "title": "Excessive Force Allegation — Handcuffing Injury",
+      "sourceType": "bodycam",
+      "expectedEvents": 3,
+      "detectedEvents": 7,
+      "truePositives": 3,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 7,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "handcuffing",
+        "medical_attention",
+        "verbal_command",
+        "compliance_command"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-040",
+      "title": "Training Scenario — Active Shooter Response",
+      "sourceType": "transcript",
+      "expectedEvents": 5,
+      "detectedEvents": 6,
+      "truePositives": 5,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 1,
+        "medium": 5,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "weapon_drawn",
+        "verbal_command",
+        "shots_fired",
+        "threat_language",
+        "suspect_restrained",
+        "medical_attention"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-041",
+      "title": "Threat Language — Officer Issues Verbal Threat",
+      "sourceType": "bodycam",
+      "expectedEvents": 4,
+      "detectedEvents": 8,
+      "truePositives": 4,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 1,
+        "medium": 7,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "threat_language",
+        "uof_warning",
+        "taser_deployed",
+        "compliance_command",
+        "verbal_command",
+        "handcuffing"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-042",
+      "title": "Traffic Collision Investigation",
+      "sourceType": "police_report",
+      "expectedEvents": 1,
+      "detectedEvents": 1,
+      "truePositives": 1,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 1,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "medical_attention"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-043",
+      "title": "Community Policing Event — No Incident",
+      "sourceType": "police_report",
+      "expectedEvents": 0,
+      "detectedEvents": 0,
+      "truePositives": 0,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 0,
+        "low": 0
+      },
+      "detectedEventTypes": [],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-044",
+      "title": "Missing Person Report",
+      "sourceType": "police_report",
+      "expectedEvents": 1,
+      "detectedEvents": 1,
+      "truePositives": 1,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 1,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "medical_attention"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-045",
+      "title": "Drug-Related Arrest with Force",
+      "sourceType": "bodycam",
+      "expectedEvents": 8,
+      "detectedEvents": 10,
+      "truePositives": 8,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 1,
+        "medium": 9,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "verbal_command",
+        "physical_strike",
+        "suspect_restrained",
+        "handcuffing",
+        "compliance_command",
+        "medical_attention",
+        "pat_down_search",
+        "miranda_warning"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-046",
+      "title": "Armed Robbery Response — Suspect Surrenders",
+      "sourceType": "bodycam",
+      "expectedEvents": 5,
+      "detectedEvents": 6,
+      "truePositives": 5,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 1,
+        "medium": 5,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "weapon_drawn",
+        "verbal_command",
+        "handcuffing",
+        "pat_down_search",
+        "miranda_warning"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-047",
+      "title": "Multiple Use of Force Techniques in Sequence",
+      "sourceType": "bodycam",
+      "expectedEvents": 8,
+      "detectedEvents": 15,
+      "truePositives": 8,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 2,
+        "medium": 13,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "physical_strike",
+        "taser_deployed",
+        "uof_warning",
+        "baton_strike",
+        "suspect_restrained",
+        "prone_restraint",
+        "verbal_command",
+        "compliance_command",
+        "handcuffing",
+        "medical_attention"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-048",
+      "title": "Domestic Violence — Dual Arrest",
+      "sourceType": "bodycam",
+      "expectedEvents": 4,
+      "detectedEvents": 7,
+      "truePositives": 4,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 7,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "handcuffing",
+        "suspect_restrained",
+        "miranda_warning",
+        "medical_attention"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-049",
+      "title": "Narcotics Operation — Controlled Buy",
+      "sourceType": "audio",
+      "expectedEvents": 6,
+      "detectedEvents": 9,
+      "truePositives": 6,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 0,
+        "medium": 9,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "verbal_command",
+        "handcuffing",
+        "foot_pursuit",
+        "suspect_restrained",
+        "pat_down_search",
+        "miranda_warning"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    },
+    {
+      "testCaseId": "VAL-050",
+      "title": "Complete Force Incident with All Phases",
+      "sourceType": "bodycam",
+      "expectedEvents": 14,
+      "detectedEvents": 20,
+      "truePositives": 14,
+      "falsePositives": 0,
+      "missedEvents": 0,
+      "precision": 1,
+      "recall": 1,
+      "f1Score": 1,
+      "confidenceDistribution": {
+        "high": 4,
+        "medium": 16,
+        "low": 0
+      },
+      "detectedEventTypes": [
+        "officer_proximity",
+        "de_escalation_attempt",
+        "verbal_command",
+        "weapon_drawn",
+        "threat_language",
+        "uof_warning",
+        "physical_strike",
+        "taser_deployed",
+        "prone_restraint",
+        "suspect_restrained",
+        "compliance_command",
+        "handcuffing",
+        "medical_attention",
+        "miranda_warning",
+        "vehicle_search"
+      ],
+      "missedEventTypes": [],
+      "falsePositiveTypes": []
+    }
+  ],
+  "safetyLanguageCheck": "PASSED"
+}

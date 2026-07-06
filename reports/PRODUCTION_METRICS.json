@@ -1,0 +1,83 @@
+{
+  "generatedAt": "2026-07-04T20:19:23.865Z",
+  "californiaCodes": {
+    "discovered": 1,
+    "total": 30
+  },
+  "sectionsDiscovered": 207,
+  "sectionsAcquired": 3,
+  "sectionsParsed": 4,
+  "criminalOffenses": 2,
+  "offenseElements": 4,
+  "mensReaCoveragePercent": 100,
+  "authorityCoveragePercent": 100,
+  "calcrimMappings": 1,
+  "calcrimCoveragePercent": 50,
+  "repositoryIntegrity": "PASS",
+  "parsingFailures": 0,
+  "manualReviewQueue": 2,
+  "repositories": {
+    "statutes": 4,
+    "offenses": 2,
+    "elements": 4,
+    "mens_rea": 2,
+    "exceptions": 3,
+    "defenses": 0,
+    "cross_references": 13,
+    "regulatory_incorporations": 2,
+    "calcrim_links": 1,
+    "authorities": 13,
+    "statute_classifications": 3
+  },
+  "liabilityDiscovery": {
+    "generatedAt": "2026-07-04T20:19:23.865Z",
+    "classifierVersion": "1.0.0",
+    "californiaCodesDiscovered": 1,
+    "californiaCodesTotal": 30,
+    "codesAnalyzed": 1,
+    "statutesClassified": 3,
+    "likelyCriminalStatutes": 1,
+    "confirmedCriminalOffenses": 1,
+    "regulatoryIncorporationCandidates": 0,
+    "manualReviewQueue": 2,
+    "unknownClassifications": 0,
+    "byClassification": {
+      "criminal_offense": 1,
+      "criminal_penalty": 0,
+      "criminal_enhancement": 0,
+      "sentencing_provision": 1,
+      "definitions": 0,
+      "procedure": 0,
+      "evidence": 0,
+      "regulatory_incorporation": 0,
+      "licensing": 0,
+      "administrative": 0,
+      "civil": 0,
+      "tax": 0,
+      "environmental": 0,
+      "cross_reference": 1,
+      "unknown": 0
+    },
+    "byPriority": {
+      "critical": 1,
+      "high": 0,
+      "medium": 0,
+      "low": 0,
+      "deferred": 2
+    },
+    "byCode": {
+      "PEN": {
+        "classified": 3,
+        "likelyCriminal": 1,
+        "confirmedOffenses": 1
+      }
+    }
+  },
+  "backendCompile": "UNKNOWN",
+  "frontendCompile": "UNKNOWN",
+  "e2eWorkflows": {
+    "passed": 0,
+    "total": 0,
+    "status": "UNKNOWN"
+  }
+}

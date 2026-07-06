@@ -1,0 +1,21 @@
+{
+  "phase": "PHASE-01",
+  "name": "Production Website Screenshots (local)",
+  "verifiedAt": "2026-07-05T17:07:22.614Z",
+  "screenshots": [
+    "/workspace/reports/screenshots/phase-01/landing-desktop.png",
+    "/workspace/reports/screenshots/phase-01/pricing-desktop.png",
+    "/workspace/reports/screenshots/phase-01/signup-desktop.png",
+    "/workspace/reports/screenshots/phase-01/login-desktop.png",
+    "/workspace/reports/screenshots/phase-01/features-desktop.png",
+    "/workspace/reports/screenshots/phase-01/attorneys-desktop.png",
+    "/workspace/reports/screenshots/phase-01/investigators-desktop.png",
+    "/workspace/reports/screenshots/phase-01/defendants-desktop.png"
+  ],
+  "routesCaptured": 8,
+  "errors": [
+    "/onboarding: page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"http://127.0.0.1:4173/onboarding\", waiting until \"networkidle\"\n"
+  ],
+  "status": "PARTIAL",
+  "note": "Dashboard screenshots (attorney/investigator/defendant/admin) require post-deploy authenticated flows."
+}

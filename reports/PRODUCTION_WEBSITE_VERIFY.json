@@ -1,0 +1,55 @@
+{
+  "program": "PRIORITY-ZERO",
+  "verifiedAt": "2026-07-05T17:07:36.126Z",
+  "url": "https://courtaccess.net",
+  "checks": [
+    {
+      "name": "http_status",
+      "pass": true,
+      "value": 200
+    },
+    {
+      "name": "title_branding",
+      "pass": false,
+      "expected": "Criminal Case Intelligence Platform"
+    },
+    {
+      "name": "no_stale_title",
+      "pass": false,
+      "value": "Court Access System"
+    },
+    {
+      "name": "no_stale_bundle",
+      "pass": true,
+      "value": "absent"
+    },
+    {
+      "name": "build_stamp",
+      "pass": false,
+      "optional": true
+    },
+    {
+      "name": "last_modified",
+      "pass": true,
+      "value": "Fri, 26 Jun 2026 19:17:43 GMT"
+    },
+    {
+      "name": "hero_content",
+      "pass": false
+    }
+  ],
+  "screenshots": [
+    "/workspace/reports/screenshots/production/production-landing-desktop.png",
+    "/workspace/reports/screenshots/production/production-pricing-desktop.png",
+    "/workspace/reports/screenshots/production/production-signup-desktop.png",
+    "/workspace/reports/screenshots/production/production-features-desktop.png",
+    "/workspace/reports/screenshots/production/production-attorneys-desktop.png",
+    "/workspace/reports/screenshots/production/production-landing-mobile.png"
+  ],
+  "status": "FAIL",
+  "errors": [
+    "Production title missing Criminal Case Intelligence Platform branding",
+    "Production still serves stale Court Access System title",
+    "Landing page missing expected hero content"
+  ]
+}

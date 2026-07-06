@@ -1,9 +1,15 @@
 // ============================================
 // Court Access — Sidebar Navigation
+// Phase 230-235: Added admin sub-nav for CPRA,
+// Discount Codes, Evidence Management
 // ============================================
 
 import { NavLink, useLocation } from 'react-router-dom';
-import { LayoutDashboard, Briefcase, Search, Bell, Settings, Shield, LogOut, ChevronLeft, ChevronRight } from 'lucide-react';
+import {
+  LayoutDashboard, Briefcase, Search, Bell, Settings, Shield, LogOut,
+  ChevronLeft, ChevronRight, ChevronDown,
+  FileText, Tag, Upload, BarChart3, Globe, Activity, Server, BookOpen, CheckSquare, FileQuestion,
+} from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
 import { ROLE_PERMISSIONS } from '../../constants';
 import type { RolePermissions } from '../../types';
@@ -18,23 +24,83 @@ const iconMap = {
   Shield,
 };
 
-const navItems = [
+interface NavChild {
+  id: string;
+  label: string;
+  path: string;
+  icon: React.ReactNode;
+  permission?: keyof RolePermissions;
+}
+
+interface NavItem {
+  id: string;
+  label: string;
+  path: string;
+  icon: string;
+  permission: keyof RolePermissions | null;
+  children?: NavChild[];
+}
+
+const navItems: NavItem[] = [
   { id: 'dashboard', label: 'Dashboard', path: '/dashboard', icon: 'LayoutDashboard', permission: null },
   { id: 'cases', label: 'Cases', path: '/cases', icon: 'Briefcase', permission: null },
   { id: 'search', label: 'Search', path: '/search', icon: 'Search', permission: null },
   { id: 'notifications', label: 'Notifications & Alerts', path: '/notifications', icon: 'Bell', permission: null },
-  { id: 'settings', label: 'Settings', path: '/settings', icon: 'Settings', permission: 'canViewSettings' as keyof RolePermissions },
-  { id: 'admin', label: 'Admin', path: '/admin', icon: 'Shield', permission: 'canViewAdmin' as keyof RolePermissions },
+  { id: 'firm', label: 'Law Firm Platform', path: '/firm', icon: 'Settings', permission: 'canViewSettings' },
+  { id: 'settings', label: 'Settings', path: '/settings', icon: 'Settings', permission: 'canViewSettings' },
+  // Evidence Management — separate top-level item for staff who lack canViewAdmin
+  {
+    id: 'evidence-mgmt-standalone',
+    label: 'Evidence Management',
+    path: '/dashboard/evidence-management',
+    icon: 'Shield',
+    permission: 'canViewEvidenceManagement',
+  },
+  // AI Evidence Requests — separate top-level item for non-admin users with canViewEvidence
+  {
+    id: 'evidence-requests-standalone',
+    label: 'AI Evidence Requests',
+    path: '/dashboard/evidence-requests',
+    icon: 'Shield',
+    permission: 'canViewEvidence',
+  },
+  {
+    id: 'admin',
+    label: 'Admin',
+    path: '/admin',
+    icon: 'Shield',
+    permission: 'canViewAdmin',
+    children: [
+      { id: 'cpra', label: 'CPRA Campaigns', path: '/dashboard/cpra', icon: <Globe size={16} /> },
+      { id: 'policy-ops', label: 'Policy Operations', path: '/dashboard/policy-operations', icon: <FileText size={16} /> },
+      { id: 'discount-codes', label: 'Discount Codes', path: '/dashboard/discount-codes', icon: <Tag size={16} /> },
+      { id: 'evidence-mgmt', label: 'Evidence Management', path: '/dashboard/evidence-management', icon: <Upload size={16} />, permission: 'canViewEvidenceManagement' },
+      { id: 'system-health', label: 'System Health', path: '/dashboard/system-health', icon: <BarChart3 size={16} /> },
+      { id: 'evidence-processing', label: 'Evidence Processing', path: '/dashboard/evidence-processing', icon: <Activity size={16} /> },
+      { id: 'worker-queues', label: 'Worker Queues', path: '/dashboard/system/workers', icon: <Server size={16} /> },
+      { id: 'policy-registry', label: 'Policy Topic Registry', path: '/dashboard/policy-topic-registry', icon: <BookOpen size={16} /> },
+      { id: 'beta-verification', label: 'Beta Verification', path: '/dashboard/beta-verification', icon: <CheckSquare size={16} /> },
+      { id: 'policy-matrix', label: 'Policy Matrix', path: '/dashboard/policy-matrix', icon: <BarChart3 size={16} /> },
+      { id: 'cpra-timeline', label: 'CPRA Timeline', path: '/dashboard/cpra-timeline', icon: <Globe size={16} /> },
+      { id: 'cpra-autonomous', label: 'CPRA Autonomous', path: '/dashboard/cpra-autonomous', icon: <Globe size={16} /> },
+      { id: 'evidence-requests', label: 'AI Evidence Requests', path: '/dashboard/evidence-requests', icon: <FileQuestion size={16} />, permission: 'canViewEvidence' },
+    ],
+  },
 ];
 
 export function Sidebar() {
   const { user, logout } = useAuthStore();
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
+  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({ admin: true });
 
   if (!user) return null;
 
   const permissions = ROLE_PERMISSIONS[user.role];
+
+  const toggleSection = (id: string) => {
+    setExpandedSections((prev) => ({ ...prev, [id]: !prev[id] }));
+  };
 
   return (
     <aside
@@ -73,26 +139,81 @@ export function Sidebar() {
       <nav className="flex-1 py-4 px-2 space-y-1 overflow-y-auto">
         {navItems.map((item) => {
           if (item.permission && !permissions[item.permission]) return null;
+          // Hide standalone evidence-mgmt for admins (they see it under Admin sub-nav)
+          if (item.id === 'evidence-mgmt-standalone' && permissions.canViewAdmin) return null;
+          if (item.id === 'evidence-requests-standalone' && permissions.canViewAdmin) return null;
 
           const Icon = iconMap[item.icon as keyof typeof iconMap];
           const isActive =
             location.pathname === item.path ||
             (item.path !== '/dashboard' && location.pathname.startsWith(item.path));
+          const hasChildren = item.children && item.children.length > 0;
+          const isExpanded = expandedSections[item.id] ?? false;
+          // Filter children by permission
+          const visibleChildren = item.children?.filter((c) => !c.permission || permissions[c.permission]);
+          const childActive = hasChildren && visibleChildren?.some((c) => location.pathname === c.path);
 
           return (
-            <NavLink
-              key={item.id}
-              to={item.path}
-              className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
-                isActive
-                  ? 'bg-slate-700 text-white'
-                  : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
-              }`}
-              title={collapsed ? item.label : undefined}
-            >
-              <Icon size={20} className="flex-shrink-0" />
-              {!collapsed && <span>{item.label}</span>}
-            </NavLink>
+            <div key={item.id}>
+              {hasChildren ? (
+                <>
+                  <button
+                    onClick={() => toggleSection(item.id)}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors w-full ${
+                      isActive || childActive
+                        ? 'bg-slate-700 text-white'
+                        : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                    }`}
+                    title={collapsed ? item.label : undefined}
+                  >
+                    <Icon size={20} className="flex-shrink-0" />
+                    {!collapsed && (
+                      <>
+                        <span className="flex-1 text-left">{item.label}</span>
+                        <ChevronDown
+                          size={14}
+                          className={`transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+                        />
+                      </>
+                    )}
+                  </button>
+                  {!collapsed && isExpanded && (
+                    <div className="ml-4 mt-1 space-y-0.5 border-l border-slate-700 pl-3">
+                      {visibleChildren?.map((child) => {
+                        const isChildActive = location.pathname === child.path;
+                        return (
+                          <NavLink
+                            key={child.id}
+                            to={child.path}
+                            className={`flex items-center gap-2.5 px-2.5 py-2 rounded-md text-xs font-medium transition-colors ${
+                              isChildActive
+                                ? 'bg-slate-700 text-white'
+                                : 'text-slate-400 hover:bg-slate-700/50 hover:text-white'
+                            }`}
+                          >
+                            <span className="flex-shrink-0">{child.icon}</span>
+                            <span>{child.label}</span>
+                          </NavLink>
+                        );
+                      })}
+                    </div>
+                  )}
+                </>
+              ) : (
+                <NavLink
+                  to={item.path}
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                    isActive
+                      ? 'bg-slate-700 text-white'
+                      : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                  }`}
+                  title={collapsed ? item.label : undefined}
+                >
+                  <Icon size={20} className="flex-shrink-0" />
+                  {!collapsed && <span>{item.label}</span>}
+                </NavLink>
+              )}
+            </div>
           );
         })}
       </nav>

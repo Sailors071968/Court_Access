@@ -1,0 +1,119 @@
+{
+  "program": "COURTACCESS_MASTER_PRODUCTION_PROGRAM",
+  "version": "12.0",
+  "updatedAt": "2026-07-05T13:53:34.627Z",
+  "overallStatus": "RELEASE_CANDIDATE",
+  "completionPercent": 89.7,
+  "phasesComplete": 9,
+  "phasesPartial": 13,
+  "phasesTotal": 22,
+  "releaseGates": {
+    "legacy": {
+      "pass": 14,
+      "total": 15,
+      "status": "NOT_READY"
+    },
+    "version1": {
+      "pass": 16,
+      "total": 20,
+      "status": "NOT_READY"
+    }
+  },
+  "items": [
+    {
+      "id": "MPP-001",
+      "priority": "P0",
+      "title": "Client-level billing not wired",
+      "status": "pending"
+    },
+    {
+      "id": "MPP-002",
+      "priority": "P1",
+      "title": "Prosecutor field not persisted",
+      "status": "pending"
+    },
+    {
+      "id": "MPP-003",
+      "priority": "P1",
+      "title": "Document versioning not implemented",
+      "status": "pending"
+    },
+    {
+      "id": "MPP-004",
+      "priority": "P1",
+      "title": "Interview scheduling not implemented",
+      "status": "pending"
+    },
+    {
+      "id": "MPP-005",
+      "priority": "P1",
+      "title": "Investigator report generator not implemented",
+      "status": "pending"
+    }
+  ],
+  "completedPhases": [
+    "PHASE-01",
+    "PHASE-05",
+    "PHASE-07",
+    "PHASE-08",
+    "PHASE-09",
+    "PHASE-11",
+    "PHASE-16",
+    "PHASE-18",
+    "PHASE-20"
+  ],
+  "partialPhases": [
+    {
+      "id": "PHASE-02",
+      "percent": 89
+    },
+    {
+      "id": "PHASE-03",
+      "percent": 89
+    },
+    {
+      "id": "PHASE-04",
+      "percent": 86
+    },
+    {
+      "id": "PHASE-06",
+      "percent": 91
+    },
+    {
+      "id": "PHASE-10",
+      "percent": 67
+    },
+    {
+      "id": "PHASE-12",
+      "percent": 71
+    },
+    {
+      "id": "PHASE-13",
+      "percent": 80
+    },
+    {
+      "id": "PHASE-14",
+      "percent": 60
+    },
+    {
+      "id": "PHASE-15",
+      "percent": 80
+    },
+    {
+      "id": "PHASE-17",
+      "percent": 86
+    },
+    {
+      "id": "PHASE-19",
+      "percent": 75
+    },
+    {
+      "id": "PHASE-21",
+      "percent": 80
+    },
+    {
+      "id": "PHASE-22",
+      "percent": 83
+    }
+  ]
+}

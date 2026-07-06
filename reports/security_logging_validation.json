@@ -1,0 +1,159 @@
+{
+  "phase": 197,
+  "title": "Security Logging Validation",
+  "generated": "2026-03-10T15:57:00Z",
+  "status": "IMPLEMENTED",
+  "summary": "Structured security logging is now active for all security-relevant events including failed logins, unauthorized access, upload validation failures, and system exceptions.",
+
+  "implementation": {
+    "file": "backend/src/security/securityLogger.ts",
+    "linesOfCode": 280,
+    "integrationFile": "backend/src/server.ts",
+    "hookRegistrations": [
+      "registerSecurityLogging(app) — registers onResponse and onError hooks"
+    ]
+  },
+
+  "loggedEvents": [
+    {
+      "event": "LOGIN_SUCCESS",
+      "severity": "INFO",
+      "trigger": "Successful authentication via /api/auth/login",
+      "logged": ["userId", "email", "IP address", "timestamp"]
+    },
+    {
+      "event": "LOGIN_FAILED",
+      "severity": "WARNING",
+      "trigger": "Failed authentication attempt (wrong email/password)",
+      "logged": ["email attempted", "IP address", "timestamp"]
+    },
+    {
+      "event": "LOGOUT",
+      "severity": "INFO",
+      "trigger": "User logout via /api/auth/logout",
+      "logged": ["userId", "IP address", "tokens revoked count"]
+    },
+    {
+      "event": "TOKEN_REFRESHED",
+      "severity": "INFO",
+      "trigger": "Successful token refresh via /api/auth/refresh",
+      "logged": ["userId", "IP address"]
+    },
+    {
+      "event": "TOKEN_REFRESH_FAILED",
+      "severity": "WARNING",
+      "trigger": "Failed token refresh (expired/revoked refresh token)",
+      "logged": ["IP address", "error message"]
+    },
+    {
+      "event": "UNAUTHORIZED_ACCESS",
+      "severity": "WARNING",
+      "trigger": "API request without valid authentication (401 response)",
+      "logged": ["path", "method", "IP address", "user-agent"]
+    },
+    {
+      "event": "FORBIDDEN_ACCESS",
+      "severity": "WARNING",
+      "trigger": "Authenticated user attempted to access route above their role (403 response)",
+      "logged": ["userId", "role", "path", "required roles", "IP address"]
+    },
+    {
+      "event": "INVALID_TOKEN",
+      "severity": "WARNING",
+      "trigger": "Request with malformed or tampered JWT",
+      "logged": ["path", "IP address", "error message"]
+    },
+    {
+      "event": "RATE_LIMIT_EXCEEDED",
+      "severity": "WARNING",
+      "trigger": "Request exceeds rate limit (429 response)",
+      "logged": ["path", "method", "IP address", "userId"]
+    },
+    {
+      "event": "CSRF_VALIDATION_FAILED",
+      "severity": "ERROR",
+      "trigger": "CSRF token or origin validation failure",
+      "logged": ["path", "method", "origin header", "IP address"]
+    },
+    {
+      "event": "UPLOAD_VALIDATION_FAILED",
+      "severity": "WARNING",
+      "trigger": "File upload rejected (wrong type, too large, etc.)",
+      "logged": ["filename", "reason", "IP address", "userId"]
+    },
+    {
+      "event": "MALICIOUS_FILE_DETECTED",
+      "severity": "CRITICAL",
+      "trigger": "File contains suspicious patterns (scripts, exec calls, etc.)",
+      "logged": ["filename", "threats detected", "IP address", "userId"]
+    },
+    {
+      "event": "SYSTEM_EXCEPTION",
+      "severity": "ERROR",
+      "trigger": "Unhandled server error (500+ response) or onError hook",
+      "logged": ["path", "method", "error message", "stack trace", "userId", "IP address"]
+    }
+  ],
+
+  "logFormat": {
+    "type": "Structured JSON",
+    "output": "console.log/console.warn/console.error (based on severity)",
+    "fields": ["timestamp", "event", "severity", "userId", "ip", "userAgent", "path", "method", "statusCode", "details", "metadata"],
+    "example": {
+      "level": "warning",
+      "msg": "[SECURITY] LOGIN_FAILED",
+      "timestamp": "2026-03-10T15:57:00Z",
+      "event": "LOGIN_FAILED",
+      "ip": "192.168.1.100",
+      "path": "/api/auth/login",
+      "method": "POST",
+      "details": "Failed login for unknown@example.com"
+    }
+  },
+
+  "severityLevels": {
+    "INFO": "Normal operations (logins, token refreshes, authenticated access)",
+    "WARNING": "Potential issues (failed logins, unauthorized access, rate limits)",
+    "ERROR": "Security concerns (CSRF failures, origin validation, system errors)",
+    "CRITICAL": "Immediate attention needed (malicious files, data breaches)"
+  },
+
+  "adminEndpoints": [
+    {
+      "method": "GET",
+      "path": "/api/security/logs",
+      "description": "Query security logs with filters (severity, event, userId, since, limit)",
+      "access": "admin only"
+    },
+    {
+      "method": "GET",
+      "path": "/api/security/summary",
+      "description": "Aggregated security summary (event counts, severity breakdown, recent critical/errors)",
+      "access": "admin only"
+    }
+  ],
+
+  "storage": {
+    "type": "In-memory array",
+    "maxEntries": 50000,
+    "autoTrim": "Trims to 45000 entries when limit reached",
+    "productionRecommendation": "Stream to external log aggregator (ELK Stack, Datadog, CloudWatch)"
+  },
+
+  "responseTimeTracking": {
+    "status": "ACTIVE",
+    "description": "Each request start time is recorded; response time calculated in onResponse hook",
+    "storedIn": "metadata.responseTime field of log entry"
+  },
+
+  "productionRecommendations": [
+    "Stream security logs to ELK Stack or CloudWatch for persistence and alerting",
+    "Set up alerts for CRITICAL events (malicious files, repeated failed logins)",
+    "Implement IP-based anomaly detection (unusual access patterns)",
+    "Add geographic analysis of access patterns (flag access from unexpected locations)",
+    "Configure log rotation and retention policies (90 days minimum for compliance)",
+    "Integrate with SIEM (Security Information and Event Management) system"
+  ],
+
+  "validationResult": "PASS"
+}

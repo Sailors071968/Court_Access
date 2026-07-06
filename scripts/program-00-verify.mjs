@@ -1,0 +1,147 @@
+#!/usr/bin/env node
+/**
+ * Program 0 — Production Website Verification
+ * Routes, responsive screenshots, landing headline assertion
+ * CI: uses local vite binary (spawn npx fails on GitHub Actions)
+ */
+import { chromium } from 'playwright';
+import { spawn } from 'child_process';
+import { readFileSync, mkdirSync } from 'fs';
+import { fileURLToPath } from 'url';
+import path from 'path';
+import { setTimeout as sleep } from 'timers/promises';
+
+const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const VITE_BIN = path.join(ROOT, 'node_modules', 'vite', 'bin', 'vite.js');
+const PORT = 4173;
+const BASE = `http://127.0.0.1:${PORT}`;
+const OUT_DIR = path.join(ROOT, 'reports/screenshots/program-00');
+mkdirSync(OUT_DIR, { recursive: true });
+
+const PROGRAM_00_ROUTES = [
+  '/',
+  '/pricing',
+  '/about',
+  '/features',
+  '/how-it-works',
+  '/attorney',
+  '/investigator',
+  '/defendant',
+  '/families',
+  '/experts',
+  '/government',
+  '/security',
+  '/blog',
+  '/knowledge-base',
+  '/support',
+  '/faq',
+  '/contact',
+  '/login',
+  '/register',
+  '/forgot-password',
+  '/verify-email',
+  '/privacy',
+  '/terms',
+  '/accessibility',
+  '/legal-disclaimer',
+  '/sitemap',
+  '/press',
+  '/careers',
+  '/attorneys',
+  '/investigators',
+  '/defendants',
+];
+
+async function startPreview() {
+  const proc = spawn(process.execPath, [VITE_BIN, 'preview', '--port', String(PORT), '--host', '127.0.0.1'], {
+    cwd: ROOT,
+    stdio: ['ignore', 'pipe', 'pipe'],
+  });
+  for (let i = 0; i < 30; i++) {
+    await sleep(500);
+    try {
+      const res = await fetch(BASE);
+      if (res.ok) return proc;
+    } catch {
+      /* retry */
+    }
+  }
+  proc.kill();
+  throw new Error('Preview server failed to start');
+}
+
+const server = await startPreview();
+const browser = await chromium.launch({ headless: true });
+const results = {
+  routes: [],
+  headlineCheck: false,
+  screenshots: [],
+  errors: [],
+};
+
+try {
+  const page = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+
+  for (const route of PROGRAM_00_ROUTES) {
+    const res = await page.goto(`${BASE}${route}`, { waitUntil: 'domcontentloaded' });
+    const status = res?.status() ?? 0;
+    const ok = status >= 200 && status < 400;
+    results.routes.push({ route, status, ok });
+    if (!ok) results.errors.push(`Route ${route} returned ${status}`);
+  }
+
+  await page.goto(BASE, { waitUntil: 'networkidle' });
+  const bodyText = await page.textContent('body');
+  results.headlineCheck = bodyText?.includes('Criminal Case Intelligence Platform') ||
+    bodyText?.includes('Criminal Case May Have Defenses') || false;
+  if (!results.headlineCheck) {
+    results.errors.push('Landing page missing expected production headline/branding');
+  }
+
+  const viewports = [
+    { name: 'desktop', width: 1440, height: 900 },
+    { name: 'tablet', width: 768, height: 1024 },
+    { name: 'mobile', width: 390, height: 844 },
+  ];
+
+  for (const vp of viewports) {
+    const vpPage = await browser.newPage({ viewport: { width: vp.width, height: vp.height } });
+    await vpPage.goto(BASE, { waitUntil: 'networkidle' });
+    const path = `${OUT_DIR}/landing-${vp.name}.png`;
+    await vpPage.screenshot({ path, fullPage: true });
+    results.screenshots.push(path);
+    await vpPage.close();
+  }
+
+  // Key pages screenshots
+  for (const route of ['/about', '/features', '/how-it-works', '/attorney', '/security', '/faq', '/privacy']) {
+    await page.goto(`${BASE}${route}`, { waitUntil: 'networkidle' });
+    const slug = route.slice(1);
+    const path = `${OUT_DIR}/${slug}-desktop.png`;
+    await page.screenshot({ path, fullPage: true });
+    results.screenshots.push(path);
+  }
+} finally {
+  await browser.close();
+  server.kill();
+}
+
+const landingSource = readFileSync(path.join(ROOT, 'src/pages/LandingPage.tsx'), 'utf8');
+const buildOk = landingSource.includes('Criminal Case Intelligence Platform');
+
+const report = {
+  program: 'PROGRAM-00',
+  name: 'Production Website',
+  verifiedAt: new Date().toISOString(),
+  routesTotal: PROGRAM_00_ROUTES.length,
+  routesPass: results.routes.filter((r) => r.ok).length,
+  headlineCheck: results.headlineCheck,
+  buildSourceCheck: buildOk,
+  screenshots: results.screenshots,
+  routes: results.routes,
+  errors: results.errors,
+  status: results.errors.length === 0 && buildOk ? 'PASS' : 'FAIL',
+};
+
+console.log(JSON.stringify(report, null, 2));
+process.exit(report.status === 'PASS' ? 0 : 1);

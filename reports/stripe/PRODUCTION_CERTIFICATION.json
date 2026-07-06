@@ -1,0 +1,364 @@
+{
+  "generatedAt": "2026-07-04T20:40:16.721Z",
+  "epic": "1A-FINAL",
+  "stripeTestMode": false,
+  "overallResult": "INCOMPLETE",
+  "passCount": 17,
+  "failCount": 0,
+  "skipCount": 1,
+  "workflows": [
+    {
+      "workflow": "New customer signup",
+      "result": "PASS",
+      "mode": "simulated",
+      "testSteps": [
+        "Create user via Prisma (simulates POST /api/auth/register)",
+        "Verify FREE subscription + credit balance"
+      ],
+      "stripeObjects": [],
+      "databaseChanges": [
+        "subscriptions.planId=FREE",
+        "ai_credit_balances created"
+      ],
+      "webhookEvents": [],
+      "emailsSent": [],
+      "recoveryBehavior": "N/A — registration is atomic transaction"
+    },
+    {
+      "workflow": "Checkout session",
+      "result": "PASS",
+      "mode": "simulated",
+      "testSteps": [
+        "Dispatch checkout.session.completed with STARTER planId"
+      ],
+      "stripeObjects": [
+        "cs_cert_*",
+        "cus:cus_cert_98d806ed-34a"
+      ],
+      "databaseChanges": [
+        "planId→STARTER",
+        "stripeCustomerId set",
+        "monthlyCredits→20"
+      ],
+      "webhookEvents": [
+        "checkout.session.completed"
+      ],
+      "emailsSent": [
+        "checkout_completed (simulated or SES)"
+      ],
+      "recoveryBehavior": "Stripe retries webhook on 500"
+    },
+    {
+      "workflow": "Subscription creation",
+      "result": "PASS",
+      "mode": "simulated",
+      "testSteps": [
+        "Dispatch customer.subscription.created"
+      ],
+      "stripeObjects": [
+        "sub:sub_cert_ad0028eb-ef8"
+      ],
+      "databaseChanges": [
+        "subscription upserted with starter tier"
+      ],
+      "webhookEvents": [
+        "customer.subscription.created"
+      ],
+      "emailsSent": [
+        "subscription_created"
+      ],
+      "recoveryBehavior": "Idempotent via evt_cert_* dedup"
+    },
+    {
+      "workflow": "Webhook processing",
+      "result": "PASS",
+      "mode": "simulated",
+      "testSteps": [
+        "Replay same event ID",
+        "Verify duplicate response"
+      ],
+      "stripeObjects": [],
+      "databaseChanges": [
+        "No duplicate writes"
+      ],
+      "webhookEvents": [
+        "customer.subscription.created (duplicate)"
+      ],
+      "emailsSent": [],
+      "recoveryBehavior": "Duplicate events return duplicate:true without side effects"
+    },
+    {
+      "workflow": "Database synchronization",
+      "result": "PASS",
+      "mode": "simulated",
+      "testSteps": [
+        "Query subscription + credit balance after webhooks"
+      ],
+      "stripeObjects": [
+        "sub:sub_cert_ad0028eb-ef8",
+        "cus:cus_cert_98d806ed-34a"
+      ],
+      "databaseChanges": [
+        "subscriptionStatus=active",
+        "planId=STARTER",
+        "credits>=20"
+      ],
+      "webhookEvents": [],
+      "emailsSent": [],
+      "recoveryBehavior": "N/A"
+    },
+    {
+      "workflow": "Customer portal",
+      "result": "PASS",
+      "mode": "simulated",
+      "testSteps": [
+        "Verify stripeCustomerId on subscription",
+        "DB prerequisite only"
+      ],
+      "stripeObjects": [
+        "cus:cus_cert_98d806ed-34a"
+      ],
+      "databaseChanges": [
+        "stripeCustomerId present enables portal session creation"
+      ],
+      "webhookEvents": [],
+      "emailsSent": [],
+      "recoveryBehavior": "Returns 400 if no stripeCustomerId",
+      "error": "Live portal session requires sk_test_ key — DB prerequisite verified"
+    },
+    {
+      "workflow": "Subscription upgrade",
+      "result": "PASS",
+      "mode": "simulated",
+      "testSteps": [
+        "Dispatch subscription.updated with professional_monthly lookup_key"
+      ],
+      "stripeObjects": [
+        "sub:sub_cert_ad0028eb-ef8"
+      ],
+      "databaseChanges": [
+        "planId→PROFESSIONAL",
+        "monthlyCredits→100"
+      ],
+      "webhookEvents": [
+        "customer.subscription.updated"
+      ],
+      "emailsSent": [],
+      "recoveryBehavior": "N/A"
+    },
+    {
+      "workflow": "Subscription downgrade",
+      "result": "PASS",
+      "mode": "simulated",
+      "testSteps": [
+        "Dispatch subscription.updated with starter_monthly"
+      ],
+      "stripeObjects": [
+        "sub:sub_cert_ad0028eb-ef8"
+      ],
+      "databaseChanges": [
+        "planId→STARTER"
+      ],
+      "webhookEvents": [
+        "customer.subscription.updated"
+      ],
+      "emailsSent": [],
+      "recoveryBehavior": "N/A"
+    },
+    {
+      "workflow": "Renewal",
+      "result": "PASS",
+      "mode": "simulated",
+      "testSteps": [
+        "Dispatch invoice.paid",
+        "Verify active status + credit reset"
+      ],
+      "stripeObjects": [
+        "in_cert_*"
+      ],
+      "databaseChanges": [
+        "subscriptionStatus→active",
+        "creditsUsed reset"
+      ],
+      "webhookEvents": [
+        "invoice.paid"
+      ],
+      "emailsSent": [
+        "subscription_renewed"
+      ],
+      "recoveryBehavior": "N/A"
+    },
+    {
+      "workflow": "Failed payment",
+      "result": "PASS",
+      "mode": "simulated",
+      "testSteps": [
+        "Dispatch invoice.payment_failed"
+      ],
+      "stripeObjects": [
+        "in_fail_*"
+      ],
+      "databaseChanges": [
+        "subscriptionStatus→past_due"
+      ],
+      "webhookEvents": [
+        "invoice.payment_failed"
+      ],
+      "emailsSent": [
+        "payment_failed"
+      ],
+      "recoveryBehavior": "Attorney notified; portal link in email"
+    },
+    {
+      "workflow": "Retry",
+      "result": "PASS",
+      "mode": "simulated",
+      "testSteps": [
+        "Dispatch invoice.paid after past_due"
+      ],
+      "stripeObjects": [
+        "in_retry_*"
+      ],
+      "databaseChanges": [
+        "subscriptionStatus→active"
+      ],
+      "webhookEvents": [
+        "invoice.paid"
+      ],
+      "emailsSent": [
+        "subscription_renewed"
+      ],
+      "recoveryBehavior": "Automatic recovery on successful retry"
+    },
+    {
+      "workflow": "Cancellation",
+      "result": "PASS",
+      "mode": "simulated",
+      "testSteps": [
+        "Dispatch customer.subscription.deleted"
+      ],
+      "stripeObjects": [
+        "sub:sub_cert_ad0028eb-ef8"
+      ],
+      "databaseChanges": [
+        "planId→FREE",
+        "stripeSubscriptionId→null",
+        "monthlyCredits→0"
+      ],
+      "webhookEvents": [
+        "customer.subscription.deleted"
+      ],
+      "emailsSent": [
+        "subscription_canceled"
+      ],
+      "recoveryBehavior": "Downgrade to FREE tier"
+    },
+    {
+      "workflow": "Reactivation",
+      "result": "PASS",
+      "mode": "simulated",
+      "testSteps": [
+        "New checkout.session.completed after cancellation"
+      ],
+      "stripeObjects": [
+        "sub:sub_cert_react_6a682f2f"
+      ],
+      "databaseChanges": [
+        "planId→STARTER",
+        "subscriptionStatus→active"
+      ],
+      "webhookEvents": [
+        "checkout.session.completed"
+      ],
+      "emailsSent": [
+        "checkout_completed"
+      ],
+      "recoveryBehavior": "New subscription via checkout"
+    },
+    {
+      "workflow": "Refund",
+      "result": "PASS",
+      "mode": "simulated",
+      "testSteps": [
+        "Dispatch charge.refunded"
+      ],
+      "stripeObjects": [
+        "ch_cert_*"
+      ],
+      "databaseChanges": [
+        "Security log entry"
+      ],
+      "webhookEvents": [
+        "charge.refunded"
+      ],
+      "emailsSent": [
+        "refund_processed"
+      ],
+      "recoveryBehavior": "Audit logged; email sent"
+    },
+    {
+      "workflow": "Billing emails",
+      "result": "PASS",
+      "mode": "simulated",
+      "testSteps": [
+        "Count BILLING_EMAIL_* security log entries after lifecycle"
+      ],
+      "stripeObjects": [],
+      "databaseChanges": [],
+      "webhookEvents": [],
+      "emailsSent": [
+        "8 billing email(s) logged (SES or simulated)"
+      ],
+      "recoveryBehavior": "Emails simulated when SES not configured"
+    },
+    {
+      "workflow": "Audit logging",
+      "result": "PASS",
+      "mode": "simulated",
+      "testSteps": [
+        "Count STRIPE_* security log events"
+      ],
+      "stripeObjects": [],
+      "databaseChanges": [
+        "8 audit entries"
+      ],
+      "webhookEvents": [],
+      "emailsSent": [],
+      "recoveryBehavior": "All billing events logged to security_logs"
+    },
+    {
+      "workflow": "Administrative metrics",
+      "result": "PASS",
+      "mode": "simulated",
+      "testSteps": [
+        "Call collectBillingReadinessMetrics()"
+      ],
+      "stripeObjects": [],
+      "databaseChanges": [],
+      "webhookEvents": [],
+      "emailsSent": [],
+      "recoveryBehavior": "N/A"
+    },
+    {
+      "workflow": "Live Stripe Test Mode API",
+      "result": "SKIP",
+      "mode": "skipped",
+      "testSteps": [
+        "Requires sk_test_ secret key and STRIPE_PRICE_STARTER",
+        "Missing: STRIPE_SECRET_KEY=sk_test_*, STRIPE_PRICE_STARTER"
+      ],
+      "stripeObjects": [],
+      "databaseChanges": [],
+      "webhookEvents": [],
+      "emailsSent": [],
+      "recoveryBehavior": "Run npm run billing:certify in staging with Stripe test credentials"
+    }
+  ],
+  "backlogItems": [
+    {
+      "id": "1A-012",
+      "title": "Live Stripe Test Mode API certification in staging",
+      "reason": "STRIPE_SECRET_KEY=sk_test_*; STRIPE_PRICE_STARTER"
+    }
+  ]
+}

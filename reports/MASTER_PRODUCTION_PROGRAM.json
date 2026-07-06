@@ -1,0 +1,1453 @@
+{
+  "program": "COURTACCESS_MASTER_PRODUCTION_PROGRAM",
+  "version": "12.0",
+  "generatedAt": "2026-07-05T13:53:34.627Z",
+  "mission": "Complete every operational domain required for a production-grade California criminal litigation platform",
+  "overallStatus": "RELEASE_CANDIDATE",
+  "overallCompletionPercent": 89.7,
+  "phasesComplete": 9,
+  "phasesPartial": 13,
+  "phasesNotStarted": 0,
+  "phasesTotal": 22,
+  "capabilitiesComplete": 140,
+  "capabilitiesTotal": 156,
+  "criticalWorkflows": [
+    {
+      "id": "WF-ATTORNEY",
+      "name": "Attorney intelligence → workbench → report",
+      "status": "COMPLETE"
+    },
+    {
+      "id": "WF-INVESTIGATOR",
+      "name": "Investigator assignments → evidence → field notes",
+      "status": "PARTIAL"
+    },
+    {
+      "id": "WF-LEGAL",
+      "name": "Legislative pipeline → KG → attorney intelligence",
+      "status": "COMPLETE"
+    },
+    {
+      "id": "WF-BILLING",
+      "name": "Stripe checkout → webhook → subscription sync",
+      "status": "PARTIAL"
+    },
+    {
+      "id": "WF-CLIENT",
+      "name": "Client portal experience",
+      "status": "COMPLETE"
+    }
+  ],
+  "releaseGates": {
+    "legacy": {
+      "pass": 14,
+      "total": 15,
+      "status": "NOT_READY"
+    },
+    "version1": {
+      "pass": 16,
+      "total": 20,
+      "status": "NOT_READY"
+    }
+  },
+  "productionPrograms": [
+    {
+      "id": "PROGRAM-00",
+      "number": 0,
+      "name": "Production Website",
+      "capabilities": [
+        {
+          "id": "P00-01",
+          "name": "Landing page",
+          "path": "src/pages/LandingPage.tsx"
+        },
+        {
+          "id": "P00-02",
+          "name": "Pricing page",
+          "path": "src/pages/LandingPage.tsx"
+        },
+        {
+          "id": "P00-03",
+          "name": "About page",
+          "path": "src/pages/marketing/AboutPage.tsx"
+        },
+        {
+          "id": "P00-04",
+          "name": "Features page",
+          "path": "src/pages/marketing/FeaturesPage.tsx"
+        },
+        {
+          "id": "P00-05",
+          "name": "FAQ page",
+          "path": "src/pages/marketing/FAQPage.tsx"
+        },
+        {
+          "id": "P00-06",
+          "name": "Contact page",
+          "path": "src/pages/ContactSalesPage.tsx"
+        },
+        {
+          "id": "P00-07",
+          "name": "Contact API",
+          "path": "backend/src/marketing/contactRoutes.ts"
+        },
+        {
+          "id": "P00-08",
+          "name": "Login page",
+          "path": "src/pages/auth/LoginPage.tsx"
+        },
+        {
+          "id": "P00-09",
+          "name": "Registration page",
+          "path": "src/pages/auth/RegisterPage.tsx"
+        },
+        {
+          "id": "P00-10",
+          "name": "Password reset",
+          "path": "src/pages/auth/ForgotPasswordPage.tsx"
+        },
+        {
+          "id": "P00-11",
+          "name": "Email verification",
+          "path": "src/pages/auth/VerifyEmailPage.tsx"
+        },
+        {
+          "id": "P00-12",
+          "name": "Privacy policy",
+          "path": "src/pages/marketing/PrivacyPolicyPage.tsx"
+        },
+        {
+          "id": "P00-13",
+          "name": "Terms of service",
+          "path": "src/pages/marketing/TermsOfServicePage.tsx"
+        },
+        {
+          "id": "P00-14",
+          "name": "Public marketing layout",
+          "path": "src/components/marketing/PublicMarketingLayout.tsx"
+        },
+        {
+          "id": "P00-15",
+          "name": "Website verification report",
+          "path": "reports/PROGRAM_00_PRODUCTION_WEBSITE.md"
+        }
+      ],
+      "capabilitiesComplete": 15,
+      "completionPercent": 100
+    },
+    {
+      "id": "PROGRAM-02",
+      "number": 2,
+      "name": "Law Firm Operating Platform",
+      "capabilities": [
+        {
+          "id": "P02-01",
+          "name": "Organization profile & settings",
+          "path": "backend/src/organizations/organizationRoutes.ts"
+        },
+        {
+          "id": "P02-02",
+          "name": "Multiple offices & branches",
+          "path": "backend/src/organizations/firmPlatformService.ts"
+        },
+        {
+          "id": "P02-03",
+          "name": "Department management",
+          "path": "backend/src/organizations/firmPlatformService.ts"
+        },
+        {
+          "id": "P02-04",
+          "name": "Practice groups",
+          "path": "backend/src/organizations/organizationService.ts"
+        },
+        {
+          "id": "P02-05",
+          "name": "Personnel management",
+          "path": "backend/src/organizations/firmPlatformService.ts"
+        },
+        {
+          "id": "P02-06",
+          "name": "Invitations & onboarding",
+          "path": "backend/src/organizations/organizationService.ts"
+        },
+        {
+          "id": "P02-07",
+          "name": "Branding & theme",
+          "path": "backend/src/organizations/firmPlatformService.ts"
+        },
+        {
+          "id": "P02-08",
+          "name": "Client team assignments",
+          "path": "backend/src/organizations/firmPlatformService.ts"
+        },
+        {
+          "id": "P02-09",
+          "name": "Internal messaging & tasks",
+          "path": "backend/src/organizations/firmPlatformService.ts"
+        },
+        {
+          "id": "P02-10",
+          "name": "Knowledge management",
+          "path": "backend/src/organizations/firmPlatformService.ts"
+        },
+        {
+          "id": "P02-11",
+          "name": "Conflict checking",
+          "path": "backend/src/organizations/firmPlatformService.ts"
+        },
+        {
+          "id": "P02-12",
+          "name": "Permissions & approvals",
+          "path": "backend/src/organizations/firmPlatformService.ts"
+        },
+        {
+          "id": "P02-13",
+          "name": "Firm analytics dashboards",
+          "path": "backend/src/organizations/firmPlatformService.ts"
+        },
+        {
+          "id": "P02-14",
+          "name": "Firm platform API",
+          "path": "backend/src/organizations/firmPlatformRoutes.ts"
+        },
+        {
+          "id": "P02-15",
+          "name": "Firm Operating Platform UI",
+          "path": "src/pages/organization/FirmOperatingPlatformPage.tsx"
+        },
+        {
+          "id": "P02-16",
+          "name": "Cross-tenant isolation tests",
+          "path": "backend/tests/organization-domain.test.ts"
+        },
+        {
+          "id": "P02-17",
+          "name": "Firm platform tests",
+          "path": "backend/tests/firm-platform.test.ts"
+        },
+        {
+          "id": "P02-18",
+          "name": "Visual demonstration report",
+          "path": "reports/PROGRAM_02_DEMONSTRATION.md"
+        }
+      ],
+      "capabilitiesComplete": 18,
+      "completionPercent": 100
+    },
+    {
+      "id": "PROGRAM-23",
+      "number": 23,
+      "name": "Litigation Intelligence",
+      "capabilities": [
+        {
+          "id": "P23-01",
+          "name": "Contradiction engine",
+          "path": "backend/src/contradiction/contradictionEngine.ts"
+        },
+        {
+          "id": "P23-02",
+          "name": "Evidence gap detection",
+          "path": "backend/src/intelligence/evidenceGapDetectionService.ts"
+        },
+        {
+          "id": "P23-03",
+          "name": "Attorney intelligence orchestrator",
+          "path": "backend/src/intelligence/caseIntelligenceOrchestrator.ts"
+        },
+        {
+          "id": "P23-04",
+          "name": "Element analysis",
+          "path": "backend/src/intelligence/elementAnalysisService.ts"
+        },
+        {
+          "id": "P23-05",
+          "name": "Unknown management",
+          "path": "backend/src/intelligence/unknownManagementService.ts"
+        }
+      ],
+      "capabilitiesComplete": 1,
+      "completionPercent": 20
+    },
+    {
+      "id": "PROGRAM-24",
+      "number": 24,
+      "name": "CourtAccess AI Operating System",
+      "capabilities": [
+        {
+          "id": "P24-01",
+          "name": "AI governance routes",
+          "path": "backend/src/governance/governanceRoutes.ts"
+        },
+        {
+          "id": "P24-02",
+          "name": "Policy narrative guard",
+          "path": "backend/src/services/policyNarrativeGuard.ts"
+        },
+        {
+          "id": "P24-03",
+          "name": "Citation validation",
+          "path": "backend/src/intelligence/unknownManagementService.ts"
+        },
+        {
+          "id": "P24-04",
+          "name": "Confidence scoring",
+          "path": "backend/src/intelligence/caseIntelligenceOrchestrator.ts"
+        }
+      ],
+      "capabilitiesComplete": 3,
+      "completionPercent": 75
+    }
+  ],
+  "phases": [
+    {
+      "id": "PHASE-01",
+      "number": 1,
+      "name": "Core Platform",
+      "domain": "Platform / Security / Identity",
+      "status": "COMPLETE",
+      "completionPercent": 100,
+      "capabilitiesComplete": 12,
+      "capabilitiesTotal": 12,
+      "capabilities": [
+        {
+          "id": "P01-01",
+          "name": "Authentication",
+          "status": "PASS"
+        },
+        {
+          "id": "P01-02",
+          "name": "Registration",
+          "status": "PASS"
+        },
+        {
+          "id": "P01-03",
+          "name": "Password recovery",
+          "status": "PASS"
+        },
+        {
+          "id": "P01-04",
+          "name": "MFA",
+          "status": "PASS"
+        },
+        {
+          "id": "P01-05",
+          "name": "Session management",
+          "status": "PASS"
+        },
+        {
+          "id": "P01-06",
+          "name": "Device management",
+          "status": "PASS"
+        },
+        {
+          "id": "P01-07",
+          "name": "Email verification",
+          "status": "PASS"
+        },
+        {
+          "id": "P01-08",
+          "name": "Organization model",
+          "status": "PASS"
+        },
+        {
+          "id": "P01-09",
+          "name": "Multi-tenant architecture",
+          "status": "PASS"
+        },
+        {
+          "id": "P01-10",
+          "name": "Roles & permissions",
+          "status": "PASS"
+        },
+        {
+          "id": "P01-11",
+          "name": "Security logging",
+          "status": "PASS"
+        },
+        {
+          "id": "P01-12",
+          "name": "Audit logging",
+          "status": "PASS"
+        }
+      ],
+      "blockers": []
+    },
+    {
+      "id": "PHASE-02",
+      "number": 2,
+      "name": "Client Management",
+      "domain": "Client Domain",
+      "status": "PARTIAL",
+      "completionPercent": 89,
+      "capabilitiesComplete": 8,
+      "capabilitiesTotal": 9,
+      "capabilities": [
+        {
+          "id": "P02-01",
+          "name": "Client profiles",
+          "status": "PASS"
+        },
+        {
+          "id": "P02-02",
+          "name": "Contact management",
+          "status": "PASS"
+        },
+        {
+          "id": "P02-03",
+          "name": "Intake",
+          "status": "PASS"
+        },
+        {
+          "id": "P02-04",
+          "name": "Client notes",
+          "status": "PASS"
+        },
+        {
+          "id": "P02-05",
+          "name": "Client communications",
+          "status": "PASS"
+        },
+        {
+          "id": "P02-06",
+          "name": "Court reminders",
+          "status": "PASS"
+        },
+        {
+          "id": "P02-07",
+          "name": "Client billing",
+          "status": "FAIL",
+          "blocker": "Client-level billing not wired"
+        },
+        {
+          "id": "P02-08",
+          "name": "Client tests",
+          "status": "PASS"
+        },
+        {
+          "id": "P02-09",
+          "name": "Emergency contacts",
+          "status": "PASS"
+        }
+      ],
+      "blockers": [
+        "Client-level billing not wired"
+      ]
+    },
+    {
+      "id": "PHASE-03",
+      "number": 3,
+      "name": "Case Management",
+      "domain": "Case Domain",
+      "status": "PARTIAL",
+      "completionPercent": 89,
+      "capabilitiesComplete": 8,
+      "capabilitiesTotal": 9,
+      "capabilities": [
+        {
+          "id": "P03-01",
+          "name": "Case creation",
+          "status": "PASS"
+        },
+        {
+          "id": "P03-02",
+          "name": "Criminal charges",
+          "status": "PASS"
+        },
+        {
+          "id": "P03-03",
+          "name": "Hearings & calendar",
+          "status": "PASS"
+        },
+        {
+          "id": "P03-04",
+          "name": "Judge tracking",
+          "status": "PASS"
+        },
+        {
+          "id": "P03-05",
+          "name": "Prosecutor tracking",
+          "status": "FAIL",
+          "blocker": "Prosecutor field not persisted"
+        },
+        {
+          "id": "P03-06",
+          "name": "Motions",
+          "status": "PASS"
+        },
+        {
+          "id": "P03-07",
+          "name": "Discovery",
+          "status": "PASS"
+        },
+        {
+          "id": "P03-08",
+          "name": "Case tests",
+          "status": "PASS"
+        },
+        {
+          "id": "P03-09",
+          "name": "Investigation tasks",
+          "status": "PASS"
+        }
+      ],
+      "blockers": [
+        "Prosecutor field not persisted"
+      ]
+    },
+    {
+      "id": "PHASE-04",
+      "number": 4,
+      "name": "Document Management",
+      "domain": "Document Platform",
+      "status": "PARTIAL",
+      "completionPercent": 86,
+      "capabilitiesComplete": 6,
+      "capabilitiesTotal": 7,
+      "capabilities": [
+        {
+          "id": "P04-01",
+          "name": "Upload",
+          "status": "PASS"
+        },
+        {
+          "id": "P04-02",
+          "name": "Direct upload",
+          "status": "PASS"
+        },
+        {
+          "id": "P04-03",
+          "name": "OCR",
+          "status": "PASS"
+        },
+        {
+          "id": "P04-04",
+          "name": "Deduplication",
+          "status": "PASS"
+        },
+        {
+          "id": "P04-05",
+          "name": "Hash verification",
+          "status": "PASS"
+        },
+        {
+          "id": "P04-06",
+          "name": "Version history",
+          "status": "FAIL",
+          "blocker": "Document versioning not implemented"
+        },
+        {
+          "id": "P04-07",
+          "name": "File integrity",
+          "status": "PASS"
+        }
+      ],
+      "blockers": [
+        "Document versioning not implemented"
+      ]
+    },
+    {
+      "id": "PHASE-05",
+      "number": 5,
+      "name": "Evidence Management",
+      "domain": "Evidence Platform",
+      "status": "COMPLETE",
+      "completionPercent": 100,
+      "capabilitiesComplete": 7,
+      "capabilitiesTotal": 7,
+      "capabilities": [
+        {
+          "id": "P05-01",
+          "name": "Evidence repository",
+          "status": "PASS"
+        },
+        {
+          "id": "P05-02",
+          "name": "Evidence timeline",
+          "status": "PASS"
+        },
+        {
+          "id": "P05-03",
+          "name": "Contradictions",
+          "status": "PASS"
+        },
+        {
+          "id": "P05-04",
+          "name": "Missing evidence",
+          "status": "PASS"
+        },
+        {
+          "id": "P05-05",
+          "name": "Unknowns",
+          "status": "PASS"
+        },
+        {
+          "id": "P05-06",
+          "name": "Evidence graph",
+          "status": "PASS"
+        },
+        {
+          "id": "P05-07",
+          "name": "Chain of custody",
+          "status": "PASS"
+        }
+      ],
+      "blockers": []
+    },
+    {
+      "id": "PHASE-06",
+      "number": 6,
+      "name": "Investigator Platform",
+      "domain": "Investigator Workbench",
+      "status": "PARTIAL",
+      "completionPercent": 91,
+      "capabilitiesComplete": 10,
+      "capabilitiesTotal": 11,
+      "capabilities": [
+        {
+          "id": "P06-01",
+          "name": "Investigator dashboard",
+          "status": "PASS"
+        },
+        {
+          "id": "P06-02",
+          "name": "Investigation assignments",
+          "status": "PASS"
+        },
+        {
+          "id": "P06-03",
+          "name": "Leads",
+          "status": "PASS"
+        },
+        {
+          "id": "P06-04",
+          "name": "Witnesses",
+          "status": "PASS"
+        },
+        {
+          "id": "P06-05",
+          "name": "Field notes",
+          "status": "PASS"
+        },
+        {
+          "id": "P06-06",
+          "name": "Evidence collection",
+          "status": "PASS"
+        },
+        {
+          "id": "P06-07",
+          "name": "Chain of custody",
+          "status": "PASS"
+        },
+        {
+          "id": "P06-08",
+          "name": "GPS mapping",
+          "status": "PASS"
+        },
+        {
+          "id": "P06-09",
+          "name": "Interview scheduling",
+          "status": "FAIL",
+          "blocker": "Interview scheduling not implemented"
+        },
+        {
+          "id": "P06-10",
+          "name": "Investigator tests",
+          "status": "PASS"
+        },
+        {
+          "id": "P06-11",
+          "name": "Investigator UI",
+          "status": "PASS"
+        }
+      ],
+      "blockers": [
+        "Interview scheduling not implemented"
+      ]
+    },
+    {
+      "id": "PHASE-07",
+      "number": 7,
+      "name": "Attorney Workbench",
+      "domain": "Attorney Intelligence UI",
+      "status": "COMPLETE",
+      "completionPercent": 100,
+      "capabilitiesComplete": 10,
+      "capabilitiesTotal": 10,
+      "capabilities": [
+        {
+          "id": "P07-01",
+          "name": "Attorney workbench",
+          "status": "PASS"
+        },
+        {
+          "id": "P07-02",
+          "name": "Evidence explorer",
+          "status": "PASS"
+        },
+        {
+          "id": "P07-03",
+          "name": "Authority explorer",
+          "status": "PASS"
+        },
+        {
+          "id": "P07-04",
+          "name": "CALCRIM explorer",
+          "status": "PASS"
+        },
+        {
+          "id": "P07-05",
+          "name": "Element analysis",
+          "status": "PASS"
+        },
+        {
+          "id": "P07-06",
+          "name": "Trial notebook",
+          "status": "PASS"
+        },
+        {
+          "id": "P07-07",
+          "name": "Report generation",
+          "status": "PASS"
+        },
+        {
+          "id": "P07-08",
+          "name": "Attorney workbench UI",
+          "status": "PASS"
+        },
+        {
+          "id": "P07-09",
+          "name": "Attorney workbench tests",
+          "status": "PASS"
+        },
+        {
+          "id": "P07-10",
+          "name": "Intelligence engine tests",
+          "status": "PASS"
+        }
+      ],
+      "blockers": []
+    },
+    {
+      "id": "PHASE-08",
+      "number": 8,
+      "name": "Legal Intelligence",
+      "domain": "California Legislative Platform",
+      "status": "COMPLETE",
+      "completionPercent": 100,
+      "capabilitiesComplete": 10,
+      "capabilitiesTotal": 10,
+      "capabilities": [
+        {
+          "id": "P08-01",
+          "name": "Discovery pipeline",
+          "status": "PASS"
+        },
+        {
+          "id": "P08-02",
+          "name": "Acquisition pipeline",
+          "status": "PASS"
+        },
+        {
+          "id": "P08-03",
+          "name": "Normalization",
+          "status": "PASS"
+        },
+        {
+          "id": "P08-04",
+          "name": "Extraction",
+          "status": "PASS"
+        },
+        {
+          "id": "P08-05",
+          "name": "Validation",
+          "status": "PASS"
+        },
+        {
+          "id": "P08-06",
+          "name": "Sections parsed",
+          "status": "PASS"
+        },
+        {
+          "id": "P08-07",
+          "name": "Criminal offenses",
+          "status": "PASS"
+        },
+        {
+          "id": "P08-08",
+          "name": "CALCRIM mappings",
+          "status": "PASS"
+        },
+        {
+          "id": "P08-09",
+          "name": "Coverage analytics",
+          "status": "PASS"
+        },
+        {
+          "id": "P08-10",
+          "name": "Repository integrity dashboard",
+          "status": "PASS"
+        }
+      ],
+      "blockers": []
+    },
+    {
+      "id": "PHASE-09",
+      "number": 9,
+      "name": "Knowledge Graph",
+      "domain": "Legal Knowledge Graph",
+      "status": "COMPLETE",
+      "completionPercent": 100,
+      "capabilitiesComplete": 7,
+      "capabilitiesTotal": 7,
+      "capabilities": [
+        {
+          "id": "P09-01",
+          "name": "KG pipeline",
+          "status": "PASS"
+        },
+        {
+          "id": "P09-02",
+          "name": "Repositories",
+          "status": "PASS"
+        },
+        {
+          "id": "P09-03",
+          "name": "Offense repository",
+          "status": "PASS"
+        },
+        {
+          "id": "P09-04",
+          "name": "Element repository",
+          "status": "PASS"
+        },
+        {
+          "id": "P09-05",
+          "name": "Authority repository",
+          "status": "PASS"
+        },
+        {
+          "id": "P09-06",
+          "name": "Repository integrity",
+          "status": "PASS"
+        },
+        {
+          "id": "P09-07",
+          "name": "KG tests",
+          "status": "PASS"
+        }
+      ],
+      "blockers": []
+    },
+    {
+      "id": "PHASE-10",
+      "number": 10,
+      "name": "Report Generation",
+      "domain": "Evidence-Governed Reports",
+      "status": "PARTIAL",
+      "completionPercent": 67,
+      "capabilitiesComplete": 4,
+      "capabilitiesTotal": 6,
+      "capabilities": [
+        {
+          "id": "P10-01",
+          "name": "Attorney reports",
+          "status": "PASS"
+        },
+        {
+          "id": "P10-02",
+          "name": "Workbench exports",
+          "status": "PASS"
+        },
+        {
+          "id": "P10-03",
+          "name": "Trial notebooks",
+          "status": "PASS"
+        },
+        {
+          "id": "P10-04",
+          "name": "Investigator reports",
+          "status": "FAIL",
+          "blocker": "Investigator report generator not implemented"
+        },
+        {
+          "id": "P10-05",
+          "name": "Client summaries",
+          "status": "FAIL",
+          "blocker": "Client report generator not implemented"
+        },
+        {
+          "id": "P10-06",
+          "name": "Citation traceability",
+          "status": "PASS"
+        }
+      ],
+      "blockers": [
+        "Investigator report generator not implemented",
+        "Client report generator not implemented"
+      ]
+    },
+    {
+      "id": "PHASE-11",
+      "number": 11,
+      "name": "Client Portal",
+      "domain": "Client / Defendant Experience",
+      "status": "COMPLETE",
+      "completionPercent": 100,
+      "capabilitiesComplete": 6,
+      "capabilitiesTotal": 6,
+      "capabilities": [
+        {
+          "id": "P11-01",
+          "name": "Client dashboard",
+          "status": "PASS"
+        },
+        {
+          "id": "P11-02",
+          "name": "Secure messaging",
+          "status": "PASS"
+        },
+        {
+          "id": "P11-03",
+          "name": "Court dates",
+          "status": "PASS"
+        },
+        {
+          "id": "P11-04",
+          "name": "Document access",
+          "status": "PASS"
+        },
+        {
+          "id": "P11-05",
+          "name": "Evidence uploads",
+          "status": "PASS"
+        },
+        {
+          "id": "P11-06",
+          "name": "Billing portal",
+          "status": "PASS"
+        }
+      ],
+      "blockers": []
+    },
+    {
+      "id": "PHASE-12",
+      "number": 12,
+      "name": "Administrative Command Center",
+      "domain": "Law Firm Administration",
+      "status": "PARTIAL",
+      "completionPercent": 71,
+      "capabilitiesComplete": 5,
+      "capabilitiesTotal": 7,
+      "capabilities": [
+        {
+          "id": "P12-01",
+          "name": "Operations dashboard",
+          "status": "PASS"
+        },
+        {
+          "id": "P12-02",
+          "name": "Admin routes",
+          "status": "PASS"
+        },
+        {
+          "id": "P12-03",
+          "name": "Repository dashboard",
+          "status": "PASS"
+        },
+        {
+          "id": "P12-04",
+          "name": "Engineering dashboard",
+          "status": "PASS"
+        },
+        {
+          "id": "P12-05",
+          "name": "Operations UI",
+          "status": "PASS"
+        },
+        {
+          "id": "P12-06",
+          "name": "CRM",
+          "status": "FAIL",
+          "blocker": "CRM not implemented"
+        },
+        {
+          "id": "P12-07",
+          "name": "Customer support",
+          "status": "FAIL",
+          "blocker": "Support dashboard not implemented"
+        }
+      ],
+      "blockers": [
+        "CRM not implemented",
+        "Support dashboard not implemented"
+      ]
+    },
+    {
+      "id": "PHASE-13",
+      "number": 13,
+      "name": "Business Intelligence",
+      "domain": "Revenue & Usage Analytics",
+      "status": "PARTIAL",
+      "completionPercent": 80,
+      "capabilitiesComplete": 4,
+      "capabilitiesTotal": 5,
+      "capabilities": [
+        {
+          "id": "P13-01",
+          "name": "Billing metrics",
+          "status": "PASS"
+        },
+        {
+          "id": "P13-02",
+          "name": "MRR/ARR",
+          "status": "PASS"
+        },
+        {
+          "id": "P13-03",
+          "name": "Legal coverage analytics",
+          "status": "PASS"
+        },
+        {
+          "id": "P13-04",
+          "name": "Repository growth",
+          "status": "PASS"
+        },
+        {
+          "id": "P13-05",
+          "name": "Usage analytics",
+          "status": "FAIL",
+          "blocker": "Usage analytics dashboard not implemented"
+        }
+      ],
+      "blockers": [
+        "Usage analytics dashboard not implemented"
+      ]
+    },
+    {
+      "id": "PHASE-14",
+      "number": 14,
+      "name": "Communication Platform",
+      "domain": "Email / SMS / Messaging",
+      "status": "PARTIAL",
+      "completionPercent": 60,
+      "capabilitiesComplete": 3,
+      "capabilitiesTotal": 5,
+      "capabilities": [
+        {
+          "id": "P14-01",
+          "name": "Billing emails",
+          "status": "PASS"
+        },
+        {
+          "id": "P14-02",
+          "name": "CPRA email",
+          "status": "PASS"
+        },
+        {
+          "id": "P14-03",
+          "name": "Secure messaging",
+          "status": "PASS"
+        },
+        {
+          "id": "P14-04",
+          "name": "SMS",
+          "status": "FAIL",
+          "blocker": "SMS not implemented"
+        },
+        {
+          "id": "P14-05",
+          "name": "Campaigns",
+          "status": "FAIL",
+          "blocker": "Email campaigns not implemented"
+        }
+      ],
+      "blockers": [
+        "SMS not implemented",
+        "Email campaigns not implemented"
+      ]
+    },
+    {
+      "id": "PHASE-15",
+      "number": 15,
+      "name": "Stripe & Billing",
+      "domain": "Billing Certification",
+      "status": "PARTIAL",
+      "completionPercent": 80,
+      "capabilitiesComplete": 4,
+      "capabilitiesTotal": 5,
+      "capabilities": [
+        {
+          "id": "P15-01",
+          "name": "Stripe certification",
+          "status": "PASS"
+        },
+        {
+          "id": "P15-02",
+          "name": "Webhook processor",
+          "status": "PASS"
+        },
+        {
+          "id": "P15-03",
+          "name": "Billing routes",
+          "status": "PASS"
+        },
+        {
+          "id": "P15-04",
+          "name": "Subscription service",
+          "status": "PASS"
+        },
+        {
+          "id": "P15-05",
+          "name": "Live certification",
+          "status": "FAIL",
+          "blocker": "Requires sk_test_* credentials"
+        }
+      ],
+      "blockers": [
+        "Requires sk_test_* credentials"
+      ]
+    },
+    {
+      "id": "PHASE-16",
+      "number": 16,
+      "name": "Engineering Operations",
+      "domain": "Production Operations",
+      "status": "COMPLETE",
+      "completionPercent": 100,
+      "capabilitiesComplete": 6,
+      "capabilitiesTotal": 6,
+      "capabilities": [
+        {
+          "id": "P16-01",
+          "name": "Operations dashboard",
+          "status": "PASS"
+        },
+        {
+          "id": "P16-02",
+          "name": "Alerting",
+          "status": "PASS"
+        },
+        {
+          "id": "P16-03",
+          "name": "Queue monitoring",
+          "status": "PASS"
+        },
+        {
+          "id": "P16-04",
+          "name": "Backup drill",
+          "status": "PASS"
+        },
+        {
+          "id": "P16-05",
+          "name": "Disaster recovery",
+          "status": "PASS"
+        },
+        {
+          "id": "P16-06",
+          "name": "Observability",
+          "status": "PASS"
+        }
+      ],
+      "blockers": []
+    },
+    {
+      "id": "PHASE-17",
+      "number": 17,
+      "name": "Security",
+      "domain": "Security & Compliance",
+      "status": "PARTIAL",
+      "completionPercent": 86,
+      "capabilitiesComplete": 6,
+      "capabilitiesTotal": 7,
+      "capabilities": [
+        {
+          "id": "P17-01",
+          "name": "RBAC",
+          "status": "PASS"
+        },
+        {
+          "id": "P17-02",
+          "name": "Tenant isolation",
+          "status": "PASS"
+        },
+        {
+          "id": "P17-03",
+          "name": "Rate limiting",
+          "status": "PASS"
+        },
+        {
+          "id": "P17-04",
+          "name": "CSRF protection",
+          "status": "PASS"
+        },
+        {
+          "id": "P17-05",
+          "name": "Security readiness",
+          "status": "PASS"
+        },
+        {
+          "id": "P17-06",
+          "name": "MFA",
+          "status": "PASS"
+        },
+        {
+          "id": "P17-07",
+          "name": "Penetration testing",
+          "status": "FAIL",
+          "blocker": "Pen test not documented"
+        }
+      ],
+      "blockers": [
+        "Pen test not documented"
+      ]
+    },
+    {
+      "id": "PHASE-18",
+      "number": 18,
+      "name": "AI Governance",
+      "domain": "Evidence-Governed AI",
+      "status": "COMPLETE",
+      "completionPercent": 100,
+      "capabilitiesComplete": 6,
+      "capabilitiesTotal": 6,
+      "capabilities": [
+        {
+          "id": "P18-01",
+          "name": "Intelligence engine",
+          "status": "PASS"
+        },
+        {
+          "id": "P18-02",
+          "name": "Unknown management",
+          "status": "PASS"
+        },
+        {
+          "id": "P18-03",
+          "name": "Citation report generator",
+          "status": "PASS"
+        },
+        {
+          "id": "P18-04",
+          "name": "No fabrication tests",
+          "status": "PASS"
+        },
+        {
+          "id": "P18-05",
+          "name": "Extraction audit",
+          "status": "PASS"
+        },
+        {
+          "id": "P18-06",
+          "name": "Confidence scoring",
+          "status": "PASS"
+        }
+      ],
+      "blockers": []
+    },
+    {
+      "id": "PHASE-19",
+      "number": 19,
+      "name": "Performance & Scalability",
+      "domain": "Performance Engineering",
+      "status": "PARTIAL",
+      "completionPercent": 75,
+      "capabilitiesComplete": 3,
+      "capabilitiesTotal": 4,
+      "capabilities": [
+        {
+          "id": "P19-01",
+          "name": "Performance benchmark",
+          "status": "PASS"
+        },
+        {
+          "id": "P19-02",
+          "name": "Observability routes",
+          "status": "PASS"
+        },
+        {
+          "id": "P19-03",
+          "name": "Load testing",
+          "status": "PASS"
+        },
+        {
+          "id": "P19-04",
+          "name": "Latency targets",
+          "status": "FAIL",
+          "blocker": "Latency SLOs not certified"
+        }
+      ],
+      "blockers": [
+        "Latency SLOs not certified"
+      ]
+    },
+    {
+      "id": "PHASE-20",
+      "number": 20,
+      "name": "Quality Assurance",
+      "domain": "Test Coverage",
+      "status": "COMPLETE",
+      "completionPercent": 100,
+      "capabilitiesComplete": 6,
+      "capabilitiesTotal": 6,
+      "capabilities": [
+        {
+          "id": "P20-01",
+          "name": "Unit tests",
+          "status": "PASS"
+        },
+        {
+          "id": "P20-02",
+          "name": "Integration tests",
+          "status": "PASS"
+        },
+        {
+          "id": "P20-03",
+          "name": "Client domain tests",
+          "status": "PASS"
+        },
+        {
+          "id": "P20-04",
+          "name": "Legislative tests",
+          "status": "PASS"
+        },
+        {
+          "id": "P20-05",
+          "name": "Production gates tests",
+          "status": "PASS"
+        },
+        {
+          "id": "P20-06",
+          "name": "E2E tests",
+          "status": "PASS"
+        }
+      ],
+      "blockers": []
+    },
+    {
+      "id": "PHASE-21",
+      "number": 21,
+      "name": "Compliance & Governance",
+      "domain": "Documentation & Policies",
+      "status": "PARTIAL",
+      "completionPercent": 80,
+      "capabilitiesComplete": 4,
+      "capabilitiesTotal": 5,
+      "capabilities": [
+        {
+          "id": "P21-01",
+          "name": "Disaster recovery",
+          "status": "PASS"
+        },
+        {
+          "id": "P21-02",
+          "name": "Deployment runbook",
+          "status": "PASS"
+        },
+        {
+          "id": "P21-03",
+          "name": "Beta checklist",
+          "status": "PASS"
+        },
+        {
+          "id": "P21-04",
+          "name": "Privacy policy",
+          "status": "PASS"
+        },
+        {
+          "id": "P21-05",
+          "name": "Incident response",
+          "status": "FAIL",
+          "blocker": "Incident response plan not documented"
+        }
+      ],
+      "blockers": [
+        "Incident response plan not documented"
+      ]
+    },
+    {
+      "id": "PHASE-22",
+      "number": 22,
+      "name": "Version 1.0 Certification",
+      "domain": "Release Certification",
+      "status": "PARTIAL",
+      "completionPercent": 83,
+      "capabilitiesComplete": 5,
+      "capabilitiesTotal": 6,
+      "capabilities": [
+        {
+          "id": "P22-01",
+          "name": "Production gates",
+          "status": "PASS"
+        },
+        {
+          "id": "P22-02",
+          "name": "V1 release checklist",
+          "status": "PASS"
+        },
+        {
+          "id": "P22-03",
+          "name": "Backup restore drill",
+          "status": "PASS"
+        },
+        {
+          "id": "P22-04",
+          "name": "Attorney workflow E2E",
+          "status": "PASS"
+        },
+        {
+          "id": "P22-05",
+          "name": "Investigator workflow E2E",
+          "status": "PASS"
+        },
+        {
+          "id": "P22-06",
+          "name": "Billing certification",
+          "status": "FAIL",
+          "blocker": "Stripe live cert pending"
+        }
+      ],
+      "blockers": [
+        "Stripe live cert pending"
+      ]
+    }
+  ],
+  "topBlockers": [
+    "Client-level billing not wired",
+    "Prosecutor field not persisted",
+    "Document versioning not implemented",
+    "Interview scheduling not implemented",
+    "Investigator report generator not implemented",
+    "Client report generator not implemented",
+    "CRM not implemented",
+    "Support dashboard not implemented",
+    "Usage analytics dashboard not implemented",
+    "SMS not implemented"
+  ],
+  "nextRecommendedTasks": [
+    {
+      "priority": "P0",
+      "phase": "See blocker",
+      "task": "Client-level billing not wired"
+    },
+    {
+      "priority": "P1",
+      "phase": "See blocker",
+      "task": "Prosecutor field not persisted"
+    },
+    {
+      "priority": "P1",
+      "phase": "See blocker",
+      "task": "Document versioning not implemented"
+    },
+    {
+      "priority": "P1",
+      "phase": "See blocker",
+      "task": "Interview scheduling not implemented"
+    },
+    {
+      "priority": "P1",
+      "phase": "See blocker",
+      "task": "Investigator report generator not implemented"
+    }
+  ]
+}

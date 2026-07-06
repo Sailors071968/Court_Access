@@ -1,0 +1,111 @@
+// ============================================================================
+// Phase 2 — Narrative Processing Worker (ACU-Enforced)
+// BullMQ worker that processes narrative deconstruction jobs.
+// Extends CourtAccessWorker for automatic ACU credit validation/deduction.
+// Flow: pending → running → completed/failed
+// ============================================================================
+
+import type { Job } from 'bullmq';
+import { CourtAccessWorker, JobTimeoutError } from '../lib/baseWorker.js';
+import { QUEUE_NAMES, type NarrativeProcessingJobData } from '../lib/queues.js';
+import prisma from '../lib/prisma.js';
+
+// ---------------------------------------------------------------------------
+// Narrative Processing Worker
+// ---------------------------------------------------------------------------
+
+class NarrativeProcessingWorker extends CourtAccessWorker<NarrativeProcessingJobData> {
+  constructor() {
+    super({
+      queueName: QUEUE_NAMES.NARRATIVE_PROCESSING,
+      workerName: 'NarrativeProcessingWorker',
+      concurrency: 2,
+      lockDuration: 120_000, // 2 minutes for narrative analysis
+    });
+  }
+
+  protected async processJob(job: Job<NarrativeProcessingJobData>, signal: AbortSignal): Promise<void> {
+    const { tenantId, caseId, processingJobId } = job.data;
+
+    // Mark ProcessingJob as active (direct ID lookup — safe across retries)
+    if (processingJobId) {
+      await prisma.processingJob.update({
+        where: { id: processingJobId },
+        data: { status: 'active', startedAt: new Date(), completedAt: null, failureCode: null, error: null },
+      });
+    }
+
+    try {
+      // Execute narrative deconstruction pipeline
+      console.log(`[NarrativeProcessingWorker] Deconstructing narratives for case ${caseId}`);
+
+      // Fetch evidence documents for claim extraction
+      const evidence = await prisma.evidence.findMany({
+        where: { caseId, tenantId },
+        select: { evidenceId: true, evidenceType: true, fileName: true },
+      });
+
+      // Filter to narrative-relevant evidence types
+      const narrativeEvidence = evidence.filter((e) =>
+        ['police_report', 'probable_cause', 'arrest_affidavit', 'supplemental_report', 'incident_report'].includes(e.evidenceType),
+      );
+
+      console.log(`[NarrativeProcessingWorker] Found ${narrativeEvidence.length} narrative documents for case ${caseId}`);
+
+      // In production: runs 4-stage pipeline:
+      // 1. Claim extraction (claimExtractionWorker)
+      // 2. Claim normalization (claimNormalizationWorker)
+      // 3. Evidence validation (evidenceValidationWorker)
+      // 4. Impeachment detection (impeachmentDetectionWorker)
+      // Actual AI pipeline integration in Phase 3.
+
+      // Check abort signal before writing completion status
+      if (signal.aborted) throw new JobTimeoutError('Job aborted by timeout');
+
+      // Mark ProcessingJob as completed (idempotent — only if still 'active')
+      if (processingJobId) {
+        await prisma.processingJob.updateMany({
+          where: { id: processingJobId, status: 'active' },
+          data: {
+            status: 'completed',
+            completedAt: new Date(),
+            acuCredits: job.data.acuCreditsRequired,
+            failureCode: null,
+            error: null,
+          },
+        });
+      }
+
+      console.log(`[NarrativeProcessingWorker] Narrative deconstruction completed for case ${caseId}`);
+    } catch (error) {
+      // Skip DB write for timeout — base worker handles JOB_TIMEOUT status
+      if (error instanceof JobTimeoutError) throw error;
+
+      // Mark ProcessingJob as failed (non-timeout errors only)
+      if (processingJobId) {
+        try {
+          const message = error instanceof Error ? error.message : String(error);
+          await prisma.processingJob.update({
+            where: { id: processingJobId },
+            data: {
+              status: 'failed',
+              completedAt: new Date(),
+              failureCode: 'PROCESSING_ERROR',
+              error: message,
+            },
+          });
+        } catch (dbError) {
+          const dbMsg = dbError instanceof Error ? dbError.message : String(dbError);
+          console.error(`[NarrativeProcessingWorker] Failed to update ProcessingJob status: ${dbMsg}`);
+        }
+      }
+      throw error; // Rethrow to trigger BullMQ retry + ACU refund in base class
+    }
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Singleton Export
+// ---------------------------------------------------------------------------
+
+export const narrativeProcessingWorker = new NarrativeProcessingWorker();

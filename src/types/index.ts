@@ -1,166 +1,131 @@
 // ============================================
-// Court Access — Unified Type Definitions
+// Court Access — Unified Type Re-exports (Phase 1)
+// All domain types are now defined in canonical models.
+// This file re-exports for backward compatibility.
 // ============================================
 
-// --- Roles ---
-export type UserRole = 'investigator' | 'attorney' | 'admin' | 'staff';
+// ---------------------------------------------------------------------------
+// Canonical Model Re-exports — Case Domain
+// ---------------------------------------------------------------------------
+
+export type {
+  CaseEntity,
+  Case,
+  CaseStatus,
+  CasePhase,
+  EvidenceStatus,
+  ChargeElement,
+  ChargeEntity,
+  Charge,
+  ExpertRecommendation,
+  ExpertEntity,
+  Expert,
+  MotionPriority,
+  MotionEntity,
+  Motion,
+  ActivityType,
+  ActivityEntry,
+  ActivityItem,
+  NotificationEntry,
+  Notification,
+  TaskPriority,
+  TaskStatus,
+  InvestigativeTaskEntity,
+  InvestigativeTask,
+} from '../models/CaseModel';
+
+// ---------------------------------------------------------------------------
+// Canonical Model Re-exports — Document Domain
+// ---------------------------------------------------------------------------
+
+export type {
+  DocumentType,
+  DocumentAnalysisStatus,
+  ExtractionStatus,
+  AIAnalysisStatus,
+  DocumentEntity,
+  CaseDocument,
+} from '../models/DocumentModel';
+
+// ---------------------------------------------------------------------------
+// Canonical Model Re-exports — Agency Domain
+// ---------------------------------------------------------------------------
+
+export type {
+  AgencyTier,
+  AgencyEntity,
+} from '../models/AgencyModel';
+
+// ---------------------------------------------------------------------------
+// Canonical Model Re-exports — Intelligence Domain
+// ---------------------------------------------------------------------------
+
+export type {
+  IntelligenceSeverity,
+  SignalCategory,
+  IntelligenceSignal,
+  ElementCoverageMap,
+  IntelligenceSnapshot,
+  RiskScoreResult,
+  RiskFactor,
+  ProsecutionAnalysisResult,
+  ProsecutionVulnerability,
+  StrengthSummary,
+  DefenseInsight,
+  SearchResult,
+} from '../models/IntelligenceModel';
+
+// ---------------------------------------------------------------------------
+// Auth & RBAC (remain here — not domain models)
+// ---------------------------------------------------------------------------
+
+export type UserRole = 'investigator' | 'attorney' | 'admin' | 'staff' | 'defendant';
+
+export type DefaultRole =
+  | 'attorney'
+  | 'criminal_investigator'
+  | 'criminal_defendant'
+  | 'self_represented_litigant'
+  | 'paralegal'
+  | 'secretary'
+  | 'legal_assistant'
+  | 'law_office_administrator'
+  | 'expert_witness'
+  | 'family_member'
+  | 'interpreter'
+  | 'consultant'
+  | 'other';
 
 export interface User {
   id: string;
   name: string;
   email: string;
   role: UserRole;
+  defaultRole?: DefaultRole;
   avatar?: string;
   phone?: string;
 }
 
-// --- Cases ---
-export type CaseStatus = 'active' | 'closed' | 'pending' | 'archived';
-
-export interface Case {
-  id: string;
-  caseNumber: string;
-  title: string;
-  status: CaseStatus;
-  jurisdiction: string;
-  court: string;
-  judge: string;
-  department: string;
-  nextHearing?: string;
-  nextHearingLocation?: string;
-  documentsCount: number;
-  chargesCount: number;
-  createdAt: string;
-  updatedAt: string;
+export interface RolePermissions {
+  canViewCharges: boolean;
+  canViewEvidence: boolean;
+  canViewExperts: boolean;
+  canViewMotions: boolean;
+  canViewResearch: boolean;
+  canViewActivity: boolean;
+  canViewDocuments: boolean;
+  canUploadDocuments: boolean;
+  canManageCases: boolean;
+  canViewAdmin: boolean;
+  canViewEvidenceManagement: boolean;
+  canViewTasks: boolean;
+  canViewSettings: boolean;
 }
 
-// --- Charges ---
-export type EvidenceStatus = 'established' | 'disputed' | 'weak' | 'unclear';
+// ---------------------------------------------------------------------------
+// Notification Settings (UI-only, not a domain model)
+// ---------------------------------------------------------------------------
 
-export interface ChargeElement {
-  number: number;
-  description: string;
-  status: EvidenceStatus;
-  details: string;
-}
-
-export interface Charge {
-  id: string;
-  code: string;
-  title: string;
-  degree?: string;
-  calcrimNumber?: string;
-  elements: ChargeElement[];
-  potentialSentence?: string;
-  enhancement?: string;
-}
-
-// --- Evidence / Documents ---
-export type DocumentType =
-  | 'defense_motion'
-  | 'charging_document'
-  | 'transcript'
-  | 'prosecution_motion'
-  | 'court_order'
-  | 'defense_filing'
-  | 'other';
-
-export type AIAnalysisStatus = 'analyzed' | 'analyzing' | 'pending' | 'failed';
-
-export interface CaseDocument {
-  id: string;
-  name: string;
-  type: DocumentType;
-  filedDate: string;
-  pages: number;
-  aiStatus: AIAnalysisStatus;
-  fileSize?: string;
-  fileType?: string;
-}
-
-// --- Experts ---
-export type ExpertRecommendation = 'recommended' | 'consider';
-
-export interface Expert {
-  id: string;
-  title: string;
-  recommendation: ExpertRecommendation;
-  reason: string;
-  costRange: string;
-}
-
-// --- Motions ---
-export type MotionPriority = 'high' | 'medium' | 'low';
-
-export interface Motion {
-  id: string;
-  title: string;
-  code?: string;
-  priority: MotionPriority;
-  description: string;
-}
-
-// --- Activity ---
-export type ActivityType = 'document' | 'hearing' | 'analysis' | 'motion' | 'system';
-
-export interface ActivityItem {
-  id: string;
-  type: ActivityType;
-  title: string;
-  description: string;
-  timestamp: string;
-  actionLabel?: string;
-  actionUrl?: string;
-}
-
-// --- Notifications ---
-export interface Notification {
-  id: string;
-  type: ActivityType;
-  title: string;
-  description: string;
-  timestamp: string;
-  read: boolean;
-  actionLabel?: string;
-  actionUrl?: string;
-}
-
-// --- Investigative Tasks ---
-export type TaskPriority = 'high' | 'medium' | 'standard';
-export type TaskStatus = 'pending' | 'in_progress' | 'completed';
-
-export interface InvestigativeTask {
-  id: string;
-  number: number;
-  title: string;
-  description: string;
-  priority: TaskPriority;
-  status: TaskStatus;
-}
-
-// --- AI Insights ---
-export interface DefenseInsight {
-  id: string;
-  content: string;
-}
-
-export interface AIAnalysis {
-  impactOnDefense: string;
-  daStrategy: string;
-  elementsBreakdown: ChargeElement[];
-  recommendedActions: string[];
-}
-
-// --- Search ---
-export interface SearchResult {
-  id: string;
-  type: 'case' | 'document' | 'statute';
-  title: string;
-  description: string;
-  url: string;
-}
-
-// --- Notification Settings ---
 export interface NotificationSettings {
   smsEnabled: boolean;
   emailEnabled: boolean;
@@ -175,18 +140,13 @@ export interface NotificationSettings {
   email: string;
 }
 
-// --- RBAC ---
-export interface RolePermissions {
-  canViewCharges: boolean;
-  canViewEvidence: boolean;
-  canViewExperts: boolean;
-  canViewMotions: boolean;
-  canViewResearch: boolean;
-  canViewActivity: boolean;
-  canViewDocuments: boolean;
-  canUploadDocuments: boolean;
-  canManageCases: boolean;
-  canViewAdmin: boolean;
-  canViewTasks: boolean;
-  canViewSettings: boolean;
+// ---------------------------------------------------------------------------
+// AI Analysis (legacy — prefer IntelligenceModel types)
+// ---------------------------------------------------------------------------
+
+export interface AIAnalysis {
+  impactOnDefense: string;
+  daStrategy: string;
+  elementsBreakdown: import('../models/CaseModel').ChargeElement[];
+  recommendedActions: string[];
 }

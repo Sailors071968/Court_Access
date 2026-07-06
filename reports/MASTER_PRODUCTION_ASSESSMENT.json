@@ -1,0 +1,4827 @@
+{
+  "assessment": "COURTACCESS_MASTER_PRODUCTION_ASSESSMENT",
+  "version": "1.0",
+  "generatedAt": "2026-07-05T15:48:47.306Z",
+  "methodology": "Each capability has objective binary criteria. Verified = runtime criterion passes when defined; otherwise all defined implementation criteria must pass. No subjective scoring.",
+  "formula": "Completion % = Verified Capabilities ÷ Total Planned Capabilities",
+  "summary": {
+    "totalPrograms": 25,
+    "totalCapabilities": 199,
+    "verifiedCapabilities": 158,
+    "implementedCapabilities": 167,
+    "blockedCapabilities": 19,
+    "overallCompletionPercent": 79.4,
+    "overallVerificationPercent": 79.4,
+    "productionReadiness": "RELEASE_CANDIDATE"
+  },
+  "programs": [
+    {
+      "id": "PROGRAM-00",
+      "number": 0,
+      "name": "Production Website",
+      "totalPlanned": 15,
+      "implemented": 15,
+      "verified": 15,
+      "incomplete": 0,
+      "blocked": 0,
+      "completionPercent": 100,
+      "verificationPercent": 100,
+      "productionReadiness": "READY",
+      "capabilities": [
+        {
+          "id": "P00-01",
+          "name": "Landing page",
+          "programId": "PROGRAM-00",
+          "criteria": [
+            {
+              "id": "P00-01-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P00-01-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P00-01-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            },
+            {
+              "id": "P00-01-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P00-02",
+          "name": "Pricing page",
+          "programId": "PROGRAM-00",
+          "criteria": [
+            {
+              "id": "P00-02-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P00-02-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P00-02-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P00-03",
+          "name": "About page",
+          "programId": "PROGRAM-00",
+          "criteria": [
+            {
+              "id": "P00-03-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P00-03-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P00-03-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P00-04",
+          "name": "Features page",
+          "programId": "PROGRAM-00",
+          "criteria": [
+            {
+              "id": "P00-04-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P00-04-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P00-04-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P00-05",
+          "name": "FAQ page",
+          "programId": "PROGRAM-00",
+          "criteria": [
+            {
+              "id": "P00-05-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P00-05-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P00-05-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P00-06",
+          "name": "Contact page",
+          "programId": "PROGRAM-00",
+          "criteria": [
+            {
+              "id": "P00-06-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P00-06-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P00-06-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            },
+            {
+              "id": "P00-06-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P00-07",
+          "name": "Login",
+          "programId": "PROGRAM-00",
+          "criteria": [
+            {
+              "id": "P00-07-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P00-07-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P00-07-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            },
+            {
+              "id": "P00-07-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P00-08",
+          "name": "Registration",
+          "programId": "PROGRAM-00",
+          "criteria": [
+            {
+              "id": "P00-08-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P00-08-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P00-08-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            },
+            {
+              "id": "P00-08-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P00-09",
+          "name": "Password reset",
+          "programId": "PROGRAM-00",
+          "criteria": [
+            {
+              "id": "P00-09-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P00-09-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P00-09-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            },
+            {
+              "id": "P00-09-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P00-10",
+          "name": "Email verification",
+          "programId": "PROGRAM-00",
+          "criteria": [
+            {
+              "id": "P00-10-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P00-10-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P00-10-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            },
+            {
+              "id": "P00-10-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P00-11",
+          "name": "Privacy policy",
+          "programId": "PROGRAM-00",
+          "criteria": [
+            {
+              "id": "P00-11-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P00-11-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P00-11-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P00-12",
+          "name": "Terms of service",
+          "programId": "PROGRAM-00",
+          "criteria": [
+            {
+              "id": "P00-12-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P00-12-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P00-12-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P00-13",
+          "name": "Frontend build",
+          "programId": "PROGRAM-00",
+          "criteria": [
+            {
+              "id": "P00-13-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P00-13-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P00-13-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P00-14",
+          "name": "Route verification script",
+          "programId": "PROGRAM-00",
+          "criteria": [
+            {
+              "id": "P00-14-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P00-14-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P00-14-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P00-15",
+          "name": "Lighthouse audit",
+          "programId": "PROGRAM-00",
+          "criteria": [
+            {
+              "id": "P00-15-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P00-15-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P00-15-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        }
+      ]
+    },
+    {
+      "id": "PROGRAM-01",
+      "number": 1,
+      "name": "Universal Membership",
+      "totalPlanned": 10,
+      "implemented": 10,
+      "verified": 9,
+      "incomplete": 1,
+      "blocked": 0,
+      "completionPercent": 90,
+      "verificationPercent": 90,
+      "productionReadiness": "PARTIAL",
+      "capabilities": [
+        {
+          "id": "P01-01",
+          "name": "Universal membership model",
+          "programId": "PROGRAM-01",
+          "criteria": [
+            {
+              "id": "P01-01-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P01-01-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P01-01-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": true
+            },
+            {
+              "id": "P01-01-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P01-02",
+          "name": "Account provisioning",
+          "programId": "PROGRAM-01",
+          "criteria": [
+            {
+              "id": "P01-02-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P01-02-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P01-03",
+          "name": "Terms acceptance",
+          "programId": "PROGRAM-01",
+          "criteria": [
+            {
+              "id": "P01-03-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P01-03-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P01-03-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            },
+            {
+              "id": "P01-03-database",
+              "label": "Database complete",
+              "category": "database",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P01-04",
+          "name": "30-day trial",
+          "programId": "PROGRAM-01",
+          "criteria": [
+            {
+              "id": "P01-04-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            },
+            {
+              "id": "P01-04-database",
+              "label": "Database complete",
+              "category": "database",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P01-05",
+          "name": "Membership API",
+          "programId": "PROGRAM-01",
+          "criteria": [
+            {
+              "id": "P01-05-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P01-05-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P01-05-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P01-06",
+          "name": "Account settings UI",
+          "programId": "PROGRAM-01",
+          "criteria": [
+            {
+              "id": "P01-06-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P01-06-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P01-06-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P01-07",
+          "name": "Shared access dashboard",
+          "programId": "PROGRAM-01",
+          "criteria": [
+            {
+              "id": "P01-07-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P01-07-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P01-07-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            },
+            {
+              "id": "P01-07-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P01-08",
+          "name": "Stripe checkout wiring",
+          "programId": "PROGRAM-01",
+          "criteria": [
+            {
+              "id": "P01-08-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P01-08-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P01-08-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P01-09",
+          "name": "Delegated user limit",
+          "programId": "PROGRAM-01",
+          "criteria": [
+            {
+              "id": "P01-09-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P01-09-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P01-09-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": false
+            }
+          ],
+          "implemented": true,
+          "verified": false,
+          "blocked": false
+        },
+        {
+          "id": "P01-10",
+          "name": "Permission resolver",
+          "programId": "PROGRAM-01",
+          "criteria": [
+            {
+              "id": "P01-10-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P01-10-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P01-10-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        }
+      ]
+    },
+    {
+      "id": "PROGRAM-02",
+      "number": 2,
+      "name": "Hybrid Stripe Billing",
+      "totalPlanned": 12,
+      "implemented": 11,
+      "verified": 10,
+      "incomplete": 2,
+      "blocked": 1,
+      "completionPercent": 83.3,
+      "verificationPercent": 83.3,
+      "productionReadiness": "PARTIAL",
+      "capabilities": [
+        {
+          "id": "P02-01",
+          "name": "Stripe checkout",
+          "programId": "PROGRAM-02",
+          "criteria": [
+            {
+              "id": "P02-01-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P02-01-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P02-01-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P02-02",
+          "name": "Webhook processor",
+          "programId": "PROGRAM-02",
+          "criteria": [
+            {
+              "id": "P02-02-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P02-02-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P02-02-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P02-03",
+          "name": "Customer portal",
+          "programId": "PROGRAM-02",
+          "criteria": [
+            {
+              "id": "P02-03-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P02-04",
+          "name": "Subscription service",
+          "programId": "PROGRAM-02",
+          "criteria": [
+            {
+              "id": "P02-04-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P02-04-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P02-04-database",
+              "label": "Database complete",
+              "category": "database",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P02-05",
+          "name": "Billing routes",
+          "programId": "PROGRAM-02",
+          "criteria": [
+            {
+              "id": "P02-05-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P02-05-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P02-05-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P02-06",
+          "name": "Discount codes",
+          "programId": "PROGRAM-02",
+          "criteria": [
+            {
+              "id": "P02-06-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P02-06-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P02-06-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P02-07",
+          "name": "Billing emails",
+          "programId": "PROGRAM-02",
+          "criteria": [
+            {
+              "id": "P02-07-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P02-07-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P02-08",
+          "name": "Stripe certification harness",
+          "programId": "PROGRAM-02",
+          "criteria": [
+            {
+              "id": "P02-08-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P02-08-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P02-08-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": false
+            }
+          ],
+          "implemented": true,
+          "verified": false,
+          "blocked": false
+        },
+        {
+          "id": "P02-09",
+          "name": "Stripe billing tests",
+          "programId": "PROGRAM-02",
+          "criteria": [
+            {
+              "id": "P02-09-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": true
+            },
+            {
+              "id": "P02-09-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P02-10",
+          "name": "Live Stripe env configured",
+          "programId": "PROGRAM-02",
+          "criteria": [
+            {
+              "id": "P02-10-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": true,
+          "blocker": "STRIPE_SECRET_KEY not configured"
+        },
+        {
+          "id": "P02-11",
+          "name": "Annual billing",
+          "programId": "PROGRAM-02",
+          "criteria": [
+            {
+              "id": "P02-11-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P02-12",
+          "name": "Production certification report",
+          "programId": "PROGRAM-02",
+          "criteria": [
+            {
+              "id": "P02-12-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P02-12-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        }
+      ]
+    },
+    {
+      "id": "PROGRAM-03",
+      "number": 3,
+      "name": "Delegated Access",
+      "totalPlanned": 8,
+      "implemented": 7,
+      "verified": 7,
+      "incomplete": 1,
+      "blocked": 0,
+      "completionPercent": 87.5,
+      "verificationPercent": 87.5,
+      "productionReadiness": "PARTIAL",
+      "capabilities": [
+        {
+          "id": "P03-01",
+          "name": "Invitation create",
+          "programId": "PROGRAM-03",
+          "criteria": [
+            {
+              "id": "P03-01-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            },
+            {
+              "id": "P03-01-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P03-02",
+          "name": "Invitation accept",
+          "programId": "PROGRAM-03",
+          "criteria": [
+            {
+              "id": "P03-02-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P03-02-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P03-02-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            },
+            {
+              "id": "P03-02-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P03-03",
+          "name": "Invitation preview",
+          "programId": "PROGRAM-03",
+          "criteria": [
+            {
+              "id": "P03-03-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P03-04",
+          "name": "5-user limit",
+          "programId": "PROGRAM-03",
+          "criteria": [
+            {
+              "id": "P03-04-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P03-04-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P03-04-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P03-05",
+          "name": "MFA for delegates",
+          "programId": "PROGRAM-03",
+          "criteria": [
+            {
+              "id": "P03-05-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P03-05-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P03-05-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P03-06",
+          "name": "Session history",
+          "programId": "PROGRAM-03",
+          "criteria": [
+            {
+              "id": "P03-06-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P03-07",
+          "name": "Org member list",
+          "programId": "PROGRAM-03",
+          "criteria": [
+            {
+              "id": "P03-07-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P03-08",
+          "name": "Invitation tests",
+          "programId": "PROGRAM-03",
+          "criteria": [
+            {
+              "id": "P03-08-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": false
+            },
+            {
+              "id": "P03-08-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": false
+        }
+      ]
+    },
+    {
+      "id": "PROGRAM-04",
+      "number": 4,
+      "name": "Resource Permissions",
+      "totalPlanned": 18,
+      "implemented": 18,
+      "verified": 18,
+      "incomplete": 0,
+      "blocked": 0,
+      "completionPercent": 100,
+      "verificationPercent": 100,
+      "productionReadiness": "READY",
+      "capabilities": [
+        {
+          "id": "P04-01",
+          "name": "PermissionGrant model",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-01-database",
+              "label": "Database complete",
+              "category": "database",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P04-02",
+          "name": "Permission grant API",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-02-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P04-03",
+          "name": "Permission resolver",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-03-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P04-03-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P04-04",
+          "name": "Case-level filtering",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-04-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P04-05",
+          "name": "Permission check API",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-05-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P04-06",
+          "name": "Firm permissions UI",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-06-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P04-07",
+          "name": "Route enforcement",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-07-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P04-07-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P04-07-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P04-08",
+          "name": "Firm platform tests",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-08-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P04-08-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P04-09",
+          "name": "Charges authorization",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-09-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P04-09-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P04-10",
+          "name": "Communications authorization",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-10-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P04-10-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P04-11",
+          "name": "Witness and leads authorization",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-11-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P04-11-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P04-12",
+          "name": "Reports and workbench authorization",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-12-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P04-12-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P04-13",
+          "name": "CALCRIM authorization",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-13-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P04-13-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P04-14",
+          "name": "Intelligence report authorization",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-14-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P04-14-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P04-15",
+          "name": "Client organization authorization",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-15-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P04-15-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P04-16",
+          "name": "Non-disclosure list filtering",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-16-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P04-16-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P04-16-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P04-17",
+          "name": "Scope registry",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-17-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P04-17-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P04-17-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P04-18",
+          "name": "Seven-level permission model",
+          "programId": "PROGRAM-04",
+          "criteria": [
+            {
+              "id": "P04-18-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P04-18-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P04-18-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": true
+            },
+            {
+              "id": "P04-18-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        }
+      ]
+    },
+    {
+      "id": "PROGRAM-05",
+      "number": 5,
+      "name": "Document Redaction",
+      "totalPlanned": 7,
+      "implemented": 5,
+      "verified": 5,
+      "incomplete": 2,
+      "blocked": 2,
+      "completionPercent": 71.4,
+      "verificationPercent": 71.4,
+      "productionReadiness": "PARTIAL",
+      "capabilities": [
+        {
+          "id": "P05-01",
+          "name": "Redaction schema",
+          "programId": "PROGRAM-05",
+          "criteria": [
+            {
+              "id": "P05-01-database",
+              "label": "Database complete",
+              "category": "database",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P05-02",
+          "name": "Redaction service",
+          "programId": "PROGRAM-05",
+          "criteria": [
+            {
+              "id": "P05-02-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P05-02-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P05-03",
+          "name": "Redaction API",
+          "programId": "PROGRAM-05",
+          "criteria": [
+            {
+              "id": "P05-03-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P05-04",
+          "name": "Publication profiles",
+          "programId": "PROGRAM-05",
+          "criteria": [
+            {
+              "id": "P05-04-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P05-04-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P05-05",
+          "name": "Redaction UI",
+          "programId": "PROGRAM-05",
+          "criteria": [
+            {
+              "id": "P05-05-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P05-05-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P05-05-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": false
+            },
+            {
+              "id": "P05-05-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P05-06",
+          "name": "OCR text redaction",
+          "programId": "PROGRAM-05",
+          "criteria": [
+            {
+              "id": "P05-06-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": true,
+          "blocker": "OCR layer redaction not implemented"
+        },
+        {
+          "id": "P05-07",
+          "name": "AI redaction suggestions",
+          "programId": "PROGRAM-05",
+          "criteria": [
+            {
+              "id": "P05-07-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": true,
+          "blocker": "AI suggestion engine not implemented"
+        }
+      ]
+    },
+    {
+      "id": "PROGRAM-06",
+      "number": 6,
+      "name": "Disclosure Manager",
+      "totalPlanned": 6,
+      "implemented": 6,
+      "verified": 6,
+      "incomplete": 0,
+      "blocked": 0,
+      "completionPercent": 100,
+      "verificationPercent": 100,
+      "productionReadiness": "READY",
+      "capabilities": [
+        {
+          "id": "P06-01",
+          "name": "Disclosure schema",
+          "programId": "PROGRAM-06",
+          "criteria": [
+            {
+              "id": "P06-01-database",
+              "label": "Database complete",
+              "category": "database",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P06-02",
+          "name": "Disclosure service",
+          "programId": "PROGRAM-06",
+          "criteria": [
+            {
+              "id": "P06-02-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P06-02-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P06-03",
+          "name": "Disclosure API",
+          "programId": "PROGRAM-06",
+          "criteria": [
+            {
+              "id": "P06-03-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P06-04",
+          "name": "Shared access view",
+          "programId": "PROGRAM-06",
+          "criteria": [
+            {
+              "id": "P06-04-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            },
+            {
+              "id": "P06-04-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P06-05",
+          "name": "Preview as recipient",
+          "programId": "PROGRAM-06",
+          "criteria": [
+            {
+              "id": "P06-05-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P06-05-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P06-05-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P06-06",
+          "name": "Version comparison",
+          "programId": "PROGRAM-06",
+          "criteria": [
+            {
+              "id": "P06-06-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P06-06-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P06-06-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        }
+      ]
+    },
+    {
+      "id": "PROGRAM-07",
+      "number": 7,
+      "name": "Organizations",
+      "totalPlanned": 8,
+      "implemented": 6,
+      "verified": 6,
+      "incomplete": 2,
+      "blocked": 0,
+      "completionPercent": 75,
+      "verificationPercent": 75,
+      "productionReadiness": "PARTIAL",
+      "capabilities": [
+        {
+          "id": "P07-01",
+          "name": "Organization model",
+          "programId": "PROGRAM-07",
+          "criteria": [
+            {
+              "id": "P07-01-database",
+              "label": "Database complete",
+              "category": "database",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P07-02",
+          "name": "Org routes",
+          "programId": "PROGRAM-07",
+          "criteria": [
+            {
+              "id": "P07-02-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P07-02-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P07-02-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P07-03",
+          "name": "Offices",
+          "programId": "PROGRAM-07",
+          "criteria": [
+            {
+              "id": "P07-03-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            },
+            {
+              "id": "P07-03-database",
+              "label": "Database complete",
+              "category": "database",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P07-04",
+          "name": "Practice groups",
+          "programId": "PROGRAM-07",
+          "criteria": [
+            {
+              "id": "P07-04-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P07-05",
+          "name": "Firm platform",
+          "programId": "PROGRAM-07",
+          "criteria": [
+            {
+              "id": "P07-05-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P07-05-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P07-05-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P07-06",
+          "name": "Tenant isolation",
+          "programId": "PROGRAM-07",
+          "criteria": [
+            {
+              "id": "P07-06-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": false
+            },
+            {
+              "id": "P07-06-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": false
+        },
+        {
+          "id": "P07-07",
+          "name": "Firm platform tests",
+          "programId": "PROGRAM-07",
+          "criteria": [
+            {
+              "id": "P07-07-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": false
+            },
+            {
+              "id": "P07-07-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": false
+        },
+        {
+          "id": "P07-08",
+          "name": "Org settings UI",
+          "programId": "PROGRAM-07",
+          "criteria": [
+            {
+              "id": "P07-08-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        }
+      ]
+    },
+    {
+      "id": "PROGRAM-08",
+      "number": 8,
+      "name": "Client Management",
+      "totalPlanned": 5,
+      "implemented": 2,
+      "verified": 2,
+      "incomplete": 3,
+      "blocked": 2,
+      "completionPercent": 40,
+      "verificationPercent": 40,
+      "productionReadiness": "PARTIAL",
+      "capabilities": [
+        {
+          "id": "P08-01",
+          "name": "Client model",
+          "programId": "PROGRAM-08",
+          "criteria": [
+            {
+              "id": "P08-01-database",
+              "label": "Database complete",
+              "category": "database",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P08-02",
+          "name": "Client CRUD API",
+          "programId": "PROGRAM-08",
+          "criteria": [
+            {
+              "id": "P08-02-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P08-02-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P08-02-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P08-03",
+          "name": "Client tests",
+          "programId": "PROGRAM-08",
+          "criteria": [
+            {
+              "id": "P08-03-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": false
+            },
+            {
+              "id": "P08-03-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": false
+        },
+        {
+          "id": "P08-04",
+          "name": "Client intake UI",
+          "programId": "PROGRAM-08",
+          "criteria": [
+            {
+              "id": "P08-04-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": true,
+          "blocker": "Dedicated intake UI not built"
+        },
+        {
+          "id": "P08-05",
+          "name": "Client billing",
+          "programId": "PROGRAM-08",
+          "criteria": [
+            {
+              "id": "P08-05-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": true,
+          "blocker": "Client-level billing not wired"
+        }
+      ]
+    },
+    {
+      "id": "PROGRAM-09",
+      "number": 9,
+      "name": "Case Management",
+      "totalPlanned": 8,
+      "implemented": 8,
+      "verified": 8,
+      "incomplete": 0,
+      "blocked": 0,
+      "completionPercent": 100,
+      "verificationPercent": 100,
+      "productionReadiness": "READY",
+      "capabilities": [
+        {
+          "id": "P09-01",
+          "name": "Case CRUD API",
+          "programId": "PROGRAM-09",
+          "criteria": [
+            {
+              "id": "P09-01-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P09-01-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P09-01-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P09-02",
+          "name": "Cases list UI",
+          "programId": "PROGRAM-09",
+          "criteria": [
+            {
+              "id": "P09-02-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P09-03",
+          "name": "Case overview UI",
+          "programId": "PROGRAM-09",
+          "criteria": [
+            {
+              "id": "P09-03-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P09-04",
+          "name": "Charges",
+          "programId": "PROGRAM-09",
+          "criteria": [
+            {
+              "id": "P09-04-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            },
+            {
+              "id": "P09-04-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P09-05",
+          "name": "Hearings",
+          "programId": "PROGRAM-09",
+          "criteria": [
+            {
+              "id": "P09-05-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P09-06",
+          "name": "Motions UI",
+          "programId": "PROGRAM-09",
+          "criteria": [
+            {
+              "id": "P09-06-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P09-07",
+          "name": "Discovery requests",
+          "programId": "PROGRAM-09",
+          "criteria": [
+            {
+              "id": "P09-07-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P09-08",
+          "name": "Case tests",
+          "programId": "PROGRAM-09",
+          "criteria": [
+            {
+              "id": "P09-08-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": true
+            },
+            {
+              "id": "P09-08-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        }
+      ]
+    },
+    {
+      "id": "PROGRAM-10",
+      "number": 10,
+      "name": "Document Platform",
+      "totalPlanned": 6,
+      "implemented": 5,
+      "verified": 5,
+      "incomplete": 1,
+      "blocked": 1,
+      "completionPercent": 83.3,
+      "verificationPercent": 83.3,
+      "productionReadiness": "PARTIAL",
+      "capabilities": [
+        {
+          "id": "P10-01",
+          "name": "Evidence upload API",
+          "programId": "PROGRAM-10",
+          "criteria": [
+            {
+              "id": "P10-01-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P10-02",
+          "name": "Direct upload",
+          "programId": "PROGRAM-10",
+          "criteria": [
+            {
+              "id": "P10-02-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P10-02-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P10-03",
+          "name": "Documents UI",
+          "programId": "PROGRAM-10",
+          "criteria": [
+            {
+              "id": "P10-03-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P10-04",
+          "name": "OCR worker",
+          "programId": "PROGRAM-10",
+          "criteria": [
+            {
+              "id": "P10-04-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P10-04-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P10-05",
+          "name": "Document versioning",
+          "programId": "PROGRAM-10",
+          "criteria": [
+            {
+              "id": "P10-05-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": true,
+          "blocker": "Document versioning not implemented"
+        },
+        {
+          "id": "P10-06",
+          "name": "Deduplication report",
+          "programId": "PROGRAM-10",
+          "criteria": [
+            {
+              "id": "P10-06-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P10-06-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        }
+      ]
+    },
+    {
+      "id": "PROGRAM-11",
+      "number": 11,
+      "name": "Evidence Platform",
+      "totalPlanned": 7,
+      "implemented": 6,
+      "verified": 5,
+      "incomplete": 2,
+      "blocked": 0,
+      "completionPercent": 71.4,
+      "verificationPercent": 71.4,
+      "productionReadiness": "PARTIAL",
+      "capabilities": [
+        {
+          "id": "P11-01",
+          "name": "Evidence repository",
+          "programId": "PROGRAM-11",
+          "criteria": [
+            {
+              "id": "P11-01-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            },
+            {
+              "id": "P11-01-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P11-02",
+          "name": "Timeline API",
+          "programId": "PROGRAM-11",
+          "criteria": [
+            {
+              "id": "P11-02-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P11-02-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P11-02-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P11-03",
+          "name": "Contradiction engine",
+          "programId": "PROGRAM-11",
+          "criteria": [
+            {
+              "id": "P11-03-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": false
+            },
+            {
+              "id": "P11-03-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": false
+            },
+            {
+              "id": "P11-03-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": false,
+          "blocked": false
+        },
+        {
+          "id": "P11-04",
+          "name": "Evidence gaps",
+          "programId": "PROGRAM-11",
+          "criteria": [
+            {
+              "id": "P11-04-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": false
+            },
+            {
+              "id": "P11-04-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": false
+        },
+        {
+          "id": "P11-05",
+          "name": "Forensic reconstruction",
+          "programId": "PROGRAM-11",
+          "criteria": [
+            {
+              "id": "P11-05-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P11-05-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P11-06",
+          "name": "Contradiction UI",
+          "programId": "PROGRAM-11",
+          "criteria": [
+            {
+              "id": "P11-06-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P11-07",
+          "name": "Evidence tests",
+          "programId": "PROGRAM-11",
+          "criteria": [
+            {
+              "id": "P11-07-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        }
+      ]
+    },
+    {
+      "id": "PROGRAM-12",
+      "number": 12,
+      "name": "Investigator Workbench",
+      "totalPlanned": 9,
+      "implemented": 6,
+      "verified": 6,
+      "incomplete": 3,
+      "blocked": 2,
+      "completionPercent": 66.7,
+      "verificationPercent": 66.7,
+      "productionReadiness": "PARTIAL",
+      "capabilities": [
+        {
+          "id": "P12-01",
+          "name": "Investigator API",
+          "programId": "PROGRAM-12",
+          "criteria": [
+            {
+              "id": "P12-01-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P12-01-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P12-01-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P12-02",
+          "name": "Witnesses",
+          "programId": "PROGRAM-12",
+          "criteria": [
+            {
+              "id": "P12-02-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P12-03",
+          "name": "Leads",
+          "programId": "PROGRAM-12",
+          "criteria": [
+            {
+              "id": "P12-03-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P12-04",
+          "name": "Field notes",
+          "programId": "PROGRAM-12",
+          "criteria": [
+            {
+              "id": "P12-04-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P12-05",
+          "name": "Assignments",
+          "programId": "PROGRAM-12",
+          "criteria": [
+            {
+              "id": "P12-05-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P12-06",
+          "name": "Investigator UI",
+          "programId": "PROGRAM-12",
+          "criteria": [
+            {
+              "id": "P12-06-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P12-06-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P12-06-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P12-07",
+          "name": "Investigator tests",
+          "programId": "PROGRAM-12",
+          "criteria": [
+            {
+              "id": "P12-07-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": false
+            },
+            {
+              "id": "P12-07-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": false
+        },
+        {
+          "id": "P12-08",
+          "name": "GPS mapping",
+          "programId": "PROGRAM-12",
+          "criteria": [
+            {
+              "id": "P12-08-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": true,
+          "blocker": "GPS mapping not implemented"
+        },
+        {
+          "id": "P12-09",
+          "name": "Surveillance logs",
+          "programId": "PROGRAM-12",
+          "criteria": [
+            {
+              "id": "P12-09-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": true,
+          "blocker": "Surveillance module not implemented"
+        }
+      ]
+    },
+    {
+      "id": "PROGRAM-13",
+      "number": 13,
+      "name": "Attorney Workbench",
+      "totalPlanned": 8,
+      "implemented": 5,
+      "verified": 5,
+      "incomplete": 3,
+      "blocked": 1,
+      "completionPercent": 62.5,
+      "verificationPercent": 62.5,
+      "productionReadiness": "PARTIAL",
+      "capabilities": [
+        {
+          "id": "P13-01",
+          "name": "Workbench API",
+          "programId": "PROGRAM-13",
+          "criteria": [
+            {
+              "id": "P13-01-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P13-01-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P13-01-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P13-02",
+          "name": "Attorney UI",
+          "programId": "PROGRAM-13",
+          "criteria": [
+            {
+              "id": "P13-02-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P13-02-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P13-02-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P13-03",
+          "name": "Intelligence API",
+          "programId": "PROGRAM-13",
+          "criteria": [
+            {
+              "id": "P13-03-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P13-04",
+          "name": "Trial prep",
+          "programId": "PROGRAM-13",
+          "criteria": [
+            {
+              "id": "P13-04-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P13-05",
+          "name": "CALCRIM",
+          "programId": "PROGRAM-13",
+          "criteria": [
+            {
+              "id": "P13-05-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P13-06",
+          "name": "Attorney workbench tests",
+          "programId": "PROGRAM-13",
+          "criteria": [
+            {
+              "id": "P13-06-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": false
+            },
+            {
+              "id": "P13-06-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": false
+        },
+        {
+          "id": "P13-07",
+          "name": "Attorney intelligence tests",
+          "programId": "PROGRAM-13",
+          "criteria": [
+            {
+              "id": "P13-07-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": false
+            },
+            {
+              "id": "P13-07-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": false
+        },
+        {
+          "id": "P13-08",
+          "name": "Voir dire workspace",
+          "programId": "PROGRAM-13",
+          "criteria": [
+            {
+              "id": "P13-08-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": true,
+          "blocker": "Dedicated voir dire UI not built"
+        }
+      ]
+    },
+    {
+      "id": "PROGRAM-14",
+      "number": 14,
+      "name": "Client Portal",
+      "totalPlanned": 6,
+      "implemented": 6,
+      "verified": 5,
+      "incomplete": 1,
+      "blocked": 0,
+      "completionPercent": 83.3,
+      "verificationPercent": 83.3,
+      "productionReadiness": "PARTIAL",
+      "capabilities": [
+        {
+          "id": "P14-01",
+          "name": "Defendant dashboard",
+          "programId": "PROGRAM-14",
+          "criteria": [
+            {
+              "id": "P14-01-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P14-01-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P14-01-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": false
+            }
+          ],
+          "implemented": true,
+          "verified": false,
+          "blocked": false
+        },
+        {
+          "id": "P14-02",
+          "name": "Secure messaging",
+          "programId": "PROGRAM-14",
+          "criteria": [
+            {
+              "id": "P14-02-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            },
+            {
+              "id": "P14-02-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P14-03",
+          "name": "Court dates portal",
+          "programId": "PROGRAM-14",
+          "criteria": [
+            {
+              "id": "P14-03-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P14-04",
+          "name": "Document access",
+          "programId": "PROGRAM-14",
+          "criteria": [
+            {
+              "id": "P14-04-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P14-05",
+          "name": "Evidence upload panel",
+          "programId": "PROGRAM-14",
+          "criteria": [
+            {
+              "id": "P14-05-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P14-05-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P14-06",
+          "name": "Dedicated client portal route",
+          "programId": "PROGRAM-14",
+          "criteria": [
+            {
+              "id": "P14-06-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P14-06-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P14-06-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            },
+            {
+              "id": "P14-06-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        }
+      ]
+    },
+    {
+      "id": "PROGRAM-15",
+      "number": 15,
+      "name": "Administrative Command Center",
+      "totalPlanned": 8,
+      "implemented": 4,
+      "verified": 3,
+      "incomplete": 5,
+      "blocked": 2,
+      "completionPercent": 37.5,
+      "verificationPercent": 37.5,
+      "productionReadiness": "PARTIAL",
+      "capabilities": [
+        {
+          "id": "P15-01",
+          "name": "Admin page",
+          "programId": "PROGRAM-15",
+          "criteria": [
+            {
+              "id": "P15-01-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P15-01-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P15-01-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": false
+            }
+          ],
+          "implemented": true,
+          "verified": false,
+          "blocked": false
+        },
+        {
+          "id": "P15-02",
+          "name": "Operations command center",
+          "programId": "PROGRAM-15",
+          "criteria": [
+            {
+              "id": "P15-02-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P15-02-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P15-02-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P15-03",
+          "name": "Operations API",
+          "programId": "PROGRAM-15",
+          "criteria": [
+            {
+              "id": "P15-03-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P15-04",
+          "name": "Repository dashboard",
+          "programId": "PROGRAM-15",
+          "criteria": [
+            {
+              "id": "P15-04-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": false
+        },
+        {
+          "id": "P15-05",
+          "name": "Engineering dashboard",
+          "programId": "PROGRAM-15",
+          "criteria": [
+            {
+              "id": "P15-05-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P15-06",
+          "name": "CRM",
+          "programId": "PROGRAM-15",
+          "criteria": [
+            {
+              "id": "P15-06-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": true,
+          "blocker": "CRM not implemented"
+        },
+        {
+          "id": "P15-07",
+          "name": "Customer support",
+          "programId": "PROGRAM-15",
+          "criteria": [
+            {
+              "id": "P15-07-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": true,
+          "blocker": "Support dashboard not implemented"
+        },
+        {
+          "id": "P15-08",
+          "name": "Production ops tests",
+          "programId": "PROGRAM-15",
+          "criteria": [
+            {
+              "id": "P15-08-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": false
+        }
+      ]
+    },
+    {
+      "id": "PROGRAM-16",
+      "number": 16,
+      "name": "California Legislative Intelligence",
+      "totalPlanned": 7,
+      "implemented": 7,
+      "verified": 7,
+      "incomplete": 0,
+      "blocked": 0,
+      "completionPercent": 100,
+      "verificationPercent": 100,
+      "productionReadiness": "READY",
+      "capabilities": [
+        {
+          "id": "P16-01",
+          "name": "Discovery pipeline",
+          "programId": "PROGRAM-16",
+          "criteria": [
+            {
+              "id": "P16-01-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P16-01-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P16-01-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P16-02",
+          "name": "Acquisition pipeline",
+          "programId": "PROGRAM-16",
+          "criteria": [
+            {
+              "id": "P16-02-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P16-02-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P16-02-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P16-03",
+          "name": "Extraction audit",
+          "programId": "PROGRAM-16",
+          "criteria": [
+            {
+              "id": "P16-03-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P16-03-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P16-03-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P16-04",
+          "name": "Legislative API",
+          "programId": "PROGRAM-16",
+          "criteria": [
+            {
+              "id": "P16-04-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P16-04-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P16-04-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P16-05",
+          "name": "Pipeline stages tests",
+          "programId": "PROGRAM-16",
+          "criteria": [
+            {
+              "id": "P16-05-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": true
+            },
+            {
+              "id": "P16-05-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P16-06",
+          "name": "Liability discovery",
+          "programId": "PROGRAM-16",
+          "criteria": [
+            {
+              "id": "P16-06-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P16-07",
+          "name": "Production metrics",
+          "programId": "PROGRAM-16",
+          "criteria": [
+            {
+              "id": "P16-07-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P16-07-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P16-07-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        }
+      ]
+    },
+    {
+      "id": "PROGRAM-17",
+      "number": 17,
+      "name": "Legal Knowledge Graph",
+      "totalPlanned": 5,
+      "implemented": 5,
+      "verified": 5,
+      "incomplete": 0,
+      "blocked": 0,
+      "completionPercent": 100,
+      "verificationPercent": 100,
+      "productionReadiness": "READY",
+      "capabilities": [
+        {
+          "id": "P17-01",
+          "name": "KG pipeline",
+          "programId": "PROGRAM-17",
+          "criteria": [
+            {
+              "id": "P17-01-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P17-01-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P17-02",
+          "name": "Repositories",
+          "programId": "PROGRAM-17",
+          "criteria": [
+            {
+              "id": "P17-02-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P17-02-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P17-03",
+          "name": "KG tests",
+          "programId": "PROGRAM-17",
+          "criteria": [
+            {
+              "id": "P17-03-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": true
+            },
+            {
+              "id": "P17-03-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P17-04",
+          "name": "Repository integrity",
+          "programId": "PROGRAM-17",
+          "criteria": [
+            {
+              "id": "P17-04-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P17-05",
+          "name": "Doctrine routes registered",
+          "programId": "PROGRAM-17",
+          "criteria": [
+            {
+              "id": "P17-05-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P17-05-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P17-05-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        }
+      ]
+    },
+    {
+      "id": "PROGRAM-18",
+      "number": 18,
+      "name": "Communications Platform",
+      "totalPlanned": 6,
+      "implemented": 5,
+      "verified": 5,
+      "incomplete": 1,
+      "blocked": 1,
+      "completionPercent": 83.3,
+      "verificationPercent": 83.3,
+      "productionReadiness": "PARTIAL",
+      "capabilities": [
+        {
+          "id": "P18-01",
+          "name": "Secure messaging",
+          "programId": "PROGRAM-18",
+          "criteria": [
+            {
+              "id": "P18-01-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            },
+            {
+              "id": "P18-01-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P18-02",
+          "name": "Hearings API",
+          "programId": "PROGRAM-18",
+          "criteria": [
+            {
+              "id": "P18-02-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P18-03",
+          "name": "Billing emails",
+          "programId": "PROGRAM-18",
+          "criteria": [
+            {
+              "id": "P18-03-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P18-03-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P18-04",
+          "name": "CPRA email",
+          "programId": "PROGRAM-18",
+          "criteria": [
+            {
+              "id": "P18-04-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P18-04-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P18-05",
+          "name": "SMS",
+          "programId": "PROGRAM-18",
+          "criteria": [
+            {
+              "id": "P18-05-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": true,
+          "blocker": "SMS not implemented"
+        },
+        {
+          "id": "P18-06",
+          "name": "Communications tests",
+          "programId": "PROGRAM-18",
+          "criteria": [
+            {
+              "id": "P18-06-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        }
+      ]
+    },
+    {
+      "id": "PROGRAM-19",
+      "number": 19,
+      "name": "Operations",
+      "totalPlanned": 6,
+      "implemented": 5,
+      "verified": 4,
+      "incomplete": 2,
+      "blocked": 0,
+      "completionPercent": 66.7,
+      "verificationPercent": 66.7,
+      "productionReadiness": "PARTIAL",
+      "capabilities": [
+        {
+          "id": "P19-01",
+          "name": "Operations dashboard",
+          "programId": "PROGRAM-19",
+          "criteria": [
+            {
+              "id": "P19-01-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P19-01-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P19-01-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P19-02",
+          "name": "Queue monitoring",
+          "programId": "PROGRAM-19",
+          "criteria": [
+            {
+              "id": "P19-02-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": false
+            },
+            {
+              "id": "P19-02-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": false,
+          "blocked": false
+        },
+        {
+          "id": "P19-03",
+          "name": "Backup drill",
+          "programId": "PROGRAM-19",
+          "criteria": [
+            {
+              "id": "P19-03-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P19-04",
+          "name": "Observability",
+          "programId": "PROGRAM-19",
+          "criteria": [
+            {
+              "id": "P19-04-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P19-04-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P19-04-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P19-05",
+          "name": "Disaster recovery doc",
+          "programId": "PROGRAM-19",
+          "criteria": [
+            {
+              "id": "P19-05-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P19-05-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P19-06",
+          "name": "Production ops tests",
+          "programId": "PROGRAM-19",
+          "criteria": [
+            {
+              "id": "P19-06-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": false
+            },
+            {
+              "id": "P19-06-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": false
+        }
+      ]
+    },
+    {
+      "id": "PROGRAM-20",
+      "number": 20,
+      "name": "Security",
+      "totalPlanned": 7,
+      "implemented": 5,
+      "verified": 5,
+      "incomplete": 2,
+      "blocked": 1,
+      "completionPercent": 71.4,
+      "verificationPercent": 71.4,
+      "productionReadiness": "PARTIAL",
+      "capabilities": [
+        {
+          "id": "P20-01",
+          "name": "RBAC",
+          "programId": "PROGRAM-20",
+          "criteria": [
+            {
+              "id": "P20-01-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P20-01-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P20-01-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P20-02",
+          "name": "MFA",
+          "programId": "PROGRAM-20",
+          "criteria": [
+            {
+              "id": "P20-02-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P20-02-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P20-02-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P20-03",
+          "name": "Rate limiting",
+          "programId": "PROGRAM-20",
+          "criteria": [
+            {
+              "id": "P20-03-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P20-03-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P20-04",
+          "name": "CSRF",
+          "programId": "PROGRAM-20",
+          "criteria": [
+            {
+              "id": "P20-04-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P20-04-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P20-05",
+          "name": "Security readiness report",
+          "programId": "PROGRAM-20",
+          "criteria": [
+            {
+              "id": "P20-05-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P20-05-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P20-06",
+          "name": "Tenant isolation tests",
+          "programId": "PROGRAM-20",
+          "criteria": [
+            {
+              "id": "P20-06-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": false
+        },
+        {
+          "id": "P20-07",
+          "name": "Penetration testing",
+          "programId": "PROGRAM-20",
+          "criteria": [
+            {
+              "id": "P20-07-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": true,
+          "blocker": "Pen test not documented"
+        }
+      ]
+    },
+    {
+      "id": "PROGRAM-21",
+      "number": 21,
+      "name": "Performance",
+      "totalPlanned": 5,
+      "implemented": 3,
+      "verified": 3,
+      "incomplete": 2,
+      "blocked": 2,
+      "completionPercent": 60,
+      "verificationPercent": 60,
+      "productionReadiness": "PARTIAL",
+      "capabilities": [
+        {
+          "id": "P21-01",
+          "name": "Performance benchmark report",
+          "programId": "PROGRAM-21",
+          "criteria": [
+            {
+              "id": "P21-01-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P21-01-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P21-02",
+          "name": "Lighthouse scores",
+          "programId": "PROGRAM-21",
+          "criteria": [
+            {
+              "id": "P21-02-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P21-02-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P21-03",
+          "name": "Deep health check",
+          "programId": "PROGRAM-21",
+          "criteria": [
+            {
+              "id": "P21-03-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P21-04",
+          "name": "Load testing",
+          "programId": "PROGRAM-21",
+          "criteria": [
+            {
+              "id": "P21-04-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": true,
+          "blocker": "Load test suite not implemented"
+        },
+        {
+          "id": "P21-05",
+          "name": "Stress testing",
+          "programId": "PROGRAM-21",
+          "criteria": [
+            {
+              "id": "P21-05-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": true,
+          "blocker": "Stress test suite not implemented"
+        }
+      ]
+    },
+    {
+      "id": "PROGRAM-22",
+      "number": 22,
+      "name": "Documentation",
+      "totalPlanned": 6,
+      "implemented": 4,
+      "verified": 4,
+      "incomplete": 2,
+      "blocked": 2,
+      "completionPercent": 66.7,
+      "verificationPercent": 66.7,
+      "productionReadiness": "PARTIAL",
+      "capabilities": [
+        {
+          "id": "P22-01",
+          "name": "Disaster recovery",
+          "programId": "PROGRAM-22",
+          "criteria": [
+            {
+              "id": "P22-01-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P22-01-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P22-02",
+          "name": "Stripe architecture",
+          "programId": "PROGRAM-22",
+          "criteria": [
+            {
+              "id": "P22-02-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P22-02-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P22-03",
+          "name": "Program 00 report",
+          "programId": "PROGRAM-22",
+          "criteria": [
+            {
+              "id": "P22-03-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P22-03-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P22-04",
+          "name": "Program 01 report",
+          "programId": "PROGRAM-22",
+          "criteria": [
+            {
+              "id": "P22-04-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P22-04-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P22-05",
+          "name": "User guide",
+          "programId": "PROGRAM-22",
+          "criteria": [
+            {
+              "id": "P22-05-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": true,
+          "blocker": "User guide not written"
+        },
+        {
+          "id": "P22-06",
+          "name": "API documentation",
+          "programId": "PROGRAM-22",
+          "criteria": [
+            {
+              "id": "P22-06-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": true,
+          "blocker": "OpenAPI spec not generated"
+        }
+      ]
+    },
+    {
+      "id": "PROGRAM-23",
+      "number": 23,
+      "name": "Version 1.0 Certification",
+      "totalPlanned": 6,
+      "implemented": 4,
+      "verified": 2,
+      "incomplete": 4,
+      "blocked": 1,
+      "completionPercent": 33.3,
+      "verificationPercent": 33.3,
+      "productionReadiness": "PARTIAL",
+      "capabilities": [
+        {
+          "id": "P23-01",
+          "name": "Production gates runner",
+          "programId": "PROGRAM-23",
+          "criteria": [
+            {
+              "id": "P23-01-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P23-01-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P23-01-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": false
+            }
+          ],
+          "implemented": true,
+          "verified": false,
+          "blocked": false
+        },
+        {
+          "id": "P23-02",
+          "name": "V1 gates",
+          "programId": "PROGRAM-23",
+          "criteria": [
+            {
+              "id": "P23-02-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P23-02-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P23-03",
+          "name": "Master program assessor",
+          "programId": "PROGRAM-23",
+          "criteria": [
+            {
+              "id": "P23-03-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P23-03-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P23-03-tested",
+              "label": "Tested",
+              "category": "tested",
+              "pass": false
+            }
+          ],
+          "implemented": true,
+          "verified": false,
+          "blocked": false
+        },
+        {
+          "id": "P23-04",
+          "name": "Frontend build gate",
+          "programId": "PROGRAM-23",
+          "criteria": [
+            {
+              "id": "P23-04-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P23-05",
+          "name": "Backend compile gate",
+          "programId": "PROGRAM-23",
+          "criteria": [
+            {
+              "id": "P23-05-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": false
+        },
+        {
+          "id": "P23-06",
+          "name": "E2E workflow demo",
+          "programId": "PROGRAM-23",
+          "criteria": [
+            {
+              "id": "P23-06-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": true,
+          "blocker": "Full E2E demonstration not recorded"
+        }
+      ]
+    },
+    {
+      "id": "PROGRAM-24",
+      "number": 24,
+      "name": "Self-Demonstrating Product",
+      "totalPlanned": 10,
+      "implemented": 9,
+      "verified": 8,
+      "incomplete": 2,
+      "blocked": 1,
+      "completionPercent": 80,
+      "verificationPercent": 80,
+      "productionReadiness": "PARTIAL",
+      "capabilities": [
+        {
+          "id": "P24-01",
+          "name": "Register UI",
+          "programId": "PROGRAM-24",
+          "criteria": [
+            {
+              "id": "P24-01-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P24-02",
+          "name": "Subscribe flow",
+          "programId": "PROGRAM-24",
+          "criteria": [
+            {
+              "id": "P24-02-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            },
+            {
+              "id": "P24-02-api",
+              "label": "API complete",
+              "category": "api",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P24-03",
+          "name": "Login UI",
+          "programId": "PROGRAM-24",
+          "criteria": [
+            {
+              "id": "P24-03-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P24-04",
+          "name": "Case creation reachable",
+          "programId": "PROGRAM-24",
+          "criteria": [
+            {
+              "id": "P24-04-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P24-05",
+          "name": "Evidence upload reachable",
+          "programId": "PROGRAM-24",
+          "criteria": [
+            {
+              "id": "P24-05-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P24-06",
+          "name": "Invite users reachable",
+          "programId": "PROGRAM-24",
+          "criteria": [
+            {
+              "id": "P24-06-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P24-07",
+          "name": "Redaction UI",
+          "programId": "PROGRAM-24",
+          "criteria": [
+            {
+              "id": "P24-07-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P24-07-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            },
+            {
+              "id": "P24-07-ui",
+              "label": "UI reachable",
+              "category": "ui",
+              "pass": false
+            }
+          ],
+          "implemented": true,
+          "verified": false,
+          "blocked": false
+        },
+        {
+          "id": "P24-08",
+          "name": "Program 02 demonstration",
+          "programId": "PROGRAM-24",
+          "criteria": [
+            {
+              "id": "P24-08-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P24-08-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P24-09",
+          "name": "Screenshot evidence",
+          "programId": "PROGRAM-24",
+          "criteria": [
+            {
+              "id": "P24-09-exists",
+              "label": "Exists",
+              "category": "exists",
+              "pass": true
+            },
+            {
+              "id": "P24-09-integrated",
+              "label": "Integrated",
+              "category": "integrated",
+              "pass": true
+            }
+          ],
+          "implemented": true,
+          "verified": true,
+          "blocked": false
+        },
+        {
+          "id": "P24-10",
+          "name": "End-to-end walkthrough doc",
+          "programId": "PROGRAM-24",
+          "criteria": [
+            {
+              "id": "P24-10-runtime",
+              "label": "Runtime verified",
+              "category": "runtime",
+              "pass": false
+            }
+          ],
+          "implemented": false,
+          "verified": false,
+          "blocked": true,
+          "blocker": "E2E walkthrough not published"
+        }
+      ]
+    }
+  ]
+}

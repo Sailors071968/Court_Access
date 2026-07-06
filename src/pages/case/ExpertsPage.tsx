@@ -8,22 +8,42 @@ import { Card } from '../../components/common/Card';
 import { ExpertRecommendationBadge } from '../../components/common/StatusBadge';
 import { getExpertRecommendations } from '../../services/ai/expertRecommendations';
 import type { Expert } from '../../types';
-import { AlertTriangle, MessageSquare } from 'lucide-react';
-import { MOCK_CASES } from '../../constants/mockData';
+import { AlertTriangle, MessageSquare, Loader2 } from 'lucide-react';
+import { fetchCase, type ApiCase } from '../../services/caseApi';
 
 export function ExpertsPage() {
   const { caseId } = useParams<{ caseId: string }>();
   const [experts, setExperts] = useState<Expert[]>([]);
   const [loading, setLoading] = useState(true);
-  const currentCase = MOCK_CASES.find((c) => c.id === caseId) || MOCK_CASES[0];
+  const [caseLoading, setCaseLoading] = useState(true);
+  const [currentCase, setCurrentCase] = useState<ApiCase | null>(null);
+
+  useEffect(() => {
+    if (!caseId) return;
+    let cancelled = false;
+    setCaseLoading(true);
+    fetchCase(caseId).then((c) => {
+      if (!cancelled) { setCurrentCase(c); setCaseLoading(false); }
+    }).catch(() => { if (!cancelled) setCaseLoading(false); });
+    return () => { cancelled = true; };
+  }, [caseId]);
 
   useEffect(() => {
     setLoading(true);
-    getExpertRecommendations({ caseId: caseId || '1' }).then((res) => {
+    if (!caseId) return;
+    getExpertRecommendations({ caseId }).then((res) => {
       setExperts(res.experts);
       setLoading(false);
     });
   }, [caseId]);
+
+  if (caseLoading) {
+    return <div className="flex items-center justify-center p-12"><Loader2 className="animate-spin text-blue-600" size={32} /></div>;
+  }
+
+  if (!currentCase) {
+    return <div className="p-8 text-center text-gray-500">No cases found.</div>;
+  }
 
   return (
     <div className="space-y-6">
@@ -38,10 +58,9 @@ export function ExpertsPage() {
 
       {/* Case Info */}
       <div>
-        <h2 className="text-xl font-bold text-blue-700">{currentCase.title} - Case #{currentCase.caseNumber}</h2>
+        <h2 className="text-xl font-bold text-blue-700">{currentCase.title || currentCase.caseType} - Case #{currentCase.caseNumber}</h2>
         <p className="text-sm text-gray-500 mt-1">
-          Jurisdiction: {currentCase.jurisdiction}, {currentCase.court}<br />
-          Status: Pre-Trial Motions
+          Status: {currentCase.status || 'Pre-Trial Motions'}
         </p>
       </div>
 
@@ -52,6 +71,11 @@ export function ExpertsPage() {
           {[1, 2, 3, 4].map((i) => (
             <div key={i} className="h-48 bg-gray-100 rounded-xl animate-pulse" />
           ))}
+        </div>
+      ) : experts.length === 0 ? (
+        <div className="text-center py-12">
+          <AlertTriangle size={48} className="text-gray-300 mx-auto mb-4" />
+          <p className="text-gray-500 text-sm">No expert recommendations yet. Upload evidence and run analysis to generate expert witness recommendations.</p>
         </div>
       ) : (
         <div className="grid md:grid-cols-2 gap-4">

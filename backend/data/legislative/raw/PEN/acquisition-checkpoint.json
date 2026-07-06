@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "code": "PEN",
+  "manifestPath": "/workspace/backend/data/legislative/discovery/PEN-discovery-manifest.json",
+  "startedAt": "2026-07-04T19:40:16.555Z",
+  "updatedAt": "2026-07-04T19:40:18.791Z",
+  "nextIndex": 3,
+  "acquired": 3,
+  "failed": 0,
+  "skipped": 0,
+  "lastSection": "27."
+}

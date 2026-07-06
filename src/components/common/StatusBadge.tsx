@@ -85,7 +85,7 @@ export function ExpertRecommendationBadge({ recommendation }: ExpertBadgeProps) 
 }
 
 interface CaseStatusBadgeProps {
-  status: 'active' | 'closed' | 'pending' | 'archived';
+  status: string;
 }
 
 export function CaseStatusBadge({ status }: CaseStatusBadgeProps) {
@@ -95,7 +95,7 @@ export function CaseStatusBadge({ status }: CaseStatusBadgeProps) {
     pending: { label: 'Pending', bgColor: 'bg-amber-50', textColor: 'text-amber-700', dotColor: 'bg-amber-500' },
     archived: { label: 'Archived', bgColor: 'bg-blue-50', textColor: 'text-blue-700', dotColor: 'bg-blue-500' },
   };
-  const c = config[status];
+  const c = config[status] ?? { label: status, bgColor: 'bg-gray-100', textColor: 'text-gray-600', dotColor: 'bg-gray-400' };
   return (
     <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${c.bgColor} ${c.textColor}`}>
       <span className={`w-2 h-2 rounded-full ${c.dotColor}`} />

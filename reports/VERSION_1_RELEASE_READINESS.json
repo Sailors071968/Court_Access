@@ -1,0 +1,575 @@
+{
+  "assessment": "VERSION_1_RELEASE_READINESS",
+  "version": "1.0",
+  "generatedAt": "2026-07-05T15:48:47.306Z",
+  "currentCompletion": 79.4,
+  "verifiedCapabilities": 158,
+  "totalCapabilities": 199,
+  "productionReadiness": "RELEASE_CANDIDATE",
+  "productionGates": "NOT_READY",
+  "deploymentBlocked": true,
+  "programsReady": 6,
+  "programsPartial": 19,
+  "programsNotReady": 0,
+  "criticalBlockers": [
+    {
+      "rank": 1,
+      "id": "P08-05",
+      "title": "Client billing (Client Management)",
+      "programId": "PROGRAM-08",
+      "programName": "Client Management",
+      "blocker": "Client-level billing not wired",
+      "productionImpact": "critical",
+      "attorneyImpact": "medium",
+      "userImpact": "medium",
+      "operationalRisk": "high",
+      "dependencyOrder": 10
+    },
+    {
+      "rank": 2,
+      "id": "P20-06",
+      "title": "Tenant isolation tests (Security)",
+      "programId": "PROGRAM-20",
+      "programName": "Security",
+      "blocker": "Criteria not verified",
+      "productionImpact": "critical",
+      "attorneyImpact": "medium",
+      "userImpact": "medium",
+      "operationalRisk": "high",
+      "dependencyOrder": 10
+    },
+    {
+      "rank": 3,
+      "id": "P20-07",
+      "title": "Penetration testing (Security)",
+      "programId": "PROGRAM-20",
+      "programName": "Security",
+      "blocker": "Pen test not documented",
+      "productionImpact": "critical",
+      "attorneyImpact": "medium",
+      "userImpact": "medium",
+      "operationalRisk": "high",
+      "dependencyOrder": 10
+    }
+  ],
+  "topBacklog": [
+    {
+      "rank": 1,
+      "id": "P08-05",
+      "title": "Client billing (Client Management)",
+      "programId": "PROGRAM-08",
+      "programName": "Client Management",
+      "blocker": "Client-level billing not wired",
+      "productionImpact": "critical",
+      "attorneyImpact": "medium",
+      "userImpact": "medium",
+      "operationalRisk": "high",
+      "dependencyOrder": 10
+    },
+    {
+      "rank": 2,
+      "id": "P20-06",
+      "title": "Tenant isolation tests (Security)",
+      "programId": "PROGRAM-20",
+      "programName": "Security",
+      "blocker": "Criteria not verified",
+      "productionImpact": "critical",
+      "attorneyImpact": "medium",
+      "userImpact": "medium",
+      "operationalRisk": "high",
+      "dependencyOrder": 10
+    },
+    {
+      "rank": 3,
+      "id": "P20-07",
+      "title": "Penetration testing (Security)",
+      "programId": "PROGRAM-20",
+      "programName": "Security",
+      "blocker": "Pen test not documented",
+      "productionImpact": "critical",
+      "attorneyImpact": "medium",
+      "userImpact": "medium",
+      "operationalRisk": "high",
+      "dependencyOrder": 10
+    },
+    {
+      "rank": 4,
+      "id": "P02-08",
+      "title": "Stripe certification harness (Hybrid Stripe Billing)",
+      "programId": "PROGRAM-02",
+      "programName": "Hybrid Stripe Billing",
+      "blocker": "Criteria not verified",
+      "productionImpact": "high",
+      "attorneyImpact": "medium",
+      "userImpact": "medium",
+      "operationalRisk": "high",
+      "dependencyOrder": 20
+    },
+    {
+      "rank": 5,
+      "id": "P02-10",
+      "title": "Live Stripe env configured (Hybrid Stripe Billing)",
+      "programId": "PROGRAM-02",
+      "programName": "Hybrid Stripe Billing",
+      "blocker": "STRIPE_SECRET_KEY not configured",
+      "productionImpact": "high",
+      "attorneyImpact": "medium",
+      "userImpact": "medium",
+      "operationalRisk": "high",
+      "dependencyOrder": 20
+    },
+    {
+      "rank": 6,
+      "id": "P05-06",
+      "title": "OCR text redaction (Document Redaction)",
+      "programId": "PROGRAM-05",
+      "programName": "Document Redaction",
+      "blocker": "OCR layer redaction not implemented",
+      "productionImpact": "high",
+      "attorneyImpact": "medium",
+      "userImpact": "medium",
+      "operationalRisk": "medium",
+      "dependencyOrder": 20
+    },
+    {
+      "rank": 7,
+      "id": "P05-07",
+      "title": "AI redaction suggestions (Document Redaction)",
+      "programId": "PROGRAM-05",
+      "programName": "Document Redaction",
+      "blocker": "AI suggestion engine not implemented",
+      "productionImpact": "high",
+      "attorneyImpact": "medium",
+      "userImpact": "medium",
+      "operationalRisk": "medium",
+      "dependencyOrder": 20
+    },
+    {
+      "rank": 8,
+      "id": "P24-07",
+      "title": "Redaction UI (Self-Demonstrating Product)",
+      "programId": "PROGRAM-24",
+      "programName": "Self-Demonstrating Product",
+      "blocker": "Criteria not verified",
+      "productionImpact": "high",
+      "attorneyImpact": "medium",
+      "userImpact": "medium",
+      "operationalRisk": "medium",
+      "dependencyOrder": 20
+    },
+    {
+      "rank": 9,
+      "id": "P11-03",
+      "title": "Contradiction engine (Evidence Platform)",
+      "programId": "PROGRAM-11",
+      "programName": "Evidence Platform",
+      "blocker": "Criteria not verified",
+      "productionImpact": "medium",
+      "attorneyImpact": "high",
+      "userImpact": "medium",
+      "operationalRisk": "medium",
+      "dependencyOrder": 50
+    },
+    {
+      "rank": 10,
+      "id": "P11-04",
+      "title": "Evidence gaps (Evidence Platform)",
+      "programId": "PROGRAM-11",
+      "programName": "Evidence Platform",
+      "blocker": "Criteria not verified",
+      "productionImpact": "medium",
+      "attorneyImpact": "high",
+      "userImpact": "medium",
+      "operationalRisk": "medium",
+      "dependencyOrder": 50
+    },
+    {
+      "rank": 11,
+      "id": "P13-06",
+      "title": "Attorney workbench tests (Attorney Workbench)",
+      "programId": "PROGRAM-13",
+      "programName": "Attorney Workbench",
+      "blocker": "Criteria not verified",
+      "productionImpact": "medium",
+      "attorneyImpact": "high",
+      "userImpact": "medium",
+      "operationalRisk": "medium",
+      "dependencyOrder": 50
+    },
+    {
+      "rank": 12,
+      "id": "P13-07",
+      "title": "Attorney intelligence tests (Attorney Workbench)",
+      "programId": "PROGRAM-13",
+      "programName": "Attorney Workbench",
+      "blocker": "Criteria not verified",
+      "productionImpact": "medium",
+      "attorneyImpact": "high",
+      "userImpact": "medium",
+      "operationalRisk": "medium",
+      "dependencyOrder": 50
+    },
+    {
+      "rank": 13,
+      "id": "P13-08",
+      "title": "Voir dire workspace (Attorney Workbench)",
+      "programId": "PROGRAM-13",
+      "programName": "Attorney Workbench",
+      "blocker": "Dedicated voir dire UI not built",
+      "productionImpact": "medium",
+      "attorneyImpact": "high",
+      "userImpact": "medium",
+      "operationalRisk": "medium",
+      "dependencyOrder": 50
+    },
+    {
+      "rank": 14,
+      "id": "P01-09",
+      "title": "Delegated user limit (Universal Membership)",
+      "programId": "PROGRAM-01",
+      "programName": "Universal Membership",
+      "blocker": "Criteria not verified",
+      "productionImpact": "medium",
+      "attorneyImpact": "medium",
+      "userImpact": "high",
+      "operationalRisk": "medium",
+      "dependencyOrder": 50
+    },
+    {
+      "rank": 15,
+      "id": "P14-01",
+      "title": "Defendant dashboard (Client Portal)",
+      "programId": "PROGRAM-14",
+      "programName": "Client Portal",
+      "blocker": "Criteria not verified",
+      "productionImpact": "medium",
+      "attorneyImpact": "medium",
+      "userImpact": "high",
+      "operationalRisk": "medium",
+      "dependencyOrder": 50
+    },
+    {
+      "rank": 16,
+      "id": "P03-08",
+      "title": "Invitation tests (Delegated Access)",
+      "programId": "PROGRAM-03",
+      "programName": "Delegated Access",
+      "blocker": "Criteria not verified",
+      "productionImpact": "medium",
+      "attorneyImpact": "medium",
+      "userImpact": "medium",
+      "operationalRisk": "medium",
+      "dependencyOrder": 50
+    },
+    {
+      "rank": 17,
+      "id": "P07-06",
+      "title": "Tenant isolation (Organizations)",
+      "programId": "PROGRAM-07",
+      "programName": "Organizations",
+      "blocker": "Criteria not verified",
+      "productionImpact": "medium",
+      "attorneyImpact": "medium",
+      "userImpact": "medium",
+      "operationalRisk": "medium",
+      "dependencyOrder": 50
+    },
+    {
+      "rank": 18,
+      "id": "P07-07",
+      "title": "Firm platform tests (Organizations)",
+      "programId": "PROGRAM-07",
+      "programName": "Organizations",
+      "blocker": "Criteria not verified",
+      "productionImpact": "medium",
+      "attorneyImpact": "medium",
+      "userImpact": "medium",
+      "operationalRisk": "medium",
+      "dependencyOrder": 50
+    },
+    {
+      "rank": 19,
+      "id": "P08-03",
+      "title": "Client tests (Client Management)",
+      "programId": "PROGRAM-08",
+      "programName": "Client Management",
+      "blocker": "Criteria not verified",
+      "productionImpact": "medium",
+      "attorneyImpact": "medium",
+      "userImpact": "medium",
+      "operationalRisk": "medium",
+      "dependencyOrder": 50
+    },
+    {
+      "rank": 20,
+      "id": "P08-04",
+      "title": "Client intake UI (Client Management)",
+      "programId": "PROGRAM-08",
+      "programName": "Client Management",
+      "blocker": "Dedicated intake UI not built",
+      "productionImpact": "medium",
+      "attorneyImpact": "medium",
+      "userImpact": "medium",
+      "operationalRisk": "medium",
+      "dependencyOrder": 50
+    },
+    {
+      "rank": 21,
+      "id": "P10-05",
+      "title": "Document versioning (Document Platform)",
+      "programId": "PROGRAM-10",
+      "programName": "Document Platform",
+      "blocker": "Document versioning not implemented",
+      "productionImpact": "medium",
+      "attorneyImpact": "medium",
+      "userImpact": "medium",
+      "operationalRisk": "medium",
+      "dependencyOrder": 50
+    },
+    {
+      "rank": 22,
+      "id": "P12-07",
+      "title": "Investigator tests (Investigator Workbench)",
+      "programId": "PROGRAM-12",
+      "programName": "Investigator Workbench",
+      "blocker": "Criteria not verified",
+      "productionImpact": "medium",
+      "attorneyImpact": "medium",
+      "userImpact": "medium",
+      "operationalRisk": "medium",
+      "dependencyOrder": 50
+    },
+    {
+      "rank": 23,
+      "id": "P12-08",
+      "title": "GPS mapping (Investigator Workbench)",
+      "programId": "PROGRAM-12",
+      "programName": "Investigator Workbench",
+      "blocker": "GPS mapping not implemented",
+      "productionImpact": "medium",
+      "attorneyImpact": "medium",
+      "userImpact": "medium",
+      "operationalRisk": "medium",
+      "dependencyOrder": 50
+    },
+    {
+      "rank": 24,
+      "id": "P12-09",
+      "title": "Surveillance logs (Investigator Workbench)",
+      "programId": "PROGRAM-12",
+      "programName": "Investigator Workbench",
+      "blocker": "Surveillance module not implemented",
+      "productionImpact": "medium",
+      "attorneyImpact": "medium",
+      "userImpact": "medium",
+      "operationalRisk": "medium",
+      "dependencyOrder": 50
+    },
+    {
+      "rank": 25,
+      "id": "P15-01",
+      "title": "Admin page (Administrative Command Center)",
+      "programId": "PROGRAM-15",
+      "programName": "Administrative Command Center",
+      "blocker": "Criteria not verified",
+      "productionImpact": "medium",
+      "attorneyImpact": "medium",
+      "userImpact": "medium",
+      "operationalRisk": "medium",
+      "dependencyOrder": 50
+    }
+  ],
+  "remainingRisks": [
+    "Stripe live certification pending",
+    "E2E demonstrations not recorded",
+    "Load/stress testing not implemented",
+    "SMS communications not implemented"
+  ],
+  "recommendedOrder": [
+    "Resource permissions",
+    "Redaction + disclosure",
+    "Client portal + membership",
+    "Stripe certification",
+    "E2E demos",
+    "Workbench completion",
+    "Admin command center",
+    "Legal intelligence expansion"
+  ],
+  "programSummary": [
+    {
+      "id": "PROGRAM-00",
+      "name": "Production Website",
+      "completionPercent": 100,
+      "productionReadiness": "READY",
+      "blocked": 0
+    },
+    {
+      "id": "PROGRAM-01",
+      "name": "Universal Membership",
+      "completionPercent": 90,
+      "productionReadiness": "PARTIAL",
+      "blocked": 0
+    },
+    {
+      "id": "PROGRAM-02",
+      "name": "Hybrid Stripe Billing",
+      "completionPercent": 83.3,
+      "productionReadiness": "PARTIAL",
+      "blocked": 1
+    },
+    {
+      "id": "PROGRAM-03",
+      "name": "Delegated Access",
+      "completionPercent": 87.5,
+      "productionReadiness": "PARTIAL",
+      "blocked": 0
+    },
+    {
+      "id": "PROGRAM-04",
+      "name": "Resource Permissions",
+      "completionPercent": 100,
+      "productionReadiness": "READY",
+      "blocked": 0
+    },
+    {
+      "id": "PROGRAM-05",
+      "name": "Document Redaction",
+      "completionPercent": 71.4,
+      "productionReadiness": "PARTIAL",
+      "blocked": 2
+    },
+    {
+      "id": "PROGRAM-06",
+      "name": "Disclosure Manager",
+      "completionPercent": 100,
+      "productionReadiness": "READY",
+      "blocked": 0
+    },
+    {
+      "id": "PROGRAM-07",
+      "name": "Organizations",
+      "completionPercent": 75,
+      "productionReadiness": "PARTIAL",
+      "blocked": 0
+    },
+    {
+      "id": "PROGRAM-08",
+      "name": "Client Management",
+      "completionPercent": 40,
+      "productionReadiness": "PARTIAL",
+      "blocked": 2
+    },
+    {
+      "id": "PROGRAM-09",
+      "name": "Case Management",
+      "completionPercent": 100,
+      "productionReadiness": "READY",
+      "blocked": 0
+    },
+    {
+      "id": "PROGRAM-10",
+      "name": "Document Platform",
+      "completionPercent": 83.3,
+      "productionReadiness": "PARTIAL",
+      "blocked": 1
+    },
+    {
+      "id": "PROGRAM-11",
+      "name": "Evidence Platform",
+      "completionPercent": 71.4,
+      "productionReadiness": "PARTIAL",
+      "blocked": 0
+    },
+    {
+      "id": "PROGRAM-12",
+      "name": "Investigator Workbench",
+      "completionPercent": 66.7,
+      "productionReadiness": "PARTIAL",
+      "blocked": 2
+    },
+    {
+      "id": "PROGRAM-13",
+      "name": "Attorney Workbench",
+      "completionPercent": 62.5,
+      "productionReadiness": "PARTIAL",
+      "blocked": 1
+    },
+    {
+      "id": "PROGRAM-14",
+      "name": "Client Portal",
+      "completionPercent": 83.3,
+      "productionReadiness": "PARTIAL",
+      "blocked": 0
+    },
+    {
+      "id": "PROGRAM-15",
+      "name": "Administrative Command Center",
+      "completionPercent": 37.5,
+      "productionReadiness": "PARTIAL",
+      "blocked": 2
+    },
+    {
+      "id": "PROGRAM-16",
+      "name": "California Legislative Intelligence",
+      "completionPercent": 100,
+      "productionReadiness": "READY",
+      "blocked": 0
+    },
+    {
+      "id": "PROGRAM-17",
+      "name": "Legal Knowledge Graph",
+      "completionPercent": 100,
+      "productionReadiness": "READY",
+      "blocked": 0
+    },
+    {
+      "id": "PROGRAM-18",
+      "name": "Communications Platform",
+      "completionPercent": 83.3,
+      "productionReadiness": "PARTIAL",
+      "blocked": 1
+    },
+    {
+      "id": "PROGRAM-19",
+      "name": "Operations",
+      "completionPercent": 66.7,
+      "productionReadiness": "PARTIAL",
+      "blocked": 0
+    },
+    {
+      "id": "PROGRAM-20",
+      "name": "Security",
+      "completionPercent": 71.4,
+      "productionReadiness": "PARTIAL",
+      "blocked": 1
+    },
+    {
+      "id": "PROGRAM-21",
+      "name": "Performance",
+      "completionPercent": 60,
+      "productionReadiness": "PARTIAL",
+      "blocked": 2
+    },
+    {
+      "id": "PROGRAM-22",
+      "name": "Documentation",
+      "completionPercent": 66.7,
+      "productionReadiness": "PARTIAL",
+      "blocked": 2
+    },
+    {
+      "id": "PROGRAM-23",
+      "name": "Version 1.0 Certification",
+      "completionPercent": 33.3,
+      "productionReadiness": "PARTIAL",
+      "blocked": 1
+    },
+    {
+      "id": "PROGRAM-24",
+      "name": "Self-Demonstrating Product",
+      "completionPercent": 80,
+      "productionReadiness": "PARTIAL",
+      "blocked": 1
+    }
+  ]
+}

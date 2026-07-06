@@ -1,0 +1,162 @@
+{
+  "phase": 183,
+  "title": "Evidence Handling Safety",
+  "generatedAt": "2026-03-10T14:50:00Z",
+  "description": "Verification of evidence processing safeguards: file size limits, malicious file detection, hash verification, chain-of-custody metadata",
+  "checks": {
+    "fileSizeLimits": {
+      "status": "PARTIAL",
+      "findings": [
+        {
+          "component": "Document Download Worker",
+          "file": "backend/src/workers/documentValidationService.ts",
+          "implemented": true,
+          "maxFileSize": "50MB for policy documents",
+          "enforcement": "Validated before download completes"
+        },
+        {
+          "component": "Evidence Upload API",
+          "file": "backend/src/evidence/forensicReconstructionRoutes.ts",
+          "implemented": false,
+          "recommendation": "Add @fastify/multipart with bodyLimit configuration for evidence uploads (500MB for video, 50MB for audio, 10MB for images)"
+        },
+        {
+          "component": "OCR Processing",
+          "file": "backend/src/workers/ocrResourceControls.ts",
+          "implemented": true,
+          "maxFileSize": "Resource controls limit memory and CPU usage during OCR processing"
+        }
+      ],
+      "overallStatus": "needs_hardening",
+      "requiredActions": [
+        "Configure Fastify bodyLimit for evidence upload endpoints",
+        "Add per-file-type size limits (video: 500MB, audio: 50MB, document: 50MB, image: 10MB)",
+        "Reject oversized files before buffering to disk"
+      ]
+    },
+    "maliciousFileDetection": {
+      "status": "NOT_IMPLEMENTED",
+      "findings": [
+        {
+          "component": "File Upload Pipeline",
+          "implemented": false,
+          "recommendation": "Integrate ClamAV or equivalent virus scanner for all uploaded evidence files"
+        },
+        {
+          "component": "Document Validation",
+          "file": "backend/src/workers/documentValidationService.ts",
+          "implemented": true,
+          "capabilities": [
+            "Content-type verification (checks MIME type matches file extension)",
+            "File type whitelist enforcement"
+          ]
+        }
+      ],
+      "overallStatus": "needs_implementation",
+      "requiredActions": [
+        "Integrate ClamAV for virus/malware scanning",
+        "Add file magic byte validation (verify actual file type regardless of extension)",
+        "Implement sandboxed file processing (isolate evidence files from main application)",
+        "Block executable file types (.exe, .sh, .bat, .js, .py, etc.)"
+      ]
+    },
+    "hashVerification": {
+      "status": "PARTIAL",
+      "findings": [
+        {
+          "component": "Document Deduplication",
+          "file": "backend/prisma/schema.prisma (PolicyDocument model)",
+          "implemented": true,
+          "hashAlgorithm": "SHA-256",
+          "field": "documentHash",
+          "constraint": "@@unique([agencyId, documentHash])",
+          "description": "Policy documents are hashed on ingestion for deduplication"
+        },
+        {
+          "component": "Evidence File Integrity",
+          "implemented": false,
+          "recommendation": "Add SHA-256 hashing for all evidence files at upload time. Store hash in metadata for chain-of-custody verification."
+        }
+      ],
+      "overallStatus": "needs_extension",
+      "requiredActions": [
+        "Hash all evidence files (SHA-256) at upload time",
+        "Store hash in database alongside evidence record",
+        "Verify hash on retrieval to detect tampering",
+        "Implement hash chain for audit trail (each modification creates new hash referencing previous)"
+      ]
+    },
+    "chainOfCustodyMetadata": {
+      "status": "PARTIAL",
+      "findings": [
+        {
+          "component": "Compliance Audit Trail",
+          "file": "backend/prisma/schema.prisma (ComplianceAuditTrail model)",
+          "implemented": true,
+          "fields": ["auditId", "caseId", "action", "performedBy", "details", "previousState", "newState", "ipAddress", "createdAt"],
+          "description": "Full audit trail for compliance finding lifecycle — tracks who did what and when"
+        },
+        {
+          "component": "Evidence Event Tracking",
+          "file": "backend/prisma/schema.prisma (EvidenceEvent model)",
+          "implemented": true,
+          "fields": ["eventId", "caseId", "sourceType", "sourceId", "timestamp", "createdAt", "updatedAt"],
+          "description": "Evidence events track source type (bodycam, dashcam, audio) and creation timestamp"
+        },
+        {
+          "component": "Review Queue",
+          "file": "backend/prisma/schema.prisma (ComplianceReviewQueue model)",
+          "implemented": true,
+          "fields": ["reviewId", "findingId", "reviewStatus", "reviewerId", "reviewerNotes", "reviewedAt", "approvedForReport"],
+          "description": "Review queue tracks who reviewed findings and when"
+        },
+        {
+          "component": "Evidence File Chain-of-Custody",
+          "implemented": false,
+          "recommendation": "Add dedicated EvidenceChainOfCustody model tracking: upload time, uploader, access log, modifications, export events"
+        }
+      ],
+      "overallStatus": "needs_extension",
+      "requiredActions": [
+        "Create EvidenceChainOfCustody Prisma model with fields: evidenceId, action (uploaded/accessed/modified/exported), performedBy, timestamp, ipAddress, previousHash, currentHash",
+        "Log every evidence file access for chain-of-custody compliance",
+        "Implement tamper-evident logging (hash chain for audit entries)",
+        "Add evidence export tracking (who exported, when, to what format)"
+      ]
+    }
+  },
+  "evidenceTypes": {
+    "supported": [
+      { "type": "bodycam_video", "formats": ["MP4", "AVI", "MOV"], "processing": "Vision analysis, action detection" },
+      { "type": "dashcam_video", "formats": ["MP4", "AVI"], "processing": "Scene analysis, timeline" },
+      { "type": "audio_recording", "formats": ["WAV", "MP3", "M4A"], "processing": "Speech analysis, transcription" },
+      { "type": "policy_document", "formats": ["PDF", "DOCX", "HTML"], "processing": "OCR, text extraction, classification" },
+      { "type": "incident_report", "formats": ["PDF", "DOCX"], "processing": "Event extraction, timeline" },
+      { "type": "photograph", "formats": ["JPG", "PNG", "TIFF"], "processing": "Scene evidence" }
+    ]
+  },
+  "summary": {
+    "overallStatus": "PARTIAL — needs hardening before production",
+    "implementedSafeguards": [
+      "Document hash-based deduplication",
+      "Content-type verification for downloads",
+      "OCR resource controls",
+      "Compliance audit trail",
+      "Review queue with reviewer tracking"
+    ],
+    "missingSafeguards": [
+      "Evidence file upload size limits at API level",
+      "Malicious file detection (antivirus scanning)",
+      "Evidence file hash verification on retrieval",
+      "Full chain-of-custody model for evidence files",
+      "Tamper-evident audit logging"
+    ],
+    "prioritizedActions": [
+      "1. Add file size limits and type validation to evidence upload endpoints",
+      "2. Implement SHA-256 hashing for all evidence files at upload",
+      "3. Create EvidenceChainOfCustody model and log all access",
+      "4. Integrate ClamAV for malware scanning",
+      "5. Implement hash chain for tamper-evident audit trail"
+    ]
+  }
+}

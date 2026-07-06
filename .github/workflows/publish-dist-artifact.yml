@@ -1,0 +1,42 @@
+# Publish frontend dist artifact for manual production deploy
+# Use when SSH secrets are not configured — download artifact on server and extract to dist/
+
+name: Publish Dist Artifact
+
+on:
+  push:
+    branches: [dev]
+  workflow_dispatch:
+
+jobs:
+  build-artifact:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - run: npm ci
+      - run: npm run build
+      - run: |
+          grep -q "Criminal Case Intelligence Platform" dist/index.html
+          BUILD_SHA=$(git rev-parse --short HEAD)
+          echo "Build: $BUILD_SHA" > dist/BUILD_INFO.txt
+          tar -czf courtaccess-dist.tar.gz -C dist .
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: courtaccess-dist-${{ github.sha }}
+          path: courtaccess-dist.tar.gz
+          retention-days: 30
+
+      - name: Manual deploy instructions
+        run: |
+          echo "## Manual Frontend Deploy" >> $GITHUB_STEP_SUMMARY
+          echo "1. Download artifact courtaccess-dist-${{ github.sha }}" >> $GITHUB_STEP_SUMMARY
+          echo "2. On server: tar -xzf courtaccess-dist.tar.gz -C /opt/courtaccess/dist" >> $GITHUB_STEP_SUMMARY
+          echo "3. sudo nginx -t && sudo systemctl reload nginx" >> $GITHUB_STEP_SUMMARY
+          echo "4. npm run verify:production" >> $GITHUB_STEP_SUMMARY

@@ -1,0 +1,361 @@
+{
+  "generatedAt": "2026-07-04T22:10:20.817Z",
+  "version": "4.0",
+  "program": "PRODUCTION_CERTIFICATION",
+  "gates": [
+    {
+      "id": "PG-001",
+      "name": "Stripe Billing",
+      "program": "Program 1 / Program 9",
+      "result": "PARTIAL",
+      "checks": {
+        "pass": 17,
+        "total": 18
+      },
+      "testSteps": [
+        "Run Stripe production certification harness",
+        "Collect billing readiness metrics"
+      ],
+      "evidence": [
+        "PRODUCTION_CERTIFICATION: INCOMPLETE (17/18 PASS)",
+        "billingIntegrity: FAIL",
+        "webhookEventsProcessed: 0"
+      ],
+      "blockers": [
+        "1A-012: Live Stripe Test Mode API certification in staging"
+      ],
+      "recoveryBehavior": "Configure sk_test_ credentials and run npm run billing:certify"
+    },
+    {
+      "id": "PG-002",
+      "name": "Authentication",
+      "program": "Program 1 / Program 13",
+      "result": "PASS",
+      "checks": {
+        "pass": 5,
+        "total": 5
+      },
+      "testSteps": [
+        "Verify JWT/refresh config",
+        "Verify RBAC route permissions",
+        "Check auth security report"
+      ],
+      "evidence": [
+        "JWT access token config",
+        "Refresh token config",
+        "Route permissions defined",
+        "Admin routes protected",
+        "Auth security report exists"
+      ],
+      "blockers": [],
+      "recoveryBehavior": "Ensure authMiddleware.ts RBAC covers all protected routes"
+    },
+    {
+      "id": "PG-003",
+      "name": "Client Domain",
+      "program": "Domain C / Program 17",
+      "result": "PASS",
+      "checks": {
+        "pass": 5,
+        "total": 5
+      },
+      "testSteps": [
+        "Verify Client + Organization in Prisma",
+        "Verify /api/clients CRUD",
+        "Run client-domain.test.ts"
+      ],
+      "evidence": [
+        "Dedicated Client model",
+        "Organization model (tenant)",
+        "Client API routes",
+        "Client domain tests",
+        "Case-client relationship"
+      ],
+      "blockers": [],
+      "recoveryBehavior": "Implement and verify client CRUD with tenant isolation"
+    },
+    {
+      "id": "PG-004",
+      "name": "Case Management",
+      "program": "Program 1 / Program 2",
+      "result": "PASS",
+      "checks": {
+        "pass": 3,
+        "total": 3
+      },
+      "testSteps": [
+        "Verify case CRUD routes",
+        "Run evidence.test.ts"
+      ],
+      "evidence": [
+        "POST/GET/PATCH/DELETE /api/cases"
+      ],
+      "blockers": [],
+      "recoveryBehavior": "Fix failing case management tests"
+    },
+    {
+      "id": "PG-005",
+      "name": "Document Upload",
+      "program": "Program 1 / Program 2",
+      "result": "PASS",
+      "checks": {
+        "pass": 4,
+        "total": 4
+      },
+      "testSteps": [
+        "Verify evidence upload routes",
+        "Check file upload security validation"
+      ],
+      "evidence": [
+        "evidenceRoutes.ts",
+        "evidenceDirectUpload.ts",
+        "File upload security report",
+        "R2/S3 storage configured"
+      ],
+      "blockers": [],
+      "recoveryBehavior": "Configure R2 credentials and verify upload security hardening"
+    },
+    {
+      "id": "PG-006",
+      "name": "OCR",
+      "program": "Program 1 / Program 14",
+      "result": "PASS",
+      "checks": {
+        "pass": 4,
+        "total": 4
+      },
+      "testSteps": [
+        "Verify OCR worker and extractor modules",
+        "Check OCR pipeline report"
+      ],
+      "evidence": [
+        "OCR worker module",
+        "Document text extractor",
+        "Evidence text extraction service",
+        "OCR pipeline report"
+      ],
+      "blockers": [],
+      "recoveryBehavior": "Run phase85-90:validate to regenerate OCR pipeline report"
+    },
+    {
+      "id": "PG-007",
+      "name": "Evidence Processing",
+      "program": "Program 1 / Program 7",
+      "result": "PASS",
+      "checks": {
+        "pass": 4,
+        "total": 4
+      },
+      "testSteps": [
+        "Verify evidence pipeline modules",
+        "Check evidence security report"
+      ],
+      "evidence": [
+        "Evidence processing pipeline",
+        "Compliance routes",
+        "Forensic reconstruction routes",
+        "Evidence security validation"
+      ],
+      "blockers": [],
+      "recoveryBehavior": "Ensure evidence processing workers are running"
+    },
+    {
+      "id": "PG-008",
+      "name": "Timeline",
+      "program": "Program 1 / Program 2",
+      "result": "PASS",
+      "checks": {
+        "pass": 3,
+        "total": 3
+      },
+      "testSteps": [
+        "Verify timeline routes and reconstruction service"
+      ],
+      "evidence": [
+        "GET /api/timeline/:caseId",
+        "POST /api/timeline/rebuild/:caseId"
+      ],
+      "blockers": [],
+      "recoveryBehavior": "Fix timeline reconstruction service errors"
+    },
+    {
+      "id": "PG-009",
+      "name": "Attorney Reports",
+      "program": "Domain U / Program 15",
+      "result": "PASS",
+      "checks": {
+        "pass": 9,
+        "total": 9
+      },
+      "testSteps": [
+        "Verify Attorney Intelligence Engine modules",
+        "Run attorney-intelligence.test.ts"
+      ],
+      "evidence": [
+        "Attorney Intelligence Engine",
+        "Element analysis module",
+        "Report generator (structured)",
+        "Intelligence API routes",
+        "Attorney intelligence tests",
+        "Attorney Workbench service",
+        "Workbench API routes",
+        "Workbench tests",
+        "Expert witness package exporter"
+      ],
+      "blockers": [],
+      "recoveryBehavior": "Complete intelligence engine and verify evidence traceability"
+    },
+    {
+      "id": "PG-010",
+      "name": "Legislative Intelligence",
+      "program": "Program 1 / Program 5",
+      "result": "PASS",
+      "checks": {
+        "pass": 5,
+        "total": 5
+      },
+      "testSteps": [
+        "Collect production metrics",
+        "Verify legislative pipeline modules"
+      ],
+      "evidence": [
+        "sectionsParsed: 4",
+        "criminalOffenses: 2",
+        "repositoryIntegrity: PASS"
+      ],
+      "blockers": [],
+      "recoveryBehavior": "Run leginfo:discover/acquire/process/classify pipeline"
+    },
+    {
+      "id": "PG-011",
+      "name": "Knowledge Graph",
+      "program": "Program 1 / Program 6",
+      "result": "PASS",
+      "checks": {
+        "pass": 4,
+        "total": 4
+      },
+      "testSteps": [
+        "Verify KG pipeline and repositories",
+        "Check repository record counts"
+      ],
+      "evidence": [
+        "statutes: 4",
+        "offenses: 2",
+        "elements: 4",
+        "mens_rea: 2",
+        "exceptions: 3",
+        "defenses: 0",
+        "cross_references: 13",
+        "regulatory_incorporations: 2",
+        "calcrim_links: 1",
+        "authorities: 13",
+        "statute_classifications: 3"
+      ],
+      "blockers": [],
+      "recoveryBehavior": "Run leginfo:classify to populate knowledge graph repositories"
+    },
+    {
+      "id": "PG-012",
+      "name": "Repository Integrity",
+      "program": "Program 1 / Program 8 / Epic H",
+      "result": "PASS",
+      "checks": {
+        "pass": 6,
+        "total": 6
+      },
+      "testSteps": [
+        "Run repository integrity check",
+        "Verify integrity dashboard modules"
+      ],
+      "evidence": [
+        "repositoryIntegrity: PASS",
+        "parsingFailures: 0",
+        "Repository integrity PASS",
+        "Integrity dashboard service",
+        "Integrity dashboard API",
+        "Integrity dashboard tests",
+        "Integrity dashboard UI",
+        "Zero parsing failures"
+      ],
+      "blockers": [],
+      "recoveryBehavior": "Run npm run integrity:report and fix parsing failures"
+    },
+    {
+      "id": "PG-013",
+      "name": "Administrative Dashboard",
+      "program": "Program 1 / Program 4 / Program 11",
+      "result": "PASS",
+      "checks": {
+        "pass": 5,
+        "total": 5
+      },
+      "testSteps": [
+        "Verify admin routes and metrics collectors"
+      ],
+      "evidence": [
+        "GET /api/admin/stats",
+        "GET /api/admin/billing/metrics",
+        "GET /api/admin/production-gates"
+      ],
+      "blockers": [],
+      "recoveryBehavior": "Wire missing admin dashboard endpoints"
+    },
+    {
+      "id": "PG-014",
+      "name": "Security",
+      "program": "Program 1 / Program 13",
+      "result": "PASS",
+      "checks": {
+        "pass": 5,
+        "total": 5
+      },
+      "testSteps": [
+        "Read security_readiness.json",
+        "Verify security modules and audit reports"
+      ],
+      "evidence": [
+        "Security readiness report",
+        "Security status PRODUCTION_READY",
+        "Rate limiter module",
+        "CSRF protection report",
+        "Access control audit"
+      ],
+      "blockers": [],
+      "recoveryBehavior": "Address security audit gaps and regenerate validation reports"
+    },
+    {
+      "id": "PG-015",
+      "name": "Backup / Recovery",
+      "program": "Program 1 / Program 13",
+      "result": "PASS",
+      "checks": {
+        "pass": 4,
+        "total": 4
+      },
+      "testSteps": [
+        "Verify DR documentation",
+        "Run automated backup restore drill",
+        "Check database migration safety script"
+      ],
+      "evidence": [
+        "DISASTER_RECOVERY.md",
+        "db-safe-migrate.sh",
+        "Database integrity audit",
+        "Automated backup verification",
+        "BACKUP_RESTORE_DRILL: PASS (9/9 checks)"
+      ],
+      "blockers": [],
+      "recoveryBehavior": "Run npm run backup:drill and verify BACKUP_RESTORE_DRILL.json"
+    }
+  ],
+  "passCount": 14,
+  "failCount": 0,
+  "partialCount": 1,
+  "skipCount": 0,
+  "blockers": [
+    "PG-001: 1A-012: Live Stripe Test Mode API certification in staging"
+  ],
+  "deploymentBlocked": true,
+  "overallResult": "NOT_READY"
+}

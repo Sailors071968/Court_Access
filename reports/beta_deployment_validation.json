@@ -1,0 +1,119 @@
+{
+  "report": "Beta Deployment Validation — Phase 229",
+  "generatedAt": "2026-03-10T18:03:00Z",
+  "targetEnvironment": "beta.courtaccess.net",
+  "branch": "dev",
+  "mergedFrom": "devin/1773065839-agency-registry-pipeline (PR #26)",
+  "deployMethod": "GitHub Actions → rsync → EC2",
+  "checks": {
+    "apiHealth": {
+      "endpoint": "https://beta.courtaccess.net/api/health",
+      "expected": "HTTP 200",
+      "status": "PENDING_DEPLOY",
+      "notes": "Verified by deploy workflow health check step"
+    },
+    "databaseConnection": {
+      "type": "PostgreSQL via Prisma",
+      "migrationCommand": "npx prisma migrate deploy",
+      "status": "PENDING_DEPLOY",
+      "notes": "Migrations run automatically during deploy workflow"
+    },
+    "workerQueues": {
+      "queues": [
+        "agencyCrawlerWorker",
+        "ocrWorker",
+        "classificationWorker",
+        "documentDownloadWorker",
+        "cpraCampaignWorker",
+        "chpPolicyIngestionWorker",
+        "discountExpirationWorker"
+      ],
+      "managedBy": "PM2",
+      "restartCommand": "pm2 restart court-access-api",
+      "status": "PENDING_DEPLOY"
+    },
+    "s3Access": {
+      "bucket": "court-access-evidence",
+      "operations": ["upload", "download", "list"],
+      "status": "PENDING_DEPLOY",
+      "notes": "S3 credentials configured via .env on EC2"
+    },
+    "authentication": {
+      "jwtAuth": true,
+      "refreshTokenRotation": true,
+      "rbacRoles": ["admin", "attorney", "investigator", "staff", "defendant"],
+      "demoUsers": [
+        "admin@courtaccess.com",
+        "attorney@courtaccess.com",
+        "investigator@courtaccess.com",
+        "staff@courtaccess.com",
+        "defendant@courtaccess.com"
+      ],
+      "status": "PENDING_DEPLOY"
+    },
+    "frontendBuild": {
+      "buildTool": "Vite 6.4.1",
+      "outputDir": "dist/",
+      "bundleSize": "1,117 KB (276 KB gzipped)",
+      "modules": 1561,
+      "typeCheckPassed": true,
+      "status": "VERIFIED_LOCAL"
+    },
+    "nginxReverseProxy": {
+      "domain": "beta.courtaccess.net",
+      "ssl": "Let's Encrypt / Certbot",
+      "frontendPath": "/var/www/court-access/frontend/",
+      "backendProxy": "proxy_pass http://localhost:3001",
+      "status": "PENDING_DEPLOY"
+    }
+  },
+  "featuresIncluded": {
+    "securityHardening": {
+      "phases": "191-198",
+      "securityScore": "96/100",
+      "modules": ["authMiddleware", "rateLimiter", "csrfProtection", "securityHeaders", "evidenceUploadProtection", "securityLogger"]
+    },
+    "landingPage": {
+      "route": "/",
+      "sections": ["hero", "painPoints", "solution", "features", "testimonials", "authority", "faq", "cta", "footer"]
+    },
+    "marketExpansion": {
+      "phases": "207-216",
+      "newPages": ["/for-defense", "/for-prosecutors", "/government", "/contact", "/case-studies"],
+      "newDashboards": ["/dashboard/demo-requests", "/dashboard/government-outreach", "/dashboard/marketing"]
+    },
+    "discountCodeSystem": {
+      "phases": "221-228",
+      "adminDashboard": "/dashboard/discount-codes",
+      "registrationIntegration": true,
+      "usageTracking": true,
+      "expirationWorker": true
+    },
+    "demoLoginFix": {
+      "description": "Demo buttons on /login now auto-login on click",
+      "affectedFile": "src/pages/auth/LoginPage.tsx"
+    }
+  },
+  "deployWorkflowSteps": [
+    "1. Build frontend (npx vite build)",
+    "2. Run TypeScript check (npx tsc --noEmit)",
+    "3. Run ESLint (npm run lint)",
+    "4. Run unit tests (npx vitest run)",
+    "5. Upload build artifact",
+    "6. Configure SSH to EC2",
+    "7. rsync frontend to /var/www/court-access/frontend/",
+    "8. rsync backend to /var/www/court-access/backend/",
+    "9. npm install --production on EC2",
+    "10. npx prisma migrate deploy",
+    "11. pm2 restart court-access-api",
+    "12. Health check: curl https://beta.courtaccess.net/api/health"
+  ],
+  "postDeployVerification": {
+    "landingPageLoads": "GET https://beta.courtaccess.net/ → 200",
+    "loginWorks": "POST /api/auth/login with demo credentials → JWT token",
+    "demoButtonsWork": "Click Attorney/Admin/etc → auto-login + redirect to /dashboard",
+    "discountCodesFunction": "Create code in admin → apply during registration → verify usage",
+    "dashboardLoads": "GET /dashboard → role-based dashboard rendering",
+    "caseUploadWorks": "Upload evidence file → stored in S3 → chain-of-custody logged"
+  }
+}

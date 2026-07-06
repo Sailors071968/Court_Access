@@ -1,0 +1,128 @@
+{
+  "phase": 108,
+  "title": "Dashboard Refresh — Real Data",
+  "generatedAt": "2026-03-09T23:28:34.792Z",
+  "dashboardPages": {
+    "policyIntelligence": {
+      "agenciesIndexed": 488,
+      "agenciesWithRealPolicies": 420,
+      "policiesCollected": 9763,
+      "realPoliciesCollected": 8213,
+      "topicsCovered": 334,
+      "classificationAccuracy": {
+        "totalClassified": 8189,
+        "averageConfidence": 0.99,
+        "highConfidencePercent": 100,
+        "estimatedAccuracy": 99.6,
+        "aboveThreshold": true
+      },
+      "coverageSummary": {
+        "totalAgencies": 488,
+        "totalTopics": 334,
+        "totalPoliciesCollected": 8213,
+        "overallCoveragePercent": 2.87,
+        "missingTopicsCount": 158319,
+        "agenciesIndexed": 420
+      }
+    },
+    "policyAcquisition": {
+      "sitesCrawled": 488,
+      "documentsFound": 9763,
+      "documentsDownloaded": 6639,
+      "documentsOcr": 6639,
+      "documentsClassified": 8189,
+      "realOcrCompleted": 6639,
+      "realOcrPending": 0,
+      "realOcrFailed": 1574,
+      "realClassCompleted": 6639,
+      "realClassPending": 1574
+    },
+    "cpra": {
+      "activeCampaigns": 1,
+      "totalRequests": 25,
+      "campaignStatus": {
+        "activeCampaigns": 1,
+        "totalRequestsSent": 0,
+        "totalResponsesReceived": 0,
+        "pendingFollowUps": 0,
+        "dailySendCount": 0,
+        "dailyLimit": 20,
+        "campaigns": [
+          {
+            "campaignId": "e37fdd7e-b31a-4641-b997-83de7763a28b",
+            "campaignName": "Phase 95 Statewide CPRA Campaign -- 2026-03-09",
+            "requestCount": 25,
+            "sentCount": 0,
+            "respondedCount": 0,
+            "closedCount": 0
+          }
+        ]
+      },
+      "queueStatus": {
+        "pendingRequests": 25,
+        "sentRequests": 0,
+        "responsesReceived": 0,
+        "closedRequests": 0,
+        "agenciesInQueue": 25
+      },
+      "note": "No CPRA emails sent during real data acquisition"
+    },
+    "systemHealth": {
+      "pipelineStats": {
+        "totalAgencies": 488,
+        "websitesFound": 172,
+        "sitesCrawled": 488,
+        "documentsFound": 9763,
+        "documentsDownloaded": 6639,
+        "documentsOcr": 6639,
+        "documentsClassified": 8189,
+        "crawlInProgress": 0,
+        "crawlFailed": 0
+      },
+      "pipelineHealth": {
+        "inboundEmailStatus": "operational",
+        "ocrStatus": "operational",
+        "classificationStatus": "operational",
+        "coverageUpdateStatus": "operational",
+        "recentResponses": 0,
+        "pendingOcr": 0,
+        "pendingClassification": 0,
+        "lastResponseAt": null
+      },
+      "chpStatus": {
+        "isComplete": true,
+        "totalDocuments": 1561,
+        "classifiedDocuments": 1550,
+        "coverageEntries": 334,
+        "topicsSeeded": 334,
+        "chpAgencyId": "0bd0d44f-0975-4492-923a-d7d125c93bab"
+      },
+      "coverageStats": {
+        "totalAgencies": 488,
+        "totalTopics": 334,
+        "totalCoverageEntries": 162992,
+        "totalFound": 4673,
+        "totalMissing": 158319,
+        "overallCoveragePercent": 2.87,
+        "agenciesWithFullCoverage": 1,
+        "agenciesWithNoCoverage": 0
+      },
+      "databaseCounts": {
+        "agencies": 488,
+        "documents": 9763,
+        "realDocuments": 8213,
+        "topics": 334,
+        "coverageEntries": 162992,
+        "policiesFound": 4673,
+        "policiesMissing": 158319
+      }
+    }
+  },
+  "expectedMetrics": {
+    "agenciesIndexed": 488,
+    "policiesCollected": 8213,
+    "topicsCovered": 334,
+    "note": "These reflect real crawled data, not synthetic"
+  },
+  "runtimeMs": 316
+}

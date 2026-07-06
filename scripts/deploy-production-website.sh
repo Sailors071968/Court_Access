@@ -1,11 +1,22 @@
 #!/usr/bin/env bash
 # =============================================================================
-# Priority Zero — Deploy current production website to courtaccess.net
-# Run on the production server as a user with access to /opt/courtaccess
+# DEPRECATED for V1 greenfield — use GREENFIELD_V1_DEPLOYMENT.md instead.
+# This script checks out origin/dev on the target directory and MUST NOT be run
+# against /var/www/courtaccess during greenfield deployment (production frozen).
 # =============================================================================
 set -euo pipefail
 
 DEPLOY_DIR="${DEPLOY_DIR:-/opt/courtaccess}"
+PROTECTED_PROD_DIR="${PROTECTED_PROD_DIR:-/var/www/courtaccess}"
+
+resolve_path() { readlink -f "$1" 2>/dev/null || realpath "$1" 2>/dev/null || echo "$1"; }
+if [[ "$(resolve_path "$DEPLOY_DIR")" == "$(resolve_path "$PROTECTED_PROD_DIR")" ]]; then
+  echo "ERROR: deploy-production-website.sh must not run on ${PROTECTED_PROD_DIR} during greenfield."
+  echo "       Use scripts/v1-greenfield-install.sh → v1-greenfield-verify.sh → v1-production-cutover.sh"
+  echo "       See GREENFIELD_V1_DEPLOYMENT.md"
+  exit 1
+fi
+
 BRANCH="${DEPLOY_BRANCH:-dev}"
 NGINX_ROOT="${NGINX_ROOT:-$DEPLOY_DIR/dist}"
 PM2_FRONTEND="${PM2_FRONTEND:-courtaccess-frontend}"

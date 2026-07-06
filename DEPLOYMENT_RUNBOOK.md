@@ -1,5 +1,8 @@
 # CourtAccess Deployment Runbook
 
+> **V1 Greenfield (Program 1A):** For Version 1.0 production release, use [`GREENFIELD_V1_DEPLOYMENT.md`](GREENFIELD_V1_DEPLOYMENT.md).  
+> **Do not** run `git checkout` / `git pull` on `/var/www/courtaccess` for origin/dev. Clone origin/dev only into `/var/www/courtaccess-v1`. Production is modified only by `scripts/v1-production-cutover.sh` after verify PASS.
+
 ## Phase 188 — Production Deployment Checklist
 
 Generated: 2026-03-10

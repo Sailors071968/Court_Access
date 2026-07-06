@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # ==============================================================================
 # CourtAccess V1 — Greenfield Preflight (Phase 0, read-only)
-# Run on production EC2. Makes NO modifications.
+# Run on production EC2 from a /tmp origin/dev clone — NEVER git checkout/pull
+# inside /var/www/courtaccess.
 # Usage: bash scripts/v1-greenfield-preflight.sh [--json /path/report.json]
 # ==============================================================================
 set -uo pipefail
@@ -19,7 +20,7 @@ pass() { echo "PASS: $*"; PASS=$((PASS + 1)); RESULTS+=("PASS|$*"); }
 warn() { echo "WARN: $*"; WARN=$((WARN + 1)); RESULTS+=("WARN|$*"); }
 fail() { echo "FAIL: $*"; FAIL=$((FAIL + 1)); BLOCKERS+=("$*"); RESULTS+=("FAIL|$*"); }
 
-# ── Configurable paths (override via env) ─────────────────────────────────────
+PROTECTED_PROD_DIR="${PROTECTED_PROD_DIR:-/var/www/courtaccess}"
 V1_DIR="${V1_DIR:-/var/www/courtaccess-v1}"
 V1_DB_NAME="${V1_DB_NAME:-courtaccess_v1}"
 V1_API_PORT="${V1_API_PORT:-3101}"
@@ -59,6 +60,21 @@ discover_repos() {
   done
   PROD_DIR="${PROD_DIR:-/var/www/courtaccess}"
   LEGACY_REPO="${LEGACY_REPO:-/var/www/courtaccess_repo}"
+}
+
+verify_origin_scripts() {
+  local tmp repo
+  tmp="$(mktemp -d)"
+  repo="${tmp}/courtaccess-scripts"
+  if git clone --depth 1 --branch "$GIT_BRANCH" "$GIT_REMOTE" "$repo" >/dev/null 2>&1; then
+    for f in scripts/v1-greenfield-install.sh scripts/v1-greenfield-verify.sh scripts/v1-greenfield-preflight.sh scripts/v1-production-cutover.sh; do
+      [[ -f "${repo}/${f}" ]] && pass "origin/${GIT_BRANCH} contains ${f}" || fail "origin/${GIT_BRANCH} missing ${f}"
+    done
+    rm -rf "$tmp"
+    return 0
+  fi
+  rm -rf "$tmp"
+  fail "Cannot shallow-clone origin/${GIT_BRANCH} to verify deployment scripts"
 }
 
 discover_env_file() {
@@ -220,34 +236,27 @@ else
 fi
 
 if [[ -d "${PROD_DIR}/.git" ]]; then
-  pass "Production branch: $(git -C "$PROD_DIR" branch --show-current 2>/dev/null || echo unknown)"
+  PROD_BRANCH="$(git -C "$PROD_DIR" branch --show-current 2>/dev/null || echo unknown)"
   PROD_SHA="$(git -C "$PROD_DIR" rev-parse HEAD 2>/dev/null || true)"
-  pass "Production commit: ${PROD_SHA:-unknown}"
+  pass "Production branch (frozen): ${PROD_BRANCH}"
+  pass "Production commit (frozen): ${PROD_SHA:-unknown}"
+  pass "Production repo git state recorded — preflight does not modify it"
+  if [[ "$PROD_BRANCH" == "$GIT_BRANCH" ]]; then
+    warn "Production repo is on ${GIT_BRANCH} — greenfield still must not run git pull/checkout on ${PROD_DIR}"
+  else
+    pass "Production repo is not on ${GIT_BRANCH} (expected for frozen production)"
+  fi
 fi
 
-for f in scripts/v1-greenfield-install.sh scripts/v1-greenfield-verify.sh scripts/v1-greenfield-preflight.sh scripts/v1-production-cutover.sh; do
-  [[ -f "${PROD_DIR}/${f}" ]] && pass "Script in prod checkout: ${f}" || warn "Script not in prod checkout: ${f} (will exist after pull from origin/dev)"
-done
+# Scripts are verified from origin/dev clone — NOT required in production checkout
+verify_origin_scripts
 echo ""
 
 # ── 0.8 GitHub ───────────────────────────────────────────────────────────────
 echo "── GitHub / origin/dev ──"
 REMOTE_DEV_SHA="$(git ls-remote "$GIT_REMOTE" "refs/heads/${GIT_BRANCH}" 2>/dev/null | awk '{print $1}')"
-if [[ -n "$REMOTE_DEV_SHA" ]]; then
-  pass "origin/${GIT_BRANCH} reachable: ${REMOTE_DEV_SHA}"
-  for f in scripts/v1-greenfield-install.sh scripts/v1-greenfield-verify.sh scripts/v1-greenfield-preflight.sh; do
-    if [[ -f "${PROD_DIR}/${f}" ]]; then
-      pass "origin/${GIT_BRANCH} script available locally: ${f}"
-    else
-      warn "Script not in prod checkout yet: ${f} (pull origin/${GIT_BRANCH} before install)"
-    fi
-  done
-else
-  fail "Cannot reach origin/${GIT_BRANCH}"
-fi
+[[ -n "$REMOTE_DEV_SHA" ]] && pass "origin/${GIT_BRANCH} reachable: ${REMOTE_DEV_SHA}" || fail "Cannot reach origin/${GIT_BRANCH}"
 echo ""
-
-# ── 0.3 Environment ───────────────────────────────────────────────────────────
 echo "── Environment ──"
 [[ -n "$ENV_FILE" && -f "$ENV_FILE" ]] && pass ".env located: ${ENV_FILE}" || fail ".env not found"
 
@@ -427,7 +436,11 @@ if [[ ${#BLOCKERS[@]} -gt 0 ]]; then
 fi
 
 if [[ "$READY" == "yes" && "$FAIL" -eq 0 ]]; then
-  echo "READINESS: PASS — proceed to Phase 1: bash ${PROD_DIR}/scripts/v1-greenfield-install.sh"
+  echo "READINESS: PASS — proceed to Phase 1 (clone origin/dev → ${V1_DIR})"
+  echo "  TMPDIR=\$(mktemp -d)"
+  echo "  git clone --depth 1 --branch dev ${GIT_REMOTE} \"\${TMPDIR}/courtaccess-install\""
+  echo "  export ENV_SOURCE=${ENV_FILE:-/var/www/courtaccess/backend/.env}"
+  echo "  bash \"\${TMPDIR}/courtaccess-install/scripts/v1-greenfield-install.sh\""
   EXIT=0
 elif [[ "$FAIL" -eq 0 ]]; then
   echo "READINESS: WARN — review warnings; Phase 1 may proceed with caution"
@@ -436,7 +449,7 @@ else
   echo "READINESS: FAIL — resolve blockers before Phase 1"
   EXIT=1
 fi
-echo "Production path ${PROD_DIR} was NOT modified by this audit."
+echo "Production path ${PROD_DIR} git state was NOT modified by this audit."
 echo "=============================================================================="
 
 write_json_report

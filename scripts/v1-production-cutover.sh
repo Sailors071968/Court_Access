@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
 # ==============================================================================
 # CourtAccess V1 — Production Cutover
-# Replaces live courtaccess.net with verified /var/www/courtaccess-v1 install
-# Legacy installations become rollback backups — NOT reused
+# THE ONLY script that modifies /var/www/courtaccess and live courtaccess.net.
+# Promotes verified /var/www/courtaccess-v1 after v1-greenfield-verify.sh PASS.
+# Legacy tree is backed up — not updated in place before promotion.
 # PREREQUISITE: v1-greenfield-verify.sh must PASS
 # ==============================================================================
 set -euo pipefail

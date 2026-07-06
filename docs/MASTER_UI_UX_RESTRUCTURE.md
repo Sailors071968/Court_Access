@@ -19,6 +19,7 @@
 | **22** | **Defendant Workspace** | **DONE** | `client-portal/DefendantWorkspace.tsx` |
 | **23** | **Operations Command Center** | **DONE** | `OperationsCommandCenter.tsx` on library |
 | **25** | **Global Legal Intelligence Search** | **DONE** | `GlobalSearch` palette + `SearchPage` + `globalSearchService` |
+| **26** | **Unified Timeline Engine** | **DONE** | `components/timeline/TimelineEngine.tsx` + adapters; migrated `ActivityPage` & Investigator |
 | **24** | **Repository Audit** | **DONE** | `docs/DESIGN_DEBT_REPORT.md` |
 
 ## Design Philosophy

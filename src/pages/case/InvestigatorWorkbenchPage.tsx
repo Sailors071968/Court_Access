@@ -18,7 +18,7 @@ import { EmptyState } from '../../components/ui/empty-state';
 import { Icon } from '../../components/icons/registry';
 import { StatCard } from '../../components/ui/card';
 import { DataTable, type Column } from '../../components/data/data-table';
-import { TimelineCard } from '../../components/cards/domain-cards';
+import { TimelineEngine, fromGenericEvents } from '../../components/timeline';
 import { StatusBadge, UnknownIndicator } from '../../components/indicators/indicators';
 import { SPACING } from '../../constants/designTokens';
 import {
@@ -250,24 +250,17 @@ export function InvestigatorWorkbenchPage() {
       )}
 
       {tab === 'timeline' && (
-        <Card>
-          <h3 className="text-base font-semibold text-white mb-4">Case Timeline</h3>
-          {data.timeline.length === 0 ? (
-            <EmptyState title="No timeline events" />
-          ) : (
-            <div className="space-y-1 max-h-[28rem] overflow-y-auto">
-              {data.timeline.map((e) => (
-                <TimelineCard
-                  key={e.id}
-                  title={e.actor ? `${e.actor}` : 'Event'}
-                  date={e.timestamp ? new Date(e.timestamp).toLocaleString() : 'UNKNOWN time'}
-                  description={e.description}
-                  tag={e.actor ? undefined : 'Unverified'}
-                />
-              ))}
-            </div>
+        <TimelineEngine
+          variant="investigation"
+          events={fromGenericEvents(
+            data.timeline.map((e) => ({
+              id: e.id,
+              timestamp: e.timestamp,
+              description: e.description,
+              eventType: e.actor ? `${e.actor}` : 'Event',
+            })),
           )}
-        </Card>
+        />
       )}
 
       {tab === 'notes' && (

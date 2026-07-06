@@ -52,3 +52,7 @@ export { SplitPane } from './layout/split-pane';
 // Global search (Program 25)
 export { GlobalSearchProvider, useGlobalSearch } from './search/GlobalSearch';
 export { SearchResultRow } from './search/SearchResultRow';
+
+// Timeline engine (Program 26)
+export { TimelineEngine, fromApiTimelineEvents, fromGenericEvents } from './timeline';
+export type { TimelineEvent, TimelineVariant, TimelineGrouping } from './timeline';

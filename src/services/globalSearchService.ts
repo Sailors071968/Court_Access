@@ -166,6 +166,56 @@ function highlight(text: string): string {
   return text; // snippet already concise; UI highlights matched query separately
 }
 
+// Types served by the real, evidence-governed backend search API (Program 115).
+const BACKEND_TYPES: GlobalSearchType[] = ['case', 'evidence', 'ocr_text', 'timeline_event', 'message'];
+
+interface BackendSearchResult {
+  id: string;
+  type: GlobalSearchType;
+  title: string;
+  snippet: string;
+  url: string;
+  caseId: string;
+  confidence?: number;
+  repositorySource?: string;
+  humanReviewStatus?: HumanReviewStatus;
+  auditAvailable?: boolean;
+  contentHash?: string;
+}
+
+function authHeaders(): Record<string, string> {
+  const token = localStorage.getItem('court-access-token');
+  return {
+    'Content-Type': 'application/json',
+    ...(token ? { Authorization: `Bearer ${token}` } : {}),
+  };
+}
+
+/** Query the real backend search API for the types it can serve. */
+async function backendSearch(query: string, types: GlobalSearchType[]): Promise<GlobalSearchResult[]> {
+  const requested = types.length ? types.filter((t) => BACKEND_TYPES.includes(t)) : BACKEND_TYPES;
+  if (requested.length === 0) return [];
+  const params = new URLSearchParams({ q: query, types: requested.join(','), limit: '50' });
+  try {
+    const res = await fetch(`/api/search?${params.toString()}`, { headers: authHeaders() });
+    if (!res.ok) return [];
+    const data = (await res.json()) as { results?: BackendSearchResult[] };
+    return (data.results ?? []).map((r) => ({
+      id: r.id,
+      type: r.type,
+      title: r.title,
+      snippet: highlight(r.snippet),
+      url: r.url,
+      confidence: r.confidence,
+      repositorySource: r.repositorySource,
+      humanReviewStatus: r.humanReviewStatus,
+      auditAvailable: r.auditAvailable,
+    }));
+  } catch {
+    return [];
+  }
+}
+
 /** The single global search entry point used by the palette and search page. */
 export async function globalSearch(
   query: string,
@@ -174,42 +224,51 @@ export async function globalSearch(
   const start = performance.now();
   const q = query.trim().toLowerCase();
   const mode = options.mode ?? 'natural';
+  const types = options.types ?? [];
 
-  // Live cases from the existing service, enriched.
-  let caseResults: GlobalSearchResult[] = [];
-  try {
-    const legacy = await legacySearch({ query, type: 'case' });
-    caseResults = legacy.results.map((r) => ({
-      id: r.id,
-      type: 'case',
-      title: r.title,
-      snippet: highlight(r.description),
-      url: r.url,
-      confidence: 90,
-      evidenceCount: 0,
-      citationCount: 0,
-      repositorySource: 'Case Repository',
-      humanReviewStatus: 'none',
-      auditAvailable: true,
-    }));
-  } catch {
-    caseResults = [];
+  // Real, evidence-governed results from the backend search API. Cases,
+  // evidence, OCR text, timeline events, and messages are served here.
+  let backendResults = await backendSearch(query, types);
+  if (backendResults.length === 0) {
+    // Fallback: at least surface live cases if the search API is unavailable.
+    try {
+      const legacy = await legacySearch({ query, type: 'case' });
+      backendResults = legacy.results.map((r) => ({
+        id: r.id,
+        type: 'case' as GlobalSearchType,
+        title: r.title,
+        snippet: highlight(r.description),
+        url: r.url,
+        repositorySource: 'Case Repository',
+        humanReviewStatus: 'none' as HumanReviewStatus,
+        auditAvailable: true,
+      }));
+      if (types.length) backendResults = backendResults.filter((r) => types.includes(r.type));
+    } catch {
+      backendResults = [];
+    }
   }
 
-  let pool = [...caseResults];
-  // Representative non-case corpus is DEV-only; production never shows fabricated
-  // results. Wire real evidence/witness/statute indexes here when available.
+  let pool = [...backendResults];
+  // Representative corpus for domains not yet backed by a real index (statutes,
+  // case law, graph nodes, etc.) is DEV-only; production never shows fabricated
+  // results. Skip any type the backend already served to avoid duplicates.
   if (import.meta.env.DEV) {
-    pool = [...pool, ...CORPUS];
+    const backendServed = new Set(BACKEND_TYPES);
+    pool = [...pool, ...CORPUS.filter((r) => !backendServed.has(r.type))];
   }
 
-  if (options.types && options.types.length > 0) {
-    pool = pool.filter((r) => options.types!.includes(r.type));
+  if (types.length > 0) {
+    pool = pool.filter((r) => types.includes(r.type));
   }
 
+  // Backend results are already query-matched + ranked; only the DEV corpus
+  // needs client-side filtering.
+  const backendIds = new Set(backendResults.map((r) => r.id));
   const matches = q
     ? pool.filter(
         (r) =>
+          backendIds.has(r.id) ||
           r.title.toLowerCase().includes(q) ||
           r.snippet.toLowerCase().includes(q) ||
           TYPE_META[r.type].label.toLowerCase().includes(q),

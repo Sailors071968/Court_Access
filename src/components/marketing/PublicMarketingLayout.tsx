@@ -1,11 +1,12 @@
 // ============================================================================
-// Public marketing site layout — unified nav + footer (Programs 2–3)
+// Public marketing site layout — unified dark nav + footer (Programs 2–4)
 // ============================================================================
 
 import { useState, type ReactNode } from 'react';
 import { Link } from 'react-router-dom';
 import { Mail } from 'lucide-react';
 import { BrandLogo } from '../brand/BrandLogo';
+import { TrustBar } from '../brand/TrustBar';
 import { PUBLIC_NAV_LINKS, PUBLIC_FOOTER_SECTIONS } from '../../config/navigation';
 import { cn } from '../../lib/utils';
 
@@ -14,7 +15,7 @@ export function PublicMarketingNav() {
 
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 ca-glass-nav">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3">
         <div className="flex items-center justify-between">
           <BrandLogo variant="light" />
 
@@ -23,7 +24,7 @@ export function PublicMarketingNav() {
               <Link
                 key={item.href}
                 to={item.href}
-                className="text-sm text-slate-400 hover:text-white transition-colors"
+                className="text-sm text-slate-300 hover:text-white transition-colors"
               >
                 {item.label}
               </Link>
@@ -33,15 +34,15 @@ export function PublicMarketingNav() {
           <div className="flex items-center gap-3">
             <Link
               to="/login"
-              className="text-sm text-slate-400 hover:text-white font-medium transition-colors hidden sm:inline"
+              className="text-sm text-slate-300 hover:text-white font-medium transition-colors hidden sm:inline"
             >
-              Login
+              Log In
             </Link>
             <Link
               to="/register"
-              className="text-sm bg-gold-light hover:bg-gold text-navy font-semibold px-5 py-2 rounded-xl transition-colors shadow-gold"
+              className="text-sm ca-gradient-gold text-navy font-semibold px-5 py-2 rounded-xl transition-all hover:brightness-110 shadow-gold"
             >
-              Get Started
+              Start Free Trial
             </Link>
             <button
               onClick={() => setMobileOpen(!mobileOpen)}
@@ -69,7 +70,7 @@ export function PublicMarketingNav() {
               </Link>
             ))}
             <Link to="/login" onClick={() => setMobileOpen(false)} className="block text-sm text-slate-300 hover:text-white py-1">
-              Login
+              Log In
             </Link>
           </div>
         )}
@@ -85,7 +86,7 @@ function FooterLinkList({ title, links }: { title: string; links: readonly { hre
       <ul className="space-y-2">
         {links.map((item) => (
           <li key={item.href}>
-            <Link to={item.href} className="text-sm text-slate-400 hover:text-white transition-colors">
+            <Link to={item.href} className="text-sm text-slate-400 hover:text-gold-light transition-colors">
               {item.label}
             </Link>
           </li>
@@ -97,12 +98,14 @@ function FooterLinkList({ title, links }: { title: string; links: readonly { hre
 
 export function PublicMarketingFooter() {
   return (
-    <footer className="bg-navy border-t border-white/5 py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8 mb-10">
+    <footer className="bg-navy-900 border-t border-white/5 pt-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pb-10">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
           <div className="col-span-2 md:col-span-1">
             <BrandLogo variant="light" className="mb-4" linkTo="/" />
-            <p className="text-slate-500 text-sm leading-relaxed">Criminal Case Intelligence Platform</p>
+            <p className="text-slate-500 text-sm leading-relaxed">
+              AI-powered criminal case intelligence for justice professionals.
+            </p>
           </div>
           <FooterLinkList title="Product" links={PUBLIC_FOOTER_SECTIONS.product} />
           <FooterLinkList title="Audiences" links={PUBLIC_FOOTER_SECTIONS.audiences} />
@@ -112,7 +115,7 @@ export function PublicMarketingFooter() {
             <ul className="space-y-2">
               {PUBLIC_FOOTER_SECTIONS.legal.map((item) => (
                 <li key={item.href}>
-                  <Link to={item.href} className="text-sm text-slate-400 hover:text-white transition-colors">
+                  <Link to={item.href} className="text-sm text-slate-400 hover:text-gold-light transition-colors">
                     {item.label}
                   </Link>
                 </li>
@@ -120,7 +123,7 @@ export function PublicMarketingFooter() {
               <li>
                 <a
                   href="mailto:support@courtaccess.net"
-                  className="text-sm text-slate-400 hover:text-white transition-colors flex items-center gap-2"
+                  className="text-sm text-slate-400 hover:text-gold-light transition-colors flex items-center gap-2"
                 >
                   <Mail size={14} />
                   support@courtaccess.net
@@ -129,11 +132,14 @@ export function PublicMarketingFooter() {
             </ul>
           </div>
         </div>
+      </div>
 
-        <div className="border-t border-white/5 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-slate-500">&copy; {new Date().getFullYear()} CourtAccess. All rights reserved.</p>
-          <p className="text-xs text-slate-600">Criminal Case Intelligence Platform</p>
-        </div>
+      {/* Constitutional trust bar */}
+      <TrustBar />
+
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <p className="text-sm text-slate-500">&copy; {new Date().getFullYear()} CourtAccess. All rights reserved.</p>
+        <p className="text-xs text-slate-600">Criminal Case Intelligence Platform</p>
       </div>
     </footer>
   );
@@ -144,11 +150,11 @@ interface PublicMarketingLayoutProps {
   className?: string;
 }
 
-export function PublicMarketingLayout({ children, className = 'bg-white' }: PublicMarketingLayoutProps) {
+export function PublicMarketingLayout({ children, className = 'bg-navy-800' }: PublicMarketingLayoutProps) {
   return (
     <div className={cn('min-h-screen', className)}>
       <PublicMarketingNav />
-      <main className="pt-20">{children}</main>
+      <main className="pt-[68px]">{children}</main>
       <PublicMarketingFooter />
     </div>
   );

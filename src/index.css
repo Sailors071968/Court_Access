@@ -4,22 +4,24 @@
 
 @layer base {
   :root {
-    /* Brand */
-    --color-navy: 15 23 42;
-    --color-navy-light: 30 41 59;
-    --color-gold: 200 150 62;
-    --color-gold-light: 245 158 11;
+    /* Brand — deep navy foundation */
+    --color-navy: 10 15 28; /* #0a0f1c — deepest surface */
+    --color-navy-800: 15 23 42; /* #0f172a — primary page */
+    --color-navy-700: 20 28 48; /* panel base */
+    --color-navy-600: 30 41 59; /* #1e293b — elevated panel */
+    --color-navy-500: 45 58 82; /* borders / hover */
 
-    /* Surfaces */
-    --color-surface: 255 255 255;
-    --color-surface-muted: 248 250 252;
-    --color-surface-elevated: 255 255 255;
+    /* Gold */
+    --color-gold: 200 150 62; /* #C8963E */
+    --color-gold-light: 234 179 96; /* #eab360 */
+    --color-gold-bright: 245 200 110;
 
     /* Semantic */
-    --color-success: 16 185 129;
-    --color-warning: 245 158 11;
-    --color-danger: 239 68 68;
-    --color-info: 59 130 246;
+    --color-success: 52 211 153;
+    --color-warning: 245 179 96;
+    --color-danger: 248 113 113;
+    --color-info: 96 165 250;
+    --color-violet: 167 139 250;
 
     /* Layout */
     --radius: 0.75rem;
@@ -27,14 +29,14 @@
     --radius-xl: 1.25rem;
 
     /* Glass */
-    --glass-bg: rgba(15, 23, 42, 0.95);
+    --glass-bg: rgba(15, 23, 42, 0.85);
     --glass-border: rgba(255, 255, 255, 0.08);
-    --glass-blur: 12px;
+    --glass-blur: 14px;
 
     /* Shadows */
-    --shadow-card: 0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04);
-    --shadow-elevated: 0 10px 40px -10px rgba(15, 23, 42, 0.12);
-    --shadow-gold: 0 8px 32px -8px rgba(200, 150, 62, 0.35);
+    --shadow-card: 0 1px 3px rgba(0, 0, 0, 0.4), 0 1px 2px rgba(0, 0, 0, 0.3);
+    --shadow-elevated: 0 20px 50px -12px rgba(0, 0, 0, 0.55);
+    --shadow-gold: 0 8px 32px -8px rgba(200, 150, 62, 0.4);
   }
 
   html {
@@ -55,20 +57,22 @@
   }
 
   body {
-    @apply antialiased text-slate-700 bg-surface-muted;
+    @apply antialiased text-slate-200 bg-navy-800;
     font-feature-settings: 'cv02', 'cv03', 'cv04', 'cv11';
   }
 
   :focus-visible {
-    @apply outline-2 outline-offset-2 outline-gold;
+    outline: 2px solid rgb(var(--color-gold-light));
+    outline-offset: 2px;
   }
 }
 
 @layer components {
+  /* Subtle grid texture for hero / dark sections */
   .ca-grid-overlay {
     background-image:
-      linear-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+      linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
     background-size: 60px 60px;
   }
 
@@ -78,16 +82,53 @@
     border-bottom: 1px solid var(--glass-border);
   }
 
+  /* Elevated dark panel — the universal card surface */
+  .ca-panel {
+    background: linear-gradient(180deg, rgba(30, 41, 59, 0.7) 0%, rgba(20, 28, 48, 0.7) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-card);
+  }
+
+  .ca-panel-hover {
+    transition: all 0.2s ease;
+  }
+  .ca-panel-hover:hover {
+    border-color: rgba(200, 150, 62, 0.3);
+    box-shadow: var(--shadow-elevated);
+    transform: translateY(-2px);
+  }
+
   .ca-gradient-hero {
-    background: linear-gradient(135deg, rgb(var(--color-navy)) 0%, rgb(var(--color-navy-light)) 50%, rgb(30 41 59) 100%);
+    background:
+      radial-gradient(ellipse 80% 60% at 70% 0%, rgba(200, 150, 62, 0.08), transparent 60%),
+      linear-gradient(180deg, #0f172a 0%, #0a0f1c 100%);
   }
 
   .ca-gradient-gold {
-    background: linear-gradient(135deg, rgb(var(--color-gold)) 0%, rgb(var(--color-gold-light)) 100%);
+    background: linear-gradient(135deg, #eab360 0%, #C8963E 100%);
   }
 
   .ca-text-gradient-gold {
     @apply bg-clip-text text-transparent;
-    background-image: linear-gradient(135deg, #f59e0b 0%, #C8963E 100%);
+    background-image: linear-gradient(135deg, #f5c86e 0%, #C8963E 100%);
+  }
+
+  /* Gradient icon tiles for stat cards */
+  .ca-icon-gold {
+    background: linear-gradient(135deg, rgba(234, 179, 96, 0.2), rgba(200, 150, 62, 0.1));
+    border: 1px solid rgba(200, 150, 62, 0.25);
+  }
+  .ca-icon-blue {
+    background: linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(59, 130, 246, 0.1));
+    border: 1px solid rgba(96, 165, 250, 0.25);
+  }
+  .ca-icon-violet {
+    background: linear-gradient(135deg, rgba(167, 139, 250, 0.2), rgba(139, 92, 246, 0.1));
+    border: 1px solid rgba(167, 139, 250, 0.25);
+  }
+  .ca-icon-emerald {
+    background: linear-gradient(135deg, rgba(52, 211, 153, 0.2), rgba(16, 185, 129, 0.1));
+    border: 1px solid rgba(52, 211, 153, 0.25);
   }
 }

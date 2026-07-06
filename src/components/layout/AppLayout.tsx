@@ -1,22 +1,22 @@
 // ============================================
 // Court Access — App Layout (Sidebar + Header + Content)
-// Unified design language — Program 6
+// Unified dark design language — Program 6
 // ============================================
 
 import { Outlet } from 'react-router-dom';
 import { Sidebar } from './Sidebar';
 import { Header } from './Header';
 import { useState } from 'react';
-import { SURFACES } from '../../constants/designTokens';
+import { TrustBar } from '../brand/TrustBar';
 
 export function AppLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className={SURFACES.page}>
+    <div className="min-h-screen bg-navy-800 text-slate-200">
       {mobileMenuOpen && (
         <div
-          className="fixed inset-0 bg-navy/60 backdrop-blur-sm z-30 lg:hidden"
+          className="fixed inset-0 bg-black/60 backdrop-blur-sm z-30 lg:hidden"
           onClick={() => setMobileMenuOpen(false)}
           aria-hidden="true"
         />
@@ -31,9 +31,10 @@ export function AppLayout() {
         <main className="flex-1 p-6 lg:p-8">
           <Outlet />
         </main>
-        <footer className="px-6 lg:px-8 py-4 border-t border-slate-200/80 bg-white/80 backdrop-blur-sm">
+        <TrustBar />
+        <footer className="px-6 lg:px-8 py-3 border-t border-white/5 bg-navy-900/60">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
-            <span>CourtAccess — Criminal Evidence Intelligence Platform</span>
+            <span>CourtAccess — Criminal Case Intelligence Platform</span>
             <span>AI-generated insights are not legal advice. Consult your attorney.</span>
           </div>
         </footer>

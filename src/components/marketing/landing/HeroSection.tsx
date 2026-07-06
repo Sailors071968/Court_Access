@@ -1,90 +1,121 @@
 import { Link } from 'react-router-dom';
-import { ArrowRight, Layers, Search, Scale, Gavel, FileText } from 'lucide-react';
+import { ArrowRight, ShieldCheck, Cpu, Scale, Shield, Gem, CheckCircle2, UserCheck } from 'lucide-react';
 import { SPACING, TYPOGRAPHY } from '../../../constants/designTokens';
 import { cn } from '../../../lib/utils';
 
+const TRUST_CHIPS = [
+  { icon: ShieldCheck, label: 'Evidence-Governed' },
+  { icon: Cpu, label: 'AI-Powered' },
+  { icon: Scale, label: 'Built for Justice' },
+];
+
+const HERO_STATS = [
+  { icon: Shield, tile: 'ca-icon-gold text-gold-light', value: '94%', tag: 'HIGH', label: 'Case Strength', sub: 'Strong likelihood of favorable outcome' },
+  { icon: Gem, tile: 'ca-icon-blue text-blue-300', value: '98%', tag: 'VERY HIGH', label: 'Evidence Confidence', sub: 'Based on 106 total evidentiary items' },
+  { icon: CheckCircle2, tile: 'ca-icon-violet text-violet-300', value: '91%', tag: 'COMPREHENSIVE', label: 'Overall Completeness', sub: 'All critical areas addressed' },
+  { icon: UserCheck, tile: 'ca-icon-emerald text-emerald-300', value: '1 Item', tag: 'REQUIRES REVIEW', label: 'Human Review', sub: 'Review recommended' },
+];
+
 export function HeroSection() {
   return (
-    <section className="relative bg-navy overflow-hidden">
-      <div className="absolute inset-0 opacity-[0.04] ca-grid-overlay" />
-      <div className="absolute top-0 right-0 w-1/2 h-full bg-gradient-to-l from-gold/5 to-transparent pointer-events-none" />
+    <section className="relative ca-gradient-hero overflow-hidden">
+      <div className="absolute inset-0 opacity-[0.5] ca-grid-overlay" />
 
-      <div className={cn('relative', SPACING.container, 'pt-12 pb-20 lg:pt-20 lg:pb-28')}>
-        <div className="text-center max-w-4xl mx-auto animate-fade-in">
-          <p className={cn(TYPOGRAPHY.overline, 'text-gold-light mb-4')}>
-            Criminal Case Intelligence Platform
-          </p>
+      <div className={cn('relative', SPACING.container, 'pt-14 pb-16 lg:pt-20 lg:pb-20')}>
+        <div className="grid lg:grid-cols-2 gap-10 lg:gap-14 items-center">
+          {/* Copy */}
+          <div className="animate-fade-in">
+            <h1 className={cn(TYPOGRAPHY.display, 'mb-6')}>
+              Criminal Case{' '}
+              <span className="ca-text-gradient-gold">Intelligence Platform</span>
+            </h1>
 
-          <h1 className={cn(TYPOGRAPHY.display, 'text-white mb-6')}>
-            Your Criminal Case May Have Defenses{' '}
-            <span className="ca-text-gradient-gold">You Haven&apos;t Found Yet.</span>
-          </h1>
+            <p className={cn(TYPOGRAPHY.bodyLg, 'max-w-xl mb-8')}>
+              AI-powered legal intelligence for attorneys, investigators, and justice
+              professionals — organize evidence, surface contradictions, and build
+              defensible, citation-backed case theory.
+            </p>
 
-          <p className={cn(TYPOGRAPHY.bodyLg, 'max-w-3xl mx-auto mb-10')}>
-            CourtAccess helps organize, analyze, and connect the information in a
-            criminal case to identify contradictions, evidence gaps, charge elements,
-            jury instructions, legal authorities, and potentially relevant case issues.
-          </p>
+            <div className="flex flex-col sm:flex-row gap-4 mb-8">
+              <Link
+                to="/register"
+                className="inline-flex items-center justify-center gap-2 h-13 px-8 rounded-xl text-base font-semibold ca-gradient-gold text-navy shadow-gold hover:brightness-110 transition-all"
+              >
+                Start Free Trial
+                <ArrowRight size={20} />
+              </Link>
+              <Link
+                to="/features"
+                className="inline-flex items-center justify-center gap-2 h-13 px-8 rounded-xl text-base font-medium bg-white/5 hover:bg-white/10 text-white border border-white/15 backdrop-blur-sm transition-all"
+              >
+                View Platform
+              </Link>
+            </div>
 
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-14">
-            <Link
-              to="/register"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-13 px-8 rounded-xl text-base font-semibold bg-gold-light hover:bg-gold text-navy shadow-gold hover:shadow-lg transition-all"
-            >
-              Start Free 30-Day Trial
-              <ArrowRight size={20} />
-            </Link>
-            <a
-              href="#intelligence"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 h-13 px-8 rounded-xl text-base font-medium bg-white/10 hover:bg-white/15 text-white border border-white/15 backdrop-blur-sm transition-all"
-            >
-              See How It Works
-            </a>
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+              {TRUST_CHIPS.map((chip) => (
+                <div key={chip.label} className="flex items-center gap-2 text-sm text-slate-300">
+                  <chip.icon size={16} className="text-gold-light" />
+                  <span>{chip.label}</span>
+                </div>
+              ))}
+            </div>
           </div>
 
-          <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-3">
-            {[
-              { icon: Layers, label: 'Case Organization' },
-              { icon: Search, label: 'Contradiction Analysis' },
-              { icon: Scale, label: 'Charge & CALCRIM Mapping' },
-              { icon: Gavel, label: 'Motion & Authority Research' },
-              { icon: FileText, label: 'Intelligence Reports' },
-            ].map((item) => (
-              <div key={item.label} className="flex items-center gap-1.5 text-slate-400 text-sm">
-                <item.icon size={14} className="text-gold-light/80" />
-                <span>{item.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-
-        {/* Dashboard preview mock */}
-        <div className="mt-16 max-w-5xl mx-auto animate-slide-up">
-          <div className="rounded-2xl border border-white/10 bg-navy-light/60 backdrop-blur-lg p-1 shadow-glass">
-            <div className="rounded-xl bg-surface-muted p-6 space-y-4">
-              <div className="flex items-center gap-3">
-                <div className="w-3 h-3 rounded-full bg-red-400/80" />
-                <div className="w-3 h-3 rounded-full bg-amber-400/80" />
-                <div className="w-3 h-3 rounded-full bg-emerald-400/80" />
-                <span className="text-xs text-slate-400 ml-2">CourtAccess — Case Intelligence</span>
-              </div>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                {['Active Cases', 'Contradictions', 'Evidence Gaps', 'Authorities'].map((label) => (
-                  <div key={label} className="bg-white rounded-xl p-4 border border-slate-200/80 shadow-card">
-                    <div className="text-2xl font-bold text-navy">—</div>
-                    <div className="text-xs text-slate-500 mt-1">{label}</div>
-                  </div>
+          {/* Courthouse imagery panel */}
+          <div className="animate-slide-up">
+            <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-elevated aspect-[4/3] ca-gradient-hero">
+              <div className="absolute inset-0 ca-grid-overlay opacity-30" />
+              {/* Stylized courthouse */}
+              <svg viewBox="0 0 400 300" className="absolute inset-0 w-full h-full" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+                <defs>
+                  <linearGradient id="ch-sky" x1="0" y1="0" x2="0" y2="300">
+                    <stop offset="0" stopColor="#0f172a" />
+                    <stop offset="1" stopColor="#0a0f1c" />
+                  </linearGradient>
+                  <linearGradient id="ch-gold" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0" stopColor="#f5c86e" />
+                    <stop offset="1" stopColor="#C8963E" />
+                  </linearGradient>
+                </defs>
+                <rect width="400" height="300" fill="url(#ch-sky)" />
+                {/* pediment */}
+                <path d="M120 110 L200 70 L280 110 Z" fill="url(#ch-gold)" opacity="0.9" />
+                <rect x="118" y="112" width="164" height="10" rx="2" fill="url(#ch-gold)" opacity="0.85" />
+                {/* columns */}
+                {[0, 1, 2, 3, 4, 5].map((i) => (
+                  <rect key={i} x={128 + i * 28} y="128" width="12" height="90" rx="2" fill="url(#ch-gold)" opacity="0.75" />
                 ))}
-              </div>
-              <div className="h-24 bg-white rounded-xl border border-slate-200/80 flex items-center justify-center text-sm text-slate-400">
-                Live platform preview — connect your case to see intelligence
-              </div>
+                {/* steps */}
+                <rect x="108" y="222" width="184" height="8" rx="2" fill="url(#ch-gold)" opacity="0.6" />
+                <rect x="98" y="232" width="204" height="8" rx="2" fill="url(#ch-gold)" opacity="0.5" />
+                <rect x="88" y="242" width="224" height="10" rx="2" fill="url(#ch-gold)" opacity="0.4" />
+                {/* glow */}
+                <ellipse cx="200" cy="140" rx="150" ry="60" fill="#C8963E" opacity="0.08" />
+              </svg>
             </div>
           </div>
         </div>
-      </div>
 
-      <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-white to-transparent" />
+        {/* Intelligence stat cards */}
+        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mt-12">
+          {HERO_STATS.map((stat) => (
+            <div key={stat.label} className="ca-panel p-5">
+              <div className="flex items-center gap-3 mb-3">
+                <div className={cn('w-10 h-10 rounded-xl flex items-center justify-center', stat.tile)}>
+                  <stat.icon size={18} />
+                </div>
+                <div>
+                  <div className="text-xl font-bold text-white leading-none">{stat.value}</div>
+                  <div className="text-[10px] font-semibold text-gold-light uppercase tracking-wide mt-1">{stat.tag}</div>
+                </div>
+              </div>
+              <p className="text-sm font-medium text-slate-200">{stat.label}</p>
+              <p className="text-xs text-slate-500 mt-0.5">{stat.sub}</p>
+            </div>
+          ))}
+        </div>
+      </div>
     </section>
   );
 }

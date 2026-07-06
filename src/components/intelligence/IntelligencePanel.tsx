@@ -64,18 +64,18 @@ export function IntelligencePanel({
       className={cn('group', className)}
     >
       <div className="flex items-start gap-4">
-        <div className="w-10 h-10 rounded-xl bg-navy/5 flex items-center justify-center flex-shrink-0 group-hover:bg-gold-muted transition-colors">
-          <Icon size={20} className="text-navy group-hover:text-gold-dark transition-colors" />
+        <div className="w-10 h-10 rounded-xl ca-icon-gold flex items-center justify-center flex-shrink-0 transition-colors">
+          <Icon size={20} className="text-gold-light" />
         </div>
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between gap-2">
-            <h4 className="text-sm font-semibold text-navy">{meta.label}</h4>
+            <h4 className="text-sm font-semibold text-white">{meta.label}</h4>
             {value !== undefined && (
-              <span className="text-lg font-bold text-navy tabular-nums">{value}</span>
+              <span className="text-lg font-bold text-white tabular-nums">{value}</span>
             )}
           </div>
           {!compact && (
-            <p className="text-xs text-slate-500 mt-1 line-clamp-2">{subtitle ?? meta.description}</p>
+            <p className="text-xs text-slate-400 mt-1 line-clamp-2">{subtitle ?? meta.description}</p>
           )}
           {status !== 'neutral' && (
             <Badge variant={statusBadge[status]} className="mt-2">

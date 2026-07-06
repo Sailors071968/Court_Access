@@ -62,13 +62,13 @@ function CaseIntelligenceSection() {
   ];
 
   return (
-    <section id="intelligence" className="py-20 lg:py-28 bg-white">
+    <section id="intelligence" className="py-20 lg:py-28 bg-navy-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-navy mb-4 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4 tracking-tight">
             Case Intelligence
           </h2>
-          <p className="text-lg text-slate-500 max-w-2xl mx-auto">
+          <p className="text-lg text-slate-400 max-w-2xl mx-auto">
             CourtAccess organizes and analyzes the information in your criminal case so you can see what matters.
           </p>
         </div>
@@ -77,13 +77,13 @@ function CaseIntelligenceSection() {
           {capabilities.map((cap) => (
             <div
               key={cap.title}
-              className="bg-slate-50 rounded-2xl p-7 border border-slate-200 hover:shadow-md transition-shadow"
+              className="bg-navy-600/60 rounded-2xl p-7 border border-white/10 hover:shadow-md transition-shadow"
             >
-              <div className="w-12 h-12 rounded-xl bg-navy flex items-center justify-center mb-5">
-                <cap.icon className="text-amber-400" size={22} />
+              <div className="w-12 h-12 rounded-xl ca-icon-gold flex items-center justify-center mb-5">
+                <cap.icon size={22} />
               </div>
-              <h3 className="text-lg font-bold text-navy mb-2">{cap.title}</h3>
-              <p className="text-slate-500 text-sm leading-relaxed">{cap.description}</p>
+              <h3 className="text-lg font-bold text-white mb-2">{cap.title}</h3>
+              <p className="text-slate-400 text-sm leading-relaxed">{cap.description}</p>
             </div>
           ))}
         </div>
@@ -106,13 +106,13 @@ function LegalAnalysisSection() {
   ];
 
   return (
-    <section id="legal-analysis" className="py-20 lg:py-28 bg-slate-50">
+    <section id="legal-analysis" className="py-20 lg:py-28 bg-navy-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-navy mb-4 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4 tracking-tight">
             Legal Analysis
           </h2>
-          <p className="text-lg text-slate-500 max-w-2xl mx-auto">
+          <p className="text-lg text-slate-400 max-w-2xl mx-auto">
             CourtAccess connects the facts of your case to the legal framework — charges, elements, instructions, and authorities.
           </p>
         </div>
@@ -121,13 +121,13 @@ function LegalAnalysisSection() {
           {items.map((item) => (
             <div
               key={item.title}
-              className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-shadow"
+              className="bg-navy-600/60 backdrop-blur-sm rounded-2xl p-6 border border-white/10 shadow-sm hover:shadow-md transition-shadow"
             >
-              <div className="w-12 h-12 rounded-xl bg-navy flex items-center justify-center mb-5">
-                <item.icon className="text-amber-400" size={22} />
+              <div className="w-12 h-12 rounded-xl ca-icon-gold flex items-center justify-center mb-5">
+                <item.icon size={22} />
               </div>
-              <h3 className="text-lg font-bold text-navy mb-2">{item.title}</h3>
-              <p className="text-slate-500 text-sm leading-relaxed">{item.description}</p>
+              <h3 className="text-lg font-bold text-white mb-2">{item.title}</h3>
+              <p className="text-slate-400 text-sm leading-relaxed">{item.description}</p>
             </div>
           ))}
         </div>
@@ -169,13 +169,13 @@ function EvidenceReviewSection() {
   ];
 
   return (
-    <section className="py-20 lg:py-28 bg-white">
+    <section className="py-20 lg:py-28 bg-navy-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-navy mb-4 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4 tracking-tight">
             Evidence Review
           </h2>
-          <p className="text-lg text-slate-500 max-w-2xl mx-auto">
+          <p className="text-lg text-slate-400 max-w-2xl mx-auto">
             Structured, citation-backed analysis of the evidence in your case.
           </p>
         </div>
@@ -184,13 +184,13 @@ function EvidenceReviewSection() {
           {features.map((f) => (
             <div
               key={f.title}
-              className="bg-slate-50 rounded-2xl p-7 border border-slate-200 hover:shadow-md transition-shadow"
+              className="bg-navy-600/60 rounded-2xl p-7 border border-white/10 hover:shadow-md transition-shadow"
             >
-              <div className="w-12 h-12 rounded-xl bg-navy flex items-center justify-center mb-5">
-                <f.icon className="text-amber-400" size={22} />
+              <div className="w-12 h-12 rounded-xl ca-icon-gold flex items-center justify-center mb-5">
+                <f.icon size={22} />
               </div>
-              <h3 className="text-lg font-bold text-navy mb-2">{f.title}</h3>
-              <p className="text-slate-500 text-sm leading-relaxed">{f.description}</p>
+              <h3 className="text-lg font-bold text-white mb-2">{f.title}</h3>
+              <p className="text-slate-400 text-sm leading-relaxed">{f.description}</p>
             </div>
           ))}
         </div>
@@ -228,10 +228,10 @@ function WhoUsesSection() {
   ];
 
   return (
-    <section id="who" className="py-20 lg:py-28 bg-slate-50">
+    <section id="who" className="py-20 lg:py-28 bg-navy-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-navy mb-4 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4 tracking-tight">
             Who Uses CourtAccess
           </h2>
         </div>
@@ -240,13 +240,13 @@ function WhoUsesSection() {
           {audiences.map((a) => (
             <div
               key={a.title}
-              className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm text-center hover:shadow-md transition-shadow"
+              className="bg-navy-600/60 backdrop-blur-sm rounded-2xl p-6 border border-white/10 shadow-sm text-center hover:shadow-md transition-shadow"
             >
-              <div className="w-14 h-14 rounded-2xl bg-navy flex items-center justify-center mx-auto mb-5">
-                <a.icon className="text-amber-400" size={24} />
+              <div className="w-14 h-14 rounded-2xl ca-icon-gold flex items-center justify-center mx-auto mb-5">
+                <a.icon size={24} />
               </div>
-              <h3 className="text-lg font-bold text-navy mb-2">{a.title}</h3>
-              <p className="text-slate-500 text-sm leading-relaxed">{a.description}</p>
+              <h3 className="text-lg font-bold text-white mb-2">{a.title}</h3>
+              <p className="text-slate-400 text-sm leading-relaxed">{a.description}</p>
             </div>
           ))}
         </div>
@@ -296,7 +296,7 @@ function PlanSubscribeButton({ planId, label }: { planId: string; label: string 
       type="button"
       onClick={handleCheckout}
       disabled={loading}
-      className="mt-4 w-full py-2.5 rounded-lg text-sm font-semibold bg-amber-500 hover:bg-amber-400 text-slate-900 transition-colors disabled:opacity-50"
+      className="mt-4 w-full py-2.5 rounded-lg text-sm font-semibold ca-gradient-gold text-navy hover:brightness-110 transition-all disabled:opacity-50"
     >
       {loading ? 'Redirecting…' : label}
     </button>
@@ -373,21 +373,21 @@ function PricingSection() {
   ];
 
   return (
-    <section id="pricing" className="py-20 lg:py-28 bg-white">
+    <section id="pricing" className="py-20 lg:py-28 bg-navy-800">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Header */}
         <div className="text-center mb-8">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-navy mb-4 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4 tracking-tight">
             Simple, Transparent Pricing
           </h2>
-          <p className="text-lg text-slate-500 max-w-2xl mx-auto">
+          <p className="text-lg text-slate-400 max-w-2xl mx-auto">
             Experience the full CourtAccess platform free for 30 days. No credit card required.
           </p>
         </div>
 
         {/* Free trial feature callout */}
         <div className="max-w-3xl mx-auto mb-14 bg-navy rounded-2xl p-8 text-center border border-slate-700/50">
-          <p className="text-amber-400 text-sm font-semibold uppercase tracking-wide mb-3">Free 30-Day Trial</p>
+          <p className="text-gold-light text-sm font-semibold uppercase tracking-wide mb-3">Free 30-Day Trial</p>
           <p className="text-white text-lg leading-relaxed mb-6">
             Analyze charges, jury instructions, motions, authorities, evidence,
             contradictions, and case intelligence with no credit card required.
@@ -395,14 +395,14 @@ function PricingSection() {
           <div className="flex flex-wrap items-center justify-center gap-3 mb-6">
             {allFeatures.map((f) => (
               <span key={f} className="flex items-center gap-1.5 text-sm text-slate-300">
-                <CheckCircle2 size={14} className="text-amber-400 shrink-0" />
+                <CheckCircle2 size={14} className="text-gold-light shrink-0" />
                 {f}
               </span>
             ))}
           </div>
           <Link
             to="/register"
-            className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-navy font-bold px-8 py-4 rounded-xl text-lg transition-colors shadow-lg shadow-amber-500/20"
+            className="inline-flex items-center gap-2 ca-gradient-gold text-navy font-bold px-8 py-4 rounded-xl text-lg hover:brightness-110 transition-all shadow-gold"
           >
             Start Free 30-Day Trial
             <ArrowRight size={20} />
@@ -419,22 +419,22 @@ function PricingSection() {
                   ? 'bg-navy border-amber-500/50 shadow-xl shadow-amber-500/10 ring-2 ring-amber-500/30'
                   : plan.featured
                     ? 'bg-navy border-slate-700/50'
-                    : 'bg-slate-50 border-slate-200'
+                    : 'bg-navy-600/60 border-white/10'
               }`}
             >
               <p className={`text-xs font-semibold uppercase tracking-wide mb-2 ${
-                plan.highlight || plan.featured ? 'text-amber-400' : 'text-amber-600'
+                plan.highlight || plan.featured ? 'text-gold-light' : 'text-gold'
               }`}>
                 {plan.name}
               </p>
               <div className="mb-1">
                 <span className={`text-3xl font-extrabold ${
-                  plan.highlight || plan.featured ? 'text-white' : 'text-navy'
+                  plan.highlight || plan.featured ? 'text-white' : 'text-white'
                 }`}>
                   {plan.price}
                 </span>
                 <span className={`text-sm ml-1 ${
-                  plan.highlight || plan.featured ? 'text-slate-400' : 'text-slate-500'
+                  plan.highlight || plan.featured ? 'text-slate-400' : 'text-slate-400'
                 }`}>
                   {plan.period}
                 </span>
@@ -458,7 +458,7 @@ function PricingSection() {
 
               {plan.extraStorage && (
                 <p className={`text-xs mt-1 ${
-                  plan.highlight ? 'text-slate-500' : 'text-slate-400'
+                  plan.highlight ? 'text-slate-400' : 'text-slate-400'
                 }`}>
                   {plan.extraStorage}
                 </p>
@@ -467,7 +467,7 @@ function PricingSection() {
               <ul className="mt-4 space-y-2 flex-1">
                 {plan.notes.map((note) => (
                   <li key={note} className={`flex items-start gap-2 text-xs ${
-                    plan.highlight || plan.featured ? 'text-slate-400' : 'text-slate-500'
+                    plan.highlight || plan.featured ? 'text-slate-400' : 'text-slate-400'
                   }`}>
                     <CheckCircle2 size={12} className="text-amber-500 shrink-0 mt-0.5" />
                     {note}
@@ -477,7 +477,7 @@ function PricingSection() {
               {plan.planId === 'TRIAL' ? (
                 <Link
                   to="/register"
-                  className="mt-4 w-full py-2.5 rounded-lg text-sm font-semibold bg-amber-500 hover:bg-amber-400 text-slate-900 transition-colors text-center block"
+                  className="mt-4 w-full py-2.5 rounded-lg text-sm font-semibold ca-gradient-gold text-navy hover:brightness-110 transition-all text-center block"
                 >
                   Start Free Trial
                 </Link>
@@ -491,10 +491,10 @@ function PricingSection() {
         {/* Video & Large Evidence Processing */}
         <div className="max-w-4xl mx-auto">
           <div className="text-center mb-10">
-            <h3 className="text-2xl font-extrabold text-navy mb-3 tracking-tight">
+            <h3 className="text-2xl font-extrabold text-white mb-3 tracking-tight">
               Video &amp; Large Evidence Processing
             </h3>
-            <p className="text-slate-500 max-w-2xl mx-auto text-sm leading-relaxed">
+            <p className="text-slate-400 max-w-2xl mx-auto text-sm leading-relaxed">
               Storage keeps files available. Processing analyzes large evidence files.
               Each credit equals 10 minutes of video processing.
             </p>
@@ -508,9 +508,9 @@ function PricingSection() {
               { plan: 'Complex Case', credits: '1,000' },
               { plan: 'Professional', credits: '5,000' },
             ].map((tier) => (
-              <div key={tier.plan} className="bg-slate-50 rounded-xl p-4 border border-slate-200 text-center">
-                <p className="text-xs text-slate-500 mb-1">{tier.plan}</p>
-                <p className="text-lg font-bold text-navy">{tier.credits}</p>
+              <div key={tier.plan} className="bg-navy-600/60 rounded-xl border border-white/10 text-center">
+                <p className="text-xs text-slate-400 mb-1">{tier.plan}</p>
+                <p className="text-lg font-bold text-white">{tier.credits}</p>
                 <p className="text-xs text-slate-400">credits/month</p>
               </div>
             ))}
@@ -518,7 +518,7 @@ function PricingSection() {
 
           {/* Additional credit packs */}
           <div className="bg-navy rounded-2xl p-6 border border-slate-700/50">
-            <h4 className="text-sm font-semibold text-amber-400 uppercase tracking-wide mb-4 text-center">
+            <h4 className="text-sm font-semibold text-gold-light uppercase tracking-wide mb-4 text-center">
               Additional Credit Packs
             </h4>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
@@ -529,11 +529,11 @@ function PricingSection() {
               ].map((pack) => (
                 <div key={pack.credits} className="bg-[#1e293b] rounded-xl p-4 text-center border border-slate-700/30">
                   <p className="text-white font-bold text-lg">{pack.credits}</p>
-                  <p className="text-amber-400 font-semibold">{pack.price}</p>
+                  <p className="text-gold-light font-semibold">{pack.price}</p>
                 </div>
               ))}
             </div>
-            <p className="text-center text-xs text-slate-500 mt-4">
+            <p className="text-center text-xs text-slate-400 mt-4">
               1 Credit = 10 Minutes of Video Processing
             </p>
           </div>
@@ -543,7 +543,7 @@ function PricingSection() {
         <div className="text-center mt-14">
           <Link
             to="/register"
-            className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-navy font-bold px-10 py-4 rounded-xl text-lg transition-colors shadow-lg shadow-amber-500/20"
+            className="inline-flex items-center gap-2 ca-gradient-gold text-navy font-bold px-10 py-4 rounded-xl text-lg hover:brightness-110 transition-all shadow-gold"
           >
             Start Free 30-Day Trial
             <ArrowRight size={20} />
@@ -569,40 +569,40 @@ function WhyCourtAccessSection() {
   ];
 
   return (
-    <section className="py-20 lg:py-28 bg-slate-50">
+    <section className="py-20 lg:py-28 bg-navy-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-navy mb-4 tracking-tight">
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4 tracking-tight">
             Why CourtAccess
           </h2>
-          <p className="text-lg text-slate-500 max-w-2xl mx-auto">
+          <p className="text-lg text-slate-400 max-w-2xl mx-auto">
             CourtAccess organizes complex criminal case information, connects evidence to legal requirements, and helps users understand what information exists in the record.
           </p>
         </div>
 
-        <div className="max-w-3xl mx-auto overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-          <div className="grid grid-cols-3 bg-navy text-white text-sm font-semibold">
+        <div className="max-w-3xl mx-auto overflow-hidden rounded-2xl border border-white/10 ca-panel">
+          <div className="grid grid-cols-3 bg-navy-900 text-white text-sm font-semibold">
             <div className="px-6 py-4" />
-            <div className="px-6 py-4 text-center border-l border-slate-700/50">Traditional Approach</div>
-            <div className="px-6 py-4 text-center border-l border-slate-700/50 bg-amber-500/10 text-amber-400">CourtAccess</div>
+            <div className="px-6 py-4 text-center border-l border-white/10">Traditional Approach</div>
+            <div className="px-6 py-4 text-center border-l border-white/10 bg-gold/10 text-gold-light">CourtAccess</div>
           </div>
 
           {rows.map((row, i) => (
-            <div key={row.feature} className={`grid grid-cols-3 text-sm ${i % 2 === 0 ? 'bg-white' : 'bg-slate-50'} border-t border-slate-100`}>
-              <div className="px-6 py-4 font-medium text-navy">{row.feature}</div>
-              <div className="px-6 py-4 text-center text-slate-400 border-l border-slate-100 flex items-center justify-center gap-1">
+            <div key={row.feature} className={`grid grid-cols-3 text-sm ${i % 2 === 0 ? 'bg-transparent' : 'bg-white/[0.02]'} border-t border-white/5`}>
+              <div className="px-6 py-4 font-medium text-white">{row.feature}</div>
+              <div className="px-6 py-4 text-center text-slate-400 border-l border-white/5 flex items-center justify-center gap-1">
                 {typeof row.traditional === 'boolean' ? (
-                  row.traditional ? <Check size={16} className="text-green-500" /> : <X size={16} className="text-slate-300" />
+                  row.traditional ? <Check size={16} className="text-emerald-400" /> : <X size={16} className="text-slate-500" />
                 ) : (
                   row.traditional
                 )}
               </div>
-              <div className="px-6 py-4 text-center text-navy font-medium border-l border-slate-100 flex items-center justify-center gap-1">
+              <div className="px-6 py-4 text-center text-white font-medium border-l border-white/5 flex items-center justify-center gap-1">
                 {typeof row.courtaccess === 'boolean' ? (
-                  row.courtaccess ? <Check size={16} className="text-amber-500" /> : <X size={16} className="text-slate-300" />
+                  row.courtaccess ? <Check size={16} className="text-gold-light" /> : <X size={16} className="text-slate-500" />
                 ) : (
                   <span className="flex items-center gap-1.5">
-                    <ChevronRight size={14} className="text-amber-500" />
+                    <ChevronRight size={14} className="text-gold-light" />
                     {row.courtaccess}
                   </span>
                 )}
@@ -621,11 +621,11 @@ function WhyCourtAccessSection() {
 
 function LegalDisclaimerSection() {
   return (
-    <section className="py-16 bg-white border-t border-slate-100">
+    <section className="py-16 bg-navy-900 border-t border-white/5">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <Lock size={24} className="text-slate-300 mx-auto mb-4" />
-        <div className="space-y-3 text-sm text-slate-500 leading-relaxed">
-          <p className="font-semibold text-slate-600">CourtAccess is not a law firm.</p>
+        <Lock size={24} className="text-slate-500 mx-auto mb-4" />
+        <div className="space-y-3 text-sm text-slate-400 leading-relaxed">
+          <p className="font-semibold text-slate-200">CourtAccess is not a law firm.</p>
           <p>CourtAccess does not provide legal advice.</p>
           <p>CourtAccess does not guarantee outcomes.</p>
           <p>The existence of defenses is not guaranteed for any case.</p>
@@ -651,7 +651,7 @@ export function PricingPage() {
 
 export function LandingPage() {
   return (
-    <PublicMarketingLayout className="bg-white">
+    <PublicMarketingLayout className="bg-navy-800">
       <HeroSection />
       <CaseIntelligenceSection />
       <LegalAnalysisSection />

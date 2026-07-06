@@ -6,22 +6,27 @@ export default {
     extend: {
       colors: {
         navy: {
-          DEFAULT: '#0f172a',
+          DEFAULT: '#0a0f1c',
+          900: '#0a0f1c',
+          800: '#0f172a',
+          700: '#141c30',
+          600: '#1e293b',
+          500: '#2d3a52',
           light: '#1e293b',
           medium: '#334155',
-          muted: '#475569',
         },
         gold: {
           DEFAULT: '#C8963E',
-          light: '#f59e0b',
-          dark: '#b45309',
-          muted: '#fef3c7',
+          light: '#eab360',
+          bright: '#f5c86e',
+          dark: '#a3762c',
+          muted: 'rgba(200, 150, 62, 0.12)',
         },
         surface: {
-          DEFAULT: '#ffffff',
-          muted: '#f8fafc',
-          elevated: '#ffffff',
-          dark: '#0f172a',
+          DEFAULT: '#0f172a',
+          muted: '#0a0f1c',
+          panel: '#1e293b',
+          elevated: '#141c30',
         },
       },
       borderRadius: {
@@ -35,23 +40,16 @@ export default {
         card: 'var(--shadow-card)',
         elevated: 'var(--shadow-elevated)',
         gold: 'var(--shadow-gold)',
-        glass: '0 8px 32px rgba(15, 23, 42, 0.24)',
+        glass: '0 8px 32px rgba(0, 0, 0, 0.4)',
       },
       fontFamily: {
-        sans: [
-          'Inter',
-          'system-ui',
-          '-apple-system',
-          'BlinkMacSystemFont',
-          'Segoe UI',
-          'Roboto',
-          'sans-serif',
-        ],
+        sans: ['Inter', 'system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+        serif: ['Georgia', 'Cambria', 'Times New Roman', 'serif'],
       },
       animation: {
-        'fade-in': 'fadeIn 0.3s ease-out',
-        'slide-up': 'slideUp 0.4s ease-out',
-        'pulse-soft': 'pulseSoft 2s ease-in-out infinite',
+        'fade-in': 'fadeIn 0.4s ease-out',
+        'slide-up': 'slideUp 0.5s ease-out',
+        'pulse-soft': 'pulseSoft 2.5s ease-in-out infinite',
       },
       keyframes: {
         fadeIn: {
@@ -59,12 +57,12 @@ export default {
           '100%': { opacity: '1' },
         },
         slideUp: {
-          '0%': { opacity: '0', transform: 'translateY(8px)' },
+          '0%': { opacity: '0', transform: 'translateY(12px)' },
           '100%': { opacity: '1', transform: 'translateY(0)' },
         },
         pulseSoft: {
           '0%, 100%': { opacity: '1' },
-          '50%': { opacity: '0.7' },
+          '50%': { opacity: '0.6' },
         },
       },
     },

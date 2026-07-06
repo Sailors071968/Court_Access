@@ -1,16 +1,16 @@
 import { forwardRef, type HTMLAttributes } from 'react';
 import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils';
+import { ICON_TILES, type IconTile } from '../../constants/designTokens';
 
-const cardVariants = cva('rounded-2xl transition-all duration-200', {
+const cardVariants = cva('rounded-xl transition-all duration-200', {
   variants: {
     variant: {
-      default: 'bg-white border border-slate-200/80 shadow-card',
-      elevated: 'bg-white border border-slate-200/60 shadow-elevated',
-      glass: 'bg-navy-light/80 backdrop-blur-lg border border-white/10 text-white',
-      glassLight: 'bg-white/80 backdrop-blur-md border border-white/60 shadow-card',
-      highlight: 'bg-gold-muted/50 border border-gold/20 shadow-card',
-      navy: 'bg-navy border border-white/5 text-white shadow-glass',
+      default: 'ca-panel',
+      elevated: 'ca-panel shadow-elevated',
+      glass: 'bg-navy-600/60 backdrop-blur-lg border border-white/10 text-white',
+      highlight: 'ca-panel border-gold/30',
+      plain: 'bg-navy-600 border border-white/5',
     },
     padding: {
       none: '',
@@ -19,7 +19,7 @@ const cardVariants = cva('rounded-2xl transition-all duration-200', {
       lg: 'p-8',
     },
     interactive: {
-      true: 'cursor-pointer hover:shadow-elevated hover:-translate-y-0.5',
+      true: 'ca-panel-hover cursor-pointer',
       false: '',
     },
   },
@@ -38,10 +38,7 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
   ({ className, variant, padding, interactive, hover, ...props }, ref) => (
     <div
       ref={ref}
-      className={cn(
-        cardVariants({ variant, padding, interactive: interactive || hover }),
-        className,
-      )}
+      className={cn(cardVariants({ variant, padding, interactive: interactive || hover }), className)}
       {...props}
     />
   ),
@@ -62,8 +59,8 @@ export function CardHeader({
   return (
     <div className={cn('flex items-start justify-between gap-4 mb-5', className)}>
       <div>
-        <h3 className="text-lg font-semibold text-navy">{title}</h3>
-        {subtitle && <p className="text-sm text-slate-500 mt-1">{subtitle}</p>}
+        <h3 className="text-lg font-semibold text-white">{title}</h3>
+        {subtitle && <p className="text-sm text-slate-400 mt-1">{subtitle}</p>}
       </div>
       {action}
     </div>
@@ -74,19 +71,24 @@ export function StatCard({
   icon,
   value,
   label,
+  sublabel,
   trend,
-  highlight = false,
+  tile = 'gold',
+  highlight,
   onClick,
   className,
 }: {
   icon: React.ReactNode;
   value: string | number;
   label: string;
+  sublabel?: string;
   trend?: string;
+  tile?: IconTile;
   highlight?: boolean;
   onClick?: () => void;
   className?: string;
 }) {
+  const resolvedTile: IconTile = highlight ? 'gold' : tile;
   return (
     <Card
       variant={highlight ? 'highlight' : 'default'}
@@ -104,11 +106,16 @@ export function StatCard({
           : undefined
       }
     >
-      <div className="flex flex-col items-center text-center">
-        <div className={cn('mb-3', highlight ? 'text-gold' : 'text-navy-muted')}>{icon}</div>
-        <div className={cn('text-2xl font-bold', highlight ? 'text-gold-dark' : 'text-navy')}>{value}</div>
-        <div className="text-sm text-slate-500 mt-1">{label}</div>
-        {trend && <div className="text-xs text-emerald-600 mt-1 font-medium">{trend}</div>}
+      <div className="flex items-start gap-4">
+        <div className={cn('w-11 h-11 rounded-xl flex items-center justify-center flex-shrink-0', ICON_TILES[resolvedTile])}>
+          {icon}
+        </div>
+        <div className="min-w-0">
+          <div className="text-2xl font-bold text-white tabular-nums leading-tight">{value}</div>
+          <div className="text-sm text-slate-400 mt-0.5">{label}</div>
+          {sublabel && <div className="text-xs text-slate-500 mt-1">{sublabel}</div>}
+          {trend && <div className="text-xs text-emerald-400 mt-1 font-medium">{trend}</div>}
+        </div>
       </div>
     </Card>
   );

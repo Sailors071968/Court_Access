@@ -6,12 +6,13 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import {
-  FileText, Scale, Calendar, Lightbulb, AlertTriangle, Search as SearchIcon,
-  Plus, Upload, BarChart3, Users, Clock, TrendingUp, Briefcase
+  FileText, Scale, AlertTriangle,
+  Plus, Upload, BarChart3, Users, Clock, TrendingUp, Briefcase, Lightbulb
 } from 'lucide-react';
 import { Card, StatCard } from '../../components/common/Card';
 import { PageHeader } from '../../components/ui/page-header';
 import { Button } from '../../components/ui/button';
+import { Badge } from '../../components/ui/badge';
 import { SkeletonStatGrid } from '../../components/ui/skeleton';
 import { IntelligenceGrid } from '../../components/intelligence/IntelligencePanel';
 import { SPACING, STATUS_COLORS, TEXT_COLORS } from '../../constants/designTokens';
@@ -90,50 +91,50 @@ export function StaffDashboard() {
           { type: 'authorities', value: 8, status: 'success' },
         ]}
       />
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <StatCard
-          icon={<Briefcase size={28} className={TEXT_COLORS.info} />}
+          tile="blue"
+          icon={<Briefcase size={20} />}
           value={cases.length}
           label="Active Cases"
+          sublabel="Across your workspace"
           onClick={() => navigate('/cases?status=active')}
         />
         <StatCard
-          icon={<Plus size={28} className={TEXT_COLORS.success} />}
-          value={cases.filter(c => new Date(c.createdAt) > new Date(Date.now() - 7 * 86400000)).length}
-          label="New Cases (7 Days)"
+          tile="emerald"
+          icon={<Plus size={20} />}
+          value={cases.filter((c) => new Date(c.createdAt) > new Date(Date.now() - 7 * 86400000)).length}
+          label="New This Week"
+          sublabel="Recently opened"
           onClick={() => navigate('/cases?sort=newest')}
         />
         <StatCard
-          icon={<AlertTriangle size={28} className={TEXT_COLORS.danger} />}
+          tile="gold"
+          icon={<AlertTriangle size={20} />}
           value={2}
           label="Action Required"
-          highlight
+          sublabel="Needs your attention"
           onClick={() => navigate('/cases?filter=action-needed')}
         />
         <StatCard
-          icon={<Calendar size={28} className={TEXT_COLORS.info} />}
-          value="Feb 15"
-          label="Next Hearing"
-          onClick={() => navigate(`/cases/${primaryCase.caseId}/activity`)}
-        />
-        <StatCard
-          icon={<Lightbulb size={28} className={TEXT_COLORS.warning} />}
+          tile="violet"
+          icon={<Lightbulb size={20} />}
           value={8}
           label="Intelligence Signals"
-          highlight
+          sublabel="Review recommended"
           onClick={() => navigate(`/cases/${primaryCase.caseId}/charges`)}
         />
       </div>
 
       <div className="grid lg:grid-cols-3 gap-6">
-        {/* 2. Alerts & Action Queue */}
+        {/* Alerts & Action Queue */}
         <div className="lg:col-span-2 space-y-6">
           <Card>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-900">Alerts & Action Queue</h2>
-              <span className="text-xs text-gray-400">Sorted by urgency</span>
+              <h2 className="text-lg font-semibold text-white">Recent Activity</h2>
+              <span className="text-xs text-slate-500">Sorted by urgency</span>
             </div>
-            <div className="space-y-3">
+            <div className="space-y-2">
               {[
                 { type: 'high', icon: AlertTriangle, color: STATUS_COLORS.danger, label: 'Evidence dispute added — People v. Smith', time: '2 hours ago' },
                 { type: 'high', icon: Lightbulb, color: STATUS_COLORS.warning, label: 'Motion recommendation signal: Motion to Suppress (HIGH)', time: '4 hours ago' },
@@ -143,17 +144,15 @@ export function StaffDashboard() {
               ].map((alert, i) => {
                 const Icon = alert.icon;
                 return (
-                  <div key={i} className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${alert.color}`}>
+                  <div key={i} className="flex items-start gap-3 p-3 rounded-lg hover:bg-white/5 cursor-pointer transition-colors">
+                    <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 border ${alert.color}`}>
                       <Icon size={14} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900">{alert.label}</p>
-                      <p className="text-xs text-gray-500 mt-0.5">{alert.time}</p>
+                      <p className="text-sm font-medium text-slate-200">{alert.label}</p>
+                      <p className="text-xs text-slate-500 mt-0.5">{alert.time}</p>
                     </div>
-                    {alert.type === 'high' && (
-                      <span className="text-xs px-2 py-0.5 bg-red-100 text-red-700 rounded-full font-medium flex-shrink-0">Urgent</span>
-                    )}
+                    {alert.type === 'high' && <Badge variant="danger" className="flex-shrink-0">Urgent</Badge>}
                   </div>
                 );
               })}
@@ -162,35 +161,51 @@ export function StaffDashboard() {
 
           {/* Recent Documents */}
           <Card>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Documents</h2>
+            <h2 className="text-lg font-semibold text-white mb-4">Recent Documents</h2>
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-gray-100">
-                    <th className="text-left py-3 px-2 text-gray-500 font-medium">Document Name</th>
-                    <th className="text-left py-3 px-2 text-gray-500 font-medium">Filed Date</th>
-                    <th className="text-left py-3 px-2 text-gray-500 font-medium">Type</th>
-                    <th className="text-left py-3 px-2 text-gray-500 font-medium">AI Status</th>
+                  <tr className="border-b border-white/10">
+                    <th className="text-left py-3 px-2 text-slate-400 font-medium">Document Name</th>
+                    <th className="text-left py-3 px-2 text-slate-400 font-medium">Filed Date</th>
+                    <th className="text-left py-3 px-2 text-slate-400 font-medium">Type</th>
+                    <th className="text-left py-3 px-2 text-slate-400 font-medium">AI Status</th>
                   </tr>
                 </thead>
                 <tbody>
                   {evidence.slice(0, 3).map((doc) => (
-                    <tr key={doc.evidenceId} className="border-b border-gray-50 hover:bg-gray-50 cursor-pointer" onClick={() => navigate(`/cases/${primaryCase.caseId}/evidence`)}>
-                      <td className="py-3 px-2 font-medium text-gray-900">{doc.fileName}</td>
-                      <td className="py-3 px-2 text-gray-500">{new Date(doc.uploadedAt).toLocaleDateString()}</td>
-                      <td className="py-3 px-2 text-gray-500">{doc.evidenceType}</td>
+                    <tr
+                      key={doc.evidenceId}
+                      className="border-b border-white/5 hover:bg-white/5 cursor-pointer"
+                      onClick={() => navigate(`/cases/${primaryCase.caseId}/evidence`)}
+                    >
+                      <td className="py-3 px-2 font-medium text-slate-200">{doc.fileName}</td>
+                      <td className="py-3 px-2 text-slate-400">{new Date(doc.uploadedAt).toLocaleDateString()}</td>
+                      <td className="py-3 px-2 text-slate-400">{doc.evidenceType}</td>
                       <td className="py-3 px-2">
-                        <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${
-                          doc.processingStatus === 'analyzed' ? 'bg-green-100 text-green-700' :
-                          doc.processingStatus === 'processing' ? 'bg-blue-100 text-blue-700' :
-                          doc.processingStatus === 'failed' ? 'bg-red-100 text-red-700' :
-                          'bg-gray-100 text-gray-700'
-                        }`}>
+                        <Badge
+                          variant={
+                            doc.processingStatus === 'analyzed'
+                              ? 'success'
+                              : doc.processingStatus === 'processing'
+                                ? 'info'
+                                : doc.processingStatus === 'failed'
+                                  ? 'danger'
+                                  : 'default'
+                          }
+                        >
                           {doc.processingStatus}
-                        </span>
+                        </Badge>
                       </td>
                     </tr>
                   ))}
+                  {evidence.length === 0 && (
+                    <tr>
+                      <td colSpan={4} className="py-6 text-center text-slate-500 text-sm">
+                        No documents uploaded yet.
+                      </td>
+                    </tr>
+                  )}
                 </tbody>
               </table>
             </div>
@@ -199,49 +214,76 @@ export function StaffDashboard() {
 
         {/* Right Column */}
         <div className="space-y-6">
-          {/* 3. Case Intelligence Overview */}
+          {/* Case Strength */}
           <Card>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Case Intelligence Overview</h2>
-            <div className="space-y-3">
+            <h2 className="text-lg font-semibold text-white mb-4">Case Strength</h2>
+            <div className="flex flex-col items-center text-center py-2">
+              <div className="relative w-28 h-28 mb-3">
+                <svg viewBox="0 0 100 100" className="w-full h-full -rotate-90">
+                  <circle cx="50" cy="50" r="42" fill="none" stroke="rgba(255,255,255,0.08)" strokeWidth="8" />
+                  <circle
+                    cx="50"
+                    cy="50"
+                    r="42"
+                    fill="none"
+                    stroke="#C8963E"
+                    strokeWidth="8"
+                    strokeLinecap="round"
+                    strokeDasharray={`${2 * Math.PI * 42 * 0.94} ${2 * Math.PI * 42}`}
+                  />
+                </svg>
+                <div className="absolute inset-0 flex flex-col items-center justify-center">
+                  <span className="text-2xl font-bold text-white">94%</span>
+                  <span className="text-[10px] font-semibold text-gold-light uppercase tracking-wide">High</span>
+                </div>
+              </div>
+              <p className="text-xs text-slate-400">Strong likelihood of favorable outcome</p>
+              <button
+                onClick={() => navigate(`/cases/${primaryCase.caseId}/charges`)}
+                className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-gold/10 text-gold-light rounded-lg text-sm font-medium hover:bg-gold/20 transition-colors w-full justify-center border border-gold/20"
+              >
+                <TrendingUp size={16} />
+                View Full Analysis
+              </button>
+            </div>
+          </Card>
+
+          {/* Case Intelligence Overview */}
+          <Card>
+            <h2 className="text-lg font-semibold text-white mb-4">Case Intelligence</h2>
+            <div className="space-y-1">
               {[
                 { label: 'Priority cases', value: '1', color: TEXT_COLORS.danger },
                 { label: 'Prosecution Vulnerabilities', value: '3', color: TEXT_COLORS.warning },
                 { label: 'Sentencing Exposure Flags', value: '2', color: TEXT_COLORS.orange },
                 { label: 'Procedural deadline warnings', value: '1', color: TEXT_COLORS.info },
               ].map((insight, i) => (
-                <div key={i} className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50">
-                  <span className="text-sm text-gray-700">{insight.label}</span>
+                <div key={i} className="flex items-center justify-between p-2 rounded-lg hover:bg-white/5">
+                  <span className="text-sm text-slate-300">{insight.label}</span>
                   <span className={`text-sm font-bold ${insight.color}`}>{insight.value}</span>
                 </div>
               ))}
             </div>
-            <button
-              onClick={() => navigate(`/cases/${primaryCase.caseId}/charges`)}
-              className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-amber-50 text-amber-700 rounded-lg text-sm font-medium hover:bg-amber-100 transition-colors w-full justify-center"
-            >
-              <TrendingUp size={16} />
-              View Full Analysis
-            </button>
           </Card>
 
-          {/* 4. Calendar Widget */}
+          {/* Upcoming Schedule */}
           <Card>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Upcoming Schedule</h2>
-            <div className="space-y-3">
+            <h2 className="text-lg font-semibold text-white mb-4">Upcoming Schedule</h2>
+            <div className="space-y-2">
               {[
-                { type: 'hearing', label: 'Hearing — People v. Smith', date: 'Feb 15, 2024', icon: Scale },
-                { type: 'deadline', label: 'Filing Deadline — Motion to Suppress', date: 'Feb 20, 2024', icon: Clock },
-                { type: 'discovery', label: 'Discovery Deadline', date: 'Mar 1, 2024', icon: FileText },
+                { label: 'Hearing — People v. Smith', date: 'Feb 15, 2024', icon: Scale },
+                { label: 'Filing Deadline — Motion to Suppress', date: 'Feb 20, 2024', icon: Clock },
+                { label: 'Discovery Deadline', date: 'Mar 1, 2024', icon: FileText },
               ].map((event, i) => {
                 const Icon = event.icon;
                 return (
-                  <div key={i} className="flex items-start gap-3 p-2 rounded-lg hover:bg-gray-50">
-                    <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-blue-50 text-blue-600">
+                  <div key={i} className="flex items-start gap-3 p-2 rounded-lg hover:bg-white/5">
+                    <div className="w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ca-icon-blue text-blue-300">
                       <Icon size={14} />
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-900">{event.label}</p>
-                      <p className="text-xs text-gray-500 mt-0.5">{event.date}</p>
+                      <p className="text-sm font-medium text-slate-200">{event.label}</p>
+                      <p className="text-xs text-slate-500 mt-0.5">{event.date}</p>
                     </div>
                   </div>
                 );
@@ -249,9 +291,9 @@ export function StaffDashboard() {
             </div>
           </Card>
 
-          {/* 6. Quick Actions */}
+          {/* Quick Actions */}
           <Card>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h2>
+            <h2 className="text-lg font-semibold text-white mb-4">Quick Actions</h2>
             <div className="grid grid-cols-2 gap-2">
               {[
                 { label: 'New Case', icon: Plus, action: () => navigate('/cases') },
@@ -264,50 +306,17 @@ export function StaffDashboard() {
                   <button
                     key={i}
                     onClick={action.action}
-                    className="flex items-center gap-2 p-3 rounded-lg border border-gray-200 text-sm font-medium text-gray-700 hover:bg-gray-50 hover:border-gray-300 transition-colors"
+                    className="flex items-center gap-2 p-3 rounded-lg border border-white/10 text-sm font-medium text-slate-300 hover:bg-white/5 hover:border-gold/30 hover:text-white transition-colors"
                   >
-                    <Icon size={16} className="text-gray-500" />
+                    <Icon size={16} className="text-gold-light/80" />
                     {action.label}
                   </button>
                 );
               })}
             </div>
           </Card>
-
-          {/* Recent Activity */}
-          <Card>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Recent Cases</h2>
-            <div className="space-y-3">
-              {cases.slice(0, 3).map((c) => (
-                <div key={c.caseId} className="flex gap-3 pb-3 border-b border-gray-50 last:border-0">
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-blue-100 text-blue-600">
-                    <Briefcase size={14} />
-                  </div>
-                  <div>
-                    <p className="text-sm font-medium text-gray-900">{c.title || c.caseNumber}</p>
-                    <p className="text-xs text-gray-500 mt-0.5">{c.status} — {new Date(c.createdAt).toLocaleDateString()}</p>
-                  </div>
-                </div>
-              ))}
-            </div>
-          </Card>
         </div>
       </div>
-
-      {/* 5. Global Search Prompt */}
-      <Card>
-        <div className="flex items-center gap-3">
-          <SearchIcon size={20} className="text-gray-400" />
-          <input
-            type="text"
-            placeholder="Search cases, documents, statutes, motions, evidence..."
-            className="flex-1 text-sm text-gray-700 bg-transparent outline-none placeholder-gray-400"
-            onFocus={() => navigate('/search')}
-            readOnly
-          />
-          <span className="text-xs text-gray-400 bg-gray-100 px-2 py-1 rounded">Ctrl+K</span>
-        </div>
-      </Card>
     </div>
   );
 }

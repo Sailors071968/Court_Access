@@ -107,7 +107,7 @@ export function Sidebar() {
   return (
     <aside
       className={cn(
-        'fixed left-0 top-0 h-screen bg-navy-light text-white flex flex-col z-40 transition-all duration-300 border-r border-white/5',
+        'fixed left-0 top-0 h-screen bg-navy-900 text-slate-200 flex flex-col z-40 transition-all duration-300 border-r border-white/5',
         collapsed ? 'w-16' : 'w-64',
       )}
     >
@@ -162,8 +162,8 @@ export function Sidebar() {
                     onClick={() => toggleSection(item.id)}
                     className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors w-full ${
                       isActive || childActive
-                        ? 'bg-slate-700 text-white'
-                        : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                        ? 'bg-gold/10 text-gold-light border border-gold/20'
+                        : 'text-slate-300 hover:bg-white/5 hover:text-white border border-transparent'
                     }`}
                     title={collapsed ? item.label : undefined}
                   >
@@ -179,7 +179,7 @@ export function Sidebar() {
                     )}
                   </button>
                   {!collapsed && isExpanded && (
-                    <div className="ml-4 mt-1 space-y-0.5 border-l border-slate-700 pl-3">
+                    <div className="ml-4 mt-1 space-y-0.5 border-l border-white/10 pl-3">
                       {visibleChildren?.map((child) => {
                         const isChildActive = location.pathname === child.path;
                         return (
@@ -188,8 +188,8 @@ export function Sidebar() {
                             to={child.path}
                             className={`flex items-center gap-2.5 px-2.5 py-2 rounded-md text-xs font-medium transition-colors ${
                               isChildActive
-                                ? 'bg-slate-700 text-white'
-                                : 'text-slate-400 hover:bg-slate-700/50 hover:text-white'
+                                ? 'bg-gold/10 text-gold-light'
+                                : 'text-slate-400 hover:bg-white/5 hover:text-white'
                             }`}
                           >
                             <span className="flex-shrink-0">{child.icon}</span>
@@ -203,10 +203,10 @@ export function Sidebar() {
               ) : (
                 <NavLink
                   to={item.path}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors border ${
                     isActive
-                      ? 'bg-slate-700 text-white'
-                      : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                      ? 'bg-gold/10 text-gold-light border-gold/20'
+                      : 'text-slate-300 hover:bg-white/5 hover:text-white border-transparent'
                   }`}
                   title={collapsed ? item.label : undefined}
                 >
@@ -220,17 +220,17 @@ export function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="px-2 py-3 border-t border-slate-700 space-y-1">
+      <div className="px-2 py-3 border-t border-white/5 space-y-1">
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-700/50 hover:text-white transition-colors w-full"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:bg-white/5 hover:text-white transition-colors w-full"
         >
           {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
           {!collapsed && <span>Collapse</span>}
         </button>
         <button
           onClick={logout}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-700/50 hover:text-white transition-colors w-full"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:bg-white/5 hover:text-white transition-colors w-full"
         >
           <LogOut size={20} className="flex-shrink-0" />
           {!collapsed && <span>Logout</span>}

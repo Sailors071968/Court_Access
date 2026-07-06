@@ -3,20 +3,17 @@ import { cva, type VariantProps } from 'class-variance-authority';
 import { cn } from '../../lib/utils';
 
 const buttonVariants = cva(
-  'inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold focus-visible:ring-offset-2 disabled:pointer-events-none disabled:opacity-50',
+  'inline-flex items-center justify-center gap-2 rounded-xl font-semibold transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gold-light focus-visible:ring-offset-2 focus-visible:ring-offset-navy-800 disabled:pointer-events-none disabled:opacity-50',
   {
     variants: {
       variant: {
-        primary:
-          'bg-gold-light hover:bg-gold text-navy shadow-gold hover:shadow-lg active:scale-[0.98]',
-        secondary:
-          'bg-white/10 hover:bg-white/15 text-white border border-white/15 backdrop-blur-sm',
-        outline:
-          'border border-slate-200 bg-white hover:bg-slate-50 text-navy hover:border-slate-300',
-        ghost: 'hover:bg-slate-100 text-navy',
-        navy: 'bg-navy hover:bg-navy-light text-white shadow-card hover:shadow-elevated',
-        danger: 'bg-red-600 hover:bg-red-700 text-white',
-        link: 'text-gold underline-offset-4 hover:underline p-0 h-auto',
+        primary: 'ca-gradient-gold text-navy shadow-gold hover:brightness-110 active:scale-[0.98]',
+        secondary: 'bg-white/5 hover:bg-white/10 text-white border border-white/15 backdrop-blur-sm',
+        outline: 'border border-white/15 bg-transparent hover:bg-white/5 text-white',
+        ghost: 'hover:bg-white/5 text-slate-300 hover:text-white',
+        navy: 'bg-navy-600 hover:bg-navy-500 text-white border border-white/10',
+        danger: 'bg-red-500/90 hover:bg-red-500 text-white',
+        link: 'text-gold-light underline-offset-4 hover:underline p-0 h-auto',
       },
       size: {
         sm: 'h-9 px-4 text-sm',

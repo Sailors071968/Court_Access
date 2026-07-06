@@ -210,6 +210,11 @@ async function startServer() {
   console.log('[Server] Registering Attorney Workbench routes...');
   await registerWorkbenchRoutes(app);
 
+  // Program 115 — Unified Case Search (evidence-governed, permission-scoped)
+  console.log('[Server] Registering unified search routes...');
+  const { registerSearchRoutes } = await import('./search/searchRoutes.js');
+  await registerSearchRoutes(app);
+
   console.log('[Server] Registering Investigator Workbench routes...');
   await registerInvestigatorRoutes(app);
 

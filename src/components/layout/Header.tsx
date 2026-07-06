@@ -3,10 +3,10 @@
 // Unified design language — Program 2
 // ============================================
 
-import { Search, Bell, Menu, HelpCircle } from 'lucide-react';
+import { Search, Bell, Menu, HelpCircle, Command } from 'lucide-react';
 import { useNavigate, Link } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
-import { useState } from 'react';
+import { useGlobalSearch } from '../search/GlobalSearch';
 
 interface HeaderProps {
   onMobileMenuToggle?: () => void;
@@ -15,15 +15,7 @@ interface HeaderProps {
 export function Header({ onMobileMenuToggle }: HeaderProps) {
   const { user } = useAuthStore();
   const navigate = useNavigate();
-  const [searchQuery, setSearchQuery] = useState('');
-
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim()) {
-      navigate(`/search?q=${encodeURIComponent(searchQuery.trim())}`);
-      setSearchQuery('');
-    }
-  };
+  const { open: openSearch } = useGlobalSearch();
 
   return (
     <header className="h-16 ca-glass-nav flex items-center justify-between px-6 sticky top-0 z-30">
@@ -36,20 +28,28 @@ export function Header({ onMobileMenuToggle }: HeaderProps) {
           <Menu size={20} />
         </button>
 
-        <form onSubmit={handleSearch} className="relative hidden sm:block">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-          <input
-            type="search"
-            placeholder="Search cases, statutes, citations..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-72 lg:w-96 pl-10 pr-4 py-2.5 rounded-xl border border-white/10 bg-navy-900/60 text-sm text-slate-200 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/30 transition-shadow"
-            aria-label="Search"
-          />
-        </form>
+        {/* Primary navigation experience — opens the global command palette */}
+        <button
+          onClick={openSearch}
+          className="hidden sm:flex items-center gap-3 w-72 lg:w-96 pl-3 pr-2 py-2.5 rounded-xl border border-white/10 bg-navy-900/60 text-sm text-slate-500 hover:border-gold/30 hover:text-slate-300 transition-colors"
+          aria-label="Open global search"
+        >
+          <Search size={16} className="text-slate-500" />
+          <span className="flex-1 text-left">Search cases, statutes, citations…</span>
+          <kbd className="flex items-center gap-0.5 text-[10px] px-1.5 py-0.5 rounded bg-white/10 border border-white/10">
+            <Command size={10} />K
+          </kbd>
+        </button>
       </div>
 
       <div className="flex items-center gap-2">
+        <button
+          onClick={openSearch}
+          className="sm:hidden p-2 text-slate-400 hover:text-white rounded-xl hover:bg-white/5 transition-colors"
+          aria-label="Search"
+        >
+          <Search size={20} />
+        </button>
         <Link
           to="/faq"
           className="hidden md:flex p-2 text-slate-400 hover:text-white rounded-xl hover:bg-white/5 transition-colors"

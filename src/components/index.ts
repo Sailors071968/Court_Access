@@ -48,3 +48,7 @@ export { Sparkline, BarChart, DonutChart, KnowledgeGraphContainer, TimelineConta
 
 // Layout
 export { SplitPane } from './layout/split-pane';
+
+// Global search (Program 25)
+export { GlobalSearchProvider, useGlobalSearch } from './search/GlobalSearch';
+export { SearchResultRow } from './search/SearchResultRow';

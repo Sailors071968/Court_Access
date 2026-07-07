@@ -43,7 +43,31 @@ export const CRIMINAL_SEEDS: Record<string, CodeSeeds> = {
   WIC: {
     code: 'WIC',
     codeName: 'Welfare and Institutions Code',
-    sections: ['602', '871', '10980'],
+    sections: ['602', '871', '10980', '11482', '14107'],
+  },
+  FGC: {
+    code: 'FGC',
+    codeName: 'Fish and Game Code',
+    // Unlawful take of wildlife, pollution of waters, penalties
+    sections: ['2000', '2001', '2002', '5650', '5652', '12000', '12002', '1602'],
+  },
+  LAB: {
+    code: 'LAB',
+    codeName: 'Labor Code',
+    // Failure to secure workers' comp, willful safety violations, wage crimes
+    sections: ['3700.5', '6425', '1199', '553', '227'],
+  },
+  PRC: {
+    code: 'PRC',
+    codeName: 'Public Resources Code',
+    // Fire/defensible space, waste, coastal violations
+    sections: ['4291', '4421', '4422', '42400', '30820'],
+  },
+  GOV: {
+    code: 'GOV',
+    codeName: 'Government Code',
+    // Conflict of interest, destruction of public records, misuse of office
+    sections: ['1097', '6200', '6201', '8314', '1090'],
   },
 };
 

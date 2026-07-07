@@ -225,6 +225,11 @@ async function startServer() {
   const { registerCaseViewRoutes } = await import('./workbench/caseViewRoutes.js');
   await registerCaseViewRoutes(app);
 
+  // CourtListener — external case-law / authority / citation integration
+  console.log('[Server] Registering CourtListener routes...');
+  const { registerCourtListenerRoutes } = await import('./courtlistener/courtListenerRoutes.js');
+  await registerCourtListenerRoutes(app);
+
   console.log('[Server] Registering Investigator Workbench routes...');
   await registerInvestigatorRoutes(app);
 

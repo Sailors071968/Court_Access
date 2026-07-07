@@ -1,0 +1,67 @@
+{
+  "certifiedAt": "2026-07-07T15:28:05.719350+00:00",
+  "apiBase": "http://localhost:3001",
+  "steps": [
+    {
+      "phase": "2 registry",
+      "endpoint": "GET /api/providers",
+      "http": 200,
+      "verdict": "PASS",
+      "evidence": "9 providers; 2 active (courtlistener,ca-leginfo), 7 declared"
+    },
+    {
+      "phase": "14 health",
+      "endpoint": "GET /api/providers/health",
+      "http": 200,
+      "verdict": "PASS",
+      "evidence": "courtlistener online 1195ms; ca-leginfo online 8ms/379 records; declared providers honestly degraded/unknown"
+    },
+    {
+      "phase": "16 federated statutes",
+      "endpoint": "GET /api/providers/search/searchStatutes?q=burglary",
+      "http": 200,
+      "verdict": "PASS",
+      "evidence": "ca-leginfo real PEN \u00a7459 w/ sha256 + original leginfo URL provenance"
+    },
+    {
+      "phase": "16 federated opinions",
+      "endpoint": "GET /api/providers/search/searchOpinions?q=miranda",
+      "http": 200,
+      "verdict": "PASS",
+      "evidence": "courtlistener 20 real opinions w/ provenance (provider+hash)"
+    },
+    {
+      "phase": "3 courtlistener retrieveOpinion",
+      "endpoint": "GET /api/courtlistener/opinions/:id",
+      "http": 401,
+      "verdict": "UNKNOWN",
+      "evidence": "token-gated upstream; honest 401"
+    },
+    {
+      "phase": "6 PACER",
+      "endpoint": "n/a",
+      "http": null,
+      "verdict": "UNKNOWN",
+      "evidence": "requires PACER credentials; declared not active"
+    },
+    {
+      "phase": "4 CAP",
+      "endpoint": "n/a",
+      "http": null,
+      "verdict": "UNKNOWN",
+      "evidence": "CAP REST API sunset 2024; declared pending bulk-sync"
+    },
+    {
+      "phase": "5 OpenLaws",
+      "endpoint": "n/a",
+      "http": null,
+      "verdict": "UNKNOWN",
+      "evidence": "requires OPENLAWS_API_KEY; declared"
+    }
+  ],
+  "summary": {
+    "PASS": 4,
+    "UNKNOWN": 4,
+    "FAIL": 0
+  }
+}

@@ -13,6 +13,7 @@ import { KnowledgeGraphWorkspace } from '../../components/graph/KnowledgeGraphWo
 import { SAMPLE_GRAPH, fromWorkbenchGraph } from '../../components/graph/adapters';
 import type { KnowledgeGraphData } from '../../components/graph/types';
 import { fetchWorkbench } from '../../services/workbenchApi';
+import { CaseLawSearch } from '../../components/research/CaseLawSearch';
 
 export function ResearchPage() {
   const { caseId } = useParams<{ caseId: string }>();
@@ -58,6 +59,8 @@ export function ResearchPage() {
       ) : (
         <KnowledgeGraphWorkspace data={data} />
       )}
+
+      <CaseLawSearch />
     </div>
   );
 }

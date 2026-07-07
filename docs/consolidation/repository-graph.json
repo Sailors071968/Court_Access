@@ -1,0 +1,929 @@
+{
+  "src/App.tsx": {
+    "files": 1,
+    "dependsOn": {
+      "src/components": 2,
+      "src/pages": 86
+    }
+  },
+  "src/components": {
+    "files": 78,
+    "dependsOn": {
+      "src/lib": 44,
+      "src/constants": 6,
+      "src/services": 11,
+      "backend/src/providers": 36,
+      "workers/registry.ts": 15,
+      "backend/src/conflict": 21,
+      "backend/src/contradiction": 21,
+      "backend/src/doctrine": 21,
+      "backend/src/evidence": 21,
+      "backend/src/governance": 21,
+      "backend/src/graph": 21,
+      "backend/src/ingestion": 21,
+      "backend/src/intelligence": 21,
+      "backend/src/investigator": 21,
+      "backend/src/legislative": 63,
+      "backend/src/policy": 21,
+      "backend/src/productionGates": 21,
+      "backend/src/productionOperations": 21,
+      "backend/src/workbench": 21,
+      "src/stores": 3,
+      "src/config": 1
+    }
+  },
+  "src/config": {
+    "files": 2,
+    "dependsOn": {}
+  },
+  "src/constants": {
+    "files": 2,
+    "dependsOn": {
+      "src/components": 4,
+      "backend/src/conflict": 1,
+      "backend/src/contradiction": 1,
+      "backend/src/doctrine": 1,
+      "backend/src/evidence": 1,
+      "backend/src/governance": 1,
+      "backend/src/graph": 1,
+      "backend/src/ingestion": 1,
+      "backend/src/intelligence": 1,
+      "backend/src/investigator": 1,
+      "backend/src/legislative": 3,
+      "backend/src/policy": 1,
+      "backend/src/productionGates": 1,
+      "backend/src/productionOperations": 1,
+      "backend/src/providers": 1,
+      "backend/src/workbench": 1
+    }
+  },
+  "src/lib": {
+    "files": 1,
+    "dependsOn": {}
+  },
+  "src/main.tsx": {
+    "files": 1,
+    "dependsOn": {
+      "src/App.tsx": 1
+    }
+  },
+  "src/models": {
+    "files": 4,
+    "dependsOn": {}
+  },
+  "src/pages": {
+    "files": 90,
+    "dependsOn": {
+      "src/components": 194,
+      "src/services": 36,
+      "src/stores": 13,
+      "backend/src/providers": 18,
+      "workers/registry.ts": 12,
+      "src/constants": 4,
+      "src/lib": 2,
+      "src/config": 3,
+      "backend/src/membership": 3,
+      "backend/src/conflict": 6,
+      "backend/src/contradiction": 6,
+      "backend/src/doctrine": 6,
+      "backend/src/evidence": 6,
+      "backend/src/governance": 6,
+      "backend/src/graph": 6,
+      "backend/src/ingestion": 6,
+      "backend/src/intelligence": 6,
+      "backend/src/investigator": 6,
+      "backend/src/legislative": 18,
+      "backend/src/policy": 6,
+      "backend/src/productionGates": 6,
+      "backend/src/productionOperations": 6,
+      "backend/src/workbench": 6,
+      "src/models": 1
+    }
+  },
+  "src/services": {
+    "files": 13,
+    "dependsOn": {
+      "src/models": 3,
+      "backend/src/search": 1,
+      "src/components": 5,
+      "backend/src/providers": 2,
+      "workers/registry.ts": 1,
+      "backend/src/conflict": 1,
+      "backend/src/contradiction": 1,
+      "backend/src/doctrine": 1,
+      "backend/src/evidence": 1,
+      "backend/src/governance": 1,
+      "backend/src/graph": 1,
+      "backend/src/ingestion": 1,
+      "backend/src/intelligence": 1,
+      "backend/src/investigator": 1,
+      "backend/src/legislative": 3,
+      "backend/src/policy": 1,
+      "backend/src/productionGates": 1,
+      "backend/src/productionOperations": 1,
+      "backend/src/workbench": 1
+    }
+  },
+  "src/stores": {
+    "files": 1,
+    "dependsOn": {
+      "src/components": 4,
+      "backend/src/conflict": 1,
+      "backend/src/contradiction": 1,
+      "backend/src/doctrine": 1,
+      "backend/src/evidence": 1,
+      "backend/src/governance": 1,
+      "backend/src/graph": 1,
+      "backend/src/ingestion": 1,
+      "backend/src/intelligence": 1,
+      "backend/src/investigator": 1,
+      "backend/src/legislative": 3,
+      "backend/src/policy": 1,
+      "backend/src/productionGates": 1,
+      "backend/src/productionOperations": 1,
+      "backend/src/providers": 1,
+      "backend/src/workbench": 1
+    }
+  },
+  "src/types": {
+    "files": 1,
+    "dependsOn": {
+      "src/models": 4
+    }
+  },
+  "src/vite-env.d.ts": {
+    "files": 1,
+    "dependsOn": {}
+  },
+  "backend/src/admin": {
+    "files": 2,
+    "dependsOn": {
+      "backend/src/middleware": 1,
+      "backend/src/security": 1,
+      "backend/src/billing": 1,
+      "backend/src/lib": 1
+    }
+  },
+  "backend/src/ai": {
+    "files": 1,
+    "dependsOn": {}
+  },
+  "backend/src/assistant": {
+    "files": 2,
+    "dependsOn": {
+      "backend/src/middleware": 1,
+      "backend/src/security": 1,
+      "backend/src/membership": 2,
+      "backend/src/workbench": 2,
+      "src/components": 4,
+      "backend/src/conflict": 1,
+      "backend/src/contradiction": 1,
+      "backend/src/doctrine": 1,
+      "backend/src/evidence": 1,
+      "backend/src/governance": 1,
+      "backend/src/graph": 1,
+      "backend/src/ingestion": 1,
+      "backend/src/intelligence": 1,
+      "backend/src/investigator": 1,
+      "backend/src/legislative": 3,
+      "backend/src/policy": 1,
+      "backend/src/productionGates": 1,
+      "backend/src/productionOperations": 1,
+      "backend/src/providers": 1,
+      "src/services": 1,
+      "backend/src/search": 1,
+      "backend/src/ai": 1
+    }
+  },
+  "backend/src/billing": {
+    "files": 14,
+    "dependsOn": {
+      "backend/src/lib": 20,
+      "backend/src/middleware": 5,
+      "backend/src/security": 5,
+      "backend/src/models": 3,
+      "backend/src/membership": 2
+    }
+  },
+  "backend/src/charges": {
+    "files": 1,
+    "dependsOn": {
+      "backend/src/lib": 2,
+      "backend/src/middleware": 1,
+      "backend/src/security": 1,
+      "backend/src/membership": 1
+    }
+  },
+  "backend/src/clients": {
+    "files": 2,
+    "dependsOn": {
+      "backend/src/lib": 2,
+      "backend/src/middleware": 1,
+      "backend/src/security": 1,
+      "backend/src/membership": 1
+    }
+  },
+  "backend/src/communications": {
+    "files": 2,
+    "dependsOn": {
+      "backend/src/lib": 4,
+      "backend/src/middleware": 2,
+      "backend/src/security": 2,
+      "backend/src/membership": 2
+    }
+  },
+  "backend/src/conflict": {
+    "files": 7,
+    "dependsOn": {
+      "src/components": 28,
+      "backend/src/contradiction": 7,
+      "backend/src/doctrine": 7,
+      "backend/src/evidence": 7,
+      "backend/src/governance": 7,
+      "backend/src/graph": 7,
+      "backend/src/ingestion": 7,
+      "backend/src/intelligence": 7,
+      "backend/src/investigator": 7,
+      "backend/src/legislative": 21,
+      "backend/src/policy": 7,
+      "backend/src/productionGates": 7,
+      "backend/src/productionOperations": 7,
+      "backend/src/providers": 7,
+      "backend/src/workbench": 7
+    }
+  },
+  "backend/src/contradiction": {
+    "files": 15,
+    "dependsOn": {
+      "src/components": 52,
+      "backend/src/conflict": 13,
+      "backend/src/doctrine": 13,
+      "backend/src/evidence": 13,
+      "backend/src/governance": 13,
+      "backend/src/graph": 13,
+      "backend/src/ingestion": 13,
+      "backend/src/intelligence": 13,
+      "backend/src/investigator": 13,
+      "backend/src/legislative": 39,
+      "backend/src/policy": 13,
+      "backend/src/productionGates": 13,
+      "backend/src/productionOperations": 13,
+      "backend/src/providers": 13,
+      "backend/src/workbench": 13
+    }
+  },
+  "backend/src/courtlistener": {
+    "files": 3,
+    "dependsOn": {
+      "backend/src/middleware": 1,
+      "backend/src/security": 1,
+      "backend/src/membership": 1
+    }
+  },
+  "backend/src/cpra": {
+    "files": 21,
+    "dependsOn": {}
+  },
+  "backend/src/data": {
+    "files": 2,
+    "dependsOn": {}
+  },
+  "backend/src/database": {
+    "files": 1,
+    "dependsOn": {
+      "backend/src/lib": 2
+    }
+  },
+  "backend/src/doctrine": {
+    "files": 25,
+    "dependsOn": {
+      "src/components": 96,
+      "backend/src/conflict": 24,
+      "backend/src/contradiction": 24,
+      "backend/src/evidence": 24,
+      "backend/src/governance": 24,
+      "backend/src/graph": 24,
+      "backend/src/ingestion": 24,
+      "backend/src/intelligence": 24,
+      "backend/src/investigator": 24,
+      "backend/src/legislative": 72,
+      "backend/src/policy": 24,
+      "backend/src/productionGates": 24,
+      "backend/src/productionOperations": 24,
+      "backend/src/providers": 24,
+      "backend/src/workbench": 24
+    }
+  },
+  "backend/src/engines": {
+    "files": 5,
+    "dependsOn": {}
+  },
+  "backend/src/evidence": {
+    "files": 36,
+    "dependsOn": {
+      "backend/src/middleware": 4,
+      "backend/src/security": 4,
+      "backend/src/membership": 2,
+      "src/components": 28,
+      "backend/src/conflict": 7,
+      "backend/src/contradiction": 7,
+      "backend/src/doctrine": 7,
+      "backend/src/governance": 7,
+      "backend/src/graph": 7,
+      "backend/src/ingestion": 7,
+      "backend/src/intelligence": 7,
+      "backend/src/investigator": 7,
+      "backend/src/legislative": 21,
+      "backend/src/policy": 7,
+      "backend/src/productionGates": 7,
+      "backend/src/productionOperations": 7,
+      "backend/src/providers": 7,
+      "backend/src/workbench": 7,
+      "backend/src/services": 2,
+      "backend/src/lib": 5,
+      "backend/src/workers": 1
+    }
+  },
+  "backend/src/exhibits": {
+    "files": 5,
+    "dependsOn": {}
+  },
+  "backend/src/governance": {
+    "files": 10,
+    "dependsOn": {
+      "src/components": 28,
+      "backend/src/conflict": 7,
+      "backend/src/contradiction": 7,
+      "backend/src/doctrine": 7,
+      "backend/src/evidence": 7,
+      "backend/src/graph": 7,
+      "backend/src/ingestion": 7,
+      "backend/src/intelligence": 7,
+      "backend/src/investigator": 7,
+      "backend/src/legislative": 22,
+      "backend/src/policy": 7,
+      "backend/src/productionGates": 7,
+      "backend/src/productionOperations": 7,
+      "backend/src/providers": 7,
+      "backend/src/workbench": 7
+    }
+  },
+  "backend/src/graph": {
+    "files": 9,
+    "dependsOn": {
+      "src/components": 28,
+      "backend/src/conflict": 7,
+      "backend/src/contradiction": 7,
+      "backend/src/doctrine": 7,
+      "backend/src/evidence": 7,
+      "backend/src/governance": 7,
+      "backend/src/ingestion": 7,
+      "backend/src/intelligence": 7,
+      "backend/src/investigator": 7,
+      "backend/src/legislative": 21,
+      "backend/src/policy": 7,
+      "backend/src/productionGates": 7,
+      "backend/src/productionOperations": 7,
+      "backend/src/providers": 7,
+      "backend/src/workbench": 7
+    }
+  },
+  "backend/src/ingestion": {
+    "files": 10,
+    "dependsOn": {
+      "src/components": 36,
+      "backend/src/conflict": 9,
+      "backend/src/contradiction": 9,
+      "backend/src/doctrine": 9,
+      "backend/src/evidence": 9,
+      "backend/src/governance": 9,
+      "backend/src/graph": 9,
+      "backend/src/intelligence": 9,
+      "backend/src/investigator": 9,
+      "backend/src/legislative": 27,
+      "backend/src/policy": 9,
+      "backend/src/productionGates": 9,
+      "backend/src/productionOperations": 9,
+      "backend/src/providers": 9,
+      "backend/src/workbench": 9
+    }
+  },
+  "backend/src/intelligence": {
+    "files": 8,
+    "dependsOn": {
+      "backend/src/lib": 4,
+      "backend/src/services": 3,
+      "src/components": 28,
+      "backend/src/conflict": 7,
+      "backend/src/contradiction": 7,
+      "backend/src/doctrine": 7,
+      "backend/src/evidence": 7,
+      "backend/src/governance": 7,
+      "backend/src/graph": 7,
+      "backend/src/ingestion": 7,
+      "backend/src/investigator": 7,
+      "backend/src/legislative": 23,
+      "backend/src/policy": 7,
+      "backend/src/productionGates": 7,
+      "backend/src/productionOperations": 7,
+      "backend/src/providers": 7,
+      "backend/src/workbench": 7,
+      "backend/src/middleware": 1,
+      "backend/src/security": 1,
+      "backend/src/membership": 1
+    }
+  },
+  "backend/src/investigator": {
+    "files": 3,
+    "dependsOn": {
+      "backend/src/middleware": 1,
+      "backend/src/security": 1,
+      "backend/src/lib": 4,
+      "src/components": 8,
+      "backend/src/conflict": 2,
+      "backend/src/contradiction": 2,
+      "backend/src/doctrine": 2,
+      "backend/src/evidence": 2,
+      "backend/src/governance": 2,
+      "backend/src/graph": 2,
+      "backend/src/ingestion": 2,
+      "backend/src/intelligence": 4,
+      "backend/src/legislative": 6,
+      "backend/src/policy": 2,
+      "backend/src/productionGates": 2,
+      "backend/src/productionOperations": 2,
+      "backend/src/providers": 2,
+      "backend/src/workbench": 2,
+      "backend/src/membership": 1
+    }
+  },
+  "backend/src/legislative": {
+    "files": 32,
+    "dependsOn": {
+      "backend/src/ingestion": 23,
+      "src/components": 95,
+      "backend/src/conflict": 23,
+      "backend/src/contradiction": 23,
+      "backend/src/doctrine": 23,
+      "backend/src/evidence": 23,
+      "backend/src/governance": 25,
+      "backend/src/graph": 23,
+      "backend/src/intelligence": 22,
+      "backend/src/investigator": 22,
+      "backend/src/policy": 24,
+      "backend/src/productionGates": 23,
+      "backend/src/productionOperations": 22,
+      "backend/src/providers": 23,
+      "backend/src/workbench": 22,
+      "backend/src/lib": 6,
+      "src/constants": 1,
+      "src/types": 1,
+      "backend/src/cpra": 1,
+      "backend/src/observability": 1,
+      "backend/src/data": 1,
+      "backend/src/workers": 1
+    }
+  },
+  "backend/src/lib": {
+    "files": 8,
+    "dependsOn": {
+      "backend/src/workers": 1,
+      "backend/src/observability": 1
+    }
+  },
+  "backend/src/logic": {
+    "files": 1,
+    "dependsOn": {
+      "backend/src/engines": 5
+    }
+  },
+  "backend/src/marketing": {
+    "files": 1,
+    "dependsOn": {
+      "backend/src/models": 1
+    }
+  },
+  "backend/src/membership": {
+    "files": 10,
+    "dependsOn": {
+      "backend/src/lib": 14,
+      "backend/src/middleware": 1,
+      "backend/src/security": 1,
+      "src/config": 1
+    }
+  },
+  "backend/src/middleware": {
+    "files": 1,
+    "dependsOn": {}
+  },
+  "backend/src/models": {
+    "files": 5,
+    "dependsOn": {
+      "backend/src/lib": 10
+    }
+  },
+  "backend/src/narrative": {
+    "files": 6,
+    "dependsOn": {
+      "backend/src/evidence": 1,
+      "backend/src/lib": 1,
+      "backend/src/workers": 1
+    }
+  },
+  "backend/src/observability": {
+    "files": 6,
+    "dependsOn": {
+      "backend/src/lib": 6
+    }
+  },
+  "backend/src/organizations": {
+    "files": 5,
+    "dependsOn": {
+      "backend/src/middleware": 4,
+      "backend/src/security": 4,
+      "backend/src/lib": 6,
+      "backend/src/membership": 1
+    }
+  },
+  "backend/src/policy": {
+    "files": 49,
+    "dependsOn": {
+      "src/components": 40,
+      "backend/src/conflict": 10,
+      "backend/src/contradiction": 10,
+      "backend/src/doctrine": 10,
+      "backend/src/evidence": 10,
+      "backend/src/governance": 10,
+      "backend/src/graph": 10,
+      "backend/src/ingestion": 10,
+      "backend/src/intelligence": 10,
+      "backend/src/investigator": 10,
+      "backend/src/legislative": 30,
+      "backend/src/productionGates": 10,
+      "backend/src/productionOperations": 10,
+      "backend/src/providers": 10,
+      "backend/src/workbench": 10,
+      "backend/src/cpra": 2,
+      "backend/src/workers": 4
+    }
+  },
+  "backend/src/productionGates": {
+    "files": 9,
+    "dependsOn": {
+      "backend/src/legislative": 10,
+      "backend/src/middleware": 4,
+      "backend/src/security": 4,
+      "backend/src/productionOperations": 5,
+      "backend/src/billing": 4,
+      "src/components": 8,
+      "backend/src/conflict": 2,
+      "backend/src/contradiction": 2,
+      "backend/src/doctrine": 2,
+      "backend/src/evidence": 2,
+      "backend/src/governance": 2,
+      "backend/src/graph": 2,
+      "backend/src/ingestion": 2,
+      "backend/src/intelligence": 2,
+      "backend/src/investigator": 2,
+      "backend/src/policy": 2,
+      "backend/src/providers": 2,
+      "backend/src/workbench": 2
+    }
+  },
+  "backend/src/productionOperations": {
+    "files": 8,
+    "dependsOn": {
+      "backend/src/billing": 2,
+      "backend/src/legislative": 24,
+      "src/components": 24,
+      "backend/src/conflict": 6,
+      "backend/src/contradiction": 6,
+      "backend/src/doctrine": 6,
+      "backend/src/evidence": 6,
+      "backend/src/governance": 6,
+      "backend/src/graph": 6,
+      "backend/src/ingestion": 6,
+      "backend/src/intelligence": 6,
+      "backend/src/investigator": 6,
+      "backend/src/policy": 6,
+      "backend/src/productionGates": 7,
+      "backend/src/providers": 6,
+      "backend/src/workbench": 6,
+      "backend/src/lib": 5,
+      "backend/src/security": 2,
+      "backend/src/observability": 3,
+      "backend/src/middleware": 1
+    }
+  },
+  "backend/src/providers": {
+    "files": 9,
+    "dependsOn": {
+      "src/components": 37,
+      "backend/src/conflict": 8,
+      "backend/src/contradiction": 8,
+      "backend/src/doctrine": 8,
+      "backend/src/evidence": 8,
+      "backend/src/governance": 8,
+      "backend/src/graph": 8,
+      "backend/src/ingestion": 7,
+      "backend/src/intelligence": 7,
+      "backend/src/investigator": 7,
+      "backend/src/legislative": 23,
+      "backend/src/policy": 9,
+      "backend/src/productionGates": 7,
+      "backend/src/productionOperations": 7,
+      "backend/src/workbench": 7,
+      "backend/src/courtlistener": 2,
+      "workers/registry.ts": 2,
+      "backend/src/middleware": 1,
+      "backend/src/security": 1,
+      "backend/src/membership": 1,
+      "src/constants": 1,
+      "src/types": 1,
+      "backend/src/cpra": 1,
+      "backend/src/observability": 1
+    }
+  },
+  "backend/src/routes": {
+    "files": 2,
+    "dependsOn": {
+      "backend/src/services": 1,
+      "backend/src/middleware": 1,
+      "backend/src/security": 1,
+      "backend/src/membership": 1
+    }
+  },
+  "backend/src/scripts": {
+    "files": 2,
+    "dependsOn": {
+      "backend/src/lib": 4
+    }
+  },
+  "backend/src/search": {
+    "files": 2,
+    "dependsOn": {
+      "backend/src/middleware": 1,
+      "backend/src/security": 1,
+      "backend/src/membership": 2,
+      "src/services": 1,
+      "backend/src/lib": 2
+    }
+  },
+  "backend/src/security": {
+    "files": 8,
+    "dependsOn": {
+      "backend/src/lib": 6,
+      "backend/src/membership": 2,
+      "src/config": 1,
+      "backend/src/middleware": 2
+    }
+  },
+  "backend/src/server.ts": {
+    "files": 1,
+    "dependsOn": {
+      "backend/src/policy": 5,
+      "backend/src/evidence": 7,
+      "backend/src/middleware": 1,
+      "backend/src/security": 7,
+      "src/components": 7,
+      "src/constants": 1,
+      "src/types": 1,
+      "backend/src/conflict": 1,
+      "backend/src/contradiction": 1,
+      "backend/src/cpra": 3,
+      "backend/src/doctrine": 2,
+      "backend/src/governance": 2,
+      "backend/src/graph": 1,
+      "backend/src/legislative": 3,
+      "backend/src/observability": 3,
+      "backend/src/providers": 2,
+      "backend/src/billing": 4,
+      "backend/src/clients": 1,
+      "backend/src/intelligence": 1,
+      "backend/src/workbench": 2,
+      "backend/src/investigator": 1,
+      "backend/src/timeline": 1,
+      "backend/src/admin": 2,
+      "workers/adminRoutes.ts": 1,
+      "backend/src/workers": 2,
+      "backend/src/database": 1,
+      "backend/src/charges": 1,
+      "backend/src/routes": 1,
+      "backend/src/productionGates": 1,
+      "backend/src/productionOperations": 1,
+      "backend/src/marketing": 1,
+      "backend/src/membership": 1,
+      "backend/src/organizations": 2,
+      "backend/src/communications": 2,
+      "backend/src/search": 1,
+      "backend/src/assistant": 1,
+      "backend/src/courtlistener": 1
+    }
+  },
+  "backend/src/services": {
+    "files": 53,
+    "dependsOn": {
+      "backend/src/lib": 14,
+      "backend/src/data": 2,
+      "backend/src/evidence": 6,
+      "backend/src/utils": 1
+    }
+  },
+  "backend/src/timeline": {
+    "files": 2,
+    "dependsOn": {
+      "backend/src/lib": 3,
+      "backend/src/evidence": 3,
+      "backend/src/contradiction": 2,
+      "backend/src/conflict": 2,
+      "backend/src/services": 9,
+      "src/components": 4,
+      "backend/src/doctrine": 1,
+      "backend/src/governance": 1,
+      "backend/src/graph": 1,
+      "backend/src/ingestion": 1,
+      "backend/src/intelligence": 1,
+      "backend/src/investigator": 1,
+      "backend/src/legislative": 3,
+      "backend/src/policy": 1,
+      "backend/src/productionGates": 1,
+      "backend/src/productionOperations": 1,
+      "backend/src/providers": 1,
+      "backend/src/workbench": 1,
+      "backend/src/logic": 1,
+      "backend/src/middleware": 1,
+      "backend/src/security": 1,
+      "backend/src/workers": 1
+    }
+  },
+  "backend/src/tmpTriggerVideo.ts": {
+    "files": 1,
+    "dependsOn": {
+      "backend/src/lib": 1
+    }
+  },
+  "backend/src/utils": {
+    "files": 1,
+    "dependsOn": {}
+  },
+  "backend/src/video": {
+    "files": 2,
+    "dependsOn": {
+      "backend/src/lib": 1,
+      "backend/src/workers": 1
+    }
+  },
+  "backend/src/workbench": {
+    "files": 6,
+    "dependsOn": {
+      "backend/src/middleware": 2,
+      "backend/src/security": 2,
+      "backend/src/membership": 2,
+      "src/components": 20,
+      "backend/src/conflict": 5,
+      "backend/src/contradiction": 5,
+      "backend/src/doctrine": 5,
+      "backend/src/evidence": 5,
+      "backend/src/governance": 5,
+      "backend/src/graph": 5,
+      "backend/src/ingestion": 5,
+      "backend/src/intelligence": 9,
+      "backend/src/investigator": 5,
+      "backend/src/legislative": 15,
+      "backend/src/policy": 5,
+      "backend/src/productionGates": 6,
+      "backend/src/productionOperations": 5,
+      "backend/src/providers": 5,
+      "backend/src/lib": 4
+    }
+  },
+  "backend/src/workers": {
+    "files": 16,
+    "dependsOn": {
+      "backend/src/lib": 25,
+      "backend/src/models": 1,
+      "backend/src/billing": 1,
+      "backend/src/timeline": 1
+    }
+  },
+  "workers/adminRoutes.ts": {
+    "files": 1,
+    "dependsOn": {
+      "src/components": 1,
+      "backend/src/providers": 1,
+      "workers/registry.ts": 1,
+      "workers/queueMonitor.ts": 1,
+      "workers/systemHealth.ts": 1,
+      "workers/cronScheduler.ts": 1
+    }
+  },
+  "workers/circuitBreaker.ts": {
+    "files": 1,
+    "dependsOn": {
+      "src/components": 1,
+      "backend/src/providers": 1,
+      "workers/registry.ts": 1
+    }
+  },
+  "workers/cronScheduler.ts": {
+    "files": 1,
+    "dependsOn": {}
+  },
+  "workers/evidenceLimits.ts": {
+    "files": 1,
+    "dependsOn": {}
+  },
+  "workers/graphIntegrityCheck.ts": {
+    "files": 1,
+    "dependsOn": {}
+  },
+  "workers/graphQueryProfiler.ts": {
+    "files": 1,
+    "dependsOn": {}
+  },
+  "workers/memoryWatchdog.ts": {
+    "files": 1,
+    "dependsOn": {
+      "src/components": 1,
+      "backend/src/providers": 1,
+      "workers/registry.ts": 1
+    }
+  },
+  "workers/queueMonitor.ts": {
+    "files": 1,
+    "dependsOn": {
+      "src/components": 1,
+      "backend/src/providers": 1,
+      "workers/registry.ts": 1
+    }
+  },
+  "workers/registry.ts": {
+    "files": 1,
+    "dependsOn": {}
+  },
+  "workers/runners": {
+    "files": 3,
+    "dependsOn": {}
+  },
+  "workers/systemHealth.ts": {
+    "files": 1,
+    "dependsOn": {
+      "src/components": 1,
+      "backend/src/providers": 1,
+      "workers/registry.ts": 1,
+      "workers/queueMonitor.ts": 1
+    }
+  },
+  "workers/telemetry.ts": {
+    "files": 1,
+    "dependsOn": {}
+  },
+  "scripts/capture-phase1-screenshots.mjs": {
+    "files": 1,
+    "dependsOn": {}
+  },
+  "scripts/execute-workflows.mjs": {
+    "files": 1,
+    "dependsOn": {}
+  },
+  "scripts/generate-4b-certification.mjs": {
+    "files": 1,
+    "dependsOn": {}
+  },
+  "scripts/generate-api-registry.mjs": {
+    "files": 1,
+    "dependsOn": {}
+  },
+  "scripts/generate-api-reports.mjs": {
+    "files": 1,
+    "dependsOn": {}
+  },
+  "scripts/generate-executive-dashboard.mjs": {
+    "files": 1,
+    "dependsOn": {}
+  },
+  "scripts/landing-screenshots.mjs": {
+    "files": 1,
+    "dependsOn": {}
+  },
+  "scripts/probe-api-registry.mjs": {
+    "files": 1,
+    "dependsOn": {}
+  },
+  "scripts/program-00-verify.mjs": {
+    "files": 1,
+    "dependsOn": {}
+  },
+  "scripts/repo-consolidation-analysis.mjs": {
+    "files": 1,
+    "dependsOn": {}
+  },
+  "scripts/verify-production-website.mjs": {
+    "files": 1,
+    "dependsOn": {}
+  },
+  "tests/determinism": {
+    "files": 1,
+    "dependsOn": {}
+  }
+}

@@ -1,0 +1,167 @@
+[
+  {
+    "path": "/api/evidence/upload",
+    "template": "/api/evidence/upload",
+    "file": "src/components/EvidenceUpload.tsx"
+  },
+  {
+    "path": "/api/evidence/upload",
+    "template": "/api/evidence/upload",
+    "file": "src/lib/api.ts"
+  },
+  {
+    "path": "/api/timeline/rebuild",
+    "template": "/api/timeline/rebuild",
+    "file": "src/lib/api.ts"
+  },
+  {
+    "path": "/api/timeline",
+    "template": "/api/timeline",
+    "file": "src/lib/api.ts"
+  },
+  {
+    "path": "/api/cases/*/litigation-strategy",
+    "template": "/api/cases/*/litigation-strategy",
+    "file": "src/pages/case/LitigationStrategyView.tsx"
+  },
+  {
+    "path": "/api/cases/*/trial-exhibits",
+    "template": "/api/cases/*/trial-exhibits",
+    "file": "src/pages/case/TrialExhibitWorkspace.tsx"
+  },
+  {
+    "path": "/api/operations/cpra-requests",
+    "template": "/api/operations/cpra-requests",
+    "file": "src/pages/dashboard/CpraCampaignTimeline.tsx"
+  },
+  {
+    "path": "/api/cpra/dashboard",
+    "template": "/api/cpra/dashboard",
+    "file": "src/pages/dashboard/CpraDashboard.tsx"
+  },
+  {
+    "path": "/api/cpra/campaigns",
+    "template": "/api/cpra/campaigns",
+    "file": "src/pages/dashboard/CpraDashboard.tsx"
+  },
+  {
+    "path": "/api/cpra/campaigns/*",
+    "template": "/api/cpra/campaigns/*",
+    "file": "src/pages/dashboard/CpraDashboard.tsx"
+  },
+  {
+    "path": "/api/cpra/campaigns/*/launch",
+    "template": "/api/cpra/campaigns/*/launch",
+    "file": "src/pages/dashboard/CpraDashboard.tsx"
+  },
+  {
+    "path": "/api/cpra/requests/*/response",
+    "template": "/api/cpra/requests/*/response",
+    "file": "src/pages/dashboard/CpraDashboard.tsx"
+  },
+  {
+    "path": "/api/cpra/overdue",
+    "template": "/api/cpra/overdue",
+    "file": "src/pages/dashboard/CpraDashboard.tsx"
+  },
+  {
+    "path": "/api/cpra/annual/dashboard",
+    "template": "/api/cpra/annual/dashboard",
+    "file": "src/pages/dashboard/CpraDashboard.tsx"
+  },
+  {
+    "path": "/api/cpra/annual/updates",
+    "template": "/api/cpra/annual/updates",
+    "file": "src/pages/dashboard/CpraDashboard.tsx"
+  },
+  {
+    "path": "/api/cpra/annual/updates/*/received",
+    "template": "/api/cpra/annual/updates/*/received",
+    "file": "src/pages/dashboard/CpraDashboard.tsx"
+  },
+  {
+    "path": "/api/cpra/annual/check",
+    "template": "/api/cpra/annual/check",
+    "file": "src/pages/dashboard/CpraDashboard.tsx"
+  },
+  {
+    "path": "/api/cpra",
+    "template": "/api/cpra",
+    "file": "src/pages/dashboard/CpraDashboard.tsx"
+  },
+  {
+    "path": "/api/evidence/processing-logs",
+    "template": "/api/evidence/processing-logs",
+    "file": "src/pages/dashboard/EvidenceProcessingTrace.tsx"
+  },
+  {
+    "path": "/api/policy-intelligence/agencies",
+    "template": "/api/policy-intelligence/agencies",
+    "file": "src/pages/dashboard/PolicyIntelligenceDashboard.tsx"
+  },
+  {
+    "path": "/api/policy-intelligence/taxonomy/seed",
+    "template": "/api/policy-intelligence/taxonomy/seed",
+    "file": "src/pages/dashboard/PolicyIntelligenceDashboard.tsx"
+  },
+  {
+    "path": "/api/policy-intelligence",
+    "template": "/api/policy-intelligence",
+    "file": "src/pages/dashboard/PolicyIntelligenceDashboard.tsx"
+  },
+  {
+    "path": "/api/operations/policy-matrix",
+    "template": "/api/operations/policy-matrix",
+    "file": "src/pages/dashboard/PolicyMatrixVirtualized.tsx"
+  },
+  {
+    "path": "/api/policy-pipeline/run/*",
+    "template": "/api/policy-pipeline/run/*",
+    "file": "src/pages/dashboard/PolicyPipelineDashboard.tsx"
+  },
+  {
+    "path": "/api/operations/topics/registry",
+    "template": "/api/operations/topics/registry",
+    "file": "src/pages/dashboard/PolicyTopicRegistry.tsx"
+  },
+  {
+    "path": "/api/exhibits/create-scene",
+    "template": "/api/exhibits/create-scene",
+    "file": "src/pages/dashboard/exhibits/ExhibitViewer.tsx"
+  },
+  {
+    "path": "/api/exhibits/export/html",
+    "template": "/api/exhibits/export/html",
+    "file": "src/pages/dashboard/exhibits/ExhibitViewer.tsx"
+  },
+  {
+    "path": "/api/narrative/*/claims${qs",
+    "template": "/api/narrative/*/claims${qs",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/narrative/*/impeachment*",
+    "template": "/api/narrative/*/impeachment*",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/evidence/upload",
+    "template": "/api/evidence/upload",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/timeline/*",
+    "template": "/api/timeline/*",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/doctrine",
+    "template": "/api/doctrine",
+    "file": "src/services/doctrineService.ts"
+  },
+  {
+    "path": "/api/firm*",
+    "template": "/api/firm*",
+    "file": "src/services/firmApi.ts"
+  }
+]

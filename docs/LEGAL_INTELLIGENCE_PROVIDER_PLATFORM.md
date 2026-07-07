@@ -1,5 +1,32 @@
 # Legal Intelligence Provider Platform — Certification
 
+## Master Program 6 update — full provider roster (16 providers, one interface)
+
+Every requested source is now registered on the canonical `LegalIntelligenceProvider` interface. **3 active + runtime-verified**, 13 declared (framework-registered, honest non-active status). Health score 19% reflects that only the 3 data-backed providers are online — declared adapters are intentionally not.
+
+| Provider | Interface | Active caps | Runtime |
+|----------|-----------|-------------|---------|
+| CourtListener | ✅ | 6 | **online** (opinion/docket search live) |
+| California Legislative (leginfo) | ✅ | 4 | **online** (379 hash-verified statutes) |
+| CALCRIM | ✅ | 2 | **online** — federated jury-instruction search returns real records w/ provenance (`CALCRIM — burglary`, hash `e5807fce…`) |
+| Caselaw Access Project (CAP) | ✅ | 0 | declared (REST API sunset 2024) |
+| OpenLaws | ✅ | 0 | declared (needs `OPENLAWS_API_KEY`) |
+| California Judicial Council | ✅ | 0 | declared (forms/rules acquisition pending) |
+| California Rules of Court | ✅ | 0 | declared (acquisition pending) |
+| California Constitution | ✅ | 0 | declared (leginfo constitution code pending) |
+| United States Constitution | ✅ | 0 | declared (congress.gov/govinfo pending) |
+| California Code of Regulations (CCR) | ✅ | 0 | declared (acquisition pending) |
+| Federal Rules (Evidence/Crim Pro) | ✅ | 0 | declared (uscourts.gov/govinfo pending) |
+| Local Court Rules | ✅ | 0 | declared (per-county acquisition pending) |
+| PACER | ✅ | 0 | declared (credentials + billing controls) |
+| RECAP | ✅ | 0 | declared (via CourtListener token) |
+| Westlaw / Lexis (optional) | ✅ | 0 | declared (optional commercial, no hard dependency) |
+
+Runtime-verified live: `GET /api/providers` → 16; `GET /api/providers/health` → 3 online; `GET /api/providers/search/searchJuryInstructions?q=burglary` → CALCRIM real record with provenance. New active provider code: `backend/src/providers/calcrimProvider.ts`. Declared adapters return UNKNOWN for every capability (never fabricated) until their data/credentials are provisioned.
+
+---
+
+
 > A canonical, evidence-governed provider architecture: every external legal knowledge source implements ONE interface, registers in ONE registry, and stamps every record with provenance (provider + original id/URL + SHA-256 + retrieval time). No fabricated integrations; no PASS without live runtime evidence; capabilities a provider cannot serve return UNKNOWN, never faked.
 
 ## What was built (this program)

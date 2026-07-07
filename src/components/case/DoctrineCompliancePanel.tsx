@@ -39,35 +39,35 @@ interface DoctrineCompliancePanelProps {
 
 const CATEGORY_CONFIG: Record<string, { color: string; bg: string; label: string }> = {
   // LD-15: Laws of Arrest
-  constitutional: { color: 'text-purple-700', bg: 'bg-purple-50', label: 'Constitutional' },
-  encounter: { color: 'text-blue-700', bg: 'bg-blue-50', label: 'Encounter' },
-  detention: { color: 'text-amber-700', bg: 'bg-amber-50', label: 'Detention' },
+  constitutional: { color: 'text-violet-300', bg: 'bg-violet-500/10', label: 'Constitutional' },
+  encounter: { color: 'text-blue-300', bg: 'bg-blue-500/10', label: 'Encounter' },
+  detention: { color: 'text-amber-300', bg: 'bg-amber-500/10', label: 'Detention' },
   search: { color: 'text-orange-700', bg: 'bg-orange-50', label: 'Search' },
-  arrest: { color: 'text-red-700', bg: 'bg-red-50', label: 'Arrest' },
-  miranda: { color: 'text-indigo-700', bg: 'bg-indigo-50', label: 'Miranda' },
+  arrest: { color: 'text-red-300', bg: 'bg-red-500/10', label: 'Arrest' },
+  miranda: { color: 'text-indigo-300', bg: 'bg-indigo-500/10', label: 'Miranda' },
   interrogation: { color: 'text-pink-700', bg: 'bg-pink-50', label: 'Interrogation' },
-  use_of_force: { color: 'text-rose-700', bg: 'bg-rose-50', label: 'Use of Force' },
+  use_of_force: { color: 'text-rose-300', bg: 'bg-rose-500/10', label: 'Use of Force' },
   pursuit: { color: 'text-cyan-700', bg: 'bg-cyan-50', label: 'Pursuit' },
   // LD-17: Presentation of Evidence
-  evidence_presentation: { color: 'text-violet-700', bg: 'bg-violet-50', label: 'Evidence Presentation' },
+  evidence_presentation: { color: 'text-violet-300', bg: 'bg-violet-500/10', label: 'Evidence Presentation' },
   chain_of_custody: { color: 'text-fuchsia-700', bg: 'bg-fuchsia-50', label: 'Chain of Custody' },
-  testimony: { color: 'text-sky-700', bg: 'bg-sky-50', label: 'Testimony' },
+  testimony: { color: 'text-sky-300', bg: 'bg-sky-500/10', label: 'Testimony' },
   // LD-18: Report Writing
   report_writing: { color: 'text-teal-700', bg: 'bg-teal-50', label: 'Report Writing' },
   // LD-24 & LD-30: Evidence Handling & Crime Scene
   evidence_handling: { color: 'text-lime-700', bg: 'bg-lime-50', label: 'Evidence Handling' },
-  evidence_collection: { color: 'text-emerald-700', bg: 'bg-emerald-50', label: 'Evidence Collection' },
+  evidence_collection: { color: 'text-emerald-300', bg: 'bg-emerald-500/10', label: 'Evidence Collection' },
   crime_scene: { color: 'text-stone-700', bg: 'bg-stone-50', label: 'Crime Scene' },
   // LD-21: Patrol
-  patrol: { color: 'text-slate-700', bg: 'bg-slate-50', label: 'Patrol' },
+  patrol: { color: 'text-slate-200', bg: 'bg-white/5', label: 'Patrol' },
   field_contact: { color: 'text-zinc-700', bg: 'bg-zinc-50', label: 'Field Contact' },
   general: { color: 'text-slate-200', bg: 'bg-white/5', label: 'General' },
 };
 
 const FLAG_CONFIG: Record<string, { icon: typeof AlertTriangle; color: string; bg: string; label: string }> = {
-  violation: { icon: AlertTriangle, color: 'text-red-600', bg: 'bg-red-50 border-red-200', label: 'Violation' },
-  concern: { icon: AlertCircle, color: 'text-amber-600', bg: 'bg-amber-50 border-amber-200', label: 'Concern' },
-  compliant: { icon: CheckCircle, color: 'text-green-600', bg: 'bg-green-50 border-green-200', label: 'Compliant' },
+  violation: { icon: AlertTriangle, color: 'text-red-600', bg: 'bg-red-500/10 border-red-500/20', label: 'Violation' },
+  concern: { icon: AlertCircle, color: 'text-amber-600', bg: 'bg-amber-500/10 border-amber-500/20', label: 'Concern' },
+  compliant: { icon: CheckCircle, color: 'text-green-600', bg: 'bg-emerald-500/10 border-emerald-500/20', label: 'Compliant' },
 };
 
 // ---------------------------------------------------------------------------
@@ -121,15 +121,15 @@ export function DoctrineCompliancePanel({
   // Overall compliance badge
   const complianceBadge = compliance ? (
     compliance.overallCompliance === 'violations' ? (
-      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-700">
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-red-500/15 text-red-300">
         <AlertTriangle size={12} /> {compliance.violations} Violation{compliance.violations !== 1 ? 's' : ''}
       </span>
     ) : compliance.overallCompliance === 'concerns' ? (
-      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-100 text-amber-700">
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-amber-500/15 text-amber-300">
         <AlertCircle size={12} /> {compliance.concerns} Concern{compliance.concerns !== 1 ? 's' : ''}
       </span>
     ) : (
-      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-700">
+      <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium bg-emerald-500/15 text-emerald-300">
         <CheckCircle size={12} /> Compliant
       </span>
     )
@@ -158,7 +158,7 @@ export function DoctrineCompliancePanel({
         </div>
         <div className="flex items-center gap-2">
           {isLoading && <Loader2 size={16} className="animate-spin text-indigo-500" />}
-          {isExpanded ? <ChevronUp size={18} className="text-slate-500" /> : <ChevronDown size={18} className="text-slate-500" />}
+          {isExpanded ? <ChevronUp size={18} className="text-slate-400" /> : <ChevronDown size={18} className="text-slate-400" />}
         </div>
       </button>
 
@@ -169,20 +169,20 @@ export function DoctrineCompliancePanel({
           {status && !compliance && (
             <div className="mt-4">
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-4">
-                <div className="bg-indigo-50 rounded-lg p-3 text-center">
-                  <p className="text-2xl font-bold text-indigo-700">{status.totalRules}</p>
+                <div className="bg-indigo-500/10 rounded-lg p-3 text-center">
+                  <p className="text-2xl font-bold text-indigo-300">{status.totalRules}</p>
                   <p className="text-xs text-indigo-600 mt-1">Doctrine Rules</p>
                 </div>
-                <div className="bg-purple-50 rounded-lg p-3 text-center">
-                  <p className="text-2xl font-bold text-purple-700">{Object.keys(status.rulesByCategory).length}</p>
+                <div className="bg-violet-500/10 rounded-lg p-3 text-center">
+                  <p className="text-2xl font-bold text-violet-300">{Object.keys(status.rulesByCategory).length}</p>
                   <p className="text-xs text-purple-600 mt-1">Categories</p>
                 </div>
-                <div className="bg-blue-50 rounded-lg p-3 text-center">
-                  <p className="text-2xl font-bold text-blue-700">{status.totalEmbeddings}</p>
+                <div className="bg-blue-500/10 rounded-lg p-3 text-center">
+                  <p className="text-2xl font-bold text-blue-300">{status.totalEmbeddings}</p>
                   <p className="text-xs text-gold-light mt-1">Embeddings</p>
                 </div>
-                <div className="bg-green-50 rounded-lg p-3 text-center">
-                  <p className="text-2xl font-bold text-green-700">{Object.keys(status.rulesBySource).length}</p>
+                <div className="bg-emerald-500/10 rounded-lg p-3 text-center">
+                  <p className="text-2xl font-bold text-emerald-300">{Object.keys(status.rulesBySource).length}</p>
                   <p className="text-xs text-green-600 mt-1">Sources</p>
                 </div>
               </div>
@@ -216,7 +216,7 @@ export function DoctrineCompliancePanel({
 
               {!evidenceText && (
                 <div className="bg-white/5 rounded-lg p-3 text-center text-sm text-slate-400">
-                  <BookOpen size={20} className="mx-auto mb-2 text-slate-500" />
+                  <BookOpen size={20} className="mx-auto mb-2 text-slate-400" />
                   Select evidence to analyze against POST training doctrine
                 </div>
               )}
@@ -238,19 +238,19 @@ export function DoctrineCompliancePanel({
               <div className="flex items-center gap-3 mb-4 p-3 rounded-lg bg-white/5">
                 <div className="flex items-center gap-1.5">
                   <AlertTriangle size={14} className="text-red-500" />
-                  <span className="text-sm font-medium text-red-700">{compliance.violations}</span>
+                  <span className="text-sm font-medium text-red-300">{compliance.violations}</span>
                   <span className="text-xs text-slate-400">violations</span>
                 </div>
                 <div className="w-px h-4 bg-gray-300" />
                 <div className="flex items-center gap-1.5">
                   <AlertCircle size={14} className="text-amber-500" />
-                  <span className="text-sm font-medium text-amber-700">{compliance.concerns}</span>
+                  <span className="text-sm font-medium text-amber-300">{compliance.concerns}</span>
                   <span className="text-xs text-slate-400">concerns</span>
                 </div>
                 <div className="w-px h-4 bg-gray-300" />
                 <div className="flex items-center gap-1.5">
                   <CheckCircle size={14} className="text-green-500" />
-                  <span className="text-sm font-medium text-green-700">{compliance.compliant}</span>
+                  <span className="text-sm font-medium text-emerald-300">{compliance.compliant}</span>
                   <span className="text-xs text-slate-400">compliant</span>
                 </div>
                 <div className="ml-auto">
@@ -273,7 +273,7 @@ export function DoctrineCompliancePanel({
                     onClick={() => setActiveFilter(filter)}
                     className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${
                       activeFilter === filter
-                        ? 'bg-indigo-100 text-indigo-700'
+                        ? 'bg-indigo-100 text-indigo-300'
                         : 'bg-white/10 text-slate-300 hover:bg-gray-200'
                     }`}
                   >
@@ -299,7 +299,7 @@ export function DoctrineCompliancePanel({
               )}
 
               {/* Attribution */}
-              <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs text-slate-500">
+              <div className="mt-4 pt-3 border-t border-white/10 flex items-center justify-between text-xs text-slate-400">
                 <span>Source: California POST Training Standards</span>
                 <span>Checked {compliance.totalRulesChecked} rules \u2022 {new Date(compliance.analyzedAt).toLocaleTimeString()}</span>
               </div>
@@ -336,7 +336,7 @@ function DoctrineMatchCard({ match }: { match: DoctrineMatchResult }) {
             <span className="text-xs text-slate-400">
               {match.chapter} \u2022 {match.topic}
             </span>
-            <span className="ml-auto text-xs font-mono text-slate-500" title={`Raw: ${Math.round(match.similarityScore * 100)}%`}>
+            <span className="ml-auto text-xs font-mono text-slate-400" title={`Raw: ${Math.round(match.similarityScore * 100)}%`}>
               {Math.round((match.effectiveSimilarity ?? match.similarityScore) * 100)}%
             </span>
           </div>
@@ -361,7 +361,7 @@ function DoctrineMatchCard({ match }: { match: DoctrineMatchResult }) {
                   href="https://post.ca.gov/training"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-700"
+                  className="inline-flex items-center gap-1 text-indigo-600 hover:text-indigo-300"
                 >
                   POST Reference <ExternalLink size={10} />
                 </a>

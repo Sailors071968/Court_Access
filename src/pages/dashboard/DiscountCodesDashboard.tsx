@@ -370,7 +370,7 @@ export function DiscountCodesDashboard() {
                             onClick={(e) => { e.stopPropagation(); toggleActive(code.codeId); }}
                             className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${
                               code.active
-                                ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200'
+                                ? 'bg-emerald-500/15 text-emerald-300 hover:bg-emerald-200'
                                 : 'bg-white/10 text-slate-400 hover:bg-gray-200'
                             }`}
                           >
@@ -388,13 +388,13 @@ export function DiscountCodesDashboard() {
                               {new Date(code.expiresAt).toLocaleDateString()}
                             </span>
                           ) : (
-                            <span className="text-slate-500">No expiry</span>
+                            <span className="text-slate-400">No expiry</span>
                           )}
                         </td>
                         <td className="px-4 py-3 text-right">
                           <button
                             onClick={(e) => { e.stopPropagation(); deleteCode(code.codeId); }}
-                            className="p-1.5 rounded-lg text-red-400 hover:bg-red-50 hover:text-red-600 transition-colors"
+                            className="p-1.5 rounded-lg text-red-400 hover:bg-red-500/10 hover:text-red-600 transition-colors"
                             title="Delete code"
                           >
                             <Trash2 size={14} />
@@ -449,7 +449,7 @@ export function DiscountCodesDashboard() {
                         <td className="px-4 py-3 text-right text-slate-200">${ca.totalDiscount.toLocaleString()}</td>
                         <td className="px-4 py-3 text-center">
                           <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${
-                            ca.active ? 'bg-emerald-100 text-emerald-700' : 'bg-white/10 text-slate-400'
+                            ca.active ? 'bg-emerald-500/15 text-emerald-300' : 'bg-white/10 text-slate-400'
                           }`}>
                             {ca.active ? 'Active' : 'Inactive'}
                           </span>

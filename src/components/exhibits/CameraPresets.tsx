@@ -125,7 +125,7 @@ export default function CameraPresets({
           Camera Views
         </h3>
         <svg
-          className={`w-4 h-4 text-slate-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+          className={`w-4 h-4 text-slate-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -175,7 +175,7 @@ export default function CameraPresets({
                   </button>
                   <button
                     onClick={() => { setShowSaveInput(false); setSaveName(''); }}
-                    className="px-2 py-1.5 text-xs text-slate-500 hover:text-white transition-colors"
+                    className="px-2 py-1.5 text-xs text-slate-400 hover:text-white transition-colors"
                   >
                     Cancel
                   </button>

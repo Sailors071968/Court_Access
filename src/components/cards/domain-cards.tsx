@@ -34,7 +34,7 @@ export function ProgressCard({
         <span className="text-lg font-bold text-white tabular-nums">{value}%</span>
       </div>
       <ProgressBar value={value} tone={tone} />
-      {description && <p className="text-xs text-slate-500 mt-2">{description}</p>}
+      {description && <p className="text-xs text-slate-400 mt-2">{description}</p>}
     </Card>
   );
 }
@@ -75,7 +75,7 @@ export function TimelineCard({
           <p className="text-sm font-medium text-white truncate">{title}</p>
           {tag && <Badge variant="default">{tag}</Badge>}
         </div>
-        <p className="text-xs text-slate-500 mt-0.5">{date}</p>
+        <p className="text-xs text-slate-400 mt-0.5">{date}</p>
         {description && <p className="text-sm text-slate-400 mt-1">{description}</p>}
       </div>
     </div>
@@ -106,7 +106,7 @@ export function EvidenceCard({
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium text-white truncate">{title}</p>
-          <p className="text-xs text-slate-500 mt-0.5">{type}</p>
+          <p className="text-xs text-slate-400 mt-0.5">{type}</p>
           <div className="flex items-center gap-2 mt-2">
             {status && <StatusBadge status={status} />}
             {confidence !== undefined && <ConfidenceIndicator score={confidence} showLabel={false} />}
@@ -139,7 +139,7 @@ export function DocumentCard({
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium text-white truncate">{title}</p>
-          {meta && <p className="text-xs text-slate-500 mt-0.5">{meta}</p>}
+          {meta && <p className="text-xs text-slate-400 mt-0.5">{meta}</p>}
         </div>
         {status && <StatusBadge status={status} />}
       </div>
@@ -169,7 +169,7 @@ export function WitnessCard({
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium text-white truncate">{name}</p>
-          {role && <p className="text-xs text-slate-500 mt-0.5">{role}</p>}
+          {role && <p className="text-xs text-slate-400 mt-0.5">{role}</p>}
         </div>
         {tag && <Badge variant="default">{tag}</Badge>}
       </div>
@@ -200,7 +200,7 @@ export function AuthorityCard({
         <div className="flex-1 min-w-0">
           <p className="text-sm font-medium text-white">{citation}</p>
           {title && <p className="text-xs text-slate-400 mt-0.5 line-clamp-2">{title}</p>}
-          {relevance && <p className="text-xs text-slate-500 mt-1">{relevance}</p>}
+          {relevance && <p className="text-xs text-slate-400 mt-1">{relevance}</p>}
         </div>
       </div>
     </Card>
@@ -234,7 +234,7 @@ export function ReportCard({
             {format && <Badge variant="gold" className="mt-2">{format}</Badge>}
           </div>
         </div>
-        {onGenerate && <ArrowRight size={16} className="text-slate-500 flex-shrink-0 mt-1" />}
+        {onGenerate && <ArrowRight size={16} className="text-slate-400 flex-shrink-0 mt-1" />}
       </div>
     </Card>
   );

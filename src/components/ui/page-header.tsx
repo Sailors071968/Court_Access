@@ -15,7 +15,7 @@ export function PageHeader({ title, subtitle, action, overline, className }: Pag
       <div className="space-y-2">
         {overline && <p className={TYPOGRAPHY.overline}>{overline}</p>}
         <h1 className={TYPOGRAPHY.h1}>{title}</h1>
-        {subtitle && <p className="text-base text-slate-400">{subtitle}</p>}
+        {subtitle && <p className="text-base text-slate-300 leading-relaxed">{subtitle}</p>}
       </div>
       {action && <div className="flex-shrink-0">{action}</div>}
     </div>

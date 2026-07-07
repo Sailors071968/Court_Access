@@ -74,13 +74,13 @@ const EXPORT_OPTIONS: Array<{ type: ExportPackageType; label: string }> = [
 
 function StatusBadge({ status }: { status: string }) {
   const colors: Record<string, string> = {
-    satisfied: 'bg-green-100 text-green-800',
-    unsatisfied: 'bg-red-100 text-red-800',
+    satisfied: 'bg-emerald-500/15 text-emerald-300',
+    unsatisfied: 'bg-red-500/15 text-red-300',
     unknown: 'bg-white/10 text-slate-200',
-    disputed: 'bg-amber-100 text-amber-800',
-    open: 'bg-blue-100 text-blue-800',
+    disputed: 'bg-amber-500/15 text-amber-300',
+    open: 'bg-blue-500/15 text-blue-300',
     in_progress: 'bg-indigo-100 text-indigo-800',
-    completed: 'bg-green-100 text-green-800',
+    completed: 'bg-emerald-500/15 text-emerald-300',
   };
   return (
     <span className={`inline-flex px-2 py-0.5 rounded text-xs font-medium ${colors[status] ?? 'bg-white/10 text-slate-200'}`}>
@@ -107,11 +107,11 @@ function ExpandableSection({ title, children, defaultOpen = false }: { title: st
 }
 
 function CitationList({ citations }: { citations: Array<{ type: string; id: string; label?: string }> }) {
-  if (!citations.length) return <span className="text-xs text-slate-500">No citations</span>;
+  if (!citations.length) return <span className="text-xs text-slate-400">No citations</span>;
   return (
     <div className="flex flex-wrap gap-1 mt-1">
       {citations.map((c) => (
-        <span key={`${c.type}-${c.id}`} className="text-xs bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded">
+        <span key={`${c.type}-${c.id}`} className="text-xs bg-white/10 text-slate-300 px-1.5 py-0.5 rounded">
           {c.type}:{c.label ?? c.id.slice(0, 8)}
         </span>
       ))}
@@ -185,7 +185,7 @@ export function AttorneyWorkbenchPage() {
   if (loading && !data) {
     return (
       <div className="flex items-center justify-center py-24">
-        <Loader2 className="animate-spin text-slate-500" size={32} />
+        <Loader2 className="animate-spin text-slate-400" size={32} />
       </div>
     );
   }
@@ -194,7 +194,7 @@ export function AttorneyWorkbenchPage() {
     return (
       <div className="max-w-3xl mx-auto p-6 text-center">
         <AlertTriangle className="mx-auto text-red-500 mb-3" size={32} />
-        <p className="text-red-700">{error}</p>
+        <p className="text-red-300">{error}</p>
         <button type="button" onClick={() => void load()} className="mt-4 px-4 py-2 bg-slate-800 text-white rounded-lg">
           Retry
         </button>
@@ -218,7 +218,7 @@ export function AttorneyWorkbenchPage() {
           </h1>
           <p className="text-sm text-slate-400 mt-1">
             {data.caseOverview.case.title} — {data.caseOverview.case.caseNumber}
-            <span className="ml-2 text-xs bg-slate-100 px-2 py-0.5 rounded">v{data.workbenchVersion}</span>
+            <span className="ml-2 text-xs bg-white/10 px-2 py-0.5 rounded">v{data.workbenchVersion}</span>
           </p>
         </div>
         <button
@@ -268,7 +268,7 @@ export function AttorneyWorkbenchPage() {
               </ul>
             </div>
             {data.caseOverview.upcomingHearings[0]?.date && (
-              <div className="mt-4 p-3 bg-amber-50 rounded-lg text-sm">
+              <div className="mt-4 p-3 bg-amber-500/10 rounded-lg text-sm">
                 <strong>Next hearing:</strong> {new Date(data.caseOverview.upcomingHearings[0].date).toLocaleDateString()}
                 {data.caseOverview.upcomingHearings[0].note && ` — ${data.caseOverview.upcomingHearings[0].note}`}
               </div>
@@ -286,7 +286,7 @@ export function AttorneyWorkbenchPage() {
             ) : (
               <ul className="space-y-2 max-h-64 overflow-y-auto">
                 {data.caseOverview.caseTimeline.map((e) => (
-                  <li key={e.id} className={`text-sm p-2 rounded ${e.conflictFlag ? 'bg-red-50 border border-red-100' : 'bg-white/5'}`}>
+                  <li key={e.id} className={`text-sm p-2 rounded ${e.conflictFlag ? 'bg-red-500/10 border border-red-100' : 'bg-white/5'}`}>
                     <span className="text-slate-400">{e.timestamp ? new Date(e.timestamp).toLocaleString() : 'UNKNOWN time'}</span>
                     {e.actor && <span className="ml-2 font-medium">{e.actor}: </span>}
                     {e.description}
@@ -350,10 +350,10 @@ export function AttorneyWorkbenchPage() {
                             <td className="py-2">{row.confidence}</td>
                             <td className="py-2">
                               {row.supportingEvidence.length > 0 && (
-                                <span className="text-green-700">{row.supportingEvidence.length} supporting</span>
+                                <span className="text-emerald-300">{row.supportingEvidence.length} supporting</span>
                               )}
                               {row.contradictoryEvidence.length > 0 && (
-                                <span className="text-red-700 ml-2">{row.contradictoryEvidence.length} contradictory</span>
+                                <span className="text-red-300 ml-2">{row.contradictoryEvidence.length} contradictory</span>
                               )}
                               {row.missingEvidenceReason && (
                                 <p className="text-xs text-amber-600 mt-0.5">{row.missingEvidenceReason}</p>
@@ -364,7 +364,7 @@ export function AttorneyWorkbenchPage() {
                       </tbody>
                     </table>
                     {legal?.unknownLegalQuestions.length ? (
-                      <div className="text-sm text-amber-700 bg-amber-50 p-3 rounded">
+                      <div className="text-sm text-amber-300 bg-amber-500/10 p-3 rounded">
                         <strong>Unknown legal questions:</strong> {legal.unknownLegalQuestions.join('; ')}
                       </div>
                     ) : null}
@@ -403,7 +403,7 @@ export function AttorneyWorkbenchPage() {
                         type="button"
                         title="Pin evidence"
                         onClick={() => void pinWorkbenchItem(caseId!, 'evidence', e.evidenceId, e.fileName).then(() => load())}
-                        className="text-slate-500 hover:text-amber-600"
+                        className="text-slate-400 hover:text-amber-600"
                       >
                         <Pin size={14} />
                       </button>
@@ -593,10 +593,10 @@ export function AttorneyWorkbenchPage() {
             </button>
             <ul className="mt-4 space-y-2">
               {data.attorneyNotes.notes.map((n) => (
-                <li key={n.id} className="p-3 bg-yellow-50 border border-yellow-100 rounded text-sm">
+                <li key={n.id} className="p-3 bg-amber-500/10 border border-yellow-100 rounded text-sm">
                   {n.title && <div className="font-medium">{n.title}</div>}
                   <div>{n.content}</div>
-                  <div className="text-xs text-slate-500 mt-1">{new Date(n.createdAt).toLocaleString()}</div>
+                  <div className="text-xs text-slate-400 mt-1">{new Date(n.createdAt).toLocaleString()}</div>
                 </li>
               ))}
             </ul>

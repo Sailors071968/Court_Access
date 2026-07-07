@@ -110,11 +110,11 @@ export function RegisterPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-1">Full name</label>
-              <input id="name" type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-white/5 text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light" placeholder="Jane Doe" required />
+              <input id="name" type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-white/5 text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light" placeholder="Jane Doe" required />
             </div>
             <div>
               <label htmlFor="reg-email" className="block text-sm font-medium text-slate-300 mb-1">Email address</label>
-              <input id="reg-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-white/5 text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light" placeholder="you@courtaccess.com" required />
+              <input id="reg-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-white/5 text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light" placeholder="you@courtaccess.com" required />
             </div>
             <div>
               <label htmlFor="defaultRole" className="block text-sm font-medium text-slate-300 mb-1">
@@ -124,7 +124,7 @@ export function RegisterPage() {
                 id="defaultRole"
                 value={defaultRole}
                 onChange={(e) => setDefaultRole(e.target.value as DefaultRole)}
-                className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-white/5 text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light bg-white/5"
+                className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-white/5 text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light bg-white/5"
               >
                 {REGISTRATION_ROLE_OPTIONS.map((opt) => (
                   <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -142,25 +142,25 @@ export function RegisterPage() {
             </div>
             <div>
               <label htmlFor="reg-password" className="block text-sm font-medium text-slate-300 mb-1">Password</label>
-              <input id="reg-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-white/5 text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light" placeholder="Minimum 8 characters" required autoComplete="new-password" />
+              <input id="reg-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-white/5 text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light" placeholder="Minimum 8 characters" required autoComplete="new-password" />
             </div>
             <div>
               <label htmlFor="confirm-password" className="block text-sm font-medium text-slate-300 mb-1">Confirm password</label>
-              <input id="confirm-password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-white/5 text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light" placeholder="Re-enter password" required autoComplete="new-password" />
+              <input id="confirm-password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-white/5 text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light" placeholder="Re-enter password" required autoComplete="new-password" />
             </div>
             <div>
-              <label htmlFor="discount-code" className="block text-sm font-medium text-slate-300 mb-1">Discount code <span className="text-slate-500 font-normal">(optional)</span></label>
+              <label htmlFor="discount-code" className="block text-sm font-medium text-slate-300 mb-1">Discount code <span className="text-slate-400 font-normal">(optional)</span></label>
               <div className="flex gap-2">
                 <div className="relative flex-1">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Tag className="text-slate-500" size={14} />
+                    <Tag className="text-slate-400" size={14} />
                   </div>
                   <input
                     id="discount-code"
                     type="text"
                     value={discountCode}
                     onChange={(e) => { setDiscountCode(e.target.value); setDiscountResult(null); }}
-                    className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-white/15 bg-white/5 text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light uppercase"
+                    className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-white/15 bg-white/5 text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light uppercase"
                     placeholder="e.g. EARLYACCESS50"
                   />
                 </div>

@@ -31,11 +31,11 @@ interface DemoRequestRecord {
 }
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; icon: React.ElementType }> = {
-  new: { label: 'New', color: 'bg-blue-100 text-blue-700', icon: Send },
-  contacted: { label: 'Contacted', color: 'bg-amber-100 text-amber-700', icon: Mail },
-  scheduled: { label: 'Scheduled', color: 'bg-purple-100 text-purple-700', icon: Calendar },
-  completed: { label: 'Completed', color: 'bg-emerald-100 text-emerald-700', icon: CheckCircle2 },
-  declined: { label: 'Declined', color: 'bg-red-100 text-red-700', icon: XCircle },
+  new: { label: 'New', color: 'bg-blue-500/15 text-blue-300', icon: Send },
+  contacted: { label: 'Contacted', color: 'bg-amber-500/15 text-amber-300', icon: Mail },
+  scheduled: { label: 'Scheduled', color: 'bg-violet-500/15 text-violet-300', icon: Calendar },
+  completed: { label: 'Completed', color: 'bg-emerald-500/15 text-emerald-300', icon: CheckCircle2 },
+  declined: { label: 'Declined', color: 'bg-red-500/15 text-red-300', icon: XCircle },
 };
 
 export function DemoRequestsDashboard() {
@@ -91,7 +91,7 @@ export function DemoRequestsDashboard() {
               key={key}
               onClick={() => setFilter(filter === key ? 'all' : key)}
               className={`p-4 rounded-xl border text-left transition-colors ${
-                filter === key ? 'border-amber-300 bg-amber-50' : 'border-white/10 bg-white/5 hover:border-white/10'
+                filter === key ? 'border-amber-300 bg-amber-500/10' : 'border-white/10 bg-white/5 hover:border-white/10'
               }`}
             >
               <div className="flex items-center gap-2 mb-2">
@@ -131,21 +131,21 @@ export function DemoRequestsDashboard() {
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm text-slate-300 mb-3">
                       <div className="flex items-center gap-1.5">
-                        <Building2 size={14} className="text-slate-500" />
+                        <Building2 size={14} className="text-slate-400" />
                         <span className="truncate">{req.organization}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <Mail size={14} className="text-slate-500" />
+                        <Mail size={14} className="text-slate-400" />
                         <span className="truncate">{req.email}</span>
                       </div>
                       {req.county && (
                         <div className="flex items-center gap-1.5">
-                          <MapPin size={14} className="text-slate-500" />
+                          <MapPin size={14} className="text-slate-400" />
                           <span className="truncate">{req.county}</span>
                         </div>
                       )}
                     </div>
-                    <div className="flex items-center gap-4 text-xs text-slate-500">
+                    <div className="flex items-center gap-4 text-xs text-slate-400">
                       <span>{req.agencyType}</span>
                       <span>{req.role}</span>
                       <span><Clock size={12} className="inline mr-1" />{new Date(req.submittedAt).toLocaleDateString()}</span>

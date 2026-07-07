@@ -42,11 +42,11 @@ export function OrganizationOnboardingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
+    <div className="min-h-screen bg-white/10 flex items-center justify-center p-4">
       <div className="w-full max-w-lg bg-white/5 rounded-2xl shadow-xl p-8">
         <h1 className="text-xl font-bold mb-2">Set up your law firm</h1>
         <p className="text-sm text-slate-300 mb-6">Step {stepIndex + 1} of {STEPS.length}: {currentStep}</p>
-        {error && <div className="bg-red-50 text-red-700 p-3 rounded mb-4 text-sm">{error}</div>}
+        {error && <div className="bg-red-500/10 text-red-300 p-3 rounded mb-4 text-sm">{error}</div>}
 
         {currentStep === 'profile' && (
           <div className="space-y-3">

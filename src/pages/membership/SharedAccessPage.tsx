@@ -109,7 +109,7 @@ export function SharedAccessPage() {
                       <FolderOpen size={15} className="text-gold-light" /> Cases
                     </h3>
                     {ws.cases.length === 0 ? (
-                      <p className="text-sm text-slate-500">No cases shared</p>
+                      <p className="text-sm text-slate-400">No cases shared</p>
                     ) : (
                       <ul className="space-y-1.5">
                         {ws.cases.map((c) => (
@@ -127,7 +127,7 @@ export function SharedAccessPage() {
                       <FileText size={15} className="text-gold-light" /> Shared Documents
                     </h3>
                     {ws.disclosures.filter((d) => d.status === 'published').length === 0 ? (
-                      <p className="text-sm text-slate-500">No published documents</p>
+                      <p className="text-sm text-slate-400">No published documents</p>
                     ) : (
                       <ul className="space-y-1.5">
                         {ws.disclosures.filter((d) => d.status === 'published').map((d) => (

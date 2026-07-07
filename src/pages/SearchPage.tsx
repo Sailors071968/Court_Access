@@ -113,7 +113,7 @@ export function SearchPage() {
 
       {/* Mode selector */}
       <div className="flex flex-wrap items-center gap-2">
-        <span className="text-xs text-slate-500 mr-1">Mode:</span>
+        <span className="text-xs text-slate-400 mr-1">Mode:</span>
         {SEARCH_MODES.map((m) => (
           <button
             key={m.id}

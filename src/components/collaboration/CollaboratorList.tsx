@@ -51,7 +51,7 @@ export function CollaboratorList({ collaborators, onInvite, onEditPermissions, c
                 <div className="flex items-center gap-2 mt-0.5">
                   <Badge variant="gold">{ROLE_LABELS[c.role]}</Badge>
                   {c.permissions && c.permissions.length > 0 && (
-                    <span className="text-[11px] text-slate-500">{c.permissions.length} permissions</span>
+                    <span className="text-[11px] text-slate-400">{c.permissions.length} permissions</span>
                   )}
                 </div>
               </div>

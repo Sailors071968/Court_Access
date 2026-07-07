@@ -23,7 +23,7 @@ export function Breadcrumbs({ items, className }: { items: Crumb[]; className?: 
                 {item.label}
               </span>
             )}
-            {!isLast && <ChevronRight size={14} className="text-slate-600" />}
+            {!isLast && <ChevronRight size={14} className="text-slate-500" />}
           </span>
         );
       })}

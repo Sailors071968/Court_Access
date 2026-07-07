@@ -116,7 +116,7 @@ export default function SceneMarkerTool({
           Evidence Markers ({markers.length})
         </h3>
         <svg
-          className={`w-4 h-4 text-slate-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+          className={`w-4 h-4 text-slate-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -186,7 +186,7 @@ export default function SceneMarkerTool({
               <button
                 onClick={handleCustomAdd}
                 disabled={!customLabel.trim()}
-                className="w-full py-1.5 text-xs bg-blue-600 text-white rounded hover:bg-blue-500 disabled:bg-gray-600 disabled:text-slate-500 transition-colors"
+                className="w-full py-1.5 text-xs bg-blue-600 text-white rounded hover:bg-blue-500 disabled:bg-gray-600 disabled:text-slate-400 transition-colors"
               >
                 Add Marker
               </button>

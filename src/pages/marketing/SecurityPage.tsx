@@ -81,21 +81,21 @@ export function SecurityPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {SECURITY_FEATURES.map(({ icon: Icon, title, description }) => (
-              <div key={title} className="p-5 rounded-xl border border-slate-200 bg-white/5">
-                <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center mb-3">
+              <div key={title} className="p-5 rounded-xl border border-white/10 bg-white/5">
+                <div className="w-10 h-10 bg-emerald-500/15 rounded-lg flex items-center justify-center mb-3">
                   <Icon className="text-emerald-600" size={20} />
                 </div>
-                <h3 className="font-semibold text-slate-900 mb-2 text-sm">{title}</h3>
-                <p className="text-xs text-slate-600 leading-relaxed">{description}</p>
+                <h3 className="font-semibold text-white mb-2 text-sm">{title}</h3>
+                <p className="text-xs text-slate-300 leading-relaxed">{description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="py-16 bg-slate-50 border-y border-slate-200">
+      <section className="py-16 bg-white/5 border-y border-white/10">
         <div className="max-w-3xl mx-auto px-4 text-center">
-          <p className="text-slate-600 mb-6">
+          <p className="text-slate-300 mb-6">
             For security inquiries, contact{' '}
             <a href="mailto:security@courtaccess.net" className="text-amber-600 hover:underline">
               security@courtaccess.net

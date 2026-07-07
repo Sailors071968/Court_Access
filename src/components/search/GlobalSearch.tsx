@@ -155,11 +155,11 @@ function GlobalSearchPalette({ onClose }: { onClose: () => void }) {
             onChange={(e) => setQuery(e.target.value)}
             onKeyDown={onKeyDown}
             placeholder="Search cases, evidence, statutes, people, citations…"
-            className="flex-1 bg-transparent text-white text-base placeholder:text-slate-500 focus:outline-none"
+            className="flex-1 bg-transparent text-white text-base placeholder:text-slate-400 focus:outline-none"
             aria-label="Search query"
           />
-          {loading && <span className="text-xs text-slate-500">…</span>}
-          <button onClick={onClose} className="p-1 text-slate-500 hover:text-white rounded-lg" aria-label="Close search">
+          {loading && <span className="text-xs text-slate-400">…</span>}
+          <button onClick={onClose} className="p-1 text-slate-400 hover:text-white rounded-lg" aria-label="Close search">
             <X size={16} />
           </button>
         </div>
@@ -187,7 +187,7 @@ function GlobalSearchPalette({ onClose }: { onClose: () => void }) {
             {!hasQuery ? (
               <SuggestionLists pinned={pinned} saved={saved} recents={recents} onPick={runQuery} />
             ) : results.length === 0 && !loading ? (
-              <div className="px-3 py-10 text-center text-sm text-slate-500">No results for “{query}”.</div>
+              <div className="px-3 py-10 text-center text-sm text-slate-400">No results for “{query}”.</div>
             ) : (
               results.map((r, i) => (
                 <div key={r.id} onMouseEnter={() => setActiveIndex(i)}>
@@ -209,7 +209,7 @@ function GlobalSearchPalette({ onClose }: { onClose: () => void }) {
               <dl className="mt-4 space-y-2 text-xs">
                 {preview.confidence !== undefined && (
                   <div className="flex items-center justify-between">
-                    <dt className="text-slate-500">Confidence</dt>
+                    <dt className="text-slate-400">Confidence</dt>
                     <dd><ConfidenceIndicator score={preview.confidence} showLabel={false} /></dd>
                   </div>
                 )}
@@ -234,7 +234,7 @@ function GlobalSearchPalette({ onClose }: { onClose: () => void }) {
         </div>
 
         {/* Footer / shortcuts */}
-        <div className="flex items-center justify-between px-4 py-2.5 border-t border-white/10 text-[11px] text-slate-500">
+        <div className="flex items-center justify-between px-4 py-2.5 border-t border-white/10 text-[11px] text-slate-400">
           <div className="flex items-center gap-3">
             <span className="flex items-center gap-1"><CornerDownLeft size={12} /> open</span>
             <span>↑↓ navigate</span>
@@ -250,7 +250,7 @@ function GlobalSearchPalette({ onClose }: { onClose: () => void }) {
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between">
-      <dt className="text-slate-500">{label}</dt>
+      <dt className="text-slate-400">{label}</dt>
       <dd className="text-slate-300 capitalize">{value}</dd>
     </div>
   );
@@ -270,7 +270,7 @@ function SuggestionLists({
   const section = (title: string, icon: ReactNode, items: string[]) =>
     items.length > 0 && (
       <div className="mb-3">
-        <p className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-slate-500">
+        <p className="flex items-center gap-1.5 px-3 py-1.5 text-[11px] font-semibold uppercase tracking-wide text-slate-400">
           {icon} {title}
         </p>
         {items.slice(0, 5).map((q) => (
@@ -279,7 +279,7 @@ function SuggestionLists({
             onClick={() => onPick(q)}
             className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-sm text-slate-300 hover:bg-white/5 hover:text-white"
           >
-            <Search size={13} className="text-slate-500" />
+            <Search size={13} className="text-slate-400" />
             {q}
           </button>
         ))}
@@ -289,9 +289,9 @@ function SuggestionLists({
   if (pinned.length === 0 && saved.length === 0 && recents.length === 0) {
     return (
       <div className="px-3 py-10 text-center">
-        <Search size={28} className="mx-auto text-slate-600 mb-3" />
+        <Search size={28} className="mx-auto text-slate-300 mb-3" />
         <p className="text-sm text-slate-400">Search across cases, evidence, statutes, people, and the knowledge graph.</p>
-        <p className="text-xs text-slate-600 mt-1">Try natural language, a citation like “PC 459”, or boolean queries.</p>
+        <p className="text-xs text-slate-300 mt-1">Try natural language, a citation like “PC 459”, or boolean queries.</p>
       </div>
     );
   }

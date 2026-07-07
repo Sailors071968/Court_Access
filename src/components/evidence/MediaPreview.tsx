@@ -65,8 +65,8 @@ export function MediaPreview({ fileName, mimeType, url, pageCount, duration, cla
         <Icon size={24} />
       </div>
       <p className="text-sm font-medium text-white truncate max-w-full">{fileName}</p>
-      <p className="text-xs text-slate-500 mt-1 capitalize">{kind} preview</p>
-      <div className="flex items-center gap-3 mt-3 text-[11px] text-slate-500">
+      <p className="text-xs text-slate-400 mt-1 capitalize">{kind} preview</p>
+      <div className="flex items-center gap-3 mt-3 text-[11px] text-slate-400">
         {pageCount ? <span>{pageCount} pages</span> : null}
         {duration ? <span>{Math.round(duration)}s</span> : null}
       </div>

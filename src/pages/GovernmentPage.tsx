@@ -20,7 +20,7 @@ import {
 
 function GovNav() {
   return (
-    <nav className="bg-slate-900 border-b border-slate-800">
+    <nav className="bg-slate-900 border-b border-gold">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3">
@@ -36,7 +36,7 @@ function GovNav() {
           </div>
           <div className="flex items-center gap-3">
             <Link to="/login" className="text-sm text-slate-300 hover:text-white font-medium transition-colors">Sign In</Link>
-            <Link to="/register" className="text-sm bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-4 py-2 rounded-lg transition-colors">
+            <Link to="/register" className="text-sm bg-amber-500 hover:bg-amber-400 text-white font-semibold px-4 py-2 rounded-lg transition-colors">
               Get Started
             </Link>
           </div>
@@ -69,7 +69,7 @@ function GovHero() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               to="/register"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-3.5 rounded-xl text-lg transition-colors"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-white font-semibold px-8 py-3.5 rounded-xl text-lg transition-colors"
             >
               Start Your First Case Analysis
               <ArrowRight size={20} />
@@ -99,21 +99,21 @@ function GovAgencies() {
     <section className="py-20 bg-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
             Designed for Government Deployment
           </h2>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+          <p className="text-lg text-slate-300 max-w-2xl mx-auto">
             CourtAccess supports deployment across the criminal justice system.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {agencies.map((agency) => (
-            <div key={agency.title} className="bg-white/5 rounded-2xl shadow-md border border-slate-200 p-8 hover:shadow-lg transition-shadow">
-              <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center mb-6">
-                <agency.icon className="text-slate-700" size={24} />
+            <div key={agency.title} className="bg-white/5 rounded-2xl shadow-md border border-white/10 p-8 hover:shadow-lg transition-shadow">
+              <div className="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center mb-6">
+                <agency.icon className="text-slate-200" size={24} />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">{agency.title}</h3>
-              <p className="text-slate-600 leading-relaxed">{agency.description}</p>
+              <h3 className="text-xl font-bold text-white mb-3">{agency.title}</h3>
+              <p className="text-slate-300 leading-relaxed">{agency.description}</p>
             </div>
           ))}
         </div>
@@ -171,25 +171,25 @@ function GovEnterprise() {
   ];
 
   return (
-    <section className="py-20 bg-slate-50">
+    <section className="py-20 bg-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
             Enterprise Capabilities
           </h2>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {sections.map((section) => (
-            <div key={section.title} className="bg-white/5 rounded-2xl shadow-md border border-slate-200 p-8">
+            <div key={section.title} className="bg-white/5 rounded-2xl shadow-md border border-white/10 p-8">
               <div className="flex items-center gap-3 mb-6">
-                <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center">
+                <div className="w-10 h-10 rounded-xl bg-amber-500/15 flex items-center justify-center">
                   <section.icon className="text-amber-600" size={20} />
                 </div>
-                <h3 className="text-lg font-bold text-slate-900">{section.title}</h3>
+                <h3 className="text-lg font-bold text-white">{section.title}</h3>
               </div>
               <ul className="space-y-3">
                 {section.items.map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-sm text-slate-700">
+                  <li key={item} className="flex items-start gap-2 text-sm text-slate-200">
                     <CheckCircle2 className="text-emerald-500 shrink-0 mt-0.5" size={16} />
                     <span>{item}</span>
                   </li>
@@ -215,19 +215,19 @@ function GovProcess() {
     <section className="py-20 bg-white/5">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
             Procurement Process
           </h2>
         </div>
         <div className="space-y-6">
           {steps.map((s) => (
-            <div key={s.step} className="flex items-start gap-6 p-6 bg-slate-50 rounded-xl border border-slate-200">
+            <div key={s.step} className="flex items-start gap-6 p-6 bg-white/5 rounded-xl border border-white/10">
               <div className="w-10 h-10 rounded-full bg-amber-500 text-white flex items-center justify-center font-bold text-lg shrink-0">
                 {s.step}
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-slate-900 mb-1">{s.title}</h3>
-                <p className="text-slate-600">{s.description}</p>
+                <h3 className="text-lg font-semibold text-white mb-1">{s.title}</h3>
+                <p className="text-slate-300">{s.description}</p>
               </div>
             </div>
           ))}
@@ -250,7 +250,7 @@ function GovCta() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             to="/register"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-3.5 rounded-xl text-lg transition-colors"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-white font-semibold px-8 py-3.5 rounded-xl text-lg transition-colors"
           >
             Create Your Account
             <ArrowRight size={20} />
@@ -269,7 +269,7 @@ function GovCta() {
 
 function GovFooter() {
   return (
-    <footer className="bg-slate-900 border-t border-slate-800 py-12">
+    <footer className="bg-slate-900 border-t border-gold py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
@@ -278,11 +278,11 @@ function GovFooter() {
             </div>
             <span className="text-white font-semibold">CourtAccess</span>
           </div>
-          <div className="flex items-center gap-2 text-sm text-slate-500">
+          <div className="flex items-center gap-2 text-sm text-slate-400">
             <Lock size={14} />
             <span>Criminal Evidence Intelligence Platform</span>
           </div>
-          <p className="text-sm text-slate-500">&copy; {new Date().getFullYear()} CourtAccess. All rights reserved.</p>
+          <p className="text-sm text-slate-400">&copy; {new Date().getFullYear()} CourtAccess. All rights reserved.</p>
         </div>
       </div>
     </footer>

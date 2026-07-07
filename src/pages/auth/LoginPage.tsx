@@ -111,7 +111,7 @@ export function LoginPage() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="w-full px-4 py-2.5 rounded-lg border border-white/10 bg-navy-900/60 text-white text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/30"
+                  className="w-full px-4 py-2.5 rounded-lg border border-white/10 bg-navy-900/60 text-white text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/30"
                   placeholder="you@courtaccess.com"
                   required
                   autoComplete="email"
@@ -128,7 +128,7 @@ export function LoginPage() {
                     type={showPassword ? 'text' : 'password'}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="w-full px-4 py-2.5 rounded-lg border border-white/10 bg-navy-900/60 text-white text-sm placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/30 pr-10"
+                    className="w-full px-4 py-2.5 rounded-lg border border-white/10 bg-navy-900/60 text-white text-sm placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-gold/40 focus:border-gold/30 pr-10"
                     placeholder="Enter your password"
                     required
                     autoComplete="current-password"
@@ -136,7 +136,7 @@ export function LoginPage() {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 hover:text-slate-300"
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-300"
                     aria-label={showPassword ? 'Hide password' : 'Show password'}
                   >
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}

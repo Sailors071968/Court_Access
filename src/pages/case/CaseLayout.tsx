@@ -32,7 +32,7 @@ export function CaseLayout() {
   }, [caseId]);
 
   if (!user) return null;
-  if (loading) return <div className="max-w-7xl mx-auto text-center py-12"><Loader2 size={24} className="animate-spin text-slate-500 mx-auto mb-2" /><p className="text-slate-400">Loading case...</p></div>;
+  if (loading) return <div className="max-w-7xl mx-auto text-center py-12"><Loader2 size={24} className="animate-spin text-slate-400 mx-auto mb-2" /><p className="text-slate-400">Loading case...</p></div>;
   if (!currentCase) return <div className="max-w-7xl mx-auto p-8 text-center text-slate-400">No cases found.</div>;
   const permissions = ROLE_PERMISSIONS[user.role];
 

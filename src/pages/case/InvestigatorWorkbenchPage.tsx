@@ -97,7 +97,7 @@ export function InvestigatorWorkbenchPage() {
       key: 'source',
       header: 'Source',
       render: (w) => (
-        <span className="text-xs text-slate-500">
+        <span className="text-xs text-slate-400">
           {w.citations.map((c) => `${c.type}:${c.id.slice(0, 6)}`).join(', ') || 'manual'}
         </span>
       ),

@@ -37,7 +37,7 @@ export function AppLayout() {
           </main>
           <TrustBar />
           <footer className="px-6 lg:px-8 py-3 border-t border-white/5 bg-navy-900/60">
-            <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-500">
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-2 text-xs text-slate-400">
               <span>CourtAccess — Criminal Case Intelligence Platform</span>
               <span>AI-generated insights are not legal advice. Consult your attorney.</span>
             </div>

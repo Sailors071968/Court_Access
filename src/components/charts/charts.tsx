@@ -63,7 +63,7 @@ export function BarChart({
             style={{ height: `${(d.value / max) * (height - 24)}px` }}
             title={`${d.label}: ${d.value}`}
           />
-          <span className="text-[10px] text-slate-500 truncate w-full text-center">{d.label}</span>
+          <span className="text-[10px] text-slate-400 truncate w-full text-center">{d.label}</span>
         </div>
       ))}
     </div>
@@ -115,7 +115,7 @@ export function DonutChart({
           <li key={d.label} className="flex items-center gap-2 text-xs text-slate-300">
             <span className="w-2.5 h-2.5 rounded-sm" style={{ background: DONUT_COLORS[i % DONUT_COLORS.length] }} />
             {d.label}
-            <span className="text-slate-500 tabular-nums">{d.value}</span>
+            <span className="text-slate-400 tabular-nums">{d.value}</span>
           </li>
         ))}
       </ul>

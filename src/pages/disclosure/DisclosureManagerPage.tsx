@@ -74,7 +74,7 @@ export function DisclosureManagerPage() {
   return (
     <div className="max-w-5xl mx-auto space-y-6 p-4">
       <div>
-        <Link to={`/cases/${caseId}/documents`} className="text-sm text-amber-600 hover:text-amber-700">
+        <Link to={`/cases/${caseId}/documents`} className="text-sm text-amber-600 hover:text-amber-300">
           ← Back to documents
         </Link>
         <h1 className="text-2xl font-bold text-white mt-1">Disclosure Manager</h1>
@@ -142,7 +142,7 @@ export function DisclosureManagerPage() {
                   key={pkg.packageId}
                   className={`text-sm p-3 rounded-lg border cursor-pointer transition-colors ${
                     selectedPkg?.packageId === pkg.packageId
-                      ? 'border-amber-400 bg-amber-50'
+                      ? 'border-amber-400 bg-amber-500/10'
                       : 'border-white/10 hover:bg-white/5'
                   }`}
                   onClick={() => setSelectedPkg(pkg)}
@@ -150,7 +150,7 @@ export function DisclosureManagerPage() {
                   <div className="font-medium">{pkg.recipientType}</div>
                   <div className="text-slate-400 text-xs">Doc {pkg.documentId.slice(0, 8)}… · {pkg.status}</div>
                   {pkg.publishedAt && (
-                    <div className="text-xs text-slate-500">
+                    <div className="text-xs text-slate-400">
                       Published {new Date(pkg.publishedAt).toLocaleString()}
                     </div>
                   )}
@@ -162,7 +162,7 @@ export function DisclosureManagerPage() {
       </div>
 
       {(selectedPkg || comparePkg) && (
-        <div className="bg-slate-50 rounded-xl border border-white/10 p-5 grid md:grid-cols-2 gap-4">
+        <div className="bg-white/5 rounded-xl border border-white/10 p-5 grid md:grid-cols-2 gap-4">
           <div>
             <h3 className="font-semibold flex items-center gap-2 mb-2">
               <Eye size={18} /> Preview

@@ -112,8 +112,8 @@ export function OrganizationSettingsPage() {
         <p className="text-slate-300">Manage your law firm, offices, team, and branding.</p>
       </div>
 
-      {error && <div className="bg-red-50 text-red-700 p-3 rounded-lg text-sm">{error}</div>}
-      {message && <div className="bg-green-50 text-green-700 p-3 rounded-lg text-sm">{message}</div>}
+      {error && <div className="bg-red-500/10 text-red-300 p-3 rounded-lg text-sm">{error}</div>}
+      {message && <div className="bg-emerald-500/10 text-emerald-300 p-3 rounded-lg text-sm">{message}</div>}
 
       {analytics && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">

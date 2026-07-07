@@ -130,7 +130,7 @@ export function ContactSalesPage() {
             </Link>
             <div className="flex items-center gap-3">
               <Link to="/login" className="text-sm text-slate-300 hover:text-white font-medium transition-colors">Sign In</Link>
-              <Link to="/register" className="text-sm bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-4 py-2 rounded-lg transition-colors">
+              <Link to="/register" className="text-sm bg-amber-500 hover:bg-amber-400 text-white font-semibold px-4 py-2 rounded-lg transition-colors">
                 Get Started
               </Link>
             </div>
@@ -269,7 +269,7 @@ export function ContactSalesPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-amber-500 hover:bg-amber-400 text-slate-900 py-3 rounded-lg font-semibold text-sm transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full bg-amber-500 hover:bg-amber-400 text-white py-3 rounded-lg font-semibold text-sm transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isSubmitting ? 'Sending...' : (
                   <>

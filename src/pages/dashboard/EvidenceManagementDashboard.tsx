@@ -248,7 +248,7 @@ export function EvidenceManagementDashboard() {
           {/* Filters */}
           <div className="flex flex-wrap items-center gap-3">
             <div className="relative flex-1 min-w-[200px] max-w-md">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 type="text"
                 value={searchQuery}
@@ -258,7 +258,7 @@ export function EvidenceManagementDashboard() {
               />
             </div>
             <div className="relative">
-              <Filter size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+              <Filter size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
@@ -272,7 +272,7 @@ export function EvidenceManagementDashboard() {
                 <option value="corrupted">Corrupted</option>
                 <option value="disregarded">Disregarded</option>
               </select>
-              <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-500 pointer-events-none" />
+              <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
             </div>
             <label className="inline-flex items-center gap-2 text-sm text-slate-300 cursor-pointer">
               <input
@@ -313,7 +313,7 @@ export function EvidenceManagementDashboard() {
                       <tr
                         key={upload.fileId}
                         className={`border-b border-white/10 hover:bg-white/5 transition-colors ${
-                          upload.deleted ? 'opacity-50 bg-red-50/30' : ''
+                          upload.deleted ? 'opacity-50 bg-red-500/10/30' : ''
                         }`}
                       >
                         <td className="px-4 py-3">
@@ -321,7 +321,7 @@ export function EvidenceManagementDashboard() {
                             <FileTypeIcon fileType={upload.fileType} />
                             <div>
                               <p className="font-medium text-white text-xs">{upload.fileName}</p>
-                              <p className="text-[10px] text-slate-500">{formatFileSize(upload.fileSizeBytes)}</p>
+                              <p className="text-[10px] text-slate-400">{formatFileSize(upload.fileSizeBytes)}</p>
                             </div>
                           </div>
                         </td>
@@ -329,7 +329,7 @@ export function EvidenceManagementDashboard() {
                         <td className="px-4 py-3 text-slate-200 text-xs">{upload.defendantName}</td>
                         <td className="px-4 py-3 text-xs">
                           <p className="text-slate-200">{new Date(upload.uploadedAt).toLocaleDateString()}</p>
-                          <p className="text-[10px] text-slate-500">{upload.uploadedBy} ({upload.uploadedByRole})</p>
+                          <p className="text-[10px] text-slate-400">{upload.uploadedBy} ({upload.uploadedByRole})</p>
                         </td>
                         <td className="px-4 py-3">
                           <span className="text-xs text-slate-400">{getFileTypeLabel(upload.fileType)}</span>
@@ -343,13 +343,13 @@ export function EvidenceManagementDashboard() {
                               <span className="text-[10px] px-1.5 py-0.5 bg-white/10 text-slate-300 rounded font-medium">DISREGARD</span>
                             )}
                             {upload.isEvidenceArtifact && (
-                              <span className="text-[10px] px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded font-medium">ARTIFACT</span>
+                              <span className="text-[10px] px-1.5 py-0.5 bg-blue-500/15 text-blue-300 rounded font-medium">ARTIFACT</span>
                             )}
                             {upload.flaggedCorrupted && (
-                              <span className="text-[10px] px-1.5 py-0.5 bg-red-100 text-red-700 rounded font-medium">CORRUPT</span>
+                              <span className="text-[10px] px-1.5 py-0.5 bg-red-500/15 text-red-300 rounded font-medium">CORRUPT</span>
                             )}
                             {upload.deleted && (
-                              <span className="text-[10px] px-1.5 py-0.5 bg-red-100 text-red-700 rounded font-medium">DELETED</span>
+                              <span className="text-[10px] px-1.5 py-0.5 bg-red-500/15 text-red-300 rounded font-medium">DELETED</span>
                             )}
                           </div>
                         </td>
@@ -417,8 +417,8 @@ export function EvidenceManagementDashboard() {
           </div>
 
           {/* Security note */}
-          <div className="p-3 bg-amber-50 rounded-lg border border-amber-200">
-            <p className="text-xs text-amber-800">
+          <div className="p-3 bg-amber-500/10 rounded-lg border border-amber-500/20">
+            <p className="text-xs text-amber-300">
               <AlertTriangle size={12} className="inline mr-1" />
               <strong>Security:</strong> Clients cannot delete files. Client users may only mark uploads as &quot;Disregard&quot;.
               All admin actions are logged in the audit trail.
@@ -459,7 +459,7 @@ export function EvidenceManagementDashboard() {
                       </td>
                       <td className="px-4 py-3 text-xs">
                         <span className="inline-flex items-center gap-1">
-                          <User size={10} className="text-slate-500" />
+                          <User size={10} className="text-slate-400" />
                           {entry.adminUser}
                         </span>
                       </td>
@@ -540,8 +540,8 @@ function ActionButton({ icon, title, onClick, danger }: { icon: React.ReactNode;
       title={title}
       className={`p-1.5 rounded-lg transition-colors ${
         danger
-          ? 'text-red-400 hover:bg-red-50 hover:text-red-600'
-          : 'text-slate-500 hover:bg-white/10 hover:text-slate-300'
+          ? 'text-red-400 hover:bg-red-500/10 hover:text-red-600'
+          : 'text-slate-400 hover:bg-white/10 hover:text-slate-300'
       }`}
     >
       {icon}
@@ -552,10 +552,10 @@ function ActionButton({ icon, title, onClick, danger }: { icon: React.ReactNode;
 function AnalysisStatusBadge({ status }: { status: AnalysisStatus }) {
   const config: Record<AnalysisStatus, { bg: string; text: string; label: string }> = {
     pending: { bg: 'bg-white/10', text: 'text-slate-200', label: 'Pending' },
-    analyzing: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Analyzing' },
-    analyzed: { bg: 'bg-emerald-100', text: 'text-emerald-700', label: 'Analyzed' },
-    failed: { bg: 'bg-red-100', text: 'text-red-700', label: 'Failed' },
-    corrupted: { bg: 'bg-red-100', text: 'text-red-700', label: 'Corrupted' },
+    analyzing: { bg: 'bg-blue-500/15', text: 'text-blue-300', label: 'Analyzing' },
+    analyzed: { bg: 'bg-emerald-500/15', text: 'text-emerald-300', label: 'Analyzed' },
+    failed: { bg: 'bg-red-500/15', text: 'text-red-300', label: 'Failed' },
+    corrupted: { bg: 'bg-red-500/15', text: 'text-red-300', label: 'Corrupted' },
     disregarded: { bg: 'bg-white/10', text: 'text-slate-400', label: 'Disregarded' },
   };
   const c = config[status];
@@ -568,14 +568,14 @@ function AnalysisStatusBadge({ status }: { status: AnalysisStatus }) {
 
 function ActionTypeBadge({ type }: { type: EvidenceAdminAction['actionType'] }) {
   const config: Record<string, { bg: string; text: string; label: string }> = {
-    delete: { bg: 'bg-red-100', text: 'text-red-700', label: 'Delete' },
-    restore: { bg: 'bg-emerald-100', text: 'text-emerald-700', label: 'Restore' },
-    reprocess: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Reprocess' },
-    mark_artifact: { bg: 'bg-purple-100', text: 'text-purple-700', label: 'Mark Artifact' },
-    flag_corrupted: { bg: 'bg-red-100', text: 'text-red-700', label: 'Flag Corrupted' },
-    unflag_corrupted: { bg: 'bg-emerald-100', text: 'text-emerald-700', label: 'Unflag Corrupted' },
+    delete: { bg: 'bg-red-500/15', text: 'text-red-300', label: 'Delete' },
+    restore: { bg: 'bg-emerald-500/15', text: 'text-emerald-300', label: 'Restore' },
+    reprocess: { bg: 'bg-blue-500/15', text: 'text-blue-300', label: 'Reprocess' },
+    mark_artifact: { bg: 'bg-violet-500/15', text: 'text-violet-300', label: 'Mark Artifact' },
+    flag_corrupted: { bg: 'bg-red-500/15', text: 'text-red-300', label: 'Flag Corrupted' },
+    unflag_corrupted: { bg: 'bg-emerald-500/15', text: 'text-emerald-300', label: 'Unflag Corrupted' },
     disregard: { bg: 'bg-white/10', text: 'text-slate-200', label: 'Disregard' },
-    undo_disregard: { bg: 'bg-emerald-100', text: 'text-emerald-700', label: 'Undo Disregard' },
+    undo_disregard: { bg: 'bg-emerald-500/15', text: 'text-emerald-300', label: 'Undo Disregard' },
   };
   const c = config[type] || { bg: 'bg-white/10', text: 'text-slate-300', label: type };
   return (
@@ -587,14 +587,14 @@ function ActionTypeBadge({ type }: { type: EvidenceAdminAction['actionType'] }) 
 
 function FileTypeIcon({ fileType }: { fileType: string }) {
   const color = fileType.startsWith('image/')
-    ? 'text-purple-500 bg-purple-50'
+    ? 'text-purple-500 bg-violet-500/10'
     : fileType.startsWith('video/')
-    ? 'text-red-500 bg-red-50'
+    ? 'text-red-500 bg-red-500/10'
     : fileType.includes('pdf')
-    ? 'text-red-500 bg-red-50'
+    ? 'text-red-500 bg-red-500/10'
     : fileType.includes('spreadsheet') || fileType.includes('excel')
-    ? 'text-emerald-500 bg-emerald-50'
-    : 'text-blue-500 bg-blue-50';
+    ? 'text-emerald-500 bg-emerald-500/10'
+    : 'text-blue-500 bg-blue-500/10';
 
   return (
     <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${color}`}>

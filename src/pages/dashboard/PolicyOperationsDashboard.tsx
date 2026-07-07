@@ -55,11 +55,11 @@ interface DashboardData {
 function getCpraStatusBadge(status: string) {
   const map: Record<string, { bg: string; text: string; label: string }> = {
     none: { bg: 'bg-white/10', text: 'text-slate-300', label: 'None' },
-    draft: { bg: 'bg-blue-50', text: 'text-blue-700', label: 'Draft' },
-    sent: { bg: 'bg-indigo-50', text: 'text-indigo-700', label: 'Sent' },
-    awaiting_response: { bg: 'bg-yellow-50', text: 'text-yellow-700', label: 'Awaiting' },
+    draft: { bg: 'bg-blue-500/10', text: 'text-blue-300', label: 'Draft' },
+    sent: { bg: 'bg-indigo-500/10', text: 'text-indigo-300', label: 'Sent' },
+    awaiting_response: { bg: 'bg-amber-500/10', text: 'text-amber-300', label: 'Awaiting' },
     follow_up: { bg: 'bg-orange-50', text: 'text-orange-700', label: 'Follow-up' },
-    received: { bg: 'bg-green-50', text: 'text-green-700', label: 'Received' },
+    received: { bg: 'bg-emerald-500/10', text: 'text-emerald-300', label: 'Received' },
     closed: { bg: 'bg-white/5', text: 'text-slate-400', label: 'Closed' },
   };
   const s = map[status] ?? map.none;
@@ -71,9 +71,9 @@ function getCpraStatusBadge(status: string) {
 }
 
 function getCoverageColor(score: number): string {
-  if (score >= 70) return 'text-green-700 bg-green-50';
-  if (score >= 40) return 'text-yellow-700 bg-yellow-50';
-  return 'text-red-700 bg-red-50';
+  if (score >= 70) return 'text-emerald-300 bg-emerald-500/10';
+  if (score >= 40) return 'text-amber-300 bg-amber-500/10';
+  return 'text-red-300 bg-red-500/10';
 }
 
 // ---------------------------------------------------------------------------
@@ -130,7 +130,7 @@ export function PolicyOperationsDashboard() {
             </div>
           ) : (
             <>
-              <RefreshCw size={24} className="animate-spin text-slate-500" />
+              <RefreshCw size={24} className="animate-spin text-slate-400" />
               <span className="ml-3 text-slate-400">Loading operations dashboard...</span>
             </>
           )}
@@ -156,7 +156,7 @@ export function PolicyOperationsDashboard() {
           <button
             onClick={() => setShowFilters(!showFilters)}
             className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
-              showFilters ? 'bg-blue-50 text-blue-700' : 'bg-white/10 text-slate-300 hover:bg-gray-200'
+              showFilters ? 'bg-blue-500/10 text-blue-300' : 'bg-white/10 text-slate-300 hover:bg-gray-200'
             }`}
           >
             <Filter size={14} />
@@ -177,7 +177,7 @@ export function PolicyOperationsDashboard() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-blue-50 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg bg-blue-500/10 flex items-center justify-center">
               <Building2 size={20} className="text-gold-light" />
             </div>
             <div>
@@ -188,7 +188,7 @@ export function PolicyOperationsDashboard() {
         </Card>
         <Card>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-green-50 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg bg-emerald-500/10 flex items-center justify-center">
               <FileSearch size={20} className="text-green-600" />
             </div>
             <div>
@@ -199,7 +199,7 @@ export function PolicyOperationsDashboard() {
         </Card>
         <Card>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-purple-50 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg bg-violet-500/10 flex items-center justify-center">
               <Shield size={20} className="text-purple-600" />
             </div>
             <div>
@@ -210,7 +210,7 @@ export function PolicyOperationsDashboard() {
         </Card>
         <Card>
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-lg bg-yellow-50 flex items-center justify-center">
+            <div className="w-10 h-10 rounded-lg bg-amber-500/10 flex items-center justify-center">
               <Mail size={20} className="text-yellow-600" />
             </div>
             <div>
@@ -241,7 +241,7 @@ export function PolicyOperationsDashboard() {
             <div>
               <label className="block text-xs font-medium text-slate-400 mb-1">Search</label>
               <div className="relative">
-                <Search size={14} className="absolute left-3 top-2.5 text-slate-500" />
+                <Search size={14} className="absolute left-3 top-2.5 text-slate-400" />
                 <input
                   type="text"
                   value={searchTerm}
@@ -321,12 +321,12 @@ export function PolicyOperationsDashboard() {
                       <p className="font-medium text-white">{agency.agencyName}</p>
                       <p className="text-xs text-slate-400">
                         {[agency.city, agency.county].filter(Boolean).join(', ')}
-                        {agency.agencyType && <span className="ml-1 text-slate-500">({agency.agencyType})</span>}
+                        {agency.agencyType && <span className="ml-1 text-slate-400">({agency.agencyType})</span>}
                       </p>
                     </div>
                   </td>
                   <td className="py-3 px-3 text-right">
-                    <span className="font-medium text-green-700">{agency.policiesFound}</span>
+                    <span className="font-medium text-emerald-300">{agency.policiesFound}</span>
                   </td>
                   <td className="py-3 px-3 text-right">
                     <span className={agency.policiesMissing > 200 ? 'font-medium text-red-600' : 'text-slate-300'}>
@@ -341,7 +341,7 @@ export function PolicyOperationsDashboard() {
                   <td className="py-3 px-3 text-center text-xs text-slate-400">
                     {agency.lastCrawl
                       ? new Date(agency.lastCrawl).toLocaleDateString()
-                      : <span className="text-slate-500">Never</span>}
+                      : <span className="text-slate-400">Never</span>}
                   </td>
                   <td className="py-3 px-3 text-center">
                     {getCpraStatusBadge(agency.cpraStatus)}
@@ -353,7 +353,7 @@ export function PolicyOperationsDashboard() {
                         {new Date(agency.cpraDeadline).toLocaleDateString()}
                       </span>
                     ) : (
-                      <span className="text-xs text-slate-500">-</span>
+                      <span className="text-xs text-slate-400">-</span>
                     )}
                   </td>
                   <td className="py-3 px-3 text-center">
@@ -368,7 +368,7 @@ export function PolicyOperationsDashboard() {
                         )}
                       </span>
                     ) : (
-                      <span className="text-xs text-slate-500">-</span>
+                      <span className="text-xs text-slate-400">-</span>
                     )}
                   </td>
                 </tr>

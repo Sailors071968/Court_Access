@@ -78,18 +78,18 @@ export function HowItWorksPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-8">
             {STEPS.map(({ icon: Icon, step, title, description }) => (
-              <div key={step} className="flex gap-6 p-6 rounded-xl border border-slate-200 bg-white/5">
+              <div key={step} className="flex gap-6 p-6 rounded-xl border border-white/10 bg-white/5">
                 <div className="shrink-0 flex flex-col items-center gap-2">
                   <div className="w-12 h-12 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold">
                     {step}
                   </div>
-                  <div className="w-10 h-10 bg-slate-100 rounded-lg flex items-center justify-center">
-                    <Icon className="text-slate-600" size={20} />
+                  <div className="w-10 h-10 bg-white/10 rounded-lg flex items-center justify-center">
+                    <Icon className="text-slate-300" size={20} />
                   </div>
                 </div>
                 <div>
-                  <h2 className="text-xl font-bold text-slate-900 mb-2">{title}</h2>
-                  <p className="text-slate-600 leading-relaxed">{description}</p>
+                  <h2 className="text-xl font-bold text-white mb-2">{title}</h2>
+                  <p className="text-slate-300 leading-relaxed">{description}</p>
                 </div>
               </div>
             ))}
@@ -97,12 +97,12 @@ export function HowItWorksPage() {
         </div>
       </section>
 
-      <section className="py-16 bg-slate-50 border-t border-slate-200">
+      <section className="py-16 bg-white/5 border-t border-white/10">
         <div className="max-w-3xl mx-auto px-4 text-center">
-          <h2 className="text-2xl font-bold text-slate-900 mb-4">Ready to start?</h2>
+          <h2 className="text-2xl font-bold text-white mb-4">Ready to start?</h2>
           <Link
             to="/register"
-            className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-6 py-3 rounded-lg transition-colors"
+            className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
           >
             Start Free 30-Day Trial
             <ArrowRight size={18} />

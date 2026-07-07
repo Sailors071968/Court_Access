@@ -58,16 +58,43 @@ export const SURFACES = {
   sidebar: 'bg-navy-900 text-slate-200 border-r border-white/5',
 } as const;
 
-/** Typography scale */
+/**
+ * Canonical Typography Scale — single source of truth for all text roles.
+ * Colors are chosen to meet or exceed WCAG AA contrast on the navy surfaces
+ * (#0a0f1c / #0f172a / bg-white/5). Muted roles never go below slate-400
+ * (~7:1 on navy) so no text blends into the background.
+ *
+ * Mirror classes exist in index.css (.ca-display, .ca-page-title, ...) for
+ * non-token contexts; keep the two in sync.
+ */
 export const TYPOGRAPHY = {
+  // Display / hero
   display: 'text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-[1.05] text-white',
+  // Headings
   h1: 'text-3xl sm:text-4xl font-bold tracking-tight text-white',
   h2: 'text-2xl sm:text-3xl font-bold tracking-tight text-white',
   h3: 'text-xl font-semibold text-white',
   h4: 'text-lg font-semibold text-white',
-  body: 'text-base text-slate-300 leading-relaxed',
-  bodyLg: 'text-lg text-slate-300 leading-relaxed',
+  // Semantic aliases (preferred names going forward)
+  pageTitle: 'text-2xl sm:text-3xl font-bold tracking-tight text-white',
+  sectionTitle: 'text-lg font-semibold text-white tracking-tight',
+  cardTitle: 'text-base font-semibold text-slate-100',
+  subtitle: 'text-sm font-medium text-slate-300',
+  // Body & supporting text (all AA on navy)
+  body: 'text-base text-slate-200 leading-relaxed',
+  bodyLg: 'text-lg text-slate-200 leading-relaxed',
+  secondary: 'text-sm text-slate-300 leading-relaxed',
   caption: 'text-sm text-slate-400',
+  metadata: 'text-xs font-medium uppercase tracking-wide text-slate-400',
+  helpText: 'text-xs text-slate-400 leading-relaxed',
+  // Tables
+  tableHeader: 'text-xs font-semibold uppercase tracking-wide text-slate-300',
+  tableCell: 'text-sm text-slate-200',
+  // Controls
+  label: 'text-sm font-medium text-slate-200',
+  button: 'text-sm font-semibold tracking-tight',
+  badge: 'text-xs font-semibold',
+  nav: 'text-sm font-medium',
   overline: 'text-xs font-semibold uppercase tracking-[0.18em] text-gold-light',
 } as const;
 

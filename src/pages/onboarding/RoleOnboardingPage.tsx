@@ -137,7 +137,7 @@ export function RoleOnboardingPage() {
           <button
             type="button"
             onClick={() => (isLast ? finish() : setStepIndex((i) => i + 1))}
-            className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-6 py-2.5 rounded-lg"
+            className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-white font-semibold px-6 py-2.5 rounded-lg"
           >
             {isLast ? 'Go to Dashboard' : 'Continue'}
             <ArrowRight size={16} />

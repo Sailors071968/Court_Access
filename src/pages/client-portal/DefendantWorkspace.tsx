@@ -96,9 +96,9 @@ export function DefendantWorkspace() {
                 {i <= currentPhase ? (
                   <CheckCircle2 size={18} className="text-gold-light" />
                 ) : (
-                  <Circle size={18} className="text-slate-600" />
+                  <Circle size={18} className="text-slate-300" />
                 )}
-                <span className={`text-[11px] text-center ${i === currentPhase ? 'text-white font-medium' : 'text-slate-500'}`}>
+                <span className={`text-[11px] text-center ${i === currentPhase ? 'text-white font-medium' : 'text-slate-400'}`}>
                   {phase}
                 </span>
               </div>

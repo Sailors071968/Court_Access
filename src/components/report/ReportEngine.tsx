@@ -94,18 +94,18 @@ export function ReportEngine({ report, reportType, onChangeType, onDrillCitation
           {/* Paper */}
           <div
             className={cn(
-              'report-paper mx-auto w-full bg-[#faf8f3] text-slate-800 rounded-xl shadow-elevated',
+              'report-paper mx-auto w-full bg-[#faf8f3] text-slate-100 rounded-xl shadow-elevated',
               mode === 'pdf' && 'ring-1 ring-black/10',
               mode === 'word' && 'max-w-3xl',
             )}
           >
             <div className="px-8 py-8 sm:px-12 sm:py-10">
-              <header className="border-b border-slate-200 pb-5 mb-6">
-                <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-700">
+              <header className="border-b border-white/10 pb-5 mb-6">
+                <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-amber-300">
                   <FileText size={13} /> CourtAccess · {MODE_LABEL[mode]} preview
                 </div>
-                <h1 className="text-3xl font-bold text-slate-900 mt-3 font-serif">{report.title}</h1>
-                {report.subtitle && <p className="text-sm text-slate-500 mt-1">{report.subtitle}</p>}
+                <h1 className="text-3xl font-bold text-white mt-3 font-serif">{report.title}</h1>
+                {report.subtitle && <p className="text-sm text-slate-400 mt-1">{report.subtitle}</p>}
                 <p className="text-xs text-slate-400 mt-1">Generated {new Date(report.generatedAt).toLocaleString()}</p>
               </header>
 
@@ -114,7 +114,7 @@ export function ReportEngine({ report, reportType, onChangeType, onDrillCitation
                 .filter(Boolean)
                 .map((section) => (
                   <section key={section.id} className="mb-8 last:mb-0">
-                    <h2 className="text-lg font-bold text-slate-900 font-serif mb-3">{section.title}</h2>
+                    <h2 className="text-lg font-bold text-white font-serif mb-3">{section.title}</h2>
                     <div className="space-y-3">
                       {section.blocks.map((block, bi) => (
                         <ReportBlockView key={bi} block={block} onDrillCitation={onDrillCitation} />
@@ -124,10 +124,10 @@ export function ReportEngine({ report, reportType, onChangeType, onDrillCitation
                 ))}
 
               {mode === 'pdf' && report.sections.length > 1 && (
-                <div className="flex items-center justify-center gap-3 pt-4 border-t border-slate-200 print:hidden">
-                  <button onClick={() => setActiveSection((i) => Math.max(0, i - 1))} disabled={activeSection === 0} className="text-slate-500 disabled:opacity-40"><ChevronLeft size={16} /></button>
-                  <span className="text-xs text-slate-500">Page {activeSection + 1} / {report.sections.length}</span>
-                  <button onClick={() => setActiveSection((i) => Math.min(report.sections.length - 1, i + 1))} disabled={activeSection === report.sections.length - 1} className="text-slate-500 disabled:opacity-40"><ChevronRight size={16} /></button>
+                <div className="flex items-center justify-center gap-3 pt-4 border-t border-white/10 print:hidden">
+                  <button onClick={() => setActiveSection((i) => Math.max(0, i - 1))} disabled={activeSection === 0} className="text-slate-400 disabled:opacity-40"><ChevronLeft size={16} /></button>
+                  <span className="text-xs text-slate-400">Page {activeSection + 1} / {report.sections.length}</span>
+                  <button onClick={() => setActiveSection((i) => Math.min(report.sections.length - 1, i + 1))} disabled={activeSection === report.sections.length - 1} className="text-slate-400 disabled:opacity-40"><ChevronRight size={16} /></button>
                 </div>
               )}
             </div>
@@ -143,36 +143,36 @@ export function ReportEngine({ report, reportType, onChangeType, onDrillCitation
 function ReportBlockView({ block, onDrillCitation }: { block: ReportBlock; onDrillCitation?: (ref: CitationRef) => void }) {
   switch (block.kind) {
     case 'paragraph':
-      return <p className="text-[15px] leading-7 text-slate-700 font-serif">{block.text}</p>;
+      return <p className="text-[15px] leading-7 text-slate-200 font-serif">{block.text}</p>;
     case 'list':
       return block.ordered ? (
-        <ol className="list-decimal list-inside space-y-1 text-[15px] text-slate-700">{block.items.map((it, i) => <li key={i}>{it}</li>)}</ol>
+        <ol className="list-decimal list-inside space-y-1 text-[15px] text-slate-200">{block.items.map((it, i) => <li key={i}>{it}</li>)}</ol>
       ) : (
-        <ul className="list-disc list-inside space-y-1 text-[15px] text-slate-700">{block.items.map((it, i) => <li key={i}>{it}</li>)}</ul>
+        <ul className="list-disc list-inside space-y-1 text-[15px] text-slate-200">{block.items.map((it, i) => <li key={i}>{it}</li>)}</ul>
       );
     case 'keyvalue':
       return (
         <dl className="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-1.5">
           {block.rows.map((r, i) => (
             <div key={i} className="flex justify-between border-b border-slate-100 py-1">
-              <dt className="text-sm text-slate-500">{r.label}</dt>
-              <dd className="text-sm font-medium text-slate-800">{r.value}</dd>
+              <dt className="text-sm text-slate-400">{r.label}</dt>
+              <dd className="text-sm font-medium text-slate-100">{r.value}</dd>
             </div>
           ))}
         </dl>
       );
     case 'table':
       return (
-        <table className="w-full text-sm border border-slate-200">
+        <table className="w-full text-sm border border-white/10">
           <thead>
-            <tr className="bg-slate-100">
-              {block.headers.map((h) => <th key={h} className="text-left py-2 px-3 font-semibold text-slate-600 border-b border-slate-200">{h}</th>)}
+            <tr className="bg-white/10">
+              {block.headers.map((h) => <th key={h} className="text-left py-2 px-3 font-semibold text-slate-300 border-b border-white/10">{h}</th>)}
             </tr>
           </thead>
           <tbody>
             {block.rows.map((row, ri) => (
-              <tr key={ri} className="odd:bg-white/5 even:bg-slate-50/60">
-                {row.map((cell, ci) => <td key={ci} className="py-2 px-3 text-slate-700 border-b border-slate-100 align-top">{cell || '—'}</td>)}
+              <tr key={ri} className="odd:bg-white/5 even:bg-white/5/60">
+                {row.map((cell, ci) => <td key={ci} className="py-2 px-3 text-slate-200 border-b border-slate-100 align-top">{cell || '—'}</td>)}
               </tr>
             ))}
             {block.rows.length === 0 && <tr><td colSpan={block.headers.length} className="py-3 px-3 text-center text-slate-400">No entries.</td></tr>}
@@ -186,7 +186,7 @@ function ReportBlockView({ block, onDrillCitation }: { block: ReportBlock; onDri
             <button
               key={i}
               onClick={() => onDrillCitation?.(ref)}
-              className="inline-flex items-center gap-1 rounded-md border border-amber-300 bg-amber-50 px-2 py-0.5 text-[11px] font-medium text-amber-800 hover:bg-amber-100"
+              className="inline-flex items-center gap-1 rounded-md border border-amber-300 bg-amber-500/10 px-2 py-0.5 text-[11px] font-medium text-amber-300 hover:bg-amber-500/15"
             >
               {ref.type}:{ref.label ?? ref.id.slice(0, 6)}
             </button>
@@ -195,15 +195,15 @@ function ReportBlockView({ block, onDrillCitation }: { block: ReportBlock; onDri
       );
     case 'callout':
       return (
-        <div className={cn('rounded-lg border px-3 py-2 text-sm', block.tone === 'danger' ? 'border-red-200 bg-red-50 text-red-700' : block.tone === 'warning' ? 'border-amber-200 bg-amber-50 text-amber-800' : 'border-blue-200 bg-blue-50 text-blue-700')}>
+        <div className={cn('rounded-lg border px-3 py-2 text-sm', block.tone === 'danger' ? 'border-red-500/20 bg-red-500/10 text-red-300' : block.tone === 'warning' ? 'border-amber-500/20 bg-amber-500/10 text-amber-300' : 'border-blue-500/20 bg-blue-500/10 text-blue-300')}>
           {block.text}
         </div>
       );
     case 'humanReview':
       return (
-        <div className="flex items-center gap-2 rounded-lg border border-amber-300 bg-amber-50 px-3 py-2">
-          <UserCheck size={16} className="text-amber-700" />
-          <span className="text-sm text-amber-800"><strong>{block.count}</strong> item{block.count === 1 ? '' : 's'} require human review. {block.note}</span>
+        <div className="flex items-center gap-2 rounded-lg border border-amber-300 bg-amber-500/10 px-3 py-2">
+          <UserCheck size={16} className="text-amber-300" />
+          <span className="text-sm text-amber-300"><strong>{block.count}</strong> item{block.count === 1 ? '' : 's'} require human review. {block.note}</span>
         </div>
       );
     default:
@@ -244,7 +244,7 @@ function PresentationDeck({ report, onClose }: { report: ReportDoc; onClose: () 
       </div>
       <div className="flex items-center justify-between px-6 py-4 border-t border-white/10">
         <button onClick={() => setI(Math.max(0, i - 1))} disabled={i === 0} className="inline-flex items-center gap-1 text-sm text-slate-300 hover:text-white disabled:opacity-40"><ChevronLeft size={16} /> Previous</button>
-        <span className="text-xs text-slate-500">{i + 1} / {report.sections.length}</span>
+        <span className="text-xs text-slate-400">{i + 1} / {report.sections.length}</span>
         <button onClick={() => setI(Math.min(report.sections.length - 1, i + 1))} disabled={i === report.sections.length - 1} className="inline-flex items-center gap-1 text-sm text-slate-300 hover:text-white disabled:opacity-40">Next <ChevronRight size={16} /></button>
       </div>
     </div>

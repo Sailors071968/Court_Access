@@ -55,7 +55,7 @@ export function EvidenceProcessingTrace() {
       case 'completed': return <CheckCircle size={14} className="text-green-500" />;
       case 'failed': return <XCircle size={14} className="text-red-500" />;
       case 'running': return <RefreshCw size={14} className="text-blue-500 animate-spin" />;
-      case 'pending': return <Clock size={14} className="text-slate-500" />;
+      case 'pending': return <Clock size={14} className="text-slate-400" />;
     }
   };
 
@@ -73,7 +73,7 @@ export function EvidenceProcessingTrace() {
 
       {/* Filters */}
       <div className="flex items-center gap-3">
-        <Filter size={14} className="text-slate-500" />
+        <Filter size={14} className="text-slate-400" />
         <select
           value={filterStage}
           onChange={(e) => setFilterStage(e.target.value)}
@@ -98,14 +98,14 @@ export function EvidenceProcessingTrace() {
       {/* Log Table */}
       {isLoading ? (
         <div className="flex items-center justify-center py-12">
-          <Loader2 size={20} className="animate-spin text-slate-500" />
+          <Loader2 size={20} className="animate-spin text-slate-400" />
           <span className="ml-2 text-sm text-slate-400">Loading processing logs...</span>
         </div>
       ) : filtered.length === 0 ? (
         <div className="text-center py-12 bg-white/5 rounded-xl border border-white/10">
           <Activity size={48} className="mx-auto mb-3 text-gray-300" />
           <p className="text-sm text-slate-400">No processing logs available yet.</p>
-          <p className="text-xs text-slate-500 mt-1">Upload evidence to see processing activity.</p>
+          <p className="text-xs text-slate-400 mt-1">Upload evidence to see processing activity.</p>
         </div>
       ) : (
       <div className="bg-white/5 rounded-xl border border-white/10 overflow-hidden">

@@ -314,7 +314,7 @@ export default function ExhibitViewer() {
         <div className="flex items-center gap-4">
           <h1 className="text-lg font-bold text-white">3D Trial Exhibit Generator</h1>
           {sceneName && (
-            <span className="text-sm text-slate-500">{sceneName}</span>
+            <span className="text-sm text-slate-400">{sceneName}</span>
           )}
         </div>
         <div className="flex items-center gap-2">
@@ -353,7 +353,7 @@ export default function ExhibitViewer() {
                     </svg>
                   </div>
                   <h2 className="text-2xl font-bold text-white mb-2">Create 3D Scene</h2>
-                  <p className="text-slate-500 text-sm">
+                  <p className="text-slate-400 text-sm">
                     Enter an address or location to generate an interactive 3D courtroom exhibit.
                   </p>
                 </div>
@@ -370,7 +370,7 @@ export default function ExhibitViewer() {
                   <button
                     onClick={handleCreateScene}
                     disabled={isLoading || !address.trim()}
-                    className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-500 disabled:bg-gray-600 disabled:text-slate-500 transition-colors text-sm"
+                    className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-500 disabled:bg-gray-600 disabled:text-slate-400 transition-colors text-sm"
                   >
                     {isLoading ? 'Generating Scene...' : 'Generate 3D Scene'}
                   </button>
@@ -392,7 +392,7 @@ export default function ExhibitViewer() {
                       <button
                         key={addr}
                         onClick={() => { setAddress(addr); }}
-                        className="text-left py-2 px-3 bg-gray-800 border border-gray-700 rounded text-xs text-slate-500 hover:text-white hover:border-gray-600 transition-colors"
+                        className="text-left py-2 px-3 bg-gray-800 border border-gray-700 rounded text-xs text-slate-400 hover:text-white hover:border-gray-600 transition-colors"
                       >
                         {addr}
                       </button>

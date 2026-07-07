@@ -84,15 +84,15 @@ const caseStudies = [
 ];
 
 const colorMap: Record<string, { bg: string; text: string; border: string; light: string }> = {
-  amber: { bg: 'bg-amber-100', text: 'text-amber-700', border: 'border-amber-200', light: 'bg-amber-50' },
-  blue: { bg: 'bg-blue-100', text: 'text-blue-700', border: 'border-blue-200', light: 'bg-blue-50' },
-  emerald: { bg: 'bg-emerald-100', text: 'text-emerald-700', border: 'border-emerald-200', light: 'bg-emerald-50' },
-  purple: { bg: 'bg-purple-100', text: 'text-purple-700', border: 'border-purple-200', light: 'bg-purple-50' },
+  amber: { bg: 'bg-amber-500/15', text: 'text-amber-300', border: 'border-amber-500/20', light: 'bg-amber-500/10' },
+  blue: { bg: 'bg-blue-500/15', text: 'text-blue-300', border: 'border-blue-500/20', light: 'bg-blue-500/10' },
+  emerald: { bg: 'bg-emerald-500/15', text: 'text-emerald-300', border: 'border-emerald-500/20', light: 'bg-emerald-500/10' },
+  purple: { bg: 'bg-violet-500/15', text: 'text-violet-300', border: 'border-violet-500/20', light: 'bg-violet-500/10' },
 };
 
 function CaseStudyNav() {
   return (
-    <nav className="bg-slate-900 border-b border-slate-800">
+    <nav className="bg-slate-900 border-b border-gold">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3">
@@ -108,7 +108,7 @@ function CaseStudyNav() {
           </div>
           <div className="flex items-center gap-3">
             <Link to="/login" className="text-sm text-slate-300 hover:text-white font-medium transition-colors">Sign In</Link>
-            <Link to="/register" className="text-sm bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-4 py-2 rounded-lg transition-colors">
+            <Link to="/register" className="text-sm bg-amber-500 hover:bg-amber-400 text-white font-semibold px-4 py-2 rounded-lg transition-colors">
               Get Started
             </Link>
           </div>
@@ -141,9 +141,9 @@ export function CaseStudiesPage() {
       </section>
 
       {/* Disclaimer */}
-      <section className="py-6 bg-amber-50 border-b border-amber-100">
+      <section className="py-6 bg-amber-500/10 border-b border-amber-100">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-sm text-amber-800 text-center">
+          <p className="text-sm text-amber-300 text-center">
             <strong>Note:</strong> All case studies presented below use fictional scenarios and sanitized data
             for demonstration purposes. No real case information is depicted.
           </p>
@@ -156,7 +156,7 @@ export function CaseStudiesPage() {
           {caseStudies.map((cs) => {
             const colors = colorMap[cs.color];
             return (
-              <article key={cs.id} className="bg-white/5 rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
+              <article key={cs.id} className="bg-white/5 rounded-2xl shadow-lg border border-white/10 overflow-hidden">
                 {/* Header */}
                 <div className={`${colors.light} ${colors.border} border-b p-8`}>
                   <div className="flex items-start gap-4">
@@ -164,8 +164,8 @@ export function CaseStudiesPage() {
                       <cs.icon className={colors.text} size={24} />
                     </div>
                     <div>
-                      <h2 className="text-2xl font-bold text-slate-900 mb-1">{cs.title}</h2>
-                      <p className="text-sm text-slate-500">{cs.subtitle}</p>
+                      <h2 className="text-2xl font-bold text-white mb-1">{cs.title}</h2>
+                      <p className="text-sm text-slate-400">{cs.subtitle}</p>
                     </div>
                   </div>
                 </div>
@@ -173,27 +173,27 @@ export function CaseStudiesPage() {
                 <div className="p-8 space-y-6">
                   {/* Description */}
                   <div>
-                    <p className="text-slate-700 leading-relaxed">{cs.description}</p>
+                    <p className="text-slate-200 leading-relaxed">{cs.description}</p>
                   </div>
 
                   {/* Challenge */}
                   <div>
-                    <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-2">Challenge</h3>
-                    <p className="text-slate-600 leading-relaxed">{cs.challenge}</p>
+                    <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wide mb-2">Challenge</h3>
+                    <p className="text-slate-300 leading-relaxed">{cs.challenge}</p>
                   </div>
 
                   {/* Solution */}
                   <div>
-                    <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-2">How CourtAccess Helped</h3>
-                    <p className="text-slate-600 leading-relaxed">{cs.solution}</p>
+                    <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wide mb-2">How CourtAccess Helped</h3>
+                    <p className="text-slate-300 leading-relaxed">{cs.solution}</p>
                   </div>
 
                   {/* Results */}
                   <div>
-                    <h3 className="text-sm font-semibold text-slate-500 uppercase tracking-wide mb-3">Results</h3>
+                    <h3 className="text-sm font-semibold text-slate-400 uppercase tracking-wide mb-3">Results</h3>
                     <ul className="space-y-2">
                       {cs.results.map((result) => (
-                        <li key={result} className="flex items-start gap-2 text-sm text-slate-700">
+                        <li key={result} className="flex items-start gap-2 text-sm text-slate-200">
                           <ChevronRight className={`${colors.text} shrink-0 mt-0.5`} size={14} />
                           <span>{result}</span>
                         </li>
@@ -219,7 +219,7 @@ export function CaseStudiesPage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               to="/register"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-3.5 rounded-xl text-lg transition-colors"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-white font-semibold px-8 py-3.5 rounded-xl text-lg transition-colors"
             >
               Start Your First Case Analysis
               <ArrowRight size={20} />
@@ -235,7 +235,7 @@ export function CaseStudiesPage() {
       </section>
 
       {/* Footer */}
-      <footer className="bg-slate-900 border-t border-slate-800 py-8">
+      <footer className="bg-slate-900 border-t border-gold py-8">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
             <div className="flex items-center gap-3">
@@ -244,11 +244,11 @@ export function CaseStudiesPage() {
               </div>
               <span className="text-white font-semibold">CourtAccess</span>
             </div>
-            <div className="flex items-center gap-2 text-sm text-slate-500">
+            <div className="flex items-center gap-2 text-sm text-slate-400">
               <Lock size={14} />
               <span>Criminal Evidence Intelligence Platform</span>
             </div>
-            <p className="text-sm text-slate-500">&copy; {new Date().getFullYear()} CourtAccess. All rights reserved.</p>
+            <p className="text-sm text-slate-400">&copy; {new Date().getFullYear()} CourtAccess. All rights reserved.</p>
           </div>
         </div>
       </footer>

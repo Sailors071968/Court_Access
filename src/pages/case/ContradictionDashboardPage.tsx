@@ -61,8 +61,8 @@ type DoctrineMatchDisplay = ApiDoctrineMatch;
 function ConfidenceBadge({ confidence }: { confidence: number }) {
   const pct = Math.round(confidence * 100);
   let color = 'bg-white/10 text-slate-200';
-  if (pct >= 80) color = 'bg-red-100 text-red-700';
-  else if (pct >= 60) color = 'bg-amber-100 text-amber-700';
+  if (pct >= 80) color = 'bg-red-500/15 text-red-300';
+  else if (pct >= 60) color = 'bg-amber-500/15 text-amber-300';
 
   return (
     <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs font-medium ${color}`}>
@@ -73,9 +73,9 @@ function ConfidenceBadge({ confidence }: { confidence: number }) {
 
 function PriorityBadge({ priority }: { priority: string }) {
   const styles: Record<string, string> = {
-    critical: 'bg-red-100 text-red-800 border-red-200',
+    critical: 'bg-red-500/15 text-red-300 border-red-500/20',
     high: 'bg-orange-100 text-orange-800 border-orange-200',
-    medium: 'bg-yellow-100 text-yellow-800 border-yellow-200',
+    medium: 'bg-amber-500/15 text-amber-300 border-amber-500/20',
     low: 'bg-white/10 text-slate-200 border-white/10',
   };
 
@@ -103,19 +103,19 @@ function SeverityBadge({ severity }: { severity: string }) {
 
 function ContradictionTypeBadge({ type }: { type: string }) {
   const labels: Record<string, { label: string; color: string }> = {
-    narrative_inconsistency: { label: 'Narrative', color: 'bg-purple-100 text-purple-700' },
-    timeline_conflict: { label: 'Timeline', color: 'bg-blue-100 text-blue-700' },
-    missing_bodycam_activation: { label: 'Missing BWC', color: 'bg-red-100 text-red-700' },
-    dispatch_report_inconsistency: { label: 'Dispatch', color: 'bg-indigo-100 text-indigo-700' },
+    narrative_inconsistency: { label: 'Narrative', color: 'bg-violet-500/15 text-violet-300' },
+    timeline_conflict: { label: 'Timeline', color: 'bg-blue-500/15 text-blue-300' },
+    missing_bodycam_activation: { label: 'Missing BWC', color: 'bg-red-500/15 text-red-300' },
+    dispatch_report_inconsistency: { label: 'Dispatch', color: 'bg-indigo-100 text-indigo-300' },
     witness_conflict: { label: 'Witness', color: 'bg-teal-100 text-teal-700' },
     consent_dispute: { label: 'Consent', color: 'bg-orange-100 text-orange-700' },
-    search_authority_gap: { label: 'Search Auth', color: 'bg-red-100 text-red-700' },
-    chain_of_custody_gap: { label: 'Chain of Custody', color: 'bg-amber-100 text-amber-700' },
+    search_authority_gap: { label: 'Search Auth', color: 'bg-red-500/15 text-red-300' },
+    chain_of_custody_gap: { label: 'Chain of Custody', color: 'bg-amber-500/15 text-amber-300' },
     evidence_appearance_disappearance: { label: 'Evidence', color: 'bg-pink-100 text-pink-700' },
-    action_sequence_conflict: { label: 'Sequence', color: 'bg-sky-100 text-sky-700' },
-    force_justification_gap: { label: 'Force', color: 'bg-red-100 text-red-800' },
-    missing_miranda: { label: 'Miranda', color: 'bg-violet-100 text-violet-700' },
-    location_inconsistency: { label: 'Location', color: 'bg-emerald-100 text-emerald-700' },
+    action_sequence_conflict: { label: 'Sequence', color: 'bg-sky-100 text-sky-300' },
+    force_justification_gap: { label: 'Force', color: 'bg-red-500/15 text-red-300' },
+    missing_miranda: { label: 'Miranda', color: 'bg-violet-100 text-violet-300' },
+    location_inconsistency: { label: 'Location', color: 'bg-emerald-500/15 text-emerald-300' },
     identity_inconsistency: { label: 'Identity', color: 'bg-cyan-100 text-cyan-700' },
     count_discrepancy: { label: 'Count', color: 'bg-lime-100 text-lime-700' },
   };
@@ -239,12 +239,12 @@ export function ContradictionDashboardPage() {
           <button
             onClick={handleRunAnalysis}
             disabled={analyzing}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800 hover:bg-blue-200 transition-colors disabled:opacity-50"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full text-xs font-medium bg-blue-500/15 text-blue-300 hover:bg-blue-200 transition-colors disabled:opacity-50"
           >
             {analyzing ? <Loader2 size={12} className="animate-spin" /> : <RefreshCw size={12} />}
             {analyzing ? 'Analyzing...' : 'Run Analysis'}
           </button>
-          <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+          <span className="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-medium bg-emerald-500/15 text-emerald-300">
             CDE Active
           </span>
         </div>
@@ -253,15 +253,15 @@ export function ContradictionDashboardPage() {
       {/* Loading State */}
       {loading && (
         <div className="text-center py-12">
-          <Loader2 size={24} className="animate-spin text-slate-500 mx-auto mb-2" />
+          <Loader2 size={24} className="animate-spin text-slate-400 mx-auto mb-2" />
           <p className="text-slate-400">Loading contradiction analysis...</p>
         </div>
       )}
 
       {/* Error State */}
       {error && !loading && (
-        <div className="text-center py-8 bg-amber-50 rounded-lg border border-amber-200">
-          <p className="text-amber-700 text-sm">{error}</p>
+        <div className="text-center py-8 bg-amber-500/10 rounded-lg border border-amber-500/20">
+          <p className="text-amber-300 text-sm">{error}</p>
           <button onClick={loadData} className="mt-2 text-sm text-gold-light hover:text-gold-bright font-medium">Retry</button>
         </div>
       )}
@@ -270,7 +270,7 @@ export function ContradictionDashboardPage() {
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-red-100 rounded-lg">
+            <div className="p-2 bg-red-500/15 rounded-lg">
               <AlertTriangle size={20} className="text-red-600" />
             </div>
             <div>
@@ -294,7 +294,7 @@ export function ContradictionDashboardPage() {
 
         <Card>
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-purple-100 rounded-lg">
+            <div className="p-2 bg-violet-500/15 rounded-lg">
               <Shield size={20} className="text-purple-600" />
             </div>
             <div>
@@ -306,7 +306,7 @@ export function ContradictionDashboardPage() {
 
         <Card>
           <div className="flex items-center gap-3">
-            <div className="p-2 bg-blue-100 rounded-lg">
+            <div className="p-2 bg-blue-500/15 rounded-lg">
               <Scale size={20} className="text-gold-light" />
             </div>
             <div>
@@ -342,12 +342,12 @@ export function ContradictionDashboardPage() {
           <Card>
             <h3 className="text-sm font-semibold text-white mb-4">Analysis Summary</h3>
             <div className="grid grid-cols-3 gap-4">
-              <div className="text-center p-4 bg-red-50 rounded-lg">
-                <p className="text-3xl font-bold text-red-700">{criticalCount}</p>
+              <div className="text-center p-4 bg-red-500/10 rounded-lg">
+                <p className="text-3xl font-bold text-red-300">{criticalCount}</p>
                 <p className="text-xs text-red-600 mt-1">High Confidence (&ge;80%)</p>
               </div>
-              <div className="text-center p-4 bg-amber-50 rounded-lg">
-                <p className="text-3xl font-bold text-amber-700">{significantCount}</p>
+              <div className="text-center p-4 bg-amber-500/10 rounded-lg">
+                <p className="text-3xl font-bold text-amber-300">{significantCount}</p>
                 <p className="text-xs text-amber-600 mt-1">Medium Confidence (60-79%)</p>
               </div>
               <div className="text-center p-4 bg-white/5 rounded-lg">
@@ -428,20 +428,20 @@ export function ContradictionDashboardPage() {
                     {/* Event content */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <span className="text-xs font-mono text-slate-500">{te.canonicalTimestamp}</span>
+                        <span className="text-xs font-mono text-slate-400">{te.canonicalTimestamp}</span>
                         <span className={`inline-flex items-center px-2 py-0.5 rounded text-xs ${
                           te.timestampSource === 'cad_dispatch'
-                            ? 'bg-green-100 text-green-700'
+                            ? 'bg-emerald-500/15 text-emerald-300'
                             : te.timestampSource === 'bodycam_overlay'
-                              ? 'bg-blue-100 text-blue-700'
+                              ? 'bg-blue-500/15 text-blue-300'
                               : te.timestampSource === 'video_transcript'
-                                ? 'bg-purple-100 text-purple-700'
+                                ? 'bg-violet-500/15 text-violet-300'
                                 : 'bg-white/10 text-slate-200'
                         }`}>
                           {te.timestampSource.replace(/_/g, ' ')}
                         </span>
                         {hasContradiction && (
-                          <span className="inline-flex items-center px-2 py-0.5 rounded text-xs bg-red-100 text-red-700 font-medium">
+                          <span className="inline-flex items-center px-2 py-0.5 rounded text-xs bg-red-500/15 text-red-300 font-medium">
                             <AlertTriangle size={10} className="mr-1" />
                             Flagged
                           </span>
@@ -474,16 +474,16 @@ export function ContradictionDashboardPage() {
                 <div className="flex items-start justify-between">
                   <div className="flex items-start gap-3">
                     {expandedContradiction === c.contradictionId ? (
-                      <ChevronDown size={16} className="text-slate-500 mt-1 flex-shrink-0" />
+                      <ChevronDown size={16} className="text-slate-400 mt-1 flex-shrink-0" />
                     ) : (
-                      <ChevronRight size={16} className="text-slate-500 mt-1 flex-shrink-0" />
+                      <ChevronRight size={16} className="text-slate-400 mt-1 flex-shrink-0" />
                     )}
                     <div>
                       <div className="flex items-center gap-2 mb-2">
                         <ContradictionTypeBadge type={c.contradictionType} />
                         <ConfidenceBadge confidence={c.confidence} />
                         {c.timeRangeStart && (
-                          <span className="text-xs text-slate-500 font-mono">{c.timeRangeStart}</span>
+                          <span className="text-xs text-slate-400 font-mono">{c.timeRangeStart}</span>
                         )}
                       </div>
                       <p className="text-sm text-slate-200">{c.description}</p>
@@ -520,9 +520,9 @@ export function ContradictionDashboardPage() {
                       <h4 className="text-xs font-semibold text-slate-400 uppercase mb-2">Related Doctrine</h4>
                       <div className="space-y-2">
                         {doctrineMatches.filter((d) => d.contradictionId === c.contradictionId).map((d) => (
-                          <div key={d.doctrineRuleId} className="flex items-center gap-2 p-2 bg-purple-50 rounded">
+                          <div key={d.doctrineRuleId} className="flex items-center gap-2 p-2 bg-violet-500/10 rounded">
                             <Shield size={14} className="text-purple-500" />
-                            <span className="text-xs font-mono text-purple-700">{d.doctrineRuleId}</span>
+                            <span className="text-xs font-mono text-violet-300">{d.doctrineRuleId}</span>
                             <SeverityBadge severity={d.severity} />
                             <span className="text-xs text-slate-300">{d.matchDescription}</span>
                           </div>
@@ -567,7 +567,7 @@ export function ContradictionDashboardPage() {
               <tbody>
                 {doctrineMatches.map((d, idx) => (
                   <tr key={idx} className="border-b border-gray-50 hover:bg-white/5">
-                    <td className="py-3 px-4 font-mono text-blue-700 text-xs">{d.doctrineRuleId}</td>
+                    <td className="py-3 px-4 font-mono text-blue-300 text-xs">{d.doctrineRuleId}</td>
                     <td className="py-3 px-4"><SeverityBadge severity={d.severity} /></td>
                     <td className="py-3 px-4 text-slate-200">{d.matchDescription}</td>
                     <td className="py-3 px-4 text-slate-400 text-xs font-mono">{d.contradictionId}</td>
@@ -589,7 +589,7 @@ export function ContradictionDashboardPage() {
                   <div className="flex items-center gap-2 mb-2">
                     <PriorityBadge priority={r.priority} />
                     <ConfidenceBadge confidence={r.confidence} />
-                    <span className="text-xs text-slate-500 uppercase">{r.type.replace(/_/g, ' ')}</span>
+                    <span className="text-xs text-slate-400 uppercase">{r.type.replace(/_/g, ' ')}</span>
                   </div>
                   <h4 className="text-sm font-semibold text-white">{r.title}</h4>
                   <p className="text-sm text-slate-300 mt-2">{r.description}</p>
@@ -601,8 +601,8 @@ export function ContradictionDashboardPage() {
       )}
 
       {/* Guardrail Notice */}
-      <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-        <p className="text-xs text-blue-700">
+      <div className="p-4 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+        <p className="text-xs text-blue-300">
           <strong>Notice:</strong> All findings are presented as potential inconsistencies requiring human review.
           The Contradiction Detection Engine does not make determinations of wrongdoing. All language uses
           neutral, investigative framing. Findings should be verified by qualified legal counsel before use

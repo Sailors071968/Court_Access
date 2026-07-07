@@ -78,7 +78,7 @@ export function SitemapPage() {
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-10">
             {SITEMAP_SECTIONS.map((section) => (
               <div key={section.title}>
-                <h2 className="font-bold text-slate-900 mb-4 text-sm uppercase tracking-wide">
+                <h2 className="font-bold text-white mb-4 text-sm uppercase tracking-wide">
                   {section.title}
                 </h2>
                 <ul className="space-y-2">
@@ -86,7 +86,7 @@ export function SitemapPage() {
                     <li key={link.href}>
                       <Link
                         to={link.href}
-                        className="text-sm text-slate-600 hover:text-amber-600 transition-colors"
+                        className="text-sm text-slate-300 hover:text-amber-600 transition-colors"
                       >
                         {link.label}
                       </Link>

@@ -30,7 +30,7 @@ export function ClientPortalLayout() {
       <aside className="lg:w-64 bg-navy-900 border-b lg:border-b-0 lg:border-r border-white/5 shrink-0">
         <div className="p-6 border-b border-white/5">
           <BrandLogo variant="light" size="sm" linkTo="/client-portal/dashboard" />
-          <p className="text-xs text-slate-500 mt-3">Your case information</p>
+          <p className="text-xs text-slate-400 mt-3">Your case information</p>
         </div>
         <nav className="p-3 flex lg:flex-col gap-1 overflow-x-auto" aria-label="Client portal navigation">
           {NAV.map(({ to, label, icon: Icon }) => (

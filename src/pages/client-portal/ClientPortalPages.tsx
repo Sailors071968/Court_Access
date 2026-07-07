@@ -46,13 +46,13 @@ export function ClientPortalCourtDatesPage() {
             <h3 className="font-semibold text-white">{c.title}</h3>
             <p className="text-sm text-slate-400">{c.caseNumber}</p>
             {c.nextHearing && (
-              <p className="mt-2 text-amber-700 font-medium">
+              <p className="mt-2 text-amber-300 font-medium">
                 Next hearing: {new Date(c.nextHearing).toLocaleDateString()}
               </p>
             )}
             <Link
               to={`/cases/${c.caseId}/overview`}
-              className="inline-block mt-3 text-sm text-amber-600 hover:text-amber-700"
+              className="inline-block mt-3 text-sm text-amber-600 hover:text-amber-300"
             >
               View case details
             </Link>
@@ -73,11 +73,11 @@ export function ClientPortalMessagesPage() {
       <p className="text-slate-400">
         Open a case to view secure messages with your legal team.
       </p>
-      <Link to="/cases" className="text-amber-600 hover:text-amber-700 font-medium">
+      <Link to="/cases" className="text-amber-600 hover:text-amber-300 font-medium">
         Go to My Cases
       </Link>
       {user?.email && (
-        <p className="text-sm text-slate-500">Signed in as {user.email}</p>
+        <p className="text-sm text-slate-400">Signed in as {user.email}</p>
       )}
     </div>
   );
@@ -92,7 +92,7 @@ export function ClientPortalDocumentsPage() {
       <p className="text-slate-400">
         Documents shared with you through disclosure packages appear in each case.
       </p>
-      <Link to="/shared-access" className="text-amber-600 hover:text-amber-700 font-medium">
+      <Link to="/shared-access" className="text-amber-600 hover:text-amber-300 font-medium">
         View Shared Access
       </Link>
     </div>
@@ -104,7 +104,7 @@ export function ClientPortalEvidencePage() {
     <div className="max-w-3xl space-y-4">
       <h2 className="text-xl font-bold text-white">Evidence</h2>
       <p className="text-slate-400">Select a case to view or upload evidence.</p>
-      <Link to="/cases" className="text-amber-600 hover:text-amber-700 font-medium">
+      <Link to="/cases" className="text-amber-600 hover:text-amber-300 font-medium">
         Browse Cases
       </Link>
     </div>
@@ -116,7 +116,7 @@ export function ClientPortalTimelinePage() {
     <div className="max-w-3xl space-y-4">
       <h2 className="text-xl font-bold text-white">Case Timeline</h2>
       <p className="text-slate-400">Timeline events are available within each case.</p>
-      <Link to="/cases" className="text-amber-600 hover:text-amber-700 font-medium">
+      <Link to="/cases" className="text-amber-600 hover:text-amber-300 font-medium">
         Open a Case
       </Link>
     </div>
@@ -130,7 +130,7 @@ export function ClientPortalTasksPage() {
       <p className="text-slate-400">
         Investigative suggestions and tasks from your dashboard are tracked per case.
       </p>
-      <Link to="/client-portal/dashboard" className="text-amber-600 hover:text-amber-700 font-medium">
+      <Link to="/client-portal/dashboard" className="text-amber-600 hover:text-amber-300 font-medium">
         View Dashboard Tasks
       </Link>
     </div>
@@ -153,7 +153,7 @@ export function ClientPortalBillingPage() {
         <p className="text-sm text-slate-400">Subscription status</p>
         <p className="text-lg font-semibold text-white capitalize">{status || 'Loading...'}</p>
       </div>
-      <Link to="/settings" className="text-amber-600 hover:text-amber-700 font-medium">
+      <Link to="/settings" className="text-amber-600 hover:text-amber-300 font-medium">
         Manage Account & Billing
       </Link>
     </div>
@@ -166,7 +166,7 @@ export function ClientPortalNotificationsPage() {
       <h2 className="text-xl font-bold text-white flex items-center gap-2">
         <Bell size={22} /> Notifications
       </h2>
-      <Link to="/notifications" className="text-amber-600 hover:text-amber-700 font-medium">
+      <Link to="/notifications" className="text-amber-600 hover:text-amber-300 font-medium">
         Open Notifications Center
       </Link>
     </div>
@@ -178,7 +178,7 @@ export function ClientPortalUploadsPage() {
     <div className="max-w-3xl space-y-4">
       <h2 className="text-xl font-bold text-white">Upload Evidence</h2>
       <p className="text-slate-400">Upload evidence files from within a case evidence tab.</p>
-      <Link to="/cases" className="text-amber-600 hover:text-amber-700 font-medium">
+      <Link to="/cases" className="text-amber-600 hover:text-amber-300 font-medium">
         Select Case to Upload
       </Link>
     </div>

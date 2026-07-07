@@ -36,14 +36,14 @@ interface GovernmentLeadRecord {
 }
 
 const STATUS_PIPELINE: { key: string; label: string; color: string; icon: React.ElementType }[] = [
-  { key: 'new', label: 'New', color: 'bg-blue-100 text-blue-700', icon: UserPlus },
-  { key: 'contacted', label: 'Contacted', color: 'bg-amber-100 text-amber-700', icon: Phone },
-  { key: 'demo_scheduled', label: 'Demo Scheduled', color: 'bg-purple-100 text-purple-700', icon: Calendar },
-  { key: 'demo_completed', label: 'Demo Completed', color: 'bg-indigo-100 text-indigo-700', icon: CheckCircle2 },
+  { key: 'new', label: 'New', color: 'bg-blue-500/15 text-blue-300', icon: UserPlus },
+  { key: 'contacted', label: 'Contacted', color: 'bg-amber-500/15 text-amber-300', icon: Phone },
+  { key: 'demo_scheduled', label: 'Demo Scheduled', color: 'bg-violet-500/15 text-violet-300', icon: Calendar },
+  { key: 'demo_completed', label: 'Demo Completed', color: 'bg-indigo-100 text-indigo-300', icon: CheckCircle2 },
   { key: 'contract_discussion', label: 'Contract Discussion', color: 'bg-cyan-100 text-cyan-700', icon: FileText },
-  { key: 'pilot_active', label: 'Pilot Active', color: 'bg-emerald-100 text-emerald-700', icon: Rocket },
-  { key: 'closed_won', label: 'Closed Won', color: 'bg-green-100 text-green-700', icon: CheckCircle2 },
-  { key: 'closed_lost', label: 'Closed Lost', color: 'bg-red-100 text-red-700', icon: XCircle },
+  { key: 'pilot_active', label: 'Pilot Active', color: 'bg-emerald-500/15 text-emerald-300', icon: Rocket },
+  { key: 'closed_won', label: 'Closed Won', color: 'bg-emerald-500/15 text-emerald-300', icon: CheckCircle2 },
+  { key: 'closed_lost', label: 'Closed Lost', color: 'bg-red-500/15 text-red-300', icon: XCircle },
 ];
 
 const STORAGE_KEY = 'courtaccess_government_leads';
@@ -124,28 +124,28 @@ export function GovernmentOutreachDashboard() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-white/5 rounded-xl border border-white/10 p-4">
           <div className="flex items-center gap-2 mb-2">
-            <Building2 size={14} className="text-slate-500" />
+            <Building2 size={14} className="text-slate-400" />
             <span className="text-xs font-medium text-slate-400">Total Leads</span>
           </div>
           <p className="text-2xl font-bold text-white">{leads.length}</p>
         </div>
         <div className="bg-white/5 rounded-xl border border-white/10 p-4">
           <div className="flex items-center gap-2 mb-2">
-            <Rocket size={14} className="text-slate-500" />
+            <Rocket size={14} className="text-slate-400" />
             <span className="text-xs font-medium text-slate-400">Active Pilots</span>
           </div>
           <p className="text-2xl font-bold text-white">{statusCounts['pilot_active'] || 0}</p>
         </div>
         <div className="bg-white/5 rounded-xl border border-white/10 p-4">
           <div className="flex items-center gap-2 mb-2">
-            <TrendingUp size={14} className="text-slate-500" />
+            <TrendingUp size={14} className="text-slate-400" />
             <span className="text-xs font-medium text-slate-400">Seat Pipeline</span>
           </div>
           <p className="text-2xl font-bold text-white">{totalSeats}</p>
         </div>
         <div className="bg-white/5 rounded-xl border border-white/10 p-4">
           <div className="flex items-center gap-2 mb-2">
-            <CheckCircle2 size={14} className="text-slate-500" />
+            <CheckCircle2 size={14} className="text-slate-400" />
             <span className="text-xs font-medium text-slate-400">Closed Won</span>
           </div>
           <p className="text-2xl font-bold text-white">{statusCounts['closed_won'] || 0}</p>
@@ -157,7 +157,7 @@ export function GovernmentOutreachDashboard() {
         <button
           onClick={() => setFilter('all')}
           className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
-            filter === 'all' ? 'bg-amber-50 border-amber-300 text-amber-700' : 'bg-white/5 border-white/10 text-slate-300 hover:border-white/10'
+            filter === 'all' ? 'bg-amber-500/10 border-amber-300 text-amber-300' : 'bg-white/5 border-white/10 text-slate-300 hover:border-white/10'
           }`}
         >
           All ({leads.length})
@@ -167,7 +167,7 @@ export function GovernmentOutreachDashboard() {
             key={s.key}
             onClick={() => setFilter(filter === s.key ? 'all' : s.key)}
             className={`px-3 py-1.5 text-xs font-medium rounded-lg border transition-colors ${
-              filter === s.key ? 'bg-amber-50 border-amber-300 text-amber-700' : 'bg-white/5 border-white/10 text-slate-300 hover:border-white/10'
+              filter === s.key ? 'bg-amber-500/10 border-amber-300 text-amber-300' : 'bg-white/5 border-white/10 text-slate-300 hover:border-white/10'
             }`}
           >
             {s.label} ({statusCounts[s.key] || 0})
@@ -250,23 +250,23 @@ export function GovernmentOutreachDashboard() {
                     </div>
                     <div className="grid grid-cols-1 sm:grid-cols-4 gap-2 text-sm text-slate-300">
                       <div className="flex items-center gap-1.5">
-                        <UserPlus size={13} className="text-slate-500" />
+                        <UserPlus size={13} className="text-slate-400" />
                         <span className="truncate">{lead.contactName}</span>
                       </div>
                       {lead.email && (
                         <div className="flex items-center gap-1.5">
-                          <Mail size={13} className="text-slate-500" />
+                          <Mail size={13} className="text-slate-400" />
                           <span className="truncate">{lead.email}</span>
                         </div>
                       )}
                       {lead.county && (
                         <div className="flex items-center gap-1.5">
-                          <MapPin size={13} className="text-slate-500" />
+                          <MapPin size={13} className="text-slate-400" />
                           <span className="truncate">{lead.county}</span>
                         </div>
                       )}
                       <div className="flex items-center gap-1.5">
-                        <Building2 size={13} className="text-slate-500" />
+                        <Building2 size={13} className="text-slate-400" />
                         <span className="truncate">{lead.seatEstimate} seats</span>
                       </div>
                     </div>

@@ -49,7 +49,7 @@ export function AcceptInvitationPage() {
           You&apos;ve been invited as <strong>{String(preview?.role ?? 'member')}</strong>
           {preview?.email ? <> for {String(preview.email)}</> : null}
         </p>
-        {error && <div className="bg-red-50 text-red-700 p-3 rounded mb-4 text-sm">{error}</div>}
+        {error && <div className="bg-red-500/10 text-red-300 p-3 rounded mb-4 text-sm">{error}</div>}
         <form onSubmit={submit} className="space-y-4">
           <input className="w-full border rounded-lg px-3 py-2" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your full name" required />
           <input className="w-full border rounded-lg px-3 py-2" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password (min 8 characters)" minLength={8} required />

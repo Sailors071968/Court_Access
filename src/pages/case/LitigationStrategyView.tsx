@@ -64,11 +64,11 @@ const TYPE_ICONS: Record<RecommendationType, React.ReactNode> = {
 };
 
 const TYPE_COLORS: Record<RecommendationType, string> = {
-  INVESTIGATION: 'bg-blue-100 text-blue-700',
-  MOTION: 'bg-purple-100 text-purple-700',
-  SUBPOENA: 'bg-amber-100 text-amber-700',
-  PUBLIC_RECORD: 'bg-emerald-100 text-emerald-700',
-  EXPERT: 'bg-red-100 text-red-700',
+  INVESTIGATION: 'bg-blue-500/15 text-blue-300',
+  MOTION: 'bg-violet-500/15 text-violet-300',
+  SUBPOENA: 'bg-amber-500/15 text-amber-300',
+  PUBLIC_RECORD: 'bg-emerald-500/15 text-emerald-300',
+  EXPERT: 'bg-red-500/15 text-red-300',
 };
 
 const STATUS_COLORS: Record<RoadmapStatus, string> = {
@@ -122,7 +122,7 @@ export function LitigationStrategyView() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 size={24} className="animate-spin text-slate-500" />
+        <Loader2 size={24} className="animate-spin text-slate-400" />
         <span className="ml-2 text-sm text-slate-400">Loading strategy data...</span>
       </div>
     );
@@ -142,9 +142,9 @@ export function LitigationStrategyView() {
       </div>
 
       {/* Disclaimer */}
-      <div className="bg-amber-50 border border-amber-200 rounded-xl p-3 flex items-start gap-2">
+      <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-3 flex items-start gap-2">
         <Info size={14} className="text-amber-600 mt-0.5 flex-shrink-0" />
-        <p className="text-xs text-amber-700">
+        <p className="text-xs text-amber-300">
           CourtAccess provides analytical observations based on uploaded evidence. Attorneys must independently evaluate all legal strategies.
         </p>
       </div>
@@ -153,7 +153,7 @@ export function LitigationStrategyView() {
         <div className="text-center py-12 bg-white/5 rounded-xl border border-white/10">
           <Target size={48} className="mx-auto mb-3 text-gray-300" />
           <p className="text-sm text-slate-400">No litigation strategy data available yet.</p>
-          <p className="text-xs text-slate-500 mt-1">Upload evidence to generate strategy recommendations.</p>
+          <p className="text-xs text-slate-400 mt-1">Upload evidence to generate strategy recommendations.</p>
         </div>
       )}
 
@@ -167,9 +167,9 @@ export function LitigationStrategyView() {
           </h3>
           <div className="flex items-center gap-2">
             <div className={`w-16 h-16 rounded-full flex items-center justify-center font-bold text-xl ${
-              overallReadiness >= 75 ? 'bg-green-100 text-green-700' :
-              overallReadiness >= 50 ? 'bg-amber-100 text-amber-700' :
-              'bg-red-100 text-red-700'
+              overallReadiness >= 75 ? 'bg-emerald-500/15 text-emerald-300' :
+              overallReadiness >= 50 ? 'bg-amber-500/15 text-amber-300' :
+              'bg-red-500/15 text-red-300'
             }`}>
               {overallReadiness}%
             </div>
@@ -181,7 +181,7 @@ export function LitigationStrategyView() {
             return (
               <div key={metric.label} className="p-3 bg-white/5 rounded-lg">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-slate-500">{metric.icon}</span>
+                  <span className="text-slate-400">{metric.icon}</span>
                   <span className="text-xs font-medium text-slate-200">{metric.label}</span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -210,11 +210,11 @@ export function LitigationStrategyView() {
           <div className="flex items-center gap-3">
             <TrendingUp size={18} className="text-indigo-600" />
             <span className="font-semibold text-white">Case Litigation Roadmap</span>
-            <span className="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-full text-[10px] font-bold">
+            <span className="px-2 py-0.5 bg-indigo-100 text-indigo-300 rounded-full text-[10px] font-bold">
               {completedSteps}/{totalSteps} steps
             </span>
           </div>
-          {expandedSection === 'roadmap' ? <ChevronDown size={16} className="text-slate-500" /> : <ChevronRight size={16} className="text-slate-500" />}
+          {expandedSection === 'roadmap' ? <ChevronDown size={16} className="text-slate-400" /> : <ChevronRight size={16} className="text-slate-400" />}
         </button>
 
         {expandedSection === 'roadmap' && (
@@ -250,7 +250,7 @@ export function LitigationStrategyView() {
                   {/* Content */}
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      <span className={`text-sm font-medium ${step.status === 'completed' ? 'text-slate-500 line-through' : 'text-white'}`}>
+                      <span className={`text-sm font-medium ${step.status === 'completed' ? 'text-slate-400 line-through' : 'text-white'}`}>
                         Step {step.stepNumber} — {step.description}
                       </span>
                     </div>
@@ -260,8 +260,8 @@ export function LitigationStrategyView() {
                         {step.category.replace(/_/g, ' ')}
                       </span>
                       <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                        step.status === 'completed' ? 'bg-green-100 text-green-700' :
-                        step.status === 'in_progress' ? 'bg-blue-100 text-blue-700' :
+                        step.status === 'completed' ? 'bg-emerald-500/15 text-emerald-300' :
+                        step.status === 'in_progress' ? 'bg-blue-500/15 text-blue-300' :
                         'bg-white/10 text-slate-400'
                       }`}>
                         {step.status.replace(/_/g, ' ').toUpperCase()}
@@ -286,18 +286,18 @@ export function LitigationStrategyView() {
           <div className="flex items-center gap-3">
             <AlertTriangle size={18} className="text-amber-600" />
             <span className="font-semibold text-white">Evidence Observations</span>
-            <span className="px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full text-[10px] font-bold">
+            <span className="px-2 py-0.5 bg-amber-500/15 text-amber-300 rounded-full text-[10px] font-bold">
               {observations.length} detected
             </span>
           </div>
-          {expandedSection === 'observations' ? <ChevronDown size={16} className="text-slate-500" /> : <ChevronRight size={16} className="text-slate-500" />}
+          {expandedSection === 'observations' ? <ChevronDown size={16} className="text-slate-400" /> : <ChevronRight size={16} className="text-slate-400" />}
         </button>
 
         {expandedSection === 'observations' && (
           <div className="px-6 pb-4 space-y-2">
             {observations.map((obs) => (
               <div key={obs.id} className="flex items-start gap-3 py-2 border-b border-gray-50 last:border-0">
-                <span className="font-mono text-xs text-gold-light bg-blue-50 px-2 py-1 rounded whitespace-nowrap">{obs.timestamp}</span>
+                <span className="font-mono text-xs text-gold-light bg-blue-500/10 px-2 py-1 rounded whitespace-nowrap">{obs.timestamp}</span>
                 <div className="flex-1">
                   <p className="text-sm text-white">{obs.observation}</p>
                   <p className="text-xs text-slate-400 mt-0.5">Source: {obs.evidenceSource}</p>
@@ -319,11 +319,11 @@ export function LitigationStrategyView() {
           <div className="flex items-center gap-3">
             <Target size={18} className="text-indigo-600" />
             <span className="font-semibold text-white">All Recommendations</span>
-            <span className="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-full text-[10px] font-bold">
+            <span className="px-2 py-0.5 bg-indigo-100 text-indigo-300 rounded-full text-[10px] font-bold">
               {recommendations.length} total
             </span>
           </div>
-          {expandedSection === 'recommendations' ? <ChevronDown size={16} className="text-slate-500" /> : <ChevronRight size={16} className="text-slate-500" />}
+          {expandedSection === 'recommendations' ? <ChevronDown size={16} className="text-slate-400" /> : <ChevronRight size={16} className="text-slate-400" />}
         </button>
 
         {expandedSection === 'recommendations' && (
@@ -350,8 +350,8 @@ export function LitigationStrategyView() {
                     <td className="py-2 px-2 text-slate-400 text-xs font-mono">{rec.evidenceSource}</td>
                     <td className="py-2 px-2 text-right">
                       <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                        rec.confidenceScore >= 0.85 ? 'bg-green-100 text-green-700' :
-                        rec.confidenceScore >= 0.70 ? 'bg-amber-100 text-amber-700' :
+                        rec.confidenceScore >= 0.85 ? 'bg-emerald-500/15 text-emerald-300' :
+                        rec.confidenceScore >= 0.70 ? 'bg-amber-500/15 text-amber-300' :
                         'bg-white/10 text-slate-300'
                       }`}>
                         {(rec.confidenceScore * 100).toFixed(0)}%
@@ -359,9 +359,9 @@ export function LitigationStrategyView() {
                     </td>
                     <td className="py-2 px-2 text-center">
                       <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                        rec.status === 'addressed' ? 'bg-green-100 text-green-700' :
+                        rec.status === 'addressed' ? 'bg-emerald-500/15 text-emerald-300' :
                         rec.status === 'dismissed' ? 'bg-white/10 text-slate-400' :
-                        'bg-blue-100 text-blue-700'
+                        'bg-blue-500/15 text-blue-300'
                       }`}>
                         {rec.status.toUpperCase()}
                       </span>

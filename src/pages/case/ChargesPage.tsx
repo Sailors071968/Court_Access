@@ -109,7 +109,7 @@ export function ChargesPage() {
 
               {/* Sentencing Info */}
               {activeCharge.potentialSentence && (
-                <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+                <div className="mt-6 p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl">
                   <p className="text-sm">
                     <span className="font-bold text-white">Potential Maximum Sentence:</span>{' '}
                     <span className="text-slate-200">{activeCharge.potentialSentence}</span>
@@ -127,7 +127,7 @@ export function ChargesPage() {
 
           {/* AI Defense Insights */}
           <div>
-            <Card className="bg-slate-50 border-slate-200">
+            <Card className="bg-white/5 border-white/10">
               <h3 className="text-lg font-semibold text-white mb-4">AI Defense Insights</h3>
               {insightsLoading ? (
                 <div className="space-y-3">

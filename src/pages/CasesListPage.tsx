@@ -80,7 +80,7 @@ export function CasesListPage() {
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             type="search"
             placeholder="Search cases..."
@@ -91,7 +91,7 @@ export function CasesListPage() {
           />
         </div>
         <div className="flex items-center gap-2">
-          <Filter size={16} className="text-slate-500" />
+          <Filter size={16} className="text-slate-400" />
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
@@ -110,7 +110,7 @@ export function CasesListPage() {
       {/* Loading State */}
       {loading && (
         <div className="text-center py-12">
-          <Loader2 size={24} className="animate-spin text-slate-500 mx-auto mb-2" />
+          <Loader2 size={24} className="animate-spin text-slate-400 mx-auto mb-2" />
           <p className="text-slate-400">Loading cases...</p>
         </div>
       )}
@@ -137,7 +137,7 @@ export function CasesListPage() {
                   <CaseStatusBadge status={c.status} />
                   <button
                     onClick={(e) => { e.stopPropagation(); setConfirmDeleteCaseId(c.caseId); setDeleteCaseError(null); }}
-                    className="p-1.5 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                    className="p-1.5 text-slate-400 hover:text-red-600 hover:bg-red-500/10 rounded-lg transition-colors"
                     title="Delete case"
                   >
                     <Trash2 size={14} />
@@ -149,7 +149,7 @@ export function CasesListPage() {
                 {c.judge && <p><span className="font-medium">Judge:</span> {c.judge}</p>}
                 {c.nextHearing && <p><span className="font-medium">Next Hearing:</span> {c.nextHearing}</p>}
               </div>
-              <div className="mt-4 pt-3 border-t border-white/10 flex items-center gap-4 text-xs text-slate-500">
+              <div className="mt-4 pt-3 border-t border-white/10 flex items-center gap-4 text-xs text-slate-400">
                 <span>{c._count?.evidence ?? 0} evidence items</span>
                 <span>{c.caseType}</span>
               </div>
@@ -173,7 +173,7 @@ export function CasesListPage() {
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
           <div className="bg-white/5 rounded-xl shadow-2xl p-6 max-w-md w-full mx-4">
             <div className="flex items-center gap-3 mb-4">
-              <div className="w-10 h-10 rounded-full flex items-center justify-center bg-red-100">
+              <div className="w-10 h-10 rounded-full flex items-center justify-center bg-red-500/15">
                 <AlertTriangle size={20} className="text-red-600" />
               </div>
               <div>
@@ -196,7 +196,7 @@ export function CasesListPage() {
             </p>
 
             {deleteCaseError && (
-              <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm">
+              <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-300 text-sm">
                 {deleteCaseError}
               </div>
             )}

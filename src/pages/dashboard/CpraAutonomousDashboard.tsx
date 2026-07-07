@@ -122,25 +122,25 @@ const EVENT_ICONS: Record<string, React.ReactNode> = {
 };
 
 const EVENT_COLORS: Record<string, string> = {
-  REQUEST_SENT: 'border-blue-200 bg-blue-50',
-  EMAIL_SENT: 'border-blue-200 bg-blue-50',
-  EMAIL_RECEIVED: 'border-green-200 bg-green-50',
-  ATTACHMENT_DETECTED: 'border-purple-200 bg-purple-50',
-  DOCUMENT_UPLOADED: 'border-indigo-200 bg-indigo-50',
-  POLICY_UPLOADED: 'border-indigo-200 bg-indigo-50',
-  POLICY_PARSED: 'border-yellow-200 bg-yellow-50',
-  POLICY_ACTIVE: 'border-green-200 bg-green-50',
-  POLICY_INGESTED: 'border-green-200 bg-green-50',
+  REQUEST_SENT: 'border-blue-500/20 bg-blue-500/10',
+  EMAIL_SENT: 'border-blue-500/20 bg-blue-500/10',
+  EMAIL_RECEIVED: 'border-emerald-500/20 bg-emerald-500/10',
+  ATTACHMENT_DETECTED: 'border-violet-500/20 bg-violet-500/10',
+  DOCUMENT_UPLOADED: 'border-indigo-200 bg-indigo-500/10',
+  POLICY_UPLOADED: 'border-indigo-200 bg-indigo-500/10',
+  POLICY_PARSED: 'border-amber-500/20 bg-amber-500/10',
+  POLICY_ACTIVE: 'border-emerald-500/20 bg-emerald-500/10',
+  POLICY_INGESTED: 'border-emerald-500/20 bg-emerald-500/10',
   FOLLOW_UP_SENT: 'border-orange-200 bg-orange-50',
   STATUS_CHANGED: 'border-white/10 bg-white/5',
-  REQUEST_CREATED: 'border-blue-200 bg-blue-50',
+  REQUEST_CREATED: 'border-blue-500/20 bg-blue-500/10',
 };
 
 function WorkerStatusBadge({ running }: { running: boolean }) {
   return (
     <span
       className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium ${
-        running ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+        running ? 'bg-emerald-500/15 text-emerald-300' : 'bg-red-500/15 text-red-300'
       }`}
     >
       <span className={`w-1.5 h-1.5 rounded-full ${running ? 'bg-green-500 animate-pulse' : 'bg-red-500'}`} />
@@ -152,10 +152,10 @@ function WorkerStatusBadge({ running }: { running: boolean }) {
 function StatusPill({ status, count }: { status: string; count: number }) {
   const configs: Record<string, { color: string; bg: string }> = {
     NOT_REQUESTED: { color: 'text-slate-200', bg: 'bg-white/10' },
-    REQUESTED: { color: 'text-yellow-700', bg: 'bg-yellow-100' },
-    RECEIVED: { color: 'text-blue-700', bg: 'bg-blue-100' },
-    UPLOADED: { color: 'text-purple-700', bg: 'bg-purple-100' },
-    IN_USE: { color: 'text-green-700', bg: 'bg-green-100' },
+    REQUESTED: { color: 'text-amber-300', bg: 'bg-amber-500/15' },
+    RECEIVED: { color: 'text-blue-300', bg: 'bg-blue-500/15' },
+    UPLOADED: { color: 'text-violet-300', bg: 'bg-violet-500/15' },
+    IN_USE: { color: 'text-emerald-300', bg: 'bg-emerald-500/15' },
   };
   const config = configs[status] ?? { color: 'text-slate-200', bg: 'bg-white/10' };
 
@@ -350,7 +350,7 @@ export function CpraAutonomousDashboard() {
           </p>
         </div>
         <div className="flex items-center gap-3">
-          <span className="text-xs text-slate-500">
+          <span className="text-xs text-slate-400">
             Last refresh: {lastRefresh.toLocaleTimeString()}
           </span>
           <button
@@ -364,7 +364,7 @@ export function CpraAutonomousDashboard() {
       </div>
 
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-700">
+        <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3 text-sm text-red-300">
           <AlertCircle size={14} className="inline mr-1" />
           {error}
         </div>
@@ -382,7 +382,7 @@ export function CpraAutonomousDashboard() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <Card>
           <div className="flex items-center gap-3 p-2">
-            <div className="p-2 bg-blue-100 rounded-lg">
+            <div className="p-2 bg-blue-500/15 rounded-lg">
               <Send size={20} className="text-gold-light" />
             </div>
             <div>
@@ -395,7 +395,7 @@ export function CpraAutonomousDashboard() {
 
         <Card>
           <div className="flex items-center gap-3 p-2">
-            <div className="p-2 bg-green-100 rounded-lg">
+            <div className="p-2 bg-emerald-500/15 rounded-lg">
               <MailOpen size={20} className="text-green-600" />
             </div>
             <div>
@@ -408,7 +408,7 @@ export function CpraAutonomousDashboard() {
 
         <Card>
           <div className="flex items-center gap-3 p-2">
-            <div className="p-2 bg-purple-100 rounded-lg">
+            <div className="p-2 bg-violet-500/15 rounded-lg">
               <FileText size={20} className="text-purple-600" />
             </div>
             <div>
@@ -425,7 +425,7 @@ export function CpraAutonomousDashboard() {
 
         <Card>
           <div className="flex items-center gap-3 p-2">
-            <div className="p-2 bg-yellow-100 rounded-lg">
+            <div className="p-2 bg-amber-500/15 rounded-lg">
               <Bell size={20} className="text-yellow-600" />
             </div>
             <div>
@@ -462,8 +462,8 @@ export function CpraAutonomousDashboard() {
                   }
                   className={`p-1 rounded ${
                     status?.workers.emailMonitor.running
-                      ? 'text-red-600 hover:bg-red-50'
-                      : 'text-green-600 hover:bg-green-50'
+                      ? 'text-red-600 hover:bg-red-500/10'
+                      : 'text-green-600 hover:bg-emerald-500/10'
                   }`}
                   title={status?.workers.emailMonitor.running ? 'Stop' : 'Start'}
                 >
@@ -489,8 +489,8 @@ export function CpraAutonomousDashboard() {
                   }
                   className={`p-1 rounded ${
                     status?.workers.followUp.running
-                      ? 'text-red-600 hover:bg-red-50'
-                      : 'text-green-600 hover:bg-green-50'
+                      ? 'text-red-600 hover:bg-red-500/10'
+                      : 'text-green-600 hover:bg-emerald-500/10'
                   }`}
                   title={status?.workers.followUp.running ? 'Stop' : 'Start'}
                 >
@@ -516,8 +516,8 @@ export function CpraAutonomousDashboard() {
                   }
                   className={`p-1 rounded ${
                     status?.workers.ingestion.running
-                      ? 'text-red-600 hover:bg-red-50'
-                      : 'text-green-600 hover:bg-green-50'
+                      ? 'text-red-600 hover:bg-red-500/10'
+                      : 'text-green-600 hover:bg-emerald-500/10'
                   }`}
                   title={status?.workers.ingestion.running ? 'Stop' : 'Start'}
                 >
@@ -562,11 +562,11 @@ export function CpraAutonomousDashboard() {
         <div className="space-y-3">
           <div className="flex items-center justify-between">
             <h3 className="text-sm font-semibold text-slate-200">Recent Activity</h3>
-            <span className="text-xs text-slate-500">{timeline.length} events</span>
+            <span className="text-xs text-slate-400">{timeline.length} events</span>
           </div>
 
           {timeline.length === 0 ? (
-            <div className="text-center py-12 text-slate-500">
+            <div className="text-center py-12 text-slate-400">
               <Clock size={32} className="mx-auto mb-2" />
               <p>No timeline events yet. Start sending CPRA requests to see activity.</p>
             </div>
@@ -592,13 +592,13 @@ export function CpraAutonomousDashboard() {
                           {event.title}
                         </p>
                         <div className="flex items-center gap-2">
-                          <span className="text-xs text-slate-500 whitespace-nowrap">
+                          <span className="text-xs text-slate-400 whitespace-nowrap">
                             {formatTimeAgo(event.createdAt)}
                           </span>
                           {expandedEvent === event.eventId ? (
-                            <ChevronUp size={14} className="text-slate-500" />
+                            <ChevronUp size={14} className="text-slate-400" />
                           ) : (
-                            <ChevronDown size={14} className="text-slate-500" />
+                            <ChevronDown size={14} className="text-slate-400" />
                           )}
                         </div>
                       </div>
@@ -648,7 +648,7 @@ export function CpraAutonomousDashboard() {
             </h3>
             <button
               onClick={markAllRead}
-              className="text-xs text-gold-light hover:text-blue-800 font-medium"
+              className="text-xs text-gold-light hover:text-blue-300 font-medium"
             >
               <Eye size={12} className="inline mr-1" />
               Mark all read
@@ -656,7 +656,7 @@ export function CpraAutonomousDashboard() {
           </div>
 
           {notifications.length === 0 ? (
-            <div className="text-center py-12 text-slate-500">
+            <div className="text-center py-12 text-slate-400">
               <Bell size={32} className="mx-auto mb-2" />
               <p>No notifications yet.</p>
             </div>
@@ -668,7 +668,7 @@ export function CpraAutonomousDashboard() {
                   className={`border rounded-lg p-3 transition-all ${
                     notif.read
                       ? 'border-white/10 bg-white/5'
-                      : 'border-blue-200 bg-blue-50 shadow-sm'
+                      : 'border-blue-500/20 bg-blue-500/10 shadow-sm'
                   }`}
                 >
                   <div className="flex items-start gap-3">
@@ -684,7 +684,7 @@ export function CpraAutonomousDashboard() {
                         >
                           {notif.title}
                         </p>
-                        <span className="text-xs text-slate-500 whitespace-nowrap">
+                        <span className="text-xs text-slate-400 whitespace-nowrap">
                           {formatTimeAgo(notif.createdAt)}
                         </span>
                       </div>
@@ -715,7 +715,7 @@ export function CpraAutonomousDashboard() {
                 </h4>
                 <div className="space-y-2">
                   <button
-                    className="w-full text-left px-3 py-2 rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 text-sm font-medium transition-colors"
+                    className="w-full text-left px-3 py-2 rounded-lg bg-blue-500/10 hover:bg-blue-500/15 text-blue-300 text-sm font-medium transition-colors"
                     onClick={async () => {
                       try {
                         await apiFetch('/admin/cpra/send-all-missing', {
@@ -748,7 +748,7 @@ export function CpraAutonomousDashboard() {
                 </h4>
                 <div className="space-y-2">
                   <button
-                    className="w-full text-left px-3 py-2 rounded-lg bg-purple-50 hover:bg-purple-100 text-purple-700 text-sm font-medium transition-colors"
+                    className="w-full text-left px-3 py-2 rounded-lg bg-violet-500/10 hover:bg-violet-500/15 text-violet-300 text-sm font-medium transition-colors"
                     onClick={async () => {
                       try {
                         await apiFetch('/admin/cpra/monitor/poll', { method: 'POST' });
@@ -762,7 +762,7 @@ export function CpraAutonomousDashboard() {
                     Poll Inbox Now
                   </button>
                   <button
-                    className="w-full text-left px-3 py-2 rounded-lg bg-indigo-50 hover:bg-indigo-100 text-indigo-700 text-sm font-medium transition-colors"
+                    className="w-full text-left px-3 py-2 rounded-lg bg-indigo-500/10 hover:bg-indigo-100 text-indigo-300 text-sm font-medium transition-colors"
                     onClick={async () => {
                       try {
                         await apiFetch('/admin/cpra/attachments/process', { method: 'POST' });
@@ -776,7 +776,7 @@ export function CpraAutonomousDashboard() {
                     Process Pending Attachments
                   </button>
                   <button
-                    className="w-full text-left px-3 py-2 rounded-lg bg-yellow-50 hover:bg-yellow-100 text-yellow-700 text-sm font-medium transition-colors"
+                    className="w-full text-left px-3 py-2 rounded-lg bg-amber-500/10 hover:bg-amber-500/15 text-amber-300 text-sm font-medium transition-colors"
                     onClick={async () => {
                       try {
                         await apiFetch('/admin/cpra/classify-all', { method: 'POST' });
@@ -790,7 +790,7 @@ export function CpraAutonomousDashboard() {
                     Classify All Pending
                   </button>
                   <button
-                    className="w-full text-left px-3 py-2 rounded-lg bg-green-50 hover:bg-green-100 text-green-700 text-sm font-medium transition-colors"
+                    className="w-full text-left px-3 py-2 rounded-lg bg-emerald-500/10 hover:bg-emerald-500/15 text-emerald-300 text-sm font-medium transition-colors"
                     onClick={async () => {
                       try {
                         await apiFetch('/admin/cpra/ingestion/process', { method: 'POST' });

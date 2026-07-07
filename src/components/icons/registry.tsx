@@ -137,7 +137,7 @@ export const ICON_VARIANT_CLASS: Record<IconVariant, string> = {
   default: 'text-slate-400',
   hover: 'text-white',
   selected: 'text-gold-light',
-  disabled: 'text-slate-600 opacity-50',
+  disabled: 'text-slate-300 opacity-50',
   alert: 'text-red-400',
   success: 'text-emerald-400',
   warning: 'text-gold-light',

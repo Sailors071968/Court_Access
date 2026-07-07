@@ -36,7 +36,7 @@ export function ProtectedRoute({ children, requiredPermission, skipSubscriptionC
         <div className="text-center">
           <h2 className="text-2xl font-bold text-white mb-2">Access Denied</h2>
           <p className="text-slate-400">You do not have permission to access this page.</p>
-          <p className="text-sm text-slate-500 mt-2">Contact your administrator for access.</p>
+          <p className="text-sm text-slate-400 mt-2">Contact your administrator for access.</p>
         </div>
       </div>
     );

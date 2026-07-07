@@ -197,7 +197,7 @@ export function CaseOverviewPage() {
                   <p className="text-xs text-slate-400 mt-1">Contradictions</p>
                 </button>
               </div>
-              <p className="text-xs text-slate-500 mt-3">Counts populate from evidence-governed analysis; no values are estimated.</p>
+              <p className="text-xs text-slate-400 mt-3">Counts populate from evidence-governed analysis; no values are estimated.</p>
             </ExpandableCard>
           )}
         </div>
@@ -239,11 +239,11 @@ export function CaseOverviewPage() {
               <div className="space-y-2">
                 <button onClick={() => go('attorney-workbench')} className="flex w-full items-center justify-between p-2.5 rounded-lg hover:bg-white/5 text-sm text-slate-200">
                   <span className="flex items-center gap-2"><Icon name="tasks" size={15} variant="selected" /> Investigation tasks</span>
-                  <ArrowRight size={14} className="text-slate-500" />
+                  <ArrowRight size={14} className="text-slate-400" />
                 </button>
                 <button onClick={() => go('activity')} className="flex w-full items-center justify-between p-2.5 rounded-lg hover:bg-white/5 text-sm text-slate-200">
                   <span className="flex items-center gap-2"><Icon name="messages" size={15} variant="selected" /> Case messages</span>
-                  <ArrowRight size={14} className="text-slate-500" />
+                  <ArrowRight size={14} className="text-slate-400" />
                 </button>
               </div>
             </Card>
@@ -269,7 +269,7 @@ function Stat({ label, value }: { label: string; value: number }) {
   return (
     <div className="ca-panel py-3">
       <p className="text-xl font-bold text-white tabular-nums">{value}</p>
-      <p className="text-[11px] text-slate-500 mt-0.5">{label}</p>
+      <p className="text-[11px] text-slate-400 mt-0.5">{label}</p>
     </div>
   );
 }
@@ -277,7 +277,7 @@ function Stat({ label, value }: { label: string; value: number }) {
 function Detail({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between border-b border-white/5 pb-1.5">
-      <dt className="text-slate-500">{label}</dt>
+      <dt className="text-slate-400">{label}</dt>
       <dd className="text-slate-200 capitalize">{value}</dd>
     </div>
   );

@@ -81,7 +81,7 @@ export function EvidenceDetailDrawer({ evidence, onClose }: EvidenceDetailDrawer
                 content: (
                   <div className="flex flex-wrap gap-1.5">
                     <CitationIndicator source={`EV-${evidence.evidenceId.slice(0, 6)}`} />
-                    <span className="text-xs text-slate-500">Citations verify once extraction completes.</span>
+                    <span className="text-xs text-slate-400">Citations verify once extraction completes.</span>
                   </div>
                 ),
               },
@@ -91,7 +91,7 @@ export function EvidenceDetailDrawer({ evidence, onClose }: EvidenceDetailDrawer
                 icon: <Icon name="contradiction" size={15} />,
                 content: (
                   <div className="space-y-2">
-                    <p className="text-xs text-slate-500">Findings populate from evidence-governed analysis once extraction completes.</p>
+                    <p className="text-xs text-slate-400">Findings populate from evidence-governed analysis once extraction completes.</p>
                     <UnknownIndicator label="No unknowns flagged" />
                   </div>
                 ),
@@ -102,8 +102,8 @@ export function EvidenceDetailDrawer({ evidence, onClose }: EvidenceDetailDrawer
                 icon: <Icon name="security" size={15} />,
                 content: (
                   <ul className="space-y-1.5 text-xs text-slate-400">
-                    <li><span className="text-slate-500">{new Date(evidence.uploadedAt).toLocaleString()}</span> — Uploaded by {evidence.uploadedBy}</li>
-                    <li><span className="text-slate-500">Storage</span> — {evidence.s3Key ? 'Sealed in evidence vault' : 'Pending'}</li>
+                    <li><span className="text-slate-400">{new Date(evidence.uploadedAt).toLocaleString()}</span> — Uploaded by {evidence.uploadedBy}</li>
+                    <li><span className="text-slate-400">Storage</span> — {evidence.s3Key ? 'Sealed in evidence vault' : 'Pending'}</li>
                   </ul>
                 ),
               },
@@ -116,7 +116,7 @@ export function EvidenceDetailDrawer({ evidence, onClose }: EvidenceDetailDrawer
                     <div className="flex flex-wrap gap-1.5">
                       <Badge variant="gold">{evidence.evidenceType.replace(/_/g, ' ')}</Badge>
                     </div>
-                    <p className="text-xs text-slate-500">Add tags, collections, and bookmarks to organize evidence.</p>
+                    <p className="text-xs text-slate-400">Add tags, collections, and bookmarks to organize evidence.</p>
                   </div>
                 ),
               },
@@ -132,7 +132,7 @@ export function EvidenceDetailDrawer({ evidence, onClose }: EvidenceDetailDrawer
                 icon: <Icon name="audit" size={15} />,
                 content: (
                   <ul className="space-y-1.5 text-xs text-slate-400">
-                    <li><span className="text-slate-500">v1</span> — Original upload · {new Date(evidence.uploadedAt).toLocaleDateString()}</li>
+                    <li><span className="text-slate-400">v1</span> — Original upload · {new Date(evidence.uploadedAt).toLocaleDateString()}</li>
                     <li className="text-emerald-400">Audit trail available</li>
                   </ul>
                 ),
@@ -148,7 +148,7 @@ export function EvidenceDetailDrawer({ evidence, onClose }: EvidenceDetailDrawer
 function Row({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between">
-      <span className="text-slate-500">{label}</span>
+      <span className="text-slate-400">{label}</span>
       <span className="text-slate-200">{value}</span>
     </div>
   );

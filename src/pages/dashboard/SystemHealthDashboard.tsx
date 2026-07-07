@@ -98,13 +98,13 @@ function getStatusColor(status: string): string {
     case 'healthy':
     case 'active':
     case 'completed':
-      return 'text-green-600 bg-green-50';
+      return 'text-green-600 bg-emerald-500/10';
     case 'warning':
     case 'paused':
-      return 'text-yellow-600 bg-yellow-50';
+      return 'text-yellow-600 bg-amber-500/10';
     case 'critical':
     case 'error':
-      return 'text-red-600 bg-red-50';
+      return 'text-red-600 bg-red-500/10';
     default:
       return 'text-slate-300 bg-white/5';
   }
@@ -176,7 +176,7 @@ export function SystemHealthDashboard() {
             </div>
           ) : (
             <>
-              <RefreshCw size={24} className="animate-spin text-slate-500" />
+              <RefreshCw size={24} className="animate-spin text-slate-400" />
               <span className="ml-3 text-slate-400">Loading system health data...</span>
             </>
           )}
@@ -268,7 +268,7 @@ export function SystemHealthDashboard() {
             onClick={() => setAutoRefresh(!autoRefresh)}
             className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
               autoRefresh
-                ? 'bg-green-50 text-green-700 hover:bg-green-100'
+                ? 'bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/15'
                 : 'bg-white/10 text-slate-300 hover:bg-gray-200'
             }`}
           >
@@ -393,13 +393,13 @@ export function SystemHealthDashboard() {
                 <p className="text-xs text-slate-400">Pending</p>
                 <p className="text-lg font-bold text-white">{data.ocrBacklog.pending}</p>
               </div>
-              <div className="p-3 bg-green-50 rounded-lg">
+              <div className="p-3 bg-emerald-500/10 rounded-lg">
                 <p className="text-xs text-slate-400">Completed Today</p>
-                <p className="text-lg font-bold text-green-700">{data.ocrBacklog.completedToday}</p>
+                <p className="text-lg font-bold text-emerald-300">{data.ocrBacklog.completedToday}</p>
               </div>
-              <div className="p-3 bg-red-50 rounded-lg">
+              <div className="p-3 bg-red-500/10 rounded-lg">
                 <p className="text-xs text-slate-400">Failed Today</p>
-                <p className="text-lg font-bold text-red-700">{data.ocrBacklog.failedToday}</p>
+                <p className="text-lg font-bold text-red-300">{data.ocrBacklog.failedToday}</p>
               </div>
             </div>
             <div className="text-xs text-slate-400">
@@ -439,17 +439,17 @@ export function SystemHealthDashboard() {
                 <p className="text-xs text-slate-400">Total Agencies</p>
                 <p className="text-lg font-bold text-white">{data.cpraCampaign.totalAgencies}</p>
               </div>
-              <div className="p-3 bg-blue-50 rounded-lg">
+              <div className="p-3 bg-blue-500/10 rounded-lg">
                 <p className="text-xs text-slate-400">Requests Sent</p>
-                <p className="text-lg font-bold text-blue-700">{data.cpraCampaign.requestsSent}</p>
+                <p className="text-lg font-bold text-blue-300">{data.cpraCampaign.requestsSent}</p>
               </div>
-              <div className="p-3 bg-green-50 rounded-lg">
+              <div className="p-3 bg-emerald-500/10 rounded-lg">
                 <p className="text-xs text-slate-400">Responses Received</p>
-                <p className="text-lg font-bold text-green-700">{data.cpraCampaign.responsesReceived}</p>
+                <p className="text-lg font-bold text-emerald-300">{data.cpraCampaign.responsesReceived}</p>
               </div>
-              <div className="p-3 bg-yellow-50 rounded-lg">
+              <div className="p-3 bg-amber-500/10 rounded-lg">
                 <p className="text-xs text-slate-400">Pending Follow-Up</p>
-                <p className="text-lg font-bold text-yellow-700">{data.cpraCampaign.pendingFollowUp}</p>
+                <p className="text-lg font-bold text-amber-300">{data.cpraCampaign.pendingFollowUp}</p>
               </div>
             </div>
           </div>
@@ -468,7 +468,7 @@ export function SystemHealthDashboard() {
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-slate-400">p50: <span className="font-medium text-white">{ep.p50}</span></span>
                   <span className="text-xs text-slate-400">p95: <span className="font-medium text-white">{ep.p95}</span></span>
-                  <span className={`text-xs px-1.5 py-0.5 rounded ${ep.status === 'healthy' ? 'bg-green-100 text-green-700' : ep.status === 'degraded' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}>
+                  <span className={`text-xs px-1.5 py-0.5 rounded ${ep.status === 'healthy' ? 'bg-emerald-500/15 text-emerald-300' : ep.status === 'degraded' ? 'bg-amber-500/15 text-amber-300' : 'bg-red-500/15 text-red-300'}`}>
                     {ep.status}
                   </span>
                 </div>
@@ -487,7 +487,7 @@ export function SystemHealthDashboard() {
                 <div className="flex items-center gap-2">
                   <span className="text-xs text-slate-400">avg: <span className="font-medium text-white">{q.avgMs}</span></span>
                   <span className="text-xs text-slate-400">max: <span className="font-medium text-white">{q.maxMs}</span></span>
-                  <span className={`text-xs px-1.5 py-0.5 rounded ${q.status === 'healthy' ? 'bg-green-100 text-green-700' : q.status === 'degraded' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}>
+                  <span className={`text-xs px-1.5 py-0.5 rounded ${q.status === 'healthy' ? 'bg-emerald-500/15 text-emerald-300' : q.status === 'degraded' ? 'bg-amber-500/15 text-amber-300' : 'bg-red-500/15 text-red-300'}`}>
                     {q.status}
                   </span>
                 </div>
@@ -504,7 +504,7 @@ export function SystemHealthDashboard() {
               <div key={m.model} className="p-3 bg-white/5 rounded-lg">
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-sm font-medium text-white">{m.model}</span>
-                  <span className={`text-xs px-1.5 py-0.5 rounded ${m.status === 'healthy' ? 'bg-green-100 text-green-700' : m.status === 'degraded' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}>
+                  <span className={`text-xs px-1.5 py-0.5 rounded ${m.status === 'healthy' ? 'bg-emerald-500/15 text-emerald-300' : m.status === 'degraded' ? 'bg-amber-500/15 text-amber-300' : 'bg-red-500/15 text-red-300'}`}>
                     {m.status}
                   </span>
                 </div>
@@ -530,19 +530,19 @@ export function SystemHealthDashboard() {
                 <p className="text-xs text-slate-400">Total</p>
                 <p className="text-xl font-bold text-white">{data.policyIngestion.totalPolicies}</p>
               </div>
-              <div className="p-3 bg-blue-50 rounded-lg text-center">
+              <div className="p-3 bg-blue-500/10 rounded-lg text-center">
                 <p className="text-xs text-slate-400">Today</p>
-                <p className="text-xl font-bold text-blue-700">{data.policyIngestion.ingestedToday}</p>
+                <p className="text-xl font-bold text-blue-300">{data.policyIngestion.ingestedToday}</p>
               </div>
-              <div className="p-3 bg-yellow-50 rounded-lg text-center">
+              <div className="p-3 bg-amber-500/10 rounded-lg text-center">
                 <p className="text-xs text-slate-400">Review Queue</p>
-                <p className="text-xl font-bold text-yellow-700">{data.policyIngestion.pendingReview}</p>
+                <p className="text-xl font-bold text-amber-300">{data.policyIngestion.pendingReview}</p>
               </div>
             </div>
             <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
               <span className="text-sm text-slate-300">Avg Confidence Score</span>
               <span className={`text-sm font-bold ${
-                data.policyIngestion.avgConfidenceScore >= 0.65 ? 'text-green-700' : 'text-red-700'
+                data.policyIngestion.avgConfidenceScore >= 0.65 ? 'text-emerald-300' : 'text-red-300'
               }`}>
                 {data.policyIngestion.avgConfidenceScore > 0
                   ? (data.policyIngestion.avgConfidenceScore * 100).toFixed(1) + '%'
@@ -580,7 +580,7 @@ export function SystemHealthDashboard() {
               </div>
               <div className="flex items-center justify-between p-2">
                 <span className="text-sm text-slate-300">Recent Uploads</span>
-                <span className="text-sm font-medium text-blue-700">{data.s3Storage.recentUploads}</span>
+                <span className="text-sm font-medium text-blue-300">{data.s3Storage.recentUploads}</span>
               </div>
             </div>
           </div>

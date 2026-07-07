@@ -110,9 +110,9 @@ export function WorkerQueueMonitoring() {
                   <td className="px-4 py-3 text-right text-white font-medium">{q.depth}</td>
                   <td className="px-4 py-3 text-center">
                     <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                      health === 'healthy' ? 'bg-green-100 text-green-700' :
-                      health === 'warning' ? 'bg-amber-100 text-amber-700' :
-                      'bg-red-100 text-red-700'
+                      health === 'healthy' ? 'bg-emerald-500/15 text-emerald-300' :
+                      health === 'warning' ? 'bg-amber-500/15 text-amber-300' :
+                      'bg-red-500/15 text-red-300'
                     }`}>
                       {health === 'healthy' ? <CheckCircle size={10} /> : <AlertTriangle size={10} />}
                       {health.toUpperCase()}
@@ -137,7 +137,7 @@ export function WorkerQueueMonitoring() {
                 {job.status === 'active' && <RefreshCw size={14} className="text-blue-500 animate-spin" />}
                 {job.status === 'completed' && <CheckCircle size={14} className="text-green-500" />}
                 {job.status === 'failed' && <XCircle size={14} className="text-red-500" />}
-                {job.status === 'waiting' && <Clock size={14} className="text-slate-500" />}
+                {job.status === 'waiting' && <Clock size={14} className="text-slate-400" />}
                 {job.status === 'retry' && <AlertTriangle size={14} className="text-amber-500" />}
                 <div>
                   <p className="text-sm font-medium text-white">{job.payload}</p>
@@ -145,10 +145,10 @@ export function WorkerQueueMonitoring() {
                 </div>
               </div>
               <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                job.status === 'active' ? 'bg-blue-100 text-blue-700' :
-                job.status === 'completed' ? 'bg-green-100 text-green-700' :
-                job.status === 'failed' ? 'bg-red-100 text-red-700' :
-                job.status === 'retry' ? 'bg-amber-100 text-amber-700' :
+                job.status === 'active' ? 'bg-blue-500/15 text-blue-300' :
+                job.status === 'completed' ? 'bg-emerald-500/15 text-emerald-300' :
+                job.status === 'failed' ? 'bg-red-500/15 text-red-300' :
+                job.status === 'retry' ? 'bg-amber-500/15 text-amber-300' :
                 'bg-white/10 text-slate-300'
               }`}>
                 {job.status.toUpperCase()}

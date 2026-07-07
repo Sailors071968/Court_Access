@@ -33,12 +33,12 @@ interface TimelineEvent {
 
 const STATUS_CONFIG: Record<CpraStatus, { label: string; color: string; icon: React.ReactNode }> = {
   draft: { label: 'Draft', color: 'bg-white/10 text-slate-200', icon: <Clock size={14} /> },
-  sent: { label: 'Sent', color: 'bg-blue-100 text-blue-700', icon: <Mail size={14} /> },
-  acknowledged: { label: 'Acknowledged', color: 'bg-indigo-100 text-indigo-700', icon: <CheckCircle size={14} /> },
-  partial_response: { label: 'Partial Response', color: 'bg-yellow-100 text-yellow-700', icon: <AlertTriangle size={14} /> },
-  complete: { label: 'Complete', color: 'bg-green-100 text-green-700', icon: <CheckCircle size={14} /> },
-  overdue: { label: 'Overdue', color: 'bg-red-100 text-red-700', icon: <XCircle size={14} /> },
-  denied: { label: 'Denied', color: 'bg-red-100 text-red-700', icon: <XCircle size={14} /> },
+  sent: { label: 'Sent', color: 'bg-blue-500/15 text-blue-300', icon: <Mail size={14} /> },
+  acknowledged: { label: 'Acknowledged', color: 'bg-indigo-100 text-indigo-300', icon: <CheckCircle size={14} /> },
+  partial_response: { label: 'Partial Response', color: 'bg-amber-500/15 text-amber-300', icon: <AlertTriangle size={14} /> },
+  complete: { label: 'Complete', color: 'bg-emerald-500/15 text-emerald-300', icon: <CheckCircle size={14} /> },
+  overdue: { label: 'Overdue', color: 'bg-red-500/15 text-red-300', icon: <XCircle size={14} /> },
+  denied: { label: 'Denied', color: 'bg-red-500/15 text-red-300', icon: <XCircle size={14} /> },
   appeal: { label: 'Appeal Filed', color: 'bg-orange-100 text-orange-700', icon: <AlertTriangle size={14} /> },
 };
 
@@ -133,7 +133,7 @@ export function CpraCampaignTimeline() {
       <Card>
         <div className="flex gap-4">
           <div className="relative flex-1">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
               placeholder="Search agencies..."
@@ -194,7 +194,7 @@ export function CpraCampaignTimeline() {
                         {req.documentsReceived}/{req.totalExpected} docs
                       </span>
                     )}
-                    {isExpanded ? <ChevronUp size={16} className="text-slate-500" /> : <ChevronDown size={16} className="text-slate-500" />}
+                    {isExpanded ? <ChevronUp size={16} className="text-slate-400" /> : <ChevronDown size={16} className="text-slate-400" />}
                   </div>
                 </div>
               </button>
@@ -206,8 +206,8 @@ export function CpraCampaignTimeline() {
                     {timeline.map((event, idx) => (
                       <div key={idx} className="flex items-center gap-2">
                         <div className={`flex items-center gap-1.5 px-2 py-1 rounded text-xs ${
-                          event.status === 'complete' ? 'bg-green-50 text-green-700' :
-                          event.status === 'overdue' ? 'bg-red-50 text-red-700' :
+                          event.status === 'complete' ? 'bg-emerald-500/10 text-emerald-300' :
+                          event.status === 'overdue' ? 'bg-red-500/10 text-red-300' :
                           'bg-white/5 text-slate-400'
                         }`}>
                           {event.status === 'complete' ? <CheckCircle size={12} /> :
@@ -240,7 +240,7 @@ export function CpraCampaignTimeline() {
                   )}
 
                   {req.notes && (
-                    <p className="text-xs text-slate-300 bg-yellow-50 p-2 rounded">
+                    <p className="text-xs text-slate-300 bg-amber-500/10 p-2 rounded">
                       <span className="font-medium">Note:</span> {req.notes}
                     </p>
                   )}

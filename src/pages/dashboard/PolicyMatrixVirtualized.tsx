@@ -154,9 +154,9 @@ export function PolicyMatrixVirtualized() {
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: 'Compliant', value: complianceStats.compliant, color: 'text-green-700 bg-green-50' },
-          { label: 'Non-Compliant', value: complianceStats.nonCompliant, color: 'text-red-700 bg-red-50' },
-          { label: 'Partial', value: complianceStats.partial, color: 'text-yellow-700 bg-yellow-50' },
+          { label: 'Compliant', value: complianceStats.compliant, color: 'text-emerald-300 bg-emerald-500/10' },
+          { label: 'Non-Compliant', value: complianceStats.nonCompliant, color: 'text-red-300 bg-red-500/10' },
+          { label: 'Partial', value: complianceStats.partial, color: 'text-amber-300 bg-amber-500/10' },
           { label: 'Unknown', value: complianceStats.unknown, color: 'text-slate-200 bg-white/5' },
         ].map((s) => (
           <div key={s.label} className={`p-4 rounded-lg ${s.color}`}>
@@ -170,7 +170,7 @@ export function PolicyMatrixVirtualized() {
       <Card>
         <div className="flex flex-wrap gap-4">
           <div className="relative flex-1 min-w-[200px]">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
               placeholder="Search agencies..."
@@ -180,7 +180,7 @@ export function PolicyMatrixVirtualized() {
             />
           </div>
           <div className="flex items-center gap-2">
-            <Filter size={16} className="text-slate-500" />
+            <Filter size={16} className="text-slate-400" />
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}

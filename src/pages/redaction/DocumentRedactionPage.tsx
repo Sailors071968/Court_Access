@@ -130,7 +130,7 @@ export function DocumentRedactionPage() {
     <div className="max-w-6xl mx-auto space-y-6 p-4">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <Link to={`/cases/${caseId}/documents`} className="text-sm text-amber-600 hover:text-amber-700">
+          <Link to={`/cases/${caseId}/documents`} className="text-sm text-amber-600 hover:text-amber-300">
             ← Back to documents
           </Link>
           <h1 className="text-2xl font-bold text-white mt-1 flex items-center gap-2">
@@ -152,7 +152,7 @@ export function DocumentRedactionPage() {
             type="button"
             onClick={() => setPreviewMode(!previewMode)}
             className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm border ${
-              previewMode ? 'bg-amber-100 border-amber-300' : 'border-white/10'
+              previewMode ? 'bg-amber-500/15 border-amber-300' : 'border-white/10'
             }`}
           >
             <Eye size={16} /> Preview As Recipient
@@ -173,7 +173,7 @@ export function DocumentRedactionPage() {
         <div className="lg:col-span-3 space-y-4">
           <div className="flex items-center gap-2 flex-wrap">
             <div className="flex items-center gap-1 border border-white/10 rounded-lg px-2 py-1">
-              <Search size={16} className="text-slate-500" />
+              <Search size={16} className="text-slate-400" />
               <input
                 type="text"
                 placeholder="Search OCR text to redact…"
@@ -209,7 +209,7 @@ export function DocumentRedactionPage() {
             onMouseUp={handleMouseUp}
             className="relative bg-white/5 border-2 border-dashed border-white/10 rounded-xl min-h-[480px] cursor-crosshair select-none"
           >
-            <div className="absolute inset-4 text-slate-500 text-sm pointer-events-none">
+            <div className="absolute inset-4 text-slate-400 text-sm pointer-events-none">
               Document preview layer (page {currentPage})
               {previewMode && ' — recipient view: redacted areas hidden'}
             </div>
@@ -242,7 +242,7 @@ export function DocumentRedactionPage() {
                   <li key={v.redactionId} className="text-sm border-b border-white/10 pb-2">
                     <span className="font-medium">{v.profileName}</span> v{v.versionNumber}
                     <span className={`ml-2 text-xs px-1.5 py-0.5 rounded ${
-                      v.status === 'published' ? 'bg-green-100 text-green-800' : 'bg-white/10'
+                      v.status === 'published' ? 'bg-emerald-500/15 text-emerald-300' : 'bg-white/10'
                     }`}>
                       {v.status}
                     </span>
@@ -251,7 +251,7 @@ export function DocumentRedactionPage() {
               </ul>
             )}
           </div>
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-900">
+          <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 text-sm text-amber-900">
             <Layers size={16} className="inline mr-1" />
             Batch redaction: search terms apply to current page. Multi-page supported via page selector.
           </div>

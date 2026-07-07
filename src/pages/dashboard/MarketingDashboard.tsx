@@ -152,7 +152,7 @@ export function MarketingDashboard() {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         <div className="bg-white/5 rounded-xl border border-white/10 p-5">
           <div className="flex items-center gap-2 mb-3">
-            <div className="w-8 h-8 rounded-lg bg-blue-100 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-blue-500/15 flex items-center justify-center">
               <Eye size={16} className="text-gold-light" />
             </div>
             <span className="text-xs font-medium text-slate-400">Page Views</span>
@@ -161,7 +161,7 @@ export function MarketingDashboard() {
         </div>
         <div className="bg-white/5 rounded-xl border border-white/10 p-5">
           <div className="flex items-center gap-2 mb-3">
-            <div className="w-8 h-8 rounded-lg bg-purple-100 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-violet-500/15 flex items-center justify-center">
               <Send size={16} className="text-purple-600" />
             </div>
             <span className="text-xs font-medium text-slate-400">Demo Requests</span>
@@ -170,7 +170,7 @@ export function MarketingDashboard() {
         </div>
         <div className="bg-white/5 rounded-xl border border-white/10 p-5">
           <div className="flex items-center gap-2 mb-3">
-            <div className="w-8 h-8 rounded-lg bg-emerald-100 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-emerald-500/15 flex items-center justify-center">
               <UserPlus size={16} className="text-emerald-600" />
             </div>
             <span className="text-xs font-medium text-slate-400">Signups</span>
@@ -179,7 +179,7 @@ export function MarketingDashboard() {
         </div>
         <div className="bg-white/5 rounded-xl border border-white/10 p-5">
           <div className="flex items-center gap-2 mb-3">
-            <div className="w-8 h-8 rounded-lg bg-amber-100 flex items-center justify-center">
+            <div className="w-8 h-8 rounded-lg bg-amber-500/15 flex items-center justify-center">
               <TrendingUp size={16} className="text-amber-600" />
             </div>
             <span className="text-xs font-medium text-slate-400">Conversion Rate</span>
@@ -208,17 +208,17 @@ export function MarketingDashboard() {
                 <tr key={pm.page} className="hover:bg-white/5">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-2">
-                      <Globe size={14} className="text-slate-500" />
+                      <Globe size={14} className="text-slate-400" />
                       <div>
                         <p className="text-sm font-medium text-white">{pm.label}</p>
-                        <p className="text-xs text-slate-500">{pm.page}</p>
+                        <p className="text-xs text-slate-400">{pm.page}</p>
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 text-right text-sm text-slate-200">{pm.views.toLocaleString()}</td>
                   <td className="px-6 py-4 text-right text-sm text-slate-200">{pm.conversions.toLocaleString()}</td>
                   <td className="px-6 py-4 text-right">
-                    <span className={`text-sm font-medium ${pm.views > 0 && pm.conversions > 0 ? 'text-emerald-600' : 'text-slate-500'}`}>
+                    <span className={`text-sm font-medium ${pm.views > 0 && pm.conversions > 0 ? 'text-emerald-600' : 'text-slate-400'}`}>
                       {pm.views > 0 ? ((pm.conversions / pm.views) * 100).toFixed(1) : '0.0'}%
                     </span>
                   </td>
@@ -250,9 +250,9 @@ export function MarketingDashboard() {
                     activity.type === 'cta_click' ? 'bg-amber-400' : 'bg-gray-400'
                   }`} />
                   <span className="text-sm text-slate-200 capitalize">{activity.type.replace('_', ' ')}</span>
-                  <span className="text-xs text-slate-500">{activity.page}</span>
+                  <span className="text-xs text-slate-400">{activity.page}</span>
                 </div>
-                <span className="text-xs text-slate-500">
+                <span className="text-xs text-slate-400">
                   {new Date(activity.timestamp).toLocaleString()}
                 </span>
               </div>

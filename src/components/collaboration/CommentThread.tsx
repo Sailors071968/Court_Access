@@ -45,7 +45,7 @@ export function CommentThread({ comments, onAdd, className }: CommentThreadProps
               <div className="min-w-0">
                 <p className="text-sm">
                   <span className="font-medium text-white">{c.author}</span>
-                  <span className="text-xs text-slate-500 ml-2">{c.at}</span>
+                  <span className="text-xs text-slate-400 ml-2">{c.at}</span>
                 </p>
                 <p className="text-sm text-slate-300 mt-0.5">{renderText(c.text)}</p>
               </div>
@@ -61,7 +61,7 @@ export function CommentThread({ comments, onAdd, className }: CommentThreadProps
             onChange={(e) => setDraft(e.target.value)}
             onKeyDown={(e) => e.key === 'Enter' && submit()}
             placeholder="Add a comment… use @ to mention"
-            className="flex-1 rounded-xl border border-white/10 bg-navy-900/60 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-gold/40"
+            className="flex-1 rounded-xl border border-white/10 bg-navy-900/60 px-3 py-2 text-sm text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-gold/40"
           />
           <button onClick={submit} className="p-2 rounded-xl ca-gradient-gold text-navy hover:brightness-110" aria-label="Send comment">
             <Send size={16} />

@@ -158,7 +158,7 @@ export function StaffDashboard() {
             <div className="space-y-3">
               <div>
                 <p className="text-sm font-semibold text-white">{caseTitle}</p>
-                <p className="text-xs text-slate-500 mt-0.5">{primaryCase.jurisdiction} · {primaryCase.status}</p>
+                <p className="text-xs text-slate-400 mt-0.5">{primaryCase.jurisdiction} · {primaryCase.status}</p>
               </div>
               <div className="flex flex-wrap gap-2">
                 <Badge variant="gold">{primaryCase.phase ?? 'Active'}</Badge>

@@ -105,7 +105,7 @@ export function Pagination({ page, totalPages, onPageChange, className }: Pagina
         const gap = prev && p - prev > 1;
         return (
           <span key={p} className="flex items-center gap-1">
-            {gap && <span className="text-slate-600 px-1">…</span>}
+            {gap && <span className="text-slate-300 px-1">…</span>}
             <button
               onClick={() => onPageChange(p)}
               aria-current={p === page ? 'page' : undefined}

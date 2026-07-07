@@ -41,9 +41,9 @@ import {
 
 function ValidationBadge({ status }: { status: string }) {
   const configs: Record<string, { label: string; bg: string; text: string; Icon: typeof CheckCircle }> = {
-    supported: { label: 'Supported', bg: 'bg-green-100', text: 'text-green-800', Icon: CheckCircle },
-    contradicted: { label: 'Contradicted', bg: 'bg-red-100', text: 'text-red-800', Icon: XCircle },
-    unverified: { label: 'Unverified', bg: 'bg-yellow-100', text: 'text-yellow-800', Icon: HelpCircle },
+    supported: { label: 'Supported', bg: 'bg-emerald-500/15', text: 'text-emerald-300', Icon: CheckCircle },
+    contradicted: { label: 'Contradicted', bg: 'bg-red-500/15', text: 'text-red-300', Icon: XCircle },
+    unverified: { label: 'Unverified', bg: 'bg-amber-500/15', text: 'text-amber-300', Icon: HelpCircle },
     pending: { label: 'Pending', bg: 'bg-white/10', text: 'text-slate-300', Icon: HelpCircle },
   };
   const config = configs[status] || configs.pending;
@@ -109,7 +109,7 @@ function ClaimCard({ claim }: { claim: ApiNarrativeClaim }) {
         </div>
         <button
           onClick={() => setExpanded(!expanded)}
-          className="flex-shrink-0 rounded p-1 text-slate-500 hover:bg-white/10 hover:text-slate-300"
+          className="flex-shrink-0 rounded p-1 text-slate-400 hover:bg-white/10 hover:text-slate-300"
         >
           {expanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
         </button>
@@ -146,7 +146,7 @@ function ClaimCard({ claim }: { claim: ApiNarrativeClaim }) {
           </div>
 
           {claim.normalizedEvent && (
-            <div className="rounded bg-blue-50 px-3 py-2 text-xs text-blue-800">
+            <div className="rounded bg-blue-500/10 px-3 py-2 text-xs text-blue-300">
               <span className="font-medium">Normalized:</span> {claim.normalizedEvent.eventType} — {claim.normalizedEvent.actor} {claim.normalizedEvent.actionNorm}
               {claim.normalizedEvent.object ? ` → ${claim.normalizedEvent.object}` : ''}
             </div>
@@ -165,7 +165,7 @@ function ClaimCard({ claim }: { claim: ApiNarrativeClaim }) {
 
 function ImpeachmentCard({ candidate }: { candidate: ApiImpeachmentCandidate }) {
   return (
-    <div className="rounded-lg border-2 border-red-200 bg-red-50 p-4 shadow-sm">
+    <div className="rounded-lg border-2 border-red-500/20 bg-red-500/10 p-4 shadow-sm">
       <div className="mb-2 flex items-center gap-2">
         <SeverityBadge severity={candidate.severity} />
         <span className="text-xs font-medium text-slate-400">{candidate.contradictionType}</span>
@@ -179,17 +179,17 @@ function ImpeachmentCard({ candidate }: { candidate: ApiImpeachmentCandidate }) 
         </div>
         <div>
           <p className="text-xs font-semibold text-slate-400">Contradicting Evidence</p>
-          <p className="text-sm text-red-700">{candidate.contradictingEvidence}</p>
+          <p className="text-sm text-red-300">{candidate.contradictingEvidence}</p>
         </div>
       </div>
 
       {candidate.suggestedQuestion && (
-        <div className="rounded-lg border border-amber-200 bg-amber-50 p-3">
+        <div className="rounded-lg border border-amber-500/20 bg-amber-500/10 p-3">
           <div className="mb-1 flex items-center gap-1.5">
             <MessageSquare className="h-3.5 w-3.5 text-amber-600" />
-            <span className="text-xs font-semibold text-amber-700">Suggested Impeachment Question</span>
+            <span className="text-xs font-semibold text-amber-300">Suggested Impeachment Question</span>
           </div>
-          <p className="text-sm italic text-amber-800">&ldquo;{candidate.suggestedQuestion}&rdquo;</p>
+          <p className="text-sm italic text-amber-300">&ldquo;{candidate.suggestedQuestion}&rdquo;</p>
         </div>
       )}
     </div>
@@ -199,7 +199,7 @@ function ImpeachmentCard({ candidate }: { candidate: ApiImpeachmentCandidate }) 
 function EmptyState({ onAnalyze, loading }: { onAnalyze: () => void; loading: boolean }) {
   return (
     <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-white/10 py-16 text-center">
-      <FileText className="mb-4 h-12 w-12 text-slate-500" />
+      <FileText className="mb-4 h-12 w-12 text-slate-400" />
       <h3 className="mb-2 text-lg font-semibold text-slate-200">No Narrative Analysis Yet</h3>
       <p className="mb-6 max-w-md text-sm text-slate-400">
         Upload police reports, supplemental reports, or arrest affidavits, then run the Narrative
@@ -303,9 +303,9 @@ export function NarrativeAnalysisPage() {
 
   if (error) {
     return (
-      <div className="rounded-lg border border-red-200 bg-red-50 p-6 text-center">
+      <div className="rounded-lg border border-red-500/20 bg-red-500/10 p-6 text-center">
         <AlertTriangle className="mx-auto mb-2 h-8 w-8 text-red-500" />
-        <p className="text-sm text-red-700">{error}</p>
+        <p className="text-sm text-red-300">{error}</p>
         <button onClick={loadData} className="mt-3 text-sm font-medium text-red-600 hover:underline">
           Retry
         </button>
@@ -345,16 +345,16 @@ export function NarrativeAnalysisPage() {
               <p className="text-2xl font-bold text-white">{claims.length}</p>
               <p className="text-xs text-slate-400">Total Claims</p>
             </div>
-            <div className="rounded-lg border border-green-200 bg-green-50 p-3 text-center">
-              <p className="text-2xl font-bold text-green-700">{supported}</p>
+            <div className="rounded-lg border border-emerald-500/20 bg-emerald-500/10 p-3 text-center">
+              <p className="text-2xl font-bold text-emerald-300">{supported}</p>
               <p className="text-xs text-green-600">Supported</p>
             </div>
-            <div className="rounded-lg border border-red-200 bg-red-50 p-3 text-center">
-              <p className="text-2xl font-bold text-red-700">{contradicted}</p>
+            <div className="rounded-lg border border-red-500/20 bg-red-500/10 p-3 text-center">
+              <p className="text-2xl font-bold text-red-300">{contradicted}</p>
               <p className="text-xs text-red-600">Contradicted</p>
             </div>
-            <div className="rounded-lg border border-yellow-200 bg-yellow-50 p-3 text-center">
-              <p className="text-2xl font-bold text-yellow-700">{unverified}</p>
+            <div className="rounded-lg border border-amber-500/20 bg-amber-500/10 p-3 text-center">
+              <p className="text-2xl font-bold text-amber-300">{unverified}</p>
               <p className="text-xs text-yellow-600">Unverified</p>
             </div>
             <div className="rounded-lg border border-white/10 bg-white/5 p-3 text-center">
@@ -365,10 +365,10 @@ export function NarrativeAnalysisPage() {
 
           {/* Impeachment Alert */}
           {severityCounts.high > 0 && (
-            <div className="flex items-center gap-3 rounded-lg border border-red-300 bg-red-50 p-4">
+            <div className="flex items-center gap-3 rounded-lg border border-red-300 bg-red-500/10 p-4">
               <Shield className="h-6 w-6 flex-shrink-0 text-red-600" />
               <div>
-                <p className="text-sm font-semibold text-red-800">
+                <p className="text-sm font-semibold text-red-300">
                   {severityCounts.high} High-Confidence Impeachment{severityCounts.high > 1 ? 's' : ''} Detected
                 </p>
                 <p className="text-xs text-red-600">
@@ -440,7 +440,7 @@ export function NarrativeAnalysisPage() {
                     Clear filter
                   </button>
                 )}
-                <span className="text-xs text-slate-500">
+                <span className="text-xs text-slate-400">
                   Showing {filteredClaims.length} of {claims.length} claims
                 </span>
               </div>
@@ -487,14 +487,14 @@ export function NarrativeAnalysisPage() {
                 <div className="py-12 text-center">
                   <CheckCircle className="mx-auto mb-3 h-10 w-10 text-green-400" />
                   <p className="text-sm font-medium text-slate-300">No contradictions detected</p>
-                  <p className="text-xs text-slate-500">All verified claims are consistent with the evidence</p>
+                  <p className="text-xs text-slate-400">All verified claims are consistent with the evidence</p>
                 </div>
               ) : (
                 contradictions.map((c) => (
-                  <div key={c.validationId} className="rounded-lg border-2 border-red-200 bg-white/5 p-4">
+                  <div key={c.validationId} className="rounded-lg border-2 border-red-500/20 bg-white/5 p-4">
                     <div className="mb-2 flex items-center gap-2">
                       <XCircle className="h-4 w-4 text-red-500" />
-                      <span className="text-xs font-semibold text-red-700">CONTRADICTION</span>
+                      <span className="text-xs font-semibold text-red-300">CONTRADICTION</span>
                       <ConfidenceBar confidence={c.confidence} />
                     </div>
                     {c.claim && (
@@ -507,7 +507,7 @@ export function NarrativeAnalysisPage() {
                       </div>
                     )}
                     {c.reasoning && (
-                      <p className="rounded bg-red-50 px-3 py-2 text-xs text-red-700">{c.reasoning}</p>
+                      <p className="rounded bg-red-500/10 px-3 py-2 text-xs text-red-300">{c.reasoning}</p>
                     )}
                   </div>
                 ))
@@ -520,9 +520,9 @@ export function NarrativeAnalysisPage() {
             <div className="space-y-4">
               {impeachmentCandidates.length === 0 ? (
                 <div className="py-12 text-center">
-                  <Shield className="mx-auto mb-3 h-10 w-10 text-slate-500" />
+                  <Shield className="mx-auto mb-3 h-10 w-10 text-slate-400" />
                   <p className="text-sm font-medium text-slate-300">No impeachment candidates</p>
-                  <p className="text-xs text-slate-500">
+                  <p className="text-xs text-slate-400">
                     Run narrative analysis to discover impeachment opportunities
                   </p>
                 </div>

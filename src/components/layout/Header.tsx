@@ -31,10 +31,10 @@ export function Header({ onMobileMenuToggle }: HeaderProps) {
         {/* Primary navigation experience — opens the global command palette */}
         <button
           onClick={openSearch}
-          className="hidden sm:flex items-center gap-3 w-72 lg:w-96 pl-3 pr-2 py-2.5 rounded-xl border border-white/10 bg-navy-900/60 text-sm text-slate-500 hover:border-gold/30 hover:text-slate-300 transition-colors"
+          className="hidden sm:flex items-center gap-3 w-72 lg:w-96 pl-3 pr-2 py-2.5 rounded-xl border border-white/10 bg-navy-900/60 text-sm text-slate-400 hover:border-gold/30 hover:text-slate-300 transition-colors"
           aria-label="Open global search"
         >
-          <Search size={16} className="text-slate-500" />
+          <Search size={16} className="text-slate-400" />
           <span className="flex-1 text-left">Search cases, statutes, citations…</span>
           <kbd className="flex items-center gap-0.5 text-[10px] px-1.5 py-0.5 rounded bg-white/10 border border-white/10">
             <Command size={10} />K

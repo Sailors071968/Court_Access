@@ -100,7 +100,7 @@ export function HeroSection() {
         {/* Intelligence stat cards — illustrative product preview (not real case data) */}
         <div className="mt-12">
           <div className="flex items-center gap-2 mb-3">
-            <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-500">Illustrative preview</span>
+            <span className="text-[10px] font-semibold uppercase tracking-[0.18em] text-slate-400">Illustrative preview</span>
             <span className="h-px flex-1 bg-white/5" />
           </div>
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
@@ -116,7 +116,7 @@ export function HeroSection() {
                   </div>
                 </div>
                 <p className="text-sm font-medium text-slate-200">{stat.label}</p>
-                <p className="text-xs text-slate-500 mt-0.5">{stat.sub}</p>
+                <p className="text-xs text-slate-400 mt-0.5">{stat.sub}</p>
               </div>
             ))}
           </div>

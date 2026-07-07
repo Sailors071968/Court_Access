@@ -198,7 +198,7 @@ export function PolicyTopicsViewer() {
       <Card>
         <div className="flex items-center gap-4">
           <div className="flex-1 relative">
-            <Search size={14} className="absolute left-3 top-2.5 text-slate-500" />
+            <Search size={14} className="absolute left-3 top-2.5 text-slate-400" />
             <input
               type="text"
               value={searchTerm}
@@ -208,7 +208,7 @@ export function PolicyTopicsViewer() {
             />
           </div>
           <div className="flex items-center gap-2">
-            <Filter size={14} className="text-slate-500" />
+            <Filter size={14} className="text-slate-400" />
             <select
               value={countyFilter}
               onChange={e => setCountyFilter(e.target.value)}
@@ -226,7 +226,7 @@ export function PolicyTopicsViewer() {
       {/* Agency list */}
       {isLoading ? (
         <div className="flex items-center justify-center h-48">
-          <RefreshCw size={24} className="animate-spin text-slate-500" />
+          <RefreshCw size={24} className="animate-spin text-slate-400" />
           <span className="ml-3 text-slate-400">Loading agencies...</span>
         </div>
       ) : (
@@ -239,7 +239,7 @@ export function PolicyTopicsViewer() {
                 onClick={() => toggleExpand(agency)}
               >
                 <div className="flex items-center gap-4">
-                  <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center">
+                  <div className="w-10 h-10 rounded-lg bg-indigo-500/10 flex items-center justify-center">
                     <span className="text-sm font-bold text-indigo-600">
                       {agency.coveragePercent >= 70 ? 'A' : agency.coveragePercent >= 40 ? 'B' : 'C'}
                     </span>
@@ -280,12 +280,12 @@ export function PolicyTopicsViewer() {
                       className="p-2 rounded-lg hover:bg-white/10 transition-colors"
                       title="Export CSV"
                     >
-                      <Download size={16} className="text-slate-500" />
+                      <Download size={16} className="text-slate-400" />
                     </button>
                     {expandedAgency === agency.agencyId ? (
-                      <ChevronUp size={20} className="text-slate-500" />
+                      <ChevronUp size={20} className="text-slate-400" />
                     ) : (
-                      <ChevronDown size={20} className="text-slate-500" />
+                      <ChevronDown size={20} className="text-slate-400" />
                     )}
                   </div>
                 </div>
@@ -296,7 +296,7 @@ export function PolicyTopicsViewer() {
                 <div className="mt-4 pt-4 border-t border-white/10">
                   {detailLoading ? (
                     <div className="flex items-center justify-center py-8">
-                      <RefreshCw size={16} className="animate-spin text-slate-500" />
+                      <RefreshCw size={16} className="animate-spin text-slate-400" />
                       <span className="ml-2 text-sm text-slate-400">Loading topics...</span>
                     </div>
                   ) : agencyDetail ? (
@@ -327,10 +327,10 @@ export function PolicyTopicsViewer() {
                           <div
                             key={t.topic}
                             className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm ${
-                              t.status === 'FOUND' ? 'bg-green-50' :
-                              t.status === 'RECEIVED' ? 'bg-blue-50' :
-                              t.status === 'CPRA_REQUESTED' ? 'bg-yellow-50' :
-                              'bg-red-50'
+                              t.status === 'FOUND' ? 'bg-emerald-500/10' :
+                              t.status === 'RECEIVED' ? 'bg-blue-500/10' :
+                              t.status === 'CPRA_REQUESTED' ? 'bg-amber-500/10' :
+                              'bg-red-500/10'
                             }`}
                           >
                             <TopicStatusIcon status={t.status} />

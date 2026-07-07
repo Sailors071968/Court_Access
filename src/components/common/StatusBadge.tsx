@@ -90,10 +90,10 @@ interface CaseStatusBadgeProps {
 
 export function CaseStatusBadge({ status }: CaseStatusBadgeProps) {
   const config: Record<string, { label: string; bgColor: string; textColor: string; dotColor: string }> = {
-    active: { label: 'Active', bgColor: 'bg-green-50', textColor: 'text-green-700', dotColor: 'bg-green-500' },
+    active: { label: 'Active', bgColor: 'bg-emerald-500/10', textColor: 'text-emerald-300', dotColor: 'bg-green-500' },
     closed: { label: 'Closed', bgColor: 'bg-white/10', textColor: 'text-slate-300', dotColor: 'bg-gray-400' },
-    pending: { label: 'Pending', bgColor: 'bg-amber-50', textColor: 'text-amber-700', dotColor: 'bg-amber-500' },
-    archived: { label: 'Archived', bgColor: 'bg-blue-50', textColor: 'text-blue-700', dotColor: 'bg-blue-500' },
+    pending: { label: 'Pending', bgColor: 'bg-amber-500/10', textColor: 'text-amber-300', dotColor: 'bg-amber-500' },
+    archived: { label: 'Archived', bgColor: 'bg-blue-500/10', textColor: 'text-blue-300', dotColor: 'bg-blue-500' },
   };
   const c = config[status] ?? { label: status, bgColor: 'bg-white/10', textColor: 'text-slate-300', dotColor: 'bg-gray-400' };
   return (

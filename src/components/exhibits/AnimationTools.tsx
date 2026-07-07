@@ -101,7 +101,7 @@ export default function AnimationTools({
             <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
           )}
           <svg
-            className={`w-4 h-4 text-slate-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+            className={`w-4 h-4 text-slate-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -151,7 +151,7 @@ export default function AnimationTools({
 
             {/* Timeline Scrubber */}
             <div className="mb-2">
-              <div className="flex items-center justify-between text-xs text-slate-500 mb-1">
+              <div className="flex items-center justify-between text-xs text-slate-400 mb-1">
                 <span>{formatTime(timeline.currentTime)}</span>
                 <span>{formatTime(timeline.duration)}</span>
               </div>
@@ -189,7 +189,7 @@ export default function AnimationTools({
                   className={`flex-1 py-1 text-xs rounded transition-colors ${
                     timeline.playbackSpeed === speed
                       ? 'bg-blue-500 text-white'
-                      : 'bg-gray-700 text-slate-500 hover:bg-gray-600'
+                      : 'bg-gray-700 text-slate-400 hover:bg-gray-600'
                   }`}
                 >
                   {speed}x

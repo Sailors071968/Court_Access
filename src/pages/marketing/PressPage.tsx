@@ -45,19 +45,19 @@ export function PressPage() {
       <section className="py-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           {PRESS_ITEMS.map((item) => (
-            <article key={item.title} className="p-6 rounded-xl border border-slate-200 bg-white/5">
-              <time className="text-sm text-slate-500">{item.date}</time>
-              <h2 className="text-xl font-bold text-slate-900 mt-2 mb-2">{item.title}</h2>
-              <p className="text-slate-600 leading-relaxed">{item.excerpt}</p>
+            <article key={item.title} className="p-6 rounded-xl border border-white/10 bg-white/5">
+              <time className="text-sm text-slate-400">{item.date}</time>
+              <h2 className="text-xl font-bold text-white mt-2 mb-2">{item.title}</h2>
+              <p className="text-slate-300 leading-relaxed">{item.excerpt}</p>
             </article>
           ))}
         </div>
       </section>
 
-      <section className="py-16 bg-slate-50 border-t border-slate-200">
+      <section className="py-16 bg-white/5 border-t border-white/10">
         <div className="max-w-2xl mx-auto px-4 text-center">
-          <h2 className="text-xl font-bold text-slate-900 mb-3">Media Inquiries</h2>
-          <p className="text-slate-600 mb-6">
+          <h2 className="text-xl font-bold text-white mb-3">Media Inquiries</h2>
+          <p className="text-slate-300 mb-6">
             For press kits, interviews, and product demonstrations, contact our media team.
           </p>
           <a
@@ -68,7 +68,7 @@ export function PressPage() {
             press@courtaccess.net
           </a>
           <div className="mt-8">
-            <Link to="/about" className="inline-flex items-center gap-1 text-sm text-slate-600 hover:text-slate-900">
+            <Link to="/about" className="inline-flex items-center gap-1 text-sm text-slate-300 hover:text-white">
               About CourtAccess
               <ArrowRight size={14} />
             </Link>

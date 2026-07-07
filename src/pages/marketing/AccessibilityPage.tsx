@@ -45,25 +45,25 @@ export function AccessibilityPage() {
 
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <p className="text-slate-600 leading-relaxed mb-10 text-center max-w-2xl mx-auto">
+          <p className="text-slate-300 leading-relaxed mb-10 text-center max-w-2xl mx-auto">
             We believe attorneys, defendants, investigators, and family members should be able to
             access case information regardless of ability. We continuously improve accessibility
             across our public website and authenticated platform.
           </p>
           <div className="grid sm:grid-cols-2 gap-6 mb-12">
             {COMMITMENTS.map(({ icon: Icon, title, description }) => (
-              <div key={title} className="p-5 rounded-xl border border-slate-200 bg-white/5">
-                <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-3">
+              <div key={title} className="p-5 rounded-xl border border-white/10 bg-white/5">
+                <div className="w-10 h-10 bg-blue-500/15 rounded-lg flex items-center justify-center mb-3">
                   <Icon className="text-gold-light" size={20} />
                 </div>
-                <h2 className="font-semibold text-slate-900 mb-2">{title}</h2>
-                <p className="text-sm text-slate-600 leading-relaxed">{description}</p>
+                <h2 className="font-semibold text-white mb-2">{title}</h2>
+                <p className="text-sm text-slate-300 leading-relaxed">{description}</p>
               </div>
             ))}
           </div>
 
-          <div className="text-center p-6 rounded-xl bg-slate-50 border border-slate-200">
-            <p className="text-slate-600 mb-4">
+          <div className="text-center p-6 rounded-xl bg-white/5 border border-white/10">
+            <p className="text-slate-300 mb-4">
               Encounter an accessibility barrier? Contact us at{' '}
               <a href="mailto:accessibility@courtaccess.net" className="text-amber-600 hover:underline">
                 accessibility@courtaccess.net

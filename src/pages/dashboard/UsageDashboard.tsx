@@ -98,13 +98,13 @@ function UsageProgressBar({
         <span>{(limit - used).toLocaleString()} remaining</span>
       </div>
       {warningLevel === 'approaching' && (
-        <div className="flex items-center gap-1 text-xs text-amber-600 bg-amber-50 px-2 py-1 rounded">
+        <div className="flex items-center gap-1 text-xs text-amber-600 bg-amber-500/10 px-2 py-1 rounded">
           <AlertTriangle size={12} />
           Approaching limit — consider upgrading or purchasing add-ons
         </div>
       )}
       {warningLevel === 'exceeded' && (
-        <div className="flex items-center gap-1 text-xs text-red-600 bg-red-50 px-2 py-1 rounded">
+        <div className="flex items-center gap-1 text-xs text-red-600 bg-red-500/10 px-2 py-1 rounded">
           <AlertTriangle size={12} />
           Limit exceeded — uploads/analyses blocked until upgraded
         </div>
@@ -156,7 +156,7 @@ function PurchaseModal({
       <div className="bg-white/5 rounded-xl shadow-2xl max-w-md w-full mx-4 p-6">
         <div className="flex items-center justify-between mb-4">
           <h3 className="text-lg font-bold text-white">Purchase AI Credits</h3>
-          <button onClick={onClose} className="text-slate-500 hover:text-slate-300">
+          <button onClick={onClose} className="text-slate-400 hover:text-slate-300">
             <X size={20} />
           </button>
         </div>
@@ -172,12 +172,12 @@ function PurchaseModal({
               onClick={() => setSelectedPack(pack.packId)}
               className={`w-full flex items-center justify-between p-4 rounded-lg border-2 transition-all ${
                 selectedPack === pack.packId
-                  ? 'border-blue-500 bg-blue-50'
+                  ? 'border-blue-500 bg-blue-500/10'
                   : 'border-white/10 hover:border-white/10'
               }`}
             >
               <div className="flex items-center gap-3">
-                <Zap size={20} className={selectedPack === pack.packId ? 'text-gold-light' : 'text-slate-500'} />
+                <Zap size={20} className={selectedPack === pack.packId ? 'text-gold-light' : 'text-slate-400'} />
                 <div className="text-left">
                   <p className="font-medium text-white">{pack.description}</p>
                   <p className="text-xs text-slate-400">
@@ -193,7 +193,7 @@ function PurchaseModal({
         </div>
 
         {error && (
-          <div className="flex items-center gap-2 p-3 mb-4 bg-red-50 text-red-700 rounded-lg text-sm">
+          <div className="flex items-center gap-2 p-3 mb-4 bg-red-500/10 text-red-300 rounded-lg text-sm">
             {error}
           </div>
         )}
@@ -282,7 +282,7 @@ export function UsageDashboard() {
   return (
     <div className="max-w-4xl mx-auto space-y-6">
       {checkoutMessage && (
-        <div className="flex items-center gap-2 p-3 bg-green-50 text-green-800 rounded-lg text-sm">
+        <div className="flex items-center gap-2 p-3 bg-emerald-500/10 text-emerald-300 rounded-lg text-sm">
           <Check size={16} />
           {checkoutMessage}
         </div>
@@ -310,7 +310,7 @@ export function UsageDashboard() {
       <Card>
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
+            <div className="w-10 h-10 bg-blue-500/15 rounded-lg flex items-center justify-center">
               <TrendingUp size={20} className="text-gold-light" />
             </div>
             <div>
@@ -374,7 +374,7 @@ export function UsageDashboard() {
             <button
               key={pack.packId}
               onClick={() => setShowPurchaseModal(true)}
-              className="p-4 border border-white/10 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-all text-center"
+              className="p-4 border border-white/10 rounded-lg hover:border-blue-300 hover:bg-blue-500/10 transition-all text-center"
             >
               <p className="text-2xl font-bold text-white">{pack.credits}</p>
               <p className="text-xs text-slate-400 mb-2">credits</p>

@@ -55,22 +55,22 @@ function FAQAccordionItem({ q, a }: { q: string; a: string }) {
   const id = q.replace(/\s+/g, '-').toLowerCase().slice(0, 40);
 
   return (
-    <div className="border border-slate-200 rounded-xl overflow-hidden">
+    <div className="border border-white/10 rounded-xl overflow-hidden">
       <button
         type="button"
         onClick={() => setOpen(!open)}
         aria-expanded={open}
         aria-controls={`faq-${id}`}
-        className="w-full flex items-center justify-between gap-4 px-6 py-4 text-left bg-white/5 hover:bg-slate-50 transition-colors"
+        className="w-full flex items-center justify-between gap-4 px-6 py-4 text-left bg-white/5 hover:bg-white/5 transition-colors"
       >
-        <span className="font-semibold text-slate-900">{q}</span>
+        <span className="font-semibold text-white">{q}</span>
         <ChevronDown
           size={20}
           className={`text-slate-400 shrink-0 transition-transform ${open ? 'rotate-180' : ''}`}
         />
       </button>
       {open && (
-        <div id={`faq-${id}`} className="px-6 pb-4 text-slate-600 leading-relaxed border-t border-slate-100 pt-4 bg-slate-50">
+        <div id={`faq-${id}`} className="px-6 pb-4 text-slate-300 leading-relaxed border-t border-slate-100 pt-4 bg-white/5">
           {a}
         </div>
       )}
@@ -100,16 +100,16 @@ export function FAQPage() {
         </div>
       </section>
 
-      <section className="py-12 bg-slate-50 border-t border-slate-200">
+      <section className="py-12 bg-white/5 border-t border-white/10">
         <div className="max-w-3xl mx-auto px-4 text-center">
-          <p className="text-slate-600 mb-4">Still have questions?</p>
+          <p className="text-slate-300 mb-4">Still have questions?</p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Link to="/contact" className="text-amber-600 hover:text-amber-700 font-medium">
+            <Link to="/contact" className="text-amber-600 hover:text-amber-300 font-medium">
               Contact Us
             </Link>
             <Link
               to="/register"
-              className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-6 py-2.5 rounded-lg transition-colors"
+              className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-white font-semibold px-6 py-2.5 rounded-lg transition-colors"
             >
               Start Free Trial
               <ArrowRight size={16} />

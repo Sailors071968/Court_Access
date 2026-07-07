@@ -48,9 +48,9 @@ export function MotionsPage() {
   return (
     <div className="space-y-6">
       {/* Disclaimer */}
-      <div className="flex items-start gap-3 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+      <div className="flex items-start gap-3 p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl">
         <AlertTriangle size={20} className="text-amber-600 mt-0.5 flex-shrink-0" />
-        <p className="text-sm text-amber-800">
+        <p className="text-sm text-amber-300">
           <strong>Important:</strong> These are AI-generated ideas, not legal advice.
           Discuss all recommendations with your licensed attorney.
         </p>

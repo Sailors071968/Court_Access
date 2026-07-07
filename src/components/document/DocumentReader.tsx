@@ -63,7 +63,7 @@ export function DocumentReader({ evidence, extractedText, url, onAnnotate, onBoo
               className="min-h-[24rem]"
             />
             {evidence.processingStatus !== 'analyzed' && (
-              <p className="text-center text-xs text-slate-500 mt-4">
+              <p className="text-center text-xs text-slate-400 mt-4">
                 Extracted text appears here once OCR &amp; AI extraction complete.
               </p>
             )}

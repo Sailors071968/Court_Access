@@ -186,14 +186,14 @@ export function NotificationsPage() {
                 <div>
                   <label className="block text-sm font-medium text-slate-300 mb-1">Email</label>
                   <div className="flex items-center gap-2 px-3 py-2 border border-white/10 rounded-lg bg-navy-900/60">
-                    <Mail size={14} className="text-slate-500" />
+                    <Mail size={14} className="text-slate-400" />
                     <span className="flex-1 text-sm text-slate-200">{contact.email || 'UNKNOWN'}</span>
                   </div>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-slate-300 mb-1">Phone number</label>
                   <div className="flex items-center gap-2 px-3 py-2 border border-white/10 rounded-lg bg-navy-900/60">
-                    <Phone size={14} className="text-slate-500" />
+                    <Phone size={14} className="text-slate-400" />
                     <span className="flex-1 text-sm text-slate-200">{contact.phone || 'Not set'}</span>
                   </div>
                 </div>

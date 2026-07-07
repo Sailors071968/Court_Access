@@ -68,10 +68,10 @@ interface MatrixSummary {
 
 const STATUS_CONFIG: Record<PolicyMatrixStatus, { label: string; color: string; bg: string; icon: React.ReactNode }> = {
   NOT_REQUESTED: { label: 'Not Requested', color: 'text-slate-400', bg: 'bg-white/10', icon: <AlertCircle size={12} /> },
-  REQUESTED: { label: 'Requested', color: 'text-yellow-700', bg: 'bg-yellow-100', icon: <Clock size={12} /> },
-  RECEIVED: { label: 'Received', color: 'text-blue-700', bg: 'bg-blue-100', icon: <Download size={12} /> },
-  UPLOADED: { label: 'Uploaded', color: 'text-purple-700', bg: 'bg-purple-100', icon: <Upload size={12} /> },
-  IN_USE: { label: 'In Use', color: 'text-green-700', bg: 'bg-green-100', icon: <CheckCircle2 size={12} /> },
+  REQUESTED: { label: 'Requested', color: 'text-amber-300', bg: 'bg-amber-500/15', icon: <Clock size={12} /> },
+  RECEIVED: { label: 'Received', color: 'text-blue-300', bg: 'bg-blue-500/15', icon: <Download size={12} /> },
+  UPLOADED: { label: 'Uploaded', color: 'text-violet-300', bg: 'bg-violet-500/15', icon: <Upload size={12} /> },
+  IN_USE: { label: 'In Use', color: 'text-emerald-300', bg: 'bg-emerald-500/15', icon: <CheckCircle2 size={12} /> },
 };
 
 function StatusBadge({ status, compact }: { status: PolicyMatrixStatus; compact?: boolean }) {
@@ -356,7 +356,7 @@ export function CpraMatrixDashboard() {
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-4">
         <div className="relative flex-1 min-w-[200px]">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
             placeholder="Search agencies..."
@@ -473,7 +473,7 @@ export function CpraMatrixDashboard() {
       </div>
 
       {/* Stats Footer */}
-      <div className="text-xs text-slate-500 text-center">
+      <div className="text-xs text-slate-400 text-center">
         Showing {filteredAgencies.length} of {data.agencies.length} agencies |{' '}
         {data.topics.length} policy topics | {data.entries.length} total matrix cells
       </div>

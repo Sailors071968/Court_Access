@@ -65,11 +65,11 @@ function getTypeLabel(type: TrialExhibit['type']): string {
 
 function getTypeColor(type: TrialExhibit['type']): string {
   const colors: Record<TrialExhibit['type'], string> = {
-    timeline: 'bg-blue-100 text-blue-700',
-    officer_action: 'bg-red-100 text-red-700',
-    policy_comparison: 'bg-purple-100 text-purple-700',
-    scene_reconstruction: 'bg-emerald-100 text-emerald-700',
-    evidence_relationship: 'bg-amber-100 text-amber-700',
+    timeline: 'bg-blue-500/15 text-blue-300',
+    officer_action: 'bg-red-500/15 text-red-300',
+    policy_comparison: 'bg-violet-500/15 text-violet-300',
+    scene_reconstruction: 'bg-emerald-500/15 text-emerald-300',
+    evidence_relationship: 'bg-amber-500/15 text-amber-300',
   };
   return colors[type];
 }
@@ -155,10 +155,10 @@ export function TrialExhibitWorkspace() {
                 }`}
               >
                 <div className="flex items-start justify-between mb-3">
-                  <span className="text-xs font-bold text-slate-500">EXHIBIT {exhibit.exhibitNumber}</span>
+                  <span className="text-xs font-bold text-slate-400">EXHIBIT {exhibit.exhibitNumber}</span>
                   <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                    exhibit.status === 'ready' ? 'bg-green-100 text-green-700' :
-                    exhibit.status === 'generating' ? 'bg-amber-100 text-amber-700' :
+                    exhibit.status === 'ready' ? 'bg-emerald-500/15 text-emerald-300' :
+                    exhibit.status === 'generating' ? 'bg-amber-500/15 text-amber-300' :
                     'bg-white/10 text-slate-300'
                   }`}>
                     {exhibit.status.toUpperCase()}
@@ -198,7 +198,7 @@ export function TrialExhibitWorkspace() {
             <div className="h-96 bg-gray-900 flex items-center justify-center relative">
               <div className="text-center">
                 <Box size={64} className="mx-auto mb-4 text-slate-300" />
-                <p className="text-slate-500 font-medium">3D Scene Reconstruction</p>
+                <p className="text-slate-400 font-medium">3D Scene Reconstruction</p>
                 <p className="text-slate-400 text-sm mt-1">Three.js renderer — requires bodycam, dashcam, scene photos</p>
               </div>
               {/* Scene controls overlay */}
@@ -217,14 +217,14 @@ export function TrialExhibitWorkspace() {
               <div className="flex gap-3">
                 {['Bodycam Footage', 'Dashcam Footage', 'Scene Photos', 'Police Reports', 'Witness Statements'].map((input) => (
                   <div key={input} className="flex items-center gap-1.5 px-3 py-1.5 bg-white/5 border border-white/10 rounded-lg text-xs">
-                    <Video size={12} className="text-slate-500" />
+                    <Video size={12} className="text-slate-400" />
                     <span className="text-slate-200">{input}</span>
                   </div>
                 ))}
               </div>
             </div>
           </div>
-          <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 text-sm text-blue-800">
+          <div className="bg-blue-500/10 border border-blue-500/20 rounded-xl p-4 text-sm text-blue-300">
             <strong>Scene Outputs:</strong> 3D reconstruction, camera viewpoints, officer positions, lighting simulation, trajectory analysis
           </div>
         </div>
@@ -282,7 +282,7 @@ export function TrialExhibitWorkspace() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4">
               {['Officer Actions', 'Suspect Movements', 'Radio Calls', 'Timeline Events'].map((input) => (
                 <div key={input} className="p-3 bg-white/5 rounded-lg text-center">
-                  <Play size={20} className="mx-auto mb-1 text-slate-500" />
+                  <Play size={20} className="mx-auto mb-1 text-slate-400" />
                   <span className="text-xs font-medium text-slate-200">{input}</span>
                 </div>
               ))}
@@ -292,7 +292,7 @@ export function TrialExhibitWorkspace() {
             {animations.map((anim) => (
               <div key={anim.id} className="bg-white/5 rounded-xl border border-white/10 p-4 flex items-center justify-between">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center">
+                  <div className="w-10 h-10 bg-violet-500/15 rounded-lg flex items-center justify-center">
                     <Play size={20} className="text-purple-600" />
                   </div>
                   <div>
@@ -301,7 +301,7 @@ export function TrialExhibitWorkspace() {
                   </div>
                 </div>
                 <span className={`px-2.5 py-1 rounded-full text-xs font-medium ${
-                  anim.status === 'ready' ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
+                  anim.status === 'ready' ? 'bg-emerald-500/15 text-emerald-300' : 'bg-amber-500/15 text-amber-300'
                 }`}>
                   {anim.status === 'ready' ? 'Ready' : 'Rendering...'}
                 </span>
@@ -322,7 +322,7 @@ export function TrialExhibitWorkspace() {
               { format: 'Interactive Viewer', desc: 'Browser-based interactive exhibit for jury display', icon: <Eye size={24} /> },
             ].map((exp) => (
               <div key={exp.format} className="bg-white/5 rounded-xl border border-white/10 p-6 text-center hover:shadow-md transition-shadow cursor-pointer">
-                <div className="w-12 h-12 bg-blue-100 rounded-xl mx-auto mb-3 flex items-center justify-center text-gold-light">
+                <div className="w-12 h-12 bg-blue-500/15 rounded-xl mx-auto mb-3 flex items-center justify-center text-gold-light">
                   {exp.icon}
                 </div>
                 <h4 className="font-semibold text-white mb-1">{exp.format}</h4>

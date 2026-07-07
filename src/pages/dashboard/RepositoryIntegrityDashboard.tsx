@@ -61,9 +61,9 @@ function getAuthHeaders(): Record<string, string> {
 
 function IntegrityBadge({ status }: { status: string }) {
   const styles: Record<string, { icon: React.ReactNode; className: string }> = {
-    PASS: { icon: <CheckCircle size={14} />, className: 'bg-green-100 text-green-800' },
-    FAIL: { icon: <AlertTriangle size={14} />, className: 'bg-red-100 text-red-800' },
-    PARTIAL: { icon: <AlertTriangle size={14} />, className: 'bg-amber-100 text-amber-800' },
+    PASS: { icon: <CheckCircle size={14} />, className: 'bg-emerald-500/15 text-emerald-300' },
+    FAIL: { icon: <AlertTriangle size={14} />, className: 'bg-red-500/15 text-red-300' },
+    PARTIAL: { icon: <AlertTriangle size={14} />, className: 'bg-amber-500/15 text-amber-300' },
     UNKNOWN: { icon: <HelpCircle size={14} />, className: 'bg-white/10 text-slate-200' },
   };
   const s = styles[status] ?? styles.UNKNOWN;
@@ -99,7 +99,7 @@ export function RepositoryIntegrityDashboard() {
   if (loading && !data) {
     return (
       <div className="flex items-center justify-center py-24">
-        <Loader2 className="animate-spin text-slate-500" size={32} />
+        <Loader2 className="animate-spin text-slate-400" size={32} />
       </div>
     );
   }
@@ -108,7 +108,7 @@ export function RepositoryIntegrityDashboard() {
     return (
       <div className="max-w-3xl mx-auto p-6 text-center">
         <AlertTriangle className="mx-auto text-red-500 mb-3" size={32} />
-        <p className="text-red-700">{error}</p>
+        <p className="text-red-300">{error}</p>
         <button type="button" onClick={() => void load()} className="mt-4 px-4 py-2 bg-slate-800 text-white rounded-lg">Retry</button>
       </div>
     );
@@ -150,7 +150,7 @@ export function RepositoryIntegrityDashboard() {
       {data.globalUnknowns.length > 0 && (
         <Card>
           <CardHeader title="Global Unknowns" subtitle="Explicitly reported — never fabricated" />
-          <ul className="list-disc list-inside text-sm text-amber-800 space-y-1">
+          <ul className="list-disc list-inside text-sm text-amber-300 space-y-1">
             {data.globalUnknowns.map((u, i) => <li key={i}>{u}</li>)}
           </ul>
         </Card>
@@ -181,18 +181,18 @@ export function RepositoryIntegrityDashboard() {
                   <td className="px-4 py-3">{repo.recordCount}</td>
                   <td className="px-4 py-3">
                     <IntegrityBadge status={repo.integrity} />
-                    <p className="text-xs text-slate-500 mt-0.5">{repo.integrityDetail}</p>
+                    <p className="text-xs text-slate-400 mt-0.5">{repo.integrityDetail}</p>
                   </td>
                   <td className="px-4 py-3">
                     {repo.coverage ? (
                       <span>{repo.coverage.statutesCovered} statutes</span>
                     ) : (
-                      <span className="text-slate-500">—</span>
+                      <span className="text-slate-400">—</span>
                     )}
                   </td>
                   <td className="px-4 py-3">
                     {repo.unknowns.length > 0 ? (
-                      <span className="text-amber-700">{repo.unknowns.length}</span>
+                      <span className="text-amber-300">{repo.unknowns.length}</span>
                     ) : (
                       <span className="text-green-600">0</span>
                     )}
@@ -225,9 +225,9 @@ export function RepositoryIntegrityDashboard() {
           <CardHeader title="Extraction Audit" />
           <dl className="grid grid-cols-2 gap-2 text-sm">
             <div><dt className="text-slate-400">Total</dt><dd>{data.auditSummary.total}</dd></div>
-            <div><dt className="text-slate-400">Success</dt><dd className="text-green-700">{data.auditSummary.success}</dd></div>
-            <div><dt className="text-slate-400">Rejected</dt><dd className="text-red-700">{data.auditSummary.rejected}</dd></div>
-            <div><dt className="text-slate-400">Partial</dt><dd className="text-amber-700">{data.auditSummary.partial}</dd></div>
+            <div><dt className="text-slate-400">Success</dt><dd className="text-emerald-300">{data.auditSummary.success}</dd></div>
+            <div><dt className="text-slate-400">Rejected</dt><dd className="text-red-300">{data.auditSummary.rejected}</dd></div>
+            <div><dt className="text-slate-400">Partial</dt><dd className="text-amber-300">{data.auditSummary.partial}</dd></div>
           </dl>
         </Card>
       </div>

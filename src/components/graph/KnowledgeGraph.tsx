@@ -183,7 +183,7 @@ export function KnowledgeGraph({
                 }
                 className={cn(
                   'inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] border transition-colors',
-                  active ? 'border-white/15 text-slate-200' : 'border-white/5 text-slate-600',
+                  active ? 'border-white/15 text-slate-200' : 'border-white/5 text-slate-300',
                 )}
               >
                 <span className="w-2 h-2 rounded-full" style={{ background: NODE_META[t].color }} />

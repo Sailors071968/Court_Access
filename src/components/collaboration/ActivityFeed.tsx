@@ -28,7 +28,7 @@ export function ActivityFeed({ items, className }: { items: ActivityItem[]; clas
               <span className="font-medium text-white">{item.actor}</span> {item.action}
               {item.target && <span className="text-gold-light"> {item.target}</span>}
             </p>
-            <p className="text-xs text-slate-500 mt-0.5">{item.at}</p>
+            <p className="text-xs text-slate-400 mt-0.5">{item.at}</p>
           </div>
         ))}
       </div>

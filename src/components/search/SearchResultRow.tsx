@@ -81,7 +81,7 @@ export function SearchResultRow({ result, query, active, onSelect, compact }: Se
               </span>
             )}
             {result.repositorySource && (
-              <span className="inline-flex items-center gap-1 text-[11px] text-slate-500">
+              <span className="inline-flex items-center gap-1 text-[11px] text-slate-400">
                 <ShieldCheck size={11} /> {result.repositorySource}
               </span>
             )}

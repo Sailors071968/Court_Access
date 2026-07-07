@@ -201,12 +201,12 @@ export function TimelineEngine({ events, variant = 'case', title, loading, class
 
         <div className="flex flex-wrap items-center gap-2">
           <div className="relative">
-            <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-500" />
+            <Search size={14} className="absolute left-2.5 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               placeholder="Search timeline…"
-              className="w-44 pl-8 pr-3 py-1.5 rounded-lg border border-white/10 bg-navy-900/60 text-xs text-white placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-gold/40"
+              className="w-44 pl-8 pr-3 py-1.5 rounded-lg border border-white/10 bg-navy-900/60 text-xs text-white placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-gold/40"
               aria-label="Search timeline"
             />
           </div>
@@ -241,7 +241,7 @@ export function TimelineEngine({ events, variant = 'case', title, loading, class
 
       {/* Filter chips */}
       <div className="flex flex-wrap items-center gap-2 px-4 py-2.5 border-b border-white/5 print:hidden">
-        <span className="text-[11px] text-slate-500">Significance:</span>
+        <span className="text-[11px] text-slate-400">Significance:</span>
         {(['routine', 'notable', 'significant', 'critical'] as TimelineSignificance[]).map((s) => (
           <button
             key={s}
@@ -250,21 +250,21 @@ export function TimelineEngine({ events, variant = 'case', title, loading, class
               'inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[11px] border transition-colors capitalize',
               sigFilter.size === 0 || sigFilter.has(s)
                 ? 'border-white/15 text-slate-200'
-                : 'border-white/5 text-slate-600',
+                : 'border-white/5 text-slate-300',
             )}
           >
             <span className={cn('w-2 h-2 rounded-full', SIGNIFICANCE_DOT[s])} /> {s}
           </button>
         ))}
         <span className="w-px h-4 bg-white/10 mx-1" />
-        <span className="text-[11px] text-slate-500">Overlays:</span>
+        <span className="text-[11px] text-slate-400">Overlays:</span>
         {(['evidence', 'authorities', 'contradictions', 'unknowns'] as (keyof TimelineOverlayFlags)[]).map((o) => (
           <button
             key={o}
             onClick={() => setOverlays((prev) => ({ ...prev, [o]: !prev[o] }))}
             className={cn(
               'px-2 py-0.5 rounded-full text-[11px] border transition-colors capitalize',
-              overlays[o] ? 'border-gold/25 bg-gold/10 text-gold-light' : 'border-white/10 text-slate-500',
+              overlays[o] ? 'border-gold/25 bg-gold/10 text-gold-light' : 'border-white/10 text-slate-400',
             )}
           >
             {o}
@@ -324,7 +324,7 @@ export function TimelineEngine({ events, variant = 'case', title, loading, class
                           </p>
                           {e.description && <p className="text-xs text-slate-400 mt-0.5">{e.description}</p>}
                         </div>
-                        <span className={cn('text-[11px] whitespace-nowrap flex-shrink-0', e.isUnknown ? 'text-orange-400' : 'text-slate-500')}>
+                        <span className={cn('text-[11px] whitespace-nowrap flex-shrink-0', e.isUnknown ? 'text-orange-400' : 'text-slate-400')}>
                           {formatTime(e.timestamp)}
                         </span>
                       </div>
@@ -339,7 +339,7 @@ export function TimelineEngine({ events, variant = 'case', title, loading, class
                           <span className="inline-flex items-center gap-1 text-[11px] text-emerald-400"><Landmark size={11} /> {e.authorities.length}</span>
                         )}
                         {e.citations && e.citations.length > 0 && (
-                          <span className="inline-flex items-center gap-1 text-[11px] text-slate-500"><Quote size={11} /> {e.citations.length}</span>
+                          <span className="inline-flex items-center gap-1 text-[11px] text-slate-400"><Quote size={11} /> {e.citations.length}</span>
                         )}
                         {overlays.contradictions && e.isContradiction && <Badge variant="danger">Contradiction</Badge>}
                         {overlays.unknowns && e.isUnknown && <Badge variant="warning">Unknown time</Badge>}
@@ -423,7 +423,7 @@ function PresentationOverlay({
       </div>
       <div className="flex items-center justify-between px-6 py-4 border-t border-white/10">
         <button onClick={() => onIndex(Math.max(index - 1, 0))} disabled={index === 0} className="inline-flex items-center gap-1 text-sm text-slate-300 hover:text-white disabled:opacity-40"><ChevronLeft size={16} /> Previous</button>
-        <span className="text-xs text-slate-500">{index + 1} / {events.length}</span>
+        <span className="text-xs text-slate-400">{index + 1} / {events.length}</span>
         <button onClick={() => onIndex(Math.min(index + 1, events.length - 1))} disabled={index === events.length - 1} className="inline-flex items-center gap-1 text-sm text-slate-300 hover:text-white disabled:opacity-40">Next <ChevronRight size={16} /></button>
       </div>
     </div>

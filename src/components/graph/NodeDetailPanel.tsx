@@ -46,19 +46,19 @@ export function NodeDetailPanel({ node, data, className }: NodeDetailPanelProps)
         <dl className="space-y-2.5 text-sm">
           {node.confidence !== undefined && (
             <div className="flex items-center justify-between">
-              <dt className="text-slate-500">Confidence</dt>
+              <dt className="text-slate-400">Confidence</dt>
               <dd><ConfidenceIndicator score={node.confidence} /></dd>
             </div>
           )}
           {node.repositorySource && (
             <div className="flex items-center justify-between">
-              <dt className="text-slate-500">Repository</dt>
+              <dt className="text-slate-400">Repository</dt>
               <dd className="text-slate-300">{node.repositorySource}</dd>
             </div>
           )}
           {node.timestamp && (
             <div className="flex items-center justify-between">
-              <dt className="text-slate-500">Timestamp</dt>
+              <dt className="text-slate-400">Timestamp</dt>
               <dd className="text-slate-300">{new Date(node.timestamp).toLocaleString()}</dd>
             </div>
           )}
@@ -66,7 +66,7 @@ export function NodeDetailPanel({ node, data, className }: NodeDetailPanelProps)
 
         {node.evidenceCitations && node.evidenceCitations.length > 0 && (
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">Evidence Citations</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-2">Evidence Citations</p>
             <div className="flex flex-wrap gap-1.5">
               {node.evidenceCitations.map((c) => (
                 <CitationIndicator key={c} source={c} />
@@ -76,7 +76,7 @@ export function NodeDetailPanel({ node, data, className }: NodeDetailPanelProps)
         )}
 
         <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">Relationships ({relationships.length})</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-2">Relationships ({relationships.length})</p>
           <div className="space-y-1.5">
             {relationships.map((r, i) => (
               <div key={i} className="flex items-center justify-between gap-2 p-2 rounded-lg bg-white/[0.03]">
@@ -88,17 +88,17 @@ export function NodeDetailPanel({ node, data, className }: NodeDetailPanelProps)
                 </div>
               </div>
             ))}
-            {relationships.length === 0 && <p className="text-sm text-slate-500">No relationships.</p>}
+            {relationships.length === 0 && <p className="text-sm text-slate-400">No relationships.</p>}
           </div>
         </div>
 
         {node.auditHistory && node.auditHistory.length > 0 && (
           <div>
-            <p className="text-xs font-semibold uppercase tracking-wide text-slate-500 mb-2">Audit History</p>
+            <p className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-2">Audit History</p>
             <ul className="space-y-1.5">
               {node.auditHistory.map((a, i) => (
                 <li key={i} className="text-xs text-slate-400">
-                  <span className="text-slate-500">{new Date(a.at).toLocaleString()}</span> — {a.event}
+                  <span className="text-slate-400">{new Date(a.at).toLocaleString()}</span> — {a.event}
                 </li>
               ))}
             </ul>

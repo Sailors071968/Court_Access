@@ -441,7 +441,7 @@ function PricingSection() {
               </div>
 
               <div className={`flex items-center gap-2 mb-1 text-sm ${
-                plan.highlight || plan.featured ? 'text-slate-300' : 'text-slate-600'
+                plan.highlight || plan.featured ? 'text-slate-300' : 'text-slate-300'
               }`}>
                 <HardDrive size={14} className="text-amber-500 shrink-0" />
                 {plan.storage} storage
@@ -449,7 +449,7 @@ function PricingSection() {
 
               {plan.credits && (
                 <div className={`flex items-center gap-2 mb-1 text-sm ${
-                  plan.highlight ? 'text-slate-300' : 'text-slate-600'
+                  plan.highlight ? 'text-slate-300' : 'text-slate-300'
                 }`}>
                   <Play size={14} className="text-amber-500 shrink-0" />
                   {plan.credits}
@@ -592,14 +592,14 @@ function WhyCourtAccessSection() {
               <div className="px-6 py-4 font-medium text-white">{row.feature}</div>
               <div className="px-6 py-4 text-center text-slate-400 border-l border-white/5 flex items-center justify-center gap-1">
                 {typeof row.traditional === 'boolean' ? (
-                  row.traditional ? <Check size={16} className="text-emerald-400" /> : <X size={16} className="text-slate-500" />
+                  row.traditional ? <Check size={16} className="text-emerald-400" /> : <X size={16} className="text-slate-400" />
                 ) : (
                   row.traditional
                 )}
               </div>
               <div className="px-6 py-4 text-center text-white font-medium border-l border-white/5 flex items-center justify-center gap-1">
                 {typeof row.courtaccess === 'boolean' ? (
-                  row.courtaccess ? <Check size={16} className="text-gold-light" /> : <X size={16} className="text-slate-500" />
+                  row.courtaccess ? <Check size={16} className="text-gold-light" /> : <X size={16} className="text-slate-400" />
                 ) : (
                   <span className="flex items-center gap-1.5">
                     <ChevronRight size={14} className="text-gold-light" />
@@ -623,7 +623,7 @@ function LegalDisclaimerSection() {
   return (
     <section className="py-16 bg-navy-900 border-t border-white/5">
       <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-        <Lock size={24} className="text-slate-500 mx-auto mb-4" />
+        <Lock size={24} className="text-slate-400 mx-auto mb-4" />
         <div className="space-y-3 text-sm text-slate-400 leading-relaxed">
           <p className="font-semibold text-slate-200">CourtAccess is not a law firm.</p>
           <p>CourtAccess does not provide legal advice.</p>

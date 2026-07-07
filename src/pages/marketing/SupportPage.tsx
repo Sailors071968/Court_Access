@@ -58,12 +58,12 @@ export function SupportPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid sm:grid-cols-2 gap-6 mb-12">
             {SUPPORT_CHANNELS.map(({ icon: Icon, title, description, action, href, isRoute }) => (
-              <div key={title} className="p-6 rounded-xl border border-slate-200 bg-white/5">
-                <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center mb-4">
+              <div key={title} className="p-6 rounded-xl border border-white/10 bg-white/5">
+                <div className="w-10 h-10 bg-amber-500/15 rounded-lg flex items-center justify-center mb-4">
                   <Icon className="text-amber-600" size={20} />
                 </div>
-                <h2 className="font-bold text-slate-900 mb-2">{title}</h2>
-                <p className="text-sm text-slate-600 mb-4">{description}</p>
+                <h2 className="font-bold text-white mb-2">{title}</h2>
+                <p className="text-sm text-slate-300 mb-4">{description}</p>
                 {isRoute ? (
                   <Link to={href} className="text-amber-600 hover:text-amber-500 text-sm font-semibold">
                     {action} →
@@ -77,11 +77,11 @@ export function SupportPage() {
             ))}
           </div>
 
-          <div className="p-6 rounded-xl bg-slate-50 border border-slate-200 flex items-start gap-4">
+          <div className="p-6 rounded-xl bg-white/5 border border-white/10 flex items-start gap-4">
             <Clock className="text-slate-400 shrink-0 mt-1" size={20} />
             <div>
-              <h3 className="font-semibold text-slate-900 mb-1">Response Times</h3>
-              <p className="text-sm text-slate-600">
+              <h3 className="font-semibold text-white mb-1">Response Times</h3>
+              <p className="text-sm text-slate-300">
                 Email support typically responds within one business day. Enterprise customers
                 receive priority support. For urgent security matters, contact{' '}
                 <a href="mailto:security@courtaccess.net" className="text-amber-600 hover:underline">

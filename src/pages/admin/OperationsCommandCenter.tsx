@@ -190,7 +190,7 @@ export function OperationsCommandCenter() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-2">
           {dashboard.productionGates.gates.map((g) => (
             <div key={g.id} className="p-3 rounded-lg bg-white/[0.03] border border-white/5">
-              <span className="font-mono text-[10px] text-slate-500">{g.id}</span>
+              <span className="font-mono text-[10px] text-slate-400">{g.id}</span>
               <p className="text-xs font-medium text-slate-200 truncate">{g.name}</p>
               <div className="mt-1.5"><HealthBadge status={g.result} /></div>
             </div>
@@ -236,11 +236,11 @@ export function OperationsCommandCenter() {
                 <span className="text-sm font-medium text-slate-200">{label}</span>
               </div>
               <HealthBadge status={health.status} />
-              {health.latencyMs !== undefined && <p className="mt-2 text-xs text-slate-500">{health.latencyMs}ms latency</p>}
-              {health.message && <p className="mt-1 text-xs text-slate-500 truncate">{health.message}</p>}
+              {health.latencyMs !== undefined && <p className="mt-2 text-xs text-slate-400">{health.latencyMs}ms latency</p>}
+              {health.message && <p className="mt-1 text-xs text-slate-400 truncate">{health.message}</p>}
             </div>
           ))}
-          {components.length === 0 && <p className="text-sm text-slate-500 col-span-full py-4 text-center">No components match “{filter}”.</p>}
+          {components.length === 0 && <p className="text-sm text-slate-400 col-span-full py-4 text-center">No components match “{filter}”.</p>}
         </div>
       </Card>
 
@@ -255,15 +255,15 @@ export function OperationsCommandCenter() {
                 <div className="grid grid-cols-3 gap-2 text-center">
                   <div>
                     <p className="text-lg font-bold text-blue-400 tabular-nums">{q.waiting}</p>
-                    <p className="text-[10px] text-slate-500 uppercase">Waiting</p>
+                    <p className="text-[10px] text-slate-400 uppercase">Waiting</p>
                   </div>
                   <div>
                     <p className="text-lg font-bold text-emerald-400 tabular-nums">{q.active}</p>
-                    <p className="text-[10px] text-slate-500 uppercase">Active</p>
+                    <p className="text-[10px] text-slate-400 uppercase">Active</p>
                   </div>
                   <div>
                     <p className="text-lg font-bold text-red-400 tabular-nums">{q.failed}</p>
-                    <p className="text-[10px] text-slate-500 uppercase">Failed</p>
+                    <p className="text-[10px] text-slate-400 uppercase">Failed</p>
                   </div>
                 </div>
               </div>

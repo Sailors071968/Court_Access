@@ -168,12 +168,12 @@ export function AdminPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
-                    <span className={`text-xs px-2 py-1 rounded-full ${user.status === 'active' ? 'bg-green-100 text-green-700' : 'bg-white/10 text-slate-400'}`}>
+                    <span className={`text-xs px-2 py-1 rounded-full ${user.status === 'active' ? 'bg-emerald-500/15 text-emerald-300' : 'bg-white/10 text-slate-400'}`}>
                       {user.status || 'active'}
                     </span>
                     <button
                       onClick={() => setDeleteConfirm({ type: 'user', id: user.userId, name: user.name || user.email })}
-                      className="p-1 text-slate-500 hover:text-red-600 transition-colors"
+                      className="p-1 text-slate-400 hover:text-red-600 transition-colors"
                       title="Delete user"
                     >
                       <Trash2 size={14} />
@@ -205,7 +205,7 @@ export function AdminPage() {
                   </div>
                   <button
                     onClick={() => setDeleteConfirm({ type: 'case', id: c.caseId, name: c.title })}
-                    className="p-1 text-slate-500 hover:text-red-600 transition-colors"
+                    className="p-1 text-slate-400 hover:text-red-600 transition-colors"
                     title="Delete case"
                   >
                     <Trash2 size={14} />

@@ -108,7 +108,7 @@ export function ResetPasswordPage() {
           ) : (
             <>
               <h2 className="text-xl font-semibold text-white mb-6">Set new password</h2>
-              {error && <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm">{error}</div>}
+              {error && <div className="bg-red-500/10 border border-red-500/20 text-red-300 px-4 py-3 rounded-lg mb-4 text-sm">{error}</div>}
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label htmlFor="new-pass" className="block text-sm font-medium text-slate-200 mb-1">New password</label>

@@ -54,7 +54,7 @@ export function ForgotPasswordPage() {
         <div className="bg-white/5 rounded-2xl shadow-xl p-8">
           {submitted ? (
             <div className="text-center">
-              <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <div className="w-16 h-16 bg-emerald-500/15 rounded-full flex items-center justify-center mx-auto mb-4">
                 <span className="text-2xl">✉️</span>
               </div>
               <h2 className="text-xl font-semibold text-white mb-2">Check your email</h2>
@@ -68,7 +68,7 @@ export function ForgotPasswordPage() {
             <>
               <h2 className="text-xl font-semibold text-white mb-2">Forgot your password?</h2>
               <p className="text-slate-400 text-sm mb-6">Enter your email and we'll send you a reset link.</p>
-              {error && <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm">{error}</div>}
+              {error && <div className="bg-red-500/10 border border-red-500/20 text-red-300 px-4 py-3 rounded-lg mb-4 text-sm">{error}</div>}
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
                   <label htmlFor="forgot-email" className="block text-sm font-medium text-slate-200 mb-1">Email address</label>

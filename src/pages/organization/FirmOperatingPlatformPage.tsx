@@ -114,7 +114,7 @@ export function FirmOperatingPlatformPage() {
   const primaryColor = String(org?.primaryColor ?? '#1e293b');
 
   return (
-    <div className="min-h-screen bg-slate-50" style={{ '--firm-primary': primaryColor } as React.CSSProperties}>
+    <div className="min-h-screen bg-white/5" style={{ '--firm-primary': primaryColor } as React.CSSProperties}>
       <header className="bg-white/5 border-b px-6 py-4 flex items-center justify-between">
         <div className="flex items-center gap-4">
           {org?.logoUrl ? (
@@ -130,7 +130,7 @@ export function FirmOperatingPlatformPage() {
           </div>
         </div>
         <select
-          className="border rounded-lg px-3 py-2 text-sm"
+          className="bg-white/5 border border-white/10 text-slate-200 rounded-lg px-3 py-2 text-sm focus:border-gold-light focus:outline-none"
           value={selectedOffice}
           onChange={(e) => setSelectedOffice(e.target.value)}
         >
@@ -147,7 +147,7 @@ export function FirmOperatingPlatformPage() {
             key={t.id}
             type="button"
             onClick={() => setTab(t.id)}
-            className={`px-4 py-3 text-sm font-medium border-b-2 whitespace-nowrap ${tab === t.id ? 'border-slate-800 text-slate-900' : 'border-transparent text-slate-400 hover:text-slate-200'}`}
+            className={`px-4 py-3 text-sm font-medium border-b-2 whitespace-nowrap ${tab === t.id ? 'border-gold text-white' : 'border-transparent text-slate-400 hover:text-slate-200'}`}
           >
             {t.label}
           </button>
@@ -155,8 +155,8 @@ export function FirmOperatingPlatformPage() {
       </nav>
 
       <main className="max-w-6xl mx-auto p-6">
-        {error && <div className="mb-4 bg-red-50 text-red-700 p-3 rounded-lg text-sm">{error}</div>}
-        {message && <div className="mb-4 bg-green-50 text-green-700 p-3 rounded-lg text-sm">{message}</div>}
+        {error && <div className="mb-4 bg-red-500/10 border border-red-500/20 text-red-300 p-3 rounded-lg text-sm">{error}</div>}
+        {message && <div className="mb-4 bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 p-3 rounded-lg text-sm">{message}</div>}
 
         {tab === 'overview' && analytics && (
           <div className="space-y-6">
@@ -171,9 +171,9 @@ export function FirmOperatingPlatformPage() {
                 ['Open Conflicts', analytics.openConflicts],
                 ['Knowledge Assets', analytics.knowledgeAssets],
               ].map(([label, val]) => (
-                <div key={String(label)} className="bg-white/5 rounded-xl border p-4">
-                  <div className="text-2xl font-bold" style={{ color: primaryColor }}>{String(val ?? 0)}</div>
-                  <div className="text-sm text-slate-400">{String(label)}</div>
+                <div key={String(label)} className="bg-white/5 rounded-xl border border-white/10 p-4 hover:border-gold/30 transition-colors">
+                  <div className="text-3xl font-bold text-white tracking-tight">{String(val ?? 0)}</div>
+                  <div className="text-sm font-medium text-slate-300 mt-1">{String(label)}</div>
                 </div>
               ))}
             </div>
@@ -224,7 +224,7 @@ export function FirmOperatingPlatformPage() {
         {tab === 'personnel' && (
           <div className="bg-white/5 border rounded-xl overflow-hidden">
             <table className="w-full text-sm">
-              <thead className="bg-slate-50 border-b">
+              <thead className="bg-white/5 border-b">
                 <tr>
                   <th className="text-left p-3">Name</th>
                   <th className="text-left p-3">Type</th>
@@ -272,7 +272,7 @@ export function FirmOperatingPlatformPage() {
                 {tasks.map((t) => (
                   <li key={String(t.taskId)} className="text-sm flex justify-between border-b pb-1">
                     <span>{String(t.title)}</span>
-                    <span className="text-slate-500">{String(t.status)}</span>
+                    <span className="text-slate-400">{String(t.status)}</span>
                   </li>
                 ))}
               </ul>
@@ -293,7 +293,7 @@ export function FirmOperatingPlatformPage() {
             </div>
             {knowledge.map((k) => (
               <div key={String(k.assetId)} className="bg-white/5 border rounded-xl p-4">
-                <div className="font-medium">{String(k.title)} <span className="text-xs text-slate-500">({String(k.assetType)})</span></div>
+                <div className="font-medium">{String(k.title)} <span className="text-xs text-slate-400">({String(k.assetType)})</span></div>
                 <p className="text-sm text-slate-300 mt-1 line-clamp-2">{String(k.body)}</p>
               </div>
             ))}
@@ -312,7 +312,7 @@ export function FirmOperatingPlatformPage() {
                   <div className="font-medium">{String(c.conflictType)}: {String(c.entityA)} ↔ {String(c.entityB)}</div>
                   <div className="text-sm text-slate-400">{String(c.details)}</div>
                 </div>
-                <span className={`text-xs px-2 py-1 rounded ${c.severity === 'blocked' ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'}`}>{String(c.severity)}</span>
+                <span className={`text-xs px-2 py-1 rounded ${c.severity === 'blocked' ? 'bg-red-500/15 text-red-300' : 'bg-amber-500/15 text-amber-300'}`}>{String(c.severity)}</span>
               </div>
             ))}
           </div>
@@ -325,7 +325,7 @@ export function FirmOperatingPlatformPage() {
               {permissions.map((g) => (
                 <li key={String(g.grantId)}>{String(g.scope)} / {String(g.permission)} — user {String(g.userId).slice(0, 8)}…</li>
               ))}
-              {!permissions.length && <li className="text-slate-500">No custom grants — using role defaults.</li>}
+              {!permissions.length && <li className="text-slate-400">No custom grants — using role defaults.</li>}
             </ul>
             <p className="text-xs text-slate-400">Scopes: office, department, case, document, evidence, admin. Approval workflows available via API.</p>
           </div>

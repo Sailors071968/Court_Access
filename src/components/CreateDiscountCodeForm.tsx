@@ -68,10 +68,10 @@ export function CreateDiscountCodeForm({ initial, onSubmit, onCancel, submitLabe
   return (
     <form onSubmit={handleSubmit} className="space-y-4">
       {error && (
-        <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg text-sm">{error}</div>
+        <div className="bg-red-500/10 border border-red-500/20 text-red-300 px-4 py-3 rounded-lg text-sm">{error}</div>
       )}
       {success && (
-        <div className="bg-emerald-50 border border-emerald-200 text-emerald-700 px-4 py-3 rounded-lg text-sm flex items-center gap-2">
+        <div className="bg-emerald-500/10 border border-emerald-500/20 text-emerald-300 px-4 py-3 rounded-lg text-sm flex items-center gap-2">
           <CheckCircle2 size={14} /> Discount code saved successfully
         </div>
       )}
@@ -81,7 +81,7 @@ export function CreateDiscountCodeForm({ initial, onSubmit, onCancel, submitLabe
         <label className="block text-sm font-medium text-slate-200 mb-1">Campaign Name</label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Tag className="text-slate-500" size={14} />
+            <Tag className="text-slate-400" size={14} />
           </div>
           <input
             type="text"
@@ -105,7 +105,7 @@ export function CreateDiscountCodeForm({ initial, onSubmit, onCancel, submitLabe
           placeholder="e.g. EARLYACCESS50"
           required
         />
-        <p className="text-xs text-slate-500 mt-1">Alphanumeric, dashes, and underscores only</p>
+        <p className="text-xs text-slate-400 mt-1">Alphanumeric, dashes, and underscores only</p>
       </div>
 
       {/* Discount Type */}
@@ -117,7 +117,7 @@ export function CreateDiscountCodeForm({ initial, onSubmit, onCancel, submitLabe
             onClick={() => setDiscountType('percent')}
             className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border text-sm font-medium transition-colors ${
               discountType === 'percent'
-                ? 'border-blue-500 bg-blue-50 text-blue-700'
+                ? 'border-blue-500 bg-blue-500/10 text-blue-300'
                 : 'border-white/10 bg-white/5 text-slate-300 hover:bg-white/5'
             }`}
           >
@@ -128,7 +128,7 @@ export function CreateDiscountCodeForm({ initial, onSubmit, onCancel, submitLabe
             onClick={() => setDiscountType('fixed')}
             className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border text-sm font-medium transition-colors ${
               discountType === 'fixed'
-                ? 'border-blue-500 bg-blue-50 text-blue-700'
+                ? 'border-blue-500 bg-blue-500/10 text-blue-300'
                 : 'border-white/10 bg-white/5 text-slate-300 hover:bg-white/5'
             }`}
           >
@@ -144,7 +144,7 @@ export function CreateDiscountCodeForm({ initial, onSubmit, onCancel, submitLabe
         </label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            {discountType === 'percent' ? <Percent className="text-slate-500" size={14} /> : <DollarSign className="text-slate-500" size={14} />}
+            {discountType === 'percent' ? <Percent className="text-slate-400" size={14} /> : <DollarSign className="text-slate-400" size={14} />}
           </div>
           <input
             type="number"
@@ -160,10 +160,10 @@ export function CreateDiscountCodeForm({ initial, onSubmit, onCancel, submitLabe
 
       {/* Expiration Date */}
       <div>
-        <label className="block text-sm font-medium text-slate-200 mb-1">Expiration Date <span className="text-slate-500 font-normal">(optional)</span></label>
+        <label className="block text-sm font-medium text-slate-200 mb-1">Expiration Date <span className="text-slate-400 font-normal">(optional)</span></label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Calendar className="text-slate-500" size={14} />
+            <Calendar className="text-slate-400" size={14} />
           </div>
           <input
             type="date"
@@ -189,7 +189,7 @@ export function CreateDiscountCodeForm({ initial, onSubmit, onCancel, submitLabe
         {usageLimitEnabled && (
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Hash className="text-slate-500" size={14} />
+              <Hash className="text-slate-400" size={14} />
             </div>
             <input
               type="number"

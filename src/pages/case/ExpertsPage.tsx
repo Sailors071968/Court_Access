@@ -48,9 +48,9 @@ export function ExpertsPage() {
   return (
     <div className="space-y-6">
       {/* Disclaimer */}
-      <div className="flex items-start gap-3 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+      <div className="flex items-start gap-3 p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl">
         <AlertTriangle size={20} className="text-amber-600 mt-0.5 flex-shrink-0" />
-        <p className="text-sm text-amber-800">
+        <p className="text-sm text-amber-300">
           <strong>DISCLAIMER:</strong> These recommendations are based on preliminary case data and strategy.
           Final selection and engagement should be determined through direct consultation with lead counsel and due diligence.
         </p>
@@ -58,7 +58,7 @@ export function ExpertsPage() {
 
       {/* Case Info */}
       <div>
-        <h2 className="text-xl font-bold text-blue-700">{currentCase.title || currentCase.caseType} - Case #{currentCase.caseNumber}</h2>
+        <h2 className="text-xl font-bold text-blue-300">{currentCase.title || currentCase.caseType} - Case #{currentCase.caseNumber}</h2>
         <p className="text-sm text-slate-400 mt-1">
           Status: {currentCase.status || 'Pre-Trial Motions'}
         </p>
@@ -83,7 +83,7 @@ export function ExpertsPage() {
             <Card key={expert.id}>
               <div className="flex items-start justify-between mb-3">
                 <div className="flex items-center gap-3">
-                  <div className="w-10 h-10 bg-blue-100 rounded-xl flex items-center justify-center">
+                  <div className="w-10 h-10 bg-blue-500/15 rounded-xl flex items-center justify-center">
                     <span className="text-gold-light text-lg">⚗️</span>
                   </div>
                   <h4 className="font-semibold text-white">{expert.title}</h4>

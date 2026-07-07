@@ -65,13 +65,13 @@ export function VerifyEmailPage() {
         {status === 'loading' && <p className="text-slate-300">Verifying…</p>}
         {status === 'success' && (
           <>
-            <p className="text-green-700 mb-4">{message}</p>
+            <p className="text-emerald-300 mb-4">{message}</p>
             <Link to="/login" className="text-gold-light hover:underline">Sign in</Link>
           </>
         )}
         {status === 'error' && (
           <>
-            <p className="text-red-700 mb-4">{message}</p>
+            <p className="text-red-300 mb-4">{message}</p>
             <Link to="/login" className="text-gold-light hover:underline">Back to sign in</Link>
           </>
         )}

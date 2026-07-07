@@ -63,7 +63,7 @@ export function PolicyTopicRegistry() {
 
       <div className="flex items-center gap-3">
         <div className="relative flex-1">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             type="search"
             placeholder="Search topics or aliases..."
@@ -80,7 +80,7 @@ export function PolicyTopicRegistry() {
 
       {isLoading ? (
         <div className="flex items-center justify-center py-12">
-          <Loader2 size={20} className="animate-spin text-slate-500" />
+          <Loader2 size={20} className="animate-spin text-slate-400" />
           <span className="ml-2 text-sm text-slate-400">Loading topics...</span>
         </div>
       ) : filtered.length === 0 ? (
@@ -113,7 +113,7 @@ export function PolicyTopicRegistry() {
                   </div>
                 </td>
                 <td className="px-4 py-3">
-                  <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs font-medium">{topic.category}</span>
+                  <span className="px-2 py-0.5 bg-blue-500/15 text-blue-300 rounded text-xs font-medium">{topic.category}</span>
                 </td>
                 <td className="px-4 py-3 text-right">
                   <button className="text-gold-light hover:text-gold-bright text-xs font-medium">Edit</button>
@@ -124,7 +124,7 @@ export function PolicyTopicRegistry() {
         </table>
       </div>
       )}
-      <p className="text-xs text-slate-500 text-center">Showing {filtered.length} of {topics.length} registered topics</p>
+      <p className="text-xs text-slate-400 text-center">Showing {filtered.length} of {topics.length} registered topics</p>
     </div>
   );
 }

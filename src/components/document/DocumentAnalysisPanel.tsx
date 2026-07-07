@@ -77,7 +77,7 @@ export function DocumentAnalysisPanel({ evidence, className }: DocumentAnalysisP
 
         {tab === 'citations' && (
           <div className="space-y-3">
-            <p className="text-xs text-slate-500">Citations mapped from this document (side-by-side verifiable).</p>
+            <p className="text-xs text-slate-400">Citations mapped from this document (side-by-side verifiable).</p>
             <EmptyState icon={<Icon name="statutes" size={20} />} title="No mapped citations" description="Verified citations populate from extraction output — none are fabricated." />
           </div>
         )}
@@ -104,7 +104,7 @@ export function DocumentAnalysisPanel({ evidence, className }: DocumentAnalysisP
 
         {tab === 'audit' && (
           <ul className="space-y-1.5 text-xs text-slate-400">
-            <li><span className="text-slate-500">{new Date(evidence.uploadedAt).toLocaleString()}</span> — Uploaded by {evidence.uploadedBy}</li>
+            <li><span className="text-slate-400">{new Date(evidence.uploadedAt).toLocaleString()}</span> — Uploaded by {evidence.uploadedBy}</li>
             {analyzed && <li className="text-emerald-400">Extraction completed · audit trail sealed</li>}
           </ul>
         )}

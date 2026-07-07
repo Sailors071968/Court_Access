@@ -120,10 +120,10 @@ export function PolicyPipelineDashboard() {
   const statusBadge = (status: string) => {
     const colors: Record<string, string> = {
       pending: 'bg-white/10 text-slate-200',
-      in_progress: 'bg-blue-100 text-blue-700',
-      completed: 'bg-green-100 text-green-700',
-      failed: 'bg-red-100 text-red-700',
-      skipped: 'bg-yellow-100 text-yellow-700',
+      in_progress: 'bg-blue-500/15 text-blue-300',
+      completed: 'bg-emerald-500/15 text-emerald-300',
+      failed: 'bg-red-500/15 text-red-300',
+      skipped: 'bg-amber-500/15 text-amber-300',
     };
     return (
       <span
@@ -314,7 +314,7 @@ export function PolicyPipelineDashboard() {
 
       {/* Error */}
       {error && (
-        <div className="bg-red-50 border border-red-200 rounded-lg p-3 text-sm text-red-700">
+        <div className="bg-red-500/10 border border-red-500/20 rounded-lg p-3 text-sm text-red-300">
           {error}
         </div>
       )}
@@ -357,14 +357,14 @@ export function PolicyPipelineDashboard() {
             <tbody className="divide-y divide-white/10">
               {loading && (
                 <tr>
-                  <td colSpan={9} className="px-4 py-8 text-center text-slate-500">
+                  <td colSpan={9} className="px-4 py-8 text-center text-slate-400">
                     Loading agencies...
                   </td>
                 </tr>
               )}
               {!loading && agencies?.agencies.length === 0 && (
                 <tr>
-                  <td colSpan={9} className="px-4 py-8 text-center text-slate-500">
+                  <td colSpan={9} className="px-4 py-8 text-center text-slate-400">
                     No agencies found. Run the POST directory crawler to populate.
                   </td>
                 </tr>
@@ -413,7 +413,7 @@ export function PolicyPipelineDashboard() {
                           {new URL(agency.website).hostname}
                         </a>
                       ) : (
-                        <span className="text-xs text-slate-500">None</span>
+                        <span className="text-xs text-slate-400">None</span>
                       )}
                     </td>
                   </tr>
@@ -468,24 +468,24 @@ function StatCard({
   color: string;
 }) {
   const bgColors: Record<string, string> = {
-    indigo: 'bg-indigo-50 border-indigo-200',
-    blue: 'bg-blue-50 border-blue-200',
-    emerald: 'bg-emerald-50 border-emerald-200',
-    purple: 'bg-purple-50 border-purple-200',
-    amber: 'bg-amber-50 border-amber-200',
+    indigo: 'bg-indigo-500/10 border-indigo-200',
+    blue: 'bg-blue-500/10 border-blue-500/20',
+    emerald: 'bg-emerald-500/10 border-emerald-500/20',
+    purple: 'bg-violet-500/10 border-violet-500/20',
+    amber: 'bg-amber-500/10 border-amber-500/20',
     teal: 'bg-teal-50 border-teal-200',
     cyan: 'bg-cyan-50 border-cyan-200',
-    red: 'bg-red-50 border-red-200',
+    red: 'bg-red-500/10 border-red-500/20',
   };
   const textColors: Record<string, string> = {
-    indigo: 'text-indigo-700',
-    blue: 'text-blue-700',
-    emerald: 'text-emerald-700',
-    purple: 'text-purple-700',
-    amber: 'text-amber-700',
+    indigo: 'text-indigo-300',
+    blue: 'text-blue-300',
+    emerald: 'text-emerald-300',
+    purple: 'text-violet-300',
+    amber: 'text-amber-300',
     teal: 'text-teal-700',
     cyan: 'text-cyan-700',
-    red: 'text-red-700',
+    red: 'text-red-300',
   };
 
   return (

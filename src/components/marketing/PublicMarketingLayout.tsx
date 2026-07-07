@@ -103,7 +103,7 @@ export function PublicMarketingFooter() {
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-8">
           <div className="col-span-2 md:col-span-1">
             <BrandLogo variant="light" className="mb-4" linkTo="/" />
-            <p className="text-slate-500 text-sm leading-relaxed">
+            <p className="text-slate-400 text-sm leading-relaxed">
               AI-powered criminal case intelligence for justice professionals.
             </p>
           </div>
@@ -138,8 +138,8 @@ export function PublicMarketingFooter() {
       <TrustBar />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 flex flex-col sm:flex-row items-center justify-between gap-3">
-        <p className="text-sm text-slate-500">&copy; {new Date().getFullYear()} CourtAccess. All rights reserved.</p>
-        <p className="text-xs text-slate-600">Criminal Case Intelligence Platform</p>
+        <p className="text-sm text-slate-400">&copy; {new Date().getFullYear()} CourtAccess. All rights reserved.</p>
+        <p className="text-xs text-slate-300">Criminal Case Intelligence Platform</p>
       </div>
     </footer>
   );

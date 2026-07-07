@@ -235,6 +235,11 @@ async function startServer() {
   const { registerProviderRoutes } = await import('./providers/providerRoutes.js');
   await registerProviderRoutes(app);
 
+  // Master Program 8 — Case Knowledge Graph
+  console.log('[Server] Registering knowledge graph routes...');
+  const { registerKnowledgeGraphRoutes } = await import('./graph/knowledgeGraphRoutes.js');
+  await registerKnowledgeGraphRoutes(app);
+
   console.log('[Server] Registering Investigator Workbench routes...');
   await registerInvestigatorRoutes(app);
 

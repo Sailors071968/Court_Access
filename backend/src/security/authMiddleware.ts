@@ -78,7 +78,10 @@ export async function generateRefreshToken(
   payload: Omit<JwtPayload, 'iat' | 'exp'>,
   device?: { userAgent?: string; ipAddress?: string; deviceLabel?: string },
 ): Promise<string> {
-  const token = jwt.sign(payload, JWT_REFRESH_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRY });
+  // Unique jti guarantees the signed token is distinct even when two tokens are
+  // issued for the same user within the same second (e.g. register→login),
+  // preventing a unique-constraint 500 on refresh_tokens.token.
+  const token = jwt.sign(payload, JWT_REFRESH_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRY, jwtid: crypto.randomUUID() });
 
   await prisma.refreshToken.create({
     data: {

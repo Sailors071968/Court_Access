@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-07T15:43:56.016Z",
+  "generatedAt": "2026-07-07T15:50:35.154Z",
   "totalEndpoints": 374,
   "routeFiles": 45,
   "duplicates": [],
@@ -13,13 +13,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "billingMetricsService.js"
       ],
       "websocketEvents": [],
@@ -37,13 +42,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "billingMetricsService.js"
       ],
       "websocketEvents": [],
@@ -63,13 +73,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "billingMetricsService.js"
       ],
       "websocketEvents": [],
@@ -89,13 +104,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "billingMetricsService.js"
       ],
       "websocketEvents": [],
@@ -115,13 +135,19 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "billingMetricsService.js"
       ],
       "websocketEvents": [],
@@ -141,13 +167,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "billingMetricsService.js"
       ],
       "websocketEvents": [],
@@ -167,13 +198,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "billingMetricsService.js"
       ],
       "websocketEvents": [],
@@ -191,6 +227,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
@@ -199,7 +238,9 @@
       "queuesInvoked": [
         "(file-level) getQueueHealth"
       ],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -215,6 +256,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -223,7 +267,9 @@
       "queuesInvoked": [
         "(file-level) getQueueHealth"
       ],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -239,6 +285,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -247,7 +296,9 @@
       "queuesInvoked": [
         "(file-level) getQueueHealth"
       ],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -263,6 +314,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -271,7 +325,9 @@
       "queuesInvoked": [
         "(file-level) getQueueHealth"
       ],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -287,6 +343,11 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "400-response",
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "body",
         "params"
@@ -294,7 +355,9 @@
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "litigationAssistantService.js"
       ],
       "websocketEvents": [],
@@ -312,13 +375,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "subscriptionService.js",
         "aiCreditService.js",
         "usageEnforcementService.js",
@@ -341,13 +409,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "subscriptionService.js",
         "aiCreditService.js",
         "usageEnforcementService.js",
@@ -368,13 +441,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "subscriptionService.js",
         "aiCreditService.js",
         "usageEnforcementService.js",
@@ -395,13 +473,19 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "subscriptionService.js",
         "aiCreditService.js",
         "usageEnforcementService.js",
@@ -422,13 +506,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "subscriptionService.js",
         "aiCreditService.js",
         "usageEnforcementService.js",
@@ -449,13 +538,19 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "subscriptionService.js",
         "aiCreditService.js",
         "usageEnforcementService.js",
@@ -476,13 +571,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "subscriptionService.js",
         "aiCreditService.js",
         "usageEnforcementService.js",
@@ -503,13 +603,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "subscriptionService.js",
         "aiCreditService.js",
         "usageEnforcementService.js",
@@ -530,13 +635,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "subscriptionService.js",
         "aiCreditService.js",
         "usageEnforcementService.js",
@@ -557,13 +667,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "subscriptionService.js",
         "aiCreditService.js",
         "usageEnforcementService.js",
@@ -584,13 +699,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "subscriptionService.js",
         "aiCreditService.js",
         "usageEnforcementService.js",
@@ -611,13 +731,19 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "subscriptionService.js",
         "aiCreditService.js",
         "usageEnforcementService.js",
@@ -638,13 +764,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "subscriptionService.js",
         "aiCreditService.js",
         "usageEnforcementService.js",
@@ -667,13 +798,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "subscriptionService.js",
         "aiCreditService.js",
         "usageEnforcementService.js",
@@ -694,13 +830,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "subscriptionService.js",
         "aiCreditService.js",
         "usageEnforcementService.js",
@@ -721,13 +862,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "subscriptionService.js",
         "aiCreditService.js",
         "usageEnforcementService.js",
@@ -746,13 +892,18 @@
       "authenticationRequired": false,
       "authenticationMechanism": "PUBLIC_ROUTES allowlist",
       "authorizationGuards": [],
+      "validation": [
+        "400-response"
+      ],
       "inputSurface": [
         "query"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "discountService.js"
       ],
       "websocketEvents": [],
@@ -772,13 +923,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "discountService.js"
       ],
       "websocketEvents": [],
@@ -798,13 +954,19 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "discountService.js"
       ],
       "websocketEvents": [],
@@ -824,6 +986,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "body",
         "params"
@@ -831,7 +996,9 @@
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "discountService.js"
       ],
       "websocketEvents": [],
@@ -851,13 +1018,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "discountService.js"
       ],
       "websocketEvents": [],
@@ -877,13 +1049,20 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "discountService.js"
       ],
       "websocketEvents": [],
@@ -903,6 +1082,10 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "body"
       ],
@@ -913,7 +1096,9 @@
         "users"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/services/caseApi.ts",
@@ -932,13 +1117,19 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -954,6 +1145,10 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
@@ -964,7 +1159,9 @@
         "subscriptions"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/services/caseApi.ts"
@@ -982,6 +1179,9 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "400-response"
+      ],
       "inputSurface": [
         "body"
       ],
@@ -992,7 +1192,9 @@
         "Charge"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": true,
@@ -1008,6 +1210,9 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -1018,7 +1223,9 @@
         "Charge"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -1034,6 +1241,9 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -1044,7 +1254,9 @@
         "Charge"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -1060,6 +1272,11 @@
       "authorizationGuards": [
         "guardScopeAccess"
       ],
+      "validation": [
+        "400-response",
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "body"
       ],
@@ -1070,7 +1287,9 @@
         "clients"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -1086,6 +1305,9 @@
       "authorizationGuards": [
         "guardScopeAccess"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "query"
       ],
@@ -1096,7 +1318,9 @@
         "clients"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -1112,6 +1336,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -1122,7 +1349,9 @@
         "clients"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -1138,6 +1367,11 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "body",
         "params"
@@ -1149,7 +1383,9 @@
         "clients"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -1165,6 +1401,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -1175,7 +1414,9 @@
         "clients"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -1191,6 +1432,9 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -1201,7 +1445,9 @@
         "case_hearings"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -1217,6 +1463,11 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "400-response",
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "body",
         "params"
@@ -1228,7 +1479,9 @@
         "case_hearings"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -1244,6 +1497,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
@@ -1258,7 +1514,9 @@
         "case_hearings"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -1274,6 +1532,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -1284,7 +1545,9 @@
         "case_messages"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -1300,6 +1563,11 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "body",
         "params"
@@ -1311,7 +1579,9 @@
         "case_messages"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -1327,6 +1597,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -1337,7 +1610,9 @@
         "case_messages"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -1353,13 +1628,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -1375,13 +1655,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -1397,13 +1682,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -1419,13 +1709,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -1441,13 +1736,19 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -1463,13 +1764,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -1485,13 +1791,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -1507,13 +1818,19 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -1529,13 +1846,19 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -1551,13 +1874,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/services/caseApi.ts"
@@ -1575,13 +1903,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -1597,13 +1930,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -1619,13 +1957,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/services/caseApi.ts"
@@ -1643,13 +1986,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "courtListenerService.js"
       ],
       "websocketEvents": [],
@@ -1669,13 +2017,20 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "query"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "courtListenerService.js"
       ],
       "websocketEvents": [],
@@ -1695,13 +2050,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "courtListenerService.js"
       ],
       "websocketEvents": [],
@@ -1719,13 +2079,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "courtListenerService.js"
       ],
       "websocketEvents": [],
@@ -1743,13 +2108,20 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "courtListenerService.js"
       ],
       "websocketEvents": [],
@@ -1769,13 +2141,27 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -1798,13 +2184,27 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -1827,13 +2227,27 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -1856,13 +2270,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -1885,13 +2312,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -1914,13 +2354,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "type/bounds"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -1943,13 +2396,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -1972,13 +2438,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -2001,13 +2480,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -2030,13 +2522,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -2059,13 +2564,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -2088,13 +2606,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -2117,13 +2648,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "type/bounds"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -2146,13 +2690,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -2175,13 +2732,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -2204,13 +2774,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -2233,13 +2816,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -2262,13 +2858,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -2291,13 +2900,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "type/bounds"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -2320,13 +2942,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "type/bounds"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -2349,13 +2984,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -2378,13 +3026,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -2407,13 +3068,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -2436,13 +3110,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -2465,13 +3152,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -2494,13 +3194,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -2523,13 +3236,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -2552,13 +3278,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -2581,13 +3320,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -2610,13 +3362,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -2639,13 +3404,26 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [
+        "cpraEmailMonitorWorker",
+        "startFollowUpWorker",
+        "stopFollowUpWorker",
+        "cpraFollowUpWorker",
+        "startIngestionWorker",
+        "stopIngestionWorker",
+        "cpraIngestionWorker"
+      ],
+      "cache": false,
+      "services": [
         "cpraRequestEngine.js",
         "cpraEmailLogService.js",
         "cpraAttachmentProcessor.js",
@@ -2668,13 +3446,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "cpraMatrixService.js"
       ],
       "websocketEvents": [],
@@ -2692,13 +3475,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "cpraMatrixService.js"
       ],
       "websocketEvents": [],
@@ -2716,13 +3504,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "cpraMatrixService.js"
       ],
       "websocketEvents": [],
@@ -2740,13 +3533,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "cpraMatrixService.js"
       ],
       "websocketEvents": [],
@@ -2764,13 +3562,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "cpraMatrixService.js"
       ],
       "websocketEvents": [],
@@ -2788,13 +3591,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "cpraMatrixService.js"
       ],
       "websocketEvents": [],
@@ -2812,13 +3620,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "cpraMatrixService.js"
       ],
       "websocketEvents": [],
@@ -2836,13 +3649,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "doctrineIngestionService.ts"
       ],
       "websocketEvents": [],
@@ -2862,13 +3680,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "type/bounds"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "doctrineIngestionService.ts"
       ],
       "websocketEvents": [],
@@ -2886,13 +3709,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "doctrineIngestionService.ts"
       ],
       "websocketEvents": [],
@@ -2910,13 +3738,20 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "doctrineIngestionService.ts"
       ],
       "websocketEvents": [],
@@ -2936,13 +3771,19 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "doctrineIngestionService.ts"
       ],
       "websocketEvents": [],
@@ -2962,13 +3803,19 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "doctrineIngestionService.ts"
       ],
       "websocketEvents": [],
@@ -2988,13 +3835,19 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "doctrineIngestionService.ts"
       ],
       "websocketEvents": [],
@@ -3012,13 +3865,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "doctrineIngestionService.ts"
       ],
       "websocketEvents": [],
@@ -3038,13 +3896,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "doctrineIngestionService.ts"
       ],
       "websocketEvents": [],
@@ -3062,13 +3925,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "doctrineIngestionService.ts"
       ],
       "websocketEvents": [],
@@ -3086,13 +3954,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "doctrineIngestionService.ts"
       ],
       "websocketEvents": [],
@@ -3110,13 +3983,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "doctrineIngestionService.ts"
       ],
       "websocketEvents": [],
@@ -3134,13 +4012,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "doctrineIngestionService.ts"
       ],
       "websocketEvents": [],
@@ -3158,6 +4041,11 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "body"
       ],
@@ -3170,7 +4058,9 @@
         "criminal_cases"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/pages/dashboard/EvidenceRequestsDashboard.tsx",
@@ -3189,6 +4079,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
@@ -3199,7 +4092,9 @@
         "criminal_cases"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/pages/dashboard/EvidenceRequestsDashboard.tsx",
@@ -3218,6 +4113,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -3228,7 +4126,9 @@
         "criminal_cases"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/services/caseApi.ts"
@@ -3246,6 +4146,11 @@
       "authorizationGuards": [
         "requireCaseAccess"
       ],
+      "validation": [
+        "400-response",
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "body",
         "params"
@@ -3257,7 +4162,9 @@
         "criminal_cases"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/services/caseApi.ts"
@@ -3275,6 +4182,9 @@
       "authorizationGuards": [
         "requireCaseAccess"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -3285,7 +4195,9 @@
         "criminal_cases"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/services/caseApi.ts"
@@ -3303,13 +4215,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -3331,13 +4248,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -3359,13 +4281,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -3387,13 +4314,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -3415,13 +4347,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -3443,13 +4380,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -3471,6 +4413,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params",
         "query"
@@ -3478,7 +4423,9 @@
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -3500,13 +4447,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -3528,6 +4480,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params",
         "query"
@@ -3535,7 +4490,9 @@
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -3557,13 +4514,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -3585,13 +4547,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -3613,13 +4580,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -3641,13 +4613,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -3669,13 +4646,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -3697,13 +4679,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "type/bounds"
+      ],
       "inputSurface": [
         "query"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -3725,6 +4712,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body",
         "params"
@@ -3732,7 +4722,9 @@
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -3754,13 +4746,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -3782,13 +4779,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -3812,13 +4814,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -3842,6 +4849,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body",
         "params"
@@ -3849,7 +4859,9 @@
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -3871,13 +4883,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -3899,13 +4916,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -3927,13 +4949,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "query"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -3955,13 +4982,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -3983,6 +5015,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params",
         "query"
@@ -3990,7 +5025,9 @@
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -4012,13 +5049,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -4040,13 +5082,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -4068,13 +5115,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -4096,13 +5148,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -4124,13 +5181,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "eventExtractionService.js",
         "videoActionDetectionService.js",
         "speechAnalysisService.js",
@@ -4152,6 +5214,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params",
         "query"
@@ -4163,7 +5228,9 @@
         "criminal_cases"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "evidenceGapDetectionService.js"
       ],
       "websocketEvents": [],
@@ -4183,6 +5250,11 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "body",
         "params"
@@ -4194,7 +5266,9 @@
         "evidence_requests"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "evidenceGapDetectionService.js"
       ],
       "websocketEvents": [],
@@ -4214,6 +5288,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -4224,7 +5301,9 @@
         "criminal_cases"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "evidenceGapDetectionService.js"
       ],
       "websocketEvents": [],
@@ -4244,6 +5323,11 @@
       "authorizationGuards": [
         "requireCaseAccess"
       ],
+      "validation": [
+        "400-response",
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "body"
       ],
@@ -4256,7 +5340,9 @@
       "queuesInvoked": [
         "(file-level) enqueueEvidenceIngestion"
       ],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/services/caseApi.ts"
@@ -4274,6 +5360,11 @@
       "authorizationGuards": [
         "requireCaseAccess"
       ],
+      "validation": [
+        "400-response",
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "body"
       ],
@@ -4288,7 +5379,9 @@
       "queuesInvoked": [
         "enqueueEvidenceIngestion"
       ],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/services/caseApi.ts"
@@ -4306,6 +5399,9 @@
       "authorizationGuards": [
         "requireCaseAccess"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -4318,7 +5414,9 @@
       "queuesInvoked": [
         "(file-level) enqueueEvidenceIngestion"
       ],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/services/caseApi.ts"
@@ -4336,6 +5434,9 @@
       "authorizationGuards": [
         "requireCaseAccess"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -4348,7 +5449,9 @@
       "queuesInvoked": [
         "(file-level) enqueueEvidenceIngestion"
       ],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/services/caseApi.ts"
@@ -4366,6 +5469,9 @@
       "authorizationGuards": [
         "requireCaseAccess"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -4378,7 +5484,9 @@
       "queuesInvoked": [
         "(file-level) enqueueEvidenceIngestion"
       ],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/services/caseApi.ts"
@@ -4396,13 +5504,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "bodycamVisionService.js",
         "trajectoryAnalysisService.js",
         "visibilitySimulationService.js",
@@ -4425,13 +5538,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "bodycamVisionService.js",
         "trajectoryAnalysisService.js",
         "visibilitySimulationService.js",
@@ -4454,6 +5572,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params",
         "query"
@@ -4461,7 +5582,9 @@
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "bodycamVisionService.js",
         "trajectoryAnalysisService.js",
         "visibilitySimulationService.js",
@@ -4484,13 +5607,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "bodycamVisionService.js",
         "trajectoryAnalysisService.js",
         "visibilitySimulationService.js",
@@ -4513,13 +5641,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "bodycamVisionService.js",
         "trajectoryAnalysisService.js",
         "visibilitySimulationService.js",
@@ -4542,13 +5675,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "bodycamVisionService.js",
         "trajectoryAnalysisService.js",
         "visibilitySimulationService.js",
@@ -4571,13 +5709,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "bodycamVisionService.js",
         "trajectoryAnalysisService.js",
         "visibilitySimulationService.js",
@@ -4600,13 +5743,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "bodycamVisionService.js",
         "trajectoryAnalysisService.js",
         "visibilitySimulationService.js",
@@ -4629,13 +5777,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "bodycamVisionService.js",
         "trajectoryAnalysisService.js",
         "visibilitySimulationService.js",
@@ -4658,13 +5811,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "bodycamVisionService.js",
         "trajectoryAnalysisService.js",
         "visibilitySimulationService.js",
@@ -4687,13 +5845,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "bodycamVisionService.js",
         "trajectoryAnalysisService.js",
         "visibilitySimulationService.js",
@@ -4716,13 +5879,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "bodycamVisionService.js",
         "trajectoryAnalysisService.js",
         "visibilitySimulationService.js",
@@ -4745,13 +5913,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "bodycamVisionService.js",
         "trajectoryAnalysisService.js",
         "visibilitySimulationService.js",
@@ -4774,13 +5947,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "bodycamVisionService.js",
         "trajectoryAnalysisService.js",
         "visibilitySimulationService.js",
@@ -4803,13 +5981,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "schema"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "bodycamVisionService.js",
         "trajectoryAnalysisService.js",
         "visibilitySimulationService.js",
@@ -4832,6 +6015,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -4842,7 +6028,9 @@
         "evidence_events"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "bodycamVisionService.js",
         "trajectoryAnalysisService.js",
         "visibilitySimulationService.js",
@@ -4867,13 +6055,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "bodycamVisionService.js",
         "trajectoryAnalysisService.js",
         "visibilitySimulationService.js",
@@ -4896,13 +6089,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "bodycamVisionService.js",
         "trajectoryAnalysisService.js",
         "visibilitySimulationService.js",
@@ -4925,13 +6123,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "bodycamVisionService.js",
         "trajectoryAnalysisService.js",
         "visibilitySimulationService.js",
@@ -4954,13 +6157,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "bodycamVisionService.js",
         "trajectoryAnalysisService.js",
         "visibilitySimulationService.js",
@@ -4983,13 +6191,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "bodycamVisionService.js",
         "trajectoryAnalysisService.js",
         "visibilitySimulationService.js",
@@ -5012,13 +6225,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "bodycamVisionService.js",
         "trajectoryAnalysisService.js",
         "visibilitySimulationService.js",
@@ -5041,13 +6259,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "legislativeIngestService.ts"
       ],
       "websocketEvents": [],
@@ -5065,13 +6288,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "legislativeIngestService.ts"
       ],
       "websocketEvents": [],
@@ -5089,13 +6317,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "legislativeIngestService.ts"
       ],
       "websocketEvents": [],
@@ -5113,13 +6346,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "legislativeIngestService.ts"
       ],
       "websocketEvents": [],
@@ -5137,13 +6375,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "legislativeIngestService.ts"
       ],
       "websocketEvents": [],
@@ -5161,13 +6404,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "legislativeIngestService.ts"
       ],
       "websocketEvents": [],
@@ -5185,13 +6433,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "legislativeIngestService.ts"
       ],
       "websocketEvents": [],
@@ -5209,13 +6462,18 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -5231,13 +6489,18 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -5253,13 +6516,18 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -5275,6 +6543,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -5285,7 +6556,9 @@
         "narrative_claims"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -5301,13 +6574,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/services/caseApi.ts"
@@ -5325,6 +6603,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -5335,7 +6616,9 @@
         "impeachment_candidates"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -5351,13 +6634,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/services/caseApi.ts"
@@ -5375,13 +6663,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -5397,13 +6690,18 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "investigatorWorkbenchService.js"
       ],
       "websocketEvents": [],
@@ -5423,6 +6721,11 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "400-response",
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "body",
         "params"
@@ -5434,7 +6737,9 @@
         "case_witnesses"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "investigatorWorkbenchService.js"
       ],
       "websocketEvents": [],
@@ -5454,6 +6759,11 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "400-response",
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "body",
         "params"
@@ -5465,7 +6775,9 @@
         "investigation_leads"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "investigatorWorkbenchService.js"
       ],
       "websocketEvents": [],
@@ -5485,6 +6797,11 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "400-response",
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "body",
         "params"
@@ -5496,7 +6813,9 @@
         "field_notes"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "investigatorWorkbenchService.js"
       ],
       "websocketEvents": [],
@@ -5516,6 +6835,10 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "body",
         "params"
@@ -5527,7 +6850,9 @@
         "investigation_assignments"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "investigatorWorkbenchService.js"
       ],
       "websocketEvents": [],
@@ -5545,13 +6870,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "investigatorWorkbenchService.js"
       ],
       "websocketEvents": [],
@@ -5569,13 +6899,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "legislativeIngestService.ts"
       ],
       "websocketEvents": [],
@@ -5593,13 +6928,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "legislativeIngestService.ts"
       ],
       "websocketEvents": [],
@@ -5617,13 +6957,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "legislativeIngestService.ts"
       ],
       "websocketEvents": [],
@@ -5641,13 +6986,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "legislativeIngestService.ts"
       ],
       "websocketEvents": [],
@@ -5665,13 +7015,19 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "schema",
+        "type/bounds"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "legislativeIngestService.ts"
       ],
       "websocketEvents": [],
@@ -5689,13 +7045,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "legislativeIngestService.ts"
       ],
       "websocketEvents": [],
@@ -5713,13 +7074,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "type/bounds"
+      ],
       "inputSurface": [
         "query"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "legislativeIngestService.ts"
       ],
       "websocketEvents": [],
@@ -5737,13 +7103,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "legislativeIngestService.ts"
       ],
       "websocketEvents": [],
@@ -5761,13 +7132,19 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "schema",
+        "type/bounds"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "legislativeIngestService.ts"
       ],
       "websocketEvents": [],
@@ -5783,13 +7160,20 @@
       "authenticationRequired": false,
       "authenticationMechanism": "PUBLIC_ROUTES allowlist",
       "authorizationGuards": [],
+      "validation": [
+        "400-response",
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/pages/ContactSalesPage.tsx"
@@ -5807,6 +7191,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
@@ -5823,7 +7210,9 @@
         "organization_members"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "redactionService.js",
         "disclosureService.js",
         "publicationService.js"
@@ -5845,6 +7234,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
@@ -5855,7 +7247,9 @@
         "user_account_settings"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "redactionService.js",
         "disclosureService.js",
         "publicationService.js"
@@ -5877,13 +7271,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "redactionService.js",
         "disclosureService.js",
         "publicationService.js"
@@ -5905,6 +7304,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
@@ -5915,7 +7317,9 @@
         "criminal_cases"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "redactionService.js",
         "disclosureService.js",
         "publicationService.js"
@@ -5935,6 +7339,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
@@ -5945,7 +7352,9 @@
         "permission_grants"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "redactionService.js",
         "disclosureService.js",
         "publicationService.js"
@@ -5967,13 +7376,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "query"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "redactionService.js",
         "disclosureService.js",
         "publicationService.js"
@@ -5993,13 +7407,18 @@
       "authorizationGuards": [
         "requireCaseAccess"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "redactionService.js",
         "disclosureService.js",
         "publicationService.js"
@@ -6021,6 +7440,9 @@
       "authorizationGuards": [
         "requireCaseAccess"
       ],
+      "validation": [
+        "400-response"
+      ],
       "inputSurface": [
         "body",
         "params"
@@ -6028,7 +7450,9 @@
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "redactionService.js",
         "disclosureService.js",
         "publicationService.js"
@@ -6050,13 +7474,18 @@
       "authorizationGuards": [
         "requireCaseAccess"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "redactionService.js",
         "disclosureService.js",
         "publicationService.js"
@@ -6078,6 +7507,9 @@
       "authorizationGuards": [
         "requireCaseAccess"
       ],
+      "validation": [
+        "400-response"
+      ],
       "inputSurface": [
         "body",
         "params"
@@ -6085,7 +7517,9 @@
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "redactionService.js",
         "disclosureService.js",
         "publicationService.js"
@@ -6107,13 +7541,18 @@
       "authorizationGuards": [
         "requireCaseAccess"
       ],
+      "validation": [
+        "400-response"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "redactionService.js",
         "disclosureService.js",
         "publicationService.js"
@@ -6133,13 +7572,18 @@
       "authorizationGuards": [
         "requireCaseAccess"
       ],
+      "validation": [
+        "400-response"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "redactionService.js",
         "disclosureService.js",
         "publicationService.js"
@@ -6159,6 +7603,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
@@ -6169,7 +7616,9 @@
         "users"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "redactionService.js",
         "disclosureService.js",
         "publicationService.js"
@@ -6191,13 +7640,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "redactionService.js",
         "disclosureService.js",
         "publicationService.js"
@@ -6217,13 +7671,18 @@
       "authorizationGuards": [
         "requireCaseAccess"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "redactionService.js",
         "disclosureService.js",
         "publicationService.js"
@@ -6243,6 +7702,9 @@
       "authorizationGuards": [
         "requireCaseAccess"
       ],
+      "validation": [
+        "400-response"
+      ],
       "inputSurface": [
         "body",
         "params"
@@ -6250,7 +7712,9 @@
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "redactionService.js",
         "disclosureService.js",
         "publicationService.js"
@@ -6270,13 +7734,18 @@
       "authorizationGuards": [
         "requireCaseAccess"
       ],
+      "validation": [
+        "400-response"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "redactionService.js",
         "disclosureService.js",
         "publicationService.js"
@@ -6296,13 +7765,18 @@
       "authorizationGuards": [
         "requireCaseAccess"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "redactionService.js",
         "disclosureService.js",
         "publicationService.js"
@@ -6322,6 +7796,9 @@
       "authorizationGuards": [
         "requireCaseAccess"
       ],
+      "validation": [
+        "400-response"
+      ],
       "inputSurface": [
         "body",
         "params"
@@ -6333,7 +7810,9 @@
         "evidence"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "redactionService.js",
         "disclosureService.js",
         "publicationService.js"
@@ -6351,13 +7830,18 @@
       "authenticationRequired": false,
       "authenticationMechanism": "PUBLIC_ROUTES allowlist",
       "authorizationGuards": [],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": true,
@@ -6371,13 +7855,18 @@
       "authenticationRequired": false,
       "authenticationMechanism": "PUBLIC_ROUTES allowlist",
       "authorizationGuards": [],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": true,
@@ -6391,13 +7880,18 @@
       "authenticationRequired": false,
       "authenticationMechanism": "PUBLIC_ROUTES allowlist",
       "authorizationGuards": [],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": true,
@@ -6413,13 +7907,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "query"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js",
         "firmPlatformService.js"
       ],
@@ -6438,13 +7937,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js",
         "firmPlatformService.js"
       ],
@@ -6463,13 +7967,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "query"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js",
         "firmPlatformService.js"
       ],
@@ -6488,6 +7997,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body",
         "params"
@@ -6495,7 +8007,9 @@
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js",
         "firmPlatformService.js"
       ],
@@ -6514,13 +8028,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js",
         "firmPlatformService.js"
       ],
@@ -6539,6 +8058,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body",
         "params"
@@ -6546,7 +8068,9 @@
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js",
         "firmPlatformService.js"
       ],
@@ -6564,6 +8088,9 @@
       "authenticationMechanism": "global authenticationHook (JWT)",
       "authorizationGuards": [
         "(role/route-permission only)"
+      ],
+      "validation": [
+        "none-detected"
       ],
       "inputSurface": [
         "none"
@@ -6571,7 +8098,9 @@
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js",
         "firmPlatformService.js"
       ],
@@ -6590,13 +8119,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js",
         "firmPlatformService.js"
       ],
@@ -6615,13 +8149,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "query"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js",
         "firmPlatformService.js"
       ],
@@ -6640,13 +8179,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js",
         "firmPlatformService.js"
       ],
@@ -6665,6 +8209,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body",
         "params"
@@ -6672,7 +8219,9 @@
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js",
         "firmPlatformService.js"
       ],
@@ -6691,13 +8240,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "query"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js",
         "firmPlatformService.js"
       ],
@@ -6716,13 +8270,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js",
         "firmPlatformService.js"
       ],
@@ -6741,13 +8300,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js",
         "firmPlatformService.js"
       ],
@@ -6766,13 +8330,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "query"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js",
         "firmPlatformService.js"
       ],
@@ -6791,13 +8360,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "query"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js",
         "firmPlatformService.js"
       ],
@@ -6816,13 +8390,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js",
         "firmPlatformService.js"
       ],
@@ -6841,13 +8420,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js",
         "firmPlatformService.js"
       ],
@@ -6866,6 +8450,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body",
         "params"
@@ -6873,7 +8460,9 @@
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js",
         "firmPlatformService.js"
       ],
@@ -6892,13 +8481,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "query"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js",
         "firmPlatformService.js"
       ],
@@ -6917,13 +8511,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js",
         "firmPlatformService.js"
       ],
@@ -6942,13 +8541,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js",
         "firmPlatformService.js"
       ],
@@ -6967,13 +8571,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js"
       ],
       "websocketEvents": [],
@@ -6993,13 +8602,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js"
       ],
       "websocketEvents": [],
@@ -7019,13 +8633,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js"
       ],
       "websocketEvents": [],
@@ -7045,13 +8664,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js"
       ],
       "websocketEvents": [],
@@ -7071,13 +8695,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js"
       ],
       "websocketEvents": [],
@@ -7097,13 +8726,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js"
       ],
       "websocketEvents": [],
@@ -7123,13 +8757,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js"
       ],
       "websocketEvents": [],
@@ -7149,13 +8788,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js"
       ],
       "websocketEvents": [],
@@ -7175,6 +8819,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
@@ -7185,7 +8832,9 @@
         "organization_invitations"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js"
       ],
       "websocketEvents": [],
@@ -7205,13 +8854,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js"
       ],
       "websocketEvents": [],
@@ -7231,13 +8885,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js"
       ],
       "websocketEvents": [],
@@ -7257,13 +8916,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "query"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js"
       ],
       "websocketEvents": [],
@@ -7283,13 +8947,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "type/bounds"
+      ],
       "inputSurface": [
         "query"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js"
       ],
       "websocketEvents": [],
@@ -7305,13 +8974,19 @@
       "authenticationRequired": false,
       "authenticationMechanism": "PUBLIC_ROUTES allowlist",
       "authorizationGuards": [],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "query"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js"
       ],
       "websocketEvents": [],
@@ -7329,13 +9004,19 @@
       "authenticationRequired": false,
       "authenticationMechanism": "PUBLIC_ROUTES allowlist",
       "authorizationGuards": [],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js"
       ],
       "websocketEvents": [],
@@ -7355,13 +9036,19 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "query"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "organizationService.js"
       ],
       "websocketEvents": [],
@@ -7379,13 +9066,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "type/bounds"
+      ],
       "inputSurface": [
         "query"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/pages/dashboard/PolicyOperationsDashboard.tsx"
@@ -7403,13 +9095,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -7425,13 +9122,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "query"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/pages/dashboard/PolicyTopicsViewer.tsx"
@@ -7449,13 +9151,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/pages/dashboard/PolicyTopicsViewer.tsx"
@@ -7473,13 +9180,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/pages/dashboard/PolicyTopicsViewer.tsx"
@@ -7497,13 +9209,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -7519,13 +9236,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -7541,6 +9263,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
@@ -7549,7 +9274,9 @@
       "queuesInvoked": [
         "(file-level) enqueueSiteCrawls,enqueueResult"
       ],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/pages/dashboard/PolicyPipelineDashboard.tsx"
@@ -7567,6 +9294,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "type/bounds"
+      ],
       "inputSurface": [
         "query"
       ],
@@ -7575,7 +9305,9 @@
       "queuesInvoked": [
         "(file-level) enqueueSiteCrawls,enqueueResult"
       ],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/pages/dashboard/PolicyPipelineDashboard.tsx"
@@ -7593,6 +9325,11 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "query"
       ],
@@ -7601,7 +9338,9 @@
       "queuesInvoked": [
         "(file-level) enqueueSiteCrawls,enqueueResult"
       ],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -7617,6 +9356,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -7625,7 +9367,9 @@
       "queuesInvoked": [
         "(file-level) enqueueSiteCrawls,enqueueResult"
       ],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -7641,6 +9385,10 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "body"
       ],
@@ -7649,7 +9397,9 @@
       "queuesInvoked": [
         "(file-level) enqueueSiteCrawls,enqueueResult"
       ],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -7665,6 +9415,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
@@ -7673,7 +9426,9 @@
       "queuesInvoked": [
         "(file-level) enqueueSiteCrawls,enqueueResult"
       ],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -7689,6 +9444,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
@@ -7697,7 +9455,9 @@
       "queuesInvoked": [
         "(file-level) enqueueSiteCrawls,enqueueResult"
       ],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -7713,6 +9473,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
@@ -7721,7 +9484,9 @@
       "queuesInvoked": [
         "enqueueSiteCrawls"
       ],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -7737,6 +9502,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
@@ -7746,7 +9514,9 @@
         "enqueueResult",
         "enqueueSiteCrawls"
       ],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -7762,13 +9532,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "chpPolicyImportService.js"
       ],
       "websocketEvents": [],
@@ -7788,13 +9563,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "chpPolicyImportService.js"
       ],
       "websocketEvents": [],
@@ -7812,13 +9592,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "chpPolicyImportService.js"
       ],
       "websocketEvents": [],
@@ -7836,13 +9621,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "chpPolicyImportService.js"
       ],
       "websocketEvents": [],
@@ -7860,13 +9650,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "chpPolicyImportService.js"
       ],
       "websocketEvents": [],
@@ -7884,13 +9679,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "type/bounds"
+      ],
       "inputSurface": [
         "query"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "chpPolicyImportService.js"
       ],
       "websocketEvents": [],
@@ -7908,13 +9708,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "chpPolicyImportService.js"
       ],
       "websocketEvents": [],
@@ -7932,13 +9737,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "chpPolicyImportService.js"
       ],
       "websocketEvents": [],
@@ -7956,13 +9766,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "chpPolicyImportService.js"
       ],
       "websocketEvents": [],
@@ -7980,13 +9795,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "type/bounds"
+      ],
       "inputSurface": [
         "query"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "chpPolicyImportService.js"
       ],
       "websocketEvents": [],
@@ -8004,13 +9824,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "chpPolicyImportService.js"
       ],
       "websocketEvents": [],
@@ -8028,13 +9853,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "chpPolicyImportService.js"
       ],
       "websocketEvents": [],
@@ -8052,13 +9882,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "chpPolicyImportService.js"
       ],
       "websocketEvents": [],
@@ -8076,13 +9911,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "chpPolicyImportService.js"
       ],
       "websocketEvents": [],
@@ -8100,13 +9940,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "chpPolicyImportService.js"
       ],
       "websocketEvents": [],
@@ -8124,13 +9969,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "chpPolicyImportService.js"
       ],
       "websocketEvents": [],
@@ -8148,13 +9998,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "chpPolicyImportService.js"
       ],
       "websocketEvents": [],
@@ -8172,13 +10027,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "chpPolicyImportService.js"
       ],
       "websocketEvents": [],
@@ -8196,13 +10056,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -8218,13 +10083,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/pages/admin/OperationsCommandCenter.tsx"
@@ -8242,13 +10112,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/pages/dashboard/SystemHealthDashboard.tsx"
@@ -8266,13 +10141,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/pages/dashboard/BetaDeploymentVerification.tsx"
@@ -8290,13 +10170,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -8312,13 +10197,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "query"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -8334,13 +10224,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -8356,13 +10251,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/pages/dashboard/RepositoryIntegrityDashboard.tsx"
@@ -8380,13 +10280,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -8402,13 +10307,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -8424,13 +10334,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -8446,13 +10361,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -8468,13 +10388,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -8490,13 +10415,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -8512,6 +10442,11 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "params",
         "query"
@@ -8519,7 +10454,9 @@
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -8535,13 +10472,18 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "calcrimEngine.js"
       ],
       "websocketEvents": [],
@@ -8559,13 +10501,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "query"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "searchService.js"
       ],
       "websocketEvents": [],
@@ -8585,6 +10532,9 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params",
         "query"
@@ -8592,7 +10542,9 @@
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "searchService.js"
       ],
       "websocketEvents": [],
@@ -8608,13 +10560,18 @@
       "authenticationRequired": false,
       "authenticationMechanism": "PUBLIC_ROUTES allowlist",
       "authorizationGuards": [],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -8628,6 +10585,11 @@
       "authenticationRequired": false,
       "authenticationMechanism": "PUBLIC_ROUTES allowlist",
       "authorizationGuards": [],
+      "validation": [
+        "400-response",
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "body"
       ],
@@ -8640,7 +10602,9 @@
         "subscriptions"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/stores/authStore.ts"
@@ -8656,6 +10620,11 @@
       "authenticationRequired": false,
       "authenticationMechanism": "PUBLIC_ROUTES allowlist",
       "authorizationGuards": [],
+      "validation": [
+        "400-response",
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "body"
       ],
@@ -8666,7 +10635,9 @@
         "users"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/stores/authStore.ts"
@@ -8682,13 +10653,19 @@
       "authenticationRequired": false,
       "authenticationMechanism": "PUBLIC_ROUTES allowlist",
       "authorizationGuards": [],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": true,
@@ -8702,13 +10679,18 @@
       "authenticationRequired": false,
       "authenticationMechanism": "PUBLIC_ROUTES allowlist",
       "authorizationGuards": [],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/stores/authStore.ts"
@@ -8726,6 +10708,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
@@ -8736,7 +10721,9 @@
         "subscriptions"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -8750,6 +10737,11 @@
       "authenticationRequired": false,
       "authenticationMechanism": "PUBLIC_ROUTES allowlist",
       "authorizationGuards": [],
+      "validation": [
+        "400-response",
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "body"
       ],
@@ -8762,7 +10754,9 @@
         "password_reset_tokens"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/pages/auth/ForgotPasswordPage.tsx"
@@ -8778,13 +10772,19 @@
       "authenticationRequired": false,
       "authenticationMechanism": "PUBLIC_ROUTES allowlist",
       "authorizationGuards": [],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [
         "src/pages/auth/ResetPasswordPage.tsx"
@@ -8802,6 +10802,11 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "body"
       ],
@@ -8812,7 +10817,9 @@
         "users"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -8828,6 +10835,10 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "query"
       ],
@@ -8838,7 +10849,9 @@
         "security_logs"
       ],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": true,
@@ -8852,13 +10865,19 @@
       "authenticationRequired": false,
       "authenticationMechanism": "PUBLIC_ROUTES allowlist",
       "authorizationGuards": [],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "body"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "identityService.js"
       ],
       "websocketEvents": [],
@@ -8878,6 +10897,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
@@ -8888,7 +10910,9 @@
         "users"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "identityService.js"
       ],
       "websocketEvents": [],
@@ -8906,6 +10930,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
@@ -8916,7 +10943,9 @@
         "users"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "identityService.js"
       ],
       "websocketEvents": [],
@@ -8934,6 +10963,10 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "body"
       ],
@@ -8944,7 +10977,9 @@
         "users"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "identityService.js"
       ],
       "websocketEvents": [],
@@ -8960,6 +10995,10 @@
       "authenticationRequired": false,
       "authenticationMechanism": "PUBLIC_ROUTES allowlist",
       "authorizationGuards": [],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "body"
       ],
@@ -8974,7 +11013,9 @@
         "subscriptions"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "identityService.js"
       ],
       "websocketEvents": [],
@@ -8994,6 +11035,10 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "body"
       ],
@@ -9004,7 +11049,9 @@
         "users"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "identityService.js"
       ],
       "websocketEvents": [],
@@ -9022,13 +11069,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "identityService.js"
       ],
       "websocketEvents": [],
@@ -9046,13 +11098,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "identityService.js"
       ],
       "websocketEvents": [],
@@ -9070,13 +11127,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -9092,13 +11154,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "type/bounds"
+      ],
       "inputSurface": [
         "query"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -9114,13 +11181,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -9134,6 +11206,9 @@
       "authenticationRequired": false,
       "authenticationMechanism": "PUBLIC_ROUTES allowlist",
       "authorizationGuards": [],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
@@ -9142,7 +11217,12 @@
       "queuesInvoked": [
         "(file-level) startPipelineWorkers"
       ],
-      "fileServices": [],
+      "workersInvoked": [
+        "startExpirationWorker",
+        "discountExpirationWorker"
+      ],
+      "cache": true,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": true,
@@ -9156,6 +11236,9 @@
       "authenticationRequired": false,
       "authenticationMechanism": "PUBLIC_ROUTES allowlist",
       "authorizationGuards": [],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
@@ -9164,7 +11247,12 @@
       "queuesInvoked": [
         "(file-level) startPipelineWorkers"
       ],
-      "fileServices": [],
+      "workersInvoked": [
+        "startExpirationWorker",
+        "discountExpirationWorker"
+      ],
+      "cache": true,
+      "services": [],
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
@@ -9180,6 +11268,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
@@ -9188,7 +11279,9 @@
       "queuesInvoked": [
         "(file-level) enqueueTimelineProcessing,pipelineJobService,getQueueHealth"
       ],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "argumentInteractionEngine",
         "explainableArgumentEngine",
         "contradictionExtractionService",
@@ -9213,6 +11306,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -9221,7 +11317,9 @@
       "queuesInvoked": [
         "(file-level) enqueueTimelineProcessing,pipelineJobService,getQueueHealth"
       ],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "argumentInteractionEngine",
         "explainableArgumentEngine",
         "contradictionExtractionService",
@@ -9246,6 +11344,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -9254,7 +11355,9 @@
       "queuesInvoked": [
         "enqueueTimelineProcessing"
       ],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "argumentInteractionEngine",
         "explainableArgumentEngine",
         "contradictionExtractionService",
@@ -9279,6 +11382,10 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "body"
       ],
@@ -9287,7 +11394,9 @@
       "queuesInvoked": [
         "enqueueTimelineProcessing"
       ],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "argumentInteractionEngine",
         "explainableArgumentEngine",
         "contradictionExtractionService",
@@ -9310,6 +11419,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
@@ -9318,7 +11430,9 @@
       "queuesInvoked": [
         "(file-level) enqueueTimelineProcessing,pipelineJobService,getQueueHealth"
       ],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "argumentInteractionEngine",
         "explainableArgumentEngine",
         "contradictionExtractionService",
@@ -9341,13 +11455,18 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "workbenchService.js"
       ],
       "websocketEvents": [],
@@ -9367,13 +11486,18 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "workbenchService.js"
       ],
       "websocketEvents": [],
@@ -9393,13 +11517,18 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "workbenchService.js",
         "exportService.js"
       ],
@@ -9420,13 +11549,18 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "workbenchService.js",
         "exportService.js"
       ],
@@ -9445,13 +11579,18 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "workbenchService.js",
         "exportService.js"
       ],
@@ -9470,13 +11609,20 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "400-response",
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "workbenchService.js",
         "exportService.js"
       ],
@@ -9497,6 +11643,9 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -9507,7 +11656,9 @@
         "attorney_notes"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "workbenchService.js",
         "exportService.js"
       ],
@@ -9528,6 +11679,11 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "400-response",
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "body",
         "params"
@@ -9539,7 +11695,9 @@
         "attorney_notes"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "workbenchService.js",
         "exportService.js"
       ],
@@ -9560,6 +11718,10 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "body",
         "params"
@@ -9571,7 +11733,9 @@
         "attorney_notes"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "workbenchService.js",
         "exportService.js"
       ],
@@ -9590,6 +11754,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -9600,7 +11767,9 @@
         "attorney_notes"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "workbenchService.js",
         "exportService.js"
       ],
@@ -9619,6 +11788,9 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -9629,7 +11801,9 @@
         "workbench_pins"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "workbenchService.js",
         "exportService.js"
       ],
@@ -9650,6 +11824,10 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "400-response",
+        "required-field"
+      ],
       "inputSurface": [
         "body",
         "params"
@@ -9661,7 +11839,9 @@
         "workbench_pins"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "workbenchService.js",
         "exportService.js"
       ],
@@ -9682,6 +11862,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -9692,7 +11875,9 @@
         "workbench_pins"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "workbenchService.js",
         "exportService.js"
       ],
@@ -9711,6 +11896,9 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -9721,7 +11909,9 @@
         "investigation_tasks"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "workbenchService.js",
         "exportService.js"
       ],
@@ -9742,6 +11932,11 @@
       "authorizationGuards": [
         "guardCaseAccess"
       ],
+      "validation": [
+        "400-response",
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "body",
         "params"
@@ -9753,7 +11948,9 @@
         "investigation_tasks"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "workbenchService.js",
         "exportService.js"
       ],
@@ -9774,6 +11971,10 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field",
+        "type/bounds"
+      ],
       "inputSurface": [
         "body",
         "params"
@@ -9785,7 +11986,9 @@
         "investigation_tasks"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "workbenchService.js",
         "exportService.js"
       ],
@@ -9806,6 +12009,9 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "required-field"
+      ],
       "inputSurface": [
         "params"
       ],
@@ -9816,7 +12022,9 @@
         "investigation_tasks"
       ],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "workbenchService.js",
         "exportService.js"
       ],
@@ -9837,13 +12045,18 @@
       "authorizationGuards": [
         "(role/route-permission only)"
       ],
+      "validation": [
+        "none-detected"
+      ],
       "inputSurface": [
         "none"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
       "queuesInvoked": [],
-      "fileServices": [
+      "workersInvoked": [],
+      "cache": false,
+      "services": [
         "workbenchService.js",
         "exportService.js"
       ],
@@ -9854,7 +12067,7 @@
       "runtimeStatus": "CONNECTED"
     }
   ],
-  "runtimeProbedAt": "2026-07-07T15:44:21.232Z",
+  "runtimeProbedAt": "2026-07-07T15:50:37.121Z",
   "runtimeProbedGetEndpoints": 205,
   "runtimeStatusCounts": {
     "CONNECTED": 197,

@@ -2,8 +2,8 @@
 
 > Single source of truth for CourtAccess HTTP endpoints. **Generated deterministically** from source by `scripts/generate-api-registry.mjs` and enriched with **live runtime probing** by `scripts/probe-api-registry.mjs`. No values are estimated or fabricated; fields that cannot be resolved statically are marked accordingly. Regenerate with those scripts.
 
-- Generated: 2026-07-07T15:43:56.016Z
-- Runtime probed: 2026-07-07T15:44:21.232Z (205 GET endpoints against a live server)
+- Generated: 2026-07-07T15:50:35.154Z
+- Runtime probed: 2026-07-07T15:50:37.121Z (205 GET endpoints against a live server)
 - **Total endpoints: 374** across 45 route files
 - Duplicate endpoints (same method+route): **0** (none)
 
@@ -208,51 +208,51 @@ Route file → service modules imported (file-level).
 
 | Route file | Services |
 |------------|----------|
-| `admin/adminRoutes.ts` | billingMetricsService.js |
+| `admin/adminRoutes.ts` | — |
 | `admin/queueMonitorRoutes.ts` | — |
-| `assistant/litigationAssistantRoutes.ts` | litigationAssistantService.js |
-| `billing/billingRoutes.ts` | subscriptionService.js, aiCreditService.js, usageEnforcementService.js, stripeSyncService.js |
-| `billing/discountRoutes.ts` | discountService.js |
+| `assistant/litigationAssistantRoutes.ts` | — |
+| `billing/billingRoutes.ts` | — |
+| `billing/discountRoutes.ts` | — |
 | `billing/stripeWebhookHandler.ts` | — |
 | `charges/chargeRoutes.ts` | — |
 | `clients/clientRoutes.ts` | — |
 | `communications/hearingRoutes.ts` | — |
 | `communications/messagingRoutes.ts` | — |
 | `contradiction/contradictionRoutes.ts` | — |
-| `courtlistener/courtListenerRoutes.ts` | courtListenerService.js |
-| `cpra/autonomousCpraRoutes.ts` | cpraRequestEngine.js, cpraEmailLogService.js, cpraAttachmentProcessor.js, cpraClassificationEngine.js, cpraNotificationService.js, cpraTimelineService.js |
-| `cpra/policyMatrixRoutes.ts` | cpraMatrixService.js |
-| `doctrine/doctrineRoutes.ts` | doctrineIngestionService.ts |
+| `courtlistener/courtListenerRoutes.ts` | — |
+| `cpra/autonomousCpraRoutes.ts` | — |
+| `cpra/policyMatrixRoutes.ts` | — |
+| `doctrine/doctrineRoutes.ts` | — |
 | `evidence/caseRoutes.ts` | — |
-| `evidence/complianceRoutes.ts` | eventExtractionService.js, videoActionDetectionService.js, speechAnalysisService.js, officerActionTimelineService.js, complianceDashboardService.js |
-| `evidence/evidenceRequestRoutes.ts` | evidenceGapDetectionService.js |
+| `evidence/complianceRoutes.ts` | — |
+| `evidence/evidenceRequestRoutes.ts` | — |
 | `evidence/evidenceRoutes.ts` | — |
-| `evidence/forensicReconstructionRoutes.ts` | bodycamVisionService.js, trajectoryAnalysisService.js, visibilitySimulationService.js, multiCameraSyncService.js, sceneGeometryService.js, juryVisualizationService.js |
-| `governance/governanceRoutes.ts` | legislativeIngestService.ts |
+| `evidence/forensicReconstructionRoutes.ts` | — |
+| `governance/governanceRoutes.ts` | — |
 | `intelligence/intelligenceRoutes.ts` | — |
-| `investigator/investigatorRoutes.ts` | investigatorWorkbenchService.js |
-| `legislative/legislativeRoutes.ts` | legislativeIngestService.ts |
+| `investigator/investigatorRoutes.ts` | — |
+| `legislative/legislativeRoutes.ts` | — |
 | `marketing/contactRoutes.ts` | — |
-| `membership/membershipRoutes.ts` | redactionService.js, disclosureService.js, publicationService.js |
+| `membership/membershipRoutes.ts` | — |
 | `observability/observabilityRoutes.ts` | — |
-| `organizations/firmPlatformRoutes.ts` | organizationService.js, firmPlatformService.js |
-| `organizations/organizationRoutes.ts` | organizationService.js |
+| `organizations/firmPlatformRoutes.ts` | — |
+| `organizations/organizationRoutes.ts` | — |
 | `policy/pipeline/operationsConsoleRoutes.ts` | — |
 | `policy/pipeline/pipelineRoutes.ts` | — |
-| `policy/pipeline/policyIntelligenceRoutes.ts` | chpPolicyImportService.js |
+| `policy/pipeline/policyIntelligenceRoutes.ts` | — |
 | `productionGates/productionGatesRoutes.ts` | — |
 | `productionOperations/productionOperationsRoutes.ts` | — |
 | `providers/providerRoutes.ts` | — |
-| `routes/calcrimRoutes.ts` | calcrimEngine.js |
-| `search/searchRoutes.ts` | searchService.js |
+| `routes/calcrimRoutes.ts` | — |
+| `search/searchRoutes.ts` | — |
 | `security/authMiddleware.ts` | — |
-| `security/identityRoutes.ts` | identityService.js |
+| `security/identityRoutes.ts` | — |
 | `security/rateLimiter.ts` | — |
 | `security/securityLogger.ts` | — |
 | `server.ts` | — |
-| `timeline/timelineRoutes.ts` | argumentInteractionEngine, explainableArgumentEngine, contradictionExtractionService, timelineReconstructionService.js, pipelineJobService.js, legalAnalysisEngine |
-| `workbench/caseViewRoutes.ts` | workbenchService.js |
-| `workbench/workbenchRoutes.ts` | workbenchService.js, exportService.js |
+| `timeline/timelineRoutes.ts` | — |
+| `workbench/caseViewRoutes.ts` | — |
+| `workbench/workbenchRoutes.ts` | — |
 
 ---
 
@@ -424,128 +424,128 @@ Prisma model → physical table (`@@map`). 103 models.
 
 Each endpoint → { authz guards, DB tables (direct), queues }. Full graph in the JSON.
 
-| Method | Route | Authz | Tables (direct) | Queues |
-|--------|-------|-------|-----------------|--------|
-| GET | `/api/admin/billing/metrics` | (role/route-permission only) | - | - |
-| GET | `/api/admin/stats` | (role/route-permission only) | - | - |
-| GET | `/api/admin/users` | (role/route-permission only) | - | - |
-| GET | `/api/admin/cases` | (role/route-permission only) | - | - |
-| DELETE | `/api/admin/users/:userId` | (role/route-permission only) | - | - |
-| DELETE | `/api/admin/cases/:caseId` | (role/route-permission only) | - | - |
-| DELETE | `/api/admin/evidence/:evidenceId` | (role/route-permission only) | - | - |
-| GET | `/api/admin/queues` | (role/route-permission only) | - | (file-level) getQueueHealth |
-| GET | `/api/admin/queues/:queueName` | (role/route-permission only) | - | (file-level) getQueueHealth |
-| POST | `/api/admin/queues/:queueName/retry-all` | (role/route-permission only) | - | (file-level) getQueueHealth |
-| POST | `/api/admin/queues/:queueName/clean` | (role/route-permission only) | - | (file-level) getQueueHealth |
-| POST | `/api/cases/:caseId/assistant` | guardCaseAccess | - | - |
-| GET | `/api/billing/plans` | (role/route-permission only) | - | - |
-| GET | `/api/billing/plans/:planId` | (role/route-permission only) | - | - |
-| GET | `/api/billing/subscription` | (role/route-permission only) | - | - |
-| POST | `/api/billing/subscription` | (role/route-permission only) | - | - |
-| GET | `/api/billing/credits` | (role/route-permission only) | - | - |
-| GET | `/api/billing/credits/history` | (role/route-permission only) | - | - |
-| GET | `/api/billing/credits/by-type` | (role/route-permission only) | - | - |
-| GET | `/api/billing/credits/costs` | (role/route-permission only) | - | - |
-| POST | `/api/billing/credits/calculate` | (role/route-permission only) | - | - |
-| POST | `/api/billing/credits/deduct` | (role/route-permission only) | - | - |
-| GET | `/api/billing/credit-packs` | (role/route-permission only) | - | - |
-| POST | `/api/billing/credit-packs/purchase` | (role/route-permission only) | - | - |
-| GET | `/api/billing/usage` | (role/route-permission only) | - | - |
-| POST | `/api/billing/usage/check-pages` | (role/route-permission only) | - | - |
-| POST | `/api/billing/usage/check-credits` | (role/route-permission only) | - | - |
-| POST | `/api/billing/usage/record-upload` | (role/route-permission only) | - | - |
-| GET | `/api/discount-codes/validate` | - | - | - |
-| GET | `/api/admin/discount-codes` | (role/route-permission only) | - | - |
-| POST | `/api/admin/discount-codes` | (role/route-permission only) | - | - |
-| PATCH | `/api/admin/discount-codes/:codeId` | (role/route-permission only) | - | - |
-| DELETE | `/api/admin/discount-codes/:codeId` | (role/route-permission only) | - | - |
-| POST | `/api/discount-codes/apply` | (role/route-permission only) | - | - |
-| POST | `/api/billing/create-checkout-session` | (role/route-permission only) | users | - |
-| GET | `/api/billing/checkout-status/:sessionId` | (role/route-permission only) | - | - |
-| POST | `/api/billing/create-portal-session` | (role/route-permission only) | subscriptions | - |
-| POST | `/api/charges` | guardCaseAccess | Charge | - |
-| GET | `/api/charges/:caseId` | guardCaseAccess | Charge | - |
-| DELETE | `/api/charges/:id` | guardCaseAccess | Charge | - |
-| POST | `/api/clients` | guardScopeAccess | clients | - |
-| GET | `/api/clients` | guardScopeAccess | clients | - |
-| GET | `/api/clients/:clientId` | (role/route-permission only) | clients | - |
-| PATCH | `/api/clients/:clientId` | (role/route-permission only) | clients | - |
-| DELETE | `/api/clients/:clientId` | (role/route-permission only) | clients | - |
-| GET | `/api/cases/:caseId/hearings` | guardCaseAccess | case_hearings | - |
-| POST | `/api/cases/:caseId/hearings` | guardCaseAccess | case_hearings | - |
-| GET | `/api/portal/court-dates` | (role/route-permission only) | users,criminal_cases,case_hearings | - |
-| GET | `/api/cases/:caseId/messages` | (role/route-permission only) | case_messages | - |
-| POST | `/api/cases/:caseId/messages` | (role/route-permission only) | case_messages | - |
-| PATCH | `/api/cases/:caseId/messages/:messageId/read` | (role/route-permission only) | case_messages | - |
-| GET | `/api/contradiction/status` | (role/route-permission only) | - | - |
-| GET | `/api/contradiction/ontology` | (role/route-permission only) | - | - |
-| GET | `/api/contradiction/ontology/:category` | (role/route-permission only) | - | - |
-| GET | `/api/contradiction/ontology/event/:eventTypeId` | (role/route-permission only) | - | - |
-| POST | `/api/contradiction/extract` | (role/route-permission only) | - | - |
-| GET | `/api/contradiction/events/:caseId` | (role/route-permission only) | - | - |
-| POST | `/api/contradiction/timeline/:caseId` | (role/route-permission only) | - | - |
-| POST | `/api/contradiction/video/process` | (role/route-permission only) | - | - |
-| POST | `/api/contradiction/video/bodycam-gaps` | (role/route-permission only) | - | - |
-| POST | `/api/contradiction/analyze/:caseId` | (role/route-permission only) | - | - |
-| GET | `/api/contradiction/graph/:caseId` | (role/route-permission only) | - | - |
-| GET | `/api/contradiction/graph/:caseId/cypher` | (role/route-permission only) | - | - |
-| GET | `/api/contradiction/recommendations/:caseId` | (role/route-permission only) | - | - |
-| GET | `/api/courtlistener/status` | (role/route-permission only) | - | - |
-| GET | `/api/courtlistener/search` | (role/route-permission only) | - | - |
-| GET | `/api/courtlistener/opinions/:id` | (role/route-permission only) | - | - |
-| GET | `/api/courtlistener/dockets/:id` | (role/route-permission only) | - | - |
-| POST | `/api/courtlistener/citation-lookup` | (role/route-permission only) | - | - |
-| POST | `/api/admin/cpra/send` | (role/route-permission only) | - | - |
-| POST | `/api/admin/cpra/send-batch` | (role/route-permission only) | - | - |
-| POST | `/api/admin/cpra/send-all-missing` | (role/route-permission only) | - | - |
-| POST | `/api/admin/cpra/follow-up/:requestId` | (role/route-permission only) | - | - |
-| GET | `/api/admin/cpra/progress` | (role/route-permission only) | - | - |
-| GET | `/api/admin/cpra/emails/:agencyId` | (role/route-permission only) | - | - |
-| GET | `/api/admin/cpra/emails/conversation/:requestId` | (role/route-permission only) | - | - |
-| GET | `/api/admin/cpra/email-stats` | (role/route-permission only) | - | - |
-| POST | `/api/admin/cpra/attachments/process` | (role/route-permission only) | - | - |
-| POST | `/api/admin/cpra/attachments/process/:attachmentId` | (role/route-permission only) | - | - |
-| POST | `/api/admin/cpra/classify/:attachmentId` | (role/route-permission only) | - | - |
-| POST | `/api/admin/cpra/classify-all` | (role/route-permission only) | - | - |
-| GET | `/api/admin/cpra/notifications` | (role/route-permission only) | - | - |
-| GET | `/api/admin/cpra/notifications/count` | (role/route-permission only) | - | - |
-| GET | `/api/admin/cpra/notifications/summary` | (role/route-permission only) | - | - |
-| PUT | `/api/admin/cpra/notifications/:notificationId/read` | (role/route-permission only) | - | - |
-| PUT | `/api/admin/cpra/notifications/read-all` | (role/route-permission only) | - | - |
-| DELETE | `/api/admin/cpra/notifications/:notificationId` | (role/route-permission only) | - | - |
-| GET | `/api/admin/cpra/timeline/:agencyId` | (role/route-permission only) | - | - |
-| GET | `/api/admin/cpra/timeline` | (role/route-permission only) | - | - |
-| POST | `/api/admin/cpra/monitor/poll` | (role/route-permission only) | - | - |
-| POST | `/api/admin/cpra/monitor/simulate` | (role/route-permission only) | - | - |
-| POST | `/api/admin/cpra/monitor/start` | (role/route-permission only) | - | - |
-| POST | `/api/admin/cpra/monitor/stop` | (role/route-permission only) | - | - |
-| POST | `/api/admin/cpra/follow-up/check` | (role/route-permission only) | - | - |
-| POST | `/api/admin/cpra/follow-up/worker/start` | (role/route-permission only) | - | - |
-| POST | `/api/admin/cpra/follow-up/worker/stop` | (role/route-permission only) | - | - |
-| POST | `/api/admin/cpra/ingestion/process` | (role/route-permission only) | - | - |
-| POST | `/api/admin/cpra/ingestion/worker/start` | (role/route-permission only) | - | - |
-| POST | `/api/admin/cpra/ingestion/worker/stop` | (role/route-permission only) | - | - |
-| GET | `/api/admin/cpra/status` | (role/route-permission only) | - | - |
-| GET | `/api/cpra/policy-matrix/topics` | (role/route-permission only) | - | - |
-| GET | `/api/cpra/policy-matrix/agencies` | (role/route-permission only) | - | - |
-| GET | `/api/cpra/policy-matrix` | (role/route-permission only) | - | - |
-| GET | `/api/cpra/policy-matrix/:agencyId` | (role/route-permission only) | - | - |
-| PUT | `/api/cpra/policy-matrix/:agencyId/:topicId` | (role/route-permission only) | - | - |
-| GET | `/api/cpra/policy-matrix/summary` | (role/route-permission only) | - | - |
-| POST | `/api/cpra/policy-matrix/seed` | (role/route-permission only) | - | - |
-| GET | `/api/doctrine/status` | (role/route-permission only) | - | - |
-| GET | `/api/doctrine/rules` | (role/route-permission only) | - | - |
-| GET | `/api/doctrine/rules/:doctrineId` | (role/route-permission only) | - | - |
-| GET | `/api/doctrine/search` | (role/route-permission only) | - | - |
-| POST | `/api/doctrine/analyze` | (role/route-permission only) | - | - |
-| POST | `/api/doctrine/quick-scan` | (role/route-permission only) | - | - |
-| POST | `/api/doctrine/ingest` | (role/route-permission only) | - | - |
-| POST | `/api/doctrine/seed` | (role/route-permission only) | - | - |
-| POST | `/api/doctrine/seed-all` | (role/route-permission only) | - | - |
-| POST | `/api/doctrine/seed/:domainCode` | (role/route-permission only) | - | - |
-| GET | `/api/doctrine/domains` | (role/route-permission only) | - | - |
-| GET | `/api/doctrine/categories` | (role/route-permission only) | - | - |
-| GET | `/api/doctrine/chapters` | (role/route-permission only) | - | - |
+| Method | Route | Authz | Validation | Tables (direct) | Queues | Cache |
+|--------|-------|-------|------------|-----------------|--------|-------|
+| GET | `/api/admin/billing/metrics` | (role/route-permission only) | required-field | - | - | - |
+| GET | `/api/admin/stats` | (role/route-permission only) | required-field | - | - | - |
+| GET | `/api/admin/users` | (role/route-permission only) | required-field | - | - | - |
+| GET | `/api/admin/cases` | (role/route-permission only) | required-field | - | - | - |
+| DELETE | `/api/admin/users/:userId` | (role/route-permission only) | 400-response,required-field | - | - | - |
+| DELETE | `/api/admin/cases/:caseId` | (role/route-permission only) | required-field | - | - | - |
+| DELETE | `/api/admin/evidence/:evidenceId` | (role/route-permission only) | required-field | - | - | - |
+| GET | `/api/admin/queues` | (role/route-permission only) | none-detected | - | (file-level) getQueueHealth | - |
+| GET | `/api/admin/queues/:queueName` | (role/route-permission only) | none-detected | - | (file-level) getQueueHealth | - |
+| POST | `/api/admin/queues/:queueName/retry-all` | (role/route-permission only) | none-detected | - | (file-level) getQueueHealth | - |
+| POST | `/api/admin/queues/:queueName/clean` | (role/route-permission only) | none-detected | - | (file-level) getQueueHealth | - |
+| POST | `/api/cases/:caseId/assistant` | guardCaseAccess | 400-response,required-field,type/bounds | - | - | - |
+| GET | `/api/billing/plans` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/billing/plans/:planId` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/billing/subscription` | (role/route-permission only) | required-field | - | - | - |
+| POST | `/api/billing/subscription` | (role/route-permission only) | 400-response,required-field | - | - | - |
+| GET | `/api/billing/credits` | (role/route-permission only) | required-field | - | - | - |
+| GET | `/api/billing/credits/history` | (role/route-permission only) | required-field,type/bounds | - | - | - |
+| GET | `/api/billing/credits/by-type` | (role/route-permission only) | required-field | - | - | - |
+| GET | `/api/billing/credits/costs` | (role/route-permission only) | none-detected | - | - | - |
+| POST | `/api/billing/credits/calculate` | (role/route-permission only) | none-detected | - | - | - |
+| POST | `/api/billing/credits/deduct` | (role/route-permission only) | required-field | - | - | - |
+| GET | `/api/billing/credit-packs` | (role/route-permission only) | none-detected | - | - | - |
+| POST | `/api/billing/credit-packs/purchase` | (role/route-permission only) | 400-response,required-field | - | - | - |
+| GET | `/api/billing/usage` | (role/route-permission only) | required-field | - | - | - |
+| POST | `/api/billing/usage/check-pages` | (role/route-permission only) | required-field | - | - | - |
+| POST | `/api/billing/usage/check-credits` | (role/route-permission only) | required-field | - | - | - |
+| POST | `/api/billing/usage/record-upload` | (role/route-permission only) | required-field | - | - | - |
+| GET | `/api/discount-codes/validate` | - | 400-response | - | - | - |
+| GET | `/api/admin/discount-codes` | (role/route-permission only) | required-field | - | - | - |
+| POST | `/api/admin/discount-codes` | (role/route-permission only) | 400-response,required-field | - | - | - |
+| PATCH | `/api/admin/discount-codes/:codeId` | (role/route-permission only) | required-field | - | - | - |
+| DELETE | `/api/admin/discount-codes/:codeId` | (role/route-permission only) | required-field | - | - | - |
+| POST | `/api/discount-codes/apply` | (role/route-permission only) | 400-response,required-field,type/bounds | - | - | - |
+| POST | `/api/billing/create-checkout-session` | (role/route-permission only) | 400-response,required-field | users | - | - |
+| GET | `/api/billing/checkout-status/:sessionId` | (role/route-permission only) | 400-response,required-field | - | - | - |
+| POST | `/api/billing/create-portal-session` | (role/route-permission only) | 400-response,required-field | subscriptions | - | - |
+| POST | `/api/charges` | guardCaseAccess | 400-response | Charge | - | - |
+| GET | `/api/charges/:caseId` | guardCaseAccess | none-detected | Charge | - | - |
+| DELETE | `/api/charges/:id` | guardCaseAccess | none-detected | Charge | - | - |
+| POST | `/api/clients` | guardScopeAccess | 400-response,required-field,type/bounds | clients | - | - |
+| GET | `/api/clients` | guardScopeAccess | none-detected | clients | - | - |
+| GET | `/api/clients/:clientId` | (role/route-permission only) | required-field | clients | - | - |
+| PATCH | `/api/clients/:clientId` | (role/route-permission only) | 400-response,required-field,type/bounds | clients | - | - |
+| DELETE | `/api/clients/:clientId` | (role/route-permission only) | required-field | clients | - | - |
+| GET | `/api/cases/:caseId/hearings` | guardCaseAccess | none-detected | case_hearings | - | - |
+| POST | `/api/cases/:caseId/hearings` | guardCaseAccess | 400-response,required-field,type/bounds | case_hearings | - | - |
+| GET | `/api/portal/court-dates` | (role/route-permission only) | required-field | users,criminal_cases,case_hearings | - | - |
+| GET | `/api/cases/:caseId/messages` | (role/route-permission only) | none-detected | case_messages | - | - |
+| POST | `/api/cases/:caseId/messages` | (role/route-permission only) | 400-response,required-field,type/bounds | case_messages | - | - |
+| PATCH | `/api/cases/:caseId/messages/:messageId/read` | (role/route-permission only) | none-detected | case_messages | - | - |
+| GET | `/api/contradiction/status` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/contradiction/ontology` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/contradiction/ontology/:category` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/contradiction/ontology/event/:eventTypeId` | (role/route-permission only) | none-detected | - | - | - |
+| POST | `/api/contradiction/extract` | (role/route-permission only) | 400-response,required-field | - | - | - |
+| GET | `/api/contradiction/events/:caseId` | (role/route-permission only) | none-detected | - | - | - |
+| POST | `/api/contradiction/timeline/:caseId` | (role/route-permission only) | none-detected | - | - | - |
+| POST | `/api/contradiction/video/process` | (role/route-permission only) | 400-response,required-field | - | - | - |
+| POST | `/api/contradiction/video/bodycam-gaps` | (role/route-permission only) | 400-response,required-field | - | - | - |
+| POST | `/api/contradiction/analyze/:caseId` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/contradiction/graph/:caseId` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/contradiction/graph/:caseId/cypher` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/contradiction/recommendations/:caseId` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/courtlistener/status` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/courtlistener/search` | (role/route-permission only) | 400-response,required-field,type/bounds | - | - | - |
+| GET | `/api/courtlistener/opinions/:id` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/courtlistener/dockets/:id` | (role/route-permission only) | none-detected | - | - | - |
+| POST | `/api/courtlistener/citation-lookup` | (role/route-permission only) | 400-response,required-field,type/bounds | - | - | - |
+| POST | `/api/admin/cpra/send` | (role/route-permission only) | 400-response,required-field | - | - | - |
+| POST | `/api/admin/cpra/send-batch` | (role/route-permission only) | 400-response,required-field | - | - | - |
+| POST | `/api/admin/cpra/send-all-missing` | (role/route-permission only) | 400-response,required-field | - | - | - |
+| POST | `/api/admin/cpra/follow-up/:requestId` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/admin/cpra/progress` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/admin/cpra/emails/:agencyId` | (role/route-permission only) | type/bounds | - | - | - |
+| GET | `/api/admin/cpra/emails/conversation/:requestId` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/admin/cpra/email-stats` | (role/route-permission only) | none-detected | - | - | - |
+| POST | `/api/admin/cpra/attachments/process` | (role/route-permission only) | none-detected | - | - | - |
+| POST | `/api/admin/cpra/attachments/process/:attachmentId` | (role/route-permission only) | none-detected | - | - | - |
+| POST | `/api/admin/cpra/classify/:attachmentId` | (role/route-permission only) | none-detected | - | - | - |
+| POST | `/api/admin/cpra/classify-all` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/admin/cpra/notifications` | (role/route-permission only) | type/bounds | - | - | - |
+| GET | `/api/admin/cpra/notifications/count` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/admin/cpra/notifications/summary` | (role/route-permission only) | none-detected | - | - | - |
+| PUT | `/api/admin/cpra/notifications/:notificationId/read` | (role/route-permission only) | none-detected | - | - | - |
+| PUT | `/api/admin/cpra/notifications/read-all` | (role/route-permission only) | none-detected | - | - | - |
+| DELETE | `/api/admin/cpra/notifications/:notificationId` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/admin/cpra/timeline/:agencyId` | (role/route-permission only) | type/bounds | - | - | - |
+| GET | `/api/admin/cpra/timeline` | (role/route-permission only) | type/bounds | - | - | - |
+| POST | `/api/admin/cpra/monitor/poll` | (role/route-permission only) | none-detected | - | - | - |
+| POST | `/api/admin/cpra/monitor/simulate` | (role/route-permission only) | none-detected | - | - | - |
+| POST | `/api/admin/cpra/monitor/start` | (role/route-permission only) | none-detected | - | - | - |
+| POST | `/api/admin/cpra/monitor/stop` | (role/route-permission only) | none-detected | - | - | - |
+| POST | `/api/admin/cpra/follow-up/check` | (role/route-permission only) | none-detected | - | - | - |
+| POST | `/api/admin/cpra/follow-up/worker/start` | (role/route-permission only) | none-detected | - | - | - |
+| POST | `/api/admin/cpra/follow-up/worker/stop` | (role/route-permission only) | none-detected | - | - | - |
+| POST | `/api/admin/cpra/ingestion/process` | (role/route-permission only) | none-detected | - | - | - |
+| POST | `/api/admin/cpra/ingestion/worker/start` | (role/route-permission only) | none-detected | - | - | - |
+| POST | `/api/admin/cpra/ingestion/worker/stop` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/admin/cpra/status` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/cpra/policy-matrix/topics` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/cpra/policy-matrix/agencies` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/cpra/policy-matrix` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/cpra/policy-matrix/:agencyId` | (role/route-permission only) | none-detected | - | - | - |
+| PUT | `/api/cpra/policy-matrix/:agencyId/:topicId` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/cpra/policy-matrix/summary` | (role/route-permission only) | none-detected | - | - | - |
+| POST | `/api/cpra/policy-matrix/seed` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/doctrine/status` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/doctrine/rules` | (role/route-permission only) | type/bounds | - | - | - |
+| GET | `/api/doctrine/rules/:doctrineId` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/doctrine/search` | (role/route-permission only) | 400-response,required-field,type/bounds | - | - | - |
+| POST | `/api/doctrine/analyze` | (role/route-permission only) | 400-response,required-field | - | - | - |
+| POST | `/api/doctrine/quick-scan` | (role/route-permission only) | 400-response,required-field | - | - | - |
+| POST | `/api/doctrine/ingest` | (role/route-permission only) | 400-response,required-field | - | - | - |
+| POST | `/api/doctrine/seed` | (role/route-permission only) | none-detected | - | - | - |
+| POST | `/api/doctrine/seed-all` | (role/route-permission only) | none-detected | - | - | - |
+| POST | `/api/doctrine/seed/:domainCode` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/doctrine/domains` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/doctrine/categories` | (role/route-permission only) | none-detected | - | - | - |
+| GET | `/api/doctrine/chapters` | (role/route-permission only) | none-detected | - | - | - |
 
 _(truncated to 120; full in canonical-api-registry.json.)_
 

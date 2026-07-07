@@ -192,9 +192,9 @@ ${Object.entries(modelTable).sort().map(([m,t])=>`| ${m} | \`${t}\` |`).join('\n
 
 Each endpoint → { authz guards, DB tables (direct), queues }. Full graph in the JSON.
 
-| Method | Route | Authz | Tables (direct) | Queues |
-|--------|-------|-------|-----------------|--------|
-${eps.slice(0,120).map((e)=>`| ${e.method} | \`${esc(e.route)}\` | ${e.authorizationGuards.join(',')||'-'} | ${e.databaseTables.join(',')||'-'} | ${(e.queuesInvoked||[]).join(',')||'-'} |`).join('\n')}
+| Method | Route | Authz | Validation | Tables (direct) | Queues | Cache |
+|--------|-------|-------|------------|-----------------|--------|-------|
+${eps.slice(0,120).map((e)=>`| ${e.method} | \`${esc(e.route)}\` | ${e.authorizationGuards.join(',')||'-'} | ${(e.validation||['-']).join(',')} | ${e.databaseTables.join(',')||'-'} | ${(e.queuesInvoked||[]).join(',')||'-'} | ${e.cache?'yes':'-'} |`).join('\n')}
 
 _(truncated to 120; full in canonical-api-registry.json.)_
 

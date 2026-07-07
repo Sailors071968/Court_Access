@@ -75,6 +75,11 @@ function extractEndpoints(file, modelTable) {
   const fileServices = [...new Set([...src.matchAll(/from\s+['"]\.\.?\/([^'"]*[Ss]ervice[^'"]*)['"]/g)].map((x) => basename(x[1])))];
   const fileQueues = [...new Set([...src.matchAll(/\b(enqueue[A-Za-z]+|startPipelineWorkers|pipelineJobService|getQueueHealth)\b/g)].map((x) => x[1]))];
   const fileWs = [...new Set([...src.matchAll(/\b(WebSocket|socket\.io|\.emit\(|ws\.on\()\b/g)].map((x) => x[1]))];
+  // File-level cache/worker imports (Cache, Worker columns).
+  const fileCache = /from\s+['"][^'"]*(cache|redis|Cache|Redis)[^'"]*['"]/.test(src) || /\b(getCache|setCache|cacheGet|cacheSet|redis\.)\b/.test(src);
+  const fileWorkers = [...new Set([...src.matchAll(/\b(\w*Worker)\b/g)].map((x) => x[1]).filter((w) => w !== 'Worker'))];
+  // Local service/business modules imported (Service + Repository columns).
+  const localImports = [...new Set([...src.matchAll(/from\s+['"]\.\.?\/([^'"]+)['"]/g)].map((x) => basename(x[1])))];
 
   const endpoints = [];
   for (let i = 0; i < regs.length; i++) {
@@ -100,6 +105,18 @@ function extractEndpoints(file, modelTable) {
 
     const enqueues = [...new Set([...chunk.matchAll(/\b(enqueue[A-Za-z]+)\b/g)].map((x) => x[1]))];
 
+    // Validation: explicit input validation in the handler (400 responses,
+    // required-field guards, schema/zod parsing, type/trim checks).
+    const validationSignals = [];
+    if (/reply\.code\(400\)|statusCode:\s*400|\.status\(400\)/.test(chunk)) validationSignals.push('400-response');
+    if (/is required|required['"]|missing required|!(body|params|query)/.test(chunk)) validationSignals.push('required-field');
+    if (/\.parse\(|zodolt|z\.object|schema/.test(chunk)) validationSignals.push('schema');
+    if (/\.trim\(\)|typeof\s+\w+\s*[!=]==?\s*['"]|Number\.isFinite|parseInt|includes\(/.test(chunk)) validationSignals.push('type/bounds');
+
+    // Per-endpoint service/business modules referenced (heuristic: local import
+    // basenames whose identifier appears used in this handler chunk).
+    const usedServices = localImports.filter((b) => new RegExp(`\\b${b.replace(/[^A-Za-z0-9]/g, '')}|${b}`).test(chunk) && /[Ss]ervice|[Ee]ngine|[Rr]epository|build|generate|analyze/.test(b));
+
     endpoints.push({
       method: reg.method,
       route: reg.route,
@@ -107,11 +124,14 @@ function extractEndpoints(file, modelTable) {
       authenticationRequired: authRequired,
       authenticationMechanism: authRequired ? 'global authenticationHook (JWT)' : 'PUBLIC_ROUTES allowlist',
       authorizationGuards: authzUsed.length ? authzUsed : (authRequired ? ['(role/route-permission only)'] : []),
+      validation: validationSignals.length ? validationSignals : ['none-detected'],
       inputSurface: reads.length ? reads : ['none'],
       directPrismaModels: prismaModels,
       databaseTables: tables,
       queuesInvoked: enqueues.length ? enqueues : (fileQueues.length ? ['(file-level) ' + fileQueues.join(',')] : []),
-      fileServices,
+      workersInvoked: fileWorkers,
+      cache: fileCache,
+      services: usedServices.length ? usedServices : fileServices,
       websocketEvents: fileWs,
     });
   }

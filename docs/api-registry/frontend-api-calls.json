@@ -1,25 +1,5 @@
 [
   {
-    "path": "/api/cases",
-    "file": "src/components/EvidenceUpload.tsx"
-  },
-  {
-    "path": "/api/evidence/upload",
-    "file": "src/components/EvidenceUpload.tsx"
-  },
-  {
-    "path": "/api/evidence/upload",
-    "file": "src/lib/api.ts"
-  },
-  {
-    "path": "/api/timeline/rebuild",
-    "file": "src/lib/api.ts"
-  },
-  {
-    "path": "/api/timeline",
-    "file": "src/lib/api.ts"
-  },
-  {
     "path": "/api/contact",
     "file": "src/pages/ContactSalesPage.tsx"
   },
@@ -350,6 +330,18 @@
   {
     "path": "/api/billing/create-portal-session",
     "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/courtlistener/status",
+    "file": "src/services/courtListenerApi.ts"
+  },
+  {
+    "path": "/api/courtlistener/search",
+    "file": "src/services/courtListenerApi.ts"
+  },
+  {
+    "path": "/api/courtlistener/citation-lookup",
+    "file": "src/services/courtListenerApi.ts"
   },
   {
     "path": "/api/doctrine/analyze",

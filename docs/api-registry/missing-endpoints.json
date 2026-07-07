@@ -1,25 +1,5 @@
 [
   {
-    "path": "/api/evidence/upload",
-    "template": "/api/evidence/upload",
-    "file": "src/components/EvidenceUpload.tsx"
-  },
-  {
-    "path": "/api/evidence/upload",
-    "template": "/api/evidence/upload",
-    "file": "src/lib/api.ts"
-  },
-  {
-    "path": "/api/timeline/rebuild",
-    "template": "/api/timeline/rebuild",
-    "file": "src/lib/api.ts"
-  },
-  {
-    "path": "/api/timeline",
-    "template": "/api/timeline",
-    "file": "src/lib/api.ts"
-  },
-  {
     "path": "/api/operations/cpra-requests",
     "template": "/api/operations/cpra-requests",
     "file": "src/pages/dashboard/CpraCampaignTimeline.tsx"

@@ -2,9 +2,9 @@
 
 > Single source of truth for CourtAccess HTTP endpoints. **Generated deterministically** from source by `scripts/generate-api-registry.mjs` and enriched with **live runtime probing** by `scripts/probe-api-registry.mjs`. No values are estimated or fabricated; fields that cannot be resolved statically are marked accordingly. Regenerate with those scripts.
 
-- Generated: 2026-07-07T14:11:57.347Z
-- Runtime probed: 2026-07-07T14:11:58.685Z (197 GET endpoints against a live server)
-- **Total endpoints: 365** across 43 route files
+- Generated: 2026-07-07T15:43:56.016Z
+- Runtime probed: 2026-07-07T15:44:21.232Z (205 GET endpoints against a live server)
+- **Total endpoints: 374** across 45 route files
 - Duplicate endpoints (same method+route): **0** (none)
 
 ## Method note (how each field is derived)
@@ -19,25 +19,25 @@
 
 | Metric | Count | % |
 |--------|-------|---|
-| Total endpoints | 365 | 100% |
-| Authentication required | 347 | 95.1% |
-| Public (allowlist) | 18 | 4.9% |
-| Statically mapped to a UI caller | 102 | 27.9% |
-| Covered by a test reference | 17 | 4.7% |
-| Runtime GET probed | 197 | — |
+| Total endpoints | 374 | 100% |
+| Authentication required | 356 | 95.2% |
+| Public (allowlist) | 18 | 4.8% |
+| Statically mapped to a UI caller | 105 | 28.1% |
+| Covered by a test reference | 17 | 4.5% |
+| Runtime GET probed | 205 | — |
 
 ### Canonical runtime status (requested taxonomy)
 
 | Status | Count | % | Definition |
 |--------|-------|---|------------|
-| CONNECTED | 115 | 31.5% | Route exists + responds (2xx/401/403) and is wired to a UI caller, a test, or is a public/infra route |
-| PARTIALLY CONNECTED | 8 | 2.2% | Route exists but returned 404 for a seeded resource (reachable, not fully exercised) |
-| UNUSED | 242 | 66.3% | Route exists/responds but no detected UI caller or test (verify dynamic callers) |
+| CONNECTED | 118 | 31.6% | Route exists + responds (2xx/401/403) and is wired to a UI caller, a test, or is a public/infra route |
+| PARTIALLY CONNECTED | 8 | 2.1% | Route exists but returned 404 for a seeded resource (reachable, not fully exercised) |
+| UNUSED | 248 | 66.3% | Route exists/responds but no detected UI caller or test (verify dynamic callers) |
 | BROKEN | 0 | 0.0% | Route returned 5xx |
 | DEPRECATED | 0 | 0% | Not statically determinable — none asserted (UNKNOWN preferred) |
 | UNKNOWN | 0 | 0.0% | Could not be reached during probe |
 
-_(Raw probe codes: CONNECTED=189, REGISTERED=168, NOT_FOUND_FOR_SEED=8)_
+_(Raw probe codes: CONNECTED=197, REGISTERED=169, NOT_FOUND_FOR_SEED=8)_
 
 > **UI-mapping caveat (honest):** UI callers are detected statically from `/api` string + `${API_BASE}` template literals in the frontend. Endpoints built through multi-step dynamic path construction may be under-counted; the "unused" list below is therefore **candidates requiring confirmation**, not confirmed dead endpoints.
 
@@ -45,7 +45,7 @@ _(Raw probe codes: CONNECTED=189, REGISTERED=168, NOT_FOUND_FOR_SEED=8)_
 
 ## 8. Unused Endpoint Report (candidates)
 
-251 endpoints have **no statically-detected UI caller and no test reference**. These are candidates for either UI wiring or removal (verify dynamic callers first). Full list in `unused-endpoints.json`. Top by controller:
+257 endpoints have **no statically-detected UI caller and no test reference**. These are candidates for either UI wiring or removal (verify dynamic callers first). Full list in `unused-endpoints.json`. Top by controller:
 
 - `cpra/autonomousCpraRoutes.ts` — 31
 - `evidence/complianceRoutes.ts` — 28
@@ -71,10 +71,6 @@ Frontend code calls these paths, but no backend route matches (static match). Ru
 
 | Frontend path | Called from | Runtime (live probe) |
 |---------------|-------------|----------------------|
-| `/api/evidence/upload` | EvidenceUpload.tsx | exists or static-miss (see note) |
-| `/api/evidence/upload` | api.ts | exists or static-miss (see note) |
-| `/api/timeline/rebuild` | api.ts | exists or static-miss (see note) |
-| `/api/timeline` | api.ts | exists or static-miss (see note) |
 | `/api/operations/cpra-requests` | CpraCampaignTimeline.tsx | exists or static-miss (see note) |
 | `/api/cpra/dashboard` | CpraDashboard.tsx | exists or static-miss (see note) |
 | `/api/cpra/campaigns` | CpraDashboard.tsx | exists or static-miss (see note) |
@@ -110,14 +106,14 @@ Frontend code calls these paths, but no backend route matches (static match). Ru
 ## 10. Integration Priority List
 
 1. **Wire 3 runtime-confirmed missing endpoints** (or confirm the UI's graceful empty-state is intended): `litigation-strategy` (service exists: `litigationStrategyService.ts`), `trial-exhibits` (data in `TrialExhibitScene`/`exhibitRoutes`), `policy-intelligence/agencies`.
-2. **Add test coverage** — only 17/365 endpoints have any test reference.
-3. **Triage the 251 no-UI-caller candidates** — confirm dynamic callers or retire.
+2. **Add test coverage** — only 17/374 endpoints have any test reference.
+3. **Triage the 257 no-UI-caller candidates** — confirm dynamic callers or retire.
 
 ---
 
 ## 3. Frontend-to-API Mapping
 
-102 endpoints have a detected UI caller. Enderpoints and their UI files:
+105 endpoints have a detected UI caller. Enderpoints and their UI files:
 
 | Method | Route | UI file(s) |
 |--------|-------|-----------|
@@ -138,13 +134,16 @@ Frontend code calls these paths, but no backend route matches (static match). Ru
 | POST | `/api/billing/create-portal-session` | caseApi.ts |
 | POST | `/api/contradiction/analyze/:caseId` | caseApi.ts |
 | GET | `/api/contradiction/recommendations/:caseId` | caseApi.ts |
+| GET | `/api/courtlistener/status` | courtListenerApi.ts |
+| GET | `/api/courtlistener/search` | courtListenerApi.ts |
+| POST | `/api/courtlistener/citation-lookup` | courtListenerApi.ts |
 | GET | `/api/doctrine/status` | doctrineService.ts |
 | GET | `/api/doctrine/search` | doctrineService.ts |
 | POST | `/api/doctrine/analyze` | doctrineService.ts |
 | POST | `/api/doctrine/quick-scan` | doctrineService.ts |
 | POST | `/api/doctrine/seed` | doctrineService.ts |
-| POST | `/api/cases` | EvidenceUpload.tsx, EvidenceRequestsDashboard.tsx, caseApi.ts |
-| GET | `/api/cases` | EvidenceUpload.tsx, EvidenceRequestsDashboard.tsx, caseApi.ts |
+| POST | `/api/cases` | EvidenceRequestsDashboard.tsx, caseApi.ts |
+| GET | `/api/cases` | EvidenceRequestsDashboard.tsx, caseApi.ts |
 | GET | `/api/cases/:caseId` | caseApi.ts |
 | PATCH | `/api/cases/:caseId` | caseApi.ts |
 | DELETE | `/api/cases/:caseId` | caseApi.ts |
@@ -198,11 +197,8 @@ Frontend code calls these paths, but no backend route matches (static match). Ru
 | GET | `/api/policy-intelligence/dashboard` | PolicyIntelligenceDashboard.tsx |
 | GET | `/api/admin/operations/dashboard` | OperationsCommandCenter.tsx |
 | GET | `/api/system/health` | SystemHealthDashboard.tsx |
-| GET | `/api/admin/deployment-checks` | BetaDeploymentVerification.tsx |
-| GET | `/api/admin/repository-integrity` | RepositoryIntegrityDashboard.tsx |
-| GET | `/api/search` | globalSearchService.ts |
 
-_(102 total; truncated to 80. Full data in canonical-api-registry.json → endpoints[].uiPages.)_
+_(105 total; truncated to 80. Full data in canonical-api-registry.json → endpoints[].uiPages.)_
 
 ---
 
@@ -223,6 +219,7 @@ Route file → service modules imported (file-level).
 | `communications/hearingRoutes.ts` | — |
 | `communications/messagingRoutes.ts` | — |
 | `contradiction/contradictionRoutes.ts` | — |
+| `courtlistener/courtListenerRoutes.ts` | courtListenerService.js |
 | `cpra/autonomousCpraRoutes.ts` | cpraRequestEngine.js, cpraEmailLogService.js, cpraAttachmentProcessor.js, cpraClassificationEngine.js, cpraNotificationService.js, cpraTimelineService.js |
 | `cpra/policyMatrixRoutes.ts` | cpraMatrixService.js |
 | `doctrine/doctrineRoutes.ts` | doctrineIngestionService.ts |
@@ -245,6 +242,7 @@ Route file → service modules imported (file-level).
 | `policy/pipeline/policyIntelligenceRoutes.ts` | chpPolicyImportService.js |
 | `productionGates/productionGatesRoutes.ts` | — |
 | `productionOperations/productionOperationsRoutes.ts` | — |
+| `providers/providerRoutes.ts` | — |
 | `routes/calcrimRoutes.ts` | calcrimEngine.js |
 | `search/searchRoutes.ts` | searchService.js |
 | `security/authMiddleware.ts` | — |
@@ -492,6 +490,11 @@ Each endpoint → { authz guards, DB tables (direct), queues }. Full graph in th
 | GET | `/api/contradiction/graph/:caseId` | (role/route-permission only) | - | - |
 | GET | `/api/contradiction/graph/:caseId/cypher` | (role/route-permission only) | - | - |
 | GET | `/api/contradiction/recommendations/:caseId` | (role/route-permission only) | - | - |
+| GET | `/api/courtlistener/status` | (role/route-permission only) | - | - |
+| GET | `/api/courtlistener/search` | (role/route-permission only) | - | - |
+| GET | `/api/courtlistener/opinions/:id` | (role/route-permission only) | - | - |
+| GET | `/api/courtlistener/dockets/:id` | (role/route-permission only) | - | - |
+| POST | `/api/courtlistener/citation-lookup` | (role/route-permission only) | - | - |
 | POST | `/api/admin/cpra/send` | (role/route-permission only) | - | - |
 | POST | `/api/admin/cpra/send-batch` | (role/route-permission only) | - | - |
 | POST | `/api/admin/cpra/send-all-missing` | (role/route-permission only) | - | - |
@@ -543,11 +546,6 @@ Each endpoint → { authz guards, DB tables (direct), queues }. Full graph in th
 | GET | `/api/doctrine/domains` | (role/route-permission only) | - | - |
 | GET | `/api/doctrine/categories` | (role/route-permission only) | - | - |
 | GET | `/api/doctrine/chapters` | (role/route-permission only) | - | - |
-| POST | `/api/cases` | (role/route-permission only) | clients,criminal_cases | - |
-| GET | `/api/cases` | (role/route-permission only) | criminal_cases | - |
-| GET | `/api/cases/:caseId` | (role/route-permission only) | criminal_cases | - |
-| PATCH | `/api/cases/:caseId` | requireCaseAccess | criminal_cases | - |
-| DELETE | `/api/cases/:caseId` | requireCaseAccess | criminal_cases | - |
 
 _(truncated to 120; full in canonical-api-registry.json.)_
 
@@ -674,6 +672,16 @@ _(truncated to 120; full in canonical-api-registry.json.)_
 | GET | `/api/contradiction/graph/:caseId/cypher` | yes | PARTIALLY CONNECTED | 0 | - |
 | GET | `/api/contradiction/recommendations/:caseId` | yes | PARTIALLY CONNECTED | 1 | - |
 
+### `courtlistener/courtListenerRoutes.ts` (5)
+
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
+| GET | `/api/courtlistener/status` | yes | CONNECTED | 1 | - |
+| GET | `/api/courtlistener/search` | yes | CONNECTED | 1 | - |
+| GET | `/api/courtlistener/opinions/:id` | yes | UNUSED | 0 | - |
+| GET | `/api/courtlistener/dockets/:id` | yes | UNUSED | 0 | - |
+| POST | `/api/courtlistener/citation-lookup` | yes | CONNECTED | 1 | - |
+
 ### `cpra/autonomousCpraRoutes.ts` (31)
 
 | Method | Route | Auth | Status | UI callers | Tested |
@@ -744,8 +752,8 @@ _(truncated to 120; full in canonical-api-registry.json.)_
 
 | Method | Route | Auth | Status | UI callers | Tested |
 |--------|-------|------|--------|-----------|--------|
-| POST | `/api/cases` | yes | CONNECTED | 3 | - |
-| GET | `/api/cases` | yes | CONNECTED | 3 | - |
+| POST | `/api/cases` | yes | CONNECTED | 2 | - |
+| GET | `/api/cases` | yes | CONNECTED | 2 | - |
 | GET | `/api/cases/:caseId` | yes | CONNECTED | 1 | - |
 | PATCH | `/api/cases/:caseId` | yes | CONNECTED | 1 | - |
 | DELETE | `/api/cases/:caseId` | yes | CONNECTED | 1 | - |
@@ -1035,6 +1043,15 @@ _(truncated to 120; full in canonical-api-registry.json.)_
 | GET | `/api/admin/backup/status` | yes | UNUSED | 0 | - |
 | POST | `/api/admin/backup/verify` | yes | UNUSED | 0 | - |
 | GET | `/api/admin/alerts` | yes | UNUSED | 0 | - |
+
+### `providers/providerRoutes.ts` (4)
+
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
+| GET | `/api/providers` | yes | UNUSED | 0 | - |
+| GET | `/api/providers/health` | yes | UNUSED | 0 | - |
+| GET | `/api/providers/:id` | yes | UNUSED | 0 | - |
+| GET | `/api/providers/search/:capability` | yes | UNUSED | 0 | - |
 
 ### `routes/calcrimRoutes.ts` (1)
 

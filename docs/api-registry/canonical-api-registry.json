@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-07T14:11:57.347Z",
-  "totalEndpoints": 365,
-  "routeFiles": 43,
+  "generatedAt": "2026-07-07T15:43:56.016Z",
+  "totalEndpoints": 374,
+  "routeFiles": 45,
   "duplicates": [],
   "endpoints": [
     {
@@ -1635,6 +1635,132 @@
       "runtimeStatus": "NOT_FOUND_FOR_SEED"
     },
     {
+      "method": "GET",
+      "route": "/api/courtlistener/status",
+      "controller": "backend/src/courtlistener/courtListenerRoutes.ts",
+      "authenticationRequired": true,
+      "authenticationMechanism": "global authenticationHook (JWT)",
+      "authorizationGuards": [
+        "(role/route-permission only)"
+      ],
+      "inputSurface": [
+        "none"
+      ],
+      "directPrismaModels": [],
+      "databaseTables": [],
+      "queuesInvoked": [],
+      "fileServices": [
+        "courtListenerService.js"
+      ],
+      "websocketEvents": [],
+      "uiPages": [
+        "src/services/courtListenerApi.ts"
+      ],
+      "testCovered": false,
+      "runtimeStatusCode": 200,
+      "runtimeStatus": "CONNECTED"
+    },
+    {
+      "method": "GET",
+      "route": "/api/courtlistener/search",
+      "controller": "backend/src/courtlistener/courtListenerRoutes.ts",
+      "authenticationRequired": true,
+      "authenticationMechanism": "global authenticationHook (JWT)",
+      "authorizationGuards": [
+        "(role/route-permission only)"
+      ],
+      "inputSurface": [
+        "query"
+      ],
+      "directPrismaModels": [],
+      "databaseTables": [],
+      "queuesInvoked": [],
+      "fileServices": [
+        "courtListenerService.js"
+      ],
+      "websocketEvents": [],
+      "uiPages": [
+        "src/services/courtListenerApi.ts"
+      ],
+      "testCovered": false,
+      "runtimeStatusCode": 400,
+      "runtimeStatus": "CONNECTED"
+    },
+    {
+      "method": "GET",
+      "route": "/api/courtlistener/opinions/:id",
+      "controller": "backend/src/courtlistener/courtListenerRoutes.ts",
+      "authenticationRequired": true,
+      "authenticationMechanism": "global authenticationHook (JWT)",
+      "authorizationGuards": [
+        "(role/route-permission only)"
+      ],
+      "inputSurface": [
+        "params"
+      ],
+      "directPrismaModels": [],
+      "databaseTables": [],
+      "queuesInvoked": [],
+      "fileServices": [
+        "courtListenerService.js"
+      ],
+      "websocketEvents": [],
+      "uiPages": [],
+      "testCovered": false,
+      "runtimeStatusCode": 401,
+      "runtimeStatus": "CONNECTED"
+    },
+    {
+      "method": "GET",
+      "route": "/api/courtlistener/dockets/:id",
+      "controller": "backend/src/courtlistener/courtListenerRoutes.ts",
+      "authenticationRequired": true,
+      "authenticationMechanism": "global authenticationHook (JWT)",
+      "authorizationGuards": [
+        "(role/route-permission only)"
+      ],
+      "inputSurface": [
+        "params"
+      ],
+      "directPrismaModels": [],
+      "databaseTables": [],
+      "queuesInvoked": [],
+      "fileServices": [
+        "courtListenerService.js"
+      ],
+      "websocketEvents": [],
+      "uiPages": [],
+      "testCovered": false,
+      "runtimeStatusCode": 401,
+      "runtimeStatus": "CONNECTED"
+    },
+    {
+      "method": "POST",
+      "route": "/api/courtlistener/citation-lookup",
+      "controller": "backend/src/courtlistener/courtListenerRoutes.ts",
+      "authenticationRequired": true,
+      "authenticationMechanism": "global authenticationHook (JWT)",
+      "authorizationGuards": [
+        "(role/route-permission only)"
+      ],
+      "inputSurface": [
+        "body"
+      ],
+      "directPrismaModels": [],
+      "databaseTables": [],
+      "queuesInvoked": [],
+      "fileServices": [
+        "courtListenerService.js"
+      ],
+      "websocketEvents": [],
+      "uiPages": [
+        "src/services/courtListenerApi.ts"
+      ],
+      "testCovered": false,
+      "runtimeStatusCode": null,
+      "runtimeStatus": "REGISTERED"
+    },
+    {
       "method": "POST",
       "route": "/api/admin/cpra/send",
       "controller": "backend/src/cpra/autonomousCpraRoutes.ts",
@@ -3047,7 +3173,6 @@
       "fileServices": [],
       "websocketEvents": [],
       "uiPages": [
-        "src/components/EvidenceUpload.tsx",
         "src/pages/dashboard/EvidenceRequestsDashboard.tsx",
         "src/services/caseApi.ts"
       ],
@@ -3077,7 +3202,6 @@
       "fileServices": [],
       "websocketEvents": [],
       "uiPages": [
-        "src/components/EvidenceUpload.tsx",
         "src/pages/dashboard/EvidenceRequestsDashboard.tsx",
         "src/services/caseApi.ts"
       ],
@@ -5189,7 +5313,7 @@
         "src/services/caseApi.ts"
       ],
       "testCovered": false,
-      "runtimeStatusCode": 200,
+      "runtimeStatusCode": 429,
       "runtimeStatus": "CONNECTED"
     },
     {
@@ -5215,7 +5339,7 @@
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
-      "runtimeStatusCode": 200,
+      "runtimeStatusCode": 429,
       "runtimeStatus": "CONNECTED"
     },
     {
@@ -5261,7 +5385,7 @@
       "websocketEvents": [],
       "uiPages": [],
       "testCovered": false,
-      "runtimeStatusCode": 200,
+      "runtimeStatusCode": 429,
       "runtimeStatus": "CONNECTED"
     },
     {
@@ -5287,7 +5411,7 @@
         "src/services/investigatorApi.ts"
       ],
       "testCovered": false,
-      "runtimeStatusCode": 200,
+      "runtimeStatusCode": 429,
       "runtimeStatus": "CONNECTED"
     },
     {
@@ -8315,6 +8439,95 @@
     },
     {
       "method": "GET",
+      "route": "/api/providers",
+      "controller": "backend/src/providers/providerRoutes.ts",
+      "authenticationRequired": true,
+      "authenticationMechanism": "global authenticationHook (JWT)",
+      "authorizationGuards": [
+        "(role/route-permission only)"
+      ],
+      "inputSurface": [
+        "none"
+      ],
+      "directPrismaModels": [],
+      "databaseTables": [],
+      "queuesInvoked": [],
+      "fileServices": [],
+      "websocketEvents": [],
+      "uiPages": [],
+      "testCovered": false,
+      "runtimeStatusCode": 429,
+      "runtimeStatus": "CONNECTED"
+    },
+    {
+      "method": "GET",
+      "route": "/api/providers/health",
+      "controller": "backend/src/providers/providerRoutes.ts",
+      "authenticationRequired": true,
+      "authenticationMechanism": "global authenticationHook (JWT)",
+      "authorizationGuards": [
+        "(role/route-permission only)"
+      ],
+      "inputSurface": [
+        "none"
+      ],
+      "directPrismaModels": [],
+      "databaseTables": [],
+      "queuesInvoked": [],
+      "fileServices": [],
+      "websocketEvents": [],
+      "uiPages": [],
+      "testCovered": false,
+      "runtimeStatusCode": 429,
+      "runtimeStatus": "CONNECTED"
+    },
+    {
+      "method": "GET",
+      "route": "/api/providers/:id",
+      "controller": "backend/src/providers/providerRoutes.ts",
+      "authenticationRequired": true,
+      "authenticationMechanism": "global authenticationHook (JWT)",
+      "authorizationGuards": [
+        "(role/route-permission only)"
+      ],
+      "inputSurface": [
+        "params"
+      ],
+      "directPrismaModels": [],
+      "databaseTables": [],
+      "queuesInvoked": [],
+      "fileServices": [],
+      "websocketEvents": [],
+      "uiPages": [],
+      "testCovered": false,
+      "runtimeStatusCode": 429,
+      "runtimeStatus": "CONNECTED"
+    },
+    {
+      "method": "GET",
+      "route": "/api/providers/search/:capability",
+      "controller": "backend/src/providers/providerRoutes.ts",
+      "authenticationRequired": true,
+      "authenticationMechanism": "global authenticationHook (JWT)",
+      "authorizationGuards": [
+        "(role/route-permission only)"
+      ],
+      "inputSurface": [
+        "params",
+        "query"
+      ],
+      "directPrismaModels": [],
+      "databaseTables": [],
+      "queuesInvoked": [],
+      "fileServices": [],
+      "websocketEvents": [],
+      "uiPages": [],
+      "testCovered": false,
+      "runtimeStatusCode": 429,
+      "runtimeStatus": "CONNECTED"
+    },
+    {
+      "method": "GET",
       "route": "/api/calcrim/analyze/:caseId",
       "controller": "backend/src/routes/calcrimRoutes.ts",
       "authenticationRequired": true,
@@ -9641,11 +9854,11 @@
       "runtimeStatus": "CONNECTED"
     }
   ],
-  "runtimeProbedAt": "2026-07-07T14:11:58.685Z",
-  "runtimeProbedGetEndpoints": 197,
+  "runtimeProbedAt": "2026-07-07T15:44:21.232Z",
+  "runtimeProbedGetEndpoints": 205,
   "runtimeStatusCounts": {
-    "CONNECTED": 189,
-    "REGISTERED": 168,
+    "CONNECTED": 197,
+    "REGISTERED": 169,
     "NOT_FOUND_FOR_SEED": 8
   }
 }

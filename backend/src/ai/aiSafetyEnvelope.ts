@@ -46,14 +46,28 @@ export interface EnvelopeAudit {
  * `contentHash` is a deterministic SHA-256 over the answer + citations so the
  * same inputs always produce the same, verifiable hash.
  */
+/** Consolidated provenance for the whole answer (Program 9). */
+export interface EnvelopeProvenance {
+  repositorySources: string[];
+  providers: string[];
+  contentHash: string;
+  retrievalTimestamp: string;
+  envelopeVersion: string;
+  pipelineVersion: string;
+}
+
 export interface AiSafetyEnvelope<T> {
   answer: T;
   status: EnvelopeStatus;
   confidence: ConfidenceLevel;
   evidence: EnvelopeEvidence[];
   authorities: EnvelopeAuthority[];
+  /** Normalized citation strings for every evidence + authority reference. */
+  citations: string[];
   humanReviewRequired: boolean;
   audit: EnvelopeAudit;
+  provenance: EnvelopeProvenance;
+  retrievalTimestamp: string;
   contentHash: string;
 }
 
@@ -69,6 +83,10 @@ export interface BuildEnvelopeInput<T> {
   requireHumanReview?: boolean;
   /** Deterministic timestamp override (for reproducible tests / snapshots). */
   generatedAt?: string;
+  /** External providers that sourced the answer (e.g. courtlistener, ca-leginfo). */
+  providers?: string[];
+  /** When the underlying records were retrieved (defaults to generatedAt). */
+  retrievalTimestamp?: string;
 }
 
 function stableStringify(value: unknown): string {
@@ -131,7 +149,27 @@ export function buildEnvelope<T>(input: BuildEnvelopeInput<T>): AiSafetyEnvelope
     repositorySources: audit.repositorySources,
   });
 
-  return { answer: input.answer, status, confidence, evidence, authorities, humanReviewRequired, audit, contentHash };
+  // Normalized citation strings for every evidence + authority reference.
+  const citations = [
+    ...evidence.map((e) => (e.label ? `${e.evidenceId} — ${e.label}` : e.evidenceId)),
+    ...authorities.map((a) => a.label ?? ([a.code, a.section].filter(Boolean).join(' ') || a.calcrimId || a.authorityId || 'authority')),
+  ].filter((c): c is string => Boolean(c));
+
+  const retrievalTimestamp = input.retrievalTimestamp ?? audit.generatedAt;
+  const providers = [...new Set(input.providers ?? [])].sort();
+  const provenance: EnvelopeProvenance = {
+    repositorySources: audit.repositorySources,
+    providers,
+    contentHash,
+    retrievalTimestamp,
+    envelopeVersion: audit.envelopeVersion,
+    pipelineVersion: audit.pipelineVersion,
+  };
+
+  return {
+    answer: input.answer, status, confidence, evidence, authorities, citations,
+    humanReviewRequired, audit, provenance, retrievalTimestamp, contentHash,
+  };
 }
 
 /** An UNKNOWN envelope — the correct response when nothing supports an answer. */
@@ -159,6 +197,17 @@ export function validateEnvelope<T>(env: AiSafetyEnvelope<T>): EnvelopeValidatio
     if (!env.audit.repositorySources?.length) errors.push('audit.repositorySources missing');
   }
   if (!env.contentHash || env.contentHash.length !== 64) errors.push('contentHash invalid');
+  // Program 9 required fields present on every answer.
+  if (!env.provenance) errors.push('provenance missing');
+  else {
+    if (!env.provenance.contentHash) errors.push('provenance.contentHash missing');
+    if (!env.provenance.retrievalTimestamp) errors.push('provenance.retrievalTimestamp missing');
+    if (!Array.isArray(env.provenance.repositorySources)) errors.push('provenance.repositorySources missing');
+  }
+  if (!env.retrievalTimestamp) errors.push('retrievalTimestamp missing');
+  if (!Array.isArray(env.citations)) errors.push('citations missing');
+  // A supported answer must expose at least one citation string.
+  if (env.status === 'SUPPORTED' && env.citations.length === 0) errors.push('SUPPORTED answer has no citations');
 
   const hasSupport = env.evidence.length > 0 || env.authorities.length > 0;
   if (env.status === 'SUPPORTED' && !hasSupport) errors.push('SUPPORTED without any evidence or authority');

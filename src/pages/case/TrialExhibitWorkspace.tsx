@@ -89,7 +89,9 @@ export function TrialExhibitWorkspace() {
   useEffect(() => {
     async function fetchExhibits() {
       try {
-        const res = await fetch(`/api/cases/${caseId}/trial-exhibits`);
+        const res = await fetch(`/api/cases/${caseId}/trial-exhibits`, {
+          headers: { Authorization: `Bearer ${localStorage.getItem('court-access-token') ?? ''}` },
+        });
         if (res.ok) {
           const json = await res.json();
           if (json.exhibits) setExhibits(json.exhibits);

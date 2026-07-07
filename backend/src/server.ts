@@ -220,6 +220,11 @@ async function startServer() {
   const { registerLitigationAssistantRoutes } = await import('./assistant/litigationAssistantRoutes.js');
   await registerLitigationAssistantRoutes(app);
 
+  // Phase 4A — Canonical connection of reachable case views (litigation strategy, trial exhibits)
+  console.log('[Server] Registering case view routes...');
+  const { registerCaseViewRoutes } = await import('./workbench/caseViewRoutes.js');
+  await registerCaseViewRoutes(app);
+
   console.log('[Server] Registering Investigator Workbench routes...');
   await registerInvestigatorRoutes(app);
 

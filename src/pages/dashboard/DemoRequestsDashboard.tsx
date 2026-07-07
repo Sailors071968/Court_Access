@@ -70,12 +70,12 @@ export function DemoRequestsDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Demo Requests</h1>
-          <p className="text-sm text-gray-500 mt-1">Manage government and enterprise demonstration requests</p>
+          <h1 className="text-2xl font-bold text-white">Demo Requests</h1>
+          <p className="text-sm text-slate-400 mt-1">Manage government and enterprise demonstration requests</p>
         </div>
         <button
           onClick={loadRequests}
-          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-200 bg-white/5 border border-white/10 rounded-lg hover:bg-white/5"
         >
           <RefreshCw size={14} />
           Refresh
@@ -91,14 +91,14 @@ export function DemoRequestsDashboard() {
               key={key}
               onClick={() => setFilter(filter === key ? 'all' : key)}
               className={`p-4 rounded-xl border text-left transition-colors ${
-                filter === key ? 'border-amber-300 bg-amber-50' : 'border-gray-200 bg-white hover:border-gray-300'
+                filter === key ? 'border-amber-300 bg-amber-50' : 'border-white/10 bg-white/5 hover:border-white/10'
               }`}
             >
               <div className="flex items-center gap-2 mb-2">
-                <StatusIcon size={14} className="text-gray-500" />
-                <span className="text-xs font-medium text-gray-500">{config.label}</span>
+                <StatusIcon size={14} className="text-slate-400" />
+                <span className="text-xs font-medium text-slate-400">{config.label}</span>
               </div>
-              <p className="text-2xl font-bold text-gray-900">{statusCounts[key] || 0}</p>
+              <p className="text-2xl font-bold text-white">{statusCounts[key] || 0}</p>
             </button>
           );
         })}
@@ -106,10 +106,10 @@ export function DemoRequestsDashboard() {
 
       {/* Requests List */}
       {filtered.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
+        <div className="bg-white/5 rounded-xl border border-white/10 p-12 text-center">
           <Send className="mx-auto mb-4 text-gray-300" size={48} />
-          <h3 className="text-lg font-semibold text-gray-700 mb-2">No Demo Requests</h3>
-          <p className="text-sm text-gray-500">
+          <h3 className="text-lg font-semibold text-slate-200 mb-2">No Demo Requests</h3>
+          <p className="text-sm text-slate-400">
             {filter === 'all'
               ? 'Demo requests submitted through /demo will appear here.'
               : `No requests with status "${filter}".`}
@@ -120,38 +120,38 @@ export function DemoRequestsDashboard() {
           {filtered.map((req) => {
             const statusInfo = STATUS_CONFIG[req.status] || STATUS_CONFIG.new;
             return (
-              <div key={req.id} className="bg-white rounded-xl border border-gray-200 p-6 hover:shadow-sm transition-shadow">
+              <div key={req.id} className="bg-white/5 rounded-xl border border-white/10 p-6 hover:shadow-sm transition-shadow">
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-3 mb-2">
-                      <h3 className="text-lg font-semibold text-gray-900 truncate">{req.name}</h3>
+                      <h3 className="text-lg font-semibold text-white truncate">{req.name}</h3>
                       <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${statusInfo.color}`}>
                         {statusInfo.label}
                       </span>
                     </div>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm text-gray-600 mb-3">
+                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm text-slate-300 mb-3">
                       <div className="flex items-center gap-1.5">
-                        <Building2 size={14} className="text-gray-400" />
+                        <Building2 size={14} className="text-slate-500" />
                         <span className="truncate">{req.organization}</span>
                       </div>
                       <div className="flex items-center gap-1.5">
-                        <Mail size={14} className="text-gray-400" />
+                        <Mail size={14} className="text-slate-500" />
                         <span className="truncate">{req.email}</span>
                       </div>
                       {req.county && (
                         <div className="flex items-center gap-1.5">
-                          <MapPin size={14} className="text-gray-400" />
+                          <MapPin size={14} className="text-slate-500" />
                           <span className="truncate">{req.county}</span>
                         </div>
                       )}
                     </div>
-                    <div className="flex items-center gap-4 text-xs text-gray-400">
+                    <div className="flex items-center gap-4 text-xs text-slate-500">
                       <span>{req.agencyType}</span>
                       <span>{req.role}</span>
                       <span><Clock size={12} className="inline mr-1" />{new Date(req.submittedAt).toLocaleDateString()}</span>
                     </div>
                     {req.message && (
-                      <p className="mt-3 text-sm text-gray-500 bg-gray-50 rounded-lg p-3 border border-gray-100">
+                      <p className="mt-3 text-sm text-slate-400 bg-white/5 rounded-lg p-3 border border-white/10">
                         {req.message}
                       </p>
                     )}
@@ -164,7 +164,7 @@ export function DemoRequestsDashboard() {
                         <button
                           key={key}
                           onClick={() => updateStatus(req.id, key)}
-                          className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-gray-600 bg-gray-50 border border-gray-200 rounded-lg hover:bg-gray-100 transition-colors"
+                          className="inline-flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-slate-300 bg-white/5 border border-white/10 rounded-lg hover:bg-white/10 transition-colors"
                         >
                           <ChevronRight size={12} />
                           {config.label}

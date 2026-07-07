@@ -34,9 +34,9 @@ export function ProtectedRoute({ children, requiredPermission, skipSubscriptionC
     return (
       <div className="flex items-center justify-center min-h-[60vh]">
         <div className="text-center">
-          <h2 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h2>
-          <p className="text-gray-500">You do not have permission to access this page.</p>
-          <p className="text-sm text-gray-400 mt-2">Contact your administrator for access.</p>
+          <h2 className="text-2xl font-bold text-white mb-2">Access Denied</h2>
+          <p className="text-slate-400">You do not have permission to access this page.</p>
+          <p className="text-sm text-slate-500 mt-2">Contact your administrator for access.</p>
         </div>
       </div>
     );

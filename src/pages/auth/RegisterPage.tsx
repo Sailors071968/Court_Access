@@ -124,7 +124,7 @@ export function RegisterPage() {
                 id="defaultRole"
                 value={defaultRole}
                 onChange={(e) => setDefaultRole(e.target.value as DefaultRole)}
-                className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-white/5 text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light bg-white"
+                className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-white/5 text-white placeholder-slate-500 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light bg-white/5"
               >
                 {REGISTRATION_ROLE_OPTIONS.map((opt) => (
                   <option key={opt.value} value={opt.value}>{opt.label}</option>

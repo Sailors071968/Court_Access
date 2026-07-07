@@ -229,7 +229,7 @@ export function EvidenceRequestsDashboard() {
             id="case-select"
             value={selectedCaseId}
             onChange={(e) => setSelectedCaseId(e.target.value)}
-            className="border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+            className="border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white/5 focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
           >
             <option value="">Select a case...</option>
             {cases.map((c) => (
@@ -246,7 +246,7 @@ export function EvidenceRequestsDashboard() {
             id="status-filter"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white"
+            className="border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white/5"
           >
             <option value="">All</option>
             <option value="pending">Pending</option>
@@ -269,15 +269,15 @@ export function EvidenceRequestsDashboard() {
       {/* Summary Cards */}
       {selectedCaseId && requests.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-          <div className="bg-white rounded-lg border border-slate-200 p-4">
+          <div className="bg-white/5 rounded-lg border border-slate-200 p-4">
             <div className="text-sm text-slate-500">Total Requests</div>
             <div className="text-2xl font-bold text-slate-800">{requests.length}</div>
           </div>
-          <div className="bg-white rounded-lg border border-amber-200 p-4">
+          <div className="bg-white/5 rounded-lg border border-amber-200 p-4">
             <div className="text-sm text-amber-600">Pending Review</div>
             <div className="text-2xl font-bold text-amber-700">{pendingCount}</div>
           </div>
-          <div className="bg-white rounded-lg border border-red-200 p-4">
+          <div className="bg-white/5 rounded-lg border border-red-200 p-4">
             <div className="text-sm text-red-600">High Priority</div>
             <div className="text-2xl font-bold text-red-700">{highPriorityCount}</div>
           </div>
@@ -305,7 +305,7 @@ export function EvidenceRequestsDashboard() {
 
       {/* Empty State */}
       {!loading && selectedCaseId && requests.length === 0 && (
-        <div className="text-center py-16 bg-white rounded-lg border border-slate-200">
+        <div className="text-center py-16 bg-white/5 rounded-lg border border-slate-200">
           <Shield size={48} className="mx-auto text-slate-300 mb-4" />
           <h3 className="text-lg font-medium text-slate-600 mb-2">No evidence gaps detected</h3>
           <p className="text-slate-400 text-sm mb-4">
@@ -326,7 +326,7 @@ export function EvidenceRequestsDashboard() {
 
       {/* No case selected */}
       {!selectedCaseId && (
-        <div className="text-center py-16 bg-white rounded-lg border border-slate-200">
+        <div className="text-center py-16 bg-white/5 rounded-lg border border-slate-200">
           <FileQuestion size={48} className="mx-auto text-slate-300 mb-4" />
           <h3 className="text-lg font-medium text-slate-600">Select a case to view evidence requests</h3>
         </div>
@@ -344,7 +344,7 @@ export function EvidenceRequestsDashboard() {
             return (
               <div
                 key={req.id}
-                className={`bg-white rounded-lg border ${
+                className={`bg-white/5 rounded-lg border ${
                   req.status === 'pending' ? 'border-amber-200' : 'border-slate-200'
                 } overflow-hidden transition-all`}
               >

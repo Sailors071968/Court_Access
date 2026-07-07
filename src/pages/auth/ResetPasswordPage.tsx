@@ -72,9 +72,9 @@ export function ResetPasswordPage() {
               <h1 className="text-3xl font-bold text-white">Court Access</h1>
             </div>
           </div>
-          <div className="bg-white rounded-2xl shadow-xl p-8 text-center">
-            <h2 className="text-xl font-semibold text-gray-900 mb-2">Invalid reset link</h2>
-            <p className="text-gray-500 text-sm mb-6">This password reset link is invalid or has expired.</p>
+          <div className="bg-white/5 rounded-2xl shadow-xl p-8 text-center">
+            <h2 className="text-xl font-semibold text-white mb-2">Invalid reset link</h2>
+            <p className="text-slate-400 text-sm mb-6">This password reset link is invalid or has expired.</p>
             <Link to="/forgot-password" className="bg-slate-800 text-white px-6 py-2.5 rounded-lg font-medium text-sm hover:bg-slate-700 transition-colors inline-block">
               Request a new link
             </Link>
@@ -96,27 +96,27 @@ export function ResetPasswordPage() {
           </div>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-white/5 rounded-2xl shadow-xl p-8">
           {submitted ? (
             <div className="text-center">
-              <h2 className="text-xl font-semibold text-gray-900 mb-2">Password reset!</h2>
-              <p className="text-gray-500 text-sm mb-6">Your password has been successfully updated.</p>
+              <h2 className="text-xl font-semibold text-white mb-2">Password reset!</h2>
+              <p className="text-slate-400 text-sm mb-6">Your password has been successfully updated.</p>
               <Link to="/login" className="bg-slate-800 text-white px-6 py-2.5 rounded-lg font-medium text-sm hover:bg-slate-700 transition-colors inline-block">
                 Sign in
               </Link>
             </div>
           ) : (
             <>
-              <h2 className="text-xl font-semibold text-gray-900 mb-6">Set new password</h2>
+              <h2 className="text-xl font-semibold text-white mb-6">Set new password</h2>
               {error && <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm">{error}</div>}
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div>
-                  <label htmlFor="new-pass" className="block text-sm font-medium text-gray-700 mb-1">New password</label>
-                  <input id="new-pass" type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required autoComplete="new-password" />
+                  <label htmlFor="new-pass" className="block text-sm font-medium text-slate-200 mb-1">New password</label>
+                  <input id="new-pass" type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light" required autoComplete="new-password" />
                 </div>
                 <div>
-                  <label htmlFor="confirm-new-pass" className="block text-sm font-medium text-gray-700 mb-1">Confirm new password</label>
-                  <input id="confirm-new-pass" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" required autoComplete="new-password" />
+                  <label htmlFor="confirm-new-pass" className="block text-sm font-medium text-slate-200 mb-1">Confirm new password</label>
+                  <input id="confirm-new-pass" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light" required autoComplete="new-password" />
                 </div>
                 <button type="submit" disabled={loading} className="w-full bg-slate-800 text-white py-2.5 rounded-lg font-medium text-sm hover:bg-slate-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
                   {loading ? 'Resetting...' : 'Reset password'}

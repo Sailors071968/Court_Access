@@ -45,14 +45,14 @@ export function VerifyEmailPage() {
 
   return (
     <div className="min-h-screen bg-slate-800 flex items-center justify-center px-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8 text-center">
+      <div className="w-full max-w-md bg-white/5 rounded-2xl shadow-xl p-8 text-center">
         <div className="inline-flex items-center gap-2 mb-4">
           <Scale className="text-amber-500" size={28} />
-          <h1 className="text-xl font-semibold text-gray-900">Verify your email</h1>
+          <h1 className="text-xl font-semibold text-white">Verify your email</h1>
         </div>
         {status === 'idle' && (
           <>
-            <p className="text-gray-600 mb-6">Confirm your Court Access account email address.</p>
+            <p className="text-slate-300 mb-6">Confirm your Court Access account email address.</p>
             <button
               type="button"
               onClick={verify}
@@ -62,17 +62,17 @@ export function VerifyEmailPage() {
             </button>
           </>
         )}
-        {status === 'loading' && <p className="text-gray-600">Verifying…</p>}
+        {status === 'loading' && <p className="text-slate-300">Verifying…</p>}
         {status === 'success' && (
           <>
             <p className="text-green-700 mb-4">{message}</p>
-            <Link to="/login" className="text-blue-600 hover:underline">Sign in</Link>
+            <Link to="/login" className="text-gold-light hover:underline">Sign in</Link>
           </>
         )}
         {status === 'error' && (
           <>
             <p className="text-red-700 mb-4">{message}</p>
-            <Link to="/login" className="text-blue-600 hover:underline">Back to sign in</Link>
+            <Link to="/login" className="text-gold-light hover:underline">Back to sign in</Link>
           </>
         )}
       </div>

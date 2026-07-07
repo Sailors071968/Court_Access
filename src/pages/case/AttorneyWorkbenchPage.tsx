@@ -76,14 +76,14 @@ function StatusBadge({ status }: { status: string }) {
   const colors: Record<string, string> = {
     satisfied: 'bg-green-100 text-green-800',
     unsatisfied: 'bg-red-100 text-red-800',
-    unknown: 'bg-gray-100 text-gray-700',
+    unknown: 'bg-white/10 text-slate-200',
     disputed: 'bg-amber-100 text-amber-800',
     open: 'bg-blue-100 text-blue-800',
     in_progress: 'bg-indigo-100 text-indigo-800',
     completed: 'bg-green-100 text-green-800',
   };
   return (
-    <span className={`inline-flex px-2 py-0.5 rounded text-xs font-medium ${colors[status] ?? 'bg-gray-100 text-gray-700'}`}>
+    <span className={`inline-flex px-2 py-0.5 rounded text-xs font-medium ${colors[status] ?? 'bg-white/10 text-slate-200'}`}>
       {status.replace(/_/g, ' ')}
     </span>
   );
@@ -92,22 +92,22 @@ function StatusBadge({ status }: { status: string }) {
 function ExpandableSection({ title, children, defaultOpen = false }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <div className="border border-gray-200 rounded-lg">
+    <div className="border border-white/10 rounded-lg">
       <button
         type="button"
-        className="w-full flex items-center gap-2 px-4 py-3 text-left font-medium text-gray-900 hover:bg-gray-50"
+        className="w-full flex items-center gap-2 px-4 py-3 text-left font-medium text-white hover:bg-white/5"
         onClick={() => setOpen(!open)}
       >
         {open ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
         {title}
       </button>
-      {open && <div className="px-4 pb-4 border-t border-gray-100">{children}</div>}
+      {open && <div className="px-4 pb-4 border-t border-white/10">{children}</div>}
     </div>
   );
 }
 
 function CitationList({ citations }: { citations: Array<{ type: string; id: string; label?: string }> }) {
-  if (!citations.length) return <span className="text-xs text-gray-400">No citations</span>;
+  if (!citations.length) return <span className="text-xs text-slate-500">No citations</span>;
   return (
     <div className="flex flex-wrap gap-1 mt-1">
       {citations.map((c) => (
@@ -212,11 +212,11 @@ export function AttorneyWorkbenchPage() {
     <div className="max-w-7xl mx-auto space-y-6 p-6">
       <header className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
             <Briefcase size={24} />
             Attorney Workbench
           </h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-slate-400 mt-1">
             {data.caseOverview.case.title} — {data.caseOverview.case.caseNumber}
             <span className="ml-2 text-xs bg-slate-100 px-2 py-0.5 rounded">v{data.workbenchVersion}</span>
           </p>
@@ -224,21 +224,21 @@ export function AttorneyWorkbenchPage() {
         <button
           type="button"
           onClick={() => void load()}
-          className="flex items-center gap-2 px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50"
+          className="flex items-center gap-2 px-3 py-2 text-sm border border-white/10 rounded-lg hover:bg-white/5"
         >
           <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
           Refresh
         </button>
       </header>
 
-      <nav className="flex flex-wrap gap-1 border-b border-gray-200 pb-1">
+      <nav className="flex flex-wrap gap-1 border-b border-white/10 pb-1">
         {TABS.map((tab) => (
           <button
             key={tab.id}
             type="button"
             onClick={() => setActiveTab(tab.id)}
             className={`flex items-center gap-1.5 px-3 py-2 text-sm rounded-t-lg transition-colors ${
-              activeTab === tab.id ? 'bg-slate-800 text-white' : 'text-gray-600 hover:bg-gray-100'
+              activeTab === tab.id ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-white/10'
             }`}
           >
             {tab.icon}
@@ -252,15 +252,15 @@ export function AttorneyWorkbenchPage() {
           <Card className="lg:col-span-2">
             <CardHeader title="Case Summary" subtitle="Evidence-governed case understanding" />
             <dl className="grid grid-cols-2 gap-3 text-sm">
-              <div><dt className="text-gray-500">Client</dt><dd className="font-medium">{data.caseOverview.client?.name ?? 'UNKNOWN'}</dd></div>
-              <div><dt className="text-gray-500">Status</dt><dd>{data.caseOverview.currentStatus}</dd></div>
-              <div><dt className="text-gray-500">Court</dt><dd>{data.caseOverview.court ?? 'UNKNOWN'}</dd></div>
-              <div><dt className="text-gray-500">Judge</dt><dd>{data.caseOverview.judge ?? 'UNKNOWN'}</dd></div>
-              <div><dt className="text-gray-500">Prosecutor</dt><dd>{data.caseOverview.prosecutor ?? 'UNKNOWN'}</dd></div>
-              <div><dt className="text-gray-500">Defense</dt><dd>{data.caseOverview.defenseTeam.map((d) => d.role).join(', ') || 'UNKNOWN'}</dd></div>
+              <div><dt className="text-slate-400">Client</dt><dd className="font-medium">{data.caseOverview.client?.name ?? 'UNKNOWN'}</dd></div>
+              <div><dt className="text-slate-400">Status</dt><dd>{data.caseOverview.currentStatus}</dd></div>
+              <div><dt className="text-slate-400">Court</dt><dd>{data.caseOverview.court ?? 'UNKNOWN'}</dd></div>
+              <div><dt className="text-slate-400">Judge</dt><dd>{data.caseOverview.judge ?? 'UNKNOWN'}</dd></div>
+              <div><dt className="text-slate-400">Prosecutor</dt><dd>{data.caseOverview.prosecutor ?? 'UNKNOWN'}</dd></div>
+              <div><dt className="text-slate-400">Defense</dt><dd>{data.caseOverview.defenseTeam.map((d) => d.role).join(', ') || 'UNKNOWN'}</dd></div>
             </dl>
             <div className="mt-4">
-              <h4 className="text-sm font-semibold text-gray-700 mb-2">Charges</h4>
+              <h4 className="text-sm font-semibold text-slate-200 mb-2">Charges</h4>
               <ul className="space-y-1">
                 {data.caseOverview.charges.map((c) => (
                   <li key={c.id} className="text-sm">{c.code} §{c.section} — {c.title ?? 'Untitled'}</li>
@@ -282,12 +282,12 @@ export function AttorneyWorkbenchPage() {
           <Card className="lg:col-span-3">
             <CardHeader title="Case Timeline" />
             {data.caseOverview.caseTimeline.length === 0 ? (
-              <p className="text-sm text-gray-500">No timeline events — UNKNOWN timeline coverage</p>
+              <p className="text-sm text-slate-400">No timeline events — UNKNOWN timeline coverage</p>
             ) : (
               <ul className="space-y-2 max-h-64 overflow-y-auto">
                 {data.caseOverview.caseTimeline.map((e) => (
-                  <li key={e.id} className={`text-sm p-2 rounded ${e.conflictFlag ? 'bg-red-50 border border-red-100' : 'bg-gray-50'}`}>
-                    <span className="text-gray-500">{e.timestamp ? new Date(e.timestamp).toLocaleString() : 'UNKNOWN time'}</span>
+                  <li key={e.id} className={`text-sm p-2 rounded ${e.conflictFlag ? 'bg-red-50 border border-red-100' : 'bg-white/5'}`}>
+                    <span className="text-slate-400">{e.timestamp ? new Date(e.timestamp).toLocaleString() : 'UNKNOWN time'}</span>
                     {e.actor && <span className="ml-2 font-medium">{e.actor}: </span>}
                     {e.description}
                   </li>
@@ -298,7 +298,7 @@ export function AttorneyWorkbenchPage() {
           {data.caseOverview.outstandingUnknowns.length > 0 && (
             <Card className="lg:col-span-3">
               <CardHeader title="Outstanding Unknowns" subtitle="Never fabricated — explicitly reported" />
-              <ul className="list-disc list-inside text-sm text-gray-700 space-y-1">
+              <ul className="list-disc list-inside text-sm text-slate-200 space-y-1">
                 {data.caseOverview.outstandingUnknowns.map((u, i) => <li key={i}>{u}</li>)}
               </ul>
             </Card>
@@ -320,7 +320,7 @@ export function AttorneyWorkbenchPage() {
                 >
                   <div>
                     <h3 className="text-lg font-semibold">{matrix.code} §{matrix.section}</h3>
-                    <p className="text-sm text-gray-500">{matrix.rows.length} elements · {legal?.applicableCalcrim.length ?? 0} CALCRIM</p>
+                    <p className="text-sm text-slate-400">{matrix.rows.length} elements · {legal?.applicableCalcrim.length ?? 0} CALCRIM</p>
                   </div>
                   {isOpen ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
                 </button>
@@ -335,7 +335,7 @@ export function AttorneyWorkbenchPage() {
                     )}
                     <table className="w-full text-sm">
                       <thead>
-                        <tr className="text-left text-gray-500 border-b">
+                        <tr className="text-left text-slate-400 border-b">
                           <th className="pb-2">Element</th>
                           <th className="pb-2">Status</th>
                           <th className="pb-2">Confidence</th>
@@ -384,7 +384,7 @@ export function AttorneyWorkbenchPage() {
               placeholder="Filter evidence..."
               value={evidenceFilter}
               onChange={(e) => setEvidenceFilter(e.target.value)}
-              className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm"
+              className="flex-1 px-3 py-2 border border-white/10 rounded-lg text-sm"
             />
           </div>
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
@@ -392,10 +392,10 @@ export function AttorneyWorkbenchPage() {
               <CardHeader title="Evidence Items" subtitle={`${filteredEvidence.length} items`} />
               <ul className="space-y-2 max-h-96 overflow-y-auto">
                 {filteredEvidence.map((e) => (
-                  <li key={e.evidenceId} className="flex items-center justify-between p-2 bg-gray-50 rounded text-sm">
+                  <li key={e.evidenceId} className="flex items-center justify-between p-2 bg-white/5 rounded text-sm">
                     <div>
                       <span className="font-medium">{e.fileName}</span>
-                      <span className="ml-2 text-gray-500">{e.evidenceType}</span>
+                      <span className="ml-2 text-slate-400">{e.evidenceType}</span>
                     </div>
                     <div className="flex items-center gap-2">
                       <StatusBadge status={e.processingStatus} />
@@ -403,7 +403,7 @@ export function AttorneyWorkbenchPage() {
                         type="button"
                         title="Pin evidence"
                         onClick={() => void pinWorkbenchItem(caseId!, 'evidence', e.evidenceId, e.fileName).then(() => load())}
-                        className="text-gray-400 hover:text-amber-600"
+                        className="text-slate-500 hover:text-amber-600"
                       >
                         <Pin size={14} />
                       </button>
@@ -423,7 +423,7 @@ export function AttorneyWorkbenchPage() {
               </Card>
               <Card>
                 <CardHeader title="Evidence Graph" />
-                <p className="text-sm text-gray-600">{data.evidenceWorkbench.graph.nodes.length} nodes, {data.evidenceWorkbench.graph.edges.length} edges</p>
+                <p className="text-sm text-slate-300">{data.evidenceWorkbench.graph.nodes.length} nodes, {data.evidenceWorkbench.graph.edges.length} edges</p>
               </Card>
             </div>
           </div>
@@ -443,7 +443,7 @@ export function AttorneyWorkbenchPage() {
               <CardHeader title="CALCRIM Instructions" />
               {data.legalAuthority.calcrim.map((c) => (
                 <ExpandableSection key={c.id} title={c.finding}>
-                  <p className="text-sm text-gray-600">Expandable authority with repository audit trail</p>
+                  <p className="text-sm text-slate-300">Expandable authority with repository audit trail</p>
                 </ExpandableSection>
               ))}
             </Card>
@@ -451,7 +451,7 @@ export function AttorneyWorkbenchPage() {
               <CardHeader title="Authorities" />
               <ul className="space-y-1 text-sm">
                 {data.legalAuthority.authorities.map((a) => (
-                  <li key={a.id} className="p-2 bg-gray-50 rounded">{a.finding}</li>
+                  <li key={a.id} className="p-2 bg-white/5 rounded">{a.finding}</li>
                 ))}
               </ul>
             </Card>
@@ -511,10 +511,10 @@ export function AttorneyWorkbenchPage() {
             />
             <ul className="space-y-2">
               {data.investigation.tasks.map((t) => (
-                <li key={t.id} className="flex items-center justify-between p-2 bg-gray-50 rounded text-sm">
+                <li key={t.id} className="flex items-center justify-between p-2 bg-white/5 rounded text-sm">
                   <div>
                     <span className="font-medium">{t.title}</span>
-                    {t.assignedTo && <span className="ml-2 text-gray-500">→ {t.assignedTo}</span>}
+                    {t.assignedTo && <span className="ml-2 text-slate-400">→ {t.assignedTo}</span>}
                   </div>
                   <div className="flex items-center gap-2">
                     <StatusBadge status={t.status} />
@@ -537,7 +537,7 @@ export function AttorneyWorkbenchPage() {
             <CardHeader title="Discovery Requests" />
             <ul className="text-sm space-y-1">
               {data.investigation.discoveryRequests.map((r) => (
-                <li key={r.id} className="flex justify-between p-2 bg-gray-50 rounded">
+                <li key={r.id} className="flex justify-between p-2 bg-white/5 rounded">
                   <span>{r.title}</span>
                   <StatusBadge status={r.status} />
                 </li>
@@ -565,9 +565,9 @@ export function AttorneyWorkbenchPage() {
                 <CardHeader title={labels[section]} subtitle={`${items.length} items — evidence-governed`} />
                 <ul className="space-y-2">
                   {items.map((item) => (
-                    <li key={item.id} className="p-2 bg-gray-50 rounded text-sm">
+                    <li key={item.id} className="p-2 bg-white/5 rounded text-sm">
                       <div className="font-medium">{item.title}</div>
-                      <div className="text-gray-600">{item.detail}</div>
+                      <div className="text-slate-300">{item.detail}</div>
                       {'citations' in item && <CitationList citations={item.citations} />}
                     </li>
                   ))}
@@ -596,7 +596,7 @@ export function AttorneyWorkbenchPage() {
                 <li key={n.id} className="p-3 bg-yellow-50 border border-yellow-100 rounded text-sm">
                   {n.title && <div className="font-medium">{n.title}</div>}
                   <div>{n.content}</div>
-                  <div className="text-xs text-gray-400 mt-1">{new Date(n.createdAt).toLocaleString()}</div>
+                  <div className="text-xs text-slate-500 mt-1">{new Date(n.createdAt).toLocaleString()}</div>
                 </li>
               ))}
             </ul>
@@ -605,14 +605,14 @@ export function AttorneyWorkbenchPage() {
             <CardHeader title="Pinned Items" />
             <ul className="space-y-2">
               {data.attorneyNotes.pins.map((p) => (
-                <li key={p.id} className="flex items-center gap-2 p-2 bg-gray-50 rounded text-sm">
+                <li key={p.id} className="flex items-center gap-2 p-2 bg-white/5 rounded text-sm">
                   <Pin size={14} className="text-amber-600" />
                   <span className="font-medium">{p.pinType}</span>
-                  <span className="text-gray-600">{p.label ?? p.entityId}</span>
+                  <span className="text-slate-300">{p.label ?? p.entityId}</span>
                 </li>
               ))}
               {data.attorneyNotes.pins.length === 0 && (
-                <p className="text-sm text-gray-500">Pin evidence, authorities, or timeline items from other tabs.</p>
+                <p className="text-sm text-slate-400">Pin evidence, authorities, or timeline items from other tabs.</p>
               )}
             </ul>
           </Card>
@@ -644,7 +644,7 @@ export function AttorneyWorkbenchPage() {
                 type="button"
                 disabled={exporting === opt.type}
                 onClick={() => void handleExport(opt.type)}
-                className="flex items-center justify-center gap-2 p-4 border border-gray-200 rounded-lg hover:bg-gray-50 text-sm font-medium disabled:opacity-50"
+                className="flex items-center justify-center gap-2 p-4 border border-white/10 rounded-lg hover:bg-white/5 text-sm font-medium disabled:opacity-50"
               >
                 {exporting === opt.type ? <Loader2 size={16} className="animate-spin" /> : <Download size={16} />}
                 {opt.label}

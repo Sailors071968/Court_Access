@@ -38,11 +38,11 @@ export function MotionsPage() {
   }, [caseId]);
 
   if (caseLoading) {
-    return <div className="flex items-center justify-center p-12"><Loader2 className="animate-spin text-blue-600" size={32} /></div>;
+    return <div className="flex items-center justify-center p-12"><Loader2 className="animate-spin text-gold-light" size={32} /></div>;
   }
 
   if (!currentCase) {
-    return <div className="p-8 text-center text-gray-500">No cases found.</div>;
+    return <div className="p-8 text-center text-slate-400">No cases found.</div>;
   }
 
   return (
@@ -58,7 +58,7 @@ export function MotionsPage() {
 
       <div className="flex items-start justify-between">
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Court Attorney - Motion Recommendations</h2>
+          <h2 className="text-xl font-bold text-white">Court Attorney - Motion Recommendations</h2>
           <div className="flex items-center gap-2 mt-2 px-4 py-2 bg-purple-600 text-white rounded-lg text-sm">
             <span>{currentCase.title || currentCase.caseType} - Case #{currentCase.caseNumber}</span>
             <button aria-label="Edit case"><Pencil size={14} /></button>
@@ -66,31 +66,31 @@ export function MotionsPage() {
         </div>
       </div>
 
-      <h3 className="text-lg font-bold text-gray-900">Recommended Motions to File</h3>
+      <h3 className="text-lg font-bold text-white">Recommended Motions to File</h3>
 
       {loading ? (
         <div className="grid md:grid-cols-2 gap-4">
           {[1, 2, 3, 4].map((i) => (
-            <div key={i} className="h-40 bg-gray-100 rounded-xl animate-pulse" />
+            <div key={i} className="h-40 bg-white/10 rounded-xl animate-pulse" />
           ))}
         </div>
       ) : motions.length === 0 ? (
         <div className="text-center py-12">
           <AlertTriangle size={48} className="text-gray-300 mx-auto mb-4" />
-          <p className="text-gray-500 text-sm">No motion recommendations yet. Upload evidence and run analysis to generate motion recommendations.</p>
+          <p className="text-slate-400 text-sm">No motion recommendations yet. Upload evidence and run analysis to generate motion recommendations.</p>
         </div>
       ) : (
         <div className="grid md:grid-cols-2 gap-4">
           {motions.map((motion) => (
             <Card key={motion.id}>
               <div className="flex items-start justify-between mb-3">
-                <h4 className="font-semibold text-gray-900">
+                <h4 className="font-semibold text-white">
                   {motion.title}
-                  {motion.code && <span className="text-gray-500 font-normal"> ({motion.code})</span>}
+                  {motion.code && <span className="text-slate-400 font-normal"> ({motion.code})</span>}
                 </h4>
                 <MotionPriorityBadge priority={motion.priority} />
               </div>
-              <p className="text-sm text-gray-600 leading-relaxed mb-4">
+              <p className="text-sm text-slate-300 leading-relaxed mb-4">
                 {motion.description}
               </p>
               <button className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-amber-500 text-white rounded-lg text-xs font-medium hover:bg-amber-600 transition-colors">

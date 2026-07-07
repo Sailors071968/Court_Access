@@ -45,7 +45,7 @@ export function PressPage() {
       <section className="py-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           {PRESS_ITEMS.map((item) => (
-            <article key={item.title} className="p-6 rounded-xl border border-slate-200 bg-white">
+            <article key={item.title} className="p-6 rounded-xl border border-slate-200 bg-white/5">
               <time className="text-sm text-slate-500">{item.date}</time>
               <h2 className="text-xl font-bold text-slate-900 mt-2 mb-2">{item.title}</h2>
               <p className="text-slate-600 leading-relaxed">{item.excerpt}</p>

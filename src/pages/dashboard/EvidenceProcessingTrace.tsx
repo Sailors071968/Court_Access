@@ -55,7 +55,7 @@ export function EvidenceProcessingTrace() {
       case 'completed': return <CheckCircle size={14} className="text-green-500" />;
       case 'failed': return <XCircle size={14} className="text-red-500" />;
       case 'running': return <RefreshCw size={14} className="text-blue-500 animate-spin" />;
-      case 'pending': return <Clock size={14} className="text-gray-400" />;
+      case 'pending': return <Clock size={14} className="text-slate-500" />;
     }
   };
 
@@ -63,21 +63,21 @@ export function EvidenceProcessingTrace() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Activity size={24} className="text-blue-600" />
+          <Activity size={24} className="text-gold-light" />
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Evidence Processing Trace</h1>
-            <p className="text-sm text-gray-500">Track every stage of evidence processing</p>
+            <h1 className="text-2xl font-bold text-white">Evidence Processing Trace</h1>
+            <p className="text-sm text-slate-400">Track every stage of evidence processing</p>
           </div>
         </div>
       </div>
 
       {/* Filters */}
       <div className="flex items-center gap-3">
-        <Filter size={14} className="text-gray-400" />
+        <Filter size={14} className="text-slate-500" />
         <select
           value={filterStage}
           onChange={(e) => setFilterStage(e.target.value)}
-          className="text-sm border border-gray-300 rounded-lg px-3 py-1.5"
+          className="text-sm border border-white/10 rounded-lg px-3 py-1.5"
         >
           <option value="all">All Stages</option>
           {STAGES.map((s) => <option key={s} value={s}>{s}</option>)}
@@ -85,7 +85,7 @@ export function EvidenceProcessingTrace() {
         <select
           value={filterStatus}
           onChange={(e) => setFilterStatus(e.target.value)}
-          className="text-sm border border-gray-300 rounded-lg px-3 py-1.5"
+          className="text-sm border border-white/10 rounded-lg px-3 py-1.5"
         >
           <option value="all">All Statuses</option>
           <option value="completed">Completed</option>
@@ -98,39 +98,39 @@ export function EvidenceProcessingTrace() {
       {/* Log Table */}
       {isLoading ? (
         <div className="flex items-center justify-center py-12">
-          <Loader2 size={20} className="animate-spin text-gray-400" />
-          <span className="ml-2 text-sm text-gray-500">Loading processing logs...</span>
+          <Loader2 size={20} className="animate-spin text-slate-500" />
+          <span className="ml-2 text-sm text-slate-400">Loading processing logs...</span>
         </div>
       ) : filtered.length === 0 ? (
-        <div className="text-center py-12 bg-white rounded-xl border border-gray-200">
+        <div className="text-center py-12 bg-white/5 rounded-xl border border-white/10">
           <Activity size={48} className="mx-auto mb-3 text-gray-300" />
-          <p className="text-sm text-gray-500">No processing logs available yet.</p>
-          <p className="text-xs text-gray-400 mt-1">Upload evidence to see processing activity.</p>
+          <p className="text-sm text-slate-400">No processing logs available yet.</p>
+          <p className="text-xs text-slate-500 mt-1">Upload evidence to see processing activity.</p>
         </div>
       ) : (
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="bg-white/5 rounded-xl border border-white/10 overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-gray-200 bg-gray-50">
-              <th className="text-left px-4 py-3 font-medium text-gray-600">Status</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-600">Evidence</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-600">Stage</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-600">Worker</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-600">Timestamp</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-600">Details</th>
+            <tr className="border-b border-white/10 bg-white/5">
+              <th className="text-left px-4 py-3 font-medium text-slate-300">Status</th>
+              <th className="text-left px-4 py-3 font-medium text-slate-300">Evidence</th>
+              <th className="text-left px-4 py-3 font-medium text-slate-300">Stage</th>
+              <th className="text-left px-4 py-3 font-medium text-slate-300">Worker</th>
+              <th className="text-left px-4 py-3 font-medium text-slate-300">Timestamp</th>
+              <th className="text-left px-4 py-3 font-medium text-slate-300">Details</th>
             </tr>
           </thead>
           <tbody>
             {filtered.map((log) => (
-              <tr key={log.id} className="border-b border-gray-100 hover:bg-gray-50">
+              <tr key={log.id} className="border-b border-white/10 hover:bg-white/5">
                 <td className="px-4 py-3">{statusIcon(log.status)}</td>
-                <td className="px-4 py-3 font-medium text-gray-900 text-xs">{log.evidenceName}</td>
+                <td className="px-4 py-3 font-medium text-white text-xs">{log.evidenceName}</td>
                 <td className="px-4 py-3">
-                  <span className="px-2 py-0.5 bg-gray-100 text-gray-700 rounded text-[10px] font-mono">{log.stage}</span>
+                  <span className="px-2 py-0.5 bg-white/10 text-slate-200 rounded text-[10px] font-mono">{log.stage}</span>
                 </td>
-                <td className="px-4 py-3 text-gray-600 text-xs font-mono">{log.workerId}</td>
-                <td className="px-4 py-3 text-gray-500 text-xs">{log.timestamp}</td>
-                <td className="px-4 py-3 text-gray-600 text-xs">{log.details}</td>
+                <td className="px-4 py-3 text-slate-300 text-xs font-mono">{log.workerId}</td>
+                <td className="px-4 py-3 text-slate-400 text-xs">{log.timestamp}</td>
+                <td className="px-4 py-3 text-slate-300 text-xs">{log.details}</td>
               </tr>
             ))}
           </tbody>

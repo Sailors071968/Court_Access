@@ -78,7 +78,7 @@ export function HowItWorksPage() {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="space-y-8">
             {STEPS.map(({ icon: Icon, step, title, description }) => (
-              <div key={step} className="flex gap-6 p-6 rounded-xl border border-slate-200 bg-white">
+              <div key={step} className="flex gap-6 p-6 rounded-xl border border-slate-200 bg-white/5">
                 <div className="shrink-0 flex flex-col items-center gap-2">
                   <div className="w-12 h-12 bg-amber-500 rounded-full flex items-center justify-center text-white font-bold">
                     {step}

@@ -58,7 +58,7 @@ export function BlogPage() {
       <section className="py-16">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 space-y-8">
           {POSTS.map((post) => (
-            <article key={post.slug} className="p-6 rounded-xl border border-slate-200 bg-white hover:border-amber-200 transition-colors">
+            <article key={post.slug} className="p-6 rounded-xl border border-slate-200 bg-white/5 hover:border-amber-200 transition-colors">
               <div className="flex items-center gap-3 text-sm text-slate-500 mb-3">
                 <span className="bg-amber-100 text-amber-700 px-2 py-0.5 rounded text-xs font-medium">
                   {post.category}

@@ -32,8 +32,8 @@ export function CaseLayout() {
   }, [caseId]);
 
   if (!user) return null;
-  if (loading) return <div className="max-w-7xl mx-auto text-center py-12"><Loader2 size={24} className="animate-spin text-gray-400 mx-auto mb-2" /><p className="text-gray-500">Loading case...</p></div>;
-  if (!currentCase) return <div className="max-w-7xl mx-auto p-8 text-center text-gray-500">No cases found.</div>;
+  if (loading) return <div className="max-w-7xl mx-auto text-center py-12"><Loader2 size={24} className="animate-spin text-slate-500 mx-auto mb-2" /><p className="text-slate-400">Loading case...</p></div>;
+  if (!currentCase) return <div className="max-w-7xl mx-auto p-8 text-center text-slate-400">No cases found.</div>;
   const permissions = ROLE_PERMISSIONS[user.role];
 
   return (
@@ -41,8 +41,8 @@ export function CaseLayout() {
       {/* Case Header */}
       <div className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">{currentCase.title}</h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-white">{currentCase.title}</h1>
+          <p className="text-sm text-slate-400 mt-1">
             Case #{currentCase.caseNumber} &middot; {currentCase.jurisdiction}{currentCase.court ? `, ${currentCase.court}` : ''}
           </p>
         </div>
@@ -50,7 +50,7 @@ export function CaseLayout() {
       </div>
 
       {/* Tab Navigation — deterministic order */}
-      <div className="border-b border-gray-200">
+      <div className="border-b border-white/10">
         <nav className="flex gap-1 overflow-x-auto" role="tablist" aria-label="Case sections">
           {CASE_TABS.map((tab) => {
             // Hide tabs based on role permissions
@@ -69,8 +69,8 @@ export function CaseLayout() {
                 className={({ isActive }) =>
                   `px-4 py-3 text-sm font-medium whitespace-nowrap border-b-2 transition-colors ${
                     isActive
-                      ? 'border-blue-600 text-blue-600'
-                      : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                      ? 'border-blue-600 text-gold-light'
+                      : 'border-transparent text-slate-400 hover:text-slate-200 hover:border-white/10'
                   }`
                 }
               >

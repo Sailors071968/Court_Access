@@ -34,7 +34,7 @@ export function CaseLawSearch() {
   }
 
   return (
-    <div className="rounded-lg border border-slate-200 bg-white p-4">
+    <div className="rounded-lg border border-slate-200 bg-white/5 p-4">
       <div className="mb-3 flex items-center justify-between">
         <h3 className="text-sm font-semibold text-slate-800">Case Law Search</h3>
         <span className="text-xs text-slate-400">Source: CourtListener (Free Law Project)</span>

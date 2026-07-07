@@ -78,16 +78,16 @@ export function CreateDiscountCodeForm({ initial, onSubmit, onCancel, submitLabe
 
       {/* Code Name */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Campaign Name</label>
+        <label className="block text-sm font-medium text-slate-200 mb-1">Campaign Name</label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Tag className="text-gray-400" size={14} />
+            <Tag className="text-slate-500" size={14} />
           </div>
           <input
             type="text"
             value={codeName}
             onChange={(e) => setCodeName(e.target.value)}
-            className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light"
             placeholder="e.g. Early Access Promotion"
             required
           />
@@ -96,21 +96,21 @@ export function CreateDiscountCodeForm({ initial, onSubmit, onCancel, submitLabe
 
       {/* Code Value */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Code Value</label>
+        <label className="block text-sm font-medium text-slate-200 mb-1">Code Value</label>
         <input
           type="text"
           value={codeValue}
           onChange={(e) => setCodeValue(e.target.value.toUpperCase())}
-          className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 uppercase font-mono"
+          className="w-full px-4 py-2.5 rounded-lg border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light uppercase font-mono"
           placeholder="e.g. EARLYACCESS50"
           required
         />
-        <p className="text-xs text-gray-400 mt-1">Alphanumeric, dashes, and underscores only</p>
+        <p className="text-xs text-slate-500 mt-1">Alphanumeric, dashes, and underscores only</p>
       </div>
 
       {/* Discount Type */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Discount Type</label>
+        <label className="block text-sm font-medium text-slate-200 mb-1">Discount Type</label>
         <div className="flex gap-3">
           <button
             type="button"
@@ -118,7 +118,7 @@ export function CreateDiscountCodeForm({ initial, onSubmit, onCancel, submitLabe
             className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border text-sm font-medium transition-colors ${
               discountType === 'percent'
                 ? 'border-blue-500 bg-blue-50 text-blue-700'
-                : 'border-gray-300 bg-white text-gray-600 hover:bg-gray-50'
+                : 'border-white/10 bg-white/5 text-slate-300 hover:bg-white/5'
             }`}
           >
             <Percent size={14} /> Percentage
@@ -129,7 +129,7 @@ export function CreateDiscountCodeForm({ initial, onSubmit, onCancel, submitLabe
             className={`flex-1 flex items-center justify-center gap-2 px-4 py-2.5 rounded-lg border text-sm font-medium transition-colors ${
               discountType === 'fixed'
                 ? 'border-blue-500 bg-blue-50 text-blue-700'
-                : 'border-gray-300 bg-white text-gray-600 hover:bg-gray-50'
+                : 'border-white/10 bg-white/5 text-slate-300 hover:bg-white/5'
             }`}
           >
             <DollarSign size={14} /> Fixed Amount
@@ -139,12 +139,12 @@ export function CreateDiscountCodeForm({ initial, onSubmit, onCancel, submitLabe
 
       {/* Discount Value */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="block text-sm font-medium text-slate-200 mb-1">
           {discountType === 'percent' ? 'Discount Percentage' : 'Discount Amount ($)'}
         </label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            {discountType === 'percent' ? <Percent className="text-gray-400" size={14} /> : <DollarSign className="text-gray-400" size={14} />}
+            {discountType === 'percent' ? <Percent className="text-slate-500" size={14} /> : <DollarSign className="text-slate-500" size={14} />}
           </div>
           <input
             type="number"
@@ -152,7 +152,7 @@ export function CreateDiscountCodeForm({ initial, onSubmit, onCancel, submitLabe
             max={discountType === 'percent' ? 100 : undefined}
             value={discountValue}
             onChange={(e) => setDiscountValue(Number(e.target.value))}
-            className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light"
             required
           />
         </div>
@@ -160,16 +160,16 @@ export function CreateDiscountCodeForm({ initial, onSubmit, onCancel, submitLabe
 
       {/* Expiration Date */}
       <div>
-        <label className="block text-sm font-medium text-gray-700 mb-1">Expiration Date <span className="text-gray-400 font-normal">(optional)</span></label>
+        <label className="block text-sm font-medium text-slate-200 mb-1">Expiration Date <span className="text-slate-500 font-normal">(optional)</span></label>
         <div className="relative">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <Calendar className="text-gray-400" size={14} />
+            <Calendar className="text-slate-500" size={14} />
           </div>
           <input
             type="date"
             value={expiresAt}
             onChange={(e) => setExpiresAt(e.target.value)}
-            className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light"
           />
         </div>
       </div>
@@ -182,21 +182,21 @@ export function CreateDiscountCodeForm({ initial, onSubmit, onCancel, submitLabe
             id="usage-limit-toggle"
             checked={usageLimitEnabled}
             onChange={(e) => setUsageLimitEnabled(e.target.checked)}
-            className="w-4 h-4 text-blue-600 rounded border-gray-300"
+            className="w-4 h-4 text-gold-light rounded border-white/10"
           />
-          <label htmlFor="usage-limit-toggle" className="text-sm font-medium text-gray-700">Set usage limit</label>
+          <label htmlFor="usage-limit-toggle" className="text-sm font-medium text-slate-200">Set usage limit</label>
         </div>
         {usageLimitEnabled && (
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Hash className="text-gray-400" size={14} />
+              <Hash className="text-slate-500" size={14} />
             </div>
             <input
               type="number"
               min={1}
               value={usageLimit}
               onChange={(e) => setUsageLimit(Number(e.target.value))}
-              className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light"
               placeholder="Max number of uses"
             />
           </div>
@@ -210,9 +210,9 @@ export function CreateDiscountCodeForm({ initial, onSubmit, onCancel, submitLabe
           onClick={() => setActive(!active)}
           className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors ${active ? 'bg-emerald-500' : 'bg-gray-300'}`}
         >
-          <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${active ? 'translate-x-6' : 'translate-x-1'}`} />
+          <span className={`inline-block h-4 w-4 transform rounded-full bg-white/5 transition-transform ${active ? 'translate-x-6' : 'translate-x-1'}`} />
         </button>
-        <span className="text-sm font-medium text-gray-700">{active ? 'Active' : 'Inactive'}</span>
+        <span className="text-sm font-medium text-slate-200">{active ? 'Active' : 'Inactive'}</span>
       </div>
 
       {/* Submit */}
@@ -227,7 +227,7 @@ export function CreateDiscountCodeForm({ initial, onSubmit, onCancel, submitLabe
           <button
             type="button"
             onClick={onCancel}
-            className="px-6 py-2.5 rounded-lg border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors"
+            className="px-6 py-2.5 rounded-lg border border-white/10 text-sm font-medium text-slate-200 hover:bg-white/5 transition-colors"
           >
             Cancel
           </button>

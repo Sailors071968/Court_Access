@@ -122,8 +122,8 @@ export function LitigationStrategyView() {
   if (isLoading) {
     return (
       <div className="flex items-center justify-center py-20">
-        <Loader2 size={24} className="animate-spin text-gray-400" />
-        <span className="ml-2 text-sm text-gray-500">Loading strategy data...</span>
+        <Loader2 size={24} className="animate-spin text-slate-500" />
+        <span className="ml-2 text-sm text-slate-400">Loading strategy data...</span>
       </div>
     );
   }
@@ -134,11 +134,11 @@ export function LitigationStrategyView() {
     <div className="space-y-6">
       {/* Header */}
       <div>
-        <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+        <h2 className="text-xl font-bold text-white flex items-center gap-2">
           <Target size={22} className="text-indigo-600" />
           Litigation Strategy Dashboard
         </h2>
-        <p className="text-sm text-gray-500 mt-1">Evidence-driven litigation planning and case readiness tracking</p>
+        <p className="text-sm text-slate-400 mt-1">Evidence-driven litigation planning and case readiness tracking</p>
       </div>
 
       {/* Disclaimer */}
@@ -150,18 +150,18 @@ export function LitigationStrategyView() {
       </div>
 
       {hasNoData && (
-        <div className="text-center py-12 bg-white rounded-xl border border-gray-200">
+        <div className="text-center py-12 bg-white/5 rounded-xl border border-white/10">
           <Target size={48} className="mx-auto mb-3 text-gray-300" />
-          <p className="text-sm text-gray-500">No litigation strategy data available yet.</p>
-          <p className="text-xs text-gray-400 mt-1">Upload evidence to generate strategy recommendations.</p>
+          <p className="text-sm text-slate-400">No litigation strategy data available yet.</p>
+          <p className="text-xs text-slate-500 mt-1">Upload evidence to generate strategy recommendations.</p>
         </div>
       )}
 
       {/* Phase 289: Case Readiness Score */}
       {readiness.length > 0 && (
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div className="bg-white/5 rounded-xl border border-white/10 p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+          <h3 className="text-lg font-semibold text-white flex items-center gap-2">
             <BarChart3 size={18} className="text-indigo-600" />
             Case Readiness Score
           </h3>
@@ -179,10 +179,10 @@ export function LitigationStrategyView() {
           {readiness.map((metric) => {
             const pct = Math.round((metric.score / metric.maxScore) * 100);
             return (
-              <div key={metric.label} className="p-3 bg-gray-50 rounded-lg">
+              <div key={metric.label} className="p-3 bg-white/5 rounded-lg">
                 <div className="flex items-center gap-2 mb-2">
-                  <span className="text-gray-400">{metric.icon}</span>
-                  <span className="text-xs font-medium text-gray-700">{metric.label}</span>
+                  <span className="text-slate-500">{metric.icon}</span>
+                  <span className="text-xs font-medium text-slate-200">{metric.label}</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <div className="flex-1 bg-gray-200 rounded-full h-2">
@@ -191,7 +191,7 @@ export function LitigationStrategyView() {
                       style={{ width: `${pct}%` }}
                     />
                   </div>
-                  <span className="text-xs font-bold text-gray-600">{metric.score}/{metric.maxScore}</span>
+                  <span className="text-xs font-bold text-slate-300">{metric.score}/{metric.maxScore}</span>
                 </div>
               </div>
             );
@@ -202,19 +202,19 @@ export function LitigationStrategyView() {
 
       {/* Phase 290: Litigation Roadmap */}
       {roadmap.length > 0 && (
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="bg-white/5 rounded-xl border border-white/10 overflow-hidden">
         <button
           onClick={() => setExpandedSection(expandedSection === 'roadmap' ? null : 'roadmap')}
-          className="w-full flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition-colors"
+          className="w-full flex items-center justify-between px-6 py-4 hover:bg-white/5 transition-colors"
         >
           <div className="flex items-center gap-3">
             <TrendingUp size={18} className="text-indigo-600" />
-            <span className="font-semibold text-gray-900">Case Litigation Roadmap</span>
+            <span className="font-semibold text-white">Case Litigation Roadmap</span>
             <span className="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-full text-[10px] font-bold">
               {completedSteps}/{totalSteps} steps
             </span>
           </div>
-          {expandedSection === 'roadmap' ? <ChevronDown size={16} className="text-gray-400" /> : <ChevronRight size={16} className="text-gray-400" />}
+          {expandedSection === 'roadmap' ? <ChevronDown size={16} className="text-slate-500" /> : <ChevronRight size={16} className="text-slate-500" />}
         </button>
 
         {expandedSection === 'roadmap' && (
@@ -222,8 +222,8 @@ export function LitigationStrategyView() {
             {/* Progress bar */}
             <div className="mb-4">
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-xs text-gray-500">Roadmap Progress</span>
-                <span className="text-xs font-bold text-gray-700">{totalSteps > 0 ? Math.round((completedSteps / totalSteps) * 100) : 0}%</span>
+                <span className="text-xs text-slate-400">Roadmap Progress</span>
+                <span className="text-xs font-bold text-slate-200">{totalSteps > 0 ? Math.round((completedSteps / totalSteps) * 100) : 0}%</span>
               </div>
               <div className="bg-gray-200 rounded-full h-2">
                 <div className="bg-indigo-500 h-2 rounded-full" style={{ width: `${totalSteps > 0 ? (completedSteps / totalSteps) * 100 : 0}%` }} />
@@ -242,7 +242,7 @@ export function LitigationStrategyView() {
                       ) : step.status === 'in_progress' ? (
                         <Clock size={14} className="text-white" />
                       ) : (
-                        <span className="text-xs text-gray-500 font-bold">{step.stepNumber}</span>
+                        <span className="text-xs text-slate-400 font-bold">{step.stepNumber}</span>
                       )}
                     </div>
                   </div>
@@ -250,7 +250,7 @@ export function LitigationStrategyView() {
                   {/* Content */}
                   <div className="flex-1">
                     <div className="flex items-center gap-2">
-                      <span className={`text-sm font-medium ${step.status === 'completed' ? 'text-gray-400 line-through' : 'text-gray-900'}`}>
+                      <span className={`text-sm font-medium ${step.status === 'completed' ? 'text-slate-500 line-through' : 'text-white'}`}>
                         Step {step.stepNumber} — {step.description}
                       </span>
                     </div>
@@ -262,7 +262,7 @@ export function LitigationStrategyView() {
                       <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                         step.status === 'completed' ? 'bg-green-100 text-green-700' :
                         step.status === 'in_progress' ? 'bg-blue-100 text-blue-700' :
-                        'bg-gray-100 text-gray-500'
+                        'bg-white/10 text-slate-400'
                       }`}>
                         {step.status.replace(/_/g, ' ').toUpperCase()}
                       </span>
@@ -278,29 +278,29 @@ export function LitigationStrategyView() {
 
       {/* Evidence Observations */}
       {observations.length > 0 && (
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="bg-white/5 rounded-xl border border-white/10 overflow-hidden">
         <button
           onClick={() => setExpandedSection(expandedSection === 'observations' ? null : 'observations')}
-          className="w-full flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition-colors"
+          className="w-full flex items-center justify-between px-6 py-4 hover:bg-white/5 transition-colors"
         >
           <div className="flex items-center gap-3">
             <AlertTriangle size={18} className="text-amber-600" />
-            <span className="font-semibold text-gray-900">Evidence Observations</span>
+            <span className="font-semibold text-white">Evidence Observations</span>
             <span className="px-2 py-0.5 bg-amber-100 text-amber-700 rounded-full text-[10px] font-bold">
               {observations.length} detected
             </span>
           </div>
-          {expandedSection === 'observations' ? <ChevronDown size={16} className="text-gray-400" /> : <ChevronRight size={16} className="text-gray-400" />}
+          {expandedSection === 'observations' ? <ChevronDown size={16} className="text-slate-500" /> : <ChevronRight size={16} className="text-slate-500" />}
         </button>
 
         {expandedSection === 'observations' && (
           <div className="px-6 pb-4 space-y-2">
             {observations.map((obs) => (
               <div key={obs.id} className="flex items-start gap-3 py-2 border-b border-gray-50 last:border-0">
-                <span className="font-mono text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded whitespace-nowrap">{obs.timestamp}</span>
+                <span className="font-mono text-xs text-gold-light bg-blue-50 px-2 py-1 rounded whitespace-nowrap">{obs.timestamp}</span>
                 <div className="flex-1">
-                  <p className="text-sm text-gray-900">{obs.observation}</p>
-                  <p className="text-xs text-gray-500 mt-0.5">Source: {obs.evidenceSource}</p>
+                  <p className="text-sm text-white">{obs.observation}</p>
+                  <p className="text-xs text-slate-400 mt-0.5">Source: {obs.evidenceSource}</p>
                 </div>
               </div>
             ))}
@@ -311,31 +311,31 @@ export function LitigationStrategyView() {
 
       {/* Strategy Recommendations by Type */}
       {recommendations.length > 0 && (
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="bg-white/5 rounded-xl border border-white/10 overflow-hidden">
         <button
           onClick={() => setExpandedSection(expandedSection === 'recommendations' ? null : 'recommendations')}
-          className="w-full flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition-colors"
+          className="w-full flex items-center justify-between px-6 py-4 hover:bg-white/5 transition-colors"
         >
           <div className="flex items-center gap-3">
             <Target size={18} className="text-indigo-600" />
-            <span className="font-semibold text-gray-900">All Recommendations</span>
+            <span className="font-semibold text-white">All Recommendations</span>
             <span className="px-2 py-0.5 bg-indigo-100 text-indigo-700 rounded-full text-[10px] font-bold">
               {recommendations.length} total
             </span>
           </div>
-          {expandedSection === 'recommendations' ? <ChevronDown size={16} className="text-gray-400" /> : <ChevronRight size={16} className="text-gray-400" />}
+          {expandedSection === 'recommendations' ? <ChevronDown size={16} className="text-slate-500" /> : <ChevronRight size={16} className="text-slate-500" />}
         </button>
 
         {expandedSection === 'recommendations' && (
           <div className="px-6 pb-4">
             <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-gray-200">
-                  <th className="text-left py-2 px-2 text-gray-500 font-medium text-xs">Type</th>
-                  <th className="text-left py-2 px-2 text-gray-500 font-medium text-xs">Recommendation</th>
-                  <th className="text-left py-2 px-2 text-gray-500 font-medium text-xs">Evidence</th>
-                  <th className="text-right py-2 px-2 text-gray-500 font-medium text-xs">Confidence</th>
-                  <th className="text-center py-2 px-2 text-gray-500 font-medium text-xs">Status</th>
+                <tr className="border-b border-white/10">
+                  <th className="text-left py-2 px-2 text-slate-400 font-medium text-xs">Type</th>
+                  <th className="text-left py-2 px-2 text-slate-400 font-medium text-xs">Recommendation</th>
+                  <th className="text-left py-2 px-2 text-slate-400 font-medium text-xs">Evidence</th>
+                  <th className="text-right py-2 px-2 text-slate-400 font-medium text-xs">Confidence</th>
+                  <th className="text-center py-2 px-2 text-slate-400 font-medium text-xs">Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -346,13 +346,13 @@ export function LitigationStrategyView() {
                         {TYPE_ICONS[rec.type]}
                       </span>
                     </td>
-                    <td className="py-2 px-2 text-gray-900 text-xs">{rec.suggestedOpportunity}</td>
-                    <td className="py-2 px-2 text-gray-500 text-xs font-mono">{rec.evidenceSource}</td>
+                    <td className="py-2 px-2 text-white text-xs">{rec.suggestedOpportunity}</td>
+                    <td className="py-2 px-2 text-slate-400 text-xs font-mono">{rec.evidenceSource}</td>
                     <td className="py-2 px-2 text-right">
                       <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                         rec.confidenceScore >= 0.85 ? 'bg-green-100 text-green-700' :
                         rec.confidenceScore >= 0.70 ? 'bg-amber-100 text-amber-700' :
-                        'bg-gray-100 text-gray-600'
+                        'bg-white/10 text-slate-300'
                       }`}>
                         {(rec.confidenceScore * 100).toFixed(0)}%
                       </span>
@@ -360,7 +360,7 @@ export function LitigationStrategyView() {
                     <td className="py-2 px-2 text-center">
                       <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
                         rec.status === 'addressed' ? 'bg-green-100 text-green-700' :
-                        rec.status === 'dismissed' ? 'bg-gray-100 text-gray-500' :
+                        rec.status === 'dismissed' ? 'bg-white/10 text-slate-400' :
                         'bg-blue-100 text-blue-700'
                       }`}>
                         {rec.status.toUpperCase()}

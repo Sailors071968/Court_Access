@@ -118,7 +118,7 @@ export function NotificationsPage() {
         aria-checked={settings[k]}
         aria-label={`Toggle ${label}`}
       >
-        <span className={`absolute top-0.5 w-5 h-5 bg-white rounded-full transition-transform ${settings[k] ? 'left-6' : 'left-0.5'}`} />
+        <span className={`absolute top-0.5 w-5 h-5 bg-white/5 rounded-full transition-transform ${settings[k] ? 'left-6' : 'left-0.5'}`} />
       </button>
     </div>
   );

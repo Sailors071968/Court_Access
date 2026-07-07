@@ -61,7 +61,7 @@ function FAQAccordionItem({ q, a }: { q: string; a: string }) {
         onClick={() => setOpen(!open)}
         aria-expanded={open}
         aria-controls={`faq-${id}`}
-        className="w-full flex items-center justify-between gap-4 px-6 py-4 text-left bg-white hover:bg-slate-50 transition-colors"
+        className="w-full flex items-center justify-between gap-4 px-6 py-4 text-left bg-white/5 hover:bg-slate-50 transition-colors"
       >
         <span className="font-semibold text-slate-900">{q}</span>
         <ChevronDown

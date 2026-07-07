@@ -69,7 +69,7 @@ export function AccountSettingsPage() {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">Account Settings</h1>
+      <h1 className="text-2xl font-bold text-white">Account Settings</h1>
       {message && (
         <div className="bg-blue-50 border border-blue-200 text-blue-800 px-4 py-3 rounded-lg text-sm">
           {message}
@@ -78,16 +78,16 @@ export function AccountSettingsPage() {
 
       <Card>
         <div className="flex items-center gap-3 mb-6">
-          <User size={20} className="text-gray-500" />
-          <h2 className="text-lg font-semibold text-gray-900">Profile</h2>
+          <User size={20} className="text-slate-400" />
+          <h2 className="text-lg font-semibold text-white">Profile</h2>
         </div>
         <div className="grid sm:grid-cols-2 gap-4 text-sm">
           <div>
-            <span className="text-gray-500">Name</span>
+            <span className="text-slate-400">Name</span>
             <p className="font-medium">{user?.name}</p>
           </div>
           <div>
-            <span className="text-gray-500">Email</span>
+            <span className="text-slate-400">Email</span>
             <p className="font-medium">{user?.email}</p>
             {account?.user.emailVerified ? (
               <span className="text-green-600 text-xs">Verified</span>
@@ -96,11 +96,11 @@ export function AccountSettingsPage() {
             )}
           </div>
           <div>
-            <span className="text-gray-500">Role</span>
+            <span className="text-slate-400">Role</span>
             <p className="font-medium capitalize">{user?.role}</p>
           </div>
           <div>
-            <span className="text-gray-500">MFA</span>
+            <span className="text-slate-400">MFA</span>
             <p className="font-medium">{account?.user.mfaEnabled ? 'Enabled' : 'Not enabled'}</p>
           </div>
         </div>
@@ -108,25 +108,25 @@ export function AccountSettingsPage() {
 
       <Card>
         <div className="flex items-center gap-3 mb-6">
-          <CreditCard size={20} className="text-gray-500" />
-          <h2 className="text-lg font-semibold text-gray-900">Subscription & Billing</h2>
+          <CreditCard size={20} className="text-slate-400" />
+          <h2 className="text-lg font-semibold text-white">Subscription & Billing</h2>
         </div>
         <div className="space-y-3 text-sm mb-4">
           <p>
-            <span className="text-gray-500">Plan: </span>
+            <span className="text-slate-400">Plan: </span>
             <span className="font-medium capitalize">{sub?.planId?.toLowerCase().replace(/_/g, ' ') ?? 'Trial'}</span>
           </p>
           <p>
-            <span className="text-gray-500">Status: </span>
+            <span className="text-slate-400">Status: </span>
             <span className="font-medium capitalize">{sub?.status ?? 'trial'}</span>
           </p>
           {sub?.trialEndsAt && (
             <p>
-              <span className="text-gray-500">Trial ends: </span>
+              <span className="text-slate-400">Trial ends: </span>
               {new Date(sub.trialEndsAt).toLocaleDateString()}
             </p>
           )}
-          <p className="text-gray-600">
+          <p className="text-slate-300">
             Universal membership — full platform access on every plan. Authorization is controlled by delegated permissions.
           </p>
         </div>
@@ -140,11 +140,11 @@ export function AccountSettingsPage() {
           <button
             type="button"
             onClick={openBillingPortal}
-            className="px-4 py-2 border border-gray-300 rounded-lg text-sm font-medium hover:bg-gray-50 flex items-center gap-2"
+            className="px-4 py-2 border border-white/10 rounded-lg text-sm font-medium hover:bg-white/5 flex items-center gap-2"
           >
             Manage Billing <ExternalLink size={14} />
           </button>
-          <Link to="/dashboard/usage" className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900">
+          <Link to="/dashboard/usage" className="px-4 py-2 text-sm text-slate-300 hover:text-white">
             Usage & Credits
           </Link>
         </div>
@@ -152,10 +152,10 @@ export function AccountSettingsPage() {
 
       <Card>
         <div className="flex items-center gap-3 mb-6">
-          <Users size={20} className="text-gray-500" />
-          <h2 className="text-lg font-semibold text-gray-900">Delegated Access</h2>
+          <Users size={20} className="text-slate-400" />
+          <h2 className="text-lg font-semibold text-white">Delegated Access</h2>
         </div>
-        <p className="text-sm text-gray-600 mb-4">
+        <p className="text-sm text-slate-300 mb-4">
           {account?.delegatedUserLimit == null
             ? 'Invite unlimited users with individual permissions.'
             : `Invite up to ${account.delegatedUserLimit} additional users with individual permissions.`}
@@ -168,10 +168,10 @@ export function AccountSettingsPage() {
           >
             Manage Invitations
           </Link>
-          <Link to="/shared-access" className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900">
+          <Link to="/shared-access" className="px-4 py-2 text-sm text-slate-300 hover:text-white">
             My Shared Access
           </Link>
-          <Link to="/firm" className="px-4 py-2 text-sm text-gray-600 hover:text-gray-900">
+          <Link to="/firm" className="px-4 py-2 text-sm text-slate-300 hover:text-white">
             Permissions & Firm Platform
           </Link>
         </div>
@@ -179,8 +179,8 @@ export function AccountSettingsPage() {
 
       <Card>
         <div className="flex items-center gap-3 mb-6">
-          <Bell size={20} className="text-gray-500" />
-          <h2 className="text-lg font-semibold text-gray-900">Notifications</h2>
+          <Bell size={20} className="text-slate-400" />
+          <h2 className="text-lg font-semibold text-white">Notifications</h2>
         </div>
         <div className="space-y-3">
           {[
@@ -192,7 +192,7 @@ export function AccountSettingsPage() {
             { key: 'autoDocumentAnalysis', label: 'Automatic document analysis' },
           ].map(({ key, label }) => (
             <label key={key} className="flex items-center justify-between">
-              <span className="text-sm text-gray-700">{label}</span>
+              <span className="text-sm text-slate-200">{label}</span>
               <input
                 type="checkbox"
                 checked={Boolean((account?.settings as Record<string, boolean>)?.[key] ?? true)}
@@ -203,7 +203,7 @@ export function AccountSettingsPage() {
                     settings: { ...account.settings, [key]: e.target.checked },
                   });
                 }}
-                className="rounded border-gray-300 text-amber-600 focus:ring-amber-500"
+                className="rounded border-white/10 text-amber-600 focus:ring-amber-500"
               />
             </label>
           ))}
@@ -220,18 +220,18 @@ export function AccountSettingsPage() {
 
       <Card>
         <div className="flex items-center gap-3 mb-4">
-          <Shield size={20} className="text-gray-500" />
-          <h2 className="text-lg font-semibold text-gray-900">Security & Legal</h2>
+          <Shield size={20} className="text-slate-400" />
+          <h2 className="text-lg font-semibold text-white">Security & Legal</h2>
         </div>
         <div className="flex flex-wrap gap-4 text-sm">
-          <Link to="/forgot-password" className="text-blue-600 hover:underline flex items-center gap-1">
+          <Link to="/forgot-password" className="text-gold-light hover:underline flex items-center gap-1">
             <Lock size={14} /> Change password
           </Link>
-          <Link to="/privacy" className="text-gray-600 hover:text-gray-900">Privacy Policy</Link>
-          <Link to="/terms" className="text-gray-600 hover:text-gray-900">Terms of Service</Link>
+          <Link to="/privacy" className="text-slate-300 hover:text-white">Privacy Policy</Link>
+          <Link to="/terms" className="text-slate-300 hover:text-white">Terms of Service</Link>
         </div>
         {account?.user.termsAcceptedAt && (
-          <p className="text-xs text-gray-400 mt-3">
+          <p className="text-xs text-slate-500 mt-3">
             Terms accepted {new Date(account.user.termsAcceptedAt).toLocaleDateString()}
           </p>
         )}

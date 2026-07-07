@@ -35,16 +35,16 @@ export function ClientPortalCourtDatesPage() {
 
   return (
     <div className="max-w-3xl space-y-6">
-      <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+      <h2 className="text-xl font-bold text-white flex items-center gap-2">
         <Calendar size={22} /> Court Dates
       </h2>
       {cases.length === 0 ? (
-        <p className="text-gray-500">No cases with scheduled hearings yet.</p>
+        <p className="text-slate-400">No cases with scheduled hearings yet.</p>
       ) : (
         cases.map((c) => (
-          <div key={c.caseId} className="bg-white rounded-xl border border-gray-200 p-5">
-            <h3 className="font-semibold text-gray-900">{c.title}</h3>
-            <p className="text-sm text-gray-500">{c.caseNumber}</p>
+          <div key={c.caseId} className="bg-white/5 rounded-xl border border-white/10 p-5">
+            <h3 className="font-semibold text-white">{c.title}</h3>
+            <p className="text-sm text-slate-400">{c.caseNumber}</p>
             {c.nextHearing && (
               <p className="mt-2 text-amber-700 font-medium">
                 Next hearing: {new Date(c.nextHearing).toLocaleDateString()}
@@ -67,17 +67,17 @@ export function ClientPortalMessagesPage() {
   const user = useAuthStore((s) => s.user);
   return (
     <div className="max-w-3xl space-y-4">
-      <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+      <h2 className="text-xl font-bold text-white flex items-center gap-2">
         <MessageSquare size={22} /> Secure Messages
       </h2>
-      <p className="text-gray-500">
+      <p className="text-slate-400">
         Open a case to view secure messages with your legal team.
       </p>
       <Link to="/cases" className="text-amber-600 hover:text-amber-700 font-medium">
         Go to My Cases
       </Link>
       {user?.email && (
-        <p className="text-sm text-gray-400">Signed in as {user.email}</p>
+        <p className="text-sm text-slate-500">Signed in as {user.email}</p>
       )}
     </div>
   );
@@ -86,10 +86,10 @@ export function ClientPortalMessagesPage() {
 export function ClientPortalDocumentsPage() {
   return (
     <div className="max-w-3xl space-y-4">
-      <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+      <h2 className="text-xl font-bold text-white flex items-center gap-2">
         <FileText size={22} /> Shared Documents
       </h2>
-      <p className="text-gray-500">
+      <p className="text-slate-400">
         Documents shared with you through disclosure packages appear in each case.
       </p>
       <Link to="/shared-access" className="text-amber-600 hover:text-amber-700 font-medium">
@@ -102,8 +102,8 @@ export function ClientPortalDocumentsPage() {
 export function ClientPortalEvidencePage() {
   return (
     <div className="max-w-3xl space-y-4">
-      <h2 className="text-xl font-bold text-gray-900">Evidence</h2>
-      <p className="text-gray-500">Select a case to view or upload evidence.</p>
+      <h2 className="text-xl font-bold text-white">Evidence</h2>
+      <p className="text-slate-400">Select a case to view or upload evidence.</p>
       <Link to="/cases" className="text-amber-600 hover:text-amber-700 font-medium">
         Browse Cases
       </Link>
@@ -114,8 +114,8 @@ export function ClientPortalEvidencePage() {
 export function ClientPortalTimelinePage() {
   return (
     <div className="max-w-3xl space-y-4">
-      <h2 className="text-xl font-bold text-gray-900">Case Timeline</h2>
-      <p className="text-gray-500">Timeline events are available within each case.</p>
+      <h2 className="text-xl font-bold text-white">Case Timeline</h2>
+      <p className="text-slate-400">Timeline events are available within each case.</p>
       <Link to="/cases" className="text-amber-600 hover:text-amber-700 font-medium">
         Open a Case
       </Link>
@@ -126,8 +126,8 @@ export function ClientPortalTimelinePage() {
 export function ClientPortalTasksPage() {
   return (
     <div className="max-w-3xl space-y-4">
-      <h2 className="text-xl font-bold text-gray-900">Your Tasks</h2>
-      <p className="text-gray-500">
+      <h2 className="text-xl font-bold text-white">Your Tasks</h2>
+      <p className="text-slate-400">
         Investigative suggestions and tasks from your dashboard are tracked per case.
       </p>
       <Link to="/client-portal/dashboard" className="text-amber-600 hover:text-amber-700 font-medium">
@@ -148,10 +148,10 @@ export function ClientPortalBillingPage() {
 
   return (
     <div className="max-w-3xl space-y-4">
-      <h2 className="text-xl font-bold text-gray-900">Billing</h2>
-      <div className="bg-white rounded-xl border border-gray-200 p-5">
-        <p className="text-sm text-gray-500">Subscription status</p>
-        <p className="text-lg font-semibold text-gray-900 capitalize">{status || 'Loading...'}</p>
+      <h2 className="text-xl font-bold text-white">Billing</h2>
+      <div className="bg-white/5 rounded-xl border border-white/10 p-5">
+        <p className="text-sm text-slate-400">Subscription status</p>
+        <p className="text-lg font-semibold text-white capitalize">{status || 'Loading...'}</p>
       </div>
       <Link to="/settings" className="text-amber-600 hover:text-amber-700 font-medium">
         Manage Account & Billing
@@ -163,7 +163,7 @@ export function ClientPortalBillingPage() {
 export function ClientPortalNotificationsPage() {
   return (
     <div className="max-w-3xl space-y-4">
-      <h2 className="text-xl font-bold text-gray-900 flex items-center gap-2">
+      <h2 className="text-xl font-bold text-white flex items-center gap-2">
         <Bell size={22} /> Notifications
       </h2>
       <Link to="/notifications" className="text-amber-600 hover:text-amber-700 font-medium">
@@ -176,8 +176,8 @@ export function ClientPortalNotificationsPage() {
 export function ClientPortalUploadsPage() {
   return (
     <div className="max-w-3xl space-y-4">
-      <h2 className="text-xl font-bold text-gray-900">Upload Evidence</h2>
-      <p className="text-gray-500">Upload evidence files from within a case evidence tab.</p>
+      <h2 className="text-xl font-bold text-white">Upload Evidence</h2>
+      <p className="text-slate-400">Upload evidence files from within a case evidence tab.</p>
       <Link to="/cases" className="text-amber-600 hover:text-amber-700 font-medium">
         Select Case to Upload
       </Link>

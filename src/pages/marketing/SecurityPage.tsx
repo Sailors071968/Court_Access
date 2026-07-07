@@ -81,7 +81,7 @@ export function SecurityPage() {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {SECURITY_FEATURES.map(({ icon: Icon, title, description }) => (
-              <div key={title} className="p-5 rounded-xl border border-slate-200 bg-white">
+              <div key={title} className="p-5 rounded-xl border border-slate-200 bg-white/5">
                 <div className="w-10 h-10 bg-emerald-100 rounded-lg flex items-center justify-center mb-3">
                   <Icon className="text-emerald-600" size={20} />
                 </div>

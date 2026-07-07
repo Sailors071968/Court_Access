@@ -56,7 +56,7 @@ export function CareersPage() {
           <h2 className="text-2xl font-bold text-slate-900 mb-8">Open Positions</h2>
           <div className="space-y-6">
             {OPEN_ROLES.map((role) => (
-              <div key={role.title} className="p-6 rounded-xl border border-slate-200 bg-white hover:border-amber-200 transition-colors">
+              <div key={role.title} className="p-6 rounded-xl border border-slate-200 bg-white/5 hover:border-amber-200 transition-colors">
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                   <div>
                     <h3 className="text-lg font-bold text-slate-900">{role.title}</h3>
@@ -86,7 +86,7 @@ export function CareersPage() {
           <h2 className="text-2xl font-bold text-slate-900 mb-8 text-center">Engineering Principles</h2>
           <div className="grid sm:grid-cols-3 gap-6">
             {VALUES.map(({ title, desc }) => (
-              <div key={title} className="p-5 rounded-xl bg-white border border-slate-200 text-center">
+              <div key={title} className="p-5 rounded-xl bg-white/5 border border-slate-200 text-center">
                 <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center mx-auto mb-3">
                   <Shield className="text-amber-600" size={20} />
                 </div>

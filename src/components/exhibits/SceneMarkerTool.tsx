@@ -116,7 +116,7 @@ export default function SceneMarkerTool({
           Evidence Markers ({markers.length})
         </h3>
         <svg
-          className={`w-4 h-4 text-gray-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+          className={`w-4 h-4 text-slate-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -129,7 +129,7 @@ export default function SceneMarkerTool({
         <div className="px-4 pb-4 border-t border-gray-700">
           {/* Quick Add Presets */}
           <div className="pt-3">
-            <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Quick Add</p>
+            <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">Quick Add</p>
             <div className="grid grid-cols-2 gap-1.5">
               {MARKER_PRESETS.map((preset) => (
                 <button
@@ -149,21 +149,21 @@ export default function SceneMarkerTool({
 
           {/* Custom Marker */}
           <div className="border-t border-gray-700 pt-3 mt-3">
-            <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Custom Marker</p>
+            <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">Custom Marker</p>
             <div className="space-y-2">
               <input
                 type="text"
                 placeholder="Marker label..."
                 value={customLabel}
                 onChange={(e) => setCustomLabel(e.target.value)}
-                className="w-full px-3 py-1.5 text-xs bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                className="w-full px-3 py-1.5 text-xs bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-500 focus:outline-none focus:border-gold-light"
                 onKeyDown={(e) => e.key === 'Enter' && handleCustomAdd()}
               />
               <div className="flex gap-2">
                 <select
                   value={customType}
                   onChange={(e) => setCustomType(e.target.value as 'pin' | 'number' | 'evidence')}
-                  className="flex-1 px-2 py-1.5 text-xs bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:border-blue-500"
+                  className="flex-1 px-2 py-1.5 text-xs bg-gray-700 border border-gray-600 rounded text-white focus:outline-none focus:border-gold-light"
                 >
                   <option value="pin">Pin Marker</option>
                   <option value="number">Number Marker</option>
@@ -186,7 +186,7 @@ export default function SceneMarkerTool({
               <button
                 onClick={handleCustomAdd}
                 disabled={!customLabel.trim()}
-                className="w-full py-1.5 text-xs bg-blue-600 text-white rounded hover:bg-blue-500 disabled:bg-gray-600 disabled:text-gray-400 transition-colors"
+                className="w-full py-1.5 text-xs bg-blue-600 text-white rounded hover:bg-blue-500 disabled:bg-gray-600 disabled:text-slate-500 transition-colors"
               >
                 Add Marker
               </button>
@@ -197,7 +197,7 @@ export default function SceneMarkerTool({
           {markers.length > 0 && (
             <div className="border-t border-gray-700 pt-3 mt-3">
               <div className="flex items-center justify-between mb-2">
-                <p className="text-xs text-gray-500 uppercase tracking-wider">Placed Markers</p>
+                <p className="text-xs text-slate-400 uppercase tracking-wider">Placed Markers</p>
                 <button
                   onClick={onClearAll}
                   className="text-xs text-red-400 hover:text-red-300 transition-colors"
@@ -217,13 +217,13 @@ export default function SceneMarkerTool({
                         style={{ backgroundColor: marker.color }}
                       />
                       <span className="text-xs text-gray-300">
-                        {marker.number != null && <span className="text-gray-500 mr-1">#{marker.number}</span>}
+                        {marker.number != null && <span className="text-slate-400 mr-1">#{marker.number}</span>}
                         {marker.label}
                       </span>
                     </div>
                     <button
                       onClick={() => onRemoveMarker(marker.id)}
-                      className="text-gray-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all"
+                      className="text-slate-400 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all"
                     >
                       <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

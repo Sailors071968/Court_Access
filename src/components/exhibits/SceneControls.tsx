@@ -52,7 +52,7 @@ function ToggleSwitch({
         }`}
       >
         <span
-          className={`inline-block h-4 w-4 rounded-full bg-white transition-transform duration-200 ${
+          className={`inline-block h-4 w-4 rounded-full bg-white/5 transition-transform duration-200 ${
             checked ? 'translate-x-6' : 'translate-x-1'
           }`}
         />
@@ -134,7 +134,7 @@ export default function SceneControls({
           Scene Objects
         </h3>
         <svg
-          className={`w-4 h-4 text-gray-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+          className={`w-4 h-4 text-slate-500 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -147,7 +147,7 @@ export default function SceneControls({
       {isExpanded && (
         <div className="px-4 pb-4 space-y-1 border-t border-gray-700">
           <div className="pt-2">
-            <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Vegetation</p>
+            <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">Vegetation</p>
             <ToggleSwitch
               label="Include Trees"
               checked={settings.showTrees}
@@ -161,7 +161,7 @@ export default function SceneControls({
           </div>
 
           <div className="border-t border-gray-700 pt-2">
-            <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Vehicles & People</p>
+            <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">Vehicles & People</p>
             <ToggleSwitch
               label="Include Vehicles"
               checked={settings.showVehicles}
@@ -175,7 +175,7 @@ export default function SceneControls({
           </div>
 
           <div className="border-t border-gray-700 pt-2">
-            <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Infrastructure</p>
+            <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">Infrastructure</p>
             <ToggleSwitch
               label="Include Streetlights"
               checked={settings.showStreetlights}
@@ -198,7 +198,7 @@ export default function SceneControls({
 
           {/* Quick presets */}
           <div className="border-t border-gray-700 pt-3">
-            <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Quick Presets</p>
+            <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">Quick Presets</p>
             <div className="flex gap-2">
               <button
                 onClick={() => onSettingsChange({

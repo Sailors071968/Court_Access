@@ -64,7 +64,7 @@ function IntegrityBadge({ status }: { status: string }) {
     PASS: { icon: <CheckCircle size={14} />, className: 'bg-green-100 text-green-800' },
     FAIL: { icon: <AlertTriangle size={14} />, className: 'bg-red-100 text-red-800' },
     PARTIAL: { icon: <AlertTriangle size={14} />, className: 'bg-amber-100 text-amber-800' },
-    UNKNOWN: { icon: <HelpCircle size={14} />, className: 'bg-gray-100 text-gray-700' },
+    UNKNOWN: { icon: <HelpCircle size={14} />, className: 'bg-white/10 text-slate-200' },
   };
   const s = styles[status] ?? styles.UNKNOWN;
   return (
@@ -120,18 +120,18 @@ export function RepositoryIntegrityDashboard() {
     <div className="max-w-7xl mx-auto space-y-6 p-6">
       <header className="flex items-start justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
             <Database size={24} />
             Repository Integrity Dashboard
           </h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-slate-400 mt-1">
             California legislative repositories — integrity, coverage, unknowns
           </p>
         </div>
         <button
           type="button"
           onClick={() => void load()}
-          className="flex items-center gap-2 px-3 py-2 text-sm border border-gray-300 rounded-lg hover:bg-gray-50"
+          className="flex items-center gap-2 px-3 py-2 text-sm border border-white/10 rounded-lg hover:bg-white/5"
         >
           <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
           Refresh
@@ -157,13 +157,13 @@ export function RepositoryIntegrityDashboard() {
       )}
 
       <Card padding="none">
-        <div className="px-6 py-4 border-b border-gray-200">
-          <h3 className="text-lg font-semibold text-gray-900">Repository Status</h3>
+        <div className="px-6 py-4 border-b border-white/10">
+          <h3 className="text-lg font-semibold text-white">Repository Status</h3>
         </div>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="text-left text-gray-500 border-b bg-gray-50">
+              <tr className="text-left text-slate-400 border-b bg-white/5">
                 <th className="px-4 py-3">Repository</th>
                 <th className="px-4 py-3">Records</th>
                 <th className="px-4 py-3">Integrity</th>
@@ -176,18 +176,18 @@ export function RepositoryIntegrityDashboard() {
             </thead>
             <tbody>
               {data.repositories.map((repo) => (
-                <tr key={repo.name} className="border-b border-gray-50 hover:bg-gray-50">
+                <tr key={repo.name} className="border-b border-gray-50 hover:bg-white/5">
                   <td className="px-4 py-3 font-medium">{repo.displayName}</td>
                   <td className="px-4 py-3">{repo.recordCount}</td>
                   <td className="px-4 py-3">
                     <IntegrityBadge status={repo.integrity} />
-                    <p className="text-xs text-gray-400 mt-0.5">{repo.integrityDetail}</p>
+                    <p className="text-xs text-slate-500 mt-0.5">{repo.integrityDetail}</p>
                   </td>
                   <td className="px-4 py-3">
                     {repo.coverage ? (
                       <span>{repo.coverage.statutesCovered} statutes</span>
                     ) : (
-                      <span className="text-gray-400">—</span>
+                      <span className="text-slate-500">—</span>
                     )}
                   </td>
                   <td className="px-4 py-3">
@@ -198,7 +198,7 @@ export function RepositoryIntegrityDashboard() {
                     )}
                   </td>
                   <td className="px-4 py-3"><IntegrityBadge status={repo.auditStatus} /></td>
-                  <td className="px-4 py-3 text-gray-500">
+                  <td className="px-4 py-3 text-slate-400">
                     {repo.lastSynchronization ? new Date(repo.lastSynchronization).toLocaleString() : 'UNKNOWN'}
                   </td>
                   <td className="px-4 py-3">{repo.completionPercent}%</td>
@@ -213,21 +213,21 @@ export function RepositoryIntegrityDashboard() {
         <Card>
           <CardHeader title="Coverage Analytics" />
           <dl className="grid grid-cols-2 gap-2 text-sm">
-            <div><dt className="text-gray-500">Codes Discovered</dt><dd>{data.coverageAnalytics.codesDiscovered}/{data.coverageAnalytics.codesTotal}</dd></div>
-            <div><dt className="text-gray-500">Sections Discovered</dt><dd>{data.coverageAnalytics.sectionsDiscovered}</dd></div>
-            <div><dt className="text-gray-500">Elements</dt><dd>{data.coverageAnalytics.offenseElements}</dd></div>
-            <div><dt className="text-gray-500">CALCRIM</dt><dd>{data.coverageAnalytics.calcrimMappings}</dd></div>
-            <div><dt className="text-gray-500">Authority Coverage</dt><dd>{data.coverageAnalytics.authorityCoveragePercent}%</dd></div>
-            <div><dt className="text-gray-500">Parsing Failures</dt><dd>{data.parsingFailures}</dd></div>
+            <div><dt className="text-slate-400">Codes Discovered</dt><dd>{data.coverageAnalytics.codesDiscovered}/{data.coverageAnalytics.codesTotal}</dd></div>
+            <div><dt className="text-slate-400">Sections Discovered</dt><dd>{data.coverageAnalytics.sectionsDiscovered}</dd></div>
+            <div><dt className="text-slate-400">Elements</dt><dd>{data.coverageAnalytics.offenseElements}</dd></div>
+            <div><dt className="text-slate-400">CALCRIM</dt><dd>{data.coverageAnalytics.calcrimMappings}</dd></div>
+            <div><dt className="text-slate-400">Authority Coverage</dt><dd>{data.coverageAnalytics.authorityCoveragePercent}%</dd></div>
+            <div><dt className="text-slate-400">Parsing Failures</dt><dd>{data.parsingFailures}</dd></div>
           </dl>
         </Card>
         <Card>
           <CardHeader title="Extraction Audit" />
           <dl className="grid grid-cols-2 gap-2 text-sm">
-            <div><dt className="text-gray-500">Total</dt><dd>{data.auditSummary.total}</dd></div>
-            <div><dt className="text-gray-500">Success</dt><dd className="text-green-700">{data.auditSummary.success}</dd></div>
-            <div><dt className="text-gray-500">Rejected</dt><dd className="text-red-700">{data.auditSummary.rejected}</dd></div>
-            <div><dt className="text-gray-500">Partial</dt><dd className="text-amber-700">{data.auditSummary.partial}</dd></div>
+            <div><dt className="text-slate-400">Total</dt><dd>{data.auditSummary.total}</dd></div>
+            <div><dt className="text-slate-400">Success</dt><dd className="text-green-700">{data.auditSummary.success}</dd></div>
+            <div><dt className="text-slate-400">Rejected</dt><dd className="text-red-700">{data.auditSummary.rejected}</dd></div>
+            <div><dt className="text-slate-400">Partial</dt><dd className="text-amber-700">{data.auditSummary.partial}</dd></div>
           </dl>
         </Card>
       </div>

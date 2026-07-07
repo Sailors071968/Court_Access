@@ -52,9 +52,9 @@ export function AccessibilityPage() {
           </p>
           <div className="grid sm:grid-cols-2 gap-6 mb-12">
             {COMMITMENTS.map(({ icon: Icon, title, description }) => (
-              <div key={title} className="p-5 rounded-xl border border-slate-200 bg-white">
+              <div key={title} className="p-5 rounded-xl border border-slate-200 bg-white/5">
                 <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center mb-3">
-                  <Icon className="text-blue-600" size={20} />
+                  <Icon className="text-gold-light" size={20} />
                 </div>
                 <h2 className="font-semibold text-slate-900 mb-2">{title}</h2>
                 <p className="text-sm text-slate-600 leading-relaxed">{description}</p>

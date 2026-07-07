@@ -171,7 +171,7 @@ function ReportBlockView({ block, onDrillCitation }: { block: ReportBlock; onDri
           </thead>
           <tbody>
             {block.rows.map((row, ri) => (
-              <tr key={ri} className="odd:bg-white even:bg-slate-50/60">
+              <tr key={ri} className="odd:bg-white/5 even:bg-slate-50/60">
                 {row.map((cell, ci) => <td key={ci} className="py-2 px-3 text-slate-700 border-b border-slate-100 align-top">{cell || '—'}</td>)}
               </tr>
             ))}

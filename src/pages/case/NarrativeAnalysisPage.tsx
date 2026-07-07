@@ -44,7 +44,7 @@ function ValidationBadge({ status }: { status: string }) {
     supported: { label: 'Supported', bg: 'bg-green-100', text: 'text-green-800', Icon: CheckCircle },
     contradicted: { label: 'Contradicted', bg: 'bg-red-100', text: 'text-red-800', Icon: XCircle },
     unverified: { label: 'Unverified', bg: 'bg-yellow-100', text: 'text-yellow-800', Icon: HelpCircle },
-    pending: { label: 'Pending', bg: 'bg-gray-100', text: 'text-gray-600', Icon: HelpCircle },
+    pending: { label: 'Pending', bg: 'bg-white/10', text: 'text-slate-300', Icon: HelpCircle },
   };
   const config = configs[status] || configs.pending;
   const { Icon } = config;
@@ -81,7 +81,7 @@ function ConfidenceBar({ confidence }: { confidence: number }) {
       <div className="h-1.5 w-20 rounded-full bg-gray-200">
         <div className={`h-1.5 rounded-full ${color}`} style={{ width: `${pct}%` }} />
       </div>
-      <span className="text-xs text-gray-500">{pct}%</span>
+      <span className="text-xs text-slate-400">{pct}%</span>
     </div>
   );
 }
@@ -95,51 +95,51 @@ function ClaimCard({ claim }: { claim: ApiNarrativeClaim }) {
       ? 'border-red-300'
       : validationStatus === 'supported'
         ? 'border-green-300'
-        : 'border-gray-200';
+        : 'border-white/10';
 
   return (
-    <div className={`rounded-lg border-2 ${borderColor} bg-white p-4 shadow-sm`}>
+    <div className={`rounded-lg border-2 ${borderColor} bg-white/5 p-4 shadow-sm`}>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0 flex-1">
           <div className="mb-2 flex flex-wrap items-center gap-2">
             <ValidationBadge status={validationStatus} />
             <ConfidenceBar confidence={claim.confidence} />
           </div>
-          <p className="text-sm text-gray-800">{claim.claimText}</p>
+          <p className="text-sm text-slate-100">{claim.claimText}</p>
         </div>
         <button
           onClick={() => setExpanded(!expanded)}
-          className="flex-shrink-0 rounded p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
+          className="flex-shrink-0 rounded p-1 text-slate-500 hover:bg-white/10 hover:text-slate-300"
         >
           {expanded ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
         </button>
       </div>
 
       {expanded && (
-        <div className="mt-3 space-y-2 border-t border-gray-100 pt-3">
+        <div className="mt-3 space-y-2 border-t border-white/10 pt-3">
           <div className="grid grid-cols-2 gap-3 text-xs">
-            <div className="flex items-center gap-1.5 text-gray-600">
+            <div className="flex items-center gap-1.5 text-slate-300">
               <User className="h-3.5 w-3.5" />
               <span className="font-medium">Subject:</span> {claim.subject}
             </div>
-            <div className="flex items-center gap-1.5 text-gray-600">
+            <div className="flex items-center gap-1.5 text-slate-300">
               <Crosshair className="h-3.5 w-3.5" />
               <span className="font-medium">Action:</span> {claim.action}
             </div>
             {claim.object && (
-              <div className="flex items-center gap-1.5 text-gray-600">
+              <div className="flex items-center gap-1.5 text-slate-300">
                 <Target className="h-3.5 w-3.5" />
                 <span className="font-medium">Object:</span> {claim.object}
               </div>
             )}
             {claim.target && (
-              <div className="flex items-center gap-1.5 text-gray-600">
+              <div className="flex items-center gap-1.5 text-slate-300">
                 <Target className="h-3.5 w-3.5" />
                 <span className="font-medium">Target:</span> {claim.target}
               </div>
             )}
             {claim.timestampReference && (
-              <div className="col-span-2 flex items-center gap-1.5 text-gray-600">
+              <div className="col-span-2 flex items-center gap-1.5 text-slate-300">
                 <span className="font-medium">Time Ref:</span> {claim.timestampReference}
               </div>
             )}
@@ -153,7 +153,7 @@ function ClaimCard({ claim }: { claim: ApiNarrativeClaim }) {
           )}
 
           {claim.validation?.reasoning && (
-            <div className="rounded bg-gray-50 px-3 py-2 text-xs text-gray-600">
+            <div className="rounded bg-white/5 px-3 py-2 text-xs text-slate-300">
               <span className="font-medium">Analysis:</span> {claim.validation.reasoning}
             </div>
           )}
@@ -168,17 +168,17 @@ function ImpeachmentCard({ candidate }: { candidate: ApiImpeachmentCandidate }) 
     <div className="rounded-lg border-2 border-red-200 bg-red-50 p-4 shadow-sm">
       <div className="mb-2 flex items-center gap-2">
         <SeverityBadge severity={candidate.severity} />
-        <span className="text-xs font-medium text-gray-500">{candidate.contradictionType}</span>
+        <span className="text-xs font-medium text-slate-400">{candidate.contradictionType}</span>
         <ConfidenceBar confidence={candidate.confidence} />
       </div>
 
       <div className="mb-3 space-y-2">
         <div>
-          <p className="text-xs font-semibold text-gray-500">Police Claim</p>
-          <p className="text-sm text-gray-800">{candidate.claimText}</p>
+          <p className="text-xs font-semibold text-slate-400">Police Claim</p>
+          <p className="text-sm text-slate-100">{candidate.claimText}</p>
         </div>
         <div>
-          <p className="text-xs font-semibold text-gray-500">Contradicting Evidence</p>
+          <p className="text-xs font-semibold text-slate-400">Contradicting Evidence</p>
           <p className="text-sm text-red-700">{candidate.contradictingEvidence}</p>
         </div>
       </div>
@@ -198,10 +198,10 @@ function ImpeachmentCard({ candidate }: { candidate: ApiImpeachmentCandidate }) 
 
 function EmptyState({ onAnalyze, loading }: { onAnalyze: () => void; loading: boolean }) {
   return (
-    <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-300 py-16 text-center">
-      <FileText className="mb-4 h-12 w-12 text-gray-400" />
-      <h3 className="mb-2 text-lg font-semibold text-gray-700">No Narrative Analysis Yet</h3>
-      <p className="mb-6 max-w-md text-sm text-gray-500">
+    <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-white/10 py-16 text-center">
+      <FileText className="mb-4 h-12 w-12 text-slate-500" />
+      <h3 className="mb-2 text-lg font-semibold text-slate-200">No Narrative Analysis Yet</h3>
+      <p className="mb-6 max-w-md text-sm text-slate-400">
         Upload police reports, supplemental reports, or arrest affidavits, then run the Narrative
         Deconstruction Engine to automatically extract claims and test them against your evidence.
       </p>
@@ -320,8 +320,8 @@ export function NarrativeAnalysisPage() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h2 className="text-xl font-bold text-gray-900">Narrative Analysis</h2>
-          <p className="text-sm text-gray-500">
+          <h2 className="text-xl font-bold text-white">Narrative Analysis</h2>
+          <p className="text-sm text-slate-400">
             Deconstruct police narratives into testable claims and expose contradictions
           </p>
         </div>
@@ -341,9 +341,9 @@ export function NarrativeAnalysisPage() {
         <>
           {/* Stats Bar */}
           <div className="grid grid-cols-2 gap-3 sm:grid-cols-5">
-            <div className="rounded-lg border border-gray-200 bg-white p-3 text-center">
-              <p className="text-2xl font-bold text-gray-900">{claims.length}</p>
-              <p className="text-xs text-gray-500">Total Claims</p>
+            <div className="rounded-lg border border-white/10 bg-white/5 p-3 text-center">
+              <p className="text-2xl font-bold text-white">{claims.length}</p>
+              <p className="text-xs text-slate-400">Total Claims</p>
             </div>
             <div className="rounded-lg border border-green-200 bg-green-50 p-3 text-center">
               <p className="text-2xl font-bold text-green-700">{supported}</p>
@@ -357,9 +357,9 @@ export function NarrativeAnalysisPage() {
               <p className="text-2xl font-bold text-yellow-700">{unverified}</p>
               <p className="text-xs text-yellow-600">Unverified</p>
             </div>
-            <div className="rounded-lg border border-gray-200 bg-gray-50 p-3 text-center">
-              <p className="text-2xl font-bold text-gray-600">{pending}</p>
-              <p className="text-xs text-gray-500">Pending</p>
+            <div className="rounded-lg border border-white/10 bg-white/5 p-3 text-center">
+              <p className="text-2xl font-bold text-slate-300">{pending}</p>
+              <p className="text-xs text-slate-400">Pending</p>
             </div>
           </div>
 
@@ -385,14 +385,14 @@ export function NarrativeAnalysisPage() {
           )}
 
           {/* Tabs */}
-          <div className="border-b border-gray-200">
+          <div className="border-b border-white/10">
             <nav className="-mb-px flex gap-6">
               <button
                 onClick={() => setActiveTab('claims')}
                 className={`border-b-2 pb-3 text-sm font-medium ${
                   activeTab === 'claims'
-                    ? 'border-blue-600 text-blue-600'
-                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                    ? 'border-blue-600 text-gold-light'
+                    : 'border-transparent text-slate-400 hover:border-white/10 hover:text-slate-200'
                 }`}
               >
                 All Claims ({claims.length})
@@ -402,7 +402,7 @@ export function NarrativeAnalysisPage() {
                 className={`border-b-2 pb-3 text-sm font-medium ${
                   activeTab === 'contradictions'
                     ? 'border-red-600 text-red-600'
-                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                    : 'border-transparent text-slate-400 hover:border-white/10 hover:text-slate-200'
                 }`}
               >
                 Contradictions ({contradictions.length})
@@ -412,7 +412,7 @@ export function NarrativeAnalysisPage() {
                 className={`border-b-2 pb-3 text-sm font-medium ${
                   activeTab === 'impeachment'
                     ? 'border-amber-600 text-amber-600'
-                    : 'border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700'
+                    : 'border-transparent text-slate-400 hover:border-white/10 hover:text-slate-200'
                 }`}
               >
                 Impeachment ({impeachmentCandidates.length})
@@ -427,7 +427,7 @@ export function NarrativeAnalysisPage() {
               <div className="flex items-center gap-3">
                 <button
                   onClick={() => setShowFilters(!showFilters)}
-                  className="inline-flex items-center gap-1.5 rounded border border-gray-300 bg-white px-3 py-1.5 text-xs font-medium text-gray-600 hover:bg-gray-50"
+                  className="inline-flex items-center gap-1.5 rounded border border-white/10 bg-white/5 px-3 py-1.5 text-xs font-medium text-slate-300 hover:bg-white/5"
                 >
                   <Filter className="h-3.5 w-3.5" />
                   Filters
@@ -435,19 +435,19 @@ export function NarrativeAnalysisPage() {
                 {statusFilter !== 'all' && (
                   <button
                     onClick={() => setStatusFilter('all')}
-                    className="text-xs text-blue-600 hover:underline"
+                    className="text-xs text-gold-light hover:underline"
                   >
                     Clear filter
                   </button>
                 )}
-                <span className="text-xs text-gray-400">
+                <span className="text-xs text-slate-500">
                   Showing {filteredClaims.length} of {claims.length} claims
                 </span>
               </div>
 
               {showFilters && (
-                <div className="rounded-lg border border-gray-200 bg-gray-50 p-3">
-                  <p className="mb-2 text-xs font-medium text-gray-600">Filter by Status</p>
+                <div className="rounded-lg border border-white/10 bg-white/5 p-3">
+                  <p className="mb-2 text-xs font-medium text-slate-300">Filter by Status</p>
                   <div className="flex flex-wrap gap-2">
                     {['all', 'supported', 'contradicted', 'unverified', 'pending'].map((s) => (
                       <button
@@ -456,7 +456,7 @@ export function NarrativeAnalysisPage() {
                         className={`rounded-full px-3 py-1 text-xs font-medium ${
                           statusFilter === s
                             ? 'bg-blue-600 text-white'
-                            : 'bg-white text-gray-600 hover:bg-gray-100'
+                            : 'bg-white/5 text-slate-300 hover:bg-white/10'
                         }`}
                       >
                         {s.charAt(0).toUpperCase() + s.slice(1)}
@@ -472,7 +472,7 @@ export function NarrativeAnalysisPage() {
                   <ClaimCard key={claim.claimId} claim={claim} />
                 ))}
                 {filteredClaims.length === 0 && (
-                  <p className="py-8 text-center text-sm text-gray-500">
+                  <p className="py-8 text-center text-sm text-slate-400">
                     No claims match the current filter.
                   </p>
                 )}
@@ -486,12 +486,12 @@ export function NarrativeAnalysisPage() {
               {contradictions.length === 0 ? (
                 <div className="py-12 text-center">
                   <CheckCircle className="mx-auto mb-3 h-10 w-10 text-green-400" />
-                  <p className="text-sm font-medium text-gray-600">No contradictions detected</p>
-                  <p className="text-xs text-gray-400">All verified claims are consistent with the evidence</p>
+                  <p className="text-sm font-medium text-slate-300">No contradictions detected</p>
+                  <p className="text-xs text-slate-500">All verified claims are consistent with the evidence</p>
                 </div>
               ) : (
                 contradictions.map((c) => (
-                  <div key={c.validationId} className="rounded-lg border-2 border-red-200 bg-white p-4">
+                  <div key={c.validationId} className="rounded-lg border-2 border-red-200 bg-white/5 p-4">
                     <div className="mb-2 flex items-center gap-2">
                       <XCircle className="h-4 w-4 text-red-500" />
                       <span className="text-xs font-semibold text-red-700">CONTRADICTION</span>
@@ -499,8 +499,8 @@ export function NarrativeAnalysisPage() {
                     </div>
                     {c.claim && (
                       <div className="mb-2">
-                        <p className="text-sm text-gray-800">{c.claim.claimText}</p>
-                        <p className="mt-1 text-xs text-gray-500">
+                        <p className="text-sm text-slate-100">{c.claim.claimText}</p>
+                        <p className="mt-1 text-xs text-slate-400">
                           {c.claim.subject} — {c.claim.action}
                           {c.claim.object ? ` → ${c.claim.object}` : ''}
                         </p>
@@ -520,17 +520,17 @@ export function NarrativeAnalysisPage() {
             <div className="space-y-4">
               {impeachmentCandidates.length === 0 ? (
                 <div className="py-12 text-center">
-                  <Shield className="mx-auto mb-3 h-10 w-10 text-gray-400" />
-                  <p className="text-sm font-medium text-gray-600">No impeachment candidates</p>
-                  <p className="text-xs text-gray-400">
+                  <Shield className="mx-auto mb-3 h-10 w-10 text-slate-500" />
+                  <p className="text-sm font-medium text-slate-300">No impeachment candidates</p>
+                  <p className="text-xs text-slate-500">
                     Run narrative analysis to discover impeachment opportunities
                   </p>
                 </div>
               ) : (
                 <>
                   {/* Severity Summary */}
-                  <div className="flex items-center gap-4 rounded-lg border border-gray-200 bg-white p-3">
-                    <span className="text-xs font-medium text-gray-500">By Severity:</span>
+                  <div className="flex items-center gap-4 rounded-lg border border-white/10 bg-white/5 p-3">
+                    <span className="text-xs font-medium text-slate-400">By Severity:</span>
                     <span className="inline-flex items-center gap-1 text-xs">
                       <span className="h-2 w-2 rounded-full bg-red-600" />
                       High: {severityCounts.high}

@@ -145,7 +145,7 @@ function ProsecutorFeatures() {
   ];
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
@@ -157,7 +157,7 @@ function ProsecutorFeatures() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((f) => (
-            <div key={f.title} className="bg-white rounded-2xl shadow-md border border-slate-200 p-8 hover:shadow-lg transition-shadow">
+            <div key={f.title} className="bg-white/5 rounded-2xl shadow-md border border-slate-200 p-8 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center mb-6">
                 <f.icon className="text-blue-400" size={24} />
               </div>
@@ -198,9 +198,9 @@ function ProsecutorSecurity() {
             { icon: FileText, label: 'Audit trail logging' },
             { icon: Star, label: 'CJIS compatibility preparation' },
           ].map((item) => (
-            <div key={item.label} className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 text-center">
+            <div key={item.label} className="bg-white/5 rounded-xl shadow-sm border border-slate-200 p-6 text-center">
               <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mx-auto mb-4">
-                <item.icon className="text-blue-600" size={22} />
+                <item.icon className="text-gold-light" size={22} />
               </div>
               <p className="text-sm font-medium text-slate-800">{item.label}</p>
             </div>
@@ -265,7 +265,7 @@ function ProsecutorFooter() {
 
 export function ForProsecutorsPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white/5">
       <ProsecutorNav />
       <ProsecutorHero />
       <ProsecutorFeatures />

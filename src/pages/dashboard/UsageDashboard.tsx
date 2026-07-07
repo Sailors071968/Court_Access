@@ -74,14 +74,14 @@ function UsageProgressBar({
       ? 'text-red-600'
       : warningLevel === 'approaching'
         ? 'text-amber-600'
-        : 'text-gray-700';
+        : 'text-slate-200';
 
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           {icon}
-          <span className="text-sm font-medium text-gray-700">{label}</span>
+          <span className="text-sm font-medium text-slate-200">{label}</span>
         </div>
         <span className={`text-sm font-bold ${textColor}`}>
           {used.toLocaleString()} / {limit.toLocaleString()} {unit}
@@ -93,7 +93,7 @@ function UsageProgressBar({
           style={{ width: `${Math.min(percentUsed, 100)}%` }}
         />
       </div>
-      <div className="flex items-center justify-between text-xs text-gray-500">
+      <div className="flex items-center justify-between text-xs text-slate-400">
         <span>{percentUsed}% used</span>
         <span>{(limit - used).toLocaleString()} remaining</span>
       </div>
@@ -153,15 +153,15 @@ function PurchaseModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-      <div className="bg-white rounded-xl shadow-2xl max-w-md w-full mx-4 p-6">
+      <div className="bg-white/5 rounded-xl shadow-2xl max-w-md w-full mx-4 p-6">
         <div className="flex items-center justify-between mb-4">
-          <h3 className="text-lg font-bold text-gray-900">Purchase AI Credits</h3>
-          <button onClick={onClose} className="text-gray-400 hover:text-gray-600">
+          <h3 className="text-lg font-bold text-white">Purchase AI Credits</h3>
+          <button onClick={onClose} className="text-slate-500 hover:text-slate-300">
             <X size={20} />
           </button>
         </div>
 
-        <p className="text-sm text-gray-600 mb-4">
+        <p className="text-sm text-slate-300 mb-4">
           Purchased credits roll over for 90 days and are consumed before monthly credits.
         </p>
 
@@ -173,19 +173,19 @@ function PurchaseModal({
               className={`w-full flex items-center justify-between p-4 rounded-lg border-2 transition-all ${
                 selectedPack === pack.packId
                   ? 'border-blue-500 bg-blue-50'
-                  : 'border-gray-200 hover:border-gray-300'
+                  : 'border-white/10 hover:border-white/10'
               }`}
             >
               <div className="flex items-center gap-3">
-                <Zap size={20} className={selectedPack === pack.packId ? 'text-blue-600' : 'text-gray-400'} />
+                <Zap size={20} className={selectedPack === pack.packId ? 'text-gold-light' : 'text-slate-500'} />
                 <div className="text-left">
-                  <p className="font-medium text-gray-900">{pack.description}</p>
-                  <p className="text-xs text-gray-500">
+                  <p className="font-medium text-white">{pack.description}</p>
+                  <p className="text-xs text-slate-400">
                     ${(pack.priceCents / pack.credits).toFixed(0)}c per credit
                   </p>
                 </div>
               </div>
-              <span className="text-lg font-bold text-gray-900">
+              <span className="text-lg font-bold text-white">
                 ${(pack.priceCents / 100).toFixed(0)}
               </span>
             </button>
@@ -256,7 +256,7 @@ export function UsageDashboard() {
     return (
       <div className="max-w-4xl mx-auto text-center py-20">
         <TrendingUp size={48} className="mx-auto mb-3 text-gray-300" />
-        <p className="text-sm text-gray-500">{isLoading ? 'Loading usage data...' : 'No usage data available yet.'}</p>
+        <p className="text-sm text-slate-400">{isLoading ? 'Loading usage data...' : 'No usage data available yet.'}</p>
       </div>
     );
   }
@@ -290,8 +290,8 @@ export function UsageDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Usage & Billing</h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-white">Usage & Billing</h1>
+          <p className="text-sm text-slate-400 mt-1">
             {usage.plan.name} Plan — {daysLeft} days remaining in billing period
           </p>
         </div>
@@ -311,11 +311,11 @@ export function UsageDashboard() {
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-              <TrendingUp size={20} className="text-blue-600" />
+              <TrendingUp size={20} className="text-gold-light" />
             </div>
             <div>
-              <h3 className="font-semibold text-gray-900">{usage.plan.name} Plan</h3>
-              <p className="text-sm text-gray-500">
+              <h3 className="font-semibold text-white">{usage.plan.name} Plan</h3>
+              <p className="text-sm text-slate-400">
                 ${(usage.plan.priceCents / 100).toFixed(0)}/month
               </p>
             </div>
@@ -323,7 +323,7 @@ export function UsageDashboard() {
           <button
             onClick={() => void handleManageBilling()}
             disabled={portalLoading}
-            className="text-sm text-blue-600 hover:text-blue-700 font-medium"
+            className="text-sm text-gold-light hover:text-gold-bright font-medium"
           >
             {portalLoading ? 'Opening portal...' : 'Manage Billing'}
           </button>
@@ -359,26 +359,26 @@ export function UsageDashboard() {
 
       {/* Credit Usage Breakdown */}
       <Card>
-        <h3 className="font-semibold text-gray-900 mb-4">Credit Usage by Analysis Type</h3>
-        <p className="text-sm text-gray-500">Credit breakdown will appear as you use AI features.</p>
+        <h3 className="font-semibold text-white mb-4">Credit Usage by Analysis Type</h3>
+        <p className="text-sm text-slate-400">Credit breakdown will appear as you use AI features.</p>
       </Card>
 
       {/* Credit Pack Pricing */}
       <Card>
         <div className="flex items-center justify-between mb-4">
-          <h3 className="font-semibold text-gray-900">Credit Pack Add-ons</h3>
-          <span className="text-xs text-gray-500">Purchased credits roll over for 90 days</span>
+          <h3 className="font-semibold text-white">Credit Pack Add-ons</h3>
+          <span className="text-xs text-slate-400">Purchased credits roll over for 90 days</span>
         </div>
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {creditPacks.map((pack) => (
             <button
               key={pack.packId}
               onClick={() => setShowPurchaseModal(true)}
-              className="p-4 border border-gray-200 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-all text-center"
+              className="p-4 border border-white/10 rounded-lg hover:border-blue-300 hover:bg-blue-50 transition-all text-center"
             >
-              <p className="text-2xl font-bold text-gray-900">{pack.credits}</p>
-              <p className="text-xs text-gray-500 mb-2">credits</p>
-              <p className="text-sm font-semibold text-blue-600">
+              <p className="text-2xl font-bold text-white">{pack.credits}</p>
+              <p className="text-xs text-slate-400 mb-2">credits</p>
+              <p className="text-sm font-semibold text-gold-light">
                 ${(pack.priceCents / 100).toFixed(0)}
               </p>
             </button>

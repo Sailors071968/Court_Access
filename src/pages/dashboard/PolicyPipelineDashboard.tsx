@@ -119,7 +119,7 @@ export function PolicyPipelineDashboard() {
 
   const statusBadge = (status: string) => {
     const colors: Record<string, string> = {
-      pending: 'bg-gray-100 text-gray-700',
+      pending: 'bg-white/10 text-slate-200',
       in_progress: 'bg-blue-100 text-blue-700',
       completed: 'bg-green-100 text-green-700',
       failed: 'bg-red-100 text-red-700',
@@ -127,7 +127,7 @@ export function PolicyPipelineDashboard() {
     };
     return (
       <span
-        className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${colors[status] ?? 'bg-gray-100 text-gray-700'}`}
+        className={`inline-flex items-center px-2 py-0.5 rounded-full text-xs font-medium ${colors[status] ?? 'bg-white/10 text-slate-200'}`}
       >
         {status}
       </span>
@@ -142,10 +142,10 @@ export function PolicyPipelineDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">
+          <h1 className="text-2xl font-bold text-white">
             Policy Acquisition Pipeline
           </h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <p className="text-sm text-slate-400 mt-1">
             California Law Enforcement Agency Registry + Policy Collection
           </p>
         </div>
@@ -227,8 +227,8 @@ export function PolicyPipelineDashboard() {
 
       {/* Pipeline Progress Bar */}
       {stats && stats.totalAgencies > 0 && (
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
-          <h3 className="text-sm font-semibold text-gray-700 mb-3">
+        <div className="bg-white/5 rounded-xl border border-white/10 p-4">
+          <h3 className="text-sm font-semibold text-slate-200 mb-3">
             Pipeline Progress
           </h3>
           <div className="space-y-2">
@@ -276,7 +276,7 @@ export function PolicyPipelineDashboard() {
             setSearch(e.target.value);
             setPage(1);
           }}
-          className="px-3 py-2 border border-gray-300 rounded-lg text-sm w-64 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
+          className="px-3 py-2 border border-white/10 rounded-lg text-sm w-64 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500"
         />
         <select
           value={typeFilter}
@@ -284,7 +284,7 @@ export function PolicyPipelineDashboard() {
             setTypeFilter(e.target.value);
             setPage(1);
           }}
-          className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500"
+          className="px-3 py-2 border border-white/10 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500"
         >
           <option value="">All Types</option>
           <option value="Police">Police</option>
@@ -302,7 +302,7 @@ export function PolicyPipelineDashboard() {
             setStatusFilter(e.target.value);
             setPage(1);
           }}
-          className="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500"
+          className="px-3 py-2 border border-white/10 rounded-lg text-sm focus:ring-2 focus:ring-indigo-500"
         >
           <option value="">All Statuses</option>
           <option value="pending">Pending</option>
@@ -320,83 +320,83 @@ export function PolicyPipelineDashboard() {
       )}
 
       {/* Agency Table */}
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="bg-white/5 rounded-xl border border-white/10 overflow-hidden">
         <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
+          <table className="min-w-full divide-y divide-white/10">
+            <thead className="bg-white/5">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase">
                   Rank
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase">
                   Agency
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase">
                   Type
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase">
                   City / County
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase">
                   Population
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase">
                   Crawl Status
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase">
                   Pages
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase">
                   Policies
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 uppercase">
+                <th className="px-4 py-3 text-left text-xs font-medium text-slate-400 uppercase">
                   Website
                 </th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-200">
+            <tbody className="divide-y divide-white/10">
               {loading && (
                 <tr>
-                  <td colSpan={9} className="px-4 py-8 text-center text-gray-400">
+                  <td colSpan={9} className="px-4 py-8 text-center text-slate-500">
                     Loading agencies...
                   </td>
                 </tr>
               )}
               {!loading && agencies?.agencies.length === 0 && (
                 <tr>
-                  <td colSpan={9} className="px-4 py-8 text-center text-gray-400">
+                  <td colSpan={9} className="px-4 py-8 text-center text-slate-500">
                     No agencies found. Run the POST directory crawler to populate.
                   </td>
                 </tr>
               )}
               {!loading &&
                 agencies?.agencies.map((agency) => (
-                  <tr key={agency.agencyId} className="hover:bg-gray-50">
-                    <td className="px-4 py-3 text-sm text-gray-500">
+                  <tr key={agency.agencyId} className="hover:bg-white/5">
+                    <td className="px-4 py-3 text-sm text-slate-400">
                       {agency.jurisdictionRank ?? '--'}
                     </td>
                     <td className="px-4 py-3">
-                      <div className="text-sm font-medium text-gray-900">
+                      <div className="text-sm font-medium text-white">
                         {agency.agencyName}
                       </div>
                     </td>
                     <td className="px-4 py-3">
-                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-gray-100 text-gray-700">
+                      <span className="inline-flex items-center px-2 py-0.5 rounded text-xs font-medium bg-white/10 text-slate-200">
                         {agency.agencyType ?? 'Unknown'}
                       </span>
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-600">
+                    <td className="px-4 py-3 text-sm text-slate-300">
                       {[agency.city, agency.county]
                         .filter(Boolean)
                         .join(', ') || '--'}
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-600">
+                    <td className="px-4 py-3 text-sm text-slate-300">
                       {formatNumber(agency.populationEstimate)}
                     </td>
                     <td className="px-4 py-3">
                       {statusBadge(agency.crawlStatus)}
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-600">
+                    <td className="px-4 py-3 text-sm text-slate-300">
                       {agency.pagesFound} / {agency.policyPagesFound}
                     </td>
                     <td className="px-4 py-3 text-sm font-medium text-indigo-600">
@@ -408,12 +408,12 @@ export function PolicyPipelineDashboard() {
                           href={agency.website}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="text-xs text-blue-600 hover:underline truncate block max-w-xs"
+                          className="text-xs text-gold-light hover:underline truncate block max-w-xs"
                         >
                           {new URL(agency.website).hostname}
                         </a>
                       ) : (
-                        <span className="text-xs text-gray-400">None</span>
+                        <span className="text-xs text-slate-500">None</span>
                       )}
                     </td>
                   </tr>
@@ -424,8 +424,8 @@ export function PolicyPipelineDashboard() {
 
         {/* Pagination */}
         {agencies && agencies.totalPages > 1 && (
-          <div className="flex items-center justify-between px-4 py-3 border-t border-gray-200 bg-gray-50">
-            <div className="text-sm text-gray-500">
+          <div className="flex items-center justify-between px-4 py-3 border-t border-white/10 bg-white/5">
+            <div className="text-sm text-slate-400">
               Page {agencies.page} of {agencies.totalPages} ({agencies.total}{' '}
               agencies)
             </div>
@@ -433,7 +433,7 @@ export function PolicyPipelineDashboard() {
               <button
                 onClick={() => setPage((p) => Math.max(1, p - 1))}
                 disabled={page <= 1}
-                className="px-3 py-1 text-sm rounded border border-gray-300 hover:bg-gray-100 disabled:opacity-50"
+                className="px-3 py-1 text-sm rounded border border-white/10 hover:bg-white/10 disabled:opacity-50"
               >
                 Previous
               </button>
@@ -442,7 +442,7 @@ export function PolicyPipelineDashboard() {
                   setPage((p) => Math.min(agencies.totalPages, p + 1))
                 }
                 disabled={page >= agencies.totalPages}
-                className="px-3 py-1 text-sm rounded border border-gray-300 hover:bg-gray-100 disabled:opacity-50"
+                className="px-3 py-1 text-sm rounded border border-white/10 hover:bg-white/10 disabled:opacity-50"
               >
                 Next
               </button>
@@ -490,11 +490,11 @@ function StatCard({
 
   return (
     <div
-      className={`rounded-xl border p-4 ${bgColors[color] ?? 'bg-gray-50 border-gray-200'}`}
+      className={`rounded-xl border p-4 ${bgColors[color] ?? 'bg-white/5 border-white/10'}`}
     >
-      <div className="text-xs font-medium text-gray-500 uppercase">{label}</div>
+      <div className="text-xs font-medium text-slate-400 uppercase">{label}</div>
       <div
-        className={`text-2xl font-bold mt-1 ${textColors[color] ?? 'text-gray-900'}`}
+        className={`text-2xl font-bold mt-1 ${textColors[color] ?? 'text-white'}`}
       >
         {value}
       </div>
@@ -515,14 +515,14 @@ function ProgressRow({
 
   return (
     <div className="flex items-center gap-3">
-      <span className="text-xs text-gray-500 w-36">{label}</span>
+      <span className="text-xs text-slate-400 w-36">{label}</span>
       <div className="flex-1 bg-gray-200 rounded-full h-2">
         <div
           className="bg-indigo-500 h-2 rounded-full transition-all"
           style={{ width: `${pct}%` }}
         />
       </div>
-      <span className="text-xs text-gray-600 w-20 text-right">
+      <span className="text-xs text-slate-300 w-20 text-right">
         {current.toLocaleString()} / {total.toLocaleString()} ({pct}%)
       </span>
     </div>

@@ -178,8 +178,8 @@ export function PolicyTopicsViewer() {
         <div className="flex items-center gap-3">
           <BookOpen size={24} className="text-indigo-600" />
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Policy Topic Coverage</h1>
-            <p className="text-sm text-gray-500">
+            <h1 className="text-2xl font-bold text-white">Policy Topic Coverage</h1>
+            <p className="text-sm text-slate-400">
               Topic-by-topic coverage status across all agencies ({CANONICAL_TOPICS.length} tracked topics)
             </p>
           </div>
@@ -198,21 +198,21 @@ export function PolicyTopicsViewer() {
       <Card>
         <div className="flex items-center gap-4">
           <div className="flex-1 relative">
-            <Search size={14} className="absolute left-3 top-2.5 text-gray-400" />
+            <Search size={14} className="absolute left-3 top-2.5 text-slate-500" />
             <input
               type="text"
               value={searchTerm}
               onChange={e => setSearchTerm(e.target.value)}
               placeholder="Search agencies..."
-              className="w-full pl-9 pr-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full pl-9 pr-3 py-2 border border-white/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
             />
           </div>
           <div className="flex items-center gap-2">
-            <Filter size={14} className="text-gray-400" />
+            <Filter size={14} className="text-slate-500" />
             <select
               value={countyFilter}
               onChange={e => setCountyFilter(e.target.value)}
-              className="px-3 py-2 border border-gray-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="px-3 py-2 border border-white/10 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
             >
               <option value="">All Counties</option>
               {counties.map(c => (
@@ -226,8 +226,8 @@ export function PolicyTopicsViewer() {
       {/* Agency list */}
       {isLoading ? (
         <div className="flex items-center justify-center h-48">
-          <RefreshCw size={24} className="animate-spin text-gray-400" />
-          <span className="ml-3 text-gray-500">Loading agencies...</span>
+          <RefreshCw size={24} className="animate-spin text-slate-500" />
+          <span className="ml-3 text-slate-400">Loading agencies...</span>
         </div>
       ) : (
         <div className="space-y-3">
@@ -245,8 +245,8 @@ export function PolicyTopicsViewer() {
                     </span>
                   </div>
                   <div>
-                    <p className="font-semibold text-gray-900">{agency.agencyName}</p>
-                    <p className="text-xs text-gray-500">
+                    <p className="font-semibold text-white">{agency.agencyName}</p>
+                    <p className="text-xs text-slate-400">
                       {[agency.city, agency.county].filter(Boolean).join(', ')}
                     </p>
                   </div>
@@ -255,15 +255,15 @@ export function PolicyTopicsViewer() {
                 <div className="flex items-center gap-6">
                   <div className="text-center">
                     <p className="text-lg font-bold text-green-600">{agency.found}</p>
-                    <p className="text-xs text-gray-500">Found</p>
+                    <p className="text-xs text-slate-400">Found</p>
                   </div>
                   <div className="text-center">
                     <p className="text-lg font-bold text-red-500">{agency.missing}</p>
-                    <p className="text-xs text-gray-500">Missing</p>
+                    <p className="text-xs text-slate-400">Missing</p>
                   </div>
                   <div className="text-center">
                     <p className="text-lg font-bold text-yellow-600">{agency.cpraRequested}</p>
-                    <p className="text-xs text-gray-500">CPRA</p>
+                    <p className="text-xs text-slate-400">CPRA</p>
                   </div>
                   <div className="w-16 text-center">
                     <p className={`text-lg font-bold ${
@@ -271,21 +271,21 @@ export function PolicyTopicsViewer() {
                     }`}>
                       {agency.coveragePercent}%
                     </p>
-                    <p className="text-xs text-gray-500">Coverage</p>
+                    <p className="text-xs text-slate-400">Coverage</p>
                   </div>
 
                   <div className="flex items-center gap-2">
                     <button
                       onClick={e => { e.stopPropagation(); handleExportCsv(agency); }}
-                      className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+                      className="p-2 rounded-lg hover:bg-white/10 transition-colors"
                       title="Export CSV"
                     >
-                      <Download size={16} className="text-gray-400" />
+                      <Download size={16} className="text-slate-500" />
                     </button>
                     {expandedAgency === agency.agencyId ? (
-                      <ChevronUp size={20} className="text-gray-400" />
+                      <ChevronUp size={20} className="text-slate-500" />
                     ) : (
-                      <ChevronDown size={20} className="text-gray-400" />
+                      <ChevronDown size={20} className="text-slate-500" />
                     )}
                   </div>
                 </div>
@@ -293,11 +293,11 @@ export function PolicyTopicsViewer() {
 
               {/* Expanded topic detail */}
               {expandedAgency === agency.agencyId && (
-                <div className="mt-4 pt-4 border-t border-gray-100">
+                <div className="mt-4 pt-4 border-t border-white/10">
                   {detailLoading ? (
                     <div className="flex items-center justify-center py-8">
-                      <RefreshCw size={16} className="animate-spin text-gray-400" />
-                      <span className="ml-2 text-sm text-gray-500">Loading topics...</span>
+                      <RefreshCw size={16} className="animate-spin text-slate-500" />
+                      <span className="ml-2 text-sm text-slate-400">Loading topics...</span>
                     </div>
                   ) : agencyDetail ? (
                     <>
@@ -305,19 +305,19 @@ export function PolicyTopicsViewer() {
                       <div className="flex items-center gap-4 mb-4">
                         <div className="flex items-center gap-1.5 text-sm">
                           <CheckCircle size={14} className="text-green-500" />
-                          <span className="text-gray-700">Found: <strong>{agencyDetail.summary.FOUND}</strong></span>
+                          <span className="text-slate-200">Found: <strong>{agencyDetail.summary.FOUND}</strong></span>
                         </div>
                         <div className="flex items-center gap-1.5 text-sm">
                           <XCircle size={14} className="text-red-400" />
-                          <span className="text-gray-700">Missing: <strong>{agencyDetail.summary.MISSING}</strong></span>
+                          <span className="text-slate-200">Missing: <strong>{agencyDetail.summary.MISSING}</strong></span>
                         </div>
                         <div className="flex items-center gap-1.5 text-sm">
                           <Mail size={14} className="text-yellow-500" />
-                          <span className="text-gray-700">CPRA Requested: <strong>{agencyDetail.summary.CPRA_REQUESTED}</strong></span>
+                          <span className="text-slate-200">CPRA Requested: <strong>{agencyDetail.summary.CPRA_REQUESTED}</strong></span>
                         </div>
                         <div className="flex items-center gap-1.5 text-sm">
                           <CheckCircle size={14} className="text-blue-500" />
-                          <span className="text-gray-700">Received: <strong>{agencyDetail.summary.RECEIVED}</strong></span>
+                          <span className="text-slate-200">Received: <strong>{agencyDetail.summary.RECEIVED}</strong></span>
                         </div>
                       </div>
 
@@ -334,7 +334,7 @@ export function PolicyTopicsViewer() {
                             }`}
                           >
                             <TopicStatusIcon status={t.status} />
-                            <span className="text-gray-800 truncate" title={t.topic.replace(/_/g, ' ')}>
+                            <span className="text-slate-100 truncate" title={t.topic.replace(/_/g, ' ')}>
                               {t.topic.replace(/_/g, ' ')}
                             </span>
                           </div>
@@ -349,7 +349,7 @@ export function PolicyTopicsViewer() {
 
           {agencies.length === 0 && (
             <Card>
-              <div className="py-12 text-center text-gray-500">
+              <div className="py-12 text-center text-slate-400">
                 <BookOpen size={32} className="mx-auto mb-3 text-gray-300" />
                 <p>No agencies match the current filters</p>
               </div>

@@ -65,8 +65,8 @@ export function CasesListPage() {
     <div className="max-w-7xl mx-auto space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Cases</h1>
-          <p className="text-sm text-gray-500 mt-1">{cases.length} total cases</p>
+          <h1 className="text-2xl font-bold text-white">Cases</h1>
+          <p className="text-sm text-slate-400 mt-1">{cases.length} total cases</p>
         </div>
         <button
           onClick={() => setShowCreateModal(true)}
@@ -80,22 +80,22 @@ export function CasesListPage() {
       {/* Filters */}
       <div className="flex flex-col sm:flex-row gap-3">
         <div className="relative flex-1">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
           <input
             type="search"
             placeholder="Search cases..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full pl-10 pr-4 py-2.5 rounded-lg border border-white/10 bg-white/5 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light"
             aria-label="Search cases"
           />
         </div>
         <div className="flex items-center gap-2">
-          <Filter size={16} className="text-gray-400" />
+          <Filter size={16} className="text-slate-500" />
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="px-4 py-2.5 rounded-lg border border-gray-200 bg-white text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="px-4 py-2.5 rounded-lg border border-white/10 bg-white/5 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light"
             aria-label="Filter by status"
           >
             <option value="all">All statuses</option>
@@ -110,8 +110,8 @@ export function CasesListPage() {
       {/* Loading State */}
       {loading && (
         <div className="text-center py-12">
-          <Loader2 size={24} className="animate-spin text-gray-400 mx-auto mb-2" />
-          <p className="text-gray-500">Loading cases...</p>
+          <Loader2 size={24} className="animate-spin text-slate-500 mx-auto mb-2" />
+          <p className="text-slate-400">Loading cases...</p>
         </div>
       )}
 
@@ -119,7 +119,7 @@ export function CasesListPage() {
       {error && !loading && (
         <div className="text-center py-12">
           <p className="text-red-600 mb-2">{error}</p>
-          <button onClick={loadCases} className="text-sm text-blue-600 hover:text-blue-700 font-medium">Retry</button>
+          <button onClick={loadCases} className="text-sm text-gold-light hover:text-gold-bright font-medium">Retry</button>
         </div>
       )}
 
@@ -130,26 +130,26 @@ export function CasesListPage() {
             <Card key={c.caseId} hover padding="md" className="cursor-pointer" onClick={() => navigate(`/cases/${c.caseId}/overview`)}>
               <div className="flex items-start justify-between mb-3">
                 <div>
-                  <h3 className="font-semibold text-gray-900">{c.title}</h3>
-                  <p className="text-sm text-gray-500">#{c.caseNumber}</p>
+                  <h3 className="font-semibold text-white">{c.title}</h3>
+                  <p className="text-sm text-slate-400">#{c.caseNumber}</p>
                 </div>
                 <div className="flex items-center gap-2">
                   <CaseStatusBadge status={c.status} />
                   <button
                     onClick={(e) => { e.stopPropagation(); setConfirmDeleteCaseId(c.caseId); setDeleteCaseError(null); }}
-                    className="p-1.5 text-gray-400 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
+                    className="p-1.5 text-slate-500 hover:text-red-600 hover:bg-red-50 rounded-lg transition-colors"
                     title="Delete case"
                   >
                     <Trash2 size={14} />
                   </button>
                 </div>
               </div>
-              <div className="space-y-2 text-sm text-gray-600">
+              <div className="space-y-2 text-sm text-slate-300">
                 <p><span className="font-medium">Jurisdiction:</span> {c.jurisdiction}</p>
                 {c.judge && <p><span className="font-medium">Judge:</span> {c.judge}</p>}
                 {c.nextHearing && <p><span className="font-medium">Next Hearing:</span> {c.nextHearing}</p>}
               </div>
-              <div className="mt-4 pt-3 border-t border-gray-100 flex items-center gap-4 text-xs text-gray-400">
+              <div className="mt-4 pt-3 border-t border-white/10 flex items-center gap-4 text-xs text-slate-500">
                 <span>{c._count?.evidence ?? 0} evidence items</span>
                 <span>{c.caseType}</span>
               </div>
@@ -160,7 +160,7 @@ export function CasesListPage() {
 
       {!loading && !error && filteredCases.length === 0 && (
         <div className="text-center py-12">
-          <p className="text-gray-500">
+          <p className="text-slate-400">
             {cases.length === 0
               ? 'No cases yet. Click "New Case" to create your first case.'
               : 'No cases found matching your criteria.'}
@@ -171,27 +171,27 @@ export function CasesListPage() {
       {/* Delete Confirmation Modal */}
       {confirmDeleteCaseId && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-          <div className="bg-white rounded-xl shadow-2xl p-6 max-w-md w-full mx-4">
+          <div className="bg-white/5 rounded-xl shadow-2xl p-6 max-w-md w-full mx-4">
             <div className="flex items-center gap-3 mb-4">
               <div className="w-10 h-10 rounded-full flex items-center justify-center bg-red-100">
                 <AlertTriangle size={20} className="text-red-600" />
               </div>
               <div>
-                <h3 className="text-lg font-semibold text-gray-900">Delete Case</h3>
-                <p className="text-sm text-gray-500">This action cannot be undone</p>
+                <h3 className="text-lg font-semibold text-white">Delete Case</h3>
+                <p className="text-sm text-slate-400">This action cannot be undone</p>
               </div>
             </div>
 
-            <div className="mb-4 p-3 bg-gray-50 rounded-lg">
-              <p className="text-sm font-medium text-gray-900">
+            <div className="mb-4 p-3 bg-white/5 rounded-lg">
+              <p className="text-sm font-medium text-white">
                 {cases.find((c) => c.caseId === confirmDeleteCaseId)?.title}
               </p>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-slate-400 mt-1">
                 #{cases.find((c) => c.caseId === confirmDeleteCaseId)?.caseNumber}
               </p>
             </div>
 
-            <p className="text-sm text-gray-600 mb-4">
+            <p className="text-sm text-slate-300 mb-4">
               Are you sure you want to delete this case? All associated evidence, timeline events, and analysis data will be permanently removed.
             </p>
 
@@ -205,7 +205,7 @@ export function CasesListPage() {
               <button
                 onClick={() => { setConfirmDeleteCaseId(null); setDeleteCaseError(null); }}
                 disabled={deletingCaseId === confirmDeleteCaseId}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 rounded-lg hover:bg-gray-200 disabled:opacity-50 transition-colors"
+                className="px-4 py-2 text-sm font-medium text-slate-200 bg-white/10 rounded-lg hover:bg-gray-200 disabled:opacity-50 transition-colors"
               >
                 Cancel
               </button>
@@ -278,42 +278,42 @@ function CreateCaseModal({ onClose, onCreated }: { onClose: () => void; onCreate
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6">
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Create New Case</h2>
+      <div className="bg-white/5 rounded-2xl shadow-xl max-w-lg w-full p-6">
+        <h2 className="text-lg font-semibold text-white mb-4">Create New Case</h2>
         {formError && <p className="text-sm text-red-600 mb-3">{formError}</p>}
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Case Title *</label>
-            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., People v. Smith" />
+            <label className="block text-sm font-medium text-slate-200 mb-1">Case Title *</label>
+            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required className="w-full px-3 py-2 rounded-lg border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light" placeholder="e.g., People v. Smith" />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Case Number *</label>
-              <input type="text" value={caseNumber} onChange={(e) => setCaseNumber(e.target.value)} required className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., 2024-CF-001234" />
+              <label className="block text-sm font-medium text-slate-200 mb-1">Case Number *</label>
+              <input type="text" value={caseNumber} onChange={(e) => setCaseNumber(e.target.value)} required className="w-full px-3 py-2 rounded-lg border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light" placeholder="e.g., 2024-CF-001234" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Case Type</label>
-              <select value={caseType} onChange={(e) => setCaseType(e.target.value)} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
+              <label className="block text-sm font-medium text-slate-200 mb-1">Case Type</label>
+              <select value={caseType} onChange={(e) => setCaseType(e.target.value)} className="w-full px-3 py-2 rounded-lg border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light">
                 {CASE_TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
               </select>
             </div>
           </div>
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-1">Jurisdiction *</label>
-            <input type="text" value={jurisdiction} onChange={(e) => setJurisdiction(e.target.value)} required className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., Santa Clara County" />
+            <label className="block text-sm font-medium text-slate-200 mb-1">Jurisdiction *</label>
+            <input type="text" value={jurisdiction} onChange={(e) => setJurisdiction(e.target.value)} required className="w-full px-3 py-2 rounded-lg border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light" placeholder="e.g., Santa Clara County" />
           </div>
           <div className="grid grid-cols-2 gap-4">
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Court</label>
-              <input type="text" value={court} onChange={(e) => setCourt(e.target.value)} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., Superior Court" />
+              <label className="block text-sm font-medium text-slate-200 mb-1">Court</label>
+              <input type="text" value={court} onChange={(e) => setCourt(e.target.value)} className="w-full px-3 py-2 rounded-lg border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light" placeholder="e.g., Superior Court" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1">Judge</label>
-              <input type="text" value={judge} onChange={(e) => setJudge(e.target.value)} className="w-full px-3 py-2 rounded-lg border border-gray-200 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="e.g., Hon. Wilson" />
+              <label className="block text-sm font-medium text-slate-200 mb-1">Judge</label>
+              <input type="text" value={judge} onChange={(e) => setJudge(e.target.value)} className="w-full px-3 py-2 rounded-lg border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light" placeholder="e.g., Hon. Wilson" />
             </div>
           </div>
           <div className="flex justify-end gap-3 pt-2">
-            <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 rounded-lg transition-colors">Cancel</button>
+            <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-medium text-slate-200 hover:bg-white/10 rounded-lg transition-colors">Cancel</button>
             <button type="submit" disabled={submitting} className="px-4 py-2 bg-slate-800 text-white rounded-lg text-sm font-medium hover:bg-slate-700 transition-colors disabled:opacity-50">
               {submitting ? 'Creating...' : 'Create Case'}
             </button>

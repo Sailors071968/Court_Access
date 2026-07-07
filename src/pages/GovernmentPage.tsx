@@ -96,7 +96,7 @@ function GovAgencies() {
   ];
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
@@ -108,7 +108,7 @@ function GovAgencies() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
           {agencies.map((agency) => (
-            <div key={agency.title} className="bg-white rounded-2xl shadow-md border border-slate-200 p-8 hover:shadow-lg transition-shadow">
+            <div key={agency.title} className="bg-white/5 rounded-2xl shadow-md border border-slate-200 p-8 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 rounded-xl bg-slate-100 flex items-center justify-center mb-6">
                 <agency.icon className="text-slate-700" size={24} />
               </div>
@@ -180,7 +180,7 @@ function GovEnterprise() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {sections.map((section) => (
-            <div key={section.title} className="bg-white rounded-2xl shadow-md border border-slate-200 p-8">
+            <div key={section.title} className="bg-white/5 rounded-2xl shadow-md border border-slate-200 p-8">
               <div className="flex items-center gap-3 mb-6">
                 <div className="w-10 h-10 rounded-xl bg-amber-100 flex items-center justify-center">
                   <section.icon className="text-amber-600" size={20} />
@@ -212,7 +212,7 @@ function GovProcess() {
   ];
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-white/5">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
@@ -291,7 +291,7 @@ function GovFooter() {
 
 export function GovernmentPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white/5">
       <GovNav />
       <GovHero />
       <GovAgencies />

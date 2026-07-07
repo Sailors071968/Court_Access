@@ -110,7 +110,7 @@ interface DefenseFeatureProps {
 
 function DefenseFeatureCard({ icon: Icon, title, description, items }: DefenseFeatureProps) {
   return (
-    <div className="bg-white rounded-2xl shadow-md border border-slate-200 p-8 hover:shadow-lg transition-shadow">
+    <div className="bg-white/5 rounded-2xl shadow-md border border-slate-200 p-8 hover:shadow-lg transition-shadow">
       <div className="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center mb-6">
         <Icon className="text-amber-400" size={24} />
       </div>
@@ -169,7 +169,7 @@ function DefenseFeatures() {
   ];
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
           <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
@@ -206,7 +206,7 @@ function DefenseTestimonials() {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {testimonials.map((t) => (
-            <div key={t.author} className="bg-white rounded-2xl shadow-md border border-slate-200 p-8">
+            <div key={t.author} className="bg-white/5 rounded-2xl shadow-md border border-slate-200 p-8">
               <div className="flex gap-1 mb-4">
                 {[1, 2, 3, 4, 5].map((s) => (
                   <Star key={s} className="text-amber-400 fill-amber-400" size={18} />
@@ -278,7 +278,7 @@ function DefenseFooter() {
 
 export function ForDefensePage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white/5">
       <DefenseNav />
       <DefenseHero />
       <DefenseFeatures />

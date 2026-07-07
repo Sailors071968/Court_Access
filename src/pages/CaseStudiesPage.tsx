@@ -120,7 +120,7 @@ function CaseStudyNav() {
 
 export function CaseStudiesPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white/5">
       <CaseStudyNav />
 
       {/* Hero */}
@@ -156,7 +156,7 @@ export function CaseStudiesPage() {
           {caseStudies.map((cs) => {
             const colors = colorMap[cs.color];
             return (
-              <article key={cs.id} className="bg-white rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
+              <article key={cs.id} className="bg-white/5 rounded-2xl shadow-lg border border-slate-200 overflow-hidden">
                 {/* Header */}
                 <div className={`${colors.light} ${colors.border} border-b p-8`}>
                   <div className="flex items-start gap-4">

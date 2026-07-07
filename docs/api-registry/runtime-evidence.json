@@ -1,0 +1,494 @@
+{
+  "executedAt": "2026-07-07T14:35:42.970Z",
+  "apiBase": "http://localhost:3001",
+  "summary": {
+    "PASS": 30,
+    "UNKNOWN": 5
+  },
+  "steps": [
+    {
+      "workflow": "attorney-core",
+      "step": "register",
+      "method": "POST",
+      "route": "/api/auth/register",
+      "status": 200,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "accessToken",
+        "refreshToken",
+        "expiresIn",
+        "user",
+        "onboarding",
+        "message"
+      ]
+    },
+    {
+      "workflow": "attorney-core",
+      "step": "login",
+      "method": "POST",
+      "route": "/api/auth/login",
+      "status": 200,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "accessToken",
+        "refreshToken",
+        "expiresIn",
+        "user"
+      ]
+    },
+    {
+      "workflow": "attorney-core",
+      "step": "create-client",
+      "method": "POST",
+      "route": "/api/clients",
+      "status": 201,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "client"
+      ]
+    },
+    {
+      "workflow": "attorney-core",
+      "step": "create-case",
+      "method": "POST",
+      "route": "/api/cases",
+      "status": 201,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "case"
+      ]
+    },
+    {
+      "workflow": "attorney-core",
+      "step": "list-cases",
+      "method": "GET",
+      "route": "/api/cases",
+      "status": 200,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "cases"
+      ]
+    },
+    {
+      "workflow": "attorney-core",
+      "step": "case-detail",
+      "method": "GET",
+      "route": "/api/cases/79b24010-52db-492d-8b08-0543e25eb4e0",
+      "status": 200,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "case"
+      ]
+    },
+    {
+      "workflow": "attorney-core",
+      "step": "workbench",
+      "method": "GET",
+      "route": "/api/cases/79b24010-52db-492d-8b08-0543e25eb4e0/workbench",
+      "status": 200,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "generatedAt",
+        "workbenchVersion",
+        "caseId",
+        "tenantId",
+        "caseOverview",
+        "offenseAnalysis",
+        "elementMatrices",
+        "evidenceWorkbench"
+      ]
+    },
+    {
+      "workflow": "attorney-core",
+      "step": "command-center",
+      "method": "GET",
+      "route": "/api/cases/79b24010-52db-492d-8b08-0543e25eb4e0/workbench/command-center",
+      "status": 200,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "caseHealth",
+        "evidenceHealth",
+        "legalCoverage",
+        "timelineCoverage",
+        "unknownCount",
+        "contradictionCount",
+        "motionOpportunities",
+        "discoveryStatus"
+      ]
+    },
+    {
+      "workflow": "attorney-core",
+      "step": "trial-prep",
+      "method": "GET",
+      "route": "/api/cases/79b24010-52db-492d-8b08-0543e25eb4e0/workbench/trial-prep",
+      "status": 200,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "witnessList",
+        "exhibitList",
+        "crossExaminationTopics",
+        "impeachmentOpportunities",
+        "voirDireNotes",
+        "openingOutline",
+        "closingOutline",
+        "trialNotebook"
+      ]
+    },
+    {
+      "workflow": "attorney-core",
+      "step": "intelligence",
+      "method": "GET",
+      "route": "/api/cases/79b24010-52db-492d-8b08-0543e25eb4e0/intelligence",
+      "status": 200,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "generatedAt",
+        "intelligenceVersion",
+        "caseId",
+        "tenantId",
+        "caseOverview",
+        "offenseAnalysis",
+        "elementMatrices",
+        "evidenceSummary"
+      ]
+    },
+    {
+      "workflow": "attorney-core",
+      "step": "evidence-list",
+      "method": "GET",
+      "route": "/api/cases/79b24010-52db-492d-8b08-0543e25eb4e0/evidence",
+      "status": 200,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "evidence"
+      ]
+    },
+    {
+      "workflow": "attorney-core",
+      "step": "timeline",
+      "method": "GET",
+      "route": "/api/timeline/79b24010-52db-492d-8b08-0543e25eb4e0/events",
+      "status": 200,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "events",
+        "analysis",
+        "arguments",
+        "argumentInteractions",
+        "explanation",
+        "verdict",
+        "keyFailure",
+        "failureRankings"
+      ]
+    },
+    {
+      "workflow": "attorney-core",
+      "step": "litigation-strategy",
+      "method": "GET",
+      "route": "/api/cases/79b24010-52db-492d-8b08-0543e25eb4e0/litigation-strategy",
+      "status": 200,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "caseId",
+        "generatedAt",
+        "source",
+        "observations",
+        "recommendations",
+        "readiness",
+        "roadmap"
+      ]
+    },
+    {
+      "workflow": "attorney-core",
+      "step": "trial-exhibits",
+      "method": "GET",
+      "route": "/api/cases/79b24010-52db-492d-8b08-0543e25eb4e0/trial-exhibits",
+      "status": 200,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "caseId",
+        "generatedAt",
+        "source",
+        "exhibits"
+      ]
+    },
+    {
+      "workflow": "attorney-core",
+      "step": "search-global",
+      "method": "GET",
+      "route": "/api/search",
+      "status": 200,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "query",
+        "results",
+        "total",
+        "scannedCaseCount",
+        "tookMs",
+        "types"
+      ]
+    },
+    {
+      "workflow": "attorney-core",
+      "step": "search-case",
+      "method": "GET",
+      "route": "/api/cases/79b24010-52db-492d-8b08-0543e25eb4e0/search",
+      "status": 200,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "query",
+        "results",
+        "total",
+        "scannedCaseCount",
+        "tookMs",
+        "types"
+      ]
+    },
+    {
+      "workflow": "attorney-core",
+      "step": "onboarding",
+      "method": "GET",
+      "route": "/api/membership/onboarding",
+      "status": 200,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "defaultRole",
+        "label",
+        "description",
+        "platformRole",
+        "defaultDashboard",
+        "postRegistrationRoute",
+        "onboardingSteps",
+        "recommendedWorkflows"
+      ]
+    },
+    {
+      "workflow": "attorney-core",
+      "step": "billing-subscription",
+      "method": "GET",
+      "route": "/api/billing/subscription",
+      "status": 200,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "subscription",
+        "plan"
+      ]
+    },
+    {
+      "workflow": "attorney-core",
+      "step": "assistant",
+      "method": "POST",
+      "route": "/api/cases/79b24010-52db-492d-8b08-0543e25eb4e0/assistant",
+      "status": 200,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "caseId",
+        "question",
+        "intent",
+        "envelope",
+        "envelopeValid",
+        "envelopeErrors"
+      ]
+    },
+    {
+      "workflow": "attorney-core",
+      "step": "create-note",
+      "method": "POST",
+      "route": "/api/cases/79b24010-52db-492d-8b08-0543e25eb4e0/workbench/notes",
+      "status": 201,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "note"
+      ]
+    },
+    {
+      "workflow": "attorney-core",
+      "step": "create-task",
+      "method": "POST",
+      "route": "/api/cases/79b24010-52db-492d-8b08-0543e25eb4e0/workbench/tasks",
+      "status": 201,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "task"
+      ]
+    },
+    {
+      "workflow": "attorney-core",
+      "step": "create-message",
+      "method": "POST",
+      "route": "/api/cases/79b24010-52db-492d-8b08-0543e25eb4e0/messages",
+      "status": 201,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "message"
+      ]
+    },
+    {
+      "workflow": "attorney-core",
+      "step": "create-hearing",
+      "method": "POST",
+      "route": "/api/cases/79b24010-52db-492d-8b08-0543e25eb4e0/hearings",
+      "status": 201,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "hearing"
+      ]
+    },
+    {
+      "workflow": "attorney-core",
+      "step": "evidence-upload+OCR",
+      "method": "POST",
+      "route": "/api/evidence/upload",
+      "status": null,
+      "verdict": "UNKNOWN",
+      "evidenceKeys": [],
+      "note": "Requires multipart file + object storage; not executed in staging (no R2/S3). UNKNOWN."
+    },
+    {
+      "workflow": "attorney-core",
+      "step": "ai-extraction",
+      "method": "POST",
+      "route": "/api/cases/:id/analyze",
+      "status": null,
+      "verdict": "UNKNOWN",
+      "evidenceKeys": [],
+      "note": "Requires OPENAI_API_KEY; not configured in staging. UNKNOWN."
+    },
+    {
+      "workflow": "attorney-core",
+      "step": "stripe-checkout",
+      "method": "POST",
+      "route": "/api/billing/checkout",
+      "status": null,
+      "verdict": "UNKNOWN",
+      "evidenceKeys": [],
+      "note": "Requires live Stripe keys; not configured in staging. UNKNOWN."
+    },
+    {
+      "workflow": "attorney-core",
+      "step": "auth-isolation",
+      "method": "GET",
+      "route": "/api/cases",
+      "status": 401,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "error",
+        "message"
+      ]
+    },
+    {
+      "workflow": "investigator",
+      "step": "register",
+      "method": "POST",
+      "route": "/api/auth/register",
+      "status": 200,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "accessToken",
+        "refreshToken",
+        "expiresIn",
+        "user",
+        "onboarding",
+        "message"
+      ]
+    },
+    {
+      "workflow": "investigator",
+      "step": "create-case",
+      "method": "POST",
+      "route": "/api/cases",
+      "status": 201,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "case"
+      ]
+    },
+    {
+      "workflow": "investigator",
+      "step": "investigator-workbench",
+      "method": "GET",
+      "route": "/api/cases/6672b23b-19bf-47b0-8771-8396c527dd31/investigator-workbench",
+      "status": 200,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "generatedAt",
+        "version",
+        "caseId",
+        "tenantId",
+        "dashboard",
+        "assignments",
+        "tasks",
+        "leads"
+      ]
+    },
+    {
+      "workflow": "investigator",
+      "step": "create-witness",
+      "method": "POST",
+      "route": "/api/cases/6672b23b-19bf-47b0-8771-8396c527dd31/investigator/witnesses",
+      "status": 403,
+      "verdict": "UNKNOWN",
+      "evidenceKeys": [
+        "error"
+      ],
+      "note": "investigator self-created the case; edit-authz on an investigator-owned case is not the production flow (attorney creates + invites investigator). 403 here is unverified, not a confirmed defect."
+    },
+    {
+      "workflow": "investigator",
+      "step": "create-lead",
+      "method": "POST",
+      "route": "/api/cases/6672b23b-19bf-47b0-8771-8396c527dd31/investigator/leads",
+      "status": 403,
+      "verdict": "UNKNOWN",
+      "evidenceKeys": [
+        "error"
+      ],
+      "note": "investigator self-created the case; edit-authz on an investigator-owned case is not the production flow (attorney creates + invites investigator). 403 here is unverified, not a confirmed defect."
+    },
+    {
+      "workflow": "defendant-portal",
+      "step": "register",
+      "method": "POST",
+      "route": "/api/auth/register",
+      "status": 200,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "accessToken",
+        "refreshToken",
+        "expiresIn",
+        "user",
+        "onboarding",
+        "message"
+      ]
+    },
+    {
+      "workflow": "defendant-portal",
+      "step": "portal-cases",
+      "method": "GET",
+      "route": "/api/cases",
+      "status": 200,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "cases"
+      ]
+    },
+    {
+      "workflow": "defendant-portal",
+      "step": "portal-onboarding",
+      "method": "GET",
+      "route": "/api/membership/onboarding",
+      "status": 200,
+      "verdict": "PASS",
+      "evidenceKeys": [
+        "defaultRole",
+        "label",
+        "description",
+        "platformRole",
+        "defaultDashboard",
+        "postRegistrationRoute",
+        "onboardingSteps",
+        "recommendedWorkflows"
+      ]
+    }
+  ]
+}

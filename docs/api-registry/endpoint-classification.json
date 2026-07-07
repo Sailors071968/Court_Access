@@ -1,0 +1,2192 @@
+[
+  {
+    "method": "GET",
+    "route": "/api/admin/billing/metrics",
+    "classification": "TEST ONLY",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/admin/stats",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/admin/users",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/admin/cases",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "DELETE",
+    "route": "/api/admin/users/:userId",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "DELETE",
+    "route": "/api/admin/cases/:caseId",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "DELETE",
+    "route": "/api/admin/evidence/:evidenceId",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/admin/queues",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/admin/queues/:queueName",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/admin/queues/:queueName/retry-all",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/admin/queues/:queueName/clean",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/cases/:caseId/assistant",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/billing/plans",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/billing/plans/:planId",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/billing/subscription",
+    "classification": "TEST ONLY",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/billing/subscription",
+    "classification": "TEST ONLY",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/billing/credits",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/billing/credits/history",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/billing/credits/by-type",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/billing/credits/costs",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/billing/credits/calculate",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/billing/credits/deduct",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/billing/credit-packs",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/billing/credit-packs/purchase",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/billing/usage",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/billing/usage/check-pages",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/billing/usage/check-credits",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/billing/usage/record-upload",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/discount-codes/validate",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/admin/discount-codes",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/admin/discount-codes",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "PATCH",
+    "route": "/api/admin/discount-codes/:codeId",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "DELETE",
+    "route": "/api/admin/discount-codes/:codeId",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/discount-codes/apply",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/billing/create-checkout-session",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/billing/checkout-status/:sessionId",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/billing/create-portal-session",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/charges",
+    "classification": "TEST ONLY",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/charges/:caseId",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "DELETE",
+    "route": "/api/charges/:id",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/clients",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/clients",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/clients/:clientId",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "PATCH",
+    "route": "/api/clients/:clientId",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "DELETE",
+    "route": "/api/clients/:clientId",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cases/:caseId/hearings",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/cases/:caseId/hearings",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/portal/court-dates",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cases/:caseId/messages",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/cases/:caseId/messages",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "PATCH",
+    "route": "/api/cases/:caseId/messages/:messageId/read",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/contradiction/status",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/contradiction/ontology",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/contradiction/ontology/:category",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/contradiction/ontology/event/:eventTypeId",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/contradiction/extract",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/contradiction/events/:caseId",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/contradiction/timeline/:caseId",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/contradiction/video/process",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/contradiction/video/bodycam-gaps",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/contradiction/analyze/:caseId",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/contradiction/graph/:caseId",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/contradiction/graph/:caseId/cypher",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/contradiction/recommendations/:caseId",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/admin/cpra/send",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/admin/cpra/send-batch",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/admin/cpra/send-all-missing",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/admin/cpra/follow-up/:requestId",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/admin/cpra/progress",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/admin/cpra/emails/:agencyId",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/admin/cpra/emails/conversation/:requestId",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/admin/cpra/email-stats",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/admin/cpra/attachments/process",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/admin/cpra/attachments/process/:attachmentId",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/admin/cpra/classify/:attachmentId",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/admin/cpra/classify-all",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/admin/cpra/notifications",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/admin/cpra/notifications/count",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/admin/cpra/notifications/summary",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "PUT",
+    "route": "/api/admin/cpra/notifications/:notificationId/read",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "PUT",
+    "route": "/api/admin/cpra/notifications/read-all",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "DELETE",
+    "route": "/api/admin/cpra/notifications/:notificationId",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/admin/cpra/timeline/:agencyId",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/admin/cpra/timeline",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/admin/cpra/monitor/poll",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/admin/cpra/monitor/simulate",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/admin/cpra/monitor/start",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/admin/cpra/monitor/stop",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/admin/cpra/follow-up/check",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/admin/cpra/follow-up/worker/start",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/admin/cpra/follow-up/worker/stop",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/admin/cpra/ingestion/process",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/admin/cpra/ingestion/worker/start",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/admin/cpra/ingestion/worker/stop",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/admin/cpra/status",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cpra/policy-matrix/topics",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cpra/policy-matrix/agencies",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cpra/policy-matrix",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cpra/policy-matrix/:agencyId",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "PUT",
+    "route": "/api/cpra/policy-matrix/:agencyId/:topicId",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cpra/policy-matrix/summary",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/cpra/policy-matrix/seed",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/doctrine/status",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/doctrine/rules",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/doctrine/rules/:doctrineId",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/doctrine/search",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/doctrine/analyze",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/doctrine/quick-scan",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/doctrine/ingest",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/doctrine/seed",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/doctrine/seed-all",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/doctrine/seed/:domainCode",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/doctrine/domains",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/doctrine/categories",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/doctrine/chapters",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/cases",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cases",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cases/:caseId",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "PATCH",
+    "route": "/api/cases/:caseId",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "DELETE",
+    "route": "/api/cases/:caseId",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/compliance/events/extract",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/compliance/events/:caseId",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/compliance/events/:caseId/stats",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/compliance/video/analyze",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/compliance/video/:caseId/summary",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/compliance/speech/analyze",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/compliance/timeline/:caseId",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/compliance/rules/extract",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/compliance/rules/:agencyId",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/compliance/mappings/generate",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/compliance/mappings/:eventType/:agencyId",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/compliance/analyze",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/compliance/findings/:caseId",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/compliance/findings/agency/:agencyId",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/compliance/reviews",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "PUT",
+    "route": "/api/compliance/reviews/:reviewId",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/compliance/reviews/stats",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/compliance/dashboard",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/compliance/heatmap",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/compliance/report/:caseId",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/compliance/exhibits/:caseId",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/compliance/compare",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/compliance/comparisons",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/compliance/training/analyze",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/compliance/evolution/:agencyId",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/compliance/evolution/:agencyId/detect",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/compliance/audit/:caseId",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/compliance/expert/:caseId",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/compliance/jury/:caseId",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/compliance/safety/check",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cases/:caseId/evidence-requests",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/evidence-requests/:id/respond",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/cases/:caseId/evidence-requests/detect",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/evidence/upload-url",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/evidence",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cases/:caseId/evidence",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/evidence/:evidenceId",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "DELETE",
+    "route": "/api/evidence/:evidenceId",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/forensic/vision/analyze",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/forensic/vision/:caseId",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/forensic/vision/:caseId/critical",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/forensic/trajectory/analyze",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/forensic/trajectory/:caseId",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/forensic/trajectory/profiles",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/forensic/visibility/simulate",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/forensic/visibility/:caseId",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/forensic/line-of-sight/analyze",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/forensic/line-of-sight/:caseId",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/forensic/camera-sync/synchronize",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/forensic/camera-sync/:caseId",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/forensic/scene/build",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/forensic/scene/:caseId",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/forensic/scene/:caseId/exhibit",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/forensic/timeline/:caseId",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/forensic/evidence-graph/build",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/forensic/evidence-graph/:caseId",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/forensic/expert-package/generate",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/forensic/expert-package/:caseId",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/forensic/jury-view/generate",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/forensic/jury-view/:caseId",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/corpus/registry",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/corpus/register",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/corpus/status",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/corpus/versions",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/corpus/lock",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/corpus/unlock",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/corpus/ingest",
+    "classification": "TEST ONLY",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cases/:caseId/intelligence",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cases/:caseId/intelligence/report",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/cases/:caseId/intelligence/analyze",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/narrative/:caseId/claims",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/narrative/:caseId/contradictions",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/narrative/:caseId/impeachment",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/narrative/analyze/:caseId",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/narrative/health",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cases/:caseId/investigator-workbench",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/cases/:caseId/investigator/witnesses",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/cases/:caseId/investigator/leads",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/cases/:caseId/investigator/field-notes",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/cases/:caseId/investigator/assignments",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/investigator/health",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/legislative/metrics",
+    "classification": "TEST ONLY",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/legislative/coverage",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/legislative/repositories",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/legislative/liability",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/legislative/classifications/:code/:section",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/legislative/intelligence/:code/:section",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/legislative/audit",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/legislative/repository-integrity",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/legislative/statutes/:code/:section",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/contact",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/membership/account",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "PATCH",
+    "route": "/api/membership/settings",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/membership/shared-access",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/membership/accessible-cases",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/membership/permission-grants",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/membership/permission-check",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cases/:caseId/documents/:documentId/redactions",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/cases/:caseId/documents/:documentId/redactions",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cases/:caseId/disclosures",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/cases/:caseId/disclosures",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/cases/:caseId/disclosures/:packageId/publish",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/cases/:caseId/documents/:documentId/redactions/:redactionId/publish",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/membership/onboarding",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/membership/permission-model",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cases/:caseId/publication-sets",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/cases/:caseId/publication-sets",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/cases/:caseId/publication-sets/:setId/publish",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cases/:caseId/documents/:documentId/copies",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/cases/:caseId/documents/:documentId/copies/original",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/health/deep",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/metrics",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/metrics/json",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/firm/departments",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/firm/departments",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/firm/personnel",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "PUT",
+    "route": "/api/firm/personnel/:userId",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/firm/clients/:clientId/team",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "PUT",
+    "route": "/api/firm/clients/:clientId/team",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/firm/messages",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/firm/messages",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/firm/tasks",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/firm/tasks",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "PATCH",
+    "route": "/api/firm/tasks/:taskId",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/firm/knowledge",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/firm/knowledge",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/firm/conflicts/check",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/firm/conflicts",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/firm/permissions",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/firm/permissions",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/firm/approvals",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "PATCH",
+    "route": "/api/firm/approvals/:requestId",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/firm/analytics",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "PATCH",
+    "route": "/api/firm/theme",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/firm/offices/seed-california",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/organizations/current",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "PATCH",
+    "route": "/api/organizations/current",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/organizations/onboarding",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/organizations/offices",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/organizations/offices",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/organizations/practice-groups",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/organizations/practice-groups",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/organizations/members",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/organizations/invitations",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/organizations/invitations",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/organizations/analytics",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/organizations/search",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/organizations/audit-logs",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/organizations/invitations/preview",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/auth/accept-invitation",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/organizations/tenant-verify",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/operations/dashboard",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/operations/deadlines",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/operations/topics",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/operations/topics/:agencyId",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/operations/topics/:agencyId/export/csv",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/operations/report",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/operations/populate",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/policy-pipeline/stats",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/policy-pipeline/agencies",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/policy-pipeline/agencies/search",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/policy-pipeline/agencies/:agencyId",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/policy-pipeline/intelligence",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/policy-pipeline/run/post-crawl",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/policy-pipeline/run/rank",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/policy-pipeline/run/enqueue-crawls",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/policy-pipeline/run/full",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/policy-intelligence/dashboard",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/policy-intelligence/sandbox/crawl",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/policy-intelligence/sandbox/status",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/policy-intelligence/chp/import",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/policy-intelligence/chp/status",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/policy-intelligence/classification/validate",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/policy-intelligence/classification/accuracy",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/policy-intelligence/coverage/generate",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/policy-intelligence/coverage/agency/:agencyId",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/policy-intelligence/coverage/heatmap",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/policy-intelligence/coverage/summary",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/policy-intelligence/cpra/prepare-queue",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/policy-intelligence/cpra/queue-status",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/policy-intelligence/cpra/launch-campaign",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/policy-intelligence/cpra/campaign-status",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/policy-intelligence/responses/process",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/policy-intelligence/responses/health",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/policy-intelligence/responses/process-pending",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/admin/production-gates",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/admin/operations/dashboard",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/system/health",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/admin/deployment-checks",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/admin/engineering-dashboard",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/admin/audit",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/admin/changes",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/admin/repository-integrity",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/admin/backup/status",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/admin/backup/verify",
+    "classification": "OPTIONAL",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/admin/alerts",
+    "classification": "OPTIONAL",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/calcrim/analyze/:caseId",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/search",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cases/:caseId/search",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/auth/debug-check",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/auth/login",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/auth/register",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/auth/refresh",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/auth/logout",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/auth/me",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/auth/forgot-password",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/auth/reset-password",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/admin/reset-password",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/security/log",
+    "classification": "TEST ONLY",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/auth/verify-email",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/auth/resend-verification",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/auth/mfa/setup",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/auth/mfa/confirm",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/auth/mfa/challenge",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/auth/mfa/disable",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/auth/sessions",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "DELETE",
+    "route": "/api/auth/sessions/:sessionId",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/admin/rate-limits",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/security/logs",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/security/summary",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/health",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/auth/csrf-token",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/timeline/:caseId/events",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/timeline/:caseId/conflicts",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/timeline/rebuild/:caseId",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "POST",
+    "route": "/api/timeline/process",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/timeline/health",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cases/:caseId/litigation-strategy",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cases/:caseId/trial-exhibits",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cases/:caseId/workbench",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cases/:caseId/workbench/command-center",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cases/:caseId/workbench/trial-prep",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cases/:caseId/workbench/export/:packageType",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cases/:caseId/workbench/notes",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/cases/:caseId/workbench/notes",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "PATCH",
+    "route": "/api/cases/:caseId/workbench/notes/:noteId",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "DELETE",
+    "route": "/api/cases/:caseId/workbench/notes/:noteId",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cases/:caseId/workbench/pins",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/cases/:caseId/workbench/pins",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "DELETE",
+    "route": "/api/cases/:caseId/workbench/pins/:pinId",
+    "classification": "RESERVED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/cases/:caseId/workbench/tasks",
+    "classification": "REQUIRED",
+    "exec": "PASS"
+  },
+  {
+    "method": "POST",
+    "route": "/api/cases/:caseId/workbench/tasks",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "PATCH",
+    "route": "/api/cases/:caseId/workbench/tasks/:taskId",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "DELETE",
+    "route": "/api/cases/:caseId/workbench/tasks/:taskId",
+    "classification": "REQUIRED",
+    "exec": "UNKNOWN"
+  },
+  {
+    "method": "GET",
+    "route": "/api/workbench/health",
+    "classification": "RESERVED",
+    "exec": "PASS"
+  }
+]

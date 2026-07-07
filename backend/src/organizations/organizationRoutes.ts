@@ -55,7 +55,10 @@ async function requireOrgContext(request: AuthenticatedRequest, reply: FastifyRe
 async function requireOrgAdmin(request: AuthenticatedRequest, reply: FastifyReply) {
   const ctx = await requireOrgContext(request, reply);
   if (!ctx) return null;
-  if (!isOrgAdmin(ctx.user.role, ctx.member.role)) {
+  // The primary account owner (the member who created the org — never invited)
+  // always has collaborator-management authority, regardless of profession.
+  const isOwner = ctx.member.invitedById == null;
+  if (!isOwner && !isOrgAdmin(ctx.user.role, ctx.member.role)) {
     reply.code(403).send({ error: 'Organization admin access required' });
     return null;
   }

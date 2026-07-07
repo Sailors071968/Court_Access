@@ -22,7 +22,10 @@ import prisma from '../lib/prisma.js';
 // ---------------------------------------------------------------------------
 
 /** Local storage directory for uploaded evidence files */
-const UPLOAD_DIR = process.env.EVIDENCE_UPLOAD_DIR || '/var/www/courtaccess/uploads/evidence';
+// Default to a repo-relative path so uploads work on any host out of the box;
+// override with EVIDENCE_UPLOAD_DIR in production. (Previously hardcoded to a
+// non-portable /var/www path that broke on fresh deploys.)
+const UPLOAD_DIR = process.env.EVIDENCE_UPLOAD_DIR || path.join(process.cwd(), 'data', 'uploads', 'evidence');
 
 /** Maximum file size for multipart upload (500 MB) */
 const MAX_FILE_SIZE = 500 * 1024 * 1024;

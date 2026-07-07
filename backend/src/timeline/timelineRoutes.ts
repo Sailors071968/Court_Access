@@ -57,27 +57,19 @@ export async function registerTimelineRoutes(app: FastifyInstance): Promise<void
   // --------------------------------------------------------------------------
   app.get(
     '/api/timeline/:caseId/events',
-    {}, // 🔥 TEMP disable auth
-    async (_request: AuthenticatedRequest, reply: FastifyReply) => {
-
-      console.log("🚀 EVENTS ROUTE HIT (DEBUG)");
+    { preHandler: authMiddleware },
+    async (request: AuthenticatedRequest, reply: FastifyReply) => {
+      const { tenantId } = resolveContext(request);
+      const { caseId } = request.params as { caseId: string };
 
       try {
-        // --------------------------------------------------
-        // TEST EVENTS
-        // --------------------------------------------------
-        const eventList = [
-          {
-            description: "Defendant entered the house",
-            action: "enter",
-            target: "house"
-          },
-          {
-            description: "Defendant was not present at the house",
-            action: "deny",
-            target: "presence"
-          }
-        ];
+        // Real, DB-backed timeline events for this case — no fabricated data.
+        // (Previously returned hardcoded test events with auth disabled and ran
+        // a broken legal-cascade on them.) A raw events endpoint returns events
+        // + conflicts; legal analysis lives in the intelligence/workbench APIs.
+        const eventList = await getTimelineEvents(caseId, tenantId);
+        const conflicts = await getTimelineConflicts(caseId, tenantId);
+        return reply.send({ caseId, events: eventList, conflicts, count: eventList.length });
 
         // --------------------------------------------------
         // CONTRADICTIONS

@@ -88,7 +88,7 @@ export const FAMILIES_PERSONA: PersonaConfig = {
   subtitle:
     'Authorized family members receive delegated access to court dates, published documents, and case updates — without seeing attorney-only material.',
   features: [
-    { icon: Users, title: 'Delegated Access', description: 'Attorneys invite up to five designees with independent permission levels.' },
+    { icon: Users, title: 'Collaborators', description: 'Attorneys invite unlimited collaborators with independent permission levels.' },
     { icon: Clock, title: 'Court Date Alerts', description: 'Receive notifications for hearings and critical deadlines.' },
     { icon: FileText, title: 'Published Documents', description: 'View only what the defense team publishes to the family profile.' },
     { icon: MessageSquare, title: 'Secure Communication', description: 'Message the defense team through encrypted in-platform channels.' },

@@ -103,6 +103,7 @@ export interface User {
   role: UserRole;
   defaultRole?: DefaultRole;
   avatar?: string;
+  avatarUrl?: string;
   phone?: string;
 }
 

@@ -145,6 +145,7 @@
   "GET /api/corpus/versions",
   "POST /api/corpus/lock",
   "POST /api/corpus/unlock",
+  "GET /api/cases/:caseId/knowledge-graph",
   "GET /api/cases/:caseId/intelligence",
   "GET /api/cases/:caseId/intelligence/report",
   "POST /api/cases/:caseId/intelligence/analyze",

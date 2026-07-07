@@ -1,7 +1,7 @@
 {
-  "generatedAt": "2026-07-07T15:50:35.154Z",
-  "totalEndpoints": 374,
-  "routeFiles": 45,
+  "generatedAt": "2026-07-07T17:29:38.961Z",
+  "totalEndpoints": 375,
+  "routeFiles": 46,
   "duplicates": [],
   "endpoints": [
     {
@@ -29,9 +29,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": true,
-      "runtimeStatusCode": 403,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": true
     },
     {
       "method": "GET",
@@ -60,9 +58,7 @@
       "uiPages": [
         "src/pages/admin/AdminPage.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 403,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -91,9 +87,7 @@
       "uiPages": [
         "src/pages/admin/AdminPage.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 403,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -122,9 +116,7 @@
       "uiPages": [
         "src/pages/admin/AdminPage.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 403,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "DELETE",
@@ -154,9 +146,7 @@
       "uiPages": [
         "src/pages/admin/AdminPage.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "DELETE",
@@ -185,9 +175,7 @@
       "uiPages": [
         "src/pages/admin/AdminPage.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "DELETE",
@@ -214,9 +202,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -243,9 +229,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 403,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -272,9 +256,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 403,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -301,9 +283,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -330,9 +310,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -362,9 +340,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -396,9 +372,7 @@
       "uiPages": [
         "src/services/caseApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -428,9 +402,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 404,
-      "runtimeStatus": "NOT_FOUND_FOR_SEED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -460,9 +432,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": true,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": true
     },
     {
       "method": "POST",
@@ -493,9 +463,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": true,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": true
     },
     {
       "method": "GET",
@@ -525,9 +493,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -558,9 +524,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -590,9 +554,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -622,9 +584,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -654,9 +614,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -686,9 +644,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -718,9 +674,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -751,9 +705,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -785,9 +737,7 @@
       "uiPages": [
         "src/pages/dashboard/UsageDashboard.tsx"
       ],
-      "testCovered": true,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": true
     },
     {
       "method": "POST",
@@ -817,9 +767,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -849,9 +797,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -881,9 +827,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -910,9 +854,7 @@
       "uiPages": [
         "src/pages/auth/RegisterPage.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 400,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -941,9 +883,7 @@
       "uiPages": [
         "src/pages/dashboard/DiscountCodesDashboard.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 403,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -973,9 +913,7 @@
       "uiPages": [
         "src/pages/dashboard/DiscountCodesDashboard.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "PATCH",
@@ -1005,9 +943,7 @@
       "uiPages": [
         "src/pages/dashboard/DiscountCodesDashboard.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "DELETE",
@@ -1036,9 +972,7 @@
       "uiPages": [
         "src/pages/dashboard/DiscountCodesDashboard.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -1069,9 +1003,7 @@
       "uiPages": [
         "src/pages/auth/RegisterPage.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -1104,9 +1036,7 @@
         "src/services/caseApi.ts",
         "src/services/membershipApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -1132,9 +1062,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 400,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -1166,9 +1094,7 @@
       "uiPages": [
         "src/services/caseApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -1197,9 +1123,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": true,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": true
     },
     {
       "method": "GET",
@@ -1228,9 +1152,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "DELETE",
@@ -1259,9 +1181,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -1292,9 +1212,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -1323,9 +1241,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -1354,9 +1270,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "PATCH",
@@ -1388,9 +1302,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "DELETE",
@@ -1419,9 +1331,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -1450,9 +1360,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -1484,9 +1392,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -1519,9 +1425,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -1550,9 +1454,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -1584,9 +1486,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "PATCH",
@@ -1615,9 +1515,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -1642,9 +1540,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -1669,9 +1565,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -1696,9 +1590,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 404,
-      "runtimeStatus": "NOT_FOUND_FOR_SEED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -1723,9 +1615,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 404,
-      "runtimeStatus": "NOT_FOUND_FOR_SEED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -1751,9 +1641,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -1778,9 +1666,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -1805,9 +1691,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -1833,9 +1717,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -1861,9 +1743,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -1890,9 +1770,7 @@
       "uiPages": [
         "src/services/caseApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -1917,9 +1795,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 404,
-      "runtimeStatus": "NOT_FOUND_FOR_SEED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -1944,9 +1820,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 404,
-      "runtimeStatus": "NOT_FOUND_FOR_SEED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -1973,9 +1847,7 @@
       "uiPages": [
         "src/services/caseApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 404,
-      "runtimeStatus": "NOT_FOUND_FOR_SEED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -2004,9 +1876,7 @@
       "uiPages": [
         "src/services/courtListenerApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -2037,9 +1907,7 @@
       "uiPages": [
         "src/services/courtListenerApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 400,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -2066,9 +1934,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 401,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -2095,9 +1961,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 401,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -2128,9 +1992,7 @@
       "uiPages": [
         "src/services/courtListenerApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -2171,9 +2033,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -2214,9 +2074,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -2257,9 +2115,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -2299,9 +2155,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -2341,9 +2195,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 403,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -2383,9 +2235,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 403,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -2425,9 +2275,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 403,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -2467,9 +2315,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 403,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -2509,9 +2355,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -2551,9 +2395,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -2593,9 +2435,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -2635,9 +2475,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -2677,9 +2515,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 403,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -2719,9 +2555,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 403,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -2761,9 +2595,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 403,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "PUT",
@@ -2803,9 +2635,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "PUT",
@@ -2845,9 +2675,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "DELETE",
@@ -2887,9 +2715,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -2929,9 +2755,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 403,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -2971,9 +2795,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 403,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -3013,9 +2835,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -3055,9 +2875,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -3097,9 +2915,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -3139,9 +2955,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -3181,9 +2995,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -3223,9 +3035,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -3265,9 +3075,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -3307,9 +3115,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -3349,9 +3155,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -3391,9 +3195,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -3433,9 +3235,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 403,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -3462,9 +3262,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 403,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -3491,9 +3289,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 403,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -3520,9 +3316,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 403,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -3549,9 +3343,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 403,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "PUT",
@@ -3578,9 +3370,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -3607,9 +3397,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 403,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -3636,9 +3424,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -3667,9 +3453,7 @@
       "uiPages": [
         "src/services/doctrineService.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -3696,9 +3480,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -3725,9 +3507,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 404,
-      "runtimeStatus": "NOT_FOUND_FOR_SEED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -3758,9 +3538,7 @@
       "uiPages": [
         "src/services/doctrineService.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 400,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -3790,9 +3568,7 @@
       "uiPages": [
         "src/services/doctrineService.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -3822,9 +3598,7 @@
       "uiPages": [
         "src/services/doctrineService.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -3852,9 +3626,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -3883,9 +3655,7 @@
       "uiPages": [
         "src/services/doctrineService.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -3912,9 +3682,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -3941,9 +3709,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -3970,9 +3736,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -3999,9 +3763,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -4028,9 +3790,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -4066,9 +3826,7 @@
         "src/pages/dashboard/EvidenceRequestsDashboard.tsx",
         "src/services/caseApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -4100,9 +3858,7 @@
         "src/pages/dashboard/EvidenceRequestsDashboard.tsx",
         "src/services/caseApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -4133,9 +3889,7 @@
       "uiPages": [
         "src/services/caseApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "PATCH",
@@ -4169,9 +3923,7 @@
       "uiPages": [
         "src/services/caseApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "DELETE",
@@ -4202,9 +3954,7 @@
       "uiPages": [
         "src/services/caseApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -4235,9 +3985,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -4268,9 +4016,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -4301,9 +4047,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -4334,9 +4078,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -4367,9 +4109,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -4400,9 +4140,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -4434,9 +4172,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -4467,9 +4203,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -4501,9 +4235,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -4534,9 +4266,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -4567,9 +4297,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -4600,9 +4328,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -4633,9 +4359,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -4666,9 +4390,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -4699,9 +4421,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "PUT",
@@ -4733,9 +4453,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -4766,9 +4484,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -4801,9 +4517,7 @@
       "uiPages": [
         "src/pages/dashboard/PolicyComplianceDashboard.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -4836,9 +4550,7 @@
       "uiPages": [
         "src/pages/dashboard/PolicyComplianceDashboard.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -4870,9 +4582,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -4903,9 +4613,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -4936,9 +4644,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -4969,9 +4675,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -5002,9 +4706,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -5036,9 +4738,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -5069,9 +4769,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -5102,9 +4800,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -5135,9 +4831,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -5168,9 +4862,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -5201,9 +4893,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -5237,9 +4927,7 @@
       "uiPages": [
         "src/pages/dashboard/EvidenceRequestsDashboard.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -5275,9 +4963,7 @@
       "uiPages": [
         "src/pages/dashboard/EvidenceRequestsDashboard.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -5310,9 +4996,7 @@
       "uiPages": [
         "src/pages/dashboard/EvidenceRequestsDashboard.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -5347,9 +5031,7 @@
       "uiPages": [
         "src/services/caseApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -5386,9 +5068,7 @@
       "uiPages": [
         "src/services/caseApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -5421,9 +5101,7 @@
       "uiPages": [
         "src/services/caseApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -5456,9 +5134,7 @@
       "uiPages": [
         "src/services/caseApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 403,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "DELETE",
@@ -5491,9 +5167,7 @@
       "uiPages": [
         "src/services/caseApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -5525,9 +5199,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -5559,9 +5231,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -5594,9 +5264,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -5628,9 +5296,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -5662,9 +5328,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -5696,9 +5360,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -5730,9 +5392,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -5764,9 +5424,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -5798,9 +5456,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -5832,9 +5488,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -5866,9 +5520,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -5900,9 +5552,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -5934,9 +5584,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -5968,9 +5616,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -6002,9 +5648,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 404,
-      "runtimeStatus": "NOT_FOUND_FOR_SEED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -6042,9 +5686,7 @@
       "uiPages": [
         "src/pages/dashboard/CaseTimelineVisualizer.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -6076,9 +5718,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -6110,9 +5750,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -6144,9 +5782,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -6178,9 +5814,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -6212,9 +5846,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -6246,9 +5878,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -6275,9 +5905,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 403,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -6304,9 +5932,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -6333,9 +5959,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 403,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -6362,9 +5986,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 403,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -6391,9 +6013,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -6420,9 +6040,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -6449,9 +6067,32 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": true,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": true
+    },
+    {
+      "method": "GET",
+      "route": "/api/cases/:caseId/knowledge-graph",
+      "controller": "backend/src/graph/knowledgeGraphRoutes.ts",
+      "authenticationRequired": true,
+      "authenticationMechanism": "global authenticationHook (JWT)",
+      "authorizationGuards": [
+        "guardCaseAccess"
+      ],
+      "validation": [
+        "none-detected"
+      ],
+      "inputSurface": [
+        "params"
+      ],
+      "directPrismaModels": [],
+      "databaseTables": [],
+      "queuesInvoked": [],
+      "workersInvoked": [],
+      "cache": false,
+      "services": [],
+      "websocketEvents": [],
+      "uiPages": [],
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -6476,9 +6117,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -6503,9 +6142,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -6530,9 +6167,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -6561,9 +6196,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -6590,9 +6223,7 @@
       "uiPages": [
         "src/services/caseApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -6621,9 +6252,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -6650,9 +6279,7 @@
       "uiPages": [
         "src/services/caseApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -6677,9 +6304,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -6708,9 +6333,7 @@
       "uiPages": [
         "src/services/investigatorApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -6746,9 +6369,7 @@
       "uiPages": [
         "src/services/investigatorApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -6784,9 +6405,7 @@
       "uiPages": [
         "src/services/investigatorApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -6822,9 +6441,7 @@
       "uiPages": [
         "src/services/investigatorApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -6857,9 +6474,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -6886,9 +6501,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -6915,9 +6528,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": true,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": true
     },
     {
       "method": "GET",
@@ -6944,9 +6555,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -6973,9 +6582,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -7002,9 +6609,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -7032,9 +6637,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -7061,9 +6664,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -7090,9 +6691,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -7119,9 +6718,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -7149,9 +6746,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -7178,9 +6773,7 @@
       "uiPages": [
         "src/pages/ContactSalesPage.tsx"
       ],
-      "testCovered": true,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": true
     },
     {
       "method": "GET",
@@ -7221,9 +6814,7 @@
       "uiPages": [
         "src/services/membershipApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "PATCH",
@@ -7258,9 +6849,7 @@
       "uiPages": [
         "src/services/membershipApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -7291,9 +6880,7 @@
       "uiPages": [
         "src/services/membershipApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -7326,9 +6913,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -7363,9 +6948,7 @@
       "uiPages": [
         "src/services/membershipApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -7394,9 +6977,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -7427,9 +7008,7 @@
       "uiPages": [
         "src/services/membershipApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -7461,9 +7040,7 @@
       "uiPages": [
         "src/services/membershipApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -7494,9 +7071,7 @@
       "uiPages": [
         "src/services/membershipApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -7528,9 +7103,7 @@
       "uiPages": [
         "src/services/membershipApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -7559,9 +7132,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -7590,9 +7161,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -7627,9 +7196,7 @@
       "uiPages": [
         "src/pages/onboarding/RoleOnboardingPage.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -7658,9 +7225,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -7689,9 +7254,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -7721,9 +7284,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -7752,9 +7313,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -7783,9 +7342,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -7819,9 +7376,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -7844,9 +7399,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": true,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": true
     },
     {
       "method": "GET",
@@ -7869,9 +7422,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": true,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": true
     },
     {
       "method": "GET",
@@ -7894,9 +7445,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": true,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": true
     },
     {
       "method": "GET",
@@ -7924,9 +7473,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -7954,9 +7501,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -7984,9 +7529,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "PUT",
@@ -8015,9 +7558,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -8045,9 +7586,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "PUT",
@@ -8076,9 +7615,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -8106,9 +7643,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -8136,9 +7671,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -8166,9 +7699,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -8196,9 +7727,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "PATCH",
@@ -8227,9 +7756,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -8257,9 +7784,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -8287,9 +7812,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -8317,9 +7840,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -8347,9 +7868,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -8377,9 +7896,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -8407,9 +7924,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -8437,9 +7952,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "PATCH",
@@ -8468,9 +7981,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -8498,9 +8009,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "PATCH",
@@ -8528,9 +8037,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -8558,9 +8065,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -8589,9 +8094,7 @@
       "uiPages": [
         "src/services/organizationApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "PATCH",
@@ -8620,9 +8123,7 @@
       "uiPages": [
         "src/services/organizationApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -8651,9 +8152,7 @@
       "uiPages": [
         "src/services/organizationApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -8682,9 +8181,7 @@
       "uiPages": [
         "src/services/organizationApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -8713,9 +8210,7 @@
       "uiPages": [
         "src/services/organizationApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -8744,9 +8239,7 @@
       "uiPages": [
         "src/services/organizationApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -8775,9 +8268,7 @@
       "uiPages": [
         "src/services/organizationApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -8806,9 +8297,7 @@
       "uiPages": [
         "src/services/organizationApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -8841,9 +8330,7 @@
       "uiPages": [
         "src/services/organizationApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -8872,9 +8359,7 @@
       "uiPages": [
         "src/services/organizationApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -8903,9 +8388,7 @@
       "uiPages": [
         "src/services/organizationApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -8934,9 +8417,7 @@
       "uiPages": [
         "src/services/organizationApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -8963,9 +8444,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -8993,9 +8472,7 @@
       "uiPages": [
         "src/services/organizationApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -9023,9 +8500,7 @@
       "uiPages": [
         "src/services/organizationApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -9053,9 +8528,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -9082,9 +8555,7 @@
       "uiPages": [
         "src/pages/dashboard/PolicyOperationsDashboard.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -9109,9 +8580,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -9138,9 +8607,7 @@
       "uiPages": [
         "src/pages/dashboard/PolicyTopicsViewer.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -9167,9 +8634,7 @@
       "uiPages": [
         "src/pages/dashboard/PolicyTopicsViewer.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -9196,9 +8661,7 @@
       "uiPages": [
         "src/pages/dashboard/PolicyTopicsViewer.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -9223,9 +8686,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -9250,9 +8711,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -9281,9 +8740,7 @@
       "uiPages": [
         "src/pages/dashboard/PolicyPipelineDashboard.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -9312,9 +8769,7 @@
       "uiPages": [
         "src/pages/dashboard/PolicyPipelineDashboard.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -9343,9 +8798,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -9372,9 +8825,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -9402,9 +8853,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -9431,9 +8880,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -9460,9 +8907,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -9489,9 +8934,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -9519,9 +8962,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -9550,9 +8991,7 @@
       "uiPages": [
         "src/pages/dashboard/PolicyIntelligenceDashboard.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -9579,9 +9018,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -9608,9 +9045,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -9637,9 +9072,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -9666,9 +9099,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -9695,9 +9126,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -9724,9 +9153,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -9753,9 +9180,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -9782,9 +9207,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -9811,9 +9234,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -9840,9 +9261,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -9869,9 +9288,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -9898,9 +9315,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -9927,9 +9342,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -9956,9 +9369,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -9985,9 +9396,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -10014,9 +9423,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -10043,9 +9450,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -10070,9 +9475,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -10099,9 +9502,7 @@
       "uiPages": [
         "src/pages/admin/OperationsCommandCenter.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -10128,9 +9529,7 @@
       "uiPages": [
         "src/pages/dashboard/SystemHealthDashboard.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -10157,9 +9556,7 @@
       "uiPages": [
         "src/pages/dashboard/BetaDeploymentVerification.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -10184,9 +9581,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -10211,9 +9606,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -10238,9 +9631,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -10267,9 +9658,7 @@
       "uiPages": [
         "src/pages/dashboard/RepositoryIntegrityDashboard.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -10294,9 +9683,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -10321,9 +9708,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -10348,9 +9733,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -10375,9 +9758,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -10402,9 +9783,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -10429,9 +9808,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -10459,9 +9836,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -10488,9 +9863,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -10519,9 +9892,7 @@
       "uiPages": [
         "src/services/globalSearchService.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -10549,9 +9920,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -10574,9 +9943,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -10609,9 +9976,7 @@
       "uiPages": [
         "src/stores/authStore.ts"
       ],
-      "testCovered": true,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": true
     },
     {
       "method": "POST",
@@ -10642,9 +10007,7 @@
       "uiPages": [
         "src/stores/authStore.ts"
       ],
-      "testCovered": true,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": true
     },
     {
       "method": "POST",
@@ -10668,9 +10031,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": true,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": true
     },
     {
       "method": "POST",
@@ -10695,9 +10056,7 @@
       "uiPages": [
         "src/stores/authStore.ts"
       ],
-      "testCovered": true,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": true
     },
     {
       "method": "GET",
@@ -10726,9 +10085,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -10761,9 +10118,7 @@
       "uiPages": [
         "src/pages/auth/ForgotPasswordPage.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -10789,9 +10144,7 @@
       "uiPages": [
         "src/pages/auth/ResetPasswordPage.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -10822,9 +10175,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -10854,9 +10205,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": true,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": true
     },
     {
       "method": "POST",
@@ -10884,9 +10233,7 @@
       "uiPages": [
         "src/pages/auth/VerifyEmailPage.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -10917,9 +10264,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -10950,9 +10295,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -10984,9 +10327,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -11022,9 +10363,7 @@
       "uiPages": [
         "src/stores/authStore.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -11056,9 +10395,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -11085,9 +10422,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "DELETE",
@@ -11114,9 +10449,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -11141,9 +10474,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -11168,9 +10499,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -11195,9 +10524,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -11225,9 +10552,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": true,
-      "runtimeStatusCode": 200,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": true
     },
     {
       "method": "GET",
@@ -11255,9 +10580,7 @@
       "services": [],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -11272,7 +10595,7 @@
         "none-detected"
       ],
       "inputSurface": [
-        "none"
+        "params"
       ],
       "directPrismaModels": [],
       "databaseTables": [],
@@ -11293,9 +10616,7 @@
       "uiPages": [
         "src/services/caseApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -11331,9 +10652,7 @@
       "uiPages": [
         "src/services/caseApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -11369,9 +10688,7 @@
       "uiPages": [
         "src/services/caseApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -11406,9 +10723,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -11442,9 +10757,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -11473,9 +10786,7 @@
       "uiPages": [
         "src/pages/case/LitigationStrategyView.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -11504,9 +10815,7 @@
       "uiPages": [
         "src/pages/case/TrialExhibitWorkspace.tsx"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -11536,9 +10845,7 @@
       "uiPages": [
         "src/services/workbenchApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -11566,9 +10873,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -11596,9 +10901,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -11630,9 +10933,7 @@
       "uiPages": [
         "src/services/workbenchApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -11666,9 +10967,7 @@
       "uiPages": [
         "src/services/workbenchApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -11705,9 +11004,7 @@
       "uiPages": [
         "src/services/workbenchApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "PATCH",
@@ -11741,9 +11038,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "DELETE",
@@ -11775,9 +11070,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -11811,9 +11104,7 @@
       "uiPages": [
         "src/services/workbenchApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -11849,9 +11140,7 @@
       "uiPages": [
         "src/services/workbenchApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "DELETE",
@@ -11883,9 +11172,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -11919,9 +11206,7 @@
       "uiPages": [
         "src/services/workbenchApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     },
     {
       "method": "POST",
@@ -11958,9 +11243,7 @@
       "uiPages": [
         "src/services/workbenchApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "PATCH",
@@ -11996,9 +11279,7 @@
       "uiPages": [
         "src/services/workbenchApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "DELETE",
@@ -12032,9 +11313,7 @@
       "uiPages": [
         "src/services/workbenchApi.ts"
       ],
-      "testCovered": false,
-      "runtimeStatusCode": null,
-      "runtimeStatus": "REGISTERED"
+      "testCovered": false
     },
     {
       "method": "GET",
@@ -12062,16 +11341,7 @@
       ],
       "websocketEvents": [],
       "uiPages": [],
-      "testCovered": false,
-      "runtimeStatusCode": 429,
-      "runtimeStatus": "CONNECTED"
+      "testCovered": false
     }
-  ],
-  "runtimeProbedAt": "2026-07-07T15:50:37.121Z",
-  "runtimeProbedGetEndpoints": 205,
-  "runtimeStatusCounts": {
-    "CONNECTED": 197,
-    "REGISTERED": 169,
-    "NOT_FOUND_FOR_SEED": 8
-  }
+  ]
 }

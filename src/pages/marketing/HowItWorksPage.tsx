@@ -27,7 +27,7 @@ const STEPS = [
     step: '2',
     title: 'Create Your Workspace',
     description:
-      'Set up your organization, invite up to five designees (attorney, investigator, client, family, expert), and assign independent permissions.',
+      'Set up your organization, invite unlimited collaborators (attorney, investigator, client, family, expert), and assign independent permissions.',
   },
   {
     icon: Upload,

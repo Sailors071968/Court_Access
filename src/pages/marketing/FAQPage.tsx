@@ -26,7 +26,7 @@ const FAQ_ITEMS = [
   },
   {
     q: 'Can I invite other people to my account?',
-    a: 'Yes. Every Primary Account Owner can invite up to five additional users with individually configured permissions per case and per resource. Hidden information is completely invisible to unauthorized users.',
+    a: 'Yes. Every Primary Account Owner can invite an unlimited number of collaborators with individually configured permissions per case and per resource. Hidden information is completely invisible to unauthorized users.',
   },
   {
     q: 'Is my case data secure?',

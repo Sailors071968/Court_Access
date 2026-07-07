@@ -82,6 +82,7 @@ import { SearchPage } from './pages/SearchPage';
 import { NotificationsPage } from './pages/NotificationsPage';
 import { AccountSettingsPage } from './pages/membership/AccountSettingsPage';
 import { SharedAccessPage } from './pages/membership/SharedAccessPage';
+import { CollaboratorsPage } from './pages/membership/CollaboratorsPage';
 import { AdminPage } from './pages/admin/AdminPage';
 import { OperationsCommandCenter } from './pages/admin/OperationsCommandCenter';
 
@@ -402,6 +403,14 @@ function App() {
             element={
               <ProtectedRoute>
                 <SharedAccessPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="collaborators"
+            element={
+              <ProtectedRoute>
+                <CollaboratorsPage />
               </ProtectedRoute>
             }
           />

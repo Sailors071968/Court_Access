@@ -76,7 +76,7 @@ export function AccountSettingsPage() {
         </div>
       )}
 
-      <Card>
+      <Card id="profile" className="scroll-mt-20">
         <div className="flex items-center gap-3 mb-6">
           <User size={20} className="text-slate-400" />
           <h2 className="text-lg font-semibold text-white">Profile</h2>
@@ -106,7 +106,7 @@ export function AccountSettingsPage() {
         </div>
       </Card>
 
-      <Card>
+      <Card id="billing" className="scroll-mt-20">
         <div className="flex items-center gap-3 mb-6">
           <CreditCard size={20} className="text-slate-400" />
           <h2 className="text-lg font-semibold text-white">Subscription & Billing</h2>
@@ -150,23 +150,23 @@ export function AccountSettingsPage() {
         </div>
       </Card>
 
-      <Card>
+      <Card id="collaborators" className="scroll-mt-20">
         <div className="flex items-center gap-3 mb-6">
           <Users size={20} className="text-slate-400" />
-          <h2 className="text-lg font-semibold text-white">Delegated Access</h2>
+          <h2 className="text-lg font-semibold text-white">Collaborators</h2>
         </div>
         <p className="text-sm text-slate-300 mb-4">
           {account?.delegatedUserLimit == null
-            ? 'Invite unlimited users with individual permissions.'
-            : `Invite up to ${account.delegatedUserLimit} additional users with individual permissions.`}
-          Currently: {account?.delegatedUsers ?? 0} delegated user(s).
+            ? 'Invite an unlimited number of collaborators with individual permissions.'
+            : `Invite up to ${account.delegatedUserLimit} collaborators with individual permissions.`}
+          {' '}Currently: {account?.delegatedUsers ?? 0} collaborator(s).
         </p>
         <div className="flex flex-wrap gap-3">
           <Link
-            to="/organization/settings"
-            className="px-4 py-2 bg-slate-800 text-white rounded-lg text-sm font-medium hover:bg-slate-700"
+            to="/collaborators"
+            className="px-4 py-2 ca-gradient-gold text-navy rounded-lg text-sm font-semibold hover:brightness-110"
           >
-            Manage Invitations
+            Manage Collaborators
           </Link>
           <Link to="/shared-access" className="px-4 py-2 text-sm text-slate-300 hover:text-white">
             My Shared Access
@@ -219,7 +219,7 @@ export function AccountSettingsPage() {
       </Card>
 
       <Card>
-        <div className="flex items-center gap-3 mb-4">
+        <div id="security" className="scroll-mt-20 flex items-center gap-3 mb-4">
           <Shield size={20} className="text-slate-400" />
           <h2 className="text-lg font-semibold text-white">Security & Legal</h2>
         </div>

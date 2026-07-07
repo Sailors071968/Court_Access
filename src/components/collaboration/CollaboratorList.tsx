@@ -1,20 +1,9 @@
 import { UserPlus, Shield } from 'lucide-react';
 import { Button } from '../ui/button';
 import { Badge } from '../ui/badge';
-import { Icon } from '../icons/registry';
-import { ROLE_LABELS, type Collaborator, type CollaboratorRole } from './types';
+import { Avatar } from '../ui/avatar';
+import { ROLE_LABELS, type Collaborator } from './types';
 import { cn } from '../../lib/utils';
-
-const ROLE_ICON: Record<CollaboratorRole, Parameters<typeof Icon>[0]['name']> = {
-  attorney: 'attorney',
-  secretary: 'documents',
-  client: 'defendant',
-  investigator: 'investigator',
-  expert: 'witness',
-  paralegal: 'tasks',
-  family: 'defendant',
-  admin: 'permissions',
-};
 
 interface CollaboratorListProps {
   collaborators: Collaborator[];
@@ -42,14 +31,11 @@ export function CollaboratorList({ collaborators, onInvite, onEditPermissions, c
         {collaborators.map((c) => (
           <div key={c.userId} className="flex items-center justify-between gap-3 p-3 rounded-xl bg-white/[0.03]">
             <div className="flex items-center gap-3 min-w-0">
-              <span className="relative w-9 h-9 rounded-xl ca-icon-gold text-gold-light flex items-center justify-center flex-shrink-0">
-                <Icon name={ROLE_ICON[c.role]} size={16} />
-                {c.online && <span className="absolute -bottom-0.5 -right-0.5 w-2.5 h-2.5 rounded-full bg-emerald-400 ring-2 ring-navy-800" />}
-              </span>
+              <Avatar name={c.name} src={c.avatarUrl} size="sm" online={c.online} />
               <div className="min-w-0">
                 <p className="text-sm font-medium text-white truncate">{c.name}</p>
                 <div className="flex items-center gap-2 mt-0.5">
-                  <Badge variant="gold">{ROLE_LABELS[c.role]}</Badge>
+                  <Badge variant="gold">{c.customRole ?? ROLE_LABELS[c.role] ?? c.role}</Badge>
                   {c.permissions && c.permissions.length > 0 && (
                     <span className="text-[11px] text-slate-400">{c.permissions.length} permissions</span>
                   )}

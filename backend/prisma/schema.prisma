@@ -21,6 +21,7 @@ model User {
   passwordHash  String
   role          String   @default("staff") // admin | attorney | investigator | staff | defendant
   defaultRole   String?  // Program 2A onboarding role (attorney | criminal_investigator | ...)
+  avatarUrl     String?  // Uploaded profile photo / firm portrait; initials used as fallback
   tenantId      String
   clientId      String?  // Links defendant portal users to Client record
   officeId      String?

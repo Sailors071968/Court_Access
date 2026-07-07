@@ -47,7 +47,7 @@ const FEATURE_GROUPS = [
       { icon: Briefcase, name: 'Attorney Workbench', desc: 'Motions, trial notebook, voir dire, opening and closing outlines.' },
       { icon: Search, name: 'Investigator Workbench', desc: 'Witnesses, leads, interviews, field notes, and surveillance logs.' },
       { icon: Users, name: 'Client Portal', desc: 'Court dates, documents, messages, and authorized evidence uploads.' },
-      { icon: Users, name: 'Delegated Access', desc: 'Invite up to five users with per-case, per-resource permissions.' },
+      { icon: Users, name: 'Collaborators', desc: 'Invite unlimited collaborators with per-case, per-resource permissions.' },
     ],
   },
 ];

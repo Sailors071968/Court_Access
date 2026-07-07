@@ -31,3 +31,10 @@ export { ProgressBar, ProgressRing } from './progress';
 export { Spinner } from './spinner';
 export { Skeleton, SkeletonCard, SkeletonStatGrid } from './skeleton';
 export { EmptyState } from './empty-state';
+export { ErrorState } from './error-state';
+
+// Data
+export { DataTable } from '../data/data-table';
+
+// Iconography (canonical registry)
+export { Icon, type IconName } from '../icons/registry';

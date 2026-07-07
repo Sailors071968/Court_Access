@@ -230,6 +230,11 @@ async function startServer() {
   const { registerCourtListenerRoutes } = await import('./courtlistener/courtListenerRoutes.js');
   await registerCourtListenerRoutes(app);
 
+  // Legal Intelligence Provider Layer — canonical provider registry + federated search
+  console.log('[Server] Registering Legal Intelligence provider routes...');
+  const { registerProviderRoutes } = await import('./providers/providerRoutes.js');
+  await registerProviderRoutes(app);
+
   console.log('[Server] Registering Investigator Workbench routes...');
   await registerInvestigatorRoutes(app);
 

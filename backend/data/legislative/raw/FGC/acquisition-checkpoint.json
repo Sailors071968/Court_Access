@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "code": "FGC",
+  "manifestPath": "/workspace/backend/data/legislative/discovery/FGC-criminal-manifest.json",
+  "startedAt": "2026-07-07T16:33:05.165Z",
+  "updatedAt": "2026-07-07T16:33:12.456Z",
+  "nextIndex": 8,
+  "acquired": 8,
+  "failed": 0,
+  "skipped": 0,
+  "lastSection": "1602."
+}

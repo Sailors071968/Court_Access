@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "code": "WIC",
+  "manifestPath": "/workspace/backend/data/legislative/discovery/WIC-criminal-manifest.json",
+  "startedAt": "2026-07-07T16:33:00.221Z",
+  "updatedAt": "2026-07-07T16:33:04.526Z",
+  "nextIndex": 5,
+  "acquired": 5,
+  "failed": 0,
+  "skipped": 0,
+  "lastSection": "14107."
+}

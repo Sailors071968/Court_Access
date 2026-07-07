@@ -1,38 +1,38 @@
 {
-  "generatedAt": "2026-07-06T21:32:21.761Z",
+  "generatedAt": "2026-07-07T16:33:28.975Z",
   "classifierVersion": "1.0.0",
   "californiaCodesDiscovered": 2,
   "californiaCodesTotal": 30,
-  "codesAnalyzed": 4,
-  "statutesClassified": 378,
-  "likelyCriminalStatutes": 167,
-  "confirmedCriminalOffenses": 123,
+  "codesAnalyzed": 9,
+  "statutesClassified": 406,
+  "likelyCriminalStatutes": 187,
+  "confirmedCriminalOffenses": 133,
   "regulatoryIncorporationCandidates": 0,
-  "manualReviewQueue": 99,
-  "unknownClassifications": 93,
+  "manualReviewQueue": 109,
+  "unknownClassifications": 97,
   "byClassification": {
-    "criminal_offense": 100,
-    "criminal_penalty": 60,
+    "criminal_offense": 109,
+    "criminal_penalty": 64,
     "criminal_enhancement": 1,
     "sentencing_provision": 2,
-    "definitions": 28,
-    "procedure": 13,
-    "evidence": 6,
+    "definitions": 29,
+    "procedure": 14,
+    "evidence": 7,
     "regulatory_incorporation": 0,
-    "licensing": 10,
-    "administrative": 21,
+    "licensing": 16,
+    "administrative": 23,
     "civil": 2,
     "tax": 0,
     "environmental": 0,
     "cross_reference": 42,
-    "unknown": 93
+    "unknown": 97
   },
   "byPriority": {
-    "critical": 123,
-    "high": 42,
-    "medium": 2,
-    "low": 55,
-    "deferred": 156
+    "critical": 133,
+    "high": 46,
+    "medium": 8,
+    "low": 57,
+    "deferred": 162
   },
   "byCode": {
     "PEN": {
@@ -54,6 +54,31 @@
       "classified": 8,
       "likelyCriminal": 8,
       "confirmedOffenses": 7
+    },
+    "WIC": {
+      "classified": 5,
+      "likelyCriminal": 4,
+      "confirmedOffenses": 3
+    },
+    "FGC": {
+      "classified": 8,
+      "likelyCriminal": 5,
+      "confirmedOffenses": 2
+    },
+    "LAB": {
+      "classified": 5,
+      "likelyCriminal": 5,
+      "confirmedOffenses": 4
+    },
+    "PRC": {
+      "classified": 5,
+      "likelyCriminal": 2,
+      "confirmedOffenses": 0
+    },
+    "GOV": {
+      "classified": 5,
+      "likelyCriminal": 4,
+      "confirmedOffenses": 1
     }
   }
 }

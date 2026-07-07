@@ -24,7 +24,10 @@ const INVITE_EXPIRY_MS = 7 * 24 * 60 * 60 * 1000;
 const BCRYPT_ROUNDS = 12;
 
 export async function ensureMembership(userId: string, tenantId: string) {
-  const existing = await prisma.organizationMember.findUnique({ where: { userId } });
+  // OrganizationMember is unique on [organizationId, userId] — userId alone is
+  // NOT a unique key, so findUnique({where:{userId}}) was an invalid invocation
+  // (500). Scope the lookup to the tenant with findFirst.
+  const existing = await prisma.organizationMember.findFirst({ where: { userId, organizationId: tenantId } });
   if (existing) return existing;
 
   const user = await prisma.user.findUnique({ where: { id: userId } });

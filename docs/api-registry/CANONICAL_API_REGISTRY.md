@@ -2,9 +2,9 @@
 
 > Single source of truth for CourtAccess HTTP endpoints. **Generated deterministically** from source by `scripts/generate-api-registry.mjs` and enriched with **live runtime probing** by `scripts/probe-api-registry.mjs`. No values are estimated or fabricated; fields that cannot be resolved statically are marked accordingly. Regenerate with those scripts.
 
-- Generated: 2026-07-07T13:34:31.712Z
-- Runtime probed: 2026-07-07T13:37:20.808Z (195 GET endpoints against a live server)
-- **Total endpoints: 363** across 42 route files
+- Generated: 2026-07-07T14:11:57.347Z
+- Runtime probed: 2026-07-07T14:11:58.685Z (197 GET endpoints against a live server)
+- **Total endpoints: 365** across 43 route files
 - Duplicate endpoints (same method+route): **0** (none)
 
 ## Method note (how each field is derived)
@@ -19,14 +19,25 @@
 
 | Metric | Count | % |
 |--------|-------|---|
-| Total endpoints | 363 | 100% |
-| Authentication required | 345 | 95.0% |
-| Public (allowlist) | 18 | 5.0% |
-| Statically mapped to a UI caller | 100 | 27.5% |
+| Total endpoints | 365 | 100% |
+| Authentication required | 347 | 95.1% |
+| Public (allowlist) | 18 | 4.9% |
+| Statically mapped to a UI caller | 102 | 27.9% |
 | Covered by a test reference | 17 | 4.7% |
-| Runtime GET probed | 195 | — |
-| Runtime: CONNECTED | 195 | 53.7% |
-| Runtime: REGISTERED | 168 | 46.3% |
+| Runtime GET probed | 197 | — |
+
+### Canonical runtime status (requested taxonomy)
+
+| Status | Count | % | Definition |
+|--------|-------|---|------------|
+| CONNECTED | 115 | 31.5% | Route exists + responds (2xx/401/403) and is wired to a UI caller, a test, or is a public/infra route |
+| PARTIALLY CONNECTED | 8 | 2.2% | Route exists but returned 404 for a seeded resource (reachable, not fully exercised) |
+| UNUSED | 242 | 66.3% | Route exists/responds but no detected UI caller or test (verify dynamic callers) |
+| BROKEN | 0 | 0.0% | Route returned 5xx |
+| DEPRECATED | 0 | 0% | Not statically determinable — none asserted (UNKNOWN preferred) |
+| UNKNOWN | 0 | 0.0% | Could not be reached during probe |
+
+_(Raw probe codes: CONNECTED=189, REGISTERED=168, NOT_FOUND_FOR_SEED=8)_
 
 > **UI-mapping caveat (honest):** UI callers are detected statically from `/api` string + `${API_BASE}` template literals in the frontend. Endpoints built through multi-step dynamic path construction may be under-counted; the "unused" list below is therefore **candidates requiring confirmation**, not confirmed dead endpoints.
 
@@ -64,8 +75,6 @@ Frontend code calls these paths, but no backend route matches (static match). Ru
 | `/api/evidence/upload` | api.ts | exists or static-miss (see note) |
 | `/api/timeline/rebuild` | api.ts | exists or static-miss (see note) |
 | `/api/timeline` | api.ts | exists or static-miss (see note) |
-| `/api/cases/*/litigation-strategy` | LitigationStrategyView.tsx | **404 confirmed missing** |
-| `/api/cases/*/trial-exhibits` | TrialExhibitWorkspace.tsx | **404 confirmed missing** |
 | `/api/operations/cpra-requests` | CpraCampaignTimeline.tsx | exists or static-miss (see note) |
 | `/api/cpra/dashboard` | CpraDashboard.tsx | exists or static-miss (see note) |
 | `/api/cpra/campaigns` | CpraDashboard.tsx | exists or static-miss (see note) |
@@ -101,14 +110,14 @@ Frontend code calls these paths, but no backend route matches (static match). Ru
 ## 10. Integration Priority List
 
 1. **Wire 3 runtime-confirmed missing endpoints** (or confirm the UI's graceful empty-state is intended): `litigation-strategy` (service exists: `litigationStrategyService.ts`), `trial-exhibits` (data in `TrialExhibitScene`/`exhibitRoutes`), `policy-intelligence/agencies`.
-2. **Add test coverage** — only 17/363 endpoints have any test reference.
+2. **Add test coverage** — only 17/365 endpoints have any test reference.
 3. **Triage the 251 no-UI-caller candidates** — confirm dynamic callers or retire.
 
 ---
 
 ## 3. Frontend-to-API Mapping
 
-100 endpoints have a detected UI caller. Enderpoints and their UI files:
+102 endpoints have a detected UI caller. Enderpoints and their UI files:
 
 | Method | Route | UI file(s) |
 |--------|-------|-----------|
@@ -193,7 +202,7 @@ Frontend code calls these paths, but no backend route matches (static match). Ru
 | GET | `/api/admin/repository-integrity` | RepositoryIntegrityDashboard.tsx |
 | GET | `/api/search` | globalSearchService.ts |
 
-_(100 total; truncated to 80. Full data in canonical-api-registry.json → endpoints[].uiPages.)_
+_(102 total; truncated to 80. Full data in canonical-api-registry.json → endpoints[].uiPages.)_
 
 ---
 
@@ -244,6 +253,7 @@ Route file → service modules imported (file-level).
 | `security/securityLogger.ts` | — |
 | `server.ts` | — |
 | `timeline/timelineRoutes.ts` | argumentInteractionEngine, explainableArgumentEngine, contradictionExtractionService, timelineReconstructionService.js, pipelineJobService.js, legalAnalysisEngine |
+| `workbench/caseViewRoutes.ts` | workbenchService.js |
 | `workbench/workbenchRoutes.ts` | workbenchService.js, exportService.js |
 
 ---
@@ -547,573 +557,580 @@ _(truncated to 120; full in canonical-api-registry.json.)_
 
 ### `admin/adminRoutes.ts` (7)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
 | GET | `/api/admin/billing/metrics` | yes | CONNECTED | 0 | yes |
 | GET | `/api/admin/stats` | yes | CONNECTED | 1 | - |
 | GET | `/api/admin/users` | yes | CONNECTED | 1 | - |
 | GET | `/api/admin/cases` | yes | CONNECTED | 1 | - |
-| DELETE | `/api/admin/users/:userId` | yes | REGISTERED | 1 | - |
-| DELETE | `/api/admin/cases/:caseId` | yes | REGISTERED | 1 | - |
-| DELETE | `/api/admin/evidence/:evidenceId` | yes | REGISTERED | 0 | - |
+| DELETE | `/api/admin/users/:userId` | yes | CONNECTED | 1 | - |
+| DELETE | `/api/admin/cases/:caseId` | yes | CONNECTED | 1 | - |
+| DELETE | `/api/admin/evidence/:evidenceId` | yes | UNUSED | 0 | - |
 
 ### `admin/queueMonitorRoutes.ts` (4)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
-| GET | `/api/admin/queues` | yes | CONNECTED | 0 | - |
-| GET | `/api/admin/queues/:queueName` | yes | CONNECTED | 0 | - |
-| POST | `/api/admin/queues/:queueName/retry-all` | yes | REGISTERED | 0 | - |
-| POST | `/api/admin/queues/:queueName/clean` | yes | REGISTERED | 0 | - |
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
+| GET | `/api/admin/queues` | yes | UNUSED | 0 | - |
+| GET | `/api/admin/queues/:queueName` | yes | UNUSED | 0 | - |
+| POST | `/api/admin/queues/:queueName/retry-all` | yes | UNUSED | 0 | - |
+| POST | `/api/admin/queues/:queueName/clean` | yes | UNUSED | 0 | - |
 
 ### `assistant/litigationAssistantRoutes.ts` (1)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
-| POST | `/api/cases/:caseId/assistant` | yes | REGISTERED | 0 | - |
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
+| POST | `/api/cases/:caseId/assistant` | yes | UNUSED | 0 | - |
 
 ### `billing/billingRoutes.ts` (16)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
 | GET | `/api/billing/plans` | yes | CONNECTED | 1 | - |
-| GET | `/api/billing/plans/:planId` | yes | CONNECTED | 0 | - |
+| GET | `/api/billing/plans/:planId` | yes | PARTIALLY CONNECTED | 0 | - |
 | GET | `/api/billing/subscription` | yes | CONNECTED | 0 | yes |
-| POST | `/api/billing/subscription` | yes | REGISTERED | 0 | yes |
-| GET | `/api/billing/credits` | yes | CONNECTED | 0 | - |
-| GET | `/api/billing/credits/history` | yes | CONNECTED | 0 | - |
-| GET | `/api/billing/credits/by-type` | yes | CONNECTED | 0 | - |
-| GET | `/api/billing/credits/costs` | yes | CONNECTED | 0 | - |
-| POST | `/api/billing/credits/calculate` | yes | REGISTERED | 0 | - |
-| POST | `/api/billing/credits/deduct` | yes | REGISTERED | 0 | - |
-| GET | `/api/billing/credit-packs` | yes | CONNECTED | 0 | - |
-| POST | `/api/billing/credit-packs/purchase` | yes | REGISTERED | 0 | - |
+| POST | `/api/billing/subscription` | yes | CONNECTED | 0 | yes |
+| GET | `/api/billing/credits` | yes | UNUSED | 0 | - |
+| GET | `/api/billing/credits/history` | yes | UNUSED | 0 | - |
+| GET | `/api/billing/credits/by-type` | yes | UNUSED | 0 | - |
+| GET | `/api/billing/credits/costs` | yes | UNUSED | 0 | - |
+| POST | `/api/billing/credits/calculate` | yes | UNUSED | 0 | - |
+| POST | `/api/billing/credits/deduct` | yes | UNUSED | 0 | - |
+| GET | `/api/billing/credit-packs` | yes | UNUSED | 0 | - |
+| POST | `/api/billing/credit-packs/purchase` | yes | UNUSED | 0 | - |
 | GET | `/api/billing/usage` | yes | CONNECTED | 1 | yes |
-| POST | `/api/billing/usage/check-pages` | yes | REGISTERED | 0 | - |
-| POST | `/api/billing/usage/check-credits` | yes | REGISTERED | 0 | - |
-| POST | `/api/billing/usage/record-upload` | yes | REGISTERED | 0 | - |
+| POST | `/api/billing/usage/check-pages` | yes | UNUSED | 0 | - |
+| POST | `/api/billing/usage/check-credits` | yes | UNUSED | 0 | - |
+| POST | `/api/billing/usage/record-upload` | yes | UNUSED | 0 | - |
 
 ### `billing/discountRoutes.ts` (6)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
 | GET | `/api/discount-codes/validate` | PUBLIC | CONNECTED | 1 | - |
 | GET | `/api/admin/discount-codes` | yes | CONNECTED | 1 | - |
-| POST | `/api/admin/discount-codes` | yes | REGISTERED | 1 | - |
-| PATCH | `/api/admin/discount-codes/:codeId` | yes | REGISTERED | 1 | - |
-| DELETE | `/api/admin/discount-codes/:codeId` | yes | REGISTERED | 1 | - |
-| POST | `/api/discount-codes/apply` | yes | REGISTERED | 1 | - |
+| POST | `/api/admin/discount-codes` | yes | CONNECTED | 1 | - |
+| PATCH | `/api/admin/discount-codes/:codeId` | yes | CONNECTED | 1 | - |
+| DELETE | `/api/admin/discount-codes/:codeId` | yes | CONNECTED | 1 | - |
+| POST | `/api/discount-codes/apply` | yes | CONNECTED | 1 | - |
 
 ### `billing/stripeWebhookHandler.ts` (3)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
-| POST | `/api/billing/create-checkout-session` | yes | REGISTERED | 2 | - |
-| GET | `/api/billing/checkout-status/:sessionId` | yes | CONNECTED | 0 | - |
-| POST | `/api/billing/create-portal-session` | yes | REGISTERED | 1 | - |
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
+| POST | `/api/billing/create-checkout-session` | yes | CONNECTED | 2 | - |
+| GET | `/api/billing/checkout-status/:sessionId` | yes | UNUSED | 0 | - |
+| POST | `/api/billing/create-portal-session` | yes | CONNECTED | 1 | - |
 
 ### `charges/chargeRoutes.ts` (3)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
-| POST | `/api/charges` | yes | REGISTERED | 0 | yes |
-| GET | `/api/charges/:caseId` | yes | CONNECTED | 0 | - |
-| DELETE | `/api/charges/:id` | yes | REGISTERED | 0 | - |
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
+| POST | `/api/charges` | yes | CONNECTED | 0 | yes |
+| GET | `/api/charges/:caseId` | yes | UNUSED | 0 | - |
+| DELETE | `/api/charges/:id` | yes | UNUSED | 0 | - |
 
 ### `clients/clientRoutes.ts` (5)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
-| POST | `/api/clients` | yes | REGISTERED | 0 | - |
-| GET | `/api/clients` | yes | CONNECTED | 0 | - |
-| GET | `/api/clients/:clientId` | yes | CONNECTED | 0 | - |
-| PATCH | `/api/clients/:clientId` | yes | REGISTERED | 0 | - |
-| DELETE | `/api/clients/:clientId` | yes | REGISTERED | 0 | - |
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
+| POST | `/api/clients` | yes | UNUSED | 0 | - |
+| GET | `/api/clients` | yes | UNUSED | 0 | - |
+| GET | `/api/clients/:clientId` | yes | UNUSED | 0 | - |
+| PATCH | `/api/clients/:clientId` | yes | UNUSED | 0 | - |
+| DELETE | `/api/clients/:clientId` | yes | UNUSED | 0 | - |
 
 ### `communications/hearingRoutes.ts` (3)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
-| GET | `/api/cases/:caseId/hearings` | yes | CONNECTED | 0 | - |
-| POST | `/api/cases/:caseId/hearings` | yes | REGISTERED | 0 | - |
-| GET | `/api/portal/court-dates` | yes | CONNECTED | 0 | - |
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
+| GET | `/api/cases/:caseId/hearings` | yes | UNUSED | 0 | - |
+| POST | `/api/cases/:caseId/hearings` | yes | UNUSED | 0 | - |
+| GET | `/api/portal/court-dates` | yes | UNUSED | 0 | - |
 
 ### `communications/messagingRoutes.ts` (3)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
-| GET | `/api/cases/:caseId/messages` | yes | CONNECTED | 0 | - |
-| POST | `/api/cases/:caseId/messages` | yes | REGISTERED | 0 | - |
-| PATCH | `/api/cases/:caseId/messages/:messageId/read` | yes | REGISTERED | 0 | - |
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
+| GET | `/api/cases/:caseId/messages` | yes | UNUSED | 0 | - |
+| POST | `/api/cases/:caseId/messages` | yes | UNUSED | 0 | - |
+| PATCH | `/api/cases/:caseId/messages/:messageId/read` | yes | UNUSED | 0 | - |
 
 ### `contradiction/contradictionRoutes.ts` (13)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
-| GET | `/api/contradiction/status` | yes | CONNECTED | 0 | - |
-| GET | `/api/contradiction/ontology` | yes | CONNECTED | 0 | - |
-| GET | `/api/contradiction/ontology/:category` | yes | CONNECTED | 0 | - |
-| GET | `/api/contradiction/ontology/event/:eventTypeId` | yes | CONNECTED | 0 | - |
-| POST | `/api/contradiction/extract` | yes | REGISTERED | 0 | - |
-| GET | `/api/contradiction/events/:caseId` | yes | CONNECTED | 0 | - |
-| POST | `/api/contradiction/timeline/:caseId` | yes | REGISTERED | 0 | - |
-| POST | `/api/contradiction/video/process` | yes | REGISTERED | 0 | - |
-| POST | `/api/contradiction/video/bodycam-gaps` | yes | REGISTERED | 0 | - |
-| POST | `/api/contradiction/analyze/:caseId` | yes | REGISTERED | 1 | - |
-| GET | `/api/contradiction/graph/:caseId` | yes | CONNECTED | 0 | - |
-| GET | `/api/contradiction/graph/:caseId/cypher` | yes | CONNECTED | 0 | - |
-| GET | `/api/contradiction/recommendations/:caseId` | yes | CONNECTED | 1 | - |
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
+| GET | `/api/contradiction/status` | yes | UNUSED | 0 | - |
+| GET | `/api/contradiction/ontology` | yes | UNUSED | 0 | - |
+| GET | `/api/contradiction/ontology/:category` | yes | PARTIALLY CONNECTED | 0 | - |
+| GET | `/api/contradiction/ontology/event/:eventTypeId` | yes | PARTIALLY CONNECTED | 0 | - |
+| POST | `/api/contradiction/extract` | yes | UNUSED | 0 | - |
+| GET | `/api/contradiction/events/:caseId` | yes | UNUSED | 0 | - |
+| POST | `/api/contradiction/timeline/:caseId` | yes | UNUSED | 0 | - |
+| POST | `/api/contradiction/video/process` | yes | UNUSED | 0 | - |
+| POST | `/api/contradiction/video/bodycam-gaps` | yes | UNUSED | 0 | - |
+| POST | `/api/contradiction/analyze/:caseId` | yes | CONNECTED | 1 | - |
+| GET | `/api/contradiction/graph/:caseId` | yes | PARTIALLY CONNECTED | 0 | - |
+| GET | `/api/contradiction/graph/:caseId/cypher` | yes | PARTIALLY CONNECTED | 0 | - |
+| GET | `/api/contradiction/recommendations/:caseId` | yes | PARTIALLY CONNECTED | 1 | - |
 
 ### `cpra/autonomousCpraRoutes.ts` (31)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
-| POST | `/api/admin/cpra/send` | yes | REGISTERED | 0 | - |
-| POST | `/api/admin/cpra/send-batch` | yes | REGISTERED | 0 | - |
-| POST | `/api/admin/cpra/send-all-missing` | yes | REGISTERED | 0 | - |
-| POST | `/api/admin/cpra/follow-up/:requestId` | yes | REGISTERED | 0 | - |
-| GET | `/api/admin/cpra/progress` | yes | CONNECTED | 0 | - |
-| GET | `/api/admin/cpra/emails/:agencyId` | yes | CONNECTED | 0 | - |
-| GET | `/api/admin/cpra/emails/conversation/:requestId` | yes | CONNECTED | 0 | - |
-| GET | `/api/admin/cpra/email-stats` | yes | CONNECTED | 0 | - |
-| POST | `/api/admin/cpra/attachments/process` | yes | REGISTERED | 0 | - |
-| POST | `/api/admin/cpra/attachments/process/:attachmentId` | yes | REGISTERED | 0 | - |
-| POST | `/api/admin/cpra/classify/:attachmentId` | yes | REGISTERED | 0 | - |
-| POST | `/api/admin/cpra/classify-all` | yes | REGISTERED | 0 | - |
-| GET | `/api/admin/cpra/notifications` | yes | CONNECTED | 0 | - |
-| GET | `/api/admin/cpra/notifications/count` | yes | CONNECTED | 0 | - |
-| GET | `/api/admin/cpra/notifications/summary` | yes | CONNECTED | 0 | - |
-| PUT | `/api/admin/cpra/notifications/:notificationId/read` | yes | REGISTERED | 0 | - |
-| PUT | `/api/admin/cpra/notifications/read-all` | yes | REGISTERED | 0 | - |
-| DELETE | `/api/admin/cpra/notifications/:notificationId` | yes | REGISTERED | 0 | - |
-| GET | `/api/admin/cpra/timeline/:agencyId` | yes | CONNECTED | 0 | - |
-| GET | `/api/admin/cpra/timeline` | yes | CONNECTED | 0 | - |
-| POST | `/api/admin/cpra/monitor/poll` | yes | REGISTERED | 0 | - |
-| POST | `/api/admin/cpra/monitor/simulate` | yes | REGISTERED | 0 | - |
-| POST | `/api/admin/cpra/monitor/start` | yes | REGISTERED | 0 | - |
-| POST | `/api/admin/cpra/monitor/stop` | yes | REGISTERED | 0 | - |
-| POST | `/api/admin/cpra/follow-up/check` | yes | REGISTERED | 0 | - |
-| POST | `/api/admin/cpra/follow-up/worker/start` | yes | REGISTERED | 0 | - |
-| POST | `/api/admin/cpra/follow-up/worker/stop` | yes | REGISTERED | 0 | - |
-| POST | `/api/admin/cpra/ingestion/process` | yes | REGISTERED | 0 | - |
-| POST | `/api/admin/cpra/ingestion/worker/start` | yes | REGISTERED | 0 | - |
-| POST | `/api/admin/cpra/ingestion/worker/stop` | yes | REGISTERED | 0 | - |
-| GET | `/api/admin/cpra/status` | yes | CONNECTED | 0 | - |
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
+| POST | `/api/admin/cpra/send` | yes | UNUSED | 0 | - |
+| POST | `/api/admin/cpra/send-batch` | yes | UNUSED | 0 | - |
+| POST | `/api/admin/cpra/send-all-missing` | yes | UNUSED | 0 | - |
+| POST | `/api/admin/cpra/follow-up/:requestId` | yes | UNUSED | 0 | - |
+| GET | `/api/admin/cpra/progress` | yes | UNUSED | 0 | - |
+| GET | `/api/admin/cpra/emails/:agencyId` | yes | UNUSED | 0 | - |
+| GET | `/api/admin/cpra/emails/conversation/:requestId` | yes | UNUSED | 0 | - |
+| GET | `/api/admin/cpra/email-stats` | yes | UNUSED | 0 | - |
+| POST | `/api/admin/cpra/attachments/process` | yes | UNUSED | 0 | - |
+| POST | `/api/admin/cpra/attachments/process/:attachmentId` | yes | UNUSED | 0 | - |
+| POST | `/api/admin/cpra/classify/:attachmentId` | yes | UNUSED | 0 | - |
+| POST | `/api/admin/cpra/classify-all` | yes | UNUSED | 0 | - |
+| GET | `/api/admin/cpra/notifications` | yes | UNUSED | 0 | - |
+| GET | `/api/admin/cpra/notifications/count` | yes | UNUSED | 0 | - |
+| GET | `/api/admin/cpra/notifications/summary` | yes | UNUSED | 0 | - |
+| PUT | `/api/admin/cpra/notifications/:notificationId/read` | yes | UNUSED | 0 | - |
+| PUT | `/api/admin/cpra/notifications/read-all` | yes | UNUSED | 0 | - |
+| DELETE | `/api/admin/cpra/notifications/:notificationId` | yes | UNUSED | 0 | - |
+| GET | `/api/admin/cpra/timeline/:agencyId` | yes | UNUSED | 0 | - |
+| GET | `/api/admin/cpra/timeline` | yes | UNUSED | 0 | - |
+| POST | `/api/admin/cpra/monitor/poll` | yes | UNUSED | 0 | - |
+| POST | `/api/admin/cpra/monitor/simulate` | yes | UNUSED | 0 | - |
+| POST | `/api/admin/cpra/monitor/start` | yes | UNUSED | 0 | - |
+| POST | `/api/admin/cpra/monitor/stop` | yes | UNUSED | 0 | - |
+| POST | `/api/admin/cpra/follow-up/check` | yes | UNUSED | 0 | - |
+| POST | `/api/admin/cpra/follow-up/worker/start` | yes | UNUSED | 0 | - |
+| POST | `/api/admin/cpra/follow-up/worker/stop` | yes | UNUSED | 0 | - |
+| POST | `/api/admin/cpra/ingestion/process` | yes | UNUSED | 0 | - |
+| POST | `/api/admin/cpra/ingestion/worker/start` | yes | UNUSED | 0 | - |
+| POST | `/api/admin/cpra/ingestion/worker/stop` | yes | UNUSED | 0 | - |
+| GET | `/api/admin/cpra/status` | yes | UNUSED | 0 | - |
 
 ### `cpra/policyMatrixRoutes.ts` (7)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
-| GET | `/api/cpra/policy-matrix/topics` | yes | CONNECTED | 0 | - |
-| GET | `/api/cpra/policy-matrix/agencies` | yes | CONNECTED | 0 | - |
-| GET | `/api/cpra/policy-matrix` | yes | CONNECTED | 0 | - |
-| GET | `/api/cpra/policy-matrix/:agencyId` | yes | CONNECTED | 0 | - |
-| PUT | `/api/cpra/policy-matrix/:agencyId/:topicId` | yes | REGISTERED | 0 | - |
-| GET | `/api/cpra/policy-matrix/summary` | yes | CONNECTED | 0 | - |
-| POST | `/api/cpra/policy-matrix/seed` | yes | REGISTERED | 0 | - |
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
+| GET | `/api/cpra/policy-matrix/topics` | yes | UNUSED | 0 | - |
+| GET | `/api/cpra/policy-matrix/agencies` | yes | UNUSED | 0 | - |
+| GET | `/api/cpra/policy-matrix` | yes | UNUSED | 0 | - |
+| GET | `/api/cpra/policy-matrix/:agencyId` | yes | UNUSED | 0 | - |
+| PUT | `/api/cpra/policy-matrix/:agencyId/:topicId` | yes | UNUSED | 0 | - |
+| GET | `/api/cpra/policy-matrix/summary` | yes | UNUSED | 0 | - |
+| POST | `/api/cpra/policy-matrix/seed` | yes | UNUSED | 0 | - |
 
 ### `doctrine/doctrineRoutes.ts` (13)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
 | GET | `/api/doctrine/status` | yes | CONNECTED | 1 | - |
-| GET | `/api/doctrine/rules` | yes | CONNECTED | 0 | - |
-| GET | `/api/doctrine/rules/:doctrineId` | yes | CONNECTED | 0 | - |
+| GET | `/api/doctrine/rules` | yes | UNUSED | 0 | - |
+| GET | `/api/doctrine/rules/:doctrineId` | yes | PARTIALLY CONNECTED | 0 | - |
 | GET | `/api/doctrine/search` | yes | CONNECTED | 1 | - |
-| POST | `/api/doctrine/analyze` | yes | REGISTERED | 1 | - |
-| POST | `/api/doctrine/quick-scan` | yes | REGISTERED | 1 | - |
-| POST | `/api/doctrine/ingest` | yes | REGISTERED | 0 | - |
-| POST | `/api/doctrine/seed` | yes | REGISTERED | 1 | - |
-| POST | `/api/doctrine/seed-all` | yes | REGISTERED | 0 | - |
-| POST | `/api/doctrine/seed/:domainCode` | yes | REGISTERED | 0 | - |
-| GET | `/api/doctrine/domains` | yes | CONNECTED | 0 | - |
-| GET | `/api/doctrine/categories` | yes | CONNECTED | 0 | - |
-| GET | `/api/doctrine/chapters` | yes | CONNECTED | 0 | - |
+| POST | `/api/doctrine/analyze` | yes | CONNECTED | 1 | - |
+| POST | `/api/doctrine/quick-scan` | yes | CONNECTED | 1 | - |
+| POST | `/api/doctrine/ingest` | yes | UNUSED | 0 | - |
+| POST | `/api/doctrine/seed` | yes | CONNECTED | 1 | - |
+| POST | `/api/doctrine/seed-all` | yes | UNUSED | 0 | - |
+| POST | `/api/doctrine/seed/:domainCode` | yes | UNUSED | 0 | - |
+| GET | `/api/doctrine/domains` | yes | UNUSED | 0 | - |
+| GET | `/api/doctrine/categories` | yes | UNUSED | 0 | - |
+| GET | `/api/doctrine/chapters` | yes | UNUSED | 0 | - |
 
 ### `evidence/caseRoutes.ts` (5)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
-| POST | `/api/cases` | yes | REGISTERED | 3 | - |
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
+| POST | `/api/cases` | yes | CONNECTED | 3 | - |
 | GET | `/api/cases` | yes | CONNECTED | 3 | - |
 | GET | `/api/cases/:caseId` | yes | CONNECTED | 1 | - |
-| PATCH | `/api/cases/:caseId` | yes | REGISTERED | 1 | - |
-| DELETE | `/api/cases/:caseId` | yes | REGISTERED | 1 | - |
+| PATCH | `/api/cases/:caseId` | yes | CONNECTED | 1 | - |
+| DELETE | `/api/cases/:caseId` | yes | CONNECTED | 1 | - |
 
 ### `evidence/complianceRoutes.ts` (30)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
-| POST | `/api/compliance/events/extract` | yes | REGISTERED | 0 | - |
-| GET | `/api/compliance/events/:caseId` | yes | CONNECTED | 0 | - |
-| GET | `/api/compliance/events/:caseId/stats` | yes | CONNECTED | 0 | - |
-| POST | `/api/compliance/video/analyze` | yes | REGISTERED | 0 | - |
-| GET | `/api/compliance/video/:caseId/summary` | yes | CONNECTED | 0 | - |
-| POST | `/api/compliance/speech/analyze` | yes | REGISTERED | 0 | - |
-| GET | `/api/compliance/timeline/:caseId` | yes | CONNECTED | 0 | - |
-| POST | `/api/compliance/rules/extract` | yes | REGISTERED | 0 | - |
-| GET | `/api/compliance/rules/:agencyId` | yes | CONNECTED | 0 | - |
-| POST | `/api/compliance/mappings/generate` | yes | REGISTERED | 0 | - |
-| GET | `/api/compliance/mappings/:eventType/:agencyId` | yes | CONNECTED | 0 | - |
-| POST | `/api/compliance/analyze` | yes | REGISTERED | 0 | - |
-| GET | `/api/compliance/findings/:caseId` | yes | CONNECTED | 0 | - |
-| GET | `/api/compliance/findings/agency/:agencyId` | yes | CONNECTED | 0 | - |
-| GET | `/api/compliance/reviews` | yes | CONNECTED | 0 | - |
-| PUT | `/api/compliance/reviews/:reviewId` | yes | REGISTERED | 0 | - |
-| GET | `/api/compliance/reviews/stats` | yes | CONNECTED | 0 | - |
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
+| POST | `/api/compliance/events/extract` | yes | UNUSED | 0 | - |
+| GET | `/api/compliance/events/:caseId` | yes | UNUSED | 0 | - |
+| GET | `/api/compliance/events/:caseId/stats` | yes | UNUSED | 0 | - |
+| POST | `/api/compliance/video/analyze` | yes | UNUSED | 0 | - |
+| GET | `/api/compliance/video/:caseId/summary` | yes | UNUSED | 0 | - |
+| POST | `/api/compliance/speech/analyze` | yes | UNUSED | 0 | - |
+| GET | `/api/compliance/timeline/:caseId` | yes | UNUSED | 0 | - |
+| POST | `/api/compliance/rules/extract` | yes | UNUSED | 0 | - |
+| GET | `/api/compliance/rules/:agencyId` | yes | UNUSED | 0 | - |
+| POST | `/api/compliance/mappings/generate` | yes | UNUSED | 0 | - |
+| GET | `/api/compliance/mappings/:eventType/:agencyId` | yes | UNUSED | 0 | - |
+| POST | `/api/compliance/analyze` | yes | UNUSED | 0 | - |
+| GET | `/api/compliance/findings/:caseId` | yes | UNUSED | 0 | - |
+| GET | `/api/compliance/findings/agency/:agencyId` | yes | UNUSED | 0 | - |
+| GET | `/api/compliance/reviews` | yes | UNUSED | 0 | - |
+| PUT | `/api/compliance/reviews/:reviewId` | yes | UNUSED | 0 | - |
+| GET | `/api/compliance/reviews/stats` | yes | UNUSED | 0 | - |
 | GET | `/api/compliance/dashboard` | yes | CONNECTED | 1 | - |
 | GET | `/api/compliance/heatmap` | yes | CONNECTED | 1 | - |
-| POST | `/api/compliance/report/:caseId` | yes | REGISTERED | 0 | - |
-| GET | `/api/compliance/exhibits/:caseId` | yes | CONNECTED | 0 | - |
-| POST | `/api/compliance/compare` | yes | REGISTERED | 0 | - |
-| GET | `/api/compliance/comparisons` | yes | CONNECTED | 0 | - |
-| POST | `/api/compliance/training/analyze` | yes | REGISTERED | 0 | - |
-| GET | `/api/compliance/evolution/:agencyId` | yes | CONNECTED | 0 | - |
-| POST | `/api/compliance/evolution/:agencyId/detect` | yes | REGISTERED | 0 | - |
-| GET | `/api/compliance/audit/:caseId` | yes | CONNECTED | 0 | - |
-| GET | `/api/compliance/expert/:caseId` | yes | CONNECTED | 0 | - |
-| GET | `/api/compliance/jury/:caseId` | yes | CONNECTED | 0 | - |
-| POST | `/api/compliance/safety/check` | yes | REGISTERED | 0 | - |
+| POST | `/api/compliance/report/:caseId` | yes | UNUSED | 0 | - |
+| GET | `/api/compliance/exhibits/:caseId` | yes | UNUSED | 0 | - |
+| POST | `/api/compliance/compare` | yes | UNUSED | 0 | - |
+| GET | `/api/compliance/comparisons` | yes | UNUSED | 0 | - |
+| POST | `/api/compliance/training/analyze` | yes | UNUSED | 0 | - |
+| GET | `/api/compliance/evolution/:agencyId` | yes | UNUSED | 0 | - |
+| POST | `/api/compliance/evolution/:agencyId/detect` | yes | UNUSED | 0 | - |
+| GET | `/api/compliance/audit/:caseId` | yes | UNUSED | 0 | - |
+| GET | `/api/compliance/expert/:caseId` | yes | UNUSED | 0 | - |
+| GET | `/api/compliance/jury/:caseId` | yes | UNUSED | 0 | - |
+| POST | `/api/compliance/safety/check` | yes | UNUSED | 0 | - |
 
 ### `evidence/evidenceRequestRoutes.ts` (3)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
 | GET | `/api/cases/:caseId/evidence-requests` | yes | CONNECTED | 1 | - |
-| POST | `/api/evidence-requests/:id/respond` | yes | REGISTERED | 1 | - |
-| POST | `/api/cases/:caseId/evidence-requests/detect` | yes | REGISTERED | 1 | - |
+| POST | `/api/evidence-requests/:id/respond` | yes | CONNECTED | 1 | - |
+| POST | `/api/cases/:caseId/evidence-requests/detect` | yes | CONNECTED | 1 | - |
 
 ### `evidence/evidenceRoutes.ts` (5)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
-| POST | `/api/evidence/upload-url` | yes | REGISTERED | 1 | - |
-| POST | `/api/evidence` | yes | REGISTERED | 1 | - |
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
+| POST | `/api/evidence/upload-url` | yes | CONNECTED | 1 | - |
+| POST | `/api/evidence` | yes | CONNECTED | 1 | - |
 | GET | `/api/cases/:caseId/evidence` | yes | CONNECTED | 1 | - |
 | GET | `/api/evidence/:evidenceId` | yes | CONNECTED | 1 | - |
-| DELETE | `/api/evidence/:evidenceId` | yes | REGISTERED | 1 | - |
+| DELETE | `/api/evidence/:evidenceId` | yes | CONNECTED | 1 | - |
 
 ### `evidence/forensicReconstructionRoutes.ts` (22)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
-| POST | `/api/forensic/vision/analyze` | yes | REGISTERED | 0 | - |
-| GET | `/api/forensic/vision/:caseId` | yes | CONNECTED | 0 | - |
-| GET | `/api/forensic/vision/:caseId/critical` | yes | CONNECTED | 0 | - |
-| POST | `/api/forensic/trajectory/analyze` | yes | REGISTERED | 0 | - |
-| GET | `/api/forensic/trajectory/:caseId` | yes | CONNECTED | 0 | - |
-| GET | `/api/forensic/trajectory/profiles` | yes | CONNECTED | 0 | - |
-| POST | `/api/forensic/visibility/simulate` | yes | REGISTERED | 0 | - |
-| GET | `/api/forensic/visibility/:caseId` | yes | CONNECTED | 0 | - |
-| POST | `/api/forensic/line-of-sight/analyze` | yes | REGISTERED | 0 | - |
-| GET | `/api/forensic/line-of-sight/:caseId` | yes | CONNECTED | 0 | - |
-| POST | `/api/forensic/camera-sync/synchronize` | yes | REGISTERED | 0 | - |
-| GET | `/api/forensic/camera-sync/:caseId` | yes | CONNECTED | 0 | - |
-| POST | `/api/forensic/scene/build` | yes | REGISTERED | 0 | - |
-| GET | `/api/forensic/scene/:caseId` | yes | CONNECTED | 0 | - |
-| GET | `/api/forensic/scene/:caseId/exhibit` | yes | CONNECTED | 0 | - |
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
+| POST | `/api/forensic/vision/analyze` | yes | UNUSED | 0 | - |
+| GET | `/api/forensic/vision/:caseId` | yes | UNUSED | 0 | - |
+| GET | `/api/forensic/vision/:caseId/critical` | yes | UNUSED | 0 | - |
+| POST | `/api/forensic/trajectory/analyze` | yes | UNUSED | 0 | - |
+| GET | `/api/forensic/trajectory/:caseId` | yes | UNUSED | 0 | - |
+| GET | `/api/forensic/trajectory/profiles` | yes | UNUSED | 0 | - |
+| POST | `/api/forensic/visibility/simulate` | yes | UNUSED | 0 | - |
+| GET | `/api/forensic/visibility/:caseId` | yes | UNUSED | 0 | - |
+| POST | `/api/forensic/line-of-sight/analyze` | yes | UNUSED | 0 | - |
+| GET | `/api/forensic/line-of-sight/:caseId` | yes | UNUSED | 0 | - |
+| POST | `/api/forensic/camera-sync/synchronize` | yes | UNUSED | 0 | - |
+| GET | `/api/forensic/camera-sync/:caseId` | yes | UNUSED | 0 | - |
+| POST | `/api/forensic/scene/build` | yes | UNUSED | 0 | - |
+| GET | `/api/forensic/scene/:caseId` | yes | UNUSED | 0 | - |
+| GET | `/api/forensic/scene/:caseId/exhibit` | yes | PARTIALLY CONNECTED | 0 | - |
 | GET | `/api/forensic/timeline/:caseId` | yes | CONNECTED | 1 | - |
-| POST | `/api/forensic/evidence-graph/build` | yes | REGISTERED | 0 | - |
-| GET | `/api/forensic/evidence-graph/:caseId` | yes | CONNECTED | 0 | - |
-| POST | `/api/forensic/expert-package/generate` | yes | REGISTERED | 0 | - |
-| GET | `/api/forensic/expert-package/:caseId` | yes | CONNECTED | 0 | - |
-| POST | `/api/forensic/jury-view/generate` | yes | REGISTERED | 0 | - |
-| GET | `/api/forensic/jury-view/:caseId` | yes | CONNECTED | 0 | - |
+| POST | `/api/forensic/evidence-graph/build` | yes | UNUSED | 0 | - |
+| GET | `/api/forensic/evidence-graph/:caseId` | yes | UNUSED | 0 | - |
+| POST | `/api/forensic/expert-package/generate` | yes | UNUSED | 0 | - |
+| GET | `/api/forensic/expert-package/:caseId` | yes | UNUSED | 0 | - |
+| POST | `/api/forensic/jury-view/generate` | yes | UNUSED | 0 | - |
+| GET | `/api/forensic/jury-view/:caseId` | yes | UNUSED | 0 | - |
 
 ### `governance/governanceRoutes.ts` (7)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
-| GET | `/api/corpus/registry` | yes | CONNECTED | 0 | - |
-| POST | `/api/corpus/register` | yes | REGISTERED | 0 | - |
-| GET | `/api/corpus/status` | yes | CONNECTED | 0 | - |
-| GET | `/api/corpus/versions` | yes | CONNECTED | 0 | - |
-| POST | `/api/corpus/lock` | yes | REGISTERED | 0 | - |
-| POST | `/api/corpus/unlock` | yes | REGISTERED | 0 | - |
-| POST | `/api/corpus/ingest` | yes | REGISTERED | 0 | yes |
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
+| GET | `/api/corpus/registry` | yes | UNUSED | 0 | - |
+| POST | `/api/corpus/register` | yes | UNUSED | 0 | - |
+| GET | `/api/corpus/status` | yes | UNUSED | 0 | - |
+| GET | `/api/corpus/versions` | yes | UNUSED | 0 | - |
+| POST | `/api/corpus/lock` | yes | UNUSED | 0 | - |
+| POST | `/api/corpus/unlock` | yes | UNUSED | 0 | - |
+| POST | `/api/corpus/ingest` | yes | CONNECTED | 0 | yes |
 
 ### `intelligence/intelligenceRoutes.ts` (8)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
-| GET | `/api/cases/:caseId/intelligence` | yes | CONNECTED | 0 | - |
-| GET | `/api/cases/:caseId/intelligence/report` | yes | CONNECTED | 0 | - |
-| POST | `/api/cases/:caseId/intelligence/analyze` | yes | REGISTERED | 0 | - |
-| GET | `/api/narrative/:caseId/claims` | yes | CONNECTED | 0 | - |
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
+| GET | `/api/cases/:caseId/intelligence` | yes | UNUSED | 0 | - |
+| GET | `/api/cases/:caseId/intelligence/report` | yes | UNUSED | 0 | - |
+| POST | `/api/cases/:caseId/intelligence/analyze` | yes | UNUSED | 0 | - |
+| GET | `/api/narrative/:caseId/claims` | yes | UNUSED | 0 | - |
 | GET | `/api/narrative/:caseId/contradictions` | yes | CONNECTED | 1 | - |
-| GET | `/api/narrative/:caseId/impeachment` | yes | CONNECTED | 0 | - |
-| POST | `/api/narrative/analyze/:caseId` | yes | REGISTERED | 1 | - |
-| GET | `/api/narrative/health` | yes | CONNECTED | 0 | - |
+| GET | `/api/narrative/:caseId/impeachment` | yes | UNUSED | 0 | - |
+| POST | `/api/narrative/analyze/:caseId` | yes | CONNECTED | 1 | - |
+| GET | `/api/narrative/health` | yes | UNUSED | 0 | - |
 
 ### `investigator/investigatorRoutes.ts` (6)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
 | GET | `/api/cases/:caseId/investigator-workbench` | yes | CONNECTED | 1 | - |
-| POST | `/api/cases/:caseId/investigator/witnesses` | yes | REGISTERED | 1 | - |
-| POST | `/api/cases/:caseId/investigator/leads` | yes | REGISTERED | 1 | - |
-| POST | `/api/cases/:caseId/investigator/field-notes` | yes | REGISTERED | 1 | - |
-| POST | `/api/cases/:caseId/investigator/assignments` | yes | REGISTERED | 0 | - |
-| GET | `/api/investigator/health` | yes | CONNECTED | 0 | - |
+| POST | `/api/cases/:caseId/investigator/witnesses` | yes | CONNECTED | 1 | - |
+| POST | `/api/cases/:caseId/investigator/leads` | yes | CONNECTED | 1 | - |
+| POST | `/api/cases/:caseId/investigator/field-notes` | yes | CONNECTED | 1 | - |
+| POST | `/api/cases/:caseId/investigator/assignments` | yes | UNUSED | 0 | - |
+| GET | `/api/investigator/health` | yes | UNUSED | 0 | - |
 
 ### `legislative/legislativeRoutes.ts` (9)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
 | GET | `/api/legislative/metrics` | yes | CONNECTED | 0 | yes |
-| GET | `/api/legislative/coverage` | yes | CONNECTED | 0 | - |
-| GET | `/api/legislative/repositories` | yes | CONNECTED | 0 | - |
-| GET | `/api/legislative/liability` | yes | CONNECTED | 0 | - |
-| GET | `/api/legislative/classifications/:code/:section` | yes | CONNECTED | 0 | - |
-| GET | `/api/legislative/intelligence/:code/:section` | yes | CONNECTED | 0 | - |
-| GET | `/api/legislative/audit` | yes | CONNECTED | 0 | - |
-| GET | `/api/legislative/repository-integrity` | yes | CONNECTED | 0 | - |
-| GET | `/api/legislative/statutes/:code/:section` | yes | CONNECTED | 0 | - |
+| GET | `/api/legislative/coverage` | yes | UNUSED | 0 | - |
+| GET | `/api/legislative/repositories` | yes | UNUSED | 0 | - |
+| GET | `/api/legislative/liability` | yes | UNUSED | 0 | - |
+| GET | `/api/legislative/classifications/:code/:section` | yes | UNUSED | 0 | - |
+| GET | `/api/legislative/intelligence/:code/:section` | yes | UNUSED | 0 | - |
+| GET | `/api/legislative/audit` | yes | UNUSED | 0 | - |
+| GET | `/api/legislative/repository-integrity` | yes | UNUSED | 0 | - |
+| GET | `/api/legislative/statutes/:code/:section` | yes | UNUSED | 0 | - |
 
 ### `marketing/contactRoutes.ts` (1)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
-| POST | `/api/contact` | PUBLIC | REGISTERED | 1 | yes |
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
+| POST | `/api/contact` | PUBLIC | CONNECTED | 1 | yes |
 
 ### `membership/membershipRoutes.ts` (19)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
 | GET | `/api/membership/account` | yes | CONNECTED | 1 | - |
-| PATCH | `/api/membership/settings` | yes | REGISTERED | 1 | - |
+| PATCH | `/api/membership/settings` | yes | CONNECTED | 1 | - |
 | GET | `/api/membership/shared-access` | yes | CONNECTED | 1 | - |
-| GET | `/api/membership/accessible-cases` | yes | CONNECTED | 0 | - |
-| POST | `/api/membership/permission-grants` | yes | REGISTERED | 1 | - |
-| GET | `/api/membership/permission-check` | yes | CONNECTED | 0 | - |
+| GET | `/api/membership/accessible-cases` | yes | UNUSED | 0 | - |
+| POST | `/api/membership/permission-grants` | yes | CONNECTED | 1 | - |
+| GET | `/api/membership/permission-check` | yes | UNUSED | 0 | - |
 | GET | `/api/cases/:caseId/documents/:documentId/redactions` | yes | CONNECTED | 1 | - |
-| POST | `/api/cases/:caseId/documents/:documentId/redactions` | yes | REGISTERED | 1 | - |
+| POST | `/api/cases/:caseId/documents/:documentId/redactions` | yes | CONNECTED | 1 | - |
 | GET | `/api/cases/:caseId/disclosures` | yes | CONNECTED | 1 | - |
-| POST | `/api/cases/:caseId/disclosures` | yes | REGISTERED | 1 | - |
-| POST | `/api/cases/:caseId/disclosures/:packageId/publish` | yes | REGISTERED | 0 | - |
-| POST | `/api/cases/:caseId/documents/:documentId/redactions/:redactionId/publish` | yes | REGISTERED | 0 | - |
+| POST | `/api/cases/:caseId/disclosures` | yes | CONNECTED | 1 | - |
+| POST | `/api/cases/:caseId/disclosures/:packageId/publish` | yes | UNUSED | 0 | - |
+| POST | `/api/cases/:caseId/documents/:documentId/redactions/:redactionId/publish` | yes | UNUSED | 0 | - |
 | GET | `/api/membership/onboarding` | yes | CONNECTED | 1 | - |
-| GET | `/api/membership/permission-model` | yes | CONNECTED | 0 | - |
-| GET | `/api/cases/:caseId/publication-sets` | yes | CONNECTED | 0 | - |
-| POST | `/api/cases/:caseId/publication-sets` | yes | REGISTERED | 0 | - |
-| POST | `/api/cases/:caseId/publication-sets/:setId/publish` | yes | REGISTERED | 0 | - |
-| GET | `/api/cases/:caseId/documents/:documentId/copies` | yes | CONNECTED | 0 | - |
-| POST | `/api/cases/:caseId/documents/:documentId/copies/original` | yes | REGISTERED | 0 | - |
+| GET | `/api/membership/permission-model` | yes | UNUSED | 0 | - |
+| GET | `/api/cases/:caseId/publication-sets` | yes | UNUSED | 0 | - |
+| POST | `/api/cases/:caseId/publication-sets` | yes | UNUSED | 0 | - |
+| POST | `/api/cases/:caseId/publication-sets/:setId/publish` | yes | UNUSED | 0 | - |
+| GET | `/api/cases/:caseId/documents/:documentId/copies` | yes | UNUSED | 0 | - |
+| POST | `/api/cases/:caseId/documents/:documentId/copies/original` | yes | UNUSED | 0 | - |
 
 ### `observability/observabilityRoutes.ts` (3)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
 | GET | `/api/health/deep` | PUBLIC | CONNECTED | 0 | yes |
 | GET | `/api/metrics` | PUBLIC | CONNECTED | 0 | yes |
 | GET | `/api/metrics/json` | PUBLIC | CONNECTED | 0 | yes |
 
 ### `organizations/firmPlatformRoutes.ts` (22)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
-| GET | `/api/firm/departments` | yes | CONNECTED | 0 | - |
-| POST | `/api/firm/departments` | yes | REGISTERED | 0 | - |
-| GET | `/api/firm/personnel` | yes | CONNECTED | 0 | - |
-| PUT | `/api/firm/personnel/:userId` | yes | REGISTERED | 0 | - |
-| GET | `/api/firm/clients/:clientId/team` | yes | CONNECTED | 0 | - |
-| PUT | `/api/firm/clients/:clientId/team` | yes | REGISTERED | 0 | - |
-| GET | `/api/firm/messages` | yes | CONNECTED | 0 | - |
-| POST | `/api/firm/messages` | yes | REGISTERED | 0 | - |
-| GET | `/api/firm/tasks` | yes | CONNECTED | 0 | - |
-| POST | `/api/firm/tasks` | yes | REGISTERED | 0 | - |
-| PATCH | `/api/firm/tasks/:taskId` | yes | REGISTERED | 0 | - |
-| GET | `/api/firm/knowledge` | yes | CONNECTED | 0 | - |
-| POST | `/api/firm/knowledge` | yes | REGISTERED | 0 | - |
-| POST | `/api/firm/conflicts/check` | yes | REGISTERED | 0 | - |
-| GET | `/api/firm/conflicts` | yes | CONNECTED | 0 | - |
-| GET | `/api/firm/permissions` | yes | CONNECTED | 0 | - |
-| POST | `/api/firm/permissions` | yes | REGISTERED | 0 | - |
-| POST | `/api/firm/approvals` | yes | REGISTERED | 0 | - |
-| PATCH | `/api/firm/approvals/:requestId` | yes | REGISTERED | 0 | - |
-| GET | `/api/firm/analytics` | yes | CONNECTED | 0 | - |
-| PATCH | `/api/firm/theme` | yes | REGISTERED | 0 | - |
-| POST | `/api/firm/offices/seed-california` | yes | REGISTERED | 0 | - |
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
+| GET | `/api/firm/departments` | yes | UNUSED | 0 | - |
+| POST | `/api/firm/departments` | yes | UNUSED | 0 | - |
+| GET | `/api/firm/personnel` | yes | UNUSED | 0 | - |
+| PUT | `/api/firm/personnel/:userId` | yes | UNUSED | 0 | - |
+| GET | `/api/firm/clients/:clientId/team` | yes | UNUSED | 0 | - |
+| PUT | `/api/firm/clients/:clientId/team` | yes | UNUSED | 0 | - |
+| GET | `/api/firm/messages` | yes | UNUSED | 0 | - |
+| POST | `/api/firm/messages` | yes | UNUSED | 0 | - |
+| GET | `/api/firm/tasks` | yes | UNUSED | 0 | - |
+| POST | `/api/firm/tasks` | yes | UNUSED | 0 | - |
+| PATCH | `/api/firm/tasks/:taskId` | yes | UNUSED | 0 | - |
+| GET | `/api/firm/knowledge` | yes | UNUSED | 0 | - |
+| POST | `/api/firm/knowledge` | yes | UNUSED | 0 | - |
+| POST | `/api/firm/conflicts/check` | yes | UNUSED | 0 | - |
+| GET | `/api/firm/conflicts` | yes | UNUSED | 0 | - |
+| GET | `/api/firm/permissions` | yes | UNUSED | 0 | - |
+| POST | `/api/firm/permissions` | yes | UNUSED | 0 | - |
+| POST | `/api/firm/approvals` | yes | UNUSED | 0 | - |
+| PATCH | `/api/firm/approvals/:requestId` | yes | UNUSED | 0 | - |
+| GET | `/api/firm/analytics` | yes | UNUSED | 0 | - |
+| PATCH | `/api/firm/theme` | yes | UNUSED | 0 | - |
+| POST | `/api/firm/offices/seed-california` | yes | UNUSED | 0 | - |
 
 ### `organizations/organizationRoutes.ts` (16)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
 | GET | `/api/organizations/current` | yes | CONNECTED | 1 | - |
-| PATCH | `/api/organizations/current` | yes | REGISTERED | 1 | - |
-| POST | `/api/organizations/onboarding` | yes | REGISTERED | 1 | - |
+| PATCH | `/api/organizations/current` | yes | CONNECTED | 1 | - |
+| POST | `/api/organizations/onboarding` | yes | CONNECTED | 1 | - |
 | GET | `/api/organizations/offices` | yes | CONNECTED | 1 | - |
-| POST | `/api/organizations/offices` | yes | REGISTERED | 1 | - |
+| POST | `/api/organizations/offices` | yes | CONNECTED | 1 | - |
 | GET | `/api/organizations/practice-groups` | yes | CONNECTED | 1 | - |
-| POST | `/api/organizations/practice-groups` | yes | REGISTERED | 1 | - |
+| POST | `/api/organizations/practice-groups` | yes | CONNECTED | 1 | - |
 | GET | `/api/organizations/members` | yes | CONNECTED | 1 | - |
 | GET | `/api/organizations/invitations` | yes | CONNECTED | 1 | - |
-| POST | `/api/organizations/invitations` | yes | REGISTERED | 1 | - |
+| POST | `/api/organizations/invitations` | yes | CONNECTED | 1 | - |
 | GET | `/api/organizations/analytics` | yes | CONNECTED | 1 | - |
 | GET | `/api/organizations/search` | yes | CONNECTED | 1 | - |
-| GET | `/api/organizations/audit-logs` | yes | CONNECTED | 0 | - |
+| GET | `/api/organizations/audit-logs` | yes | UNUSED | 0 | - |
 | GET | `/api/organizations/invitations/preview` | PUBLIC | CONNECTED | 1 | - |
-| POST | `/api/auth/accept-invitation` | PUBLIC | REGISTERED | 1 | - |
-| GET | `/api/organizations/tenant-verify` | yes | CONNECTED | 0 | - |
+| POST | `/api/auth/accept-invitation` | PUBLIC | CONNECTED | 1 | - |
+| GET | `/api/organizations/tenant-verify` | yes | UNUSED | 0 | - |
 
 ### `policy/pipeline/operationsConsoleRoutes.ts` (7)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
 | GET | `/api/operations/dashboard` | yes | CONNECTED | 1 | - |
-| GET | `/api/operations/deadlines` | yes | CONNECTED | 0 | - |
+| GET | `/api/operations/deadlines` | yes | UNUSED | 0 | - |
 | GET | `/api/operations/topics` | yes | CONNECTED | 1 | - |
 | GET | `/api/operations/topics/:agencyId` | yes | CONNECTED | 1 | - |
 | GET | `/api/operations/topics/:agencyId/export/csv` | yes | CONNECTED | 1 | - |
-| POST | `/api/operations/report` | yes | REGISTERED | 0 | - |
-| POST | `/api/operations/populate` | yes | REGISTERED | 0 | - |
+| POST | `/api/operations/report` | yes | UNUSED | 0 | - |
+| POST | `/api/operations/populate` | yes | UNUSED | 0 | - |
 
 ### `policy/pipeline/pipelineRoutes.ts` (9)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
 | GET | `/api/policy-pipeline/stats` | yes | CONNECTED | 1 | - |
 | GET | `/api/policy-pipeline/agencies` | yes | CONNECTED | 1 | - |
-| GET | `/api/policy-pipeline/agencies/search` | yes | CONNECTED | 0 | - |
-| GET | `/api/policy-pipeline/agencies/:agencyId` | yes | CONNECTED | 0 | - |
-| POST | `/api/policy-pipeline/intelligence` | yes | REGISTERED | 0 | - |
-| POST | `/api/policy-pipeline/run/post-crawl` | yes | REGISTERED | 0 | - |
-| POST | `/api/policy-pipeline/run/rank` | yes | REGISTERED | 0 | - |
-| POST | `/api/policy-pipeline/run/enqueue-crawls` | yes | REGISTERED | 0 | - |
-| POST | `/api/policy-pipeline/run/full` | yes | REGISTERED | 0 | - |
+| GET | `/api/policy-pipeline/agencies/search` | yes | UNUSED | 0 | - |
+| GET | `/api/policy-pipeline/agencies/:agencyId` | yes | UNUSED | 0 | - |
+| POST | `/api/policy-pipeline/intelligence` | yes | UNUSED | 0 | - |
+| POST | `/api/policy-pipeline/run/post-crawl` | yes | UNUSED | 0 | - |
+| POST | `/api/policy-pipeline/run/rank` | yes | UNUSED | 0 | - |
+| POST | `/api/policy-pipeline/run/enqueue-crawls` | yes | UNUSED | 0 | - |
+| POST | `/api/policy-pipeline/run/full` | yes | UNUSED | 0 | - |
 
 ### `policy/pipeline/policyIntelligenceRoutes.ts` (18)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
 | GET | `/api/policy-intelligence/dashboard` | yes | CONNECTED | 1 | - |
-| POST | `/api/policy-intelligence/sandbox/crawl` | yes | REGISTERED | 0 | - |
-| GET | `/api/policy-intelligence/sandbox/status` | yes | CONNECTED | 0 | - |
-| POST | `/api/policy-intelligence/chp/import` | yes | REGISTERED | 0 | - |
-| GET | `/api/policy-intelligence/chp/status` | yes | CONNECTED | 0 | - |
-| GET | `/api/policy-intelligence/classification/validate` | yes | CONNECTED | 0 | - |
-| GET | `/api/policy-intelligence/classification/accuracy` | yes | CONNECTED | 0 | - |
-| POST | `/api/policy-intelligence/coverage/generate` | yes | REGISTERED | 0 | - |
-| GET | `/api/policy-intelligence/coverage/agency/:agencyId` | yes | CONNECTED | 0 | - |
-| GET | `/api/policy-intelligence/coverage/heatmap` | yes | CONNECTED | 0 | - |
-| GET | `/api/policy-intelligence/coverage/summary` | yes | CONNECTED | 0 | - |
-| POST | `/api/policy-intelligence/cpra/prepare-queue` | yes | REGISTERED | 0 | - |
-| GET | `/api/policy-intelligence/cpra/queue-status` | yes | CONNECTED | 0 | - |
-| POST | `/api/policy-intelligence/cpra/launch-campaign` | yes | REGISTERED | 0 | - |
-| GET | `/api/policy-intelligence/cpra/campaign-status` | yes | CONNECTED | 0 | - |
-| POST | `/api/policy-intelligence/responses/process` | yes | REGISTERED | 0 | - |
-| GET | `/api/policy-intelligence/responses/health` | yes | CONNECTED | 0 | - |
-| POST | `/api/policy-intelligence/responses/process-pending` | yes | REGISTERED | 0 | - |
+| POST | `/api/policy-intelligence/sandbox/crawl` | yes | UNUSED | 0 | - |
+| GET | `/api/policy-intelligence/sandbox/status` | yes | UNUSED | 0 | - |
+| POST | `/api/policy-intelligence/chp/import` | yes | UNUSED | 0 | - |
+| GET | `/api/policy-intelligence/chp/status` | yes | UNUSED | 0 | - |
+| GET | `/api/policy-intelligence/classification/validate` | yes | UNUSED | 0 | - |
+| GET | `/api/policy-intelligence/classification/accuracy` | yes | UNUSED | 0 | - |
+| POST | `/api/policy-intelligence/coverage/generate` | yes | UNUSED | 0 | - |
+| GET | `/api/policy-intelligence/coverage/agency/:agencyId` | yes | UNUSED | 0 | - |
+| GET | `/api/policy-intelligence/coverage/heatmap` | yes | UNUSED | 0 | - |
+| GET | `/api/policy-intelligence/coverage/summary` | yes | UNUSED | 0 | - |
+| POST | `/api/policy-intelligence/cpra/prepare-queue` | yes | UNUSED | 0 | - |
+| GET | `/api/policy-intelligence/cpra/queue-status` | yes | UNUSED | 0 | - |
+| POST | `/api/policy-intelligence/cpra/launch-campaign` | yes | UNUSED | 0 | - |
+| GET | `/api/policy-intelligence/cpra/campaign-status` | yes | UNUSED | 0 | - |
+| POST | `/api/policy-intelligence/responses/process` | yes | UNUSED | 0 | - |
+| GET | `/api/policy-intelligence/responses/health` | yes | UNUSED | 0 | - |
+| POST | `/api/policy-intelligence/responses/process-pending` | yes | UNUSED | 0 | - |
 
 ### `productionGates/productionGatesRoutes.ts` (1)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
-| GET | `/api/admin/production-gates` | yes | CONNECTED | 0 | - |
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
+| GET | `/api/admin/production-gates` | yes | UNUSED | 0 | - |
 
 ### `productionOperations/productionOperationsRoutes.ts` (10)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
 | GET | `/api/admin/operations/dashboard` | yes | CONNECTED | 1 | - |
 | GET | `/api/system/health` | yes | CONNECTED | 1 | - |
 | GET | `/api/admin/deployment-checks` | yes | CONNECTED | 1 | - |
-| GET | `/api/admin/engineering-dashboard` | yes | CONNECTED | 0 | - |
-| GET | `/api/admin/audit` | yes | CONNECTED | 0 | - |
-| GET | `/api/admin/changes` | yes | CONNECTED | 0 | - |
+| GET | `/api/admin/engineering-dashboard` | yes | UNUSED | 0 | - |
+| GET | `/api/admin/audit` | yes | UNUSED | 0 | - |
+| GET | `/api/admin/changes` | yes | UNUSED | 0 | - |
 | GET | `/api/admin/repository-integrity` | yes | CONNECTED | 1 | - |
-| GET | `/api/admin/backup/status` | yes | CONNECTED | 0 | - |
-| POST | `/api/admin/backup/verify` | yes | REGISTERED | 0 | - |
-| GET | `/api/admin/alerts` | yes | CONNECTED | 0 | - |
+| GET | `/api/admin/backup/status` | yes | UNUSED | 0 | - |
+| POST | `/api/admin/backup/verify` | yes | UNUSED | 0 | - |
+| GET | `/api/admin/alerts` | yes | UNUSED | 0 | - |
 
 ### `routes/calcrimRoutes.ts` (1)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
-| GET | `/api/calcrim/analyze/:caseId` | yes | CONNECTED | 0 | - |
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
+| GET | `/api/calcrim/analyze/:caseId` | yes | UNUSED | 0 | - |
 
 ### `search/searchRoutes.ts` (2)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
 | GET | `/api/search` | yes | CONNECTED | 1 | - |
-| GET | `/api/cases/:caseId/search` | yes | CONNECTED | 0 | - |
+| GET | `/api/cases/:caseId/search` | yes | UNUSED | 0 | - |
 
 ### `security/authMiddleware.ts` (10)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
 | GET | `/api/auth/debug-check` | PUBLIC | CONNECTED | 0 | - |
-| POST | `/api/auth/login` | PUBLIC | REGISTERED | 1 | yes |
-| POST | `/api/auth/register` | PUBLIC | REGISTERED | 1 | yes |
-| POST | `/api/auth/refresh` | PUBLIC | REGISTERED | 0 | yes |
-| POST | `/api/auth/logout` | PUBLIC | REGISTERED | 1 | yes |
-| GET | `/api/auth/me` | yes | CONNECTED | 0 | - |
-| POST | `/api/auth/forgot-password` | PUBLIC | REGISTERED | 1 | - |
-| POST | `/api/auth/reset-password` | PUBLIC | REGISTERED | 1 | - |
-| POST | `/api/admin/reset-password` | yes | REGISTERED | 0 | - |
+| POST | `/api/auth/login` | PUBLIC | CONNECTED | 1 | yes |
+| POST | `/api/auth/register` | PUBLIC | CONNECTED | 1 | yes |
+| POST | `/api/auth/refresh` | PUBLIC | CONNECTED | 0 | yes |
+| POST | `/api/auth/logout` | PUBLIC | CONNECTED | 1 | yes |
+| GET | `/api/auth/me` | yes | UNUSED | 0 | - |
+| POST | `/api/auth/forgot-password` | PUBLIC | CONNECTED | 1 | - |
+| POST | `/api/auth/reset-password` | PUBLIC | CONNECTED | 1 | - |
+| POST | `/api/admin/reset-password` | yes | UNUSED | 0 | - |
 | GET | `/api/security/log` | yes | CONNECTED | 0 | yes |
 
 ### `security/identityRoutes.ts` (8)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
-| POST | `/api/auth/verify-email` | PUBLIC | REGISTERED | 1 | - |
-| POST | `/api/auth/resend-verification` | yes | REGISTERED | 0 | - |
-| POST | `/api/auth/mfa/setup` | yes | REGISTERED | 0 | - |
-| POST | `/api/auth/mfa/confirm` | yes | REGISTERED | 0 | - |
-| POST | `/api/auth/mfa/challenge` | PUBLIC | REGISTERED | 1 | - |
-| POST | `/api/auth/mfa/disable` | yes | REGISTERED | 0 | - |
-| GET | `/api/auth/sessions` | yes | CONNECTED | 0 | - |
-| DELETE | `/api/auth/sessions/:sessionId` | yes | REGISTERED | 0 | - |
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
+| POST | `/api/auth/verify-email` | PUBLIC | CONNECTED | 1 | - |
+| POST | `/api/auth/resend-verification` | yes | UNUSED | 0 | - |
+| POST | `/api/auth/mfa/setup` | yes | UNUSED | 0 | - |
+| POST | `/api/auth/mfa/confirm` | yes | UNUSED | 0 | - |
+| POST | `/api/auth/mfa/challenge` | PUBLIC | CONNECTED | 1 | - |
+| POST | `/api/auth/mfa/disable` | yes | UNUSED | 0 | - |
+| GET | `/api/auth/sessions` | yes | UNUSED | 0 | - |
+| DELETE | `/api/auth/sessions/:sessionId` | yes | UNUSED | 0 | - |
 
 ### `security/rateLimiter.ts` (1)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
-| GET | `/api/admin/rate-limits` | yes | CONNECTED | 0 | - |
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
+| GET | `/api/admin/rate-limits` | yes | UNUSED | 0 | - |
 
 ### `security/securityLogger.ts` (2)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
-| GET | `/api/security/logs` | yes | CONNECTED | 0 | - |
-| GET | `/api/security/summary` | yes | CONNECTED | 0 | - |
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
+| GET | `/api/security/logs` | yes | UNUSED | 0 | - |
+| GET | `/api/security/summary` | yes | UNUSED | 0 | - |
 
 ### `server.ts` (2)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
 | GET | `/api/health` | PUBLIC | CONNECTED | 0 | yes |
 | GET | `/api/auth/csrf-token` | PUBLIC | CONNECTED | 0 | - |
 
 ### `timeline/timelineRoutes.ts` (5)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
 | GET | `/api/timeline/:caseId/events` | yes | CONNECTED | 1 | - |
 | GET | `/api/timeline/:caseId/conflicts` | yes | CONNECTED | 1 | - |
-| POST | `/api/timeline/rebuild/:caseId` | yes | REGISTERED | 1 | - |
-| POST | `/api/timeline/process` | yes | REGISTERED | 0 | - |
-| GET | `/api/timeline/health` | yes | CONNECTED | 0 | - |
+| POST | `/api/timeline/rebuild/:caseId` | yes | CONNECTED | 1 | - |
+| POST | `/api/timeline/process` | yes | UNUSED | 0 | - |
+| GET | `/api/timeline/health` | yes | UNUSED | 0 | - |
+
+### `workbench/caseViewRoutes.ts` (2)
+
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
+| GET | `/api/cases/:caseId/litigation-strategy` | yes | CONNECTED | 1 | - |
+| GET | `/api/cases/:caseId/trial-exhibits` | yes | CONNECTED | 1 | - |
 
 ### `workbench/workbenchRoutes.ts` (16)
 
-| Method | Route | Auth | Runtime | UI callers | Tested |
-|--------|-------|------|---------|-----------|--------|
+| Method | Route | Auth | Status | UI callers | Tested |
+|--------|-------|------|--------|-----------|--------|
 | GET | `/api/cases/:caseId/workbench` | yes | CONNECTED | 1 | - |
-| GET | `/api/cases/:caseId/workbench/command-center` | yes | CONNECTED | 0 | - |
-| GET | `/api/cases/:caseId/workbench/trial-prep` | yes | CONNECTED | 0 | - |
+| GET | `/api/cases/:caseId/workbench/command-center` | yes | UNUSED | 0 | - |
+| GET | `/api/cases/:caseId/workbench/trial-prep` | yes | UNUSED | 0 | - |
 | GET | `/api/cases/:caseId/workbench/export/:packageType` | yes | CONNECTED | 1 | - |
 | GET | `/api/cases/:caseId/workbench/notes` | yes | CONNECTED | 1 | - |
-| POST | `/api/cases/:caseId/workbench/notes` | yes | REGISTERED | 1 | - |
-| PATCH | `/api/cases/:caseId/workbench/notes/:noteId` | yes | REGISTERED | 0 | - |
-| DELETE | `/api/cases/:caseId/workbench/notes/:noteId` | yes | REGISTERED | 0 | - |
+| POST | `/api/cases/:caseId/workbench/notes` | yes | CONNECTED | 1 | - |
+| PATCH | `/api/cases/:caseId/workbench/notes/:noteId` | yes | UNUSED | 0 | - |
+| DELETE | `/api/cases/:caseId/workbench/notes/:noteId` | yes | UNUSED | 0 | - |
 | GET | `/api/cases/:caseId/workbench/pins` | yes | CONNECTED | 1 | - |
-| POST | `/api/cases/:caseId/workbench/pins` | yes | REGISTERED | 1 | - |
-| DELETE | `/api/cases/:caseId/workbench/pins/:pinId` | yes | REGISTERED | 0 | - |
+| POST | `/api/cases/:caseId/workbench/pins` | yes | CONNECTED | 1 | - |
+| DELETE | `/api/cases/:caseId/workbench/pins/:pinId` | yes | UNUSED | 0 | - |
 | GET | `/api/cases/:caseId/workbench/tasks` | yes | CONNECTED | 1 | - |
-| POST | `/api/cases/:caseId/workbench/tasks` | yes | REGISTERED | 1 | - |
-| PATCH | `/api/cases/:caseId/workbench/tasks/:taskId` | yes | REGISTERED | 1 | - |
-| DELETE | `/api/cases/:caseId/workbench/tasks/:taskId` | yes | REGISTERED | 1 | - |
-| GET | `/api/workbench/health` | yes | CONNECTED | 0 | - |
+| POST | `/api/cases/:caseId/workbench/tasks` | yes | CONNECTED | 1 | - |
+| PATCH | `/api/cases/:caseId/workbench/tasks/:taskId` | yes | CONNECTED | 1 | - |
+| DELETE | `/api/cases/:caseId/workbench/tasks/:taskId` | yes | CONNECTED | 1 | - |
+| GET | `/api/workbench/health` | yes | UNUSED | 0 | - |

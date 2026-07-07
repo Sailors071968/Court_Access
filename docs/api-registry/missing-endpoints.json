@@ -20,16 +20,6 @@
     "file": "src/lib/api.ts"
   },
   {
-    "path": "/api/cases/*/litigation-strategy",
-    "template": "/api/cases/*/litigation-strategy",
-    "file": "src/pages/case/LitigationStrategyView.tsx"
-  },
-  {
-    "path": "/api/cases/*/trial-exhibits",
-    "template": "/api/cases/*/trial-exhibits",
-    "file": "src/pages/case/TrialExhibitWorkspace.tsx"
-  },
-  {
     "path": "/api/operations/cpra-requests",
     "template": "/api/operations/cpra-requests",
     "file": "src/pages/dashboard/CpraCampaignTimeline.tsx"

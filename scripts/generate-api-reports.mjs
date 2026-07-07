@@ -42,6 +42,21 @@ for (const f of backendFiles) {
 }
 
 const esc = (s) => String(s).replace(/\|/g, '\\|');
+
+// Canonical runtime taxonomy (exact terms requested in Phase 4A).
+// DEPRECATED cannot be determined statically → reported as UNKNOWN, never guessed.
+function canonicalStatus(e) {
+  if (e.runtimeStatus === 'BROKEN') return 'BROKEN';
+  if (e.runtimeStatus === 'UNKNOWN') return 'UNKNOWN';
+  if (e.runtimeStatus === 'NOT_FOUND_FOR_SEED') return 'PARTIALLY CONNECTED';
+  const wired = e.uiPages.length > 0 || e.testCovered || !e.authenticationRequired;
+  return wired ? 'CONNECTED' : 'UNUSED';
+}
+for (const e of eps) e.canonicalStatus = canonicalStatus(e);
+const canonCounts = {};
+for (const e of eps) canonCounts[e.canonicalStatus] = (canonCounts[e.canonicalStatus] || 0) + 1;
+canonCounts['DEPRECATED'] = 0; // not statically determinable
+
 const byController = {};
 for (const e of eps) (byController[e.controller] ||= []).push(e);
 
@@ -79,7 +94,19 @@ let md = `# Canonical API Registry — Phase 4A
 | Statically mapped to a UI caller | ${withUI} | ${(withUI/total*100).toFixed(1)}% |
 | Covered by a test reference | ${tested} | ${(tested/total*100).toFixed(1)}% |
 | Runtime GET probed | ${reg.runtimeProbedGetEndpoints || 0} | — |
-${Object.entries(rc).map(([k,v]) => `| Runtime: ${k} | ${v} | ${(v/total*100).toFixed(1)}% |`).join('\n')}
+
+### Canonical runtime status (requested taxonomy)
+
+| Status | Count | % | Definition |
+|--------|-------|---|------------|
+| CONNECTED | ${canonCounts['CONNECTED']||0} | ${((canonCounts['CONNECTED']||0)/total*100).toFixed(1)}% | Route exists + responds (2xx/401/403) and is wired to a UI caller, a test, or is a public/infra route |
+| PARTIALLY CONNECTED | ${canonCounts['PARTIALLY CONNECTED']||0} | ${((canonCounts['PARTIALLY CONNECTED']||0)/total*100).toFixed(1)}% | Route exists but returned 404 for a seeded resource (reachable, not fully exercised) |
+| UNUSED | ${canonCounts['UNUSED']||0} | ${((canonCounts['UNUSED']||0)/total*100).toFixed(1)}% | Route exists/responds but no detected UI caller or test (verify dynamic callers) |
+| BROKEN | ${canonCounts['BROKEN']||0} | ${((canonCounts['BROKEN']||0)/total*100).toFixed(1)}% | Route returned 5xx |
+| DEPRECATED | ${canonCounts['DEPRECATED']||0} | 0% | Not statically determinable — none asserted (UNKNOWN preferred) |
+| UNKNOWN | ${canonCounts['UNKNOWN']||0} | ${((canonCounts['UNKNOWN']||0)/total*100).toFixed(1)}% | Could not be reached during probe |
+
+_(Raw probe codes: ${Object.entries(rc).map(([k,v]) => `${k}=${v}`).join(', ')})_
 
 > **UI-mapping caveat (honest):** UI callers are detected statically from \`/api\` string + \`\${API_BASE}\` template literals in the frontend. Endpoints built through multi-step dynamic path construction may be under-counted; the "unused" list below is therefore **candidates requiring confirmation**, not confirmed dead endpoints.
 
@@ -175,7 +202,7 @@ _(truncated to 120; full in canonical-api-registry.json.)_
 
 ## 1. Canonical API Registry (by controller)
 
-${Object.entries(byController).sort().map(([c, list]) => `### \`${relativeCtrl(c)}\` (${list.length})\n\n| Method | Route | Auth | Runtime | UI callers | Tested |\n|--------|-------|------|---------|-----------|--------|\n${list.map((e)=>`| ${e.method} | \`${esc(e.route)}\` | ${e.authenticationRequired?'yes':'PUBLIC'} | ${e.runtimeStatus} | ${e.uiPages.length} | ${e.testCovered?'yes':'-'} |`).join('\n')}`).join('\n\n')}
+${Object.entries(byController).sort().map(([c, list]) => `### \`${relativeCtrl(c)}\` (${list.length})\n\n| Method | Route | Auth | Status | UI callers | Tested |\n|--------|-------|------|--------|-----------|--------|\n${list.map((e)=>`| ${e.method} | \`${esc(e.route)}\` | ${e.authenticationRequired?'yes':'PUBLIC'} | ${e.canonicalStatus} | ${e.uiPages.length} | ${e.testCovered?'yes':'-'} |`).join('\n')}`).join('\n\n')}
 `;
 
 function relativeCtrl(c) { return c.replace(/^backend\/src\//, ''); }

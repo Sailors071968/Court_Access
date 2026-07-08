@@ -56,6 +56,7 @@ export interface ApiEvidence {
   pageCount: number | null;
   evidenceType: string;
   s3Key: string | null;
+  sha256?: string | null;
   uploadedBy: string;
   uploadedAt: string;
   processingStatus: string;

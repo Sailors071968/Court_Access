@@ -45,8 +45,35 @@ function formatFileSize(bytes: number): string {
   if (!bytes || isNaN(bytes)) return '—';
   if (bytes < 1024) return `${bytes} B`;
   if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
-  return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  if (bytes < 1024 * 1024 * 1024) return `${(bytes / (1024 * 1024)).toFixed(1)} MB`;
+  return `${(bytes / (1024 * 1024 * 1024)).toFixed(2)} GB`;
 }
+
+type MediaClass = 'document' | 'image' | 'audio' | 'video' | 'archive' | 'physical' | 'other';
+
+// Classify an evidence item into a media class from its real MIME type / evidence type.
+function classifyMedia(mime: string | null, evidenceType: string): MediaClass {
+  const m = (mime ?? '').toLowerCase();
+  const t = (evidenceType ?? '').toLowerCase();
+  if (m.startsWith('image/') || t === 'photo') return 'image';
+  if (m.startsWith('audio/')) return 'audio';
+  if (m.startsWith('video/') || ['bodycam', 'dashcam', 'witness_video'].includes(t)) return 'video';
+  if (m.includes('zip') || m.includes('compressed') || m.includes('archive')) return 'archive';
+  if (t === 'physical_evidence' || t === 'physical') return 'physical';
+  if (m.includes('pdf') || m.includes('word') || m.includes('document') || m.includes('text') || m.includes('rtf') || m.includes('officedocument') ||
+      ['transcript', 'police_report', 'forensic_report', 'autopsy_report', 'dispatch_log', 'other_document', 'discovery'].includes(t)) return 'document';
+  return 'other';
+}
+
+// OCR / analysis completion is derived from real processing state — never assumed.
+function isOcrComplete(ev: ApiEvidence): boolean {
+  return ev.processingStatus === 'analyzed' || ev.analysisStatus === 'completed';
+}
+function isOcrPending(ev: ApiEvidence): boolean {
+  return !isOcrComplete(ev) && ev.processingStatus !== 'failed' && ev.analysisStatus !== 'failed';
+}
+
+const UPLOAD_ACCEPT = '.pdf,.doc,.docx,.txt,.rtf,.jpg,.jpeg,.png,.gif,.tiff,.tif,.heic,.webp,.mp4,.mov,.avi,.mp3,.wav,.zip';
 
 export function EvidencePage() {
   const { caseId } = useParams<{ caseId: string }>();
@@ -129,6 +156,27 @@ export function EvidencePage() {
     const ocrQueue = evidence.filter((e) => ['pending', 'processing'].includes(e.processingStatus)).length;
     const review = evidence.filter((e) => e.processingStatus === 'pending').length;
     return { total: evidence.length, analyzed, ocrQueue, review };
+  }, [evidence]);
+
+  // Premium evidence summary — every value computed from the real evidence set.
+  const summary = useMemo(() => {
+    const media: Record<MediaClass, number> = { document: 0, image: 0, audio: 0, video: 0, archive: 0, physical: 0, other: 0 };
+    let bytes = 0;
+    let ocrDone = 0;
+    let ocrPending = 0;
+    let failed = 0;
+    for (const e of evidence) {
+      media[classifyMedia(e.mimeType, e.evidenceType)] += 1;
+      bytes += Number(e.size) || 0;
+      if (isOcrComplete(e)) ocrDone += 1;
+      else if (isOcrPending(e)) ocrPending += 1;
+      if (e.processingStatus === 'failed' || e.analysisStatus === 'failed') failed += 1;
+    }
+    const recent = [...evidence]
+      .sort((a, b) => new Date(b.uploadedAt).getTime() - new Date(a.uploadedAt).getTime())
+      .slice(0, 5);
+    const health = evidence.length === 0 ? 'UNKNOWN' : failed > 0 ? 'Attention' : ocrPending > 0 ? 'Processing' : 'Healthy';
+    return { media, bytes, ocrDone, ocrPending, failed, recent, health };
   }, [evidence]);
 
   const typeCounts = evidence.reduce<Record<string, number>>((acc, ev) => {
@@ -226,12 +274,44 @@ export function EvidencePage() {
         </div>
       )}
 
-      {/* Intelligence header */}
+      {/* Evidence Summary — media breakdown */}
+      <div>
+        <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-3">Evidence Summary</h3>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+          {([
+            ['Total', counts.total, 'evidence', 'gold'],
+            ['Documents', summary.media.document, 'documents', 'blue'],
+            ['Images', summary.media.image, 'evidence', 'violet'],
+            ['Audio', summary.media.audio, 'ocr', 'emerald'],
+            ['Video', summary.media.video, 'evidence', 'blue'],
+            ['Other', summary.media.other + summary.media.archive + summary.media.physical, 'evidence', 'violet'],
+          ] as const).map(([label, value, icon, tile]) => (
+            <div key={label} className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+              <span className={`inline-flex w-9 h-9 rounded-lg items-center justify-center mb-2 ca-icon-${tile}`}>
+                <Icon name={icon as never} size={16} />
+              </span>
+              <div className="text-2xl font-bold text-white tracking-tight">{value}</div>
+              <div className="text-xs font-medium text-slate-400 mt-0.5">{label}</div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Processing + storage + health */}
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <StatCard tile="blue" icon={<Icon name="evidence" size={20} />} value={counts.total} label="Total Evidence" />
-        <StatCard tile="emerald" icon={<Icon name="aiAnalysis" size={20} />} value={counts.analyzed} label="Analyzed" />
-        <StatCard tile="gold" icon={<Icon name="ocr" size={20} />} value={counts.ocrQueue} label="OCR Queue" />
+        <StatCard tile="gold" icon={<Icon name="ocr" size={20} />} value={summary.ocrPending} label="Pending OCR" highlight={summary.ocrPending > 0} />
+        <StatCard tile="emerald" icon={<Icon name="aiAnalysis" size={20} />} value={summary.ocrDone} label="Completed OCR" />
+        <StatCard tile="blue" icon={<Icon name="evidence" size={20} />} value={formatFileSize(summary.bytes)} label="Storage Used" />
         <StatCard tile="violet" icon={<Icon name="humanReview" size={20} />} value={counts.review} label="Needs Review" highlight={counts.review > 0} />
+      </div>
+
+      {/* Pipeline status chips */}
+      <div className="flex flex-wrap items-center gap-2 text-xs">
+        <span className="text-slate-400">Pipeline:</span>
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-white/10 bg-white/[0.03] text-slate-300"><Icon name="knowledgeGraph" size={12} className="text-gold-light" /> Knowledge Graph: {counts.analyzed > 0 ? 'Linked' : counts.total > 0 ? 'Queued' : 'UNKNOWN'}</span>
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-white/10 bg-white/[0.03] text-slate-300"><Icon name="timeline" size={12} className="text-gold-light" /> Timeline: {counts.analyzed > 0 ? 'Linked' : counts.total > 0 ? 'Queued' : 'UNKNOWN'}</span>
+        <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border border-white/10 bg-white/[0.03] text-slate-300"><Icon name="ocr" size={12} className="text-gold-light" /> OCR Queue: {summary.ocrPending}</span>
+        <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full border ${summary.health === 'Healthy' ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300' : summary.health === 'Attention' ? 'border-red-500/20 bg-red-500/10 text-red-300' : 'border-white/10 bg-white/[0.03] text-slate-300'}`}>Evidence Health: {summary.health}</span>
       </div>
 
       <HumanReviewBanner count={counts.review} onReview={() => setTab('review')} />
@@ -338,7 +418,7 @@ export function EvidencePage() {
               type="file"
               onChange={(e) => setSelectedFile(e.target.files?.[0] ?? null)}
               className="w-full text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-medium file:bg-white/10 file:text-white hover:file:bg-white/15"
-              accept=".pdf,.doc,.docx,.mp4,.mov,.avi,.jpg,.jpeg,.png,.mp3,.wav"
+              accept={UPLOAD_ACCEPT}
             />
           </div>
           {uploading && <ProgressBar value={uploadProgress} tone="gold" showValue />}

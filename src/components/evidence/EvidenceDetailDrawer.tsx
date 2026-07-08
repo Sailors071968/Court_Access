@@ -59,8 +59,24 @@ export function EvidenceDetailDrawer({ evidence, onClose }: EvidenceDetailDrawer
           </div>
 
           <Accordion
-            defaultOpenIds={['extraction']}
+            defaultOpenIds={['identity', 'extraction']}
             items={[
+              {
+                id: 'identity',
+                title: 'File & Identity',
+                icon: <Icon name="documents" size={15} />,
+                content: (
+                  <div className="space-y-2 text-sm text-slate-300">
+                    <Row label="Evidence ID" value={evidence.evidenceId} mono />
+                    <Row label="SHA-256" value={evidence.sha256 ? `${evidence.sha256.slice(0, 20)}…` : 'UNKNOWN'} mono title={evidence.sha256 ?? undefined} />
+                    <Row label="Size" value={formatBytes(evidence.size)} />
+                    <Row label="MIME type" value={evidence.mimeType ?? 'UNKNOWN'} />
+                    <Row label="Type" value={evidence.evidenceType.replace(/_/g, ' ')} />
+                    <Row label="Uploaded" value={new Date(evidence.uploadedAt).toLocaleString()} />
+                    <Row label="Uploader" value={evidence.uploadedBy} mono />
+                  </div>
+                ),
+              },
               {
                 id: 'extraction',
                 title: 'Extraction Status',
@@ -103,6 +119,7 @@ export function EvidenceDetailDrawer({ evidence, onClose }: EvidenceDetailDrawer
                 content: (
                   <ul className="space-y-1.5 text-xs text-slate-400">
                     <li><span className="text-slate-400">{new Date(evidence.uploadedAt).toLocaleString()}</span> — Uploaded by {evidence.uploadedBy}</li>
+                    <li><span className="text-slate-400">Integrity</span> — {evidence.sha256 ? `SHA-256 ${evidence.sha256.slice(0, 16)}…` : 'Hash UNKNOWN'}</li>
                     <li><span className="text-slate-400">Storage</span> — {evidence.s3Key ? 'Sealed in evidence vault' : 'Pending'}</li>
                   </ul>
                 ),
@@ -145,11 +162,20 @@ export function EvidenceDetailDrawer({ evidence, onClose }: EvidenceDetailDrawer
   );
 }
 
-function Row({ label, value }: { label: string; value: string }) {
+function Row({ label, value, mono, title }: { label: string; value: string; mono?: boolean; title?: string }) {
   return (
-    <div className="flex items-center justify-between">
-      <span className="text-slate-400">{label}</span>
-      <span className="text-slate-200">{value}</span>
+    <div className="flex items-center justify-between gap-3">
+      <span className="text-slate-400 flex-shrink-0">{label}</span>
+      <span className={cn('text-slate-200 truncate text-right', mono && 'font-mono text-xs')} title={title}>{value}</span>
     </div>
   );
+}
+
+function formatBytes(size: string | number): string {
+  const b = Number(size);
+  if (!b || isNaN(b)) return '—';
+  if (b < 1024) return `${b} B`;
+  if (b < 1024 * 1024) return `${(b / 1024).toFixed(1)} KB`;
+  if (b < 1024 * 1024 * 1024) return `${(b / (1024 * 1024)).toFixed(1)} MB`;
+  return `${(b / (1024 * 1024 * 1024)).toFixed(2)} GB`;
 }

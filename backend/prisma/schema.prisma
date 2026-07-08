@@ -1834,6 +1834,7 @@ model Evidence {
   pageCount       Int?     // for documents
   evidenceType    String   // transcript | police_report | bodycam | dashcam | witness_video | photo | dispatch_log | forensic_report | autopsy_report | other_document
   s3Key           String?
+  sha256          String?  // SHA-256 content hash for integrity / chain of custody
   uploadedBy      String
   uploadedAt      DateTime @default(now())
 

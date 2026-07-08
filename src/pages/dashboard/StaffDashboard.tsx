@@ -30,11 +30,16 @@ const TONE_CLASS: Record<string, string> = {
   violet: 'ca-icon-violet text-violet-300',
   gold: 'ca-icon-gold text-gold-light',
 };
+const TAG_CLASS: Record<string, string> = {
+  emerald: 'text-emerald-300', blue: 'text-blue-300', violet: 'text-violet-300', gold: 'text-gold-light',
+};
 
-// Phase 3 — large color-themed intelligence card with glass, gradient, hover.
-function IntelCard({ tone, icon, label, value, desc, onClick }: {
+// Phase 3 — large color-themed intelligence card, matching the approved
+// reference hero cards (icon tile + value + colored tag + supporting text).
+// Values remain UNKNOWN until computed from the repository (never fabricated).
+function IntelCard({ tone, icon, label, value, tag, desc, onClick }: {
   tone: 'emerald' | 'blue' | 'violet' | 'gold';
-  icon: React.ReactNode; label: string; value: string; desc: string; onClick?: () => void;
+  icon: React.ReactNode; label: string; value: string; tag: string; desc: string; onClick?: () => void;
 }) {
   return (
     <button
@@ -42,13 +47,15 @@ function IntelCard({ tone, icon, label, value, desc, onClick }: {
       onClick={onClick}
       className="group text-left rounded-2xl border border-white/10 bg-white/[0.03] p-5 hover:border-gold/30 hover:bg-white/[0.05] hover:-translate-y-0.5 hover:shadow-elevated transition-all duration-200"
     >
-      <div className="flex items-center justify-between">
-        <span className={`inline-flex w-12 h-12 rounded-xl items-center justify-center ${TONE_CLASS[tone]}`}>{icon}</span>
-        <ArrowRight size={16} className="text-slate-500 group-hover:text-gold-light transition-colors" />
+      <div className="flex items-center gap-3.5 mb-3">
+        <span className={`inline-flex w-14 h-14 rounded-2xl items-center justify-center flex-shrink-0 ${TONE_CLASS[tone]}`}>{icon}</span>
+        <div className="min-w-0">
+          <div className="text-3xl font-bold text-white leading-none tracking-tight">{value}</div>
+          <div className={`text-[10px] font-semibold uppercase tracking-[0.14em] mt-1.5 ${TAG_CLASS[tone]}`}>{tag}</div>
+        </div>
       </div>
-      <div className="text-2xl font-bold text-white tracking-tight mt-4">{value}</div>
-      <div className="text-sm font-semibold text-slate-200 mt-0.5">{label}</div>
-      <p className="text-xs text-slate-400 mt-1 leading-relaxed">{desc}</p>
+      <p className="text-sm font-semibold text-slate-200">{label}</p>
+      <p className="text-xs text-slate-400 mt-0.5 leading-relaxed">{desc}</p>
     </button>
   );
 }
@@ -164,10 +171,10 @@ export function StaffDashboard() {
       {/* Phase 3 — large color-themed intelligence cards. Analytics compute from
           the repository; shown as UNKNOWN until processed (never fabricated). */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        <IntelCard tone="emerald" icon={<Scale size={22} />} label="Case Strength" value="UNKNOWN" desc="Overall defense posture — process case to compute" onClick={() => navigate(`/cases/${caseId}/charges`)} />
-        <IntelCard tone="blue" icon={<ShieldCheck size={22} />} label="Evidence Confidence" value="UNKNOWN" desc="Reliability of extracted evidence — awaiting analysis" onClick={() => navigate(`/cases/${caseId}/evidence`)} />
-        <IntelCard tone="violet" icon={<BarChart3 size={22} />} label="Repository Integrity" value="UNKNOWN" desc="Chain of custody & completeness — awaiting analysis" onClick={() => navigate(`/cases/${caseId}/evidence`)} />
-        <IntelCard tone="gold" icon={<AlertTriangle size={22} />} label="Contradictions" value="UNKNOWN" desc="Conflicting statements & facts — awaiting analysis" onClick={() => navigate(`/cases/${caseId}/contradictions`)} />
+        <IntelCard tone="emerald" icon={<Scale size={26} />} label="Case Strength" value="UNKNOWN" tag="Awaiting analysis" desc="Overall defense posture — process case to compute" onClick={() => navigate(`/cases/${caseId}/charges`)} />
+        <IntelCard tone="blue" icon={<ShieldCheck size={26} />} label="Evidence Confidence" value="UNKNOWN" tag="Awaiting analysis" desc="Reliability of extracted evidence" onClick={() => navigate(`/cases/${caseId}/evidence`)} />
+        <IntelCard tone="violet" icon={<BarChart3 size={26} />} label="Repository Integrity" value="UNKNOWN" tag="Awaiting analysis" desc="Chain of custody & completeness" onClick={() => navigate(`/cases/${caseId}/evidence`)} />
+        <IntelCard tone="gold" icon={<AlertTriangle size={26} />} label="Contradictions" value="UNKNOWN" tag="Awaiting analysis" desc="Conflicting statements & facts" onClick={() => navigate(`/cases/${caseId}/contradictions`)} />
       </div>
 
       {/* Main two-column layout — collapses to one column on tablet/mobile */}

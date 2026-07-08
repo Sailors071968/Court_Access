@@ -15,6 +15,7 @@ import { ROLE_PERMISSIONS } from '../../constants';
 import type { RolePermissions } from '../../types';
 import { useState } from 'react';
 import { BrandLogo } from '../brand/BrandLogo';
+import { Avatar } from '../ui/avatar';
 import { cn } from '../../lib/utils';
 
 const iconMap = {
@@ -108,7 +109,8 @@ export function Sidebar() {
   return (
     <aside
       className={cn(
-        'fixed left-0 top-0 h-screen bg-navy-900 text-slate-200 flex flex-col z-40 transition-all duration-300 border-r border-white/5',
+        'fixed left-0 top-0 h-screen text-slate-200 flex flex-col z-40 transition-all duration-300 border-r border-white/10',
+        'bg-gradient-to-b from-navy-900 via-navy-900 to-[#070b16]',
         collapsed ? 'w-16' : 'w-64',
       )}
     >
@@ -126,12 +128,10 @@ export function Sidebar() {
       {!collapsed && (
         <div className="px-4 py-3 border-b border-white/5">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-navy rounded-xl flex items-center justify-center flex-shrink-0 ring-1 ring-white/10">
-              <span className="text-sm font-medium">{user.name.charAt(0)}</span>
-            </div>
+            <Avatar name={user.name} size="sm" accent />
             <div className="min-w-0">
-              <p className="text-sm font-medium truncate">{user.name}</p>
-              <p className="text-xs text-slate-400 capitalize">{user.role}</p>
+              <p className="text-sm font-medium text-white truncate">{user.name}</p>
+              <p className="text-xs text-slate-400 capitalize">{user.role.replace(/_/g, ' ')}</p>
             </div>
           </div>
         </div>
@@ -139,6 +139,7 @@ export function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 py-4 px-2 space-y-1 overflow-y-auto">
+        {!collapsed && <p className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">Workspace</p>}
         {navItems.map((item) => {
           if (item.permission && !permissions[item.permission]) return null;
           // Hide standalone evidence-mgmt for admins (they see it under Admin sub-nav)
@@ -161,10 +162,10 @@ export function Sidebar() {
                 <>
                   <button
                     onClick={() => toggleSection(item.id)}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors w-full ${
+                    className={`relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all w-full ${
                       isActive || childActive
-                        ? 'bg-gold/10 text-gold-light border border-gold/20'
-                        : 'text-slate-300 hover:bg-white/5 hover:text-white border border-transparent'
+                        ? 'bg-gold/10 text-gold-light ring-1 ring-inset ring-gold/20 shadow-[inset_3px_0_0_0_#eab360]'
+                        : 'text-slate-300 hover:bg-white/5 hover:text-white'
                     }`}
                     title={collapsed ? item.label : undefined}
                   >
@@ -204,10 +205,10 @@ export function Sidebar() {
               ) : (
                 <NavLink
                   to={item.path}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors border ${
+                  className={`relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
                     isActive
-                      ? 'bg-gold/10 text-gold-light border-gold/20'
-                      : 'text-slate-300 hover:bg-white/5 hover:text-white border-transparent'
+                      ? 'bg-gold/10 text-gold-light ring-1 ring-inset ring-gold/20 shadow-[inset_3px_0_0_0_#eab360]'
+                      : 'text-slate-300 hover:bg-white/5 hover:text-white'
                   }`}
                   title={collapsed ? item.label : undefined}
                 >

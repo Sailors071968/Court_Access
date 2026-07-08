@@ -104,6 +104,7 @@ import { LitigationStrategyView } from './pages/case/LitigationStrategyView';
 import { ContradictionDashboardPage } from './pages/case/ContradictionDashboardPage';
 import { NarrativeAnalysisPage } from './pages/case/NarrativeAnalysisPage';
 import { AttorneyWorkbenchPage } from './pages/case/AttorneyWorkbenchPage';
+import { KnowledgeGraphPage } from './pages/case/KnowledgeGraphPage';
 import { InvestigatorWorkbenchPage } from './pages/case/InvestigatorWorkbenchPage';
 import { ClientPortalLayout, ClientPortalIndex } from './pages/client-portal/ClientPortalLayout';
 import {
@@ -577,6 +578,14 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canViewEvidence">
                   <LitigationStrategyView />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="knowledge-graph"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <KnowledgeGraphPage />
                 </ProtectedRoute>
               }
             />

@@ -133,7 +133,7 @@ const ATTORNEY_ACTIONS: Array<{ label: string; icon: React.ReactNode; path: stri
   { label: 'Search Authorities', icon: <BookOpen size={16} />, path: 'research' },
   { label: 'Review Evidence', icon: <FileSearch size={16} />, path: 'evidence' },
   { label: 'Review Charges', icon: <Scale size={16} />, path: 'charges' },
-  { label: 'Review Discovery', icon: <ClipboardList size={16} />, path: 'disclosures' },
+  { label: 'Review Discovery', icon: <ClipboardList size={16} />, path: 'discovery' },
   { label: 'Review Witnesses', icon: <Users size={16} />, path: 'witnesses' },
   { label: 'Review Timeline', icon: <Clock size={16} />, path: 'timeline' },
   { label: 'Knowledge Graph', icon: <Network size={16} />, path: 'knowledge-graph' },

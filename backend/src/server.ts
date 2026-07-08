@@ -31,6 +31,7 @@ import { registerEvidenceRequestRoutes } from './evidence/evidenceRequestRoutes.
 import { registerIntelligenceRoutes, registerNarrativeIntelligenceRoutes } from './intelligence/intelligenceRoutes.js';
 import { registerWorkbenchRoutes } from './workbench/workbenchRoutes.js';
 import { registerInvestigatorRoutes } from './investigator/investigatorRoutes.js';
+import { registerDiscoveryRoutes } from './discovery/discoveryRoutes.js';
 import { registerTimelineRoutes } from './timeline/timelineRoutes.js';
 import { registerQueueMonitorRoutes } from './admin/queueMonitorRoutes.js';
 import { registerAdminRoutes } from './admin/adminRoutes.js';
@@ -242,6 +243,7 @@ async function startServer() {
 
   console.log('[Server] Registering Investigator Workbench routes...');
   await registerInvestigatorRoutes(app);
+  await registerDiscoveryRoutes(app);
 
   // Timeline Reconstruction Engine
   console.log('[Server] Registering timeline reconstruction routes...');

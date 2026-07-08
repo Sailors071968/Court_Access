@@ -2482,6 +2482,40 @@ model IntegrationSetting {
   @@map("integration_settings")
 }
 
+// Inbound criminal discovery items (produced materials tracked & reviewed).
+// Distinct from DisclosurePackage (outbound sharing). Evidence-governed:
+// Brady/Giglio/Jencks are candidate flags set by users, never fabricated.
+model DiscoveryItem {
+  id               String    @id @default(uuid())
+  caseId           String
+  tenantId         String
+  title            String
+  category         String    // police_report | body_camera | dash_camera | 911_call | cad_log | crime_scene_photo | lab_report | dna_report | fingerprint | medical | autopsy | financial | phone_extraction | search_warrant | affidavit | subpoena | court_order | expert_report | brady | giglio | jencks | custom
+  sourceAgency     String?
+  originalFileName String?
+  receivedDate     DateTime?
+  producedDate     DateTime?
+  hash             String?
+  fileSize         BigInt?
+  ocrStatus        String    @default("unknown")
+  reviewStatus     String    @default("pending") // pending | in_review | completed
+  reviewedBy       String?
+  reviewRole       String?   // attorney | investigator | paralegal | legal_assistant
+  bradyFlag        Boolean   @default(false)
+  giglioFlag       Boolean   @default(false)
+  jencksFlag       Boolean   @default(false)
+  flags            String[]  @default([]) // motion | investigation | expert | trial | manual_review
+  evidenceId       String?
+  notes            String?
+  createdBy        String
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([caseId, tenantId])
+  @@index([reviewStatus])
+  @@map("discovery_items")
+}
+
 model SchemaVersion {
   id             String   @id @default(uuid())
   version        String   @unique

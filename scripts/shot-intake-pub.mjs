@@ -1,0 +1,16 @@
+import { chromium } from 'playwright';
+const U='https://eric-collaborative-pmid-safari.trycloudflare.com'; const OUT='reports/screenshots/intake';
+const b=await chromium.launch(); const pg=await b.newPage({viewport:{width:1440,height:1200}});
+await pg.goto(U+'/login',{waitUntil:'networkidle',timeout:30000});
+await pg.fill('input[type=email]','attorney2@courtaccess.test');await pg.fill('input[type=password]','TestPass123!');await pg.click('button[type=submit]');await pg.waitForTimeout(4000);
+await pg.goto(U+'/cases',{waitUntil:'networkidle',timeout:30000}).catch(()=>{});await pg.waitForTimeout(1500);
+await pg.getByRole('button',{name:/New Case/i}).first().click({timeout:6000}).catch(()=>{});
+await pg.waitForTimeout(1200);
+await pg.locator('select:has(option[value="PEN"])').first().selectOption('PEN').catch(()=>{});
+await pg.getByPlaceholder(/Type e.g/).first().fill('459').catch(()=>{});
+await pg.waitForTimeout(1600);
+await pg.getByText('PEN 459',{exact:false}).first().click({timeout:4000}).catch(()=>{});
+await pg.waitForTimeout(1800);
+await pg.screenshot({path:OUT+'/public-intake-populated.png'});
+console.log('public intake shot done');
+await b.close();

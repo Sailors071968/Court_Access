@@ -7,7 +7,6 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { Play, Eye, Columns, CheckSquare, Briefcase, Network, Clock } from 'lucide-react';
-import { PageHeader } from '../../components/ui/page-header';
 import { Button } from '../../components/ui/button';
 import { Card, StatCard } from '../../components/ui/card';
 import { Tabs } from '../../components/ui/tabs';
@@ -18,17 +17,18 @@ import { ProgressBar } from '../../components/ui/progress';
 import { Spinner } from '../../components/ui/spinner';
 import { EmptyState } from '../../components/ui/empty-state';
 import { Icon } from '../../components/icons/registry';
-import { DataTable, type Column } from '../../components/data/data-table';
 import { SplitPane } from '../../components/layout/split-pane';
 import { EvidenceStatus, HumanReviewBanner } from '../../components/indicators/indicators';
 import { MediaPreview } from '../../components/evidence/MediaPreview';
 import { EvidenceDetailDrawer } from '../../components/evidence/EvidenceDetailDrawer';
 import { DoctrineCompliancePanel } from '../../components/case/DoctrineCompliancePanel';
 import {
+  fetchCase,
   fetchCaseEvidence,
   uploadEvidenceDirect,
   rebuildTimeline,
   EVIDENCE_TYPES,
+  type ApiCase,
   type ApiEvidence,
 } from '../../services/caseApi';
 
@@ -82,6 +82,7 @@ export function EvidencePage() {
   const [typeFilter, setTypeFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
   const [evidence, setEvidence] = useState<ApiEvidence[]>([]);
+  const [caseInfo, setCaseInfo] = useState<ApiCase | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
@@ -106,8 +107,11 @@ export function EvidencePage() {
       try {
         setLoading(true);
         setError(null);
-        const data = await fetchCaseEvidence(caseId);
-        if (!cancelled) setEvidence(data ?? []);
+        const [data, ci] = await Promise.all([
+          fetchCaseEvidence(caseId),
+          fetchCase(caseId).catch(() => null),
+        ]);
+        if (!cancelled) { setEvidence(data ?? []); setCaseInfo(ci); }
       } catch (err) {
         if (!cancelled) setError(err instanceof Error ? err.message : 'Failed to load evidence');
       } finally {
@@ -214,68 +218,54 @@ export function EvidencePage() {
 
   const selectedList = evidence.filter((e) => selectedIds.has(e.evidenceId));
 
-  const columns: Column<ApiEvidence>[] = [
-    {
-      key: 'select',
-      header: '',
-      width: '2.5rem',
-      render: (ev) => (
-        <input
-          type="checkbox"
-          checked={selectedIds.has(ev.evidenceId)}
-          onChange={(e) => {
-            e.stopPropagation();
-            toggleSelect(ev.evidenceId);
-          }}
-          onClick={(e) => e.stopPropagation()}
-          className="rounded border-white/20 bg-navy-900"
-          aria-label={`Select ${ev.fileName}`}
-        />
-      ),
-    },
-    { key: 'fileName', header: 'File Name', render: (ev) => <span className="font-medium text-white">{ev.fileName}</span> },
-    { key: 'evidenceType', header: 'Type', render: (ev) => <span className="capitalize text-slate-400">{ev.evidenceType.replace(/_/g, ' ')}</span> },
-    { key: 'uploadedAt', header: 'Uploaded', render: (ev) => <span className="text-slate-400">{new Date(ev.uploadedAt).toLocaleDateString()}</span> },
-    { key: 'size', header: 'Size', render: (ev) => <span className="text-slate-400">{formatFileSize(Number(ev.size))}</span> },
-    { key: 'processingStatus', header: 'Status', render: (ev) => <EvidenceStatus status={ev.processingStatus} /> },
-    {
-      key: 'actions',
-      header: '',
-      align: 'right',
-      render: (ev) => (
-        <Button variant="ghost" size="sm" onClick={() => setDetail(ev)}>
-          <Eye size={14} /> View
-        </Button>
-      ),
-    },
-  ];
-
   return (
     <div className="space-y-6">
-      <PageHeader
-        title="Evidence Workspace"
-        overline="Evidence"
-        subtitle={`${evidence.length} items`}
-        action={
-          <div className="flex flex-wrap items-center gap-2">
-            <Button variant="ghost" size="sm" onClick={() => caseId && navigate(`/cases/${caseId}/attorney-workbench`)}>
-              <Briefcase size={15} /> Workbench
-            </Button>
-            <Button variant="ghost" size="sm" onClick={() => caseId && navigate(`/cases/${caseId}/knowledge-graph`)}>
-              <Network size={15} /> Knowledge Graph
-            </Button>
-            <Button variant="ghost" size="sm" onClick={() => caseId && navigate(`/cases/${caseId}/timeline`)}>
-              <Clock size={15} /> Timeline
-            </Button>
-            <Button variant="secondary" onClick={handleProcess} disabled={processing || evidence.length === 0}>
-              <Play size={15} className={processing ? 'animate-pulse' : ''} /> Process Case
-            </Button>
-            <Button variant="primary" onClick={() => setShowUpload(true)}>
-              <Icon name="upload" size={15} /> Upload
-            </Button>
+      {/* Phase 1 — premium evidence header hero */}
+      <div className="relative overflow-hidden rounded-2xl border border-white/10 ca-gradient-hero ca-grid-overlay">
+        <div className="relative p-6 lg:p-7">
+          <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-5">
+            <div className="flex items-start gap-4 min-w-0">
+              <div className="w-14 h-14 rounded-2xl ca-gradient-gold flex items-center justify-center shadow-gold flex-shrink-0">
+                <Icon name="evidence" size={26} className="text-navy" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold-light">Evidence Workspace</p>
+                <h1 className="text-2xl font-bold tracking-tight text-white mt-1 truncate">{caseInfo?.title ?? 'Evidence'}</h1>
+                <div className="flex flex-wrap items-center gap-x-4 gap-y-1 mt-2 text-sm text-slate-300">
+                  <span>{counts.total} items</span>
+                  <span className="text-slate-500">·</span>
+                  <span>{summary.ocrDone} analyzed</span>
+                  <span className="text-slate-500">·</span>
+                  <span>{formatFileSize(summary.bytes)}</span>
+                  <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full border text-xs ${summary.health === 'Healthy' ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300' : summary.health === 'Attention' ? 'border-red-500/20 bg-red-500/10 text-red-300' : 'border-white/10 bg-white/[0.03] text-slate-300'}`}>Repository: {summary.health === 'UNKNOWN' ? 'UNKNOWN' : 'Connected'}</span>
+                </div>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2 flex-shrink-0">
+              <Button variant="secondary" onClick={handleProcess} disabled={processing || evidence.length === 0}>
+                <Play size={15} className={processing ? 'animate-pulse' : ''} /> Process
+              </Button>
+              <Button variant="primary" onClick={() => setShowUpload(true)}><Icon name="upload" size={15} /> Upload</Button>
+            </div>
           </div>
-        }
-      />
+          {/* Quick actions */}
+          <div className="flex flex-wrap gap-2 mt-5 pt-4 border-t border-white/10">
+            {([
+              ['Import Discovery', 'discovery', <Icon name="discovery" size={14} key="d" />],
+              ['Workbench', 'attorney-workbench', <Briefcase size={14} key="w" />],
+              ['Knowledge Graph', 'knowledge-graph', <Network size={14} key="k" />],
+              ['Timeline', 'timeline', <Clock size={14} key="t" />],
+              ['Witnesses', 'witnesses', <Icon name="witness" size={14} key="wi" />],
+              ['Research', 'research', <Icon name="authorities" size={14} key="r" />],
+            ] as const).map(([label, path, icon]) => (
+              <button key={label} onClick={() => caseId && navigate(`/cases/${caseId}/${path}`)}
+                className="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-white/10 bg-white/[0.03] text-sm text-slate-200 hover:border-gold/30 hover:bg-white/5 hover:text-white transition-colors">
+                <span className="text-gold-light">{icon}</span> {label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
 
       {processNote && (
         <div className="flex items-center gap-2 p-3 rounded-lg text-sm bg-blue-500/10 border border-blue-500/20 text-blue-300">
@@ -378,17 +368,65 @@ export function EvidencePage() {
         <Card>
           <EmptyState icon={<Icon name="evidence" size={22} />} title="Unable to load evidence" description={error} />
         </Card>
-      ) : (
-        <Card padding="sm">
-          <DataTable
-            columns={columns}
-            rows={rows}
-            rowKey={(ev) => ev.evidenceId}
-            onRowClick={(ev) => setDetail(ev)}
-            emptyTitle={tab === 'ocr' ? 'OCR queue is clear' : tab === 'review' ? 'Nothing awaiting review' : 'No evidence uploaded yet'}
-            emptyDescription={tab === 'inbox' ? 'Upload discovery to begin OCR and evidence extraction.' : undefined}
+      ) : rows.length === 0 ? (
+        <Card>
+          <EmptyState
+            icon={<Icon name="evidence" size={24} />}
+            title={tab === 'ocr' ? 'OCR queue is clear' : tab === 'review' ? 'Nothing awaiting review' : 'No evidence uploaded yet'}
+            description="Upload discovery to begin OCR, extraction, and repository linking. Repository is connected and ready."
+            action={
+              <div className="flex flex-wrap items-center justify-center gap-2">
+                <Button variant="primary" size="sm" onClick={() => setShowUpload(true)}><Icon name="upload" size={15} /> Upload Evidence</Button>
+                <Button variant="secondary" size="sm" onClick={() => caseId && navigate(`/cases/${caseId}/discovery`)}>Import Discovery</Button>
+              </div>
+            }
           />
         </Card>
+      ) : (
+        /* Phase 3 — premium evidence cards */
+        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+          {rows.map((ev) => {
+            const ocrDone = ev.processingStatus === 'analyzed' || ev.analysisStatus === 'completed';
+            return (
+              <div key={ev.evidenceId} className="group rounded-2xl border border-white/10 bg-white/[0.03] p-4 hover:border-gold/30 hover:bg-white/[0.05] transition-colors">
+                <div className="flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    checked={selectedIds.has(ev.evidenceId)}
+                    onChange={() => toggleSelect(ev.evidenceId)}
+                    onClick={(e) => e.stopPropagation()}
+                    className="mt-1 rounded border-white/20 bg-navy-900 accent-gold-light"
+                    aria-label={`Select ${ev.fileName}`}
+                  />
+                  <button onClick={() => setDetail(ev)} className="flex items-start gap-3 flex-1 min-w-0 text-left">
+                    <span className="w-11 h-11 rounded-xl ca-icon-gold text-gold-light flex items-center justify-center flex-shrink-0">
+                      <Icon name="evidence" size={18} />
+                    </span>
+                    <div className="min-w-0">
+                      <p className="text-sm font-semibold text-white truncate group-hover:text-gold-light transition-colors">{ev.fileName}</p>
+                      <p className="text-xs text-slate-400 capitalize truncate">{ev.evidenceType.replace(/_/g, ' ')}</p>
+                    </div>
+                  </button>
+                </div>
+                <div className="flex flex-wrap items-center gap-1.5 mt-3">
+                  <EvidenceStatus status={ev.processingStatus} />
+                  <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] border ${ocrDone ? 'border-emerald-500/20 bg-emerald-500/10 text-emerald-300' : 'border-white/10 bg-white/5 text-slate-400'}`}>OCR: {ocrDone ? 'Complete' : 'Pending'}</span>
+                  {ev.sha256 && <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[11px] border border-emerald-500/20 bg-emerald-500/10 text-emerald-300" title={ev.sha256}>Hash ✓</span>}
+                </div>
+                <dl className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs mt-3">
+                  <div><dt className="text-slate-500">Uploaded</dt><dd className="text-slate-300">{new Date(ev.uploadedAt).toLocaleDateString()}</dd></div>
+                  <div><dt className="text-slate-500">Size</dt><dd className="text-slate-300">{formatFileSize(Number(ev.size))}</dd></div>
+                </dl>
+                <div className="flex items-center gap-3 mt-3 pt-3 border-t border-white/10">
+                  <button onClick={() => setDetail(ev)} className="text-xs text-slate-300 hover:text-gold-light inline-flex items-center gap-1"><Eye size={13} /> Open</button>
+                  <button onClick={() => caseId && navigate(`/cases/${caseId}/knowledge-graph`)} className="text-xs text-slate-400 hover:text-gold-light inline-flex items-center gap-1"><Network size={12} /> Graph</button>
+                  <button onClick={() => caseId && navigate(`/cases/${caseId}/timeline`)} className="text-xs text-slate-400 hover:text-gold-light inline-flex items-center gap-1"><Clock size={12} /> Timeline</button>
+                  <span className="text-[11px] text-slate-500 ml-auto font-mono">{ev.evidenceId.slice(0, 8)}</span>
+                </div>
+              </div>
+            );
+          })}
+        </div>
       )}
 
       <DoctrineCompliancePanel />

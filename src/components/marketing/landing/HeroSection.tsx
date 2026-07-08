@@ -31,9 +31,8 @@ export function HeroSection() {
             </h1>
 
             <p className={cn(TYPOGRAPHY.bodyLg, 'max-w-xl mb-8')}>
-              AI-powered legal intelligence for attorneys, investigators, and justice
-              professionals — organize evidence, surface contradictions, and build
-              defensible, citation-backed case theory.
+              AI-powered criminal litigation intelligence for attorneys, investigators,
+              public defenders, prosecutors, and justice professionals.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mb-8">
@@ -62,37 +61,19 @@ export function HeroSection() {
             </div>
           </div>
 
-          {/* Courthouse imagery panel */}
+          {/* Cinematic courthouse imagery panel */}
           <div className="animate-slide-up">
-            <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-elevated aspect-[4/3] ca-gradient-hero">
-              <div className="absolute inset-0 ca-grid-overlay opacity-30" />
-              {/* Stylized courthouse */}
-              <svg viewBox="0 0 400 300" className="absolute inset-0 w-full h-full" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-                <defs>
-                  <linearGradient id="ch-sky" x1="0" y1="0" x2="0" y2="300">
-                    <stop offset="0" stopColor="#0f172a" />
-                    <stop offset="1" stopColor="#0a0f1c" />
-                  </linearGradient>
-                  <linearGradient id="ch-gold" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0" stopColor="#f5c86e" />
-                    <stop offset="1" stopColor="#C8963E" />
-                  </linearGradient>
-                </defs>
-                <rect width="400" height="300" fill="url(#ch-sky)" />
-                {/* pediment */}
-                <path d="M120 110 L200 70 L280 110 Z" fill="url(#ch-gold)" opacity="0.9" />
-                <rect x="118" y="112" width="164" height="10" rx="2" fill="url(#ch-gold)" opacity="0.85" />
-                {/* columns */}
-                {[0, 1, 2, 3, 4, 5].map((i) => (
-                  <rect key={i} x={128 + i * 28} y="128" width="12" height="90" rx="2" fill="url(#ch-gold)" opacity="0.75" />
-                ))}
-                {/* steps */}
-                <rect x="108" y="222" width="184" height="8" rx="2" fill="url(#ch-gold)" opacity="0.6" />
-                <rect x="98" y="232" width="204" height="8" rx="2" fill="url(#ch-gold)" opacity="0.5" />
-                <rect x="88" y="242" width="224" height="10" rx="2" fill="url(#ch-gold)" opacity="0.4" />
-                {/* glow */}
-                <ellipse cx="200" cy="140" rx="150" ry="60" fill="#C8963E" opacity="0.08" />
-              </svg>
+            <div className="relative rounded-2xl overflow-hidden border border-white/10 shadow-elevated aspect-[4/3] bg-navy-900">
+              <img
+                src="/hero-courthouse.png"
+                alt="Illuminated neoclassical courthouse at dusk"
+                loading="eager"
+                className="absolute inset-0 w-full h-full object-cover"
+              />
+              {/* Cinematic gradient overlays for depth + brand blend */}
+              <div className="absolute inset-0 bg-gradient-to-t from-navy-900/80 via-transparent to-navy-900/20" />
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-navy-900/40" />
+              <div className="absolute inset-0 ring-1 ring-inset ring-gold/10" />
             </div>
           </div>
         </div>

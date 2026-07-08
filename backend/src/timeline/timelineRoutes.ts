@@ -30,6 +30,7 @@ import {
   getTimelineEvents,
   getTimelineConflicts,
 } from './timelineReconstructionService.js';
+import prisma from '../lib/prisma.js';
 
 import { enqueueTimelineProcessing } from '../workers/pipelineJobService.js';
 import { getQueueHealth } from '../lib/queues.js';
@@ -44,6 +45,23 @@ function resolveContext(request: AuthenticatedRequest) {
   return {
     userId: (user as any)?.userId || 'dev-user',
     tenantId: (user as any)?.tenantId || 'dev-tenant'
+  };
+}
+
+// Map a raw TimelineEvent row → the ApiTimelineEvent shape the frontend expects.
+function toApiEvent(e: any) {
+  const meta = (e?.metadata ?? {}) as Record<string, unknown>;
+  return {
+    eventId: e.id,
+    eventType: (typeof meta.eventType === 'string' && meta.eventType) || e.sourceType || 'event',
+    canonicalTimestamp: e.timestamp ? new Date(e.timestamp).toISOString() : '',
+    timestampSource: e.sourceType || (e.timestamp ? 'repository' : 'UNKNOWN'),
+    confidence: typeof e.confidence === 'number' ? e.confidence : 0,
+    actor: e.actor ?? undefined,
+    action: e.action ?? undefined,
+    target: e.target ?? undefined,
+    location: e.location ?? undefined,
+    description: e.description ?? '',
   };
 }
 
@@ -68,8 +86,20 @@ export async function registerTimelineRoutes(app: FastifyInstance): Promise<void
         // a broken legal-cascade on them.) A raw events endpoint returns events
         // + conflicts; legal analysis lives in the intelligence/workbench APIs.
         const eventList = await getTimelineEvents(caseId, tenantId);
-        const conflicts = await getTimelineConflicts(caseId, tenantId);
-        return reply.send({ caseId, events: eventList, conflicts, count: eventList.length });
+        const conflictResult = await getTimelineConflicts(caseId, tenantId);
+        const events = (eventList.events ?? []).map(toApiEvent);
+        return reply.send({
+          caseId,
+          totalEvents: events.length,
+          events,
+          conflicts: (conflictResult.conflicts ?? []).map((c: any) => ({
+            conflictId: c.id,
+            type: 'chronology_conflict',
+            description: c.description,
+            eventIds: c.conflictsWith ? [c.id, c.conflictsWith] : [c.id],
+            severity: 'medium',
+          })),
+        });
 
         // --------------------------------------------------
         // CONTRADICTIONS
@@ -209,6 +239,52 @@ export async function registerTimelineRoutes(app: FastifyInstance): Promise<void
       const { tenantId } = resolveContext(request);
       const { caseId } = request.params as any;
       return await getTimelineConflicts(caseId, tenantId);
+    }
+  );
+
+  // --------------------------------------------------------------------------
+  // POST /events — attorney-entered ("Custom Event"). Real user data, never
+  // fabricated; time may be UNKNOWN (null) rather than invented.
+  // --------------------------------------------------------------------------
+  app.post(
+    '/api/timeline/:caseId/events',
+    { preHandler: authMiddleware },
+    async (request: AuthenticatedRequest, reply: FastifyReply) => {
+      const { tenantId } = resolveContext(request);
+      const { caseId } = request.params as { caseId: string };
+      const body = (request.body ?? {}) as {
+        description?: string; timestamp?: string; eventType?: string;
+        actor?: string; location?: string; sourceDoc?: string;
+      };
+      if (!body.description || !body.description.trim()) {
+        return reply.code(400).send({ error: 'Event description is required' });
+      }
+      let ts: Date | null = null;
+      if (body.timestamp) {
+        const d = new Date(body.timestamp);
+        if (!Number.isNaN(d.getTime())) ts = d;
+      }
+      try {
+        const created = await prisma.timelineEvent.create({
+          data: {
+            caseId,
+            tenantId,
+            description: body.description.trim(),
+            timestamp: ts,
+            actor: body.actor?.trim() || null,
+            action: body.eventType?.trim() || null,
+            location: body.location?.trim() || null,
+            sourceDoc: body.sourceDoc?.trim() || null,
+            sourceType: 'attorney_entry',
+            confidence: 1.0,
+            metadata: { eventType: body.eventType?.trim() || 'custom', manual: true },
+          },
+        });
+        return reply.code(201).send({ event: toApiEvent(created) });
+      } catch (err) {
+        request.log?.error?.(err);
+        return reply.code(500).send({ error: 'Failed to create timeline event' });
+      }
     }
   );
 

@@ -555,6 +555,23 @@ export async function fetchTimeline(caseId: string): Promise<ApiTimelineSummary>
   return res.json();
 }
 
+export async function createTimelineEvent(
+  caseId: string,
+  event: { description: string; timestamp?: string; eventType?: string; actor?: string; location?: string },
+): Promise<ApiTimelineEvent> {
+  const res = await fetch(`${API_BASE}/timeline/${caseId}/events`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(event),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to create event' }));
+    throw new Error(err.error || 'Failed to create event');
+  }
+  const data = await res.json();
+  return data.event ?? data;
+}
+
 export async function fetchTimelineConflicts(caseId: string): Promise<ApiTimelineConflict[]> {
   const res = await fetch(`${API_BASE}/timeline/${caseId}/conflicts`, { headers: getAuthHeaders() });
   if (!res.ok) {

@@ -3,7 +3,8 @@
 // Slide-over with progressive-disclosure sections. Reusable across workspaces.
 // =============================================================================
 
-import { X } from 'lucide-react';
+import { X, Network, Clock } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { MediaPreview } from './MediaPreview';
 import { Accordion } from '../ui/accordion';
 import { Badge } from '../ui/badge';
@@ -14,6 +15,7 @@ import { cn } from '../../lib/utils';
 
 interface EvidenceDetailDrawerProps {
   evidence: ApiEvidence | null;
+  caseId?: string;
   onClose: () => void;
 }
 
@@ -24,8 +26,11 @@ function ocrStateFromStatus(status: string): 'queued' | 'processing' | 'complete
   return 'queued';
 }
 
-export function EvidenceDetailDrawer({ evidence, onClose }: EvidenceDetailDrawerProps) {
+export function EvidenceDetailDrawer({ evidence, caseId, onClose }: EvidenceDetailDrawerProps) {
+  const navigate = useNavigate();
   if (!evidence) return null;
+
+  const ocrComplete = evidence.processingStatus === 'analyzed' || evidence.analysisStatus === 'completed';
 
   return (
     <div className="fixed inset-0 z-50 flex justify-end">
@@ -58,6 +63,17 @@ export function EvidenceDetailDrawer({ evidence, onClose }: EvidenceDetailDrawer
             <OcrStatus state={ocrStateFromStatus(evidence.processingStatus)} />
           </div>
 
+          {caseId && (
+            <div className="flex flex-wrap gap-2">
+              <button onClick={() => navigate(`/cases/${caseId}/knowledge-graph`)} className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg text-xs font-semibold border border-white/10 text-slate-200 hover:border-gold/30 hover:bg-white/5">
+                <Network size={13} /> Open in Knowledge Graph
+              </button>
+              <button onClick={() => navigate(`/cases/${caseId}/timeline`)} className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg text-xs font-semibold border border-white/10 text-slate-200 hover:border-gold/30 hover:bg-white/5">
+                <Clock size={13} /> Open in Timeline
+              </button>
+            </div>
+          )}
+
           <Accordion
             defaultOpenIds={['identity', 'extraction']}
             items={[
@@ -87,6 +103,30 @@ export function EvidenceDetailDrawer({ evidence, onClose }: EvidenceDetailDrawer
                     <Row label="Normalized pages" value={evidence.normalizedPageCount ? String(evidence.normalizedPageCount) : '—'} />
                     <Row label="Multiplex detected" value={evidence.multiplexDetected ? `Yes (${evidence.multiplexCount ?? 0})` : 'No'} />
                     {evidence.processingError && <p className="text-red-400 text-xs">{evidence.processingError}</p>}
+                  </div>
+                ),
+              },
+              {
+                id: 'ocr',
+                title: 'OCR Intelligence',
+                icon: <Icon name="ocr" size={15} />,
+                content: (
+                  <div className="space-y-2 text-sm text-slate-300">
+                    <Row label="OCR status" value={ocrComplete ? 'Complete' : evidence.processingStatus === 'failed' ? 'Failed' : 'Pending'} />
+                    <Row label="OCR confidence" value="UNKNOWN" />
+                    <Row label="Page count" value={evidence.pageCount ? String(evidence.pageCount) : 'UNKNOWN'} />
+                    <div className="pt-1 border-t border-white/10 mt-1">
+                      <p className="text-xs text-slate-400 mb-1">Detected entities</p>
+                      <div className="grid grid-cols-2 gap-x-3 gap-y-1 text-xs">
+                        <Row label="Dates" value="UNKNOWN" />
+                        <Row label="Times" value="UNKNOWN" />
+                        <Row label="Locations" value="UNKNOWN" />
+                        <Row label="People" value="UNKNOWN" />
+                        <Row label="Statutes" value="UNKNOWN" />
+                        <Row label="CALCRIM" value="UNKNOWN" />
+                      </div>
+                      <p className="text-[11px] text-slate-500 mt-2">Entity extraction populates once the analysis pipeline runs against extracted text. UNKNOWN is shown rather than fabricated.</p>
+                    </div>
                   </div>
                 ),
               },

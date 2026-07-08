@@ -5,8 +5,8 @@
 // ============================================================================
 
 import { useState, useEffect, useMemo } from 'react';
-import { useParams } from 'react-router-dom';
-import { Play, Eye, Columns, CheckSquare } from 'lucide-react';
+import { useParams, useNavigate } from 'react-router-dom';
+import { Play, Eye, Columns, CheckSquare, Briefcase, Network, Clock } from 'lucide-react';
 import { PageHeader } from '../../components/ui/page-header';
 import { Button } from '../../components/ui/button';
 import { Card, StatCard } from '../../components/ui/card';
@@ -77,6 +77,7 @@ const UPLOAD_ACCEPT = '.pdf,.doc,.docx,.txt,.rtf,.jpg,.jpeg,.png,.gif,.tiff,.tif
 
 export function EvidencePage() {
   const { caseId } = useParams<{ caseId: string }>();
+  const navigate = useNavigate();
   const [tab, setTab] = useState<WorkspaceTab>('inbox');
   const [typeFilter, setTypeFilter] = useState('all');
   const [searchQuery, setSearchQuery] = useState('');
@@ -256,7 +257,16 @@ export function EvidencePage() {
         overline="Evidence"
         subtitle={`${evidence.length} items`}
         action={
-          <div className="flex items-center gap-3">
+          <div className="flex flex-wrap items-center gap-2">
+            <Button variant="ghost" size="sm" onClick={() => caseId && navigate(`/cases/${caseId}/attorney-workbench`)}>
+              <Briefcase size={15} /> Workbench
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => caseId && navigate(`/cases/${caseId}/knowledge-graph`)}>
+              <Network size={15} /> Knowledge Graph
+            </Button>
+            <Button variant="ghost" size="sm" onClick={() => caseId && navigate(`/cases/${caseId}/timeline`)}>
+              <Clock size={15} /> Timeline
+            </Button>
             <Button variant="secondary" onClick={handleProcess} disabled={processing || evidence.length === 0}>
               <Play size={15} className={processing ? 'animate-pulse' : ''} /> Process Case
             </Button>
@@ -384,7 +394,7 @@ export function EvidencePage() {
       <DoctrineCompliancePanel />
 
       {/* Detail drawer */}
-      <EvidenceDetailDrawer evidence={detail} onClose={() => setDetail(null)} />
+      <EvidenceDetailDrawer evidence={detail} caseId={caseId} onClose={() => setDetail(null)} />
 
       {/* Upload dialog */}
       <Dialog

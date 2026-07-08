@@ -260,6 +260,10 @@ async function startServer() {
   console.log('[Server] Registering admin management routes...');
   await registerAdminRoutes(app);
 
+  console.log('[Server] Registering provider integration routes...');
+  const { registerIntegrationRoutes } = await import('./admin/integrationRoutes.js');
+  await registerIntegrationRoutes(app);
+
   console.log('[Server] Registering production gates routes...');
   await registerProductionGatesRoutes(app);
 

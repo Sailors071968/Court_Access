@@ -6,9 +6,9 @@
 
 import { NavLink, useLocation } from 'react-router-dom';
 import {
-  LayoutDashboard, Briefcase, Search, Bell, Settings, Shield, LogOut,
+  LayoutDashboard, Briefcase, Search, Bell, Settings, Shield,
   ChevronLeft, ChevronRight, ChevronDown,
-  FileText, Tag, Upload, BarChart3, Globe, Activity, Server, BookOpen, CheckSquare, FileQuestion,
+  FileText, Tag, Upload, BarChart3, Globe, Activity, Server, BookOpen, CheckSquare, FileQuestion, Plug,
 } from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
 import { ROLE_PERMISSIONS } from '../../constants';
@@ -73,6 +73,7 @@ const navItems: NavItem[] = [
     icon: 'Shield',
     permission: 'canViewAdmin',
     children: [
+      { id: 'provider-integrations', label: 'Provider Integrations', path: '/admin/provider-integrations', icon: <Plug size={16} /> },
       { id: 'cpra', label: 'CPRA Campaigns', path: '/dashboard/cpra', icon: <Globe size={16} /> },
       { id: 'policy-ops', label: 'Policy Operations', path: '/dashboard/policy-operations', icon: <FileText size={16} /> },
       { id: 'discount-codes', label: 'Discount Codes', path: '/dashboard/discount-codes', icon: <Tag size={16} /> },
@@ -91,7 +92,7 @@ const navItems: NavItem[] = [
 ];
 
 export function Sidebar() {
-  const { user, logout } = useAuthStore();
+  const { user } = useAuthStore();
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({ admin: true });
@@ -227,13 +228,6 @@ export function Sidebar() {
         >
           {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
           {!collapsed && <span>Collapse</span>}
-        </button>
-        <button
-          onClick={logout}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:bg-white/5 hover:text-white transition-colors w-full"
-        >
-          <LogOut size={20} className="flex-shrink-0" />
-          {!collapsed && <span>Logout</span>}
         </button>
       </div>
     </aside>

@@ -83,6 +83,7 @@ import { NotificationsPage } from './pages/NotificationsPage';
 import { AccountSettingsPage } from './pages/membership/AccountSettingsPage';
 import { SharedAccessPage } from './pages/membership/SharedAccessPage';
 import { CollaboratorsPage } from './pages/membership/CollaboratorsPage';
+import { ProviderIntegrationsPage } from './pages/admin/ProviderIntegrationsPage';
 import { AdminPage } from './pages/admin/AdminPage';
 import { OperationsCommandCenter } from './pages/admin/OperationsCommandCenter';
 
@@ -435,6 +436,14 @@ function App() {
             element={
               <ProtectedRoute requiredPermission="canViewAdmin">
                 <AdminPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/provider-integrations"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <ProviderIntegrationsPage />
               </ProtectedRoute>
             }
           />

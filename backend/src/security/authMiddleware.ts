@@ -228,6 +228,7 @@ const ROUTE_PERMISSIONS: Record<string, UserRole[]> = {
   '/api/admin/engineering-dashboard': ['admin', 'staff'],
   '/api/admin/deployment-checks': ['admin', 'staff'],
   '/api/admin/discount-codes': ['admin', 'staff'],
+  '/api/admin/integrations': ['admin', 'staff'],
   '/api/admin/stats': ['admin', 'staff'],
   '/api/admin/users': ['admin', 'staff'],
   '/api/admin/cases': ['admin', 'staff'],

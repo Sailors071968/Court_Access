@@ -31,6 +31,10 @@ import {
   Check,
   X,
   ChevronRight,
+  Clock,
+  ScanLine,
+  Landmark,
+  Building2,
 } from 'lucide-react';
 
 // ---------------------------------------------------------------------------
@@ -77,7 +81,7 @@ function CaseIntelligenceSection() {
           {capabilities.map((cap) => (
             <div
               key={cap.title}
-              className="bg-navy-600/60 rounded-2xl p-7 border border-white/10 hover:shadow-md transition-shadow"
+              className="ca-panel ca-panel-hover p-7"
             >
               <div className="w-12 h-12 rounded-xl ca-icon-gold flex items-center justify-center mb-5">
                 <cap.icon size={22} />
@@ -121,7 +125,7 @@ function LegalAnalysisSection() {
           {items.map((item) => (
             <div
               key={item.title}
-              className="bg-navy-600/60 backdrop-blur-sm rounded-2xl p-6 border border-white/10 shadow-sm hover:shadow-md transition-shadow"
+              className="ca-panel ca-panel-hover p-6"
             >
               <div className="w-12 h-12 rounded-xl ca-icon-gold flex items-center justify-center mb-5">
                 <item.icon size={22} />
@@ -184,7 +188,7 @@ function EvidenceReviewSection() {
           {features.map((f) => (
             <div
               key={f.title}
-              className="bg-navy-600/60 rounded-2xl p-7 border border-white/10 hover:shadow-md transition-shadow"
+              className="ca-panel ca-panel-hover p-7"
             >
               <div className="w-12 h-12 rounded-xl ca-icon-gold flex items-center justify-center mb-5">
                 <f.icon size={22} />
@@ -200,53 +204,80 @@ function EvidenceReviewSection() {
 }
 
 // ---------------------------------------------------------------------------
-// SECTION 4 — Who Uses CourtAccess
+// SECTION — Platform Features (Program 83, Phase 5)
 // ---------------------------------------------------------------------------
 
-function WhoUsesSection() {
-  const audiences = [
-    {
-      icon: Users,
-      title: 'Defendants',
-      description: 'Understand the information in your criminal case and what it may mean for your defense.',
-    },
-    {
-      icon: Shield,
-      title: 'Family Members',
-      description: 'Help a loved one by reviewing organized case information and understanding what has been filed.',
-    },
-    {
-      icon: Briefcase,
-      title: 'Attorneys',
-      description: 'Receive structured case intelligence, contradiction analysis, and citation-backed research.',
-    },
-    {
-      icon: Search,
-      title: 'Investigators',
-      description: 'Review evidence connections, identify gaps, and track how case materials relate.',
-    },
+function PlatformFeaturesSection() {
+  const features = [
+    { icon: Shield, tone: 'ca-icon-gold text-gold-light', title: 'Evidence Intelligence', desc: 'OCR, extraction, and hash-verified analysis across every item of case evidence.' },
+    { icon: Link2, tone: 'ca-icon-blue text-blue-300', title: 'Knowledge Graph', desc: 'Interconnected charges, evidence, witnesses, timeline events, and authorities.' },
+    { icon: Clock, tone: 'ca-icon-violet text-violet-300', title: 'Timeline Builder', desc: 'Evidence-governed chronological reconstruction traced back to the record.' },
+    { icon: BookOpen, tone: 'ca-icon-emerald text-emerald-300', title: 'Authority Search', desc: 'Statutes, case law, and CALCRIM jury instructions in one repository-backed search.' },
+    { icon: Gavel, tone: 'ca-icon-gold text-gold-light', title: 'Motion Builder', desc: 'Draft and organize motions with linked, citation-backed authority.' },
+    { icon: HardDrive, tone: 'ca-icon-blue text-blue-300', title: 'Repository Intelligence', desc: 'Hash-verified California statute repository with provenance on every record.' },
+    { icon: Landmark, tone: 'ca-icon-violet text-violet-300', title: 'CourtListener', desc: 'Federal & state case law via the Free Law Project, integrated in-app.' },
+    { icon: FileText, tone: 'ca-icon-emerald text-emerald-300', title: 'California Repository', desc: 'Repository-backed California codes and sections with automatic offense mapping.' },
+    { icon: ScanLine, tone: 'ca-icon-gold text-gold-light', title: 'OCR', desc: 'Text extraction from PDFs, images, and documents — never fabricated.' },
+    { icon: AlertTriangle, tone: 'ca-icon-blue text-blue-300', title: 'Contradiction Detection', desc: 'Surface conflicting statements and inconsistencies across the record.' },
   ];
 
   return (
-    <section id="who" className="py-20 lg:py-28 bg-navy-900">
+    <section id="features" className="py-20 lg:py-28 bg-navy-900">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-16">
-          <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4 tracking-tight">
-            Who Uses CourtAccess
-          </h2>
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold-light mb-3">The Platform</p>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4 tracking-tight">Litigation Intelligence, End to End</h2>
+          <p className="text-lg text-slate-400 max-w-2xl mx-auto">Ten integrated capabilities — every finding citation-backed, every source verifiable.</p>
         </div>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 max-w-5xl mx-auto">
-          {audiences.map((a) => (
-            <div
-              key={a.title}
-              className="bg-navy-600/60 backdrop-blur-sm rounded-2xl p-6 border border-white/10 shadow-sm text-center hover:shadow-md transition-shadow"
-            >
-              <div className="w-14 h-14 rounded-2xl ca-icon-gold flex items-center justify-center mx-auto mb-5">
-                <a.icon size={24} />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-5">
+          {features.map((f) => (
+            <div key={f.title} className="ca-panel ca-panel-hover p-6 group">
+              <div className={`w-12 h-12 rounded-xl flex items-center justify-center mb-4 ${f.tone} transition-transform group-hover:scale-105`}>
+                <f.icon size={22} />
               </div>
-              <h3 className="text-lg font-bold text-white mb-2">{a.title}</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">{a.description}</p>
+              <h3 className="text-base font-semibold text-white mb-1.5">{f.title}</h3>
+              <p className="text-slate-400 text-sm leading-relaxed">{f.desc}</p>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ---------------------------------------------------------------------------
+// SECTION 4 — Who CourtAccess Serves (Program 83, Phase 6 — premium roles)
+// ---------------------------------------------------------------------------
+
+function WhoUsesSection() {
+  const roles = [
+    { icon: Briefcase, tone: 'ca-icon-gold text-gold-light', title: 'Attorneys', description: 'Structured case intelligence, contradiction analysis, and citation-backed research from one workspace.' },
+    { icon: Search, tone: 'ca-icon-blue text-blue-300', title: 'Investigators', description: 'Track evidence connections, log witnesses and leads, and identify gaps across the record.' },
+    { icon: Scale, tone: 'ca-icon-violet text-violet-300', title: 'Prosecutors', description: 'Organize charges, evidence, and authorities with a verifiable chain of citations.' },
+    { icon: Shield, tone: 'ca-icon-emerald text-emerald-300', title: 'Public Defenders', description: 'Manage heavy caseloads with evidence-governed analysis and rapid discovery review.' },
+    { icon: Layers, tone: 'ca-icon-gold text-gold-light', title: 'Paralegals', description: 'Assemble evidence, timelines, and discovery with unlimited collaborator access.' },
+    { icon: FileText, tone: 'ca-icon-blue text-blue-300', title: 'Legal Assistants', description: 'Upload discovery, run OCR, and keep the case record organized and searchable.' },
+    { icon: Building2, tone: 'ca-icon-violet text-violet-300', title: 'Law Firms', description: 'A multi-office operating platform with firm-wide collaborators, roles, and permissions.' },
+    { icon: Users, tone: 'ca-icon-emerald text-emerald-300', title: 'Clients & Families', description: 'Understand the case record through a secure, permissioned client portal.' },
+  ];
+
+  return (
+    <section id="who" className="py-20 lg:py-28 bg-navy-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-16">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold-light mb-3">Built for the whole team</p>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4 tracking-tight">Who CourtAccess Serves</h2>
+        </div>
+
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 max-w-6xl mx-auto">
+          {roles.map((r) => (
+            <div key={r.title} className="ca-panel ca-panel-hover p-6 text-center group">
+              <div className={`w-14 h-14 rounded-2xl flex items-center justify-center mx-auto mb-5 ${r.tone} transition-transform group-hover:scale-105`}>
+                <r.icon size={24} />
+              </div>
+              <h3 className="text-lg font-bold text-white mb-2">{r.title}</h3>
+              <p className="text-slate-400 text-sm leading-relaxed">{r.description}</p>
             </div>
           ))}
         </div>
@@ -268,6 +299,7 @@ const allFeatures = [
   'Evidence-gap analysis',
   'Timeline generation',
   'Attorney report generation',
+  'Unlimited collaborators',
   'All platform features',
 ];
 
@@ -653,6 +685,7 @@ export function LandingPage() {
   return (
     <PublicMarketingLayout className="bg-navy-800">
       <HeroSection />
+      <PlatformFeaturesSection />
       <CaseIntelligenceSection />
       <LegalAnalysisSection />
       <EvidenceReviewSection />

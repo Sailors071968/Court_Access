@@ -2381,10 +2381,14 @@ model CaseWitness {
   tenantId        String
   name            String
   role            String?
+  witnessType     String?  // civilian | victim | law_enforcement | expert | confidential_informant | custodian | medical | crime_lab | operator_911 | dispatcher | forensic_examiner | private_investigator | defense_investigator | custom
+  agency          String?
+  employer        String?
   contactPhone    String?
   contactEmail    String?
   status          String   @default("identified") // identified | contacted | interviewed | unavailable
   interviewStatus String   @default("not_scheduled") // not_scheduled | scheduled | completed | declined
+  credibilityStatus String? // UNKNOWN until evidence-governed analysis
   notes           String?
   sourceType      String?  // timeline | manual | discovery
   sourceId        String?

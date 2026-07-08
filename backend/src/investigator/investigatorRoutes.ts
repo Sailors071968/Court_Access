@@ -28,13 +28,30 @@ export async function registerInvestigatorRoutes(app: FastifyInstance): Promise<
     return reply.send(workbench);
   });
 
-  // Witnesses
+  // Witnesses — list (dedicated Witness Workspace read)
+  app.get('/api/cases/:caseId/witnesses', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+    if (!(await guardAuth(user, reply))) return;
+    if (!requireInvestigatorRole(user)) return reply.code(403).send({ error: 'Forbidden' });
+    const { caseId } = request.params as { caseId: string };
+    if (!(await guardCaseAccess(user!, caseId, 'view', reply))) return;
+    const witnesses = await prisma.caseWitness.findMany({
+      where: { caseId, tenantId: user!.tenantId },
+      orderBy: { createdAt: 'desc' },
+    });
+    return reply.send({ caseId, total: witnesses.length, witnesses });
+  });
+
+  // Witnesses — create (unlimited)
   app.post('/api/cases/:caseId/investigator/witnesses', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
     if (!user || !requireInvestigatorRole(user)) return reply.code(403).send({ error: 'Forbidden' });
 
     const { caseId } = request.params as { caseId: string };
-    const body = request.body as { name?: string; role?: string; contactPhone?: string; notes?: string };
+    const body = request.body as {
+      name?: string; role?: string; witnessType?: string; agency?: string; employer?: string;
+      contactPhone?: string; contactEmail?: string; status?: string; interviewStatus?: string; notes?: string;
+    };
     if (!body.name?.trim()) return reply.code(400).send({ error: 'name is required' });
     if (!(await guardCaseAccess(user!, caseId, 'edit', reply))) return;
 
@@ -44,13 +61,41 @@ export async function registerInvestigatorRoutes(app: FastifyInstance): Promise<
         tenantId: user.tenantId,
         name: body.name.trim(),
         role: body.role ?? null,
+        witnessType: body.witnessType ?? 'civilian',
+        agency: body.agency ?? null,
+        employer: body.employer ?? null,
         contactPhone: body.contactPhone ?? null,
+        contactEmail: body.contactEmail ?? null,
+        status: body.status && ['identified', 'contacted', 'interviewed', 'unavailable'].includes(body.status) ? body.status : undefined,
+        interviewStatus: body.interviewStatus && ['not_scheduled', 'scheduled', 'completed', 'declined'].includes(body.interviewStatus) ? body.interviewStatus : undefined,
         notes: body.notes ?? null,
         createdBy: user.userId,
         sourceType: 'manual',
       },
     });
+    void logSecurityEvent('WITNESS_CREATED', user.userId, request.ip, `${caseId} ${witness.id}`);
     return reply.code(201).send({ witness });
+  });
+
+  // Witnesses — update
+  app.patch('/api/cases/:caseId/investigator/witnesses/:witnessId', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+    if (!user || !requireInvestigatorRole(user)) return reply.code(403).send({ error: 'Forbidden' });
+    const { caseId, witnessId } = request.params as { caseId: string; witnessId: string };
+    if (!(await guardCaseAccess(user!, caseId, 'edit', reply))) return;
+
+    const existing = await prisma.caseWitness.findFirst({ where: { id: witnessId, caseId, tenantId: user.tenantId } });
+    if (!existing) return reply.code(404).send({ error: 'Witness not found' });
+
+    const body = request.body as Record<string, unknown>;
+    const data: Record<string, unknown> = {};
+    for (const f of ['name', 'role', 'witnessType', 'agency', 'employer', 'contactPhone', 'contactEmail', 'status', 'interviewStatus', 'notes'] as const) {
+      if (body[f] !== undefined) data[f] = body[f];
+    }
+    if (Object.keys(data).length === 0) return reply.code(400).send({ error: 'No changes provided' });
+    const witness = await prisma.caseWitness.update({ where: { id: witnessId }, data });
+    void logSecurityEvent('WITNESS_UPDATED', user.userId, request.ip, `${caseId} ${witnessId}`);
+    return reply.send({ witness });
   });
 
   // Leads

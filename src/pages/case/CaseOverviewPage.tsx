@@ -35,7 +35,7 @@ const QUICK_TILES: QuickTile[] = [
   { label: 'Documents', icon: 'documents', path: 'documents' },
   { label: 'Timeline', icon: 'timeline', path: 'activity' },
   { label: 'Charges', icon: 'statutes', path: 'charges' },
-  { label: 'Witnesses', icon: 'witness', path: 'investigator-workbench' },
+  { label: 'Witnesses', icon: 'witness', path: 'witnesses' },
   { label: 'Authorities', icon: 'authorities', path: 'attorney-workbench' },
   { label: 'Knowledge Graph', icon: 'knowledgeGraph', path: 'research' },
   { label: 'Reports', icon: 'reports', path: 'reports' },

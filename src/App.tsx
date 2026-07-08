@@ -106,6 +106,7 @@ import { NarrativeAnalysisPage } from './pages/case/NarrativeAnalysisPage';
 import { AttorneyWorkbenchPage } from './pages/case/AttorneyWorkbenchPage';
 import { KnowledgeGraphPage } from './pages/case/KnowledgeGraphPage';
 import { TimelinePage } from './pages/case/TimelinePage';
+import { WitnessWorkspacePage } from './pages/case/WitnessWorkspacePage';
 import { InvestigatorWorkbenchPage } from './pages/case/InvestigatorWorkbenchPage';
 import { ClientPortalLayout, ClientPortalIndex } from './pages/client-portal/ClientPortalLayout';
 import {
@@ -595,6 +596,14 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canViewEvidence">
                   <TimelinePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="witnesses"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <WitnessWorkspacePage />
                 </ProtectedRoute>
               }
             />

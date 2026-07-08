@@ -2452,6 +2452,25 @@ model InvestigationAssignment {
 // Boot-time assertion compares expected vs actual to hard-fail on drift.
 // ---------------------------------------------------------------------------
 
+// Provider Integrations — in-app, encrypted credential storage so administrators
+// manage provider config through the UI instead of editing .env after deploy.
+model IntegrationSetting {
+  id             String    @id @default(uuid())
+  providerId     String    @unique
+  baseUrl        String?
+  apiKeyEnc      String?   // AES-256-CBC encrypted; never returned to clients
+  enabled        Boolean   @default(true)
+  lastTestAt     DateTime?
+  lastTestStatus String?
+  lastSuccessAt  DateTime?
+  rotatedAt      DateTime?
+  updatedById    String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@map("integration_settings")
+}
+
 model SchemaVersion {
   id             String   @id @default(uuid())
   version        String   @unique

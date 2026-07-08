@@ -15,6 +15,20 @@ import type { AuthenticatedRequest } from '../security/authMiddleware.js';
 import prisma from '../lib/prisma.js';
 import { providerRegistry } from '../providers/registry.js';
 import { registerAllProviders } from '../providers/index.js';
+import { logSecurityEvent } from '../security/authMiddleware.js';
+import { encryptSecret, decryptSecret, maskSecret } from './integrationCrypto.js';
+
+/**
+ * Resolve effective config for a provider: a stored (encrypted) app setting
+ * overrides the environment. Secret values stay server-side.
+ */
+async function resolveSetting(providerId: string) {
+  try {
+    return await prisma.integrationSetting.findUnique({ where: { providerId } });
+  } catch {
+    return null;
+  }
+}
 
 type Category = 'Legal Intelligence' | 'AI' | 'Payments' | 'Messaging' | 'Infrastructure' | 'Storage' | 'Developer' | 'Observability';
 
@@ -72,13 +86,22 @@ function maskedHint(names: string[]): string | null {
 
 async function buildEntry(e: CatalogEntry) {
   const reg = e.registryId ? providerRegistry.get(e.registryId) : null;
-  const requiredConfigured = e.requiredEnv.length === 0 ? true : envPresent(e.requiredEnv);
-  const hasSecret = envPresent([...(e.optionalEnv ?? []), ...e.requiredEnv].filter(Boolean));
+  const setting = await resolveSetting(e.id);
+  const dbKey = setting?.apiKeyEnc ? safeDecrypt(setting.apiKeyEnc) : '';
+  const envConfigured = e.requiredEnv.length === 0 ? true : envPresent(e.requiredEnv);
+  const envSecret = envPresent([...(e.optionalEnv ?? []), ...e.requiredEnv].filter(Boolean));
+  const requiredConfigured = !!dbKey || envConfigured;
+  const hasSecret = !!dbKey || envSecret;
+  const source: 'app' | 'environment' | 'none' = dbKey ? 'app' : envSecret ? 'environment' : 'none';
+  const credentialHint = dbKey ? maskSecret(dbKey) : maskedHint([...e.requiredEnv, ...(e.optionalEnv ?? [])]);
+  const baseUrl = setting?.baseUrl || (e.baseUrlEnv && process.env[e.baseUrlEnv]) || e.defaultBaseUrl || null;
 
   let status: 'online' | 'configured' | 'not_configured' | 'degraded' | 'unknown' = requiredConfigured ? 'configured' : 'not_configured';
   let capabilities: string[] = [];
   let rateLimits: unknown = null;
   let health: unknown = null;
+
+  if (setting && setting.enabled === false) status = 'not_configured';
 
   if (reg) {
     try {
@@ -99,18 +122,27 @@ async function buildEntry(e: CatalogEntry) {
     category: e.category,
     description: e.description,
     docsUrl: e.docsUrl ?? (reg?.documentationUrl),
-    baseUrl: (e.baseUrlEnv && process.env[e.baseUrlEnv]) || e.defaultBaseUrl || null,
+    baseUrl,
     requiredEnv: e.requiredEnv,
     optionalEnv: e.optionalEnv ?? [],
     configured: requiredConfigured && (e.requiredEnv.length > 0 || hasSecret || !!reg),
     hasCredential: hasSecret,
-    credentialHint: maskedHint([...e.requiredEnv, ...(e.optionalEnv ?? [])]),
+    credentialHint,
+    source,
+    enabled: setting?.enabled ?? true,
+    editable: true,
+    lastSuccessAt: setting?.lastSuccessAt ?? null,
+    rotatedAt: setting?.rotatedAt ?? null,
     status,
     capabilities,
     rateLimits,
     health,
     lastCheckedAt: new Date().toISOString(),
   };
+}
+
+function safeDecrypt(enc: string): string {
+  try { return decryptSecret(enc); } catch { return ''; }
 }
 
 export async function registerIntegrationRoutes(app: FastifyInstance): Promise<void> {
@@ -138,6 +170,49 @@ export async function registerIntegrationRoutes(app: FastifyInstance): Promise<v
     return reply.send(await buildEntry(e));
   });
 
+  // PUT /api/admin/integrations/:id — save config (base URL, API key, enabled)
+  app.put('/api/admin/integrations/:id', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const { id } = request.params as { id: string };
+    const e = CATALOG.find((c) => c.id === id);
+    if (!e) return reply.code(404).send({ error: 'Integration not found' });
+    const body = request.body as { baseUrl?: string; apiKey?: string; enabled?: boolean; clearKey?: boolean };
+
+    const data: Record<string, unknown> = {};
+    if (body.baseUrl !== undefined) data.baseUrl = body.baseUrl.trim() || null;
+    if (body.enabled !== undefined) data.enabled = !!body.enabled;
+    if (body.clearKey) {
+      data.apiKeyEnc = null;
+    } else if (typeof body.apiKey === 'string' && body.apiKey.trim() !== '') {
+      data.apiKeyEnc = encryptSecret(body.apiKey.trim());
+    }
+    if (Object.keys(data).length === 0) return reply.code(400).send({ error: 'No changes provided' });
+
+    await prisma.integrationSetting.upsert({
+      where: { providerId: id },
+      create: { providerId: id, updatedById: request.user?.userId ?? null, ...data },
+      update: { updatedById: request.user?.userId ?? null, ...data },
+    });
+    const changed = Object.keys(data).map((k) => (k === 'apiKeyEnc' ? (body.clearKey ? 'apiKey=cleared' : 'apiKey=set') : `${k}`)).join(' ');
+    void logSecurityEvent('INTEGRATION_CONFIG_UPDATED', request.user?.userId, request.ip, `${id} ${changed}`);
+    return reply.send(await buildEntry(e));
+  });
+
+  // POST /api/admin/integrations/:id/rotate — rotate the stored secret
+  app.post('/api/admin/integrations/:id/rotate', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const { id } = request.params as { id: string };
+    const e = CATALOG.find((c) => c.id === id);
+    if (!e) return reply.code(404).send({ error: 'Integration not found' });
+    const body = request.body as { apiKey?: string };
+    if (!body.apiKey || body.apiKey.trim() === '') return reply.code(400).send({ error: 'A new API key/secret is required to rotate' });
+    await prisma.integrationSetting.upsert({
+      where: { providerId: id },
+      create: { providerId: id, apiKeyEnc: encryptSecret(body.apiKey.trim()), rotatedAt: new Date(), lastSuccessAt: null, updatedById: request.user?.userId ?? null },
+      update: { apiKeyEnc: encryptSecret(body.apiKey.trim()), rotatedAt: new Date(), lastSuccessAt: null, updatedById: request.user?.userId ?? null },
+    });
+    void logSecurityEvent('INTEGRATION_SECRET_ROTATED', request.user?.userId, request.ip, id);
+    return reply.send(await buildEntry(e));
+  });
+
   // POST /api/admin/integrations/:id/test — live connectivity test where safe
   app.post('/api/admin/integrations/:id/test', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const { id } = request.params as { id: string };
@@ -145,52 +220,69 @@ export async function registerIntegrationRoutes(app: FastifyInstance): Promise<v
     if (!e) return reply.code(404).send({ error: 'Integration not found' });
     const startedAt = Date.now();
 
-    // Legal providers: use the live registry health probe.
-    if (e.registryId) {
-      const reg = providerRegistry.get(e.registryId);
-      if (reg) {
-        try {
-          const h = await reg.health();
-          return reply.send({ id, ok: h.status === 'online' || h.status === 'degraded', status: h.status, detail: h.detail ?? null, latencyMs: Date.now() - startedAt });
-        } catch (err) {
-          return reply.send({ id, ok: false, status: 'error', detail: err instanceof Error ? err.message : 'health check failed', latencyMs: Date.now() - startedAt });
-        }
-      }
-    }
+    const result = await runTest(e, id);
+    result.latencyMs = Date.now() - startedAt;
 
-    // PostgreSQL: real query.
-    if (id === 'postgres') {
-      try {
-        await prisma.$queryRaw`SELECT 1`;
-        return reply.send({ id, ok: true, status: 'online', detail: 'SELECT 1 succeeded', latencyMs: Date.now() - startedAt });
-      } catch (err) {
-        return reply.send({ id, ok: false, status: 'offline', detail: err instanceof Error ? err.message : 'query failed', latencyMs: Date.now() - startedAt });
-      }
-    }
+    // Persist the outcome so "last successful connection" is real.
+    try {
+      await prisma.integrationSetting.upsert({
+        where: { providerId: id },
+        create: { providerId: id, lastTestAt: new Date(), lastTestStatus: result.status, lastSuccessAt: result.ok ? new Date() : null },
+        update: { lastTestAt: new Date(), lastTestStatus: result.status, ...(result.ok ? { lastSuccessAt: new Date() } : {}) },
+      });
+    } catch { /* non-fatal */ }
 
-    // Redis: best-effort ping if a client is available.
-    if (id === 'redis') {
-      if (!process.env.REDIS_URL) return reply.send({ id, ok: false, status: 'not_configured', detail: 'REDIS_URL not set', latencyMs: Date.now() - startedAt });
-      try {
-        const IORedis = (await import('ioredis')).default;
-        const client = new IORedis(process.env.REDIS_URL, { maxRetriesPerRequest: 1, lazyConnect: true, connectTimeout: 3000 });
-        await client.connect();
-        const pong = await client.ping();
-        client.disconnect();
-        return reply.send({ id, ok: pong === 'PONG', status: 'online', detail: `PING → ${pong}`, latencyMs: Date.now() - startedAt });
-      } catch (err) {
-        return reply.send({ id, ok: false, status: 'unknown', detail: err instanceof Error ? err.message : 'ping failed', latencyMs: Date.now() - startedAt });
-      }
-    }
-
-    // Other providers: honest configuration check (no external call → no secret leakage/latency).
-    const configured = e.requiredEnv.length === 0 ? envPresent(e.optionalEnv ?? []) : envPresent(e.requiredEnv);
-    return reply.send({
-      id,
-      ok: configured,
-      status: configured ? 'configured' : 'not_configured',
-      detail: configured ? 'Credentials present in environment.' : `Missing: ${e.requiredEnv.filter((n) => !process.env[n]).join(', ') || 'credentials'}`,
-      latencyMs: Date.now() - startedAt,
-    });
+    return reply.send({ id, ...result });
   });
+}
+
+async function runTest(e: CatalogEntry, id: string): Promise<{ ok: boolean; status: string; detail: string | null; latencyMs: number }> {
+  // Legal providers: live registry health probe.
+  if (e.registryId) {
+    const reg = providerRegistry.get(e.registryId);
+    if (reg) {
+      try {
+        const h = await reg.health();
+        return { ok: h.status === 'online' || h.status === 'degraded', status: h.status, detail: h.detail ?? null, latencyMs: 0 };
+      } catch (err) {
+        return { ok: false, status: 'error', detail: err instanceof Error ? err.message : 'health check failed', latencyMs: 0 };
+      }
+    }
+  }
+
+  // PostgreSQL: real query.
+  if (id === 'postgres') {
+    try {
+      await prisma.$queryRaw`SELECT 1`;
+      return { ok: true, status: 'online', detail: 'SELECT 1 succeeded', latencyMs: 0 };
+    } catch (err) {
+      return { ok: false, status: 'offline', detail: err instanceof Error ? err.message : 'query failed', latencyMs: 0 };
+    }
+  }
+
+  // Redis: best-effort ping.
+  if (id === 'redis') {
+    if (!process.env.REDIS_URL) return { ok: false, status: 'not_configured', detail: 'REDIS_URL not set', latencyMs: 0 };
+    try {
+      const IORedis = (await import('ioredis')).default;
+      const client = new IORedis(process.env.REDIS_URL, { maxRetriesPerRequest: 1, lazyConnect: true, connectTimeout: 3000 });
+      await client.connect();
+      const pong = await client.ping();
+      client.disconnect();
+      return { ok: pong === 'PONG', status: 'online', detail: `PING → ${pong}`, latencyMs: 0 };
+    } catch (err) {
+      return { ok: false, status: 'unknown', detail: err instanceof Error ? err.message : 'ping failed', latencyMs: 0 };
+    }
+  }
+
+  // Other providers: honest configuration check (app-stored key or env presence).
+  const setting = await resolveSetting(id);
+  const dbKey = setting?.apiKeyEnc ? safeDecrypt(setting.apiKeyEnc) : '';
+  const configured = !!dbKey || (e.requiredEnv.length === 0 ? envPresent(e.optionalEnv ?? []) : envPresent(e.requiredEnv));
+  return {
+    ok: configured,
+    status: configured ? 'configured' : 'not_configured',
+    detail: configured ? (dbKey ? 'Credentials stored in application.' : 'Credentials present in environment.') : `Missing: ${e.requiredEnv.filter((n) => !process.env[n]).join(', ') || 'credentials'}`,
+    latencyMs: 0,
+  };
 }

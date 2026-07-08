@@ -9,12 +9,15 @@
 import { useEffect, useMemo, useState } from 'react';
 import {
   Plug, RefreshCw, CheckCircle2, XCircle, AlertTriangle, HelpCircle,
-  ExternalLink, KeyRound, Loader2, Search,
+  ExternalLink, KeyRound, Loader2, Search, Settings2, RotateCcw, Save, X,
 } from 'lucide-react';
 import { PageHeader } from '../../components/ui/page-header';
 import { Card } from '../../components/ui/card';
 import { Badge } from '../../components/ui/badge';
-import { listIntegrations, testIntegration, type Integration, type TestResult } from '../../services/integrationsApi';
+import {
+  listIntegrations, testIntegration, saveIntegration, rotateIntegrationSecret,
+  type Integration, type TestResult,
+} from '../../services/integrationsApi';
 
 const STATUS: Record<string, { label: string; variant: 'emerald' | 'amber' | 'danger' | 'slate' | 'gold'; icon: React.ReactNode }> = {
   online: { label: 'Online', variant: 'emerald', icon: <CheckCircle2 size={13} /> },
@@ -32,6 +35,47 @@ export function ProviderIntegrationsPage() {
   const [query, setQuery] = useState('');
   const [testing, setTesting] = useState<Record<string, boolean>>({});
   const [results, setResults] = useState<Record<string, TestResult>>({});
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [form, setForm] = useState<{ baseUrl: string; apiKey: string; rotate: boolean }>({ baseUrl: '', apiKey: '', rotate: false });
+  const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState('');
+
+  const startEdit = (it: Integration) => {
+    setEditingId(it.id);
+    setForm({ baseUrl: it.baseUrl ?? '', apiKey: '', rotate: false });
+    setSaveError('');
+  };
+
+  const applyUpdate = (updated: Integration) => {
+    setData((d) => d.map((x) => (x.id === updated.id ? updated : x)));
+    setEditingId(null);
+  };
+
+  const submitConfig = async (id: string) => {
+    setSaving(true);
+    setSaveError('');
+    try {
+      const updated = form.rotate && form.apiKey.trim()
+        ? await rotateIntegrationSecret(id, form.apiKey.trim())
+        : await saveIntegration(id, { baseUrl: form.baseUrl, ...(form.apiKey.trim() ? { apiKey: form.apiKey.trim() } : {}) });
+      applyUpdate(updated);
+    } catch (e) {
+      setSaveError(e instanceof Error ? e.message : 'Save failed');
+    } finally {
+      setSaving(false);
+    }
+  };
+
+  const clearKey = async (id: string) => {
+    setSaving(true);
+    try {
+      applyUpdate(await saveIntegration(id, { clearKey: true }));
+    } catch (e) {
+      setSaveError(e instanceof Error ? e.message : 'Failed to clear');
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const load = async () => {
     setLoading(true);
@@ -184,6 +228,12 @@ export function ProviderIntegrationsPage() {
                           </a>
                         )}
                         <button
+                          onClick={() => (editingId === it.id ? setEditingId(null) : startEdit(it))}
+                          className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg text-xs font-semibold border border-white/10 text-slate-200 hover:bg-white/5"
+                        >
+                          <Settings2 size={13} /> Configure
+                        </button>
+                        <button
                           onClick={() => runTest(it.id)}
                           disabled={testing[it.id]}
                           className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg text-xs font-semibold border border-white/10 text-slate-200 hover:bg-white/5 disabled:opacity-60"
@@ -192,6 +242,57 @@ export function ProviderIntegrationsPage() {
                         </button>
                       </div>
                     </div>
+
+                    {editingId === it.id && (
+                      <div className="rounded-xl border border-gold/20 bg-white/[0.03] p-3 space-y-3">
+                        <div className="flex items-center justify-between">
+                          <span className="text-xs font-semibold uppercase tracking-wide text-gold-light">Configure {it.name}</span>
+                          <button onClick={() => setEditingId(null)} className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/5"><X size={14} /></button>
+                        </div>
+                        <div>
+                          <label className="text-xs text-slate-400">Base URL</label>
+                          <input
+                            value={form.baseUrl}
+                            onChange={(e) => setForm((f) => ({ ...f, baseUrl: e.target.value }))}
+                            placeholder="https://api.example.com"
+                            className="w-full mt-1 bg-white/5 border border-white/10 text-slate-100 placeholder:text-slate-500 rounded-lg px-3 py-2 text-sm font-mono focus:border-gold-light focus:outline-none"
+                          />
+                        </div>
+                        <div>
+                          <label className="text-xs text-slate-400 flex items-center justify-between">
+                            <span>{form.rotate ? 'New secret (rotate)' : 'API key / secret'}</span>
+                            <button type="button" onClick={() => setForm((f) => ({ ...f, rotate: !f.rotate }))} className="text-gold-light hover:text-gold-bright flex items-center gap-1"><RotateCcw size={11} /> {form.rotate ? 'Cancel rotate' : 'Rotate'}</button>
+                          </label>
+                          <input
+                            type="password"
+                            autoComplete="new-password"
+                            value={form.apiKey}
+                            onChange={(e) => setForm((f) => ({ ...f, apiKey: e.target.value }))}
+                            placeholder={it.hasCredential ? '•••• stored — leave blank to keep' : 'Enter API key / secret'}
+                            className="w-full mt-1 bg-white/5 border border-white/10 text-slate-100 placeholder:text-slate-500 rounded-lg px-3 py-2 text-sm focus:border-gold-light focus:outline-none"
+                          />
+                          <p className="text-[11px] text-slate-500 mt-1">Encrypted at rest (AES-256). Stored credentials override environment variables.</p>
+                        </div>
+                        {saveError && <div className="text-xs text-red-300">{saveError}</div>}
+                        <div className="flex items-center gap-2">
+                          <button
+                            onClick={() => submitConfig(it.id)}
+                            disabled={saving}
+                            className="inline-flex items-center gap-1.5 h-8 px-4 rounded-lg text-xs font-semibold ca-gradient-gold text-navy hover:brightness-110 disabled:opacity-60"
+                          >
+                            {saving ? <Loader2 size={13} className="animate-spin" /> : <Save size={13} />} {form.rotate ? 'Rotate secret' : 'Save'}
+                          </button>
+                          {it.hasCredential && it.source === 'app' && (
+                            <button onClick={() => clearKey(it.id)} disabled={saving} className="inline-flex items-center gap-1.5 h-8 px-3 rounded-lg text-xs font-medium border border-white/10 text-slate-300 hover:bg-white/5">
+                              Clear stored key
+                            </button>
+                          )}
+                          {it.source && it.source !== 'none' && (
+                            <span className="text-[11px] text-slate-500 ml-auto">Source: {it.source === 'app' ? 'application (encrypted)' : 'environment'}</span>
+                          )}
+                        </div>
+                      </div>
+                    )}
                   </Card>
                 );
               })}

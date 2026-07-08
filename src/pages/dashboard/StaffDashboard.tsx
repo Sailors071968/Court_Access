@@ -6,7 +6,10 @@
 
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
-import { Upload, ArrowRight } from 'lucide-react';
+import {
+  Upload, ArrowRight, Scale, ShieldCheck, BarChart3, AlertTriangle,
+  Briefcase, Gavel, Calendar, Network, Clock, Landmark,
+} from 'lucide-react';
 import { PageHeader } from '../../components/ui/page-header';
 import { Button } from '../../components/ui/button';
 import { Card } from '../../components/ui/card';
@@ -17,10 +20,38 @@ import { EmptyState } from '../../components/ui/empty-state';
 import { Icon } from '../../components/icons/registry';
 import { ExpandableCard } from '../../components/cards/ExpandableCard';
 import { TimelineCard, EvidenceCard, ReportCard } from '../../components/cards/domain-cards';
-import { IntelligencePanel } from '../../components/intelligence/IntelligencePanel';
 import { SPACING } from '../../constants/designTokens';
 import { useAuthStore } from '../../stores/authStore';
 import { fetchCases, fetchCaseEvidence, type ApiCase, type ApiEvidence } from '../../services/caseApi';
+
+const TONE_CLASS: Record<string, string> = {
+  emerald: 'ca-icon-emerald text-emerald-300',
+  blue: 'ca-icon-blue text-blue-300',
+  violet: 'ca-icon-violet text-violet-300',
+  gold: 'ca-icon-gold text-gold-light',
+};
+
+// Phase 3 — large color-themed intelligence card with glass, gradient, hover.
+function IntelCard({ tone, icon, label, value, desc, onClick }: {
+  tone: 'emerald' | 'blue' | 'violet' | 'gold';
+  icon: React.ReactNode; label: string; value: string; desc: string; onClick?: () => void;
+}) {
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      className="group text-left rounded-2xl border border-white/10 bg-white/[0.03] p-5 hover:border-gold/30 hover:bg-white/[0.05] hover:-translate-y-0.5 hover:shadow-elevated transition-all duration-200"
+    >
+      <div className="flex items-center justify-between">
+        <span className={`inline-flex w-12 h-12 rounded-xl items-center justify-center ${TONE_CLASS[tone]}`}>{icon}</span>
+        <ArrowRight size={16} className="text-slate-500 group-hover:text-gold-light transition-colors" />
+      </div>
+      <div className="text-2xl font-bold text-white tracking-tight mt-4">{value}</div>
+      <div className="text-sm font-semibold text-slate-200 mt-0.5">{label}</div>
+      <p className="text-xs text-slate-400 mt-1 leading-relaxed">{desc}</p>
+    </button>
+  );
+}
 
 export function StaffDashboard() {
   const navigate = useNavigate();
@@ -82,29 +113,61 @@ export function StaffDashboard() {
 
   return (
     <div className={`${SPACING.container} space-y-6`}>
-      <PageHeader
-        title="Attorney Workspace"
-        overline="Dashboard"
-        subtitle={`Welcome back, ${user?.name}`}
-        action={
-          <div className="flex items-center gap-3">
-            <Button variant="secondary" onClick={() => navigate(`/cases/${caseId}/evidence`)}>
-              <Upload size={16} /> Upload
-            </Button>
-            <Button variant="primary" onClick={() => navigate(`/cases/${caseId}`)}>
-              Open Case <ArrowRight size={16} />
-            </Button>
+      {/* Phase 2 — premium case header hero */}
+      <div className="relative overflow-hidden rounded-2xl border border-white/10 ca-gradient-hero ca-grid-overlay">
+        <div className="relative p-6 lg:p-8">
+          <div className="flex flex-col lg:flex-row lg:items-start lg:justify-between gap-6">
+            <div className="flex items-start gap-5 min-w-0">
+              <div className="w-16 h-16 rounded-2xl ca-gradient-gold flex items-center justify-center shadow-gold flex-shrink-0">
+                <Scale size={30} className="text-navy" />
+              </div>
+              <div className="min-w-0">
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold-light">Attorney Workspace · Welcome back, {user?.name}</p>
+                <h1 className="text-2xl lg:text-3xl font-bold tracking-tight text-white mt-1 truncate">{caseTitle}</h1>
+                <div className="flex flex-wrap items-center gap-2 mt-3">
+                  <Badge variant="gold">{primaryCase.caseNumber}</Badge>
+                  <Badge variant="navy" className="capitalize">{primaryCase.status}</Badge>
+                  {primaryCase.phase && <Badge variant="default" className="capitalize">{primaryCase.phase}</Badge>}
+                </div>
+                <dl className="grid grid-cols-2 sm:grid-cols-4 gap-x-6 gap-y-2 mt-5 text-sm">
+                  <div><dt className="text-xs text-slate-400 flex items-center gap-1"><Landmark size={12} /> Court</dt><dd className="text-slate-200 mt-0.5 truncate">{primaryCase.court ?? 'UNKNOWN'}</dd></div>
+                  <div><dt className="text-xs text-slate-400 flex items-center gap-1"><Gavel size={12} /> Judge</dt><dd className="text-slate-200 mt-0.5 truncate">{primaryCase.judge ?? 'UNKNOWN'}</dd></div>
+                  <div><dt className="text-xs text-slate-400 flex items-center gap-1"><Calendar size={12} /> Next hearing</dt><dd className="text-slate-200 mt-0.5">{primaryCase.nextHearing ? new Date(primaryCase.nextHearing).toLocaleDateString() : 'None set'}</dd></div>
+                  <div><dt className="text-xs text-slate-400 flex items-center gap-1"><Clock size={12} /> Last updated</dt><dd className="text-slate-200 mt-0.5">{primaryCase.updatedAt ? new Date(primaryCase.updatedAt).toLocaleDateString() : 'UNKNOWN'}</dd></div>
+                </dl>
+              </div>
+            </div>
+            <div className="flex flex-wrap gap-2 flex-shrink-0">
+              <Button variant="secondary" onClick={() => navigate(`/cases/${caseId}/evidence`)}><Upload size={16} /> Upload</Button>
+              <Button variant="primary" onClick={() => navigate(`/cases/${caseId}`)}>Open Case <ArrowRight size={16} /></Button>
+            </div>
           </div>
-        }
-      />
+          {/* Quick actions */}
+          <div className="flex flex-wrap gap-2 mt-6 pt-5 border-t border-white/10">
+            {([
+              ['Workbench', 'attorney-workbench', <Briefcase size={14} key="w" />],
+              ['Knowledge Graph', 'knowledge-graph', <Network size={14} key="k" />],
+              ['Timeline', 'timeline', <Clock size={14} key="t" />],
+              ['Evidence', 'evidence', <Icon name="evidence" size={14} key="e" />],
+              ['Charges', 'charges', <Scale size={14} key="c" />],
+              ['Reports', 'reports', <Icon name="reports" size={14} key="r" />],
+            ] as const).map(([label, path, icon]) => (
+              <button key={label} onClick={() => navigate(`/cases/${caseId}/${path}`)}
+                className="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-white/10 bg-white/[0.03] text-sm text-slate-200 hover:border-gold/30 hover:bg-white/5 hover:text-white transition-colors">
+                <span className="text-gold-light">{icon}</span> {label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
 
-      {/* Intelligence headline — analytics compute from the repository; shown as
-          UNKNOWN until the case is processed (never fabricated). */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-        <IntelligencePanel type="case_strength" value="UNKNOWN" subtitle="Process case to compute" onClick={() => navigate(`/cases/${caseId}/charges`)} />
-        <IntelligencePanel type="evidence_confidence" value="UNKNOWN" subtitle="Awaiting analysis" onClick={() => navigate(`/cases/${caseId}/evidence`)} />
-        <IntelligencePanel type="repository_integrity" value="UNKNOWN" subtitle="Awaiting analysis" onClick={() => navigate(`/cases/${caseId}/evidence`)} />
-        <IntelligencePanel type="contradictions" value="UNKNOWN" subtitle="Awaiting analysis" onClick={() => navigate(`/cases/${caseId}/narrative`)} />
+      {/* Phase 3 — large color-themed intelligence cards. Analytics compute from
+          the repository; shown as UNKNOWN until processed (never fabricated). */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+        <IntelCard tone="emerald" icon={<Scale size={22} />} label="Case Strength" value="UNKNOWN" desc="Overall defense posture — process case to compute" onClick={() => navigate(`/cases/${caseId}/charges`)} />
+        <IntelCard tone="blue" icon={<ShieldCheck size={22} />} label="Evidence Confidence" value="UNKNOWN" desc="Reliability of extracted evidence — awaiting analysis" onClick={() => navigate(`/cases/${caseId}/evidence`)} />
+        <IntelCard tone="violet" icon={<BarChart3 size={22} />} label="Repository Integrity" value="UNKNOWN" desc="Chain of custody & completeness — awaiting analysis" onClick={() => navigate(`/cases/${caseId}/evidence`)} />
+        <IntelCard tone="gold" icon={<AlertTriangle size={22} />} label="Contradictions" value="UNKNOWN" desc="Conflicting statements & facts — awaiting analysis" onClick={() => navigate(`/cases/${caseId}/contradictions`)} />
       </div>
 
       {/* Main two-column layout — collapses to one column on tablet/mobile */}

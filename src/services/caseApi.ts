@@ -38,6 +38,12 @@ export interface ApiCase {
   court: string | null;
   judge: string | null;
   department: string | null;
+  county?: string | null;
+  prosecutor?: string | null;
+  defenseAttorney?: string | null;
+  filingDate?: string | null;
+  trialDate?: string | null;
+  notes?: string | null;
   nextHearing: string | null;
   nextHearingNote: string | null;
   createdAt: string;

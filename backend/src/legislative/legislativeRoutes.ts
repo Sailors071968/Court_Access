@@ -57,6 +57,90 @@ export async function registerLegislativeRoutes(app: FastifyInstance): Promise<v
     }
   });
 
+  // GET /api/legislative/codes — distinct California codes present in the repository (never hardcoded)
+  app.get('/api/legislative/codes', async (_req, reply) => {
+    const repoDir = resolve(DEFAULT_REPO_DIR);
+    const recordsPath = join(repoDir, 'statutes', 'records.jsonl');
+    try {
+      const raw = await readFile(recordsPath, 'utf-8');
+      const counts = new Map<string, { count: number; name: string }>();
+      for (const line of raw.trim().split('\n')) {
+        if (!line) continue;
+        const r = JSON.parse(line) as { code: string; title?: string };
+        const code = r.code;
+        if (!code) continue;
+        const existing = counts.get(code);
+        // Derive the human name from the statute title prefix, e.g. "Penal Code - PEN PART 1" → "Penal Code".
+        const derivedName = r.title && r.title.includes(' - ') ? r.title.split(' - ')[0].trim() : code;
+        counts.set(code, { count: (existing?.count ?? 0) + 1, name: existing?.name && existing.name !== code ? existing.name : derivedName });
+      }
+      const codes = Array.from(counts.entries())
+        .map(([code, v]) => ({ code, name: v.name, sectionCount: v.count }))
+        .sort((a, b) => a.name.localeCompare(b.name));
+      return reply.send({ source: 'repository', repositoryDir: repoDir, codes });
+    } catch {
+      return reply.status(404).send({ error: 'Statute repository not initialized' });
+    }
+  });
+
+  // GET /api/legislative/sections?code=PEN&q=459 — searchable repository-backed section selector
+  app.get('/api/legislative/sections', async (request, reply) => {
+    const { code, q, limit } = request.query as { code?: string; q?: string; limit?: string };
+    const repoDir = resolve(DEFAULT_REPO_DIR);
+    const statutesPath = join(repoDir, 'statutes', 'records.jsonl');
+    const classPath = join(repoDir, 'statute_classifications', 'records.jsonl');
+    const max = Math.min(limit ? parseInt(limit, 10) : 50, 200);
+    try {
+      // Build a classification lookup (code|section → classification value/confidence).
+      const classMap = new Map<string, { value: string; confidence: string }>();
+      try {
+        const craw = await readFile(classPath, 'utf-8');
+        for (const line of craw.trim().split('\n')) {
+          if (!line) continue;
+          const c = JSON.parse(line) as { code: string; section: string; classification?: { value?: string; confidence?: string } };
+          classMap.set(`${c.code}|${c.section}`, { value: c.classification?.value ?? 'UNKNOWN', confidence: c.classification?.confidence ?? 'UNKNOWN' });
+        }
+      } catch { /* classifications optional */ }
+
+      const raw = await readFile(statutesPath, 'utf-8');
+      const needle = (q ?? '').trim().toLowerCase();
+      const wantCode = code ? code.toUpperCase() : null;
+      const results: Array<Record<string, unknown>> = [];
+      for (const line of raw.trim().split('\n')) {
+        if (!line) continue;
+        const r = JSON.parse(line) as { code: string; section: string; title?: string; fullText?: string };
+        if (wantCode && r.code !== wantCode) continue;
+        const sectionClean = r.section.replace(/\.$/, '');
+        const citation = `${r.code} ${sectionClean}`;
+        if (needle) {
+          const hay = `${r.code} ${sectionClean} ${citation} ${r.title ?? ''} ${(r.fullText ?? '').slice(0, 400)}`.toLowerCase();
+          if (!hay.includes(needle)) continue;
+        }
+        const cls = classMap.get(`${r.code}|${r.section}`);
+        results.push({
+          code: r.code,
+          section: sectionClean,
+          citation,
+          title: r.title ?? null,
+          classification: cls?.value ?? 'UNKNOWN',
+          classificationConfidence: cls?.confidence ?? 'UNKNOWN',
+        });
+        if (results.length >= max) break;
+      }
+      // Prioritize exact section-number matches when searching.
+      if (needle) {
+        results.sort((a, b) => {
+          const ae = String(a.section).toLowerCase() === needle ? 0 : 1;
+          const be = String(b.section).toLowerCase() === needle ? 0 : 1;
+          return ae - be;
+        });
+      }
+      return reply.send({ source: 'repository', query: q ?? null, code: wantCode, count: results.length, sections: results });
+    } catch {
+      return reply.status(404).send({ error: 'Statute repository not initialized' });
+    }
+  });
+
   app.get('/api/legislative/classifications/:code/:section', async (request, reply) => {
     const { code, section } = request.params as { code: string; section: string };
     const repoDir = resolve(DEFAULT_REPO_DIR);

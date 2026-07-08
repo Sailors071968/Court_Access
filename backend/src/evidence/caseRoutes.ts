@@ -19,6 +19,23 @@ const prisma = new PrismaClient();
 // Types
 // ---------------------------------------------------------------------------
 
+interface IntakeCharge {
+  code: string;
+  section: string;
+  title?: string;
+  countNumber?: number;
+  isPrimary?: boolean;
+  isAttempt?: boolean;
+  isEnhancement?: boolean;
+  dismissed?: boolean;
+  severity?: string;
+  offenseId?: string;
+  classification?: string;
+  repositoryVerified?: boolean;
+  calcrimAvailable?: boolean;
+  notes?: string;
+}
+
 interface CreateCaseBody {
   title: string;
   caseNumber: string;
@@ -28,6 +45,15 @@ interface CreateCaseBody {
   court?: string;
   judge?: string;
   department?: string;
+  prosecutor?: string;
+  defenseAttorney?: string;
+  county?: string;
+  filingDate?: string;
+  hearingDate?: string;
+  trialDate?: string;
+  status?: string;
+  notes?: string;
+  charges?: IntakeCharge[];
 }
 
 interface UpdateCaseBody {
@@ -91,6 +117,20 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
         }
       }
 
+      // Validate charges: reject duplicate count numbers and missing code/section.
+      const charges = Array.isArray(body.charges) ? body.charges : [];
+      const counts = charges.map((c) => c.countNumber).filter((n): n is number => typeof n === 'number');
+      if (new Set(counts).size !== counts.length) {
+        return reply.code(400).send({ error: 'Duplicate charge count numbers are not allowed' });
+      }
+      for (const c of charges) {
+        if (!c.code || !c.section) {
+          return reply.code(400).send({ error: 'Each charge requires a California code and section' });
+        }
+      }
+
+      const toDate = (s?: string) => (s ? new Date(s) : null);
+
       const newCase = await prisma.criminalCase.create({
         data: {
           tenantId: user.tenantId,
@@ -100,13 +140,46 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
           caseNumber: body.caseNumber,
           jurisdiction: body.jurisdiction,
           caseType: body.caseType,
+          status: body.status && ['active', 'pending', 'closed', 'archived'].includes(body.status) ? body.status : undefined,
           court: body.court ?? null,
           judge: body.judge ?? null,
           department: body.department ?? null,
+          prosecutor: body.prosecutor ?? null,
+          defenseAttorney: body.defenseAttorney ?? null,
+          county: body.county ?? null,
+          filingDate: toDate(body.filingDate),
+          trialDate: toDate(body.trialDate),
+          nextHearing: toDate(body.hearingDate),
+          notes: body.notes ?? null,
         },
       });
 
-      return reply.code(201).send({ case: newCase });
+      let chargesCreated = 0;
+      if (charges.length > 0) {
+        await prisma.charge.createMany({
+          data: charges.map((c, i) => ({
+            caseId: newCase.caseId,
+            code: c.code,
+            section: c.section,
+            title: c.title ?? null,
+            countNumber: typeof c.countNumber === 'number' ? c.countNumber : i + 1,
+            isPrimary: c.isPrimary ?? (i === 0),
+            isAttempt: !!c.isAttempt,
+            isEnhancement: !!c.isEnhancement,
+            dismissed: !!c.dismissed,
+            severity: c.severity ?? null,
+            offenseId: c.offenseId ?? null,
+            classification: c.classification ?? null,
+            repositoryVerified: !!c.repositoryVerified,
+            calcrimAvailable: !!c.calcrimAvailable,
+            notes: c.notes ?? null,
+            victim: '',
+          })),
+        });
+        chargesCreated = charges.length;
+      }
+
+      return reply.code(201).send({ case: newCase, chargesCreated });
     } catch (err: unknown) {
       const prismaError = err as { code?: string };
       if (prismaError.code === 'P2002') {

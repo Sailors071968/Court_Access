@@ -8,7 +8,8 @@ import { Search, Plus, Filter, Loader2, Trash2, AlertTriangle } from 'lucide-rea
 import { useState, useEffect, useCallback } from 'react';
 import { Card } from '../components/common/Card';
 import { CaseStatusBadge } from '../components/common/StatusBadge';
-import { fetchCases, createCase, deleteCase, type ApiCase, CASE_TYPES } from '../services/caseApi';
+import { fetchCases, deleteCase, type ApiCase, CASE_TYPES } from '../services/caseApi';
+import { CaseIntakeModal } from '../components/cases/CaseIntakeModal';
 
 export function CasesListPage() {
   const navigate = useNavigate();
@@ -231,9 +232,9 @@ export function CasesListPage() {
         </div>
       )}
 
-      {/* Create Case Modal */}
+      {/* Case Intake */}
       {showCreateModal && (
-        <CreateCaseModal
+        <CaseIntakeModal
           onClose={() => setShowCreateModal(false)}
           onCreated={(newCase) => {
             setCases((prev) => [newCase, ...prev]);
@@ -246,80 +247,3 @@ export function CasesListPage() {
   );
 }
 
-// ---------------------------------------------------------------------------
-// Create Case Modal
-// ---------------------------------------------------------------------------
-
-function CreateCaseModal({ onClose, onCreated }: { onClose: () => void; onCreated: (c: ApiCase) => void }) {
-  const [title, setTitle] = useState('');
-  const [caseNumber, setCaseNumber] = useState('');
-  const [jurisdiction, setJurisdiction] = useState('');
-  const [caseType, setCaseType] = useState('felony');
-  const [court, setCourt] = useState('');
-  const [judge, setJudge] = useState('');
-  const [submitting, setSubmitting] = useState(false);
-  const [formError, setFormError] = useState<string | null>(null);
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!title || !caseNumber || !jurisdiction) return;
-
-    try {
-      setSubmitting(true);
-      setFormError(null);
-      const newCase = await createCase({ title, caseNumber, jurisdiction, caseType, court: court || undefined, judge: judge || undefined });
-      onCreated(newCase);
-    } catch (err) {
-      setFormError(err instanceof Error ? err.message : 'Failed to create case');
-    } finally {
-      setSubmitting(false);
-    }
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <div className="bg-white/5 rounded-2xl shadow-xl max-w-lg w-full p-6">
-        <h2 className="text-lg font-semibold text-white mb-4">Create New Case</h2>
-        {formError && <p className="text-sm text-red-600 mb-3">{formError}</p>}
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <div>
-            <label className="block text-sm font-medium text-slate-200 mb-1">Case Title *</label>
-            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} required className="w-full px-3 py-2 rounded-lg border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light" placeholder="e.g., People v. Smith" />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-slate-200 mb-1">Case Number *</label>
-              <input type="text" value={caseNumber} onChange={(e) => setCaseNumber(e.target.value)} required className="w-full px-3 py-2 rounded-lg border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light" placeholder="e.g., 2024-CF-001234" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-200 mb-1">Case Type</label>
-              <select value={caseType} onChange={(e) => setCaseType(e.target.value)} className="w-full px-3 py-2 rounded-lg border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light">
-                {CASE_TYPES.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
-              </select>
-            </div>
-          </div>
-          <div>
-            <label className="block text-sm font-medium text-slate-200 mb-1">Jurisdiction *</label>
-            <input type="text" value={jurisdiction} onChange={(e) => setJurisdiction(e.target.value)} required className="w-full px-3 py-2 rounded-lg border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light" placeholder="e.g., Santa Clara County" />
-          </div>
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <label className="block text-sm font-medium text-slate-200 mb-1">Court</label>
-              <input type="text" value={court} onChange={(e) => setCourt(e.target.value)} className="w-full px-3 py-2 rounded-lg border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light" placeholder="e.g., Superior Court" />
-            </div>
-            <div>
-              <label className="block text-sm font-medium text-slate-200 mb-1">Judge</label>
-              <input type="text" value={judge} onChange={(e) => setJudge(e.target.value)} className="w-full px-3 py-2 rounded-lg border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light" placeholder="e.g., Hon. Wilson" />
-            </div>
-          </div>
-          <div className="flex justify-end gap-3 pt-2">
-            <button type="button" onClick={onClose} className="px-4 py-2 text-sm font-medium text-slate-200 hover:bg-white/10 rounded-lg transition-colors">Cancel</button>
-            <button type="submit" disabled={submitting} className="px-4 py-2 bg-slate-800 text-white rounded-lg text-sm font-medium hover:bg-slate-700 transition-colors disabled:opacity-50">
-              {submitting ? 'Creating...' : 'Create Case'}
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-}

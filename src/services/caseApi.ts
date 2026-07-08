@@ -70,6 +70,23 @@ export interface ApiEvidence {
   updatedAt: string;
 }
 
+export interface IntakeCharge {
+  code: string;
+  section: string;
+  title?: string;
+  countNumber?: number;
+  isPrimary?: boolean;
+  isAttempt?: boolean;
+  isEnhancement?: boolean;
+  dismissed?: boolean;
+  severity?: string;
+  offenseId?: string;
+  classification?: string;
+  repositoryVerified?: boolean;
+  calcrimAvailable?: boolean;
+  notes?: string;
+}
+
 export interface CreateCasePayload {
   title: string;
   caseNumber: string;
@@ -78,6 +95,15 @@ export interface CreateCasePayload {
   court?: string;
   judge?: string;
   department?: string;
+  prosecutor?: string;
+  defenseAttorney?: string;
+  county?: string;
+  filingDate?: string;
+  hearingDate?: string;
+  trialDate?: string;
+  status?: string;
+  notes?: string;
+  charges?: IntakeCharge[];
 }
 
 export interface UploadUrlPayload {

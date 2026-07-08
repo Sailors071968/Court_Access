@@ -1742,6 +1742,12 @@ model CriminalCase {
   court           String?
   judge           String?
   department      String?
+  prosecutor      String?
+  defenseAttorney String?
+  county          String?
+  filingDate      DateTime?
+  trialDate       DateTime?
+  notes           String?
   nextHearing     DateTime?
   nextHearingNote String?
   deletedAt       DateTime?
@@ -2491,8 +2497,20 @@ model Charge {
   code           String
   section        String
   title          String?
+  // Case Intake — repository-backed charge metadata
+  countNumber    Int?
+  isPrimary      Boolean  @default(false)
+  isAttempt      Boolean  @default(false)
+  isEnhancement  Boolean  @default(false)
+  dismissed      Boolean  @default(false)
+  severity       String?  // felony | misdemeanor | infraction | UNKNOWN
+  offenseId      String?  // repository offense/statute id
+  classification String?  // repository classification value
+  repositoryVerified Boolean @default(false)
+  calcrimAvailable   Boolean @default(false)
+  notes          String?
   dateOfOffense  DateTime?
-  victim         String
+  victim         String   @default("")
   createdAt      DateTime @default(now())
 
   @@index([caseId])

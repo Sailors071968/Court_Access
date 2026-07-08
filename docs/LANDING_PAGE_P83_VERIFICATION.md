@@ -14,7 +14,13 @@
 
 **Phases 3/4 — Graphics & Iconography:** premium courthouse artwork + consistent gold-accent lucide iconography and the `ca-icon-*` tile system across the hero.
 
-**Phases 5/6/7 — Features / Roles / Pricing:** these sections are already on the premium design system from prior programs (feature cards, persona/role sections, pricing) — retained; this program's transformation focused on the hero (the primary reference-defining element).
+**Phase 5 — Features (DONE):** new **Platform Features** section ("Litigation Intelligence, End to End") with the **10 specified features** as premium glass cards + color-themed icons (gold/blue/violet/emerald) + hover-lift: Evidence Intelligence, Knowledge Graph, Timeline Builder, Authority Search, Motion Builder, Repository Intelligence, CourtListener, California Repository, OCR, Contradiction Detection.
+
+**Phase 6 — Roles (DONE):** "Who CourtAccess Serves" redesigned into **8 premium role cards** (Attorneys, Investigators, Prosecutors, Public Defenders, Paralegals, Legal Assistants, Law Firms, Clients & Families) with glass + hover + color-themed icons. (Role imagery uses premium icon tiles; photographic portraits are a follow-up.)
+
+**Phase 7 — Pricing (DONE):** premium plan cards (highlighted plan ringed/animated), transparent tiers, **Unlimited collaborators** + 30-day free trial in the callout, professional typography.
+
+**Phase 8 — Visual System (DONE):** all landing card sections migrated to `ca-panel ca-panel-hover` (glass + hover-lift + gold border-on-hover); consistent premium depth, no flat UI.
 
 **Phase 8 — Visual System (DONE):** premium typography, spacing, glass, gold accents, shadows, gradients, hover — no flat UI in the hero.
 
@@ -37,8 +43,8 @@ Landing page loaded via Playwright on `localhost:8090` and the public tunnel URL
 ## 6. Remaining Issues Register
 
 - **Hero image weight (~2 MB PNG):** convert to WebP/AVIF + responsive srcset for faster first paint (follow-up; functionally fine, served with 200).
-- **Roles section portraits:** uses the existing persona cards/iconography rather than photographic attorney portraits (bespoke role photography is a follow-up).
-- **Feature/Role/Pricing** sections were retained from prior premium work (not re-screenshot per-section this turn beyond the full-page capture).
+- **Roles section portraits:** premium icon-tile role cards rather than photographic attorney portraits (bespoke role photography is a follow-up).
+- **Features / Roles / Pricing** now redesigned to premium glass cards and browser-verified (`features.png`, `roles.png`, `pricing.png`, `public-features.png`).
 - 6 pre-existing backend TS errors (`resourceAuthMiddleware.ts`) remain (app runs via `tsx`).
 - Public URL is an ephemeral quick-tunnel.
 

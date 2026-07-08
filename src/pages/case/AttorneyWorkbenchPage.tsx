@@ -5,7 +5,7 @@
 // ============================================================================
 
 import { useState, useEffect, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import {
   Briefcase,
   Scale,
@@ -24,6 +24,13 @@ import {
   Pin,
   Plus,
   CheckCircle2,
+  FileText,
+  Network,
+  Clock,
+  Users,
+  Library,
+  Landmark,
+  ClipboardList,
 } from 'lucide-react';
 import { Card, CardHeader, StatCard } from '../../components/common/Card';
 import {
@@ -119,8 +126,25 @@ function CitationList({ citations }: { citations: Array<{ type: string; id: stri
   );
 }
 
+// Phase 4 — one-click litigation actions. Every target is a real, mounted case route.
+const ATTORNEY_ACTIONS: Array<{ label: string; icon: React.ReactNode; path: string }> = [
+  { label: 'Create Motion', icon: <Gavel size={16} />, path: 'motions' },
+  { label: 'Generate Report', icon: <FileText size={16} />, path: 'reports' },
+  { label: 'Search Authorities', icon: <BookOpen size={16} />, path: 'research' },
+  { label: 'Review Evidence', icon: <FileSearch size={16} />, path: 'evidence' },
+  { label: 'Review Charges', icon: <Scale size={16} />, path: 'charges' },
+  { label: 'Review Discovery', icon: <ClipboardList size={16} />, path: 'disclosures' },
+  { label: 'Review Witnesses', icon: <Users size={16} />, path: 'investigator-workbench' },
+  { label: 'Review Timeline', icon: <Clock size={16} />, path: 'narrative-analysis' },
+  { label: 'Knowledge Graph', icon: <Network size={16} />, path: 'litigation-strategy' },
+  { label: 'CourtListener', icon: <Landmark size={16} />, path: 'research' },
+  { label: 'CALCRIM', icon: <Library size={16} />, path: 'research' },
+  { label: 'Repository Browser', icon: <Search size={16} />, path: 'research' },
+];
+
 export function AttorneyWorkbenchPage() {
   const { caseId } = useParams<{ caseId: string }>();
+  const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState<TabId>('overview');
   const [data, setData] = useState<WorkbenchBundle | null>(null);
   const [loading, setLoading] = useState(true);
@@ -210,26 +234,60 @@ export function AttorneyWorkbenchPage() {
 
   return (
     <div className="max-w-7xl mx-auto space-y-6 p-6">
-      <header className="flex items-start justify-between">
+      <header className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-white flex items-center gap-2">
-            <Briefcase size={24} />
-            Attorney Workbench
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-gold-light">Litigation Command Center</p>
+          <h1 className="text-2xl sm:text-3xl font-bold tracking-tight text-white flex items-center gap-2 mt-1">
+            <Briefcase size={26} className="text-gold-light" /> Attorney Workbench
           </h1>
-          <p className="text-sm text-slate-400 mt-1">
+          <p className="text-sm text-slate-300 mt-1">
             {data.caseOverview.case.title} — {data.caseOverview.case.caseNumber}
-            <span className="ml-2 text-xs bg-white/10 px-2 py-0.5 rounded">v{data.workbenchVersion}</span>
+            <span className="ml-2 text-xs bg-white/10 px-2 py-0.5 rounded-full">v{data.workbenchVersion}</span>
           </p>
         </div>
         <button
           type="button"
           onClick={() => void load()}
-          className="flex items-center gap-2 px-3 py-2 text-sm border border-white/10 rounded-lg hover:bg-white/5"
+          className="inline-flex items-center gap-2 px-4 h-9 text-sm font-semibold border border-white/10 rounded-xl text-slate-200 hover:bg-white/5"
         >
-          <RefreshCw size={16} className={loading ? 'animate-spin' : ''} />
-          Refresh
+          <RefreshCw size={15} className={loading ? 'animate-spin' : ''} /> Refresh
         </button>
       </header>
+
+      {/* Phase 4 — Attorney Actions (one-click litigation launcher) */}
+      <div>
+        <h3 className="text-xs font-semibold uppercase tracking-wide text-slate-400 mb-2">Attorney Actions</h3>
+        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+          {ATTORNEY_ACTIONS.map((a) => (
+            <button
+              key={a.label}
+              type="button"
+              onClick={() => caseId && navigate(`/cases/${caseId}/${a.path}`)}
+              className="flex items-center gap-2 px-3 py-2.5 rounded-xl border border-white/10 bg-white/[0.03] text-sm text-slate-200 hover:border-gold/30 hover:bg-white/5 hover:text-white transition-colors text-left"
+            >
+              <span className="text-gold-light flex-shrink-0">{a.icon}</span>
+              <span className="truncate">{a.label}</span>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* Phase 1/3 — litigation status command widgets (real command-center metrics) */}
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-3">
+        {([
+          ['Case Health', `${data.commandCenter.caseHealth.score}%`, <Briefcase size={18} />, data.commandCenter.caseHealth.score],
+          ['Evidence Health', `${data.commandCenter.evidenceHealth.score}%`, <FileSearch size={18} />, data.commandCenter.evidenceHealth.score],
+          ['Legal Coverage', `${data.commandCenter.legalCoverage.score}%`, <Scale size={18} />, data.commandCenter.legalCoverage.score],
+          ['Trial Readiness', `${data.commandCenter.trialReadiness.score}%`, <Gavel size={18} />, data.commandCenter.trialReadiness.score],
+          ['Outstanding Unknowns', data.commandCenter.unknownCount, <AlertTriangle size={18} />, data.commandCenter.unknownCount === 0 ? 100 : 0],
+        ] as const).map(([label, value, icon, score]) => (
+          <div key={label} className="rounded-xl border border-white/10 bg-white/[0.03] p-4">
+            <span className={`inline-flex w-9 h-9 rounded-lg items-center justify-center mb-2 ${Number(score) >= 67 ? 'ca-icon-emerald text-emerald-300' : Number(score) >= 34 ? 'ca-icon-gold text-gold-light' : 'ca-icon-blue text-blue-300'}`}>{icon}</span>
+            <div className="text-2xl font-bold text-white tracking-tight">{value}</div>
+            <div className="text-xs font-medium text-slate-400 mt-0.5">{label}</div>
+          </div>
+        ))}
+      </div>
 
       <nav className="flex flex-wrap gap-1 border-b border-white/10 pb-1">
         {TABS.map((tab) => (
@@ -237,8 +295,8 @@ export function AttorneyWorkbenchPage() {
             key={tab.id}
             type="button"
             onClick={() => setActiveTab(tab.id)}
-            className={`flex items-center gap-1.5 px-3 py-2 text-sm rounded-t-lg transition-colors ${
-              activeTab === tab.id ? 'bg-slate-800 text-white' : 'text-slate-300 hover:bg-white/10'
+            className={`flex items-center gap-1.5 px-3 py-2 text-sm font-medium rounded-t-lg border-b-2 transition-colors ${
+              activeTab === tab.id ? 'border-gold text-white' : 'border-transparent text-slate-400 hover:text-slate-200 hover:bg-white/5'
             }`}
           >
             {tab.icon}

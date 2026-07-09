@@ -157,6 +157,7 @@ export function StaffDashboard() {
               ['Timeline', 'timeline', <Clock size={14} key="t" />],
               ['Evidence', 'evidence', <Icon name="evidence" size={14} key="e" />],
               ['Charges', 'charges', <Scale size={14} key="c" />],
+              ['Motion Builder', 'motions', <Gavel size={14} key="g" />],
               ['Attorney Report', 'report', <Icon name="reports" size={14} key="r" />],
             ] as const).map(([label, path, icon]) => (
               <button key={label} onClick={() => navigate(`/cases/${caseId}/${path}`)}

@@ -10,7 +10,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import {
   Loader2, Printer, RefreshCw, AlertTriangle, ShieldCheck, Scale, FileText, Users,
-  FolderOpen, Clock, Network, BookOpen, Gauge, Lightbulb, History, Fingerprint, ArrowLeft,
+  FolderOpen, Clock, Network, BookOpen, Gauge, Lightbulb, History, Fingerprint, ArrowLeft, Gavel,
 } from 'lucide-react';
 import { Button } from '../../components/ui/button';
 import { Badge } from '../../components/ui/badge';
@@ -574,6 +574,9 @@ export function AttorneyReportPage() {
           <AnalysisGroup title="Discovery Requests" items={report.recommendations.discoveryRequests} empty="No discovery requests flagged." />
           <AnalysisGroup title="Repository Research" items={report.recommendations.repositoryResearch} empty="No repository research flagged." />
           <AnalysisGroup title="Potential Motion Topics" items={report.recommendations.potentialMotionTopics} empty="No potential motion topics flagged." />
+          <Link to={`/cases/${caseId}/motions`} className="print:hidden inline-flex items-center gap-1.5 text-sm text-gold-light hover:underline mt-3">
+            <Gavel className="w-4 h-4" /> Draft a motion in the Motion Builder
+          </Link>
           {report.recommendations.manualReview.length > 0 && (
             <div className="mt-4 rounded-xl bg-navy-800/40 border border-white/5 px-4 py-3">
               <div className="ca-overline text-[10px] mb-1">Manual Review</div>

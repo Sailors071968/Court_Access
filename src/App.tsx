@@ -93,11 +93,11 @@ import { CaseOverviewPage } from './pages/case/CaseOverviewPage';
 import { ChargesPage } from './pages/case/ChargesPage';
 import { EvidencePage } from './pages/case/EvidencePage';
 import { ExpertsPage } from './pages/case/ExpertsPage';
-import { MotionsPage } from './pages/case/MotionsPage';
 import { ResearchPage } from './pages/case/ResearchPage';
 import { ActivityPage } from './pages/case/ActivityPage';
 import { ReportsPage } from './pages/case/ReportsPage';
 import { AttorneyReportPage } from './pages/case/AttorneyReportPage';
+import { MotionBuilderPage } from './pages/case/MotionBuilderPage';
 import { DocumentsPage } from './pages/case/DocumentsPage';
 import { CaseSettingsPage } from './pages/case/CaseSettingsPage';
 import { TrialExhibitWorkspace } from './pages/case/TrialExhibitWorkspace';
@@ -517,7 +517,15 @@ function App() {
               path="motions"
               element={
                 <ProtectedRoute requiredPermission="canViewMotions">
-                  <MotionsPage />
+                  <MotionBuilderPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="motion-builder"
+              element={
+                <ProtectedRoute requiredPermission="canViewMotions">
+                  <MotionBuilderPage />
                 </ProtectedRoute>
               }
             />

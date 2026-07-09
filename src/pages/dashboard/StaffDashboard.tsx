@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import {
   Upload, ArrowRight, Scale, ShieldCheck, BarChart3, AlertTriangle,
-  Briefcase, Gavel, Calendar, Network, Clock, Landmark,
+  Briefcase, Gavel, Calendar, Network, Clock, Landmark, Users,
 } from 'lucide-react';
 import { PageHeader } from '../../components/ui/page-header';
 import { Button } from '../../components/ui/button';
@@ -160,6 +160,7 @@ export function StaffDashboard() {
               ['Motion Builder', 'motions', <Gavel size={14} key="g" />],
               ['Trial Prep', 'trial-prep', <ShieldCheck size={14} key="tp" />],
               ['CALCRIM', 'calcrim', <Scale size={14} key="cal" />],
+              ['Voir Dire', 'voir-dire', <Users size={14} key="vd" />],
               ['Attorney Report', 'report', <Icon name="reports" size={14} key="r" />],
             ] as const).map(([label, path, icon]) => (
               <button key={label} onClick={() => navigate(`/cases/${caseId}/${path}`)}

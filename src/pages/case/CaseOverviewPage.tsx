@@ -129,6 +129,7 @@ export function CaseOverviewPage() {
     { label: 'Attorney Report', icon: <FileText size={16} />, path: 'report' },
     { label: 'Trial Prep', icon: <ShieldCheck size={16} />, path: 'trial-prep' },
     { label: 'CALCRIM', icon: <Scale size={16} />, path: 'calcrim' },
+    { label: 'Voir Dire', icon: <Users size={16} />, path: 'voir-dire' },
     { label: 'Open Timeline', icon: <Clock size={16} />, path: 'timeline' },
     { label: 'Knowledge Graph', icon: <Network size={16} />, path: 'knowledge-graph' },
     { label: 'Attorney Workbench', icon: <Briefcase size={16} />, path: 'attorney-workbench' },

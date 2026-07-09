@@ -132,6 +132,7 @@ const ATTORNEY_ACTIONS: Array<{ label: string; icon: React.ReactNode; path: stri
   { label: 'Create Motion', icon: <Gavel size={16} />, path: 'motions' },
   { label: 'Attorney Report', icon: <FileText size={16} />, path: 'report' },
   { label: 'Trial Prep', icon: <ShieldCheck size={16} />, path: 'trial-prep' },
+  { label: 'Voir Dire', icon: <Users size={16} />, path: 'voir-dire' },
   { label: 'Search Authorities', icon: <BookOpen size={16} />, path: 'research' },
   { label: 'Review Evidence', icon: <FileSearch size={16} />, path: 'evidence' },
   { label: 'Review Charges', icon: <Scale size={16} />, path: 'charges' },

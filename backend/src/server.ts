@@ -261,6 +261,10 @@ async function startServer() {
   const { registerCalcrimCenterRoutes } = await import('./calcrim/calcrimCenterRoutes.js');
   await registerCalcrimCenterRoutes(app);
 
+  console.log('[Server] Registering canonical Voir Dire Intelligence Center routes...');
+  const { registerVoirDireRoutes } = await import('./voirdire/voirDireRoutes.js');
+  await registerVoirDireRoutes(app);
+
   // Timeline Reconstruction Engine
   console.log('[Server] Registering timeline reconstruction routes...');
   await registerTimelineRoutes(app);

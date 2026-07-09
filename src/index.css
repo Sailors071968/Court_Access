@@ -160,3 +160,107 @@
     border: 1px solid rgba(52, 211, 153, 0.25);
   }
 }
+
+/* ==========================================================================
+   Program 88 — Attorney Report print / PDF layout
+   Produces a clean, paginated, branded document via the browser's
+   Save-as-PDF / Print. Hides application chrome; light theme for paper.
+   ========================================================================== */
+@media print {
+  @page {
+    size: Letter;
+    margin: 18mm 16mm 20mm 16mm;
+  }
+
+  /* Hide everything, then reveal only the report */
+  body * {
+    visibility: hidden !important;
+  }
+  .report-root,
+  .report-root * {
+    visibility: visible !important;
+  }
+  .report-root {
+    position: absolute !important;
+    left: 0;
+    top: 0;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    color: #0b1220 !important;
+  }
+
+  /* Paper-friendly colors */
+  .report-root,
+  .report-root .ca-panel,
+  .report-root .report-section {
+    background: #ffffff !important;
+    border-color: #d8dee9 !important;
+    box-shadow: none !important;
+  }
+  .report-root .text-slate-50,
+  .report-root .text-slate-100,
+  .report-root .text-slate-200,
+  .report-root .text-slate-300 {
+    color: #0b1220 !important;
+  }
+  .report-root .text-slate-400,
+  .report-root .text-slate-500 {
+    color: #475569 !important;
+  }
+  .report-root .ca-overline,
+  .report-root .text-gold-light {
+    color: #9a6b18 !important;
+  }
+  .report-root .ca-gradient-gold {
+    background: #9a6b18 !important;
+    color: #ffffff !important;
+  }
+  .report-root .bg-navy-800\/40,
+  .report-root .bg-navy-800\/50,
+  .report-root .bg-navy-800\/60,
+  .report-root .bg-navy-800\/70,
+  .report-root .bg-navy-900\/40,
+  .report-root .bg-navy-700\/70 {
+    background: #f3f5f9 !important;
+  }
+  .report-root .text-amber-400,
+  .report-root .text-amber-400\/90,
+  .report-root .text-amber-400\/80 {
+    color: #b45309 !important;
+  }
+
+  /* Pagination: keep sections/charges/rows together where possible */
+  .report-section {
+    break-inside: avoid;
+    page-break-inside: avoid;
+    border-radius: 0 !important;
+    border: none !important;
+    border-top: 1px solid #d8dee9 !important;
+    padding: 12px 0 !important;
+  }
+  .report-charge,
+  .report-table tr {
+    break-inside: avoid;
+    page-break-inside: avoid;
+  }
+  .report-toc {
+    break-after: page;
+    page-break-after: always;
+  }
+  .report-cover {
+    break-after: page;
+    page-break-after: always;
+    color: #0b1220 !important;
+  }
+
+  /* Running page number footer */
+  .report-footer {
+    position: fixed;
+    bottom: 6mm;
+    left: 0;
+    right: 0;
+    color: #64748b !important;
+  }
+}

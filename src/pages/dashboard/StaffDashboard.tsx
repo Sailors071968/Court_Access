@@ -157,7 +157,7 @@ export function StaffDashboard() {
               ['Timeline', 'timeline', <Clock size={14} key="t" />],
               ['Evidence', 'evidence', <Icon name="evidence" size={14} key="e" />],
               ['Charges', 'charges', <Scale size={14} key="c" />],
-              ['Reports', 'reports', <Icon name="reports" size={14} key="r" />],
+              ['Attorney Report', 'report', <Icon name="reports" size={14} key="r" />],
             ] as const).map(([label, path, icon]) => (
               <button key={label} onClick={() => navigate(`/cases/${caseId}/${path}`)}
                 className="inline-flex items-center gap-2 px-3 py-2 rounded-xl border border-white/10 bg-white/[0.03] text-sm text-slate-200 hover:border-gold/30 hover:bg-white/5 hover:text-white transition-colors">
@@ -257,7 +257,7 @@ export function StaffDashboard() {
 
           <ExpandableCard title="Reports" icon={<Icon name="reports" size={18} />} subtitle="Generate & export" defaultExpanded={false}>
             <div className="space-y-3">
-              <ReportCard title="Attorney Report" description="Full case intelligence" format="PDF / Word" onGenerate={() => navigate(`/cases/${caseId}/reports`)} />
+              <ReportCard title="Attorney Report" description="Full case intelligence" format="PDF / Print" onGenerate={() => navigate(`/cases/${caseId}/report`)} />
               <ReportCard title="Chronology" description="Timeline export" format="PDF" onGenerate={() => navigate(`/cases/${caseId}/reports`)} />
             </div>
           </ExpandableCard>

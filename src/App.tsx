@@ -97,6 +97,7 @@ import { MotionsPage } from './pages/case/MotionsPage';
 import { ResearchPage } from './pages/case/ResearchPage';
 import { ActivityPage } from './pages/case/ActivityPage';
 import { ReportsPage } from './pages/case/ReportsPage';
+import { AttorneyReportPage } from './pages/case/AttorneyReportPage';
 import { DocumentsPage } from './pages/case/DocumentsPage';
 import { CaseSettingsPage } from './pages/case/CaseSettingsPage';
 import { TrialExhibitWorkspace } from './pages/case/TrialExhibitWorkspace';
@@ -541,6 +542,14 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canViewEvidence">
                   <ReportsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="report"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <AttorneyReportPage />
                 </ProtectedRoute>
               }
             />

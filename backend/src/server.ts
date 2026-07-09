@@ -245,6 +245,10 @@ async function startServer() {
   await registerInvestigatorRoutes(app);
   await registerDiscoveryRoutes(app);
 
+  console.log('[Server] Registering canonical Attorney Report routes...');
+  const { registerAttorneyReportRoutes } = await import('./report/attorneyReportRoutes.js');
+  await registerAttorneyReportRoutes(app);
+
   // Timeline Reconstruction Engine
   console.log('[Server] Registering timeline reconstruction routes...');
   await registerTimelineRoutes(app);

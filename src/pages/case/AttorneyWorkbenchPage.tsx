@@ -129,7 +129,7 @@ function CitationList({ citations }: { citations: Array<{ type: string; id: stri
 // Phase 4 — one-click litigation actions. Every target is a real, mounted case route.
 const ATTORNEY_ACTIONS: Array<{ label: string; icon: React.ReactNode; path: string }> = [
   { label: 'Create Motion', icon: <Gavel size={16} />, path: 'motions' },
-  { label: 'Generate Report', icon: <FileText size={16} />, path: 'reports' },
+  { label: 'Attorney Report', icon: <FileText size={16} />, path: 'report' },
   { label: 'Search Authorities', icon: <BookOpen size={16} />, path: 'research' },
   { label: 'Review Evidence', icon: <FileSearch size={16} />, path: 'evidence' },
   { label: 'Review Charges', icon: <Scale size={16} />, path: 'charges' },

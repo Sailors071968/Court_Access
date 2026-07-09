@@ -126,7 +126,7 @@ export function CaseOverviewPage() {
     { label: 'Import Discovery', icon: <ClipboardList size={16} />, path: 'discovery' },
     { label: 'Search Authorities', icon: <BookOpen size={16} />, path: 'research' },
     { label: 'Build Motion', icon: <Gavel size={16} />, path: 'motions' },
-    { label: 'Generate Report', icon: <FileText size={16} />, path: 'reports' },
+    { label: 'Attorney Report', icon: <FileText size={16} />, path: 'report' },
     { label: 'Open Timeline', icon: <Clock size={16} />, path: 'timeline' },
     { label: 'Knowledge Graph', icon: <Network size={16} />, path: 'knowledge-graph' },
     { label: 'Attorney Workbench', icon: <Briefcase size={16} />, path: 'attorney-workbench' },

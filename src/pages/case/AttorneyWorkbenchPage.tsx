@@ -140,7 +140,7 @@ const ATTORNEY_ACTIONS: Array<{ label: string; icon: React.ReactNode; path: stri
   { label: 'Review Timeline', icon: <Clock size={16} />, path: 'timeline' },
   { label: 'Knowledge Graph', icon: <Network size={16} />, path: 'knowledge-graph' },
   { label: 'CourtListener', icon: <Landmark size={16} />, path: 'research' },
-  { label: 'CALCRIM', icon: <Library size={16} />, path: 'research' },
+  { label: 'CALCRIM', icon: <Library size={16} />, path: 'calcrim' },
   { label: 'Repository Browser', icon: <Search size={16} />, path: 'research' },
 ];
 

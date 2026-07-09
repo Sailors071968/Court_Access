@@ -1,0 +1,409 @@
+// ============================================================================
+// CourtAccess — Canonical CALCRIM Jury Instruction Intelligence Center (Program 91)
+// The definitive jury-instruction workspace. Every instruction is discovered
+// from repository-backed authorities (per-charge statute intelligence), and
+// identifies its supporting charge, elements, evidence, and authority.
+// UNKNOWN is shown wherever repository evidence is insufficient — instructions,
+// elements, and authorities are never fabricated. Export: Print/PDF, DOCX.
+// ============================================================================
+
+import { useEffect, useMemo, useState } from 'react';
+import { useParams, Link } from 'react-router-dom';
+import {
+  Loader2, Printer, RefreshCw, AlertTriangle, ArrowLeft, Scale, BookOpen, Network,
+  FileDown, ChevronDown, Search, Gavel, ShieldCheck, FileText, Landmark, NotebookPen, Layers,
+} from 'lucide-react';
+import { Button } from '../../components/ui/button';
+import { Badge } from '../../components/ui/badge';
+import { fetchCalcrimCenter, type CalcrimCenter, type CalcrimInstruction, type CalcrimCitation } from '../../services/calcrimApi';
+
+const SECTIONS = [
+  { id: 'dashboard', label: 'Dashboard', icon: Layers },
+  { id: 'instructions', label: 'Instruction Browser', icon: BookOpen },
+  { id: 'authorities', label: 'Authorities', icon: Landmark },
+  { id: 'graph', label: 'Knowledge Graph', icon: Network },
+  { id: 'review', label: 'Attorney Review', icon: ShieldCheck },
+  { id: 'notes', label: 'Notes', icon: NotebookPen },
+];
+
+function isUnknown(v: string | null | undefined): boolean {
+  return !v || v === 'UNKNOWN' || v.startsWith('UNKNOWN');
+}
+
+function ConfBadge({ c }: { c: string }) {
+  const map: Record<string, 'emerald' | 'amber' | 'warning' | 'slate'> = {
+    HIGH: 'emerald', 'repository-confirmed': 'emerald', MEDIUM: 'amber', 'manual-review': 'amber', LOW: 'warning', UNKNOWN: 'slate',
+  };
+  return <Badge variant={map[c] ?? 'slate'}>{c}</Badge>;
+}
+
+function statusColor(status: string): 'emerald' | 'amber' | 'danger' | 'slate' {
+  if (status === 'established' || status === 'satisfied') return 'emerald';
+  if (status === 'disputed' || status === 'unclear') return 'amber';
+  if (status === 'missing_evidence' || status === 'unsatisfied' || status === 'contradicted') return 'danger';
+  return 'slate';
+}
+
+function Chips({ items }: { items: CalcrimCitation[] }) {
+  if (!items || items.length === 0) return null;
+  return (
+    <span className="inline-flex flex-wrap gap-1 ml-1 align-middle">
+      {items.slice(0, 6).map((c, i) => (
+        <span key={i} className="text-[10px] px-1.5 py-0.5 rounded bg-navy-700/70 border border-white/10 text-slate-300 font-mono">{c.type}:{(c.label ?? c.id).slice(0, 16)}</span>
+      ))}
+      {items.length > 6 && <span className="text-[10px] text-slate-500">+{items.length - 6}</span>}
+    </span>
+  );
+}
+
+function Section({ id, title, icon: Icon, meta, children }: { id: string; title: string; icon: React.ElementType; meta?: string; children: React.ReactNode }) {
+  return (
+    <section id={id} className="report-section scroll-mt-24 ca-panel p-6 md:p-8">
+      <div className="flex items-center justify-between gap-4 border-b border-white/10 pb-4 mb-6">
+        <div className="flex items-center gap-3">
+          <span className="w-11 h-11 rounded-xl ca-gradient-gold flex items-center justify-center text-navy shadow-gold"><Icon className="w-5 h-5" /></span>
+          <h2 className="text-xl md:text-2xl font-bold text-slate-50 tracking-tight">{title}</h2>
+        </div>
+        {meta && <span className="text-xs text-slate-400 font-medium hidden md:inline">{meta}</span>}
+      </div>
+      {children}
+    </section>
+  );
+}
+
+function esc(s: string): string {
+  return (s || '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+function downloadDoc(title: string, bodyHtml: string, caseId: string, c: CalcrimCenter) {
+  const html = `<!DOCTYPE html><html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"><title>${esc(title)}</title></head>
+<body style="font-family:'Times New Roman',serif;font-size:12pt;color:#000;">
+<div style="text-align:center;margin-bottom:14pt;"><div style="font-weight:bold;letter-spacing:1pt;">COURTACCESS</div><div style="font-size:9pt;color:#555;">TRUTH · EVIDENCE · JUSTICE</div></div>
+<h1 style="font-size:15pt;text-align:center;">${esc(title)}</h1>
+<p style="font-size:10pt;">${esc(c.header.caseTitle)} · Case No. ${esc(c.header.caseNumber)} · ${esc(c.header.court)}</p>
+<p style="font-size:8pt;color:#555;">Repository ${esc(c.header.repositoryVersion)} · Hash ${esc(c.reproducibilityHash.slice(0, 24))}… · Generated ${esc(new Date(c.header.generatedAt).toLocaleString())}</p>
+<hr/>${bodyHtml}<hr/>
+<p style="font-size:8pt;color:#777;">Generated by CourtAccess CALCRIM Intelligence Center v${esc(c.calcrimVersion)}. Every instruction is repository-backed; items marked UNKNOWN require attorney verification. Not legal advice.</p>
+</body></html>`;
+  const blob = new Blob([html], { type: 'application/msword' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = `${title.replace(/[^a-z0-9]+/gi, '_')}_${caseId.slice(0, 8)}.doc`; a.click();
+  URL.revokeObjectURL(url);
+}
+
+export function CalcrimCenterPage() {
+  const { caseId } = useParams<{ caseId: string }>();
+  const [center, setCenter] = useState<CalcrimCenter | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [query, setQuery] = useState('');
+  const [notes, setNotes] = useState('');
+  const [exportOpen, setExportOpen] = useState(false);
+
+  const notesKey = useMemo(() => `ca-calcrim-notes-${caseId}`, [caseId]);
+
+  const load = async () => {
+    if (!caseId) return;
+    setLoading(true);
+    try { setCenter(await fetchCalcrimCenter(caseId)); setError(null); }
+    catch (e) { setError(e instanceof Error ? e.message : 'Failed to load CALCRIM center'); }
+    finally { setLoading(false); }
+  };
+  useEffect(() => { void load(); /* eslint-disable-next-line react-hooks/exhaustive-deps */ }, [caseId]);
+  useEffect(() => { setNotes(localStorage.getItem(notesKey) ?? ''); }, [notesKey]);
+  const saveNotes = (v: string) => { setNotes(v); localStorage.setItem(notesKey, v); };
+
+  const filtered = useMemo(() => {
+    if (!center) return [];
+    const q = query.trim().toLowerCase();
+    if (!q) return center.instructions;
+    return center.instructions.filter((i) =>
+      i.instructionNumber.toLowerCase().includes(q) || i.title.toLowerCase().includes(q) ||
+      i.category.toLowerCase().includes(q) || `${i.charge.code} ${i.charge.section}`.toLowerCase().includes(q));
+  }, [center, query]);
+
+  if (loading) {
+    return <div className="flex flex-col items-center justify-center py-32 gap-3 text-slate-400"><Loader2 className="w-8 h-8 animate-spin text-gold-light" /><p>Discovering repository-backed CALCRIM instructions…</p></div>;
+  }
+  if (error || !center) {
+    return <div className="flex flex-col items-center justify-center py-32 gap-4 text-center"><AlertTriangle className="w-10 h-10 text-amber-400" /><p className="text-slate-300">{error ?? 'No CALCRIM data.'}</p><Button onClick={() => void load()} variant="secondary"><RefreshCw className="w-4 h-4 mr-2" />Retry</Button></div>;
+  }
+
+  const h = center.header;
+  const d = center.dashboard;
+  const metrics = [
+    { l: 'Instructions', v: d.totalInstructions, tone: 'gold' },
+    { l: 'Charges w/ Instructions', v: `${d.chargesWithInstructions}/${d.chargesTotal}`, tone: d.chargesWithInstructions === d.chargesTotal && d.chargesTotal > 0 ? 'emerald' : 'amber' },
+    { l: 'Elements Satisfied', v: `${d.elementsSatisfied}/${d.elementsTotal}`, tone: 'emerald' },
+    { l: 'Elements Unsupported', v: d.elementsUnsupported, tone: d.elementsUnsupported > 0 ? 'danger' : 'emerald' },
+    { l: 'Evidence-Linked Elements', v: d.evidenceLinkedElements, tone: 'info' },
+    { l: 'Human Review', v: d.humanReviewCount, tone: d.humanReviewCount > 0 ? 'amber' : 'emerald' },
+  ];
+
+  const exportNotebook = () => {
+    const body = center.instructions.map((i) => {
+      const els = i.elements.length ? '<ul>' + i.elements.map((e) => `<li>${esc(e.label)} — <i>${esc(e.status)}</i> [${esc(e.confidence)}]${e.supportingEvidence.length ? ' · evidence: ' + e.supportingEvidence.map((s) => esc(s.fileName)).join(', ') : ''}</li>`).join('') + '</ul>' : '<p style="color:#b45309;">UNKNOWN — no elements.</p>';
+      return `<h2 style="font-size:13pt;margin:14pt 0 4pt;">CALCRIM ${esc(i.instructionNumber)} — ${esc(i.title)}</h2><p style="font-size:10pt;"><b>Charge:</b> ${esc(i.charge.code)} ${esc(i.charge.section)} (${esc(i.charge.offenseTitle)}) · <b>Category:</b> ${esc(i.category)} · <b>Status:</b> ${esc(i.repositoryStatus)}</p><p style="font-size:9pt;"><b>Authority:</b> ${esc(i.authorityReferences.join('; '))}</p>${els}`;
+    }).join('') + (notes.trim() ? `<h2 style="font-size:13pt;">Attorney Notes</h2><p style="white-space:pre-wrap;">${esc(notes)}</p>` : '');
+    downloadDoc('CALCRIM Notebook', body, caseId!, center); setExportOpen(false);
+  };
+  const exportInstructions = () => {
+    const rows = center.instructions.map((i) => `<tr><td>${esc(i.instructionNumber)}</td><td>${esc(i.title)}</td><td>${esc(i.category)}</td><td>${esc(i.charge.code)} ${esc(i.charge.section)}</td><td>${esc(i.repositoryStatus)}</td></tr>`).join('');
+    downloadDoc('CALCRIM Instruction Summary', `<table border="1" cellpadding="4" style="border-collapse:collapse;width:100%;font-size:10pt;"><tr><th>#</th><th>Title</th><th>Category</th><th>Charge</th><th>Status</th></tr>${rows}</table>`, caseId!, center); setExportOpen(false);
+  };
+  const exportElements = () => {
+    const rows = center.instructions.flatMap((i) => i.elements.map((e) => `<tr><td>${esc(i.instructionNumber)}</td><td>${esc(e.label)}</td><td>${e.required ? 'required' : 'optional'}</td><td>${esc(e.status)}</td><td>${esc(e.confidence)}</td><td>${e.supportingEvidence.length}</td></tr>`)).join('');
+    downloadDoc('CALCRIM Element Summary', `<table border="1" cellpadding="4" style="border-collapse:collapse;width:100%;font-size:10pt;"><tr><th>Instruction</th><th>Element</th><th>Required</th><th>Status</th><th>Confidence</th><th>Evidence</th></tr>${rows}</table>`, caseId!, center); setExportOpen(false);
+  };
+
+  return (
+    <div className="report-root max-w-6xl mx-auto pb-16">
+      {/* Print cover */}
+      <div className="report-cover hidden print:block mb-8">
+        <div className="text-3xl font-bold tracking-tight">CourtAccess</div>
+        <div className="ca-overline mt-1">Truth · Evidence · Justice</div>
+        <h1 className="text-4xl font-bold mt-8">CALCRIM Jury Instruction Intelligence</h1>
+        <p className="text-lg mt-2">{h.caseTitle} · {h.caseNumber}</p>
+        <p className="text-sm mt-6 text-slate-600">{h.court} · Judge {h.judge}</p>
+        <p className="text-xs mt-1 text-slate-500 font-mono">Repository {h.repositoryVersion} · Hash {center.reproducibilityHash.slice(0, 28)}…</p>
+      </div>
+
+      {/* Screen header hero */}
+      <div className="print:hidden mb-6">
+        <Link to={`/cases/${caseId}/overview`} className="inline-flex items-center gap-1.5 text-sm text-slate-400 hover:text-gold-light mb-4"><ArrowLeft className="w-4 h-4" /> Back to case overview</Link>
+        <div className="ca-panel p-6 md:p-8 relative overflow-hidden">
+          <div className="absolute inset-0 ca-gradient-gold opacity-[0.06] pointer-events-none" />
+          <div className="relative flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+            <div className="min-w-0">
+              <div className="ca-overline">CALCRIM Intelligence Center · v{center.calcrimVersion}</div>
+              <h1 className="text-2xl md:text-3xl font-bold text-slate-50 mt-1 tracking-tight flex items-center gap-3"><Scale className="w-7 h-7 text-gold-light" /> {h.caseTitle}</h1>
+              <div className="flex flex-wrap items-center gap-2 mt-3">
+                <Badge variant="gold">{h.caseNumber}</Badge>
+                <Badge variant="navy">{d.totalInstructions} instruction(s)</Badge>
+                <span className="text-xs text-slate-400">Generated {new Date(h.generatedAt).toLocaleString()}</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 flex-shrink-0 relative">
+              <Button variant="secondary" onClick={() => void load()}><RefreshCw className="w-4 h-4 mr-2" />Regenerate</Button>
+              <div className="relative">
+                <Button variant="secondary" onClick={() => setExportOpen((o) => !o)}><FileDown className="w-4 h-4 mr-2" />DOCX<ChevronDown className="w-3 h-3 ml-1" /></Button>
+                {exportOpen && (
+                  <div className="absolute right-0 mt-1 w-56 rounded-xl bg-navy-800 border border-white/10 shadow-xl z-20 py-1">
+                    <button onClick={exportNotebook} className="w-full text-left px-3 py-2 text-sm text-slate-200 hover:bg-white/5">CALCRIM Notebook</button>
+                    <button onClick={exportInstructions} className="w-full text-left px-3 py-2 text-sm text-slate-200 hover:bg-white/5">Instruction Summary</button>
+                    <button onClick={exportElements} className="w-full text-left px-3 py-2 text-sm text-slate-200 hover:bg-white/5">Element Summary</button>
+                  </div>
+                )}
+              </div>
+              <Button variant="primary" onClick={() => window.print()}><Printer className="w-4 h-4 mr-2" />PDF / Print</Button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* TOC */}
+      <nav className="report-toc ca-panel p-5 mb-8 print:hidden">
+        <div className="ca-overline mb-3">CALCRIM Command Center</div>
+        <div className="flex flex-wrap gap-2">
+          {SECTIONS.map((s) => (
+            <a key={s.id} href={`#${s.id}`} className="inline-flex items-center gap-1.5 text-sm px-3 py-1.5 rounded-lg bg-navy-800/50 border border-white/5 text-slate-300 hover:text-gold-light hover:border-gold-light/30 transition-colors"><s.icon className="w-3.5 h-3.5" />{s.label}</a>
+          ))}
+        </div>
+      </nav>
+
+      <div className="space-y-6">
+        {/* Dashboard */}
+        <Section id="dashboard" title="CALCRIM Dashboard" icon={Layers} meta={`Repository ${h.repositoryVersion}`}>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+            {metrics.map((m) => (
+              <div key={m.l} className="rounded-xl bg-navy-800/50 border border-white/5 px-4 py-3 text-center">
+                <div className={`text-2xl font-bold ${m.tone === 'danger' ? 'text-red-400' : m.tone === 'amber' ? 'text-amber-400' : m.tone === 'emerald' ? 'text-emerald-400' : 'text-gold-light'}`}>{m.v}</div>
+                <div className="ca-overline text-[10px] mt-1">{m.l}</div>
+              </div>
+            ))}
+          </div>
+          {d.chargesWithoutInstructions > 0 && (
+            <p className="text-xs text-amber-400/80 mt-3">{d.chargesWithoutInstructions} charge(s) have no repository-linked CALCRIM instruction (shown as UNKNOWN below).</p>
+          )}
+          <div className="flex flex-wrap gap-2 mt-4 print:hidden">
+            <Link to={`/cases/${caseId}/report`} className="text-sm text-gold-light hover:underline inline-flex items-center gap-1.5"><FileText className="w-4 h-4" />Attorney Report</Link>
+            <span className="text-slate-600">·</span>
+            <Link to={`/cases/${caseId}/motions`} className="text-sm text-gold-light hover:underline inline-flex items-center gap-1.5"><Gavel className="w-4 h-4" />Motion Builder</Link>
+            <span className="text-slate-600">·</span>
+            <Link to={`/cases/${caseId}/trial-prep`} className="text-sm text-gold-light hover:underline inline-flex items-center gap-1.5"><ShieldCheck className="w-4 h-4" />Trial Prep</Link>
+          </div>
+        </Section>
+
+        {/* Instruction Browser */}
+        <Section id="instructions" title="Instruction Browser" icon={BookOpen} meta={`${center.instructions.length} entr(ies)`}>
+          <div className="relative mb-4 print:hidden">
+            <Search className="w-4 h-4 text-slate-500 absolute left-3 top-1/2 -translate-y-1/2" />
+            <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search by number, title, category, or charge…" className="w-full rounded-xl bg-navy-900/50 border border-white/10 pl-9 pr-3 py-2 text-sm text-slate-100 focus:border-gold-light/50 focus:outline-none" />
+          </div>
+          {filtered.length === 0 ? (
+            <p className="text-sm text-slate-400 italic">No instructions match your search.</p>
+          ) : (
+            <div className="space-y-4">
+              {filtered.map((ins, idx) => <InstructionCard key={`${ins.instructionNumber}-${ins.charge.chargeId}-${idx}`} ins={ins} />)}
+            </div>
+          )}
+        </Section>
+
+        {/* Authorities */}
+        <Section id="authorities" title="Authority Panel" icon={Landmark}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <div className="ca-overline text-[10px] mb-2">California Statutes</div>
+              {center.authorities.statutes.length === 0 ? <span className="text-xs text-amber-400/80 italic">UNKNOWN — no repository match</span> : (
+                <ul className="text-sm text-slate-200 space-y-1">{center.authorities.statutes.map((s, i) => <li key={i}>{s.code} {s.section} — {s.title}</li>)}</ul>
+              )}
+            </div>
+            <div>
+              <div className="ca-overline text-[10px] mb-2">CALCRIM Instructions (repository)</div>
+              {center.authorities.calcrim.length === 0 ? <span className="text-xs text-amber-400/80 italic">UNKNOWN — none linked</span> : (
+                <ul className="text-sm text-slate-200 space-y-1">{center.authorities.calcrim.map((c, i) => <li key={i}>{c.instructionNumber} — {c.title}</li>)}</ul>
+              )}
+            </div>
+          </div>
+          <div className="mt-4">
+            <div className="ca-overline text-[10px] mb-2">Provider Availability</div>
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-2">
+              {center.authorities.providerAvailability.map((p, i) => (
+                <div key={i} className="flex items-center justify-between text-sm rounded-lg bg-navy-800/40 px-3 py-2 border border-white/5"><span className="text-slate-300">{p.provider}</span><span className={isUnknown(p.status) ? 'text-amber-400' : 'text-slate-200'}>{p.status}</span></div>
+              ))}
+            </div>
+          </div>
+        </Section>
+
+        {/* Knowledge Graph */}
+        <Section id="graph" title="Knowledge Graph" icon={Network} meta={`status: ${center.knowledgeGraph.status}`}>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+            <div className="rounded-xl bg-navy-800/50 px-4 py-3 text-center"><div className="text-2xl font-bold text-gold-light">{center.knowledgeGraph.nodeCount}</div><div className="ca-overline text-[10px] mt-1">Nodes</div></div>
+            <div className="rounded-xl bg-navy-800/50 px-4 py-3 text-center"><div className="text-2xl font-bold text-gold-light">{center.knowledgeGraph.edgeCount}</div><div className="ca-overline text-[10px] mt-1">Edges</div></div>
+            <div className="rounded-xl bg-navy-800/50 px-4 py-3 text-center"><div className="text-2xl font-bold text-gold-light">{center.knowledgeGraph.byType['jury_instruction'] ?? center.knowledgeGraph.byType['calcrim'] ?? 0}</div><div className="ca-overline text-[10px] mt-1">Instruction Nodes</div></div>
+            <div className="rounded-xl bg-navy-800/50 px-4 py-3 text-center"><div className="text-sm font-bold text-slate-100 mt-1.5">{center.knowledgeGraph.status}</div><div className="ca-overline text-[10px] mt-1">Status</div></div>
+          </div>
+          <div className="flex flex-wrap gap-1.5 mt-3">
+            {Object.entries(center.knowledgeGraph.byType).map(([t, n]) => <span key={t} className="text-[10px] px-2 py-0.5 rounded bg-navy-800/60 border border-white/10 text-slate-300">{t}: <span className="text-gold-light">{n}</span></span>)}
+          </div>
+          <Link to={`/cases/${caseId}/knowledge-graph`} className="print:hidden inline-flex items-center gap-1.5 text-sm text-gold-light hover:underline mt-4"><Network className="w-4 h-4" />Open interactive knowledge graph</Link>
+        </Section>
+
+        {/* Attorney Review */}
+        <Section id="review" title="Attorney Review" icon={ShieldCheck}>
+          <ReviewGroup title="Missing Elements" count={center.attorneyReview.missingElements.length}>
+            {center.attorneyReview.missingElements.map((m, i) => (
+              <div key={i} className="text-xs rounded-lg bg-red-500/5 border border-red-500/20 px-3 py-2"><span className="text-slate-100">CALCRIM {m.instruction}</span> — {m.element} <span className="text-red-400">({m.reason})</span><Chips items={m.citations} /></div>
+            ))}
+          </ReviewGroup>
+          <ReviewGroup title="Weak Elements" count={center.attorneyReview.weakElements.length}>
+            {center.attorneyReview.weakElements.map((m, i) => <div key={i} className="text-xs rounded-lg bg-amber-500/5 border border-amber-500/20 px-3 py-2"><span className="text-slate-100">CALCRIM {m.instruction}</span> — {m.element} <span className="text-amber-400">[{m.confidence}]</span></div>)}
+          </ReviewGroup>
+          <ReviewGroup title="Conflicting Evidence" count={center.attorneyReview.conflictingEvidence.length}>
+            {center.attorneyReview.conflictingEvidence.map((m) => <div key={m.id} className="text-xs rounded-lg bg-navy-800/40 border border-white/5 px-3 py-2 text-slate-200">{m.value}<Chips items={m.citations} /></div>)}
+          </ReviewGroup>
+          <ReviewGroup title="Repository Gaps" count={center.attorneyReview.repositoryGaps.length}>
+            {center.attorneyReview.repositoryGaps.map((m) => <div key={m.id} className="text-xs rounded-lg bg-navy-800/40 border border-white/5 px-3 py-2 text-slate-200">{m.value}<Chips items={m.citations} /></div>)}
+          </ReviewGroup>
+          <ReviewGroup title="Human Review Required" count={center.attorneyReview.humanReviewItems.length}>
+            {center.attorneyReview.humanReviewItems.map((m, i) => <div key={i} className="text-xs rounded-lg bg-amber-500/5 border border-amber-500/20 px-3 py-2 text-slate-200">{m}</div>)}
+          </ReviewGroup>
+          <p className="text-xs text-slate-500 mt-3">All jury instructions require attorney verification against the current CALCRIM edition and the facts of the case before use.</p>
+        </Section>
+
+        {/* Notes */}
+        <Section id="notes" title="Attorney Notes" icon={NotebookPen}>
+          <div className="print:hidden">
+            <textarea value={notes} onChange={(e) => saveNotes(e.target.value)} placeholder="Notes on instruction selection, modifications, objections…" className="w-full h-40 rounded-xl bg-navy-900/50 border border-white/10 px-3 py-2 text-sm text-slate-100 focus:border-gold-light/50 focus:outline-none resize-none" />
+            <p className="text-[11px] text-slate-500 mt-2">Private to your browser · included in CALCRIM Notebook DOCX export.</p>
+          </div>
+          {notes.trim() && <div className="hidden print:block"><p className="text-sm whitespace-pre-wrap">{notes}</p></div>}
+        </Section>
+      </div>
+
+      <p className="report-footer text-center text-xs text-slate-500 mt-10">
+        CourtAccess · CALCRIM Intelligence Center v{center.calcrimVersion} · Repository-backed · Items marked UNKNOWN require attorney verification · Not legal advice
+      </p>
+    </div>
+  );
+}
+
+function InstructionCard({ ins }: { ins: CalcrimInstruction }) {
+  const unknown = ins.repositoryStatus === 'UNKNOWN';
+  return (
+    <div className="report-charge rounded-2xl border border-white/10 bg-navy-800/40 p-5">
+      <div className="flex items-start justify-between gap-3 flex-wrap">
+        <div className="min-w-0">
+          <div className="flex items-center gap-2 flex-wrap">
+            <span className={`text-lg font-bold ${unknown ? 'text-amber-400' : 'text-gold-light'}`}>{unknown ? 'CALCRIM UNKNOWN' : `CALCRIM ${ins.instructionNumber}`}</span>
+            {!isUnknown(ins.category) && <Badge variant="navy">{ins.category}</Badge>}
+            <Badge variant={unknown ? 'slate' : 'emerald'}>{ins.repositoryStatus}</Badge>
+          </div>
+          <div className="text-sm text-slate-200 mt-1">{ins.title}</div>
+        </div>
+        <div className="text-right flex-shrink-0">
+          <ConfBadge c={ins.confidence} />
+          <div className="text-xs text-slate-400 mt-1">Charge: {ins.charge.code} {ins.charge.section}</div>
+        </div>
+      </div>
+
+      {ins.authorityReferences.length > 0 && (
+        <div className="mt-3 text-xs"><span className="ca-overline text-[10px]">Authority References</span> <span className="text-slate-300">{ins.authorityReferences.join(' · ')}</span></div>
+      )}
+
+      {/* Element analysis */}
+      <div className="mt-3">
+        <div className="ca-overline text-[10px] mb-1.5">Elements</div>
+        {ins.elements.length === 0 ? <span className="text-xs text-amber-400/80">UNKNOWN — no repository elements</span> : (
+          <div className="space-y-1.5">
+            {ins.elements.map((el, i) => (
+              <div key={i} className="rounded-lg bg-navy-900/40 px-3 py-2">
+                <div className="flex items-start justify-between gap-2">
+                  <span className="text-sm text-slate-200">{el.label}{el.required && <span className="text-gold-light ml-1">*</span>}</span>
+                  <span className="flex items-center gap-2 flex-shrink-0">
+                    <Badge variant={statusColor(el.status)}>{el.status}</Badge>
+                    <ConfBadge c={el.confidence} />
+                  </span>
+                </div>
+                {el.supportingEvidence.length > 0 ? (
+                  <div className="text-[11px] text-slate-400 mt-1">Evidence: {el.supportingEvidence.map((s) => s.fileName).join(', ')}</div>
+                ) : (
+                  <div className="text-[11px] text-amber-400/70 mt-1">Supporting evidence: UNKNOWN</div>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Evidence mapping */}
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mt-3">
+        <MapCol label="Evidence" items={ins.evidenceMapping.evidence.map((e) => e.fileName)} />
+        <MapCol label="Witnesses" items={ins.evidenceMapping.witnesses.map((w) => w.name)} />
+        <MapCol label="Discovery" items={ins.evidenceMapping.discovery.map((d) => d.title)} />
+        <MapCol label="Timeline" items={ins.evidenceMapping.timeline.map((t) => t.description)} />
+      </div>
+    </div>
+  );
+}
+
+function MapCol({ label, items }: { label: string; items: string[] }) {
+  return (
+    <div>
+      <div className="ca-overline text-[10px] mb-1">{label} <span className="text-slate-500">({items.length})</span></div>
+      {items.length === 0 ? <span className="text-[11px] text-amber-400/70">UNKNOWN</span> : (
+        <ul className="text-[11px] text-slate-300 space-y-0.5">{items.slice(0, 5).map((it, i) => <li key={i} className="truncate">{it}</li>)}{items.length > 5 && <li className="text-slate-500">+{items.length - 5}</li>}</ul>
+      )}
+    </div>
+  );
+}
+
+function ReviewGroup({ title, count, children }: { title: string; count: number; children: React.ReactNode }) {
+  return (
+    <div className="mb-4">
+      <div className="ca-overline text-[10px] mb-2">{title} <span className="text-slate-500">({count})</span></div>
+      {count === 0 ? <p className="text-xs text-slate-500 italic">None flagged by the repository.</p> : <div className="space-y-1.5">{children}</div>}
+    </div>
+  );
+}

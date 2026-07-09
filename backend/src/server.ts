@@ -257,6 +257,10 @@ async function startServer() {
   const { registerTrialPrepRoutes } = await import('./trial/trialPrepRoutes.js');
   await registerTrialPrepRoutes(app);
 
+  console.log('[Server] Registering canonical CALCRIM Intelligence Center routes...');
+  const { registerCalcrimCenterRoutes } = await import('./calcrim/calcrimCenterRoutes.js');
+  await registerCalcrimCenterRoutes(app);
+
   // Timeline Reconstruction Engine
   console.log('[Server] Registering timeline reconstruction routes...');
   await registerTimelineRoutes(app);

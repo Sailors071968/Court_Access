@@ -4,7 +4,7 @@ import { cn } from '../../lib/utils';
 
 type TypographyVariant = keyof typeof TYPOGRAPHY;
 
-const defaultElement: Record<TypographyVariant, keyof JSX.IntrinsicElements> = {
+const defaultElement: Partial<Record<TypographyVariant, keyof JSX.IntrinsicElements>> = {
   display: 'h1',
   h1: 'h1',
   h2: 'h2',
@@ -24,6 +24,6 @@ interface TypographyProps {
 }
 
 export function Typography({ variant = 'body', as, className, children }: TypographyProps) {
-  const Component = as ?? defaultElement[variant];
+  const Component = as ?? defaultElement[variant] ?? 'p';
   return <Component className={cn(TYPOGRAPHY[variant], className)}>{children}</Component>;
 }

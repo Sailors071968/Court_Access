@@ -8,7 +8,7 @@ import { Search, Plus, Filter, Loader2, Trash2, AlertTriangle } from 'lucide-rea
 import { useState, useEffect, useCallback } from 'react';
 import { Card } from '../components/common/Card';
 import { CaseStatusBadge } from '../components/common/StatusBadge';
-import { fetchCases, deleteCase, type ApiCase, CASE_TYPES } from '../services/caseApi';
+import { fetchCases, deleteCase, type ApiCase } from '../services/caseApi';
 import { CaseIntakeModal } from '../components/cases/CaseIntakeModal';
 
 export function CasesListPage() {

@@ -9,8 +9,8 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import {
-  X, Plus, Trash2, Search, Loader2, ChevronDown, CheckCircle2, ShieldCheck,
-  ScrollText, AlertTriangle, Scale, BookOpen, Network,
+  X, Plus, Trash2, Search, Loader2, CheckCircle2, ShieldCheck,
+  AlertTriangle, BookOpen, Network,
 } from 'lucide-react';
 import { Badge } from '../ui/badge';
 import { createCase, type ApiCase, type IntakeCharge, CASE_TYPES } from '../../services/caseApi';
@@ -263,8 +263,6 @@ function ChargeCard({ charge, index, codes, onPatch, onRemove, canRemove }: {
       onPatch({ loadingIntel: false, unknowns: ['Repository lookup failed — manual review required'] });
     }
   };
-
-  const codeName = codes.find((c) => c.code === charge.code)?.name;
 
   return (
     <div className="rounded-xl border border-white/10 bg-white/[0.03] p-4 space-y-3">

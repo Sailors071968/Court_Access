@@ -12,7 +12,7 @@ import { useState, useEffect, useMemo } from 'react';
 import {
   Scale, ShieldCheck, BarChart3, AlertTriangle, CheckCircle2, Users, HelpCircle, Brain,
   Gavel, Calendar, Landmark, Clock, Network, Upload, FileText, Search, BookOpen, Plus,
-  Briefcase, ClipboardList, ScanLine, ArrowRight, Building2,
+  Briefcase, ClipboardList, ArrowRight, Building2,
 } from 'lucide-react';
 import { Card } from '../../components/ui/card';
 import { Button } from '../../components/ui/button';

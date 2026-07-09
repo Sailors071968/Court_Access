@@ -31,6 +31,7 @@ import {
   Library,
   Landmark,
   ClipboardList,
+  ShieldCheck,
 } from 'lucide-react';
 import { Card, CardHeader, StatCard } from '../../components/common/Card';
 import {
@@ -130,6 +131,7 @@ function CitationList({ citations }: { citations: Array<{ type: string; id: stri
 const ATTORNEY_ACTIONS: Array<{ label: string; icon: React.ReactNode; path: string }> = [
   { label: 'Create Motion', icon: <Gavel size={16} />, path: 'motions' },
   { label: 'Attorney Report', icon: <FileText size={16} />, path: 'report' },
+  { label: 'Trial Prep', icon: <ShieldCheck size={16} />, path: 'trial-prep' },
   { label: 'Search Authorities', icon: <BookOpen size={16} />, path: 'research' },
   { label: 'Review Evidence', icon: <FileSearch size={16} />, path: 'evidence' },
   { label: 'Review Charges', icon: <Scale size={16} />, path: 'charges' },

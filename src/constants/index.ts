@@ -201,7 +201,7 @@ export const CASE_TABS = [
   { id: 'activity', label: 'Activity', path: '/activity', permission: 'canViewActivity' as const },
   { id: 'report', label: 'Attorney Report', path: '/report', permission: 'canViewEvidence' as const },
   { id: 'reports', label: 'Reports', path: '/reports', permission: 'canViewEvidence' as const },
-  { id: 'trial-exhibits', label: 'Trial Exhibits', path: '/trial-exhibits', permission: 'canViewEvidence' as const },
+  { id: 'trial-prep', label: 'Trial Prep', path: '/trial-prep', permission: 'canViewEvidence' as const },
   { id: 'litigation-strategy', label: 'Litigation Strategy', path: '/litigation-strategy', permission: 'canViewEvidence' as const },
   { id: 'contradictions', label: 'Contradictions', path: '/contradictions', permission: 'canViewEvidence' as const },
   { id: 'narrative-analysis', label: 'Narrative Analysis', path: '/narrative-analysis', permission: 'canViewEvidence' as const },

@@ -98,9 +98,9 @@ import { ActivityPage } from './pages/case/ActivityPage';
 import { ReportsPage } from './pages/case/ReportsPage';
 import { AttorneyReportPage } from './pages/case/AttorneyReportPage';
 import { MotionBuilderPage } from './pages/case/MotionBuilderPage';
+import { TrialPrepPage } from './pages/case/TrialPrepPage';
 import { DocumentsPage } from './pages/case/DocumentsPage';
 import { CaseSettingsPage } from './pages/case/CaseSettingsPage';
-import { TrialExhibitWorkspace } from './pages/case/TrialExhibitWorkspace';
 import { LitigationStrategyView } from './pages/case/LitigationStrategyView';
 import { ContradictionDashboardPage } from './pages/case/ContradictionDashboardPage';
 import { NarrativeAnalysisPage } from './pages/case/NarrativeAnalysisPage';
@@ -586,10 +586,18 @@ function App() {
               }
             />
             <Route
+              path="trial-prep"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <TrialPrepPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="trial-exhibits"
               element={
                 <ProtectedRoute requiredPermission="canViewEvidence">
-                  <TrialExhibitWorkspace />
+                  <TrialPrepPage />
                 </ProtectedRoute>
               }
             />

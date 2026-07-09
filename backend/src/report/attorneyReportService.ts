@@ -260,8 +260,9 @@ export async function buildAttorneyReport(
   caseId: string,
   tenantId: string,
   userId: string,
+  prebuiltBundle?: AttorneyWorkbenchBundle | null,
 ): Promise<AttorneyReport | null> {
-  const bundle = await buildAttorneyWorkbench(caseId, tenantId, userId);
+  const bundle = prebuiltBundle ?? (await buildAttorneyWorkbench(caseId, tenantId, userId));
   if (!bundle) return null;
 
   const [caseRecord, charges, evidence, witnesses, discovery, timelineEvents] = await Promise.all([

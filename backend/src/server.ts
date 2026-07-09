@@ -253,6 +253,10 @@ async function startServer() {
   const { registerMotionBuilderRoutes } = await import('./motion/motionBuilderRoutes.js');
   await registerMotionBuilderRoutes(app);
 
+  console.log('[Server] Registering canonical Trial Preparation routes...');
+  const { registerTrialPrepRoutes } = await import('./trial/trialPrepRoutes.js');
+  await registerTrialPrepRoutes(app);
+
   // Timeline Reconstruction Engine
   console.log('[Server] Registering timeline reconstruction routes...');
   await registerTimelineRoutes(app);

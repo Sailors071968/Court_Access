@@ -247,6 +247,44 @@ function PlatformFeaturesSection() {
 }
 
 // ---------------------------------------------------------------------------
+// SECTION — Illustrative Demonstration Showcase (Program 94, Phase 7)
+// ---------------------------------------------------------------------------
+
+function DemoShowcaseSection() {
+  const previews = [
+    { title: 'Attorney Report', to: '/demo/reports/attorney-report' },
+    { title: 'Knowledge Graph', to: '/demo/knowledge-graph' },
+    { title: 'Timeline', to: '/demo/timeline' },
+    { title: 'Motion Builder', to: '/demo/reports/motion' },
+    { title: 'Sentencing Center', to: '/demo/reports/sentencing' },
+    { title: 'Evidence Workspace', to: '/demo/reports/evidence' },
+  ];
+  return (
+    <section id="demo" className="py-20 lg:py-28 bg-navy-800">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center mb-12">
+          <p className="text-xs font-semibold uppercase tracking-[0.18em] text-amber-300 mb-3">Illustrative Example · Demonstration Only</p>
+          <h2 className="text-3xl sm:text-4xl font-extrabold text-white mb-4 tracking-tight">See the work product before you sign up</h2>
+          <p className="text-lg text-slate-400 max-w-2xl mx-auto">Browse a fully illustrative criminal case across every workspace — no account required. Every example is clearly labeled and contains no real case data.</p>
+        </div>
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 max-w-4xl mx-auto">
+          {previews.map((p) => (
+            <Link key={p.title} to={p.to} className="ca-panel ca-panel-hover p-6 group relative overflow-hidden">
+              <span className="absolute top-2 right-2 text-[9px] font-bold uppercase tracking-wider text-amber-400/70">Illustrative</span>
+              <h3 className="text-base font-semibold text-white group-hover:text-gold-light transition-colors">{p.title}</h3>
+              <p className="text-slate-500 text-sm mt-1">View example →</p>
+            </Link>
+          ))}
+        </div>
+        <div className="text-center mt-10">
+          <Link to="/demo" className="inline-flex items-center gap-2 px-6 py-3 rounded-xl ca-gradient-gold text-navy font-semibold hover:opacity-90">Explore the demonstration gallery</Link>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// ---------------------------------------------------------------------------
 // SECTION 4 — Who CourtAccess Serves (Program 83, Phase 6 — premium roles)
 // ---------------------------------------------------------------------------
 
@@ -686,6 +724,7 @@ export function LandingPage() {
     <PublicMarketingLayout className="bg-navy-800">
       <HeroSection />
       <PlatformFeaturesSection />
+      <DemoShowcaseSection />
       <CaseIntelligenceSection />
       <LegalAnalysisSection />
       <EvidenceReviewSection />

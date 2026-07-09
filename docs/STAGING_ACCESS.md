@@ -4,7 +4,9 @@
 
 ## 1. Public staging URL (live now)
 
-**https://dependent-commitments-conviction-charter.trycloudflare.com**
+**https://networking-editor-dated-comment.trycloudflare.com**
+
+> Restored 2026-07-09 (Program 87). Prior quick-tunnel URLs (`dependent-commitments-…`, `eric-collaborative-…`) are dead — quick-tunnel hostnames change on every `cloudflared` restart.
 
 Open it in any browser. Architecture:
 ```
@@ -83,3 +85,39 @@ Password `TestPass123!` — attorney `attorney2@courtaccess.test` (seeded case *
 ## Verdict
 
 **EXTERNALLY ACCESSIBLE — verified.** The application opens in a normal browser at the public HTTPS URL above with no SSH forwarding; landing/login/registration/dashboards/portal and the full authenticated API (including CourtListener, knowledge graph, search, reports, motions, evidence upload) all return success through the public edge. `staging.courtaccess.net` is one DNS record away (records provided).
+
+---
+
+## 7. Recovery & Operations (Program 87 — 2026-07-09)
+
+### Root cause of the outage
+The `cloudflared` **quick tunnel** entered a persistent control-stream reconnect-failure loop (`ERR control stream encountered a failure while serving` → `Retrying connection`). The edge registration for `eric-collaborative-pmid-safari.trycloudflare.com` was dropped and the process could not re-establish a working QUIC control stream, so the hostname stopped resolving. **The local app was never down** (backend `:3001` → 200, Nginx `:8090` → 200 throughout). Root cause = quick-tunnel instability (no uptime guarantee), not an application failure.
+
+### Fix applied
+Killed the stuck process and started a fresh quick tunnel → new URL above; verified externally (HTTP/2 200, `/api/health` 200, SPA routes 200, byte-identical `index.html`) and in a real browser (login + 10 authenticated pages, **0 console errors**).
+
+### ⚠️ Critical operational gotcha
+Do **NOT** run `pkill -f cloudflared` from a shell whose own command line contains the word "cloudflared" — `-f` matches the full command line and will kill the **wrapper shell**, taking down the command (and any tunnel it just started). Use **`pkill -9 -x cloudflared`** (exact process-name match) instead.
+
+### Startup / restart procedures
+```bash
+# Health checks
+curl -s -o /dev/null -w '%{http_code}' http://localhost:3001/api/health   # backend → 200
+curl -s -o /dev/null -w '%{http_code}' http://localhost:8090/             # nginx   → 200
+
+# Backend restart (staging clone)
+cd /var/www/courtaccess-v1/app/backend && npm start        # tsx src/server.ts (starts 6 BullMQ workers)
+
+# Nginx
+sudo nginx -t && sudo nginx -s reload
+
+# Workers: started in-process by the backend (timeline-build, narrative, contradiction, video, doctrine, discount-expiration) — restart = restart backend
+
+# Tunnel restart (quick tunnel) — capture the NEW URL from stdout
+pkill -9 -x cloudflared ; sleep 2
+/usr/local/bin/cloudflared tunnel --url http://localhost:8090
+#   → "Your quick Tunnel has been created! Visit it at https://<new>.trycloudflare.com"
+```
+
+### Stability recommendation
+Quick tunnels have **no uptime guarantee** and rotate the hostname on restart. For durable staging, migrate to a **Named Cloudflare Tunnel** with `staging.courtaccess.net` (see §2, Option A) — this requires the owner's Cloudflare account (`cloudflared tunnel login`); no Cloudflare credentials are present in this environment (`~/.cloudflared` absent, no `CLOUDFLARE_*` env), so a named tunnel cannot be created here without them.

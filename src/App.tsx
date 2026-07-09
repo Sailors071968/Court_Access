@@ -101,6 +101,7 @@ import { MotionBuilderPage } from './pages/case/MotionBuilderPage';
 import { TrialPrepPage } from './pages/case/TrialPrepPage';
 import { CalcrimCenterPage } from './pages/case/CalcrimCenterPage';
 import { VoirDirePage } from './pages/case/VoirDirePage';
+import { SentencingCenterPage } from './pages/case/SentencingCenterPage';
 import { DocumentsPage } from './pages/case/DocumentsPage';
 import { CaseSettingsPage } from './pages/case/CaseSettingsPage';
 import { LitigationStrategyView } from './pages/case/LitigationStrategyView';
@@ -608,6 +609,14 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canViewEvidence">
                   <VoirDirePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="sentencing"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <SentencingCenterPage />
                 </ProtectedRoute>
               }
             />

@@ -265,6 +265,10 @@ async function startServer() {
   const { registerVoirDireRoutes } = await import('./voirdire/voirDireRoutes.js');
   await registerVoirDireRoutes(app);
 
+  console.log('[Server] Registering canonical Sentencing Intelligence Center routes...');
+  const { registerSentencingRoutes } = await import('./sentencing/sentencingRoutes.js');
+  await registerSentencingRoutes(app);
+
   // Timeline Reconstruction Engine
   console.log('[Server] Registering timeline reconstruction routes...');
   await registerTimelineRoutes(app);

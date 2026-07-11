@@ -10,6 +10,8 @@ import { ProtectedRoute } from './components/layout/ProtectedRoute';
 import { LandingPage, PricingPage } from './pages/LandingPage';
 import { DemoGalleryPage } from './pages/demo/DemoGalleryPage';
 import { DemoReportPage, DemoKnowledgeGraphPage, DemoTimelinePage } from './pages/demo/DemoReportPage';
+import { DemoWorkbenchPage } from './pages/demo/DemoWorkbenchPage';
+import { DemoCaseBriefPage, DemoMapPage } from './pages/demo/DemoBriefMapPages';
 
 // Public Marketing Pages (Phase 207-216)
 import { ForDefensePage } from './pages/ForDefensePage';
@@ -170,6 +172,9 @@ function App() {
 
         {/* Public Illustrative Demonstration Gallery (Program 94) — read-only, no auth */}
         <Route path="/demo" element={<DemoGalleryPage />} />
+        <Route path="/demo/workbench" element={<DemoWorkbenchPage />} />
+        <Route path="/demo/brief" element={<DemoCaseBriefPage />} />
+        <Route path="/demo/map" element={<DemoMapPage />} />
         <Route path="/demo/reports/:type" element={<DemoReportPage />} />
         <Route path="/demo/knowledge-graph" element={<DemoKnowledgeGraphPage />} />
         <Route path="/demo/timeline" element={<DemoTimelinePage />} />

@@ -12,7 +12,7 @@ interface StripeApiError {
 async function stripePost(
   path: string,
   params: URLSearchParams,
-): Promise<{ ok: boolean; data: Record<string, unknown> }> {
+): Promise<{ ok: boolean; data: Record<string, unknown> & StripeApiError }> {
   const stripeKey = process.env.STRIPE_SECRET_KEY!;
   const res = await fetch(`https://api.stripe.com/v1${path}`, {
     method: 'POST',

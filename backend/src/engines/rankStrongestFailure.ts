@@ -2,9 +2,33 @@
 // 🧠 COURTACCESS — STRATEGIC FAILURE RANKING ENGINE (STABLE BUILD)
 // ============================================================================
 
-export function rankStrongestFailure(elements, contradictions, argumentsList) {
+interface FailureElement {
+  failed?: boolean;
+  label?: string;
+  name?: string;
+  id?: string;
+}
 
-  const ELEMENT_PRIORITY = {
+interface FailureContradiction {
+  impact?: string;
+  severity?: string;
+  description?: string;
+  type?: string;
+  legalImpact?: string;
+}
+
+interface StrategicArgument {
+  mapping?: { element?: string };
+  strength?: number;
+}
+
+export function rankStrongestFailure(
+  elements: FailureElement[],
+  contradictions: FailureContradiction[],
+  argumentsList: StrategicArgument[],
+) {
+
+  const ELEMENT_PRIORITY: Record<string, number> = {
     identity: 1.0,
     entry: 0.95,
     act: 0.9,
@@ -17,7 +41,7 @@ export function rankStrongestFailure(elements, contradictions, argumentsList) {
     general: 0.6
   };
 
-  function getSeverityScore(c) {
+  function getSeverityScore(c: FailureContradiction) {
     if (c.impact === "DESTROYS") return 100;
 
     switch (c.severity) {
@@ -29,7 +53,7 @@ export function rankStrongestFailure(elements, contradictions, argumentsList) {
     }
   }
 
-  function getElementName(e) {
+  function getElementName(e: FailureElement) {
     return (
       e.label ||
       e.name ||
@@ -38,7 +62,7 @@ export function rankStrongestFailure(elements, contradictions, argumentsList) {
     ).toLowerCase();
   }
 
-function getContradictionsForElement(name, contradictions) {
+function getContradictionsForElement(name: string, contradictions: FailureContradiction[]) {
 
   return (contradictions || []).filter(c => {
 
@@ -54,7 +78,7 @@ function getContradictionsForElement(name, contradictions) {
   });
 }
 
-  function getArgumentImpactMultiplier(name, argumentsList) {
+  function getArgumentImpactMultiplier(name: string, argumentsList: StrategicArgument[]) {
     const related = argumentsList.filter(a =>
       (a.mapping?.element || "").toLowerCase().includes(name)
     );

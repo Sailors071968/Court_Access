@@ -4,6 +4,7 @@
 // ============================================================================
 
 import type { FastifyInstance, FastifyReply } from 'fastify';
+import { Prisma } from '@prisma/client';
 import prisma from '../lib/prisma.js';
 import { logSecurityEvent } from '../security/authMiddleware.js';
 import type { AuthenticatedRequest } from '../security/authMiddleware.js';
@@ -63,9 +64,9 @@ export async function registerClientRoutes(app: FastifyInstance): Promise<void> 
           email: body.email?.trim() ?? null,
           phone: body.phone?.trim() ?? null,
           phoneAlt: body.phoneAlt?.trim() ?? null,
-          alternateContacts: body.alternateContacts ?? undefined,
-          emergencyContacts: body.emergencyContacts ?? undefined,
-          addressHistory: body.addressHistory ?? undefined,
+          alternateContacts: (body.alternateContacts ?? undefined) as Prisma.InputJsonValue | undefined,
+          emergencyContacts: (body.emergencyContacts ?? undefined) as Prisma.InputJsonValue | undefined,
+          addressHistory: (body.addressHistory ?? undefined) as Prisma.InputJsonValue | undefined,
           communicationPreference: body.communicationPreference ?? 'email',
           language: body.language ?? 'en',
           notes: body.notes ?? null,

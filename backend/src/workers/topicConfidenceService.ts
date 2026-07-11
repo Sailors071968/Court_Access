@@ -70,7 +70,6 @@ export function computeTopicConfidence(
 
   const normalizedText = documentText.toLowerCase();
   const textWords = normalizedText.split(/\s+/);
-  const textLength = textWords.length;
   const matchedKeywords: string[] = [];
   let weightedScore = 0;
 

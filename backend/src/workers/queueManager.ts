@@ -4,7 +4,7 @@
 // All workers MUST use this manager to create queues and workers.
 // ============================================================================
 
-import { Queue, Worker, Job, QueueEvents } from 'bullmq';
+import { Queue, Worker, Job } from 'bullmq';
 
 // ---------------------------------------------------------------------------
 // Queue Configuration Registry
@@ -185,7 +185,7 @@ export function createManagedWorker<T = unknown>(
   const worker = new Worker<T>(
     config.name,
     processor,
-    workerOpts as Parameters<typeof Worker<T>>[2],
+    workerOpts as ConstructorParameters<typeof Worker>[2],
   );
 
   worker.on('completed', (job) => {
@@ -277,7 +277,7 @@ class GlobalQueueMonitor {
     }
   }
 
-  recordCompletion(configKey: string, jobId: string): void {
+  recordCompletion(configKey: string, _jobId: string): void {
     let m = this.metrics.get(configKey);
     if (!m) {
       // Lazily initialize metrics for queues registered after construction
@@ -288,7 +288,7 @@ class GlobalQueueMonitor {
     m.lastCompletedAt = Date.now();
   }
 
-  recordFailure(configKey: string, jobId: string, error: string): void {
+  recordFailure(configKey: string, _jobId: string, error: string): void {
     let m = this.metrics.get(configKey);
     if (!m) {
       // Lazily initialize metrics for queues registered after construction

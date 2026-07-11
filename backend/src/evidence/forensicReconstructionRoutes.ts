@@ -246,9 +246,9 @@ export async function registerForensicRoutes(app: FastifyInstance): Promise<void
         const result = analyzeLineOfSight(
           caseId,
           observerPosition as Parameters<typeof analyzeLineOfSight>[1],
-          viewDirection as Parameters<typeof analyzeLineOfSight>[2],
-          obstacles as Parameters<typeof analyzeLineOfSight>[3],
-          targets as Parameters<typeof analyzeLineOfSight>[4],
+          viewDirection as unknown as Parameters<typeof analyzeLineOfSight>[2],
+          obstacles as unknown as Parameters<typeof analyzeLineOfSight>[3],
+          targets as unknown as Parameters<typeof analyzeLineOfSight>[4],
           { fieldOfView: fieldOfViewConfig, sceneId },
         );
         const analysisId = await storeLineOfSightAnalysis(result);
@@ -305,7 +305,7 @@ export async function registerForensicRoutes(app: FastifyInstance): Promise<void
           sources.map(s => ({
             ...s,
             sourceType: s.sourceType as 'bodycam' | 'dashcam' | 'surveillance' | 'bystander',
-          })) as Parameters<typeof synchronizeCameras>[1],
+          })) as unknown as Parameters<typeof synchronizeCameras>[1],
         );
         const syncId = await storeSyncResult(result);
         return reply.send({ success: true, data: { syncId, ...result } });

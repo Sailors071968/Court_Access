@@ -251,6 +251,11 @@ export function runLegalCascade({
   interactions = [],
   elements = [],
   contradictions = []
+}: {
+  argumentsList?: any[];
+  interactions?: any[];
+  elements?: any[];
+  contradictions?: any[];
 }) {
 
   try {

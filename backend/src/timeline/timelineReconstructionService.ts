@@ -417,7 +417,7 @@ export async function reconstructTimeline(
         driftCorrectionMs: te.driftCorrectionMs,
         officerTimelineEntries: officerTimelineEntryCount,
         attributes: extractAttributes(rawText),
-      } as Prisma.InputJsonValue,
+      } as unknown as Prisma.InputJsonValue,
     };
   });
 

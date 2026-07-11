@@ -5,13 +5,16 @@
 import { chromium } from 'playwright';
 import { spawn } from 'child_process';
 import { setTimeout as sleep } from 'timers/promises';
+import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
 
+const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const PORT = 4173;
 const BASE = `http://127.0.0.1:${PORT}`;
 
 async function startPreview() {
   const proc = spawn('npx', ['vite', 'preview', '--port', String(PORT), '--host', '127.0.0.1'], {
-    cwd: '/workspace',
+    cwd: repoRoot,
     stdio: ['ignore', 'pipe', 'pipe'],
   });
   for (let i = 0; i < 30; i++) {
@@ -72,7 +75,7 @@ async function capture(label, outDir) {
 }
 
 const label = process.argv[2] || 'after';
-const outDir = process.argv[3] || '/workspace/reports/screenshots/landing-recovery';
+const outDir = process.argv[3] || resolve(repoRoot, 'reports/screenshots/landing-recovery');
 
 const results = await capture(label, outDir);
 console.log(JSON.stringify(results, null, 2));

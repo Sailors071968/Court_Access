@@ -5,9 +5,12 @@
  */
 import { chromium } from 'playwright';
 import { writeFileSync, mkdirSync } from 'fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
 
+const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
 const PRODUCTION_URL = process.env.PRODUCTION_URL || 'https://courtaccess.net';
-const OUT_DIR = process.env.OUT_DIR || '/workspace/reports/screenshots/production';
+const OUT_DIR = process.env.OUT_DIR || resolve(repoRoot, 'reports/screenshots/production');
 
 const CHECKS = {
   title: 'Criminal Case Intelligence Platform',
@@ -98,7 +101,7 @@ try {
   result.status = 'FAIL';
 }
 
-const reportPath = '/workspace/reports/PRODUCTION_WEBSITE_VERIFY.json';
+const reportPath = resolve(repoRoot, 'reports/PRODUCTION_WEBSITE_VERIFY.json');
 writeFileSync(reportPath, JSON.stringify(result, null, 2));
 console.log(JSON.stringify(result, null, 2));
 process.exit(result.status === 'PASS' ? 0 : 1);

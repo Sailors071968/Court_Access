@@ -1,9 +1,15 @@
 import { useState, useEffect } from "react";
 
+interface CaseOption {
+  caseId: string;
+  name?: string;
+  caseNumber?: string;
+}
+
 export default function EvidenceUpload() {
   const [file, setFile] = useState<File | null>(null);
   const [caseId, setCaseId] = useState("");
-  const [cases, setCases] = useState<any[]>([]);
+  const [cases, setCases] = useState<CaseOption[]>([]);
   const [status, setStatus] = useState("Loading cases...");
 
   useEffect(() => {
@@ -76,7 +82,7 @@ export default function EvidenceUpload() {
       >
         <option value="">Select Case</option>
 
-        {cases.map((c: any) => (
+        {cases.map((c: CaseOption) => (
           <option key={c.caseId} value={c.caseId}>
             {c.name || c.caseNumber || c.caseId}
           </option>

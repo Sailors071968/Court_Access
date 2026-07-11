@@ -5,7 +5,7 @@
 //          policy ingestion count, CPRA campaign status, S3 storage usage
 // ============================================================================
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import {
   Activity, Server, HardDrive, FileText, Mail, Database,
   RefreshCw, AlertTriangle, CheckCircle, Clock, Wifi, WifiOff,
@@ -136,34 +136,36 @@ export function SystemHealthDashboard() {
   const [isRefreshing, setIsRefreshing] = useState(false);
   const [autoRefresh, setAutoRefresh] = useState(true);
   const [loadFailed, setLoadFailed] = useState(false);
+  const hasDataRef = useRef(false);
 
-  const fetchData = async () => {
+  const fetchData = useCallback(async () => {
     setIsRefreshing(true);
     try {
       const res = await fetch('/api/system/health');
       if (res.ok) {
         const json = await res.json();
         setData(json);
+        hasDataRef.current = true;
         setLoadFailed(false);
-      } else {
-        if (!data) setLoadFailed(true);
+      } else if (!hasDataRef.current) {
+        setLoadFailed(true);
       }
     } catch {
-      if (!data) setLoadFailed(true);
+      if (!hasDataRef.current) setLoadFailed(true);
     } finally {
       setIsRefreshing(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   useEffect(() => {
     if (!autoRefresh) return;
     const interval = setInterval(fetchData, 30_000); // Refresh every 30s
     return () => clearInterval(interval);
-  }, [autoRefresh]);
+  }, [autoRefresh, fetchData]);
 
   if (!data) {
     return (

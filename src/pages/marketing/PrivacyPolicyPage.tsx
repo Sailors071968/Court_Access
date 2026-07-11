@@ -45,7 +45,7 @@ export function PrivacyPolicyPage() {
       <LegalSection title="Data Sharing">
         <p>We share information only in these circumstances:</p>
         <p><strong className="text-slate-200">Service Providers:</strong> Hosting, payment processing (Stripe), email delivery, and infrastructure partners bound by confidentiality agreements.</p>
-        <p><strong className="text-slate-200">Delegated Users:</strong> Information you explicitly authorize through permission settings.</p>
+        <p><strong className="text-slate-200">Collaborators:</strong> Information you explicitly authorize through permission settings.</p>
         <p><strong className="text-slate-200">Legal Requirements:</strong> When required by law, court order, or to protect rights and safety.</p>
         <p>We do not sell personal information to third parties.</p>
       </LegalSection>

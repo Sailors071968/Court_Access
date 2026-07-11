@@ -38,6 +38,12 @@ export interface ApiCase {
   court: string | null;
   judge: string | null;
   department: string | null;
+  county?: string | null;
+  prosecutor?: string | null;
+  defenseAttorney?: string | null;
+  filingDate?: string | null;
+  trialDate?: string | null;
+  notes?: string | null;
   nextHearing: string | null;
   nextHearingNote: string | null;
   createdAt: string;
@@ -56,6 +62,7 @@ export interface ApiEvidence {
   pageCount: number | null;
   evidenceType: string;
   s3Key: string | null;
+  sha256?: string | null;
   uploadedBy: string;
   uploadedAt: string;
   processingStatus: string;
@@ -70,6 +77,23 @@ export interface ApiEvidence {
   updatedAt: string;
 }
 
+export interface IntakeCharge {
+  code: string;
+  section: string;
+  title?: string;
+  countNumber?: number;
+  isPrimary?: boolean;
+  isAttempt?: boolean;
+  isEnhancement?: boolean;
+  dismissed?: boolean;
+  severity?: string;
+  offenseId?: string;
+  classification?: string;
+  repositoryVerified?: boolean;
+  calcrimAvailable?: boolean;
+  notes?: string;
+}
+
 export interface CreateCasePayload {
   title: string;
   caseNumber: string;
@@ -78,6 +102,15 @@ export interface CreateCasePayload {
   court?: string;
   judge?: string;
   department?: string;
+  prosecutor?: string;
+  defenseAttorney?: string;
+  county?: string;
+  filingDate?: string;
+  hearingDate?: string;
+  trialDate?: string;
+  status?: string;
+  notes?: string;
+  charges?: IntakeCharge[];
 }
 
 export interface UploadUrlPayload {
@@ -526,6 +559,23 @@ export async function fetchTimeline(caseId: string): Promise<ApiTimelineSummary>
     throw new Error(err.error || 'Failed to fetch timeline');
   }
   return res.json();
+}
+
+export async function createTimelineEvent(
+  caseId: string,
+  event: { description: string; timestamp?: string; eventType?: string; actor?: string; location?: string },
+): Promise<ApiTimelineEvent> {
+  const res = await fetch(`${API_BASE}/timeline/${caseId}/events`, {
+    method: 'POST',
+    headers: getAuthHeaders(),
+    body: JSON.stringify(event),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({ error: 'Failed to create event' }));
+    throw new Error(err.error || 'Failed to create event');
+  }
+  const data = await res.json();
+  return data.event ?? data;
 }
 
 export async function fetchTimelineConflicts(caseId: string): Promise<ApiTimelineConflict[]> {

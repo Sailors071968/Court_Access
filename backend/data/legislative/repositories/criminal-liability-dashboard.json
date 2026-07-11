@@ -1,0 +1,123 @@
+{
+  "version": "1.0.0",
+  "generatedAt": "2026-07-07T16:33:46.775Z",
+  "totals": {
+    "total": 406,
+    "criminalSections": 187,
+    "administrativeSections": 28,
+    "pending": 94,
+    "unknown": 97,
+    "offenses": 133,
+    "hashedSections": 406,
+    "discoveryRate": 0.328,
+    "crossReferenceCompleteness": 0.166,
+    "hashVerification": 1
+  },
+  "byCode": [
+    {
+      "code": "PEN",
+      "total": 188,
+      "criminalSections": 130,
+      "administrativeSections": 4,
+      "pending": 54,
+      "unknown": 0,
+      "offenses": 89,
+      "discoveryRate": 0.473,
+      "hashedSections": 188
+    },
+    {
+      "code": "HSC",
+      "total": 18,
+      "criminalSections": 16,
+      "administrativeSections": 0,
+      "pending": 0,
+      "unknown": 2,
+      "offenses": 15,
+      "discoveryRate": 0.833,
+      "hashedSections": 18
+    },
+    {
+      "code": "VEH",
+      "total": 164,
+      "criminalSections": 13,
+      "administrativeSections": 23,
+      "pending": 37,
+      "unknown": 91,
+      "offenses": 12,
+      "discoveryRate": 0.073,
+      "hashedSections": 164
+    },
+    {
+      "code": "BPC",
+      "total": 8,
+      "criminalSections": 8,
+      "administrativeSections": 0,
+      "pending": 0,
+      "unknown": 0,
+      "offenses": 7,
+      "discoveryRate": 0.875,
+      "hashedSections": 8
+    },
+    {
+      "code": "FGC",
+      "total": 8,
+      "criminalSections": 5,
+      "administrativeSections": 0,
+      "pending": 2,
+      "unknown": 1,
+      "offenses": 2,
+      "discoveryRate": 0.25,
+      "hashedSections": 8
+    },
+    {
+      "code": "LAB",
+      "total": 5,
+      "criminalSections": 5,
+      "administrativeSections": 0,
+      "pending": 0,
+      "unknown": 0,
+      "offenses": 4,
+      "discoveryRate": 0.8,
+      "hashedSections": 5
+    },
+    {
+      "code": "WIC",
+      "total": 5,
+      "criminalSections": 4,
+      "administrativeSections": 0,
+      "pending": 1,
+      "unknown": 0,
+      "offenses": 3,
+      "discoveryRate": 0.6,
+      "hashedSections": 5
+    },
+    {
+      "code": "GOV",
+      "total": 5,
+      "criminalSections": 4,
+      "administrativeSections": 1,
+      "pending": 0,
+      "unknown": 0,
+      "offenses": 1,
+      "discoveryRate": 0.2,
+      "hashedSections": 5
+    },
+    {
+      "code": "PRC",
+      "total": 5,
+      "criminalSections": 2,
+      "administrativeSections": 0,
+      "pending": 0,
+      "unknown": 3,
+      "offenses": 0,
+      "discoveryRate": 0,
+      "hashedSections": 5
+    }
+  ],
+  "crossReference": {
+    "total": 440,
+    "acquired": 73,
+    "pending": 367,
+    "completeness": 0.166
+  }
+}

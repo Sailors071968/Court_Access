@@ -24,7 +24,7 @@ import {
 
 function ProsecutorNav() {
   return (
-    <nav className="bg-slate-900 border-b border-slate-800">
+    <nav className="bg-slate-900 border-b border-gold">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div className="flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3">
@@ -40,7 +40,7 @@ function ProsecutorNav() {
           </div>
           <div className="flex items-center gap-3">
             <Link to="/login" className="text-sm text-slate-300 hover:text-white font-medium transition-colors">Sign In</Link>
-            <Link to="/register" className="text-sm bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-4 py-2 rounded-lg transition-colors">
+            <Link to="/register" className="text-sm bg-amber-500 hover:bg-amber-400 text-white font-semibold px-4 py-2 rounded-lg transition-colors">
               Get Started
             </Link>
           </div>
@@ -86,7 +86,7 @@ function ProsecutorHero() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               to="/register"
-              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-3.5 rounded-xl text-lg transition-colors"
+              className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-white font-semibold px-8 py-3.5 rounded-xl text-lg transition-colors"
             >
               Start Your First Case Analysis
               <ArrowRight size={20} />
@@ -145,27 +145,27 @@ function ProsecutorFeatures() {
   ];
 
   return (
-    <section className="py-20 bg-white">
+    <section className="py-20 bg-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-14">
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
             Tools for Prosecution Offices
           </h2>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+          <p className="text-lg text-slate-300 max-w-2xl mx-auto">
             Analytical tools designed to help prosecutors organize evidence and prepare for trial.
           </p>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
           {features.map((f) => (
-            <div key={f.title} className="bg-white rounded-2xl shadow-md border border-slate-200 p-8 hover:shadow-lg transition-shadow">
+            <div key={f.title} className="bg-white/5 rounded-2xl shadow-md border border-white/10 p-8 hover:shadow-lg transition-shadow">
               <div className="w-12 h-12 rounded-xl bg-slate-800 flex items-center justify-center mb-6">
                 <f.icon className="text-blue-400" size={24} />
               </div>
-              <h3 className="text-xl font-bold text-slate-900 mb-3">{f.title}</h3>
-              <p className="text-slate-600 mb-5 leading-relaxed">{f.description}</p>
+              <h3 className="text-xl font-bold text-white mb-3">{f.title}</h3>
+              <p className="text-slate-300 mb-5 leading-relaxed">{f.description}</p>
               <ul className="space-y-2">
                 {f.items.map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-sm text-slate-700">
+                  <li key={item} className="flex items-start gap-2 text-sm text-slate-200">
                     <ChevronRight className="text-blue-500 shrink-0 mt-0.5" size={14} />
                     <span>{item}</span>
                   </li>
@@ -181,13 +181,13 @@ function ProsecutorFeatures() {
 
 function ProsecutorSecurity() {
   return (
-    <section className="py-20 bg-slate-50">
+    <section className="py-20 bg-white/5">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <h2 className="text-3xl sm:text-4xl font-bold text-slate-900 mb-4">
+          <h2 className="text-3xl sm:text-4xl font-bold text-white mb-4">
             Government-Grade Security
           </h2>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
+          <p className="text-lg text-slate-300 max-w-2xl mx-auto">
             Built with the security requirements of government agencies in mind.
           </p>
         </div>
@@ -198,11 +198,11 @@ function ProsecutorSecurity() {
             { icon: FileText, label: 'Audit trail logging' },
             { icon: Star, label: 'CJIS compatibility preparation' },
           ].map((item) => (
-            <div key={item.label} className="bg-white rounded-xl shadow-sm border border-slate-200 p-6 text-center">
-              <div className="w-12 h-12 rounded-xl bg-blue-100 flex items-center justify-center mx-auto mb-4">
-                <item.icon className="text-blue-600" size={22} />
+            <div key={item.label} className="bg-white/5 rounded-xl shadow-sm border border-white/10 p-6 text-center">
+              <div className="w-12 h-12 rounded-xl bg-blue-500/15 flex items-center justify-center mx-auto mb-4">
+                <item.icon className="text-gold-light" size={22} />
               </div>
-              <p className="text-sm font-medium text-slate-800">{item.label}</p>
+              <p className="text-sm font-medium text-slate-100">{item.label}</p>
             </div>
           ))}
         </div>
@@ -224,7 +224,7 @@ function ProsecutorCta() {
         <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             to="/register"
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-3.5 rounded-xl text-lg transition-colors"
+            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-amber-500 hover:bg-amber-400 text-white font-semibold px-8 py-3.5 rounded-xl text-lg transition-colors"
           >
             Create Your Account
             <ArrowRight size={20} />
@@ -243,7 +243,7 @@ function ProsecutorCta() {
 
 function ProsecutorFooter() {
   return (
-    <footer className="bg-slate-900 border-t border-slate-800 py-12">
+    <footer className="bg-slate-900 border-t border-gold py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-3">
@@ -252,11 +252,11 @@ function ProsecutorFooter() {
             </div>
             <span className="text-white font-semibold">CourtAccess</span>
           </div>
-          <div className="flex items-center gap-2 text-sm text-slate-500">
+          <div className="flex items-center gap-2 text-sm text-slate-400">
             <Lock size={14} />
             <span>Criminal Evidence Intelligence Platform</span>
           </div>
-          <p className="text-sm text-slate-500">&copy; {new Date().getFullYear()} CourtAccess. All rights reserved.</p>
+          <p className="text-sm text-slate-400">&copy; {new Date().getFullYear()} CourtAccess. All rights reserved.</p>
         </div>
       </div>
     </footer>
@@ -265,7 +265,7 @@ function ProsecutorFooter() {
 
 export function ForProsecutorsPage() {
   return (
-    <div className="min-h-screen bg-white">
+    <div className="min-h-screen bg-white/5">
       <ProsecutorNav />
       <ProsecutorHero />
       <ProsecutorFeatures />

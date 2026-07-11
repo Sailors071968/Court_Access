@@ -36,27 +36,27 @@ export function AcceptInvitationPage() {
   };
 
   if (!token) {
-    return <div className="p-8 text-center">Missing invitation token. <Link to="/login" className="text-blue-600">Sign in</Link></div>;
+    return <div className="p-8 text-center">Missing invitation token. <Link to="/login" className="text-gold-light">Sign in</Link></div>;
   }
 
   const org = preview?.organization as Record<string, unknown> | undefined;
 
   return (
     <div className="min-h-screen bg-slate-800 flex items-center justify-center p-4">
-      <div className="w-full max-w-md bg-white rounded-2xl shadow-xl p-8">
+      <div className="w-full max-w-md bg-white/5 rounded-2xl shadow-xl p-8">
         <h1 className="text-xl font-bold mb-2">Join {org?.name ? String(org.name) : 'your firm'}</h1>
-        <p className="text-sm text-gray-600 mb-6">
+        <p className="text-sm text-slate-300 mb-6">
           You&apos;ve been invited as <strong>{String(preview?.role ?? 'member')}</strong>
           {preview?.email ? <> for {String(preview.email)}</> : null}
         </p>
-        {error && <div className="bg-red-50 text-red-700 p-3 rounded mb-4 text-sm">{error}</div>}
+        {error && <div className="bg-red-500/10 text-red-300 p-3 rounded mb-4 text-sm">{error}</div>}
         <form onSubmit={submit} className="space-y-4">
           <input className="w-full border rounded-lg px-3 py-2" value={name} onChange={(e) => setName(e.target.value)} placeholder="Your full name" required />
           <input className="w-full border rounded-lg px-3 py-2" type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password (min 8 characters)" minLength={8} required />
           <button type="submit" className="w-full bg-slate-800 text-white py-2.5 rounded-lg font-medium">Create account & join</button>
         </form>
-        <p className="text-center text-sm text-gray-500 mt-4">
-          Already have an account? <Link to="/login" className="text-blue-600">Sign in</Link>
+        <p className="text-center text-sm text-slate-400 mt-4">
+          Already have an account? <Link to="/login" className="text-gold-light">Sign in</Link>
         </p>
       </div>
     </div>

@@ -67,11 +67,11 @@ interface MatrixSummary {
 // ---------------------------------------------------------------------------
 
 const STATUS_CONFIG: Record<PolicyMatrixStatus, { label: string; color: string; bg: string; icon: React.ReactNode }> = {
-  NOT_REQUESTED: { label: 'Not Requested', color: 'text-gray-500', bg: 'bg-gray-100', icon: <AlertCircle size={12} /> },
-  REQUESTED: { label: 'Requested', color: 'text-yellow-700', bg: 'bg-yellow-100', icon: <Clock size={12} /> },
-  RECEIVED: { label: 'Received', color: 'text-blue-700', bg: 'bg-blue-100', icon: <Download size={12} /> },
-  UPLOADED: { label: 'Uploaded', color: 'text-purple-700', bg: 'bg-purple-100', icon: <Upload size={12} /> },
-  IN_USE: { label: 'In Use', color: 'text-green-700', bg: 'bg-green-100', icon: <CheckCircle2 size={12} /> },
+  NOT_REQUESTED: { label: 'Not Requested', color: 'text-slate-400', bg: 'bg-white/10', icon: <AlertCircle size={12} /> },
+  REQUESTED: { label: 'Requested', color: 'text-amber-300', bg: 'bg-amber-500/15', icon: <Clock size={12} /> },
+  RECEIVED: { label: 'Received', color: 'text-blue-300', bg: 'bg-blue-500/15', icon: <Download size={12} /> },
+  UPLOADED: { label: 'Uploaded', color: 'text-violet-300', bg: 'bg-violet-500/15', icon: <Upload size={12} /> },
+  IN_USE: { label: 'In Use', color: 'text-emerald-300', bg: 'bg-emerald-500/15', icon: <CheckCircle2 size={12} /> },
 };
 
 function StatusBadge({ status, compact }: { status: PolicyMatrixStatus; compact?: boolean }) {
@@ -287,7 +287,7 @@ export function CpraMatrixDashboard() {
       <div className="max-w-full mx-auto p-6">
         <div className="animate-pulse space-y-4">
           <div className="h-8 bg-gray-200 rounded w-1/3" />
-          <div className="h-64 bg-gray-100 rounded" />
+          <div className="h-64 bg-white/10 rounded" />
         </div>
       </div>
     );
@@ -303,8 +303,8 @@ export function CpraMatrixDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">CPRA Policy Matrix</h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-white">CPRA Policy Matrix</h1>
+          <p className="text-sm text-slate-400 mt-1">
             Track policy acquisition status across {data.summary.totalAgencies} agencies and{' '}
             {data.summary.totalTopics} policy topics
           </p>
@@ -312,7 +312,7 @@ export function CpraMatrixDashboard() {
         <div className="flex items-center gap-3">
           <button
             onClick={handleRefresh}
-            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+            className="inline-flex items-center gap-2 px-3 py-2 text-sm font-medium text-slate-200 bg-white/5 border border-white/10 rounded-lg hover:bg-white/5"
           >
             <RefreshCw size={16} />
             Refresh
@@ -328,8 +328,8 @@ export function CpraMatrixDashboard() {
               <div className="flex items-center gap-3 p-2">
                 <StatusBadge status={status} />
                 <div>
-                  <p className="text-xl font-bold text-gray-900">{count}</p>
-                  <p className="text-xs text-gray-500">
+                  <p className="text-xl font-bold text-white">{count}</p>
+                  <p className="text-xs text-slate-400">
                     {Math.round((count / data.entries.length) * 100)}%
                   </p>
                 </div>
@@ -342,8 +342,8 @@ export function CpraMatrixDashboard() {
       {/* Coverage bar */}
       <Card>
         <div className="flex items-center justify-between mb-2">
-          <span className="text-sm font-medium text-gray-700">Overall Coverage</span>
-          <span className="text-sm font-bold text-gray-900">{data.summary.coveragePercent}%</span>
+          <span className="text-sm font-medium text-slate-200">Overall Coverage</span>
+          <span className="text-sm font-bold text-white">{data.summary.coveragePercent}%</span>
         </div>
         <div className="w-full bg-gray-200 rounded-full h-3">
           <div
@@ -356,21 +356,21 @@ export function CpraMatrixDashboard() {
       {/* Filters */}
       <div className="flex flex-wrap items-center gap-4">
         <div className="relative flex-1 min-w-[200px]">
-          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
             placeholder="Search agencies..."
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            className="w-full pl-9 pr-4 py-2 text-sm border border-white/10 rounded-lg focus:ring-2 focus:ring-gold-light focus:border-gold-light"
           />
         </div>
         <div className="flex items-center gap-2">
-          <Filter size={16} className="text-gray-500" />
+          <Filter size={16} className="text-slate-400" />
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value as PolicyMatrixStatus | 'ALL')}
-            className="text-sm border border-gray-300 rounded-lg px-3 py-2 focus:ring-2 focus:ring-blue-500"
+            className="text-sm border border-white/10 rounded-lg px-3 py-2 focus:ring-2 focus:ring-gold-light"
           >
             <option value="ALL">All Statuses</option>
             <option value="NOT_REQUESTED">Not Requested</option>
@@ -383,12 +383,12 @@ export function CpraMatrixDashboard() {
       </div>
 
       {/* Matrix Table */}
-      <div className="border border-gray-200 rounded-lg overflow-auto max-h-[600px]">
+      <div className="border border-white/10 rounded-lg overflow-auto max-h-[600px]">
         <table className="w-full text-sm">
-          <thead className="sticky top-0 z-20 bg-gray-50">
+          <thead className="sticky top-0 z-20 bg-white/5">
             <tr>
               <th
-                className="sticky left-0 z-30 bg-gray-50 px-4 py-3 text-left font-semibold text-gray-700 border-b border-r border-gray-200 cursor-pointer hover:bg-gray-100 min-w-[250px]"
+                className="sticky left-0 z-30 bg-white/5 px-4 py-3 text-left font-semibold text-slate-200 border-b border-r border-white/10 cursor-pointer hover:bg-white/10 min-w-[250px]"
                 onClick={() => handleSort('agencyName')}
               >
                 <div className="flex items-center gap-1">
@@ -398,7 +398,7 @@ export function CpraMatrixDashboard() {
                 </div>
               </th>
               <th
-                className="sticky left-[250px] z-30 bg-gray-50 px-3 py-3 text-left font-semibold text-gray-700 border-b border-r border-gray-200 cursor-pointer hover:bg-gray-100 min-w-[100px]"
+                className="sticky left-[250px] z-30 bg-white/5 px-3 py-3 text-left font-semibold text-slate-200 border-b border-r border-white/10 cursor-pointer hover:bg-white/10 min-w-[100px]"
                 onClick={() => handleSort('city')}
               >
                 <div className="flex items-center gap-1">
@@ -409,7 +409,7 @@ export function CpraMatrixDashboard() {
               {data.topics.map((topic) => (
                 <th
                   key={topic.topicId}
-                  className="px-2 py-3 text-center font-medium text-gray-600 border-b border-gray-200 min-w-[80px] max-w-[100px]"
+                  className="px-2 py-3 text-center font-medium text-slate-300 border-b border-white/10 min-w-[80px] max-w-[100px]"
                   title={topic.description ?? topic.topicName}
                 >
                   <div className="flex items-center justify-center gap-1">
@@ -424,15 +424,15 @@ export function CpraMatrixDashboard() {
             {filteredAgencies.map((agency, idx) => (
               <tr
                 key={agency.agencyId}
-                className={idx % 2 === 0 ? 'bg-white' : 'bg-gray-50/50'}
+                className={idx % 2 === 0 ? 'bg-white/5' : 'bg-white/5/50'}
               >
-                <td className="sticky left-0 z-10 px-4 py-2 font-medium text-gray-900 border-r border-gray-200 min-w-[250px]"
+                <td className="sticky left-0 z-10 px-4 py-2 font-medium text-white border-r border-white/10 min-w-[250px]"
                     style={{ backgroundColor: idx % 2 === 0 ? 'white' : '#f9fafb' }}>
                   <div className="truncate" title={agency.agencyName}>
                     {agency.agencyName}
                   </div>
                 </td>
-                <td className="sticky left-[250px] z-10 px-3 py-2 text-gray-600 border-r border-gray-200 min-w-[100px]"
+                <td className="sticky left-[250px] z-10 px-3 py-2 text-slate-300 border-r border-white/10 min-w-[100px]"
                     style={{ backgroundColor: idx % 2 === 0 ? 'white' : '#f9fafb' }}>
                   {agency.city ?? '—'}
                 </td>
@@ -441,7 +441,7 @@ export function CpraMatrixDashboard() {
                   return (
                     <td
                       key={topic.topicId}
-                      className="px-1 py-2 text-center border-gray-100"
+                      className="px-1 py-2 text-center border-white/10"
                     >
                       {entry ? (
                         <StatusBadge status={entry.status} compact />
@@ -458,7 +458,7 @@ export function CpraMatrixDashboard() {
       </div>
 
       {/* Legend */}
-      <div className="flex items-center gap-4 text-xs text-gray-500">
+      <div className="flex items-center gap-4 text-xs text-slate-400">
         <span className="font-medium">Legend:</span>
         {(Object.entries(STATUS_CONFIG) as [PolicyMatrixStatus, typeof STATUS_CONFIG[PolicyMatrixStatus]][]).map(
           ([status, config]) => (
@@ -473,7 +473,7 @@ export function CpraMatrixDashboard() {
       </div>
 
       {/* Stats Footer */}
-      <div className="text-xs text-gray-400 text-center">
+      <div className="text-xs text-slate-400 text-center">
         Showing {filteredAgencies.length} of {data.agencies.length} agencies |{' '}
         {data.topics.length} policy topics | {data.entries.length} total matrix cells
       </div>

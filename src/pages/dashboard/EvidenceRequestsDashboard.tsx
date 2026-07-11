@@ -53,16 +53,16 @@ interface CriminalCase {
 // ---------------------------------------------------------------------------
 
 const priorityConfig: Record<string, { color: string; bg: string; label: string }> = {
-  high: { color: 'text-red-700', bg: 'bg-red-100', label: 'High' },
-  medium: { color: 'text-amber-700', bg: 'bg-amber-100', label: 'Medium' },
-  low: { color: 'text-blue-700', bg: 'bg-blue-100', label: 'Low' },
+  high: { color: 'text-red-300', bg: 'bg-red-500/15', label: 'High' },
+  medium: { color: 'text-amber-300', bg: 'bg-amber-500/15', label: 'Medium' },
+  low: { color: 'text-blue-300', bg: 'bg-blue-500/15', label: 'Low' },
 };
 
 const statusConfig: Record<string, { color: string; bg: string; icon: React.ReactNode; label: string }> = {
-  pending: { color: 'text-amber-700', bg: 'bg-amber-50', icon: <AlertTriangle size={14} />, label: 'Pending' },
-  acknowledged: { color: 'text-green-700', bg: 'bg-green-50', icon: <CheckCircle size={14} />, label: 'Acknowledged' },
-  dismissed: { color: 'text-slate-500', bg: 'bg-slate-50', icon: <XCircle size={14} />, label: 'Dismissed' },
-  deferred: { color: 'text-blue-700', bg: 'bg-blue-50', icon: <Clock size={14} />, label: 'Deferred' },
+  pending: { color: 'text-amber-300', bg: 'bg-amber-500/10', icon: <AlertTriangle size={14} />, label: 'Pending' },
+  acknowledged: { color: 'text-emerald-300', bg: 'bg-emerald-500/10', icon: <CheckCircle size={14} />, label: 'Acknowledged' },
+  dismissed: { color: 'text-slate-400', bg: 'bg-white/5', icon: <XCircle size={14} />, label: 'Dismissed' },
+  deferred: { color: 'text-blue-300', bg: 'bg-blue-500/10', icon: <Clock size={14} />, label: 'Deferred' },
 };
 
 const typeLabels: Record<string, string> = {
@@ -214,9 +214,9 @@ export function EvidenceRequestsDashboard() {
       <div className="mb-6">
         <div className="flex items-center gap-3 mb-2">
           <FileQuestion size={28} className="text-amber-600" />
-          <h1 className="text-2xl font-bold text-slate-800">AI Evidence Requests</h1>
+          <h1 className="text-2xl font-bold text-slate-100">AI Evidence Requests</h1>
         </div>
-        <p className="text-slate-500 text-sm">
+        <p className="text-slate-400 text-sm">
           AI-detected gaps in your evidence. Review and respond to ensure complete case coverage.
         </p>
       </div>
@@ -224,12 +224,12 @@ export function EvidenceRequestsDashboard() {
       {/* Case Selector + Controls */}
       <div className="flex flex-wrap items-center gap-4 mb-6">
         <div className="flex items-center gap-2">
-          <label htmlFor="case-select" className="text-sm font-medium text-slate-600">Case:</label>
+          <label htmlFor="case-select" className="text-sm font-medium text-slate-300">Case:</label>
           <select
             id="case-select"
             value={selectedCaseId}
             onChange={(e) => setSelectedCaseId(e.target.value)}
-            className="border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
+            className="border border-white/10 rounded-lg px-3 py-2 text-sm bg-white/5 focus:ring-2 focus:ring-amber-500 focus:border-amber-500"
           >
             <option value="">Select a case...</option>
             {cases.map((c) => (
@@ -241,12 +241,12 @@ export function EvidenceRequestsDashboard() {
         </div>
 
         <div className="flex items-center gap-2">
-          <label htmlFor="status-filter" className="text-sm font-medium text-slate-600">Status:</label>
+          <label htmlFor="status-filter" className="text-sm font-medium text-slate-300">Status:</label>
           <select
             id="status-filter"
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="border border-slate-300 rounded-lg px-3 py-2 text-sm bg-white"
+            className="border border-white/10 rounded-lg px-3 py-2 text-sm bg-white/5"
           >
             <option value="">All</option>
             <option value="pending">Pending</option>
@@ -269,27 +269,27 @@ export function EvidenceRequestsDashboard() {
       {/* Summary Cards */}
       {selectedCaseId && requests.length > 0 && (
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
-          <div className="bg-white rounded-lg border border-slate-200 p-4">
-            <div className="text-sm text-slate-500">Total Requests</div>
-            <div className="text-2xl font-bold text-slate-800">{requests.length}</div>
+          <div className="bg-white/5 rounded-lg border border-white/10 p-4">
+            <div className="text-sm text-slate-400">Total Requests</div>
+            <div className="text-2xl font-bold text-slate-100">{requests.length}</div>
           </div>
-          <div className="bg-white rounded-lg border border-amber-200 p-4">
+          <div className="bg-white/5 rounded-lg border border-amber-500/20 p-4">
             <div className="text-sm text-amber-600">Pending Review</div>
-            <div className="text-2xl font-bold text-amber-700">{pendingCount}</div>
+            <div className="text-2xl font-bold text-amber-300">{pendingCount}</div>
           </div>
-          <div className="bg-white rounded-lg border border-red-200 p-4">
+          <div className="bg-white/5 rounded-lg border border-red-500/20 p-4">
             <div className="text-sm text-red-600">High Priority</div>
-            <div className="text-2xl font-bold text-red-700">{highPriorityCount}</div>
+            <div className="text-2xl font-bold text-red-300">{highPriorityCount}</div>
           </div>
         </div>
       )}
 
       {/* Error */}
       {error && (
-        <div className="mb-4 p-3 bg-red-50 border border-red-200 rounded-lg text-red-700 text-sm flex items-center gap-2">
+        <div className="mb-4 p-3 bg-red-500/10 border border-red-500/20 rounded-lg text-red-300 text-sm flex items-center gap-2">
           <AlertTriangle size={16} />
           {error}
-          <button onClick={() => setError(null)} className="ml-auto text-red-500 hover:text-red-700">
+          <button onClick={() => setError(null)} className="ml-auto text-red-500 hover:text-red-300">
             <XCircle size={16} />
           </button>
         </div>
@@ -299,15 +299,15 @@ export function EvidenceRequestsDashboard() {
       {loading && (
         <div className="flex items-center justify-center py-12">
           <RefreshCw size={24} className="animate-spin text-slate-400" />
-          <span className="ml-3 text-slate-500">Loading evidence requests...</span>
+          <span className="ml-3 text-slate-400">Loading evidence requests...</span>
         </div>
       )}
 
       {/* Empty State */}
       {!loading && selectedCaseId && requests.length === 0 && (
-        <div className="text-center py-16 bg-white rounded-lg border border-slate-200">
+        <div className="text-center py-16 bg-white/5 rounded-lg border border-white/10">
           <Shield size={48} className="mx-auto text-slate-300 mb-4" />
-          <h3 className="text-lg font-medium text-slate-600 mb-2">No evidence gaps detected</h3>
+          <h3 className="text-lg font-medium text-slate-300 mb-2">No evidence gaps detected</h3>
           <p className="text-slate-400 text-sm mb-4">
             {statusFilter
               ? 'No requests match the current filter. Try changing the status filter.'
@@ -326,9 +326,9 @@ export function EvidenceRequestsDashboard() {
 
       {/* No case selected */}
       {!selectedCaseId && (
-        <div className="text-center py-16 bg-white rounded-lg border border-slate-200">
+        <div className="text-center py-16 bg-white/5 rounded-lg border border-white/10">
           <FileQuestion size={48} className="mx-auto text-slate-300 mb-4" />
-          <h3 className="text-lg font-medium text-slate-600">Select a case to view evidence requests</h3>
+          <h3 className="text-lg font-medium text-slate-300">Select a case to view evidence requests</h3>
         </div>
       )}
 
@@ -344,8 +344,8 @@ export function EvidenceRequestsDashboard() {
             return (
               <div
                 key={req.id}
-                className={`bg-white rounded-lg border ${
-                  req.status === 'pending' ? 'border-amber-200' : 'border-slate-200'
+                className={`bg-white/5 rounded-lg border ${
+                  req.status === 'pending' ? 'border-amber-500/20' : 'border-white/10'
                 } overflow-hidden transition-all`}
               >
                 {/* Card Header */}
@@ -359,21 +359,21 @@ export function EvidenceRequestsDashboard() {
                     {/* Content */}
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 mb-1">
-                        <h3 className="text-sm font-semibold text-slate-800">{req.title}</h3>
+                        <h3 className="text-sm font-semibold text-slate-100">{req.title}</h3>
                         <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded text-xs font-medium ${status.bg} ${status.color}`}>
                           {status.icon}
                           {status.label}
                         </span>
                       </div>
-                      <p className="text-sm text-slate-600 mb-2">{req.description}</p>
+                      <p className="text-sm text-slate-300 mb-2">{req.description}</p>
                       <div className="flex items-center gap-3 text-xs text-slate-400">
-                        <span className="px-2 py-0.5 bg-slate-100 rounded">{typeLabels[req.type] ?? req.type}</span>
+                        <span className="px-2 py-0.5 bg-white/10 rounded">{typeLabels[req.type] ?? req.type}</span>
                         <span>Detected {new Date(req.createdAt).toLocaleDateString()}</span>
                       </div>
 
                       {/* Latest response info */}
                       {latestResponse && (
-                        <div className="mt-2 p-2 bg-slate-50 rounded text-xs text-slate-500">
+                        <div className="mt-2 p-2 bg-white/5 rounded text-xs text-slate-400">
                           <span className="font-medium">Response:</span>{' '}
                           {latestResponse.responseType === 'requested' && 'Already requested'}
                           {latestResponse.responseType === 'not_relevant' && 'Marked as not relevant'}
@@ -389,7 +389,7 @@ export function EvidenceRequestsDashboard() {
                     {req.status === 'pending' && (
                       <button
                         onClick={() => { setRespondingId(isExpanded ? null : req.id); if (!isExpanded) { setDeferDate(''); setResponseNotes(''); } }}
-                        className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-amber-700 bg-amber-50 rounded-lg hover:bg-amber-100 transition-colors"
+                        className="flex items-center gap-1 px-3 py-1.5 text-xs font-medium text-amber-300 bg-amber-500/10 rounded-lg hover:bg-amber-500/15 transition-colors"
                       >
                         Respond
                         <ChevronDown size={14} className={`transition-transform ${isExpanded ? 'rotate-180' : ''}`} />
@@ -400,7 +400,7 @@ export function EvidenceRequestsDashboard() {
 
                 {/* Response Panel */}
                 {isExpanded && (
-                  <div className="border-t border-slate-200 bg-slate-50 p-4">
+                  <div className="border-t border-white/10 bg-white/5 p-4">
                     <div className="flex flex-wrap gap-3 mb-3">
                       <button
                         onClick={() => handleRespond(req.id, 'requested')}
@@ -421,7 +421,7 @@ export function EvidenceRequestsDashboard() {
                           type="date"
                           value={deferDate}
                           onChange={(e) => setDeferDate(e.target.value)}
-                          className="border border-slate-300 rounded-lg px-3 py-2 text-sm"
+                          className="border border-white/10 rounded-lg px-3 py-2 text-sm"
                           min={new Date().toISOString().split('T')[0]}
                         />
                         <button
@@ -440,7 +440,7 @@ export function EvidenceRequestsDashboard() {
                         placeholder="Optional notes..."
                         value={responseNotes}
                         onChange={(e) => setResponseNotes(e.target.value)}
-                        className="w-full border border-slate-300 rounded-lg px-3 py-2 text-sm"
+                        className="w-full border border-white/10 rounded-lg px-3 py-2 text-sm"
                       />
                     </div>
                   </div>

@@ -97,17 +97,17 @@ export function KnowledgeBasePage() {
             {CATEGORIES.map(({ icon: Icon, title, articles }) => (
               <div key={title}>
                 <div className="flex items-center gap-3 mb-4">
-                  <div className="w-9 h-9 bg-amber-100 rounded-lg flex items-center justify-center">
+                  <div className="w-9 h-9 bg-amber-500/15 rounded-lg flex items-center justify-center">
                     <Icon className="text-amber-600" size={18} />
                   </div>
-                  <h2 className="font-bold text-slate-900">{title}</h2>
+                  <h2 className="font-bold text-white">{title}</h2>
                 </div>
                 <ul className="space-y-2">
                   {articles.map((article) => (
                     <li key={article.title}>
                       <Link
                         to={article.href}
-                        className="text-sm text-slate-600 hover:text-amber-600 transition-colors flex items-center gap-1"
+                        className="text-sm text-slate-300 hover:text-amber-600 transition-colors flex items-center gap-1"
                       >
                         <ArrowRight size={12} className="shrink-0" />
                         {article.title}

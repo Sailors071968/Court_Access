@@ -125,7 +125,7 @@ export default function CameraPresets({
           Camera Views
         </h3>
         <svg
-          className={`w-4 h-4 text-gray-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+          className={`w-4 h-4 text-slate-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
           fill="none"
           viewBox="0 0 24 24"
           stroke="currentColor"
@@ -138,7 +138,7 @@ export default function CameraPresets({
         <div className="px-4 pb-4 border-t border-gray-700">
           {/* Built-in Presets */}
           <div className="pt-3">
-            <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Preset Views</p>
+            <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">Preset Views</p>
             <div className="grid grid-cols-2 gap-1.5">
               {BUILT_IN_PRESETS.map((preset) => (
                 <button
@@ -162,7 +162,7 @@ export default function CameraPresets({
                     placeholder="View name..."
                     value={saveName}
                     onChange={(e) => setSaveName(e.target.value)}
-                    className="flex-1 px-2 py-1.5 text-xs bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                    className="flex-1 px-2 py-1.5 text-xs bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-500 focus:outline-none focus:border-gold-light"
                     onKeyDown={(e) => e.key === 'Enter' && handleSave()}
                     autoFocus
                   />
@@ -175,7 +175,7 @@ export default function CameraPresets({
                   </button>
                   <button
                     onClick={() => { setShowSaveInput(false); setSaveName(''); }}
-                    className="px-2 py-1.5 text-xs text-gray-400 hover:text-white transition-colors"
+                    className="px-2 py-1.5 text-xs text-slate-400 hover:text-white transition-colors"
                   >
                     Cancel
                   </button>
@@ -194,7 +194,7 @@ export default function CameraPresets({
           {/* Saved Views */}
           {savedViews.length > 0 && (
             <div className="border-t border-gray-700 pt-3 mt-3">
-              <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Saved Views</p>
+              <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">Saved Views</p>
               <div className="space-y-1 max-h-32 overflow-y-auto">
                 {savedViews.map((view) => (
                   <div
@@ -210,7 +210,7 @@ export default function CameraPresets({
                     {onDeleteView && (
                       <button
                         onClick={() => onDeleteView(view.id)}
-                        className="text-gray-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all"
+                        className="text-slate-400 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all"
                       >
                         <svg className="w-3.5 h-3.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

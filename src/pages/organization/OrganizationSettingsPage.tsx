@@ -102,31 +102,31 @@ export function OrganizationSettingsPage() {
   };
 
   if (!org) {
-    return <div className="p-8 text-gray-600">Loading organization…</div>;
+    return <div className="p-8 text-slate-300">Loading organization…</div>;
   }
 
   return (
     <div className="max-w-5xl mx-auto p-6 space-y-8">
       <div>
-        <h1 className="text-2xl font-bold text-gray-900">Organization Administration</h1>
-        <p className="text-gray-600">Manage your law firm, offices, team, and branding.</p>
+        <h1 className="text-2xl font-bold text-white">Organization Administration</h1>
+        <p className="text-slate-300">Manage your law firm, offices, team, and branding.</p>
       </div>
 
-      {error && <div className="bg-red-50 text-red-700 p-3 rounded-lg text-sm">{error}</div>}
-      {message && <div className="bg-green-50 text-green-700 p-3 rounded-lg text-sm">{message}</div>}
+      {error && <div className="bg-red-500/10 text-red-300 p-3 rounded-lg text-sm">{error}</div>}
+      {message && <div className="bg-emerald-500/10 text-emerald-300 p-3 rounded-lg text-sm">{message}</div>}
 
       {analytics && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {(['members', 'clients', 'cases', 'evidence'] as const).map((key) => (
-            <div key={key} className="bg-white border rounded-xl p-4">
+            <div key={key} className="bg-white/5 border rounded-xl p-4">
               <div className="text-2xl font-bold">{String(analytics[key] ?? 0)}</div>
-              <div className="text-sm text-gray-500 capitalize">{key}</div>
+              <div className="text-sm text-slate-400 capitalize">{key}</div>
             </div>
           ))}
         </div>
       )}
 
-      <section className="bg-white border rounded-xl p-6 space-y-4">
+      <section className="bg-white/5 border rounded-xl p-6 space-y-4">
         <h2 className="font-semibold text-lg">Firm Profile & Branding</h2>
         <div className="grid md:grid-cols-2 gap-4">
           <input className="border rounded-lg px-3 py-2" value={String(org.name ?? '')} onChange={(e) => setOrg({ ...org, name: e.target.value })} placeholder="Firm name" />
@@ -138,7 +138,7 @@ export function OrganizationSettingsPage() {
         <button type="button" onClick={saveBranding} className="bg-slate-800 text-white px-4 py-2 rounded-lg">Save settings</button>
       </section>
 
-      <section className="bg-white border rounded-xl p-6 space-y-4">
+      <section className="bg-white/5 border rounded-xl p-6 space-y-4">
         <h2 className="font-semibold text-lg">Offices ({offices.length})</h2>
         <ul className="text-sm space-y-1">
           {offices.map((o) => (
@@ -151,7 +151,7 @@ export function OrganizationSettingsPage() {
         </div>
       </section>
 
-      <section className="bg-white border rounded-xl p-6 space-y-4">
+      <section className="bg-white/5 border rounded-xl p-6 space-y-4">
         <h2 className="font-semibold text-lg">Practice Groups ({groups.length})</h2>
         <ul className="text-sm space-y-1">
           {groups.map((g) => <li key={String(g.practiceGroupId)}>{String(g.name)}</li>)}
@@ -162,13 +162,13 @@ export function OrganizationSettingsPage() {
         </div>
       </section>
 
-      <section className="bg-white border rounded-xl p-6 space-y-4">
+      <section className="bg-white/5 border rounded-xl p-6 space-y-4">
         <h2 className="font-semibold text-lg">Team Members ({members.length})</h2>
         <ul className="text-sm divide-y">
           {members.map((m) => (
             <li key={String(m.memberId)} className="py-2 flex justify-between">
               <span>{String((m.user as Record<string, unknown>)?.name)} — {(m.user as Record<string, unknown>)?.email as string}</span>
-              <span className="text-gray-500">{String(m.role)}</span>
+              <span className="text-slate-400">{String(m.role)}</span>
             </li>
           ))}
         </ul>
@@ -183,7 +183,7 @@ export function OrganizationSettingsPage() {
           <button type="button" onClick={sendInvite} className="bg-slate-800 text-white px-4 py-2 rounded-lg">Send invitation</button>
         </div>
         {invitations.length > 0 && (
-          <p className="text-xs text-gray-500">{invitations.length} pending invitation(s)</p>
+          <p className="text-xs text-slate-400">{invitations.length} pending invitation(s)</p>
         )}
       </section>
     </div>

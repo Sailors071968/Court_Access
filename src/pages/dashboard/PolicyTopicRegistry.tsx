@@ -50,10 +50,10 @@ export function PolicyTopicRegistry() {
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <BookOpen size={24} className="text-blue-600" />
+          <BookOpen size={24} className="text-gold-light" />
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">Policy Topic Registry</h1>
-            <p className="text-sm text-gray-500">Canonical registry — single source of truth for {topics.length} topics</p>
+            <h1 className="text-2xl font-bold text-white">Policy Topic Registry</h1>
+            <p className="text-sm text-slate-400">Canonical registry — single source of truth for {topics.length} topics</p>
           </div>
         </div>
         <button className="inline-flex items-center gap-2 px-4 py-2 bg-slate-800 text-white rounded-lg text-sm font-medium hover:bg-slate-700">
@@ -63,16 +63,16 @@ export function PolicyTopicRegistry() {
 
       <div className="flex items-center gap-3">
         <div className="relative flex-1">
-          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+          <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             type="search"
             placeholder="Search topics or aliases..."
             value={search}
             onChange={(e) => setSearch(e.target.value)}
-            className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded-lg text-sm"
+            className="w-full pl-9 pr-4 py-2 border border-white/10 rounded-lg text-sm"
           />
         </div>
-        <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)} className="text-sm border border-gray-300 rounded-lg px-3 py-2">
+        <select value={filterCategory} onChange={(e) => setFilterCategory(e.target.value)} className="text-sm border border-white/10 rounded-lg px-3 py-2">
           <option value="all">All Categories</option>
           {CATEGORIES.map((c) => <option key={c} value={c}>{c}</option>)}
         </select>
@@ -80,43 +80,43 @@ export function PolicyTopicRegistry() {
 
       {isLoading ? (
         <div className="flex items-center justify-center py-12">
-          <Loader2 size={20} className="animate-spin text-gray-400" />
-          <span className="ml-2 text-sm text-gray-500">Loading topics...</span>
+          <Loader2 size={20} className="animate-spin text-slate-400" />
+          <span className="ml-2 text-sm text-slate-400">Loading topics...</span>
         </div>
       ) : filtered.length === 0 ? (
-        <div className="text-center py-12 bg-white rounded-xl border border-gray-200">
+        <div className="text-center py-12 bg-white/5 rounded-xl border border-white/10">
           <BookOpen size={48} className="mx-auto mb-3 text-gray-300" />
-          <p className="text-sm text-gray-500">No policy topics registered yet.</p>
+          <p className="text-sm text-slate-400">No policy topics registered yet.</p>
         </div>
       ) : (
-      <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+      <div className="bg-white/5 rounded-xl border border-white/10 overflow-hidden">
         <table className="w-full text-sm">
           <thead>
-            <tr className="border-b border-gray-200 bg-gray-50">
-              <th className="text-left px-4 py-3 font-medium text-gray-600">ID</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-600">Canonical Name</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-600">Aliases</th>
-              <th className="text-left px-4 py-3 font-medium text-gray-600">Category</th>
-              <th className="text-right px-4 py-3 font-medium text-gray-600">Actions</th>
+            <tr className="border-b border-white/10 bg-white/5">
+              <th className="text-left px-4 py-3 font-medium text-slate-300">ID</th>
+              <th className="text-left px-4 py-3 font-medium text-slate-300">Canonical Name</th>
+              <th className="text-left px-4 py-3 font-medium text-slate-300">Aliases</th>
+              <th className="text-left px-4 py-3 font-medium text-slate-300">Category</th>
+              <th className="text-right px-4 py-3 font-medium text-slate-300">Actions</th>
             </tr>
           </thead>
           <tbody>
             {filtered.map((topic) => (
-              <tr key={topic.topicId} className="border-b border-gray-100 hover:bg-gray-50">
-                <td className="px-4 py-3 text-gray-500 font-mono text-xs">{topic.topicId}</td>
-                <td className="px-4 py-3 font-medium text-gray-900">{topic.canonicalName}</td>
+              <tr key={topic.topicId} className="border-b border-white/10 hover:bg-white/5">
+                <td className="px-4 py-3 text-slate-400 font-mono text-xs">{topic.topicId}</td>
+                <td className="px-4 py-3 font-medium text-white">{topic.canonicalName}</td>
                 <td className="px-4 py-3">
                   <div className="flex flex-wrap gap-1">
                     {topic.aliases.map((a) => (
-                      <span key={a} className="px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded text-[10px]">{a}</span>
+                      <span key={a} className="px-1.5 py-0.5 bg-white/10 text-slate-300 rounded text-[10px]">{a}</span>
                     ))}
                   </div>
                 </td>
                 <td className="px-4 py-3">
-                  <span className="px-2 py-0.5 bg-blue-100 text-blue-700 rounded text-xs font-medium">{topic.category}</span>
+                  <span className="px-2 py-0.5 bg-blue-500/15 text-blue-300 rounded text-xs font-medium">{topic.category}</span>
                 </td>
                 <td className="px-4 py-3 text-right">
-                  <button className="text-blue-600 hover:text-blue-700 text-xs font-medium">Edit</button>
+                  <button className="text-gold-light hover:text-gold-bright text-xs font-medium">Edit</button>
                 </td>
               </tr>
             ))}
@@ -124,7 +124,7 @@ export function PolicyTopicRegistry() {
         </table>
       </div>
       )}
-      <p className="text-xs text-gray-400 text-center">Showing {filtered.length} of {topics.length} registered topics</p>
+      <p className="text-xs text-slate-400 text-center">Showing {filtered.length} of {topics.length} registered topics</p>
     </div>
   );
 }

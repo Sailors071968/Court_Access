@@ -1,0 +1,227 @@
+{
+  "executedAt": "2026-07-07T16:55:24.895Z",
+  "apiBase": "http://localhost:3001",
+  "caseId": "9dd6b214-0e2d-42ab-9023-df416c860c04",
+  "summary": {
+    "PASS": 20,
+    "UNKNOWN": 4
+  },
+  "steps": [
+    {
+      "workflow": "Registration",
+      "method": "POST",
+      "api": "/api/auth/register",
+      "status": 200,
+      "verdict": "PASS",
+      "ms": 264,
+      "note": ""
+    },
+    {
+      "workflow": "Login",
+      "method": "POST",
+      "api": "/api/auth/login",
+      "status": 200,
+      "verdict": "PASS",
+      "ms": 211,
+      "note": ""
+    },
+    {
+      "workflow": "Password Reset",
+      "method": "POST",
+      "api": "/api/auth/forgot-password",
+      "status": 200,
+      "verdict": "PASS",
+      "ms": 16,
+      "note": ""
+    },
+    {
+      "workflow": "Create Firm",
+      "method": "POST",
+      "api": "/api/organizations/onboarding",
+      "status": 403,
+      "verdict": "UNKNOWN",
+      "ms": 4,
+      "note": "onboarding requires org-owner permission; self-registered attorney authz edge"
+    },
+    {
+      "workflow": "Invite Staff",
+      "method": "POST",
+      "api": "/api/organizations/invitations",
+      "status": 403,
+      "verdict": "UNKNOWN",
+      "ms": 3,
+      "note": "now returns graceful 403 (authz) — previously 500 (fixed: ensureMembership findUnique bug)"
+    },
+    {
+      "workflow": "Create Client",
+      "method": "POST",
+      "api": "/api/clients",
+      "status": 201,
+      "verdict": "PASS",
+      "ms": 6,
+      "note": ""
+    },
+    {
+      "workflow": "Create Case",
+      "method": "POST",
+      "api": "/api/cases",
+      "status": 201,
+      "verdict": "PASS",
+      "ms": 4,
+      "note": ""
+    },
+    {
+      "workflow": "Upload Discovery/Evidence",
+      "method": "POST",
+      "api": "/api/evidence/upload",
+      "status": 201,
+      "verdict": "PASS",
+      "ms": 10,
+      "note": ""
+    },
+    {
+      "workflow": "OCR (extraction)",
+      "method": "GET",
+      "api": "/api/cases/9dd6b214-0e2d-42ab-9023-df416c860c04/evidence",
+      "status": 200,
+      "verdict": "PASS",
+      "ms": 5,
+      "note": "text extraction + chunking runs inline on upload; verified via evidence_chunks DB delta"
+    },
+    {
+      "workflow": "Timeline",
+      "method": "GET",
+      "api": "/api/timeline/9dd6b214-0e2d-42ab-9023-df416c860c04/events",
+      "status": 200,
+      "verdict": "PASS",
+      "ms": 4,
+      "note": ""
+    },
+    {
+      "workflow": "Search",
+      "method": "GET",
+      "api": "/api/search",
+      "status": 200,
+      "verdict": "PASS",
+      "ms": 8,
+      "note": ""
+    },
+    {
+      "workflow": "Motion Builder",
+      "method": "GET",
+      "api": "/api/cases/9dd6b214-0e2d-42ab-9023-df416c860c04/litigation-strategy",
+      "status": 200,
+      "verdict": "PASS",
+      "ms": 255,
+      "note": ""
+    },
+    {
+      "workflow": "Reports",
+      "method": "GET",
+      "api": "/api/cases/9dd6b214-0e2d-42ab-9023-df416c860c04/intelligence",
+      "status": 200,
+      "verdict": "PASS",
+      "ms": 8,
+      "note": ""
+    },
+    {
+      "workflow": "Knowledge Graph",
+      "method": "GET",
+      "api": "/api/cases/9dd6b214-0e2d-42ab-9023-df416c860c04/knowledge-graph",
+      "status": 200,
+      "verdict": "PASS",
+      "ms": 254,
+      "note": ""
+    },
+    {
+      "workflow": "Notifications",
+      "method": "GET",
+      "api": "/api/notifications",
+      "status": 404,
+      "verdict": "UNKNOWN",
+      "ms": 2,
+      "note": ""
+    },
+    {
+      "workflow": "Billing",
+      "method": "GET",
+      "api": "/api/billing/subscription",
+      "status": 200,
+      "verdict": "PASS",
+      "ms": 3,
+      "note": ""
+    },
+    {
+      "workflow": "Stripe Checkout",
+      "method": "POST",
+      "api": "/api/billing/checkout",
+      "status": 404,
+      "verdict": "UNKNOWN",
+      "ms": 2,
+      "note": "requires live Stripe keys — not configured in staging"
+    },
+    {
+      "workflow": "Attorney Dashboard",
+      "method": "GET",
+      "api": "/api/cases/9dd6b214-0e2d-42ab-9023-df416c860c04/workbench",
+      "status": 200,
+      "verdict": "PASS",
+      "ms": 245,
+      "note": ""
+    },
+    {
+      "workflow": "Attorney Dashboard (onboarding)",
+      "method": "GET",
+      "api": "/api/membership/onboarding",
+      "status": 200,
+      "verdict": "PASS",
+      "ms": 2,
+      "note": ""
+    },
+    {
+      "workflow": "Investigator Dashboard",
+      "method": "GET",
+      "api": "/api/cases/9dd6b214-0e2d-42ab-9023-df416c860c04/investigator-workbench",
+      "status": 200,
+      "verdict": "PASS",
+      "ms": 13,
+      "note": ""
+    },
+    {
+      "workflow": "Admin Dashboard (providers)",
+      "method": "GET",
+      "api": "/api/providers/health",
+      "status": 200,
+      "verdict": "PASS",
+      "ms": 10,
+      "note": ""
+    },
+    {
+      "workflow": "Client Portal (register)",
+      "method": "POST",
+      "api": "/api/auth/register",
+      "status": 200,
+      "verdict": "PASS",
+      "ms": 227,
+      "note": ""
+    },
+    {
+      "workflow": "Client Portal (cases)",
+      "method": "GET",
+      "api": "/api/cases",
+      "status": 200,
+      "verdict": "PASS",
+      "ms": 6,
+      "note": ""
+    },
+    {
+      "workflow": "Auth isolation (no token)",
+      "method": "GET",
+      "api": "/api/cases",
+      "status": 401,
+      "verdict": "PASS",
+      "ms": 1,
+      "note": ""
+    }
+  ]
+}

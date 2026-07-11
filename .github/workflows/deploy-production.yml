@@ -1,5 +1,11 @@
 # Deploy Production Website
 # Program 21 — Continuous deployment for courtaccess.net
+#
+# V1 GREENFIELD (Program 1A): Superseded for Version 1.0 release.
+# Do NOT use this workflow to checkout origin/dev on /var/www/courtaccess.
+# Use GREENFIELD_V1_DEPLOYMENT.md: clone origin/dev → /var/www/courtaccess-v1,
+# then v1-production-cutover.sh after verify PASS.
+#
 # Requires repository secrets: DEPLOY_HOST, DEPLOY_USER, DEPLOY_SSH_KEY
 # Optional: CF_ZONE_ID, CF_API_TOKEN (passed to deploy script on server)
 

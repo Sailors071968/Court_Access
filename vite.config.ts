@@ -37,4 +37,23 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    // Split vendor libraries into cacheable chunks so the initial app chunk is
+    // smaller and third-party code is cached across deploys (Program 11 perf).
+    rollupOptions: {
+      output: {
+        manualChunks(id) {
+          if (!id.includes("node_modules")) return undefined
+          if (id.includes("react-router")) return "vendor-router"
+          if (id.includes("/react-dom/") || /\/react\//.test(id) || id.includes("scheduler")) return "vendor-react"
+          if (id.includes("recharts") || id.includes("d3") || id.includes("victory")) return "vendor-charts"
+          if (id.includes("three") || id.includes("@react-three")) return "vendor-three"
+          if (id.includes("lucide-react")) return "vendor-icons"
+          if (id.includes("zustand") || id.includes("@tanstack")) return "vendor-state"
+          return "vendor"
+        },
+      },
+    },
+    chunkSizeWarningLimit: 900,
+  },
 })

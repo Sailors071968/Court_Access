@@ -88,43 +88,43 @@ export function RegisterPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-800 flex items-center justify-center px-4 py-12">
+    <div className="min-h-screen bg-navy flex items-center justify-center px-4 py-12">
       <div className="w-full max-w-md">
         <div className="text-center mb-8">
           <div className="inline-flex items-center gap-3 mb-4">
-            <div className="w-12 h-12 bg-amber-500 rounded-xl flex items-center justify-center">
-              <Scale className="text-white" size={24} />
+            <div className="w-12 h-12 ca-gradient-gold rounded-xl flex items-center justify-center shadow-gold">
+              <Scale className="text-navy" size={24} />
             </div>
-            <h1 className="text-3xl font-bold text-white">Court Access</h1>
+            <h1 className="text-3xl font-bold text-white">Court<span className="text-gold-light">Access</span></h1>
           </div>
           <p className="text-slate-400">Create your account — full platform access for every subscriber</p>
         </div>
 
-        <div className="bg-white rounded-2xl shadow-xl p-8">
+        <div className="bg-white/5 border border-white/10 rounded-2xl shadow-xl p-8 backdrop-blur-sm">
           {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg mb-4 text-sm">
+            <div className="bg-red-500/10 border border-red-500/20 text-red-300 px-4 py-3 rounded-lg mb-4 text-sm">
               {error}
             </div>
           )}
 
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">Full name</label>
-              <input id="name" type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Jane Doe" required />
+              <label htmlFor="name" className="block text-sm font-medium text-slate-300 mb-1">Full name</label>
+              <input id="name" type="text" value={name} onChange={(e) => setName(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-white/5 text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light" placeholder="Jane Doe" required />
             </div>
             <div>
-              <label htmlFor="reg-email" className="block text-sm font-medium text-gray-700 mb-1">Email address</label>
-              <input id="reg-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="you@courtaccess.com" required />
+              <label htmlFor="reg-email" className="block text-sm font-medium text-slate-300 mb-1">Email address</label>
+              <input id="reg-email" type="email" value={email} onChange={(e) => setEmail(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-white/5 text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light" placeholder="you@courtaccess.com" required />
             </div>
             <div>
-              <label htmlFor="defaultRole" className="block text-sm font-medium text-gray-700 mb-1">
+              <label htmlFor="defaultRole" className="block text-sm font-medium text-slate-300 mb-1">
                 Your role
               </label>
               <select
                 id="defaultRole"
                 value={defaultRole}
                 onChange={(e) => setDefaultRole(e.target.value as DefaultRole)}
-                className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-white/5 text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light bg-white/5"
               >
                 {REGISTRATION_ROLE_OPTIONS.map((opt) => (
                   <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -134,33 +134,33 @@ export function RegisterPage() {
                 ))}
               </select>
               {selectedRole && (
-                <p className="mt-1.5 text-xs text-gray-500">{selectedRole.description}</p>
+                <p className="mt-1.5 text-xs text-slate-400">{selectedRole.description}</p>
               )}
-              <p className="mt-1 text-xs text-amber-700">
+              <p className="mt-1 text-xs text-gold-light">
                 Your role configures your dashboard and onboarding — it does not limit platform capabilities.
               </p>
             </div>
             <div>
-              <label htmlFor="reg-password" className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-              <input id="reg-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Minimum 8 characters" required autoComplete="new-password" />
+              <label htmlFor="reg-password" className="block text-sm font-medium text-slate-300 mb-1">Password</label>
+              <input id="reg-password" type="password" value={password} onChange={(e) => setPassword(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-white/5 text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light" placeholder="Minimum 8 characters" required autoComplete="new-password" />
             </div>
             <div>
-              <label htmlFor="confirm-password" className="block text-sm font-medium text-gray-700 mb-1">Confirm password</label>
-              <input id="confirm-password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" placeholder="Re-enter password" required autoComplete="new-password" />
+              <label htmlFor="confirm-password" className="block text-sm font-medium text-slate-300 mb-1">Confirm password</label>
+              <input id="confirm-password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} className="w-full px-4 py-2.5 rounded-lg border border-white/15 bg-white/5 text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light" placeholder="Re-enter password" required autoComplete="new-password" />
             </div>
             <div>
-              <label htmlFor="discount-code" className="block text-sm font-medium text-gray-700 mb-1">Discount code <span className="text-gray-400 font-normal">(optional)</span></label>
+              <label htmlFor="discount-code" className="block text-sm font-medium text-slate-300 mb-1">Discount code <span className="text-slate-400 font-normal">(optional)</span></label>
               <div className="flex gap-2">
                 <div className="relative flex-1">
                   <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                    <Tag className="text-gray-400" size={14} />
+                    <Tag className="text-slate-400" size={14} />
                   </div>
                   <input
                     id="discount-code"
                     type="text"
                     value={discountCode}
                     onChange={(e) => { setDiscountCode(e.target.value); setDiscountResult(null); }}
-                    className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 uppercase"
+                    className="w-full pl-9 pr-4 py-2.5 rounded-lg border border-white/15 bg-white/5 text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-gold-light uppercase"
                     placeholder="e.g. EARLYACCESS50"
                   />
                 </div>
@@ -173,13 +173,13 @@ export function RegisterPage() {
                     setValidatingDiscount(false);
                   }}
                   disabled={!discountCode.trim() || validatingDiscount}
-                  className="px-4 py-2.5 rounded-lg border border-gray-300 text-sm font-medium text-gray-700 hover:bg-gray-50 transition-colors disabled:opacity-40"
+                  className="px-4 py-2.5 rounded-lg border border-white/15 text-sm font-medium text-slate-200 hover:bg-white/10 transition-colors disabled:opacity-40"
                 >
                   {validatingDiscount ? 'Checking...' : 'Apply'}
                 </button>
               </div>
               {discountResult && (
-                <div className={`mt-2 flex items-center gap-2 text-sm ${discountResult.valid ? 'text-emerald-600' : 'text-red-600'}`}>
+                <div className={`mt-2 flex items-center gap-2 text-sm ${discountResult.valid ? 'text-emerald-400' : 'text-red-400'}`}>
                   {discountResult.valid ? <CheckCircle2 size={14} /> : <XCircle size={14} />}
                   <span>
                     {discountResult.valid
@@ -190,24 +190,24 @@ export function RegisterPage() {
               )}
             </div>
 
-            <div className="space-y-3 pt-2 border-t border-gray-100">
-              <label className="flex items-start gap-3 text-sm text-gray-600">
-                <input type="checkbox" checked={termsAccepted} onChange={(e) => setTermsAccepted(e.target.checked)} className="mt-1 rounded border-gray-300 text-amber-600 focus:ring-amber-500" required />
-                <span>I agree to the <Link to="/terms" target="_blank" className="text-amber-600 hover:underline">Terms of Service</Link></span>
+            <div className="space-y-3 pt-2 border-t border-white/10">
+              <label className="flex items-start gap-3 text-sm text-slate-400">
+                <input type="checkbox" checked={termsAccepted} onChange={(e) => setTermsAccepted(e.target.checked)} className="mt-1 rounded border-white/20 bg-white/5 text-gold focus:ring-gold-light" required />
+                <span>I agree to the <Link to="/terms" target="_blank" className="text-gold-light hover:underline">Terms of Service</Link></span>
               </label>
-              <label className="flex items-start gap-3 text-sm text-gray-600">
-                <input type="checkbox" checked={privacyAccepted} onChange={(e) => setPrivacyAccepted(e.target.checked)} className="mt-1 rounded border-gray-300 text-amber-600 focus:ring-amber-500" required />
-                <span>I agree to the <Link to="/privacy" target="_blank" className="text-amber-600 hover:underline">Privacy Policy</Link></span>
+              <label className="flex items-start gap-3 text-sm text-slate-400">
+                <input type="checkbox" checked={privacyAccepted} onChange={(e) => setPrivacyAccepted(e.target.checked)} className="mt-1 rounded border-white/20 bg-white/5 text-gold focus:ring-gold-light" required />
+                <span>I agree to the <Link to="/privacy" target="_blank" className="text-gold-light hover:underline">Privacy Policy</Link></span>
               </label>
             </div>
 
-            <button type="submit" disabled={isLoading || !termsAccepted || !privacyAccepted} className="w-full bg-slate-800 text-white py-2.5 rounded-lg font-medium text-sm hover:bg-slate-700 transition-colors disabled:opacity-50">
+            <button type="submit" disabled={isLoading || !termsAccepted || !privacyAccepted} className="w-full ca-gradient-gold text-navy py-2.5 rounded-lg font-semibold text-sm hover:brightness-110 transition-all disabled:opacity-50">
               {isLoading ? 'Creating account...' : 'Create account'}
             </button>
           </form>
 
-          <div className="mt-6 text-center text-sm text-gray-500">
-            Already have an account? <Link to="/login" className="text-blue-600 hover:text-blue-700 font-medium">Sign in</Link>
+          <div className="mt-6 text-center text-sm text-slate-400">
+            Already have an account? <Link to="/login" className="text-gold-light hover:text-gold-bright font-medium">Sign in</Link>
           </div>
         </div>
       </div>

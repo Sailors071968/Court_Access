@@ -1,140 +1,220 @@
-// ============================================
-// Court Access — Global Search Page
-// ============================================
+// ============================================================================
+// CourtAccess — Global Legal Intelligence Search (Program 25)
+// Full-page search built on the master component library + global search service.
+// ============================================================================
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import { Search, FileText, Briefcase, BookOpen } from 'lucide-react';
-import { Card } from '../components/common/Card';
-import { search as searchService } from '../services/searchService';
-import type { SearchResult } from '../types';
+import { Star, Pin, Command } from 'lucide-react';
+import { PageHeader } from '../components/ui/page-header';
+import { Button } from '../components/ui/button';
+import { Card } from '../components/ui/card';
+import { SearchBar } from '../components/ui/input';
+import { Badge } from '../components/ui/badge';
+import { Spinner } from '../components/ui/spinner';
+import { EmptyState } from '../components/ui/empty-state';
+import { Icon } from '../components/icons/registry';
+import { SearchResultRow } from '../components/search/SearchResultRow';
+import { useGlobalSearch } from '../components/search/GlobalSearch';
+import { SPACING } from '../constants/designTokens';
+import {
+  globalSearch,
+  savedSearches,
+  pinnedSearches,
+  recentSearches,
+  SEARCH_MODES,
+  TYPE_META,
+  type GlobalSearchResult,
+  type GlobalSearchType,
+  type SearchMode,
+} from '../services/globalSearchService';
+import { cn } from '../lib/utils';
 
-const TYPE_FILTERS = [
-  { id: 'all', label: 'All', icon: null },
-  { id: 'case', label: 'Cases', icon: Briefcase },
-  { id: 'document', label: 'Documents', icon: FileText },
-  { id: 'statute', label: 'Statutes', icon: BookOpen },
-] as const;
+const FILTER_GROUPS: { label: string; types: GlobalSearchType[] }[] = [
+  { label: 'Cases', types: ['case'] },
+  { label: 'Evidence', types: ['evidence', 'document', 'ocr_text', 'evidence_id'] },
+  { label: 'People', types: ['witness', 'person', 'address', 'phone', 'vehicle', 'license_plate'] },
+  { label: 'Legal', types: ['charge', 'statute', 'california_code', 'federal_code', 'case_law', 'authority'] },
+  { label: 'Knowledge Graph', types: ['graph_node', 'repository_id'] },
+  { label: 'Timeline', types: ['timeline_event'] },
+  { label: 'Notes & Messages', types: ['note', 'message'] },
+  { label: 'Reports & Audit', types: ['report', 'audit_event'] },
+];
 
 export function SearchPage() {
   const [searchParams, setSearchParams] = useSearchParams();
   const navigate = useNavigate();
+  const { open: openPalette } = useGlobalSearch();
   const queryParam = searchParams.get('q') || '';
-  const typeParam = (searchParams.get('type') || 'all') as 'all' | 'case' | 'document' | 'statute';
 
   const [query, setQuery] = useState(queryParam);
-  const [results, setResults] = useState<SearchResult[]>([]);
+  const [mode, setMode] = useState<SearchMode>('natural');
+  const [activeGroup, setActiveGroup] = useState<string>('All');
+  const [results, setResults] = useState<GlobalSearchResult[]>([]);
   const [loading, setLoading] = useState(false);
-  const [total, setTotal] = useState(0);
+  const [tookMs, setTookMs] = useState(0);
+  const [isSaved, setIsSaved] = useState(false);
+  const [isPinned, setIsPinned] = useState(false);
+
+  const runSearch = useCallback(
+    async (q: string, m: SearchMode, group: string) => {
+      if (!q.trim()) {
+        setResults([]);
+        return;
+      }
+      setLoading(true);
+      const types = group === 'All' ? undefined : FILTER_GROUPS.find((g) => g.label === group)?.types;
+      const res = await globalSearch(q, { mode: m, types });
+      setResults(res.results);
+      setTookMs(res.tookMs);
+      setLoading(false);
+      recentSearches.add(q);
+      setIsSaved(savedSearches.has(q));
+      setIsPinned(pinnedSearches.has(q));
+    },
+    [],
+  );
 
   useEffect(() => {
     if (queryParam) {
-      setLoading(true);
-      searchService({ query: queryParam, type: typeParam === 'all' ? undefined : typeParam }).then((res) => {
-        setResults(res.results);
-        setTotal(res.total);
-        setLoading(false);
-      });
+      setQuery(queryParam);
+      void runSearch(queryParam, mode, activeGroup);
     }
-  }, [queryParam, typeParam]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [queryParam]);
 
-  const handleSearch = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (query.trim()) {
-      setSearchParams({ q: query.trim(), type: typeParam });
-    }
-  };
-
-  const handleTypeFilter = (type: string) => {
-    setSearchParams({ q: queryParam, type });
-  };
-
-  const resultIcon = (type: string) => {
-    switch (type) {
-      case 'case': return <Briefcase size={16} className="text-blue-600" />;
-      case 'document': return <FileText size={16} className="text-amber-600" />;
-      case 'statute': return <BookOpen size={16} className="text-purple-600" />;
-      default: return <FileText size={16} className="text-gray-500" />;
-    }
+  const submit = (value: string) => {
+    const q = value.trim();
+    if (!q) return;
+    setSearchParams({ q });
+    void runSearch(q, mode, activeGroup);
   };
 
   return (
-    <div className="max-w-4xl mx-auto space-y-6">
-      <h1 className="text-2xl font-bold text-gray-900">Search</h1>
+    <div className={`${SPACING.container} space-y-6`}>
+      <PageHeader
+        title="Legal Intelligence Search"
+        overline="Search"
+        subtitle="Search cases, evidence, people, statutes, case law, the knowledge graph, and more."
+        action={
+          <Button variant="secondary" onClick={openPalette}>
+            <Command size={15} /> Quick search
+            <kbd className="ml-1 text-[10px] px-1.5 py-0.5 rounded bg-white/10 border border-white/10">⌘K</kbd>
+          </Button>
+        }
+      />
 
-      {/* Search Input */}
-      <form onSubmit={handleSearch} className="relative">
-        <Search size={20} className="absolute left-4 top-1/2 -translate-y-1/2 text-gray-400" />
-        <input
-          type="search"
-          placeholder="Search cases, documents, statutes..."
-          value={query}
-          onChange={(e) => setQuery(e.target.value)}
-          className="w-full pl-12 pr-4 py-3.5 rounded-xl border border-gray-200 bg-white text-base focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-sm"
-          aria-label="Search"
-          autoFocus
-        />
-      </form>
+      <SearchBar
+        placeholder="Search everything — natural language, a citation like “PC 459”, or boolean queries…"
+        defaultValue={queryParam}
+        onSearch={submit}
+        autoFocus
+      />
 
-      {/* Type Filters */}
-      <div className="flex gap-2" role="tablist" aria-label="Filter results by type">
-        {TYPE_FILTERS.map((filter) => (
+      {/* Mode selector */}
+      <div className="flex flex-wrap items-center gap-2">
+        <span className="text-xs text-slate-400 mr-1">Mode:</span>
+        {SEARCH_MODES.map((m) => (
           <button
-            key={filter.id}
-            role="tab"
-            aria-selected={typeParam === filter.id}
-            onClick={() => handleTypeFilter(filter.id)}
-            className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
-              typeParam === filter.id
-                ? 'bg-blue-600 text-white'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
-            }`}
+            key={m.id}
+            title={m.hint}
+            onClick={() => {
+              setMode(m.id);
+              if (query.trim()) void runSearch(query, m.id, activeGroup);
+            }}
+            className={cn(
+              'px-3 py-1.5 rounded-lg text-xs font-medium transition-colors',
+              mode === m.id ? 'bg-gold/10 text-gold-light border border-gold/20' : 'text-slate-400 hover:text-white hover:bg-white/5',
+            )}
           >
-            {filter.label}
+            {m.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Type filters */}
+      <div className="flex flex-wrap gap-2">
+        {['All', ...FILTER_GROUPS.map((g) => g.label)].map((label) => (
+          <button
+            key={label}
+            onClick={() => {
+              setActiveGroup(label);
+              if (query.trim()) void runSearch(query, mode, label);
+            }}
+            className={cn(
+              'px-3 py-1.5 rounded-lg text-sm font-medium transition-colors',
+              activeGroup === label ? 'bg-gold/10 text-gold-light border border-gold/20' : 'bg-white/5 text-slate-400 hover:text-white',
+            )}
+          >
+            {label}
           </button>
         ))}
       </div>
 
       {/* Results */}
       {loading ? (
-        <div className="space-y-3">
-          {[1, 2, 3].map((i) => <div key={i} className="h-20 bg-gray-100 rounded-xl animate-pulse" />)}
-        </div>
+        <Spinner label="Searching…" />
       ) : queryParam ? (
         <>
-          <p className="text-sm text-gray-500">{total} result{total !== 1 ? 's' : ''} for "{queryParam}"</p>
-          <div className="space-y-3">
-            {results.map((result) => (
-              <Card
-                key={result.id}
-                hover
-                className="cursor-pointer"
-                onClick={() => navigate(result.url)}
+          <div className="flex items-center justify-between">
+            <p className="text-sm text-slate-400">
+              {results.length} result{results.length !== 1 ? 's' : ''} for “{queryParam}” · {tookMs}ms
+            </p>
+            <div className="flex items-center gap-2">
+              <Button
+                variant={isSaved ? 'primary' : 'ghost'}
+                size="sm"
+                onClick={() => {
+                  savedSearches.toggle(queryParam);
+                  setIsSaved(savedSearches.has(queryParam));
+                }}
               >
-                <div className="flex items-start gap-3">
-                  <div className="mt-0.5">{resultIcon(result.type)}</div>
-                  <div>
-                    <div className="flex items-center gap-2">
-                      <h3 className="font-semibold text-gray-900">{result.title}</h3>
-                      <span className="text-xs text-gray-400 capitalize bg-gray-100 px-2 py-0.5 rounded">{result.type}</span>
-                    </div>
-                    <p className="text-sm text-gray-500 mt-1">{result.description}</p>
-                  </div>
-                </div>
-              </Card>
-            ))}
-          </div>
-          {results.length === 0 && (
-            <div className="text-center py-12">
-              <p className="text-gray-500">No results found for "{queryParam}"</p>
+                <Star size={14} /> {isSaved ? 'Saved' : 'Save'}
+              </Button>
+              <Button
+                variant={isPinned ? 'primary' : 'ghost'}
+                size="sm"
+                onClick={() => {
+                  pinnedSearches.toggle(queryParam);
+                  setIsPinned(pinnedSearches.has(queryParam));
+                }}
+              >
+                <Pin size={14} /> {isPinned ? 'Pinned' : 'Pin'}
+              </Button>
             </div>
+          </div>
+
+          {results.length === 0 ? (
+            <Card>
+              <EmptyState icon={<Icon name="search" size={24} />} title={`No results for “${queryParam}”`} description="Try a different mode or broaden your query." />
+            </Card>
+          ) : (
+            <Card padding="sm">
+              <div role="listbox" aria-label="Search results">
+                {results.map((r) => (
+                  <SearchResultRow key={r.id} result={r} query={queryParam} onSelect={(res) => navigate(res.url)} />
+                ))}
+              </div>
+            </Card>
           )}
         </>
       ) : (
-        <div className="text-center py-12">
-          <Search size={40} className="mx-auto mb-4 text-gray-300" />
-          <p className="text-gray-500">Enter a search term to find cases, documents, and statutes.</p>
-        </div>
+        <Card>
+          <EmptyState
+            icon={<Icon name="search" size={24} />}
+            title="Search the entire platform"
+            description="Cases, evidence, witnesses, documents, charges, statutes, California & federal codes, case law, authorities, timeline events, people, vehicles, knowledge-graph nodes, OCR text, notes, messages, reports and audit events."
+            action={
+              <div className="flex flex-wrap justify-center gap-2 mt-2">
+                {Object.values(TYPE_META)
+                  .filter((m, i, arr) => arr.findIndex((x) => x.group === m.group) === i)
+                  .map((m) => (
+                    <Badge key={m.group} variant="default">{m.group}</Badge>
+                  ))}
+              </div>
+            }
+          />
+        </Card>
       )}
     </div>
   );

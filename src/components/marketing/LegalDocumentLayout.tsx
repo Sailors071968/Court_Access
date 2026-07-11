@@ -32,7 +32,7 @@ export function LegalDocumentLayout({ title, lastUpdated, children }: LegalDocum
 
       <main className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <h1 className="text-3xl sm:text-4xl font-bold text-white mb-2">{title}</h1>
-        <p className="text-slate-500 text-sm mb-10">Last updated: {lastUpdated}</p>
+        <p className="text-slate-400 text-sm mb-10">Last updated: {lastUpdated}</p>
         <div className="prose prose-invert prose-slate max-w-none space-y-8 text-slate-300 leading-relaxed">
           {children}
         </div>

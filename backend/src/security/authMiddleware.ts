@@ -56,6 +56,12 @@ export interface AuthenticatedRequest extends FastifyRequest {
 // Configuration
 // ---------------------------------------------------------------------------
 
+// In production, JWT secrets MUST be provided — never silently fall back to an
+// ephemeral random secret (which would invalidate all tokens on restart and
+// weaken security). Fail fast instead.
+if (process.env.NODE_ENV === 'production' && (!process.env.JWT_SECRET || !process.env.JWT_REFRESH_SECRET)) {
+  throw new Error('[Security] JWT_SECRET and JWT_REFRESH_SECRET must be set in production');
+}
 const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(64).toString('hex');
 const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || crypto.randomBytes(64).toString('hex');
 const ACCESS_TOKEN_EXPIRY = '15m';
@@ -78,7 +84,10 @@ export async function generateRefreshToken(
   payload: Omit<JwtPayload, 'iat' | 'exp'>,
   device?: { userAgent?: string; ipAddress?: string; deviceLabel?: string },
 ): Promise<string> {
-  const token = jwt.sign(payload, JWT_REFRESH_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRY });
+  // Unique jti guarantees the signed token is distinct even when two tokens are
+  // issued for the same user within the same second (e.g. register→login),
+  // preventing a unique-constraint 500 on refresh_tokens.token.
+  const token = jwt.sign(payload, JWT_REFRESH_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRY, jwtid: crypto.randomUUID() });
 
   await prisma.refreshToken.create({
     data: {
@@ -219,6 +228,7 @@ const ROUTE_PERMISSIONS: Record<string, UserRole[]> = {
   '/api/admin/engineering-dashboard': ['admin', 'staff'],
   '/api/admin/deployment-checks': ['admin', 'staff'],
   '/api/admin/discount-codes': ['admin', 'staff'],
+  '/api/admin/integrations': ['admin', 'staff'],
   '/api/admin/stats': ['admin', 'staff'],
   '/api/admin/users': ['admin', 'staff'],
   '/api/admin/cases': ['admin', 'staff'],

@@ -130,7 +130,7 @@ export function ContactSalesPage() {
             </Link>
             <div className="flex items-center gap-3">
               <Link to="/login" className="text-sm text-slate-300 hover:text-white font-medium transition-colors">Sign In</Link>
-              <Link to="/register" className="text-sm bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-4 py-2 rounded-lg transition-colors">
+              <Link to="/register" className="text-sm bg-amber-500 hover:bg-amber-400 text-white font-semibold px-4 py-2 rounded-lg transition-colors">
                 Get Started
               </Link>
             </div>
@@ -177,72 +177,72 @@ export function ContactSalesPage() {
           </div>
 
           {/* Right: Form */}
-          <div className="bg-white rounded-2xl shadow-xl p-8">
+          <div className="bg-white/5 rounded-2xl shadow-xl p-8">
             <form onSubmit={handleSubmit} className="space-y-4">
               <div>
-                <label htmlFor="contact-name" className="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
+                <label htmlFor="contact-name" className="block text-sm font-medium text-slate-200 mb-1">Full Name *</label>
                 <input
                   id="contact-name"
                   name="name"
                   type="text"
                   value={form.name}
                   onChange={handleChange}
-                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  className="w-full px-4 py-2.5 rounded-lg border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
                   placeholder="Jane Smith"
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="contact-org" className="block text-sm font-medium text-gray-700 mb-1">Organization *</label>
+                <label htmlFor="contact-org" className="block text-sm font-medium text-slate-200 mb-1">Organization *</label>
                 <input
                   id="contact-org"
                   name="organization"
                   type="text"
                   value={form.organization}
                   onChange={handleChange}
-                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  className="w-full px-4 py-2.5 rounded-lg border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
                   placeholder="e.g. Los Angeles County DA Office"
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="contact-role" className="block text-sm font-medium text-gray-700 mb-1">Role *</label>
+                <label htmlFor="contact-role" className="block text-sm font-medium text-slate-200 mb-1">Role *</label>
                 <input
                   id="contact-role"
                   name="role"
                   type="text"
                   value={form.role}
                   onChange={handleChange}
-                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  className="w-full px-4 py-2.5 rounded-lg border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
                   placeholder="e.g. Chief Deputy District Attorney"
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="contact-email" className="block text-sm font-medium text-gray-700 mb-1">Email *</label>
+                <label htmlFor="contact-email" className="block text-sm font-medium text-slate-200 mb-1">Email *</label>
                 <input
                   id="contact-email"
                   name="email"
                   type="email"
                   value={form.email}
                   onChange={handleChange}
-                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
+                  className="w-full px-4 py-2.5 rounded-lg border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500"
                   placeholder="jane.smith@agency.gov"
                   required
                 />
               </div>
 
               <div>
-                <label htmlFor="contact-agency-type" className="block text-sm font-medium text-gray-700 mb-1">Agency Type *</label>
+                <label htmlFor="contact-agency-type" className="block text-sm font-medium text-slate-200 mb-1">Agency Type *</label>
                 <select
                   id="contact-agency-type"
                   name="agencyType"
                   value={form.agencyType}
                   onChange={handleChange}
-                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white"
+                  className="w-full px-4 py-2.5 rounded-lg border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 bg-white/5"
                   required
                 >
                   <option value="">Select agency type</option>
@@ -253,14 +253,14 @@ export function ContactSalesPage() {
               </div>
 
               <div>
-                <label htmlFor="contact-message" className="block text-sm font-medium text-gray-700 mb-1">Message *</label>
+                <label htmlFor="contact-message" className="block text-sm font-medium text-slate-200 mb-1">Message *</label>
                 <textarea
                   id="contact-message"
                   name="message"
                   value={form.message}
                   onChange={handleChange}
                   rows={4}
-                  className="w-full px-4 py-2.5 rounded-lg border border-gray-300 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none"
+                  className="w-full px-4 py-2.5 rounded-lg border border-white/10 text-sm focus:outline-none focus:ring-2 focus:ring-amber-500 resize-none"
                   placeholder="Tell us about your organization and what you're looking for..."
                   required
                 />
@@ -269,7 +269,7 @@ export function ContactSalesPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full bg-amber-500 hover:bg-amber-400 text-slate-900 py-3 rounded-lg font-semibold text-sm transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                className="w-full bg-amber-500 hover:bg-amber-400 text-white py-3 rounded-lg font-semibold text-sm transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
               >
                 {isSubmitting ? 'Sending...' : (
                   <>

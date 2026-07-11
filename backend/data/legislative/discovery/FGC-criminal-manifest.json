@@ -1,0 +1,133 @@
+{
+  "version": "1.0.0-criminal",
+  "code": "FGC",
+  "codeName": "Fish and Game Code",
+  "discoveredAt": "2026-07-07T16:33:05.164Z",
+  "completedAt": "2026-07-07T16:33:05.164Z",
+  "status": "completed",
+  "audit": [
+    {
+      "timestamp": "2026-07-07T16:33:05.164Z",
+      "action": "criminal_seed_targeting",
+      "detail": "8 seed sections"
+    }
+  ],
+  "hierarchyNodes": [],
+  "sections": [
+    {
+      "code": "FGC",
+      "section": "2000.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FGC&sectionNum=2000.",
+      "hierarchy": {
+        "code": "FGC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FGC&sectionNum=2000."
+    },
+    {
+      "code": "FGC",
+      "section": "2001.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FGC&sectionNum=2001.",
+      "hierarchy": {
+        "code": "FGC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FGC&sectionNum=2001."
+    },
+    {
+      "code": "FGC",
+      "section": "2002.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FGC&sectionNum=2002.",
+      "hierarchy": {
+        "code": "FGC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FGC&sectionNum=2002."
+    },
+    {
+      "code": "FGC",
+      "section": "5650.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FGC&sectionNum=5650.",
+      "hierarchy": {
+        "code": "FGC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FGC&sectionNum=5650."
+    },
+    {
+      "code": "FGC",
+      "section": "5652.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FGC&sectionNum=5652.",
+      "hierarchy": {
+        "code": "FGC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FGC&sectionNum=5652."
+    },
+    {
+      "code": "FGC",
+      "section": "12000.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FGC&sectionNum=12000.",
+      "hierarchy": {
+        "code": "FGC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FGC&sectionNum=12000."
+    },
+    {
+      "code": "FGC",
+      "section": "12002.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FGC&sectionNum=12002.",
+      "hierarchy": {
+        "code": "FGC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FGC&sectionNum=12002."
+    },
+    {
+      "code": "FGC",
+      "section": "1602.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FGC&sectionNum=1602.",
+      "hierarchy": {
+        "code": "FGC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FGC&sectionNum=1602."
+    }
+  ],
+  "stats": {
+    "pagesFetched": 0,
+    "expandedBranchPages": 0,
+    "displayTextPages": 0,
+    "hierarchyNodes": 0,
+    "sectionsDiscovered": 8,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 0,
+    "anomalies": 0
+  },
+  "anomalies": []
+}

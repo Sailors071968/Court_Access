@@ -1,0 +1,538 @@
+[
+  {
+    "path": "/api/contact",
+    "file": "src/pages/ContactSalesPage.tsx"
+  },
+  {
+    "path": "/api/admin/users/*",
+    "file": "src/pages/admin/AdminPage.tsx"
+  },
+  {
+    "path": "/api/admin/cases/*",
+    "file": "src/pages/admin/AdminPage.tsx"
+  },
+  {
+    "path": "/api/admin/stats",
+    "file": "src/pages/admin/AdminPage.tsx"
+  },
+  {
+    "path": "/api/admin/users",
+    "file": "src/pages/admin/AdminPage.tsx"
+  },
+  {
+    "path": "/api/admin/cases",
+    "file": "src/pages/admin/AdminPage.tsx"
+  },
+  {
+    "path": "/api/admin/operations/dashboard",
+    "file": "src/pages/admin/OperationsCommandCenter.tsx"
+  },
+  {
+    "path": "/api/auth/forgot-password",
+    "file": "src/pages/auth/ForgotPasswordPage.tsx"
+  },
+  {
+    "path": "/api/discount-codes/validate",
+    "file": "src/pages/auth/RegisterPage.tsx"
+  },
+  {
+    "path": "/api/discount-codes/apply",
+    "file": "src/pages/auth/RegisterPage.tsx"
+  },
+  {
+    "path": "/api/auth/reset-password",
+    "file": "src/pages/auth/ResetPasswordPage.tsx"
+  },
+  {
+    "path": "/api/auth/verify-email",
+    "file": "src/pages/auth/VerifyEmailPage.tsx"
+  },
+  {
+    "path": "/api/cases/*/litigation-strategy",
+    "file": "src/pages/case/LitigationStrategyView.tsx"
+  },
+  {
+    "path": "/api/cases/*/trial-exhibits",
+    "file": "src/pages/case/TrialExhibitWorkspace.tsx"
+  },
+  {
+    "path": "/api/admin/deployment-checks",
+    "file": "src/pages/dashboard/BetaDeploymentVerification.tsx"
+  },
+  {
+    "path": "/api/forensic/timeline/*",
+    "file": "src/pages/dashboard/CaseTimelineVisualizer.tsx"
+  },
+  {
+    "path": "/api/operations/cpra-requests",
+    "file": "src/pages/dashboard/CpraCampaignTimeline.tsx"
+  },
+  {
+    "path": "/api/cpra/dashboard",
+    "file": "src/pages/dashboard/CpraDashboard.tsx"
+  },
+  {
+    "path": "/api/cpra/campaigns",
+    "file": "src/pages/dashboard/CpraDashboard.tsx"
+  },
+  {
+    "path": "/api/cpra/campaigns/*",
+    "file": "src/pages/dashboard/CpraDashboard.tsx"
+  },
+  {
+    "path": "/api/cpra/campaigns",
+    "file": "src/pages/dashboard/CpraDashboard.tsx"
+  },
+  {
+    "path": "/api/cpra/campaigns/*/launch",
+    "file": "src/pages/dashboard/CpraDashboard.tsx"
+  },
+  {
+    "path": "/api/cpra/requests/*/response",
+    "file": "src/pages/dashboard/CpraDashboard.tsx"
+  },
+  {
+    "path": "/api/cpra/overdue",
+    "file": "src/pages/dashboard/CpraDashboard.tsx"
+  },
+  {
+    "path": "/api/cpra/annual/dashboard",
+    "file": "src/pages/dashboard/CpraDashboard.tsx"
+  },
+  {
+    "path": "/api/cpra/annual/updates",
+    "file": "src/pages/dashboard/CpraDashboard.tsx"
+  },
+  {
+    "path": "/api/cpra/annual/updates/*/received",
+    "file": "src/pages/dashboard/CpraDashboard.tsx"
+  },
+  {
+    "path": "/api/cpra/annual/check",
+    "file": "src/pages/dashboard/CpraDashboard.tsx"
+  },
+  {
+    "path": "/api/cpra",
+    "file": "src/pages/dashboard/CpraDashboard.tsx"
+  },
+  {
+    "path": "/api/admin/discount-codes/*",
+    "file": "src/pages/dashboard/DiscountCodesDashboard.tsx"
+  },
+  {
+    "path": "/api/admin/discount-codes/*",
+    "file": "src/pages/dashboard/DiscountCodesDashboard.tsx"
+  },
+  {
+    "path": "/api/admin/discount-codes",
+    "file": "src/pages/dashboard/DiscountCodesDashboard.tsx"
+  },
+  {
+    "path": "/api/admin/discount-codes",
+    "file": "src/pages/dashboard/DiscountCodesDashboard.tsx"
+  },
+  {
+    "path": "/api/evidence/processing-logs",
+    "file": "src/pages/dashboard/EvidenceProcessingTrace.tsx"
+  },
+  {
+    "path": "/api/cases/*/evidence-requests",
+    "file": "src/pages/dashboard/EvidenceRequestsDashboard.tsx"
+  },
+  {
+    "path": "/api/cases/*/evidence-requests/detect",
+    "file": "src/pages/dashboard/EvidenceRequestsDashboard.tsx"
+  },
+  {
+    "path": "/api/evidence-requests/*/respond",
+    "file": "src/pages/dashboard/EvidenceRequestsDashboard.tsx"
+  },
+  {
+    "path": "/api/cases",
+    "file": "src/pages/dashboard/EvidenceRequestsDashboard.tsx"
+  },
+  {
+    "path": "/api/compliance/dashboard",
+    "file": "src/pages/dashboard/PolicyComplianceDashboard.tsx"
+  },
+  {
+    "path": "/api/compliance/heatmap",
+    "file": "src/pages/dashboard/PolicyComplianceDashboard.tsx"
+  },
+  {
+    "path": "/api/policy-intelligence/dashboard",
+    "file": "src/pages/dashboard/PolicyIntelligenceDashboard.tsx"
+  },
+  {
+    "path": "/api/policy-intelligence/agencies",
+    "file": "src/pages/dashboard/PolicyIntelligenceDashboard.tsx"
+  },
+  {
+    "path": "/api/policy-intelligence/taxonomy/seed",
+    "file": "src/pages/dashboard/PolicyIntelligenceDashboard.tsx"
+  },
+  {
+    "path": "/api/policy-intelligence",
+    "file": "src/pages/dashboard/PolicyIntelligenceDashboard.tsx"
+  },
+  {
+    "path": "/api/operations/policy-matrix",
+    "file": "src/pages/dashboard/PolicyMatrixVirtualized.tsx"
+  },
+  {
+    "path": "/api/operations/dashboard",
+    "file": "src/pages/dashboard/PolicyOperationsDashboard.tsx"
+  },
+  {
+    "path": "/api/policy-pipeline/stats",
+    "file": "src/pages/dashboard/PolicyPipelineDashboard.tsx"
+  },
+  {
+    "path": "/api/policy-pipeline/agencies",
+    "file": "src/pages/dashboard/PolicyPipelineDashboard.tsx"
+  },
+  {
+    "path": "/api/policy-pipeline/run/*",
+    "file": "src/pages/dashboard/PolicyPipelineDashboard.tsx"
+  },
+  {
+    "path": "/api/operations/topics/registry",
+    "file": "src/pages/dashboard/PolicyTopicRegistry.tsx"
+  },
+  {
+    "path": "/api/operations/topics",
+    "file": "src/pages/dashboard/PolicyTopicsViewer.tsx"
+  },
+  {
+    "path": "/api/operations/topics/*",
+    "file": "src/pages/dashboard/PolicyTopicsViewer.tsx"
+  },
+  {
+    "path": "/api/operations/topics/*/export/csv",
+    "file": "src/pages/dashboard/PolicyTopicsViewer.tsx"
+  },
+  {
+    "path": "/api/admin/repository-integrity",
+    "file": "src/pages/dashboard/RepositoryIntegrityDashboard.tsx"
+  },
+  {
+    "path": "/api/system/health",
+    "file": "src/pages/dashboard/SystemHealthDashboard.tsx"
+  },
+  {
+    "path": "/api/billing/usage",
+    "file": "src/pages/dashboard/UsageDashboard.tsx"
+  },
+  {
+    "path": "/api/exhibits/create-scene",
+    "file": "src/pages/dashboard/exhibits/ExhibitViewer.tsx"
+  },
+  {
+    "path": "/api/exhibits/export/html",
+    "file": "src/pages/dashboard/exhibits/ExhibitViewer.tsx"
+  },
+  {
+    "path": "/api/membership/onboarding",
+    "file": "src/pages/onboarding/RoleOnboardingPage.tsx"
+  },
+  {
+    "path": "/api/cases",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/cases/*",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/cases",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/cases/*",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/cases/*",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/cases/*/evidence",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/evidence/*",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/evidence/*",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/evidence/upload-url",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/evidence",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/narrative/*/claims${qs",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/narrative/*/contradictions",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/narrative/*/impeachment*",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/narrative/analyze/*",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/evidence/upload",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/timeline/*/events",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/timeline/*",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/timeline/*/conflicts",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/timeline/rebuild/*",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/contradiction/analyze/*",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/contradiction/recommendations/*",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/billing/plans",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/billing/create-checkout-session",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/billing/create-portal-session",
+    "file": "src/services/caseApi.ts"
+  },
+  {
+    "path": "/api/courtlistener/status",
+    "file": "src/services/courtListenerApi.ts"
+  },
+  {
+    "path": "/api/courtlistener/search",
+    "file": "src/services/courtListenerApi.ts"
+  },
+  {
+    "path": "/api/courtlistener/citation-lookup",
+    "file": "src/services/courtListenerApi.ts"
+  },
+  {
+    "path": "/api/doctrine/analyze",
+    "file": "src/services/doctrineService.ts"
+  },
+  {
+    "path": "/api/doctrine/quick-scan",
+    "file": "src/services/doctrineService.ts"
+  },
+  {
+    "path": "/api/doctrine/status",
+    "file": "src/services/doctrineService.ts"
+  },
+  {
+    "path": "/api/doctrine/search",
+    "file": "src/services/doctrineService.ts"
+  },
+  {
+    "path": "/api/doctrine/seed",
+    "file": "src/services/doctrineService.ts"
+  },
+  {
+    "path": "/api/doctrine",
+    "file": "src/services/doctrineService.ts"
+  },
+  {
+    "path": "/api/firm*",
+    "file": "src/services/firmApi.ts"
+  },
+  {
+    "path": "/api/firm*",
+    "file": "src/services/firmApi.ts"
+  },
+  {
+    "path": "/api/firm*",
+    "file": "src/services/firmApi.ts"
+  },
+  {
+    "path": "/api/firm*",
+    "file": "src/services/firmApi.ts"
+  },
+  {
+    "path": "/api/search",
+    "file": "src/services/globalSearchService.ts"
+  },
+  {
+    "path": "/api/cases/*/investigator-workbench",
+    "file": "src/services/investigatorApi.ts"
+  },
+  {
+    "path": "/api/cases/*/investigator/witnesses",
+    "file": "src/services/investigatorApi.ts"
+  },
+  {
+    "path": "/api/cases/*/investigator/leads",
+    "file": "src/services/investigatorApi.ts"
+  },
+  {
+    "path": "/api/cases/*/investigator/field-notes",
+    "file": "src/services/investigatorApi.ts"
+  },
+  {
+    "path": "/api/membership/account",
+    "file": "src/services/membershipApi.ts"
+  },
+  {
+    "path": "/api/membership/settings",
+    "file": "src/services/membershipApi.ts"
+  },
+  {
+    "path": "/api/membership/shared-access",
+    "file": "src/services/membershipApi.ts"
+  },
+  {
+    "path": "/api/membership/permission-grants",
+    "file": "src/services/membershipApi.ts"
+  },
+  {
+    "path": "/api/billing/create-checkout-session",
+    "file": "src/services/membershipApi.ts"
+  },
+  {
+    "path": "/api/cases/*/documents/*/redactions",
+    "file": "src/services/membershipApi.ts"
+  },
+  {
+    "path": "/api/cases/*/documents/*/redactions",
+    "file": "src/services/membershipApi.ts"
+  },
+  {
+    "path": "/api/cases/*/disclosures",
+    "file": "src/services/membershipApi.ts"
+  },
+  {
+    "path": "/api/cases/*/disclosures",
+    "file": "src/services/membershipApi.ts"
+  },
+  {
+    "path": "/api/organizations/current",
+    "file": "src/services/organizationApi.ts"
+  },
+  {
+    "path": "/api/organizations/current",
+    "file": "src/services/organizationApi.ts"
+  },
+  {
+    "path": "/api/organizations/onboarding",
+    "file": "src/services/organizationApi.ts"
+  },
+  {
+    "path": "/api/organizations/offices",
+    "file": "src/services/organizationApi.ts"
+  },
+  {
+    "path": "/api/organizations/offices",
+    "file": "src/services/organizationApi.ts"
+  },
+  {
+    "path": "/api/organizations/practice-groups",
+    "file": "src/services/organizationApi.ts"
+  },
+  {
+    "path": "/api/organizations/practice-groups",
+    "file": "src/services/organizationApi.ts"
+  },
+  {
+    "path": "/api/organizations/members",
+    "file": "src/services/organizationApi.ts"
+  },
+  {
+    "path": "/api/organizations/invitations",
+    "file": "src/services/organizationApi.ts"
+  },
+  {
+    "path": "/api/organizations/invitations",
+    "file": "src/services/organizationApi.ts"
+  },
+  {
+    "path": "/api/organizations/analytics",
+    "file": "src/services/organizationApi.ts"
+  },
+  {
+    "path": "/api/organizations/search",
+    "file": "src/services/organizationApi.ts"
+  },
+  {
+    "path": "/api/organizations/invitations/preview",
+    "file": "src/services/organizationApi.ts"
+  },
+  {
+    "path": "/api/auth/accept-invitation",
+    "file": "src/services/organizationApi.ts"
+  },
+  {
+    "path": "/api/cases/*/workbench",
+    "file": "src/services/workbenchApi.ts"
+  },
+  {
+    "path": "/api/cases/*/workbench/export/*",
+    "file": "src/services/workbenchApi.ts"
+  },
+  {
+    "path": "/api/cases/*/workbench/notes",
+    "file": "src/services/workbenchApi.ts"
+  },
+  {
+    "path": "/api/cases/*/workbench/tasks",
+    "file": "src/services/workbenchApi.ts"
+  },
+  {
+    "path": "/api/cases/*/workbench/tasks/*",
+    "file": "src/services/workbenchApi.ts"
+  },
+  {
+    "path": "/api/cases/*/workbench/pins",
+    "file": "src/services/workbenchApi.ts"
+  },
+  {
+    "path": "/api/auth/login",
+    "file": "src/stores/authStore.ts"
+  },
+  {
+    "path": "/api/auth/mfa/challenge",
+    "file": "src/stores/authStore.ts"
+  },
+  {
+    "path": "/api/auth/register",
+    "file": "src/stores/authStore.ts"
+  },
+  {
+    "path": "/api/auth/logout",
+    "file": "src/stores/authStore.ts"
+  }
+]

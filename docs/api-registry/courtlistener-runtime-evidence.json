@@ -1,0 +1,54 @@
+{
+  "certifiedAt": "2026-07-07T15:16:04.479438Z",
+  "apiBase": "https://www.courtlistener.com/api/rest/v4",
+  "tokenConfigured": false,
+  "steps": [
+    {
+      "capability": "integration status",
+      "endpoint": "GET /api/courtlistener/status",
+      "http": 200,
+      "verdict": "PASS",
+      "evidence": "integrated=true, capabilities=[search,opinion,docket,citation-lookup]"
+    },
+    {
+      "capability": "case-law search",
+      "endpoint": "GET /api/courtlistener/search?q=terry stop reasonable suspicion",
+      "http": 200,
+      "verdict": "PASS",
+      "evidence": "24780 matches; first='State v. Jackson' (real URL)"
+    },
+    {
+      "capability": "case-law search (2)",
+      "endpoint": "GET /api/courtlistener/search?q=fourth amendment search",
+      "http": 200,
+      "verdict": "PASS",
+      "evidence": "167662 matches; real opinions w/ citations+court+URL"
+    },
+    {
+      "capability": "opinion retrieval",
+      "endpoint": "GET /api/courtlistener/opinions/:id",
+      "http": 401,
+      "verdict": "UNKNOWN",
+      "evidence": "upstream requires token; 401 surfaced honestly (not a code defect). Set COURTLISTENER_API_TOKEN to enable."
+    },
+    {
+      "capability": "citation lookup/analysis",
+      "endpoint": "POST /api/courtlistener/citation-lookup",
+      "http": 401,
+      "verdict": "UNKNOWN",
+      "evidence": "upstream requires token; requiresToken=true surfaced. Enable with COURTLISTENER_API_TOKEN."
+    },
+    {
+      "capability": "auth isolation",
+      "endpoint": "GET /api/courtlistener/search (no token)",
+      "http": 401,
+      "verdict": "PASS",
+      "evidence": "platform auth enforced"
+    }
+  ],
+  "summary": {
+    "PASS": 4,
+    "UNKNOWN": 2,
+    "FAIL": 0
+  }
+}

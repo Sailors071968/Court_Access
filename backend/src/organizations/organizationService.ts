@@ -24,7 +24,10 @@ const INVITE_EXPIRY_MS = 7 * 24 * 60 * 60 * 1000;
 const BCRYPT_ROUNDS = 12;
 
 export async function ensureMembership(userId: string, tenantId: string) {
-  const existing = await prisma.organizationMember.findUnique({ where: { userId } });
+  // OrganizationMember is unique on [organizationId, userId] — userId alone is
+  // NOT a unique key, so findUnique({where:{userId}}) was an invalid invocation
+  // (500). Scope the lookup to the tenant with findFirst.
+  const existing = await prisma.organizationMember.findFirst({ where: { userId, organizationId: tenantId } });
   if (existing) return existing;
 
   const user = await prisma.user.findUnique({ where: { id: userId } });
@@ -154,6 +157,83 @@ export async function listMembers(tenantId: string) {
     },
     orderBy: { joinedAt: 'asc' },
   });
+}
+
+/**
+ * All collaborators (active + suspended) for the management page.
+ * Removed members are excluded. There is no numerical limit.
+ */
+export async function listCollaborators(tenantId: string) {
+  return prisma.organizationMember.findMany({
+    where: { organizationId: tenantId, status: { in: ['active', 'suspended'] } },
+    include: {
+      user: { select: { id: true, email: true, name: true, role: true, createdAt: true, avatarUrl: true } },
+      office: { select: { officeId: true, name: true } },
+      practiceGroup: { select: { practiceGroupId: true, name: true } },
+    },
+    orderBy: { joinedAt: 'asc' },
+  });
+}
+
+const COLLABORATOR_STATUSES = new Set(['active', 'suspended', 'removed']);
+
+/**
+ * Update a collaborator's status (suspend / reactivate / remove) and/or role.
+ * Tenant-scoped; the primary account owner (first joined member) cannot be
+ * suspended or removed. Every change is written to the security/audit log.
+ */
+export async function updateCollaborator(
+  tenantId: string,
+  memberId: string,
+  actorUserId: string,
+  changes: { status?: string; role?: string; caseRole?: string | null },
+) {
+  const member = await prisma.organizationMember.findFirst({
+    where: { memberId, organizationId: tenantId },
+    include: { user: { select: { id: true, email: true, name: true } } },
+  });
+  if (!member) throw new Error('Collaborator not found');
+
+  // Protect the primary owner (earliest-joined member of the tenant).
+  const owner = await prisma.organizationMember.findFirst({
+    where: { organizationId: tenantId },
+    orderBy: { joinedAt: 'asc' },
+    select: { memberId: true },
+  });
+  const isOwner = owner?.memberId === memberId;
+
+  const data: { status?: string; role?: string; caseRole?: string | null } = {};
+
+  if (changes.status !== undefined) {
+    if (!COLLABORATOR_STATUSES.has(changes.status)) throw new Error('Invalid collaborator status');
+    if (isOwner && changes.status !== 'active') throw new Error('The primary account owner cannot be suspended or removed');
+    data.status = changes.status;
+  }
+  if (changes.role !== undefined) {
+    if (!validateMemberRole(changes.role)) throw new Error('Invalid collaborator role');
+    data.role = changes.role;
+  }
+  if (changes.caseRole !== undefined) data.caseRole = changes.caseRole;
+
+  if (Object.keys(data).length === 0) throw new Error('No changes provided');
+
+  const updated = await prisma.organizationMember.update({
+    where: { memberId },
+    data,
+    include: {
+      user: { select: { id: true, email: true, name: true, role: true, avatarUrl: true } },
+      office: { select: { officeId: true, name: true } },
+    },
+  });
+
+  const summary = [
+    changes.status !== undefined ? `status=${changes.status}` : null,
+    changes.role !== undefined ? `role=${changes.role}` : null,
+    changes.caseRole !== undefined ? `caseRole=${changes.caseRole}` : null,
+  ].filter(Boolean).join(' ');
+  void logSecurityEvent('ORG_COLLABORATOR_UPDATED', actorUserId, undefined, `${member.user.email} ${summary}`);
+
+  return updated;
 }
 
 export async function createInvitation(

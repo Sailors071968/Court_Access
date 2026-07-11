@@ -7,6 +7,7 @@ import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import prisma from '../lib/prisma.js';
 import { logSecurityEvent } from '../security/authMiddleware.js';
 import { dispatchStripeWebhookEvent, type StripeEvent } from './stripeWebhookProcessor.js';
+import { resolveStripeSecret } from './stripeConfig.js';
 
 const STRIPE_WEBHOOK_SECRET = process.env.STRIPE_WEBHOOK_SECRET || '';
 
@@ -90,11 +91,11 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
     const userId = (request as unknown as { user?: { userId: string } }).user?.userId;
     if (!userId) return reply.code(401).send({ error: 'Authentication required' });
 
-    const stripeKey = process.env.STRIPE_SECRET_KEY;
+    const stripeKey = await resolveStripeSecret();
     if (!stripeKey) {
       return reply.code(503).send({
         error: 'Stripe not configured',
-        message: 'Configure STRIPE_SECRET_KEY to enable checkout',
+        message: 'Configure Stripe in Admin → Provider Integrations (or set STRIPE_SECRET_KEY) to enable checkout',
       });
     }
 
@@ -176,7 +177,7 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
       return reply.code(400).send({ error: 'Invalid session ID format' });
     }
 
-    const stripeKey = process.env.STRIPE_SECRET_KEY;
+    const stripeKey = await resolveStripeSecret();
     if (!stripeKey) return reply.code(503).send({ error: 'Stripe not configured' });
 
     try {
@@ -195,8 +196,8 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
     const userId = (request as unknown as { user?: { userId: string } }).user?.userId;
     if (!userId) return reply.code(401).send({ error: 'Authentication required' });
 
-    const stripeKey = process.env.STRIPE_SECRET_KEY;
-    if (!stripeKey) return reply.code(503).send({ error: 'Stripe is not configured' });
+    const stripeKey = await resolveStripeSecret();
+    if (!stripeKey) return reply.code(503).send({ error: 'Stripe is not configured', message: 'Configure Stripe in Admin → Provider Integrations (or set STRIPE_SECRET_KEY).' });
 
     const sub = await prisma.subscription.findUnique({ where: { userId } });
     if (!sub?.stripeCustomerId) {

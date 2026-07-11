@@ -26,7 +26,9 @@ import {
   getInvitationByToken,
   getOrganizationAuditLogs,
   getOrganizationForUser,
+  listCollaborators,
   listMembers,
+  updateCollaborator,
   listOffices,
   listPracticeGroups,
   updateOrganization,
@@ -53,7 +55,10 @@ async function requireOrgContext(request: AuthenticatedRequest, reply: FastifyRe
 async function requireOrgAdmin(request: AuthenticatedRequest, reply: FastifyReply) {
   const ctx = await requireOrgContext(request, reply);
   if (!ctx) return null;
-  if (!isOrgAdmin(ctx.user.role, ctx.member.role)) {
+  // The primary account owner (the member who created the org — never invited)
+  // always has collaborator-management authority, regardless of profession.
+  const isOwner = ctx.member.invitedById == null;
+  if (!isOwner && !isOrgAdmin(ctx.user.role, ctx.member.role)) {
     reply.code(403).send({ error: 'Organization admin access required' });
     return null;
   }
@@ -128,11 +133,49 @@ export async function registerOrganizationRoutes(app: FastifyInstance): Promise<
     }
   });
 
-  // GET /api/organizations/members
+  // GET /api/organizations/members?scope=all
   app.get('/api/organizations/members', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const ctx = await requireOrgContext(request, reply);
     if (!ctx) return;
+    const { scope } = request.query as { scope?: string };
+    if (scope === 'all') {
+      return { members: await listCollaborators(ctx.user.tenantId) };
+    }
     return { members: await listMembers(ctx.user.tenantId) };
+  });
+
+  // GET /api/organizations/collaborators — active + suspended, for management page
+  app.get('/api/organizations/collaborators', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const ctx = await requireOrgContext(request, reply);
+    if (!ctx) return;
+    return { collaborators: await listCollaborators(ctx.user.tenantId) };
+  });
+
+  // PATCH /api/organizations/members/:memberId — suspend / reactivate / role change
+  app.patch('/api/organizations/members/:memberId', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const ctx = await requireOrgAdmin(request, reply);
+    if (!ctx) return;
+    const { memberId } = request.params as { memberId: string };
+    const body = request.body as { status?: string; role?: string; caseRole?: string | null };
+    try {
+      const member = await updateCollaborator(ctx.user.tenantId, memberId, ctx.user.userId, body);
+      return { member };
+    } catch (err) {
+      return reply.code(400).send({ error: err instanceof Error ? err.message : 'Failed to update collaborator' });
+    }
+  });
+
+  // DELETE /api/organizations/members/:memberId — remove collaborator (soft)
+  app.delete('/api/organizations/members/:memberId', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const ctx = await requireOrgAdmin(request, reply);
+    if (!ctx) return;
+    const { memberId } = request.params as { memberId: string };
+    try {
+      const member = await updateCollaborator(ctx.user.tenantId, memberId, ctx.user.userId, { status: 'removed' });
+      return { member };
+    } catch (err) {
+      return reply.code(400).send({ error: err instanceof Error ? err.message : 'Failed to remove collaborator' });
+    }
   });
 
   // GET /api/organizations/invitations

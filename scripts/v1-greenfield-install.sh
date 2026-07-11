@@ -1,20 +1,21 @@
 #!/usr/bin/env bash
 # ==============================================================================
 # CourtAccess V1 — Greenfield Installation (parallel to production)
-# Source of truth: origin/dev @ github.com/Sailors071968/Court_Access
+# Source of truth: origin/dev (cloned ONLY into /var/www/courtaccess-v1)
 # Target:         /var/www/courtaccess-v1
-# Does NOT modify: /var/www/courtaccess or any legacy repository
+# NEVER modifies: /var/www/courtaccess git state, files, or PM2/nginx for courtaccess.net
 # ==============================================================================
 set -euo pipefail
 
 INSTALL_DIR="${INSTALL_DIR:-/var/www/courtaccess-v1}"
-GIT_REMOTE="${GIT_REMOTE:-git@github.com:Sailors071968/Court_Access.git}"
+PROTECTED_PROD_DIR="${PROTECTED_PROD_DIR:-/var/www/courtaccess}"
+GIT_REMOTE="${GIT_REMOTE:-https://github.com/Sailors071968/Court_Access.git}"
 GIT_BRANCH="${GIT_BRANCH:-dev}"
 API_PORT="${API_PORT:-3101}"
 FRONTEND_PORT="${FRONTEND_PORT:-8080}"
 PM2_APP_NAME="${PM2_APP_NAME:-courtaccess-v1}"
 V1_URL="${V1_URL:-http://127.0.0.1:${FRONTEND_PORT}}"
-ENV_SOURCE="${ENV_SOURCE:-}"  # optional: path to existing .env to copy secrets from
+ENV_SOURCE="${ENV_SOURCE:-}"  # read-only: copy secrets from production .env (never writes to ENV_SOURCE)
 TIMESTAMP="$(date -u +%Y%m%dT%H%M%SZ)"
 LOG_DIR="/var/log/courtaccess-v1"
 NGINX_SITE="/etc/nginx/sites-available/courtaccess-v1"
@@ -25,6 +26,14 @@ die() { echo "FATAL: $*" >&2; exit 1; }
 
 require_cmd() { command -v "$1" >/dev/null 2>&1 || die "Required command not found: $1"; }
 
+# --- Guard: never install into or modify production repository path ---
+resolve_path() { readlink -f "$1" 2>/dev/null || realpath "$1" 2>/dev/null || echo "$1"; }
+INSTALL_RESOLVED="$(resolve_path "$INSTALL_DIR")"
+PROD_RESOLVED="$(resolve_path "$PROTECTED_PROD_DIR")"
+if [[ "$INSTALL_RESOLVED" == "$PROD_RESOLVED" ]]; then
+  die "INSTALL_DIR must not be production path ${PROTECTED_PROD_DIR}. Greenfield installs only to /var/www/courtaccess-v1"
+fi
+
 require_cmd git
 require_cmd node
 require_cmd npm
@@ -33,27 +42,36 @@ require_cmd curl
 require_cmd sudo
 
 log "CourtAccess V1 greenfield install"
-log "  INSTALL_DIR:    ${INSTALL_DIR}"
-log "  GIT_BRANCH:     ${GIT_BRANCH}"
-log "  API_PORT:       ${API_PORT}"
-log "  FRONTEND_PORT:  ${FRONTEND_PORT}"
-log "  V1_URL:         ${V1_URL}"
+log "  INSTALL_DIR:       ${INSTALL_DIR}"
+log "  PROTECTED (frozen): ${PROTECTED_PROD_DIR}"
+log "  GIT_REMOTE:        ${GIT_REMOTE}"
+log "  GIT_BRANCH:        ${GIT_BRANCH}"
+log "  API_PORT:          ${API_PORT}"
+log "  FRONTEND_PORT:     ${FRONTEND_PORT}"
+log "  V1_URL:            ${V1_URL}"
 
-# --- 1. Fresh clone (never reuse legacy repo) ---
+# Record production git HEAD (read-only) to prove we did not modify it
+PROD_GIT_BEFORE=""
+if [[ -d "${PROTECTED_PROD_DIR}/.git" ]]; then
+  PROD_GIT_BEFORE="$(git -C "${PROTECTED_PROD_DIR}" rev-parse HEAD 2>/dev/null || true)"
+  log "Production repo HEAD (read-only snapshot): ${PROD_GIT_BEFORE:-unknown}"
+fi
+
+# --- 1. Clone origin/dev into V1 path ONLY (never reuse /var/www/courtaccess) ---
 if [[ -d "${INSTALL_DIR}/.git" ]]; then
-  log "Existing install found — fetching latest ${GIT_BRANCH}"
+  log "Existing V1 clone — syncing to origin/${GIT_BRANCH} (V1 path only)"
   cd "${INSTALL_DIR}"
   git remote set-url origin "${GIT_REMOTE}"
   git fetch origin --prune
   git checkout "${GIT_BRANCH}"
   git reset --hard "origin/${GIT_BRANCH}"
 else
-  log "Cloning fresh repository"
+  log "Fresh clone: origin/${GIT_BRANCH} → ${INSTALL_DIR}"
   sudo mkdir -p "$(dirname "${INSTALL_DIR}")"
-  if [[ -d "${INSTALL_DIR}" ]]; then
-  sudo mv "${INSTALL_DIR}" "${INSTALL_DIR}.pre-clone.${TIMESTAMP}"
+  if [[ -e "${INSTALL_DIR}" ]]; then
+    sudo mv "${INSTALL_DIR}" "${INSTALL_DIR}.pre-clone.${TIMESTAMP}"
   fi
-  sudo git clone --branch "${GIT_BRANCH}" "${GIT_REMOTE}" "${INSTALL_DIR}"
+  git clone --branch "${GIT_BRANCH}" "${GIT_REMOTE}" "${INSTALL_DIR}"
   sudo chown -R "$(whoami):$(whoami)" "${INSTALL_DIR}" 2>/dev/null || true
   cd "${INSTALL_DIR}"
 fi
@@ -94,8 +112,15 @@ upsert_env "HOST" "0.0.0.0" "${BACKEND_ENV}"
 upsert_env "FRONTEND_URL" "${V1_URL}" "${BACKEND_ENV}"
 upsert_env "EVIDENCE_UPLOAD_DIR" "${INSTALL_DIR}/uploads/evidence" "${BACKEND_ENV}"
 
-# Use separate database if not already set
-if ! grep -q '^DATABASE_URL=' "${BACKEND_ENV}" || grep -q 'REPLACE_WITH' "${BACKEND_ENV}"; then
+# Always point V1 at separate database (never reuse legacy courtaccess DB)
+if [[ -n "${ENV_SOURCE}" && -f "${ENV_SOURCE}" ]]; then
+  SRC_DB="$(grep -E '^DATABASE_URL=' "${ENV_SOURCE}" | head -1 | sed -E 's/^DATABASE_URL=//; s/^["'\'']//; s/["'\'']$//')"
+  if [[ -n "$SRC_DB" ]]; then
+    V1_DB_URL="$(echo "$SRC_DB" | sed -E 's|/[^/?]+(\?|$)|/courtaccess_v1\1|')"
+    upsert_env "DATABASE_URL" "${V1_DB_URL}" "${BACKEND_ENV}"
+    log "DATABASE_URL set to courtaccess_v1 (derived from ENV_SOURCE)"
+  fi
+elif ! grep -q '^DATABASE_URL=' "${BACKEND_ENV}" || grep -q 'REPLACE_WITH' "${BACKEND_ENV}"; then
   upsert_env "DATABASE_URL" "postgresql://courtaccess:CHANGE_ME@localhost:5432/courtaccess_v1?schema=public" "${BACKEND_ENV}"
   log "WARN: DATABASE_URL needs real credentials for courtaccess_v1"
 fi
@@ -225,9 +250,20 @@ cat > "${INSTALL_DIR}/V1_INSTALL_MANIFEST.json" <<EOF
   "pm2App": "${PM2_APP_NAME}",
   "pm2Ecosystem": "${PM2_ECOSYSTEM}",
   "nginxSite": "${NGINX_SITE}",
-  "legacyUntouched": ["/var/www/courtaccess"]
+  "legacyUntouched": ["${PROTECTED_PROD_DIR}"],
+  "productionGitHeadBefore": "${PROD_GIT_BEFORE}",
+  "architecture": "origin/dev cloned only into courtaccess-v1; production repo frozen until cutover"
 }
 EOF
+
+# Verify production git HEAD unchanged
+if [[ -n "$PROD_GIT_BEFORE" && -d "${PROTECTED_PROD_DIR}/.git" ]]; then
+  PROD_GIT_AFTER="$(git -C "${PROTECTED_PROD_DIR}" rev-parse HEAD 2>/dev/null || true)"
+  if [[ "$PROD_GIT_BEFORE" != "$PROD_GIT_AFTER" ]]; then
+    die "Production repo git HEAD changed during install — aborting (${PROD_GIT_BEFORE} → ${PROD_GIT_AFTER})"
+  fi
+  log "Production repo git HEAD unchanged: ${PROD_GIT_AFTER}"
+fi
 
 log "Install complete"
 log "  Commit:  ${DEPLOYED_SHA}"

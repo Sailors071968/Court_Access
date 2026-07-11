@@ -72,6 +72,40 @@ export async function listMembers() {
   return res.json();
 }
 
+export async function listCollaborators() {
+  const res = await fetch(`${API_BASE}/organizations/collaborators`, { headers: authHeaders() });
+  if (!res.ok) throw new Error('Failed to load collaborators');
+  return res.json();
+}
+
+export async function updateCollaborator(
+  memberId: string,
+  changes: { status?: string; role?: string; caseRole?: string | null },
+) {
+  const res = await fetch(`${API_BASE}/organizations/members/${memberId}`, {
+    method: 'PATCH',
+    headers: authHeaders(),
+    body: JSON.stringify(changes),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || 'Failed to update collaborator');
+  }
+  return res.json();
+}
+
+export async function removeCollaborator(memberId: string) {
+  const res = await fetch(`${API_BASE}/organizations/members/${memberId}`, {
+    method: 'DELETE',
+    headers: authHeaders(),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error || 'Failed to remove collaborator');
+  }
+  return res.json();
+}
+
 export async function listInvitations() {
   const res = await fetch(`${API_BASE}/organizations/invitations`, { headers: authHeaders() });
   if (!res.ok) throw new Error('Failed to load invitations');

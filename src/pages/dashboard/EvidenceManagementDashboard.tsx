@@ -202,12 +202,12 @@ export function EvidenceManagementDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Evidence Management</h1>
-          <p className="text-sm text-gray-500 mt-1">Administrative evidence upload management and audit trail</p>
+          <h1 className="text-2xl font-bold text-white">Evidence Management</h1>
+          <p className="text-sm text-slate-400 mt-1">Administrative evidence upload management and audit trail</p>
         </div>
         <button
           onClick={refresh}
-          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+          className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-200 bg-white/5 border border-white/10 rounded-lg hover:bg-white/5"
         >
           <RefreshCw size={14} /> Refresh
         </button>
@@ -219,15 +219,15 @@ export function EvidenceManagementDashboard() {
         <StatCard icon={<CheckCircle2 size={14} className="text-emerald-500" />} label="Analyzed" value={analyzedFiles} />
         <StatCard icon={<Clock size={14} className="text-amber-500" />} label="Pending" value={pendingFiles} />
         <StatCard icon={<XCircle size={14} className="text-red-500" />} label="Failed/Corrupted" value={failedFiles} />
-        <StatCard icon={<Archive size={14} className="text-gray-500" />} label="Disregarded" value={disregardedFiles} />
+        <StatCard icon={<Archive size={14} className="text-slate-400" />} label="Disregarded" value={disregardedFiles} />
       </div>
 
       {/* Tabs */}
-      <div className="flex gap-1 bg-gray-100 rounded-lg p-1 w-fit">
+      <div className="flex gap-1 bg-white/10 rounded-lg p-1 w-fit">
         <button
           onClick={() => setActiveTab('uploads')}
           className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-            activeTab === 'uploads' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+            activeTab === 'uploads' ? 'bg-white/5 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
           }`}
         >
           <Upload size={14} className="inline mr-1.5" />Uploads
@@ -235,7 +235,7 @@ export function EvidenceManagementDashboard() {
         <button
           onClick={() => setActiveTab('audit')}
           className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-            activeTab === 'audit' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+            activeTab === 'audit' ? 'bg-white/5 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
           }`}
         >
           <Activity size={14} className="inline mr-1.5" />Audit Log
@@ -248,21 +248,21 @@ export function EvidenceManagementDashboard() {
           {/* Filters */}
           <div className="flex flex-wrap items-center gap-3">
             <div className="relative flex-1 min-w-[200px] max-w-md">
-              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Search size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search files, cases, defendants..."
-                className="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                className="w-full pl-9 pr-3 py-2 text-sm border border-white/10 rounded-lg focus:ring-2 focus:ring-gold-light focus:border-gold-light outline-none"
               />
             </div>
             <div className="relative">
-              <Filter size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              <Filter size={14} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
               <select
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
-                className="pl-9 pr-8 py-2 text-sm border border-gray-300 rounded-lg bg-white appearance-none cursor-pointer focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none"
+                className="pl-9 pr-8 py-2 text-sm border border-white/10 rounded-lg bg-white/5 appearance-none cursor-pointer focus:ring-2 focus:ring-gold-light focus:border-gold-light outline-none"
               >
                 <option value="all">All Statuses</option>
                 <option value="pending">Pending</option>
@@ -272,39 +272,39 @@ export function EvidenceManagementDashboard() {
                 <option value="corrupted">Corrupted</option>
                 <option value="disregarded">Disregarded</option>
               </select>
-              <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
+              <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
             </div>
-            <label className="inline-flex items-center gap-2 text-sm text-gray-600 cursor-pointer">
+            <label className="inline-flex items-center gap-2 text-sm text-slate-300 cursor-pointer">
               <input
                 type="checkbox"
                 checked={showDeletedFilter}
                 onChange={(e) => setShowDeletedFilter(e.target.checked)}
-                className="rounded border-gray-300"
+                className="rounded border-white/10"
               />
               Show deleted
             </label>
           </div>
 
           {/* Table */}
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="bg-white/5 rounded-xl border border-white/10 overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-gray-200 bg-gray-50">
-                    <th className="text-left px-4 py-3 font-medium text-gray-600">File</th>
-                    <th className="text-left px-4 py-3 font-medium text-gray-600">Case</th>
-                    <th className="text-left px-4 py-3 font-medium text-gray-600">Defendant</th>
-                    <th className="text-left px-4 py-3 font-medium text-gray-600">Uploaded</th>
-                    <th className="text-left px-4 py-3 font-medium text-gray-600">Type</th>
-                    <th className="text-left px-4 py-3 font-medium text-gray-600">Status</th>
-                    <th className="text-left px-4 py-3 font-medium text-gray-600">Flags</th>
-                    <th className="text-right px-4 py-3 font-medium text-gray-600">Actions</th>
+                  <tr className="border-b border-white/10 bg-white/5">
+                    <th className="text-left px-4 py-3 font-medium text-slate-300">File</th>
+                    <th className="text-left px-4 py-3 font-medium text-slate-300">Case</th>
+                    <th className="text-left px-4 py-3 font-medium text-slate-300">Defendant</th>
+                    <th className="text-left px-4 py-3 font-medium text-slate-300">Uploaded</th>
+                    <th className="text-left px-4 py-3 font-medium text-slate-300">Type</th>
+                    <th className="text-left px-4 py-3 font-medium text-slate-300">Status</th>
+                    <th className="text-left px-4 py-3 font-medium text-slate-300">Flags</th>
+                    <th className="text-right px-4 py-3 font-medium text-slate-300">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   {filtered.length === 0 ? (
                     <tr>
-                      <td colSpan={8} className="px-4 py-12 text-center text-gray-500">
+                      <td colSpan={8} className="px-4 py-12 text-center text-slate-400">
                         No evidence files match your filters.
                       </td>
                     </tr>
@@ -312,27 +312,27 @@ export function EvidenceManagementDashboard() {
                     filtered.map((upload) => (
                       <tr
                         key={upload.fileId}
-                        className={`border-b border-gray-100 hover:bg-gray-50 transition-colors ${
-                          upload.deleted ? 'opacity-50 bg-red-50/30' : ''
+                        className={`border-b border-white/10 hover:bg-white/5 transition-colors ${
+                          upload.deleted ? 'opacity-50 bg-red-500/10/30' : ''
                         }`}
                       >
                         <td className="px-4 py-3">
                           <div className="flex items-center gap-2">
                             <FileTypeIcon fileType={upload.fileType} />
                             <div>
-                              <p className="font-medium text-gray-900 text-xs">{upload.fileName}</p>
-                              <p className="text-[10px] text-gray-400">{formatFileSize(upload.fileSizeBytes)}</p>
+                              <p className="font-medium text-white text-xs">{upload.fileName}</p>
+                              <p className="text-[10px] text-slate-400">{formatFileSize(upload.fileSizeBytes)}</p>
                             </div>
                           </div>
                         </td>
-                        <td className="px-4 py-3 text-gray-700 text-xs">{upload.caseName}</td>
-                        <td className="px-4 py-3 text-gray-700 text-xs">{upload.defendantName}</td>
+                        <td className="px-4 py-3 text-slate-200 text-xs">{upload.caseName}</td>
+                        <td className="px-4 py-3 text-slate-200 text-xs">{upload.defendantName}</td>
                         <td className="px-4 py-3 text-xs">
-                          <p className="text-gray-700">{new Date(upload.uploadedAt).toLocaleDateString()}</p>
-                          <p className="text-[10px] text-gray-400">{upload.uploadedBy} ({upload.uploadedByRole})</p>
+                          <p className="text-slate-200">{new Date(upload.uploadedAt).toLocaleDateString()}</p>
+                          <p className="text-[10px] text-slate-400">{upload.uploadedBy} ({upload.uploadedByRole})</p>
                         </td>
                         <td className="px-4 py-3">
-                          <span className="text-xs text-gray-500">{getFileTypeLabel(upload.fileType)}</span>
+                          <span className="text-xs text-slate-400">{getFileTypeLabel(upload.fileType)}</span>
                         </td>
                         <td className="px-4 py-3">
                           <AnalysisStatusBadge status={upload.analysisStatus} />
@@ -340,16 +340,16 @@ export function EvidenceManagementDashboard() {
                         <td className="px-4 py-3">
                           <div className="flex gap-1">
                             {upload.disregarded && (
-                              <span className="text-[10px] px-1.5 py-0.5 bg-gray-100 text-gray-600 rounded font-medium">DISREGARD</span>
+                              <span className="text-[10px] px-1.5 py-0.5 bg-white/10 text-slate-300 rounded font-medium">DISREGARD</span>
                             )}
                             {upload.isEvidenceArtifact && (
-                              <span className="text-[10px] px-1.5 py-0.5 bg-blue-100 text-blue-700 rounded font-medium">ARTIFACT</span>
+                              <span className="text-[10px] px-1.5 py-0.5 bg-blue-500/15 text-blue-300 rounded font-medium">ARTIFACT</span>
                             )}
                             {upload.flaggedCorrupted && (
-                              <span className="text-[10px] px-1.5 py-0.5 bg-red-100 text-red-700 rounded font-medium">CORRUPT</span>
+                              <span className="text-[10px] px-1.5 py-0.5 bg-red-500/15 text-red-300 rounded font-medium">CORRUPT</span>
                             )}
                             {upload.deleted && (
-                              <span className="text-[10px] px-1.5 py-0.5 bg-red-100 text-red-700 rounded font-medium">DELETED</span>
+                              <span className="text-[10px] px-1.5 py-0.5 bg-red-500/15 text-red-300 rounded font-medium">DELETED</span>
                             )}
                           </div>
                         </td>
@@ -417,8 +417,8 @@ export function EvidenceManagementDashboard() {
           </div>
 
           {/* Security note */}
-          <div className="p-3 bg-amber-50 rounded-lg border border-amber-200">
-            <p className="text-xs text-amber-800">
+          <div className="p-3 bg-amber-500/10 rounded-lg border border-amber-500/20">
+            <p className="text-xs text-amber-300">
               <AlertTriangle size={12} className="inline mr-1" />
               <strong>Security:</strong> Clients cannot delete files. Client users may only mark uploads as &quot;Disregard&quot;.
               All admin actions are logged in the audit trail.
@@ -429,45 +429,45 @@ export function EvidenceManagementDashboard() {
 
       {/* Audit Log Tab */}
       {activeTab === 'audit' && (
-        <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-          <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
-            <h3 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+        <div className="bg-white/5 rounded-xl border border-white/10 overflow-hidden">
+          <div className="px-4 py-3 border-b border-white/10 bg-white/5">
+            <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
               <Shield size={14} /> Evidence Admin Action Log
             </h3>
           </div>
           {auditLog.length === 0 ? (
-            <div className="p-12 text-center text-sm text-gray-500">
+            <div className="p-12 text-center text-sm text-slate-400">
               No admin actions recorded yet.
             </div>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
-                  <tr className="border-b border-gray-200 bg-gray-50/50">
-                    <th className="text-left px-4 py-3 font-medium text-gray-600">Timestamp</th>
-                    <th className="text-left px-4 py-3 font-medium text-gray-600">Admin</th>
-                    <th className="text-left px-4 py-3 font-medium text-gray-600">File</th>
-                    <th className="text-left px-4 py-3 font-medium text-gray-600">Action</th>
-                    <th className="text-left px-4 py-3 font-medium text-gray-600">Notes</th>
+                  <tr className="border-b border-white/10 bg-white/5/50">
+                    <th className="text-left px-4 py-3 font-medium text-slate-300">Timestamp</th>
+                    <th className="text-left px-4 py-3 font-medium text-slate-300">Admin</th>
+                    <th className="text-left px-4 py-3 font-medium text-slate-300">File</th>
+                    <th className="text-left px-4 py-3 font-medium text-slate-300">Action</th>
+                    <th className="text-left px-4 py-3 font-medium text-slate-300">Notes</th>
                   </tr>
                 </thead>
                 <tbody>
                   {auditLog.map((entry) => (
-                    <tr key={entry.actionId} className="border-b border-gray-100">
-                      <td className="px-4 py-3 text-xs text-gray-500">
+                    <tr key={entry.actionId} className="border-b border-white/10">
+                      <td className="px-4 py-3 text-xs text-slate-400">
                         {new Date(entry.timestamp).toLocaleString()}
                       </td>
                       <td className="px-4 py-3 text-xs">
                         <span className="inline-flex items-center gap-1">
-                          <User size={10} className="text-gray-400" />
+                          <User size={10} className="text-slate-400" />
                           {entry.adminUser}
                         </span>
                       </td>
-                      <td className="px-4 py-3 text-xs text-gray-700 font-medium">{entry.fileName}</td>
+                      <td className="px-4 py-3 text-xs text-slate-200 font-medium">{entry.fileName}</td>
                       <td className="px-4 py-3">
                         <ActionTypeBadge type={entry.actionType} />
                       </td>
-                      <td className="px-4 py-3 text-xs text-gray-500 max-w-[200px] truncate">
+                      <td className="px-4 py-3 text-xs text-slate-400 max-w-[200px] truncate">
                         {entry.notes || '—'}
                       </td>
                     </tr>
@@ -482,24 +482,24 @@ export function EvidenceManagementDashboard() {
       {/* Action Notes Modal */}
       {actionNotesModal && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-xl max-w-md w-full p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-2">
+          <div className="bg-white/5 rounded-2xl shadow-xl max-w-md w-full p-6">
+            <h2 className="text-lg font-semibold text-white mb-2">
               Confirm Action: {formatActionType(actionNotesModal.action)}
             </h2>
-            <p className="text-sm text-gray-500 mb-4">
+            <p className="text-sm text-slate-400 mb-4">
               This action will be recorded in the audit log. Add optional notes below.
             </p>
             <textarea
               value={actionNotes}
               onChange={(e) => setActionNotes(e.target.value)}
               placeholder="Reason for this action (optional)..."
-              className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 outline-none resize-none"
+              className="w-full px-3 py-2 text-sm border border-white/10 rounded-lg focus:ring-2 focus:ring-gold-light focus:border-gold-light outline-none resize-none"
               rows={3}
             />
             <div className="flex justify-end gap-3 mt-4">
               <button
                 onClick={() => setActionNotesModal(null)}
-                className="px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+                className="px-4 py-2 text-sm font-medium text-slate-200 bg-white/5 border border-white/10 rounded-lg hover:bg-white/5"
               >
                 Cancel
               </button>
@@ -523,12 +523,12 @@ export function EvidenceManagementDashboard() {
 
 function StatCard({ icon, label, value }: { icon: React.ReactNode; label: string; value: number }) {
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4">
+    <div className="bg-white/5 rounded-xl border border-white/10 p-4">
       <div className="flex items-center gap-2 mb-2">
         {icon}
-        <span className="text-xs font-medium text-gray-500">{label}</span>
+        <span className="text-xs font-medium text-slate-400">{label}</span>
       </div>
-      <p className="text-2xl font-bold text-gray-900">{value}</p>
+      <p className="text-2xl font-bold text-white">{value}</p>
     </div>
   );
 }
@@ -540,8 +540,8 @@ function ActionButton({ icon, title, onClick, danger }: { icon: React.ReactNode;
       title={title}
       className={`p-1.5 rounded-lg transition-colors ${
         danger
-          ? 'text-red-400 hover:bg-red-50 hover:text-red-600'
-          : 'text-gray-400 hover:bg-gray-100 hover:text-gray-600'
+          ? 'text-red-400 hover:bg-red-500/10 hover:text-red-600'
+          : 'text-slate-400 hover:bg-white/10 hover:text-slate-300'
       }`}
     >
       {icon}
@@ -551,12 +551,12 @@ function ActionButton({ icon, title, onClick, danger }: { icon: React.ReactNode;
 
 function AnalysisStatusBadge({ status }: { status: AnalysisStatus }) {
   const config: Record<AnalysisStatus, { bg: string; text: string; label: string }> = {
-    pending: { bg: 'bg-gray-100', text: 'text-gray-700', label: 'Pending' },
-    analyzing: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Analyzing' },
-    analyzed: { bg: 'bg-emerald-100', text: 'text-emerald-700', label: 'Analyzed' },
-    failed: { bg: 'bg-red-100', text: 'text-red-700', label: 'Failed' },
-    corrupted: { bg: 'bg-red-100', text: 'text-red-700', label: 'Corrupted' },
-    disregarded: { bg: 'bg-gray-100', text: 'text-gray-500', label: 'Disregarded' },
+    pending: { bg: 'bg-white/10', text: 'text-slate-200', label: 'Pending' },
+    analyzing: { bg: 'bg-blue-500/15', text: 'text-blue-300', label: 'Analyzing' },
+    analyzed: { bg: 'bg-emerald-500/15', text: 'text-emerald-300', label: 'Analyzed' },
+    failed: { bg: 'bg-red-500/15', text: 'text-red-300', label: 'Failed' },
+    corrupted: { bg: 'bg-red-500/15', text: 'text-red-300', label: 'Corrupted' },
+    disregarded: { bg: 'bg-white/10', text: 'text-slate-400', label: 'Disregarded' },
   };
   const c = config[status];
   return (
@@ -568,16 +568,16 @@ function AnalysisStatusBadge({ status }: { status: AnalysisStatus }) {
 
 function ActionTypeBadge({ type }: { type: EvidenceAdminAction['actionType'] }) {
   const config: Record<string, { bg: string; text: string; label: string }> = {
-    delete: { bg: 'bg-red-100', text: 'text-red-700', label: 'Delete' },
-    restore: { bg: 'bg-emerald-100', text: 'text-emerald-700', label: 'Restore' },
-    reprocess: { bg: 'bg-blue-100', text: 'text-blue-700', label: 'Reprocess' },
-    mark_artifact: { bg: 'bg-purple-100', text: 'text-purple-700', label: 'Mark Artifact' },
-    flag_corrupted: { bg: 'bg-red-100', text: 'text-red-700', label: 'Flag Corrupted' },
-    unflag_corrupted: { bg: 'bg-emerald-100', text: 'text-emerald-700', label: 'Unflag Corrupted' },
-    disregard: { bg: 'bg-gray-100', text: 'text-gray-700', label: 'Disregard' },
-    undo_disregard: { bg: 'bg-emerald-100', text: 'text-emerald-700', label: 'Undo Disregard' },
+    delete: { bg: 'bg-red-500/15', text: 'text-red-300', label: 'Delete' },
+    restore: { bg: 'bg-emerald-500/15', text: 'text-emerald-300', label: 'Restore' },
+    reprocess: { bg: 'bg-blue-500/15', text: 'text-blue-300', label: 'Reprocess' },
+    mark_artifact: { bg: 'bg-violet-500/15', text: 'text-violet-300', label: 'Mark Artifact' },
+    flag_corrupted: { bg: 'bg-red-500/15', text: 'text-red-300', label: 'Flag Corrupted' },
+    unflag_corrupted: { bg: 'bg-emerald-500/15', text: 'text-emerald-300', label: 'Unflag Corrupted' },
+    disregard: { bg: 'bg-white/10', text: 'text-slate-200', label: 'Disregard' },
+    undo_disregard: { bg: 'bg-emerald-500/15', text: 'text-emerald-300', label: 'Undo Disregard' },
   };
-  const c = config[type] || { bg: 'bg-gray-100', text: 'text-gray-600', label: type };
+  const c = config[type] || { bg: 'bg-white/10', text: 'text-slate-300', label: type };
   return (
     <span className={`inline-flex items-center px-2 py-0.5 rounded-full text-[10px] font-medium ${c.bg} ${c.text}`}>
       {c.label}
@@ -587,14 +587,14 @@ function ActionTypeBadge({ type }: { type: EvidenceAdminAction['actionType'] }) 
 
 function FileTypeIcon({ fileType }: { fileType: string }) {
   const color = fileType.startsWith('image/')
-    ? 'text-purple-500 bg-purple-50'
+    ? 'text-purple-500 bg-violet-500/10'
     : fileType.startsWith('video/')
-    ? 'text-red-500 bg-red-50'
+    ? 'text-red-500 bg-red-500/10'
     : fileType.includes('pdf')
-    ? 'text-red-500 bg-red-50'
+    ? 'text-red-500 bg-red-500/10'
     : fileType.includes('spreadsheet') || fileType.includes('excel')
-    ? 'text-emerald-500 bg-emerald-50'
-    : 'text-blue-500 bg-blue-50';
+    ? 'text-emerald-500 bg-emerald-500/10'
+    : 'text-blue-500 bg-blue-500/10';
 
   return (
     <div className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${color}`}>

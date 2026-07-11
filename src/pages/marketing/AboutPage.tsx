@@ -25,14 +25,14 @@ export function AboutPage() {
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-start">
             <div>
-              <h2 className="text-2xl font-bold text-slate-900 mb-4">Our Mission</h2>
-              <p className="text-slate-600 leading-relaxed mb-4">
+              <h2 className="text-2xl font-bold text-white mb-4">Our Mission</h2>
+              <p className="text-slate-300 leading-relaxed mb-4">
                 Every criminal case contains more information than any single person can
                 organize, connect, and analyze. CourtAccess brings case documents, evidence,
                 timelines, legal authorities, and investigative intelligence into one secure
                 platform — so defense teams can find contradictions, gaps, and defenses faster.
               </p>
-              <p className="text-slate-600 leading-relaxed">
+              <p className="text-slate-300 leading-relaxed">
                 We believe every subscriber deserves the complete platform. Access restrictions
                 apply only to organizations, cases, and delegated permissions — never to
                 core legal intelligence capabilities.
@@ -45,13 +45,13 @@ export function AboutPage() {
                 { icon: MapPin, title: 'California Focus', desc: 'CALCRIM, California statutes, CPRA policy intelligence.' },
                 { icon: Users, title: 'Team Collaboration', desc: 'Attorneys, investigators, clients, and experts on one case.' },
               ].map(({ icon: Icon, title, desc }) => (
-                <div key={title} className="flex gap-4 p-4 rounded-xl border border-slate-200 bg-slate-50">
-                  <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center shrink-0">
+                <div key={title} className="flex gap-4 p-4 rounded-xl border border-white/10 bg-white/5">
+                  <div className="w-10 h-10 bg-amber-500/15 rounded-lg flex items-center justify-center shrink-0">
                     <Icon className="text-amber-600" size={20} />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-slate-900">{title}</h3>
-                    <p className="text-sm text-slate-600">{desc}</p>
+                    <h3 className="font-semibold text-white">{title}</h3>
+                    <p className="text-sm text-slate-300">{desc}</p>
                   </div>
                 </div>
               ))}
@@ -60,10 +60,10 @@ export function AboutPage() {
         </div>
       </section>
 
-      <section className="py-16 bg-slate-50 border-y border-slate-200">
+      <section className="py-16 bg-white/5 border-y border-white/10">
         <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl font-bold text-slate-900 mb-4">Who We Serve</h2>
-          <p className="text-slate-600 max-w-2xl mx-auto mb-8">
+          <h2 className="text-2xl font-bold text-white mb-4">Who We Serve</h2>
+          <p className="text-slate-300 max-w-2xl mx-auto mb-8">
             Criminal defense attorneys, private investigators, defendants managing their own
             cases, public defenders, and authorized family members — all through one universal
             subscription with permission-based access.
@@ -71,12 +71,12 @@ export function AboutPage() {
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               to="/register"
-              className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-6 py-3 rounded-lg transition-colors"
+              className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
             >
               Start Free 30-Day Trial
               <ArrowRight size={18} />
             </Link>
-            <Link to="/contact" className="text-slate-600 hover:text-slate-900 font-medium transition-colors">
+            <Link to="/contact" className="text-slate-300 hover:text-white font-medium transition-colors">
               Contact Enterprise Sales
             </Link>
           </div>

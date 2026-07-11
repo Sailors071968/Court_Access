@@ -101,7 +101,7 @@ export default function AnimationTools({
             <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
           )}
           <svg
-            className={`w-4 h-4 text-gray-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
+            className={`w-4 h-4 text-slate-400 transition-transform ${isExpanded ? 'rotate-180' : ''}`}
             fill="none"
             viewBox="0 0 24 24"
             stroke="currentColor"
@@ -151,7 +151,7 @@ export default function AnimationTools({
 
             {/* Timeline Scrubber */}
             <div className="mb-2">
-              <div className="flex items-center justify-between text-xs text-gray-400 mb-1">
+              <div className="flex items-center justify-between text-xs text-slate-400 mb-1">
                 <span>{formatTime(timeline.currentTime)}</span>
                 <span>{formatTime(timeline.duration)}</span>
               </div>
@@ -180,7 +180,7 @@ export default function AnimationTools({
 
           {/* Speed Control */}
           <div className="border-t border-gray-700 pt-3 mt-2">
-            <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">Playback Speed</p>
+            <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">Playback Speed</p>
             <div className="flex gap-1">
               {[0.25, 0.5, 1, 2, 4].map((speed) => (
                 <button
@@ -189,7 +189,7 @@ export default function AnimationTools({
                   className={`flex-1 py-1 text-xs rounded transition-colors ${
                     timeline.playbackSpeed === speed
                       ? 'bg-blue-500 text-white'
-                      : 'bg-gray-700 text-gray-400 hover:bg-gray-600'
+                      : 'bg-gray-700 text-slate-400 hover:bg-gray-600'
                   }`}
                 >
                   {speed}x
@@ -201,25 +201,25 @@ export default function AnimationTools({
           {/* Duration Setting */}
           <div className="border-t border-gray-700 pt-3 mt-3">
             <div className="flex items-center justify-between">
-              <p className="text-xs text-gray-500 uppercase tracking-wider">Duration (sec)</p>
+              <p className="text-xs text-slate-400 uppercase tracking-wider">Duration (sec)</p>
               <input
                 type="number"
                 min={1}
                 max={300}
                 value={timeline.duration}
                 onChange={(e) => handleDurationChange(parseInt(e.target.value, 10))}
-                className="w-16 px-2 py-1 text-xs bg-gray-700 border border-gray-600 rounded text-white text-center focus:outline-none focus:border-blue-500"
+                className="w-16 px-2 py-1 text-xs bg-gray-700 border border-gray-600 rounded text-white text-center focus:outline-none focus:border-gold-light"
               />
             </div>
           </div>
 
           {/* Keyframes List */}
           <div className="border-t border-gray-700 pt-3 mt-3">
-            <p className="text-xs text-gray-500 uppercase tracking-wider mb-2">
+            <p className="text-xs text-slate-400 uppercase tracking-wider mb-2">
               Keyframes ({sortedKeyframes.length})
             </p>
             {sortedKeyframes.length === 0 ? (
-              <p className="text-xs text-gray-600 italic">No keyframes yet. Add markers and set keyframes to create animations.</p>
+              <p className="text-xs text-slate-300 italic">No keyframes yet. Add markers and set keyframes to create animations.</p>
             ) : (
               <div className="space-y-1 max-h-32 overflow-y-auto">
                 {sortedKeyframes.map((kf) => (
@@ -228,13 +228,13 @@ export default function AnimationTools({
                     className="flex items-center justify-between py-1 px-2 bg-gray-750 rounded text-xs group hover:bg-gray-700"
                   >
                     <div className="flex items-center gap-2">
-                      <span className="text-gray-500">{formatTime(kf.time)}</span>
+                      <span className="text-slate-400">{formatTime(kf.time)}</span>
                       <span className="text-gray-300">{markerLabels[kf.markerId] ?? 'Marker'}</span>
-                      {kf.label && <span className="text-gray-500">({kf.label})</span>}
+                      {kf.label && <span className="text-slate-400">({kf.label})</span>}
                     </div>
                     <button
                       onClick={() => onRemoveKeyframe(kf.id)}
-                      className="text-gray-500 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all"
+                      className="text-slate-400 hover:text-red-400 opacity-0 group-hover:opacity-100 transition-all"
                     >
                       <svg className="w-3 h-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />

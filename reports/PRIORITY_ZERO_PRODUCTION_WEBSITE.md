@@ -82,6 +82,9 @@ After `npm run build` on `cursor/priority-zero-production-website-b98a` (2026-07
 
 ## Resolution
 
+> **Superseded by Program 1A greenfield** — see [`GREENFIELD_V1_DEPLOYMENT.md`](../GREENFIELD_V1_DEPLOYMENT.md).  
+> Do **not** checkout `origin/dev` on `/var/www/courtaccess`. Clone to `/var/www/courtaccess-v1` instead.
+
 ### Step 1 — Merge to `dev`
 
 Merge PRs containing:

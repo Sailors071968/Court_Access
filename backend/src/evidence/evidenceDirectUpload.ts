@@ -10,7 +10,7 @@ import multipart from '@fastify/multipart';
 import fs from 'fs/promises';
 import path from 'path';
 import crypto from 'crypto';
-import { createWriteStream } from 'fs';
+import { createWriteStream, createReadStream } from 'fs';
 import { pipeline } from 'stream/promises';
 import type { AuthenticatedRequest } from '../security/authMiddleware.js';
 import { validateEvidenceUpload } from './evidenceValidation.js';
@@ -22,7 +22,10 @@ import prisma from '../lib/prisma.js';
 // ---------------------------------------------------------------------------
 
 /** Local storage directory for uploaded evidence files */
-const UPLOAD_DIR = process.env.EVIDENCE_UPLOAD_DIR || '/var/www/courtaccess/uploads/evidence';
+// Default to a repo-relative path so uploads work on any host out of the box;
+// override with EVIDENCE_UPLOAD_DIR in production. (Previously hardcoded to a
+// non-portable /var/www path that broke on fresh deploys.)
+const UPLOAD_DIR = process.env.EVIDENCE_UPLOAD_DIR || path.join(process.cwd(), 'data', 'uploads', 'evidence');
 
 /** Maximum file size for multipart upload (500 MB) */
 const MAX_FILE_SIZE = 500 * 1024 * 1024;
@@ -271,6 +274,16 @@ export async function registerDirectUploadRoutes(app: FastifyInstance): Promise<
       });
     }
 
+    // Calculate SHA-256 content hash (streaming — memory-safe for large files)
+    let sha256: string | null = null;
+    try {
+      const hash = crypto.createHash('sha256');
+      await pipeline(createReadStream(localPath), hash);
+      sha256 = hash.digest('hex');
+    } catch (err) {
+      console.warn('[DirectUpload] SHA-256 hashing failed:', err instanceof Error ? err.message : err);
+    }
+
     // Create evidence DB record
     let evidence;
     try {
@@ -283,6 +296,7 @@ export async function registerDirectUploadRoutes(app: FastifyInstance): Promise<
           size: BigInt(fileSize),
           evidenceType,
           s3Key,
+          sha256,
           uploadedBy: user.userId,
           processingStatus: 'ingesting',
         },
@@ -312,6 +326,7 @@ export async function registerDirectUploadRoutes(app: FastifyInstance): Promise<
         size: evidence.size.toString(),
         evidenceType: evidence.evidenceType,
         s3Key: evidence.s3Key,
+        sha256: evidence.sha256,
         uploadedBy: evidence.uploadedBy,
         uploadedAt: evidence.uploadedAt,
         processingStatus: evidence.processingStatus,

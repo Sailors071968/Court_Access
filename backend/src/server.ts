@@ -31,6 +31,7 @@ import { registerEvidenceRequestRoutes } from './evidence/evidenceRequestRoutes.
 import { registerIntelligenceRoutes, registerNarrativeIntelligenceRoutes } from './intelligence/intelligenceRoutes.js';
 import { registerWorkbenchRoutes } from './workbench/workbenchRoutes.js';
 import { registerInvestigatorRoutes } from './investigator/investigatorRoutes.js';
+import { registerDiscoveryRoutes } from './discovery/discoveryRoutes.js';
 import { registerTimelineRoutes } from './timeline/timelineRoutes.js';
 import { registerQueueMonitorRoutes } from './admin/queueMonitorRoutes.js';
 import { registerAdminRoutes } from './admin/adminRoutes.js';
@@ -100,10 +101,10 @@ async function startServer() {
   app.addHook('onRequest', rateLimitHook);
 
   // Phase 191 — Authentication (JWT verification + RBAC)
-  //  app.addHook('onRequest', authenticationHook);
+  app.addHook('onRequest', authenticationHook);
 
-  // Phase 193 — CSRF protection (after auth, before route handlers)
-  // app.addHook('onRequest', csrfProtectionHook);
+  // Phase 193 — CSRF protection (Bearer-authenticated API requests bypass CSRF)
+  app.addHook('onRequest', csrfProtectionHook);
 
   // Phase 195 — Evidence upload protection
   app.addHook('onRequest', uploadProtectionHook);
@@ -210,8 +211,63 @@ async function startServer() {
   console.log('[Server] Registering Attorney Workbench routes...');
   await registerWorkbenchRoutes(app);
 
+  // Program 115 — Unified Case Search (evidence-governed, permission-scoped)
+  console.log('[Server] Registering unified search routes...');
+  const { registerSearchRoutes } = await import('./search/searchRoutes.js');
+  await registerSearchRoutes(app);
+
+  // Program 108/118 — Evidence-governed Litigation Assistant (AI Safety Envelope)
+  console.log('[Server] Registering litigation assistant routes...');
+  const { registerLitigationAssistantRoutes } = await import('./assistant/litigationAssistantRoutes.js');
+  await registerLitigationAssistantRoutes(app);
+
+  // Phase 4A — Canonical connection of reachable case views (litigation strategy, trial exhibits)
+  console.log('[Server] Registering case view routes...');
+  const { registerCaseViewRoutes } = await import('./workbench/caseViewRoutes.js');
+  await registerCaseViewRoutes(app);
+
+  // CourtListener — external case-law / authority / citation integration
+  console.log('[Server] Registering CourtListener routes...');
+  const { registerCourtListenerRoutes } = await import('./courtlistener/courtListenerRoutes.js');
+  await registerCourtListenerRoutes(app);
+
+  // Legal Intelligence Provider Layer — canonical provider registry + federated search
+  console.log('[Server] Registering Legal Intelligence provider routes...');
+  const { registerProviderRoutes } = await import('./providers/providerRoutes.js');
+  await registerProviderRoutes(app);
+
+  // Master Program 8 — Case Knowledge Graph
+  console.log('[Server] Registering knowledge graph routes...');
+  const { registerKnowledgeGraphRoutes } = await import('./graph/knowledgeGraphRoutes.js');
+  await registerKnowledgeGraphRoutes(app);
+
   console.log('[Server] Registering Investigator Workbench routes...');
   await registerInvestigatorRoutes(app);
+  await registerDiscoveryRoutes(app);
+
+  console.log('[Server] Registering canonical Attorney Report routes...');
+  const { registerAttorneyReportRoutes } = await import('./report/attorneyReportRoutes.js');
+  await registerAttorneyReportRoutes(app);
+
+  console.log('[Server] Registering canonical Motion Builder routes...');
+  const { registerMotionBuilderRoutes } = await import('./motion/motionBuilderRoutes.js');
+  await registerMotionBuilderRoutes(app);
+
+  console.log('[Server] Registering canonical Trial Preparation routes...');
+  const { registerTrialPrepRoutes } = await import('./trial/trialPrepRoutes.js');
+  await registerTrialPrepRoutes(app);
+
+  console.log('[Server] Registering canonical CALCRIM Intelligence Center routes...');
+  const { registerCalcrimCenterRoutes } = await import('./calcrim/calcrimCenterRoutes.js');
+  await registerCalcrimCenterRoutes(app);
+
+  console.log('[Server] Registering canonical Voir Dire Intelligence Center routes...');
+  const { registerVoirDireRoutes } = await import('./voirdire/voirDireRoutes.js');
+  await registerVoirDireRoutes(app);
+
+  console.log('[Server] Registering canonical Sentencing Intelligence Center routes...');
+  const { registerSentencingRoutes } = await import('./sentencing/sentencingRoutes.js');
+  await registerSentencingRoutes(app);
 
   // Timeline Reconstruction Engine
   console.log('[Server] Registering timeline reconstruction routes...');
@@ -229,6 +285,10 @@ async function startServer() {
   // Admin management routes (stats, users, cases, delete endpoints)
   console.log('[Server] Registering admin management routes...');
   await registerAdminRoutes(app);
+
+  console.log('[Server] Registering provider integration routes...');
+  const { registerIntegrationRoutes } = await import('./admin/integrationRoutes.js');
+  await registerIntegrationRoutes(app);
 
   console.log('[Server] Registering production gates routes...');
   await registerProductionGatesRoutes(app);

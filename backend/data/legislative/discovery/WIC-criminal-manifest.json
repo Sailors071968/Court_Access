@@ -1,0 +1,94 @@
+{
+  "version": "1.0.0-criminal",
+  "code": "WIC",
+  "codeName": "Welfare and Institutions Code",
+  "discoveredAt": "2026-07-07T16:33:00.220Z",
+  "completedAt": "2026-07-07T16:33:00.220Z",
+  "status": "completed",
+  "audit": [
+    {
+      "timestamp": "2026-07-07T16:33:00.220Z",
+      "action": "criminal_seed_targeting",
+      "detail": "5 seed sections"
+    }
+  ],
+  "hierarchyNodes": [],
+  "sections": [
+    {
+      "code": "WIC",
+      "section": "602.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WIC&sectionNum=602.",
+      "hierarchy": {
+        "code": "WIC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WIC&sectionNum=602."
+    },
+    {
+      "code": "WIC",
+      "section": "871.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WIC&sectionNum=871.",
+      "hierarchy": {
+        "code": "WIC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WIC&sectionNum=871."
+    },
+    {
+      "code": "WIC",
+      "section": "10980.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WIC&sectionNum=10980.",
+      "hierarchy": {
+        "code": "WIC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WIC&sectionNum=10980."
+    },
+    {
+      "code": "WIC",
+      "section": "11482.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WIC&sectionNum=11482.",
+      "hierarchy": {
+        "code": "WIC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WIC&sectionNum=11482."
+    },
+    {
+      "code": "WIC",
+      "section": "14107.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WIC&sectionNum=14107.",
+      "hierarchy": {
+        "code": "WIC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WIC&sectionNum=14107."
+    }
+  ],
+  "stats": {
+    "pagesFetched": 0,
+    "expandedBranchPages": 0,
+    "displayTextPages": 0,
+    "hierarchyNodes": 0,
+    "sectionsDiscovered": 5,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 0,
+    "anomalies": 0
+  },
+  "anomalies": []
+}

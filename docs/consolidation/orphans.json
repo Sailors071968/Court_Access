@@ -1,0 +1,291 @@
+{
+  "removableFrontend": [],
+  "backendCandidates": [
+    {
+      "file": "backend/src/evidence/complianceValidationRunner.ts",
+      "size": 49059,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/productionGates/masterProductionAssessment.ts",
+      "size": 42369,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/services/factRegistryService.ts",
+      "size": 11475,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/exhibits/objectPlacementService.ts",
+      "size": 10890,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/policy/workers/policyDocumentDownloadWorker.ts",
+      "size": 10887,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/exhibits/exhibitRoutes.ts",
+      "size": 10147,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/narrative/claimExtractionWorker.ts",
+      "size": 10060,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/exhibits/terrain/terrainGenerator.ts",
+      "size": 9416,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/workers/ocrResourceControls.ts",
+      "size": 9203,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/services/caseAnalysisCacheService.ts",
+      "size": 8922,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/evidence/documentNormalizer.ts",
+      "size": 8710,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/workers/caseAnalysisWorker.ts",
+      "size": 8697,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/policy/workers/agencyCrawlerWorker.ts",
+      "size": 8572,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/narrative/impeachmentDetectionWorker.ts",
+      "size": 8394,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/narrative/evidenceValidationWorker.ts",
+      "size": 8087,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/services/analysisRegenerationTrigger.ts",
+      "size": 7690,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/services/legalIntelligenceService.ts",
+      "size": 7410,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/policy/workers/startWorkers.ts",
+      "size": 7409,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/workers/topicConfidenceService.ts",
+      "size": 7265,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/policy/ocr/documentTextExtractor.ts",
+      "size": 7231,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/narrative/claimNormalizationWorker.ts",
+      "size": 6197,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/services/pdfExtractionService.ts",
+      "size": 5986,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/productionGates/masterProductionProgram.ts",
+      "size": 5940,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/services/eventNormalizationService.ts",
+      "size": 5515,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/policy/agencyRegistry/websiteDiscovery.ts",
+      "size": 5452,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/narrative/narrativeGraphIntegration.ts",
+      "size": 4986,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/ingestion/ingestionWorker.ts",
+      "size": 4511,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/services/semanticLogicEngine.ts",
+      "size": 4366,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/models/enterpriseLicense.ts",
+      "size": 4048,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/services/processEvidenceToChunks.ts",
+      "size": 3976,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/evidence/videoEvidenceHandler.ts",
+      "size": 3721,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/services/inferenceGraphEngine.ts",
+      "size": 3606,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/services/argumentBuilder.ts",
+      "size": 3543,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/models/marketingMetrics.ts",
+      "size": 3440,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/services/litigationStrategyService.ts",
+      "size": 3298,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/services/trialExhibitService.ts",
+      "size": 3134,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/models/demoRequest.ts",
+      "size": 3089,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/services/contradictionRankingService.ts",
+      "size": 3067,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/services/contradictionStorageService.ts",
+      "size": 2584,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/services/policyNarrativeGuard.ts",
+      "size": 2575,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/services/actorResolutionService.ts",
+      "size": 2528,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/video/videoRoutes.ts",
+      "size": 2475,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/tmpTriggerVideo.ts",
+      "size": 2368,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/services/caseAnalysisEngine.ts",
+      "size": 2278,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/services/elementImpactEngine.ts",
+      "size": 2110,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/services/calcrimService.ts",
+      "size": 2047,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/services/evidenceHashIntegrity.ts",
+      "size": 1978,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/services/analysisVersionHistory.ts",
+      "size": 1818,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/services/exhibitGenerationPipeline.ts",
+      "size": 1707,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/services/evidenceAdminAudit.ts",
+      "size": 1292,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/membership/resourceAuthorizationRegistry.ts",
+      "size": 1185,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/routes/jobRoutes.ts",
+      "size": 1175,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/services/actorExtractionService.ts",
+      "size": 1117,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/services/timelineService.ts",
+      "size": 988,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/services/actorMemoryService.ts",
+      "size": 896,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/video/videoProgressRoutes.ts",
+      "size": 700,
+      "area": "backend"
+    },
+    {
+      "file": "backend/src/services/metadataBuilder.ts",
+      "size": 358,
+      "area": "backend"
+    }
+  ],
+  "entryPointsExcluded": 35
+}

@@ -29,7 +29,7 @@ export function PersonaMarketingPage({ config }: PersonaMarketingPageProps) {
           <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link
               to="/register"
-              className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-6 py-3 rounded-lg transition-colors"
+              className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-white font-semibold px-6 py-3 rounded-lg transition-colors"
             >
               Start Free 30-Day Trial
               <ArrowRight size={18} />
@@ -45,27 +45,27 @@ export function PersonaMarketingPage({ config }: PersonaMarketingPageProps) {
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {config.features.map(({ icon: Icon, title, description }) => (
-              <div key={title} className="p-6 rounded-xl border border-slate-200 bg-white shadow-sm">
-                <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center mb-4">
+              <div key={title} className="p-6 rounded-xl border border-white/10 bg-white/5 shadow-sm">
+                <div className="w-10 h-10 bg-amber-500/15 rounded-lg flex items-center justify-center mb-4">
                   <Icon className="text-amber-600" size={20} />
                 </div>
-                <h3 className="font-semibold text-slate-900 mb-2">{title}</h3>
-                <p className="text-sm text-slate-600 leading-relaxed">{description}</p>
+                <h3 className="font-semibold text-white mb-2">{title}</h3>
+                <p className="text-sm text-slate-300 leading-relaxed">{description}</p>
               </div>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="py-16 bg-slate-50 border-y border-slate-200">
+      <section className="py-16 bg-white/5 border-y border-white/10">
         <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl font-bold text-slate-900 mb-4">Universal Platform Access</h2>
-          <p className="text-slate-600 mb-6">
+          <h2 className="text-2xl font-bold text-white mb-4">Universal Platform Access</h2>
+          <p className="text-slate-300 mb-6">
             Every subscriber receives the complete CourtAccess platform. Only billing differs — no feature tiers, no artificial restrictions.
           </p>
           <ul className="text-left max-w-md mx-auto space-y-2 mb-8">
             {['Full case intelligence', 'All command centers', 'Up to 5 delegated users', 'Evidence-governed workflows'].map((item) => (
-              <li key={item} className="flex items-center gap-2 text-slate-700 text-sm">
+              <li key={item} className="flex items-center gap-2 text-slate-200 text-sm">
                 <CheckCircle2 className="text-emerald-500 shrink-0" size={16} />
                 {item}
               </li>

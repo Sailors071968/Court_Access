@@ -53,7 +53,7 @@ export function ChargesPage() {
         <button
           onClick={() => setActiveChargeIndex(-1)}
           className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
-            activeChargeIndex === -1 ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+            activeChargeIndex === -1 ? 'bg-blue-600 text-white' : 'bg-white/10 text-slate-300 hover:bg-gray-200'
           }`}
         >
           All Charges ({charges.length})
@@ -63,7 +63,7 @@ export function ChargesPage() {
             key={charge.id}
             onClick={() => setActiveChargeIndex(idx)}
             className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
-              activeChargeIndex === idx ? 'bg-blue-600 text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+              activeChargeIndex === idx ? 'bg-blue-600 text-white' : 'bg-white/10 text-slate-300 hover:bg-gray-200'
             }`}
           >
             {charge.code} {charge.title}
@@ -74,34 +74,34 @@ export function ChargesPage() {
       {charges.length === 0 ? (
         <div className="text-center py-12">
           <AlertTriangle size={48} className="text-gray-300 mx-auto mb-4" />
-          <p className="text-gray-500 text-sm">No charges filed yet. Charges will appear here once they are added to the case.</p>
+          <p className="text-slate-400 text-sm">No charges filed yet. Charges will appear here once they are added to the case.</p>
         </div>
       ) : activeChargeIndex >= 0 && activeCharge ? (
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Elements Breakdown */}
           <div className="lg:col-span-2 space-y-6">
             <Card>
-              <h2 className="text-xl font-bold text-gray-900 mb-1">
+              <h2 className="text-xl font-bold text-white mb-1">
                 {activeCharge.code} {activeCharge.title} analysis
               </h2>
               {activeCharge.calcrimNumber && (
-                <p className="text-sm font-semibold text-gray-700 mb-6">
+                <p className="text-sm font-semibold text-slate-200 mb-6">
                   {activeCharge.calcrimNumber} - Elements the Prosecution Must Prove
                 </p>
               )}
 
               <div className="space-y-4">
                 {activeCharge.elements.map((element) => (
-                  <div key={element.number} className="flex gap-4 p-4 bg-gray-50 rounded-xl">
+                  <div key={element.number} className="flex gap-4 p-4 bg-white/5 rounded-xl">
                     <div className="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center flex-shrink-0 font-bold text-sm">
                       {element.number}
                     </div>
                     <div className="flex-1">
                       <div className="flex items-start justify-between gap-3">
-                        <p className="font-medium text-gray-900">{element.description}</p>
+                        <p className="font-medium text-white">{element.description}</p>
                         <EvidenceStatusBadge status={element.status} />
                       </div>
-                      <p className="text-sm text-gray-500 mt-1">{element.details}</p>
+                      <p className="text-sm text-slate-400 mt-1">{element.details}</p>
                     </div>
                   </div>
                 ))}
@@ -109,15 +109,15 @@ export function ChargesPage() {
 
               {/* Sentencing Info */}
               {activeCharge.potentialSentence && (
-                <div className="mt-6 p-4 bg-amber-50 border border-amber-200 rounded-xl">
+                <div className="mt-6 p-4 bg-amber-500/10 border border-amber-500/20 rounded-xl">
                   <p className="text-sm">
-                    <span className="font-bold text-gray-900">Potential Maximum Sentence:</span>{' '}
-                    <span className="text-gray-700">{activeCharge.potentialSentence}</span>
+                    <span className="font-bold text-white">Potential Maximum Sentence:</span>{' '}
+                    <span className="text-slate-200">{activeCharge.potentialSentence}</span>
                   </p>
                   {activeCharge.enhancement && (
                     <p className="text-sm mt-1">
-                      <span className="font-bold text-gray-900">Enhancement:</span>{' '}
-                      <span className="text-gray-700">{activeCharge.enhancement}</span>
+                      <span className="font-bold text-white">Enhancement:</span>{' '}
+                      <span className="text-slate-200">{activeCharge.enhancement}</span>
                     </p>
                   )}
                 </div>
@@ -127,8 +127,8 @@ export function ChargesPage() {
 
           {/* AI Defense Insights */}
           <div>
-            <Card className="bg-slate-50 border-slate-200">
-              <h3 className="text-lg font-semibold text-gray-900 mb-4">AI Defense Insights</h3>
+            <Card className="bg-white/5 border-white/10">
+              <h3 className="text-lg font-semibold text-white mb-4">AI Defense Insights</h3>
               {insightsLoading ? (
                 <div className="space-y-3">
                   {[1, 2, 3].map((i) => (
@@ -136,13 +136,13 @@ export function ChargesPage() {
                   ))}
                 </div>
               ) : insights.length === 0 ? (
-                <p className="text-sm text-gray-500 text-center py-4">No defense insights yet. Upload evidence to generate AI analysis.</p>
+                <p className="text-sm text-slate-400 text-center py-4">No defense insights yet. Upload evidence to generate AI analysis.</p>
               ) : (
                 <div className="space-y-3">
                   {insights.map((insight) => (
                     <div key={insight.id} className="flex gap-2">
-                      <ArrowRight size={16} className="text-blue-600 mt-0.5 flex-shrink-0" />
-                      <p className="text-sm text-gray-700">{insight.content}</p>
+                      <ArrowRight size={16} className="text-gold-light mt-0.5 flex-shrink-0" />
+                      <p className="text-sm text-slate-200">{insight.content}</p>
                     </div>
                   ))}
                 </div>
@@ -157,9 +157,9 @@ export function ChargesPage() {
             <Card key={charge.id} hover className="cursor-pointer" onClick={() => setActiveChargeIndex(idx)}>
               <div className="flex items-start justify-between">
                 <div>
-                  <h3 className="font-semibold text-gray-900">{charge.code} — {charge.title}</h3>
+                  <h3 className="font-semibold text-white">{charge.code} — {charge.title}</h3>
                   {charge.potentialSentence && (
-                    <p className="text-sm text-gray-500 mt-1">Potential: {charge.potentialSentence}</p>
+                    <p className="text-sm text-slate-400 mt-1">Potential: {charge.potentialSentence}</p>
                   )}
                 </div>
                 <div className="flex items-center gap-2">
@@ -184,10 +184,10 @@ export function ChargesPage() {
       {/* Defense Opportunities — populated by AI pipeline after evidence upload */}
       {insights.length > 0 && (
         <Card>
-          <h2 className="text-lg font-bold text-gray-900 mb-4">Defense Opportunities</h2>
+          <h2 className="text-lg font-bold text-white mb-4">Defense Opportunities</h2>
           <ul className="space-y-3">
             {insights.map((insight) => (
-              <li key={insight.id} className="text-sm text-gray-700">
+              <li key={insight.id} className="text-sm text-slate-200">
                 {insight.content}
               </li>
             ))}

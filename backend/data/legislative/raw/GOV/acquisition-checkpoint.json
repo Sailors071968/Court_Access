@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "code": "GOV",
+  "manifestPath": "/workspace/backend/data/legislative/discovery/GOV-criminal-manifest.json",
+  "startedAt": "2026-07-07T16:33:24.410Z",
+  "updatedAt": "2026-07-07T16:33:28.767Z",
+  "nextIndex": 5,
+  "acquired": 5,
+  "failed": 0,
+  "skipped": 0,
+  "lastSection": "1090."
+}

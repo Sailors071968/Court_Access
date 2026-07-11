@@ -8,6 +8,10 @@ import { ProtectedRoute } from './components/layout/ProtectedRoute';
 
 // Landing Page
 import { LandingPage, PricingPage } from './pages/LandingPage';
+import { DemoGalleryPage } from './pages/demo/DemoGalleryPage';
+import { DemoReportPage, DemoKnowledgeGraphPage, DemoTimelinePage } from './pages/demo/DemoReportPage';
+import { DemoWorkbenchPage } from './pages/demo/DemoWorkbenchPage';
+import { DemoCaseBriefPage, DemoMapPage } from './pages/demo/DemoBriefMapPages';
 
 // Public Marketing Pages (Phase 207-216)
 import { ForDefensePage } from './pages/ForDefensePage';
@@ -82,6 +86,8 @@ import { SearchPage } from './pages/SearchPage';
 import { NotificationsPage } from './pages/NotificationsPage';
 import { AccountSettingsPage } from './pages/membership/AccountSettingsPage';
 import { SharedAccessPage } from './pages/membership/SharedAccessPage';
+import { CollaboratorsPage } from './pages/membership/CollaboratorsPage';
+import { ProviderIntegrationsPage } from './pages/admin/ProviderIntegrationsPage';
 import { AdminPage } from './pages/admin/AdminPage';
 import { OperationsCommandCenter } from './pages/admin/OperationsCommandCenter';
 
@@ -91,16 +97,25 @@ import { CaseOverviewPage } from './pages/case/CaseOverviewPage';
 import { ChargesPage } from './pages/case/ChargesPage';
 import { EvidencePage } from './pages/case/EvidencePage';
 import { ExpertsPage } from './pages/case/ExpertsPage';
-import { MotionsPage } from './pages/case/MotionsPage';
 import { ResearchPage } from './pages/case/ResearchPage';
 import { ActivityPage } from './pages/case/ActivityPage';
+import { ReportsPage } from './pages/case/ReportsPage';
+import { AttorneyReportPage } from './pages/case/AttorneyReportPage';
+import { MotionBuilderPage } from './pages/case/MotionBuilderPage';
+import { TrialPrepPage } from './pages/case/TrialPrepPage';
+import { CalcrimCenterPage } from './pages/case/CalcrimCenterPage';
+import { VoirDirePage } from './pages/case/VoirDirePage';
+import { SentencingCenterPage } from './pages/case/SentencingCenterPage';
 import { DocumentsPage } from './pages/case/DocumentsPage';
 import { CaseSettingsPage } from './pages/case/CaseSettingsPage';
-import { TrialExhibitWorkspace } from './pages/case/TrialExhibitWorkspace';
 import { LitigationStrategyView } from './pages/case/LitigationStrategyView';
 import { ContradictionDashboardPage } from './pages/case/ContradictionDashboardPage';
 import { NarrativeAnalysisPage } from './pages/case/NarrativeAnalysisPage';
 import { AttorneyWorkbenchPage } from './pages/case/AttorneyWorkbenchPage';
+import { KnowledgeGraphPage } from './pages/case/KnowledgeGraphPage';
+import { TimelinePage } from './pages/case/TimelinePage';
+import { WitnessWorkspacePage } from './pages/case/WitnessWorkspacePage';
+import { DiscoveryWorkspacePage } from './pages/case/DiscoveryWorkspacePage';
 import { InvestigatorWorkbenchPage } from './pages/case/InvestigatorWorkbenchPage';
 import { ClientPortalLayout, ClientPortalIndex } from './pages/client-portal/ClientPortalLayout';
 import {
@@ -154,6 +169,15 @@ function App() {
         <Route path="/sitemap" element={<SitemapPage />} />
         <Route path="/press" element={<PressPage />} />
         <Route path="/careers" element={<CareersPage />} />
+
+        {/* Public Illustrative Demonstration Gallery (Program 94) — read-only, no auth */}
+        <Route path="/demo" element={<DemoGalleryPage />} />
+        <Route path="/demo/workbench" element={<DemoWorkbenchPage />} />
+        <Route path="/demo/brief" element={<DemoCaseBriefPage />} />
+        <Route path="/demo/map" element={<DemoMapPage />} />
+        <Route path="/demo/reports/:type" element={<DemoReportPage />} />
+        <Route path="/demo/knowledge-graph" element={<DemoKnowledgeGraphPage />} />
+        <Route path="/demo/timeline" element={<DemoTimelinePage />} />
 
         {/* Pricing (accessible to authenticated users without subscription) */}
         <Route path="/pricing" element={<PricingPage />} />
@@ -405,6 +429,14 @@ function App() {
             }
           />
           <Route
+            path="collaborators"
+            element={
+              <ProtectedRoute>
+                <CollaboratorsPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="firm"
             element={
               <ProtectedRoute requiredPermission="canViewSettings">
@@ -425,6 +457,14 @@ function App() {
             element={
               <ProtectedRoute requiredPermission="canViewAdmin">
                 <AdminPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/provider-integrations"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <ProviderIntegrationsPage />
               </ProtectedRoute>
             }
           />
@@ -493,7 +533,15 @@ function App() {
               path="motions"
               element={
                 <ProtectedRoute requiredPermission="canViewMotions">
-                  <MotionsPage />
+                  <MotionBuilderPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="motion-builder"
+              element={
+                <ProtectedRoute requiredPermission="canViewMotions">
+                  <MotionBuilderPage />
                 </ProtectedRoute>
               }
             />
@@ -510,6 +558,22 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canViewActivity">
                   <ActivityPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="reports"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <ReportsPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="report"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <AttorneyReportPage />
                 </ProtectedRoute>
               }
             />
@@ -538,10 +602,42 @@ function App() {
               }
             />
             <Route
+              path="trial-prep"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <TrialPrepPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="calcrim"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <CalcrimCenterPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="voir-dire"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <VoirDirePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="sentencing"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <SentencingCenterPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="trial-exhibits"
               element={
                 <ProtectedRoute requiredPermission="canViewEvidence">
-                  <TrialExhibitWorkspace />
+                  <TrialPrepPage />
                 </ProtectedRoute>
               }
             />
@@ -550,6 +646,38 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canViewEvidence">
                   <LitigationStrategyView />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="knowledge-graph"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <KnowledgeGraphPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="timeline"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <TimelinePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="witnesses"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <WitnessWorkspacePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="discovery"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <DiscoveryWorkspacePage />
                 </ProtectedRoute>
               }
             />

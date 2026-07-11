@@ -1,0 +1,49 @@
+{
+  "ranAt": "2026-07-07T17:30:33.960389+00:00",
+  "summary": {
+    "blocking_pass": 5,
+    "blocking_total": 5,
+    "advisory": 2
+  },
+  "gates": [
+    {
+      "gate": "Build (frontend)",
+      "type": "blocking",
+      "result": "PASS"
+    },
+    {
+      "gate": "TypeScript (frontend)",
+      "type": "blocking",
+      "result": "PASS",
+      "detail": "0 errors"
+    },
+    {
+      "gate": "Bundle size budget",
+      "type": "blocking",
+      "result": "PASS",
+      "detail": "836KB main < 1MB"
+    },
+    {
+      "gate": "API canonical registry",
+      "type": "blocking",
+      "result": "PASS",
+      "detail": "375 endpoints"
+    },
+    {
+      "gate": "Prisma schema validate",
+      "type": "blocking",
+      "result": "PASS"
+    },
+    {
+      "gate": "TypeScript (backend)",
+      "type": "advisory",
+      "result": "WARN",
+      "detail": "6 errors (resourceAuthMiddleware type-predicate; runs via tsx)"
+    },
+    {
+      "gate": "npm audit / lint / circular+unused",
+      "type": "advisory",
+      "result": "reporting"
+    }
+  ]
+}

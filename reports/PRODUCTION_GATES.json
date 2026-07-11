@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-04T22:10:20.817Z",
+  "generatedAt": "2026-07-07T17:21:04.187Z",
   "version": "4.0",
   "program": "PRODUCTION_CERTIFICATION",
   "gates": [
@@ -7,9 +7,9 @@
       "id": "PG-001",
       "name": "Stripe Billing",
       "program": "Program 1 / Program 9",
-      "result": "PARTIAL",
+      "result": "FAIL",
       "checks": {
-        "pass": 17,
+        "pass": 15,
         "total": 18
       },
       "testSteps": [
@@ -17,12 +17,12 @@
         "Collect billing readiness metrics"
       ],
       "evidence": [
-        "PRODUCTION_CERTIFICATION: INCOMPLETE (17/18 PASS)",
+        "PRODUCTION_CERTIFICATION: INCOMPLETE (15/18 PASS)",
         "billingIntegrity: FAIL",
         "webhookEventsProcessed: 0"
       ],
       "blockers": [
-        "1A-012: Live Stripe Test Mode API certification in staging"
+        "2 certification workflow(s) failed"
       ],
       "recoveryBehavior": "Configure sk_test_ credentials and run npm run billing:certify"
     },
@@ -219,8 +219,8 @@
         "Verify legislative pipeline modules"
       ],
       "evidence": [
-        "sectionsParsed: 4",
-        "criminalOffenses: 2",
+        "sectionsParsed: 407",
+        "criminalOffenses: 134",
         "repositoryIntegrity: PASS"
       ],
       "blockers": [],
@@ -240,17 +240,17 @@
         "Check repository record counts"
       ],
       "evidence": [
-        "statutes: 4",
-        "offenses: 2",
-        "elements: 4",
-        "mens_rea: 2",
-        "exceptions: 3",
-        "defenses: 0",
-        "cross_references: 13",
-        "regulatory_incorporations: 2",
-        "calcrim_links: 1",
-        "authorities: 13",
-        "statute_classifications: 3"
+        "statutes: 407",
+        "offenses: 134",
+        "elements: 452",
+        "mens_rea: 134",
+        "exceptions: 171",
+        "defenses: 7",
+        "cross_references: 757",
+        "regulatory_incorporations: 380",
+        "calcrim_links: 5",
+        "authorities: 373",
+        "statute_classifications: 406"
       ],
       "blockers": [],
       "recoveryBehavior": "Run leginfo:classify to populate knowledge graph repositories"
@@ -350,11 +350,11 @@
     }
   ],
   "passCount": 14,
-  "failCount": 0,
-  "partialCount": 1,
+  "failCount": 1,
+  "partialCount": 0,
   "skipCount": 0,
   "blockers": [
-    "PG-001: 1A-012: Live Stripe Test Mode API certification in staging"
+    "PG-001: 2 certification workflow(s) failed"
   ],
   "deploymentBlocked": true,
   "overallResult": "NOT_READY"

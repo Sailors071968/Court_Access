@@ -21,6 +21,7 @@ model User {
   passwordHash  String
   role          String   @default("staff") // admin | attorney | investigator | staff | defendant
   defaultRole   String?  // Program 2A onboarding role (attorney | criminal_investigator | ...)
+  avatarUrl     String?  // Uploaded profile photo / firm portrait; initials used as fallback
   tenantId      String
   clientId      String?  // Links defendant portal users to Client record
   officeId      String?
@@ -1741,6 +1742,12 @@ model CriminalCase {
   court           String?
   judge           String?
   department      String?
+  prosecutor      String?
+  defenseAttorney String?
+  county          String?
+  filingDate      DateTime?
+  trialDate       DateTime?
+  notes           String?
   nextHearing     DateTime?
   nextHearingNote String?
   deletedAt       DateTime?
@@ -1827,6 +1834,7 @@ model Evidence {
   pageCount       Int?     // for documents
   evidenceType    String   // transcript | police_report | bodycam | dashcam | witness_video | photo | dispatch_log | forensic_report | autopsy_report | other_document
   s3Key           String?
+  sha256          String?  // SHA-256 content hash for integrity / chain of custody
   uploadedBy      String
   uploadedAt      DateTime @default(now())
 
@@ -2373,10 +2381,14 @@ model CaseWitness {
   tenantId        String
   name            String
   role            String?
+  witnessType     String?  // civilian | victim | law_enforcement | expert | confidential_informant | custodian | medical | crime_lab | operator_911 | dispatcher | forensic_examiner | private_investigator | defense_investigator | custom
+  agency          String?
+  employer        String?
   contactPhone    String?
   contactEmail    String?
   status          String   @default("identified") // identified | contacted | interviewed | unavailable
   interviewStatus String   @default("not_scheduled") // not_scheduled | scheduled | completed | declined
+  credibilityStatus String? // UNKNOWN until evidence-governed analysis
   notes           String?
   sourceType      String?  // timeline | manual | discovery
   sourceId        String?
@@ -2451,15 +2463,68 @@ model InvestigationAssignment {
 // Boot-time assertion compares expected vs actual to hard-fail on drift.
 // ---------------------------------------------------------------------------
 
+// Provider Integrations — in-app, encrypted credential storage so administrators
+// manage provider config through the UI instead of editing .env after deploy.
+model IntegrationSetting {
+  id             String    @id @default(uuid())
+  providerId     String    @unique
+  baseUrl        String?
+  apiKeyEnc      String?   // AES-256-CBC encrypted; never returned to clients
+  enabled        Boolean   @default(true)
+  lastTestAt     DateTime?
+  lastTestStatus String?
+  lastSuccessAt  DateTime?
+  rotatedAt      DateTime?
+  updatedById    String?
+  createdAt      DateTime  @default(now())
+  updatedAt      DateTime  @updatedAt
+
+  @@map("integration_settings")
+}
+
+// Inbound criminal discovery items (produced materials tracked & reviewed).
+// Distinct from DisclosurePackage (outbound sharing). Evidence-governed:
+// Brady/Giglio/Jencks are candidate flags set by users, never fabricated.
+model DiscoveryItem {
+  id               String    @id @default(uuid())
+  caseId           String
+  tenantId         String
+  title            String
+  category         String    // police_report | body_camera | dash_camera | 911_call | cad_log | crime_scene_photo | lab_report | dna_report | fingerprint | medical | autopsy | financial | phone_extraction | search_warrant | affidavit | subpoena | court_order | expert_report | brady | giglio | jencks | custom
+  sourceAgency     String?
+  originalFileName String?
+  receivedDate     DateTime?
+  producedDate     DateTime?
+  hash             String?
+  fileSize         BigInt?
+  ocrStatus        String    @default("unknown")
+  reviewStatus     String    @default("pending") // pending | in_review | completed
+  reviewedBy       String?
+  reviewRole       String?   // attorney | investigator | paralegal | legal_assistant
+  bradyFlag        Boolean   @default(false)
+  giglioFlag       Boolean   @default(false)
+  jencksFlag       Boolean   @default(false)
+  flags            String[]  @default([]) // motion | investigation | expert | trial | manual_review
+  evidenceId       String?
+  notes            String?
+  createdBy        String
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+
+  @@index([caseId, tenantId])
+  @@index([reviewStatus])
+  @@map("discovery_items")
+}
+
 model SchemaVersion {
   id             String   @id @default(uuid())
   version        String   @unique
   checksum       String
-  appliedAt      DateTime @default(now())
-  appliedBy      String   @default("prisma-migrate")
+  appliedAt      DateTime @default(now()) @map("applied_at")
+  appliedBy      String   @default("prisma-migrate") @map("applied_by")
   description    String?
-  migrationName  String
-  driftChecked   Boolean  @default(false)
+  migrationName  String   @map("migration_name")
+  driftChecked   Boolean  @default(false) @map("drift_checked")
 
   @@index([appliedAt])
   @@map("schema_versions")
@@ -2471,8 +2536,20 @@ model Charge {
   code           String
   section        String
   title          String?
+  // Case Intake — repository-backed charge metadata
+  countNumber    Int?
+  isPrimary      Boolean  @default(false)
+  isAttempt      Boolean  @default(false)
+  isEnhancement  Boolean  @default(false)
+  dismissed      Boolean  @default(false)
+  severity       String?  // felony | misdemeanor | infraction | UNKNOWN
+  offenseId      String?  // repository offense/statute id
+  classification String?  // repository classification value
+  repositoryVerified Boolean @default(false)
+  calcrimAvailable   Boolean @default(false)
+  notes          String?
   dateOfOffense  DateTime?
-  victim         String
+  victim         String   @default("")
   createdAt      DateTime @default(now())
 
   @@index([caseId])

@@ -314,7 +314,7 @@ export default function ExhibitViewer() {
         <div className="flex items-center gap-4">
           <h1 className="text-lg font-bold text-white">3D Trial Exhibit Generator</h1>
           {sceneName && (
-            <span className="text-sm text-gray-400">{sceneName}</span>
+            <span className="text-sm text-slate-400">{sceneName}</span>
           )}
         </div>
         <div className="flex items-center gap-2">
@@ -353,7 +353,7 @@ export default function ExhibitViewer() {
                     </svg>
                   </div>
                   <h2 className="text-2xl font-bold text-white mb-2">Create 3D Scene</h2>
-                  <p className="text-gray-400 text-sm">
+                  <p className="text-slate-400 text-sm">
                     Enter an address or location to generate an interactive 3D courtroom exhibit.
                   </p>
                 </div>
@@ -365,12 +365,12 @@ export default function ExhibitViewer() {
                     value={address}
                     onChange={(e) => setAddress(e.target.value)}
                     onKeyDown={(e) => e.key === 'Enter' && handleCreateScene()}
-                    className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-blue-500 text-sm"
+                    className="w-full px-4 py-3 bg-gray-800 border border-gray-600 rounded-lg text-white placeholder-gray-500 focus:outline-none focus:border-gold-light text-sm"
                   />
                   <button
                     onClick={handleCreateScene}
                     disabled={isLoading || !address.trim()}
-                    className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-500 disabled:bg-gray-600 disabled:text-gray-400 transition-colors text-sm"
+                    className="w-full py-3 bg-blue-600 text-white rounded-lg font-medium hover:bg-blue-500 disabled:bg-gray-600 disabled:text-slate-400 transition-colors text-sm"
                   >
                     {isLoading ? 'Generating Scene...' : 'Generate 3D Scene'}
                   </button>
@@ -381,7 +381,7 @@ export default function ExhibitViewer() {
 
                 {/* Quick Examples */}
                 <div className="mt-6">
-                  <p className="text-xs text-gray-500 uppercase tracking-wider mb-2 text-center">Quick Examples</p>
+                  <p className="text-xs text-slate-400 uppercase tracking-wider mb-2 text-center">Quick Examples</p>
                   <div className="grid grid-cols-2 gap-2">
                     {[
                       '1100 Broadway, Sacramento, CA',
@@ -392,7 +392,7 @@ export default function ExhibitViewer() {
                       <button
                         key={addr}
                         onClick={() => { setAddress(addr); }}
-                        className="text-left py-2 px-3 bg-gray-800 border border-gray-700 rounded text-xs text-gray-400 hover:text-white hover:border-gray-600 transition-colors"
+                        className="text-left py-2 px-3 bg-gray-800 border border-gray-700 rounded text-xs text-slate-400 hover:text-white hover:border-gray-600 transition-colors"
                       >
                         {addr}
                       </button>
@@ -417,12 +417,12 @@ export default function ExhibitViewer() {
           {sceneData && (
             <div className="absolute bottom-4 left-4 bg-black/60 rounded px-3 py-2 text-xs text-gray-300">
               <span>{sceneData.metadata.totalFeatures} features</span>
-              <span className="mx-2 text-gray-600">|</span>
+              <span className="mx-2 text-slate-300">|</span>
               <span>{sceneData.buildings.length} buildings</span>
-              <span className="mx-2 text-gray-600">|</span>
+              <span className="mx-2 text-slate-300">|</span>
               <span>{sceneData.roads.length} roads</span>
-              <span className="mx-2 text-gray-600">|</span>
-              <span className="text-gray-500">{sceneData.metadata.source}</span>
+              <span className="mx-2 text-slate-300">|</span>
+              <span className="text-slate-400">{sceneData.metadata.source}</span>
             </div>
           )}
         </div>
@@ -439,7 +439,7 @@ export default function ExhibitViewer() {
                   value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   onKeyDown={(e) => e.key === 'Enter' && handleCreateScene()}
-                  className="flex-1 px-2 py-1.5 text-xs bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-500 focus:outline-none focus:border-blue-500"
+                  className="flex-1 px-2 py-1.5 text-xs bg-gray-700 border border-gray-600 rounded text-white placeholder-gray-500 focus:outline-none focus:border-gold-light"
                 />
                 <button
                   onClick={handleCreateScene}

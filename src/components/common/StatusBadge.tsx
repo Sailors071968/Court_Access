@@ -90,12 +90,12 @@ interface CaseStatusBadgeProps {
 
 export function CaseStatusBadge({ status }: CaseStatusBadgeProps) {
   const config: Record<string, { label: string; bgColor: string; textColor: string; dotColor: string }> = {
-    active: { label: 'Active', bgColor: 'bg-green-50', textColor: 'text-green-700', dotColor: 'bg-green-500' },
-    closed: { label: 'Closed', bgColor: 'bg-gray-100', textColor: 'text-gray-600', dotColor: 'bg-gray-400' },
-    pending: { label: 'Pending', bgColor: 'bg-amber-50', textColor: 'text-amber-700', dotColor: 'bg-amber-500' },
-    archived: { label: 'Archived', bgColor: 'bg-blue-50', textColor: 'text-blue-700', dotColor: 'bg-blue-500' },
+    active: { label: 'Active', bgColor: 'bg-emerald-500/10', textColor: 'text-emerald-300', dotColor: 'bg-green-500' },
+    closed: { label: 'Closed', bgColor: 'bg-white/10', textColor: 'text-slate-300', dotColor: 'bg-gray-400' },
+    pending: { label: 'Pending', bgColor: 'bg-amber-500/10', textColor: 'text-amber-300', dotColor: 'bg-amber-500' },
+    archived: { label: 'Archived', bgColor: 'bg-blue-500/10', textColor: 'text-blue-300', dotColor: 'bg-blue-500' },
   };
-  const c = config[status] ?? { label: status, bgColor: 'bg-gray-100', textColor: 'text-gray-600', dotColor: 'bg-gray-400' };
+  const c = config[status] ?? { label: status, bgColor: 'bg-white/10', textColor: 'text-slate-300', dotColor: 'bg-gray-400' };
   return (
     <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-sm font-medium ${c.bgColor} ${c.textColor}`}>
       <span className={`w-2 h-2 rounded-full ${c.dotColor}`} />

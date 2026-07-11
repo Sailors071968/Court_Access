@@ -36,12 +36,12 @@ export function TermsOfServicePage() {
         </p>
       </LegalSection>
 
-      <LegalSection title="Delegated Access">
+      <LegalSection title="Collaborators">
         <p>
-          Primary Account Owners may invite up to five additional users (limit subject to
-          plan expansion). Each designee receives independent login credentials. The Primary
-          Account Owner configures per-case and per-resource permissions. Unauthorized
-          information must not be inferable by restricted users.
+          Primary Account Owners may invite an unlimited number of collaborators. Each
+          collaborator receives independent login credentials. The Primary Account Owner
+          configures per-case and per-resource permissions. Unauthorized information must not
+          be inferable by restricted collaborators.
         </p>
       </LegalSection>
 

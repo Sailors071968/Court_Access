@@ -53,19 +53,19 @@ export function CareersPage() {
 
       <section className="py-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-slate-900 mb-8">Open Positions</h2>
+          <h2 className="text-2xl font-bold text-white mb-8">Open Positions</h2>
           <div className="space-y-6">
             {OPEN_ROLES.map((role) => (
-              <div key={role.title} className="p-6 rounded-xl border border-slate-200 bg-white hover:border-amber-200 transition-colors">
+              <div key={role.title} className="p-6 rounded-xl border border-white/10 bg-white/5 hover:border-amber-500/20 transition-colors">
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-4">
                   <div>
-                    <h3 className="text-lg font-bold text-slate-900">{role.title}</h3>
+                    <h3 className="text-lg font-bold text-white">{role.title}</h3>
                     <p className="text-sm text-amber-600 font-medium mt-1">{role.department}</p>
-                    <p className="text-sm text-slate-500 flex items-center gap-1 mt-2">
+                    <p className="text-sm text-slate-400 flex items-center gap-1 mt-2">
                       <MapPin size={14} />
                       {role.location}
                     </p>
-                    <p className="text-slate-600 mt-3 text-sm leading-relaxed">{role.description}</p>
+                    <p className="text-slate-300 mt-3 text-sm leading-relaxed">{role.description}</p>
                   </div>
                   <a
                     href={`mailto:careers@courtaccess.net?subject=Application: ${encodeURIComponent(role.title)}`}
@@ -81,17 +81,17 @@ export function CareersPage() {
         </div>
       </section>
 
-      <section className="py-16 bg-slate-50 border-y border-slate-200">
+      <section className="py-16 bg-white/5 border-y border-white/10">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h2 className="text-2xl font-bold text-slate-900 mb-8 text-center">Engineering Principles</h2>
+          <h2 className="text-2xl font-bold text-white mb-8 text-center">Engineering Principles</h2>
           <div className="grid sm:grid-cols-3 gap-6">
             {VALUES.map(({ title, desc }) => (
-              <div key={title} className="p-5 rounded-xl bg-white border border-slate-200 text-center">
-                <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center mx-auto mb-3">
+              <div key={title} className="p-5 rounded-xl bg-white/5 border border-white/10 text-center">
+                <div className="w-10 h-10 bg-amber-500/15 rounded-lg flex items-center justify-center mx-auto mb-3">
                   <Shield className="text-amber-600" size={20} />
                 </div>
-                <h3 className="font-semibold text-slate-900 mb-2 text-sm">{title}</h3>
-                <p className="text-xs text-slate-600">{desc}</p>
+                <h3 className="font-semibold text-white mb-2 text-sm">{title}</h3>
+                <p className="text-xs text-slate-300">{desc}</p>
               </div>
             ))}
           </div>
@@ -99,12 +99,12 @@ export function CareersPage() {
       </section>
 
       <section className="py-12 text-center">
-        <p className="text-slate-600 mb-4">Don't see your role? We're always looking for exceptional talent.</p>
+        <p className="text-slate-300 mb-4">Don't see your role? We're always looking for exceptional talent.</p>
         <a href="mailto:careers@courtaccess.net" className="text-amber-600 hover:text-amber-500 font-semibold">
           careers@courtaccess.net
         </a>
         <div className="mt-6">
-          <Link to="/about" className="text-sm text-slate-500 hover:text-slate-700">Learn about CourtAccess →</Link>
+          <Link to="/about" className="text-sm text-slate-400 hover:text-slate-200">Learn about CourtAccess →</Link>
         </div>
       </section>
     </PublicMarketingLayout>

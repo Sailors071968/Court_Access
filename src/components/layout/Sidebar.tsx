@@ -6,14 +6,17 @@
 
 import { NavLink, useLocation } from 'react-router-dom';
 import {
-  LayoutDashboard, Briefcase, Search, Bell, Settings, Shield, LogOut,
+  LayoutDashboard, Briefcase, Search, Bell, Settings, Shield,
   ChevronLeft, ChevronRight, ChevronDown,
-  FileText, Tag, Upload, BarChart3, Globe, Activity, Server, BookOpen, CheckSquare, FileQuestion,
+  FileText, Tag, Upload, BarChart3, Globe, Activity, Server, BookOpen, CheckSquare, FileQuestion, Plug,
 } from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
 import { ROLE_PERMISSIONS } from '../../constants';
 import type { RolePermissions } from '../../types';
 import { useState } from 'react';
+import { BrandLogo } from '../brand/BrandLogo';
+import { Avatar } from '../ui/avatar';
+import { cn } from '../../lib/utils';
 
 const iconMap = {
   LayoutDashboard,
@@ -71,6 +74,7 @@ const navItems: NavItem[] = [
     icon: 'Shield',
     permission: 'canViewAdmin',
     children: [
+      { id: 'provider-integrations', label: 'Provider Integrations', path: '/admin/provider-integrations', icon: <Plug size={16} /> },
       { id: 'cpra', label: 'CPRA Campaigns', path: '/dashboard/cpra', icon: <Globe size={16} /> },
       { id: 'policy-ops', label: 'Policy Operations', path: '/dashboard/policy-operations', icon: <FileText size={16} /> },
       { id: 'discount-codes', label: 'Discount Codes', path: '/dashboard/discount-codes', icon: <Tag size={16} /> },
@@ -89,7 +93,7 @@ const navItems: NavItem[] = [
 ];
 
 export function Sidebar() {
-  const { user, logout } = useAuthStore();
+  const { user } = useAuthStore();
   const location = useLocation();
   const [collapsed, setCollapsed] = useState(false);
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({ admin: true });
@@ -104,32 +108,30 @@ export function Sidebar() {
 
   return (
     <aside
-      className={`fixed left-0 top-0 h-screen bg-slate-800 text-white flex flex-col z-40 transition-all duration-300 ${
-        collapsed ? 'w-16' : 'w-64'
-      }`}
+      className={cn(
+        'fixed left-0 top-0 h-screen text-slate-200 flex flex-col z-40 transition-all duration-300 border-r border-white/10',
+        'bg-gradient-to-b from-navy-900 via-navy-900 to-[#070b16]',
+        collapsed ? 'w-16' : 'w-64',
+      )}
     >
-      {/* Logo */}
-      <div className="flex items-center gap-3 px-4 py-5 border-b border-slate-700">
-        <div className="w-8 h-8 bg-amber-500 rounded-lg flex items-center justify-center flex-shrink-0">
-          <span className="text-white font-bold text-sm">CA</span>
-        </div>
-        {!collapsed && (
-          <div>
-            <h1 className="text-lg font-bold text-white tracking-tight">Court Access</h1>
+      <div className={cn('flex items-center px-4 py-5 border-b border-white/5', collapsed ? 'justify-center' : '')}>
+        {collapsed ? (
+          <div className="w-8 h-8 bg-gold-light rounded-xl flex items-center justify-center">
+            <span className="text-navy font-bold text-xs">CA</span>
           </div>
+        ) : (
+          <BrandLogo variant="light" size="sm" linkTo="/dashboard" />
         )}
       </div>
 
       {/* User Info */}
       {!collapsed && (
-        <div className="px-4 py-3 border-b border-slate-700">
+        <div className="px-4 py-3 border-b border-white/5">
           <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-slate-600 rounded-full flex items-center justify-center flex-shrink-0">
-              <span className="text-sm font-medium">{user.name.charAt(0)}</span>
-            </div>
+            <Avatar name={user.name} size="sm" accent />
             <div className="min-w-0">
-              <p className="text-sm font-medium truncate">{user.name}</p>
-              <p className="text-xs text-slate-400 capitalize">{user.role}</p>
+              <p className="text-sm font-medium text-white truncate">{user.name}</p>
+              <p className="text-xs text-slate-400 capitalize">{user.role.replace(/_/g, ' ')}</p>
             </div>
           </div>
         </div>
@@ -137,6 +139,7 @@ export function Sidebar() {
 
       {/* Navigation */}
       <nav className="flex-1 py-4 px-2 space-y-1 overflow-y-auto">
+        {!collapsed && <p className="px-3 pb-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-slate-500">Workspace</p>}
         {navItems.map((item) => {
           if (item.permission && !permissions[item.permission]) return null;
           // Hide standalone evidence-mgmt for admins (they see it under Admin sub-nav)
@@ -159,10 +162,10 @@ export function Sidebar() {
                 <>
                   <button
                     onClick={() => toggleSection(item.id)}
-                    className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors w-full ${
+                    className={`relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all w-full ${
                       isActive || childActive
-                        ? 'bg-slate-700 text-white'
-                        : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                        ? 'bg-gold/10 text-gold-light ring-1 ring-inset ring-gold/20 shadow-[inset_3px_0_0_0_#eab360]'
+                        : 'text-slate-300 hover:bg-white/5 hover:text-white'
                     }`}
                     title={collapsed ? item.label : undefined}
                   >
@@ -178,7 +181,7 @@ export function Sidebar() {
                     )}
                   </button>
                   {!collapsed && isExpanded && (
-                    <div className="ml-4 mt-1 space-y-0.5 border-l border-slate-700 pl-3">
+                    <div className="ml-4 mt-1 space-y-0.5 border-l border-white/10 pl-3">
                       {visibleChildren?.map((child) => {
                         const isChildActive = location.pathname === child.path;
                         return (
@@ -187,8 +190,8 @@ export function Sidebar() {
                             to={child.path}
                             className={`flex items-center gap-2.5 px-2.5 py-2 rounded-md text-xs font-medium transition-colors ${
                               isChildActive
-                                ? 'bg-slate-700 text-white'
-                                : 'text-slate-400 hover:bg-slate-700/50 hover:text-white'
+                                ? 'bg-gold/10 text-gold-light'
+                                : 'text-slate-400 hover:bg-white/5 hover:text-white'
                             }`}
                           >
                             <span className="flex-shrink-0">{child.icon}</span>
@@ -202,10 +205,10 @@ export function Sidebar() {
               ) : (
                 <NavLink
                   to={item.path}
-                  className={`flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
+                  className={`relative flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-all ${
                     isActive
-                      ? 'bg-slate-700 text-white'
-                      : 'text-slate-300 hover:bg-slate-700/50 hover:text-white'
+                      ? 'bg-gold/10 text-gold-light ring-1 ring-inset ring-gold/20 shadow-[inset_3px_0_0_0_#eab360]'
+                      : 'text-slate-300 hover:bg-white/5 hover:text-white'
                   }`}
                   title={collapsed ? item.label : undefined}
                 >
@@ -219,20 +222,13 @@ export function Sidebar() {
       </nav>
 
       {/* Footer */}
-      <div className="px-2 py-3 border-t border-slate-700 space-y-1">
+      <div className="px-2 py-3 border-t border-white/5 space-y-1">
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-700/50 hover:text-white transition-colors w-full"
+          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-400 hover:bg-white/5 hover:text-white transition-colors w-full"
         >
           {collapsed ? <ChevronRight size={20} /> : <ChevronLeft size={20} />}
           {!collapsed && <span>Collapse</span>}
-        </button>
-        <button
-          onClick={logout}
-          className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm text-slate-300 hover:bg-slate-700/50 hover:text-white transition-colors w-full"
-        >
-          <LogOut size={20} className="flex-shrink-0" />
-          {!collapsed && <span>Logout</span>}
         </button>
       </div>
     </aside>

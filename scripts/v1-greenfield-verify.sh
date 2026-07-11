@@ -1,7 +1,8 @@
 #!/usr/bin/env bash
 # ==============================================================================
 # CourtAccess V1 — Greenfield Verification (parallel install)
-# Verifies /var/www/courtaccess-v1 without affecting production
+# Verifies /var/www/courtaccess-v1 only. Production at /var/www/courtaccess
+# git tree is not modified. HTTPS smoke on courtaccess.net is read-only.
 # ==============================================================================
 set -euo pipefail
 

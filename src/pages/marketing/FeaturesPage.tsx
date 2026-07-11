@@ -47,7 +47,7 @@ const FEATURE_GROUPS = [
       { icon: Briefcase, name: 'Attorney Workbench', desc: 'Motions, trial notebook, voir dire, opening and closing outlines.' },
       { icon: Search, name: 'Investigator Workbench', desc: 'Witnesses, leads, interviews, field notes, and surveillance logs.' },
       { icon: Users, name: 'Client Portal', desc: 'Court dates, documents, messages, and authorized evidence uploads.' },
-      { icon: Users, name: 'Delegated Access', desc: 'Invite up to five users with per-case, per-resource permissions.' },
+      { icon: Users, name: 'Collaborators', desc: 'Invite unlimited collaborators with per-case, per-resource permissions.' },
     ],
   },
 ];
@@ -72,17 +72,17 @@ export function FeaturesPage() {
           {FEATURE_GROUPS.map((group) => (
             <div key={group.title}>
               <div className="mb-8">
-                <h2 className="text-2xl font-bold text-slate-900 mb-2">{group.title}</h2>
-                <p className="text-slate-600">{group.description}</p>
+                <h2 className="text-2xl font-bold text-white mb-2">{group.title}</h2>
+                <p className="text-slate-300">{group.description}</p>
               </div>
               <div className="grid sm:grid-cols-2 gap-6">
                 {group.features.map(({ icon: Icon, name, desc }) => (
-                  <div key={name} className="p-6 rounded-xl border border-slate-200 hover:border-amber-200 hover:shadow-sm transition-all">
-                    <div className="w-10 h-10 bg-amber-100 rounded-lg flex items-center justify-center mb-4">
+                  <div key={name} className="p-6 rounded-xl border border-white/10 hover:border-amber-500/20 hover:shadow-sm transition-all">
+                    <div className="w-10 h-10 bg-amber-500/15 rounded-lg flex items-center justify-center mb-4">
                       <Icon className="text-amber-600" size={20} />
                     </div>
-                    <h3 className="font-semibold text-slate-900 mb-2">{name}</h3>
-                    <p className="text-sm text-slate-600 leading-relaxed">{desc}</p>
+                    <h3 className="font-semibold text-white mb-2">{name}</h3>
+                    <p className="text-sm text-slate-300 leading-relaxed">{desc}</p>
                   </div>
                 ))}
               </div>
@@ -91,13 +91,13 @@ export function FeaturesPage() {
         </div>
       </section>
 
-      <section className="py-16 bg-slate-50 border-t border-slate-200">
+      <section className="py-16 bg-white/5 border-t border-white/10">
         <div className="max-w-3xl mx-auto px-4 text-center">
-          <h2 className="text-2xl font-bold text-slate-900 mb-4">Ready to explore?</h2>
-          <p className="text-slate-600 mb-8">Start your free 30-day trial — full platform access, no credit card required.</p>
+          <h2 className="text-2xl font-bold text-white mb-4">Ready to explore?</h2>
+          <p className="text-slate-300 mb-8">Start your free 30-day trial — full platform access, no credit card required.</p>
           <Link
             to="/register"
-            className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-slate-900 font-semibold px-8 py-3 rounded-lg transition-colors"
+            className="inline-flex items-center gap-2 bg-amber-500 hover:bg-amber-400 text-white font-semibold px-8 py-3 rounded-lg transition-colors"
           >
             Start Free Trial
             <ArrowRight size={18} />

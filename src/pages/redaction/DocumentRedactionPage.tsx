@@ -130,19 +130,19 @@ export function DocumentRedactionPage() {
     <div className="max-w-6xl mx-auto space-y-6 p-4">
       <div className="flex flex-wrap items-center justify-between gap-4">
         <div>
-          <Link to={`/cases/${caseId}/documents`} className="text-sm text-amber-600 hover:text-amber-700">
+          <Link to={`/cases/${caseId}/documents`} className="text-sm text-amber-600 hover:text-amber-300">
             ← Back to documents
           </Link>
-          <h1 className="text-2xl font-bold text-gray-900 mt-1 flex items-center gap-2">
+          <h1 className="text-2xl font-bold text-white mt-1 flex items-center gap-2">
             <Shield size={24} /> Document Redaction
           </h1>
-          <p className="text-sm text-gray-500">Document {documentId.slice(0, 8)}… — original preserved</p>
+          <p className="text-sm text-slate-400">Document {documentId.slice(0, 8)}… — original preserved</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <select
             value={profile}
             onChange={(e) => setProfile(e.target.value)}
-            className="border border-gray-300 rounded-lg px-3 py-2 text-sm"
+            className="border border-white/10 rounded-lg px-3 py-2 text-sm"
           >
             {PUBLICATION_PROFILES.map((p) => (
               <option key={p} value={p}>{p}</option>
@@ -152,7 +152,7 @@ export function DocumentRedactionPage() {
             type="button"
             onClick={() => setPreviewMode(!previewMode)}
             className={`flex items-center gap-1 px-3 py-2 rounded-lg text-sm border ${
-              previewMode ? 'bg-amber-100 border-amber-300' : 'border-gray-300'
+              previewMode ? 'bg-amber-500/15 border-amber-300' : 'border-white/10'
             }`}
           >
             <Eye size={16} /> Preview As Recipient
@@ -172,8 +172,8 @@ export function DocumentRedactionPage() {
       <div className="grid lg:grid-cols-4 gap-6">
         <div className="lg:col-span-3 space-y-4">
           <div className="flex items-center gap-2 flex-wrap">
-            <div className="flex items-center gap-1 border border-gray-300 rounded-lg px-2 py-1">
-              <Search size={16} className="text-gray-400" />
+            <div className="flex items-center gap-1 border border-white/10 rounded-lg px-2 py-1">
+              <Search size={16} className="text-slate-400" />
               <input
                 type="text"
                 placeholder="Search OCR text to redact…"
@@ -187,17 +187,17 @@ export function DocumentRedactionPage() {
                 Redact
               </button>
             </div>
-            <span className="text-xs text-gray-500 flex items-center gap-1">
+            <span className="text-xs text-slate-400 flex items-center gap-1">
               <Square size={14} /> Drag on document to draw rectangle
             </span>
-            <label className="text-sm text-gray-600">
+            <label className="text-sm text-slate-300">
               Page{' '}
               <input
                 type="number"
                 min={1}
                 value={currentPage}
                 onChange={(e) => setCurrentPage(Number(e.target.value) || 1)}
-                className="w-14 border border-gray-300 rounded px-1 ml-1"
+                className="w-14 border border-white/10 rounded px-1 ml-1"
               />
             </label>
           </div>
@@ -207,9 +207,9 @@ export function DocumentRedactionPage() {
             role="presentation"
             onMouseDown={handleMouseDown}
             onMouseUp={handleMouseUp}
-            className="relative bg-white border-2 border-dashed border-gray-300 rounded-xl min-h-[480px] cursor-crosshair select-none"
+            className="relative bg-white/5 border-2 border-dashed border-white/10 rounded-xl min-h-[480px] cursor-crosshair select-none"
           >
-            <div className="absolute inset-4 text-gray-400 text-sm pointer-events-none">
+            <div className="absolute inset-4 text-slate-400 text-sm pointer-events-none">
               Document preview layer (page {currentPage})
               {previewMode && ' — recipient view: redacted areas hidden'}
             </div>
@@ -224,25 +224,25 @@ export function DocumentRedactionPage() {
               />
             ))}
           </div>
-          {message && <p className="text-sm text-gray-600">{message}</p>}
+          {message && <p className="text-sm text-slate-300">{message}</p>}
         </div>
 
         <div className="space-y-4">
-          <div className="bg-white rounded-xl border border-gray-200 p-4">
-            <h3 className="font-semibold text-gray-900 flex items-center gap-2 mb-3">
+          <div className="bg-white/5 rounded-xl border border-white/10 p-4">
+            <h3 className="font-semibold text-white flex items-center gap-2 mb-3">
               <History size={18} /> Version History
             </h3>
             {loading ? (
               <Loader2 className="animate-spin text-slate-400" size={24} />
             ) : versions.length === 0 ? (
-              <p className="text-sm text-gray-500">No versions yet</p>
+              <p className="text-sm text-slate-400">No versions yet</p>
             ) : (
               <ul className="space-y-2 max-h-64 overflow-y-auto">
                 {versions.map((v) => (
-                  <li key={v.redactionId} className="text-sm border-b border-gray-100 pb-2">
+                  <li key={v.redactionId} className="text-sm border-b border-white/10 pb-2">
                     <span className="font-medium">{v.profileName}</span> v{v.versionNumber}
                     <span className={`ml-2 text-xs px-1.5 py-0.5 rounded ${
-                      v.status === 'published' ? 'bg-green-100 text-green-800' : 'bg-gray-100'
+                      v.status === 'published' ? 'bg-emerald-500/15 text-emerald-300' : 'bg-white/10'
                     }`}>
                       {v.status}
                     </span>
@@ -251,7 +251,7 @@ export function DocumentRedactionPage() {
               </ul>
             )}
           </div>
-          <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 text-sm text-amber-900">
+          <div className="bg-amber-500/10 border border-amber-500/20 rounded-xl p-4 text-sm text-amber-900">
             <Layers size={16} className="inline mr-1" />
             Batch redaction: search terms apply to current page. Multi-page supported via page selector.
           </div>

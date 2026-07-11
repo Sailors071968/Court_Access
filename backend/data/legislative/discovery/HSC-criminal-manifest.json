@@ -1,0 +1,263 @@
+{
+  "version": "1.0.0-criminal",
+  "code": "HSC",
+  "codeName": "Health and Safety Code",
+  "discoveredAt": "2026-07-06T21:31:47.325Z",
+  "completedAt": "2026-07-06T21:31:47.325Z",
+  "status": "completed",
+  "audit": [
+    {
+      "timestamp": "2026-07-06T21:31:47.325Z",
+      "action": "criminal_seed_targeting",
+      "detail": "18 seed sections"
+    }
+  ],
+  "hierarchyNodes": [],
+  "sections": [
+    {
+      "code": "HSC",
+      "section": "11350.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11350.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11350."
+    },
+    {
+      "code": "HSC",
+      "section": "11351.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11351.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11351."
+    },
+    {
+      "code": "HSC",
+      "section": "11351.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11351.5.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11351.5."
+    },
+    {
+      "code": "HSC",
+      "section": "11352.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11352.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11352."
+    },
+    {
+      "code": "HSC",
+      "section": "11357.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11357.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11357."
+    },
+    {
+      "code": "HSC",
+      "section": "11358.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11358.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11358."
+    },
+    {
+      "code": "HSC",
+      "section": "11359.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11359.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11359."
+    },
+    {
+      "code": "HSC",
+      "section": "11360.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11360.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11360."
+    },
+    {
+      "code": "HSC",
+      "section": "11361.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11361.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11361."
+    },
+    {
+      "code": "HSC",
+      "section": "11364.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11364.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11364."
+    },
+    {
+      "code": "HSC",
+      "section": "11364.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11364.5.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11364.5."
+    },
+    {
+      "code": "HSC",
+      "section": "11365.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11365.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11365."
+    },
+    {
+      "code": "HSC",
+      "section": "11366.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11366.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11366."
+    },
+    {
+      "code": "HSC",
+      "section": "11370.1.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11370.1.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11370.1."
+    },
+    {
+      "code": "HSC",
+      "section": "11377.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11377.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11377."
+    },
+    {
+      "code": "HSC",
+      "section": "11378.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11378.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11378."
+    },
+    {
+      "code": "HSC",
+      "section": "11379.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11379.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11379."
+    },
+    {
+      "code": "HSC",
+      "section": "11550.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11550.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "targeted_criminal_seed",
+      "flags": [
+        "criminal_priority"
+      ],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11550."
+    }
+  ],
+  "stats": {
+    "pagesFetched": 0,
+    "expandedBranchPages": 0,
+    "displayTextPages": 0,
+    "hierarchyNodes": 0,
+    "sectionsDiscovered": 18,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 0,
+    "anomalies": 0
+  },
+  "anomalies": []
+}

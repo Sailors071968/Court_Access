@@ -204,13 +204,13 @@ export function DiscountCodesDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Discount Codes</h1>
-          <p className="text-sm text-gray-500 mt-1">Manage promotional access codes and track campaign performance</p>
+          <h1 className="text-2xl font-bold text-white">Discount Codes</h1>
+          <p className="text-sm text-slate-400 mt-1">Manage promotional access codes and track campaign performance</p>
         </div>
         <div className="flex items-center gap-3">
           <button
             onClick={refresh}
-            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-lg hover:bg-gray-50"
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-slate-200 bg-white/5 border border-white/10 rounded-lg hover:bg-white/5"
           >
             <RefreshCw size={14} /> Refresh
           </button>
@@ -225,42 +225,42 @@ export function DiscountCodesDashboard() {
 
       {/* Stats Cards */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
+        <div className="bg-white/5 rounded-xl border border-white/10 p-4">
           <div className="flex items-center gap-2 mb-2">
-            <Tag size={14} className="text-gray-500" />
-            <span className="text-xs font-medium text-gray-500">Total Codes</span>
+            <Tag size={14} className="text-slate-400" />
+            <span className="text-xs font-medium text-slate-400">Total Codes</span>
           </div>
-          <p className="text-2xl font-bold text-gray-900">{totalCodes}</p>
+          <p className="text-2xl font-bold text-white">{totalCodes}</p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
+        <div className="bg-white/5 rounded-xl border border-white/10 p-4">
           <div className="flex items-center gap-2 mb-2">
             <CheckCircle2 size={14} className="text-emerald-500" />
-            <span className="text-xs font-medium text-gray-500">Active</span>
+            <span className="text-xs font-medium text-slate-400">Active</span>
           </div>
           <p className="text-2xl font-bold text-emerald-600">{activeCodes}</p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
+        <div className="bg-white/5 rounded-xl border border-white/10 p-4">
           <div className="flex items-center gap-2 mb-2">
             <Users size={14} className="text-blue-500" />
-            <span className="text-xs font-medium text-gray-500">Total Uses</span>
+            <span className="text-xs font-medium text-slate-400">Total Uses</span>
           </div>
-          <p className="text-2xl font-bold text-blue-600">{totalUsages}</p>
+          <p className="text-2xl font-bold text-gold-light">{totalUsages}</p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
+        <div className="bg-white/5 rounded-xl border border-white/10 p-4">
           <div className="flex items-center gap-2 mb-2">
             <DollarSign size={14} className="text-amber-500" />
-            <span className="text-xs font-medium text-gray-500">Total Discount Given</span>
+            <span className="text-xs font-medium text-slate-400">Total Discount Given</span>
           </div>
           <p className="text-2xl font-bold text-amber-600">${totalDiscountValue.toLocaleString()}</p>
         </div>
       </div>
 
       {/* Tab Switcher */}
-      <div className="flex gap-1 bg-gray-100 rounded-lg p-1 w-fit">
+      <div className="flex gap-1 bg-white/10 rounded-lg p-1 w-fit">
         <button
           onClick={() => setActiveTab('codes')}
           className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-            activeTab === 'codes' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+            activeTab === 'codes' ? 'bg-white/5 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
           }`}
         >
           <Tag size={14} className="inline mr-1.5" />Codes
@@ -268,7 +268,7 @@ export function DiscountCodesDashboard() {
         <button
           onClick={() => setActiveTab('analytics')}
           className={`px-4 py-2 text-sm font-medium rounded-md transition-colors ${
-            activeTab === 'analytics' ? 'bg-white text-gray-900 shadow-sm' : 'text-gray-500 hover:text-gray-700'
+            activeTab === 'analytics' ? 'bg-white/5 text-white shadow-sm' : 'text-slate-400 hover:text-slate-200'
           }`}
         >
           <BarChart3 size={14} className="inline mr-1.5" />Analytics
@@ -278,11 +278,11 @@ export function DiscountCodesDashboard() {
       {/* Create Code Modal */}
       {showCreateForm && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto">
+          <div className="bg-white/5 rounded-2xl shadow-xl max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-900">Create Discount Code</h2>
-              <button onClick={() => setShowCreateForm(false)} className="p-1 rounded-lg hover:bg-gray-100">
-                <X size={18} className="text-gray-500" />
+              <h2 className="text-lg font-semibold text-white">Create Discount Code</h2>
+              <button onClick={() => setShowCreateForm(false)} className="p-1 rounded-lg hover:bg-white/10">
+                <X size={18} className="text-slate-400" />
               </button>
             </div>
             <CreateDiscountCodeForm onSubmit={handleCreate} onCancel={() => setShowCreateForm(false)} />
@@ -293,11 +293,11 @@ export function DiscountCodesDashboard() {
       {/* Edit Code Modal */}
       {editingCode && (
         <div className="fixed inset-0 bg-black/40 z-50 flex items-center justify-center p-4">
-          <div className="bg-white rounded-2xl shadow-xl max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto">
+          <div className="bg-white/5 rounded-2xl shadow-xl max-w-lg w-full p-6 max-h-[90vh] overflow-y-auto">
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-900">Edit Discount Code</h2>
-              <button onClick={() => setEditingCode(null)} className="p-1 rounded-lg hover:bg-gray-100">
-                <X size={18} className="text-gray-500" />
+              <h2 className="text-lg font-semibold text-white">Edit Discount Code</h2>
+              <button onClick={() => setEditingCode(null)} className="p-1 rounded-lg hover:bg-white/10">
+                <X size={18} className="text-slate-400" />
               </button>
             </div>
             <CreateDiscountCodeForm
@@ -322,10 +322,10 @@ export function DiscountCodesDashboard() {
       {activeTab === 'codes' && (
         <>
           {codes.length === 0 ? (
-            <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
+            <div className="bg-white/5 rounded-xl border border-white/10 p-12 text-center">
               <Tag className="mx-auto mb-4 text-gray-300" size={48} />
-              <h3 className="text-lg font-semibold text-gray-700 mb-2">No Discount Codes</h3>
-              <p className="text-sm text-gray-500 mb-4">Create your first promotional discount code to get started.</p>
+              <h3 className="text-lg font-semibold text-slate-200 mb-2">No Discount Codes</h3>
+              <p className="text-sm text-slate-400 mb-4">Create your first promotional discount code to get started.</p>
               <button
                 onClick={() => setShowCreateForm(true)}
                 className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-white bg-slate-800 rounded-lg hover:bg-slate-700"
@@ -334,33 +334,33 @@ export function DiscountCodesDashboard() {
               </button>
             </div>
           ) : (
-            <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
+            <div className="bg-white/5 rounded-xl border border-white/10 overflow-hidden">
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-gray-200 bg-gray-50">
-                      <th className="text-left px-4 py-3 font-medium text-gray-600">Code</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-600">Campaign</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-600">Discount</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-600">Status</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-600">Usage</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-600">Expires</th>
-                      <th className="text-right px-4 py-3 font-medium text-gray-600">Actions</th>
+                    <tr className="border-b border-white/10 bg-white/5">
+                      <th className="text-left px-4 py-3 font-medium text-slate-300">Code</th>
+                      <th className="text-left px-4 py-3 font-medium text-slate-300">Campaign</th>
+                      <th className="text-left px-4 py-3 font-medium text-slate-300">Discount</th>
+                      <th className="text-left px-4 py-3 font-medium text-slate-300">Status</th>
+                      <th className="text-left px-4 py-3 font-medium text-slate-300">Usage</th>
+                      <th className="text-left px-4 py-3 font-medium text-slate-300">Expires</th>
+                      <th className="text-right px-4 py-3 font-medium text-slate-300">Actions</th>
                     </tr>
                   </thead>
                   <tbody>
                     {codes.map((code) => (
                       <tr
                         key={code.codeId}
-                        className="border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors"
+                        className="border-b border-white/10 hover:bg-white/5 cursor-pointer transition-colors"
                         onClick={() => setEditingCode(code)}
                       >
                         <td className="px-4 py-3">
-                          <span className="font-mono text-xs bg-gray-100 px-2 py-1 rounded">{code.codeValue}</span>
+                          <span className="font-mono text-xs bg-white/10 px-2 py-1 rounded">{code.codeValue}</span>
                         </td>
-                        <td className="px-4 py-3 text-gray-700">{code.codeName}</td>
+                        <td className="px-4 py-3 text-slate-200">{code.codeName}</td>
                         <td className="px-4 py-3">
-                          <span className="inline-flex items-center gap-1 text-gray-700">
+                          <span className="inline-flex items-center gap-1 text-slate-200">
                             {code.discountType === 'percent' ? <Percent size={12} /> : <DollarSign size={12} />}
                             {code.discountValue}{code.discountType === 'percent' ? '%' : ''}
                           </span>
@@ -370,31 +370,31 @@ export function DiscountCodesDashboard() {
                             onClick={(e) => { e.stopPropagation(); toggleActive(code.codeId); }}
                             className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-medium transition-colors ${
                               code.active
-                                ? 'bg-emerald-100 text-emerald-700 hover:bg-emerald-200'
-                                : 'bg-gray-100 text-gray-500 hover:bg-gray-200'
+                                ? 'bg-emerald-500/15 text-emerald-300 hover:bg-emerald-200'
+                                : 'bg-white/10 text-slate-400 hover:bg-gray-200'
                             }`}
                           >
                             {code.active ? <CheckCircle2 size={12} /> : <XCircle size={12} />}
                             {code.active ? 'Active' : 'Inactive'}
                           </button>
                         </td>
-                        <td className="px-4 py-3 text-gray-600">
+                        <td className="px-4 py-3 text-slate-300">
                           {code.usageCount}{code.usageLimit !== null ? ` / ${code.usageLimit}` : ''}
                         </td>
-                        <td className="px-4 py-3 text-gray-500 text-xs">
+                        <td className="px-4 py-3 text-slate-400 text-xs">
                           {code.expiresAt ? (
                             <span className="inline-flex items-center gap-1">
                               <Calendar size={12} />
                               {new Date(code.expiresAt).toLocaleDateString()}
                             </span>
                           ) : (
-                            <span className="text-gray-400">No expiry</span>
+                            <span className="text-slate-400">No expiry</span>
                           )}
                         </td>
                         <td className="px-4 py-3 text-right">
                           <button
                             onClick={(e) => { e.stopPropagation(); deleteCode(code.codeId); }}
-                            className="p-1.5 rounded-lg text-red-400 hover:bg-red-50 hover:text-red-600 transition-colors"
+                            className="p-1.5 rounded-lg text-red-400 hover:bg-red-500/10 hover:text-red-600 transition-colors"
                             title="Delete code"
                           >
                             <Trash2 size={14} />
@@ -414,42 +414,42 @@ export function DiscountCodesDashboard() {
       {activeTab === 'analytics' && (
         <div className="space-y-6">
           {/* Campaign Performance Table */}
-          <div className="bg-white rounded-xl border border-gray-200 overflow-hidden">
-            <div className="px-4 py-3 border-b border-gray-200 bg-gray-50">
-              <h3 className="text-sm font-semibold text-gray-700 flex items-center gap-2">
+          <div className="bg-white/5 rounded-xl border border-white/10 overflow-hidden">
+            <div className="px-4 py-3 border-b border-white/10 bg-white/5">
+              <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2">
                 <TrendingUp size={14} /> Campaign Performance
               </h3>
             </div>
             {codeAnalytics.length === 0 ? (
-              <div className="p-8 text-center text-sm text-gray-500">
+              <div className="p-8 text-center text-sm text-slate-400">
                 No discount codes created yet. Create your first code to see analytics.
               </div>
             ) : (
               <div className="overflow-x-auto">
                 <table className="w-full text-sm">
                   <thead>
-                    <tr className="border-b border-gray-200 bg-gray-50/50">
-                      <th className="text-left px-4 py-3 font-medium text-gray-600">Campaign</th>
-                      <th className="text-left px-4 py-3 font-medium text-gray-600">Code</th>
-                      <th className="text-right px-4 py-3 font-medium text-gray-600">Signups</th>
-                      <th className="text-right px-4 py-3 font-medium text-gray-600">Conversion %</th>
-                      <th className="text-right px-4 py-3 font-medium text-gray-600">Total Discount</th>
-                      <th className="text-center px-4 py-3 font-medium text-gray-600">Status</th>
+                    <tr className="border-b border-white/10 bg-white/5/50">
+                      <th className="text-left px-4 py-3 font-medium text-slate-300">Campaign</th>
+                      <th className="text-left px-4 py-3 font-medium text-slate-300">Code</th>
+                      <th className="text-right px-4 py-3 font-medium text-slate-300">Signups</th>
+                      <th className="text-right px-4 py-3 font-medium text-slate-300">Conversion %</th>
+                      <th className="text-right px-4 py-3 font-medium text-slate-300">Total Discount</th>
+                      <th className="text-center px-4 py-3 font-medium text-slate-300">Status</th>
                     </tr>
                   </thead>
                   <tbody>
                     {codeAnalytics.map((ca) => (
-                      <tr key={ca.codeId} className="border-b border-gray-100">
-                        <td className="px-4 py-3 text-gray-700 font-medium">{ca.codeName}</td>
+                      <tr key={ca.codeId} className="border-b border-white/10">
+                        <td className="px-4 py-3 text-slate-200 font-medium">{ca.codeName}</td>
                         <td className="px-4 py-3">
-                          <span className="font-mono text-xs bg-gray-100 px-2 py-1 rounded">{ca.codeValue}</span>
+                          <span className="font-mono text-xs bg-white/10 px-2 py-1 rounded">{ca.codeValue}</span>
                         </td>
-                        <td className="px-4 py-3 text-right text-gray-700">{ca.signups}</td>
-                        <td className="px-4 py-3 text-right text-gray-700">{ca.conversionRate}%</td>
-                        <td className="px-4 py-3 text-right text-gray-700">${ca.totalDiscount.toLocaleString()}</td>
+                        <td className="px-4 py-3 text-right text-slate-200">{ca.signups}</td>
+                        <td className="px-4 py-3 text-right text-slate-200">{ca.conversionRate}%</td>
+                        <td className="px-4 py-3 text-right text-slate-200">${ca.totalDiscount.toLocaleString()}</td>
                         <td className="px-4 py-3 text-center">
                           <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-xs font-medium ${
-                            ca.active ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'
+                            ca.active ? 'bg-emerald-500/15 text-emerald-300' : 'bg-white/10 text-slate-400'
                           }`}>
                             {ca.active ? 'Active' : 'Inactive'}
                           </span>
@@ -463,12 +463,12 @@ export function DiscountCodesDashboard() {
           </div>
 
           {/* Usage Over Time (Visual Bar) */}
-          <div className="bg-white rounded-xl border border-gray-200 p-6">
-            <h3 className="text-sm font-semibold text-gray-700 flex items-center gap-2 mb-4">
+          <div className="bg-white/5 rounded-xl border border-white/10 p-6">
+            <h3 className="text-sm font-semibold text-slate-200 flex items-center gap-2 mb-4">
               <BarChart3 size={14} /> Usage Distribution by Code
             </h3>
             {codeAnalytics.length === 0 ? (
-              <p className="text-sm text-gray-500 text-center py-4">No data available</p>
+              <p className="text-sm text-slate-400 text-center py-4">No data available</p>
             ) : (
               <div className="space-y-3">
                 {codeAnalytics.map((ca) => {
@@ -476,13 +476,13 @@ export function DiscountCodesDashboard() {
                   const barWidth = Math.max((ca.signups / maxUsage) * 100, 2);
                   return (
                     <div key={ca.codeId} className="flex items-center gap-3">
-                      <div className="w-32 text-xs font-mono text-gray-600 truncate">{ca.codeValue}</div>
-                      <div className="flex-1 bg-gray-100 rounded-full h-6 relative overflow-hidden">
+                      <div className="w-32 text-xs font-mono text-slate-300 truncate">{ca.codeValue}</div>
+                      <div className="flex-1 bg-white/10 rounded-full h-6 relative overflow-hidden">
                         <div
                           className={`h-full rounded-full transition-all ${ca.active ? 'bg-blue-500' : 'bg-gray-300'}`}
                           style={{ width: `${barWidth}%` }}
                         />
-                        <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-gray-700">
+                        <span className="absolute inset-0 flex items-center justify-center text-xs font-medium text-slate-200">
                           {ca.signups} use{ca.signups !== 1 ? 's' : ''}
                         </span>
                       </div>

@@ -98,15 +98,15 @@ function getStatusColor(status: string): string {
     case 'healthy':
     case 'active':
     case 'completed':
-      return 'text-green-600 bg-green-50';
+      return 'text-green-600 bg-emerald-500/10';
     case 'warning':
     case 'paused':
-      return 'text-yellow-600 bg-yellow-50';
+      return 'text-yellow-600 bg-amber-500/10';
     case 'critical':
     case 'error':
-      return 'text-red-600 bg-red-50';
+      return 'text-red-600 bg-red-500/10';
     default:
-      return 'text-gray-600 bg-gray-50';
+      return 'text-slate-300 bg-white/5';
   }
 }
 
@@ -171,13 +171,13 @@ export function SystemHealthDashboard() {
         <div className="flex items-center justify-center h-64">
           {loadFailed ? (
             <div className="text-center">
-              <p className="text-gray-500">System health data is not available yet.</p>
+              <p className="text-slate-400">System health data is not available yet.</p>
               <button onClick={fetchData} className="mt-3 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700">Retry</button>
             </div>
           ) : (
             <>
-              <RefreshCw size={24} className="animate-spin text-gray-400" />
-              <span className="ml-3 text-gray-500">Loading system health data...</span>
+              <RefreshCw size={24} className="animate-spin text-slate-400" />
+              <span className="ml-3 text-slate-400">Loading system health data...</span>
             </>
           )}
         </div>
@@ -255,10 +255,10 @@ export function SystemHealthDashboard() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-3">
-          <Activity size={24} className="text-blue-600" />
+          <Activity size={24} className="text-gold-light" />
           <div>
-            <h1 className="text-2xl font-bold text-gray-900">System Health</h1>
-            <p className="text-sm text-gray-500">
+            <h1 className="text-2xl font-bold text-white">System Health</h1>
+            <p className="text-sm text-slate-400">
               Last refreshed: {new Date(data.lastRefreshed).toLocaleTimeString()}
             </p>
           </div>
@@ -268,8 +268,8 @@ export function SystemHealthDashboard() {
             onClick={() => setAutoRefresh(!autoRefresh)}
             className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-colors ${
               autoRefresh
-                ? 'bg-green-50 text-green-700 hover:bg-green-100'
-                : 'bg-gray-100 text-gray-600 hover:bg-gray-200'
+                ? 'bg-emerald-500/10 text-emerald-300 hover:bg-emerald-500/15'
+                : 'bg-white/10 text-slate-300 hover:bg-gray-200'
             }`}
           >
             {autoRefresh ? <Wifi size={14} /> : <WifiOff size={14} />}
@@ -296,10 +296,10 @@ export function SystemHealthDashboard() {
                   {metricIcons[metric.id]}
                 </div>
                 <div>
-                  <p className="text-sm text-gray-500">{metric.label}</p>
-                  <p className="text-xl font-bold text-gray-900">
+                  <p className="text-sm text-slate-400">{metric.label}</p>
+                  <p className="text-xl font-bold text-white">
                     {metric.value}
-                    {metric.unit && <span className="text-sm font-normal text-gray-500 ml-1">{metric.unit}</span>}
+                    {metric.unit && <span className="text-sm font-normal text-slate-400 ml-1">{metric.unit}</span>}
                   </p>
                 </div>
               </div>
@@ -309,7 +309,7 @@ export function SystemHealthDashboard() {
               </div>
             </div>
             {metric.detail && (
-              <p className="mt-2 text-xs text-gray-500">{metric.detail}</p>
+              <p className="mt-2 text-xs text-slate-400">{metric.detail}</p>
             )}
           </Card>
         ))}
@@ -317,28 +317,28 @@ export function SystemHealthDashboard() {
 
       {/* Worker Queue Detail */}
       <Card>
-        <h2 className="text-lg font-semibold text-gray-900 mb-4">Worker Queue Status</h2>
+        <h2 className="text-lg font-semibold text-white mb-4">Worker Queue Status</h2>
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-gray-200">
-                <th className="text-left py-3 px-3 text-gray-500 font-medium">Queue</th>
-                <th className="text-right py-3 px-3 text-gray-500 font-medium">Concurrency</th>
-                <th className="text-right py-3 px-3 text-gray-500 font-medium">Active</th>
-                <th className="text-right py-3 px-3 text-gray-500 font-medium">Waiting</th>
-                <th className="text-right py-3 px-3 text-gray-500 font-medium">Completed</th>
-                <th className="text-right py-3 px-3 text-gray-500 font-medium">Failed</th>
-                <th className="text-right py-3 px-3 text-gray-500 font-medium">Health</th>
+              <tr className="border-b border-white/10">
+                <th className="text-left py-3 px-3 text-slate-400 font-medium">Queue</th>
+                <th className="text-right py-3 px-3 text-slate-400 font-medium">Concurrency</th>
+                <th className="text-right py-3 px-3 text-slate-400 font-medium">Active</th>
+                <th className="text-right py-3 px-3 text-slate-400 font-medium">Waiting</th>
+                <th className="text-right py-3 px-3 text-slate-400 font-medium">Completed</th>
+                <th className="text-right py-3 px-3 text-slate-400 font-medium">Failed</th>
+                <th className="text-right py-3 px-3 text-slate-400 font-medium">Health</th>
               </tr>
             </thead>
             <tbody>
               {data.workerQueues.map((queue) => {
                 const health = queue.failed > 10 ? 'critical' : queue.waiting > 50 ? 'warning' : 'healthy';
                 return (
-                  <tr key={queue.name} className="border-b border-gray-50 hover:bg-gray-50">
-                    <td className="py-3 px-3 font-medium text-gray-900">{queue.name}</td>
-                    <td className="py-3 px-3 text-right text-gray-600">{queue.concurrency}</td>
-                    <td className="py-3 px-3 text-right text-blue-600 font-medium">{queue.active}</td>
+                  <tr key={queue.name} className="border-b border-gray-50 hover:bg-white/5">
+                    <td className="py-3 px-3 font-medium text-white">{queue.name}</td>
+                    <td className="py-3 px-3 text-right text-slate-300">{queue.concurrency}</td>
+                    <td className="py-3 px-3 text-right text-gold-light font-medium">{queue.active}</td>
                     <td className="py-3 px-3 text-right text-yellow-600">{queue.waiting}</td>
                     <td className="py-3 px-3 text-right text-green-600">{queue.completed}</td>
                     <td className="py-3 px-3 text-right text-red-600">{queue.failed}</td>
@@ -360,16 +360,16 @@ export function SystemHealthDashboard() {
       <div className="grid lg:grid-cols-2 gap-6">
         {/* OCR Resource Details */}
         <Card>
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">OCR Resource Usage</h2>
+          <h2 className="text-lg font-semibold text-white mb-4">OCR Resource Usage</h2>
           <div className="space-y-4">
             <div>
               <div className="flex justify-between text-sm mb-1">
-                <span className="text-gray-600">Textract Daily Budget</span>
-                <span className="font-medium text-gray-900">
+                <span className="text-slate-300">Textract Daily Budget</span>
+                <span className="font-medium text-white">
                   {data.ocrBacklog.textractBudgetUsed} / {data.ocrBacklog.textractBudgetLimit}
                 </span>
               </div>
-              <div className="w-full bg-gray-100 rounded-full h-2">
+              <div className="w-full bg-white/10 rounded-full h-2">
                 <div
                   className={`h-2 rounded-full ${
                     data.ocrBacklog.textractBudgetUsed / data.ocrBacklog.textractBudgetLimit > 0.8
@@ -385,24 +385,24 @@ export function SystemHealthDashboard() {
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 bg-gray-50 rounded-lg">
-                <p className="text-xs text-gray-500">Active Jobs</p>
-                <p className="text-lg font-bold text-gray-900">{data.ocrBacklog.active}</p>
+              <div className="p-3 bg-white/5 rounded-lg">
+                <p className="text-xs text-slate-400">Active Jobs</p>
+                <p className="text-lg font-bold text-white">{data.ocrBacklog.active}</p>
               </div>
-              <div className="p-3 bg-gray-50 rounded-lg">
-                <p className="text-xs text-gray-500">Pending</p>
-                <p className="text-lg font-bold text-gray-900">{data.ocrBacklog.pending}</p>
+              <div className="p-3 bg-white/5 rounded-lg">
+                <p className="text-xs text-slate-400">Pending</p>
+                <p className="text-lg font-bold text-white">{data.ocrBacklog.pending}</p>
               </div>
-              <div className="p-3 bg-green-50 rounded-lg">
-                <p className="text-xs text-gray-500">Completed Today</p>
-                <p className="text-lg font-bold text-green-700">{data.ocrBacklog.completedToday}</p>
+              <div className="p-3 bg-emerald-500/10 rounded-lg">
+                <p className="text-xs text-slate-400">Completed Today</p>
+                <p className="text-lg font-bold text-emerald-300">{data.ocrBacklog.completedToday}</p>
               </div>
-              <div className="p-3 bg-red-50 rounded-lg">
-                <p className="text-xs text-gray-500">Failed Today</p>
-                <p className="text-lg font-bold text-red-700">{data.ocrBacklog.failedToday}</p>
+              <div className="p-3 bg-red-500/10 rounded-lg">
+                <p className="text-xs text-slate-400">Failed Today</p>
+                <p className="text-lg font-bold text-red-300">{data.ocrBacklog.failedToday}</p>
               </div>
             </div>
-            <div className="text-xs text-gray-500">
+            <div className="text-xs text-slate-400">
               Primary method: <span className="font-medium">{data.ocrBacklog.primaryMethod}</span>
               {' '}| Priority: pdf-parse → AWS Textract → Tesseract
             </div>
@@ -411,7 +411,7 @@ export function SystemHealthDashboard() {
 
         {/* CPRA Campaign Status */}
         <Card>
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">CPRA Campaign Status</h2>
+          <h2 className="text-lg font-semibold text-white mb-4">CPRA Campaign Status</h2>
           <div className="space-y-4">
             <div className="flex items-center gap-2">
               <span className={`px-2 py-1 rounded-full text-xs font-medium ${getStatusColor(data.cpraCampaign.campaignStatus)}`}>
@@ -420,12 +420,12 @@ export function SystemHealthDashboard() {
             </div>
             <div>
               <div className="flex justify-between text-sm mb-1">
-                <span className="text-gray-600">Requests Sent</span>
-                <span className="font-medium text-gray-900">
+                <span className="text-slate-300">Requests Sent</span>
+                <span className="font-medium text-white">
                   {data.cpraCampaign.requestsSent} / {data.cpraCampaign.totalAgencies}
                 </span>
               </div>
-              <div className="w-full bg-gray-100 rounded-full h-2">
+              <div className="w-full bg-white/10 rounded-full h-2">
                 <div
                   className="h-2 rounded-full bg-blue-500"
                   style={{
@@ -435,21 +435,21 @@ export function SystemHealthDashboard() {
               </div>
             </div>
             <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 bg-gray-50 rounded-lg">
-                <p className="text-xs text-gray-500">Total Agencies</p>
-                <p className="text-lg font-bold text-gray-900">{data.cpraCampaign.totalAgencies}</p>
+              <div className="p-3 bg-white/5 rounded-lg">
+                <p className="text-xs text-slate-400">Total Agencies</p>
+                <p className="text-lg font-bold text-white">{data.cpraCampaign.totalAgencies}</p>
               </div>
-              <div className="p-3 bg-blue-50 rounded-lg">
-                <p className="text-xs text-gray-500">Requests Sent</p>
-                <p className="text-lg font-bold text-blue-700">{data.cpraCampaign.requestsSent}</p>
+              <div className="p-3 bg-blue-500/10 rounded-lg">
+                <p className="text-xs text-slate-400">Requests Sent</p>
+                <p className="text-lg font-bold text-blue-300">{data.cpraCampaign.requestsSent}</p>
               </div>
-              <div className="p-3 bg-green-50 rounded-lg">
-                <p className="text-xs text-gray-500">Responses Received</p>
-                <p className="text-lg font-bold text-green-700">{data.cpraCampaign.responsesReceived}</p>
+              <div className="p-3 bg-emerald-500/10 rounded-lg">
+                <p className="text-xs text-slate-400">Responses Received</p>
+                <p className="text-lg font-bold text-emerald-300">{data.cpraCampaign.responsesReceived}</p>
               </div>
-              <div className="p-3 bg-yellow-50 rounded-lg">
-                <p className="text-xs text-gray-500">Pending Follow-Up</p>
-                <p className="text-lg font-bold text-yellow-700">{data.cpraCampaign.pendingFollowUp}</p>
+              <div className="p-3 bg-amber-500/10 rounded-lg">
+                <p className="text-xs text-slate-400">Pending Follow-Up</p>
+                <p className="text-lg font-bold text-amber-300">{data.cpraCampaign.pendingFollowUp}</p>
               </div>
             </div>
           </div>
@@ -460,15 +460,15 @@ export function SystemHealthDashboard() {
       <div className="grid lg:grid-cols-3 gap-6">
         {/* API Latency */}
         <Card>
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">API Latency (ms)</h2>
+          <h2 className="text-lg font-semibold text-white mb-4">API Latency (ms)</h2>
           <div className="space-y-2">
             {data.apiLatency.map((ep) => (
-              <div key={ep.endpoint} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
-                <span className="text-xs font-mono text-gray-700">{ep.endpoint}</span>
+              <div key={ep.endpoint} className="flex items-center justify-between p-2 bg-white/5 rounded-lg">
+                <span className="text-xs font-mono text-slate-200">{ep.endpoint}</span>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-500">p50: <span className="font-medium text-gray-900">{ep.p50}</span></span>
-                  <span className="text-xs text-gray-500">p95: <span className="font-medium text-gray-900">{ep.p95}</span></span>
-                  <span className={`text-xs px-1.5 py-0.5 rounded ${ep.status === 'healthy' ? 'bg-green-100 text-green-700' : ep.status === 'degraded' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}>
+                  <span className="text-xs text-slate-400">p50: <span className="font-medium text-white">{ep.p50}</span></span>
+                  <span className="text-xs text-slate-400">p95: <span className="font-medium text-white">{ep.p95}</span></span>
+                  <span className={`text-xs px-1.5 py-0.5 rounded ${ep.status === 'healthy' ? 'bg-emerald-500/15 text-emerald-300' : ep.status === 'degraded' ? 'bg-amber-500/15 text-amber-300' : 'bg-red-500/15 text-red-300'}`}>
                     {ep.status}
                   </span>
                 </div>
@@ -479,15 +479,15 @@ export function SystemHealthDashboard() {
 
         {/* DB Latency */}
         <Card>
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Database Latency (ms)</h2>
+          <h2 className="text-lg font-semibold text-white mb-4">Database Latency (ms)</h2>
           <div className="space-y-2">
             {data.dbLatency.map((q) => (
-              <div key={q.queryType} className="flex items-center justify-between p-2 bg-gray-50 rounded-lg">
-                <span className="text-xs text-gray-700">{q.queryType}</span>
+              <div key={q.queryType} className="flex items-center justify-between p-2 bg-white/5 rounded-lg">
+                <span className="text-xs text-slate-200">{q.queryType}</span>
                 <div className="flex items-center gap-2">
-                  <span className="text-xs text-gray-500">avg: <span className="font-medium text-gray-900">{q.avgMs}</span></span>
-                  <span className="text-xs text-gray-500">max: <span className="font-medium text-gray-900">{q.maxMs}</span></span>
-                  <span className={`text-xs px-1.5 py-0.5 rounded ${q.status === 'healthy' ? 'bg-green-100 text-green-700' : q.status === 'degraded' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}>
+                  <span className="text-xs text-slate-400">avg: <span className="font-medium text-white">{q.avgMs}</span></span>
+                  <span className="text-xs text-slate-400">max: <span className="font-medium text-white">{q.maxMs}</span></span>
+                  <span className={`text-xs px-1.5 py-0.5 rounded ${q.status === 'healthy' ? 'bg-emerald-500/15 text-emerald-300' : q.status === 'degraded' ? 'bg-amber-500/15 text-amber-300' : 'bg-red-500/15 text-red-300'}`}>
                     {q.status}
                   </span>
                 </div>
@@ -498,20 +498,20 @@ export function SystemHealthDashboard() {
 
         {/* AI Model Latency */}
         <Card>
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">AI Model Latency</h2>
+          <h2 className="text-lg font-semibold text-white mb-4">AI Model Latency</h2>
           <div className="space-y-2">
             {data.aiLatency.map((m) => (
-              <div key={m.model} className="p-3 bg-gray-50 rounded-lg">
+              <div key={m.model} className="p-3 bg-white/5 rounded-lg">
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm font-medium text-gray-900">{m.model}</span>
-                  <span className={`text-xs px-1.5 py-0.5 rounded ${m.status === 'healthy' ? 'bg-green-100 text-green-700' : m.status === 'degraded' ? 'bg-yellow-100 text-yellow-700' : 'bg-red-100 text-red-700'}`}>
+                  <span className="text-sm font-medium text-white">{m.model}</span>
+                  <span className={`text-xs px-1.5 py-0.5 rounded ${m.status === 'healthy' ? 'bg-emerald-500/15 text-emerald-300' : m.status === 'degraded' ? 'bg-amber-500/15 text-amber-300' : 'bg-red-500/15 text-red-300'}`}>
                     {m.status}
                   </span>
                 </div>
-                <div className="flex gap-4 text-xs text-gray-500">
-                  <span>Avg: <span className="font-medium text-gray-900">{m.avgMs}ms</span></span>
-                  {m.tokensPerSec > 0 && <span>Tokens/s: <span className="font-medium text-gray-900">{m.tokensPerSec}</span></span>}
-                  <span>Queue: <span className="font-medium text-gray-900">{m.queueDepth}</span></span>
+                <div className="flex gap-4 text-xs text-slate-400">
+                  <span>Avg: <span className="font-medium text-white">{m.avgMs}ms</span></span>
+                  {m.tokensPerSec > 0 && <span>Tokens/s: <span className="font-medium text-white">{m.tokensPerSec}</span></span>}
+                  <span>Queue: <span className="font-medium text-white">{m.queueDepth}</span></span>
                 </div>
               </div>
             ))}
@@ -523,33 +523,33 @@ export function SystemHealthDashboard() {
       <div className="grid lg:grid-cols-2 gap-6">
         {/* Policy Ingestion */}
         <Card>
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Policy Ingestion</h2>
+          <h2 className="text-lg font-semibold text-white mb-4">Policy Ingestion</h2>
           <div className="space-y-3">
             <div className="grid grid-cols-3 gap-3">
-              <div className="p-3 bg-gray-50 rounded-lg text-center">
-                <p className="text-xs text-gray-500">Total</p>
-                <p className="text-xl font-bold text-gray-900">{data.policyIngestion.totalPolicies}</p>
+              <div className="p-3 bg-white/5 rounded-lg text-center">
+                <p className="text-xs text-slate-400">Total</p>
+                <p className="text-xl font-bold text-white">{data.policyIngestion.totalPolicies}</p>
               </div>
-              <div className="p-3 bg-blue-50 rounded-lg text-center">
-                <p className="text-xs text-gray-500">Today</p>
-                <p className="text-xl font-bold text-blue-700">{data.policyIngestion.ingestedToday}</p>
+              <div className="p-3 bg-blue-500/10 rounded-lg text-center">
+                <p className="text-xs text-slate-400">Today</p>
+                <p className="text-xl font-bold text-blue-300">{data.policyIngestion.ingestedToday}</p>
               </div>
-              <div className="p-3 bg-yellow-50 rounded-lg text-center">
-                <p className="text-xs text-gray-500">Review Queue</p>
-                <p className="text-xl font-bold text-yellow-700">{data.policyIngestion.pendingReview}</p>
+              <div className="p-3 bg-amber-500/10 rounded-lg text-center">
+                <p className="text-xs text-slate-400">Review Queue</p>
+                <p className="text-xl font-bold text-amber-300">{data.policyIngestion.pendingReview}</p>
               </div>
             </div>
-            <div className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-              <span className="text-sm text-gray-600">Avg Confidence Score</span>
+            <div className="flex items-center justify-between p-3 bg-white/5 rounded-lg">
+              <span className="text-sm text-slate-300">Avg Confidence Score</span>
               <span className={`text-sm font-bold ${
-                data.policyIngestion.avgConfidenceScore >= 0.65 ? 'text-green-700' : 'text-red-700'
+                data.policyIngestion.avgConfidenceScore >= 0.65 ? 'text-emerald-300' : 'text-red-300'
               }`}>
                 {data.policyIngestion.avgConfidenceScore > 0
                   ? (data.policyIngestion.avgConfidenceScore * 100).toFixed(1) + '%'
                   : 'N/A'}
               </span>
             </div>
-            <div className="text-xs text-gray-500">
+            <div className="text-xs text-slate-400">
               {data.policyIngestion.belowThreshold} documents below 0.65 confidence threshold
             </div>
           </div>
@@ -557,30 +557,30 @@ export function SystemHealthDashboard() {
 
         {/* S3 Storage */}
         <Card>
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">S3 Storage Usage</h2>
+          <h2 className="text-lg font-semibold text-white mb-4">S3 Storage Usage</h2>
           <div className="space-y-3">
             <div className="grid grid-cols-2 gap-3">
-              <div className="p-3 bg-gray-50 rounded-lg text-center">
-                <p className="text-xs text-gray-500">Total Size</p>
-                <p className="text-xl font-bold text-gray-900">{data.s3Storage.totalSizeGb.toFixed(2)} GB</p>
+              <div className="p-3 bg-white/5 rounded-lg text-center">
+                <p className="text-xs text-slate-400">Total Size</p>
+                <p className="text-xl font-bold text-white">{data.s3Storage.totalSizeGb.toFixed(2)} GB</p>
               </div>
-              <div className="p-3 bg-gray-50 rounded-lg text-center">
-                <p className="text-xs text-gray-500">Objects</p>
-                <p className="text-xl font-bold text-gray-900">{data.s3Storage.totalObjects.toLocaleString()}</p>
+              <div className="p-3 bg-white/5 rounded-lg text-center">
+                <p className="text-xs text-slate-400">Objects</p>
+                <p className="text-xl font-bold text-white">{data.s3Storage.totalObjects.toLocaleString()}</p>
               </div>
             </div>
             <div className="space-y-2">
               <div className="flex items-center justify-between p-2">
-                <span className="text-sm text-gray-600">Bucket</span>
-                <span className="text-sm font-mono text-gray-900">{data.s3Storage.bucketName}</span>
+                <span className="text-sm text-slate-300">Bucket</span>
+                <span className="text-sm font-mono text-white">{data.s3Storage.bucketName}</span>
               </div>
               <div className="flex items-center justify-between p-2">
-                <span className="text-sm text-gray-600">Storage Class</span>
-                <span className="text-sm font-medium text-gray-900">{data.s3Storage.storageClass}</span>
+                <span className="text-sm text-slate-300">Storage Class</span>
+                <span className="text-sm font-medium text-white">{data.s3Storage.storageClass}</span>
               </div>
               <div className="flex items-center justify-between p-2">
-                <span className="text-sm text-gray-600">Recent Uploads</span>
-                <span className="text-sm font-medium text-blue-700">{data.s3Storage.recentUploads}</span>
+                <span className="text-sm text-slate-300">Recent Uploads</span>
+                <span className="text-sm font-medium text-blue-300">{data.s3Storage.recentUploads}</span>
               </div>
             </div>
           </div>

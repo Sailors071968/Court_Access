@@ -42,11 +42,11 @@ export function OrganizationOnboardingPage() {
   };
 
   return (
-    <div className="min-h-screen bg-slate-100 flex items-center justify-center p-4">
-      <div className="w-full max-w-lg bg-white rounded-2xl shadow-xl p-8">
+    <div className="min-h-screen bg-white/10 flex items-center justify-center p-4">
+      <div className="w-full max-w-lg bg-white/5 rounded-2xl shadow-xl p-8">
         <h1 className="text-xl font-bold mb-2">Set up your law firm</h1>
-        <p className="text-sm text-gray-600 mb-6">Step {stepIndex + 1} of {STEPS.length}: {currentStep}</p>
-        {error && <div className="bg-red-50 text-red-700 p-3 rounded mb-4 text-sm">{error}</div>}
+        <p className="text-sm text-slate-300 mb-6">Step {stepIndex + 1} of {STEPS.length}: {currentStep}</p>
+        {error && <div className="bg-red-500/10 text-red-300 p-3 rounded mb-4 text-sm">{error}</div>}
 
         {currentStep === 'profile' && (
           <div className="space-y-3">
@@ -58,10 +58,10 @@ export function OrganizationOnboardingPage() {
           <input className="w-full border rounded-lg px-3 py-2" value={officeName} onChange={(e) => setOfficeName(e.target.value)} placeholder="Primary office name" />
         )}
         {currentStep === 'team' && (
-          <p className="text-sm text-gray-600">You can invite attorneys, investigators, and staff from Organization Settings after onboarding.</p>
+          <p className="text-sm text-slate-300">You can invite attorneys, investigators, and staff from Organization Settings after onboarding.</p>
         )}
         {currentStep === 'complete' && (
-          <p className="text-sm text-gray-600">Your organization is ready. Complete setup to access the full platform.</p>
+          <p className="text-sm text-slate-300">Your organization is ready. Complete setup to access the full platform.</p>
         )}
 
         <button type="button" onClick={next} className="mt-6 w-full bg-slate-800 text-white py-2.5 rounded-lg font-medium">

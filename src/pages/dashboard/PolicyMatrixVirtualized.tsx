@@ -32,7 +32,7 @@ const STATUS_COLORS: Record<string, string> = {
   non_compliant: 'bg-red-500',
   partial: 'bg-yellow-500',
   unknown: 'bg-gray-300',
-  not_applicable: 'bg-gray-100',
+  not_applicable: 'bg-white/10',
 };
 
 const STATUS_LABELS: Record<string, string> = {
@@ -140,8 +140,8 @@ export function PolicyMatrixVirtualized() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-bold text-gray-900">Policy Compliance Matrix</h1>
-          <p className="text-sm text-gray-500 mt-1">
+          <h1 className="text-2xl font-bold text-white">Policy Compliance Matrix</h1>
+          <p className="text-sm text-slate-400 mt-1">
             {filteredAgencies.length} agencies x {filteredTopics.length} topics = {(filteredAgencies.length * filteredTopics.length).toLocaleString()} cells (virtualized)
           </p>
         </div>
@@ -154,10 +154,10 @@ export function PolicyMatrixVirtualized() {
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
         {[
-          { label: 'Compliant', value: complianceStats.compliant, color: 'text-green-700 bg-green-50' },
-          { label: 'Non-Compliant', value: complianceStats.nonCompliant, color: 'text-red-700 bg-red-50' },
-          { label: 'Partial', value: complianceStats.partial, color: 'text-yellow-700 bg-yellow-50' },
-          { label: 'Unknown', value: complianceStats.unknown, color: 'text-gray-700 bg-gray-50' },
+          { label: 'Compliant', value: complianceStats.compliant, color: 'text-emerald-300 bg-emerald-500/10' },
+          { label: 'Non-Compliant', value: complianceStats.nonCompliant, color: 'text-red-300 bg-red-500/10' },
+          { label: 'Partial', value: complianceStats.partial, color: 'text-amber-300 bg-amber-500/10' },
+          { label: 'Unknown', value: complianceStats.unknown, color: 'text-slate-200 bg-white/5' },
         ].map((s) => (
           <div key={s.label} className={`p-4 rounded-lg ${s.color}`}>
             <p className="text-xs font-medium">{s.label}</p>
@@ -170,21 +170,21 @@ export function PolicyMatrixVirtualized() {
       <Card>
         <div className="flex flex-wrap gap-4">
           <div className="relative flex-1 min-w-[200px]">
-            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search size={16} className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
             <input
               type="text"
               placeholder="Search agencies..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-200 rounded-lg text-sm focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className="w-full pl-10 pr-4 py-2 border border-white/10 rounded-lg text-sm focus:ring-2 focus:ring-gold-light focus:border-gold-light"
             />
           </div>
           <div className="flex items-center gap-2">
-            <Filter size={16} className="text-gray-400" />
+            <Filter size={16} className="text-slate-400" />
             <select
               value={categoryFilter}
               onChange={(e) => setCategoryFilter(e.target.value)}
-              className="border border-gray-200 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-blue-500"
+              className="border border-white/10 rounded-lg px-3 py-2 text-sm focus:ring-2 focus:ring-gold-light"
             >
               <option value="all">All Categories</option>
               {categories.map((c) => (
@@ -200,7 +200,7 @@ export function PolicyMatrixVirtualized() {
         {Object.entries(STATUS_COLORS).map(([key, color]) => (
           <div key={key} className="flex items-center gap-1.5">
             <div className={`w-3 h-3 rounded ${color}`} />
-            <span className="text-gray-600">{STATUS_LABELS[key]}</span>
+            <span className="text-slate-300">{STATUS_LABELS[key]}</span>
           </div>
         ))}
       </div>
@@ -210,7 +210,7 @@ export function PolicyMatrixVirtualized() {
         <div
           ref={containerRef}
           onScroll={handleScroll}
-          className="overflow-auto border border-gray-200 rounded-lg"
+          className="overflow-auto border border-white/10 rounded-lg"
           style={{ height: `${(VISIBLE_ROWS + 1) * ROW_HEIGHT + 40}px` }}
         >
           <div style={{ width: totalWidth, height: totalHeight + 40, position: 'relative' }}>

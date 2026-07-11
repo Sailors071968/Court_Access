@@ -5,14 +5,15 @@
 
 export type DiscoveryStatus = 'in_progress' | 'completed' | 'partial' | 'failed';
 
-export type DiscoveryMethod = 'range' | 'link' | 'heading';
+export type DiscoveryMethod = 'range' | 'link' | 'heading' | 'targeted_criminal_seed' | 'cross_reference';
 
 export type SectionFlag =
   | 'repealed'
   | 'reserved'
   | 'renumbered'
   | 'missing_candidate'
-  | 'ambiguous_range';
+  | 'ambiguous_range'
+  | 'criminal_priority';
 
 export interface StatuteHierarchy {
   code: string;

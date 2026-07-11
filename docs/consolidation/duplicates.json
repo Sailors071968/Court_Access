@@ -1,0 +1,16 @@
+{
+  "prismaMap": [],
+  "prismaModelsWithoutMap": [
+    "Charge"
+  ],
+  "routes": [],
+  "services": [
+    {
+      "name": "searchService.ts",
+      "files": [
+        "src/services/searchService.ts",
+        "backend/src/search/searchService.ts"
+      ]
+    }
+  ]
+}

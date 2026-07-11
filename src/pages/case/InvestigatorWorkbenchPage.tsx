@@ -1,15 +1,26 @@
 // ============================================================================
-// Program 12 — Investigator Workbench
+// CourtAccess — Investigator Workspace (Program 21)
+// Investigation-first workflows on the unified design system.
 // Route: /cases/:caseId/investigator-workbench
 // ============================================================================
 
 import { useState, useEffect, useCallback } from 'react';
-import { useParams } from 'react-router-dom';
-import {
-  Search, Loader2, RefreshCw, Users, ClipboardList,
-  Camera, Video, Mic, AlertTriangle, Clock, Plus,
-} from 'lucide-react';
-import { Card, CardHeader, StatCard } from '../../components/common/Card';
+import { useParams, useNavigate } from 'react-router-dom';
+import { RefreshCw, Camera, Video, Mic, MapPin, Plus } from 'lucide-react';
+import { PageHeader } from '../../components/ui/page-header';
+import { Button } from '../../components/ui/button';
+import { Card } from '../../components/ui/card';
+import { Badge } from '../../components/ui/badge';
+import { Tabs } from '../../components/ui/tabs';
+import { Input, Textarea } from '../../components/ui/input';
+import { Spinner } from '../../components/ui/spinner';
+import { EmptyState } from '../../components/ui/empty-state';
+import { Icon } from '../../components/icons/registry';
+import { StatCard } from '../../components/ui/card';
+import { DataTable, type Column } from '../../components/data/data-table';
+import { TimelineEngine, fromGenericEvents } from '../../components/timeline';
+import { StatusBadge, UnknownIndicator } from '../../components/indicators/indicators';
+import { SPACING } from '../../constants/designTokens';
 import {
   fetchInvestigatorWorkbench,
   createWitness,
@@ -20,18 +31,19 @@ import {
 
 type TabId = 'dashboard' | 'tasks' | 'witnesses' | 'evidence' | 'timeline' | 'notes' | 'gaps';
 
-const TABS: Array<{ id: TabId; label: string }> = [
-  { id: 'dashboard', label: 'Dashboard' },
-  { id: 'tasks', label: 'Tasks & Leads' },
-  { id: 'witnesses', label: 'Witnesses' },
-  { id: 'evidence', label: 'Evidence' },
-  { id: 'timeline', label: 'Timeline' },
-  { id: 'notes', label: 'Field Notes' },
-  { id: 'gaps', label: 'Gaps & Unknowns' },
+const TABS = [
+  { id: 'dashboard', label: 'Dashboard', icon: <Icon name="investigator" size={15} /> },
+  { id: 'tasks', label: 'Tasks & Leads', icon: <Icon name="tasks" size={15} /> },
+  { id: 'witnesses', label: 'Witnesses', icon: <Icon name="witness" size={15} /> },
+  { id: 'evidence', label: 'Evidence', icon: <Icon name="evidence" size={15} /> },
+  { id: 'timeline', label: 'Timeline', icon: <Icon name="timeline" size={15} /> },
+  { id: 'notes', label: 'Field Notes', icon: <Icon name="documents" size={15} /> },
+  { id: 'gaps', label: 'Gaps & Unknowns', icon: <Icon name="unknown" size={15} /> },
 ];
 
 export function InvestigatorWorkbenchPage() {
   const { caseId } = useParams<{ caseId: string }>();
+  const navigate = useNavigate();
   const [data, setData] = useState<InvestigatorWorkbench | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -53,77 +65,131 @@ export function InvestigatorWorkbenchPage() {
     }
   }, [caseId]);
 
-  useEffect(() => { void load(); }, [load]);
+  useEffect(() => {
+    void load();
+  }, [load]);
 
-  if (loading && !data) {
-    return <div className="flex justify-center py-24"><Loader2 className="animate-spin" size={32} /></div>;
-  }
+  if (loading && !data) return <Spinner label="Loading investigation workspace…" />;
+
   if (error && !data) {
     return (
-      <div className="p-6 text-center">
-        <AlertTriangle className="mx-auto text-red-500 mb-2" size={32} />
-        <p className="text-red-700">{error}</p>
-        <button type="button" onClick={() => void load()} className="mt-4 px-4 py-2 bg-slate-800 text-white rounded-lg">Retry</button>
+      <div className={SPACING.container}>
+        <Card>
+          <EmptyState
+            icon={<Icon name="unknown" size={24} />}
+            title="Unable to load workspace"
+            description={error}
+            action={<Button variant="primary" onClick={() => void load()}>Retry</Button>}
+          />
+        </Card>
       </div>
     );
   }
   if (!data) return null;
 
-  return (
-    <div className="max-w-7xl mx-auto space-y-6 p-6">
-      <header className="flex justify-between items-start">
-        <div>
-          <h1 className="text-2xl font-bold flex items-center gap-2"><Search size={24} /> Investigator Workbench</h1>
-          <p className="text-sm text-gray-500">{data.dashboard.caseTitle} — {data.dashboard.caseNumber}</p>
-        </div>
-        <button type="button" onClick={() => void load()} className="flex items-center gap-2 px-3 py-2 border rounded-lg text-sm">
-          <RefreshCw size={16} className={loading ? 'animate-spin' : ''} /> Refresh
-        </button>
-      </header>
+  const uploadHref = `/cases/${caseId}/evidence`;
 
-      <nav className="flex flex-wrap gap-1 border-b pb-1">
-        {TABS.map((t) => (
-          <button key={t.id} type="button" onClick={() => setTab(t.id)}
-            className={`px-3 py-2 text-sm rounded-t-lg ${tab === t.id ? 'bg-slate-800 text-white' : 'text-gray-600 hover:bg-gray-100'}`}>
-            {t.label}
+  const witnessColumns: Column<InvestigatorWorkbench['witnesses'][number]>[] = [
+    { key: 'name', header: 'Name', render: (w) => <span className="font-medium text-white">{w.name}</span> },
+    { key: 'role', header: 'Role', render: (w) => w.role ?? '—' },
+    { key: 'interviewStatus', header: 'Interview', render: (w) => <StatusBadge status={w.interviewStatus} /> },
+    {
+      key: 'source',
+      header: 'Source',
+      render: (w) => (
+        <span className="text-xs text-slate-400">
+          {w.citations.map((c) => `${c.type}:${c.id.slice(0, 6)}`).join(', ') || 'manual'}
+        </span>
+      ),
+    },
+  ];
+
+  return (
+    <div className={`${SPACING.container} space-y-6`}>
+      <PageHeader
+        title="Investigator Workspace"
+        overline="Investigation"
+        subtitle={`${data.dashboard.caseTitle} — ${data.dashboard.caseNumber}`}
+        action={
+          <div className="flex items-center gap-3">
+            <Button variant="secondary" onClick={() => void load()}>
+              <RefreshCw size={15} className={loading ? 'animate-spin' : ''} /> Refresh
+            </Button>
+            <Button variant="primary" onClick={() => navigate(uploadHref)}>
+              <Icon name="upload" size={15} /> Quick Upload
+            </Button>
+          </div>
+        }
+      />
+
+      {/* Quick evidence capture — always one tap away */}
+      <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+        {[
+          { label: 'Photo', icon: <Camera size={18} /> },
+          { label: 'Video', icon: <Video size={18} /> },
+          { label: 'Audio', icon: <Mic size={18} /> },
+          { label: 'GPS Evidence', icon: <MapPin size={18} /> },
+        ].map((q) => (
+          <button
+            key={q.label}
+            onClick={() => navigate(uploadHref)}
+            className="ca-panel ca-panel-hover flex flex-col items-center gap-2 py-4 text-slate-300 hover:text-white"
+          >
+            <span className="w-10 h-10 rounded-xl ca-icon-gold text-gold-light flex items-center justify-center">{q.icon}</span>
+            <span className="text-sm font-medium">{q.label}</span>
           </button>
         ))}
-      </nav>
+      </div>
+
+      <Tabs tabs={TABS} activeId={tab} onChange={(id) => setTab(id as TabId)} />
 
       {tab === 'dashboard' && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          <StatCard icon={<ClipboardList size={20} />} value={data.dashboard.openTasks} label="Open Tasks" />
-          <StatCard icon={<Search size={20} />} value={data.dashboard.openLeads} label="Active Leads" />
-          <StatCard icon={<Users size={20} />} value={data.dashboard.witnessCount} label="Witnesses" />
-          <StatCard icon={<AlertTriangle size={20} />} value={data.dashboard.unknownCount} label="Unknowns" highlight={data.dashboard.unknownCount > 0} />
+          <StatCard tile="blue" icon={<Icon name="tasks" size={20} />} value={data.dashboard.openTasks} label="Open Tasks" />
+          <StatCard tile="gold" icon={<Icon name="search" size={20} />} value={data.dashboard.openLeads} label="Active Leads" />
+          <StatCard tile="violet" icon={<Icon name="witness" size={20} />} value={data.dashboard.witnessCount} label="Witnesses" />
+          <StatCard tile="emerald" icon={<Icon name="unknown" size={20} />} value={data.dashboard.unknownCount} label="Unknowns" highlight={data.dashboard.unknownCount > 0} />
         </div>
       )}
 
       {tab === 'tasks' && (
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
           <Card>
-            <CardHeader title="Investigation Tasks" />
-            <ul className="space-y-2 text-sm">
-              {data.tasks.map((t) => (
-                <li key={t.id} className="p-2 bg-gray-50 rounded flex justify-between">
-                  <span>{t.title}</span>
-                  <span className="text-gray-500">{t.status}</span>
-                </li>
-              ))}
-            </ul>
+            <h3 className="text-base font-semibold text-white mb-4">Investigation Tasks</h3>
+            {data.tasks.length === 0 ? (
+              <EmptyState title="No tasks yet" />
+            ) : (
+              <ul className="space-y-2">
+                {data.tasks.map((t) => (
+                  <li key={t.id} className="flex items-center justify-between gap-3 p-3 rounded-lg bg-white/[0.03]">
+                    <span className="text-sm text-slate-200">{t.title}</span>
+                    <StatusBadge status={t.status} />
+                  </li>
+                ))}
+              </ul>
+            )}
           </Card>
           <Card>
-            <CardHeader title="Leads" action={
-              <div className="flex gap-2">
-                <input value={leadTitle} onChange={(e) => setLeadTitle(e.target.value)} placeholder="New lead..." className="px-2 py-1 border rounded text-sm" />
-                <button type="button" onClick={() => void createLead(caseId!, { title: leadTitle }).then(() => { setLeadTitle(''); load(); })} className="px-2 py-1 bg-slate-800 text-white rounded text-sm"><Plus size={14} /></button>
-              </div>
-            } />
-            <ul className="space-y-2 text-sm">
+            <h3 className="text-base font-semibold text-white mb-4">Leads</h3>
+            <div className="flex gap-2 mb-4">
+              <Input
+                value={leadTitle}
+                onChange={(e) => setLeadTitle(e.target.value)}
+                placeholder="New lead…"
+                className="flex-1"
+              />
+              <Button
+                variant="primary"
+                onClick={() => leadTitle && void createLead(caseId!, { title: leadTitle }).then(() => { setLeadTitle(''); load(); })}
+              >
+                <Plus size={15} />
+              </Button>
+            </div>
+            <ul className="space-y-2">
               {data.leads.map((l) => (
-                <li key={l.id} className="p-2 bg-gray-50 rounded flex justify-between">
-                  <span>{l.title}</span>
-                  <span className="text-gray-500">{l.status}</span>
+                <li key={l.id} className="flex items-center justify-between gap-3 p-3 rounded-lg bg-white/[0.03]">
+                  <span className="text-sm text-slate-200">{l.title}</span>
+                  <StatusBadge status={l.status} />
                 </li>
               ))}
             </ul>
@@ -133,75 +199,90 @@ export function InvestigatorWorkbenchPage() {
 
       {tab === 'witnesses' && (
         <Card>
-          <CardHeader title="Witnesses & Interviews" action={
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+            <h3 className="text-base font-semibold text-white">Witnesses &amp; Interviews</h3>
             <div className="flex gap-2">
-              <input value={witnessName} onChange={(e) => setWitnessName(e.target.value)} placeholder="Witness name..." className="px-2 py-1 border rounded text-sm" />
-              <button type="button" onClick={() => void createWitness(caseId!, { name: witnessName }).then(() => { setWitnessName(''); load(); })} className="px-2 py-1 bg-slate-800 text-white rounded text-sm"><Plus size={14} /></button>
+              <Input value={witnessName} onChange={(e) => setWitnessName(e.target.value)} placeholder="Witness name…" />
+              <Button
+                variant="primary"
+                onClick={() => witnessName && void createWitness(caseId!, { name: witnessName }).then(() => { setWitnessName(''); load(); })}
+              >
+                <Plus size={15} /> Add
+              </Button>
             </div>
-          } />
-          <table className="w-full text-sm">
-            <thead><tr className="text-left text-gray-500 border-b"><th className="pb-2">Name</th><th>Role</th><th>Interview</th><th>Source</th></tr></thead>
-            <tbody>
-              {data.witnesses.map((w) => (
-                <tr key={w.id} className="border-b border-gray-50">
-                  <td className="py-2 font-medium">{w.name}</td>
-                  <td>{w.role ?? '—'}</td>
-                  <td>{w.interviewStatus}</td>
-                  <td className="text-xs text-gray-500">{w.citations.map((c) => `${c.type}:${c.id.slice(0, 6)}`).join(', ') || 'manual'}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+          </div>
+          <DataTable
+            columns={witnessColumns}
+            rows={data.witnesses}
+            rowKey={(w) => w.id}
+            emptyTitle="No witnesses tracked yet"
+          />
         </Card>
       )}
 
       {tab === 'evidence' && (
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <Card><CardHeader title="Photos" /><ul className="text-sm space-y-1">{data.evidenceCollection.photos.map((e) => <li key={e.evidenceId} className="flex items-center gap-1"><Camera size={14} />{e.fileName}</li>)}</ul></Card>
-          <Card><CardHeader title="Video" /><ul className="text-sm space-y-1">{data.evidenceCollection.videos.map((e) => <li key={e.evidenceId} className="flex items-center gap-1"><Video size={14} />{e.fileName}</li>)}</ul></Card>
-          <Card><CardHeader title="Audio" /><ul className="text-sm space-y-1">{data.evidenceCollection.audio.map((e) => <li key={e.evidenceId} className="flex items-center gap-1"><Mic size={14} />{e.fileName}</li>)}</ul></Card>
+          <Card>
+            <h3 className="text-sm font-semibold text-white mb-3 flex items-center gap-2"><Camera size={15} className="text-gold-light" /> Photos</h3>
+            <ul className="text-sm space-y-1.5 text-slate-300">{data.evidenceCollection.photos.map((e) => <li key={e.evidenceId} className="truncate">{e.fileName}</li>)}</ul>
+          </Card>
+          <Card>
+            <h3 className="text-sm font-semibold text-white mb-3 flex items-center gap-2"><Video size={15} className="text-gold-light" /> Video</h3>
+            <ul className="text-sm space-y-1.5 text-slate-300">{data.evidenceCollection.videos.map((e) => <li key={e.evidenceId} className="truncate">{e.fileName}</li>)}</ul>
+          </Card>
+          <Card>
+            <h3 className="text-sm font-semibold text-white mb-3 flex items-center gap-2"><Mic size={15} className="text-gold-light" /> Audio</h3>
+            <ul className="text-sm space-y-1.5 text-slate-300">{data.evidenceCollection.audio.map((e) => <li key={e.evidenceId} className="truncate">{e.fileName}</li>)}</ul>
+          </Card>
           <Card className="md:col-span-3">
-            <CardHeader title="Chain of Custody" />
-            <table className="w-full text-sm">
-              <thead><tr className="text-left text-gray-500 border-b"><th className="pb-2">File</th><th>Status</th></tr></thead>
-              <tbody>
-                {data.chainOfCustody.map((c) => (
-                  <tr key={c.evidenceId} className="border-b border-gray-50">
-                    <td className="py-2">{c.fileName}</td>
-                    <td>{c.status}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+            <h3 className="text-base font-semibold text-white mb-4 flex items-center gap-2"><Icon name="security" size={16} /> Chain of Custody</h3>
+            <DataTable
+              columns={[
+                { key: 'fileName', header: 'File' },
+                { key: 'status', header: 'Status', render: (c) => <StatusBadge status={c.status} /> },
+              ]}
+              rows={data.chainOfCustody}
+              rowKey={(c) => c.evidenceId}
+              emptyTitle="No custody records"
+            />
           </Card>
         </div>
       )}
 
       {tab === 'timeline' && (
-        <Card>
-          <CardHeader title="Case Timeline" />
-          <ul className="space-y-2 max-h-96 overflow-y-auto">
-            {data.timeline.map((e) => (
-              <li key={e.id} className={`text-sm p-2 rounded ${e.actor ? 'bg-gray-50' : 'bg-amber-50'}`}>
-                <Clock size={14} className="inline mr-1" />
-                {e.timestamp ? new Date(e.timestamp).toLocaleString() : 'UNKNOWN time'}
-                {e.actor && <span className="font-medium ml-2">{e.actor}:</span>} {e.description}
-              </li>
-            ))}
-          </ul>
-        </Card>
+        <TimelineEngine
+          variant="investigation"
+          events={fromGenericEvents(
+            data.timeline.map((e) => ({
+              id: e.id,
+              timestamp: e.timestamp,
+              description: e.description,
+              eventType: e.actor ? `${e.actor}` : 'Event',
+            })),
+          )}
+        />
       )}
 
       {tab === 'notes' && (
         <Card>
-          <CardHeader title="Field Notes" />
-          <textarea value={noteText} onChange={(e) => setNoteText(e.target.value)} placeholder="Field observation..." className="w-full h-24 border rounded p-2 text-sm mb-2" />
-          <button type="button" onClick={() => void createFieldNote(caseId!, noteText).then(() => { setNoteText(''); load(); })} className="px-3 py-1.5 bg-slate-800 text-white rounded text-sm">Save Note</button>
-          <ul className="mt-4 space-y-2">
+          <h3 className="text-base font-semibold text-white mb-4">Investigation Notebook</h3>
+          <Textarea
+            value={noteText}
+            onChange={(e) => setNoteText(e.target.value)}
+            placeholder="Field observation…"
+            className="mb-3"
+          />
+          <Button
+            variant="primary"
+            onClick={() => noteText && void createFieldNote(caseId!, noteText).then(() => { setNoteText(''); load(); })}
+          >
+            Save Note
+          </Button>
+          <ul className="mt-5 space-y-2">
             {data.fieldNotes.map((n) => (
-              <li key={n.id} className="p-3 bg-yellow-50 border border-yellow-100 rounded text-sm">
-                <span className="text-xs text-gray-500">{n.noteType}</span>
-                <div>{n.content}</div>
+              <li key={n.id} className="p-3 rounded-lg bg-white/[0.03] border border-white/5">
+                <Badge variant="default">{n.noteType}</Badge>
+                <p className="text-sm text-slate-200 mt-2">{n.content}</p>
               </li>
             ))}
           </ul>
@@ -210,14 +291,43 @@ export function InvestigatorWorkbenchPage() {
 
       {tab === 'gaps' && (
         <div className="space-y-4">
-          <Card><CardHeader title="Recommended Investigation" /><ul className="list-disc list-inside text-sm">{data.recommendedInvestigation.map((r, i) => <li key={i}>{r}</li>)}</ul></Card>
-          <div className="grid grid-cols-3 gap-4">
-            <Card><CardHeader title="Evidence Gaps" /><ul className="text-sm space-y-1">{data.gaps.evidence.map((g, i) => <li key={i}>{g}</li>)}</ul></Card>
-            <Card><CardHeader title="Witness Gaps" /><ul className="text-sm space-y-1">{data.gaps.witness.map((g, i) => <li key={i}>{g}</li>)}</ul></Card>
-            <Card><CardHeader title="Timeline Gaps" /><ul className="text-sm space-y-1">{data.gaps.timeline.map((g, i) => <li key={i}>{g}</li>)}</ul></Card>
+          <Card>
+            <h3 className="text-base font-semibold text-white mb-3">Recommended Investigation</h3>
+            <ul className="space-y-2">
+              {data.recommendedInvestigation.map((r, i) => (
+                <li key={i} className="flex items-start gap-2 text-sm text-slate-300">
+                  <span className="w-1.5 h-1.5 rounded-full bg-gold-light mt-1.5 flex-shrink-0" />
+                  {r}
+                </li>
+              ))}
+            </ul>
+          </Card>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            <Card>
+              <h3 className="text-sm font-semibold text-white mb-3">Evidence Gaps</h3>
+              <ul className="text-sm space-y-1.5 text-slate-300">{data.gaps.evidence.map((g, i) => <li key={i}>{g}</li>)}</ul>
+            </Card>
+            <Card>
+              <h3 className="text-sm font-semibold text-white mb-3">Witness Gaps</h3>
+              <ul className="text-sm space-y-1.5 text-slate-300">{data.gaps.witness.map((g, i) => <li key={i}>{g}</li>)}</ul>
+            </Card>
+            <Card>
+              <h3 className="text-sm font-semibold text-white mb-3">Timeline Gaps</h3>
+              <ul className="text-sm space-y-1.5 text-slate-300">{data.gaps.timeline.map((g, i) => <li key={i}>{g}</li>)}</ul>
+            </Card>
           </div>
           {data.unknowns.length > 0 && (
-            <Card><CardHeader title="Unknowns" /><ul className="list-disc list-inside text-sm text-amber-800">{data.unknowns.map((u, i) => <li key={i}>{u}</li>)}</ul></Card>
+            <Card>
+              <h3 className="text-base font-semibold text-white mb-3">Unknowns</h3>
+              <ul className="space-y-2">
+                {data.unknowns.map((u, i) => (
+                  <li key={i} className="flex items-start gap-2">
+                    <UnknownIndicator />
+                    <span className="text-sm text-slate-300">{u}</span>
+                  </li>
+                ))}
+              </ul>
+            </Card>
           )}
         </div>
       )}

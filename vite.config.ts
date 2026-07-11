@@ -37,4 +37,17 @@ export default defineConfig({
       },
     },
   },
+  build: {
+    rollupOptions: {
+      output: {
+        // Split large, rarely-changing vendor libraries into their own
+        // long-term-cacheable chunks so the initial landing bundle stays small.
+        manualChunks: {
+          "vendor-react": ["react", "react-dom", "react-router-dom"],
+          "vendor-charts": ["recharts"],
+          "vendor-three": ["three"],
+        },
+      },
+    },
+  },
 })

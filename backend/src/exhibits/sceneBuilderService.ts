@@ -200,7 +200,7 @@ export async function create3DScene(coords: SceneCoordinates): Promise<SceneData
   let osmData: Record<string, unknown>;
   try {
     osmData = await queryOverpass(overpassQuery);
-  } catch (error) {
+  } catch (_error) {
     console.warn('[SceneBuilder] Overpass API failed, generating synthetic scene');
     return generateSyntheticScene(latitude, longitude, bbox);
   }

@@ -129,7 +129,7 @@ export function createNormalizerTransform(
         );
         this.push(normalized);
         callback();
-      } catch (err) {
+      } catch (_err) {
         // Skip documents that fail normalization
         callback();
       }

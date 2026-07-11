@@ -891,7 +891,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
         }));
 
         console.log(`[Auth:ForgotPassword] Reset email sent to ${email}`);
-      } catch (sesError) {
+      } catch (_sesError) {
         // SES not configured — log info but only expose raw token in development
         console.log(`[Auth:ForgotPassword] SES not available for ${email}`);
         if (process.env.NODE_ENV !== 'production') {

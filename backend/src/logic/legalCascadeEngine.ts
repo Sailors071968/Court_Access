@@ -11,7 +11,7 @@ import { rankStrongestFailure } from "../engines/rankStrongestFailure";
 // --------------------------------------------------
 // ⚖️ INTERACTION FORCE MAP
 // --------------------------------------------------
-export const INTERACTION_FORCE = {
+export const INTERACTION_FORCE: Record<string, number> = {
   SUPPORTS: 0.25,
   WEAKENS: -0.5,
   DESTROYS: -1.0

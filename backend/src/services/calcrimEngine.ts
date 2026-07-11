@@ -41,13 +41,13 @@ function matchEventToElement(event: any, element: any) {
 
   const targetMatch =
     !element.targets?.length ||
-    element.targets.some(t =>
+    element.targets.some((t: string) =>
       (event.target || "").toLowerCase().includes(t)
     );
 
   const keywordMatch =
     !element.keywords?.length ||
-    element.keywords.some(k =>
+    element.keywords.some((k: string) =>
       (event.description || "").toLowerCase().includes(k)
     );
 
@@ -232,8 +232,8 @@ export async function analyzeCase(caseId: string) {
         }))
         .sort(
           (a, b) =>
-            b.confidence * b.credibilityWeight -
-            a.confidence * a.credibilityWeight
+            (b.confidence ?? 0) * b.credibilityWeight -
+            (a.confidence ?? 0) * a.credibilityWeight
         );
 
       elementResults.push({

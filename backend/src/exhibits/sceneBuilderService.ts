@@ -4,7 +4,6 @@
 // ============================================================================
 
 import https from 'node:https';
-import http from 'node:http';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -431,7 +430,7 @@ function generateSyntheticScene(
 export async function geocodeAddress(address: string): Promise<{ latitude: number; longitude: number; displayName: string } | null> {
   const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}&limit=1`;
 
-  return new Promise((resolve, reject) => {
+  return new Promise((resolve) => {
     https.get(url, { headers: { 'User-Agent': 'CourtAccess/1.0' } }, (res) => {
       let data = '';
       res.on('data', (chunk: Buffer) => { data += chunk.toString(); });

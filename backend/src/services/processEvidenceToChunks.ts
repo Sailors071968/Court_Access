@@ -48,7 +48,13 @@ export async function processEvidenceToChunks(file: {
   // ---------------------------------------------------------------------------
   // 3. GET QUEUE
   // ---------------------------------------------------------------------------
-  const timelineQueue = getQueue(QUEUE_NAMES.TIMELINE_BUILD);
+  const timelineQueue = getQueue<{
+    fileId: string;
+    caseId: string;
+    chunkId: number;
+    rawText: string;
+    events: unknown[];
+  }>(QUEUE_NAMES.TIMELINE_BUILD);
 
   let totalEvents = 0;
 

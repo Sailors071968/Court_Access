@@ -36,16 +36,10 @@ interface FastifyReply {
   send(payload: unknown): FastifyReply;
 }
 
-interface RouteOptions {
-  method: string;
-  url: string;
-  handler: (req: FastifyRequest, reply: FastifyReply) => Promise<unknown>;
-}
-
 interface FastifyInstance {
-  get(url: string, handler: (req: FastifyRequest, reply: FastifyReply) => Promise<unknown>): void;
-  post(url: string, handler: (req: FastifyRequest, reply: FastifyReply) => Promise<unknown>): void;
-  route(opts: RouteOptions): void;
+  get(url: string, ...args: any[]): unknown;
+  post(url: string, ...args: any[]): unknown;
+  route(opts: Record<string, any>): unknown;
 }
 
 // ---------------------------------------------------------------------------

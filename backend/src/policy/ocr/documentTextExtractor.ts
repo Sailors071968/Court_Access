@@ -32,12 +32,17 @@ export async function extractTextFromPDF(
   const start = Date.now();
 
   try {
-    const pdfParseModule = await import('pdf-parse');
-    const pdfParse = pdfParseModule.default as (buf: Buffer) => Promise<{ text: string; numpages: number }>;
-    const pdfData = await pdfParse(documentBytes);
+    const { PDFParse } = await import('pdf-parse');
+    const parser = new PDFParse({ data: new Uint8Array(documentBytes) });
+    let pdfData;
+    try {
+      pdfData = await parser.getText();
+    } finally {
+      await parser.destroy();
+    }
 
     const text = pdfData.text?.trim() || '';
-    const pageCount = pdfData.numpages || 1;
+    const pageCount = pdfData.total || pdfData.pages?.length || 1;
 
     // Confidence: high if substantial text found
     const confidenceScore = text.length > 100 ? 0.95 : text.length > 20 ? 0.7 : 0.1;

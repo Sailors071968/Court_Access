@@ -9,6 +9,7 @@
 //   6. Persist TimelineEvent records to PostgreSQL
 // ============================================================================
 
+import { Prisma } from '@prisma/client';
 import prisma from '../lib/prisma.js';
 import { extractEventsFromText, storeEvents } from '../evidence/eventExtractionService.js';
 import { buildOfficerTimeline } from '../evidence/officerActionTimelineService.js';
@@ -416,7 +417,7 @@ export async function reconstructTimeline(
         driftCorrectionMs: te.driftCorrectionMs,
         officerTimelineEntries: officerTimelineEntryCount,
         attributes: extractAttributes(rawText),
-      },
+      } as unknown as Prisma.InputJsonValue,
     };
   });
 

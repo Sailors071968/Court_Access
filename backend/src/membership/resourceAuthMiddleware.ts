@@ -51,7 +51,7 @@ export async function sendUnauthorized(reply: FastifyReply): Promise<FastifyRepl
 export async function guardAuth(
   user: AuthUser | undefined,
   reply: FastifyReply,
-): Promise<user is AuthUser> {
+): Promise<boolean> {
   if (!user?.userId || !user?.tenantId) {
     await sendUnauthorized(reply);
     return false;

@@ -3,6 +3,7 @@
 // Personnel, collaboration, knowledge, conflicts, permissions, analytics
 // ============================================================================
 
+import { Prisma } from '@prisma/client';
 import prisma from '../lib/prisma.js';
 import { logSecurityEvent } from '../security/authMiddleware.js';
 
@@ -36,10 +37,10 @@ export async function upsertPersonnelProfile(
     barNumber?: string;
     phone?: string;
     bio?: string;
-    certifications?: unknown;
-    licenses?: unknown;
-    permissions?: unknown;
-    calendarSettings?: unknown;
+    certifications?: Prisma.InputJsonValue;
+    licenses?: Prisma.InputJsonValue;
+    permissions?: Prisma.InputJsonValue;
+    calendarSettings?: Prisma.InputJsonValue;
   },
 ) {
   await prisma.organizationMember.updateMany({
@@ -402,7 +403,7 @@ export async function updateOrganizationTheme(tenantId: string, themeSettings: R
   return prisma.organization.update({
     where: { id: tenantId },
     data: {
-      themeSettings,
+      themeSettings: themeSettings as Prisma.InputJsonValue,
       logoUrl: branding?.logoUrl,
       primaryColor: branding?.primaryColor,
       secondaryColor: branding?.secondaryColor,

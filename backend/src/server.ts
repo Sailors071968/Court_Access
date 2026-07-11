@@ -13,9 +13,9 @@ import { registerPolicyIntelligenceRoutes } from './policy/pipeline/policyIntell
 import { registerOperationsConsoleRoutes } from './policy/pipeline/operationsConsoleRoutes.js';
 import { registerComplianceRoutes } from './evidence/complianceRoutes.js';
 import { registerForensicRoutes } from './evidence/forensicReconstructionRoutes.js';
-import { authenticationHook, registerAuthRoutes } from './security/authMiddleware.js';
+import { registerAuthRoutes } from './security/authMiddleware.js';
 import { rateLimitHook, registerRateLimitRoutes } from './security/rateLimiter.js';
-import { csrfProtectionHook, getCsrfTokenRoute } from './security/csrfProtection.js';
+import { getCsrfTokenRoute } from './security/csrfProtection.js';
 import { securityHeadersHook } from './security/securityHeaders.js';
 import { uploadProtectionHook } from './security/evidenceUploadProtection.js';
 import { registerSecurityLogging } from './security/securityLogger.js';

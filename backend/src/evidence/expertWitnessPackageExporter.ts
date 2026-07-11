@@ -215,7 +215,13 @@ export async function generateExpertWitnessPackage(
   // Fetch policy rules referenced
   const ruleIds = [...new Set(findings.map(f => f.ruleId).filter(Boolean))] as string[];
   const policyRules = ruleIds.length > 0
-    ? await prisma.policyRule.findMany({ where: { ruleId: { in: ruleIds } } })
+    ? (await prisma.policyRule.findMany({ where: { ruleId: { in: ruleIds } } })).map((r) => ({
+        ruleId: r.ruleId,
+        ruleName: r.ruleName,
+        category: r.category,
+        description: r.ruleText,
+        agencyId: r.agencyId,
+      }))
     : [];
 
   // Fetch vision events if available

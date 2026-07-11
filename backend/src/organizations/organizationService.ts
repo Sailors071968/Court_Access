@@ -5,6 +5,7 @@
 
 import crypto from 'crypto';
 import bcrypt from 'bcrypt';
+import { Prisma } from '@prisma/client';
 import prisma from '../lib/prisma.js';
 import { DELEGATED_USER_LIMIT } from '../membership/universalMembership.js';
 import { logSecurityEvent } from '../security/authMiddleware.js';
@@ -15,7 +16,6 @@ import {
   type CreatePracticeGroupBody,
   type OnboardingBody,
   type UpdateOrganizationBody,
-  isOrgAdmin,
   validateMemberRole,
   validateOnboardingStep,
 } from './organizationTypes.js';
@@ -24,7 +24,9 @@ const INVITE_EXPIRY_MS = 7 * 24 * 60 * 60 * 1000;
 const BCRYPT_ROUNDS = 12;
 
 export async function ensureMembership(userId: string, tenantId: string) {
-  const existing = await prisma.organizationMember.findUnique({ where: { userId } });
+  const existing = await prisma.organizationMember.findFirst({
+    where: { userId, organizationId: tenantId },
+  });
   if (existing) return existing;
 
   const user = await prisma.user.findUnique({ where: { id: userId } });
@@ -57,7 +59,7 @@ export async function updateOrganization(tenantId: string, body: UpdateOrganizat
     data: {
       name: body.name,
       orgType: body.orgType,
-      settings: body.settings ?? undefined,
+      settings: (body.settings ?? undefined) as Prisma.InputJsonValue | undefined,
       logoUrl: body.logoUrl,
       primaryColor: body.primaryColor,
       secondaryColor: body.secondaryColor,

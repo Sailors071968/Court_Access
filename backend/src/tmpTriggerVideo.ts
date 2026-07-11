@@ -39,7 +39,12 @@ async function run() {
     // ============================================================
     // GET QUEUE
     // ============================================================
-    const queue = getQueue(QUEUE_NAMES.VIDEO_PROCESSING);
+    const queue = getQueue<{
+      jobId: string;
+      caseId: string;
+      fileId: string;
+      localPath: string;
+    }>(QUEUE_NAMES.VIDEO_PROCESSING);
 
     if (!queue) {
       throw new Error("Failed to initialize video queue");

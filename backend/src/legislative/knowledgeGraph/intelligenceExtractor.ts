@@ -227,7 +227,7 @@ function linkCalcrim(statute: StatuteRecord, offense: OffenseRecord): CalcrimLin
       id: entityId(statute.id, 'calcrim', key),
       sourceStatuteId: statute.id,
       offenseId: offense.id,
-      instructionNumber: field('UNKNOWN', 'UNKNOWN'),
+      instructionNumber: field<number>('UNKNOWN', 'UNKNOWN'),
       instructionTitle: field(key, 'MEDIUM'),
       confidence: 'MEDIUM',
       audit: cloneAudit(statute),

@@ -85,6 +85,6 @@ const report = {
   note: 'Dashboard screenshots (attorney/investigator/defendant/admin) require post-deploy authenticated flows.',
 };
 
-writeFileSync('/workspace/reports/PHASE_01_SCREENSHOTS.json', JSON.stringify(report, null, 2));
+writeFileSync(path.join(ROOT, 'reports/PHASE_01_SCREENSHOTS.json'), JSON.stringify(report, null, 2));
 console.log(JSON.stringify(report, null, 2));
 process.exit(errors.length === 0 ? 0 : 1);

@@ -270,12 +270,18 @@ function inferPolicyTitle(url: string, linkText: string): string {
 async function extractPdfText(buffer: Buffer): Promise<{ text: string; pages: number; method: string }> {
   // Try pdf-parse first (fastest, works for text-based PDFs)
   try {
-    const pdfParse = (await import('pdf-parse')).default;
-    const result = await pdfParse(buffer);
+    const { PDFParse } = await import('pdf-parse');
+    const parser = new PDFParse({ data: new Uint8Array(buffer) });
+    let result;
+    try {
+      result = await parser.getText();
+    } finally {
+      await parser.destroy();
+    }
     if (result.text && result.text.trim().length > 50) {
       return {
         text: result.text.trim(),
-        pages: result.numpages || 1,
+        pages: result.total || result.pages?.length || 1,
         method: 'pdf-parse',
       };
     }

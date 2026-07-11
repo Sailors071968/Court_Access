@@ -13,6 +13,13 @@ export default async function evidenceRoutes(fastify: FastifyInstance) {
         return reply.status(400).send({ error: "No file uploaded" });
       }
 
+      const caseId: string | undefined =
+        data.fields?.caseId?.value ?? request.query?.caseId;
+
+      if (!caseId) {
+        return reply.status(400).send({ error: "caseId is required" });
+      }
+
       const uploadDir = "/home/ec2-user/uploads";
 
       // Ensure directory exists
@@ -35,8 +42,9 @@ export default async function evidenceRoutes(fastify: FastifyInstance) {
       // 🚀 TRIGGER PIPELINE
       await processEvidenceToChunks({
         id: `file-${Date.now()}`,
-        s3Key: filePath,
+        localPath: filePath,
         mimeType: data.mimetype,
+        caseId,
       });
 
       console.log("🚀 Pipeline triggered");

@@ -27,10 +27,10 @@ const EXPORT_TYPES: ExportPackageType[] = [
 export async function registerWorkbenchRoutes(app: FastifyInstance): Promise<void> {
   app.get('/api/cases/:caseId/workbench', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
-    if (!(await guardAuth(user, reply))) return;
+    if (!(await guardAuth(user, reply)) || !user) return;
 
     const { caseId } = request.params as { caseId: string };
-    if (!(await guardCaseAccess(user!, caseId, 'view', reply))) return;
+    if (!(await guardCaseAccess(user, caseId, 'view', reply))) return;
 
     const workbench = await buildAttorneyWorkbench(caseId, user.tenantId, user.userId);
     if (!workbench) return reply.code(404).send({ error: 'Case not found' });

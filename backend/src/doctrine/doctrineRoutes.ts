@@ -43,8 +43,8 @@ interface RouteOptions {
 }
 
 interface FastifyInstance {
-  get(url: string, handler: (req: FastifyRequest, reply: FastifyReply) => Promise<unknown>): void;
-  post(url: string, handler: (req: FastifyRequest, reply: FastifyReply) => Promise<unknown>): void;
+  get(url: string, ...args: any[]): unknown;
+  post(url: string, ...args: any[]): unknown;
   route(opts: RouteOptions): void;
 }
 

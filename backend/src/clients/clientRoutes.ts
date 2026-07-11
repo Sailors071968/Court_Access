@@ -32,7 +32,7 @@ export async function registerClientRoutes(app: FastifyInstance): Promise<void> 
   // POST /api/clients
   app.post('/api/clients', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
-    if (!(await guardAuth(user, reply))) return;
+    if (!(await guardAuth(user, reply)) || !user) return;
     if (!(await guardScopeAccess(user!, 'organization', null, 'edit', reply))) return;
 
     const body = request.body as CreateClientBody;
@@ -86,7 +86,7 @@ export async function registerClientRoutes(app: FastifyInstance): Promise<void> 
   // GET /api/clients
   app.get('/api/clients', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
-    if (!(await guardAuth(user, reply))) return;
+    if (!(await guardAuth(user, reply)) || !user) return;
     if (!(await guardScopeAccess(user!, 'organization', null, 'view', reply))) return;
 
     const { status, search } = request.query as { status?: string; search?: string };

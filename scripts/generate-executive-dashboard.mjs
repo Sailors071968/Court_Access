@@ -4,12 +4,20 @@
  * Reads assessment + production verify reports and writes EXECUTIVE_DASHBOARD.md
  */
 import { readFileSync, writeFileSync, existsSync } from 'fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, resolve } from 'node:path';
 
-const assessmentPath = '/workspace/reports/MASTER_PRODUCTION_ASSESSMENT.json';
-const productionPath = '/workspace/reports/PRODUCTION_WEBSITE_VERIFY.json';
-const outPath = '/workspace/reports/EXECUTIVE_DASHBOARD.md';
-const blockersPath = '/workspace/reports/PRODUCTION_BLOCKERS.json';
-const outJsonPath = '/workspace/reports/EXECUTIVE_DASHBOARD.json';
+// Resolve paths relative to the repository root (this script lives in <root>/scripts),
+// so it works on any host — the previous hardcoded /workspace prefix only existed on
+// the dev sandbox and made this step fail on CI runners (/home/runner/work/...).
+const repoRoot = resolve(dirname(fileURLToPath(import.meta.url)), '..');
+const reportsDir = resolve(repoRoot, 'reports');
+
+const assessmentPath = resolve(reportsDir, 'MASTER_PRODUCTION_ASSESSMENT.json');
+const productionPath = resolve(reportsDir, 'PRODUCTION_WEBSITE_VERIFY.json');
+const outPath = resolve(reportsDir, 'EXECUTIVE_DASHBOARD.md');
+const blockersPath = resolve(reportsDir, 'PRODUCTION_BLOCKERS.json');
+const outJsonPath = resolve(reportsDir, 'EXECUTIVE_DASHBOARD.json');
 
 const generatedAt = new Date().toISOString();
 

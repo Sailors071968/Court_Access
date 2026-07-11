@@ -11,7 +11,6 @@ import { Readable } from 'node:stream';
 export const OCR_QUEUE = 'policy-ocr-queue';
 export const CLASSIFICATION_QUEUE = 'policy-classification-queue';
 
-const S3_BUCKET = process.env.S3_POLICY_BUCKET ?? 'courtaccess-policy-library';
 const S3_REGION = process.env.AWS_REGION ?? 'us-west-2';
 
 export interface OcrJobData {

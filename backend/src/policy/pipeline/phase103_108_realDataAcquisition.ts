@@ -19,12 +19,11 @@
 import { PrismaClient } from '@prisma/client';
 import * as fs from 'fs';
 import * as path from 'path';
-import * as crypto from 'crypto';
 import { fileURLToPath } from 'url';
 import { classifyDocumentText } from '../taxonomy/classificationPipeline.js';
 import { populateAgencyCoverage, populateAllAgencyCoverage, getCoverageSummary } from '../taxonomy/coveragePopulator.js';
 import { generateCoverageMatrix } from './coverageMatrixGenerator.js';
-import { prepareCpraRequestQueue, getCpraQueueStatus } from './cpraRequestPreparation.js';
+import { getCpraQueueStatus } from './cpraRequestPreparation.js';
 import { getActiveCampaignStatus } from './cpraCampaignLauncher.js';
 import { getPipelineStats } from './pipelineOrchestrator.js';
 import { getResponsePipelineHealth } from './documentResponsePipeline.js';
@@ -33,8 +32,6 @@ import { getChpImportStatus } from './chpPolicyImportService.js';
 import { getSystemCoverageStats } from '../taxonomy/policyCoverageTracker.js';
 import {
   validateDocument,
-  detectMimeType,
-  computeSha256,
 } from '../../workers/documentValidationService.js';
 import {
   DEFAULT_CRAWL_SAFETY,

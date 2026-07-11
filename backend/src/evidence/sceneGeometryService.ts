@@ -317,10 +317,7 @@ function calculateBounds(
   centerLon: number,
   radiusMeters: number,
 ): SceneBounds {
-  // Convert radius to approximate local coordinates
-  const metersPerDegLat = 111320;
-  const metersPerDegLon = metersPerDegLat * Math.cos(centerLat * (Math.PI / 180));
-
+  // Local coordinate system uses meters directly, centered on the scene origin.
   return {
     centerLat,
     centerLon,

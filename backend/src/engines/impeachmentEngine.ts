@@ -31,7 +31,7 @@ function buildDirectImpeachment(c: Contradiction): string[] {
 // --------------------------------------------------
 // ⚔️ BUILD FORCED ADMISSION QUESTIONS
 // --------------------------------------------------
-function buildForcedAdmissions(c: Contradiction): string[] {
+function buildForcedAdmissions(_c: Contradiction): string[] {
 
   return [
     "So one of those statements must be inaccurate, correct?",

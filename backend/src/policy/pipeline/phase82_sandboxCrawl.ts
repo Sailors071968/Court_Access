@@ -17,36 +17,36 @@ async function main() {
 
   try {
     const result = await executeSandboxCrawl({
-      maxAgencies: 10,
       maxPagesPerAgency: 100,
-      maxDocumentsPerAgency: 20,
-      enableOcr: true,
-      enableClassification: true,
-      enableCoverageMapping: true,
+      maxCrawlTimeMs: 300_000,
+      requestDelayMs: 1_000,
+      respectRobotsTxt: true,
+      maxConcurrentAgencies: 3,
       dryRun: false,
     });
 
     const duration = ((Date.now() - startTime) / 1000).toFixed(1);
+    const allErrors = result.agencyResults.flatMap((a) => a.errors);
 
     console.log();
     console.log('='.repeat(80));
     console.log('SANDBOX CRAWL REPORT');
     console.log('='.repeat(80));
     console.log();
-    console.log(`Status:              ${result.status}`);
-    console.log(`Duration:            ${duration}s`);
-    console.log(`Agencies Processed:  ${result.agenciesProcessed}`);
-    console.log(`Pages Crawled:       ${result.totalPagesCrawled}`);
-    console.log(`Documents Found:     ${result.totalDocumentsFound}`);
-    console.log(`Documents Downloaded:${result.totalDocumentsDownloaded}`);
-    console.log(`OCR Processed:       ${result.totalOcrProcessed}`);
-    console.log(`Classified:          ${result.totalClassified}`);
-    console.log(`Coverage Mapped:     ${result.totalCoverageMapped}`);
+    console.log(`Status:               ${result.status}`);
+    console.log(`Duration:             ${duration}s`);
+    console.log(`Agencies Processed:   ${result.agenciesProcessed}`);
+    console.log(`Agencies Succeeded:   ${result.agenciesSucceeded}`);
+    console.log(`Agencies Failed:      ${result.agenciesFailed}`);
+    console.log(`Policies Discovered:  ${result.totalPoliciesDiscovered}`);
+    console.log(`Documents Downloaded: ${result.totalDocumentsDownloaded}`);
+    console.log(`Documents Classified: ${result.totalDocumentsClassified}`);
+    console.log(`Coverage Mappings:    ${result.totalCoverageMappings}`);
 
-    if (result.errors.length > 0) {
+    if (allErrors.length > 0) {
       console.log();
-      console.log(`Errors (${result.errors.length}):`);
-      for (const err of result.errors) {
+      console.log(`Errors (${allErrors.length}):`);
+      for (const err of allErrors) {
         console.log(`  - ${err}`);
       }
     }
@@ -56,14 +56,13 @@ async function main() {
     for (const agency of result.agencyResults) {
       console.log();
       console.log(`  ${agency.agencyName}`);
-      console.log(`    Status:     ${agency.status}`);
-      console.log(`    Pages:      ${agency.pagesCrawled}`);
-      console.log(`    Documents:  ${agency.documentsFound}`);
-      console.log(`    Downloaded: ${agency.documentsDownloaded}`);
-      console.log(`    OCR'd:      ${agency.ocrProcessed}`);
-      console.log(`    Classified: ${agency.classified}`);
+      console.log(`    Status:      ${agency.status}`);
+      console.log(`    Policies:    ${agency.policiesDiscovered}`);
+      console.log(`    Downloaded:  ${agency.documentsDownloaded}`);
+      console.log(`    Classified:  ${agency.documentsClassified}`);
+      console.log(`    Coverage:    ${agency.coverageMappings}`);
       if (agency.errors.length > 0) {
-        console.log(`    Errors:     ${agency.errors.join('; ')}`);
+        console.log(`    Errors:      ${agency.errors.join('; ')}`);
       }
     }
 

@@ -19,7 +19,7 @@ import * as path from 'path';
 import { fileURLToPath } from 'url';
 
 // Service imports
-import { executeSandboxCrawl, getSandboxExecutionStatus } from './sandboxCrawlExecutor.js';
+import { executeSandboxCrawl } from './sandboxCrawlExecutor.js';
 import { importChpPolicies } from './chpPolicyImportService.js';
 import { runClassificationValidation } from './classificationValidator.js';
 import { generateCoverageMatrix } from './coverageMatrixGenerator.js';
@@ -71,12 +71,11 @@ async function runPhase85(): Promise<void> {
   // Step 2: Execute sandbox crawl for 10 pilot agencies
   console.log('[Phase 85] Step 2: Running sandbox crawl for 10 pilot agencies...');
   const crawlResult = await executeSandboxCrawl({
-    maxAgencies: 10,
     maxPagesPerAgency: 100,
-    maxDocumentsPerAgency: 20,
-    enableOcr: true,
-    enableClassification: true,
-    enableCoverageMapping: true,
+    maxCrawlTimeMs: 300_000,
+    requestDelayMs: 1_000,
+    respectRobotsTxt: true,
+    maxConcurrentAgencies: 3,
     dryRun: false,
   });
 
@@ -650,7 +649,6 @@ async function main() {
   const crawlReport = JSON.parse(fs.readFileSync(path.join(REPORTS_DIR, 'sandbox_crawl_report.json'), 'utf-8'));
   const ocrReport = JSON.parse(fs.readFileSync(path.join(REPORTS_DIR, 'ocr_pipeline_report.json'), 'utf-8'));
   const classReport = JSON.parse(fs.readFileSync(path.join(REPORTS_DIR, 'classification_accuracy_report.json'), 'utf-8'));
-  const coverageReport = JSON.parse(fs.readFileSync(path.join(REPORTS_DIR, 'sandbox_coverage_matrix.json'), 'utf-8'));
   const cpraReport = JSON.parse(fs.readFileSync(path.join(REPORTS_DIR, 'cpra_request_queue.json'), 'utf-8'));
   const perfReport = JSON.parse(fs.readFileSync(path.join(REPORTS_DIR, 'system_performance_report.json'), 'utf-8'));
 

@@ -541,7 +541,6 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     const email = body.email.trim().toLowerCase();
     const password = body.password;
     const name = body.name;
-    const role = body.role;
 
     // Check for existing user — also check case-insensitive to prevent duplicates
     // with legacy mixed-case emails (e.g. Admin@Company.com vs admin@company.com)
@@ -892,7 +891,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
         }));
 
         console.log(`[Auth:ForgotPassword] Reset email sent to ${email}`);
-      } catch (sesError) {
+      } catch (_sesError) {
         // SES not configured — log info but only expose raw token in development
         console.log(`[Auth:ForgotPassword] SES not available for ${email}`);
         if (process.env.NODE_ENV !== 'production') {

@@ -2,7 +2,7 @@
 // Program 21 — Backup Operations
 // ============================================================================
 
-import { access, readFile } from 'node:fs/promises';
+import { access } from 'node:fs/promises';
 import { join, resolve } from 'node:path';
 import type { BackupOperationsReport, BackupStatus, ComponentHealth } from './types.js';
 import { getLatestDrillReport, runBackupRestoreDrill } from './backupRestoreDrill.js';

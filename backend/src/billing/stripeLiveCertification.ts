@@ -52,7 +52,7 @@ export async function runLiveStripeApiCertification(): Promise<WorkflowCertifica
       }),
     );
     if (!customerRes.ok || typeof customerRes.data.id !== 'string') {
-      return failWorkflow(steps, stripeObjects, customerRes.data.error?.message ?? 'Customer creation failed');
+      return failWorkflow(steps, stripeObjects, (customerRes.data.error as { message?: string } | undefined)?.message ?? 'Customer creation failed');
     }
     customerId = customerRes.data.id;
     stripeObjects.push(`cus:${customerId}`);
@@ -78,7 +78,7 @@ export async function runLiveStripeApiCertification(): Promise<WorkflowCertifica
     checkoutParams.append('subscription_data[metadata][certification]', '1A-FINAL');
     const checkoutRes = await stripePost('/checkout/sessions', checkoutParams);
     if (!checkoutRes.ok || typeof checkoutRes.data.id !== 'string') {
-      return failWorkflow(steps, stripeObjects, checkoutRes.data.error?.message ?? 'Checkout session creation failed');
+      return failWorkflow(steps, stripeObjects, (checkoutRes.data.error as { message?: string } | undefined)?.message ?? 'Checkout session creation failed');
     }
     stripeObjects.push(`cs:${checkoutRes.data.id}`);
 
@@ -88,7 +88,7 @@ export async function runLiveStripeApiCertification(): Promise<WorkflowCertifica
     portalParams.append('return_url', 'https://courtaccess.net/dashboard/usage');
     const portalRes = await stripePost('/billing_portal/sessions', portalParams);
     if (!portalRes.ok || typeof portalRes.data.url !== 'string') {
-      return failWorkflow(steps, stripeObjects, portalRes.data.error?.message ?? 'Portal session creation failed');
+      return failWorkflow(steps, stripeObjects, (portalRes.data.error as { message?: string } | undefined)?.message ?? 'Portal session creation failed');
     }
 
     return {

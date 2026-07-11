@@ -14,7 +14,7 @@ import {
 export async function registerChargeRoutes(app: FastifyInstance): Promise<void> {
   app.post('/api/charges', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
-    if (!(await guardAuth(user, reply))) return;
+    if (!(guardAuth(user, reply))) return;
 
     const { caseId, code, section, title, victim, dateOfOffense } = request.body as {
       caseId?: string;
@@ -54,7 +54,7 @@ export async function registerChargeRoutes(app: FastifyInstance): Promise<void> 
 
   app.get('/api/charges/:caseId', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
-    if (!(await guardAuth(user, reply))) return;
+    if (!(guardAuth(user, reply))) return;
 
     const { caseId } = request.params as { caseId: string };
     if (!(await guardCaseAccess(user!, caseId, 'view', reply))) return;
@@ -73,7 +73,7 @@ export async function registerChargeRoutes(app: FastifyInstance): Promise<void> 
 
   app.delete('/api/charges/:id', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
-    if (!(await guardAuth(user, reply))) return;
+    if (!(guardAuth(user, reply))) return;
 
     const { id } = request.params as { id: string };
 

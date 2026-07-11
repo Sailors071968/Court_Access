@@ -123,7 +123,7 @@ function buildLegalAuthority(intelligence: NonNullable<Awaited<ReturnType<typeof
     );
     if (o.statuteIntelligence?.offenses) {
       for (const off of o.statuteIntelligence.offenses) {
-        relatedOffenses.push(`${off.code ?? o.code} §${off.section ?? o.section}: ${off.title ?? 'UNKNOWN'}`);
+        relatedOffenses.push(`${off.code ?? o.code} §${off.section ?? o.section}: ${off.name?.value ?? 'UNKNOWN'}`);
       }
     }
   }

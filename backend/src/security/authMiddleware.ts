@@ -280,6 +280,26 @@ export function extractBearerToken(authHeader: string | undefined): string | nul
   return authHeader.slice(7);
 }
 
+/**
+ * Optional authentication: if a valid Bearer token is present, populate
+ * `request.user`; otherwise leave it unset and continue. Never rejects, so
+ * public/token-less routes are unaffected. Individual routes retain their own
+ * `if (!user) 401` guards, so this only fixes the plumbing that lets
+ * authenticated data routes see the caller identity.
+ */
+export async function optionalAuthHook(
+  request: AuthenticatedRequest,
+  _reply: FastifyReply,
+): Promise<void> {
+  const token = extractBearerToken(request.headers.authorization);
+  if (!token) return;
+  try {
+    request.user = verifyAccessToken(token);
+  } catch {
+    // Invalid/expired token: leave request.user unset; route guards handle it.
+  }
+}
+
 export async function authenticationHook(
   request: AuthenticatedRequest,
   reply: FastifyReply,

@@ -13,7 +13,7 @@ import { registerPolicyIntelligenceRoutes } from './policy/pipeline/policyIntell
 import { registerOperationsConsoleRoutes } from './policy/pipeline/operationsConsoleRoutes.js';
 import { registerComplianceRoutes } from './evidence/complianceRoutes.js';
 import { registerForensicRoutes } from './evidence/forensicReconstructionRoutes.js';
-import { registerAuthRoutes } from './security/authMiddleware.js';
+import { optionalAuthHook, registerAuthRoutes } from './security/authMiddleware.js';
 import { rateLimitHook, registerRateLimitRoutes } from './security/rateLimiter.js';
 import { getCsrfTokenRoute } from './security/csrfProtection.js';
 import { securityHeadersHook } from './security/securityHeaders.js';
@@ -101,6 +101,10 @@ async function startServer() {
 
   // Phase 191 — Authentication (JWT verification + RBAC)
   //  app.addHook('onRequest', authenticationHook);
+  // Optional identity population: sets request.user from a valid Bearer token
+  // when present, never rejects. Lets authenticated data routes see the caller
+  // (route-level guards still enforce access) without affecting public routes.
+  app.addHook('onRequest', optionalAuthHook);
 
   // Phase 193 — CSRF protection (after auth, before route handlers)
   // app.addHook('onRequest', csrfProtectionHook);

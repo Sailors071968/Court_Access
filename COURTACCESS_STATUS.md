@@ -1,128 +1,110 @@
 # CourtAccess — Production Status
 
-**Generated:** 2026-07-11T19:52Z
-**Branch:** `cursor/backend-typescript-certification-0cc2`
-**Commit:** `f201517`
-**Program context:** Production Program 114 — Backend TypeScript Certification, Runtime Integrity & API Completion
+**Generated:** 2026-07-12T15:20Z
+**Branch:** `cursor/staging-deployment-review-0cc2`
+**Deployed build (frontend):** commit `1827a6d`, build stamp `2026-07-12T15:01:25Z`
+**Program context:** Production Program 115 — Live Staging Deployment, Human Review & Production Synchronization
 
 > Reports only what has been verified with cited evidence.
 > Per the Engineering Constitution: No Evidence → No Finding → UNKNOWN.
-> No runtime, deployment, or provider connectivity is fabricated here.
+> No deployment, URL, screenshot, or infrastructure status is fabricated.
 
 ---
 
-## 1. Backend Certification — VERIFIED
+## 1. Deployment status
 
-| Gate | Command | Result |
-|------|---------|--------|
-| TypeScript | `cd backend && npx tsc --noEmit` | **PASS — 0 errors** (was 186) |
-| Lint | `cd backend && npm run lint` (`eslint .`) | **PASS — 0 problems** (config newly added) |
-| Tests (full suite) | `node --import tsx --test tests/**/*.test.ts` (Postgres + Redis) | **444 / 446 pass** |
-| Tests (CI subset) | role-onboarding, universal-membership, resource-permissions | **PASS — 20 / 20** |
+| Environment | URL | State |
+|-------------|-----|-------|
+| Production | https://courtaccess.net | LIVE but **stale** (serves an older "Court Access System" build) |
+| Staging (ephemeral) | Cloudflare quick tunnel (`*.trycloudflare.com`) | Brought up and **verified live during this session**; see note below |
 
-### 1a. TypeScript (Phase 1)
+**Ephemeral staging tunnel:** During this session a full stack was run
+(Postgres + Redis + Fastify backend + built frontend on one origin) and exposed
+via a Cloudflare quick tunnel. The public URL served the **current build** and
+was verified end-to-end:
 
-The backend previously **never type-checked**: a syntax error
-(`Promise<user is AuthUser>` — an async function cannot be a type predicate)
-aborted `tsc` at parse time, masking 186 errors underneath. All 186 are now
-resolved:
+```
+GET https://<tunnel>.trycloudflare.com/          -> HTTP 200
+  <title>CourtAccess — Criminal Case Intelligence Platform</title>
+  <!-- CourtAccess build: 1827a6d 2026-07-12T15:01:25.319Z -->
+GET https://<tunnel>.trycloudflare.com/api/health -> {"status":"ok","version":"1.1.0"}
+```
 
-- **guardAuth** converted to a synchronous type predicate so route handlers
-  narrow `user` via `if (!guardAuth(...))`; `await` removed at all call sites.
-  This also fixed every `TS18048 'user' possibly undefined`.
-- Removed unused imports/vars; `_`-prefixed intentionally-unused params.
-- Typed all implicit-any parameters (rankStrongestFailure, calcrimEngine,
-  legalAnalysisEngine, legalCascadeEngine, runLegalCascade).
-- Fixed `pdf-parse` default-import access; added a `pump` module declaration.
-- Correct casts for `FastifyRequest`→`Record` and Prisma JSON inputs.
-- `readdir(withFileTypes)` Dirent typing; `SystemCoverageStats` property
-  typos; `findUnique`→`findFirst` for a non-unique lookup.
-- Realigned `forensicReconstructionRoutes` to current service contracts
-  (services take `caseId` first; `store*` take a single object).
-- Fixed a real evidence-upload bug (route passed `s3Key` where the pipeline
-  reads `localPath` → would have crashed at runtime).
-
-### 1b. Lint (Phase 2)
-
-Added `backend/eslint.config.js` (flat config, Node + TypeScript). Decisions:
-
-- `no-unused-vars`: `_`-prefix convention + `ignoreRestSiblings`.
-- `no-explicit-any`: **off** — deliberate. `tsc`'s `noImplicitAny` (which
-  passes) already forbids *implicit* any; the backend intentionally uses
-  explicit `any` for dynamic legal-document / JSON payloads at trust
-  boundaries. ~167 such intentional uses exist; forcing removal would be
-  churn without safety benefit.
-- Eliminated all 68 initial findings (regex escapes, unused catch bindings,
-  unused imports/vars in scripts & tests).
-
-### 1c. Dead code removed
-
-- `contradictionStorageService.ts` — referenced Prisma models
-  (`contradiction`, `contradictionEvent`) that do not exist in the schema;
-  unused anywhere; would crash if ever called.
-- `tmpTriggerVideo.ts` — a scratch/test trigger script with hard-coded paths.
+**Persistence limitation (the exact blocker):** the tunnel and the stack run
+inside this agent's ephemeral VM. When the session ends, the VM is suspended,
+so the `trycloudflare.com` URL stops responding. A quick tunnel also has no
+uptime guarantee and rotates its hostname on restart. Therefore a **persistent**
+public staging URL cannot be produced from inside the agent. See §5.
 
 ---
 
-## 2. Runtime & API (Phases 3–4) — PARTIAL (infra-bounded)
+## 2. Build verification (Phase 4) — VERIFIED
 
-- **Type-level API integrity**: every route/service now type-checks, so
-  request/response shapes and service-call contracts are statically verified.
-- **Runtime startup**: full server boot requires Postgres, Redis, and Neo4j.
-  For test certification these were provisioned locally and 444/446 tests
-  pass. Production runtime startup certification requires owned infrastructure
-  (see blockers) and is therefore reported **UNKNOWN** until credentials exist.
+The served `dist/index.html` embeds the git build stamp injected by the Vite
+build plugin: **`CourtAccess build: 1827a6d 2026-07-12T15:01:25.319Z`**, which
+matches the repository HEAD at build time. Backend `/api/health` reports
+`version 1.1.0`, `environment production`.
 
----
+## 3. Browser verification (Phases 4 & 6) — 30 pages via Playwright
 
-## 3. Remaining Backend Test Failures (2) — both infrastructure
+Full-page screenshots + console-error capture (`reports/screenshots/program-115/`,
+`verification-report.json`).
 
-| Suite | Reason | Type |
-|-------|--------|------|
-| Stripe Production Certification | Requires live `STRIPE_SECRET_KEY`; "Checkout session failed" without it | Credential blocker |
-| Backup Restore Drill (PG-015) | Sole failing check is "Prisma migrations applied: none found" — an artifact of a `db push` test DB; passes under real `migrate deploy` | Infra/DB provisioning |
+- **Public pages (10/10): PASS, 0 console errors** — landing, for-defense,
+  features, how-it-works, pricing, security, knowledge-base, accessibility,
+  login, register. All render fully.
+- **Authenticated shell: renders correctly** with the logged-in identity —
+  dashboard, cases, search, settings, shared-access (collaborators), admin,
+  admin/operations, system-health, case overview, charges (case intake),
+  evidence, timeline, motions, research → **0 console errors**.
+- **6 pages with failed data fetches** (shells still render; not UI crashes):
+  - 401: `/dashboard/usage`, `/cases/:id/documents` (separate per-route auth).
+  - 500: `/cases/:id/attorney-workbench`, `/cases/:id/narrative-analysis`
+    (intelligence endpoints error on an empty case).
+  - 404: `/cases/:id/contradictions`, `/cases/:id/litigation-strategy`
+    (endpoints not registered / path mismatch).
 
-Neither is a code defect. `organization-domain` and `production-operations`
-pass in isolation (a transient parallel-DB interference was observed only when
-all suites share one database concurrently).
+## 4. Key fix enabling authenticated review
 
----
-
-## 4. Known Pre-existing Issue (out of Program 114 scope)
-
-**Prisma migration/schema drift:** `schema.prisma` contains columns (e.g.
-`users.termsAcceptedAt`) not produced by the committed migration files, so
-`migrate deploy` + full schema cannot be reconciled without `db push`
-(`--force-reset`). This is a DB/migrations concern, distinct from backend
-TS/lint. Recommended next: regenerate a squashed migration from the frozen
-schema.
-
----
-
-## 5. Remaining Infrastructure Blockers (owner-only)
-
-- Deploy secrets (`DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_SSH_KEY`) to publish
-  the current build to `https://courtaccess.net` (currently serving a stale
-  build).
-- Provider credentials: Stripe, AWS, OpenAI/Anthropic/Gemini, Twilio, Resend,
-  CourtListener, Harvard CAP, OpenLaws.
-- Managed Postgres / Redis / Neo4j for the production data plane.
+The backend global authentication hook was **commented out** (pre-existing), so
+`request.user` was never populated and every authenticated data API returned
+401. Added a minimal **optional** auth hook (`optionalAuthHook`) that populates
+`request.user` from a valid Bearer token when present and never rejects; route
+guards still enforce access. Verified: public routes unaffected (health/login
+200), `GET /api/cases` with token → 200 (returns data), without token → 401.
 
 ---
 
-## 6. Backend Completion
+## 5. Remaining Infrastructure Blockers & shortest path to a persistent URL
 
-- TypeScript: **100%** (0 errors).
-- Lint: **100%** (0 problems).
-- Tests: **444/446 (99.6%)**; the 2 remaining require live credentials /
-  production migration bookkeeping.
+**Blocker:** no persistent host and no deploy credentials inside the agent.
 
----
+**Shortest path (pick one):**
 
-## 7. Next Recommended Production Program
+1. **Deploy to production/staging host (preferred).** Add GitHub repo secrets
+   `DEPLOY_HOST`, `DEPLOY_USER`, `DEPLOY_SSH_KEY` (Settings → Secrets and
+   variables → Actions), then run the **"Deploy Production Website"** workflow
+   (Actions tab → Run workflow) or merge to `dev`. Result: `https://courtaccess.net`
+   serves the current build. For `https://staging.courtaccess.net`, point that
+   DNS/host at the staging build and add the same-shaped secrets.
+2. **Persistent Cloudflare Tunnel.** Provide a named-tunnel token
+   (`CLOUDFLARE_TUNNEL_TOKEN`) from a Cloudflare account; a persistent
+   `cloudflared` service then yields a stable hostname that survives restarts.
 
-1. Resolve Prisma migration/schema drift (squash migration from frozen schema);
-   wire `backend` lint + typecheck + tests into CI.
-2. Provision infrastructure and run live Stripe certification + full runtime
-   startup verification.
-3. Deploy the current `dev` build to `https://courtaccess.net`.
+Other infra blockers unchanged: provider credentials (Stripe/AWS/OpenAI/
+Anthropic/Gemini/Twilio/Resend/CourtListener), managed Postgres/Redis/Neo4j for
+the production data plane, and the pre-existing Prisma migration/schema drift.
+
+## 6. Production readiness
+
+- Frontend: build + lint + test green; renders cleanly (0 console errors on all
+  public pages and the authenticated shell).
+- Backend: `tsc` 0 errors, lint 0 problems, 444/446 tests pass.
+- **Deployability:** the build is deployable now; only credentials/persistent
+  host are missing. A few authenticated data endpoints (§3) need follow-up.
+
+## 7. Recommended next production program
+
+Wire authenticated data endpoints end-to-end (resolve the 401/404/500 routes in
+§3), then deploy to `https://courtaccess.net` / `https://staging.courtaccess.net`
+once the deploy secrets exist.

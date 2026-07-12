@@ -4,14 +4,11 @@
 // Completion % = Verified Capabilities ÷ Total Planned Capabilities
 // ============================================================================
 
-import { readFile, readdir, access } from 'node:fs/promises';
-import { resolve, join } from 'node:path';
+import { readFile, readdir } from 'node:fs/promises';
+import type { Dirent } from 'node:fs';
+import { join } from 'node:path';
 import { execSync } from 'node:child_process';
-import { MASTER_PRODUCTION_PHASES } from './phaseDefinitions.js';
-import { PRODUCTION_COMPLETION_PROGRAMS } from './productionCompletionPrograms.js';
 import { runProductionGates } from './runProductionGates.js';
-import { runVersion1ProductionGates } from './version1ProductionGates.js';
-import { collectProductionMetrics } from '../legislative/productionMetrics.js';
 import { fileExists, workspacePath, readJsonReport } from './gateUtils.js';
 
 export const ASSESSMENT_VERSION = '1.0';
@@ -94,7 +91,7 @@ async function routeInApp(route: string): Promise<boolean> {
 async function apiRouteExists(fragment: string): Promise<boolean> {
   const needle = fragment.replace(/\\/g, '');
   const scanDir = async (dir: string): Promise<boolean> => {
-    let entries: string[];
+    let entries: Dirent[];
     try {
       entries = await readdir(dir, { withFileTypes: true });
     } catch {
@@ -610,8 +607,6 @@ async function assessCapability(programId: string, planned: PlannedCapability): 
     const pass = await c.fn();
     criteria.push({ id: `${planned.id}-${c.category}`, label: c.label, category: c.category, pass });
   }
-
-  const implemented = criteria.some((c) => c.pass);
 
   const runtimeCriterion = criteria.find((c) => c.category === 'runtime');
   const implementationCriteria = criteria.filter((c) => c.category !== 'runtime');

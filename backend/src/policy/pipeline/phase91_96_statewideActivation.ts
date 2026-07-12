@@ -20,7 +20,7 @@ import { fileURLToPath } from 'url';
 // Service imports
 import { importChpPolicies } from './chpPolicyImportService.js';
 import { classifyDocumentText } from '../taxonomy/classificationPipeline.js';
-import { populateAgencyCoverage, populateAllAgencyCoverage } from '../taxonomy/coveragePopulator.js';
+import { populateAllAgencyCoverage } from '../taxonomy/coveragePopulator.js';
 import { generateCoverageMatrix } from './coverageMatrixGenerator.js';
 import { prepareCpraRequestQueue } from './cpraRequestPreparation.js';
 import { getActiveCampaignStatus } from './cpraCampaignLauncher.js';
@@ -31,8 +31,7 @@ import { getSystemCoverageStats } from '../taxonomy/policyCoverageTracker.js';
 import { getCoverageSummary } from '../taxonomy/coveragePopulator.js';
 import { getClassificationAccuracySummary } from './classificationValidator.js';
 import { getChpImportStatus } from './chpPolicyImportService.js';
-import { inferAgencyType, inferCity, inferCounty } from '../agencyRegistry/postCrawler.js';
-import { rankAgencies, inferCountyFromCity } from '../agencyRegistry/populationRanker.js';
+import { rankAgencies } from '../agencyRegistry/populationRanker.js';
 
 const prisma = new PrismaClient();
 
@@ -1296,7 +1295,7 @@ async function runPhase96(): Promise<{
   // Collect metrics from all systems
   const [
     pipelineStats,
-    coverageSummary,
+    ,
     classificationAccuracy,
     cpraQueue,
     campaignStatus,

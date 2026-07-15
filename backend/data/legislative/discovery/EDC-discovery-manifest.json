@@ -1,0 +1,53 @@
+{
+  "version": "1.0.0",
+  "completedAt": "2026-07-15T15:18:32.625Z",
+  "status": "partial",
+  "code": "EDC",
+  "codeName": "Education Code",
+  "discoveredAt": "2026-07-15T15:18:28.595Z",
+  "audit": [
+    {
+      "timestamp": "2026-07-15T15:18:28.595Z",
+      "action": "start",
+      "detail": "Discovery started for Education Code"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:28.595Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=EDC"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:29.558Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EDC&title=1.&nodetreepath=1"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:30.736Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EDC&title=2.&nodetreepath=2"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:31.614Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EDC&title=3.&nodetreepath=3"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:32.625Z",
+      "action": "partial",
+      "detail": "Stopped at maxPages=4; 1934 URLs remaining"
+    }
+  ],
+  "hierarchyNodes": [],
+  "sections": [],
+  "stats": {
+    "pagesFetched": 4,
+    "expandedBranchPages": 3,
+    "displayTextPages": 0,
+    "hierarchyNodes": 0,
+    "sectionsDiscovered": 0,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 0,
+    "anomalies": 0
+  },
+  "anomalies": []
+}

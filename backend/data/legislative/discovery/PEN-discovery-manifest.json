@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "completedAt": "2026-07-04T19:37:12.856Z",
+  "completedAt": "2026-07-15T14:52:26.620Z",
   "status": "partial",
   "code": "PEN",
   "codeName": "Penal Code",
@@ -162,9 +162,14 @@
       "url": "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=PEN&title=7.&part=1.&chapter=10.5."
     },
     {
-      "timestamp": "2026-07-04T19:37:12.856Z",
+      "timestamp": "2026-07-15T14:52:26.620Z",
+      "action": "resume",
+      "detail": "Resumed from /workspace/backend/data/legislative/discovery/PEN-discovery-checkpoint.json"
+    },
+    {
+      "timestamp": "2026-07-15T14:52:26.620Z",
       "action": "partial",
-      "detail": "Stopped at maxPages=30; 725 URLs remaining"
+      "detail": "Stopped at maxPages=12; 725 URLs remaining"
     }
   ],
   "hierarchyNodes": [

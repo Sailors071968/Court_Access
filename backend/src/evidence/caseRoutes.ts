@@ -294,4 +294,79 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
       return reply.code(500).send({ error: 'Failed to delete case' });
     }
   });
+
+  // GET /api/cases/:caseId/litigation-strategy — Repository-backed litigation
+  // strategy: readiness metrics, roadmap, observations, and recommendations
+  // derived deterministically from the case's actual evidence/charge/witness
+  // counts. Empty case → honest empty state (no fabricated content).
+  app.get('/api/cases/:caseId/litigation-strategy', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+    if (!user) {
+      return reply.code(401).send({ error: 'Authentication required' });
+    }
+
+    const { caseId } = request.params as { caseId: string };
+
+    if (!(await requireCaseAccess(user, caseId, 'view'))) {
+      return sendForbidden(reply);
+    }
+
+    try {
+      const existing = await prisma.criminalCase.findFirst({
+        where: { caseId, tenantId: user.tenantId, deletedAt: null },
+      });
+      if (!existing) {
+        return sendForbidden(reply);
+      }
+
+      const [evidenceCount, chargeCount, witnessCount] = await Promise.all([
+        prisma.evidence.count({ where: { caseId, tenantId: user.tenantId } }),
+        prisma.charge.count({ where: { caseId } }).catch(() => 0),
+        prisma.caseWitness.count({ where: { caseId } }).catch(() => 0),
+      ]);
+
+      const readiness = [
+        { label: 'Charges Mapped', score: Math.min(chargeCount, 5), maxScore: 5 },
+        { label: 'Evidence Collected', score: Math.min(evidenceCount, 10), maxScore: 10 },
+        { label: 'Witnesses Identified', score: Math.min(witnessCount, 5), maxScore: 5 },
+        { label: 'Case Setup', score: existing.court && existing.judge ? 2 : 1, maxScore: 2 },
+      ];
+
+      const step = (n: number, description: string, category: string, done: boolean, active: boolean) => ({
+        stepNumber: n,
+        description,
+        category,
+        status: done ? 'completed' : active ? 'in_progress' : 'pending',
+      });
+      const roadmap = [
+        step(1, 'Case intake and setup', 'INVESTIGATION', true, false),
+        step(2, 'Map charges and CALCRIM elements', 'MOTION', chargeCount > 0, chargeCount === 0),
+        step(3, 'Collect and process evidence', 'INVESTIGATION', evidenceCount > 0, chargeCount > 0 && evidenceCount === 0),
+        step(4, 'Identify and interview witnesses', 'SUBPOENA', witnessCount > 0, evidenceCount > 0 && witnessCount === 0),
+        step(5, 'Run contradiction and gap analysis', 'INVESTIGATION', false, evidenceCount > 0),
+        step(6, 'Prepare motions and trial strategy', 'MOTION', false, false),
+      ];
+
+      const observations: Array<{ id: string; evidenceSource: string; observation: string; timestamp: string }> = [];
+      const recommendations: Array<{ id: string; type: string; suggestedOpportunity: string; evidenceSource: string; confidenceScore: number; status: string }> = [];
+      const now = new Date().toISOString();
+
+      if (chargeCount === 0) {
+        recommendations.push({ id: 'rec-charges', type: 'MOTION', suggestedOpportunity: 'No charges mapped yet — add charges to enable CALCRIM element analysis and defense mapping.', evidenceSource: 'Repository (0 charges)', confidenceScore: 100, status: 'pending' });
+      }
+      if (evidenceCount === 0) {
+        recommendations.push({ id: 'rec-evidence', type: 'INVESTIGATION', suggestedOpportunity: 'No evidence uploaded yet — collect discovery materials to enable contradiction and gap analysis.', evidenceSource: 'Repository (0 evidence items)', confidenceScore: 100, status: 'pending' });
+      } else {
+        observations.push({ id: 'obs-evidence', evidenceSource: `Repository (${evidenceCount} evidence item${evidenceCount === 1 ? '' : 's'})`, observation: `${evidenceCount} evidence item${evidenceCount === 1 ? '' : 's'} available for analysis.`, timestamp: now });
+      }
+      if (witnessCount === 0 && evidenceCount > 0) {
+        recommendations.push({ id: 'rec-witnesses', type: 'SUBPOENA', suggestedOpportunity: 'No witnesses identified — review evidence for potential witnesses and subpoena targets.', evidenceSource: 'Repository (0 witnesses)', confidenceScore: 80, status: 'pending' });
+      }
+
+      return { observations, recommendations, readiness, roadmap };
+    } catch (err) {
+      console.error('[CaseRoutes] Failed to build litigation strategy:', err);
+      return reply.code(500).send({ error: 'Failed to build litigation strategy' });
+    }
+  });
 }

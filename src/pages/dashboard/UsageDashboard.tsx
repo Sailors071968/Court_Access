@@ -237,7 +237,10 @@ export function UsageDashboard() {
     async function fetchUsage() {
       setIsLoading(true);
       try {
-        const res = await fetch('/api/billing/usage');
+        const token = localStorage.getItem('court-access-token');
+        const res = await fetch('/api/billing/usage', {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
         if (res.ok) {
           const json = await res.json();
           if (json.usage) setUsage(json.usage);

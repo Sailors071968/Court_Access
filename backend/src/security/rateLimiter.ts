@@ -117,7 +117,7 @@ function peekRateLimit(storeName: string, key: string, config: RateLimitConfig):
 // ---------------------------------------------------------------------------
 
 function defaultKeyGenerator(request: FastifyRequest): string {
-  const user = (request as Record<string, unknown>).user as { userId?: string } | undefined;
+  const user = (request as unknown as Record<string, unknown>).user as { userId?: string } | undefined;
   if (user?.userId) {
     return `user:${user.userId}`;
   }

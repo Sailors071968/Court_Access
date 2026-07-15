@@ -30,3 +30,6 @@ backend/.env
 backend/.env.save
 backend/.env
 backend/.env.save
+
+# Bulky reproducible leginfo acquisition cache (regenerable via leginfo:acquire)
+backend/data/legislative/raw/**/*.html

@@ -5,18 +5,16 @@
 
 import { describe, it, before, after } from 'node:test';
 import assert from 'node:assert/strict';
-import { createWriteStream, createReadStream } from 'node:fs';
-import { mkdir, rm, stat } from 'node:fs/promises';
+import { createWriteStream } from 'node:fs';
+import { mkdir, rm } from 'node:fs/promises';
 import { resolve } from 'node:path';
-import { createHash } from 'node:crypto';
 
 import { createCorpusParser, countRecords } from '../src/ingestion/corpusParser.ts';
 import { createChunkBuilder, collectChunks, type Chunk } from '../src/ingestion/chunkBuilder.ts';
 import { createNormalizerTransform, normalizeDocument } from '../src/ingestion/normalizer.ts';
 import { IngestionStateRepository } from '../src/ingestion/ingestionStateRepository.ts';
 import { IngestionLogger } from '../src/ingestion/ingestionLogger.ts';
-import { PrismaBulkInserter } from '../src/ingestion/corpusLoader.ts';
-import type { RawDocument, NormalizedDocument, BatchResult, IngestionStatus } from '../src/ingestion/types.ts';
+import type { RawDocument, NormalizedDocument, BatchResult } from '../src/ingestion/types.ts';
 import type { ParsedRecord } from '../src/ingestion/corpusParser.ts';
 
 // ---------------------------------------------------------------------------
@@ -670,7 +668,7 @@ describe('Crash Recovery', () => {
     const stateDb = createInMemoryStateDb();
     const logDb = createInMemoryLogDb();
     const stateRepo = new IngestionStateRepository(stateDb);
-    const logger = new IngestionLogger(logDb);
+    const _logger = new IngestionLogger(logDb);
     const batchSize = 50;
     const corpusName = 'crash-test';
     const fileName = 'test-medium.jsonl';
@@ -843,7 +841,7 @@ describe('50k Corpus Test', () => {
 
     // Track memory
     const memorySnapshots: number[] = [];
-    const startMemory = process.memoryUsage().heapUsed;
+    const _startMemory = process.memoryUsage().heapUsed;
 
     const { stream } = await createCorpusParser(LARGE_CORPUS);
     const normalizer = createNormalizerTransform(corpusName, fileName, 'tenant-1');

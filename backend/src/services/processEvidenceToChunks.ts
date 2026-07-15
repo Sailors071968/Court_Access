@@ -11,11 +11,19 @@ import { getQueue, QUEUE_NAMES } from "../lib/queues";
 // MAIN PIPELINE
 // ----------------------------------------------------------------------------
 
+interface TimelineChunkJob {
+  fileId: string;
+  caseId?: string;
+  chunkId: number;
+  rawText: string;
+  events: unknown[];
+}
+
 export async function processEvidenceToChunks(file: {
   id: string;
   localPath: string;
   mimeType: string;
-  caseId: string;
+  caseId?: string;
 }) {
   const { id, localPath, caseId } = file;
 
@@ -48,7 +56,7 @@ export async function processEvidenceToChunks(file: {
   // ---------------------------------------------------------------------------
   // 3. GET QUEUE
   // ---------------------------------------------------------------------------
-  const timelineQueue = getQueue(QUEUE_NAMES.TIMELINE_BUILD);
+  const timelineQueue = getQueue<TimelineChunkJob>(QUEUE_NAMES.TIMELINE_BUILD);
 
   let totalEvents = 0;
 

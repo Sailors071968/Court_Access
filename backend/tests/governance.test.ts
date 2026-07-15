@@ -770,7 +770,7 @@ describe('Governance Pipeline', () => {
     const lockManager2 = new CorpusLockManager(lockDb);
     const dupDetector2 = new DuplicateDetector(dupDb);
     const verManager2 = new CorpusVersionManager(versioningDb);
-    const pipeline2 = new GovernancePipeline(registry2, lockManager2, dupDetector2, verManager2, 'worker-2');
+    const _pipeline2 = new GovernancePipeline(registry2, lockManager2, dupDetector2, verManager2, 'worker-2');
 
     // Worker-2 starts ingestion (holds lock via registry registration + lock)
     const lockResult = await lockManager2.acquire({ corpusName: 'penal_code', workerId: 'worker-2' });

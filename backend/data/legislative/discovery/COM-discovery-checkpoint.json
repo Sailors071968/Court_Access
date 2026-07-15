@@ -1,0 +1,83 @@
+{
+  "version": "1.0.0",
+  "code": "COM",
+  "startedAt": "2026-07-15T15:18:06.584Z",
+  "updatedAt": "2026-07-15T15:18:10.568Z",
+  "visitedUrls": [
+    "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=COM",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=COM&nodetreepath=1",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=COM&division=1.&nodetreepath=2",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=COM&division=2.&nodetreepath=3"
+  ],
+  "pendingUrls": [
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=COM&division=3.&nodetreepath=4",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=COM&division=4.&nodetreepath=5",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=COM&division=5.&nodetreepath=6",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=COM&division=6.&nodetreepath=7",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=COM&division=7.&nodetreepath=8",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=COM&division=8.&nodetreepath=9",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=COM&division=9.&nodetreepath=10",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=COM&division=10.&nodetreepath=11",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=COM&division=11.&nodetreepath=12",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=COM&division=12.&nodetreepath=13",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=COM&division=13.&nodetreepath=14",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=COM&division=14.&nodetreepath=15",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=COM&division=15.&nodetreepath=16",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=COM&division=16.&nodetreepath=17",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=COM&division=17.&nodetreepath=18",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=COM",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=COM&division=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=COM&division=1.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=COM&division=1.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=COM&division=1.&chapter=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=COM&division=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=COM&division=2.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=COM&division=2.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=COM&division=2.&chapter=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=COM&division=2.&chapter=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=COM&division=2.&chapter=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=COM&division=2.&chapter=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=COM&division=2.&chapter=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=COM&division=2.&chapter=8."
+  ],
+  "sections": [],
+  "hierarchyNodes": [],
+  "anomalies": [],
+  "stats": {
+    "pagesFetched": 4,
+    "expandedBranchPages": 3,
+    "displayTextPages": 0,
+    "hierarchyNodes": 0,
+    "sectionsDiscovered": 0,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 0,
+    "anomalies": 0
+  },
+  "audit": [
+    {
+      "timestamp": "2026-07-15T15:18:06.584Z",
+      "action": "start",
+      "detail": "Discovery started for Commercial Code"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:06.584Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=COM"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:07.500Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=COM&nodetreepath=1"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:08.565Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=COM&division=1.&nodetreepath=2"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:09.568Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=COM&division=2.&nodetreepath=3"
+    }
+  ]
+}

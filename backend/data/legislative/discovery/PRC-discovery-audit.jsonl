@@ -1,0 +1,5 @@
+{"timestamp":"2026-07-15T15:20:29.630Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=PRC"}
+{"timestamp":"2026-07-15T15:20:30.590Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1"}
+{"timestamp":"2026-07-15T15:20:31.966Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=1.&nodetreepath=2"}
+{"timestamp":"2026-07-15T15:20:32.922Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=1.5.&nodetreepath=3"}
+{"timestamp":"2026-07-15T15:20:33.598Z","action":"partial","detail":"Manifest written with 19 sections"}

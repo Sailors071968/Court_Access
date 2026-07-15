@@ -1,0 +1,709 @@
+{
+  "version": "1.0.0",
+  "code": "WAT",
+  "startedAt": "2026-07-15T15:21:53.609Z",
+  "updatedAt": "2026-07-15T15:21:57.727Z",
+  "visitedUrls": [
+    "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=WAT",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=1.&nodetreepath=2",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=2.&nodetreepath=3"
+  ],
+  "pendingUrls": [
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=3.&nodetreepath=4",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=4.&nodetreepath=5",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=5.&nodetreepath=6",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=6.&nodetreepath=7",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=7.&nodetreepath=8",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=10.&nodetreepath=9",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=11.&nodetreepath=10",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=12.&nodetreepath=11",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=13.&nodetreepath=12",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=14.&nodetreepath=13",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=15.&nodetreepath=14",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=16.&nodetreepath=15",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=17.&nodetreepath=16",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=18.&nodetreepath=17",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=19.&nodetreepath=18",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=20.&nodetreepath=19",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=20.5.&nodetreepath=20",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=21.&nodetreepath=21",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=24.&nodetreepath=22",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=26.&nodetreepath=23",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=26.5.&nodetreepath=24",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=26.7.&nodetreepath=25",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=27.&nodetreepath=26",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=27.5.&nodetreepath=27",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=28.&nodetreepath=28",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=29.&nodetreepath=29",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=29.5.&nodetreepath=30",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=30.&nodetreepath=31",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=31.&nodetreepath=32",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=31.7.&nodetreepath=33",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=33.&nodetreepath=34",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=35.&nodetreepath=35",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=1.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=2.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=2.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=2.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=2.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=1.&chapter=2.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=2.5.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=2.5.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=2.5.&article=2.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=2.5.&article=2.6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=2.5.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=2.5.&article=3.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=2.5.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=2.5.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=2.5.&article=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=2.5.&article=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=2.7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=3.3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=3.4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=3.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=3.6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=3.7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=3.8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=1.&chapter=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=4.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=4.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=4.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=1.&chapter=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=6.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=6.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=6.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=1.&chapter=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=7.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=7.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=7.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=1.&chapter=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=8.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=8.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=8.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=8.&article=3.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=8.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=8.&article=4.3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=8.&article=4.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=8.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=1.&chapter=10.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=2.&part=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=1.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=1.&chapter=1.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=1.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=2.&part=1.&chapter=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=1.&chapter=3.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=1.&chapter=3.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=1.&chapter=3.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=1.&chapter=3.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=1.&chapter=3.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=1.&chapter=3.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=2.&part=1.&chapter=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=1.&chapter=4.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=1.&chapter=4.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=1.&chapter=4.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=2.&part=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=2.&part=2.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=1.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=1.&article=1.3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=1.&article=1.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=1.&article=1.7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=1.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=1.&article=2.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=1.&article=2.6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=1.&article=2.7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=1.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=1.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=1.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=2.&part=2.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=2.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=2.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=2.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=2.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=2.&part=2.&chapter=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=3.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=3.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=3.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=2.&part=2.&chapter=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=5.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=5.&article=1.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=5.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=2.&part=2.&chapter=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=6.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=6.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=6.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=6.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=6.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=2.&part=2.&chapter=6.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=6.5.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=6.5.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=2.&part=2.&chapter=6.6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=6.6.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=6.6.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=2.&part=2.&chapter=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=7.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=7.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=7.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=7.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=7.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=7.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=7.&article=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=2.&part=2.&chapter=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=8.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=8.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=8.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=8.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=2.&part=2.&chapter=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=9.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=9.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=9.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=9.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=9.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=9.&article=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=10.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=2.&part=2.&chapter=10.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=10.5.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=10.5.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=10.5.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=10.5.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=2.&part=2.&chapter=11.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=11.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=11.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=11.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=11.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=2.&part=2.&chapter=12.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=12.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=12.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=12.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=12.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=2.&chapter=12.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=2.&part=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=2.&part=3.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=3.&chapter=1.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=3.&chapter=1.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=3.&chapter=1.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=3.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=3.&chapter=2.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=2.&part=3.&chapter=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=3.&chapter=3.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=3.&chapter=3.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=3.&chapter=3.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=3.&chapter=3.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=3.&chapter=3.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=3.&chapter=3.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=3.&chapter=3.&article=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=3.&chapter=3.&article=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=3.&chapter=3.&article=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=3.&chapter=3.&article=10.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=3.&chapter=3.&article=11.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=3.&chapter=3.&article=12.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=3.&chapter=3.&article=13.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=3.&chapter=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=2.&part=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=4.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=4.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=4.&chapter=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=2.&part=4.&chapter=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=4.&chapter=4.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=4.&chapter=4.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=2.&part=4.&chapter=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=4.&chapter=5.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=4.&chapter=5.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=4.&chapter=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=2.&part=4.&chapter=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=4.&chapter=7.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=4.&chapter=7.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=4.&chapter=7.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=4.&chapter=7.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=4.&chapter=7.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=4.&chapter=7.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=4.&chapter=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=4.&chapter=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=5.1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=5.2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=WAT&division=2.&part=7."
+  ],
+  "sections": [
+    {
+      "code": "WAT",
+      "section": "1.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WAT&sectionNum=1.",
+      "hierarchy": {
+        "code": "WAT"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    },
+    {
+      "code": "WAT",
+      "section": "2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WAT&sectionNum=2.",
+      "hierarchy": {
+        "code": "WAT"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    },
+    {
+      "code": "WAT",
+      "section": "3.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WAT&sectionNum=3.",
+      "hierarchy": {
+        "code": "WAT"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    },
+    {
+      "code": "WAT",
+      "section": "4.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WAT&sectionNum=4.",
+      "hierarchy": {
+        "code": "WAT"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    },
+    {
+      "code": "WAT",
+      "section": "5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WAT&sectionNum=5.",
+      "hierarchy": {
+        "code": "WAT"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    },
+    {
+      "code": "WAT",
+      "section": "6.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WAT&sectionNum=6.",
+      "hierarchy": {
+        "code": "WAT"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    },
+    {
+      "code": "WAT",
+      "section": "7.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WAT&sectionNum=7.",
+      "hierarchy": {
+        "code": "WAT"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    },
+    {
+      "code": "WAT",
+      "section": "8.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WAT&sectionNum=8.",
+      "hierarchy": {
+        "code": "WAT"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    },
+    {
+      "code": "WAT",
+      "section": "9.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WAT&sectionNum=9.",
+      "hierarchy": {
+        "code": "WAT"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    },
+    {
+      "code": "WAT",
+      "section": "10.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WAT&sectionNum=10.",
+      "hierarchy": {
+        "code": "WAT"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    },
+    {
+      "code": "WAT",
+      "section": "11.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WAT&sectionNum=11.",
+      "hierarchy": {
+        "code": "WAT"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    },
+    {
+      "code": "WAT",
+      "section": "12.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WAT&sectionNum=12.",
+      "hierarchy": {
+        "code": "WAT"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    },
+    {
+      "code": "WAT",
+      "section": "12.2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WAT&sectionNum=12.2.",
+      "hierarchy": {
+        "code": "WAT"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    },
+    {
+      "code": "WAT",
+      "section": "13.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WAT&sectionNum=13.",
+      "hierarchy": {
+        "code": "WAT"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    },
+    {
+      "code": "WAT",
+      "section": "14.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WAT&sectionNum=14.",
+      "hierarchy": {
+        "code": "WAT"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    },
+    {
+      "code": "WAT",
+      "section": "15.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WAT&sectionNum=15.",
+      "hierarchy": {
+        "code": "WAT"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    },
+    {
+      "code": "WAT",
+      "section": "16.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WAT&sectionNum=16.",
+      "hierarchy": {
+        "code": "WAT"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    },
+    {
+      "code": "WAT",
+      "section": "17.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WAT&sectionNum=17.",
+      "hierarchy": {
+        "code": "WAT"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    },
+    {
+      "code": "WAT",
+      "section": "18.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WAT&sectionNum=18.",
+      "hierarchy": {
+        "code": "WAT"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    },
+    {
+      "code": "WAT",
+      "section": "19.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WAT&sectionNum=19.",
+      "hierarchy": {
+        "code": "WAT"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    },
+    {
+      "code": "WAT",
+      "section": "20.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WAT&sectionNum=20.",
+      "hierarchy": {
+        "code": "WAT"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    },
+    {
+      "code": "WAT",
+      "section": "21.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WAT&sectionNum=21.",
+      "hierarchy": {
+        "code": "WAT"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    },
+    {
+      "code": "WAT",
+      "section": "22.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WAT&sectionNum=22.",
+      "hierarchy": {
+        "code": "WAT"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    },
+    {
+      "code": "WAT",
+      "section": "23.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WAT&sectionNum=23.",
+      "hierarchy": {
+        "code": "WAT"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    },
+    {
+      "code": "WAT",
+      "section": "24.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WAT&sectionNum=24.",
+      "hierarchy": {
+        "code": "WAT"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    },
+    {
+      "code": "WAT",
+      "section": "25.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WAT&sectionNum=25.",
+      "hierarchy": {
+        "code": "WAT"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    },
+    {
+      "code": "WAT",
+      "section": "26.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=WAT&sectionNum=26.",
+      "hierarchy": {
+        "code": "WAT"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    }
+  ],
+  "hierarchyNodes": [
+    {
+      "code": "WAT",
+      "level": "other",
+      "label": "GENERAL PROVISIONS",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "WAT",
+      "level": "other",
+      "label": "10.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "WAT",
+      "level": "other",
+      "label": "11.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "WAT",
+      "level": "other",
+      "label": "12.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "WAT",
+      "level": "other",
+      "label": "12.2.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "WAT",
+      "level": "other",
+      "label": "13.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "WAT",
+      "level": "other",
+      "label": "14.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "WAT",
+      "level": "other",
+      "label": "15.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "WAT",
+      "level": "other",
+      "label": "16.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "WAT",
+      "level": "other",
+      "label": "17.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "WAT",
+      "level": "other",
+      "label": "18.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "WAT",
+      "level": "other",
+      "label": "19.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "WAT",
+      "level": "other",
+      "label": "20.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "WAT",
+      "level": "other",
+      "label": "21.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "WAT",
+      "level": "other",
+      "label": "22.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "WAT",
+      "level": "other",
+      "label": "23.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "WAT",
+      "level": "other",
+      "label": "24.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "WAT",
+      "level": "other",
+      "label": "25.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "WAT",
+      "level": "other",
+      "label": "26.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1",
+      "flags": []
+    }
+  ],
+  "anomalies": [],
+  "stats": {
+    "pagesFetched": 4,
+    "expandedBranchPages": 3,
+    "displayTextPages": 0,
+    "hierarchyNodes": 19,
+    "sectionsDiscovered": 27,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 27,
+    "anomalies": 0
+  },
+  "audit": [
+    {
+      "timestamp": "2026-07-15T15:21:53.609Z",
+      "action": "start",
+      "detail": "Discovery started for Water Code"
+    },
+    {
+      "timestamp": "2026-07-15T15:21:53.609Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=WAT"
+    },
+    {
+      "timestamp": "2026-07-15T15:21:54.641Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&nodetreepath=1"
+    },
+    {
+      "timestamp": "2026-07-15T15:21:56.060Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=1.&nodetreepath=2"
+    },
+    {
+      "timestamp": "2026-07-15T15:21:56.716Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WAT&division=2.&nodetreepath=3"
+    }
+  ]
+}

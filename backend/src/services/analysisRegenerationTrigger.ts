@@ -6,9 +6,6 @@
 //   3. Policy database is updated
 // ============================================================================
 
-import type { CaseAnalysisOutput } from './evidenceIntelligenceIntegration';
-import type { RecommendationGeneratorOutput } from './litigationRecommendationGenerator';
-
 // ---------------------------------------------------------------------------
 // Types
 // ---------------------------------------------------------------------------

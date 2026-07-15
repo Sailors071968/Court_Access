@@ -1,0 +1,413 @@
+{
+  "version": "1.0.0",
+  "completedAt": "2026-07-15T15:19:02.602Z",
+  "status": "partial",
+  "code": "FIN",
+  "codeName": "Financial Code",
+  "discoveredAt": "2026-07-15T15:18:58.597Z",
+  "audit": [
+    {
+      "timestamp": "2026-07-15T15:18:58.597Z",
+      "action": "start",
+      "detail": "Discovery started for Financial Code"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:58.597Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=FIN"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:59.537Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1"
+    },
+    {
+      "timestamp": "2026-07-15T15:19:00.866Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&division=1.&nodetreepath=2"
+    },
+    {
+      "timestamp": "2026-07-15T15:19:01.604Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&division=1.1.&nodetreepath=3"
+    },
+    {
+      "timestamp": "2026-07-15T15:19:02.602Z",
+      "action": "partial",
+      "detail": "Stopped at maxPages=4; 138 URLs remaining"
+    }
+  ],
+  "hierarchyNodes": [
+    {
+      "code": "FIN",
+      "level": "other",
+      "label": "GENERAL PROVISIONS",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "FIN",
+      "level": "other",
+      "label": "10.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "FIN",
+      "level": "other",
+      "label": "11.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "FIN",
+      "level": "other",
+      "label": "11.2.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "FIN",
+      "level": "other",
+      "label": "12.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "FIN",
+      "level": "other",
+      "label": "13.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "FIN",
+      "level": "other",
+      "label": "14.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "FIN",
+      "level": "other",
+      "label": "15.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "FIN",
+      "level": "other",
+      "label": "16.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "FIN",
+      "level": "other",
+      "label": "17.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "FIN",
+      "level": "other",
+      "label": "18.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "FIN",
+      "level": "other",
+      "label": "19.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "FIN",
+      "level": "other",
+      "label": "20.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "FIN",
+      "level": "other",
+      "label": "21.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "FIN",
+      "level": "other",
+      "label": "22.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1",
+      "flags": []
+    }
+  ],
+  "sections": [
+    {
+      "code": "FIN",
+      "section": "1.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FIN&sectionNum=1.",
+      "hierarchy": {
+        "code": "FIN"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1"
+    },
+    {
+      "code": "FIN",
+      "section": "2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FIN&sectionNum=2.",
+      "hierarchy": {
+        "code": "FIN"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1"
+    },
+    {
+      "code": "FIN",
+      "section": "3.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FIN&sectionNum=3.",
+      "hierarchy": {
+        "code": "FIN"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1"
+    },
+    {
+      "code": "FIN",
+      "section": "4.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FIN&sectionNum=4.",
+      "hierarchy": {
+        "code": "FIN"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1"
+    },
+    {
+      "code": "FIN",
+      "section": "5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FIN&sectionNum=5.",
+      "hierarchy": {
+        "code": "FIN"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1"
+    },
+    {
+      "code": "FIN",
+      "section": "6.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FIN&sectionNum=6.",
+      "hierarchy": {
+        "code": "FIN"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1"
+    },
+    {
+      "code": "FIN",
+      "section": "7.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FIN&sectionNum=7.",
+      "hierarchy": {
+        "code": "FIN"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1"
+    },
+    {
+      "code": "FIN",
+      "section": "8.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FIN&sectionNum=8.",
+      "hierarchy": {
+        "code": "FIN"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1"
+    },
+    {
+      "code": "FIN",
+      "section": "9.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FIN&sectionNum=9.",
+      "hierarchy": {
+        "code": "FIN"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1"
+    },
+    {
+      "code": "FIN",
+      "section": "10.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FIN&sectionNum=10.",
+      "hierarchy": {
+        "code": "FIN"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1"
+    },
+    {
+      "code": "FIN",
+      "section": "11.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FIN&sectionNum=11.",
+      "hierarchy": {
+        "code": "FIN"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1"
+    },
+    {
+      "code": "FIN",
+      "section": "11.2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FIN&sectionNum=11.2.",
+      "hierarchy": {
+        "code": "FIN"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1"
+    },
+    {
+      "code": "FIN",
+      "section": "12.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FIN&sectionNum=12.",
+      "hierarchy": {
+        "code": "FIN"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1"
+    },
+    {
+      "code": "FIN",
+      "section": "13.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FIN&sectionNum=13.",
+      "hierarchy": {
+        "code": "FIN"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1"
+    },
+    {
+      "code": "FIN",
+      "section": "14.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FIN&sectionNum=14.",
+      "hierarchy": {
+        "code": "FIN"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1"
+    },
+    {
+      "code": "FIN",
+      "section": "15.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FIN&sectionNum=15.",
+      "hierarchy": {
+        "code": "FIN"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1"
+    },
+    {
+      "code": "FIN",
+      "section": "16.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FIN&sectionNum=16.",
+      "hierarchy": {
+        "code": "FIN"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1"
+    },
+    {
+      "code": "FIN",
+      "section": "17.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FIN&sectionNum=17.",
+      "hierarchy": {
+        "code": "FIN"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1"
+    },
+    {
+      "code": "FIN",
+      "section": "18.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FIN&sectionNum=18.",
+      "hierarchy": {
+        "code": "FIN"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1"
+    },
+    {
+      "code": "FIN",
+      "section": "19.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FIN&sectionNum=19.",
+      "hierarchy": {
+        "code": "FIN"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1"
+    },
+    {
+      "code": "FIN",
+      "section": "20.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FIN&sectionNum=20.",
+      "hierarchy": {
+        "code": "FIN"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1"
+    },
+    {
+      "code": "FIN",
+      "section": "21.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FIN&sectionNum=21.",
+      "hierarchy": {
+        "code": "FIN"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1"
+    },
+    {
+      "code": "FIN",
+      "section": "22.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=FIN&sectionNum=22.",
+      "hierarchy": {
+        "code": "FIN"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1"
+    }
+  ],
+  "stats": {
+    "pagesFetched": 4,
+    "expandedBranchPages": 3,
+    "displayTextPages": 0,
+    "hierarchyNodes": 15,
+    "sectionsDiscovered": 23,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 23,
+    "anomalies": 0
+  },
+  "anomalies": []
+}

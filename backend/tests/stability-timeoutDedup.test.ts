@@ -68,9 +68,9 @@ describe('Job Timeout — AbortController Pattern', () => {
 
   it('should clear timeout timer in finally block (no leak)', () => {
     const controller = new AbortController();
-    let timerCleared = false;
+    const _timerCleared = false;
 
-    const originalClearTimeout = globalThis.clearTimeout;
+    const _originalClearTimeout = globalThis.clearTimeout;
     // Track that clearTimeout was called
     let clearTimeoutCalled = false;
 
@@ -132,11 +132,11 @@ describe('Idempotent ProcessingJob Status Writes', () => {
 
   it('retry job should NOT overwrite completed status from previous attempt', () => {
     // If a previous attempt somehow completed but BullMQ retries anyway:
-    let currentStatus = 'completed';
+    const currentStatus = 'completed';
 
     // Retry attempt tries to set status = 'active'
     // Using updateMany WHERE status != 'completed' pattern
-    const retrySetActiveMatches = currentStatus !== 'completed';
+    const _retrySetActiveMatches = currentStatus !== 'completed';
     // In our code, the retry sets 'active' unconditionally via .update() — that's fine
     // because the COMPLETION write is the idempotent one (WHERE status='active')
 

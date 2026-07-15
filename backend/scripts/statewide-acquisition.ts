@@ -35,9 +35,12 @@ const REPORT_PATH = resolve('data/legislative/statewide-acquisition-report.json'
 const maxPages = parseInt(arg('max-pages', '15')!, 10);
 const maxSections = parseInt(arg('max-sections', '40')!, 10);
 const codesArg = arg('codes');
-const codes = codesArg
-  ? codesArg.split(',').map((c) => c.trim().toUpperCase())
-  : getCriminalPriorityCodes().map((c) => c.abbrev);
+const allFlag = process.argv.includes('--all');
+const codes = allFlag
+  ? CALIFORNIA_CODES.map((c) => c.abbrev)
+  : codesArg
+    ? codesArg.split(',').map((c) => c.trim().toUpperCase())
+    : getCriminalPriorityCodes().map((c) => c.abbrev);
 
 function repoCount(name: string): number {
   const p = join(REPO_DIR, name, 'records.jsonl');
@@ -104,6 +107,61 @@ async function main() {
   const after = snapshot();
   const deltas = Object.fromEntries(REPOS.map((r) => [r, { before: before[r], after: after[r], delta: after[r] - before[r] }]));
 
+  // ---- Continuous validation (Phase 6) + criminal-liability metrics (Phase 2/7) ----
+  function readRecords(name: string): Array<Record<string, any>> {
+    const p = join(REPO_DIR, name, 'records.jsonl');
+    if (!existsSync(p)) return [];
+    return readFileSync(p, 'utf-8').split('\n').filter(Boolean).map((l) => JSON.parse(l));
+  }
+  const statuteRecs = readRecords('statutes');
+  const offenseRecs = readRecords('offenses');
+  const fieldVal = (f: any) => (f && typeof f === 'object' && 'value' in f ? f.value : f);
+
+  // Duplicate citations (same code+section appearing more than once).
+  const citationCounts = new Map<string, number>();
+  for (const s of statuteRecs) {
+    const key = `${s.code} ${s.section}`;
+    citationCounts.set(key, (citationCounts.get(key) ?? 0) + 1);
+  }
+  const duplicateCitations = [...citationCounts.entries()].filter(([, n]) => n > 1).map(([k, n]) => ({ citation: k, count: n }));
+  // Repealed statutes (deterministic text scan of statute full text).
+  const repealed = statuteRecs
+    .filter((s) => typeof s.fullText === 'string' && /\brepeal(ed)?\b/i.test(s.fullText))
+    .map((s) => `${s.code} ${s.section}`);
+
+  // Criminal-liability classification breakdown (from offense.classification).
+  const classificationCounts: Record<string, number> = {};
+  for (const o of offenseRecs) {
+    const c = String(fieldVal(o.classification) ?? 'UNKNOWN');
+    classificationCounts[c] = (classificationCounts[c] ?? 0) + 1;
+  }
+
+  const attempted = perCode.filter((e) => e.status === 'OK').map((e) => e.code as string);
+  const failed = perCode.filter((e) => e.status !== 'OK').map((e) => e.code as string);
+  const codesWithData = new Set(statuteRecs.map((s) => s.code));
+
+  const validation = {
+    duplicateCitationCount: duplicateCitations.length,
+    duplicateCitations: duplicateCitations.slice(0, 25),
+    repealedDetectedCount: repealed.length,
+    repealedSample: repealed.slice(0, 25),
+    amendedVersionDiffs: 'UNKNOWN — version history not tracked',
+  };
+  const criminalLiability = {
+    qualifiedOffenses: offenseRecs.length,
+    classificationBreakdown: classificationCounts,
+    regulatoryIncorporations: after.regulatory_incorporations,
+    penaltyRelatedExceptions: after.exceptions,
+  };
+  const codeCoverage = {
+    knownCodes: CALIFORNIA_CODES.length,
+    codesAttempted: attempted.length,
+    codesWithData: codesWithData.size,
+    codesWithDataList: [...codesWithData].sort(),
+    codesFailed: failed,
+    codesRemaining: CALIFORNIA_CODES.map((c) => c.abbrev).filter((c) => !codesWithData.has(c)),
+  };
+
   const report = {
     generatedAt: new Date().toISOString(),
     engineVersion: '1.0.0',
@@ -112,10 +170,14 @@ async function main() {
     perCode,
     processing: { processed: proc.processed, rejected: proc.rejected, offensesIdentified: proc.offenses, classified: proc.classified },
     repository: deltas,
+    codeCoverage,
+    criminalLiability,
+    validation,
     // Continuous-update diff: net new records this run (deterministic).
     updateDiff: Object.fromEntries(REPOS.map((r) => [r, after[r] - before[r]])),
   };
   writeFileSync(REPORT_PATH, JSON.stringify(report, null, 2));
+  console.log(`Codes with data: ${codeCoverage.codesWithData}/${codeCoverage.knownCodes} | offenses: ${criminalLiability.qualifiedOffenses} | duplicates: ${validation.duplicateCitationCount} | repealed: ${validation.repealedDetectedCount}`);
   console.log(`\nReport: ${REPORT_PATH}`);
   console.log(`Statutes ${before.statutes} -> ${after.statutes} | Offenses ${before.offenses} -> ${after.offenses} | Elements ${before.elements} -> ${after.elements}`);
 }

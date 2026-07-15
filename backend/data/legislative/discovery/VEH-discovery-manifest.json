@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "completedAt": "2026-07-15T14:51:56.674Z",
+  "completedAt": "2026-07-15T15:21:43.655Z",
   "status": "partial",
   "code": "VEH",
   "codeName": "Vehicle Code",
@@ -72,14 +72,14 @@
       "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=6.7.&nodetreepath=11"
     },
     {
-      "timestamp": "2026-07-15T14:51:56.674Z",
+      "timestamp": "2026-07-15T15:21:43.655Z",
       "action": "resume",
       "detail": "Resumed from /workspace/backend/data/legislative/discovery/VEH-discovery-checkpoint.json"
     },
     {
-      "timestamp": "2026-07-15T14:51:56.674Z",
+      "timestamp": "2026-07-15T15:21:43.655Z",
       "action": "partial",
-      "detail": "Stopped at maxPages=12; 182 URLs remaining"
+      "detail": "Stopped at maxPages=4; 182 URLs remaining"
     }
   ],
   "hierarchyNodes": [

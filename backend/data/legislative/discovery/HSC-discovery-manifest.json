@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "completedAt": "2026-07-15T14:51:40.553Z",
+  "completedAt": "2026-07-15T15:19:40.603Z",
   "status": "partial",
   "code": "HSC",
   "codeName": "Health and Safety Code",
@@ -72,14 +72,14 @@
       "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=6.&nodetreepath=11"
     },
     {
-      "timestamp": "2026-07-15T14:51:40.553Z",
+      "timestamp": "2026-07-15T15:19:40.603Z",
       "action": "resume",
       "detail": "Resumed from /workspace/backend/data/legislative/discovery/HSC-discovery-checkpoint.json"
     },
     {
-      "timestamp": "2026-07-15T14:51:40.553Z",
+      "timestamp": "2026-07-15T15:19:40.603Z",
       "action": "partial",
-      "detail": "Stopped at maxPages=12; 479 URLs remaining"
+      "detail": "Stopped at maxPages=4; 479 URLs remaining"
     }
   ],
   "hierarchyNodes": [

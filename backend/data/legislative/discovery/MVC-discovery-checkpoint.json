@@ -1,0 +1,390 @@
+{
+  "version": "1.0.0",
+  "code": "MVC",
+  "startedAt": "2026-07-15T15:20:08.559Z",
+  "updatedAt": "2026-07-15T15:20:12.623Z",
+  "visitedUrls": [
+    "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=MVC",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&division=1.&nodetreepath=2",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&division=2.&nodetreepath=3"
+  ],
+  "pendingUrls": [
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&division=3.&nodetreepath=4",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&division=4.&nodetreepath=5",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&division=5.&nodetreepath=6",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&division=6.&nodetreepath=7",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&division=7.&nodetreepath=8",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&division=8.&nodetreepath=9",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&division=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=1.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=1.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&division=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&division=2.&part=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=1.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&division=2.&part=1.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=1.&chapter=2.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=1.&chapter=2.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=1.&chapter=2.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&division=2.&part=1.&chapter=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=1.&chapter=3.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=1.&chapter=3.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=1.&chapter=3.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=1.&chapter=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&division=2.&part=1.&chapter=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=1.&chapter=5.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=1.&chapter=5.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=1.&chapter=5.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=1.&chapter=5.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=1.&chapter=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=1.&chapter=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=1.&chapter=7.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&division=2.&part=1.&chapter=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=1.&chapter=8.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=1.&chapter=8.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=1.&chapter=8.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=1.&chapter=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&division=2.&part=1.&chapter=10.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=1.&chapter=10.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=1.&chapter=10.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=1.&chapter=10.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=1.&chapter=10.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=1.&chapter=10.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=1.&chapter=10.&article=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=1.&chapter=10.&article=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&division=2.&part=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=2.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=2.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=MVC&division=2.&part=2.&chapter=3."
+  ],
+  "sections": [
+    {
+      "code": "MVC",
+      "section": "1.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=MVC&sectionNum=1.",
+      "hierarchy": {
+        "code": "MVC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1"
+    },
+    {
+      "code": "MVC",
+      "section": "2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=MVC&sectionNum=2.",
+      "hierarchy": {
+        "code": "MVC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1"
+    },
+    {
+      "code": "MVC",
+      "section": "3.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=MVC&sectionNum=3.",
+      "hierarchy": {
+        "code": "MVC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1"
+    },
+    {
+      "code": "MVC",
+      "section": "4.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=MVC&sectionNum=4.",
+      "hierarchy": {
+        "code": "MVC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1"
+    },
+    {
+      "code": "MVC",
+      "section": "5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=MVC&sectionNum=5.",
+      "hierarchy": {
+        "code": "MVC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1"
+    },
+    {
+      "code": "MVC",
+      "section": "6.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=MVC&sectionNum=6.",
+      "hierarchy": {
+        "code": "MVC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1"
+    },
+    {
+      "code": "MVC",
+      "section": "7.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=MVC&sectionNum=7.",
+      "hierarchy": {
+        "code": "MVC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1"
+    },
+    {
+      "code": "MVC",
+      "section": "8.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=MVC&sectionNum=8.",
+      "hierarchy": {
+        "code": "MVC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1"
+    },
+    {
+      "code": "MVC",
+      "section": "9.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=MVC&sectionNum=9.",
+      "hierarchy": {
+        "code": "MVC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1"
+    },
+    {
+      "code": "MVC",
+      "section": "10.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=MVC&sectionNum=10.",
+      "hierarchy": {
+        "code": "MVC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1"
+    },
+    {
+      "code": "MVC",
+      "section": "11.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=MVC&sectionNum=11.",
+      "hierarchy": {
+        "code": "MVC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1"
+    },
+    {
+      "code": "MVC",
+      "section": "12.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=MVC&sectionNum=12.",
+      "hierarchy": {
+        "code": "MVC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1"
+    },
+    {
+      "code": "MVC",
+      "section": "13.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=MVC&sectionNum=13.",
+      "hierarchy": {
+        "code": "MVC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1"
+    },
+    {
+      "code": "MVC",
+      "section": "14.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=MVC&sectionNum=14.",
+      "hierarchy": {
+        "code": "MVC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1"
+    },
+    {
+      "code": "MVC",
+      "section": "15.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=MVC&sectionNum=15.",
+      "hierarchy": {
+        "code": "MVC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1"
+    },
+    {
+      "code": "MVC",
+      "section": "16.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=MVC&sectionNum=16.",
+      "hierarchy": {
+        "code": "MVC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1"
+    },
+    {
+      "code": "MVC",
+      "section": "17.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=MVC&sectionNum=17.",
+      "hierarchy": {
+        "code": "MVC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1"
+    },
+    {
+      "code": "MVC",
+      "section": "18.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=MVC&sectionNum=18.",
+      "hierarchy": {
+        "code": "MVC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1"
+    },
+    {
+      "code": "MVC",
+      "section": "19.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=MVC&sectionNum=19.",
+      "hierarchy": {
+        "code": "MVC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1"
+    }
+  ],
+  "hierarchyNodes": [
+    {
+      "code": "MVC",
+      "level": "other",
+      "label": "GENERAL PROVISIONS",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "MVC",
+      "level": "other",
+      "label": "10.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "MVC",
+      "level": "other",
+      "label": "11.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "MVC",
+      "level": "other",
+      "label": "12.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "MVC",
+      "level": "other",
+      "label": "13.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "MVC",
+      "level": "other",
+      "label": "14.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "MVC",
+      "level": "other",
+      "label": "15.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "MVC",
+      "level": "other",
+      "label": "16.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "MVC",
+      "level": "other",
+      "label": "17.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "MVC",
+      "level": "other",
+      "label": "18.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "MVC",
+      "level": "other",
+      "label": "19.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1",
+      "flags": []
+    }
+  ],
+  "anomalies": [],
+  "stats": {
+    "pagesFetched": 4,
+    "expandedBranchPages": 3,
+    "displayTextPages": 0,
+    "hierarchyNodes": 11,
+    "sectionsDiscovered": 19,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 19,
+    "anomalies": 0
+  },
+  "audit": [
+    {
+      "timestamp": "2026-07-15T15:20:08.559Z",
+      "action": "start",
+      "detail": "Discovery started for Military and Veterans Code"
+    },
+    {
+      "timestamp": "2026-07-15T15:20:08.559Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=MVC"
+    },
+    {
+      "timestamp": "2026-07-15T15:20:09.547Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&nodetreepath=1"
+    },
+    {
+      "timestamp": "2026-07-15T15:20:10.858Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&division=1.&nodetreepath=2"
+    },
+    {
+      "timestamp": "2026-07-15T15:20:11.614Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=MVC&division=2.&nodetreepath=3"
+    }
+  ]
+}

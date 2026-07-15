@@ -1,6 +1,6 @@
 {
   "version": "1.0.0",
-  "completedAt": "2026-07-15T14:50:46.265Z",
+  "completedAt": "2026-07-15T15:18:36.589Z",
   "status": "partial",
   "code": "EVID",
   "codeName": "Evidence Code",
@@ -72,14 +72,14 @@
       "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=10.&nodetreepath=11"
     },
     {
-      "timestamp": "2026-07-15T14:50:46.264Z",
+      "timestamp": "2026-07-15T15:18:36.589Z",
       "action": "resume",
       "detail": "Resumed from /workspace/backend/data/legislative/discovery/EVID-discovery-checkpoint.json"
     },
     {
-      "timestamp": "2026-07-15T14:50:46.264Z",
+      "timestamp": "2026-07-15T15:18:36.589Z",
       "action": "partial",
-      "detail": "Stopped at maxPages=12; 89 URLs remaining"
+      "detail": "Stopped at maxPages=4; 89 URLs remaining"
     }
   ],
   "hierarchyNodes": [

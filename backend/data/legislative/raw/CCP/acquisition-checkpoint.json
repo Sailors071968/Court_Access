@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "code": "CCP",
+  "manifestPath": "/workspace/backend/data/legislative/discovery/CCP-discovery-manifest.json",
+  "startedAt": "2026-07-15T15:17:51.730Z",
+  "updatedAt": "2026-07-15T15:18:01.577Z",
+  "nextIndex": 10,
+  "acquired": 10,
+  "failed": 0,
+  "skipped": 0,
+  "lastSection": "11."
+}

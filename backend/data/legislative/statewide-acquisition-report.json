@@ -1,15 +1,104 @@
 {
-  "generatedAt": "2026-07-15T14:52:28.678Z",
+  "generatedAt": "2026-07-15T15:22:24.400Z",
   "engineVersion": "1.0.0",
   "knownCodes": 30,
   "codesRequested": [
-    "EVID",
     "BPC",
+    "CCP",
+    "CIV",
+    "COM",
+    "CONS",
+    "CORP",
+    "EDC",
+    "ELEC",
+    "EVID",
+    "FAC",
+    "FAM",
+    "FGC",
+    "FIN",
+    "GOV",
+    "HNC",
     "HSC",
+    "INS",
+    "LAB",
+    "MVC",
+    "PCC",
+    "PEN",
+    "PRC",
+    "PROB",
+    "PUC",
+    "RTC",
+    "SHC",
+    "UIC",
     "VEH",
-    "PEN"
+    "WAT",
+    "WIC"
   ],
   "perCode": [
+    {
+      "code": "BPC",
+      "name": "Business and Professions Code",
+      "discovered": "UNKNOWN",
+      "acquired": 59,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
+    {
+      "code": "CCP",
+      "name": "Code of Civil Procedure",
+      "discovered": "UNKNOWN",
+      "acquired": 10,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
+    {
+      "code": "CIV",
+      "name": "Civil Code",
+      "discovered": "UNKNOWN",
+      "acquired": 1,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
+    {
+      "code": "COM",
+      "name": "Commercial Code",
+      "discovered": "UNKNOWN",
+      "acquired": 0,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
+    {
+      "code": "CONS",
+      "name": "Constitution",
+      "discovered": "UNKNOWN",
+      "acquired": 0,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
+    {
+      "code": "CORP",
+      "name": "Corporations Code",
+      "discovered": "UNKNOWN",
+      "acquired": 10,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
+    {
+      "code": "EDC",
+      "name": "Education Code",
+      "discovered": "UNKNOWN",
+      "acquired": 0,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
+    {
+      "code": "ELEC",
+      "name": "Elections Code",
+      "discovered": "UNKNOWN",
+      "acquired": 0,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
     {
       "code": "EVID",
       "name": "Evidence Code",
@@ -19,10 +108,50 @@
       "status": "OK"
     },
     {
-      "code": "BPC",
-      "name": "Business and Professions Code",
+      "code": "FAC",
+      "name": "Food and Agricultural Code",
       "discovered": "UNKNOWN",
-      "acquired": 59,
+      "acquired": 10,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
+    {
+      "code": "FAM",
+      "name": "Family Code",
+      "discovered": "UNKNOWN",
+      "acquired": 0,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
+    {
+      "code": "FGC",
+      "name": "Fish and Game Code",
+      "discovered": "UNKNOWN",
+      "acquired": 0,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
+    {
+      "code": "FIN",
+      "name": "Financial Code",
+      "discovered": "UNKNOWN",
+      "acquired": 10,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
+    {
+      "code": "GOV",
+      "name": "Government Code",
+      "discovered": "UNKNOWN",
+      "acquired": 10,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
+    {
+      "code": "HNC",
+      "name": "Harbors and Navigation Code",
+      "discovered": "UNKNOWN",
+      "acquired": 10,
       "acquireFailed": 0,
       "status": "OK"
     },
@@ -35,10 +164,34 @@
       "status": "OK"
     },
     {
-      "code": "VEH",
-      "name": "Vehicle Code",
+      "code": "INS",
+      "name": "Insurance Code",
       "discovered": "UNKNOWN",
-      "acquired": 60,
+      "acquired": 10,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
+    {
+      "code": "LAB",
+      "name": "Labor Code",
+      "discovered": "UNKNOWN",
+      "acquired": 10,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
+    {
+      "code": "MVC",
+      "name": "Military and Veterans Code",
+      "discovered": "UNKNOWN",
+      "acquired": 10,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
+    {
+      "code": "PCC",
+      "name": "Public Contract Code",
+      "discovered": "UNKNOWN",
+      "acquired": 3,
       "acquireFailed": 0,
       "status": "OK"
     },
@@ -49,82 +202,236 @@
       "acquired": 207,
       "acquireFailed": 0,
       "status": "OK"
+    },
+    {
+      "code": "PRC",
+      "name": "Public Resources Code",
+      "discovered": "UNKNOWN",
+      "acquired": 10,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
+    {
+      "code": "PROB",
+      "name": "Probate Code",
+      "discovered": "UNKNOWN",
+      "acquired": 0,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
+    {
+      "code": "PUC",
+      "name": "Public Utilities Code",
+      "discovered": "UNKNOWN",
+      "acquired": 10,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
+    {
+      "code": "RTC",
+      "name": "Revenue and Taxation Code",
+      "discovered": "UNKNOWN",
+      "acquired": 10,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
+    {
+      "code": "SHC",
+      "name": "Streets and Highways Code",
+      "discovered": "UNKNOWN",
+      "acquired": 10,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
+    {
+      "code": "UIC",
+      "name": "Unemployment Insurance Code",
+      "discovered": "UNKNOWN",
+      "acquired": 10,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
+    {
+      "code": "VEH",
+      "name": "Vehicle Code",
+      "discovered": "UNKNOWN",
+      "acquired": 70,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
+    {
+      "code": "WAT",
+      "name": "Water Code",
+      "discovered": "UNKNOWN",
+      "acquired": 10,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
+    {
+      "code": "WIC",
+      "name": "Welfare and Institutions Code",
+      "discovered": "UNKNOWN",
+      "acquired": 10,
+      "acquireFailed": 0,
+      "status": "OK"
     }
   ],
   "processing": {
-    "processed": 409,
+    "processed": 583,
     "rejected": 19,
     "offensesIdentified": 91,
-    "classified": 409
+    "classified": 583
   },
   "repository": {
     "statutes": {
-      "before": 0,
-      "after": 409,
-      "delta": 409
+      "before": 409,
+      "after": 583,
+      "delta": 174
     },
     "offenses": {
-      "before": 0,
+      "before": 91,
       "after": 91,
-      "delta": 91
+      "delta": 0
     },
     "elements": {
-      "before": 0,
+      "before": 367,
       "after": 367,
-      "delta": 367
+      "delta": 0
     },
     "mens_rea": {
-      "before": 0,
+      "before": 91,
       "after": 91,
-      "delta": 91
+      "delta": 0
     },
     "exceptions": {
-      "before": 0,
-      "after": 126,
-      "delta": 126
+      "before": 126,
+      "after": 181,
+      "delta": 55
     },
     "defenses": {
-      "before": 0,
+      "before": 7,
       "after": 7,
-      "delta": 7
+      "delta": 0
     },
     "cross_references": {
-      "before": 0,
-      "after": 583,
-      "delta": 583
+      "before": 583,
+      "after": 601,
+      "delta": 18
     },
     "regulatory_incorporations": {
-      "before": 0,
-      "after": 366,
-      "delta": 366
+      "before": 366,
+      "after": 382,
+      "delta": 16
     },
     "authorities": {
-      "before": 0,
+      "before": 150,
       "after": 150,
-      "delta": 150
+      "delta": 0
     },
     "calcrim_links": {
-      "before": 0,
+      "before": 3,
       "after": 3,
-      "delta": 3
+      "delta": 0
     },
     "statute_classifications": {
-      "before": 0,
-      "after": 409,
-      "delta": 409
+      "before": 409,
+      "after": 583,
+      "delta": 174
     }
   },
+  "codeCoverage": {
+    "knownCodes": 30,
+    "codesAttempted": 30,
+    "codesWithData": 23,
+    "codesWithDataList": [
+      "BPC",
+      "CCP",
+      "CIV",
+      "CORP",
+      "EVID",
+      "FAC",
+      "FIN",
+      "GOV",
+      "HNC",
+      "HSC",
+      "INS",
+      "LAB",
+      "MVC",
+      "PCC",
+      "PEN",
+      "PRC",
+      "PUC",
+      "RTC",
+      "SHC",
+      "UIC",
+      "VEH",
+      "WAT",
+      "WIC"
+    ],
+    "codesFailed": [],
+    "codesRemaining": [
+      "COM",
+      "CONS",
+      "EDC",
+      "ELEC",
+      "FAM",
+      "FGC",
+      "PROB"
+    ]
+  },
+  "criminalLiability": {
+    "qualifiedOffenses": 91,
+    "classificationBreakdown": {
+      "UNKNOWN": 20,
+      "felony": 27,
+      "misdemeanor": 43,
+      "infraction": 1
+    },
+    "regulatoryIncorporations": 382,
+    "penaltyRelatedExceptions": 181
+  },
+  "validation": {
+    "duplicateCitationCount": 0,
+    "duplicateCitations": [],
+    "repealedDetectedCount": 23,
+    "repealedSample": [
+      "BPC 3.",
+      "BPC 5.",
+      "BPC 6.",
+      "BPC 7.",
+      "BPC 7.5.",
+      "CCP 6.",
+      "CCP 7.",
+      "CORP 3.",
+      "FAC 5.",
+      "GOV 3.",
+      "HNC 3.",
+      "HSC 3.",
+      "INS 3.",
+      "LAB 3.",
+      "MVC 3.",
+      "PEN 29.",
+      "PEN 118.1.",
+      "PEN 136.",
+      "PRC 3.",
+      "RTC 3.",
+      "VEH 3.",
+      "WAT 3.",
+      "WIC 3."
+    ],
+    "amendedVersionDiffs": "UNKNOWN — version history not tracked"
+  },
   "updateDiff": {
-    "statutes": 409,
-    "offenses": 91,
-    "elements": 367,
-    "mens_rea": 91,
-    "exceptions": 126,
-    "defenses": 7,
-    "cross_references": 583,
-    "regulatory_incorporations": 366,
-    "authorities": 150,
-    "calcrim_links": 3,
-    "statute_classifications": 409
+    "statutes": 174,
+    "offenses": 0,
+    "elements": 0,
+    "mens_rea": 0,
+    "exceptions": 55,
+    "defenses": 0,
+    "cross_references": 18,
+    "regulatory_incorporations": 16,
+    "authorities": 0,
+    "calcrim_links": 0,
+    "statute_classifications": 174
   }
 }

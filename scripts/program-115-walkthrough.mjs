@@ -10,11 +10,14 @@ import { mkdirSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const BASE = process.env.BASE || 'http://localhost:8080';
-const OUT = 'reports/screenshots/program-115';
+const OUT = process.env.OUT || 'reports/screenshots/program-115';
 mkdirSync(OUT, { recursive: true });
 
-const CREDS = { email: 'reviewer2@staging.courtaccess.test', password: 'StagingPass1!' };
-const CASE_ID = 'case-stg-0001';
+const CREDS = {
+  email: process.env.REVIEW_EMAIL || 'reviewer2@staging.courtaccess.test',
+  password: process.env.REVIEW_PASSWORD || 'StagingPass1!',
+};
+const CASE_ID = process.env.CASE_ID || 'case-stg-0001';
 
 const publicRoutes = [
   ['landing', '/'],

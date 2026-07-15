@@ -1,5 +1,27 @@
 # CourtAccess — Staging Deployment Changelog
 
+## Program 116 — Authenticated Endpoint Certification (build `5f934df`)
+
+**Bug fixes (authenticated endpoints — all now 200; browser 30/30 pages 0 errors):**
+- `contradiction/recommendations/:caseId`: return a valid empty litigation
+  summary for an empty case instead of 404.
+- New `GET /api/evidence/uploads` list route, registered before
+  `/api/evidence/:evidenceId` (the literal `uploads` segment was being captured
+  as an evidenceId → 403).
+- New `GET /api/cases/:caseId/litigation-strategy`: repository-backed readiness
+  score, roadmap, observations, and recommendations from real evidence/charge/
+  witness counts (honest empty state; no fabricated content).
+- Frontend: Documents, Litigation Strategy, and Usage pages now send the Bearer
+  token (they previously fetched without auth → 401/403).
+
+**Result:** the Attorney Workbench, Contradiction Workspace, Narrative Analysis,
+Litigation Strategy, Document Management, and Usage Analytics workspaces are all
+operational and browser-verified with zero console errors.
+
+---
+
+# CourtAccess — Staging Deployment Changelog (Program 115)
+
 **Program 115 — Live Staging Deployment, Human Review & Production Synchronization**
 **Deployed build (frontend):** commit `1827a6d`, build stamp `2026-07-12T15:01:25Z`
 **Backend running:** includes the Program 115 auth-plumbing fix (below)

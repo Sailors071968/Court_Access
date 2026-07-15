@@ -62,15 +62,6 @@ export interface NodeStatsCheck {
 }
 
 // ---------------------------------------------------------------------------
-// Known Node Labels (must match types.ts GraphNodeType)
-// ---------------------------------------------------------------------------
-
-const KNOWN_LABELS = [
-  'Statute', 'Policy', 'CaseLaw', 'Person', 'Officer',
-  'Agency', 'Evidence', 'Event', 'LegalClaim', 'Conflict',
-] as const;
-
-// ---------------------------------------------------------------------------
 // Graph Integrity Audit
 // ---------------------------------------------------------------------------
 

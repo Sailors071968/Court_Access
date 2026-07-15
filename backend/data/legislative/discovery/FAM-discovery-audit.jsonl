@@ -1,0 +1,5 @@
+{"timestamp":"2026-07-15T15:18:50.623Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=FAM"}
+{"timestamp":"2026-07-15T15:18:51.462Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FAM&nodetreepath=1"}
+{"timestamp":"2026-07-15T15:18:52.528Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FAM&division=1.&nodetreepath=2"}
+{"timestamp":"2026-07-15T15:18:53.588Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FAM&division=2.&nodetreepath=3"}
+{"timestamp":"2026-07-15T15:18:54.590Z","action":"partial","detail":"Manifest written with 0 sections"}

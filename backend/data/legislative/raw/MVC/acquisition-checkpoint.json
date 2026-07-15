@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "code": "MVC",
+  "manifestPath": "/workspace/backend/data/legislative/discovery/MVC-discovery-manifest.json",
+  "startedAt": "2026-07-15T15:20:12.626Z",
+  "updatedAt": "2026-07-15T15:20:22.616Z",
+  "nextIndex": 10,
+  "acquired": 10,
+  "failed": 0,
+  "skipped": 0,
+  "lastSection": "10."
+}

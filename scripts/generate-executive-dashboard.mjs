@@ -3,13 +3,22 @@
  * Program 19 — Executive Dashboard Generator v18.0
  * Reads assessment + production verify reports and writes EXECUTIVE_DASHBOARD.md
  */
-import { readFileSync, writeFileSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
 
-const assessmentPath = '/workspace/reports/MASTER_PRODUCTION_ASSESSMENT.json';
-const productionPath = '/workspace/reports/PRODUCTION_WEBSITE_VERIFY.json';
-const outPath = '/workspace/reports/EXECUTIVE_DASHBOARD.md';
-const blockersPath = '/workspace/reports/PRODUCTION_BLOCKERS.json';
-const outJsonPath = '/workspace/reports/EXECUTIVE_DASHBOARD.json';
+// Resolve paths relative to the repository (this script lives in <repo>/scripts/)
+// so the generator is host-agnostic and works on any CI runner, not just a
+// hardcoded /workspace checkout.
+const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
+const reportsDir = join(repoRoot, 'reports');
+mkdirSync(reportsDir, { recursive: true });
+
+const assessmentPath = join(reportsDir, 'MASTER_PRODUCTION_ASSESSMENT.json');
+const productionPath = join(reportsDir, 'PRODUCTION_WEBSITE_VERIFY.json');
+const outPath = join(reportsDir, 'EXECUTIVE_DASHBOARD.md');
+const blockersPath = join(reportsDir, 'PRODUCTION_BLOCKERS.json');
+const outJsonPath = join(reportsDir, 'EXECUTIVE_DASHBOARD.json');
 
 const generatedAt = new Date().toISOString();
 

@@ -108,6 +108,7 @@ import { DefenseOpportunitiesPage } from './pages/case/DefenseOpportunitiesPage'
 import { LitigationStrategyCenterPage } from './pages/case/LitigationStrategyCenterPage';
 import { DefenseIntelligencePage } from './pages/case/DefenseIntelligencePage';
 import { TrialNotebookPage } from './pages/case/TrialNotebookPage';
+import { EvidenceIntelligencePage } from './pages/case/EvidenceIntelligencePage';
 import { InvestigatorWorkbenchPage } from './pages/case/InvestigatorWorkbenchPage';
 import { ClientPortalLayout, ClientPortalIndex } from './pages/client-portal/ClientPortalLayout';
 import {
@@ -589,6 +590,14 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canViewEvidence">
                   <TrialNotebookPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="evidence-intelligence"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <EvidenceIntelligencePage />
                 </ProtectedRoute>
               }
             />

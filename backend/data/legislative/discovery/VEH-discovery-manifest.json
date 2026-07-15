@@ -1,0 +1,5262 @@
+{
+  "version": "1.0.0",
+  "completedAt": "2026-07-15T15:21:43.655Z",
+  "status": "partial",
+  "code": "VEH",
+  "codeName": "Vehicle Code",
+  "discoveredAt": "2026-07-15T14:48:19.196Z",
+  "audit": [
+    {
+      "timestamp": "2026-07-15T14:48:19.196Z",
+      "action": "start",
+      "detail": "Discovery started for Vehicle Code"
+    },
+    {
+      "timestamp": "2026-07-15T14:48:19.196Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=VEH"
+    },
+    {
+      "timestamp": "2026-07-15T14:48:20.013Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "timestamp": "2026-07-15T14:48:21.406Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "timestamp": "2026-07-15T14:48:22.355Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=2.&nodetreepath=3"
+    },
+    {
+      "timestamp": "2026-07-15T14:48:23.142Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=3.&nodetreepath=4"
+    },
+    {
+      "timestamp": "2026-07-15T14:48:24.143Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=3.5.&nodetreepath=5"
+    },
+    {
+      "timestamp": "2026-07-15T14:48:25.081Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=3.6.&nodetreepath=6"
+    },
+    {
+      "timestamp": "2026-07-15T14:48:26.144Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=4.&nodetreepath=7"
+    },
+    {
+      "timestamp": "2026-07-15T14:48:27.142Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=5.&nodetreepath=8"
+    },
+    {
+      "timestamp": "2026-07-15T14:48:28.159Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=6.&nodetreepath=9"
+    },
+    {
+      "timestamp": "2026-07-15T14:48:29.168Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=6.5.&nodetreepath=10"
+    },
+    {
+      "timestamp": "2026-07-15T14:48:30.088Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=6.7.&nodetreepath=11"
+    },
+    {
+      "timestamp": "2026-07-15T15:21:43.655Z",
+      "action": "resume",
+      "detail": "Resumed from /workspace/backend/data/legislative/discovery/VEH-discovery-checkpoint.json"
+    },
+    {
+      "timestamp": "2026-07-15T15:21:43.655Z",
+      "action": "partial",
+      "detail": "Stopped at maxPages=4; 182 URLs remaining"
+    }
+  ],
+  "hierarchyNodes": [
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "General Provisions",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "10.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "11.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "12.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "12.2.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "13.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "14.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "15.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "16.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "17.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "18.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "19.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "20.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "21.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "22.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "23.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "24.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "24.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "25.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "25.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "27.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "28.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "29.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "30.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "31.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "32.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "division",
+      "label": "DIVISION 1. WORDS AND PHRASES DEFINED",
+      "sectionRange": "[100 - 681]",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "100.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "102.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "105.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "108.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "109.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "110.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "111.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "111.3.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "111.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "112.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "115.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "165.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "165.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "166.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "175.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "210.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "220.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "221.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "223.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "225.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "230.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "230.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "231.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "231.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "231.6.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "232.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "232.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "233.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "234.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "235.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "236.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "240.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "241.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "241.1.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "242.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "243.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "245.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "246.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "250.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "255.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "257.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "259.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "260.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "265.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "266.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "267.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "270.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "273.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "275.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "280.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "285.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "286.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "288.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "289.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "290.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "291.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "295.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "295.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "295.7.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "296.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "297.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "300.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "303.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "305.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "310.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "310.4.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "310.6.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "310.8.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "311.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "312.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "312.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "313.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "313.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "314.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "315.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "320.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "320.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "321.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "322.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "324.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "324.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "325.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "330.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "331.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "331.1.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "331.2.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "331.3.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "332.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "335.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "336.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "340.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "345.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "350.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "353.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "360.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "362.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "365.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "370.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "371.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "372.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "373.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "375.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "377.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "378.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "380.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "385.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "385.2.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "385.3.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "385.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "386.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "387.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "389.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "395.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "395.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "396.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "400.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "405.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "406.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "407.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "407.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "408.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "410.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "415.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "425.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "426.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "430.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "431.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "432.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "435.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "435.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "436.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "436.1.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "440.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "445.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "450.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "455.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "460.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "461.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "462.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "463.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "464.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "465.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "467.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "467.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "468.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "470.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "471.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "472.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "473.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "475.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "480.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "485.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "490.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "492.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "500.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "505.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "505.2.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "506.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "507.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "507.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "507.8.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "508.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "510.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "512.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "515.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "516.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "520.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "521.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "521.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "522.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "525.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "527.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "530.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "531.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "535.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "540.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "543.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "543.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "544.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "545.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "545.1.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "545.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "546.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "550.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "553.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "554.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "555.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "557.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "558.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "560.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "565.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "570.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "575.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "580.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "585.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "587.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "590.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "591.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "592.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "593.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "595.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "600.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "605.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "610.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "611.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "612.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "615.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "617.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "620.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "625.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "626.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "626.2.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "626.4.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "626.6.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "626.8.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "627.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "630.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "635.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "636.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "640.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "642.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "645.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "650.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "655.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "657.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "660.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "661.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "665.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "665.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "667.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "668.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "670.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "670.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "671.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "672.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "675.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "675.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "675.6.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "676.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "676.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "680.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "VEH",
+      "level": "other",
+      "label": "681.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2",
+      "flags": []
+    }
+  ],
+  "sections": [
+    {
+      "code": "VEH",
+      "section": "1.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=1.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=2.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "3.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=3.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "4.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=4.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=5.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "6.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=6.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "7.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=7.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "8.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=8.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "9.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=9.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "10.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=10.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "11.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=11.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "12.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=12.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "12.2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=12.2.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "13.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=13.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "14.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=14.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "15.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=15.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "16.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=16.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "17.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=17.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "18.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=18.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "19.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=19.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "20.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=20.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "21.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=21.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "22.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=22.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "23.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=23.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "24.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=24.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "24.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=24.5.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "25.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=25.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "25.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=25.5.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "27.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=27.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "28.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=28.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "29.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=29.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "30.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=30.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "31.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=31.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "32.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=32.",
+      "hierarchy": {
+        "code": "VEH"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&nodetreepath=1"
+    },
+    {
+      "code": "VEH",
+      "section": "100.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=100.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "102.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=102.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "105.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=105.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "108.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=108.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "109.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=109.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "110.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=110.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "111.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=111.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "111.3.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=111.3.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "111.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=111.5.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "112.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=112.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "115.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=115.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "165.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=165.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "165.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=165.5.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "166.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=166.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "175.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=175.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "210.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=210.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "220.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=220.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "221.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=221.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "223.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=223.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "225.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=225.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "230.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=230.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "230.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=230.5.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "231.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=231.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "231.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=231.5.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "231.6.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=231.6.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "232.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=232.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "232.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=232.5.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "233.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=233.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "234.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=234.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "235.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=235.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "236.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=236.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "240.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=240.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "241.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=241.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "241.1.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=241.1.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "242.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=242.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "243.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=243.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "245.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=245.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "246.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=246.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "250.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=250.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "255.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=255.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "257.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=257.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "259.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=259.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "260.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=260.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "265.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=265.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "266.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=266.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "267.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=267.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "270.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=270.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "273.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=273.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "275.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=275.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "280.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=280.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "285.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=285.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "286.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=286.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "288.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=288.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "289.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=289.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "290.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=290.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "291.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=291.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "295.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=295.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "295.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=295.5.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "295.7.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=295.7.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "296.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=296.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "297.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=297.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "300.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=300.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "303.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=303.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "305.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=305.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "310.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=310.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "310.4.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=310.4.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "310.6.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=310.6.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "310.8.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=310.8.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "311.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=311.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "312.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=312.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "312.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=312.5.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "313.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=313.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "313.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=313.5.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "314.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=314.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "315.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=315.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "320.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=320.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "320.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=320.5.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "321.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=321.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "322.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=322.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "324.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=324.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "324.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=324.5.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "325.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=325.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "330.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=330.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "331.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=331.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "331.1.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=331.1.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "331.2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=331.2.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "331.3.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=331.3.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "332.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=332.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "335.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=335.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "336.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=336.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "340.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=340.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "345.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=345.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "350.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=350.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "353.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=353.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "360.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=360.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "362.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=362.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "365.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=365.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "370.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=370.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "371.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=371.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "372.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=372.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "373.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=373.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "375.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=375.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "377.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=377.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "378.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=378.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "380.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=380.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "385.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=385.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "385.2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=385.2.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "385.3.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=385.3.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "385.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=385.5.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "386.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=386.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "387.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=387.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "389.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=389.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "395.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=395.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "395.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=395.5.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "396.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=396.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "400.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=400.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "405.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=405.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "406.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=406.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "407.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=407.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "407.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=407.5.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "408.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=408.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "410.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=410.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "415.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=415.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "425.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=425.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "426.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=426.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "430.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=430.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "431.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=431.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "432.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=432.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "435.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=435.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "435.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=435.5.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "436.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=436.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "436.1.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=436.1.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "440.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=440.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "445.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=445.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "450.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=450.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "455.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=455.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "460.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=460.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "461.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=461.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "462.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=462.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "463.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=463.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "464.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=464.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "465.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=465.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "467.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=467.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "467.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=467.5.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "468.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=468.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "470.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=470.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "471.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=471.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "472.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=472.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "473.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=473.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "475.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=475.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "480.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=480.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "485.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=485.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "490.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=490.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "492.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=492.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "500.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=500.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "505.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=505.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "505.2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=505.2.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "506.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=506.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "507.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=507.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "507.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=507.5.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "507.8.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=507.8.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "508.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=508.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "510.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=510.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "512.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=512.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "515.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=515.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "516.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=516.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "520.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=520.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "521.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=521.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "521.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=521.5.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "522.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=522.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "525.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=525.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "527.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=527.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "530.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=530.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "531.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=531.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "535.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=535.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "540.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=540.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "543.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=543.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "543.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=543.5.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "544.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=544.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "545.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=545.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "545.1.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=545.1.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "545.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=545.5.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "546.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=546.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "550.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=550.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "553.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=553.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "554.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=554.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "555.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=555.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "557.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=557.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "558.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=558.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "560.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=560.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "565.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=565.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "570.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=570.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "575.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=575.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "580.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=580.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "585.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=585.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "587.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=587.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "590.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=590.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "591.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=591.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "592.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=592.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "593.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=593.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "595.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=595.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "600.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=600.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "605.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=605.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "610.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=610.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "611.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=611.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "612.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=612.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "615.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=615.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "617.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=617.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "620.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=620.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "625.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=625.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "626.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=626.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "626.2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=626.2.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "626.4.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=626.4.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "626.6.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=626.6.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "626.8.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=626.8.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "627.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=627.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "630.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=630.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "635.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=635.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "636.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=636.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "640.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=640.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "642.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=642.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "645.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=645.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "650.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=650.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "655.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=655.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "657.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=657.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "660.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=660.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "661.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=661.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "665.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=665.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "665.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=665.5.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "667.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=667.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "668.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=668.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "670.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=670.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "670.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=670.5.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "671.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=671.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "672.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=672.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "675.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=675.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "675.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=675.5.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "675.6.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=675.6.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "676.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=676.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "676.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=676.5.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "680.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=680.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "VEH",
+      "section": "681.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=VEH&sectionNum=681.",
+      "hierarchy": {
+        "code": "VEH",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=VEH&division=1.&nodetreepath=2"
+    }
+  ],
+  "stats": {
+    "pagesFetched": 12,
+    "expandedBranchPages": 11,
+    "displayTextPages": 0,
+    "hierarchyNodes": 269,
+    "sectionsDiscovered": 276,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 276,
+    "anomalies": 0
+  },
+  "anomalies": []
+}

@@ -1,44 +1,154 @@
 {
-  "generatedAt": "2026-07-04T20:19:16.491Z",
+  "generatedAt": "2026-07-15T15:22:24.378Z",
   "classifierVersion": "1.0.0",
-  "californiaCodesDiscovered": 1,
+  "californiaCodesDiscovered": 30,
   "californiaCodesTotal": 30,
-  "codesAnalyzed": 1,
-  "statutesClassified": 3,
-  "likelyCriminalStatutes": 1,
-  "confirmedCriminalOffenses": 1,
-  "regulatoryIncorporationCandidates": 0,
-  "manualReviewQueue": 2,
-  "unknownClassifications": 0,
+  "codesAnalyzed": 23,
+  "statutesClassified": 583,
+  "likelyCriminalStatutes": 144,
+  "confirmedCriminalOffenses": 91,
+  "regulatoryIncorporationCandidates": 2,
+  "manualReviewQueue": 109,
+  "unknownClassifications": 194,
   "byClassification": {
-    "criminal_offense": 1,
-    "criminal_penalty": 0,
-    "criminal_enhancement": 0,
-    "sentencing_provision": 1,
-    "definitions": 0,
-    "procedure": 0,
-    "evidence": 0,
-    "regulatory_incorporation": 0,
-    "licensing": 0,
-    "administrative": 0,
-    "civil": 0,
-    "tax": 0,
-    "environmental": 0,
-    "cross_reference": 1,
-    "unknown": 0
+    "criminal_offense": 84,
+    "criminal_penalty": 44,
+    "criminal_enhancement": 1,
+    "sentencing_provision": 2,
+    "definitions": 46,
+    "procedure": 46,
+    "evidence": 52,
+    "regulatory_incorporation": 2,
+    "licensing": 16,
+    "administrative": 35,
+    "civil": 5,
+    "tax": 12,
+    "environmental": 1,
+    "cross_reference": 43,
+    "unknown": 194
   },
   "byPriority": {
-    "critical": 1,
-    "high": 0,
-    "medium": 0,
-    "low": 0,
-    "deferred": 2
+    "critical": 91,
+    "high": 45,
+    "medium": 8,
+    "low": 89,
+    "deferred": 350
   },
   "byCode": {
-    "PEN": {
+    "BPC": {
+      "classified": 59,
+      "likelyCriminal": 6,
+      "confirmedOffenses": 0
+    },
+    "CCP": {
+      "classified": 10,
+      "likelyCriminal": 0,
+      "confirmedOffenses": 0
+    },
+    "CIV": {
+      "classified": 1,
+      "likelyCriminal": 0,
+      "confirmedOffenses": 0
+    },
+    "CORP": {
+      "classified": 10,
+      "likelyCriminal": 0,
+      "confirmedOffenses": 0
+    },
+    "EVID": {
+      "classified": 56,
+      "likelyCriminal": 0,
+      "confirmedOffenses": 0
+    },
+    "FAC": {
+      "classified": 10,
+      "likelyCriminal": 3,
+      "confirmedOffenses": 0
+    },
+    "FIN": {
+      "classified": 10,
+      "likelyCriminal": 0,
+      "confirmedOffenses": 0
+    },
+    "GOV": {
+      "classified": 10,
+      "likelyCriminal": 0,
+      "confirmedOffenses": 0
+    },
+    "HNC": {
+      "classified": 10,
+      "likelyCriminal": 0,
+      "confirmedOffenses": 0
+    },
+    "HSC": {
+      "classified": 46,
+      "likelyCriminal": 2,
+      "confirmedOffenses": 0
+    },
+    "INS": {
+      "classified": 10,
+      "likelyCriminal": 0,
+      "confirmedOffenses": 0
+    },
+    "LAB": {
+      "classified": 10,
+      "likelyCriminal": 0,
+      "confirmedOffenses": 0
+    },
+    "MVC": {
+      "classified": 10,
+      "likelyCriminal": 0,
+      "confirmedOffenses": 0
+    },
+    "PCC": {
       "classified": 3,
-      "likelyCriminal": 1,
-      "confirmedOffenses": 1
+      "likelyCriminal": 0,
+      "confirmedOffenses": 0
+    },
+    "PEN": {
+      "classified": 188,
+      "likelyCriminal": 130,
+      "confirmedOffenses": 89
+    },
+    "PRC": {
+      "classified": 10,
+      "likelyCriminal": 0,
+      "confirmedOffenses": 0
+    },
+    "PUC": {
+      "classified": 10,
+      "likelyCriminal": 0,
+      "confirmedOffenses": 0
+    },
+    "RTC": {
+      "classified": 10,
+      "likelyCriminal": 0,
+      "confirmedOffenses": 0
+    },
+    "SHC": {
+      "classified": 10,
+      "likelyCriminal": 0,
+      "confirmedOffenses": 0
+    },
+    "UIC": {
+      "classified": 10,
+      "likelyCriminal": 0,
+      "confirmedOffenses": 0
+    },
+    "VEH": {
+      "classified": 70,
+      "likelyCriminal": 3,
+      "confirmedOffenses": 2
+    },
+    "WAT": {
+      "classified": 10,
+      "likelyCriminal": 0,
+      "confirmedOffenses": 0
+    },
+    "WIC": {
+      "classified": 10,
+      "likelyCriminal": 0,
+      "confirmedOffenses": 0
     }
   }
 }

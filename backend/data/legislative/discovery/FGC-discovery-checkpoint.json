@@ -1,0 +1,90 @@
+{
+  "version": "1.0.0",
+  "code": "FGC",
+  "startedAt": "2026-07-15T15:18:54.594Z",
+  "updatedAt": "2026-07-15T15:18:58.593Z",
+  "visitedUrls": [
+    "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=FGC",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FGC&nodetreepath=1",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FGC&division=0.5.&nodetreepath=2",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FGC&division=1.&nodetreepath=3"
+  ],
+  "pendingUrls": [
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FGC&division=2.&nodetreepath=4",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FGC&division=3.&nodetreepath=5",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FGC&division=4.&nodetreepath=6",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FGC&division=5.&nodetreepath=7",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FGC&division=6.&nodetreepath=8",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FGC&division=6.5.&nodetreepath=9",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FGC&division=7.&nodetreepath=10",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FGC&division=8.&nodetreepath=11",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FGC&division=9.&nodetreepath=12",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FGC&division=10.&nodetreepath=13",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FGC&division=10.5.&nodetreepath=14",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FGC&division=11.&nodetreepath=15",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FGC&division=12.&nodetreepath=16",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FGC&division=13.&nodetreepath=17",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FGC&division=13.5.&nodetreepath=18",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FGC",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FGC&division=0.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=FGC&division=0.5.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=FGC&division=0.5.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FGC&division=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=FGC&division=1.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FGC&division=1.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=FGC&division=1.&chapter=2.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=FGC&division=1.&chapter=2.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FGC&division=1.&chapter=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=FGC&division=1.&chapter=3.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=FGC&division=1.&chapter=3.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=FGC&division=1.&chapter=3.&article=2.1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=FGC&division=1.&chapter=3.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=FGC&division=1.&chapter=3.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=FGC&division=1.&chapter=3.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=FGC&division=1.&chapter=3.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=FGC&division=1.&chapter=3.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=FGC&division=1.&chapter=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=FGC&division=1.&chapter=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=FGC&division=1.&chapter=6."
+  ],
+  "sections": [],
+  "hierarchyNodes": [],
+  "anomalies": [],
+  "stats": {
+    "pagesFetched": 4,
+    "expandedBranchPages": 3,
+    "displayTextPages": 0,
+    "hierarchyNodes": 0,
+    "sectionsDiscovered": 0,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 0,
+    "anomalies": 0
+  },
+  "audit": [
+    {
+      "timestamp": "2026-07-15T15:18:54.594Z",
+      "action": "start",
+      "detail": "Discovery started for Fish and Game Code"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:54.594Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=FGC"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:55.526Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FGC&nodetreepath=1"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:56.593Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FGC&division=0.5.&nodetreepath=2"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:57.592Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FGC&division=1.&nodetreepath=3"
+    }
+  ]
+}

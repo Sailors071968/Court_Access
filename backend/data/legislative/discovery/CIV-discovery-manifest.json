@@ -1,0 +1,73 @@
+{
+  "version": "1.0.0",
+  "completedAt": "2026-07-15T15:18:05.720Z",
+  "status": "partial",
+  "code": "CIV",
+  "codeName": "Civil Code",
+  "discoveredAt": "2026-07-15T15:18:01.579Z",
+  "audit": [
+    {
+      "timestamp": "2026-07-15T15:18:01.579Z",
+      "action": "start",
+      "detail": "Discovery started for Civil Code"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:01.579Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=CIV"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:02.513Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CIV&nodetreepath=1"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:03.861Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CIV&nodetreepath=2"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:04.589Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CIV&nodetreepath=3"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:05.720Z",
+      "action": "partial",
+      "detail": "Stopped at maxPages=4; 8 URLs remaining"
+    }
+  ],
+  "hierarchyNodes": [
+    {
+      "code": "CIV",
+      "level": "title",
+      "label": "TITLE OF THE ACT",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CIV&nodetreepath=1",
+      "flags": []
+    }
+  ],
+  "sections": [
+    {
+      "code": "CIV",
+      "section": "1.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CIV&sectionNum=1.",
+      "hierarchy": {
+        "code": "CIV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CIV&nodetreepath=1"
+    }
+  ],
+  "stats": {
+    "pagesFetched": 4,
+    "expandedBranchPages": 3,
+    "displayTextPages": 0,
+    "hierarchyNodes": 1,
+    "sectionsDiscovered": 1,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 2,
+    "anomalies": 0
+  },
+  "anomalies": []
+}

@@ -1,0 +1,5 @@
+{"timestamp":"2026-07-15T15:17:48.275Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=CCP"}
+{"timestamp":"2026-07-15T15:17:48.717Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"}
+{"timestamp":"2026-07-15T15:17:49.853Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=2"}
+{"timestamp":"2026-07-15T15:17:50.576Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3"}
+{"timestamp":"2026-07-15T15:17:51.729Z","action":"partial","detail":"Manifest written with 39 sections"}

@@ -1,0 +1,439 @@
+{
+  "version": "1.0.0",
+  "code": "PRC",
+  "startedAt": "2026-07-15T15:20:29.630Z",
+  "updatedAt": "2026-07-15T15:20:33.596Z",
+  "visitedUrls": [
+    "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=PRC",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=1.&nodetreepath=2",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=1.5.&nodetreepath=3"
+  ],
+  "pendingUrls": [
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=2.&nodetreepath=4",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=3.&nodetreepath=5",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=3.5.&nodetreepath=6",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=4.&nodetreepath=7",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=5.&nodetreepath=8",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=5.8.&nodetreepath=9",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=6.&nodetreepath=10",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=7.&nodetreepath=11",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=7.5.&nodetreepath=12",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=7.7.&nodetreepath=13",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=7.8.&nodetreepath=14",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=8.&nodetreepath=15",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=9.&nodetreepath=16",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=10.&nodetreepath=17",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=10.2.&nodetreepath=18",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=10.3.&nodetreepath=19",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=10.4.&nodetreepath=20",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=10.5.&nodetreepath=21",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=11.&nodetreepath=22",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=12.&nodetreepath=23",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=12.1.&nodetreepath=24",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=12.2.&nodetreepath=25",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=12.3.&nodetreepath=26",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=12.4.&nodetreepath=27",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=12.5.&nodetreepath=28",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=12.7.&nodetreepath=29",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=12.9.&nodetreepath=30",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=13.&nodetreepath=31",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=13.5.&nodetreepath=32",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=14.&nodetreepath=33",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=14.5.&nodetreepath=34",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=15.&nodetreepath=35",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=16.&nodetreepath=36",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=16.3.&nodetreepath=37",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=16.5.&nodetreepath=38",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=17.&nodetreepath=39",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=18.&nodetreepath=40",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=19.&nodetreepath=41",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=19.5.&nodetreepath=42",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=20.&nodetreepath=43",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=20.4.&nodetreepath=44",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=20.5.&nodetreepath=45",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=20.6.5.&nodetreepath=46",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=20.6.9.&nodetreepath=47",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=20.7.&nodetreepath=48",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=21.&nodetreepath=49",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=22.&nodetreepath=50",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=22.3.&nodetreepath=51",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=22.5.&nodetreepath=52",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=22.7.&nodetreepath=53",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=22.8.&nodetreepath=54",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=22.9.&nodetreepath=55",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=23.&nodetreepath=56",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=23.3.&nodetreepath=57",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=23.5.&nodetreepath=58",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=23.6.&nodetreepath=59",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=23.7.&nodetreepath=60",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=24.&nodetreepath=61",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=25.&nodetreepath=62",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=26.&nodetreepath=63",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=26.5.&nodetreepath=64",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=27.&nodetreepath=65",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=28.&nodetreepath=66",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=30.&nodetreepath=67",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=31.&nodetreepath=68",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=33.&nodetreepath=69",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=34.&nodetreepath=70",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=36.&nodetreepath=71",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=37.&nodetreepath=72",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=38.&nodetreepath=73",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=43.&nodetreepath=74",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=44.&nodetreepath=75",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=45.&nodetreepath=76",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=46.&nodetreepath=77",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=47.&nodetreepath=78",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=50.&nodetreepath=79",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=PRC",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=1.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=PRC&division=1.&chapter=1.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=PRC&division=1.&chapter=1.&article=1.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=PRC&division=1.&chapter=1.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=PRC&division=1.&chapter=1.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=1.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=PRC&division=1.&chapter=2.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=PRC&division=1.&chapter=2.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=PRC&division=1.&chapter=2.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=1.&chapter=2.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=PRC&division=1.&chapter=2.5.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=PRC&division=1.&chapter=2.5.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=PRC&division=1.&chapter=2.5.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=PRC&division=1.&chapter=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=PRC&division=1.&chapter=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=1.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=PRC&division=1.5.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=PRC&division=1.5.&chapter=2."
+  ],
+  "sections": [
+    {
+      "code": "PRC",
+      "section": "1.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PRC&sectionNum=1.",
+      "hierarchy": {
+        "code": "PRC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1"
+    },
+    {
+      "code": "PRC",
+      "section": "2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PRC&sectionNum=2.",
+      "hierarchy": {
+        "code": "PRC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1"
+    },
+    {
+      "code": "PRC",
+      "section": "3.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PRC&sectionNum=3.",
+      "hierarchy": {
+        "code": "PRC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1"
+    },
+    {
+      "code": "PRC",
+      "section": "4.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PRC&sectionNum=4.",
+      "hierarchy": {
+        "code": "PRC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1"
+    },
+    {
+      "code": "PRC",
+      "section": "5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PRC&sectionNum=5.",
+      "hierarchy": {
+        "code": "PRC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1"
+    },
+    {
+      "code": "PRC",
+      "section": "6.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PRC&sectionNum=6.",
+      "hierarchy": {
+        "code": "PRC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1"
+    },
+    {
+      "code": "PRC",
+      "section": "7.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PRC&sectionNum=7.",
+      "hierarchy": {
+        "code": "PRC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1"
+    },
+    {
+      "code": "PRC",
+      "section": "8.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PRC&sectionNum=8.",
+      "hierarchy": {
+        "code": "PRC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1"
+    },
+    {
+      "code": "PRC",
+      "section": "9.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PRC&sectionNum=9.",
+      "hierarchy": {
+        "code": "PRC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1"
+    },
+    {
+      "code": "PRC",
+      "section": "10.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PRC&sectionNum=10.",
+      "hierarchy": {
+        "code": "PRC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1"
+    },
+    {
+      "code": "PRC",
+      "section": "11.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PRC&sectionNum=11.",
+      "hierarchy": {
+        "code": "PRC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1"
+    },
+    {
+      "code": "PRC",
+      "section": "12.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PRC&sectionNum=12.",
+      "hierarchy": {
+        "code": "PRC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1"
+    },
+    {
+      "code": "PRC",
+      "section": "12.2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PRC&sectionNum=12.2.",
+      "hierarchy": {
+        "code": "PRC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1"
+    },
+    {
+      "code": "PRC",
+      "section": "13.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PRC&sectionNum=13.",
+      "hierarchy": {
+        "code": "PRC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1"
+    },
+    {
+      "code": "PRC",
+      "section": "14.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PRC&sectionNum=14.",
+      "hierarchy": {
+        "code": "PRC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1"
+    },
+    {
+      "code": "PRC",
+      "section": "15.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PRC&sectionNum=15.",
+      "hierarchy": {
+        "code": "PRC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1"
+    },
+    {
+      "code": "PRC",
+      "section": "16.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PRC&sectionNum=16.",
+      "hierarchy": {
+        "code": "PRC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1"
+    },
+    {
+      "code": "PRC",
+      "section": "17.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PRC&sectionNum=17.",
+      "hierarchy": {
+        "code": "PRC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1"
+    },
+    {
+      "code": "PRC",
+      "section": "18.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PRC&sectionNum=18.",
+      "hierarchy": {
+        "code": "PRC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1"
+    }
+  ],
+  "hierarchyNodes": [
+    {
+      "code": "PRC",
+      "level": "other",
+      "label": "GENERAL PROVISIONS",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "PRC",
+      "level": "other",
+      "label": "10.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "PRC",
+      "level": "other",
+      "label": "11.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "PRC",
+      "level": "other",
+      "label": "12.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "PRC",
+      "level": "other",
+      "label": "12.2.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "PRC",
+      "level": "other",
+      "label": "13.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "PRC",
+      "level": "other",
+      "label": "14.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "PRC",
+      "level": "other",
+      "label": "15.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "PRC",
+      "level": "other",
+      "label": "16.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "PRC",
+      "level": "other",
+      "label": "17.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "PRC",
+      "level": "other",
+      "label": "18.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1",
+      "flags": []
+    }
+  ],
+  "anomalies": [],
+  "stats": {
+    "pagesFetched": 4,
+    "expandedBranchPages": 3,
+    "displayTextPages": 0,
+    "hierarchyNodes": 11,
+    "sectionsDiscovered": 19,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 19,
+    "anomalies": 0
+  },
+  "audit": [
+    {
+      "timestamp": "2026-07-15T15:20:29.630Z",
+      "action": "start",
+      "detail": "Discovery started for Public Resources Code"
+    },
+    {
+      "timestamp": "2026-07-15T15:20:29.630Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=PRC"
+    },
+    {
+      "timestamp": "2026-07-15T15:20:30.590Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&nodetreepath=1"
+    },
+    {
+      "timestamp": "2026-07-15T15:20:31.966Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=1.&nodetreepath=2"
+    },
+    {
+      "timestamp": "2026-07-15T15:20:32.922Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PRC&division=1.5.&nodetreepath=3"
+    }
+  ]
+}

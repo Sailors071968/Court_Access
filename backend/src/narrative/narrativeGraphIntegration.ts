@@ -5,8 +5,6 @@
 // Relationships: CLAIMED_IN, SUPPORTED_BY, CONTRADICTED_BY, RELATES_TO
 // ============================================================================
 
-import type { GraphNode, GraphRelationship } from '../evidence/evidenceGraphIntegration.js';
-
 // ---------------------------------------------------------------------------
 // Extended Graph Types for Narrative Engine
 // ---------------------------------------------------------------------------

@@ -1,0 +1,5 @@
+{"timestamp":"2026-07-15T15:18:32.627Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=ELEC"}
+{"timestamp":"2026-07-15T15:18:33.504Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=ELEC&nodetreepath=1"}
+{"timestamp":"2026-07-15T15:18:34.532Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=ELEC&division=0.5.&nodetreepath=2"}
+{"timestamp":"2026-07-15T15:18:35.586Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=ELEC&division=1.&nodetreepath=3"}
+{"timestamp":"2026-07-15T15:18:36.587Z","action":"partial","detail":"Manifest written with 0 sections"}

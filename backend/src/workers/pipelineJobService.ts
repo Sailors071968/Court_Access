@@ -100,7 +100,6 @@ async function createAndEnqueueJob(
     removeOnFail: { count: 5000 }, // keep last 5000 for DLQ inspection; matches queue default
     attempts: 3,
     backoff: { type: 'exponential', delay: 1000 },
-    timeout: 330_000, // 5.5 min — must exceed AbortController's 300s so AbortController fires first
   });
 
   return {

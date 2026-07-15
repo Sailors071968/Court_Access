@@ -1,0 +1,809 @@
+{
+  "version": "1.0.0",
+  "completedAt": "2026-07-15T15:21:05.721Z",
+  "status": "partial",
+  "code": "RTC",
+  "codeName": "Revenue and Taxation Code",
+  "discoveredAt": "2026-07-15T15:21:01.602Z",
+  "audit": [
+    {
+      "timestamp": "2026-07-15T15:21:01.602Z",
+      "action": "start",
+      "detail": "Discovery started for Revenue and Taxation Code"
+    },
+    {
+      "timestamp": "2026-07-15T15:21:01.602Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=RTC"
+    },
+    {
+      "timestamp": "2026-07-15T15:21:02.593Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "timestamp": "2026-07-15T15:21:03.968Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&division=1.&nodetreepath=2"
+    },
+    {
+      "timestamp": "2026-07-15T15:21:04.741Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&division=2.&nodetreepath=3"
+    },
+    {
+      "timestamp": "2026-07-15T15:21:05.721Z",
+      "action": "partial",
+      "detail": "Stopped at maxPages=4; 1126 URLs remaining"
+    }
+  ],
+  "hierarchyNodes": [
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "GENERAL PROVISIONS",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "10.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "11.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "12.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "12.2.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "13.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "14.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "15.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "16.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "17.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "18.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "19.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "20.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "20.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "21.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "22.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "23.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "24.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "25.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "26.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "27.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "28.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "29.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "30.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "31.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "33.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "34.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "35.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "36.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "36.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "37.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "38.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "38.7.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "38.9.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "38.10.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "40.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "RTC",
+      "level": "other",
+      "label": "41.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1",
+      "flags": []
+    }
+  ],
+  "sections": [
+    {
+      "code": "RTC",
+      "section": "1.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=1.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=2.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "3.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=3.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "4.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=4.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=5.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "6.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=6.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "7.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=7.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "8.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=8.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "9.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=9.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "10.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=10.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "11.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=11.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "12.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=12.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "12.2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=12.2.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "13.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=13.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "14.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=14.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "15.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=15.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "16.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=16.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "17.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=17.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "18.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=18.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "19.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=19.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "20.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=20.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "20.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=20.5.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "21.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=21.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "22.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=22.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "23.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=23.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "24.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=24.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "25.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=25.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "26.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=26.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "27.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=27.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "28.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=28.5.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "29.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=29.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "30.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=30.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "31.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=31.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "33.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=33.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "34.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=34.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "35.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=35.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "36.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=36.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "36.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=36.5.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "37.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=37.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "38.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=38.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "38.10.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=38.10.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "38.7.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=38.7.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "38.9.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=38.9.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "40.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=40.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    },
+    {
+      "code": "RTC",
+      "section": "41.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=RTC&sectionNum=41.",
+      "hierarchy": {
+        "code": "RTC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"
+    }
+  ],
+  "stats": {
+    "pagesFetched": 4,
+    "expandedBranchPages": 3,
+    "displayTextPages": 0,
+    "hierarchyNodes": 37,
+    "sectionsDiscovered": 45,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 45,
+    "anomalies": 0
+  },
+  "anomalies": []
+}

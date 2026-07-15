@@ -119,10 +119,10 @@ function removeStructuredNoise(text: string): string {
       if (/^(INFO|DEBUG|ERROR|WARN)/.test(l)) return false;
 
       // ❌ Remove ASCII tables
-      if (/^[\|\+\-_=]{5,}$/.test(l)) return false;
+      if (/^[|+\-_=]{5,}$/.test(l)) return false;
 
       // ❌ Remove mostly numeric lines
-      if (/^[\d\s\-\/:]+$/.test(l)) return false;
+      if (/^[\d\s\-/:]+$/.test(l)) return false;
 
       // ❌ Remove hex / garbage
       if (/^[A-F0-9]{8,}$/i.test(l)) return false;
@@ -142,7 +142,7 @@ function removeStructuredNoise(text: string): string {
 export function segmentIntoNarrativeUnits(text: string): string[] {
   const rawSegments = text
     // Respect paragraphs + safer sentence boundaries
-    .split(/\n{2,}|(?<=[\.!?])\s+(?=[A-Z])/)
+    .split(/\n{2,}|(?<=[.!?])\s+(?=[A-Z])/)
     .map(s => s.trim())
     .filter(Boolean);
 

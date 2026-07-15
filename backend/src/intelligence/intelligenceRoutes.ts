@@ -15,7 +15,7 @@ import { guardAuth, guardCaseAccess } from '../membership/resourceAuthMiddleware
 export async function registerIntelligenceRoutes(app: FastifyInstance): Promise<void> {
   app.get('/api/cases/:caseId/intelligence', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
-    if (!(await guardAuth(user, reply))) return;
+    if (!(guardAuth(user, reply))) return;
 
     const { caseId } = request.params as { caseId: string };
     if (!(await guardCaseAccess(user!, caseId, 'view', reply))) return;

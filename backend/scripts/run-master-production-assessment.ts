@@ -2,7 +2,7 @@
 // CourtAccess Master Production Assessment v1.0 — canonical readiness reports
 
 import { readFile, writeFile, mkdir, readdir } from 'node:fs/promises';
-import { resolve, dirname, join } from 'node:path';
+import { resolve, join } from 'node:path';
 import { runMasterProductionAssessment } from '../src/productionGates/masterProductionAssessment.ts';
 import { collectProductionMetrics } from '../src/legislative/productionMetrics.ts';
 import { fileExists, workspacePath } from '../src/productionGates/gateUtils.ts';

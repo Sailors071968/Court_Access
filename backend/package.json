@@ -10,6 +10,7 @@
     "leginfo:discover": "tsx src/legislative/cli.ts discover",
     "leginfo:acquire": "tsx src/legislative/cli.ts acquire",
     "leginfo:process": "tsx src/legislative/cli.ts process",
+    "leginfo:statewide": "tsx scripts/statewide-acquisition.ts",
     "leginfo:classify": "tsx src/legislative/cli.ts classify",
     "metrics:generate": "tsx scripts/generate-production-metrics.ts",
     "dashboard:generate": "tsx scripts/generate-engineering-dashboard.ts",
@@ -25,6 +26,8 @@
     "firm:demo": "tsx scripts/generate-program02-demonstration.ts",
     "operations:report": "tsx scripts/run-operations-report.ts",
     "test": "node --import tsx --test tests/**/*.test.ts",
+    "lint": "eslint .",
+    "typecheck": "tsc --noEmit",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev",
     "db:migrate:deploy": "bash scripts/db-safe-migrate.sh deploy",
@@ -71,6 +74,7 @@
     "uuid": "^13.0.0"
   },
   "devDependencies": {
+    "@eslint/js": "^9.39.5",
     "@types/bcrypt": "^6.0.0",
     "@types/crypto-js": "^4.2.2",
     "@types/jsonwebtoken": "^9.0.10",
@@ -81,8 +85,11 @@
     "@types/selenium-webdriver": "^4.35.5",
     "@types/stream-json": "^1.7.7",
     "@types/uuid": "^10.0.0",
+    "eslint": "^9.39.5",
+    "globals": "^15.15.0",
     "prisma": "^6.9.0",
     "tsx": "^4.19.0",
-    "typescript": "~5.6.2"
+    "typescript": "~5.6.2",
+    "typescript-eslint": "^8.63.0"
   }
 }

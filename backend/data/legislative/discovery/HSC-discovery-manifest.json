@@ -1,0 +1,922 @@
+{
+  "version": "1.0.0",
+  "completedAt": "2026-07-15T14:51:40.553Z",
+  "status": "partial",
+  "code": "HSC",
+  "codeName": "Health and Safety Code",
+  "discoveredAt": "2026-07-15T14:47:34.547Z",
+  "audit": [
+    {
+      "timestamp": "2026-07-15T14:47:34.547Z",
+      "action": "start",
+      "detail": "Discovery started for Health and Safety Code"
+    },
+    {
+      "timestamp": "2026-07-15T14:47:34.547Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=HSC"
+    },
+    {
+      "timestamp": "2026-07-15T14:47:35.697Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "timestamp": "2026-07-15T14:47:37.150Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.&nodetreepath=2"
+    },
+    {
+      "timestamp": "2026-07-15T14:47:37.784Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.5.&nodetreepath=3"
+    },
+    {
+      "timestamp": "2026-07-15T14:47:39.024Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.7.&nodetreepath=4"
+    },
+    {
+      "timestamp": "2026-07-15T14:47:40.078Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=2.&nodetreepath=5"
+    },
+    {
+      "timestamp": "2026-07-15T14:47:40.845Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=2.1.&nodetreepath=6"
+    },
+    {
+      "timestamp": "2026-07-15T14:47:42.015Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=2.5.&nodetreepath=7"
+    },
+    {
+      "timestamp": "2026-07-15T14:47:42.766Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=2.8.&nodetreepath=8"
+    },
+    {
+      "timestamp": "2026-07-15T14:47:44.026Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=3.&nodetreepath=9"
+    },
+    {
+      "timestamp": "2026-07-15T14:47:44.765Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=5.&nodetreepath=10"
+    },
+    {
+      "timestamp": "2026-07-15T14:47:45.789Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=6.&nodetreepath=11"
+    },
+    {
+      "timestamp": "2026-07-15T14:51:40.553Z",
+      "action": "resume",
+      "detail": "Resumed from /workspace/backend/data/legislative/discovery/HSC-discovery-checkpoint.json"
+    },
+    {
+      "timestamp": "2026-07-15T14:51:40.553Z",
+      "action": "partial",
+      "detail": "Stopped at maxPages=12; 479 URLs remaining"
+    }
+  ],
+  "hierarchyNodes": [
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "GENERAL PROVISIONS",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "10.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "11.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "12.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "12.2.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "13.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "14.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "15.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "16.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "17.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "18.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "19.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "20.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "21.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "22.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "23.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "24.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "25.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "27.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "28.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "division",
+      "label": "DIVISION 1.5. USE OF SECLUSION AND BEHAVIORAL RESTRAINTS IN FACILITIES",
+      "sectionRange": "[1180 - 1180.6]",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.5.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "1180.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.5.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "1180.1.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.5.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "1180.2.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.5.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "1180.3.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.5.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "1180.4.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.5.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "1180.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.5.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "1180.55.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.5.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "1180.6.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.5.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "division",
+      "label": "DIVISION 1.7. Private Equity or Hedge Fund Ownership of Health Care Practices",
+      "sectionRange": "[1190 - 1192]",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.7.&nodetreepath=4",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "1190.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.7.&nodetreepath=4",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "1191.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.7.&nodetreepath=4",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "1192.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.7.&nodetreepath=4",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "division",
+      "label": "DIVISION 2.1. CHILDREN’S CAMPS",
+      "sectionRange": "[1796.90 - 1796.91]",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=2.1.&nodetreepath=6",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "1796.90.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=2.1.&nodetreepath=6",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "1796.91.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=2.1.&nodetreepath=6",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "division",
+      "label": "DIVISION 2.8. Office of Response and Resilience",
+      "sectionRange": "[1890 - 1894]",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=2.8.&nodetreepath=8",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "1890.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=2.8.&nodetreepath=8",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "1891.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=2.8.&nodetreepath=8",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "1892.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=2.8.&nodetreepath=8",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "1893.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=2.8.&nodetreepath=8",
+      "flags": []
+    },
+    {
+      "code": "HSC",
+      "level": "other",
+      "label": "1894.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=2.8.&nodetreepath=8",
+      "flags": []
+    }
+  ],
+  "sections": [
+    {
+      "code": "HSC",
+      "section": "1.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=1.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=2.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "3.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=3.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "4.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=4.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=5.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "6.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=6.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "7.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=7.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "8.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=8.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "9.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=9.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "10.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=10.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "11.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=11.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "12.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=12.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "12.2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=12.2.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "13.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=13.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "14.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=14.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "15.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=15.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "16.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=16.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "17.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=17.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "18.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=18.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "19.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=19.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "20.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=20.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "21.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=21.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "22.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=22.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "23.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=23.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "24.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=24.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "25.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=25.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "27.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=27.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "28.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=28.",
+      "hierarchy": {
+        "code": "HSC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"
+    },
+    {
+      "code": "HSC",
+      "section": "1180.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=1180.",
+      "hierarchy": {
+        "code": "HSC",
+        "division": "1.5."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.5.&nodetreepath=3"
+    },
+    {
+      "code": "HSC",
+      "section": "1180.1.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=1180.1.",
+      "hierarchy": {
+        "code": "HSC",
+        "division": "1.5."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.5.&nodetreepath=3"
+    },
+    {
+      "code": "HSC",
+      "section": "1180.2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=1180.2.",
+      "hierarchy": {
+        "code": "HSC",
+        "division": "1.5."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.5.&nodetreepath=3"
+    },
+    {
+      "code": "HSC",
+      "section": "1180.3.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=1180.3.",
+      "hierarchy": {
+        "code": "HSC",
+        "division": "1.5."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.5.&nodetreepath=3"
+    },
+    {
+      "code": "HSC",
+      "section": "1180.4.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=1180.4.",
+      "hierarchy": {
+        "code": "HSC",
+        "division": "1.5."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.5.&nodetreepath=3"
+    },
+    {
+      "code": "HSC",
+      "section": "1180.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=1180.5.",
+      "hierarchy": {
+        "code": "HSC",
+        "division": "1.5."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.5.&nodetreepath=3"
+    },
+    {
+      "code": "HSC",
+      "section": "1180.55.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=1180.55.",
+      "hierarchy": {
+        "code": "HSC",
+        "division": "1.5."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.5.&nodetreepath=3"
+    },
+    {
+      "code": "HSC",
+      "section": "1180.6.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=1180.6.",
+      "hierarchy": {
+        "code": "HSC",
+        "division": "1.5."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.5.&nodetreepath=3"
+    },
+    {
+      "code": "HSC",
+      "section": "1190.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=1190.",
+      "hierarchy": {
+        "code": "HSC",
+        "division": "1.7."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.7.&nodetreepath=4"
+    },
+    {
+      "code": "HSC",
+      "section": "1191.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=1191.",
+      "hierarchy": {
+        "code": "HSC",
+        "division": "1.7."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.7.&nodetreepath=4"
+    },
+    {
+      "code": "HSC",
+      "section": "1192.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=1192.",
+      "hierarchy": {
+        "code": "HSC",
+        "division": "1.7."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.7.&nodetreepath=4"
+    },
+    {
+      "code": "HSC",
+      "section": "1796.90.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=1796.90.",
+      "hierarchy": {
+        "code": "HSC",
+        "division": "2.1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=2.1.&nodetreepath=6"
+    },
+    {
+      "code": "HSC",
+      "section": "1796.91.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=1796.91.",
+      "hierarchy": {
+        "code": "HSC",
+        "division": "2.1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=2.1.&nodetreepath=6"
+    },
+    {
+      "code": "HSC",
+      "section": "1890.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=1890.",
+      "hierarchy": {
+        "code": "HSC",
+        "division": "2.8."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=2.8.&nodetreepath=8"
+    },
+    {
+      "code": "HSC",
+      "section": "1891.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=1891.",
+      "hierarchy": {
+        "code": "HSC",
+        "division": "2.8."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=2.8.&nodetreepath=8"
+    },
+    {
+      "code": "HSC",
+      "section": "1892.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=1892.",
+      "hierarchy": {
+        "code": "HSC",
+        "division": "2.8."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=2.8.&nodetreepath=8"
+    },
+    {
+      "code": "HSC",
+      "section": "1893.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=1893.",
+      "hierarchy": {
+        "code": "HSC",
+        "division": "2.8."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=2.8.&nodetreepath=8"
+    },
+    {
+      "code": "HSC",
+      "section": "1894.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=HSC&sectionNum=1894.",
+      "hierarchy": {
+        "code": "HSC",
+        "division": "2.8."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=2.8.&nodetreepath=8"
+    }
+  ],
+  "stats": {
+    "pagesFetched": 12,
+    "expandedBranchPages": 11,
+    "displayTextPages": 0,
+    "hierarchyNodes": 42,
+    "sectionsDiscovered": 46,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 46,
+    "anomalies": 0
+  },
+  "anomalies": []
+}

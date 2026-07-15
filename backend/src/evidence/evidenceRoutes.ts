@@ -295,6 +295,57 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
     }
   });
 
+  // GET /api/evidence/uploads — List the tenant's uploaded evidence (for the
+  // Documents/Uploads workspace). Registered BEFORE '/api/evidence/:evidenceId'
+  // so the literal 'uploads' segment is not captured as an evidenceId.
+  app.get('/api/evidence/uploads', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    const user = request.user;
+    if (!user) {
+      return reply.code(401).send({ error: 'Authentication required' });
+    }
+
+    try {
+      const uploads = await prisma.evidence.findMany({
+        where: { tenantId: user.tenantId },
+        orderBy: { uploadedAt: 'desc' },
+        take: 200,
+      });
+
+      const fileType = (fileName: string, mimeType: string): 'pdf' | 'mp4' | 'jpg' => {
+        const lower = `${fileName} ${mimeType}`.toLowerCase();
+        if (lower.includes('pdf')) return 'pdf';
+        if (lower.includes('mp4') || lower.includes('video')) return 'mp4';
+        return 'jpg';
+      };
+      const status = (e: { processingStatus: string | null; analysisStatus: string | null }): 'analyzed' | 'processing' | 'pending' => {
+        if (e.analysisStatus === 'complete' || e.processingStatus === 'complete') return 'analyzed';
+        if (e.processingStatus === 'processing' || e.analysisStatus === 'processing') return 'processing';
+        return 'pending';
+      };
+      const formatSize = (bytes: bigint): string => {
+        const n = Number(bytes);
+        if (n === 0) return '0 B';
+        const units = ['B', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(n) / Math.log(1024));
+        return `${(n / Math.pow(1024, i)).toFixed(1)} ${units[i]}`;
+      };
+
+      return {
+        data: uploads.map((e) => ({
+          id: e.evidenceId,
+          name: e.fileName,
+          size: formatSize(e.size),
+          date: e.uploadedAt.toISOString(),
+          status: status(e),
+          type: fileType(e.fileName, e.mimeType ?? ''),
+        })),
+      };
+    } catch (err) {
+      console.error('[EvidenceRoutes] Failed to list uploads:', err);
+      return reply.code(500).send({ error: 'Failed to list uploads' });
+    }
+  });
+
   // GET /api/evidence/:evidenceId — Get a single evidence record
   app.get('/api/evidence/:evidenceId', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;

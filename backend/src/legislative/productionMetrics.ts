@@ -124,7 +124,6 @@ export async function collectProductionMetrics(options?: {
   const offenses = repositoryCounts.offenses ?? 0;
   const elements = repositoryCounts.elements ?? 0;
   const mensRea = repositoryCounts.mens_rea ?? 0;
-  const authorities = repositoryCounts.authorities ?? 0;
   const calcrim = repositoryCounts.calcrim_links ?? 0;
   const liabilityDiscovery = await collectLiabilityDiscoveryMetrics({
     discoveryDir,

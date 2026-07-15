@@ -56,7 +56,7 @@ function buildClosing(): string {
 export function generateJuryNarrative(
   keyFailure: string | null,
   explanation: string[],
-  defenseArgument: string
+  _defenseArgument: string
 ): string {
 
   try {

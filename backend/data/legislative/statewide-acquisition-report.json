@@ -1,0 +1,130 @@
+{
+  "generatedAt": "2026-07-15T14:52:28.678Z",
+  "engineVersion": "1.0.0",
+  "knownCodes": 30,
+  "codesRequested": [
+    "EVID",
+    "BPC",
+    "HSC",
+    "VEH",
+    "PEN"
+  ],
+  "perCode": [
+    {
+      "code": "EVID",
+      "name": "Evidence Code",
+      "discovered": "UNKNOWN",
+      "acquired": 56,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
+    {
+      "code": "BPC",
+      "name": "Business and Professions Code",
+      "discovered": "UNKNOWN",
+      "acquired": 59,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
+    {
+      "code": "HSC",
+      "name": "Health and Safety Code",
+      "discovered": "UNKNOWN",
+      "acquired": 46,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
+    {
+      "code": "VEH",
+      "name": "Vehicle Code",
+      "discovered": "UNKNOWN",
+      "acquired": 60,
+      "acquireFailed": 0,
+      "status": "OK"
+    },
+    {
+      "code": "PEN",
+      "name": "Penal Code",
+      "discovered": "UNKNOWN",
+      "acquired": 207,
+      "acquireFailed": 0,
+      "status": "OK"
+    }
+  ],
+  "processing": {
+    "processed": 409,
+    "rejected": 19,
+    "offensesIdentified": 91,
+    "classified": 409
+  },
+  "repository": {
+    "statutes": {
+      "before": 0,
+      "after": 409,
+      "delta": 409
+    },
+    "offenses": {
+      "before": 0,
+      "after": 91,
+      "delta": 91
+    },
+    "elements": {
+      "before": 0,
+      "after": 367,
+      "delta": 367
+    },
+    "mens_rea": {
+      "before": 0,
+      "after": 91,
+      "delta": 91
+    },
+    "exceptions": {
+      "before": 0,
+      "after": 126,
+      "delta": 126
+    },
+    "defenses": {
+      "before": 0,
+      "after": 7,
+      "delta": 7
+    },
+    "cross_references": {
+      "before": 0,
+      "after": 583,
+      "delta": 583
+    },
+    "regulatory_incorporations": {
+      "before": 0,
+      "after": 366,
+      "delta": 366
+    },
+    "authorities": {
+      "before": 0,
+      "after": 150,
+      "delta": 150
+    },
+    "calcrim_links": {
+      "before": 0,
+      "after": 3,
+      "delta": 3
+    },
+    "statute_classifications": {
+      "before": 0,
+      "after": 409,
+      "delta": 409
+    }
+  },
+  "updateDiff": {
+    "statutes": 409,
+    "offenses": 91,
+    "elements": 367,
+    "mens_rea": 91,
+    "exceptions": 126,
+    "defenses": 7,
+    "cross_references": 583,
+    "regulatory_incorporations": 366,
+    "authorities": 150,
+    "calcrim_links": 3,
+    "statute_classifications": 409
+  }
+}

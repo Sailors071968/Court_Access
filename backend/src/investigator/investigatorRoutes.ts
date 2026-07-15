@@ -17,7 +17,7 @@ function requireInvestigatorRole(user: { role: string } | undefined): boolean {
 export async function registerInvestigatorRoutes(app: FastifyInstance): Promise<void> {
   app.get('/api/cases/:caseId/investigator-workbench', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
-    if (!(await guardAuth(user, reply))) return;
+    if (!(guardAuth(user, reply))) return;
     if (!requireInvestigatorRole(user)) return reply.code(403).send({ error: 'Investigator access required' });
 
     const { caseId } = request.params as { caseId: string };

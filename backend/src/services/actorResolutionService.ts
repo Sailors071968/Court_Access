@@ -28,12 +28,12 @@ function isPronoun(actor: string): boolean {
 // ---------------------------------------------------------------------------
 
 export function resolveActors(
-  chunkText: string,
+  _chunkText: string,
   events: any[]
 ): any[] {
   let lastKnownActor: string | null = null;
 
-  return events.map((event, index) => {
+  return events.map((event, _index) => {
     const resolvedActors: ResolvedActor[] = [];
 
     const actors = event.actors || [];

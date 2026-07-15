@@ -8,9 +8,7 @@
 // ============================================================================
 
 import type { ExtractedEvent } from '../evidence/eventExtractionService';
-import type { TimelineEntry } from '../evidence/officerActionTimelineService';
-import type { FindingOutput } from '../evidence/policyComplianceAnalyzer';
-import type { EntityExtraction, EvidenceFile, ProcessedEvidenceData } from './evidenceIntelligenceIntegration';
+import type { EvidenceFile, ProcessedEvidenceData } from './evidenceIntelligenceIntegration';
 import type { EvidenceLink, LitigationRecommendation, RecommendationType } from './litigationRecommendationSchema';
 import { InvestigativeTaskEngine } from './investigativeTaskEngine';
 import { MotionRecommendationEngine } from './motionRecommendationEngine';

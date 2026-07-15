@@ -495,7 +495,7 @@ function calculateLineOfFire(
 function assessBystanderRisk(
   obstructions: Obstruction[],
   shooterPos: Point3D,
-  aimDir: Vector3D,
+  _aimDir: Vector3D,
 ): BystanderRisk {
   // Simplified bystander risk — in production would use scene population model
   const hasNearbyObstructions = obstructions.some(obs => {

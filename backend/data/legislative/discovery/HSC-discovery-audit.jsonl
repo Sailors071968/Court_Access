@@ -1,0 +1,15 @@
+{"timestamp":"2026-07-15T14:47:34.547Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=HSC"}
+{"timestamp":"2026-07-15T14:47:35.697Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&nodetreepath=1"}
+{"timestamp":"2026-07-15T14:47:37.150Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.&nodetreepath=2"}
+{"timestamp":"2026-07-15T14:47:37.784Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.5.&nodetreepath=3"}
+{"timestamp":"2026-07-15T14:47:39.024Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=1.7.&nodetreepath=4"}
+{"timestamp":"2026-07-15T14:47:40.078Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=2.&nodetreepath=5"}
+{"timestamp":"2026-07-15T14:47:40.845Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=2.1.&nodetreepath=6"}
+{"timestamp":"2026-07-15T14:47:42.015Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=2.5.&nodetreepath=7"}
+{"timestamp":"2026-07-15T14:47:42.766Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=2.8.&nodetreepath=8"}
+{"timestamp":"2026-07-15T14:47:44.026Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=3.&nodetreepath=9"}
+{"timestamp":"2026-07-15T14:47:44.765Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=5.&nodetreepath=10"}
+{"timestamp":"2026-07-15T14:47:45.789Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HSC&division=6.&nodetreepath=11"}
+{"timestamp":"2026-07-15T14:47:46.820Z","action":"partial","detail":"Manifest written with 46 sections"}
+{"timestamp":"2026-07-15T14:51:40.554Z","action":"partial","detail":"Manifest written with 46 sections"}
+{"timestamp":"2026-07-15T15:19:40.604Z","action":"partial","detail":"Manifest written with 46 sections"}

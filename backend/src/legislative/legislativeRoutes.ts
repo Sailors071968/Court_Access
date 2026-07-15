@@ -3,6 +3,7 @@
 // ============================================
 
 import type { FastifyInstance } from 'fastify';
+import prisma from '../lib/prisma.js';
 import { collectProductionMetrics } from './productionMetrics.ts';
 import { readCoverageReport } from './legislativeIngestService.ts';
 import { createRepositories, REPOSITORY_NAMES } from './knowledgeGraph/repositories.ts';

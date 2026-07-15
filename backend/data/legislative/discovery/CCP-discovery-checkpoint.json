@@ -1,0 +1,939 @@
+{
+  "version": "1.0.0",
+  "code": "CCP",
+  "startedAt": "2026-07-15T15:17:48.275Z",
+  "updatedAt": "2026-07-15T15:17:51.727Z",
+  "visitedUrls": [
+    "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=CCP",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=2",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3"
+  ],
+  "pendingUrls": [
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&part=1.&nodetreepath=4",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&part=2.&nodetreepath=5",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&part=3.&nodetreepath=6",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&part=4.&nodetreepath=7",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CCP",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP"
+  ],
+  "sections": [
+    {
+      "code": "CCP",
+      "section": "2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=2.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "3.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=3.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "4.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=4.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=5.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "6.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=6.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "7.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=7.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "8.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=8.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "9.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=9.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "10.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=10.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "11.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=11.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "12.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=12.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "12a.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=12a.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "12b.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=12b.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "12c.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=12c.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "13.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=13.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "13a.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=13a.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "13b.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=13b.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "14.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=14.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "15.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=15.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "16.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=16.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "17.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=17.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "18.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=18.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "19.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=19.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "20.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=20.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "21.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=21.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "22.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=22.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "23.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=23.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "24.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=24.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "25.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=25.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "26.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=26.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "27.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=27.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "28.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=28.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "29.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=29.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "30.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=30.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "31.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=31.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "32.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=32.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "32.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=32.5.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "33.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=33.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "code": "CCP",
+      "section": "34.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CCP&sectionNum=34.",
+      "hierarchy": {
+        "code": "CCP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    }
+  ],
+  "hierarchyNodes": [
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "PRELIMINARY PROVISIONS",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "10.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "11.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "12.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "12a.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "12b.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "12c.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "13.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "13a.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "13b.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "14.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "15.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "16.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "17.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "18.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "19.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "20.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "21.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "22.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "23.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "24.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "25.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "26.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "27.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "28.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "29.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "30.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "31.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "32.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "32.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "33.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "34.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "PRELIMINARY PROVISIONS",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "10.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "11.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "12.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "12a.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "12b.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "12c.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "13.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "13a.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "13b.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "14.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "15.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "16.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "17.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "18.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "19.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "20.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "21.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "22.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "23.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "24.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "25.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "26.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "27.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "28.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "29.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "30.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "31.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "32.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "32.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "33.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CCP",
+      "level": "other",
+      "label": "34.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3",
+      "flags": []
+    }
+  ],
+  "anomalies": [],
+  "stats": {
+    "pagesFetched": 4,
+    "expandedBranchPages": 3,
+    "displayTextPages": 0,
+    "hierarchyNodes": 64,
+    "sectionsDiscovered": 39,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 78,
+    "anomalies": 0
+  },
+  "audit": [
+    {
+      "timestamp": "2026-07-15T15:17:48.275Z",
+      "action": "start",
+      "detail": "Discovery started for Code of Civil Procedure"
+    },
+    {
+      "timestamp": "2026-07-15T15:17:48.275Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=CCP"
+    },
+    {
+      "timestamp": "2026-07-15T15:17:48.717Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=1"
+    },
+    {
+      "timestamp": "2026-07-15T15:17:49.853Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=2"
+    },
+    {
+      "timestamp": "2026-07-15T15:17:50.576Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CCP&nodetreepath=3"
+    }
+  ]
+}

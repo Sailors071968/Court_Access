@@ -1,0 +1,413 @@
+{
+  "version": "1.0.0",
+  "completedAt": "2026-07-15T15:21:33.588Z",
+  "status": "partial",
+  "code": "UIC",
+  "codeName": "Unemployment Insurance Code",
+  "discoveredAt": "2026-07-15T15:21:29.601Z",
+  "audit": [
+    {
+      "timestamp": "2026-07-15T15:21:29.601Z",
+      "action": "start",
+      "detail": "Discovery started for Unemployment Insurance Code"
+    },
+    {
+      "timestamp": "2026-07-15T15:21:29.601Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=UIC"
+    },
+    {
+      "timestamp": "2026-07-15T15:21:30.580Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1"
+    },
+    {
+      "timestamp": "2026-07-15T15:21:31.892Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&division=1.&nodetreepath=2"
+    },
+    {
+      "timestamp": "2026-07-15T15:21:32.654Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&division=1.5.&nodetreepath=3"
+    },
+    {
+      "timestamp": "2026-07-15T15:21:33.588Z",
+      "action": "partial",
+      "detail": "Stopped at maxPages=4; 108 URLs remaining"
+    }
+  ],
+  "hierarchyNodes": [
+    {
+      "code": "UIC",
+      "level": "other",
+      "label": "GENERAL PROVISIONS",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "UIC",
+      "level": "other",
+      "label": "10.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "UIC",
+      "level": "other",
+      "label": "11.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "UIC",
+      "level": "other",
+      "label": "11.2.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "UIC",
+      "level": "other",
+      "label": "12.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "UIC",
+      "level": "other",
+      "label": "13.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "UIC",
+      "level": "other",
+      "label": "14.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "UIC",
+      "level": "other",
+      "label": "15.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "UIC",
+      "level": "other",
+      "label": "16.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "UIC",
+      "level": "other",
+      "label": "17.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "UIC",
+      "level": "other",
+      "label": "18.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "UIC",
+      "level": "other",
+      "label": "19.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "UIC",
+      "level": "other",
+      "label": "20.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "UIC",
+      "level": "other",
+      "label": "21.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "UIC",
+      "level": "other",
+      "label": "22.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1",
+      "flags": []
+    }
+  ],
+  "sections": [
+    {
+      "code": "UIC",
+      "section": "1.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=UIC&sectionNum=1.",
+      "hierarchy": {
+        "code": "UIC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1"
+    },
+    {
+      "code": "UIC",
+      "section": "2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=UIC&sectionNum=2.",
+      "hierarchy": {
+        "code": "UIC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1"
+    },
+    {
+      "code": "UIC",
+      "section": "3.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=UIC&sectionNum=3.",
+      "hierarchy": {
+        "code": "UIC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1"
+    },
+    {
+      "code": "UIC",
+      "section": "4.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=UIC&sectionNum=4.",
+      "hierarchy": {
+        "code": "UIC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1"
+    },
+    {
+      "code": "UIC",
+      "section": "5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=UIC&sectionNum=5.",
+      "hierarchy": {
+        "code": "UIC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1"
+    },
+    {
+      "code": "UIC",
+      "section": "6.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=UIC&sectionNum=6.",
+      "hierarchy": {
+        "code": "UIC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1"
+    },
+    {
+      "code": "UIC",
+      "section": "7.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=UIC&sectionNum=7.",
+      "hierarchy": {
+        "code": "UIC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1"
+    },
+    {
+      "code": "UIC",
+      "section": "8.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=UIC&sectionNum=8.",
+      "hierarchy": {
+        "code": "UIC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1"
+    },
+    {
+      "code": "UIC",
+      "section": "9.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=UIC&sectionNum=9.",
+      "hierarchy": {
+        "code": "UIC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1"
+    },
+    {
+      "code": "UIC",
+      "section": "10.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=UIC&sectionNum=10.",
+      "hierarchy": {
+        "code": "UIC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1"
+    },
+    {
+      "code": "UIC",
+      "section": "11.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=UIC&sectionNum=11.",
+      "hierarchy": {
+        "code": "UIC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1"
+    },
+    {
+      "code": "UIC",
+      "section": "11.2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=UIC&sectionNum=11.2.",
+      "hierarchy": {
+        "code": "UIC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1"
+    },
+    {
+      "code": "UIC",
+      "section": "12.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=UIC&sectionNum=12.",
+      "hierarchy": {
+        "code": "UIC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1"
+    },
+    {
+      "code": "UIC",
+      "section": "13.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=UIC&sectionNum=13.",
+      "hierarchy": {
+        "code": "UIC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1"
+    },
+    {
+      "code": "UIC",
+      "section": "14.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=UIC&sectionNum=14.",
+      "hierarchy": {
+        "code": "UIC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1"
+    },
+    {
+      "code": "UIC",
+      "section": "15.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=UIC&sectionNum=15.",
+      "hierarchy": {
+        "code": "UIC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1"
+    },
+    {
+      "code": "UIC",
+      "section": "16.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=UIC&sectionNum=16.",
+      "hierarchy": {
+        "code": "UIC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1"
+    },
+    {
+      "code": "UIC",
+      "section": "17.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=UIC&sectionNum=17.",
+      "hierarchy": {
+        "code": "UIC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1"
+    },
+    {
+      "code": "UIC",
+      "section": "18.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=UIC&sectionNum=18.",
+      "hierarchy": {
+        "code": "UIC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1"
+    },
+    {
+      "code": "UIC",
+      "section": "19.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=UIC&sectionNum=19.",
+      "hierarchy": {
+        "code": "UIC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1"
+    },
+    {
+      "code": "UIC",
+      "section": "20.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=UIC&sectionNum=20.",
+      "hierarchy": {
+        "code": "UIC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1"
+    },
+    {
+      "code": "UIC",
+      "section": "21.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=UIC&sectionNum=21.",
+      "hierarchy": {
+        "code": "UIC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1"
+    },
+    {
+      "code": "UIC",
+      "section": "22.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=UIC&sectionNum=22.",
+      "hierarchy": {
+        "code": "UIC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=UIC&nodetreepath=1"
+    }
+  ],
+  "stats": {
+    "pagesFetched": 4,
+    "expandedBranchPages": 3,
+    "displayTextPages": 0,
+    "hierarchyNodes": 15,
+    "sectionsDiscovered": 23,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 23,
+    "anomalies": 0
+  },
+  "anomalies": []
+}

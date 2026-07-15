@@ -36,7 +36,12 @@ export async function registerForensicRoutes(app: FastifyInstance): Promise<void
     ) => {
       try {
         const { caseId, sourceId, durationSeconds, fps, description } = request.body;
-        const result = await analyzeBodycamFootage(caseId, sourceId, durationSeconds, fps, description);
+        const result = await analyzeBodycamFootage(
+          caseId,
+          sourceId,
+          { durationSeconds, description },
+          fps !== undefined ? ({ fps } as Parameters<typeof analyzeBodycamFootage>[3]) : undefined,
+        );
         return reply.send({ success: true, data: result });
       } catch (error) {
         return reply.status(500).send({ success: false, error: error instanceof Error ? error.message : String(error) });
@@ -66,8 +71,8 @@ export async function registerForensicRoutes(app: FastifyInstance): Promise<void
       reply: FastifyReply,
     ) => {
       try {
-        const threshold = request.query.threshold ? parseFloat(request.query.threshold) : undefined;
-        const moments = await getCriticalMoments(request.params.caseId, threshold);
+        const minSeverity = request.query.threshold as 'low' | 'medium' | 'high' | 'critical' | undefined;
+        const moments = await getCriticalMoments(request.params.caseId, minSeverity);
         return reply.send({ success: true, data: moments });
       } catch (error) {
         return reply.status(500).send({ success: false, error: error instanceof Error ? error.message : String(error) });
@@ -95,17 +100,25 @@ export async function registerForensicRoutes(app: FastifyInstance): Promise<void
       reply: FastifyReply,
     ) => {
       try {
-        const { caseId, sceneId, officerPositions, sceneObstacles, targetPositions, bystanderPositions } = request.body;
+        const { caseId, sceneId, officerPositions, sceneObstacles } = request.body;
         const result = computeTrajectoryAnalysis(
+          caseId,
           officerPositions.map(o => ({
-            ...o,
-            weaponType: (o.weaponType ?? 'glock_17_9mm') as 'glock_17_9mm' | 'glock_22_40sw' | 'sig_p320' | 'ar15_223' | 'remington_870_12ga' | 'taser_x26',
+            shotId: o.officerId,
+            shooterPosition: o.position,
+            aimDirection: o.aimDirection,
+            weaponProfile: o.weaponType,
           })),
-          sceneObstacles ?? [],
-          targetPositions,
-          bystanderPositions,
+          (sceneObstacles ?? []).map(ob => ({
+            obstructionType: ob.material,
+            position: ob.position,
+            dimensions: ob.dimensions,
+            materialType: 'other' as const,
+            penetrableByProjectile: true,
+          })),
+          sceneId,
         );
-        const analysisId = await storeTrajectoryAnalysis(caseId, result, sceneId);
+        const analysisId = await storeTrajectoryAnalysis(result);
         return reply.send({ success: true, data: { analysisId, ...result } });
       } catch (error) {
         return reply.status(500).send({ success: false, error: error instanceof Error ? error.message : String(error) });
@@ -165,13 +178,25 @@ export async function registerForensicRoutes(app: FastifyInstance): Promise<void
     ) => {
       try {
         const { caseId, sceneId, conditions, observerPosition, subjectPositions, obstacles } = request.body;
-        const result = simulateVisibility(
-          conditions as Parameters<typeof simulateVisibility>[0],
-          observerPosition,
-          subjectPositions,
-          obstacles ?? [],
-        );
-        const simulationId = await storeVisibilitySimulation(caseId, result, sceneId);
+        const simulationInput = {
+          dateTime: conditions.dateTime,
+          latitude: conditions.latitude,
+          longitude: conditions.longitude,
+          weather: conditions.weatherCondition,
+          cloudCoverPercent: 0,
+          additionalLightSources: conditions.additionalLightSources,
+          observerPositions: [{ ...observerPosition, label: 'observer' }],
+          subjectPositions: subjectPositions.map(s => ({ ...s.position, label: s.label })),
+          obstructions: obstacles?.map(o => ({
+            x: o.position.x,
+            y: o.position.y,
+            width: o.dimensions.width,
+            height: o.dimensions.height,
+            label: o.obstacleId,
+          })),
+        } as unknown as Parameters<typeof simulateVisibility>[1];
+        const result = simulateVisibility(caseId, simulationInput, sceneId);
+        const simulationId = await storeVisibilitySimulation(result);
         return reply.send({ success: true, data: { simulationId, ...result } });
       } catch (error) {
         return reply.status(500).send({ success: false, error: error instanceof Error ? error.message : String(error) });
@@ -213,8 +238,15 @@ export async function registerForensicRoutes(app: FastifyInstance): Promise<void
     ) => {
       try {
         const { caseId, sceneId, observerPosition, viewDirection, obstacles, targets, fieldOfViewConfig } = request.body;
-        const result = analyzeLineOfSight(observerPosition, viewDirection, obstacles, targets, fieldOfViewConfig);
-        const analysisId = await storeLineOfSightAnalysis(caseId, result, sceneId);
+        const result = analyzeLineOfSight(
+          caseId,
+          observerPosition,
+          viewDirection as unknown as Parameters<typeof analyzeLineOfSight>[2],
+          obstacles as unknown as Parameters<typeof analyzeLineOfSight>[3],
+          targets.map(t => ({ ...t.position, label: t.label, heightFeet: t.heightMeters })),
+          { fieldOfView: fieldOfViewConfig, sceneId },
+        );
+        const analysisId = await storeLineOfSightAnalysis(result);
         return reply.send({ success: true, data: { analysisId, ...result } });
       } catch (error) {
         return reply.status(500).send({ success: false, error: error instanceof Error ? error.message : String(error) });
@@ -264,12 +296,20 @@ export async function registerForensicRoutes(app: FastifyInstance): Promise<void
       try {
         const { caseId, sources } = request.body;
         const result = synchronizeCameras(
+          caseId,
           sources.map(s => ({
-            ...s,
-            sourceType: s.sourceType as 'bodycam' | 'dashcam' | 'surveillance' | 'bystander',
-          })),
+            sourceId: s.sourceId,
+            sourceType: s.sourceType as 'bodycam' | 'dashcam' | 'surveillance',
+            startTimestamp: s.startTimestamp,
+            endTimestamp: s.endTimestamp,
+            durationSeconds: 0,
+            hasAudio: s.hasAudio,
+            hasGps: !!s.gpsCoordinates,
+            frameRate: s.fps,
+          })) as unknown as Parameters<typeof synchronizeCameras>[1],
+          sources.flatMap(s => s.events.map(e => ({ sourceId: s.sourceId, ...e }))),
         );
-        const syncId = await storeSyncResult(caseId, result);
+        const syncId = await storeSyncResult(result);
         return reply.send({ success: true, data: { syncId, ...result } });
       } catch (error) {
         return reply.status(500).send({ success: false, error: error instanceof Error ? error.message : String(error) });

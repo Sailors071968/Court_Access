@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "code": "BPC",
+  "manifestPath": "/workspace/backend/data/legislative/discovery/BPC-discovery-manifest.json",
+  "startedAt": "2026-07-15T14:47:03.746Z",
+  "updatedAt": "2026-07-15T14:51:40.551Z",
+  "nextIndex": 59,
+  "acquired": 59,
+  "failed": 0,
+  "skipped": 0,
+  "lastSection": "22964."
+}

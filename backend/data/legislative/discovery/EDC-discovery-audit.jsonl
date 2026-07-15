@@ -1,0 +1,5 @@
+{"timestamp":"2026-07-15T15:18:28.595Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=EDC"}
+{"timestamp":"2026-07-15T15:18:29.558Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EDC&title=1.&nodetreepath=1"}
+{"timestamp":"2026-07-15T15:18:30.736Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EDC&title=2.&nodetreepath=2"}
+{"timestamp":"2026-07-15T15:18:31.614Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EDC&title=3.&nodetreepath=3"}
+{"timestamp":"2026-07-15T15:18:32.625Z","action":"partial","detail":"Manifest written with 0 sections"}

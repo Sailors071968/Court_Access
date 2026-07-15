@@ -1,0 +1,495 @@
+{
+  "version": "1.0.0",
+  "code": "CONS",
+  "startedAt": "2026-07-15T15:18:10.572Z",
+  "updatedAt": "2026-07-15T15:18:14.555Z",
+  "visitedUrls": [
+    "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=CONS",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&nodetreepath=1",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=II&nodetreepath=3"
+  ],
+  "pendingUrls": [
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=III&nodetreepath=4",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=IV&nodetreepath=5",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=V&nodetreepath=6",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=VI&nodetreepath=7",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=VII&nodetreepath=8",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=IX&nodetreepath=9",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=X&nodetreepath=10",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=X+A&nodetreepath=11",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=X+B&nodetreepath=12",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=XI&nodetreepath=13",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=XII&nodetreepath=14",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=XIII&nodetreepath=15",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=XIII+A&nodetreepath=16",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=XIII+B&nodetreepath=17",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=XIII+C&nodetreepath=18",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=XIII+D&nodetreepath=19",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=XIV&nodetreepath=20",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=XV&nodetreepath=21",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=XVI&nodetreepath=22",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=XVIII&nodetreepath=23",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=XIX&nodetreepath=24",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=XIX+A&nodetreepath=25",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=XIX+B&nodetreepath=26",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=XIX+C&nodetreepath=27",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=XIX+D&nodetreepath=28",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=XX&nodetreepath=29",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=XXI&nodetreepath=30",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=XXII&nodetreepath=31",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=XXXIV&nodetreepath=32",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=XXXV&nodetreepath=33",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CONS",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=II"
+  ],
+  "sections": [],
+  "hierarchyNodes": [
+    {
+      "code": "CONS",
+      "level": "article",
+      "label": "ARTICLE I DECLARATION OF RIGHTS",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SECTION 1.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 1.1.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 2.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 3.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 4.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 6.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 7.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 7.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 8.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 9.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 10.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 11.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 12.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 13.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 14.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 14.1.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 15.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 16.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 17.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 18.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 19.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 20.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 21.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 22.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 23.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 24.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "Section 25.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 26.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 27.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 28.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 29.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 30.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 31.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 32.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "article",
+      "label": "ARTICLE II VOTING, INITIATIVE AND REFERENDUM, AND RECALL",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=II&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SECTION 1.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=II&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 2.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=II&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 2.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=II&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 3.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=II&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 4.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=II&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=II&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 6.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=II&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 7.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=II&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 8.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=II&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 9.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=II&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 10.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=II&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 11.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=II&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 12.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=II&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 13.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=II&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 14.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=II&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 15.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=II&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 16.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=II&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 17.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=II&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 18.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=II&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 19.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=II&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "CONS",
+      "level": "other",
+      "label": "SEC. 20.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=II&nodetreepath=3",
+      "flags": []
+    }
+  ],
+  "anomalies": [],
+  "stats": {
+    "pagesFetched": 4,
+    "expandedBranchPages": 3,
+    "displayTextPages": 0,
+    "hierarchyNodes": 58,
+    "sectionsDiscovered": 0,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 0,
+    "anomalies": 0
+  },
+  "audit": [
+    {
+      "timestamp": "2026-07-15T15:18:10.572Z",
+      "action": "start",
+      "detail": "Discovery started for Constitution"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:10.572Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=CONS"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:11.523Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&nodetreepath=1"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:12.573Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:13.814Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=II&nodetreepath=3"
+    }
+  ]
+}

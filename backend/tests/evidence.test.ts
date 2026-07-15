@@ -22,7 +22,6 @@ import type {
   GraphNode,
   EvidenceRelationship,
   EvidenceLinkingRequest,
-  RelationshipCandidate,
   ScoringWeights,
 } from '../src/evidence/types.ts';
 

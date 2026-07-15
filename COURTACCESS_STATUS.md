@@ -1,95 +1,88 @@
 # CourtAccess — Production Status
 
-**Generated:** 2026-07-15T16:05Z
-**Branch:** `cursor/attorney-work-product-trial-notebook-0cc2`
-**Commit:** `b694d0e` (feature) — status/verification commit follows
-**Deployed staging build:** `b694d0e` served via Cloudflare quick tunnel
+**Generated:** 2026-07-15T16:18Z
+**Branch:** `cursor/evidence-intelligence-center-0cc2`
+**Commit:** `dd5eb6d` (feature) — status/verification commit follows
+**Deployed staging build:** `dd5eb6d` served via Cloudflare quick tunnel
 **Public staging URL:** `https://slide-fairfield-atlas-statistical.trycloudflare.com` (ephemeral)
-**Program context:** Production Program 125 — Attorney Work Product Generation & Trial Notebook Certification
+**Program context:** Production Program 126 — Evidence Intelligence Center & Proof Matrix Certification
 
 > Reports only what has been verified with cited evidence.
 > Per the Engineering Constitution: No Evidence → No Finding → UNKNOWN.
 > Repository-backed intelligence and illustrative examples are labeled
-> separately; no attorney opinions, defense theories, legal conclusions,
-> attorney recommendations, or case outcomes are fabricated.
+> separately; no evidence, witness testimony, repository intelligence, legal
+> conclusions, or case outcomes are fabricated.
 
 ---
 
 ## 1. Delivered this program (verified)
 
-**Trial Notebook workspace** (new "Trial Notebook" case tab + route
-`/cases/:caseId/trial-notebook`) — a single professional attorney work-product
-packet generated from the repository-backed Attorney Workbench bundle. It
-composes existing intelligence engines (rather than duplicating them) into the
-Program 125 work-product sections:
+**Evidence Intelligence Center** (new "Evidence Intelligence" case tab + route
+`/cases/:caseId/evidence-intelligence`) — a flagship workspace that visually
+organizes every known piece of evidence against every charge and CALCRIM element,
+composed entirely from the repository-backed Attorney Workbench bundle:
 
-- **Case, Charge & Evidence Summary (Phase 1):** case/charge identity, court/judge,
-  evidence totals, CALCRIM coverage, contradiction count, trial-readiness score.
-- **Witness Preparation (Phase 2):** repository witness list + outstanding
-  interview topics (witness gaps); UNKNOWN when absent.
-- **Cross-Examination (Phase 3):** impeachment material, cross-examination topics,
-  and contradictions (prior inconsistencies); UNKNOWN when none detected.
-- **Discovery Preparation (Phase 4):** outstanding subpoenas, digital/discovery
-  requests, missing evidence, evidence gaps.
-- **Motion Preparation (Phase 5):** repository-recommended motions
-  (`intelligence.recommendedMotions`) + supporting statutory defenses; UNKNOWN
-  where unsupported (drafting/sufficiency remains attorney judgment).
-- **Investigation Dossier (Phase 6):** priority-ranked investigation tasks,
-  recommended investigation, timeline/travel verification, unsupported elements to
-  investigate.
-- **Opening / Closing Outlines & Notebook:** repository `trialPreparation` outlines
-  and notebook entries.
-- **Human Review Checklist (Phase 1/7):** every repository UNKNOWN surfaced as a
-  checkable attorney-review item, with repository-confidence readout.
+- **Evidence Dashboard (Phase 6):** item count, CALCRIM coverage, proof strength
+  (share of elements with supporting evidence), witnesses (graph), evidence
+  health, outstanding UNKNOWN — interactive stat cards.
+- **Proof Matrix (Phase 2):** rows = CALCRIM elements; columns = supporting
+  evidence / witnesses / documents / conflicts / status / confidence, with
+  Supported / Partial / Unsupported / UNKNOWN colouring.
+- **Evidence Inventory + Categories (Phase 1):** every evidence item with
+  category icon, processing status, confidence; grouped category counts.
+- **Evidence Relationships (Phase 3):** Knowledge-Graph witness/document nodes and
+  relationship edges (from `evidenceWorkbench.graph`).
+- **Chain of Custody (Phase 4):** repository processing status per item;
+  collection/transfer/storage reported **UNKNOWN** pending records review — not
+  fabricated.
+- **Proof Gaps (Phase 5):** unsupported/partial elements, missing evidence,
+  missing witnesses, outstanding subpoenas, outstanding discovery/forensic.
 
-A standing evidence-governance banner states the packet is work product (not legal
-advice) and every item is repository-derived, UNKNOWN where coverage is
-insufficient. Each section carries a **Repository-Backed** or **UNKNOWN** badge
-(shared `ProvenanceBadge`); nothing is fabricated. Frontend `npm run build`
-passes; backend `tsc`/lint remain clean from Program 124.
+A standing evidence-governance banner states every relationship is repository-
+derived and UNKNOWN where coverage is insufficient. Each section carries a
+**Repository-Backed** or **UNKNOWN** badge (shared `ProvenanceBadge`); nothing is
+fabricated. Frontend `npm run build` passes; backend `tsc`/lint remain clean.
 
-## 2. Browser verification (Phase 8) — 37/37 pages, 0 console errors
+## 2. Browser verification (Phase 8) — 38/38 pages, 0 console errors
 
 Playwright walkthrough against the running staging build
-(`reports/screenshots/program-125/`, `verification-report.json`): all 37 routes —
-including the new **trial-notebook** page — render with **0 console errors,
-0 failing API calls**. Screenshot gallery captured (incl. `trial-notebook.png`).
+(`reports/screenshots/program-126/`, `verification-report.json`): all 38 routes —
+including the new **evidence-intelligence** page — render with **0 console errors,
+0 failing API calls**. Screenshot gallery captured (incl. `evidence-intelligence.png`).
 
 ## 3. Live staging (ephemeral)
 
 Cloudflare quick tunnel `https://slide-fairfield-atlas-statistical.trycloudflare.com`
-proxying the local static+API stack serving build `b694d0e`; verified `GET /` →
+proxying the local static+API stack serving build `dd5eb6d`; verified `GET /` →
 200 and `POST /api/auth/login` → 200. **Ephemeral** — the URL stops when this
 session's VM suspends; a persistent URL still requires deploy credentials.
 
-## 4. Program 125 phase status
+## 4. Program 126 phase status
 
 | Phase | Status |
 |-------|--------|
-| 1 — Trial Notebook | **DONE** |
-| 2 — Witness Preparation | **DONE** (section within the notebook packet) |
-| 3 — Cross-Examination | **DONE** |
-| 4 — Discovery Preparation | **DONE** |
-| 5 — Motion Preparation | **DONE** (repository-recommended; UNKNOWN where unsupported) |
-| 6 — Investigation Dossier | **DONE** |
-| 7 — Attorney Work Product packet | **DONE** (Trial Notebook is the unified packet) |
-| 8 / 9 / 10 — Verify / Git / Deploy | **DONE** |
+| 1 — Evidence Intelligence Center | **DONE** |
+| 2 — Proof Matrix | **DONE** |
+| 3 — Evidence Relationships | **DONE** (Knowledge Graph) |
+| 4 — Chain of Custody | **DONE** (repository status; UNKNOWN where unestablished) |
+| 5 — Proof Gaps | **DONE** |
+| 6 — Evidence Dashboard | **DONE** |
+| 7 / 8 / 9 / 10 — Visual / Verify / Git / Deploy | **DONE** |
 
-## 5. Attorney Work Product completion
+## 5. Evidence Intelligence completion
 
-Core capability operational and browser-verified: CourtAccess now generates a
-unified trial-notebook work-product packet that organizes repository-backed
-litigation intelligence into the seven Program 125 work sections without
-fabricating conclusions. **Attorney Work Product completion ≈ 90%** — the
-remaining ~10% is exportable/printable document rendering (PDF/DOCX packet
-generation) and a premium print-layout pass; both are bounded by the current
-bundle shape and repository coverage.
+Core capability operational and browser-verified: CourtAccess now maps evidence,
+witnesses, documents, charges, and CALCRIM elements into a single proof matrix and
+evidence center without fabricating conclusions. **Evidence Intelligence completion
+≈ 90%** — the remaining ~10% is a graphical (SVG/canvas) relationship visualizer
+and structured chain-of-custody event capture, both bounded by the current bundle
+shape and repository coverage.
 
 ## 6. Production completion
 
-Application layer ≈ **95%** (all workspaces operational, 37/37 pages 0 console
-errors, backend `tsc`/lint clean, CI green). Depth of repository-backed work
-product tracks the legislative corpus coverage (23 codes; largely bounded
+Application layer ≈ **95%** (all workspaces operational, 38/38 pages 0 console
+errors, backend `tsc`/lint clean, CI green). Depth of repository-backed evidence
+intelligence tracks the legislative corpus coverage (23 codes; largely bounded
 slices), which remains an ongoing acquisition task.
 
 ## 7. Remaining infrastructure blockers

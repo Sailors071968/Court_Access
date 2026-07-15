@@ -1,44 +1,44 @@
 {
-  "generatedAt": "2026-07-04T20:19:16.491Z",
+  "generatedAt": "2026-07-15T14:30:53.422Z",
   "classifierVersion": "1.0.0",
   "californiaCodesDiscovered": 1,
   "californiaCodesTotal": 30,
   "codesAnalyzed": 1,
-  "statutesClassified": 3,
-  "likelyCriminalStatutes": 1,
-  "confirmedCriminalOffenses": 1,
+  "statutesClassified": 188,
+  "likelyCriminalStatutes": 130,
+  "confirmedCriminalOffenses": 89,
   "regulatoryIncorporationCandidates": 0,
-  "manualReviewQueue": 2,
+  "manualReviewQueue": 95,
   "unknownClassifications": 0,
   "byClassification": {
-    "criminal_offense": 1,
-    "criminal_penalty": 0,
-    "criminal_enhancement": 0,
-    "sentencing_provision": 1,
-    "definitions": 0,
-    "procedure": 0,
-    "evidence": 0,
+    "criminal_offense": 82,
+    "criminal_penalty": 43,
+    "criminal_enhancement": 1,
+    "sentencing_provision": 2,
+    "definitions": 6,
+    "procedure": 5,
+    "evidence": 6,
     "regulatory_incorporation": 0,
     "licensing": 0,
-    "administrative": 0,
-    "civil": 0,
+    "administrative": 1,
+    "civil": 1,
     "tax": 0,
     "environmental": 0,
-    "cross_reference": 1,
+    "cross_reference": 41,
     "unknown": 0
   },
   "byPriority": {
-    "critical": 1,
-    "high": 0,
+    "critical": 89,
+    "high": 41,
     "medium": 0,
-    "low": 0,
-    "deferred": 2
+    "low": 4,
+    "deferred": 54
   },
   "byCode": {
     "PEN": {
-      "classified": 3,
-      "likelyCriminal": 1,
-      "confirmedOffenses": 1
+      "classified": 188,
+      "likelyCriminal": 130,
+      "confirmedOffenses": 89
     }
   }
 }

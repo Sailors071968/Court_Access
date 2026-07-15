@@ -8,7 +8,6 @@ import {
   DocumentType,
   DOCUMENT_TYPES,
   CLASSIFICATION_KEYWORDS,
-  PolicyClassification,
 } from '../agencyRegistry/types.js';
 
 export const CLASSIFICATION_QUEUE = 'policy-classification-queue';

@@ -6,12 +6,12 @@ import type { FastifyInstance, FastifyReply } from 'fastify';
 import prisma from '../lib/prisma.js';
 import { logSecurityEvent } from '../security/authMiddleware.js';
 import type { AuthenticatedRequest } from '../security/authMiddleware.js';
-import { guardAuth, guardCaseAccess, sendForbidden } from '../membership/resourceAuthMiddleware.js';
+import { guardAuth, guardCaseAccess } from '../membership/resourceAuthMiddleware.js';
 
 export async function registerHearingRoutes(app: FastifyInstance): Promise<void> {
   app.get('/api/cases/:caseId/hearings', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
-    if (!(await guardAuth(user, reply))) return;
+    if (!(guardAuth(user, reply))) return;
 
     const { caseId } = request.params as { caseId: string };
     if (!(await guardCaseAccess(user!, caseId, 'view', reply))) return;

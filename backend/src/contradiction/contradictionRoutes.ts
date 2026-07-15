@@ -354,8 +354,10 @@ export function registerContradictionRoutes(app: FastifyInstance): void {
     const { caseId } = req.params;
     const events = getEventsForCase(caseId);
 
+    // Empty case: return a valid, empty litigation summary (200) rather than a
+    // 404, so the workspace renders an honest empty state instead of erroring.
     if (events.length === 0) {
-      return reply.code(404).send({ error: `No events found for case: ${caseId}.` });
+      return reply.send(generateLitigationSummary(caseId, []));
     }
 
     const timeline = buildUnifiedTimeline(caseId, events);

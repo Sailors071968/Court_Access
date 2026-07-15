@@ -111,6 +111,7 @@ import { TrialNotebookPage } from './pages/case/TrialNotebookPage';
 import { EvidenceIntelligencePage } from './pages/case/EvidenceIntelligencePage';
 import { CaseIntelligenceMapPage } from './pages/case/CaseIntelligenceMapPage';
 import { MotionIntelligencePage } from './pages/case/MotionIntelligencePage';
+import { CaseTheoryPage } from './pages/case/CaseTheoryPage';
 import { InvestigatorWorkbenchPage } from './pages/case/InvestigatorWorkbenchPage';
 import { ClientPortalLayout, ClientPortalIndex } from './pages/client-portal/ClientPortalLayout';
 import {
@@ -616,6 +617,14 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canViewEvidence">
                   <MotionIntelligencePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="case-theory"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <CaseTheoryPage />
                 </ProtectedRoute>
               }
             />

@@ -103,6 +103,8 @@ import { NarrativeAnalysisPage } from './pages/case/NarrativeAnalysisPage';
 import { AttorneyWorkbenchPage } from './pages/case/AttorneyWorkbenchPage';
 import { ProsecutionWeaknessPage } from './pages/case/ProsecutionWeaknessPage';
 import { InvestigationOpportunitiesPage } from './pages/case/InvestigationOpportunitiesPage';
+import { CalcrimIntelligencePage } from './pages/case/CalcrimIntelligencePage';
+import { DefenseOpportunitiesPage } from './pages/case/DefenseOpportunitiesPage';
 import { InvestigatorWorkbenchPage } from './pages/case/InvestigatorWorkbenchPage';
 import { ClientPortalLayout, ClientPortalIndex } from './pages/client-portal/ClientPortalLayout';
 import {
@@ -540,10 +542,26 @@ function App() {
               }
             />
             <Route
+              path="calcrim-intelligence"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <CalcrimIntelligencePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
               path="prosecution-weakness"
               element={
                 <ProtectedRoute requiredPermission="canViewEvidence">
                   <ProsecutionWeaknessPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="defense-opportunities"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <DefenseOpportunitiesPage />
                 </ProtectedRoute>
               }
             />

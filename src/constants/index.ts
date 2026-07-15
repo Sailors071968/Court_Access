@@ -198,6 +198,7 @@ export const CASE_TABS = [
   { id: 'defense-intelligence', label: 'Defense Intelligence', path: '/defense-intelligence', permission: 'canViewEvidence' as const },
   { id: 'trial-notebook', label: 'Trial Notebook', path: '/trial-notebook', permission: 'canViewEvidence' as const },
   { id: 'evidence-intelligence', label: 'Evidence Intelligence', path: '/evidence-intelligence', permission: 'canViewEvidence' as const },
+  { id: 'case-map', label: 'Case Intelligence Map', path: '/case-map', permission: 'canViewEvidence' as const },
   { id: 'investigation-opportunities', label: 'Investigation Opportunities', path: '/investigation-opportunities', permission: 'canViewEvidence' as const },
   { id: 'investigator-workbench', label: 'Investigator Workbench', path: '/investigator-workbench', permission: 'canViewEvidence' as const },
   { id: 'charges', label: 'Charges', path: '/charges', permission: 'canViewCharges' as const },

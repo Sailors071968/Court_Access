@@ -1,82 +1,92 @@
 # CourtAccess — Production Status
 
-**Generated:** 2026-07-15T13:33Z
-**Branch:** `cursor/calcrim-intelligence-workspace-0cc2`
-**Commit:** `6a22699`
-**Deployed staging build:** `6a22699`, build stamp `2026-07-15T13:32:02Z`
-**Program context:** Production Program 119 — CALCRIM Intelligence, Criminal Defense Analysis & Litigation Strategy Certification
+**Generated:** 2026-07-15T13:56Z
+**Branch:** `cursor/litigation-strategy-center-0cc2`
+**Commit:** `39c3068`
+**Deployed staging build:** `39c3068`, build stamp `2026-07-15T13:55:36Z`
+**Program context:** Production Program 120 — Litigation Strategy Center & Trial Readiness Certification
 
 > Reports only what has been verified with cited evidence.
 > Per the Engineering Constitution: No Evidence → No Finding → UNKNOWN.
 > Repository-backed intelligence and illustrative demonstrations are labeled
-> separately; no CALCRIM elements, legal conclusions, or recommendations are fabricated.
+> separately; no legal conclusions, attorney recommendations, or repository
+> intelligence are fabricated.
 
 ---
 
 ## 1. Delivered this program (verified)
 
-- **CALCRIM Intelligence workspace** (new tab + route) — charge selector, per-charge
-  CALCRIM instruction (number + title), element-by-element analysis
-  (SATISFIED / PARTIALLY SUPPORTED / UNSUPPORTED / UNKNOWN with supporting &
-  contradictory evidence counts and repository confidence), a **Mens Rea Analysis**
-  section, and a **Weighted Case Readiness** score with a visible calculation
-  (CALCRIM 25% · Evidence 20% · Timeline 15% · Trial Readiness 20% · Case Health 20%).
-  All inputs are repository-backed (Attorney Workbench bundle). Where the legislative
-  repository lacks an offense's elements, the analysis is shown as **UNKNOWN**
-  (verified live: PC §459 returns "no elements in repository — legal analysis UNKNOWN").
-  A clearly-labeled **Illustrative CALCRIM 1700 (Burglary)** demonstration shows the
-  full capability without fabricating findings about the real case.
-- **Defense Opportunities workspace** (new tab + route) — unsupported/weak elements,
-  potential impeachment, known statutory defenses / exceptions / immunities (from the
-  legislative repository), and outstanding investigation; illustrative fallback when
-  no signals exist.
-- **Investigation Recommendations** — delivered in Program 118 as the Investigation
-  Opportunities workspace (retained; repository-backed leads with priority/value).
+**Litigation Strategy Center** — a new flagship case workspace (prominent
+"Strategy Center" tab) that integrates the existing intelligence engines (the
+Attorney Workbench bundle) into one executive briefing answering *"what should I
+do next to improve this case?"* It composes — it does not duplicate — the engines:
 
-## 2. Browser verification (Phase 8) — 34/34 pages, 0 console errors
+- **Readiness dashboard (Phase 1):** Case Readiness, Trial Readiness, CALCRIM /
+  Evidence / Mens Rea / Witness coverage, Repository Confidence, Contradictions,
+  Outstanding Investigation, and Outstanding Human Review — each with a
+  Repository-Backed or UNKNOWN badge.
+- **Top Attorney Priorities (Phase 2):** auto-prioritized Highest/High/Medium/Low
+  next actions derived from unsupported elements, UNKNOWN CALCRIM coverage,
+  contradictions, and repository investigation recommendations — each explaining
+  why it matters, the affected charge/element, expected litigation value, and its
+  repository reference. (Verified live: "Upload discovery materials" [Highest],
+  "Verify offense elements for PC §459 — repository lacks elements, UNKNOWN"
+  [High], subpoena/records [Medium].)
+- **Trial Readiness Score (Phase 3):** weighted score (11% for the demo case)
+  with a per-component breakdown (CALCRIM, Evidence, Witnesses, Mens Rea,
+  Timeline, Investigation, Repository Confidence) and explanations; UNKNOWN where
+  the repository cannot support a dimension.
+- **Defense Strategy Matrix (Phase 4)** and **Investigative Action Center
+  (Phase 5):** compact repository-backed summaries that link into the dedicated
+  Defense Opportunities and Investigation Opportunities workspaces (integration,
+  not duplication).
+- **Attorney Briefing (Phase 6):** current-state briefing of outstanding issues,
+  upcoming hearings, pending evidence, and contradictions. Change-tracking (a
+  "what changed" delta since last review) is not yet available and is reported as
+  UNKNOWN rather than fabricated.
+
+## 2. Browser verification (Phase 8) — 35/35 pages, 0 console errors
 
 Playwright walkthrough against the running staging build
-(`reports/screenshots/program-119/`, `verification-report.json`): all 34 routes —
-including CALCRIM Intelligence and Defense Opportunities — render with **0 console
-errors, 0 failing API calls**.
+(`reports/screenshots/program-120/`, `verification-report.json`): all 35 routes —
+including the new Strategy Center — render with **0 console errors, 0 failing API
+calls**.
 
 ## 3. Live staging (ephemeral)
 
-Cloudflare quick tunnel serving build `6a22699`; verified `GET /` → 200 with matching
-build stamp. **Ephemeral** — stops when this session's VM suspends.
+Cloudflare quick tunnel serving build `39c3068`; verified `GET /` → 200 with the
+matching build stamp. **Ephemeral** — stops when this session's VM suspends.
 
-## 4. Program 119 phase status (honest)
+## 4. Program 120 phase status (honest)
 
 | Phase | Status |
 |-------|--------|
-| 1 — CALCRIM Intelligence workspace | **DONE** |
-| 2 — Element analysis (Satisfied/Partial/Unsupported/UNKNOWN + evidence + confidence) | **DONE**; per-element related witnesses/documents/reports/timeline drill-down is PARTIAL (the repository element row exposes evidence refs + confidence; witness/document/report/timeline linkage per element is not yet in the bundle) |
-| 3 — Mens Rea analysis | **DONE** (repository-backed or UNKNOWN) |
-| 4 — Defense Opportunities | **DONE** |
-| 5 — Investigation Recommendations | **DONE** (Program 118 workspace, retained) |
-| 6 — Case Readiness expanded (weighted + calculation) | **DONE** |
-| 8 — End-to-end browser verification | **DONE** (34/34, 0 console errors) |
-| 9 / 10 — Git + deploy | **DONE** |
-| 7 — Visual excellence | PARTIAL — professional executive layout, status/readiness indicators, and provenance labeling; a global glass/animation/charts overhaul is outstanding |
+| 1 — Litigation Strategy Center | **DONE** |
+| 2 — Top Attorney Priorities | **DONE** (repository-derived; illustrative fallback when none) |
+| 3 — Trial Readiness (weighted + explained) | **DONE** |
+| 4 — Defense Strategy Matrix | **DONE** (summary + link to Defense Opportunities) |
+| 5 — Investigative Action Center | **DONE** (summary + link to Investigation Opportunities) |
+| 6 — Attorney Daily Briefing | **DONE** as a current-state briefing; the "what changed" delta requires review-history tracking (reported UNKNOWN — not yet implemented) |
+| 8 / 9 / 10 — Verify / Git / Deploy | **DONE** |
+| 7 — Executive visual design | PARTIAL — professional executive layout, provenance labeling, readiness bars; a global glass/animation/chart overhaul is outstanding |
 
-## 5. CALCRIM Intelligence completion
+## 5. Litigation Strategy Center completion
 
-Core capability (workspace, element analysis, mens rea, weighted readiness, defense
-opportunities, illustrative demonstration) is operational and browser-verified.
-Against the full Program 119 scope (which also asks for per-element related
-witnesses/documents/reports/timeline drill-down and a premium visual overhaul),
-**CALCRIM Intelligence completion ≈ 85%**.
+Core capability operational and browser-verified. Against the full Program 120
+scope (which also asks for a true "what changed" daily delta and a premium visual
+overhaul), **Litigation Strategy Center completion ≈ 88%**.
 
-> Repository coverage note: the legislative repository does not yet contain CALCRIM
-> elements for the demo charge (PC §459), so the repository-backed analysis correctly
-> reports UNKNOWN. Populating the California legal repository is a data-ingestion task
-> (tracked separately at ~12% coverage), not a defect in this workspace.
+> The workspace is designed as the primary attorney workspace; it is wired as the
+> prominent first case tab. It surfaces repository-backed data honestly (the demo
+> case + ~12%-covered legislative repository yield mostly UNKNOWN/sparse real data,
+> shown as such), with clearly-labeled illustrative content where nothing is
+> actionable.
 
 ## 6. Production completion
 
-Application layer ≈ **95%** (all workspaces operational, 34/34 pages 0 console errors,
-backend `tsc`/lint clean, CI green). Remainder is infrastructure-owned plus the
-outstanding presentation phases and legal-repository data population.
+Application layer ≈ **95%** (all workspaces operational, 35/35 pages 0 console
+errors, backend `tsc`/lint clean, CI green). Remainder is infrastructure-owned
+plus the outstanding presentation phases and legal-repository data population.
 
 ## 7. Remaining infrastructure blockers
 

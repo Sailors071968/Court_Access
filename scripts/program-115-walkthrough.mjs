@@ -46,6 +46,7 @@ const authRoutes = [
   ['case-intake-charges', `/cases/${CASE_ID}/charges`],
   ['evidence-workspace', `/cases/${CASE_ID}/evidence`],
   ['timeline', `/cases/${CASE_ID}/dashboard/case-timeline`],
+  ['strategy-center', `/cases/${CASE_ID}/strategy-center`],
   ['attorney-workbench', `/cases/${CASE_ID}/attorney-workbench`],
   ['calcrim-intelligence', `/cases/${CASE_ID}/calcrim-intelligence`],
   ['defense-opportunities', `/cases/${CASE_ID}/defense-opportunities`],

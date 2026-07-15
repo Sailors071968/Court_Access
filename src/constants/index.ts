@@ -191,6 +191,8 @@ export const ROLE_PERMISSIONS: Record<UserRole, RolePermissions> = {
 export const CASE_TABS = [
   { id: 'overview', label: 'Overview', path: '', permission: null },
   { id: 'attorney-workbench', label: 'Attorney Workbench', path: '/attorney-workbench', permission: 'canViewEvidence' as const },
+  { id: 'prosecution-weakness', label: 'Prosecution Weakness', path: '/prosecution-weakness', permission: 'canViewEvidence' as const },
+  { id: 'investigation-opportunities', label: 'Investigation Opportunities', path: '/investigation-opportunities', permission: 'canViewEvidence' as const },
   { id: 'investigator-workbench', label: 'Investigator Workbench', path: '/investigator-workbench', permission: 'canViewEvidence' as const },
   { id: 'charges', label: 'Charges', path: '/charges', permission: 'canViewCharges' as const },
   { id: 'evidence', label: 'Evidence', path: '/evidence', permission: 'canViewEvidence' as const },

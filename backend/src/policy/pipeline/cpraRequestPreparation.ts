@@ -70,7 +70,7 @@ function deriveAgencyEmail(website: string | null): string | null {
   if (!website) return null;
   const domain = website
     .replace(/^https?:\/\//, '')
-    .replace(/[\/:].*$/, '')
+    .replace(/[/:].*$/, '')
     .replace(/^www\./, '');
   return `records@${domain}`;
 }

@@ -101,6 +101,8 @@ import { LitigationStrategyView } from './pages/case/LitigationStrategyView';
 import { ContradictionDashboardPage } from './pages/case/ContradictionDashboardPage';
 import { NarrativeAnalysisPage } from './pages/case/NarrativeAnalysisPage';
 import { AttorneyWorkbenchPage } from './pages/case/AttorneyWorkbenchPage';
+import { ProsecutionWeaknessPage } from './pages/case/ProsecutionWeaknessPage';
+import { InvestigationOpportunitiesPage } from './pages/case/InvestigationOpportunitiesPage';
 import { InvestigatorWorkbenchPage } from './pages/case/InvestigatorWorkbenchPage';
 import { ClientPortalLayout, ClientPortalIndex } from './pages/client-portal/ClientPortalLayout';
 import {
@@ -534,6 +536,22 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canViewEvidence">
                   <AttorneyWorkbenchPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="prosecution-weakness"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <ProsecutionWeaknessPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="investigation-opportunities"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <InvestigationOpportunitiesPage />
                 </ProtectedRoute>
               }
             />

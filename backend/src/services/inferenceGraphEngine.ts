@@ -127,7 +127,7 @@ function generateInferences(
 // 🔥 MAIN ENGINE
 // --------------------------------------------------
 export function runInferenceGraphEngine(
-  propositions: Proposition[],
+  _propositions: Proposition[],
   relations: Relation[]
 ) {
 

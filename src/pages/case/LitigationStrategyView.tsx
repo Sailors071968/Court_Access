@@ -94,7 +94,10 @@ export function LitigationStrategyView() {
     async function fetchStrategy() {
       setIsLoading(true);
       try {
-        const res = await fetch(`/api/cases/${caseId}/litigation-strategy`);
+        const token = localStorage.getItem('court-access-token');
+        const res = await fetch(`/api/cases/${caseId}/litigation-strategy`, {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
         if (res.ok) {
           const json = await res.json();
           if (json.observations) setObservations(json.observations);

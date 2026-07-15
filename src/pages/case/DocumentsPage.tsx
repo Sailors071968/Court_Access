@@ -24,7 +24,10 @@ export function DocumentsPage() {
   useEffect(() => {
     async function fetchUploads() {
       try {
-        const res = await fetch("/api/evidence/uploads");
+        const token = localStorage.getItem("court-access-token");
+        const res = await fetch("/api/evidence/uploads", {
+          headers: token ? { Authorization: `Bearer ${token}` } : {},
+        });
         if (res.ok) {
           const json = await res.json();
           if (json.data) setUploads(json.data);

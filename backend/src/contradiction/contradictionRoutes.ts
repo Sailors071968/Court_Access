@@ -12,7 +12,7 @@ import { matchAllContradictions, assessCaseSeverity } from './doctrineMatchingEn
 import { generateRecommendations, generateLitigationSummary } from './litigationIntelligence.ts';
 import { buildContradictionGraph, generateCypherStatements } from './graphIntelligenceLayer.ts';
 import { getOntologyStats, getEventTypesByCategory, getEventType } from './eventOntology.ts';
-import type { ExtractionJobData, ExtractedEvent, VideoProcessingStage } from './types.ts';
+import type { ExtractionJobData, ExtractedEvent, VideoProcessingStage, VideoProcessingJob } from './types.ts';
 
 // ---------------------------------------------------------------------------
 // Minimal Fastify-compatible type stubs
@@ -354,8 +354,10 @@ export function registerContradictionRoutes(app: FastifyInstance): void {
     const { caseId } = req.params;
     const events = getEventsForCase(caseId);
 
+    // Empty case: return a valid, empty litigation summary (200) rather than a
+    // 404, so the workspace renders an honest empty state instead of erroring.
     if (events.length === 0) {
-      return reply.code(404).send({ error: `No events found for case: ${caseId}.` });
+      return reply.send(generateLitigationSummary(caseId, []));
     }
 
     const timeline = buildUnifiedTimeline(caseId, events);

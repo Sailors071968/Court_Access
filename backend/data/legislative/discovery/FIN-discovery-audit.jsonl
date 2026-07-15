@@ -1,0 +1,5 @@
+{"timestamp":"2026-07-15T15:18:58.597Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=FIN"}
+{"timestamp":"2026-07-15T15:18:59.537Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&nodetreepath=1"}
+{"timestamp":"2026-07-15T15:19:00.866Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&division=1.&nodetreepath=2"}
+{"timestamp":"2026-07-15T15:19:01.604Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=FIN&division=1.1.&nodetreepath=3"}
+{"timestamp":"2026-07-15T15:19:02.602Z","action":"partial","detail":"Manifest written with 23 sections"}

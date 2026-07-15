@@ -17,9 +17,6 @@ import type {
   Neo4jSession,
   Neo4jResult,
   Neo4jRecord,
-  DocumentExtractionResult,
-  ExtractedEntity,
-  GraphNodeType,
 } from '../src/graph/types.ts';
 
 // ---------------------------------------------------------------------------
@@ -546,13 +543,13 @@ describe('Graph Relationship Builder', () => {
   let builder: GraphRelationshipBuilder;
   let mockSession: Neo4jSession;
   let nodes: Map<string, StoredNode>;
-  let relationships: StoredRelationship[];
+  let _relationships: StoredRelationship[];
 
   beforeEach(() => {
     builder = new GraphRelationshipBuilder();
     const mock = createInMemoryNeo4jDriver();
     nodes = mock.nodes;
-    relationships = mock.relationships;
+    _relationships = mock.relationships;
     mockSession = mock.driver.session();
   });
 
@@ -624,12 +621,12 @@ describe('Graph Relationship Builder', () => {
 describe('Graph Indexer', () => {
   let indexer: GraphIndexer;
   let nodes: Map<string, StoredNode>;
-  let relationships: StoredRelationship[];
+  let _relationships: StoredRelationship[];
 
   beforeEach(async () => {
     const mock = createInMemoryNeo4jDriver();
     nodes = mock.nodes;
-    relationships = mock.relationships;
+    _relationships = mock.relationships;
 
     const client = new Neo4jClient({}, () => mock.driver);
     await client.connect();
@@ -854,7 +851,7 @@ describe('Graph Query Engine — Cypher Generation', () => {
 
   it('should extract node list from empty array', () => {
     const { driver } = createInMemoryNeo4jDriver();
-    const client = new Neo4jClient({}, () => driver);
+    const _client = new Neo4jClient({}, () => driver);
     // We test through the query engine indirectly by verifying types compile
     assert.ok(true, 'GraphQueryEngine types should compile');
   });

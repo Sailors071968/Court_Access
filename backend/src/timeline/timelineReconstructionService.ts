@@ -10,6 +10,7 @@
 // ============================================================================
 
 import prisma from '../lib/prisma.js';
+import { Prisma } from '@prisma/client';
 import { extractEventsFromText, storeEvents } from '../evidence/eventExtractionService.js';
 import { buildOfficerTimeline } from '../evidence/officerActionTimelineService.js';
 import { buildUnifiedTimeline, findTimelineGaps } from '../contradiction/timelineEngine.js';
@@ -416,7 +417,7 @@ export async function reconstructTimeline(
         driftCorrectionMs: te.driftCorrectionMs,
         officerTimelineEntries: officerTimelineEntryCount,
         attributes: extractAttributes(rawText),
-      },
+      } as unknown as Prisma.InputJsonValue,
     };
   });
 

@@ -1,0 +1,5 @@
+{"timestamp":"2026-07-15T15:22:07.759Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=WIC"}
+{"timestamp":"2026-07-15T15:22:08.558Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WIC&nodetreepath=1"}
+{"timestamp":"2026-07-15T15:22:09.980Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WIC&division=1.&nodetreepath=2"}
+{"timestamp":"2026-07-15T15:22:10.690Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=WIC&division=2.&nodetreepath=3"}
+{"timestamp":"2026-07-15T15:22:11.693Z","action":"partial","detail":"Manifest written with 28 sections"}

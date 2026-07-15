@@ -1,94 +1,93 @@
 # CourtAccess — Production Status
 
-**Generated:** 2026-07-15T20:15Z
-**Branch:** `cursor/cross-examination-center-0cc2`
-**Commit:** `de1c606` (feature) — status/verification commit follows
-**Deployed staging build:** `de1c606` served via Cloudflare quick tunnel
+**Generated:** 2026-07-15T21:09Z
+**Branch:** `cursor/criminal-case-command-center-0cc2`
+**Commit:** `2802041` (feature) — status/verification commit follows
+**Deployed staging build:** `2802041` served via Cloudflare quick tunnel
 **Public staging URL:** `https://slide-fairfield-atlas-statistical.trycloudflare.com` (ephemeral)
-**Program context:** Production Program 131 — Evidence-Governed Cross-Examination Intelligence & Witness Analysis Certification
+**Program context:** Production Program 132 — Evidence-Governed Criminal Case Command Center & Unified Litigation Workspace Certification
 
 > Reports only what has been verified with cited evidence.
 > Per the Engineering Constitution: No Evidence → No Finding → UNKNOWN.
 > Repository-backed intelligence and illustrative examples are labeled
-> separately; no witness statements, contradictions, impeachment material, legal
-> conclusions, attorney recommendations, or case outcomes are fabricated.
-> **CourtAccess never generates testimony, fabricates contradictions, or
-> recommends a cross-examination strategy.**
+> separately; no legal conclusions, attorney recommendations, case outcomes,
+> evidence, or repository intelligence are fabricated. **CourtAccess never
+> determines guilt, predicts verdicts, or recommends litigation strategy.**
 
 ---
 
 ## 1. Delivered this program (verified)
 
-**Cross-Examination Intelligence Center** (new "Cross-Examination" case tab +
-route `/cases/:caseId/cross-examination`) — a flagship workspace that organizes
-repository-backed evidence into structured witness analysis and cross-examination
-preparation, built entirely from the Attorney Workbench bundle. A **mandatory
-disclaimer banner** states CourtAccess does not generate testimony, fabricate
-contradictions/impeachment material, or recommend a cross-examination strategy.
+**Criminal Case Command Center** (new "Command Center" case tab + route
+`/cases/:caseId/command-center`, placed directly after Overview) — a flagship
+workspace that unifies every existing intelligence engine into a single executive
+command interface, built entirely from the Attorney Workbench bundle. A
+**mandatory disclaimer banner** states CourtAccess does not determine guilt,
+predict verdicts, or recommend litigation strategy.
 
-- **Center dashboard (Phase 1):** witnesses, contradictions, impeachment items,
-  CALCRIM coverage, repository confidence, human review.
-- **Witness Analysis (Phase 2):** per-witness related documents/timeline/CALCRIM/
-  Knowledge-Graph links; UNKNOWN where unsupported (no generated statements).
-- **Contradiction Analysis (Phase 3):** repository-backed contradictions,
-  conflicting evidence, timeline inconsistencies, outstanding factual/evidentiary
-  questions.
-- **Impeachment Review (Phase 4):** potential prior inconsistent statements,
-  conflicting evidence & timeline conflicts, outstanding investigation, human
-  review — no assertion that impeachment is appropriate.
-- **Witness Relationship Map (Phase 5):** interactive SVG (zoom/pan, clickable
-  nodes + side panel) linking witnesses, evidence, charges, CALCRIM, documents,
-  and timeline.
-- **Attorney Witness Briefing (Phase 6):** witness/evidence summary, repository
-  confidence, outstanding factual questions, investigation, legal-research
-  topics (for research, not conclusions), human review.
+- **Command dashboard (Phase 1):** case/trial readiness, repository confidence,
+  evidence/witness/CALCRIM coverage, motion review items, elements supported,
+  outstanding investigation/discovery/contradictions/human-review.
+- **Unified Case Navigation (Phase 3):** shared-context links to Attorney
+  Workbench, Trial Notebook, Evidence/Motion/Case Theory/Cross-Examination/Trial
+  Readiness, Knowledge Graph/Map, Timeline, and Settings.
+- **Executive Intelligence Panel (Phase 2):** highest-priority issues (unsupported
+  elements, contradictions, missing evidence), recently ingested evidence,
+  upcoming deadlines; UNKNOWN where unsupported.
+- **Executive Case Health (Phase 5):** repository/evidence/CALCRIM/timeline/case/
+  trial health bars + contradiction/motion/human-review/production-gate status.
+- **Investigation Command Panel (Phase 4):** priority-ranked tasks, witness
+  interviews/canvassing, digital evidence & subpoenas, additional investigation.
+- **Collaboration Overview (Phase 6):** defense team, assigned tasks, and attorney
+  review queue — repository-derived only; no fabricated assignments or activity.
 
-Every derivation is repository-backed; nothing generates testimony or fabricates
-contradictions. Repository / UNKNOWN / Illustrative labeled via `ProvenanceBadge`.
-Frontend `npm run build` passes; backend `tsc`/lint remain clean.
+Every derivation is repository-backed. Repository / UNKNOWN / Illustrative labeled
+via `ProvenanceBadge`. Frontend `npm run build` passes; backend `tsc`/lint remain
+clean.
 
-## 2. Browser verification (Phase 8) — 43/43 pages, 0 console errors
+## 2. Browser verification (Phase 8) — 44/44 pages, 0 console errors
 
 Playwright walkthrough against the running staging build
-(`reports/screenshots/program-131/`, `verification-report.json`): all 43 routes —
-including the new **cross-examination** page — render with **0 console errors, 0
-failing API calls**. Screenshot gallery captured (incl. `cross-examination.png`).
+(`reports/screenshots/program-132/`, `verification-report.json`): all 44 routes —
+including the new **command-center** page — render with **0 console errors, 0
+failing API calls**. Screenshot gallery captured (incl. `command-center.png`).
 
 ## 3. Live staging (ephemeral)
 
 Cloudflare quick tunnel `https://slide-fairfield-atlas-statistical.trycloudflare.com`
-proxying the local static+API stack serving build `de1c606`; verified `GET /` →
+proxying the local static+API stack serving build `2802041`; verified `GET /` →
 200 and `POST /api/auth/login` → 200. **Ephemeral** — the URL stops when this
 session's VM suspends; a persistent URL still requires deploy credentials.
 
-## 4. Program 131 phase status
+## 4. Program 132 phase status
 
 | Phase | Status |
 |-------|--------|
-| 1 — Cross-Examination Intelligence Center | **DONE** |
-| 2 — Witness Analysis | **DONE** |
-| 3 — Contradiction Analysis | **DONE** |
-| 4 — Impeachment Review | **DONE** (no impeachment appropriateness asserted) |
-| 5 — Witness Relationship Map | **DONE** (interactive SVG) |
-| 6 — Attorney Witness Briefing | **DONE** |
+| 1 — Criminal Case Command Center | **DONE** |
+| 2 — Executive Intelligence Panel | **DONE** |
+| 3 — Unified Case Navigation | **DONE** |
+| 4 — Investigation Command Panel | **DONE** |
+| 5 — Executive Case Health | **DONE** |
+| 6 — Collaboration Overview | **DONE** (repository-derived; no fabricated activity) |
 | 7 / 8 / 9 / 10 — Visual / Verify / Git / Deploy | **DONE** |
 
-## 5. Cross-Examination Intelligence completion
+## 5. Criminal Case Command Center completion
 
-Core capability operational and browser-verified: CourtAccess now organizes
-repository witness information into structured analysis, contradiction and
-impeachment review, and an interactive relationship map, without generating
-testimony, fabricating contradictions, or recommending strategy.
-**Cross-Examination Intelligence completion ≈ 90%** — the remaining ~10% is
-per-witness statement-level linkage (bounded by repository coverage of witness
-statements) and richer graphical relationship drill-down.
+Core capability operational and browser-verified: CourtAccess now presents a
+single executive command interface unifying every intelligence engine, with
+shared-context navigation, an executive intelligence panel, case-health bars, an
+investigation command panel, and a repository-derived collaboration overview —
+without determining guilt, predicting verdicts, or recommending strategy.
+**Criminal Case Command Center completion ≈ 90%** — the remaining ~10% is
+real-time collaboration presence and configurable executive-panel widgets, both
+bounded by the current bundle shape and repository coverage.
 
 ## 6. Production completion
 
-Application layer ≈ **95%** (all workspaces operational, 43/43 pages 0 console
-errors, backend `tsc`/lint clean, CI green). Depth of repository-backed
-cross-examination intelligence tracks the legislative corpus coverage (23 codes;
-largely bounded slices), which remains an ongoing acquisition task.
+Application layer ≈ **95%** (all workspaces operational, 44/44 pages 0 console
+errors, backend `tsc`/lint clean, CI green). Depth of repository-backed command
+center intelligence tracks the legislative corpus coverage (23 codes; largely
+bounded slices), which remains an ongoing acquisition task.
 
 ## 7. Remaining infrastructure blockers
 

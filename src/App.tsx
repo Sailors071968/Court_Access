@@ -110,6 +110,7 @@ import { DefenseIntelligencePage } from './pages/case/DefenseIntelligencePage';
 import { TrialNotebookPage } from './pages/case/TrialNotebookPage';
 import { EvidenceIntelligencePage } from './pages/case/EvidenceIntelligencePage';
 import { CaseIntelligenceMapPage } from './pages/case/CaseIntelligenceMapPage';
+import { MotionIntelligencePage } from './pages/case/MotionIntelligencePage';
 import { InvestigatorWorkbenchPage } from './pages/case/InvestigatorWorkbenchPage';
 import { ClientPortalLayout, ClientPortalIndex } from './pages/client-portal/ClientPortalLayout';
 import {
@@ -607,6 +608,14 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canViewEvidence">
                   <CaseIntelligenceMapPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="motion-intelligence"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <MotionIntelligencePage />
                 </ProtectedRoute>
               }
             />

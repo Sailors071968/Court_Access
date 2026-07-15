@@ -42,7 +42,7 @@ export class AnalysisVersionService {
   }
 
   // Phase 273: Regeneration triggers
-  static shouldRegenerate(trigger: 'new_evidence' | 'evidence_reprocessed' | 'policy_update'): boolean {
+  static shouldRegenerate(_trigger: 'new_evidence' | 'evidence_reprocessed' | 'policy_update'): boolean {
     return true; // Always regenerate on these triggers
   }
 }

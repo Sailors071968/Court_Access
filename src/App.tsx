@@ -101,6 +101,14 @@ import { LitigationStrategyView } from './pages/case/LitigationStrategyView';
 import { ContradictionDashboardPage } from './pages/case/ContradictionDashboardPage';
 import { NarrativeAnalysisPage } from './pages/case/NarrativeAnalysisPage';
 import { AttorneyWorkbenchPage } from './pages/case/AttorneyWorkbenchPage';
+import { ProsecutionWeaknessPage } from './pages/case/ProsecutionWeaknessPage';
+import { InvestigationOpportunitiesPage } from './pages/case/InvestigationOpportunitiesPage';
+import { CalcrimIntelligencePage } from './pages/case/CalcrimIntelligencePage';
+import { DefenseOpportunitiesPage } from './pages/case/DefenseOpportunitiesPage';
+import { LitigationStrategyCenterPage } from './pages/case/LitigationStrategyCenterPage';
+import { DefenseIntelligencePage } from './pages/case/DefenseIntelligencePage';
+import { TrialNotebookPage } from './pages/case/TrialNotebookPage';
+import { EvidenceIntelligencePage } from './pages/case/EvidenceIntelligencePage';
 import { InvestigatorWorkbenchPage } from './pages/case/InvestigatorWorkbenchPage';
 import { ClientPortalLayout, ClientPortalIndex } from './pages/client-portal/ClientPortalLayout';
 import {
@@ -534,6 +542,70 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canViewEvidence">
                   <AttorneyWorkbenchPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="strategy-center"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <LitigationStrategyCenterPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="calcrim-intelligence"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <CalcrimIntelligencePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="prosecution-weakness"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <ProsecutionWeaknessPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="defense-opportunities"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <DefenseOpportunitiesPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="defense-intelligence"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <DefenseIntelligencePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="trial-notebook"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <TrialNotebookPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="evidence-intelligence"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <EvidenceIntelligencePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="investigation-opportunities"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <InvestigationOpportunitiesPage />
                 </ProtectedRoute>
               }
             />

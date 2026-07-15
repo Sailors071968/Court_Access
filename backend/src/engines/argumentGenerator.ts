@@ -54,7 +54,7 @@ function buildConclusion(): string {
 export function generateDefenseArgument(
   keyFailure: string | null,
   failureRankings: RankedFailure[],
-  explanation: string[]
+  _explanation: string[]
 ): string {
 
   try {

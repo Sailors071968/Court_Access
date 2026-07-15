@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "code": "RTC",
+  "manifestPath": "/workspace/backend/data/legislative/discovery/RTC-discovery-manifest.json",
+  "startedAt": "2026-07-15T15:21:05.722Z",
+  "updatedAt": "2026-07-15T15:21:15.661Z",
+  "nextIndex": 10,
+  "acquired": 10,
+  "failed": 0,
+  "skipped": 0,
+  "lastSection": "10."
+}

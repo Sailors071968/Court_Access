@@ -71,11 +71,11 @@ function parseHierarchyFromSection(html: string, code: string): StatuteHierarchy
   const hierarchy: StatuteHierarchy = { code: code.toUpperCase() };
 
   const patterns: Array<{ key: keyof StatuteHierarchy; regex: RegExp }> = [
-    { key: 'division', regex: /DIVISION\s+[\d.]+\s*[^<\[]*/i },
-    { key: 'part', regex: /PART\s+[\d.]+\s*[^<\[]*/i },
-    { key: 'title', regex: /TITLE\s+[\d.]+\s*[^<\[]*/i },
-    { key: 'chapter', regex: /CHAPTER\s+[\d.]+\s*[^<\[]*/i },
-    { key: 'article', regex: /ARTICLE\s+[\d.]+\s*[^<\[]*/i },
+    { key: 'division', regex: /DIVISION\s+[\d.]+\s*[^<[]*/i },
+    { key: 'part', regex: /PART\s+[\d.]+\s*[^<[]*/i },
+    { key: 'title', regex: /TITLE\s+[\d.]+\s*[^<[]*/i },
+    { key: 'chapter', regex: /CHAPTER\s+[\d.]+\s*[^<[]*/i },
+    { key: 'article', regex: /ARTICLE\s+[\d.]+\s*[^<[]*/i },
   ];
 
   for (const { key, regex } of patterns) {

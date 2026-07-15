@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "code": "UIC",
+  "manifestPath": "/workspace/backend/data/legislative/discovery/UIC-discovery-manifest.json",
+  "startedAt": "2026-07-15T15:21:33.589Z",
+  "updatedAt": "2026-07-15T15:21:43.652Z",
+  "nextIndex": 10,
+  "acquired": 10,
+  "failed": 0,
+  "skipped": 0,
+  "lastSection": "10."
+}

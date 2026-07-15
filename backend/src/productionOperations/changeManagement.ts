@@ -15,7 +15,6 @@ async function listMigrations(): Promise<ChangeRecord[]> {
     const dirs = await readdir(migrationsDir);
     for (const dir of dirs) {
       if (dir === 'migration_lock.toml') continue;
-      const sqlPath = join(migrationsDir, dir, 'migration.sql');
       try {
         const info = await stat(join(migrationsDir, dir));
         records.push({

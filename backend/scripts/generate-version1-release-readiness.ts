@@ -2,7 +2,7 @@
 // Sprint 20 — Version 1.0 Release Readiness Report
 
 import { writeFile, mkdir, readFile } from 'node:fs/promises';
-import { resolve, dirname } from 'node:path';
+import { resolve } from 'node:path';
 import { runMasterProductionAssessment } from '../src/productionGates/masterProductionAssessment.ts';
 
 const reportsDir = resolve(import.meta.dirname ?? '.', '../../reports');

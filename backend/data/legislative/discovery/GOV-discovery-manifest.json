@@ -1,0 +1,629 @@
+{
+  "version": "1.0.0",
+  "completedAt": "2026-07-15T15:19:16.855Z",
+  "status": "partial",
+  "code": "GOV",
+  "codeName": "Government Code",
+  "discoveredAt": "2026-07-15T15:19:12.599Z",
+  "audit": [
+    {
+      "timestamp": "2026-07-15T15:19:12.599Z",
+      "action": "start",
+      "detail": "Discovery started for Government Code"
+    },
+    {
+      "timestamp": "2026-07-15T15:19:12.599Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=GOV"
+    },
+    {
+      "timestamp": "2026-07-15T15:19:13.606Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "timestamp": "2026-07-15T15:19:15.085Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&title=1.&nodetreepath=2"
+    },
+    {
+      "timestamp": "2026-07-15T15:19:15.757Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&title=2.&nodetreepath=3"
+    },
+    {
+      "timestamp": "2026-07-15T15:19:16.855Z",
+      "action": "partial",
+      "detail": "Stopped at maxPages=4; 1520 URLs remaining"
+    }
+  ],
+  "hierarchyNodes": [
+    {
+      "code": "GOV",
+      "level": "other",
+      "label": "GENERAL PROVISIONS",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "GOV",
+      "level": "other",
+      "label": "7.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "GOV",
+      "level": "other",
+      "label": "7.6.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "GOV",
+      "level": "other",
+      "label": "7.7.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "GOV",
+      "level": "other",
+      "label": "7.8.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "GOV",
+      "level": "other",
+      "label": "7.9.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "GOV",
+      "level": "other",
+      "label": "7.9a.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "GOV",
+      "level": "other",
+      "label": "10.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "GOV",
+      "level": "other",
+      "label": "11.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "GOV",
+      "level": "other",
+      "label": "12.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "GOV",
+      "level": "other",
+      "label": "12.2.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "GOV",
+      "level": "other",
+      "label": "12.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "GOV",
+      "level": "other",
+      "label": "13.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "GOV",
+      "level": "other",
+      "label": "14.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "GOV",
+      "level": "other",
+      "label": "15.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "GOV",
+      "level": "other",
+      "label": "16.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "GOV",
+      "level": "other",
+      "label": "16.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "GOV",
+      "level": "other",
+      "label": "17.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "GOV",
+      "level": "other",
+      "label": "18.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "GOV",
+      "level": "other",
+      "label": "19.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "GOV",
+      "level": "other",
+      "label": "20.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "GOV",
+      "level": "other",
+      "label": "21.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "GOV",
+      "level": "other",
+      "label": "22.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "GOV",
+      "level": "other",
+      "label": "23.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "GOV",
+      "level": "other",
+      "label": "24.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "GOV",
+      "level": "other",
+      "label": "25.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "GOV",
+      "level": "other",
+      "label": "26.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1",
+      "flags": []
+    }
+  ],
+  "sections": [
+    {
+      "code": "GOV",
+      "section": "1.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=1.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=2.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "3.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=3.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "4.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=4.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=5.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "6.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=6.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "7.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=7.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "7.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=7.5.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "7.6.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=7.6.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "7.7.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=7.7.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "7.8.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=7.8.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "7.9.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=7.9.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "7.9a.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=7.9a.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "8.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=8.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "9.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=9.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "10.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=10.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "11.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=11.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "12.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=12.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "12.2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=12.2.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "12.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=12.5.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "13.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=13.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "14.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=14.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "15.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=15.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "16.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=16.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "16.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=16.5.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "17.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=17.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "18.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=18.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "19.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=19.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "20.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=20.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "21.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=21.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "22.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=22.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "23.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=23.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "24.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=24.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "25.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=25.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    },
+    {
+      "code": "GOV",
+      "section": "26.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=GOV&sectionNum=26.",
+      "hierarchy": {
+        "code": "GOV"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=GOV&nodetreepath=1"
+    }
+  ],
+  "stats": {
+    "pagesFetched": 4,
+    "expandedBranchPages": 3,
+    "displayTextPages": 0,
+    "hierarchyNodes": 27,
+    "sectionsDiscovered": 35,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 35,
+    "anomalies": 0
+  },
+  "anomalies": []
+}

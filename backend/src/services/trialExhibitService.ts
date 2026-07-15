@@ -96,7 +96,7 @@ function extractLegalHighlights(legal: LegalIssue[]) {
 // NARRATIVE
 // ============================================================================
 
-function buildNarrative(clusters: Cluster[], legal: LegalIssue[]) {
+function buildNarrative(_clusters: Cluster[], legal: LegalIssue[]) {
   const high = legal.filter((l) => l.confidence >= 0.5);
 
   if (!high.length) {

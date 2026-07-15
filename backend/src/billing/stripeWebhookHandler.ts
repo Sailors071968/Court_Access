@@ -162,7 +162,7 @@ export async function registerStripeWebhookRoutes(app: FastifyInstance): Promise
         return reply.code(500).send({ error: 'Stripe checkout failed' });
       }
       return reply.send({ url: session.url, sessionId: session.id });
-    } catch (err) {
+    } catch (_err) {
       return reply.code(500).send({ error: 'Failed to create checkout session' });
     }
   });

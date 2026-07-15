@@ -82,8 +82,7 @@ function classifyTextToCategory(
 // ---------------------------------------------------------------------------
 
 // Used by extractTopicsFromChpDocuments when processing real CHP documents
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-function extractPolicyNumber(title: string, text: string): string | null {
+export function extractPolicyNumber(title: string, text: string): string | null {
   const combined = title + ' ' + text.substring(0, 500);
   const patterns = [
     /HPM\s*\d+\.\d+/i,

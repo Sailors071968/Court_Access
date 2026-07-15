@@ -2,9 +2,39 @@
 // 🧠 COURTACCESS — STRATEGIC FAILURE RANKING ENGINE (STABLE BUILD)
 // ============================================================================
 
-export function rankStrongestFailure(elements, contradictions, argumentsList) {
+interface FailureElement {
+  failed?: boolean;
+  label?: string;
+  name?: string;
+  id?: string;
+}
 
-  const ELEMENT_PRIORITY = {
+interface FailureContradiction {
+  impact?: string;
+  severity?: string;
+  description?: string;
+  type?: string;
+  legalImpact?: string;
+}
+
+interface FailureArgument {
+  mapping?: { element?: string };
+  strength?: number;
+}
+
+interface RankedFailureResult {
+  element: string;
+  reason: string;
+  damageScore: number;
+}
+
+export function rankStrongestFailure(
+  elements: FailureElement[],
+  contradictions: FailureContradiction[],
+  argumentsList: FailureArgument[],
+): RankedFailureResult[] {
+
+  const ELEMENT_PRIORITY: Record<string, number> = {
     identity: 1.0,
     entry: 0.95,
     act: 0.9,
@@ -17,7 +47,7 @@ export function rankStrongestFailure(elements, contradictions, argumentsList) {
     general: 0.6
   };
 
-  function getSeverityScore(c) {
+  function getSeverityScore(c: FailureContradiction) {
     if (c.impact === "DESTROYS") return 100;
 
     switch (c.severity) {
@@ -29,7 +59,7 @@ export function rankStrongestFailure(elements, contradictions, argumentsList) {
     }
   }
 
-  function getElementName(e) {
+  function getElementName(e: FailureElement) {
     return (
       e.label ||
       e.name ||
@@ -38,9 +68,9 @@ export function rankStrongestFailure(elements, contradictions, argumentsList) {
     ).toLowerCase();
   }
 
-function getContradictionsForElement(name, contradictions) {
+function getContradictionsForElement(name: string, contradictions: FailureContradiction[]) {
 
-  return (contradictions || []).filter(c => {
+  return (contradictions || []).filter((c: FailureContradiction) => {
 
     const text = (
       (c.description || "") +
@@ -54,14 +84,14 @@ function getContradictionsForElement(name, contradictions) {
   });
 }
 
-  function getArgumentImpactMultiplier(name, argumentsList) {
-    const related = argumentsList.filter(a =>
+  function getArgumentImpactMultiplier(name: string, argumentsList: FailureArgument[]) {
+    const related = argumentsList.filter((a: FailureArgument) =>
       (a.mapping?.element || "").toLowerCase().includes(name)
     );
 
     if (!related.length) return 1;
 
-    const destroyed = related.filter(a => a.strength === 0).length;
+    const destroyed = related.filter((a: FailureArgument) => a.strength === 0).length;
 
     if (destroyed === related.length) return 1.5;
     if (destroyed > 0) return 1.2;

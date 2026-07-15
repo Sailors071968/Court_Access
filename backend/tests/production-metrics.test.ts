@@ -2,7 +2,7 @@
 // Production metrics + governance route tests
 // ============================================
 
-import { describe, it, before, after } from 'node:test';
+import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import { collectProductionMetrics } from '../src/legislative/productionMetrics.ts';
 import { getRequiredRoles } from '../src/security/authMiddleware.ts';

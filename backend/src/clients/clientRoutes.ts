@@ -5,6 +5,7 @@
 
 import type { FastifyInstance, FastifyReply } from 'fastify';
 import prisma from '../lib/prisma.js';
+import { Prisma } from '@prisma/client';
 import { logSecurityEvent } from '../security/authMiddleware.js';
 import type { AuthenticatedRequest } from '../security/authMiddleware.js';
 import {
@@ -32,7 +33,7 @@ export async function registerClientRoutes(app: FastifyInstance): Promise<void> 
   // POST /api/clients
   app.post('/api/clients', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
-    if (!(await guardAuth(user, reply))) return;
+    if (!(guardAuth(user, reply))) return;
     if (!(await guardScopeAccess(user!, 'organization', null, 'edit', reply))) return;
 
     const body = request.body as CreateClientBody;
@@ -63,9 +64,9 @@ export async function registerClientRoutes(app: FastifyInstance): Promise<void> 
           email: body.email?.trim() ?? null,
           phone: body.phone?.trim() ?? null,
           phoneAlt: body.phoneAlt?.trim() ?? null,
-          alternateContacts: body.alternateContacts ?? undefined,
-          emergencyContacts: body.emergencyContacts ?? undefined,
-          addressHistory: body.addressHistory ?? undefined,
+          alternateContacts: (body.alternateContacts ?? undefined) as Prisma.InputJsonValue | undefined,
+          emergencyContacts: (body.emergencyContacts ?? undefined) as Prisma.InputJsonValue | undefined,
+          addressHistory: (body.addressHistory ?? undefined) as Prisma.InputJsonValue | undefined,
           communicationPreference: body.communicationPreference ?? 'email',
           language: body.language ?? 'en',
           notes: body.notes ?? null,
@@ -86,7 +87,7 @@ export async function registerClientRoutes(app: FastifyInstance): Promise<void> 
   // GET /api/clients
   app.get('/api/clients', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
-    if (!(await guardAuth(user, reply))) return;
+    if (!(guardAuth(user, reply))) return;
     if (!(await guardScopeAccess(user!, 'organization', null, 'view', reply))) return;
 
     const { status, search } = request.query as { status?: string; search?: string };

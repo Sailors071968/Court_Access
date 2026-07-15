@@ -190,7 +190,13 @@ export const ROLE_PERMISSIONS: Record<UserRole, RolePermissions> = {
 // --- Case Tab Definitions (deterministic order) ---
 export const CASE_TABS = [
   { id: 'overview', label: 'Overview', path: '', permission: null },
+  { id: 'strategy-center', label: 'Strategy Center', path: '/strategy-center', permission: 'canViewEvidence' as const },
   { id: 'attorney-workbench', label: 'Attorney Workbench', path: '/attorney-workbench', permission: 'canViewEvidence' as const },
+  { id: 'calcrim-intelligence', label: 'CALCRIM Intelligence', path: '/calcrim-intelligence', permission: 'canViewEvidence' as const },
+  { id: 'prosecution-weakness', label: 'Prosecution Weakness', path: '/prosecution-weakness', permission: 'canViewEvidence' as const },
+  { id: 'defense-opportunities', label: 'Defense Opportunities', path: '/defense-opportunities', permission: 'canViewEvidence' as const },
+  { id: 'defense-intelligence', label: 'Defense Intelligence', path: '/defense-intelligence', permission: 'canViewEvidence' as const },
+  { id: 'investigation-opportunities', label: 'Investigation Opportunities', path: '/investigation-opportunities', permission: 'canViewEvidence' as const },
   { id: 'investigator-workbench', label: 'Investigator Workbench', path: '/investigator-workbench', permission: 'canViewEvidence' as const },
   { id: 'charges', label: 'Charges', path: '/charges', permission: 'canViewCharges' as const },
   { id: 'evidence', label: 'Evidence', path: '/evidence', permission: 'canViewEvidence' as const },

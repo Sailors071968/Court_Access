@@ -176,7 +176,7 @@ export async function registerPolicyIntelligenceRoutes(
       try {
         const status = getSandboxExecutionStatus();
         return reply.send({ success: true, data: status });
-      } catch (error) {
+      } catch (_error) {
         return reply.status(500).send({
           success: false,
           error: 'Failed to get sandbox status',
@@ -211,7 +211,7 @@ export async function registerPolicyIntelligenceRoutes(
       try {
         const status = await getChpImportStatus();
         return reply.send({ success: true, data: status });
-      } catch (error) {
+      } catch (_error) {
         return reply.status(500).send({
           success: false,
           error: 'Failed to get CHP status',
@@ -250,7 +250,7 @@ export async function registerPolicyIntelligenceRoutes(
       try {
         const summary = await getClassificationAccuracySummary();
         return reply.send({ success: true, data: summary });
-      } catch (error) {
+      } catch (_error) {
         return reply.status(500).send({
           success: false,
           error: 'Failed to get accuracy summary',
@@ -288,7 +288,7 @@ export async function registerPolicyIntelligenceRoutes(
       try {
         const report = await getAgencyCoverage(request.params.agencyId);
         return reply.send({ success: true, data: report });
-      } catch (error) {
+      } catch (_error) {
         return reply.status(500).send({
           success: false,
           error: 'Failed to get agency coverage',
@@ -310,7 +310,7 @@ export async function registerPolicyIntelligenceRoutes(
         const offset = parseInt(request.query.offset ?? '0', 10);
         const data = await getCoverageHeatmapData(limit, offset);
         return reply.send({ success: true, data });
-      } catch (error) {
+      } catch (_error) {
         return reply.status(500).send({
           success: false,
           error: 'Failed to get coverage heatmap',
@@ -325,7 +325,7 @@ export async function registerPolicyIntelligenceRoutes(
       try {
         const summary = await getCoverageSummary();
         return reply.send({ success: true, data: summary });
-      } catch (error) {
+      } catch (_error) {
         return reply.status(500).send({
           success: false,
           error: 'Failed to get coverage summary',
@@ -364,7 +364,7 @@ export async function registerPolicyIntelligenceRoutes(
       try {
         const status = await getCpraQueueStatus();
         return reply.send({ success: true, data: status });
-      } catch (error) {
+      } catch (_error) {
         return reply.status(500).send({
           success: false,
           error: 'Failed to get CPRA queue status',
@@ -414,7 +414,7 @@ export async function registerPolicyIntelligenceRoutes(
       try {
         const status = await getActiveCampaignStatus();
         return reply.send({ success: true, data: status });
-      } catch (error) {
+      } catch (_error) {
         return reply.status(500).send({
           success: false,
           error: 'Failed to get campaign status',
@@ -452,7 +452,7 @@ export async function registerPolicyIntelligenceRoutes(
       try {
         const health = await getResponsePipelineHealth();
         return reply.send({ success: true, data: health });
-      } catch (error) {
+      } catch (_error) {
         return reply.status(500).send({
           success: false,
           error: 'Failed to get pipeline health',
@@ -467,7 +467,7 @@ export async function registerPolicyIntelligenceRoutes(
       try {
         const result = await processPendingDocuments();
         return reply.send({ success: true, data: result });
-      } catch (error) {
+      } catch (_error) {
         return reply.status(500).send({
           success: false,
           error: 'Failed to process pending documents',

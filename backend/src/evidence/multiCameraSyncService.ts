@@ -323,8 +323,8 @@ function matchByAudioWaveform(
 }
 
 function matchByEvents(
-  sourceAId: string,
-  sourceBId: string,
+  _sourceAId: string,
+  _sourceBId: string,
   eventsA: Array<{ timestamp: string; eventType: string; description: string }>,
   eventsB: Array<{ timestamp: string; eventType: string; description: string }>,
 ): { offsetMs: number; confidence: number; alignmentPoints: AlignmentPoint[] } {

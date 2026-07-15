@@ -3,7 +3,7 @@
 // ============================================
 
 import { readFile, access } from 'node:fs/promises';
-import { join, resolve } from 'node:path';
+import { resolve } from 'node:path';
 import { collectProductionMetrics } from './productionMetrics.ts';
 import { getExtractionAuditStats } from './extractionAuditLog.ts';
 import { collectLiabilityDiscoveryMetrics } from './liabilityDiscovery/metrics.ts';

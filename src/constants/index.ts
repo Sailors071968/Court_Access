@@ -202,6 +202,7 @@ export const CASE_TABS = [
   { id: 'motion-intelligence', label: 'Motion Intelligence', path: '/motion-intelligence', permission: 'canViewEvidence' as const },
   { id: 'case-theory', label: 'Case Theory', path: '/case-theory', permission: 'canViewEvidence' as const },
   { id: 'trial-readiness', label: 'Trial Readiness', path: '/trial-readiness', permission: 'canViewEvidence' as const },
+  { id: 'cross-examination', label: 'Cross-Examination', path: '/cross-examination', permission: 'canViewEvidence' as const },
   { id: 'investigation-opportunities', label: 'Investigation Opportunities', path: '/investigation-opportunities', permission: 'canViewEvidence' as const },
   { id: 'investigator-workbench', label: 'Investigator Workbench', path: '/investigator-workbench', permission: 'canViewEvidence' as const },
   { id: 'charges', label: 'Charges', path: '/charges', permission: 'canViewCharges' as const },

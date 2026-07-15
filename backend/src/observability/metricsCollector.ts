@@ -51,12 +51,6 @@ type MetricEntry = CounterEntry | GaugeEntry | HistogramEntry;
 // Label Serialization
 // ---------------------------------------------------------------------------
 
-function serializeLabels(labels: MetricLabels): string {
-  const entries = Object.entries(labels);
-  if (entries.length === 0) return '';
-  return entries.map(([k, v]) => `${k}="${v}"`).join(',');
-}
-
 function labelKey(labels: MetricLabels): string {
   return Object.entries(labels)
     .sort(([a], [b]) => a.localeCompare(b))

@@ -49,7 +49,6 @@ export async function crawlPostDirectory(): Promise<PostAgencyEntry[]> {
 
     for (const li of listItems) {
       try {
-        const html = await li.getAttribute('innerHTML');
         const text = await li.getText();
 
         // Skip empty entries

@@ -470,7 +470,7 @@ function createCluster(
 function buildUnifiedTimeline(
   nodes: EvidenceNode[],
   edges: EvidenceEdge[],
-  policyRefs: PolicyReference[],
+  _policyRefs: PolicyReference[],
 ): UnifiedTimelineEntry[] {
   const timeMap = new Map<string, UnifiedTimelineEntry>();
   const timedNodes = nodes.filter(n => n.timestamp !== '00:00:00');

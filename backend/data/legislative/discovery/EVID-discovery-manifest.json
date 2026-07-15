@@ -1,0 +1,1134 @@
+{
+  "version": "1.0.0",
+  "completedAt": "2026-07-15T15:18:36.589Z",
+  "status": "partial",
+  "code": "EVID",
+  "codeName": "Evidence Code",
+  "discoveredAt": "2026-07-15T14:46:10.112Z",
+  "audit": [
+    {
+      "timestamp": "2026-07-15T14:46:10.112Z",
+      "action": "start",
+      "detail": "Discovery started for Evidence Code"
+    },
+    {
+      "timestamp": "2026-07-15T14:46:10.112Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=EVID"
+    },
+    {
+      "timestamp": "2026-07-15T14:46:10.540Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&nodetreepath=1"
+    },
+    {
+      "timestamp": "2026-07-15T14:46:11.340Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=1.&nodetreepath=2"
+    },
+    {
+      "timestamp": "2026-07-15T14:46:12.661Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "timestamp": "2026-07-15T14:46:13.444Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=3.&nodetreepath=4"
+    },
+    {
+      "timestamp": "2026-07-15T14:46:14.470Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=4.&nodetreepath=5"
+    },
+    {
+      "timestamp": "2026-07-15T14:46:15.510Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=5.&nodetreepath=6"
+    },
+    {
+      "timestamp": "2026-07-15T14:46:16.398Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=6.&nodetreepath=7"
+    },
+    {
+      "timestamp": "2026-07-15T14:46:17.397Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=7.&nodetreepath=8"
+    },
+    {
+      "timestamp": "2026-07-15T14:46:18.394Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=8.&nodetreepath=9"
+    },
+    {
+      "timestamp": "2026-07-15T14:46:19.396Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=9.&nodetreepath=10"
+    },
+    {
+      "timestamp": "2026-07-15T14:46:20.346Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=10.&nodetreepath=11"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:36.589Z",
+      "action": "resume",
+      "detail": "Resumed from /workspace/backend/data/legislative/discovery/EVID-discovery-checkpoint.json"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:36.589Z",
+      "action": "partial",
+      "detail": "Stopped at maxPages=4; 89 URLs remaining"
+    }
+  ],
+  "hierarchyNodes": [
+    {
+      "code": "EVID",
+      "level": "division",
+      "label": "DIVISION 1 PRELIMINARY PROVISIONS AND CONSTRUCTION",
+      "sectionRange": "[1. - 12]",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "10.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "11.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "12.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "division",
+      "label": "DIVISION 2. WORDS AND PHRASES DEFINED",
+      "sectionRange": "[100 - 260]",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "100.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "105.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "110.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "115.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "120.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "125.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "130.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "135.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "140.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "145.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "150.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "160.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "165.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "170.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "175.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "177.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "180.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "185.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "190.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "195.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "200.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "205.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "210.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "215.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "220.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "225.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "230.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "235.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "240.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "250.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "255.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "260.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "division",
+      "label": "DIVISION 4. JUDICIAL NOTICE",
+      "sectionRange": "[450 - 460]",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=4.&nodetreepath=5",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "450.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=4.&nodetreepath=5",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "451.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=4.&nodetreepath=5",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "452.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=4.&nodetreepath=5",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "452.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=4.&nodetreepath=5",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "453.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=4.&nodetreepath=5",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "454.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=4.&nodetreepath=5",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "455.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=4.&nodetreepath=5",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "456.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=4.&nodetreepath=5",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "457.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=4.&nodetreepath=5",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "458.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=4.&nodetreepath=5",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "459.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=4.&nodetreepath=5",
+      "flags": []
+    },
+    {
+      "code": "EVID",
+      "level": "other",
+      "label": "460.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=4.&nodetreepath=5",
+      "flags": []
+    }
+  ],
+  "sections": [
+    {
+      "code": "EVID",
+      "section": "1.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=1.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "EVID",
+      "section": "2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=2.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "EVID",
+      "section": "3.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=3.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "EVID",
+      "section": "4.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=4.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "EVID",
+      "section": "5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=5.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "EVID",
+      "section": "6.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=6.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "EVID",
+      "section": "7.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=7.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "EVID",
+      "section": "8.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=8.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "EVID",
+      "section": "9.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=9.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "EVID",
+      "section": "10.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=10.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "EVID",
+      "section": "11.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=11.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "EVID",
+      "section": "12.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=12.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "EVID",
+      "section": "100.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=100.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "105.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=105.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "110.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=110.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "115.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=115.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "120.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=120.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "125.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=125.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "130.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=130.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "135.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=135.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "140.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=140.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "145.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=145.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "150.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=150.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "160.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=160.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "165.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=165.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "170.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=170.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "175.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=175.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "177.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=177.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "180.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=180.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "185.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=185.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "190.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=190.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "195.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=195.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "200.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=200.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "205.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=205.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "210.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=210.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "215.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=215.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "220.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=220.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "225.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=225.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "230.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=230.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "235.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=235.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "240.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=240.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "250.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=250.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "255.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=255.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "260.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=260.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "2."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=2.&nodetreepath=3"
+    },
+    {
+      "code": "EVID",
+      "section": "450.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=450.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "4."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=4.&nodetreepath=5"
+    },
+    {
+      "code": "EVID",
+      "section": "451.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=451.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "4."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=4.&nodetreepath=5"
+    },
+    {
+      "code": "EVID",
+      "section": "452.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=452.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "4."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=4.&nodetreepath=5"
+    },
+    {
+      "code": "EVID",
+      "section": "452.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=452.5.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "4."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=4.&nodetreepath=5"
+    },
+    {
+      "code": "EVID",
+      "section": "453.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=453.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "4."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=4.&nodetreepath=5"
+    },
+    {
+      "code": "EVID",
+      "section": "454.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=454.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "4."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=4.&nodetreepath=5"
+    },
+    {
+      "code": "EVID",
+      "section": "455.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=455.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "4."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=4.&nodetreepath=5"
+    },
+    {
+      "code": "EVID",
+      "section": "456.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=456.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "4."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=4.&nodetreepath=5"
+    },
+    {
+      "code": "EVID",
+      "section": "457.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=457.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "4."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=4.&nodetreepath=5"
+    },
+    {
+      "code": "EVID",
+      "section": "458.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=458.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "4."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=4.&nodetreepath=5"
+    },
+    {
+      "code": "EVID",
+      "section": "459.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=459.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "4."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=4.&nodetreepath=5"
+    },
+    {
+      "code": "EVID",
+      "section": "460.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=EVID&sectionNum=460.",
+      "hierarchy": {
+        "code": "EVID",
+        "division": "4."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=4.&nodetreepath=5"
+    }
+  ],
+  "stats": {
+    "pagesFetched": 12,
+    "expandedBranchPages": 11,
+    "displayTextPages": 0,
+    "hierarchyNodes": 50,
+    "sectionsDiscovered": 56,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 56,
+    "anomalies": 1
+  },
+  "anomalies": [
+    {
+      "type": "ambiguous_range",
+      "message": "Non-numeric section range requires child crawl: [1. - 12]",
+      "context": {
+        "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=EVID&division=1.&nodetreepath=2",
+        "code": "EVID"
+      }
+    }
+  ]
+}

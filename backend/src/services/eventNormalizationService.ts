@@ -3,7 +3,7 @@
 // ============================================================================
 
 export function normalizeEvent(event: any): any[] {
-  let attributes: any[] = [];
+  const attributes: any[] = [];
 
   try {
     const raw = event.rawText || "";

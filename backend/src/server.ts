@@ -13,9 +13,9 @@ import { registerPolicyIntelligenceRoutes } from './policy/pipeline/policyIntell
 import { registerOperationsConsoleRoutes } from './policy/pipeline/operationsConsoleRoutes.js';
 import { registerComplianceRoutes } from './evidence/complianceRoutes.js';
 import { registerForensicRoutes } from './evidence/forensicReconstructionRoutes.js';
-import { authenticationHook, registerAuthRoutes } from './security/authMiddleware.js';
+import { optionalAuthHook, registerAuthRoutes } from './security/authMiddleware.js';
 import { rateLimitHook, registerRateLimitRoutes } from './security/rateLimiter.js';
-import { csrfProtectionHook, getCsrfTokenRoute } from './security/csrfProtection.js';
+import { getCsrfTokenRoute } from './security/csrfProtection.js';
 import { securityHeadersHook } from './security/securityHeaders.js';
 import { uploadProtectionHook } from './security/evidenceUploadProtection.js';
 import { registerSecurityLogging } from './security/securityLogger.js';
@@ -101,6 +101,10 @@ async function startServer() {
 
   // Phase 191 — Authentication (JWT verification + RBAC)
   //  app.addHook('onRequest', authenticationHook);
+  // Optional identity population: sets request.user from a valid Bearer token
+  // when present, never rejects. Lets authenticated data routes see the caller
+  // (route-level guards still enforce access) without affecting public routes.
+  app.addHook('onRequest', optionalAuthHook);
 
   // Phase 193 — CSRF protection (after auth, before route handlers)
   // app.addHook('onRequest', csrfProtectionHook);
@@ -159,7 +163,7 @@ async function startServer() {
 
   // Contradiction Detection Engine routes
   console.log('[Server] Registering contradiction detection engine routes...');
-  registerContradictionRoutes(app);
+  registerContradictionRoutes(app as unknown as Parameters<typeof registerContradictionRoutes>[0]);
 
   // CPRA Policy Matrix routes
   console.log('[Server] Registering CPRA policy matrix routes...');
@@ -252,7 +256,7 @@ async function startServer() {
   await registerLegislativeRoutes(app);
 
   console.log('[Server] Registering doctrine intelligence routes...');
-  registerDoctrineRoutes(app);
+  registerDoctrineRoutes(app as unknown as Parameters<typeof registerDoctrineRoutes>[0]);
 
   // PR 6 — Observability: /api/health/deep, /api/metrics, /api/metrics/json
   console.log('[Server] Registering observability routes...');

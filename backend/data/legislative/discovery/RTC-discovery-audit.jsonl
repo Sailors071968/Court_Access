@@ -1,0 +1,5 @@
+{"timestamp":"2026-07-15T15:21:01.602Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=RTC"}
+{"timestamp":"2026-07-15T15:21:02.593Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&nodetreepath=1"}
+{"timestamp":"2026-07-15T15:21:03.968Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&division=1.&nodetreepath=2"}
+{"timestamp":"2026-07-15T15:21:04.741Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=RTC&division=2.&nodetreepath=3"}
+{"timestamp":"2026-07-15T15:21:05.722Z","action":"partial","detail":"Manifest written with 45 sections"}

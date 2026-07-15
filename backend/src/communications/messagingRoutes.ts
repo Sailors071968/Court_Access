@@ -41,7 +41,7 @@ async function guardMessagingAccess(
 export async function registerMessagingRoutes(app: FastifyInstance): Promise<void> {
   app.get('/api/cases/:caseId/messages', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
-    if (!(await guardAuth(user, reply))) return;
+    if (!(guardAuth(user, reply))) return;
 
     const { caseId } = request.params as { caseId: string };
     if (!(await guardMessagingAccess(user!, caseId, reply, 'view'))) return;
@@ -68,7 +68,7 @@ export async function registerMessagingRoutes(app: FastifyInstance): Promise<voi
 
   app.post('/api/cases/:caseId/messages', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
-    if (!(await guardAuth(user, reply))) return;
+    if (!(guardAuth(user, reply))) return;
 
     const { caseId } = request.params as { caseId: string };
     const body = request.body as { message?: string; body?: string };
@@ -106,7 +106,7 @@ export async function registerMessagingRoutes(app: FastifyInstance): Promise<voi
 
   app.patch('/api/cases/:caseId/messages/:messageId/read', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     const user = request.user;
-    if (!(await guardAuth(user, reply))) return;
+    if (!(guardAuth(user, reply))) return;
 
     const { caseId, messageId } = request.params as { caseId: string; messageId: string };
     if (!(await guardMessagingAccess(user!, caseId, reply, 'view'))) return;

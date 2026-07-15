@@ -7,11 +7,9 @@ import type { FastifyInstance, FastifyReply } from 'fastify';
 import prisma from '../lib/prisma.js';
 import {
   type AuthenticatedRequest,
-  extractBearerToken,
   generateAccessToken,
   generateRefreshToken,
   logSecurityEvent,
-  verifyAccessToken,
   type UserRole,
 } from '../security/authMiddleware.js';
 import {
@@ -33,8 +31,6 @@ import {
   verifyTenantAccess,
 } from './organizationService.js';
 import { isOrgAdmin } from './organizationTypes.js';
-
-const ORG_ADMIN_ROLES = new Set(['admin', 'attorney']);
 
 async function requireOrgContext(request: AuthenticatedRequest, reply: FastifyReply) {
   const user = request.user;

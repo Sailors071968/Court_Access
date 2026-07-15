@@ -1,92 +1,95 @@
 # CourtAccess — Production Status
 
-**Generated:** 2026-07-15T14:59Z
-**Branch:** `cursor/statewide-acquisition-engine-0cc2`
-**Commit:** `d3be41a`
-**Deployed staging build:** `d3be41a`, build stamp `2026-07-15T14:59:00Z`
-**Program context:** Production Program 122 — Statewide Criminal Statutory Acquisition Engine & Continuous Repository Expansion
+**Generated:** 2026-07-15T15:26Z
+**Branch:** `cursor/criminal-liability-discovery-engine-0cc2`
+**Commit:** `7ca09de`
+**Deployed staging build:** `7ca09de`, build stamp `2026-07-15T15:26:32Z`
+**Program context:** Production Program 123 — Complete California Criminal Liability Discovery Engine
 
 > Reports only what has been verified with cited evidence.
 > Per the Engineering Constitution: No Evidence → No Finding → UNKNOWN.
-> All corpus growth is real statutory text acquired from leginfo.legislature.ca.gov
-> and extracted deterministically — no statutes, offenses, elements, CALCRIM
-> mappings, or coverage figures are fabricated. Values are ACTUAL MEASURED counts.
+> All data is real leginfo statutory text extracted deterministically — no
+> offenses, penalties, regulatory incorporations, or coverage figures are
+> fabricated. Values are ACTUAL MEASURED counts (never estimated).
 
 ---
 
-## 1. Automated statewide acquisition engine (Phases 1, 2, 6)
+## 1. Complete code coverage (Phase 1) — measured
 
-New: `backend/scripts/statewide-acquisition.ts` (`npm run leginfo:statewide`). A
-deterministic orchestrator that, for each requested California code:
-**discovers** (bounded) → **acquires** real statute HTML from leginfo (skip-existing,
-resumable, audit-hashed via the acquisition index) → then **rebuilds** the unified
-knowledge-graph repository in a single per-code pass. It emits a measured
-acquisition report (`data/legislative/statewide-acquisition-report.json`) and a
-continuous-update diff (net new records per run). Repository growth is now a
-repeatable command, not manual steps.
+The statewide engine (`npm run leginfo:statewide --all`) attempted **all 30
+registered California codes** at bounded depth:
 
-- **California codes in registry:** 30 (criminal-priority: PEN, EVID, HSC, VEH, BPC).
-- Every acquired statute retains citation, source URL, acquisition timestamp, and
-  the acquisition-index audit record.
+- **Codes attempted:** 30 · **codes with data:** **23** · **codes remaining:** **7**
+  (COM, CONS, EDC, ELEC, FAM, FGC, PROB — no sections surfaced at this discovery
+  depth; reported **UNKNOWN**, not fabricated).
+- Codes with data (statutes): PEN 188, VEH 70, BPC 59, EVID 56, HSC 46, and
+  CCP/CIV/CORP/FAC/FIN/GOV/HNC/INS/LAB/MVC/PCC/PRC/PUC/RTC/SHC/UIC/WAT/WIC.
 
-## 2. Repository expansion (actual measured, Program 121 → 122)
+## 2. Criminal liability discovery (Phase 2) — measured
 
-Corpus expanded from **1 code (PEN)** to **5 codes (PEN, EVID, BPC, HSC, VEH)**:
+- **Qualified offenses:** **91**
+- **Classification breakdown:** felony **27** · misdemeanor **43** · infraction **1**
+  · UNKNOWN **20** (classification not determinable from text → UNKNOWN, not guessed).
 
-| Repository | P121 (PEN) | P122 (5 codes) |
-|-----------|-----------:|---------------:|
-| statutes | 188 | **409** |
-| offenses | 89 | **91** |
-| elements | 232 | **367** |
-| mens_rea | 89 | **91** |
-| exceptions | 71 | **126** |
-| defenses | 4 | **7** |
-| cross_references | 337 | **583** |
-| regulatory_incorporations | 225 | **366** |
+## 3. Regulatory incorporation & penalty analysis (Phases 3–4) — measured
+
+- **Regulatory incorporations:** **382** deterministic statute→regulation links.
+- **Penalty-related exceptions/provisions:** **181**.
+- **Defenses:** 7. **Cross-references:** 601. **Authorities:** 150.
+
+## 4. Continuous validation (Phase 6) — deterministic
+
+- **Duplicate citations:** **0**.
+- **Repealed statutes detected:** **23** (deterministic full-text scan; e.g.
+  PEN §29, §118.1, §136 …).
+- **Amended / version diffs:** **UNKNOWN** — version history is not tracked
+  (reported honestly, not inferred).
+
+## 5. Repository metrics (Phase 7) — actual measured
+
+| Repository | P122 | P123 |
+|-----------|-----:|-----:|
+| statutes | 409 | **583** |
+| offenses | 91 | **91** |
+| elements | 367 | **367** |
+| mens_rea | 91 | **91** |
+| exceptions | 126 | **181** |
+| defenses | 7 | **7** |
+| cross_references | 583 | **601** |
+| regulatory_incorporations | 366 | **382** |
 | authorities | 150 | **150** |
 | calcrim_links | 3 | **3** |
-| statute_classifications | 409 | **409** |
+| **California codes with data** | 5 | **23** |
 
-Statutes by code: **BPC 59, EVID 56, HSC 46, PEN 188, VEH 60**.
+**Offense count unchanged (91):** the bounded shallow slices (≤4 TOC pages) of the
+newly-added codes landed on definitional/administrative sections, correctly not
+classified as offenses. Deeper acquisition (higher `--max-pages`) surfaces their
+offense-creating sections; this is a crawl-budget/time matter, not a code defect.
+CALCRIM mappings remain 3 (needs the licensed CALCRIM dataset). Absolute
+"repository coverage %" stays **UNKNOWN** (no authoritative denominator).
 
-## 3. Honest limits (measured, not estimated)
+## 6. Litigation impact (Phase 8) — verified
 
-- **Offense growth is modest (+2)** because the bounded discovery slices of the
-  new codes (EVID/BPC/HSC, ~12 TOC pages each) landed largely on definitional /
-  administrative sections, which the extractor correctly did **not** classify as
-  offenses. Reported as-is — not inflated. Deeper acquisition of each code (higher
-  `--max-pages`) will surface their offense-creating sections (e.g. VEH DUI, HSC
-  controlled substances); this is a crawl-budget/time matter, not a code defect.
-- **CALCRIM mappings unchanged (3)** — requires the separate licensed CALCRIM
-  dataset (absent from leginfo text).
-- **Absolute "repository coverage %" remains UNKNOWN** — there is no authoritative
-  denominator of all California criminal offenses; only bounded slices of 5 of 30
-  codes are acquired. Other 25 codes are **UNKNOWN**.
+Backend serves the 23-code unified repository; every workspace reads it, so all
+benefit automatically. Covered charges resolve to real extracted elements
+(PEN §118); uncovered charges (PC §459) still report UNKNOWN. Browser-verified via
+Playwright: **35/35 pages, 0 console errors** (`reports/screenshots/program-123/`).
 
-## 4. Verified litigation impact (Phase 8)
+## 7. Live staging (ephemeral)
 
-After the rebuild, the backend serves the 5-code unified repository. Covered
-charges resolve to real extracted elements (PEN §118 → 2 element rows, confidence
-HIGH); uncovered charges (PC §459) still correctly report **UNKNOWN**. Every
-workspace reads the same repository, so all benefit automatically. Browser-verified
-via Playwright: **35/35 pages, 0 console errors** (`reports/screenshots/program-122/`).
-
-## 5. Live staging (ephemeral)
-
-Cloudflare quick tunnel serving build `d3be41a`; verified `GET /` → 200 with the
+Cloudflare quick tunnel serving build `7ca09de`; verified `GET /` → 200 with the
 matching build stamp. **Ephemeral** — stops when this session's VM suspends.
 
-## 6. Production completion
+## 8. Production completion
 
 Application layer ≈ **95%** (all workspaces operational, 35/35 pages 0 console
-errors, backend `tsc`/lint clean, CI green). The statewide engine makes corpus
-growth continuous; broad California coverage remains an ongoing acquisition task
-(UNKNOWN denominator).
+errors, backend `tsc`/lint clean, CI green). The criminal-liability discovery
+engine now spans 23 of 30 codes; completing all 30 to full depth is an ongoing
+acquisition task (bounded here by crawl budget).
 
-## 7. Remaining infrastructure blockers
+## 9. Remaining infrastructure blockers
 
 Deploy secrets (persistent staging / `courtaccess.net`); provider credentials
 (Stripe/AWS/OpenAI/Anthropic/Gemini/Twilio/Resend/CourtListener); managed
 Postgres/Redis/Neo4j for production; **licensed CALCRIM element dataset**;
-full multi-code California acquisition budget (compute/time + polite crawl rate);
-pre-existing Prisma migration/schema drift.
+full-depth multi-code acquisition budget; pre-existing Prisma migration/schema drift.

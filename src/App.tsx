@@ -115,6 +115,7 @@ import { CaseTheoryPage } from './pages/case/CaseTheoryPage';
 import { TrialReadinessCenterPage } from './pages/case/TrialReadinessCenterPage';
 import { CrossExaminationPage } from './pages/case/CrossExaminationPage';
 import { CommandCenterPage } from './pages/case/CommandCenterPage';
+import { InvestigationCommandPage } from './pages/case/InvestigationCommandPage';
 import { InvestigatorWorkbenchPage } from './pages/case/InvestigatorWorkbenchPage';
 import { ClientPortalLayout, ClientPortalIndex } from './pages/client-portal/ClientPortalLayout';
 import {
@@ -652,6 +653,14 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canViewEvidence">
                   <CommandCenterPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="investigation-command"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <InvestigationCommandPage />
                 </ProtectedRoute>
               }
             />

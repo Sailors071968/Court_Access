@@ -59,6 +59,7 @@ const authRoutes = [
   ['trial-readiness', `/cases/${CASE_ID}/trial-readiness`],
   ['cross-examination', `/cases/${CASE_ID}/cross-examination`],
   ['command-center', `/cases/${CASE_ID}/command-center`],
+  ['investigation-command', `/cases/${CASE_ID}/investigation-command`],
   ['prosecution-weakness', `/cases/${CASE_ID}/prosecution-weakness`],
   ['investigation-opportunities', `/cases/${CASE_ID}/investigation-opportunities`],
   ['contradiction-workspace', `/cases/${CASE_ID}/contradictions`],

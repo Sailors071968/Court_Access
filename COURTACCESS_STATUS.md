@@ -1,93 +1,96 @@
 # CourtAccess — Production Status
 
-**Generated:** 2026-07-15T16:48Z
-**Branch:** `cursor/motion-intelligence-center-0cc2`
-**Commit:** `4515279` (feature) — status/verification commit follows
-**Deployed staging build:** `4515279` served via Cloudflare quick tunnel
+**Generated:** 2026-07-15T17:02Z
+**Branch:** `cursor/case-theory-center-0cc2`
+**Commit:** `2860772` (feature) — status/verification commit follows
+**Deployed staging build:** `2860772` served via Cloudflare quick tunnel
 **Public staging URL:** `https://slide-fairfield-atlas-statistical.trycloudflare.com` (ephemeral)
-**Program context:** Production Program 128 — Evidence-Governed Criminal Motion Intelligence & Motion Workspace Certification
+**Program context:** Production Program 129 — Evidence-Governed Case Theory Intelligence & Competing Theory Workspace Certification
 
 > Reports only what has been verified with cited evidence.
 > Per the Engineering Constitution: No Evidence → No Finding → UNKNOWN.
 > Repository-backed intelligence and illustrative examples are labeled
-> separately; no attorney recommendations, legal conclusions, motion viability,
-> repository intelligence, or case outcomes are fabricated. **CourtAccess never
-> recommends whether a motion should or should not be filed.**
+> separately; no case theories, legal conclusions, attorney recommendations, or
+> case outcomes are fabricated. **CourtAccess never determines guilt, predicts
+> verdicts, or recommends a litigation strategy.**
 
 ---
 
 ## 1. Delivered this program (verified)
 
-**Motion Intelligence Center** (new "Motion Intelligence" case tab + route
-`/cases/:caseId/motion-intelligence`) — a flagship workspace that organizes
-repository-backed litigation information by motion category for attorney review,
-built entirely from the Attorney Workbench bundle. A **mandatory
-non-recommendation banner** states CourtAccess does not recommend filing and does
-not assess motion viability.
+**Case Theory Center** (new "Case Theory" case tab + route
+`/cases/:caseId/case-theory`) — a flagship workspace that organizes repository-
+backed evidence into structured competing case theories for attorney review,
+built entirely from the Attorney Workbench bundle. A **mandatory disclaimer
+banner** states CourtAccess does not determine guilt, predict verdicts, or
+recommend strategy.
 
-- **Executive dashboard (Phases 1/7):** categories flagged for review, evidence
-  items, contradictions, outstanding discovery, repository confidence, human
-  review.
-- **Motion Workspace (Phase 4):** interactive category selector — Suppression,
-  Discovery, Continuance, Protective Orders, Evidence Issues, Procedural Issues,
-  Constitutional Issues — each with a live signal count.
-- **Motion Analysis (Phase 2):** per selected category — repository-backed
-  information relevant to review, conflicting/limiting information, outstanding
-  factual questions, outstanding evidentiary questions, related timeline,
-  documents, charges, CALCRIM; UNKNOWN where unsupported.
-- **Evidence Support Matrix (Phase 3):** information relevant to review (evidence
-  supporting review, evidence requiring investigation, outstanding discovery/
-  subpoenas, contradictions, missing witnesses/evidence) with counts + provenance.
-- **Investigation Impact (Phase 5):** additional investigation, potential
-  witnesses/records, outstanding forensic/digital evidence, priority-ranked tasks.
-- **Attorney Briefing (Phase 6):** motion review summary, repository confidence,
-  outstanding legal-research topics (explicitly for research, not conclusions),
-  outstanding factual questions/investigation, human review checklist.
+- **Case Theory Center (Phase 1):** potential prosecution theory + potential
+  defense theory cards, plus a coverage/confidence/contradictions/human-review
+  dashboard.
+- **Theory Support Matrix (Phase 2):** per theory — repository-backed supporting
+  evidence, conflicting evidence, outstanding factual & evidentiary questions,
+  related witnesses/documents/timeline/CALCRIM; UNKNOWN where unsupported.
+- **Theory Comparison (Phase 3):** side-by-side prosecution vs defense tallies
+  (supporting/conflicting/missing/contradictions/investigation/confidence) with
+  an explicit note that counts are organizational only — no strength or outcome
+  implied.
+- **Evidence Weight Visualization (Phase 4):** per-element supporting vs
+  contradictory evidence-link bars + Knowledge-Graph node/edge counts.
+- **Theory Evolution (Phase 5):** current repository state + clearly-labeled
+  **Illustrative** examples of how the analysis reorganizes as evidence is added;
+  investigation impact; human review checklist.
+- **Attorney Executive Briefing (Phase 6):** case theory summary, repository
+  confidence, outstanding factual questions, outstanding investigation,
+  outstanding legal-research topics (for research, not conclusions), human review.
 
-Every derivation is repository-backed; nothing asserts that a motion should or
-should not be filed. Repository-backed vs UNKNOWN labeled via `ProvenanceBadge`.
-Frontend `npm run build` passes; backend `tsc`/lint remain clean.
+Every derivation is repository-backed; illustrative content is labeled
+separately and nothing determines guilt or predicts outcomes. Repository /
+UNKNOWN / Illustrative labeled via `ProvenanceBadge`. Frontend `npm run build`
+passes; backend `tsc`/lint remain clean.
 
-## 2. Browser verification (Phase 8) — 40/40 pages, 0 console errors
+## 2. Browser verification (Phase 8) — 41/41 pages, 0 console errors
 
 Playwright walkthrough against the running staging build
-(`reports/screenshots/program-128/`, `verification-report.json`): all 40 routes —
-including the new **motion-intelligence** page — render with **0 console errors,
-0 failing API calls**. Screenshot gallery captured (incl. `motion-intelligence.png`).
+(`reports/screenshots/program-129/`, `verification-report.json`): all 41 routes —
+including the new **case-theory** page — render with **0 console errors, 0
+failing API calls**. Screenshot gallery captured (incl. `case-theory.png`).
 
 ## 3. Live staging (ephemeral)
 
 Cloudflare quick tunnel `https://slide-fairfield-atlas-statistical.trycloudflare.com`
-proxying the local static+API stack serving build `4515279`; verified `GET /` →
+proxying the local static+API stack serving build `2860772`; verified `GET /` →
 200 and `POST /api/auth/login` → 200. **Ephemeral** — the URL stops when this
 session's VM suspends; a persistent URL still requires deploy credentials.
 
-## 4. Program 128 phase status
+## 4. Program 129 phase status
 
 | Phase | Status |
 |-------|--------|
-| 1 — Motion Intelligence Center | **DONE** |
-| 2 — Motion Analysis | **DONE** |
-| 3 — Evidence Support Matrix | **DONE** |
-| 4 — Motion Workspace | **DONE** (7 interactive categories) |
-| 5 — Investigation Impact | **DONE** |
-| 6 — Attorney Briefing | **DONE** (expanded for motion review) |
+| 1 — Case Theory Center | **DONE** |
+| 2 — Theory Support Matrix | **DONE** |
+| 3 — Theory Comparison | **DONE** |
+| 4 — Evidence Weight Visualization | **DONE** |
+| 5 — Theory Evolution | **DONE** (repository state + labeled Illustrative) |
+| 6 — Attorney Executive Briefing | **DONE** |
 | 7 / 8 / 9 / 10 — Visual / Verify / Git / Deploy | **DONE** |
 
-## 5. Motion Intelligence completion
+## 5. Case Theory Intelligence completion
 
 Core capability operational and browser-verified: CourtAccess now organizes
-evidence-governed information by motion category for attorney review without
-recommending filing or asserting viability. **Motion Intelligence completion
-≈ 90%** — the remaining ~10% is deeper per-category statutory/authority linkage
-(bounded by legislative corpus coverage) and export of motion-review packets.
+repository evidence into competing prosecution/defense theories with a
+side-by-side comparison and evidence-weight visualization, without determining
+guilt, predicting verdicts, or recommending strategy. **Case Theory Intelligence
+completion ≈ 90%** — the remaining ~10% is deeper per-theory authority linkage
+(bounded by legislative corpus coverage) and richer graphical theory-evolution
+tracking.
 
 ## 6. Production completion
 
-Application layer ≈ **95%** (all workspaces operational, 40/40 pages 0 console
-errors, backend `tsc`/lint clean, CI green). Depth of repository-backed motion
-intelligence tracks the legislative corpus coverage (23 codes; largely bounded
-slices), which remains an ongoing acquisition task.
+Application layer ≈ **95%** (all workspaces operational, 41/41 pages 0 console
+errors, backend `tsc`/lint clean, CI green). Depth of repository-backed case
+theory intelligence tracks the legislative corpus coverage (23 codes; largely
+bounded slices), which remains an ongoing acquisition task.
 
 ## 7. Remaining infrastructure blockers
 

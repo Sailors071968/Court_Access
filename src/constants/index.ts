@@ -190,6 +190,7 @@ export const ROLE_PERMISSIONS: Record<UserRole, RolePermissions> = {
 // --- Case Tab Definitions (deterministic order) ---
 export const CASE_TABS = [
   { id: 'overview', label: 'Overview', path: '', permission: null },
+  { id: 'strategy-center', label: 'Strategy Center', path: '/strategy-center', permission: 'canViewEvidence' as const },
   { id: 'attorney-workbench', label: 'Attorney Workbench', path: '/attorney-workbench', permission: 'canViewEvidence' as const },
   { id: 'calcrim-intelligence', label: 'CALCRIM Intelligence', path: '/calcrim-intelligence', permission: 'canViewEvidence' as const },
   { id: 'prosecution-weakness', label: 'Prosecution Weakness', path: '/prosecution-weakness', permission: 'canViewEvidence' as const },

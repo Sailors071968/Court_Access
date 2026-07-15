@@ -105,6 +105,7 @@ import { ProsecutionWeaknessPage } from './pages/case/ProsecutionWeaknessPage';
 import { InvestigationOpportunitiesPage } from './pages/case/InvestigationOpportunitiesPage';
 import { CalcrimIntelligencePage } from './pages/case/CalcrimIntelligencePage';
 import { DefenseOpportunitiesPage } from './pages/case/DefenseOpportunitiesPage';
+import { LitigationStrategyCenterPage } from './pages/case/LitigationStrategyCenterPage';
 import { InvestigatorWorkbenchPage } from './pages/case/InvestigatorWorkbenchPage';
 import { ClientPortalLayout, ClientPortalIndex } from './pages/client-portal/ClientPortalLayout';
 import {
@@ -538,6 +539,14 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canViewEvidence">
                   <AttorneyWorkbenchPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="strategy-center"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <LitigationStrategyCenterPage />
                 </ProtectedRoute>
               }
             />

@@ -47,6 +47,8 @@ const authRoutes = [
   ['evidence-workspace', `/cases/${CASE_ID}/evidence`],
   ['timeline', `/cases/${CASE_ID}/dashboard/case-timeline`],
   ['attorney-workbench', `/cases/${CASE_ID}/attorney-workbench`],
+  ['prosecution-weakness', `/cases/${CASE_ID}/prosecution-weakness`],
+  ['investigation-opportunities', `/cases/${CASE_ID}/investigation-opportunities`],
   ['contradiction-workspace', `/cases/${CASE_ID}/contradictions`],
   ['narrative-analysis', `/cases/${CASE_ID}/narrative-analysis`],
   ['litigation-strategy', `/cases/${CASE_ID}/litigation-strategy`],

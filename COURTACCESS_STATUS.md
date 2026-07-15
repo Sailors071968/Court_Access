@@ -1,90 +1,79 @@
 # CourtAccess — Production Status
 
-**Generated:** 2026-07-15T12:56Z
-**Branch:** `cursor/ci-executive-dashboard-fix-0cc2`
-**Commit:** `6402e0a`
-**Program context:** Production Program 117 — GitHub Actions Certification & Executive Dashboard Pipeline Repair
+**Generated:** 2026-07-15T13:20Z
+**Branch:** `cursor/attorney-intelligence-demonstration-0cc2`
+**Commit:** `a2a9ef5`
+**Deployed staging build:** `a2a9ef5`, build stamp `2026-07-15T13:19:22Z`
+**Program context:** Production Program 118 — Attorney Intelligence Demonstration & Litigation Excellence Certification
 
 > Reports only what has been verified with cited evidence.
 > Per the Engineering Constitution: No Evidence → No Finding → UNKNOWN.
-> No CI status, dashboard generation, or artifact is fabricated.
+> Repository-backed intelligence and illustrative demonstrations are labeled
+> separately; no legal conclusions, recommendations, or case outcomes are fabricated.
 
 ---
 
-## 1. CI certification — GREEN (evidence-backed)
+## 1. Delivered this program (verified)
 
-Workflow **"CI Build & Verify"** (`.github/workflows/ci.yml`) — the check that
-runs on pull requests and `cursor/**` pushes — now passes on all jobs:
+- **Prosecution Weakness Analysis workspace** (new tab + route) — repository-backed
+  analysis derived from the Attorney Workbench bundle: unsupported/partial CALCRIM
+  elements, evidence gaps / missing intent evidence, conflicting testimony, and
+  outstanding UNKNOWNs. Each section carries a **Repository-Backed** or **UNKNOWN**
+  badge; empty cases show a clearly-labeled **Illustrative Demonstration** (example
+  content, never presented as real).
+- **Investigation Opportunities workspace** (new tab + route) — priority-ranked
+  investigation tasks plus witnesses to interview, subpoenas, digital-evidence
+  requests, and timeline/travel-time verification, with expected litigation value.
+- **ProvenanceBadge** component enforcing the Constitution's three-way labeling
+  (Repository-Backed / Illustrative Demonstration / UNKNOWN) across intelligence
+  surfaces.
 
-```
-Run 29417082598  conclusion: success
-  ✓ Backend Tests                 33s
-  ✓ Frontend Build & Program 0    1m16s
-  ✓ Generate Executive Dashboard  14s   (previously X — now green)
-```
+## 2. Browser verification (Phase 9) — 32/32 pages, 0 console errors
 
-Verified with `gh run watch --exit-status` (exit 0) and
-`gh run view --json conclusion` → `"success"`.
+Playwright walkthrough against the running staging build
+(`reports/screenshots/program-118/`, `verification-report.json`): all 32 routes —
+including the two new workspaces — render with **0 console errors, 0 failing API
+calls**. The demo case is empty, so intelligence sections correctly show
+repository-backed empty/UNKNOWN states alongside the labeled illustrative panel.
 
-### Root cause of the previous failure (cited)
+## 3. Live staging (ephemeral)
 
-```
-Error: ENOENT: no such file or directory, open
-'/workspace/reports/EXECUTIVE_DASHBOARD.md'
-  at scripts/generate-executive-dashboard.mjs:175
-```
+Cloudflare quick tunnel serving build `a2a9ef5`; verified `GET /` → 200 with the
+matching build stamp and `/api/health` → `{"status":"ok"}`. **Ephemeral** — stops
+when this session's VM suspends (persistent URL still requires deploy secrets or a
+named tunnel token).
 
-`scripts/generate-executive-dashboard.mjs` hardcoded absolute `/workspace/...`
-report paths. On the GitHub runner the checkout is at
-`/home/runner/work/Court_Access/Court_Access`, so `/workspace/reports/` did not
-exist → `writeFileSync` failed. Backend Tests and Frontend Build were already
-green; this was the sole remaining CI failure.
+## 4. Program 118 phase status (honest)
 
-### Fix
+| Phase | Status |
+|-------|--------|
+| 2 — Prosecution Weakness Analysis | **DONE** (new workspace, verified) |
+| 4 — Investigation Opportunities | **DONE** (new workspace, verified) |
+| 9 — End-to-end browser verification | **DONE** (32/32, 0 console errors) |
+| 10 — Git certification | **DONE** |
+| 1 — Attorney Workbench executive redesign | PARTIAL — existing workbench retained & functional; two new adjacent intelligence workspaces added; a full executive redesign of the overview is outstanding |
+| 3 — Dedicated CALCRIM Analysis view | OUTSTANDING — element status/evidence surfaced in Prosecution Weakness, but a dedicated satisfied/unsupported/partial/UNKNOWN CALCRIM view is not yet built |
+| 5 — Contradiction Workspace expansion | OUTSTANDING (existing workspace retained) |
+| 6 — Case Brief expansion | OUTSTANDING |
+| 7 — 10 Demonstration Reports | OUTSTANDING |
+| 8 — Premium visual overhaul | PARTIAL — new workspaces use the existing professional design system; a global visual overhaul is outstanding |
 
-- Resolve all report paths relative to the repo (`<repo>/reports`, derived from
-  the script's own location via `import.meta.url`) and `mkdirSync` the reports
-  directory. Verified host-agnostic by running from a non-`/workspace` checkout
-  (exit 0, both artifacts written).
-- Added a real **Repository & Build** section to the dashboard (current commit,
-  branch, version, Node runtime, build source, deployment readiness) from CI
-  env / git / package.json with UNKNOWN fallbacks — no fabricated values.
+## 5. Attorney Intelligence completion
 
-## 2. Workflow status summary
+Operational intelligence workspaces: Attorney Workbench, Contradictions, Narrative
+Analysis, Litigation Strategy, **Prosecution Weakness (new)**, **Investigation
+Opportunities (new)** — all browser-verified. Against the full Program 118 scope
+(which also asks for a dedicated CALCRIM view, expanded Case Brief, 10 demonstration
+reports, and a premium visual overhaul), **Attorney Intelligence completion ≈ 65%**.
 
-| Workflow | Trigger | Status |
-|----------|---------|--------|
-| **CI Build & Verify** (`ci.yml`) | PR → dev/main, push `cursor/**` | **GREEN** (3/3 jobs) |
-| Deploy Production Website (`deploy-production.yml`) | push `dev`, manual | **INFRA-BLOCKED** — needs `DEPLOY_HOST`/`DEPLOY_USER`/`DEPLOY_SSH_KEY`; does not run on PRs |
-| Publish dist artifact (`publish-dist-artifact.yml`) | push `dev`, manual | Runs post-merge to `dev` only (not a PR gate) |
-| Verify Production (`verify-production.yml`) | schedule + push `dev` | Curls live `courtaccess.net`; passes only once the current build is deployed (infra) |
+## 6. Production completion
 
-Only `ci.yml` gates PRs / runs on `cursor/**`, and it is fully green. The other
-three run on `dev`/schedule and are infrastructure-dependent (deploy secrets /
-a live, current production site) — they cannot be made green from application
-code alone.
+Application layer ≈ **95%** (all workspaces operational, 32/32 pages 0 console
+errors, backend `tsc`/lint clean, CI green). Remaining is infrastructure-owned plus
+the outstanding Program 118 presentation phases above.
 
-## 3. Artifact certification
+## 7. Remaining infrastructure blockers
 
-`npm run dashboard:executive` → exit 0; uploads `reports/EXECUTIVE_DASHBOARD.md`
-+ `reports/EXECUTIVE_DASHBOARD.json` (CI "Generate Executive Dashboard" job step
-`actions/upload-artifact@v4` ✓). Frontend job uploads `program-00-screenshots`.
-
-## 4. Non-failing notice
-
-GitHub annotates a Node.js-20 deprecation notice on `actions/checkout@v4` /
-`actions/setup-node@v4` (GitHub is transitionally forcing them onto Node 24).
-This is a warning, not a failure; all jobs conclude `success`.
-
-## 5. Remaining infrastructure blockers
-
-Deploy secrets (for `deploy-production.yml` + a persistent staging URL); provider
-credentials (Stripe/AWS/OpenAI/Anthropic/Gemini/Twilio/Resend/CourtListener);
-managed Postgres/Redis/Neo4j for production; the pre-existing Prisma
-migration/schema drift (squash recommended).
-
-## 6. Ready for production pipeline
-
-**YES** for the PR-gating CI pipeline (`ci.yml` green, evidence above). The
-deploy/verify workflows remain infrastructure-gated and will run post-merge to
-`dev` once credentials exist.
+Deploy secrets (persistent staging / `courtaccess.net`); provider credentials
+(Stripe/AWS/OpenAI/Anthropic/Gemini/Twilio/Resend/CourtListener); managed
+Postgres/Redis/Neo4j for production; pre-existing Prisma migration/schema drift.

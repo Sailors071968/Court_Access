@@ -38,7 +38,7 @@ export async function registerProductionOperationsRoutes(app: FastifyInstance): 
   });
 
   // Legacy system health adapter for SystemHealthDashboard.tsx
-  app.get('/api/system/health', async (request: FastifyRequest, reply: FastifyReply) => {
+  app.get('/api/system/health', async (_request: FastifyRequest, reply: FastifyReply) => {
     try {
       return reply.send(await buildSystemHealthAdapter());
     } catch (err) {

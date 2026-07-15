@@ -1,8 +1,8 @@
 #!/usr/bin/env tsx
 // Program 1 — Generate Version 1.0 release artifacts
 
-import { writeFile, mkdir, readFile } from 'node:fs/promises';
-import { resolve, dirname } from 'node:path';
+import { writeFile, mkdir } from 'node:fs/promises';
+import { resolve } from 'node:path';
 import { runVersion1ProductionGates } from '../src/productionGates/version1ProductionGates.ts';
 
 const reportsDir = resolve(import.meta.dirname ?? '.', '../../reports');

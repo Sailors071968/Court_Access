@@ -14,17 +14,17 @@ function matchEvent(e: any, el: any) {
   const target = (e.target || "").toLowerCase();
 
   // STRONG MATCH (action)
-  if (el.actions && el.actions.some(a => action.includes(a))) {
+  if (el.actions && el.actions.some((a: string) => action.includes(a))) {
     return true;
   }
 
   // STRONG MATCH (target)
-  if (el.targets && el.targets.some(t => target.includes(t))) {
+  if (el.targets && el.targets.some((t: string) => target.includes(t))) {
     return true;
   }
 
   // 🔥 IMPROVED SEMANTIC MATCH
-  if (el.keywords && el.keywords.some(k => text.includes(k))) {
+  if (el.keywords && el.keywords.some((k: string) => text.includes(k))) {
     return true;
   }
 
@@ -182,7 +182,7 @@ export function runLegalAnalysis({
     if (!def) continue; // 🔥 safety guard
 
     const elements = scoreElements(events, def);
-    const missing = elements.filter(e => !e.satisfied);
+    const missing = elements.filter((e: { satisfied?: boolean; label?: string }) => !e.satisfied);
 
     // 🔥 USE SAFE VERSION HERE
     const penalty = weightContradictions(safeContradictions);
@@ -190,7 +190,7 @@ export function runLegalAnalysis({
     const brd = computeBRD(elements, penalty);
 
     const defense = [
-      ...missing.map(e => `Failure to prove: ${e.label}`),
+      ...missing.map((e: { label?: string }) => `Failure to prove: ${e.label}`),
       ...(penalty > 0 ? ["Contradictions undermine credibility"] : [])
     ];
 
@@ -198,7 +198,7 @@ export function runLegalAnalysis({
       crime: `${crimeKey.toUpperCase()} (${def.code})`,
       intentType: def.intentType,
       elements,
-      missingElements: missing.map(m => m.label),
+      missingElements: missing.map((m: { label?: string }) => m.label),
       juryInstructions: def.jury,
       defenseStrategies: defense,
 

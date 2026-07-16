@@ -58,7 +58,7 @@ export function generateLitigationStrategy(clusters: Cluster[]): StrategyOutput[
 // BUILDERS
 // ============================================================================
 
-function buildDefense(cluster: Cluster, flags: any): string {
+function buildDefense(_cluster: Cluster, flags: any): string {
   if (flags.hasTimelineConflict) {
     return `
 The sequence of events may be challenged due to inconsistencies in timing across sources.
@@ -86,7 +86,7 @@ of the narrative presented.
 `;
 }
 
-function buildProsecution(cluster: Cluster): string {
+function buildProsecution(_cluster: Cluster): string {
   return `
 The prosecution narrative may depend on a consistent interpretation of events
 within this cluster. Any inconsistencies may affect how strongly the sequence
@@ -94,7 +94,7 @@ and actions are established.
 `;
 }
 
-function buildDoubt(cluster: Cluster, count: number): string {
+function buildDoubt(_cluster: Cluster, count: number): string {
   if (count >= 3) {
     return `
 Multiple inconsistencies across independent sources may contribute to uncertainty
@@ -113,7 +113,7 @@ No significant inconsistencies detected within this cluster.
 `;
 }
 
-function buildVulnerability(cluster: Cluster): string {
+function buildVulnerability(_cluster: Cluster): string {
   return `
 This cluster represents a point where differing accounts intersect.
 Consistency across sources may be necessary to maintain narrative strength.

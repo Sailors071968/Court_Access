@@ -280,6 +280,26 @@ export function extractBearerToken(authHeader: string | undefined): string | nul
   return authHeader.slice(7);
 }
 
+/**
+ * Optional authentication: if a valid Bearer token is present, populate
+ * `request.user`; otherwise leave it unset and continue. Never rejects, so
+ * public/token-less routes are unaffected. Individual routes retain their own
+ * `if (!user) 401` guards, so this only fixes the plumbing that lets
+ * authenticated data routes see the caller identity.
+ */
+export async function optionalAuthHook(
+  request: AuthenticatedRequest,
+  _reply: FastifyReply,
+): Promise<void> {
+  const token = extractBearerToken(request.headers.authorization);
+  if (!token) return;
+  try {
+    request.user = verifyAccessToken(token);
+  } catch {
+    // Invalid/expired token: leave request.user unset; route guards handle it.
+  }
+}
+
 export async function authenticationHook(
   request: AuthenticatedRequest,
   reply: FastifyReply,
@@ -541,7 +561,6 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     const email = body.email.trim().toLowerCase();
     const password = body.password;
     const name = body.name;
-    const role = body.role;
 
     // Check for existing user — also check case-insensitive to prevent duplicates
     // with legacy mixed-case emails (e.g. Admin@Company.com vs admin@company.com)
@@ -892,7 +911,7 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
         }));
 
         console.log(`[Auth:ForgotPassword] Reset email sent to ${email}`);
-      } catch (sesError) {
+      } catch (_sesError) {
         // SES not configured — log info but only expose raw token in development
         console.log(`[Auth:ForgotPassword] SES not available for ${email}`);
         if (process.env.NODE_ENV !== 'production') {

@@ -1,0 +1,707 @@
+{
+  "version": "1.0.0",
+  "code": "CORP",
+  "startedAt": "2026-07-15T15:18:14.558Z",
+  "updatedAt": "2026-07-15T15:18:18.464Z",
+  "visitedUrls": [
+    "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=CORP",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&title=1.&nodetreepath=2",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&title=2.&nodetreepath=3"
+  ],
+  "pendingUrls": [
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&title=2.6.&nodetreepath=4",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&title=3.&nodetreepath=5",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&title=4.&nodetreepath=6",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&title=10.&nodetreepath=7",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&title=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=1.&title=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.&title=1.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.&title=1.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.&title=1.&chapter=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.&title=1.&chapter=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.&title=1.&chapter=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.&title=1.&chapter=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.&title=1.&chapter=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.&title=1.&chapter=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.&title=1.&chapter=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.&title=1.&chapter=10.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.&title=1.&chapter=11.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.&title=1.&chapter=11.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.&title=1.&chapter=12.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.&title=1.&chapter=13.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.&title=1.&chapter=14.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.&title=1.&chapter=15.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.&title=1.&chapter=16.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.&title=1.&chapter=17.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.&title=1.&chapter=18.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.&title=1.&chapter=19.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.&title=1.&chapter=20.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.&title=1.&chapter=21.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.&title=1.&chapter=22.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.&title=1.&chapter=22.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.&title=1.&chapter=23.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=1.5.&title=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.5.&title=1.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.5.&title=1.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.5.&title=1.&chapter=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.5.&title=1.&chapter=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.5.&title=1.&chapter=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.5.&title=1.&chapter=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.5.&title=1.&chapter=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.5.&title=1.&chapter=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.5.&title=1.&chapter=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.5.&title=1.&chapter=10.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=1.5.&title=1.&chapter=11.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=2.&title=1.&part=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=2.&title=1.&part=2.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=1.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=1.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=1.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=1.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=1.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=1.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=2.&title=1.&part=2.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=2.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=2.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=2.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=2.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=2.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=2.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=2.&title=1.&part=2.&chapter=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=3.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=3.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=3.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=3.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=3.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=2.&title=1.&part=2.&chapter=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=4.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=4.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=2.&title=1.&part=2.&chapter=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=5.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=5.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=2.&title=1.&part=2.&chapter=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=9.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=9.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=2.&title=1.&part=2.&chapter=10.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=10.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=10.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=11.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=12.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=2.&title=1.&part=2.&chapter=13.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=13.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=13.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=13.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=14.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=15.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=16.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=17.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=18.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=2.&chapter=19.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=2.&title=1.&part=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=2.&title=1.&part=3.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=1.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=1.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=1.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=1.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=1.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=1.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=2.&title=1.&part=3.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=2.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=2.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=2.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=2.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=2.&title=1.&part=3.&chapter=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=3.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=3.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=3.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=3.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=3.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=2.&title=1.&part=3.&chapter=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=4.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=4.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=2.&title=1.&part=3.&chapter=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=5.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=5.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=2.&title=1.&part=3.&chapter=10.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=10.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=10.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=11.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=12.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=2.&title=1.&part=3.&chapter=13.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=13.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=13.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=13.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=14.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=15.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=16.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=17.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=18.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=3.&chapter=19.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=2.&title=1.&part=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=2.&title=1.&part=4.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=1.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=1.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=1.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=1.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=1.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=1.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=2.&title=1.&part=4.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=2.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=2.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=2.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=2.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=2.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=2.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=2.&title=1.&part=4.&chapter=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=3.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=3.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=3.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=3.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=3.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=2.&title=1.&part=4.&chapter=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=6.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=6.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=6.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=6.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=6.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=6.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=6.&article=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=6.&article=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=4.&chapter=6.&article=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=10.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=2.&title=1.&part=11.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=11.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=11.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=11.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=2.&title=1.&part=11.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=3.&title=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=3.&title=1.&part=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=3.&title=1.&part=2.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=1.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=1.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=1.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=1.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=1.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=1.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=1.&article=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=3.&title=1.&part=2.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=2.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=2.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=2.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=3.&title=1.&part=2.&chapter=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=3.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=3.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=3.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=3.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=3.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=3.&title=1.&part=2.&chapter=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=4.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=4.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=3.&title=1.&part=2.&chapter=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=5.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=5.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=3.&title=1.&part=2.&chapter=10.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=10.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=10.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=11.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=12.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=3.&title=1.&part=2.&chapter=13.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=13.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=13.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=13.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=14.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=15.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=16.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=17.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=18.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=19.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=2.&chapter=20.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=3.&title=1.&part=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=3.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=3.&title=1.&part=3.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=3.&chapter=2.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=3.&chapter=2.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=3.&chapter=2.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=3.&title=1.&part=3.&chapter=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=3.&chapter=3.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=3.&chapter=3.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=3.&chapter=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=3.&chapter=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=3.&chapter=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=3.&chapter=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=3.&title=1.&part=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=3.&title=1.&part=5.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=5.&chapter=1.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=5.&chapter=1.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=5.&chapter=1.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=5.&chapter=1.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=5.&chapter=1.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=5.&chapter=1.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=5.&chapter=1.&article=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=3.&title=1.&part=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=7.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=7.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=11.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=12.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&division=3.&title=1.&part=13.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=13.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=13.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=13.&chapter=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=13.&chapter=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&division=3.&title=1.&part=14.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&title=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&title=2.&chapter=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&title=2.&chapter=4.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&title=2.&chapter=4.5.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&title=2.&chapter=4.5.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&title=2.&chapter=4.5.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&title=2.&chapter=4.5.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&title=2.&chapter=4.5.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&title=2.&chapter=4.5.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&title=2.&chapter=4.5.&article=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&title=2.&chapter=4.5.&article=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&title=2.&chapter=4.5.&article=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&title=2.&chapter=4.5.&article=10.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&title=2.&chapter=4.5.&article=11.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&title=2.&chapter=4.5.&article=11.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&title=2.&chapter=4.5.&article=12.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&title=2.&chapter=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&title=2.&chapter=5.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&title=2.&chapter=5.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&title=2.&chapter=5.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&title=2.&chapter=5.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&title=2.&chapter=5.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&title=2.&chapter=5.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&title=2.&chapter=5.&article=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&title=2.&chapter=5.&article=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&title=2.&chapter=5.&article=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=CORP&title=2.&chapter=5.&article=10."
+  ],
+  "sections": [
+    {
+      "code": "CORP",
+      "section": "1.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CORP&sectionNum=1.",
+      "hierarchy": {
+        "code": "CORP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1"
+    },
+    {
+      "code": "CORP",
+      "section": "2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CORP&sectionNum=2.",
+      "hierarchy": {
+        "code": "CORP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1"
+    },
+    {
+      "code": "CORP",
+      "section": "3.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CORP&sectionNum=3.",
+      "hierarchy": {
+        "code": "CORP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1"
+    },
+    {
+      "code": "CORP",
+      "section": "4.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CORP&sectionNum=4.",
+      "hierarchy": {
+        "code": "CORP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1"
+    },
+    {
+      "code": "CORP",
+      "section": "5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CORP&sectionNum=5.",
+      "hierarchy": {
+        "code": "CORP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1"
+    },
+    {
+      "code": "CORP",
+      "section": "6.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CORP&sectionNum=6.",
+      "hierarchy": {
+        "code": "CORP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1"
+    },
+    {
+      "code": "CORP",
+      "section": "7.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CORP&sectionNum=7.",
+      "hierarchy": {
+        "code": "CORP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1"
+    },
+    {
+      "code": "CORP",
+      "section": "8.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CORP&sectionNum=8.",
+      "hierarchy": {
+        "code": "CORP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1"
+    },
+    {
+      "code": "CORP",
+      "section": "9.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CORP&sectionNum=9.",
+      "hierarchy": {
+        "code": "CORP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1"
+    },
+    {
+      "code": "CORP",
+      "section": "10.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CORP&sectionNum=10.",
+      "hierarchy": {
+        "code": "CORP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1"
+    },
+    {
+      "code": "CORP",
+      "section": "11.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CORP&sectionNum=11.",
+      "hierarchy": {
+        "code": "CORP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1"
+    },
+    {
+      "code": "CORP",
+      "section": "12.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CORP&sectionNum=12.",
+      "hierarchy": {
+        "code": "CORP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1"
+    },
+    {
+      "code": "CORP",
+      "section": "12.2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CORP&sectionNum=12.2.",
+      "hierarchy": {
+        "code": "CORP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1"
+    },
+    {
+      "code": "CORP",
+      "section": "13.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CORP&sectionNum=13.",
+      "hierarchy": {
+        "code": "CORP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1"
+    },
+    {
+      "code": "CORP",
+      "section": "14.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CORP&sectionNum=14.",
+      "hierarchy": {
+        "code": "CORP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1"
+    },
+    {
+      "code": "CORP",
+      "section": "15.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CORP&sectionNum=15.",
+      "hierarchy": {
+        "code": "CORP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1"
+    },
+    {
+      "code": "CORP",
+      "section": "16.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CORP&sectionNum=16.",
+      "hierarchy": {
+        "code": "CORP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1"
+    },
+    {
+      "code": "CORP",
+      "section": "17.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CORP&sectionNum=17.",
+      "hierarchy": {
+        "code": "CORP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1"
+    },
+    {
+      "code": "CORP",
+      "section": "17.1.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CORP&sectionNum=17.1.",
+      "hierarchy": {
+        "code": "CORP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1"
+    },
+    {
+      "code": "CORP",
+      "section": "18.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CORP&sectionNum=18.",
+      "hierarchy": {
+        "code": "CORP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1"
+    },
+    {
+      "code": "CORP",
+      "section": "19.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CORP&sectionNum=19.",
+      "hierarchy": {
+        "code": "CORP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1"
+    },
+    {
+      "code": "CORP",
+      "section": "20.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CORP&sectionNum=20.",
+      "hierarchy": {
+        "code": "CORP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1"
+    },
+    {
+      "code": "CORP",
+      "section": "21.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=CORP&sectionNum=21.",
+      "hierarchy": {
+        "code": "CORP"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1"
+    }
+  ],
+  "hierarchyNodes": [
+    {
+      "code": "CORP",
+      "level": "other",
+      "label": "GENERAL PROVISIONS",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CORP",
+      "level": "other",
+      "label": "10.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CORP",
+      "level": "other",
+      "label": "11.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CORP",
+      "level": "other",
+      "label": "12.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CORP",
+      "level": "other",
+      "label": "12.2.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CORP",
+      "level": "other",
+      "label": "13.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CORP",
+      "level": "other",
+      "label": "14.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CORP",
+      "level": "other",
+      "label": "15.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CORP",
+      "level": "other",
+      "label": "16.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CORP",
+      "level": "other",
+      "label": "17.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CORP",
+      "level": "other",
+      "label": "17.1.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CORP",
+      "level": "other",
+      "label": "18.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CORP",
+      "level": "other",
+      "label": "19.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CORP",
+      "level": "other",
+      "label": "20.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "CORP",
+      "level": "other",
+      "label": "21.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1",
+      "flags": []
+    }
+  ],
+  "anomalies": [],
+  "stats": {
+    "pagesFetched": 4,
+    "expandedBranchPages": 3,
+    "displayTextPages": 0,
+    "hierarchyNodes": 15,
+    "sectionsDiscovered": 23,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 23,
+    "anomalies": 0
+  },
+  "audit": [
+    {
+      "timestamp": "2026-07-15T15:18:14.558Z",
+      "action": "start",
+      "detail": "Discovery started for Corporations Code"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:14.558Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=CORP"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:15.574Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:16.717Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&title=1.&nodetreepath=2"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:17.665Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&title=2.&nodetreepath=3"
+    }
+  ]
+}

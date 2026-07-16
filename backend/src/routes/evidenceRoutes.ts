@@ -35,7 +35,7 @@ export default async function evidenceRoutes(fastify: FastifyInstance) {
       // 🚀 TRIGGER PIPELINE
       await processEvidenceToChunks({
         id: `file-${Date.now()}`,
-        s3Key: filePath,
+        localPath: filePath,
         mimeType: data.mimetype,
       });
 

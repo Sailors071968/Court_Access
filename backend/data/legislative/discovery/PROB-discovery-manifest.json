@@ -1,0 +1,53 @@
+{
+  "version": "1.0.0",
+  "completedAt": "2026-07-15T15:20:47.649Z",
+  "status": "partial",
+  "code": "PROB",
+  "codeName": "Probate Code",
+  "discoveredAt": "2026-07-15T15:20:43.663Z",
+  "audit": [
+    {
+      "timestamp": "2026-07-15T15:20:43.663Z",
+      "action": "start",
+      "detail": "Discovery started for Probate Code"
+    },
+    {
+      "timestamp": "2026-07-15T15:20:43.663Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=PROB"
+    },
+    {
+      "timestamp": "2026-07-15T15:20:44.513Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PROB&nodetreepath=1"
+    },
+    {
+      "timestamp": "2026-07-15T15:20:45.640Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PROB&division=1.&nodetreepath=2"
+    },
+    {
+      "timestamp": "2026-07-15T15:20:46.645Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PROB&division=2.&nodetreepath=3"
+    },
+    {
+      "timestamp": "2026-07-15T15:20:47.649Z",
+      "action": "partial",
+      "detail": "Stopped at maxPages=4; 78 URLs remaining"
+    }
+  ],
+  "hierarchyNodes": [],
+  "sections": [],
+  "stats": {
+    "pagesFetched": 4,
+    "expandedBranchPages": 3,
+    "displayTextPages": 0,
+    "hierarchyNodes": 0,
+    "sectionsDiscovered": 0,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 0,
+    "anomalies": 0
+  },
+  "anomalies": []
+}

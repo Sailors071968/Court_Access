@@ -7,6 +7,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import { FileText, Scale, Calendar, Lightbulb, TrendingUp, Loader2 } from 'lucide-react';
 import { Card, StatCard } from '../../components/common/Card';
+import { DefenseOpportunityDashboard } from '../../components/case/DefenseOpportunityDashboard';
 import { DoctrineCompliancePanel } from '../../components/case/DoctrineCompliancePanel';
 import { ROLE_PERMISSIONS } from '../../constants';
 import { useAuthStore } from '../../stores/authStore';
@@ -69,6 +70,11 @@ export function CaseOverviewPage() {
 
   return (
     <div className="space-y-6">
+      {/* Defense Opportunity Dashboard — first thing visible on every case (Program 134) */}
+      {showIntelligence && caseId && (
+        <DefenseOpportunityDashboard caseId={caseId} compact />
+      )}
+
       {/* Stats */}
       <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
         <StatCard icon={<FileText size={28} className="text-blue-500" />} value={evidence.length} label="Evidence Items" />

@@ -76,6 +76,8 @@ import { CpraCampaignTimeline } from './pages/dashboard/CpraCampaignTimeline';
 import { CpraMatrixDashboard } from './pages/dashboard/CpraMatrixDashboard';
 import { CpraAutonomousDashboard } from './pages/dashboard/CpraAutonomousDashboard';
 import { UsageDashboard } from './pages/dashboard/UsageDashboard';
+import { AiReadinessDashboard } from './pages/dashboard/AiReadinessDashboard';
+import { DemonstrationModePage } from './pages/dashboard/DemonstrationModePage';
 import { EvidenceRequestsDashboard } from './pages/dashboard/EvidenceRequestsDashboard';
 import { CasesListPage } from './pages/CasesListPage';
 import { SearchPage } from './pages/SearchPage';
@@ -101,6 +103,22 @@ import { LitigationStrategyView } from './pages/case/LitigationStrategyView';
 import { ContradictionDashboardPage } from './pages/case/ContradictionDashboardPage';
 import { NarrativeAnalysisPage } from './pages/case/NarrativeAnalysisPage';
 import { AttorneyWorkbenchPage } from './pages/case/AttorneyWorkbenchPage';
+import { ProsecutionWeaknessPage } from './pages/case/ProsecutionWeaknessPage';
+import { InvestigationOpportunitiesPage } from './pages/case/InvestigationOpportunitiesPage';
+import { CalcrimIntelligencePage } from './pages/case/CalcrimIntelligencePage';
+import { DefenseOpportunitiesPage } from './pages/case/DefenseOpportunitiesPage';
+import { LitigationStrategyCenterPage } from './pages/case/LitigationStrategyCenterPage';
+import { DefenseIntelligencePage } from './pages/case/DefenseIntelligencePage';
+import { TrialNotebookPage } from './pages/case/TrialNotebookPage';
+import { EvidenceIntelligencePage } from './pages/case/EvidenceIntelligencePage';
+import { CaseIntelligenceMapPage } from './pages/case/CaseIntelligenceMapPage';
+import { MotionIntelligencePage } from './pages/case/MotionIntelligencePage';
+import { CaseTheoryPage } from './pages/case/CaseTheoryPage';
+import { TrialReadinessCenterPage } from './pages/case/TrialReadinessCenterPage';
+import { CrossExaminationPage } from './pages/case/CrossExaminationPage';
+import { CommandCenterPage } from './pages/case/CommandCenterPage';
+import { InvestigationCommandPage } from './pages/case/InvestigationCommandPage';
+import { DefenseOpportunityDashboardPage } from './pages/case/DefenseOpportunityDashboardPage';
 import { InvestigatorWorkbenchPage } from './pages/case/InvestigatorWorkbenchPage';
 import { ClientPortalLayout, ClientPortalIndex } from './pages/client-portal/ClientPortalLayout';
 import {
@@ -378,6 +396,15 @@ function App() {
           />
           <Route path="dashboard/usage" element={<UsageDashboard />} />
           <Route
+            path="dashboard/ai-readiness"
+            element={
+              <ProtectedRoute requiredPermission="canViewEvidence">
+                <AiReadinessDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="dashboard/demo-defense" element={<DemonstrationModePage />} />
+          <Route
             path="dashboard/evidence-requests"
             element={
               <ProtectedRoute requiredPermission="canViewEvidence">
@@ -534,6 +561,134 @@ function App() {
               element={
                 <ProtectedRoute requiredPermission="canViewEvidence">
                   <AttorneyWorkbenchPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="strategy-center"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <LitigationStrategyCenterPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="calcrim-intelligence"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <CalcrimIntelligencePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="prosecution-weakness"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <ProsecutionWeaknessPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="defense-opportunities"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <DefenseOpportunitiesPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="defense-intelligence"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <DefenseIntelligencePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="trial-notebook"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <TrialNotebookPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="evidence-intelligence"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <EvidenceIntelligencePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="case-map"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <CaseIntelligenceMapPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="motion-intelligence"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <MotionIntelligencePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="case-theory"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <CaseTheoryPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="trial-readiness"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <TrialReadinessCenterPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="cross-examination"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <CrossExaminationPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="command-center"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <CommandCenterPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="investigation-command"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <InvestigationCommandPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="defense-opportunity-dashboard"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <DefenseOpportunityDashboardPage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="investigation-opportunities"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <InvestigationOpportunitiesPage />
                 </ProtectedRoute>
               }
             />

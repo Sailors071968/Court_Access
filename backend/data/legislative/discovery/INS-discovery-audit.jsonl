@@ -1,0 +1,5 @@
+{"timestamp":"2026-07-15T15:19:40.607Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=INS"}
+{"timestamp":"2026-07-15T15:19:41.542Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"}
+{"timestamp":"2026-07-15T15:19:42.897Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=1.&nodetreepath=2"}
+{"timestamp":"2026-07-15T15:19:43.700Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&nodetreepath=3"}
+{"timestamp":"2026-07-15T15:19:44.594Z","action":"partial","detail":"Manifest written with 54 sections"}

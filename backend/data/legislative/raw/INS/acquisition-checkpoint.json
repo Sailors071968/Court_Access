@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "code": "INS",
+  "manifestPath": "/workspace/backend/data/legislative/discovery/INS-discovery-manifest.json",
+  "startedAt": "2026-07-15T15:19:44.596Z",
+  "updatedAt": "2026-07-15T15:19:54.613Z",
+  "nextIndex": 10,
+  "acquired": 10,
+  "failed": 0,
+  "skipped": 0,
+  "lastSection": "10."
+}

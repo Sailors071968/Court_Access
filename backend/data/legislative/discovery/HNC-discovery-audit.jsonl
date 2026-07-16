@@ -1,0 +1,5 @@
+{"timestamp":"2026-07-15T15:19:26.674Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=HNC"}
+{"timestamp":"2026-07-15T15:19:27.478Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HNC&nodetreepath=1"}
+{"timestamp":"2026-07-15T15:19:28.852Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HNC&division=1.&nodetreepath=2"}
+{"timestamp":"2026-07-15T15:19:29.600Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=HNC&division=1.5.&nodetreepath=3"}
+{"timestamp":"2026-07-15T15:19:30.598Z","action":"partial","detail":"Manifest written with 26 sections"}

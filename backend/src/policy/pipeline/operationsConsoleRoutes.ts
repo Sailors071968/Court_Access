@@ -141,7 +141,7 @@ export async function registerOperationsConsoleRoutes(
           .header('Content-Type', 'text/csv')
           .header('Content-Disposition', `attachment; filename="${data.agency.agencyName}_topics.csv"`)
           .send(csv);
-      } catch (error) {
+      } catch (_error) {
         return reply.status(500).send({ success: false, error: 'Failed to export CSV' });
       }
     },

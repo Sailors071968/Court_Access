@@ -14,10 +14,10 @@ const OUT = process.env.OUT || 'reports/screenshots/program-115';
 mkdirSync(OUT, { recursive: true });
 
 const CREDS = {
-  email: process.env.REVIEW_EMAIL || 'reviewer2@staging.courtaccess.test',
-  password: process.env.REVIEW_PASSWORD || 'StagingPass1!',
+  email: process.env.REVIEW_EMAIL || 'attorney2@courtaccess.test',
+  password: process.env.REVIEW_PASSWORD || 'TestPass123!',
 };
-const CASE_ID = process.env.CASE_ID || 'case-stg-0001';
+const CASE_ID = process.env.CASE_ID || 'bba55309-7867-4625-a3c3-7dece14dc646';
 
 const publicRoutes = [
   ['landing', '/'],
@@ -63,6 +63,7 @@ const authRoutes = [
   ['defense-opportunity-dashboard', `/cases/${CASE_ID}/defense-opportunity-dashboard`],
   ['ai-readiness', `/dashboard/ai-readiness`],
   ['demo-defense', `/dashboard/demo-defense`],
+  ['guided-demo', `/dashboard/guided-demo`],
   ['prosecution-weakness', `/cases/${CASE_ID}/prosecution-weakness`],
   ['investigation-opportunities', `/cases/${CASE_ID}/investigation-opportunities`],
   ['contradiction-workspace', `/cases/${CASE_ID}/contradictions`],

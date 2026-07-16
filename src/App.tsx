@@ -78,6 +78,7 @@ import { CpraAutonomousDashboard } from './pages/dashboard/CpraAutonomousDashboa
 import { UsageDashboard } from './pages/dashboard/UsageDashboard';
 import { AiReadinessDashboard } from './pages/dashboard/AiReadinessDashboard';
 import { DemonstrationModePage } from './pages/dashboard/DemonstrationModePage';
+import { GuidedDemonstrationPage } from './pages/dashboard/GuidedDemonstrationPage';
 import { EvidenceRequestsDashboard } from './pages/dashboard/EvidenceRequestsDashboard';
 import { CasesListPage } from './pages/CasesListPage';
 import { SearchPage } from './pages/SearchPage';
@@ -404,6 +405,7 @@ function App() {
             }
           />
           <Route path="dashboard/demo-defense" element={<DemonstrationModePage />} />
+          <Route path="dashboard/guided-demo" element={<GuidedDemonstrationPage />} />
           <Route
             path="dashboard/evidence-requests"
             element={

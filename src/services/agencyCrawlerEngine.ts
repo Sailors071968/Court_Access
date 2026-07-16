@@ -167,7 +167,7 @@ export function parseAgencyDataFromHtml(
 
   // Extract email addresses — deterministic ASCII pattern
   // Pattern: one or more non-whitespace chars, '@', one or more non-whitespace chars, '.', one or more non-whitespace chars
-  const emailPattern = /[A-Za-z0-9._%+\-]+@[A-Za-z0-9.\-]+\.[A-Za-z]{2,}/g;
+  const emailPattern = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g;
   const emails: string[] = [];
   let emailMatch = emailPattern.exec(html);
   while (emailMatch !== null) {
@@ -177,7 +177,7 @@ export function parseAgencyDataFromHtml(
 
   // Extract phone numbers — deterministic ASCII pattern
   // Pattern: common US phone formats
-  const phonePattern = /\(?\d{3}\)?[\s.\-]?\d{3}[\s.\-]?\d{4}/g;
+  const phonePattern = /\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}/g;
   const phones: string[] = [];
   let phoneMatch = phonePattern.exec(html);
   while (phoneMatch !== null) {

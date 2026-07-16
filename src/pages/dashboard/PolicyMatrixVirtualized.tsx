@@ -49,11 +49,11 @@ const VISIBLE_ROWS = 20;
 const VISIBLE_COLS = 15;
 const AGENCY_COL_WIDTH = 200;
 const CELL_WIDTH = 80;
+const CELL_STATUSES: PolicyCell['status'][] = ['compliant', 'non_compliant', 'partial', 'unknown', 'not_applicable'];
 
 export function PolicyMatrixVirtualized() {
   const [agencies, setAgencies] = useState<Agency[]>([]);
   const [topics, setTopics] = useState<Topic[]>([]);
-  const statuses: PolicyCell['status'][] = ['compliant', 'non_compliant', 'partial', 'unknown', 'not_applicable'];
 
   useEffect(() => {
     async function fetchMatrixData() {
@@ -96,10 +96,10 @@ export function PolicyMatrixVirtualized() {
 
   const getCellStatus = useCallback(
     (agencyIdx: number, topicIdx: number): PolicyCell['status'] => {
-      const seed = (agencyIdx * 7 + topicIdx * 13) % statuses.length;
-      return statuses[seed];
+      const seed = (agencyIdx * 7 + topicIdx * 13) % CELL_STATUSES.length;
+      return CELL_STATUSES[seed];
     },
-    [statuses]
+    []
   );
 
   const handleScroll = useCallback(() => {

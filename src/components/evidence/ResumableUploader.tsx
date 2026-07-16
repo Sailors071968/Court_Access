@@ -25,7 +25,7 @@ const CHUNK_SIZE = 5 * 1024 * 1024; // 5MB chunks
 const MAX_RETRIES = 3;
 const MAX_FILE_SIZE = 500 * 1024 * 1024; // 500MB max
 /** Supported file types for evidence upload */
-export const ALLOWED_TYPES = [
+const ALLOWED_TYPES = [
   'application/pdf',
   'image/jpeg',
   'image/png',

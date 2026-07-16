@@ -10,7 +10,8 @@ import ThreeSceneRenderer, { type ThreeSceneAPI, type SceneMarker } from '../../
 import SceneControls, { type ObjectSettings } from '../../../components/exhibits/SceneControls';
 import SceneMarkerTool from '../../../components/exhibits/SceneMarkerTool';
 import CameraPresets, { type CameraPreset, type SavedCameraView } from '../../../components/exhibits/CameraPresets';
-import AnimationTools, { type AnimationTimeline, type AnimationKeyframe, interpolatePositions } from '../../../components/exhibits/AnimationTools';
+import AnimationTools from '../../../components/exhibits/AnimationTools';
+import { type AnimationTimeline, type AnimationKeyframe, interpolatePositions } from '../../../components/exhibits/animationInterpolation';
 
 // ---------------------------------------------------------------------------
 // Types

@@ -81,6 +81,7 @@ import { DemonstrationModePage } from './pages/dashboard/DemonstrationModePage';
 import { GuidedDemonstrationPage } from './pages/dashboard/GuidedDemonstrationPage';
 import { AttorneyClientDemoPage } from './pages/dashboard/AttorneyClientDemoPage';
 import { MarketingReelPlayer } from './pages/marketing/MarketingReelPlayer';
+import { ApiCommandCenter } from './pages/dashboard/ApiCommandCenter';
 import { EvidenceRequestsDashboard } from './pages/dashboard/EvidenceRequestsDashboard';
 import { CasesListPage } from './pages/CasesListPage';
 import { SearchPage } from './pages/SearchPage';
@@ -406,6 +407,14 @@ function App() {
             element={
               <ProtectedRoute requiredPermission="canViewEvidence">
                 <AiReadinessDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="dashboard/api-command-center"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <ApiCommandCenter />
               </ProtectedRoute>
             }
           />

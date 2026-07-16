@@ -42,6 +42,7 @@ import { startPipelineWorkers, stopPipelineWorkers } from './workers/startPipeli
 import { enforceSchemaOnBoot } from './database/schemaAssert.js';
 import { registerObservabilityRoutes } from './observability/observabilityRoutes.js';
 import { registerAiRoutes } from './ai/aiRoutes.js';
+import { registerCommandCenterRoutes } from './commandCenter/commandCenterRoutes.js';
 import { startRedisMemoryMonitor, stopRedisMemoryMonitor } from './observability/redisMemoryAlert.js';
 import { registerChargeRoutes } from "./charges/chargeRoutes.js";
 import { registerCalcrimRoutes } from "./routes/calcrimRoutes.js";
@@ -266,6 +267,10 @@ async function startServer() {
   // Program 135 — AI provider orchestration, readiness, cost, metadata
   console.log('[Server] Registering AI orchestration routes...');
   await registerAiRoutes(app);
+
+  // Program 140 — API Command Center (super-admin only)
+  console.log('[Server] Registering API Command Center routes...');
+  await registerCommandCenterRoutes(app);
 
   // Seed default discount codes (e.g. HUNT100)
   await seedDefaultDiscountCodes();

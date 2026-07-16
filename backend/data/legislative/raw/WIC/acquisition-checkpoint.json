@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "code": "WIC",
+  "manifestPath": "/workspace/backend/data/legislative/discovery/WIC-discovery-manifest.json",
+  "startedAt": "2026-07-15T15:22:11.694Z",
+  "updatedAt": "2026-07-15T15:22:21.685Z",
+  "nextIndex": 10,
+  "acquired": 10,
+  "failed": 0,
+  "skipped": 0,
+  "lastSection": "10."
+}

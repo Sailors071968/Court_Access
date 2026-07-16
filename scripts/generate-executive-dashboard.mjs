@@ -3,13 +3,43 @@
  * Program 19 — Executive Dashboard Generator v18.0
  * Reads assessment + production verify reports and writes EXECUTIVE_DASHBOARD.md
  */
-import { readFileSync, writeFileSync, existsSync } from 'fs';
+import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+import { execSync } from 'child_process';
 
-const assessmentPath = '/workspace/reports/MASTER_PRODUCTION_ASSESSMENT.json';
-const productionPath = '/workspace/reports/PRODUCTION_WEBSITE_VERIFY.json';
-const outPath = '/workspace/reports/EXECUTIVE_DASHBOARD.md';
-const blockersPath = '/workspace/reports/PRODUCTION_BLOCKERS.json';
-const outJsonPath = '/workspace/reports/EXECUTIVE_DASHBOARD.json';
+// Resolve paths relative to the repository (this script lives in <repo>/scripts/)
+// so the generator is host-agnostic and works on any CI runner, not just a
+// hardcoded /workspace checkout.
+const repoRoot = join(dirname(fileURLToPath(import.meta.url)), '..');
+const reportsDir = join(repoRoot, 'reports');
+mkdirSync(reportsDir, { recursive: true });
+
+// --- Real repository / build identity (env → git → UNKNOWN; never fabricated) ---
+function gitOutput(cmd) {
+  try {
+    return execSync(cmd, { cwd: repoRoot, stdio: ['ignore', 'pipe', 'ignore'] }).toString().trim();
+  } catch {
+    return '';
+  }
+}
+const commit = process.env.GITHUB_SHA || gitOutput('git rev-parse HEAD') || 'UNKNOWN';
+const commitShort = commit !== 'UNKNOWN' ? commit.slice(0, 7) : 'UNKNOWN';
+const branch = process.env.GITHUB_REF_NAME || gitOutput('git rev-parse --abbrev-ref HEAD') || 'UNKNOWN';
+let appVersion = 'UNKNOWN';
+try {
+  appVersion = JSON.parse(readFileSync(join(repoRoot, 'package.json'), 'utf8')).version || 'UNKNOWN';
+} catch { /* leave UNKNOWN */ }
+const nodeVersion = process.version;
+const ciRun = process.env.GITHUB_RUN_ID
+  ? `${process.env.GITHUB_WORKFLOW ?? 'CI'} #${process.env.GITHUB_RUN_NUMBER ?? '?'} (run ${process.env.GITHUB_RUN_ID})`
+  : 'local';
+
+const assessmentPath = join(reportsDir, 'MASTER_PRODUCTION_ASSESSMENT.json');
+const productionPath = join(reportsDir, 'PRODUCTION_WEBSITE_VERIFY.json');
+const outPath = join(reportsDir, 'EXECUTIVE_DASHBOARD.md');
+const blockersPath = join(reportsDir, 'PRODUCTION_BLOCKERS.json');
+const outJsonPath = join(reportsDir, 'EXECUTIVE_DASHBOARD.json');
 
 const generatedAt = new Date().toISOString();
 
@@ -68,6 +98,12 @@ const blockers = blockersDoc.blockers?.length
 const dashboard = {
   directive: 'Master Production Directive v19.0',
   generatedAt,
+  commit,
+  commitShort,
+  branch,
+  appVersion,
+  nodeVersion,
+  ciRun,
   blockerCount: blockersDoc.blockerCount ?? blockers.length,
   overallCompletionPercent: assessment.summary?.overallCompletionPercent ?? 79.4,
   productionWebsitePercent: websiteCompletion,
@@ -106,6 +142,21 @@ const md = `# CourtAccess Executive Dashboard — v19.0
 | **Production Website** | **${dashboard.productionWebsitePercent}%** |
 | **Production Readiness** | ${dashboard.productionReadiness} |
 | **Release Recommendation** | **${dashboard.releaseRecommendation}** |
+
+---
+
+## Repository & Build
+
+| Field | Value |
+|-------|-------|
+| **Current Commit** | \`${commitShort}\` (${commit}) |
+| **Current Branch** | ${branch} |
+| **Version** | ${appVersion} |
+| **Node Runtime** | ${nodeVersion} |
+| **Build Source** | ${ciRun} |
+| **Build Status** | Frontend build + Program 0 + Backend tests — see GitHub Actions "CI Build & Verify" |
+| **Test Status** | Backend: node --test (CI job); Frontend: determinism replay (\`npm test\`) |
+| **Deployment Readiness** | ${productionDeployed ? 'READY' : 'BLOCKED — awaiting deploy credentials'} |
 
 ---
 

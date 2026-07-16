@@ -7,8 +7,6 @@
 import { createWriteStream } from 'node:fs';
 import { mkdir } from 'node:fs/promises';
 import { dirname, resolve } from 'node:path';
-import { createHash } from 'node:crypto';
-
 // ---------------------------------------------------------------------------
 // Configuration
 // ---------------------------------------------------------------------------

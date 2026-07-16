@@ -346,7 +346,7 @@ export class EvidenceIntelligenceIntegration {
   /**
    * Map policy compliance findings to frontend-consumable format
    */
-  private static mapPolicyFindings(findings: FindingOutput[], files: EvidenceFile[]): PolicyComparisonOutput[] {
+  private static mapPolicyFindings(findings: FindingOutput[], _files: EvidenceFile[]): PolicyComparisonOutput[] {
     return findings.map((finding, index) => {
       // Find evidence file from evidence links
       const evidenceLink = finding.evidenceLinks.find(l => l.linkType === 'video_timestamp');

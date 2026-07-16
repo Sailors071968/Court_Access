@@ -1,0 +1,1452 @@
+{
+  "version": "1.0.0",
+  "code": "INS",
+  "startedAt": "2026-07-15T15:19:40.607Z",
+  "updatedAt": "2026-07-15T15:19:44.592Z",
+  "visitedUrls": [
+    "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=INS",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=1.&nodetreepath=2",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&nodetreepath=3"
+  ],
+  "pendingUrls": [
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=3.&nodetreepath=4",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=4.&nodetreepath=5",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=5.&nodetreepath=6",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=1.&part=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=1.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=1.&part=1.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=2.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=2.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=2.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=2.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=2.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=1.&part=1.&chapter=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=3.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=3.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=1.&part=1.&chapter=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=4.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=4.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=4.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=4.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=4.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=5.2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=5.3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=5.4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=1.&part=1.&chapter=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=6.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=6.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=6.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=6.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=6.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=6.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=9.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=9.6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=10.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=10.1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=10.2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=10.25.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=10.27.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=10.3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=10.4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=11.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=11.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=1.&chapter=12.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=1.&part=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=1.&part=2.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=1.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=1.7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=4.1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=4.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=4.7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=5.1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=5.2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=5.3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=5.4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=5.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=5.7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=5.8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=5.9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=6.3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=6.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=6.6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=6.7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=6.8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=6.9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=7.3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=7.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=10.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=10.1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=10.2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=10.3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=10.4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=10.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=10.6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=10.8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=10.85.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=10.9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=11.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=12.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=13.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=13.3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=13.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=14.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=14.2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=14.26.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=14.3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=14.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=14.7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=14.8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=15.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=15.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=16.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=17.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=1.&article=18.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=1.&part=2.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=2.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=2.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=2.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=2.&article=3.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=2.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=2.&article=4.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=2.&article=4.6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=2.&article=4.7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=2.&article=4.8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=2.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=2.&article=5.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=2.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=2.&article=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=2.&article=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=1.&part=2.&chapter=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=3.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=3.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=3.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=3.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=3.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=3.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=3.&article=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=3.&article=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=3.&article=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=3.&article=10.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=1.&part=2.&chapter=3.&article=11.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=3.&article=12.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=3.&article=13.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=3.&article=14.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=3.&article=15.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=3.&article=16.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=3.&article=17.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=1.&part=2.&chapter=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=4.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=4.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=4.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=4.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=4.&article=4.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=1.&part=2.&chapter=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=5.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=5.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=5.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=5.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=5.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=5.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=5.&article=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=5.&article=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=5.&article=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=5.&article=10.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=5.&article=11.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=5.&article=12.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=5.&article=13.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=5.&article=13.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=5.&article=14.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=5.&article=15.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=5.&article=15.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=5.&article=16.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=5.&article=16.1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=5.&article=16.3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=5.&article=16.6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=5.&article=16.7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=5A.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=6.1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=6.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=1.&part=2.&chapter=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=7.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=1.&part=2.&chapter=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=9.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=9.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=9.&article=2.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=9.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=9.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=9.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=9.&article=6.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=9.&article=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=9.&article=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=9.&article=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=9.&article=10.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=10.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=10.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=1.&part=2.&chapter=12.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=12.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=12.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=12.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=12.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=12.&article=4.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=12.&article=4.6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=12.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=12.&article=5.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=12.&article=5.6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=12.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=12.&article=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=1.&part=2.&chapter=12.&article=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=1.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=1.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=1.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=1.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=1.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=1.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=1.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=1.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=2.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=2.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=2.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=2.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=1.&chapter=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=4.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=4.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=4.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=4.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=4.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=4.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=4.&article=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=4.&article=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=4.&article=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=4.&article=10.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=1.&chapter=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=5.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=5.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=5.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=5.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=5.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=5.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=5.&article=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=5.&article=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=5.&article=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=5.&article=9.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=5.&article=9.6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=5.&article=10.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=5.&article=11.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=1.&chapter=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=6.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=6.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=6.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=6.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=6.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=6.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=6.&article=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=6.&article=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=6.&article=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=6.&article=10.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=1.&chapter=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=8.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=8.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=8.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=8.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=8.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=8.6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=8.9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=10.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=1.&chapter=11.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=2.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=1.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=1.&article=1.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=1.&article=1.7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=1.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=1.&article=2.3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=1.&article=2.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=1.&article=2.6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=1.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=1.&article=3a.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=1.&article=3b.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=1.&article=3.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=1.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=1.&article=4.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=1.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=1.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=1.&article=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=2.&chapter=1.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=1.5.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=1.5.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=1.5.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=2.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=2.&chapter=2.6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=2.6.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=2.6.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=2.6.&article=3.7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=2.6.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=2.6.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=2.&chapter=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=4.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=4.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=4.&article=2.1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=2.&chapter=4.&article=2.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=4.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=4.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=4.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=4.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=4.&article=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=4.&article=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=4.1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=2.&chapter=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=5.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=5.&article=1a.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=5.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=5.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=5.&article=3a.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=5.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=5.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=5.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=5.&article=6.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=5.&article=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=5.&article=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=5.&article=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=5.&article=9.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=5.&article=11.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=5.&article=12.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=5.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=5.6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=2.&chapter=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=6.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=6.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=6.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=2.&chapter=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=8.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=8.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=8.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=8.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=8.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=2.&chapter=8.01.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=8.01.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=8.01.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=2.&chapter=8.02.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=8.02.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=8.02.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=8.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=2.&chapter=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=9.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=9.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=9.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=9.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=9.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=9.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=9.&article=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=9.&article=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=9.&article=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=9.&article=10.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=9.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=9.6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=9.7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=9.9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=2.&chapter=10.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=10.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=10.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=10.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=10.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=10.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=10.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=10.&article=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=10.&article=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=10A.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=2.&chapter=11.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=11.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=11.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=11.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=11.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=11.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=12.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=2.&chapter=13.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=13.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=13.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=2.&chapter=14.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=2.&chapter=14.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=3.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=3.&chapter=1.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=3.&chapter=1.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=3.&chapter=1.&article=2.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=3.&chapter=1.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=3.&chapter=1.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=3.&chapter=1.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=3.&chapter=1.&article=5.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=3.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=3.&chapter=2.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=3.&chapter=2.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=3.&chapter=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=3.&chapter=3.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=3.&chapter=3.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=3.&chapter=3.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=3.&chapter=3.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=3.&chapter=3.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=3.&chapter=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=3.&chapter=4.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=3.&chapter=4.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=3.&chapter=4.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=3.&chapter=4.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=3.&chapter=4.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=3.&chapter=4.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=3.&chapter=4.&article=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=3.&chapter=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=3.&chapter=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=4.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=4.&chapter=1.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=4.&chapter=1.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=4.&chapter=1.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=4.&chapter=1.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=4.&chapter=1.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=4.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=4.&chapter=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=5.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=5.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=5.&chapter=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=5.&chapter=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=5.&chapter=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=6.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.&chapter=1.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.&chapter=1.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.&chapter=1.&article=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.&chapter=1.&article=3.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.&chapter=1.&article=3.7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.&chapter=1.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.&chapter=1.&article=4.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.&chapter=1.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.&chapter=1.&article=5.5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.&chapter=1.&article=5.7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.&chapter=1.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.&chapter=1.&article=6.7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.&chapter=1.&article=6.9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.&chapter=1.&article=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.&chapter=1.&article=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=6.&chapter=2A.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.&chapter=2A.&article=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.&chapter=2A.&article=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.&chapter=2A.&article=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.&chapter=2A.&article=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.&chapter=2A.&article=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.&chapter=2A.&article=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.&chapter=2A.&article=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.&chapter=2A.&article=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.&chapter=2A.&article=10.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.&chapter=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=6.2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.2.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.2.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.2.&chapter=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.2.&chapter=4.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.2.&chapter=5.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.2.&chapter=6.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.2.&chapter=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.2.&chapter=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.2.&chapter=9.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.2.&chapter=10.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.2.&chapter=11.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.2.&chapter=12.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.2.&chapter=14.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.2.&chapter=15.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.2.&chapter=16.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.2.&chapter=16.1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.2.&chapter=16.2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=6.8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&part=7.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=7.&chapter=1.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=7.&chapter=2.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=7.&chapter=3.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=8.",
+    "https://leginfo.legislature.ca.gov/faces/codes_displayText.xhtml?lawCode=INS&division=2.&part=9."
+  ],
+  "sections": [
+    {
+      "code": "INS",
+      "section": "1.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=1.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=2.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "3.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=3.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "4.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=4.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=5.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "6.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=6.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "7.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=7.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "8.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=8.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "9.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=9.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "10.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=10.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "11.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=11.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "12.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=12.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "12.2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=12.2.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "13.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=13.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "14.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=14.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "15.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=15.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "16.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=16.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "17.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=17.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "18.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=18.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "19.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=19.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "20.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=20.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "20.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=20.5.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "21.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=21.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "21.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=21.5.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "22.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=22.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "23.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=23.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "24.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=24.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "25.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=25.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "26.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=26.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "27.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=27.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "28.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=28.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "29.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=29.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "30.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=30.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "31.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=31.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "32.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=32.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "32.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=32.5.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "33.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=33.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "33.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=33.5.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "34.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=34.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "35.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=35.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "36.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=36.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "37.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=37.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "38.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=38.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "38.6.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=38.6.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "38.8.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=38.8.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "39.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=39.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "40.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=40.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "41.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=41.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "42.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=42.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "44.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=44.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "45.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=45.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "46.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=46.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "47.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=47.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "code": "INS",
+      "section": "48.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=INS&sectionNum=48.",
+      "hierarchy": {
+        "code": "INS"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    }
+  ],
+  "hierarchyNodes": [
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "GENERAL PROVISIONS",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "10.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "11.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "12.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "12.2.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "13.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "14.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "15.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "16.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "17.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "18.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "19.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "20.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "20.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "21.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "21.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "22.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "23.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "24.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "25.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "26.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "27.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "28.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "29.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "30.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "31.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "32.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "32.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "33.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "33.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "34.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "35.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "36.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "37.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "38.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "38.6.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "38.8.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "39.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "40.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "41.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "42.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "44.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "45.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "46.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "47.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "INS",
+      "level": "other",
+      "label": "48.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1",
+      "flags": []
+    }
+  ],
+  "anomalies": [],
+  "stats": {
+    "pagesFetched": 4,
+    "expandedBranchPages": 3,
+    "displayTextPages": 0,
+    "hierarchyNodes": 46,
+    "sectionsDiscovered": 54,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 54,
+    "anomalies": 0
+  },
+  "audit": [
+    {
+      "timestamp": "2026-07-15T15:19:40.607Z",
+      "action": "start",
+      "detail": "Discovery started for Insurance Code"
+    },
+    {
+      "timestamp": "2026-07-15T15:19:40.607Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=INS"
+    },
+    {
+      "timestamp": "2026-07-15T15:19:41.542Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&nodetreepath=1"
+    },
+    {
+      "timestamp": "2026-07-15T15:19:42.897Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=1.&nodetreepath=2"
+    },
+    {
+      "timestamp": "2026-07-15T15:19:43.700Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=INS&division=2.&nodetreepath=3"
+    }
+  ]
+}

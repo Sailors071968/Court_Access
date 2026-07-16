@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "code": "CIV",
+  "manifestPath": "/workspace/backend/data/legislative/discovery/CIV-discovery-manifest.json",
+  "startedAt": "2026-07-15T15:18:05.721Z",
+  "updatedAt": "2026-07-15T15:18:06.582Z",
+  "nextIndex": 1,
+  "acquired": 1,
+  "failed": 0,
+  "skipped": 0,
+  "lastSection": "1."
+}

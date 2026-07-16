@@ -99,9 +99,9 @@ async function main() {
     console.log('System-Wide Statistics:');
     console.log(`  Total Topics:       ${matrix.systemStats.totalTopics}`);
     console.log(`  Total Agencies:     ${matrix.systemStats.totalAgencies}`);
-    console.log(`  Avg Coverage:       ${matrix.systemStats.averageCoveragePercent.toFixed(1)}%`);
+    console.log(`  Avg Coverage:       ${matrix.systemStats.overallCoveragePercent.toFixed(1)}%`);
     console.log(`  Full Coverage:      ${matrix.systemStats.agenciesWithFullCoverage}`);
-    console.log(`  Partial Coverage:   ${matrix.systemStats.agenciesWithPartialCoverage}`);
+    console.log(`  Partial Coverage:   ${matrix.systemStats.totalAgencies - matrix.systemStats.agenciesWithFullCoverage - matrix.systemStats.agenciesWithNoCoverage}`);
     console.log(`  No Coverage:        ${matrix.systemStats.agenciesWithNoCoverage}`);
 
     console.log();

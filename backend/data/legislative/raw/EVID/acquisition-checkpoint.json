@@ -1,0 +1,12 @@
+{
+  "version": "1.0.0",
+  "code": "EVID",
+  "manifestPath": "/workspace/backend/data/legislative/discovery/EVID-discovery-manifest.json",
+  "startedAt": "2026-07-15T14:46:21.404Z",
+  "updatedAt": "2026-07-15T14:51:11.563Z",
+  "nextIndex": 56,
+  "acquired": 56,
+  "failed": 0,
+  "skipped": 0,
+  "lastSection": "460."
+}

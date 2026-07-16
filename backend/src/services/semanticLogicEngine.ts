@@ -113,7 +113,7 @@ function buildSemanticRelations(props: Proposition[]): Relation[] {
 // 🧠 STEP 3 — BUILD ARGUMENTS FROM GRAPH
 // --------------------------------------------------
 function buildSemanticArguments(
-  props: Proposition[],
+  _props: Proposition[],
   relations: Relation[]
 ): Argument[] {
 

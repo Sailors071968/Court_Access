@@ -1,0 +1,120 @@
+{
+  "version": "1.0.0",
+  "completedAt": "2026-07-15T15:20:26.698Z",
+  "status": "partial",
+  "code": "PCC",
+  "codeName": "Public Contract Code",
+  "discoveredAt": "2026-07-15T15:20:22.618Z",
+  "audit": [
+    {
+      "timestamp": "2026-07-15T15:20:22.618Z",
+      "action": "start",
+      "detail": "Discovery started for Public Contract Code"
+    },
+    {
+      "timestamp": "2026-07-15T15:20:22.618Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=PCC"
+    },
+    {
+      "timestamp": "2026-07-15T15:20:23.553Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PCC&nodetreepath=1"
+    },
+    {
+      "timestamp": "2026-07-15T15:20:24.622Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PCC&division=1.&nodetreepath=2"
+    },
+    {
+      "timestamp": "2026-07-15T15:20:25.872Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PCC&division=2.&nodetreepath=3"
+    },
+    {
+      "timestamp": "2026-07-15T15:20:26.698Z",
+      "action": "partial",
+      "detail": "Stopped at maxPages=4; 274 URLs remaining"
+    }
+  ],
+  "hierarchyNodes": [
+    {
+      "code": "PCC",
+      "level": "division",
+      "label": "DIVISION 1. PURPOSE AND PRELIMINARY MATTERS",
+      "sectionRange": "[100 - 102]",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PCC&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "PCC",
+      "level": "other",
+      "label": "100.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PCC&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "PCC",
+      "level": "other",
+      "label": "101.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PCC&division=1.&nodetreepath=2",
+      "flags": []
+    },
+    {
+      "code": "PCC",
+      "level": "other",
+      "label": "102.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PCC&division=1.&nodetreepath=2",
+      "flags": []
+    }
+  ],
+  "sections": [
+    {
+      "code": "PCC",
+      "section": "100.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PCC&sectionNum=100.",
+      "hierarchy": {
+        "code": "PCC",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PCC&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "PCC",
+      "section": "101.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PCC&sectionNum=101.",
+      "hierarchy": {
+        "code": "PCC",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PCC&division=1.&nodetreepath=2"
+    },
+    {
+      "code": "PCC",
+      "section": "102.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PCC&sectionNum=102.",
+      "hierarchy": {
+        "code": "PCC",
+        "division": "1."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PCC&division=1.&nodetreepath=2"
+    }
+  ],
+  "stats": {
+    "pagesFetched": 4,
+    "expandedBranchPages": 3,
+    "displayTextPages": 0,
+    "hierarchyNodes": 4,
+    "sectionsDiscovered": 3,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 3,
+    "anomalies": 0
+  },
+  "anomalies": []
+}

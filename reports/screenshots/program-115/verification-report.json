@@ -1,0 +1,238 @@
+{
+  "base": "http://localhost:8080",
+  "generatedAt": "2026-07-12T15:19:29.347Z",
+  "totalPages": 30,
+  "pagesWithConsoleErrors": 6,
+  "results": [
+    {
+      "label": "landing",
+      "path": "/",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "for-defense",
+      "path": "/for-defense",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "features",
+      "path": "/features",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "how-it-works",
+      "path": "/how-it-works",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "pricing",
+      "path": "/pricing",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "security",
+      "path": "/security",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "knowledge-base",
+      "path": "/knowledge-base",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "accessibility",
+      "path": "/accessibility",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "login",
+      "path": "/login",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "register",
+      "path": "/register",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "dashboard",
+      "path": "/dashboard",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "cases",
+      "path": "/cases",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "search",
+      "path": "/search",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "settings",
+      "path": "/settings",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "collaborators-shared-access",
+      "path": "/shared-access",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "administration",
+      "path": "/admin",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "admin-operations",
+      "path": "/admin/operations",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "provider-system-health",
+      "path": "/dashboard/system-health",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "usage",
+      "path": "/dashboard/usage",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "nav-error: page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"http://localhost:8080/dashboard/usage\", waiting until \"networkidle\"\n",
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+      ]
+    },
+    {
+      "label": "case-overview",
+      "path": "/cases/case-stg-0001/overview",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "case-intake-charges",
+      "path": "/cases/case-stg-0001/charges",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "evidence-workspace",
+      "path": "/cases/case-stg-0001/evidence",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "timeline",
+      "path": "/cases/case-stg-0001/dashboard/case-timeline",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "attorney-workbench",
+      "path": "/cases/case-stg-0001/attorney-workbench",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "nav-error: page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"http://localhost:8080/cases/case-stg-0001/attorney-workbench\", waiting until \"networkidle\"\n",
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+      ]
+    },
+    {
+      "label": "contradiction-workspace",
+      "path": "/cases/case-stg-0001/contradictions",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    },
+    {
+      "label": "narrative-analysis",
+      "path": "/cases/case-stg-0001/narrative-analysis",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "Failed to load resource: the server responded with a status of 500 (Internal Server Error)",
+        "Failed to load resource: the server responded with a status of 500 (Internal Server Error)"
+      ]
+    },
+    {
+      "label": "litigation-strategy",
+      "path": "/cases/case-stg-0001/litigation-strategy",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "nav-error: page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"http://localhost:8080/cases/case-stg-0001/litigation-strategy\", waiting until \"networkidle\"\n",
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 404 (Not Found)",
+        "Failed to load resource: the server responded with a status of 404 (Not Found)"
+      ]
+    },
+    {
+      "label": "documents",
+      "path": "/cases/case-stg-0001/documents",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "nav-error: page.goto: Timeout 30000ms exceeded.\nCall log:\n  - navigating to \"http://localhost:8080/cases/case-stg-0001/documents\", waiting until \"networkidle\"\n",
+      "consoleErrors": [
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+        "Failed to load resource: the server responded with a status of 401 (Unauthorized)"
+      ]
+    },
+    {
+      "label": "motions",
+      "path": "/cases/case-stg-0001/motions",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "research",
+      "path": "/cases/case-stg-0001/research",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    }
+  ]
+}

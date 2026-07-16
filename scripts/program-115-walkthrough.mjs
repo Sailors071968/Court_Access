@@ -64,6 +64,7 @@ const authRoutes = [
   ['ai-readiness', `/dashboard/ai-readiness`],
   ['demo-defense', `/dashboard/demo-defense`],
   ['guided-demo', `/dashboard/guided-demo`],
+  ['attorney-client-demo', `/dashboard/attorney-client-demo`],
   ['prosecution-weakness', `/cases/${CASE_ID}/prosecution-weakness`],
   ['investigation-opportunities', `/cases/${CASE_ID}/investigation-opportunities`],
   ['contradiction-workspace', `/cases/${CASE_ID}/contradictions`],

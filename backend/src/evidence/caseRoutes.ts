@@ -7,6 +7,7 @@
 import type { FastifyInstance, FastifyReply } from 'fastify';
 import { PrismaClient } from '@prisma/client';
 import type { AuthenticatedRequest } from '../security/authMiddleware.js';
+import { logSecurityEvent } from '../security/authMiddleware.js';
 import {
   buildAuthorizedCaseFilter,
   requireCaseAccess,
@@ -91,11 +92,20 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
         }
       }
 
+      // Program 141 — case visibility fix: if a defendant (portal) user creates a
+      // case and no client was specified, auto-link it to their own Client so it
+      // appears on their dashboard.
+      let effectiveClientId = body.clientId ?? null;
+      if (!effectiveClientId && user.role === 'defendant') {
+        const dbUser = await prisma.user.findUnique({ where: { id: user.userId }, select: { clientId: true } });
+        if (dbUser?.clientId) effectiveClientId = dbUser.clientId;
+      }
+
       const newCase = await prisma.criminalCase.create({
         data: {
           tenantId: user.tenantId,
           ownerId: user.userId,
-          clientId: body.clientId ?? null,
+          clientId: effectiveClientId,
           title: body.title,
           caseNumber: body.caseNumber,
           jurisdiction: body.jurisdiction,
@@ -105,6 +115,23 @@ export async function registerCaseRoutes(app: FastifyInstance): Promise<void> {
           department: body.department ?? null,
         },
       });
+
+      // Program 141 — the creator always gets an explicit case-scoped grant so
+      // they can see and open the case they created, regardless of role. This is
+      // what makes a self-created case visible on any dashboard (incl. defendant).
+      await prisma.permissionGrant.create({
+        data: {
+          organizationId: user.tenantId,
+          userId: user.userId,
+          scope: 'case',
+          resourceId: newCase.caseId,
+          permission: 'edit',
+          grantedById: user.userId,
+        },
+      }).catch((e) => console.error('[CaseRoutes] creator grant failed:', e));
+
+      // Program 141 — audit trail.
+      void logSecurityEvent('CASE_CREATED', user.userId, request.ip, `caseId=${newCase.caseId} caseNumber=${newCase.caseNumber}`);
 
       return reply.code(201).send({ case: newCase });
     } catch (err: unknown) {

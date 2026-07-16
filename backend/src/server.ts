@@ -43,6 +43,7 @@ import { enforceSchemaOnBoot } from './database/schemaAssert.js';
 import { registerObservabilityRoutes } from './observability/observabilityRoutes.js';
 import { registerAiRoutes } from './ai/aiRoutes.js';
 import { registerCommandCenterRoutes } from './commandCenter/commandCenterRoutes.js';
+import { registerEnterpriseRoutes } from './enterprise/enterpriseRoutes.js';
 import { startRedisMemoryMonitor, stopRedisMemoryMonitor } from './observability/redisMemoryAlert.js';
 import { registerChargeRoutes } from "./charges/chargeRoutes.js";
 import { registerCalcrimRoutes } from "./routes/calcrimRoutes.js";
@@ -271,6 +272,10 @@ async function startServer() {
   // Program 140 — API Command Center (super-admin only)
   console.log('[Server] Registering API Command Center routes...');
   await registerCommandCenterRoutes(app);
+
+  // Program 141 — Enterprise permission/ownership overview (principal/admin only)
+  console.log('[Server] Registering enterprise routes...');
+  await registerEnterpriseRoutes(app);
 
   // Seed default discount codes (e.g. HUNT100)
   await seedDefaultDiscountCodes();

@@ -231,4 +231,5 @@ export const SIDEBAR_NAV = [
   { id: 'settings', label: 'Settings', path: '/settings', icon: 'Settings', permission: 'canViewSettings' as const },
   { id: 'admin', label: 'Admin', path: '/admin', icon: 'Shield', permission: 'canViewAdmin' as const },
   { id: 'api-command-center', label: 'API Command Center', path: '/dashboard/api-command-center', icon: 'ServerCog', permission: 'canViewAdmin' as const },
+  { id: 'enterprise-settings', label: 'Enterprise Settings', path: '/dashboard/enterprise-settings', icon: 'Building2', permission: 'canViewAdmin' as const },
 ] as const;

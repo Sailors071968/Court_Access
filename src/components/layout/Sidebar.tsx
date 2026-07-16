@@ -9,7 +9,7 @@ import {
   LayoutDashboard, Briefcase, Search, Bell, Settings, Shield, LogOut,
   ChevronLeft, ChevronRight, ChevronDown,
   FileText, Tag, Upload, BarChart3, Globe, Activity, Server, BookOpen, CheckSquare, FileQuestion,
-  ServerCog,
+  ServerCog, Building2,
 } from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
 import { ROLE_PERMISSIONS } from '../../constants';
@@ -24,6 +24,7 @@ const iconMap = {
   Settings,
   Shield,
   ServerCog,
+  Building2,
 };
 
 interface NavChild {

@@ -82,6 +82,8 @@ import { GuidedDemonstrationPage } from './pages/dashboard/GuidedDemonstrationPa
 import { AttorneyClientDemoPage } from './pages/dashboard/AttorneyClientDemoPage';
 import { MarketingReelPlayer } from './pages/marketing/MarketingReelPlayer';
 import { ApiCommandCenter } from './pages/dashboard/ApiCommandCenter';
+import { EnterpriseSettingsPage } from './pages/dashboard/EnterpriseSettingsPage';
+import { MarketingReelLibrary } from './pages/marketing/MarketingReelLibrary';
 import { EvidenceRequestsDashboard } from './pages/dashboard/EvidenceRequestsDashboard';
 import { CasesListPage } from './pages/CasesListPage';
 import { SearchPage } from './pages/SearchPage';
@@ -149,6 +151,8 @@ function App() {
 
         {/* Program 139 — public cinematic reel player (video render source) */}
         <Route path="/reel-player" element={<MarketingReelPlayer />} />
+        {/* Program 141 — public marketing reel library (finished videos) */}
+        <Route path="/marketing/reels" element={<MarketingReelLibrary />} />
 
         {/* Public Marketing Pages */}
         <Route path="/for-defense" element={<ForDefensePage />} />
@@ -415,6 +419,14 @@ function App() {
             element={
               <ProtectedRoute requiredPermission="canViewAdmin">
                 <ApiCommandCenter />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="dashboard/enterprise-settings"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin">
+                <EnterpriseSettingsPage />
               </ProtectedRoute>
             }
           />

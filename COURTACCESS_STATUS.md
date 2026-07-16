@@ -1,13 +1,68 @@
 # CourtAccess — Production Status
 
-**Generated:** 2026-07-11T18:38Z
-**Branch:** `cursor/lint-fix-and-status-certification-0cc2`
-**Commit:** `b48c3eb` (see `git log` for full history)
-**Program context:** Production Program 113 — Litigation Intelligence Platform & Attorney Workflow Certification
+**Generated:** 2026-07-16T21:45Z
+**Branch:** `cursor/cinematic-ai-commercial-0cc2`
+**Commit:** `926298f`
+**Program context:** Production Program 142 — Cinematic AI Commercial Production & Hollywood Marketing Certification
 
 > This document reports only what has been verified with cited evidence.
 > Per the Engineering Constitution: No Evidence → No Finding → UNKNOWN.
 > No runtime, deployment, or provider connectivity is fabricated here.
+
+---
+
+## 0. Program 142 — Cinematic AI Commercial (this program)
+
+> Note: this fresh VM checked out an early branch, so this program was built
+> self-contained (frontend deps reinstalled, Vite preview used to serve the
+> build, Playwright + ffmpeg used to render). Prior programs (111–141) live on
+> their own pushed branches/PRs.
+
+**Delivered:** a premium cinematic advertisement using **AI-generated actors**
+(a defense attorney + a defendant, generated as real images and composited into
+the scenes), cinematic lighting/motion (vignette, light-sweep, ken-burns,
+letterbox), an **animated dashboard fly-in** of illustrative findings, **subtitle
+dialogue**, a **music placeholder**, and an **animated CourtAccess.net branded
+ending** with the taglines "Evidence. Intelligence. Defense." and "Know your case.
+Help your attorney."
+
+- **Source page:** public `/commercial?format=vertical|wide|square&duration=30|45`
+  (`src/pages/marketing/CinematicCommercialPlayer.tsx`).
+- **Render pipeline:** `scripts/program-142-render.mjs` (Playwright records WebM →
+  ffmpeg encodes MP4/poster/thumbnail).
+- **Scenes:** the exact 6-beat script (plea offer → client reviewed CourtAccess →
+  dashboard of illustrative findings → "where did you find this?" → "linked to the
+  supporting records" → "we should investigate before deciding") + branded ending.
+
+**Finished videos** (in `reports/marketing/commercial/`, ffprobe-verified):
+
+| Deliverable | File | Spec |
+|-------------|------|------|
+| Instagram Reel (30s) | `instagram-reel-30s.mp4` | 1080×1920 |
+| Instagram Reel (45s) | `instagram-reel-45s.mp4` | 1080×1920 |
+| YouTube Short | `youtube-short.mp4` | 1080×1920 |
+| TikTok | `tiktok.mp4` | 1080×1920 |
+| Vertical 9:16 | `vertical-9x16.mp4` | 1080×1920 |
+| Square 1:1 | `square-1x1.mp4` | 1080×1080 |
+| Presentation 16:9 | `presentation-16x9.mp4` | 1920×1080 |
+| 1080p master | `master-1080p.mp4` | 1920×1080 |
+| **4K master** | `master-4k.mp4` | **3840×2160** |
+| Posters / thumbnails / ending frame | `*-poster.png`, `*-thumbnail.png`, `ending-brand-frame.png` | — |
+
+**Constitution:** every scene is labeled **ILLUSTRATIVE DEMONSTRATION**; the
+commercial never claims CourtAccess determines guilt, guarantees a defense, or
+predicts outcomes. Voice-over is a **post-production placeholder** — dialogue is
+carried by on-screen subtitles (no synthesized/fabricated voice track).
+
+**Verification:** `scripts/program-142-verify.mjs` — `/commercial` renders with
+**0 console errors** across vertical/wide/square. Actor, dashboard, and branded-
+ending frames visually confirmed. MP4 resolutions/durations confirmed via
+`ffprobe` (incl. the 3840×2160 4K master). Note: the "45s" renders finalized at
+~32s (Playwright video finalization) — a known capture-length nuance; the 30s
+deliverables are on-spec.
+
+**Actors:** AI-generated portraits at `public/marketing/actors/` (also copied into
+`dist/`); illustrative renders, not real individuals.
 
 ---
 

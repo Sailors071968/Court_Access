@@ -41,6 +41,7 @@ import { registerStripeWebhookRoutes } from './billing/stripeWebhookHandler.js';
 import { startPipelineWorkers, stopPipelineWorkers } from './workers/startPipelineWorkers.js';
 import { enforceSchemaOnBoot } from './database/schemaAssert.js';
 import { registerObservabilityRoutes } from './observability/observabilityRoutes.js';
+import { registerAiRoutes } from './ai/aiRoutes.js';
 import { startRedisMemoryMonitor, stopRedisMemoryMonitor } from './observability/redisMemoryAlert.js';
 import { registerChargeRoutes } from "./charges/chargeRoutes.js";
 import { registerCalcrimRoutes } from "./routes/calcrimRoutes.js";
@@ -261,6 +262,10 @@ async function startServer() {
   // PR 6 — Observability: /api/health/deep, /api/metrics, /api/metrics/json
   console.log('[Server] Registering observability routes...');
   await registerObservabilityRoutes(app);
+
+  // Program 135 — AI provider orchestration, readiness, cost, metadata
+  console.log('[Server] Registering AI orchestration routes...');
+  await registerAiRoutes(app);
 
   // Seed default discount codes (e.g. HUNT100)
   await seedDefaultDiscountCodes();

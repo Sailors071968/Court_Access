@@ -76,6 +76,7 @@ import { CpraCampaignTimeline } from './pages/dashboard/CpraCampaignTimeline';
 import { CpraMatrixDashboard } from './pages/dashboard/CpraMatrixDashboard';
 import { CpraAutonomousDashboard } from './pages/dashboard/CpraAutonomousDashboard';
 import { UsageDashboard } from './pages/dashboard/UsageDashboard';
+import { AiReadinessDashboard } from './pages/dashboard/AiReadinessDashboard';
 import { EvidenceRequestsDashboard } from './pages/dashboard/EvidenceRequestsDashboard';
 import { CasesListPage } from './pages/CasesListPage';
 import { SearchPage } from './pages/SearchPage';
@@ -393,6 +394,14 @@ function App() {
             }
           />
           <Route path="dashboard/usage" element={<UsageDashboard />} />
+          <Route
+            path="dashboard/ai-readiness"
+            element={
+              <ProtectedRoute requiredPermission="canViewEvidence">
+                <AiReadinessDashboard />
+              </ProtectedRoute>
+            }
+          />
           <Route
             path="dashboard/evidence-requests"
             element={

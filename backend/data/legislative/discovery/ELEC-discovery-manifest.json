@@ -1,0 +1,53 @@
+{
+  "version": "1.0.0",
+  "completedAt": "2026-07-15T15:18:36.586Z",
+  "status": "partial",
+  "code": "ELEC",
+  "codeName": "Elections Code",
+  "discoveredAt": "2026-07-15T15:18:32.627Z",
+  "audit": [
+    {
+      "timestamp": "2026-07-15T15:18:32.627Z",
+      "action": "start",
+      "detail": "Discovery started for Elections Code"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:32.627Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=ELEC"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:33.504Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=ELEC&nodetreepath=1"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:34.532Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=ELEC&division=0.5.&nodetreepath=2"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:35.586Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=ELEC&division=1.&nodetreepath=3"
+    },
+    {
+      "timestamp": "2026-07-15T15:18:36.586Z",
+      "action": "partial",
+      "detail": "Stopped at maxPages=4; 33 URLs remaining"
+    }
+  ],
+  "hierarchyNodes": [],
+  "sections": [],
+  "stats": {
+    "pagesFetched": 4,
+    "expandedBranchPages": 3,
+    "displayTextPages": 0,
+    "hierarchyNodes": 0,
+    "sectionsDiscovered": 0,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 0,
+    "anomalies": 0
+  },
+  "anomalies": []
+}

@@ -1,0 +1,607 @@
+{
+  "version": "1.0.0",
+  "completedAt": "2026-07-15T15:21:19.650Z",
+  "status": "partial",
+  "code": "SHC",
+  "codeName": "Streets and Highways Code",
+  "discoveredAt": "2026-07-15T15:21:15.662Z",
+  "audit": [
+    {
+      "timestamp": "2026-07-15T15:21:15.662Z",
+      "action": "start",
+      "detail": "Discovery started for Streets and Highways Code"
+    },
+    {
+      "timestamp": "2026-07-15T15:21:15.662Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=SHC"
+    },
+    {
+      "timestamp": "2026-07-15T15:21:16.585Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "timestamp": "2026-07-15T15:21:17.925Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&division=1.&nodetreepath=2"
+    },
+    {
+      "timestamp": "2026-07-15T15:21:18.665Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&division=2.&nodetreepath=3"
+    },
+    {
+      "timestamp": "2026-07-15T15:21:19.650Z",
+      "action": "partial",
+      "detail": "Stopped at maxPages=4; 104 URLs remaining"
+    }
+  ],
+  "hierarchyNodes": [
+    {
+      "code": "SHC",
+      "level": "other",
+      "label": "GENERAL PROVISIONS",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "SHC",
+      "level": "other",
+      "label": "10.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "SHC",
+      "level": "other",
+      "label": "11.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "SHC",
+      "level": "other",
+      "label": "12.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "SHC",
+      "level": "other",
+      "label": "12.2.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "SHC",
+      "level": "other",
+      "label": "13.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "SHC",
+      "level": "other",
+      "label": "14.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "SHC",
+      "level": "other",
+      "label": "15.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "SHC",
+      "level": "other",
+      "label": "16.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "SHC",
+      "level": "other",
+      "label": "17.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "SHC",
+      "level": "other",
+      "label": "18.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "SHC",
+      "level": "other",
+      "label": "19.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "SHC",
+      "level": "other",
+      "label": "20.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "SHC",
+      "level": "other",
+      "label": "21.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "SHC",
+      "level": "other",
+      "label": "22.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "SHC",
+      "level": "other",
+      "label": "22.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "SHC",
+      "level": "other",
+      "label": "23.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "SHC",
+      "level": "other",
+      "label": "23.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "SHC",
+      "level": "other",
+      "label": "24.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "SHC",
+      "level": "other",
+      "label": "25.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "SHC",
+      "level": "other",
+      "label": "26.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "SHC",
+      "level": "other",
+      "label": "27.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "SHC",
+      "level": "other",
+      "label": "28.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "SHC",
+      "level": "other",
+      "label": "29.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "SHC",
+      "level": "other",
+      "label": "30.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "SHC",
+      "level": "other",
+      "label": "35.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "SHC",
+      "level": "other",
+      "label": "36.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1",
+      "flags": []
+    }
+  ],
+  "sections": [
+    {
+      "code": "SHC",
+      "section": "1.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=1.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=2.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=5.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "6.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=6.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "7.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=7.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "8.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=8.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "9.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=9.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "10.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=10.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "11.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=11.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "12.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=12.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "12.2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=12.2.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "13.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=13.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "14.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=14.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "15.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=15.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "16.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=16.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "17.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=17.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "18.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=18.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "19.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=19.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "20.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=20.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "21.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=21.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "22.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=22.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "22.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=22.5.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "23.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=23.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "23.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=23.5.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "24.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=24.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "25.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=25.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "26.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=26.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "27.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=27.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "28.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=28.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "29.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=29.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "30.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=30.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "35.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=35.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    },
+    {
+      "code": "SHC",
+      "section": "36.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=SHC&sectionNum=36.",
+      "hierarchy": {
+        "code": "SHC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"
+    }
+  ],
+  "stats": {
+    "pagesFetched": 4,
+    "expandedBranchPages": 3,
+    "displayTextPages": 0,
+    "hierarchyNodes": 27,
+    "sectionsDiscovered": 33,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 33,
+    "anomalies": 0
+  },
+  "anomalies": []
+}

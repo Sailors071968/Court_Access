@@ -1,0 +1,5 @@
+{"timestamp":"2026-07-15T15:18:10.572Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=CONS"}
+{"timestamp":"2026-07-15T15:18:11.523Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&nodetreepath=1"}
+{"timestamp":"2026-07-15T15:18:12.573Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=I&nodetreepath=2"}
+{"timestamp":"2026-07-15T15:18:13.814Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CONS&article=II&nodetreepath=3"}
+{"timestamp":"2026-07-15T15:18:14.557Z","action":"partial","detail":"Manifest written with 0 sections"}

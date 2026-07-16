@@ -1,0 +1,5 @@
+{"timestamp":"2026-07-15T15:19:54.614Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=LAB"}
+{"timestamp":"2026-07-15T15:19:55.542Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=LAB&nodetreepath=1"}
+{"timestamp":"2026-07-15T15:19:56.870Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=LAB&division=1.&nodetreepath=2"}
+{"timestamp":"2026-07-15T15:19:57.665Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=LAB&division=2.&nodetreepath=3"}
+{"timestamp":"2026-07-15T15:19:58.565Z","action":"partial","detail":"Manifest written with 34 sections"}

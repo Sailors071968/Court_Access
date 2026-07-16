@@ -7,7 +7,6 @@ import { calcrimElements } from '../../data/calcrimElements.ts';
 import { shouldExtractOffense } from '../liabilityDiscovery/classificationEngine.ts';
 import type {
   AuditMetadata,
-  AuthorityRecord,
   CalcrimLinkRecord,
   CriminalKnowledgeBundle,
   CrossReferenceRecord,
@@ -20,7 +19,7 @@ import type {
   OffenseRecord,
   RegulatoryIncorporationRecord,
   StatuteRecord,
-} from './knowledgeGraph/types.ts';
+} from './types.ts';
 
 export const EXTRACTOR_VERSION = '1.0.0';
 
@@ -219,7 +218,6 @@ function extractRegulatoryIncorporations(statute: StatuteRecord): RegulatoryInco
 function linkCalcrim(statute: StatuteRecord, offense: OffenseRecord): CalcrimLinkRecord[] {
   const links: CalcrimLinkRecord[] = [];
   const sectionNum = statute.section.replace(/\.$/, '');
-  const codeRef = `${statute.code} ${sectionNum}`;
 
   for (const [key, crime] of Object.entries(calcrimElements)) {
     const crimeSection = crime.code.replace(/^PC\s+/i, '').trim();
@@ -229,7 +227,7 @@ function linkCalcrim(statute: StatuteRecord, offense: OffenseRecord): CalcrimLin
       id: entityId(statute.id, 'calcrim', key),
       sourceStatuteId: statute.id,
       offenseId: offense.id,
-      instructionNumber: field('UNKNOWN', 'UNKNOWN'),
+      instructionNumber: field<number>('UNKNOWN', 'UNKNOWN'),
       instructionTitle: field(key, 'MEDIUM'),
       confidence: 'MEDIUM',
       audit: cloneAudit(statute),

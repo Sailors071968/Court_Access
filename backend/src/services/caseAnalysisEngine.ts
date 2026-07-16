@@ -66,7 +66,7 @@ export class CaseAnalysisEngine {
     // Each stage would call the appropriate worker/service
   }
 
-  static shouldRegenerate(trigger: 'new_evidence' | 'policy_update' | 'evidence_modified'): boolean {
+  static shouldRegenerate(_trigger: 'new_evidence' | 'policy_update' | 'evidence_modified'): boolean {
     // Phase 273: Always regenerate on these triggers
     return true;
   }

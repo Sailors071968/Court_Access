@@ -2,7 +2,7 @@
 // CourtAccess Master Production Program — generate canonical roadmap report
 
 import { writeFile, mkdir } from 'node:fs/promises';
-import { resolve, dirname } from 'node:path';
+import { resolve } from 'node:path';
 import { assessMasterProductionProgram } from '../src/productionGates/masterProductionProgram.ts';
 
 const reportsDir = resolve(import.meta.dirname ?? '.', '../../reports');

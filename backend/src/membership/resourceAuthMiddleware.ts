@@ -47,13 +47,18 @@ export async function sendUnauthorized(reply: FastifyReply): Promise<FastifyRepl
   return reply.code(401).send({ error: 'Authentication required' });
 }
 
-/** Guard helper for route handlers — returns false if response already sent. */
-export async function guardAuth(
+/**
+ * Guard helper for route handlers. Narrows `user` to `AuthUser` when
+ * authenticated; otherwise sends 401 and returns false. Implemented as a
+ * synchronous type predicate so callers narrow `user` via `if (!guardAuth(...))`.
+ * (An async function cannot be a type predicate, and `await` erases narrowing.)
+ */
+export function guardAuth(
   user: AuthUser | undefined,
   reply: FastifyReply,
-): Promise<user is AuthUser> {
+): user is AuthUser {
   if (!user?.userId || !user?.tenantId) {
-    await sendUnauthorized(reply);
+    void sendUnauthorized(reply);
     return false;
   }
   return true;
@@ -145,27 +150,37 @@ function minLevel(a: PermissionLevel, b: PermissionLevel): PermissionLevel {
   return (LEVEL_RANK[a] ?? 0) <= (LEVEL_RANK[b] ?? 0) ? a : b;
 }
 
-/** Prisma where clause for listing cases with permission + defendant portal scoping. */
+/**
+ * Prisma where clause for listing cases with permission + defendant portal
+ * scoping. A user's access basis is the UNION of:
+ *   - explicit accessible case grants (listAccessibleCaseIds), and
+ *   - for defendants, cases linked to their portal Client (clientId match).
+ * (Program 141) Previously these were AND-ed, which zeroed out a defendant's
+ * clientId-matched cases whenever they had no separate grant — hiding cases
+ * they created or that were linked to them. They are now OR-ed.
+ */
 export async function buildAuthorizedCaseFilter(user: AuthUser): Promise<Record<string, unknown>> {
   const base: Record<string, unknown> = { tenantId: user.tenantId, deletedAt: null };
+
+  const accessible = await listAccessibleCaseIds(user.userId, user.tenantId);
+  if (accessible === 'all') return base;
+
+  const orClauses: Array<Record<string, unknown>> = [];
+  if (accessible.length > 0) orClauses.push({ caseId: { in: accessible } });
 
   if (user.role === 'defendant') {
     const dbUser = await prisma.user.findUnique({
       where: { id: user.userId },
       select: { clientId: true },
     });
-    if (!dbUser?.clientId) return { ...base, clientId: '__no_portal_client__' };
-    base.clientId = dbUser.clientId;
+    if (dbUser?.clientId) orClauses.push({ clientId: dbUser.clientId });
   }
 
-  const accessible = await listAccessibleCaseIds(user.userId, user.tenantId);
-  if (accessible === 'all') return base;
-
-  if (accessible.length === 0) {
+  if (orClauses.length === 0) {
+    // No access basis at all → disclose nothing.
     return { ...base, caseId: '__no_accessible_cases__' };
   }
-
-  return { ...base, caseId: { in: accessible } };
+  return { ...base, OR: orClauses };
 }
 
 /** Filter a list of case-scoped items — unauthorized items omitted (non-disclosure). */

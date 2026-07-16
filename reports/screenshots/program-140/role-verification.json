@@ -1,0 +1,28 @@
+{
+  "base": "http://localhost:8080",
+  "path": "/dashboard/api-command-center",
+  "generatedAt": "2026-07-16T19:47:39.278Z",
+  "results": [
+    {
+      "role": "admin",
+      "expected": "granted",
+      "outcome": "granted",
+      "pass": true,
+      "consoleErrors": []
+    },
+    {
+      "role": "attorney",
+      "expected": "denied",
+      "outcome": "denied",
+      "pass": true,
+      "consoleErrors": []
+    },
+    {
+      "role": "investigator",
+      "expected": "denied",
+      "outcome": "denied",
+      "pass": true,
+      "consoleErrors": []
+    }
+  ]
+}

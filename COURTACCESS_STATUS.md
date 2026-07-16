@@ -4,7 +4,7 @@
 **Branch:** `cursor/defense-opportunity-dashboard-0cc2`
 **Commit:** `c7c400e` (feature) — status/verification commit follows
 **Deployed staging build:** `c7c400e` served via Cloudflare quick tunnel
-**Public staging URL:** `https://slide-fairfield-atlas-statistical.trycloudflare.com` (ephemeral)
+**Public staging URL:** `https://dow-pledge-adrian-deemed.trycloudflare.com` (ephemeral)
 **Program context:** Production Program 134 — Evidence-Governed Defense Opportunity Dashboard & Defense Intelligence Certification
 
 > Reports only what has been verified with cited evidence.
@@ -64,10 +64,10 @@ and `case-overview.png`).
 
 ## 3. Live staging (ephemeral)
 
-Cloudflare quick tunnel `https://slide-fairfield-atlas-statistical.trycloudflare.com`
+Cloudflare quick tunnel `https://dow-pledge-adrian-deemed.trycloudflare.com`
 proxying the local static+API stack serving build `c7c400e`; verified `GET /` →
-200 and `POST /api/auth/login` → 200. **Ephemeral** — the URL stops when this
-session's VM suspends; a persistent URL still requires deploy credentials.
+200 and `POST /api/auth/login` → 200. **Ephemeral** — the URL stops/rotates when
+this session's VM suspends; a persistent URL still requires deploy credentials.
 
 ## 4. Program 134 phase status
 

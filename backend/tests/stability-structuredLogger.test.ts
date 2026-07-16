@@ -10,7 +10,7 @@
 //   - Deprecated setCorrelationId is a no-op
 // ============================================================================
 
-import { describe, it, beforeEach } from 'node:test';
+import { describe, it } from 'node:test';
 import assert from 'node:assert/strict';
 import {
   StructuredLogger,

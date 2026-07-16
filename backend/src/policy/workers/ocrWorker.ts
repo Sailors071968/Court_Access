@@ -11,7 +11,6 @@ import { Readable } from 'node:stream';
 export const OCR_QUEUE = 'policy-ocr-queue';
 export const CLASSIFICATION_QUEUE = 'policy-classification-queue';
 
-const S3_BUCKET = process.env.S3_POLICY_BUCKET ?? 'courtaccess-policy-library';
 const S3_REGION = process.env.AWS_REGION ?? 'us-west-2';
 
 export interface OcrJobData {
@@ -109,7 +108,9 @@ async function extractTextWithTesseract(
     if (mimeType.includes('pdf')) {
       // Attempt to extract text from PDF using pdf-parse
       try {
-        const pdfParse = await import('pdf-parse');
+        const pdfParse = await import('pdf-parse') as unknown as {
+          default: (buf: Buffer) => Promise<{ text: string }>;
+        };
         const pdfData = await pdfParse.default(documentBytes);
         if (pdfData.text && pdfData.text.trim().length > 50) {
           await worker.terminate();

@@ -6,7 +6,7 @@
 import { runStripeProductionCertification } from '../billing/stripeCertification.js';
 import { collectBillingReadinessMetrics } from '../billing/billingMetricsService.js';
 import { collectProductionMetrics } from '../legislative/productionMetrics.js';
-import { AUTH_CONFIG, getRequiredRoles } from '../security/authMiddleware.js';
+import { AUTH_CONFIG } from '../security/authMiddleware.js';
 import { isBackupDrillPassing } from '../productionOperations/backupRestoreDrill.js';
 import { runProductionGates } from './runProductionGates.js';
 import type { ProductionGate, ProductionGatesReport } from './types.js';

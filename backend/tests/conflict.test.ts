@@ -655,7 +655,7 @@ describe('ConflictGraphIntegrator', () => {
       },
     });
 
-    const { session, executedQueries } = createMockSession();
+    const { session, _executedQueries } = createMockSession();
     const result = await integrator.insertConflicts([lowSeverity], session);
 
     assert.equal(result.conflictNodesCreated, 0, 'Should not insert low-severity conflicts');
@@ -671,7 +671,7 @@ describe('ConflictGraphIntegrator', () => {
       },
     });
 
-    const { session, executedQueries } = createMockSession();
+    const { session, _executedQueries } = createMockSession();
     const result = await integrator.insertConflicts([conflict], session);
 
     assert.ok(result.conflictNodesCreated > 0, 'Should create conflict node');
@@ -1022,7 +1022,7 @@ describe('NarrativeConflictDetector', () => {
       },
     })];
 
-    const { session, executedQueries } = createMockSession();
+    const { session, _executedQueries } = createMockSession();
     const result = await detector.insertConflictsToGraph(conflicts, session);
 
     assert.ok(result.conflictNodesCreated > 0);

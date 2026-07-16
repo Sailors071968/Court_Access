@@ -1,0 +1,1130 @@
+{
+  "version": "1.0.0",
+  "completedAt": "2026-07-15T15:17:48.273Z",
+  "status": "partial",
+  "code": "BPC",
+  "codeName": "Business and Professions Code",
+  "discoveredAt": "2026-07-15T14:46:51.404Z",
+  "audit": [
+    {
+      "timestamp": "2026-07-15T14:46:51.404Z",
+      "action": "start",
+      "detail": "Discovery started for Business and Professions Code"
+    },
+    {
+      "timestamp": "2026-07-15T14:46:51.404Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=BPC"
+    },
+    {
+      "timestamp": "2026-07-15T14:46:52.368Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "timestamp": "2026-07-15T14:46:53.743Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=1.&nodetreepath=2"
+    },
+    {
+      "timestamp": "2026-07-15T14:46:54.453Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=1.5.&nodetreepath=3"
+    },
+    {
+      "timestamp": "2026-07-15T14:46:55.436Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=2.&nodetreepath=4"
+    },
+    {
+      "timestamp": "2026-07-15T14:46:56.462Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=3.&nodetreepath=5"
+    },
+    {
+      "timestamp": "2026-07-15T14:46:57.453Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=4.&nodetreepath=6"
+    },
+    {
+      "timestamp": "2026-07-15T14:46:58.382Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=5.&nodetreepath=7"
+    },
+    {
+      "timestamp": "2026-07-15T14:46:59.381Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=6.&nodetreepath=8"
+    },
+    {
+      "timestamp": "2026-07-15T14:47:00.379Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=7.&nodetreepath=9"
+    },
+    {
+      "timestamp": "2026-07-15T14:47:01.444Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.&nodetreepath=10"
+    },
+    {
+      "timestamp": "2026-07-15T14:47:02.453Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11"
+    },
+    {
+      "timestamp": "2026-07-15T15:17:48.272Z",
+      "action": "resume",
+      "detail": "Resumed from /workspace/backend/data/legislative/discovery/BPC-discovery-checkpoint.json"
+    },
+    {
+      "timestamp": "2026-07-15T15:17:48.272Z",
+      "action": "partial",
+      "detail": "Stopped at maxPages=4; 1015 URLs remaining"
+    }
+  ],
+  "hierarchyNodes": [
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "GENERAL PROVISIONS",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "7.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "10.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "11.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "12.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "12.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "13.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "14.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "14.1.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "14.2.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "15.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "16.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "17.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "18.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "19.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "20.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "21.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "22.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "23.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "23.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "23.6.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "23.7.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "23.8.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "23.9.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "24.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "26.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "27.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "27.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "27.6.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "29.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "30.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "31.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "32.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "35.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "40.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "division",
+      "label": "DIVISION 8.5. STOP TOBACCO ACCESS TO KIDS ENFORCEMENT ACT",
+      "sectionRange": "[22950 - 22964]",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "22950.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "22950.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "22951.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "22952.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "22953.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "22954.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "22955.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "22956.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "22957.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "22958.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "22959.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "22960.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "22961.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "22962.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "22963.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11",
+      "flags": []
+    },
+    {
+      "code": "BPC",
+      "level": "other",
+      "label": "22964.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11",
+      "flags": []
+    }
+  ],
+  "sections": [
+    {
+      "code": "BPC",
+      "section": "1.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=1.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=2.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "3.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=3.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "4.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=4.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=5.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "6.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=6.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "7.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=7.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "7.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=7.5.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "8.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=8.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "9.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=9.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "10.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=10.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "11.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=11.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "12.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=12.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "12.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=12.5.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "13.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=13.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "14.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=14.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "14.1.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=14.1.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "14.2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=14.2.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "15.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=15.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "16.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=16.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "17.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=17.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "18.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=18.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "19.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=19.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "20.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=20.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "21.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=21.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "22.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "23.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=23.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "23.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=23.5.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "23.6.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=23.6.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "23.7.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=23.7.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "23.8.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=23.8.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "23.9.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=23.9.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "24.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=24.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "26.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=26.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "27.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=27.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "27.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=27.5.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "27.6.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=27.6.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "29.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=29.5.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "30.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=30.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "31.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=31.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "32.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=32.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "35.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=35.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "40.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=40.",
+      "hierarchy": {
+        "code": "BPC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&nodetreepath=1"
+    },
+    {
+      "code": "BPC",
+      "section": "22950.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22950.",
+      "hierarchy": {
+        "code": "BPC",
+        "division": "8.5."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11"
+    },
+    {
+      "code": "BPC",
+      "section": "22950.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22950.5.",
+      "hierarchy": {
+        "code": "BPC",
+        "division": "8.5."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11"
+    },
+    {
+      "code": "BPC",
+      "section": "22951.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22951.",
+      "hierarchy": {
+        "code": "BPC",
+        "division": "8.5."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11"
+    },
+    {
+      "code": "BPC",
+      "section": "22952.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22952.",
+      "hierarchy": {
+        "code": "BPC",
+        "division": "8.5."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11"
+    },
+    {
+      "code": "BPC",
+      "section": "22953.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22953.",
+      "hierarchy": {
+        "code": "BPC",
+        "division": "8.5."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11"
+    },
+    {
+      "code": "BPC",
+      "section": "22954.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22954.",
+      "hierarchy": {
+        "code": "BPC",
+        "division": "8.5."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11"
+    },
+    {
+      "code": "BPC",
+      "section": "22955.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22955.",
+      "hierarchy": {
+        "code": "BPC",
+        "division": "8.5."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11"
+    },
+    {
+      "code": "BPC",
+      "section": "22956.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22956.",
+      "hierarchy": {
+        "code": "BPC",
+        "division": "8.5."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11"
+    },
+    {
+      "code": "BPC",
+      "section": "22957.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22957.",
+      "hierarchy": {
+        "code": "BPC",
+        "division": "8.5."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11"
+    },
+    {
+      "code": "BPC",
+      "section": "22958.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22958.",
+      "hierarchy": {
+        "code": "BPC",
+        "division": "8.5."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11"
+    },
+    {
+      "code": "BPC",
+      "section": "22959.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22959.",
+      "hierarchy": {
+        "code": "BPC",
+        "division": "8.5."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11"
+    },
+    {
+      "code": "BPC",
+      "section": "22960.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22960.",
+      "hierarchy": {
+        "code": "BPC",
+        "division": "8.5."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11"
+    },
+    {
+      "code": "BPC",
+      "section": "22961.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22961.",
+      "hierarchy": {
+        "code": "BPC",
+        "division": "8.5."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11"
+    },
+    {
+      "code": "BPC",
+      "section": "22962.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22962.",
+      "hierarchy": {
+        "code": "BPC",
+        "division": "8.5."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11"
+    },
+    {
+      "code": "BPC",
+      "section": "22963.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22963.",
+      "hierarchy": {
+        "code": "BPC",
+        "division": "8.5."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11"
+    },
+    {
+      "code": "BPC",
+      "section": "22964.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=BPC&sectionNum=22964.",
+      "hierarchy": {
+        "code": "BPC",
+        "division": "8.5."
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=BPC&division=8.5.&nodetreepath=11"
+    }
+  ],
+  "stats": {
+    "pagesFetched": 12,
+    "expandedBranchPages": 11,
+    "displayTextPages": 0,
+    "hierarchyNodes": 52,
+    "sectionsDiscovered": 59,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 59,
+    "anomalies": 0
+  },
+  "anomalies": []
+}

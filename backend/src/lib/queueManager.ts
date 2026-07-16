@@ -2,12 +2,12 @@
 // CourtAccess — Queue Manager (SINGLE SOURCE OF TRUTH)
 // ============================================================================
 
-import { Queue } from "bullmq";
+import { Queue, type ConnectionOptions } from "bullmq";
 import { redisConnection } from "./redis";
 
 // 🔥 VIDEO QUEUE (PRIMARY PIPELINE)
 export const videoQueue = new Queue("video", {
-  connection: redisConnection,
+  connection: redisConnection as unknown as ConnectionOptions,
 });
 
 // (Optional future queues — DO NOT REMOVE)

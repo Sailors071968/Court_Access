@@ -80,6 +80,7 @@ import { AiReadinessDashboard } from './pages/dashboard/AiReadinessDashboard';
 import { DemonstrationModePage } from './pages/dashboard/DemonstrationModePage';
 import { GuidedDemonstrationPage } from './pages/dashboard/GuidedDemonstrationPage';
 import { AttorneyClientDemoPage } from './pages/dashboard/AttorneyClientDemoPage';
+import { MarketingReelPlayer } from './pages/marketing/MarketingReelPlayer';
 import { EvidenceRequestsDashboard } from './pages/dashboard/EvidenceRequestsDashboard';
 import { CasesListPage } from './pages/CasesListPage';
 import { SearchPage } from './pages/SearchPage';
@@ -144,6 +145,9 @@ function App() {
       <Routes>
         {/* Public Landing Page */}
         <Route path="/" element={<LandingPage />} />
+
+        {/* Program 139 — public cinematic reel player (video render source) */}
+        <Route path="/reel-player" element={<MarketingReelPlayer />} />
 
         {/* Public Marketing Pages */}
         <Route path="/for-defense" element={<ForDefensePage />} />

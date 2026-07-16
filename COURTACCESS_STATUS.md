@@ -1,91 +1,104 @@
 # CourtAccess — Production Status
 
-**Generated:** 2026-07-15T21:53Z
-**Branch:** `cursor/investigation-command-center-0cc2`
-**Commit:** `62bb986` (feature) — status/verification commit follows
-**Deployed staging build:** `62bb986` served via Cloudflare quick tunnel
+**Generated:** 2026-07-16T14:45Z
+**Branch:** `cursor/defense-opportunity-dashboard-0cc2`
+**Commit:** `c7c400e` (feature) — status/verification commit follows
+**Deployed staging build:** `c7c400e` served via Cloudflare quick tunnel
 **Public staging URL:** `https://slide-fairfield-atlas-statistical.trycloudflare.com` (ephemeral)
-**Program context:** Production Program 133 — Evidence-Governed Criminal Investigation Intelligence & Investigation Command System Certification
+**Program context:** Production Program 134 — Evidence-Governed Defense Opportunity Dashboard & Defense Intelligence Certification
 
 > Reports only what has been verified with cited evidence.
 > Per the Engineering Constitution: No Evidence → No Finding → UNKNOWN.
 > Repository-backed intelligence and illustrative examples are labeled
-> separately; no investigative findings, evidence, witnesses, legal conclusions,
-> attorney recommendations, or case outcomes are fabricated. **CourtAccess never
-> fabricates investigative findings and never recommends litigation strategy.**
+> separately; no defense theories, evidence, witness testimony, legal
+> conclusions, attorney recommendations, or case outcomes are fabricated.
+> **CourtAccess never determines guilt, states a defense will succeed, or
+> recommends litigation strategy.**
 
 ---
 
 ## 1. Delivered this program (verified)
 
-**Investigation Command Center** (new "Investigation Command" case tab + route
-`/cases/:caseId/investigation-command`) — a flagship workspace that organizes
-repository-backed evidence into structured investigation planning, built entirely
-from the Attorney Workbench bundle. A **mandatory disclaimer banner** states
-CourtAccess does not fabricate investigative findings/evidence/witnesses or
-recommend litigation strategy.
+**Defense Opportunity Dashboard** — the flagship, top-of-case view that makes the
+strongest repository-backed defense opportunities obvious within seconds. Embedded
+**at the very top of every case Overview** (compact mode, first thing visible) and
+also available as a dedicated "Defense Opportunities" tab + route
+`/cases/:caseId/defense-opportunity-dashboard` (full mode). Built entirely from the
+Attorney Workbench bundle. A **mandatory disclaimer banner** states CourtAccess
+does not determine guilt, state a defense will succeed, or recommend strategy.
 
-- **Command dashboard (Phase 1):** outstanding tasks, completion %, evidence
-  gaps, witness gaps, outstanding subpoenas, outstanding human review.
-- **Investigative Leads (Phase 3):** outstanding witness interviews, document/
-  subpoena requests, forensic testing, digital & physical evidence, and
-  investigative questions; plus a priority-ranked task list with assignees/status.
-- **Scene Intelligence (Phase 2):** scene photographs, scene locations (UNKNOWN
-  unless in evidence metadata), surveillance/business-canvass/travel leads.
-- **Investigation Relationship Map (Phase 4):** interactive SVG (zoom/pan,
-  clickable nodes + side panel) linking investigation tasks, evidence, witnesses,
-  charges, CALCRIM, and timeline.
-- **Investigation Readiness (Phase 5):** completion/evidence/CALCRIM/confidence
-  health bars + outstanding forensic/legal-research/human-review chips.
-- **Investigation Briefing (Phase 6):** case/investigation/evidence/witness
-  summary + outstanding factual questions + human-review checklist.
+- **Dashboard + priority ribbon (Phases 1/5/6):** Critical / High / Medium / Low /
+  Human Review Required counts, ranked highest-first, premium executive cards with
+  color coding, icons, and a glass header.
+- **Defense Opportunity cards (Phase 2):** each clickable card shows a plain-English
+  explanation, why it matters, affected charge, affected CALCRIM element(s),
+  affected mens rea, evidence supporting review vs conflicting with review, and
+  repository confidence; UNKNOWN where unsupported.
+- **Complete Citation Panel (Phase 3):** statute, CALCRIM, authority, evidence,
+  timeline, and Knowledge-Graph citations rendered as clickable links to the
+  supporting workspace. Granular locators (police-report page/paragraph, transcript
+  page/line, dash/body-cam & audio timestamps, exhibit image location) display only
+  when present in repository metadata and are otherwise **UNKNOWN — never fabricated**.
+- **Investigation Opportunities (Phase 4):** per-card repository-backed items + a
+  link into the Investigation Command Center.
+- **Defense Priority Ranking (Phase 5):** every card carries an explained ranking;
+  UNKNOWN elements are routed to "Human Review Required" (no fabricated certainty).
+- **Client Explanation Mode (Phase 7):** a toggle that switches every card to
+  jargon-free plain English — what has been found, why it may matter, what
+  investigation may help, and what remains UNKNOWN.
 
-Every derivation is repository-backed. Repository / UNKNOWN / Illustrative labeled
-via `ProvenanceBadge`. Frontend `npm run build` passes; backend `tsc`/lint remain
-clean.
+Opportunities are derived from unproven CALCRIM elements, repository contradictions,
+impeachment material, and statutory defenses/exceptions. Every assertion is
+traceable to repository evidence or citations. Repository / UNKNOWN / Illustrative
+labeled via `ProvenanceBadge`. Frontend `npm run build` passes; backend `tsc`/lint
+remain clean.
 
-## 2. Browser verification (Phase 8) — 45/45 pages, 0 console errors
+## 2. Browser verification (Phase 8) — 46/46 pages, 0 console errors
 
 Playwright walkthrough against the running staging build
-(`reports/screenshots/program-133/`, `verification-report.json`): all 45 routes —
-including the new **investigation-command** page — render with **0 console errors,
-0 failing API calls**. Screenshot gallery captured (incl. `investigation-command.png`).
+(`reports/screenshots/program-134/`, `verification-report.json`): all 46 routes —
+including the new **defense-opportunity-dashboard** page and the **case-overview**
+now leading with the embedded dashboard — render with **0 console errors, 0 failing
+API calls**. Screenshot gallery captured (incl. `defense-opportunity-dashboard.png`
+and `case-overview.png`).
 
 ## 3. Live staging (ephemeral)
 
 Cloudflare quick tunnel `https://slide-fairfield-atlas-statistical.trycloudflare.com`
-proxying the local static+API stack serving build `62bb986`; verified `GET /` →
+proxying the local static+API stack serving build `c7c400e`; verified `GET /` →
 200 and `POST /api/auth/login` → 200. **Ephemeral** — the URL stops when this
 session's VM suspends; a persistent URL still requires deploy credentials.
 
-## 4. Program 133 phase status
+## 4. Program 134 phase status
 
 | Phase | Status |
 |-------|--------|
-| 1 — Investigation Command Center | **DONE** |
-| 2 — Scene Intelligence | **DONE** (locations UNKNOWN unless in metadata) |
-| 3 — Investigative Leads | **DONE** |
-| 4 — Investigation Relationship Map | **DONE** (interactive SVG) |
-| 5 — Investigation Readiness | **DONE** |
-| 6 — Investigation Briefing | **DONE** |
-| 7 / 8 / 9 / 10 — Visual / Verify / Git / Deploy | **DONE** |
+| 1 — Defense Opportunity Dashboard (top of case) | **DONE** |
+| 2 — Defense Opportunity Cards | **DONE** |
+| 3 — Complete Citation Panel | **DONE** (clickable; granular locators UNKNOWN unless in metadata) |
+| 4 — Investigation Opportunities | **DONE** |
+| 5 — Defense Priority Ranking | **DONE** (explained; UNKNOWN → Human Review) |
+| 6 — Visual Excellence | **DONE** |
+| 7 — Client Explanation Mode | **DONE** |
+| 8 / 9 / 10 — Verify / Git / Deploy | **DONE** |
 
-## 5. Investigation Intelligence completion
+## 5. Defense Opportunity completion
 
-Core capability operational and browser-verified: CourtAccess now organizes
-repository evidence into structured investigation planning — leads, scene
-intelligence, a relationship map, readiness metrics, and a briefing — without
-fabricating findings, evidence, or witnesses, or recommending strategy.
-**Investigation Intelligence completion ≈ 90%** — the remaining ~10% is
-geospatial scene mapping (bounded by repository geolocation metadata) and
-task-level evidence linkage.
+Core capability operational and browser-verified: CourtAccess now surfaces the
+strongest repository-backed defense opportunities at the top of every case, with
+plain-English cards, traceable clickable citations, per-card investigation
+opportunities, explained priority ranking, and a client explanation mode — without
+determining guilt, asserting a defense will succeed, or recommending strategy.
+**Defense Opportunity completion ≈ 90%** — the remaining ~10% is granular in-media
+citation locators (page/line/timestamp/image-region), which require richer
+repository evidence metadata than the current bundle exposes.
 
 ## 6. Production completion
 
-Application layer ≈ **95%** (all workspaces operational, 45/45 pages 0 console
-errors, backend `tsc`/lint clean, CI green). Depth of repository-backed
-investigation intelligence tracks the legislative corpus coverage (23 codes;
-largely bounded slices), which remains an ongoing acquisition task.
+Application layer ≈ **95%** (all workspaces operational, 46/46 pages 0 console
+errors, backend `tsc`/lint clean, CI green). Depth of repository-backed defense
+intelligence tracks the legislative corpus coverage (23 codes; largely bounded
+slices), which remains an ongoing acquisition task.
 
 ## 7. Remaining infrastructure blockers
 

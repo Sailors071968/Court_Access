@@ -1,0 +1,358 @@
+{
+  "base": "http://localhost:8080",
+  "generatedAt": "2026-07-16T18:15:47.846Z",
+  "totalPages": 50,
+  "pagesWithConsoleErrors": 0,
+  "results": [
+    {
+      "label": "landing",
+      "path": "/",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "for-defense",
+      "path": "/for-defense",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "features",
+      "path": "/features",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "how-it-works",
+      "path": "/how-it-works",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "pricing",
+      "path": "/pricing",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "security",
+      "path": "/security",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "knowledge-base",
+      "path": "/knowledge-base",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "accessibility",
+      "path": "/accessibility",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "login",
+      "path": "/login",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "register",
+      "path": "/register",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "dashboard",
+      "path": "/dashboard",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "cases",
+      "path": "/cases",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "search",
+      "path": "/search",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "settings",
+      "path": "/settings",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "collaborators-shared-access",
+      "path": "/shared-access",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "administration",
+      "path": "/admin",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "admin-operations",
+      "path": "/admin/operations",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "provider-system-health",
+      "path": "/dashboard/system-health",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "usage",
+      "path": "/dashboard/usage",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "case-overview",
+      "path": "/cases/bba55309-7867-4625-a3c3-7dece14dc646/overview",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "case-intake-charges",
+      "path": "/cases/bba55309-7867-4625-a3c3-7dece14dc646/charges",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "evidence-workspace",
+      "path": "/cases/bba55309-7867-4625-a3c3-7dece14dc646/evidence",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "timeline",
+      "path": "/cases/bba55309-7867-4625-a3c3-7dece14dc646/dashboard/case-timeline",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "strategy-center",
+      "path": "/cases/bba55309-7867-4625-a3c3-7dece14dc646/strategy-center",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "attorney-workbench",
+      "path": "/cases/bba55309-7867-4625-a3c3-7dece14dc646/attorney-workbench",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "calcrim-intelligence",
+      "path": "/cases/bba55309-7867-4625-a3c3-7dece14dc646/calcrim-intelligence",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "defense-opportunities",
+      "path": "/cases/bba55309-7867-4625-a3c3-7dece14dc646/defense-opportunities",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "defense-intelligence",
+      "path": "/cases/bba55309-7867-4625-a3c3-7dece14dc646/defense-intelligence",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "trial-notebook",
+      "path": "/cases/bba55309-7867-4625-a3c3-7dece14dc646/trial-notebook",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "evidence-intelligence",
+      "path": "/cases/bba55309-7867-4625-a3c3-7dece14dc646/evidence-intelligence",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "case-map",
+      "path": "/cases/bba55309-7867-4625-a3c3-7dece14dc646/case-map",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "motion-intelligence",
+      "path": "/cases/bba55309-7867-4625-a3c3-7dece14dc646/motion-intelligence",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "case-theory",
+      "path": "/cases/bba55309-7867-4625-a3c3-7dece14dc646/case-theory",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "trial-readiness",
+      "path": "/cases/bba55309-7867-4625-a3c3-7dece14dc646/trial-readiness",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "cross-examination",
+      "path": "/cases/bba55309-7867-4625-a3c3-7dece14dc646/cross-examination",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "command-center",
+      "path": "/cases/bba55309-7867-4625-a3c3-7dece14dc646/command-center",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "investigation-command",
+      "path": "/cases/bba55309-7867-4625-a3c3-7dece14dc646/investigation-command",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "defense-opportunity-dashboard",
+      "path": "/cases/bba55309-7867-4625-a3c3-7dece14dc646/defense-opportunity-dashboard",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "ai-readiness",
+      "path": "/dashboard/ai-readiness",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "demo-defense",
+      "path": "/dashboard/demo-defense",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "guided-demo",
+      "path": "/dashboard/guided-demo",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "attorney-client-demo",
+      "path": "/dashboard/attorney-client-demo",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "prosecution-weakness",
+      "path": "/cases/bba55309-7867-4625-a3c3-7dece14dc646/prosecution-weakness",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "investigation-opportunities",
+      "path": "/cases/bba55309-7867-4625-a3c3-7dece14dc646/investigation-opportunities",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "contradiction-workspace",
+      "path": "/cases/bba55309-7867-4625-a3c3-7dece14dc646/contradictions",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "narrative-analysis",
+      "path": "/cases/bba55309-7867-4625-a3c3-7dece14dc646/narrative-analysis",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "litigation-strategy",
+      "path": "/cases/bba55309-7867-4625-a3c3-7dece14dc646/litigation-strategy",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "documents",
+      "path": "/cases/bba55309-7867-4625-a3c3-7dece14dc646/documents",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "motions",
+      "path": "/cases/bba55309-7867-4625-a3c3-7dece14dc646/motions",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    },
+    {
+      "label": "research",
+      "path": "/cases/bba55309-7867-4625-a3c3-7dece14dc646/research",
+      "title": "CourtAccess — Criminal Case Intelligence Platform",
+      "status": "ok",
+      "consoleErrors": []
+    }
+  ]
+}

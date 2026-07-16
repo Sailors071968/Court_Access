@@ -1,0 +1,5 @@
+{"timestamp":"2026-07-15T15:21:15.662Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=SHC"}
+{"timestamp":"2026-07-15T15:21:16.585Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&nodetreepath=1"}
+{"timestamp":"2026-07-15T15:21:17.925Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&division=1.&nodetreepath=2"}
+{"timestamp":"2026-07-15T15:21:18.665Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=SHC&division=2.&nodetreepath=3"}
+{"timestamp":"2026-07-15T15:21:19.652Z","action":"partial","detail":"Manifest written with 33 sections"}

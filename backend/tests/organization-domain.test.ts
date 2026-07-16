@@ -152,10 +152,10 @@ describe('Multi-tenant organization platform', () => {
     assert.equal(user.tenantId, firmA);
     assert.equal(user.role, 'investigator');
 
-    const member = await prisma.organizationMember.findUnique({ where: { userId: user.id } });
+    const member = await prisma.organizationMember.findFirst({ where: { userId: user.id } });
     assert.equal(member?.organizationId, firmA);
 
-    await prisma.organizationMember.delete({ where: { userId: user.id } }).catch(() => undefined);
+    await prisma.organizationMember.deleteMany({ where: { userId: user.id } }).catch(() => undefined);
     await prisma.user.delete({ where: { id: user.id } }).catch(() => undefined);
   });
 });

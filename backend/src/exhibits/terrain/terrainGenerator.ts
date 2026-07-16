@@ -192,8 +192,8 @@ function recalculateNormals(
  * Generate elevation data grid (flat by default, can use real elevation APIs).
  */
 export function generateElevationData(
-  widthMeters: number,
-  heightMeters: number,
+  _widthMeters: number,
+  _heightMeters: number,
   resolution = 32,
 ): ElevationData {
   const grid: number[][] = [];

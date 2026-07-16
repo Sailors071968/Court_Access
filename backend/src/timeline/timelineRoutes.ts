@@ -7,7 +7,8 @@ import {
   propagateToElements,
   evaluateBurden,
   buildFailureExplanation,
-  applyElementDependencies
+  applyElementDependencies,
+  runLegalCascade
 } from "../logic/legalCascadeEngine";
 
 import {
@@ -27,7 +28,6 @@ import { authMiddleware } from '../middleware/authMiddleware';
 import type { AuthenticatedRequest } from '../security/authMiddleware.js';
 
 import {
-  getTimelineEvents,
   getTimelineConflicts,
 } from './timelineReconstructionService.js';
 
@@ -90,7 +90,6 @@ export async function registerTimelineRoutes(app: FastifyInstance): Promise<void
         const baseAnalysis = runLegalAnalysis({
           events: eventList,
           contradictions,
-          crimeType: 'burglary'
         });
 
         // --------------------------------------------------

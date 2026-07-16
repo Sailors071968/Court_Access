@@ -427,7 +427,12 @@ export async function detectEvidenceGaps(
     tenantId,
     events,
     evidence,
-    timelineEvents,
+    timelineEvents: timelineEvents.map((t) => ({
+      id: t.id,
+      timestamp: t.timestamp ?? new Date(0),
+      sourceType: t.sourceType ?? 'unknown',
+      description: t.description ?? '',
+    })),
   };
 
   // Run all gap detection rules

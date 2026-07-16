@@ -1,0 +1,420 @@
+{
+  "version": "1.0.0",
+  "completedAt": "2026-07-15T15:20:51.608Z",
+  "status": "partial",
+  "code": "PUC",
+  "codeName": "Public Utilities Code",
+  "discoveredAt": "2026-07-15T15:20:47.651Z",
+  "audit": [
+    {
+      "timestamp": "2026-07-15T15:20:47.651Z",
+      "action": "start",
+      "detail": "Discovery started for Public Utilities Code"
+    },
+    {
+      "timestamp": "2026-07-15T15:20:47.651Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=PUC"
+    },
+    {
+      "timestamp": "2026-07-15T15:20:48.604Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1"
+    },
+    {
+      "timestamp": "2026-07-15T15:20:49.966Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&division=1.&nodetreepath=2"
+    },
+    {
+      "timestamp": "2026-07-15T15:20:50.680Z",
+      "action": "fetch",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&division=1.5.&nodetreepath=3"
+    },
+    {
+      "timestamp": "2026-07-15T15:20:51.608Z",
+      "action": "partial",
+      "detail": "Stopped at maxPages=4; 198 URLs remaining"
+    }
+  ],
+  "hierarchyNodes": [
+    {
+      "code": "PUC",
+      "level": "other",
+      "label": "GENERAL PROVISIONS",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "PUC",
+      "level": "other",
+      "label": "10.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "PUC",
+      "level": "other",
+      "label": "11.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "PUC",
+      "level": "other",
+      "label": "12.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "PUC",
+      "level": "other",
+      "label": "12.2.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "PUC",
+      "level": "other",
+      "label": "13.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "PUC",
+      "level": "other",
+      "label": "14.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "PUC",
+      "level": "other",
+      "label": "15.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "PUC",
+      "level": "other",
+      "label": "16.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "PUC",
+      "level": "other",
+      "label": "17.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "PUC",
+      "level": "other",
+      "label": "18.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "PUC",
+      "level": "other",
+      "label": "19.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "PUC",
+      "level": "other",
+      "label": "20.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "PUC",
+      "level": "other",
+      "label": "20.5.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "PUC",
+      "level": "other",
+      "label": "21.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1",
+      "flags": []
+    },
+    {
+      "code": "PUC",
+      "level": "other",
+      "label": "22.",
+      "url": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1",
+      "flags": []
+    }
+  ],
+  "sections": [
+    {
+      "code": "PUC",
+      "section": "1.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PUC&sectionNum=1.",
+      "hierarchy": {
+        "code": "PUC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1"
+    },
+    {
+      "code": "PUC",
+      "section": "2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PUC&sectionNum=2.",
+      "hierarchy": {
+        "code": "PUC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1"
+    },
+    {
+      "code": "PUC",
+      "section": "4.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PUC&sectionNum=4.",
+      "hierarchy": {
+        "code": "PUC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1"
+    },
+    {
+      "code": "PUC",
+      "section": "5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PUC&sectionNum=5.",
+      "hierarchy": {
+        "code": "PUC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1"
+    },
+    {
+      "code": "PUC",
+      "section": "6.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PUC&sectionNum=6.",
+      "hierarchy": {
+        "code": "PUC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1"
+    },
+    {
+      "code": "PUC",
+      "section": "7.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PUC&sectionNum=7.",
+      "hierarchy": {
+        "code": "PUC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1"
+    },
+    {
+      "code": "PUC",
+      "section": "8.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PUC&sectionNum=8.",
+      "hierarchy": {
+        "code": "PUC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1"
+    },
+    {
+      "code": "PUC",
+      "section": "9.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PUC&sectionNum=9.",
+      "hierarchy": {
+        "code": "PUC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1"
+    },
+    {
+      "code": "PUC",
+      "section": "10.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PUC&sectionNum=10.",
+      "hierarchy": {
+        "code": "PUC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1"
+    },
+    {
+      "code": "PUC",
+      "section": "11.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PUC&sectionNum=11.",
+      "hierarchy": {
+        "code": "PUC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1"
+    },
+    {
+      "code": "PUC",
+      "section": "12.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PUC&sectionNum=12.",
+      "hierarchy": {
+        "code": "PUC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1"
+    },
+    {
+      "code": "PUC",
+      "section": "12.2.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PUC&sectionNum=12.2.",
+      "hierarchy": {
+        "code": "PUC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1"
+    },
+    {
+      "code": "PUC",
+      "section": "13.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PUC&sectionNum=13.",
+      "hierarchy": {
+        "code": "PUC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1"
+    },
+    {
+      "code": "PUC",
+      "section": "14.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PUC&sectionNum=14.",
+      "hierarchy": {
+        "code": "PUC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1"
+    },
+    {
+      "code": "PUC",
+      "section": "15.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PUC&sectionNum=15.",
+      "hierarchy": {
+        "code": "PUC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1"
+    },
+    {
+      "code": "PUC",
+      "section": "16.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PUC&sectionNum=16.",
+      "hierarchy": {
+        "code": "PUC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1"
+    },
+    {
+      "code": "PUC",
+      "section": "17.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PUC&sectionNum=17.",
+      "hierarchy": {
+        "code": "PUC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1"
+    },
+    {
+      "code": "PUC",
+      "section": "18.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PUC&sectionNum=18.",
+      "hierarchy": {
+        "code": "PUC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1"
+    },
+    {
+      "code": "PUC",
+      "section": "19.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PUC&sectionNum=19.",
+      "hierarchy": {
+        "code": "PUC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1"
+    },
+    {
+      "code": "PUC",
+      "section": "20.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PUC&sectionNum=20.",
+      "hierarchy": {
+        "code": "PUC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1"
+    },
+    {
+      "code": "PUC",
+      "section": "20.5.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PUC&sectionNum=20.5.",
+      "hierarchy": {
+        "code": "PUC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1"
+    },
+    {
+      "code": "PUC",
+      "section": "21.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PUC&sectionNum=21.",
+      "hierarchy": {
+        "code": "PUC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1"
+    },
+    {
+      "code": "PUC",
+      "section": "22.",
+      "canonicalUrl": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PUC&sectionNum=22.",
+      "hierarchy": {
+        "code": "PUC"
+      },
+      "discoveryMethod": "link",
+      "flags": [],
+      "sourceUrl": "https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PUC&nodetreepath=1"
+    }
+  ],
+  "stats": {
+    "pagesFetched": 4,
+    "expandedBranchPages": 3,
+    "displayTextPages": 0,
+    "hierarchyNodes": 16,
+    "sectionsDiscovered": 23,
+    "sectionsFromRanges": 0,
+    "sectionsFromLinks": 23,
+    "anomalies": 0
+  },
+  "anomalies": []
+}

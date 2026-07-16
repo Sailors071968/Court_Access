@@ -1,0 +1,5 @@
+{"timestamp":"2026-07-15T15:20:22.618Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=PCC"}
+{"timestamp":"2026-07-15T15:20:23.553Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PCC&nodetreepath=1"}
+{"timestamp":"2026-07-15T15:20:24.622Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PCC&division=1.&nodetreepath=2"}
+{"timestamp":"2026-07-15T15:20:25.872Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=PCC&division=2.&nodetreepath=3"}
+{"timestamp":"2026-07-15T15:20:26.700Z","action":"partial","detail":"Manifest written with 3 sections"}

@@ -1,0 +1,5 @@
+{"timestamp":"2026-07-15T15:18:14.558Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codesTOCSelected.xhtml?tocCode=CORP"}
+{"timestamp":"2026-07-15T15:18:15.574Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&nodetreepath=1"}
+{"timestamp":"2026-07-15T15:18:16.718Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&title=1.&nodetreepath=2"}
+{"timestamp":"2026-07-15T15:18:17.665Z","action":"fetch","url":"https://leginfo.legislature.ca.gov/faces/codes_displayexpandedbranch.xhtml?tocCode=CORP&title=2.&nodetreepath=3"}
+{"timestamp":"2026-07-15T15:18:18.466Z","action":"partial","detail":"Manifest written with 23 sections"}

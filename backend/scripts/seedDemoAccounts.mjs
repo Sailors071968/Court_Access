@@ -8,13 +8,13 @@ const TENANT = 'tenant-cd6731b6-b111-4315-a36a-480deebefb50';
 const PASSWORD = 'TestPass123!';
 
 const ACCOUNTS = [
-  { email: 'attorney2@courtaccess.test', name: 'Demo Attorney', role: 'attorney' },
-  { email: 'investigator2@courtaccess.test', name: 'Demo Investigator', role: 'investigator' },
-  { email: 'defendant2@courtaccess.test', name: 'Demo Defendant', role: 'defendant' },
-  { email: 'paralegal2@courtaccess.test', name: 'Demo Paralegal', role: 'staff' },
-  { email: 'legalassistant@courtaccess.test', name: 'Demo Legal Assistant', role: 'staff' },
-  { email: 'officeadmin@courtaccess.test', name: 'Demo Office Administrator', role: 'admin' },
-  { email: 'admin@courtaccess.test', name: 'Demo Administrator', role: 'admin' },
+  { email: 'attorney2@courtaccess.test', name: 'Demo Attorney', role: 'attorney', personnelType: 'attorney' },
+  { email: 'investigator2@courtaccess.test', name: 'Demo Investigator', role: 'investigator', personnelType: 'investigator' },
+  { email: 'defendant2@courtaccess.test', name: 'Demo Defendant', role: 'defendant', personnelType: null },
+  { email: 'paralegal2@courtaccess.test', name: 'Demo Paralegal', role: 'staff', personnelType: 'paralegal' },
+  { email: 'legalassistant@courtaccess.test', name: 'Demo Legal Assistant', role: 'staff', personnelType: 'legal_assistant' },
+  { email: 'officeadmin@courtaccess.test', name: 'Demo Office Administrator', role: 'admin', personnelType: 'office_admin' },
+  { email: 'admin@courtaccess.test', name: 'Demo Administrator', role: 'admin', personnelType: 'office_admin' },
 ];
 
 async function main() {
@@ -28,7 +28,23 @@ async function main() {
       create: { email: a.email, name: a.name, passwordHash, role: a.role, tenantId: TENANT, emailVerifiedAt: now, termsAcceptedAt: now, privacyAcceptedAt: now },
     });
     if (a.role === 'attorney') attorneyId = user.id;
-    console.log(`upserted ${a.email} (${a.role})`);
+    // Trial subscription so the app's paywall admits the account.
+    const end = new Date(now.getTime() + 30 * 864e5);
+    await prisma.subscription.upsert({
+      where: { userId: user.id },
+      update: { subscriptionStatus: 'trialing', subscriptionTier: 'trial', planId: 'TRIAL', billingPeriodEnd: end, trialEndsAt: end },
+      create: { userId: user.id, planId: 'TRIAL', subscriptionStatus: 'trialing', subscriptionTier: 'trial', billingPeriodStart: now, billingPeriodEnd: end, trialEndsAt: end },
+    });
+    // Active organization membership so resource-access guards admit the user.
+    if (a.role !== 'defendant') {
+      const existingMember = await prisma.organizationMember.findFirst({ where: { organizationId: TENANT, userId: user.id } });
+      if (existingMember) {
+        await prisma.organizationMember.update({ where: { memberId: existingMember.memberId }, data: { role: a.role, status: 'active', personnelType: a.personnelType ?? undefined } });
+      } else {
+        await prisma.organizationMember.create({ data: { organizationId: TENANT, userId: user.id, role: a.role, status: 'active', personnelType: a.personnelType ?? undefined } });
+      }
+    }
+    console.log(`upserted ${a.email} (${a.role}) + trial subscription + membership`);
   }
 
   const existing = await prisma.criminalCase.findFirst({ where: { tenantId: TENANT, caseNumber: 'CR-2026-04821' } });

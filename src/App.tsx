@@ -8,6 +8,7 @@ import { ProtectedRoute } from './components/layout/ProtectedRoute';
 
 // Landing Page
 import { LandingPage, PricingPage } from './pages/LandingPage';
+import { CinematicCommercialPlayer } from './pages/marketing/CinematicCommercialPlayer';
 
 // Public Marketing Pages (Phase 207-216)
 import { ForDefensePage } from './pages/ForDefensePage';
@@ -124,6 +125,9 @@ function App() {
       <Routes>
         {/* Public Landing Page */}
         <Route path="/" element={<LandingPage />} />
+
+        {/* Program 142 — public cinematic commercial (video render source) */}
+        <Route path="/commercial" element={<CinematicCommercialPlayer />} />
 
         {/* Public Marketing Pages */}
         <Route path="/for-defense" element={<ForDefensePage />} />

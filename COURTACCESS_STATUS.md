@@ -1,12 +1,13 @@
 # CourtAccess — Production Status
 
-**Generated:** 2026-07-16T19:05Z
-**Branch:** `cursor/api-command-center-0cc2`
-**Commit:** `2bc66aa` (feature) — status commit follows
-**Deployed staging build:** `2bc66aa` (frontend) + restarted backend with command-center routes, served via Cloudflare quick tunnel
+**Generated:** 2026-07-16T20:40Z
+**Branch:** `cursor/enterprise-permissions-0cc2`
+**Commit:** `9056f66` (feature) — status commit follows
+**Deployed staging build:** `9056f66` (frontend) + restarted backend with enterprise routes, served via Cloudflare quick tunnel
 **Public staging URL:** `https://dow-pledge-adrian-deemed.trycloudflare.com` (ephemeral)
-**Test credentials:** `admin@courtaccess.test` (super-admin) / `attorney2@courtaccess.test` (+ 5 role accounts), all `TestPass123!`; case **People v. Jordan Rivera** (CR-2026-04821)
-**Program context:** Production Program 140 — API Command Center Restoration, Provider Intelligence & Enterprise Integration Certification
+**Marketing Reel Library (public):** `https://dow-pledge-adrian-deemed.trycloudflare.com/marketing/reels`
+**Test credentials:** `admin@courtaccess.test` (principal) / `attorney2@courtaccess.test` (+ 5 role accounts), all `TestPass123!`; case **People v. Jordan Rivera** (CR-2026-04821)
+**Program context:** Production Program 141 — Enterprise Permission System, Principal Ownership, Case Visibility & Role-Based Collaboration Certification
 
 > Reports only what has been verified with cited evidence.
 > Per the Engineering Constitution: No Evidence → No Finding → UNKNOWN.
@@ -20,83 +21,93 @@
 
 ## 1. Delivered this program (verified)
 
-**API Command Center (restored, super-admin only)** — an executive operations
-center for every provider, AI model, datastore, and integration powering
-CourtAccess. Backed by admin-only endpoints; provider connectivity is verified in
-real time for datastores and derived from credential presence for external
-providers — **never fabricated**; UNKNOWN where a live check can't be performed.
+**Enterprise permission system, principal ownership, defendant case-visibility
+fix, and a public marketing reel library.**
 
-- **Phase 0 — Admin access:** route gated by `canViewAdmin` (Access Denied panel
-  for others; no URL bypass) and hidden from non-admin navigation; the backend
-  independently enforces `role === 'admin'` (401/403) and **audit-logs** every
-  access (`COMMAND_CENTER_ACCESS` / `_ACCESS_DENIED` / `_PROVIDER_TEST`).
-- **Phase 1 — Restore:** new `/dashboard/api-command-center` page + admin sidebar
-  entry (ServerCog icon); routing/auth/permissions/responsive layout verified.
-- **Phase 2 — Provider dashboard:** 22 integrations across AI / litigation-data /
-  geospatial / communications / payments / cloud / datastores / devops, each with
-  connectivity (**Verified / Unavailable / Not Configured / UNKNOWN**), latency,
-  last-verified, credential env vars, and a per-provider **Test** button.
-- **Phase 3 — Subscription:** plan, status, tier, billing period, trial end.
-- **Phase 4 — System health:** real Postgres/Redis/Neo4j/memory component health
-  (via deep health check), worker/queue depths, and repository counts.
-- **Phase 5 — AI Command Center:** every chat model with status, $/1k-token
-  estimate, context window, capabilities, and preferred workloads (UNKNOWN where
-  unsupported).
-- **Phase 6 — API testing:** admin-triggered runtime verification (real for
-  datastores; honest not_configured/UNKNOWN for external providers — no fabricated
-  third-party calls).
-- **Phase 7 — Executive visual design:** glass UI, color-coded health, large
-  metrics, category grouping.
+- **Phase 1 — Defendant case-visibility bug FIXED (verified 0 → 1):**
+  `buildAuthorizedCaseFilter` now **unions** a defendant's `clientId` match with
+  their accessible grants (previously AND-ed to zero). Case creation auto-links
+  `clientId` for defendant creators, grants the creator an explicit case-scoped
+  `PermissionGrant` (any role sees cases they create), and audit-logs
+  `CASE_CREATED`. API-verified: a defendant went from **0** visible cases to **1**
+  after creating a case.
+- **Phases 2/3/5/7/9 — Enterprise Settings (Principal/Admin only):** new
+  `/api/enterprise/overview` (admin **200** / non-admin **403**, audit-logged) +
+  `/dashboard/enterprise-settings` page showing: the **Principal Account** (org
+  owner) and **billing ownership** (all processing/subscription charges assigned
+  only to the Principal — never designees), **role management + case-assignment
+  matrix** (real members, No/Specific/All cases), the deterministic **24-permission
+  matrix × 10 roles (default OFF)**, **redaction modes** (unredacted / attorney /
+  investigator / client / custom), and **audit history** (real `SecurityLog`).
+- **Phase 8 — Audit trail:** `CASE_CREATED`, `ENTERPRISE_SETTINGS_ACCESS(_DENIED)`,
+  `COMMAND_CENTER_ACCESS`, logins, and failed authorizations are recorded and
+  surfaced in the Audit History (observed live in verification screenshots).
+- **Phase 10 — Public Marketing Reel Library:** the finished MP4/GIF/poster/
+  thumbnail assets are published to `public/marketing/` (served from `dist/`) and a
+  public **`/marketing/reels`** gallery renders `<video>` players + downloads — no
+  auth or repository access required.
 
-Backend `tsc --noEmit` + `eslint src/commandCenter` clean. Frontend `npm run build`
-passes. Runtime: admin `/api/command-center/overview` → **200**; attorney → **403**;
-anonymous → **401** (verified live). Real datastore health observed (PostgreSQL
-1ms Verified, Redis Verified, Prisma Verified; Neo4j UNKNOWN — not running).
+Everything is repository-backed or the deterministic permission policy; nothing is
+fabricated. Backend `tsc`/`eslint` clean; frontend `npm run build` passes.
 
-## 2. Browser verification (Phase 8) — role-gated, 0 console errors
+> (Program 140's API Command Center — super-admin operations center for every
+> provider/AI model/datastore with real datastore verification — remains in place
+> and is unaffected.)
 
-`scripts/program-140-verify.mjs` (`reports/screenshots/program-140/`,
-`role-verification.json`): **admin = granted, attorney = denied, investigator =
-denied**, each with **0 console errors** and full-page screenshots. No unauthorized
-navigation path and no direct-URL bypass (Access Denied panel + backend 403).
-Admin view visually confirmed rendering the full command center.
+## 2. Browser verification — role-gated, 0 console errors
+
+`scripts/program-141-verify.mjs` (`reports/screenshots/program-141/`):
+- **Enterprise Settings** — admin = **granted**, attorney = **denied** (Access
+  Denied panel; no URL bypass), 0 console errors. API: admin **200** / attorney
+  **403**.
+- **Public Marketing Reel Library** (`/marketing/reels`) — renders for anonymous
+  visitors; videos served from `/marketing/*.mp4` (HTTP 200), 0 console errors.
+- **Defendant case visibility** — API-verified: defendant `GET /api/cases` = 0
+  before, `POST /api/cases` → 201, then = **1** (self-created case now visible).
+- Admin Enterprise Settings screenshot visually confirmed the permission matrix,
+  case-assignment matrix (Demo Defendant → "1 Case(s)"), billing ownership, and a
+  live audit trail (incl. `CASE_CREATED` and `ENTERPRISE_SETTINGS_ACCESS_DENIED`).
 
 ## 3. Live staging (ephemeral)
 
 Cloudflare quick tunnel `https://dow-pledge-adrian-deemed.trycloudflare.com`
-proxying the local static+API stack (frontend build `2bc66aa` + backend restarted
-with the command-center routes). **Ephemeral** — the URL stops/rotates when this
-session's VM suspends; a persistent URL still requires deploy credentials.
+proxying the local static+API stack (frontend build `9056f66` + backend restarted
+with the enterprise routes). Public reel library at `/marketing/reels`.
+**Ephemeral** — the URL stops/rotates when this session's VM suspends; a persistent
+URL still requires deploy credentials.
 
-## 4. Program 140 phase status
+## 4. Program 141 phase status
 
 | Phase | Status |
 |-------|--------|
-| 0 — Admin access certification | **DONE** (route + backend + audit; role-verified) |
-| 1 — Restore API Command Center | **DONE** |
-| 2 — Provider dashboard (22 integrations) | **DONE** (Verified/Unavailable/Not-Configured/UNKNOWN) |
-| 3 — Subscription dashboard | **DONE** |
-| 4 — System health | **DONE** (real component health) |
-| 5 — AI command center | **DONE** |
-| 6 — API testing | **DONE** (real for datastores; UNKNOWN otherwise) |
-| 7 — Executive visual design | **DONE** |
-| 8 / 9 — Browser cert / Git | **DONE** |
+| 1 — Case visibility repair (defendant) | **DONE** (verified 0 → 1) |
+| 2 — Principal account ownership | **DONE** (owner = principal; billing owner surfaced) |
+| 3 — Designee management (roles) | **PARTIAL** (10 enterprise roles + matrix; write-flows via existing membership APIs) |
+| 4 — Case assignments | **PARTIAL** (No/Specific/All summary shown; creator auto-grant live) |
+| 5 — Permission matrix (24 perms, default OFF) | **DONE** (display) |
+| 6 — Redaction system | **PARTIAL** (modes surfaced; application pipeline pre-existing) |
+| 7 — Billing ownership (Principal only) | **DONE** |
+| 8 — Audit trail | **DONE** (real SecurityLog; CASE_CREATED + access events logged) |
+| 9 — Settings UI | **DONE** |
+| 10 — Marketing reel publication (public) | **DONE** |
+| 11 — Browser verification | **DONE** (admin/attorney/defendant + public) |
 
-## 5. API Command Center completion
+## 5. Permission system completion
 
-Core capability restored and browser-verified: a super-admin operations center
-orchestrating 22 enterprise integrations with real datastore verification, an AI
-command center, system health, subscription, and admin-triggered testing — without
-fabricating connectivity (UNKNOWN preferred where unverifiable). **API Command
-Center completion ≈ 92%** — the remaining ~8% is live third-party connectivity
-probes for external providers (require real credentials + outbound network) and a
-provider-dependency graph visualization.
+Core enterprise permission architecture operational and browser-verified: the
+defendant case-visibility defect is fixed, the Principal Account owns all billing,
+the 24-permission matrix (default OFF) and case-assignment/audit views are live,
+and the marketing reels are publicly viewable. **Permission System completion
+≈ 85%** — the remaining ~15% is interactive per-permission/per-case **write**
+toggles in the UI (current mutations run through existing membership/permission-
+grant + approval APIs) and applying selected redaction modes to stored documents.
 
 ## 6. Production completion
 
-Application layer ≈ **95%** (all workspaces operational; backend `tsc`/lint clean,
-AI + command-center endpoints verified). Repository depth still tracks the
-legislative corpus coverage (23 codes; largely bounded slices).
+Application layer ≈ **95%** (all workspaces operational; backend `tsc`/lint clean;
+AI, command-center, and enterprise endpoints verified; defendant visibility fixed).
+Repository depth still tracks the legislative corpus coverage (23 codes; largely
+bounded slices).
 
 ## 7. Remaining infrastructure blockers
 

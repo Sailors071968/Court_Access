@@ -12,6 +12,7 @@ import type {
   DetectedConflict,
   ConflictScoringFactors,
 } from './types.ts';
+import { deriveExplanationFactors } from './types.ts';
 
 // ---------------------------------------------------------------------------
 // Configuration
@@ -26,6 +27,12 @@ export interface StatementComparatorConfig {
   maxStatementsToCompare: number;
   /** Whether to detect cross-role contradictions only (officer vs witness) */
   crossRoleOnly: boolean;
+  /**
+   * Require shared context for comparisons (default: true).
+   * When true, statements must share a sourceDocumentId, speakerId,
+   * or be topically related to be compared. Prevents combinatorial explosion.
+   */
+  requireSharedContext: boolean;
 }
 
 const DEFAULT_CONFIG: StatementComparatorConfig = {
@@ -33,6 +40,7 @@ const DEFAULT_CONFIG: StatementComparatorConfig = {
   minStatementLength: 20,
   maxStatementsToCompare: 10_000,
   crossRoleOnly: false,
+  requireSharedContext: true,
 };
 
 // ---------------------------------------------------------------------------
@@ -91,6 +99,16 @@ export class StatementComparator {
 
         // If cross-role only, skip same-role comparisons
         if (this.config.crossRoleOnly && a.speakerRole === b.speakerRole) continue;
+
+        // Scope constraint: require shared context (hard entity link)
+        // Statements must share a sourceDocumentId or speakerId to be compared.
+        // Topical similarity alone is insufficient — legal statements share too
+        // much domain vocabulary, causing false positives.
+        if (this.config.requireSharedContext) {
+          const sharedDoc = a.sourceDocumentId === b.sourceDocumentId;
+          const sharedSpeaker = a.speakerId === b.speakerId;
+          if (!sharedDoc && !sharedSpeaker) continue;
+        }
 
         const result = this.comparePair(a, b);
         if (result.isContradiction) {
@@ -367,6 +385,7 @@ export class StatementComparator {
           supportingSourceCount: 0.15,
         },
       },
+      explanationFactors: deriveExplanationFactors('testimony'),
       sourceNodeIds: [a.id],
       targetNodeIds: [b.id],
       evidenceIds: [],

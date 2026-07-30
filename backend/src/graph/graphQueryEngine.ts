@@ -396,6 +396,48 @@ export class GraphQueryEngine {
   }
 
   /**
+   * Find conflicts at or above a severity threshold for a tenant (case).
+   */
+  async findConflictsBySeverity(
+    tenantId: string,
+    threshold: number,
+  ): Promise<Array<{
+    conflict: GraphNode;
+    relatedNodes: Array<{ node: GraphNode; relationship: GraphRelationship }>;
+  }>> {
+    const safeThreshold = Math.max(0.0, Math.min(1.0, threshold));
+    if (!Number.isFinite(safeThreshold)) throw new Error('Invalid threshold parameter');
+
+    const result = await this.neo4jClient.execute(
+      `
+      MATCH (c:Conflict {tenantId: $tenantId})-[r]->(target {tenantId: $tenantId})
+      WHERE c.severityScore >= $threshold
+      RETURN c, r, target
+      ORDER BY c.severityScore DESC
+      `,
+      { tenantId, threshold: safeThreshold },
+    );
+
+    const grouped = new Map<string, {
+      conflict: GraphNode;
+      relatedNodes: Array<{ node: GraphNode; relationship: GraphRelationship }>;
+    }>();
+
+    for (const record of result.records) {
+      const conflict = this.recordToNode(record['c'] as Record<string, unknown>);
+      const target = this.recordToNode(record['target'] as Record<string, unknown>);
+      const relationship = this.recordToRelationship(record['r'] as Record<string, unknown>);
+
+      if (!grouped.has(conflict.id)) {
+        grouped.set(conflict.id, { conflict, relatedNodes: [] });
+      }
+      grouped.get(conflict.id)!.relatedNodes.push({ node: target, relationship });
+    }
+
+    return Array.from(grouped.values());
+  }
+
+  /**
    * Find policy-violation conflicts for a tenant.
    */
   async findPolicyViolationConflicts(tenantId: string): Promise<Array<{

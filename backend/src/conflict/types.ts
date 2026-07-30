@@ -141,6 +141,37 @@ export interface TimelineEvent {
 }
 
 // ---------------------------------------------------------------------------
+// Explanation Factors — human-readable conflict explainability
+// ---------------------------------------------------------------------------
+
+export interface ConflictExplanationFactors {
+  /** Whether this conflict involves a timestamp mismatch */
+  timestampMismatch: boolean;
+  /** Whether this conflict involves a policy violation */
+  policyViolation: boolean;
+  /** Whether this conflict involves a witness contradiction */
+  witnessContradiction: boolean;
+  /** Whether this conflict involves evidence inconsistency */
+  evidenceInconsistency: boolean;
+  /** Whether this conflict involves contradictory legal claims */
+  legalClaimContradiction: boolean;
+}
+
+/**
+ * Derive explanation factors from a conflict type.
+ * Each conflict type sets the relevant boolean flags.
+ */
+export function deriveExplanationFactors(conflictType: ConflictType): ConflictExplanationFactors {
+  return {
+    timestampMismatch: conflictType === 'timeline',
+    policyViolation: conflictType === 'policy_violation',
+    witnessContradiction: conflictType === 'testimony',
+    evidenceInconsistency: conflictType === 'evidence',
+    legalClaimContradiction: conflictType === 'legal_claim',
+  };
+}
+
+// ---------------------------------------------------------------------------
 // Detected Conflict — output of conflict detection
 // ---------------------------------------------------------------------------
 
@@ -153,6 +184,8 @@ export interface DetectedConflict {
   description: string;
   /** Severity scoring */
   severity: ConflictSeverityScore;
+  /** Human-readable explanation factors */
+  explanationFactors: ConflictExplanationFactors;
   /** Source nodes involved in the conflict */
   sourceNodeIds: string[];
   /** Target nodes involved in the conflict */

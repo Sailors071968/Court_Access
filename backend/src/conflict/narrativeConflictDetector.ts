@@ -17,6 +17,7 @@ import type {
   GraphNode,
   GraphRelationship,
 } from './types.ts';
+import { deriveExplanationFactors } from './types.ts';
 import type { Neo4jSession } from '../graph/types.ts';
 import { createHash } from 'node:crypto';
 
@@ -35,6 +36,17 @@ export interface NarrativeConflictDetectorConfig {
   detectPolicyViolations: boolean;
   /** Whether to detect legal claim conflicts */
   detectLegalClaimConflicts: boolean;
+  /**
+   * Timeline proximity window in ms (default: 600000 — 10 minutes).
+   * Only timeline events within this window are compared.
+   */
+  timelineProximityWindowMs: number;
+  /**
+   * Require shared context for conflict comparisons (default: true).
+   * Constrains comparisons to entities sharing caseId, documents, speakers,
+   * or topical relevance. Prevents combinatorial explosion.
+   */
+  requireSharedContext: boolean;
 }
 
 const DEFAULT_CONFIG: NarrativeConflictDetectorConfig = {
@@ -43,6 +55,8 @@ const DEFAULT_CONFIG: NarrativeConflictDetectorConfig = {
   detectEvidenceInconsistencies: true,
   detectPolicyViolations: true,
   detectLegalClaimConflicts: true,
+  timelineProximityWindowMs: 600_000,
+  requireSharedContext: true,
 };
 
 // ---------------------------------------------------------------------------
@@ -58,8 +72,13 @@ export class NarrativeConflictDetector {
 
   constructor(config?: Partial<NarrativeConflictDetectorConfig>) {
     this.config = { ...DEFAULT_CONFIG, ...config };
-    this.timelineAnalyzer = new TimelineConflictAnalyzer();
-    this.statementComparator = new StatementComparator();
+    this.timelineAnalyzer = new TimelineConflictAnalyzer({
+      proximityWindowMs: this.config.timelineProximityWindowMs,
+      requireSharedContext: this.config.requireSharedContext,
+    });
+    this.statementComparator = new StatementComparator({
+      requireSharedContext: this.config.requireSharedContext,
+    });
     this.scoringEngine = new ConflictScoringEngine();
     this.graphIntegrator = new ConflictGraphIntegrator();
   }
@@ -223,6 +242,7 @@ export class NarrativeConflictDetector {
           `Evidence inconsistency: "${sourceNode.name}" ${rel.type.toLowerCase()} ` +
           `"${targetNode.name}" (confidence: ${rel.confidence.toFixed(2)})`,
         severity,
+        explanationFactors: deriveExplanationFactors('evidence'),
         sourceNodeIds: [rel.sourceNodeId],
         targetNodeIds: [rel.targetNodeId],
         evidenceIds: [rel.sourceNodeId, rel.targetNodeId],
@@ -292,6 +312,7 @@ export class NarrativeConflictDetector {
             `Policy conflict: "${violatingNode.name}" violates "${policyNode.name}" ` +
             `but "${supportingNode.name}" supports compliance`,
           severity,
+          explanationFactors: deriveExplanationFactors('policy_violation'),
           sourceNodeIds: [violation.sourceNodeId],
           targetNodeIds: [support.sourceNodeId, violation.targetNodeId],
           evidenceIds: [violation.sourceNodeId, support.sourceNodeId],
@@ -372,6 +393,7 @@ export class NarrativeConflictDetector {
                 `Legal claim conflict: "${claimA.name}" and "${claimB.name}" make ` +
                 `contradictory assertions about "${sharedTarget.name}"`,
               severity,
+              explanationFactors: deriveExplanationFactors('legal_claim'),
               sourceNodeIds: [claimA.id],
               targetNodeIds: [claimB.id, relA.targetNodeId],
               evidenceIds: [relA.targetNodeId],

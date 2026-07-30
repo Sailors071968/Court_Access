@@ -16,6 +16,7 @@ export type {
   ConflictScoringFactors,
   ConflictScoringWeights,
   ConflictSeverityScore,
+  ConflictExplanationFactors,
   Statement,
   TimelineEvent,
   DetectedConflict,
@@ -26,7 +27,7 @@ export type {
   ConflictGraphInsertionResult,
 } from './types.ts';
 
-export { DEFAULT_CONFLICT_SCORING_WEIGHTS } from './types.ts';
+export { DEFAULT_CONFLICT_SCORING_WEIGHTS, deriveExplanationFactors } from './types.ts';
 
 export type {
   NarrativeConflictDetectorConfig,

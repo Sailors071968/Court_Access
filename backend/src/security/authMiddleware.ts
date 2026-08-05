@@ -194,35 +194,47 @@ const ROLE_HIERARCHY: Record<UserRole, number> = {
   defendant: 0,
 };
 
-// Route permission map: route prefix → minimum required roles
+// Route permission map: route prefix → minimum required roles.
+//
+// Note on 'staff': self-service registration resolves several public-facing
+// signup roles — family member, interpreter, consultant, expert witness, and
+// the "other" fallback that catches any unrecognised value — onto the platform
+// role 'staff'. Anyone on the internet can therefore obtain 'staff'. It may
+// only be used for tenant-scoped firm features, never for platform-operator
+// consoles, cross-tenant reads, destructive actions, or anything that sends
+// mail on the organisation's behalf.
 const ROUTE_PERMISSIONS: Record<string, UserRole[]> = {
   '/api/compliance': ['admin', 'attorney', 'investigator'],
   '/api/clients': ['admin', 'attorney', 'investigator', 'staff'],
   '/api/organizations': ['admin', 'attorney', 'investigator', 'staff'],
   '/api/firm': ['admin', 'attorney', 'investigator', 'staff'],
   '/api/policy-intelligence': ['admin', 'attorney', 'staff'],
-  '/api/policy-pipeline': ['admin', 'staff'],
-  '/api/operations': ['admin', 'staff'],
+  // Starts headless-browser crawls of external agency websites.
+  '/api/policy-pipeline': ['admin'],
+  // Platform operations console — cross-tenant.
+  '/api/operations': ['admin'],
   '/api/exhibits': ['admin', 'attorney'],
-  '/api/cpra': ['admin', 'staff'],
+  // Prepares and sends California Public Records Act requests by email in the
+  // organisation's name.
+  '/api/cpra': ['admin'],
   '/api/crawler': ['admin'],
   '/api/forensic': ['admin', 'attorney', 'investigator'],
   '/api/forensic/expert-package': ['admin', 'attorney'],
   '/api/forensic/jury-view': ['admin', 'attorney'],
-  '/api/admin/billing/metrics': ['admin', 'staff'],
-  '/api/admin/production-gates': ['admin', 'staff'],
-  '/api/admin/operations': ['admin', 'staff'],
-  '/api/admin/audit': ['admin', 'staff'],
-  '/api/admin/alerts': ['admin', 'staff'],
-  '/api/admin/changes': ['admin', 'staff'],
+  '/api/admin/billing/metrics': ['admin'],
+  '/api/admin/production-gates': ['admin'],
+  '/api/admin/operations': ['admin'],
+  '/api/admin/audit': ['admin'],
+  '/api/admin/alerts': ['admin'],
+  '/api/admin/changes': ['admin'],
   '/api/admin/backup': ['admin'],
-  '/api/admin/engineering-dashboard': ['admin', 'staff'],
-  '/api/admin/deployment-checks': ['admin', 'staff'],
-  '/api/admin/discount-codes': ['admin', 'staff'],
-  '/api/admin/stats': ['admin', 'staff'],
-  '/api/admin/users': ['admin', 'staff'],
-  '/api/admin/cases': ['admin', 'staff'],
-  '/api/admin/evidence': ['admin', 'staff'],
+  '/api/admin/engineering-dashboard': ['admin'],
+  '/api/admin/deployment-checks': ['admin'],
+  '/api/admin/discount-codes': ['admin'],
+  '/api/admin/stats': ['admin'],
+  '/api/admin/users': ['admin'],
+  '/api/admin/cases': ['admin'],
+  '/api/admin/evidence': ['admin'],
   '/api/admin': ['admin'],
   '/api/security': ['admin'],
   '/api/corpus': ['admin'],
@@ -541,7 +553,6 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     const email = body.email.trim().toLowerCase();
     const password = body.password;
     const name = body.name;
-    const role = body.role;
 
     // Check for existing user — also check case-insensitive to prevent duplicates
     // with legacy mixed-case emails (e.g. Admin@Company.com vs admin@company.com)

@@ -121,7 +121,96 @@ export interface SchemaAssertResult {
   failedMigrations: string[];
   diskMigrationCount: number;
   appliedMigrationCount: number;
+  missingColumns: string[];
   errors: string[];
+}
+
+interface ParsedModel {
+  table: string;
+  columns: string[];
+}
+
+/**
+ * Parse schema.prisma into the set of physical tables and scalar columns it
+ * expects. Relation fields carry no column of their own and are skipped; the
+ * underlying foreign-key scalars are declared separately and are picked up.
+ */
+export function parseExpectedTables(schemaText: string): ParsedModel[] {
+  const modelNames = new Set(
+    [...schemaText.matchAll(/^model\s+(\w+)\s*\{/gm)].map((m) => m[1]),
+  );
+  const models: ParsedModel[] = [];
+
+  const blockRe = /^model\s+(\w+)\s*\{([\s\S]*?)^\}/gm;
+  for (const block of schemaText.matchAll(blockRe)) {
+    const [, modelName, body] = block;
+    const mapMatch = body.match(/@@map\(\s*"([^"]+)"\s*\)/);
+    const table = mapMatch ? mapMatch[1] : modelName;
+
+    const columns: string[] = [];
+    for (const rawLine of body.split('\n')) {
+      const line = rawLine.trim();
+      if (!line || line.startsWith('//') || line.startsWith('@@')) continue;
+
+      const fieldMatch = line.match(/^(\w+)\s+(\w+)(\[\])?(\?)?\s*(.*)$/);
+      if (!fieldMatch) continue;
+      const [, fieldName, fieldType, isList, , attrs] = fieldMatch;
+
+      // Relation fields (including lists of models) have no column.
+      if (modelNames.has(fieldType)) continue;
+      if (isList && modelNames.has(fieldType)) continue;
+
+      const colMapMatch = attrs.match(/@map\(\s*"([^"]+)"\s*\)/);
+      columns.push(colMapMatch ? colMapMatch[1] : fieldName);
+    }
+    models.push({ table, columns });
+  }
+  return models;
+}
+
+/**
+ * Returns "table.column" (or "table (missing table)") for everything the
+ * datamodel requires that the live database does not have.
+ */
+async function findMissingColumns(): Promise<string[]> {
+  let schemaText: string;
+  try {
+    schemaText = readFileSync(resolve(__dirname, '../../prisma/schema.prisma'), 'utf-8');
+  } catch {
+    return [];
+  }
+
+  const expected = parseExpectedTables(schemaText);
+
+  let rows: Array<{ table_name: string; column_name: string }>;
+  try {
+    rows = await prisma.$queryRaw<Array<{ table_name: string; column_name: string }>>`
+      SELECT table_name, column_name
+      FROM information_schema.columns
+      WHERE table_schema = current_schema()
+    `;
+  } catch {
+    return [];
+  }
+
+  const actual = new Map<string, Set<string>>();
+  for (const row of rows) {
+    if (!actual.has(row.table_name)) actual.set(row.table_name, new Set());
+    actual.get(row.table_name)!.add(row.column_name);
+  }
+
+  const missing: string[] = [];
+  for (const model of expected) {
+    const cols = actual.get(model.table);
+    if (!cols) {
+      missing.push(`${model.table} (missing table)`);
+      continue;
+    }
+    for (const col of model.columns) {
+      if (!cols.has(col)) missing.push(`${model.table}.${col}`);
+    }
+  }
+  return missing;
 }
 
 /**
@@ -151,6 +240,7 @@ export async function assertSchemaIntegrity(): Promise<SchemaAssertResult> {
       failedMigrations: [],
       diskMigrationCount: 0,
       appliedMigrationCount: 0,
+      missingColumns: [],
       errors: [`Database unreachable: ${msg}`],
     };
   }
@@ -172,14 +262,28 @@ export async function assertSchemaIntegrity(): Promise<SchemaAssertResult> {
     );
   }
 
-  // 4. Record/update schema version in schema_versions table
+  // 4. Compare the live database against the datamodel the Prisma client was
+  //    generated from. Counting applied migrations is not enough: a migration
+  //    history that has fallen behind schema.prisma applies cleanly and still
+  //    leaves the server issuing queries for columns that do not exist.
+  const missing = await findMissingColumns();
+  if (missing.length > 0) {
+    const preview = missing.slice(0, 10).join(', ');
+    errors.push(
+      `${missing.length} column(s)/table(s) required by schema.prisma are missing from the database: ` +
+        `${preview}${missing.length > 10 ? `, and ${missing.length - 10} more` : ''}. ` +
+        'The migration history is behind schema.prisma.',
+    );
+  }
+
+  // 5. Record/update schema version in schema_versions table
   try {
     // Try to upsert the current version record
     await prisma.$executeRaw`
-      INSERT INTO "schema_versions" ("id", "version", "checksum", "migration_name", "description", "applied_by", "drift_checked")
+      INSERT INTO "schema_versions" ("id", "version", "checksum", "migrationName", "description", "appliedBy", "driftChecked")
       VALUES (gen_random_uuid(), ${EXPECTED_SCHEMA_VERSION}, ${checksum}, 'boot-assertion', 'Boot-time schema integrity check', 'server-boot', true)
       ON CONFLICT ("version") DO UPDATE
-      SET "checksum" = ${checksum}, "drift_checked" = true
+      SET "checksum" = ${checksum}, "driftChecked" = true
     `;
   } catch {
     // schema_versions table may not exist yet (pre-migration) — that's a pending migration issue
@@ -198,6 +302,7 @@ export async function assertSchemaIntegrity(): Promise<SchemaAssertResult> {
     failedMigrations: failed,
     diskMigrationCount: diskCount,
     appliedMigrationCount: appliedCount,
+    missingColumns: missing,
     errors,
   };
 }

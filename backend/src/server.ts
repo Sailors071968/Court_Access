@@ -99,8 +99,11 @@ async function startServer() {
   // Phase 192 — Rate limiting (applied before auth)
   app.addHook('onRequest', rateLimitHook);
 
-  // Phase 191 — Authentication (JWT verification + RBAC)
-  //  app.addHook('onRequest', authenticationHook);
+  // Phase 191 — Authentication (JWT verification + RBAC).
+  // Route handlers across 21 modules read `request.user` and reject the
+  // request when it is absent, so this hook is what makes the authenticated
+  // API reachable at all — it must stay registered.
+  app.addHook('onRequest', authenticationHook);
 
   // Phase 193 — CSRF protection (after auth, before route handlers)
   // app.addHook('onRequest', csrfProtectionHook);

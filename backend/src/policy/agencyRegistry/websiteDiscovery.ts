@@ -9,7 +9,10 @@ import chrome from 'selenium-webdriver/chrome.js';
 /**
  * Build a headless Chrome driver for search queries.
  */
-function buildDriver(): WebDriver {
+// See postCrawler.buildDriver: the thenable returned by build() must be
+// awaited so that a failed session creation rejects into the caller instead
+// of surfacing as an unhandled rejection.
+async function buildDriver(): Promise<WebDriver> {
   const options = new chrome.Options();
   options.addArguments('--headless=new');
   options.addArguments('--no-sandbox');
@@ -36,7 +39,7 @@ export interface DiscoveryResult {
 export async function discoverAgencyWebsite(
   agencyName: string
 ): Promise<DiscoveryResult> {
-  const driver = buildDriver();
+  const driver = await buildDriver();
   const result: DiscoveryResult = {
     website: null,
     recordsRequestUrl: null,
@@ -96,7 +99,7 @@ export async function discoverAgencyWebsite(
       error instanceof Error ? error.message : error
     );
   } finally {
-    await driver.quit();
+    await driver.quit().catch(() => {});
   }
 
   return result;

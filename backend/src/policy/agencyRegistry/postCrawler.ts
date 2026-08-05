@@ -12,7 +12,11 @@ const POST_DIRECTORY_URL = 'https://post.ca.gov/le-agencies';
 /**
  * Build a headless Chrome WebDriver instance.
  */
-function buildDriver(): WebDriver {
+// Builder.build() returns a thenable driver that begins creating the session
+// immediately. Returning it unawaited leaves the session-creation rejection
+// (for example a ChromeDriver/Chrome version mismatch) with no handler
+// attached, which terminates the process rather than failing the request.
+async function buildDriver(): Promise<WebDriver> {
   const options = new chrome.Options();
   options.addArguments('--headless=new');
   options.addArguments('--no-sandbox');
@@ -33,7 +37,7 @@ function buildDriver(): WebDriver {
  * Crawl the POST directory and extract all agency entries.
  */
 export async function crawlPostDirectory(): Promise<PostAgencyEntry[]> {
-  const driver = buildDriver();
+  const driver = await buildDriver();
   const agencies: PostAgencyEntry[] = [];
 
   try {
@@ -123,7 +127,8 @@ export async function crawlPostDirectory(): Promise<PostAgencyEntry[]> {
       `[POST Crawler] Extracted ${agencies.length} agencies from POST directory`
     );
   } finally {
-    await driver.quit();
+    // Never let teardown mask the original failure.
+    await driver.quit().catch(() => {});
   }
 
   return deduplicateAgencies(agencies);

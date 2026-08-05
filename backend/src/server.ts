@@ -53,6 +53,23 @@ import { registerProductionOperationsRoutes } from './productionOperations/produ
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
 
+// A stray rejected promise anywhere in the process — a crawler that could not
+// start a browser session, a queue callback, a fire-and-forget write — would
+// otherwise terminate the API for every tenant. Log loudly and keep serving;
+// the request that triggered it still fails on its own terms.
+process.on('unhandledRejection', (reason) => {
+  const detail = reason instanceof Error ? (reason.stack ?? reason.message) : String(reason);
+  console.error('[Server] Unhandled promise rejection (server kept running):', detail);
+});
+
+// An uncaught exception leaves the process in an undefined state, so hand off
+// to the supervisor instead of continuing, but close listeners first so
+// in-flight responses are not dropped mid-write.
+process.on('uncaughtException', (err) => {
+  console.error('[Server] Uncaught exception — shutting down:', err.stack ?? err.message);
+  setTimeout(() => process.exit(1), 1000).unref();
+});
+
 async function startServer() {
   // PR 1 — Hard-fail if schema is drifted or migrations are pending
   await enforceSchemaOnBoot();

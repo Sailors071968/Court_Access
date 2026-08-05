@@ -251,7 +251,74 @@ if (storedToken) {
   } else {
     results.warn('BR-CASE-UI', 'No obvious case-creation control on the case list', 'searched for New case / Create case');
   }
+
+  // Every case workspace tab, loaded against a real case so the views render
+  // with data rather than an error boundary.
+  const caseCreate = await page.evaluate(async () => {
+    const res = await fetch('/api/cases', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${localStorage.getItem('court-access-token')}`,
+      },
+      body: JSON.stringify({
+        title: 'Browser certification case',
+        caseNumber: `BROWSER-${Date.now()}`,
+        jurisdiction: 'Alameda County',
+        caseType: 'felony',
+      }),
+    });
+    return { status: res.status, body: await res.json().catch(() => ({})) };
+  });
+
+  const caseId = caseCreate.body?.case?.caseId;
+  if (caseId) {
+    results.pass('BR-CASE-CREATE', 'A case can be created from the browser session', `caseId ${caseId}`);
+
+    const CASE_TABS = [
+      ['Case overview', 'overview'],
+      ['Charges', 'charges'],
+      ['Evidence', 'evidence'],
+      ['Documents', 'documents'],
+      ['Disclosures', 'disclosures'],
+      ['Experts', 'experts'],
+      ['Motions', 'motions'],
+      ['Research', 'research'],
+      ['Activity', 'activity'],
+      ['Case settings', 'settings'],
+      ['Investigator workbench', 'investigator-workbench'],
+      ['Attorney workbench', 'attorney-workbench'],
+      ['Trial exhibits', 'trial-exhibits'],
+      ['Litigation strategy', 'litigation-strategy'],
+      ['Contradictions', 'contradictions'],
+      ['Narrative analysis', 'narrative-analysis'],
+    ];
+    for (const [name, tab] of CASE_TABS) {
+      await visit(name, `/cases/${caseId}/${tab}`, null);
+    }
+  } else {
+    results.fail('BR-CASE-CREATE', 'Could not create a case from the browser session', JSON.stringify(caseCreate).slice(0, 200));
+  }
 }
+
+// The public contact form is the one unauthenticated write path on the site.
+await page.goto(`${BASE}/contact`, { waitUntil: 'networkidle' });
+const contactResult = await page.evaluate(async () => {
+  const res = await fetch('/api/contact', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      name: 'Certification Contact',
+      email: `contact-${Date.now()}@certification.test`,
+      organization: 'Certification LLP',
+      message: 'Automated production certification submission.',
+    }),
+  });
+  return { status: res.status, body: (await res.text()).slice(0, 200) };
+});
+contactResult.status >= 200 && contactResult.status < 400
+  ? results.pass('BR-CONTACT', 'The public contact form submits successfully', `HTTP ${contactResult.status}`)
+  : results.fail('BR-CONTACT', 'The public contact form failed', `HTTP ${contactResult.status}: ${contactResult.body}`);
 
 // ---------------------------------------------------------------------------
 // Browser diagnostics

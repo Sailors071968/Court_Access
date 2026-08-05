@@ -14,7 +14,7 @@ import { extractEventsFromText, storeEvents } from '../evidence/eventExtractionS
 import { buildOfficerTimeline } from '../evidence/officerActionTimelineService.js';
 import { buildUnifiedTimeline, findTimelineGaps } from '../contradiction/timelineEngine.js';
 import { TimelineConflictAnalyzer } from '../conflict/timelineConflictAnalyzer.js';
-import { extractEvidenceText } from '../services/evidenceTextExtractionService.js';
+import { extractEvidenceText, type ExtractionOutcome } from '../services/evidenceTextExtractionService.js';
 import { normalizeDocumentText } from '../services/documentNormalizationService.js';
 import { detectEvidenceGaps } from '../services/evidenceGapDetectionService.js';
 import type { ExtractedEvent as CdeExtractedEvent } from '../contradiction/types.js';
@@ -127,9 +127,33 @@ const MAX_EVIDENCE_PER_RUN = 200;
  * Safety: Enforces a 5-minute pipeline timeout, 200 evidence item cap,
  * and per-evidence extraction timeouts (delegated to extractEvidenceText).
  */
+/**
+ * Reassemble a document's text from the chunks ingestion already wrote.
+ * Returns null when the document has not been indexed, so the caller can fall
+ * back to reading the original object.
+ */
+async function extractIndexedText(evidenceId: string): Promise<ExtractionOutcome | null> {
+  const start = Date.now();
+  const chunks = await prisma.evidenceChunk.findMany({
+    where: { evidenceId },
+    orderBy: { chunkIndex: 'asc' },
+    select: { text: true },
+  });
+  if (chunks.length === 0) return null;
+
+  const text = chunks.map((c) => c.text).join('\n');
+  return {
+    evidenceId,
+    text,
+    method: 'evidence-chunks',
+    charCount: text.length,
+    durationMs: Date.now() - start,
+  };
+}
+
 export async function reconstructTimeline(
   caseId: string,
-  tenantId: string = 'dev-tenant',
+  tenantId: string,
 ): Promise<TimelineReconstructionResult> {
   const startTime = Date.now();
   const warnings: string[] = [];
@@ -217,15 +241,22 @@ export async function reconstructTimeline(
       const sourceType = mapEvidenceTypeToSourceType(ev.evidenceType);
 
       // -----------------------------------------------------------------
-      // Step 2a: Retrieve real evidence content from R2
+      // Step 2a: Obtain the document text.
+      //
+      // Ingestion already extracts and indexes the text into EvidenceChunk,
+      // so use that first. Re-fetching the original from object storage is
+      // slower and, in a deployment where uploads are held on local disk
+      // rather than R2, always fails — which left the timeline permanently
+      // empty for every case.
       // -----------------------------------------------------------------
-      const extraction = await extractEvidenceText({
-        evidenceId: ev.evidenceId,
-        fileName: ev.fileName,
-        mimeType: ev.mimeType,
-        s3Key: ev.s3Key,
-        evidenceType: ev.evidenceType,
-      });
+      const extraction = await extractIndexedText(ev.evidenceId) ??
+        await extractEvidenceText({
+          evidenceId: ev.evidenceId,
+          fileName: ev.fileName,
+          mimeType: ev.mimeType,
+          s3Key: ev.s3Key,
+          evidenceType: ev.evidenceType,
+        });
 
       if (!extraction.text) {
         // Text extraction failed or was skipped (audio/video/unsupported)

@@ -41,7 +41,9 @@ export interface EvidenceRecord {
 export interface ExtractionOutcome {
   evidenceId: string;
   text: string | null;
-  method: 'direct' | 'pdf-parse' | 'tesseract-ocr' | 'skipped' | 'failed';
+  // 'evidence-chunks' means the text was reassembled from the index that
+  // ingestion already wrote, rather than re-read from object storage.
+  method: 'direct' | 'pdf-parse' | 'tesseract-ocr' | 'evidence-chunks' | 'skipped' | 'failed';
   charCount: number;
   durationMs: number;
   error?: string;

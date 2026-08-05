@@ -1,0 +1,505 @@
+{
+  "report": "BROWSER_CERTIFICATION",
+  "phase": "Phase 9 — Browser Verification",
+  "generatedAt": "2026-08-05T22:13:10.804Z",
+  "apiBase": "http://127.0.0.1:3001",
+  "summary": {
+    "total": 64,
+    "PASS": 61,
+    "FAIL": 0,
+    "WARNING": 3,
+    "UNKNOWN": 0,
+    "passRate": 95.3
+  },
+  "exercisedApiRoutes": [
+    "GET /api/cases",
+    "GET /api/cases/:id",
+    "GET /api/cases/:id/disclosures",
+    "GET /api/cases/:id/evidence",
+    "GET /api/cases/:id/investigator-workbench",
+    "GET /api/cases/:id/litigation-strategy",
+    "GET /api/cases/:id/trial-exhibits",
+    "GET /api/cases/:id/workbench",
+    "GET /api/contradiction/recommendations/:id",
+    "GET /api/doctrine/status",
+    "GET /api/membership/account",
+    "GET /api/membership/onboarding",
+    "GET /api/membership/shared-access",
+    "GET /api/narrative/:id/claims",
+    "GET /api/narrative/:id/contradictions",
+    "GET /api/narrative/:id/impeachment",
+    "GET /api/timeline/:id/events",
+    "POST /api/auth/register",
+    "POST /api/cases",
+    "POST /api/contact"
+  ],
+  "exercisedSpaRoutes": [
+    "/",
+    "/about",
+    "/accessibility",
+    "/admin",
+    "/attorney",
+    "/blog",
+    "/careers",
+    "/case-studies",
+    "/cases",
+    "/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/activity",
+    "/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/attorney-workbench",
+    "/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/charges",
+    "/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/contradictions",
+    "/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/disclosures",
+    "/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/documents",
+    "/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/evidence",
+    "/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/experts",
+    "/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/investigator-workbench",
+    "/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/litigation-strategy",
+    "/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/motions",
+    "/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/narrative-analysis",
+    "/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/overview",
+    "/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/research",
+    "/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/settings",
+    "/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/trial-exhibits",
+    "/contact",
+    "/dashboard",
+    "/defendant",
+    "/experts",
+    "/families",
+    "/faq",
+    "/features",
+    "/for-defense",
+    "/for-prosecutors",
+    "/forgot-password",
+    "/government",
+    "/how-it-works",
+    "/investigator",
+    "/knowledge-base",
+    "/legal-disclaimer",
+    "/login",
+    "/notifications",
+    "/press",
+    "/pricing",
+    "/privacy",
+    "/register",
+    "/search",
+    "/security",
+    "/settings",
+    "/shared-access",
+    "/sitemap",
+    "/support",
+    "/terms"
+  ],
+  "base": "http://127.0.0.1:4180",
+  "screenshotDirectory": "/workspace/reports/certification/screenshots",
+  "consoleErrors": [
+    {
+      "url": "http://127.0.0.1:4180/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/trial-exhibits",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    },
+    {
+      "url": "http://127.0.0.1:4180/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/trial-exhibits",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    },
+    {
+      "url": "http://127.0.0.1:4180/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/litigation-strategy",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    },
+    {
+      "url": "http://127.0.0.1:4180/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/litigation-strategy",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    },
+    {
+      "url": "http://127.0.0.1:4180/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/contradictions",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    },
+    {
+      "url": "http://127.0.0.1:4180/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/contradictions",
+      "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    }
+  ],
+  "pageErrors": [],
+  "failedRequests": [],
+  "checks": [
+    {
+      "id": "BR-/",
+      "name": "Landing page renders cleanly",
+      "status": "PASS",
+      "detail": "5040 characters, 5 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/for-defense",
+      "name": "For defense renders cleanly",
+      "status": "PASS",
+      "detail": "2358 characters, 0 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/for-prosecutors",
+      "name": "For prosecutors renders cleanly",
+      "status": "PASS",
+      "detail": "2165 characters, 0 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/government",
+      "name": "Government renders cleanly",
+      "status": "PASS",
+      "detail": "2290 characters, 0 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/pricing",
+      "name": "Pricing renders cleanly",
+      "status": "PASS",
+      "detail": "1995 characters, 5 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/features",
+      "name": "Features renders cleanly",
+      "status": "PASS",
+      "detail": "2268 characters, 1 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/how-it-works",
+      "name": "How it works renders cleanly",
+      "status": "PASS",
+      "detail": "1560 characters, 1 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/about",
+      "name": "About renders cleanly",
+      "status": "PASS",
+      "detail": "1702 characters, 1 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/faq",
+      "name": "FAQ renders cleanly",
+      "status": "PASS",
+      "detail": "866 characters, 11 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/contact",
+      "name": "Contact sales renders cleanly",
+      "status": "PASS",
+      "detail": "709 characters, 7 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/security",
+      "name": "Security renders cleanly",
+      "status": "PASS",
+      "detail": "1771 characters, 1 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/privacy",
+      "name": "Privacy policy renders cleanly",
+      "status": "PASS",
+      "detail": "3527 characters, 0 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/terms",
+      "name": "Terms of service renders cleanly",
+      "status": "PASS",
+      "detail": "3987 characters, 0 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/legal-disclaimer",
+      "name": "Legal disclaimer renders cleanly",
+      "status": "PASS",
+      "detail": "3965 characters, 0 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/accessibility",
+      "name": "Accessibility renders cleanly",
+      "status": "PASS",
+      "detail": "1346 characters, 1 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/attorney",
+      "name": "Attorney audience renders cleanly",
+      "status": "PASS",
+      "detail": "1592 characters, 1 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/investigator",
+      "name": "Investigator audience renders cleanly",
+      "status": "PASS",
+      "detail": "1476 characters, 1 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/defendant",
+      "name": "Defendant audience renders cleanly",
+      "status": "PASS",
+      "detail": "1460 characters, 1 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/families",
+      "name": "Families audience renders cleanly",
+      "status": "PASS",
+      "detail": "1426 characters, 1 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/experts",
+      "name": "Experts audience renders cleanly",
+      "status": "PASS",
+      "detail": "1427 characters, 1 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/case-studies",
+      "name": "Case studies renders cleanly",
+      "status": "PASS",
+      "detail": "4120 characters, 0 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/blog",
+      "name": "Blog renders cleanly",
+      "status": "PASS",
+      "detail": "1439 characters, 1 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/knowledge-base",
+      "name": "Knowledge base renders cleanly",
+      "status": "PASS",
+      "detail": "1017 characters, 1 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/support",
+      "name": "Support renders cleanly",
+      "status": "PASS",
+      "detail": "1094 characters, 1 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/sitemap",
+      "name": "Sitemap renders cleanly",
+      "status": "PASS",
+      "detail": "816 characters, 1 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/press",
+      "name": "Press renders cleanly",
+      "status": "PASS",
+      "detail": "1198 characters, 1 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/careers",
+      "name": "Careers renders cleanly",
+      "status": "PASS",
+      "detail": "1434 characters, 1 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/login",
+      "name": "Login renders cleanly",
+      "status": "PASS",
+      "detail": "159 characters, 5 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/register",
+      "name": "Register renders cleanly",
+      "status": "PASS",
+      "detail": "629 characters, 10 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/forgot-password",
+      "name": "Forgot password renders cleanly",
+      "status": "PASS",
+      "detail": "125 characters, 2 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-GUARD-/dashboard",
+      "name": "Anonymous visitor is redirected away from /dashboard",
+      "status": "PASS",
+      "detail": "landed on /login"
+    },
+    {
+      "id": "BR-GUARD-/cases",
+      "name": "Anonymous visitor is redirected away from /cases",
+      "status": "PASS",
+      "detail": "landed on /login"
+    },
+    {
+      "id": "BR-GUARD-/admin",
+      "name": "Anonymous visitor is redirected away from /admin",
+      "status": "PASS",
+      "detail": "landed on /login"
+    },
+    {
+      "id": "BR-GUARD-/settings",
+      "name": "Anonymous visitor is redirected away from /settings",
+      "status": "PASS",
+      "detail": "landed on /login"
+    },
+    {
+      "id": "BR-REG-FORM",
+      "name": "The registration form exposes the expected fields",
+      "status": "PASS",
+      "detail": "name=true, 2 password field(s)"
+    },
+    {
+      "id": "BR-REG-SUBMIT",
+      "name": "Registration through the browser signs the user in",
+      "status": "PASS",
+      "detail": "landed on /onboarding"
+    },
+    {
+      "id": "BR-SESSION",
+      "name": "The app stores a session token after registration",
+      "status": "PASS",
+      "detail": "365 characters"
+    },
+    {
+      "id": "BR-/dashboard",
+      "name": "Dashboard renders cleanly",
+      "status": "PASS",
+      "detail": "415 characters, 6 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/cases",
+      "name": "Cases list renders cleanly",
+      "status": "PASS",
+      "detail": "424 characters, 8 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/search",
+      "name": "Search renders cleanly",
+      "status": "PASS",
+      "detail": "392 characters, 10 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/notifications",
+      "name": "Notifications renders cleanly",
+      "status": "PASS",
+      "detail": "653 characters, 14 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/settings",
+      "name": "Account settings renders cleanly",
+      "status": "PASS",
+      "detail": "1035 characters, 13 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/shared-access",
+      "name": "Shared access renders cleanly",
+      "status": "PASS",
+      "detail": "551 characters, 5 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-CASE-UI",
+      "name": "The case list offers a way to create a case",
+      "status": "PASS",
+      "detail": "control found and opened"
+    },
+    {
+      "id": "BR-CASE-CREATE",
+      "name": "A case can be created from the browser session",
+      "status": "PASS",
+      "detail": "caseId 6031fdc8-985b-4785-a47d-f8e3ed831a80"
+    },
+    {
+      "id": "BR-/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/overview",
+      "name": "Case overview renders cleanly",
+      "status": "PASS",
+      "detail": "1130 characters, 8 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/charges",
+      "name": "Charges renders cleanly",
+      "status": "PASS",
+      "detail": "617 characters, 6 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/evidence",
+      "name": "Evidence renders cleanly",
+      "status": "PASS",
+      "detail": "892 characters, 10 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/documents",
+      "name": "Documents renders cleanly",
+      "status": "PASS",
+      "detail": "745 characters, 6 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/disclosures",
+      "name": "Disclosures renders cleanly",
+      "status": "PASS",
+      "detail": "803 characters, 9 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/experts",
+      "name": "Experts renders cleanly",
+      "status": "PASS",
+      "detail": "621 characters, 5 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/motions",
+      "name": "Motions renders cleanly",
+      "status": "PASS",
+      "detail": "621 characters, 5 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/research",
+      "name": "Research renders cleanly",
+      "status": "PASS",
+      "detail": "621 characters, 5 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/activity",
+      "name": "Activity renders cleanly",
+      "status": "PASS",
+      "detail": "657 characters, 5 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/settings",
+      "name": "Case settings renders cleanly",
+      "status": "PASS",
+      "detail": "621 characters, 5 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/investigator-workbench",
+      "name": "Investigator workbench renders cleanly",
+      "status": "PASS",
+      "detail": "720 characters, 13 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/attorney-workbench",
+      "name": "Attorney workbench renders cleanly",
+      "status": "PASS",
+      "detail": "973 characters, 15 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/trial-exhibits",
+      "name": "Trial exhibits renders but logged 2 browser error(s)",
+      "status": "WARNING",
+      "detail": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    },
+    {
+      "id": "BR-/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/litigation-strategy",
+      "name": "Litigation strategy renders but logged 2 browser error(s)",
+      "status": "WARNING",
+      "detail": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    },
+    {
+      "id": "BR-/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/contradictions",
+      "name": "Contradictions renders but logged 2 browser error(s)",
+      "status": "WARNING",
+      "detail": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    },
+    {
+      "id": "BR-/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/narrative-analysis",
+      "name": "Narrative analysis renders cleanly",
+      "status": "PASS",
+      "detail": "856 characters, 7 control(s), screenshot captured"
+    },
+    {
+      "id": "BR-CONTACT",
+      "name": "The public contact form submits successfully",
+      "status": "PASS",
+      "detail": "HTTP 201"
+    },
+    {
+      "id": "BR-NO-EXCEPTIONS",
+      "name": "No uncaught JavaScript exceptions across the whole walkthrough",
+      "status": "PASS"
+    },
+    {
+      "id": "BR-NO-FAILED-REQUESTS",
+      "name": "No network requests failed during the walkthrough",
+      "status": "PASS"
+    }
+  ]
+}

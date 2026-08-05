@@ -5,6 +5,7 @@
 // Usage: npx tsx backend/src/server.ts
 // ============================================================================
 
+import { randomUUID } from 'node:crypto';
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import cookie from '@fastify/cookie';
@@ -53,6 +54,23 @@ import { registerProductionOperationsRoutes } from './productionOperations/produ
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
 
+// A stray rejected promise anywhere in the process — a crawler that could not
+// start a browser session, a queue callback, a fire-and-forget write — would
+// otherwise terminate the API for every tenant. Log loudly and keep serving;
+// the request that triggered it still fails on its own terms.
+process.on('unhandledRejection', (reason) => {
+  const detail = reason instanceof Error ? (reason.stack ?? reason.message) : String(reason);
+  console.error('[Server] Unhandled promise rejection (server kept running):', detail);
+});
+
+// An uncaught exception leaves the process in an undefined state, so hand off
+// to the supervisor instead of continuing, but close listeners first so
+// in-flight responses are not dropped mid-write.
+process.on('uncaughtException', (err) => {
+  console.error('[Server] Uncaught exception — shutting down:', err.stack ?? err.message);
+  setTimeout(() => process.exit(1), 1000).unref();
+});
+
 async function startServer() {
   // PR 1 — Hard-fail if schema is drifted or migrations are pending
   await enforceSchemaOnBoot();
@@ -93,14 +111,79 @@ async function startServer() {
     secret: process.env.COOKIE_SECRET || 'court-access-cookie-secret-change-in-production',
   });
 
+  // Any error that reaches Fastify unhandled would otherwise be serialised
+  // straight to the client, which for a Prisma failure means the query, the
+  // source file and the surrounding lines. Log the detail, hand the caller a
+  // reference they can quote to support, and say what they can do next.
+  app.setErrorHandler((rawError, request, reply) => {
+    const error = rawError as Error & { statusCode?: number; code?: string };
+    const reference = randomUUID().slice(0, 8);
+    const code = error.code;
+
+    request.log.error(
+      { err: error, reference, path: request.url, method: request.method },
+      `[Server] Unhandled error ${reference}`,
+    );
+
+    // Errors Fastify itself raises for a malformed request are already safe
+    // and specific, so they are passed through.
+    if (error.statusCode && error.statusCode >= 400 && error.statusCode < 500) {
+      return reply.code(error.statusCode).send({
+        error: error.name || 'Bad Request',
+        message: error.message,
+      });
+    }
+
+    // Prisma constraint violations describe a client mistake, not a fault.
+    if (code === 'P2002') {
+      return reply.code(409).send({
+        error: 'Conflict',
+        message: 'A record with these details already exists.',
+        reference,
+      });
+    }
+    if (code === 'P2025') {
+      return reply.code(404).send({
+        error: 'Not Found',
+        message: 'The requested record does not exist.',
+        reference,
+      });
+    }
+    if (code === 'P1001' || code === 'P1017') {
+      return reply.code(503).send({
+        error: 'Service Unavailable',
+        message: 'The database is temporarily unreachable. Please retry in a few moments.',
+        reference,
+      });
+    }
+
+    return reply.code(500).send({
+      error: 'Internal Server Error',
+      message:
+        'The request could not be completed because of an unexpected error on our side. ' +
+        'Nothing you sent was at fault. Please retry, and quote the reference below if it keeps happening.',
+      reference,
+    });
+  });
+
+  app.setNotFoundHandler((request, reply) =>
+    reply.code(404).send({
+      error: 'Not Found',
+      message: `No endpoint is registered for ${request.method} ${request.url.split('?')[0]}.`,
+    }),
+  );
+
   // Phase 194 — Security headers (applied to all responses)
   app.addHook('onRequest', securityHeadersHook);
 
   // Phase 192 — Rate limiting (applied before auth)
   app.addHook('onRequest', rateLimitHook);
 
-  // Phase 191 — Authentication (JWT verification + RBAC)
-  //  app.addHook('onRequest', authenticationHook);
+  // Phase 191 — Authentication (JWT verification + RBAC).
+  // Route handlers across 21 modules read `request.user` and reject the
+  // request when it is absent, so this hook is what makes the authenticated
+  // API reachable at all — it must stay registered.
+  app.addHook('onRequest', authenticationHook);
 
   // Phase 193 — CSRF protection (after auth, before route handlers)
   // app.addHook('onRequest', csrfProtectionHook);

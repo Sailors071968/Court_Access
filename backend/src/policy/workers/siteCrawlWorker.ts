@@ -29,7 +29,10 @@ export interface SiteCrawlJobData {
 /**
  * Build a headless Chrome driver for crawling.
  */
-function buildDriver(userAgent: string): WebDriver {
+// See postCrawler.buildDriver: the thenable returned by build() must be
+// awaited so that a failed session creation rejects into the caller instead
+// of surfacing as an unhandled rejection.
+async function buildDriver(userAgent: string): Promise<WebDriver> {
   const options = new chrome.Options();
   options.addArguments('--headless=new');
   options.addArguments('--no-sandbox');
@@ -140,7 +143,7 @@ export async function crawlAgencySite(
     error: null,
   };
 
-  const driver = buildDriver(config.userAgent);
+  const driver = await buildDriver(config.userAgent);
   const visited = new Set<string>();
   const toVisit: string[] = [data.website];
   const baseUrl = new URL(data.website);
@@ -262,7 +265,7 @@ export async function crawlAgencySite(
   } catch (error) {
     result.error = error instanceof Error ? error.message : String(error);
   } finally {
-    await driver.quit();
+    await driver.quit().catch(() => {});
   }
 
   console.log(

@@ -1,0 +1,625 @@
+{
+  "report": "PRODUCTION_CERTIFICATION",
+  "generatedAt": "2026-08-05T22:15:53.736Z",
+  "environment": {
+    "commit": "0997a3ea4b876f4783a6b147fe89494d772a154a",
+    "branch": "cursor/v1-production-certification-9f94",
+    "node": "v22.14.0",
+    "postgres": "psql (PostgreSQL) 16.14 (Ubuntu 16.14-0ubuntu0.24.04.1)",
+    "redis": "Redis v=7.0.15",
+    "chromium": "Playwright Chromium (headless shell 149)",
+    "neo4j": "not configured — knowledge-graph checks not run",
+    "stripe": "no live keys configured — billing checks not run",
+    "objectStorage": "no R2/S3 credentials — uploads stored on local disk",
+    "ocr": "tesseract.js 7 with bundled eng traineddata"
+  },
+  "method": "Every result below was produced by executing the platform: PostgreSQL 16 and Redis 7 provisioned, all Prisma migrations applied, the Fastify API and its BullMQ workers running, the built SPA served over the same same-origin /api arrangement as production, and a real Chromium driving the interface. No result is inferred from source inspection.",
+  "summary": {
+    "totalChecks": 236,
+    "pass": 231,
+    "fail": 1,
+    "warning": 4,
+    "unknown": 0,
+    "checkPassRate": 98.7,
+    "featuresInInventory": 40,
+    "featuresPass": 36,
+    "featuresFail": 0,
+    "featuresWarning": 0,
+    "featuresAuthorizationOnly": 1,
+    "featuresUnknown": 3,
+    "productionReadinessPercent": 95.5,
+    "criticalDefectsRemaining": 1,
+    "recommendedLaunchStatus": "READY WITH LIMITATIONS"
+  },
+  "inventory": {
+    "apiRoutes": 363,
+    "spaRoutes": 105,
+    "prismaModels": 103,
+    "bullmqQueues": 0,
+    "features": 40
+  },
+  "suites": [
+    {
+      "report": "AUTH_EXPOSURE_SWEEP",
+      "area": "Unauthenticated exposure sweep",
+      "phase": "Phase 7",
+      "total": 2,
+      "PASS": 2,
+      "FAIL": 0,
+      "WARNING": 0,
+      "UNKNOWN": 0,
+      "passRate": 100
+    },
+    {
+      "report": "SECURITY_CERTIFICATION",
+      "area": "Security",
+      "phase": "Phase 7",
+      "total": 34,
+      "PASS": 34,
+      "FAIL": 0,
+      "WARNING": 0,
+      "UNKNOWN": 0,
+      "passRate": 100
+    },
+    {
+      "report": "INGESTION_CERTIFICATION",
+      "area": "Document, media and failure handling",
+      "phase": "Phase 3/4/5",
+      "total": 63,
+      "PASS": 61,
+      "FAIL": 1,
+      "WARNING": 1,
+      "UNKNOWN": 0,
+      "passRate": 96.8
+    },
+    {
+      "report": "READ_SURFACE_CERTIFICATION",
+      "area": "Authenticated read surface",
+      "phase": "Phase 2",
+      "total": 5,
+      "PASS": 5,
+      "FAIL": 0,
+      "WARNING": 0,
+      "UNKNOWN": 0,
+      "passRate": 100
+    },
+    {
+      "report": "WORKFLOW_CERTIFICATION",
+      "area": "Litigation workflow and data integrity",
+      "phase": "Phase 2/8",
+      "total": 40,
+      "PASS": 40,
+      "FAIL": 0,
+      "WARNING": 0,
+      "UNKNOWN": 0,
+      "passRate": 100
+    },
+    {
+      "report": "STRESS_CERTIFICATION",
+      "area": "Stress and performance",
+      "phase": "Phase 6/11",
+      "total": 14,
+      "PASS": 14,
+      "FAIL": 0,
+      "WARNING": 0,
+      "UNKNOWN": 0,
+      "passRate": 100
+    },
+    {
+      "report": "RECOVERY_CERTIFICATION",
+      "area": "Recovery",
+      "phase": "Phase 10",
+      "total": 14,
+      "PASS": 14,
+      "FAIL": 0,
+      "WARNING": 0,
+      "UNKNOWN": 0,
+      "passRate": 100
+    },
+    {
+      "report": "BROWSER_CERTIFICATION",
+      "area": "Browser verification",
+      "phase": "Phase 9",
+      "total": 64,
+      "PASS": 61,
+      "FAIL": 0,
+      "WARNING": 3,
+      "UNKNOWN": 0,
+      "passRate": 95.3
+    }
+  ],
+  "featureVerdicts": [
+    {
+      "feature": "Administration",
+      "status": "PASS",
+      "apiRoutes": 50,
+      "apiRoutesExercised": 22,
+      "apiRoutesAuthzProbedOnly": 50,
+      "spaRoutes": 0,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Attorney Workbench",
+      "status": "PASS",
+      "apiRoutes": 16,
+      "apiRoutesExercised": 8,
+      "apiRoutesAuthzProbedOnly": 16,
+      "spaRoutes": 1,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Authentication",
+      "status": "PASS",
+      "apiRoutes": 5,
+      "apiRoutesExercised": 4,
+      "apiRoutesAuthzProbedOnly": 1,
+      "spaRoutes": 4,
+      "spaRoutesExercised": 2,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Billing & Stripe",
+      "status": "PASS",
+      "apiRoutes": 19,
+      "apiRoutesExercised": 10,
+      "apiRoutesAuthzProbedOnly": 19,
+      "spaRoutes": 1,
+      "spaRoutesExercised": 1,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "CALCRIM",
+      "status": "PASS",
+      "apiRoutes": 1,
+      "apiRoutesExercised": 1,
+      "apiRoutesAuthzProbedOnly": 1,
+      "spaRoutes": 0,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Case Management",
+      "status": "PASS",
+      "apiRoutes": 11,
+      "apiRoutesExercised": 8,
+      "apiRoutesAuthzProbedOnly": 11,
+      "spaRoutes": 0,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Charges & Mens Rea",
+      "status": "PASS",
+      "apiRoutes": 3,
+      "apiRoutesExercised": 2,
+      "apiRoutesAuthzProbedOnly": 3,
+      "spaRoutes": 1,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Client Domain",
+      "status": "PASS",
+      "apiRoutes": 10,
+      "apiRoutesExercised": 4,
+      "apiRoutesAuthzProbedOnly": 10,
+      "spaRoutes": 1,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Compliance Analysis",
+      "status": "PASS",
+      "apiRoutes": 30,
+      "apiRoutesExercised": 14,
+      "apiRoutesAuthzProbedOnly": 30,
+      "spaRoutes": 0,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Contradictions",
+      "status": "PASS",
+      "apiRoutes": 13,
+      "apiRoutesExercised": 8,
+      "apiRoutesAuthzProbedOnly": 13,
+      "spaRoutes": 1,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "CPRA",
+      "status": "PASS",
+      "apiRoutes": 7,
+      "apiRoutesExercised": 4,
+      "apiRoutesAuthzProbedOnly": 7,
+      "spaRoutes": 3,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "CSRF Protection",
+      "status": "PASS",
+      "apiRoutes": 1,
+      "apiRoutesExercised": 1,
+      "apiRoutesAuthzProbedOnly": 0,
+      "spaRoutes": 0,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Discount Codes",
+      "status": "PASS",
+      "apiRoutes": 6,
+      "apiRoutesExercised": 2,
+      "apiRoutesAuthzProbedOnly": 5,
+      "spaRoutes": 0,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Doctrine Intelligence",
+      "status": "PASS",
+      "apiRoutes": 13,
+      "apiRoutesExercised": 7,
+      "apiRoutesAuthzProbedOnly": 13,
+      "spaRoutes": 0,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Documents & Disclosure",
+      "status": "PASS",
+      "apiRoutes": 8,
+      "apiRoutesExercised": 3,
+      "apiRoutesAuthzProbedOnly": 8,
+      "spaRoutes": 0,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Evidence Gap Detection",
+      "status": "PASS",
+      "apiRoutes": 3,
+      "apiRoutesExercised": 1,
+      "apiRoutesAuthzProbedOnly": 3,
+      "spaRoutes": 0,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Evidence Repository",
+      "status": "PASS",
+      "apiRoutes": 6,
+      "apiRoutesExercised": 4,
+      "apiRoutesAuthzProbedOnly": 6,
+      "spaRoutes": 5,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Firm Operating Platform",
+      "status": "PASS",
+      "apiRoutes": 22,
+      "apiRoutesExercised": 9,
+      "apiRoutesAuthzProbedOnly": 22,
+      "spaRoutes": 0,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Forensic Reconstruction",
+      "status": "PASS",
+      "apiRoutes": 22,
+      "apiRoutesExercised": 13,
+      "apiRoutesAuthzProbedOnly": 22,
+      "spaRoutes": 0,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Identity & MFA",
+      "status": "AUTHZ ONLY",
+      "apiRoutes": 5,
+      "apiRoutesExercised": 0,
+      "apiRoutesAuthzProbedOnly": 3,
+      "spaRoutes": 0,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Investigator Workbench",
+      "status": "PASS",
+      "apiRoutes": 6,
+      "apiRoutesExercised": 2,
+      "apiRoutesAuthzProbedOnly": 6,
+      "spaRoutes": 1,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Job Processing",
+      "status": "PASS",
+      "apiRoutes": 1,
+      "apiRoutesExercised": 1,
+      "apiRoutesAuthzProbedOnly": 1,
+      "spaRoutes": 0,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Legislative Intelligence",
+      "status": "PASS",
+      "apiRoutes": 9,
+      "apiRoutesExercised": 9,
+      "apiRoutesAuthzProbedOnly": 9,
+      "spaRoutes": 0,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Litigation Strategy",
+      "status": "UNKNOWN",
+      "apiRoutes": 0,
+      "apiRoutesExercised": 0,
+      "apiRoutesAuthzProbedOnly": 0,
+      "spaRoutes": 1,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Marketing & Contact",
+      "status": "PASS",
+      "apiRoutes": 1,
+      "apiRoutesExercised": 1,
+      "apiRoutesAuthzProbedOnly": 0,
+      "spaRoutes": 0,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Marketing & Public Site",
+      "status": "PASS",
+      "apiRoutes": 0,
+      "apiRoutesExercised": 0,
+      "apiRoutesAuthzProbedOnly": 0,
+      "spaRoutes": 68,
+      "spaRoutesExercised": 26,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Membership & Onboarding",
+      "status": "PASS",
+      "apiRoutes": 8,
+      "apiRoutesExercised": 6,
+      "apiRoutesAuthzProbedOnly": 8,
+      "spaRoutes": 1,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Motion Intelligence",
+      "status": "UNKNOWN",
+      "apiRoutes": 0,
+      "apiRoutesExercised": 0,
+      "apiRoutesAuthzProbedOnly": 0,
+      "spaRoutes": 1,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Narrative Analysis",
+      "status": "PASS",
+      "apiRoutes": 5,
+      "apiRoutesExercised": 4,
+      "apiRoutesAuthzProbedOnly": 5,
+      "spaRoutes": 1,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Observability",
+      "status": "PASS",
+      "apiRoutes": 4,
+      "apiRoutesExercised": 3,
+      "apiRoutesAuthzProbedOnly": 0,
+      "spaRoutes": 0,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Operations Console",
+      "status": "PASS",
+      "apiRoutes": 7,
+      "apiRoutesExercised": 3,
+      "apiRoutesAuthzProbedOnly": 7,
+      "spaRoutes": 0,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Organizations",
+      "status": "PASS",
+      "apiRoutes": 15,
+      "apiRoutesExercised": 13,
+      "apiRoutesAuthzProbedOnly": 14,
+      "spaRoutes": 1,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Password Reset",
+      "status": "PASS",
+      "apiRoutes": 2,
+      "apiRoutesExercised": 0,
+      "apiRoutesAuthzProbedOnly": 0,
+      "spaRoutes": 2,
+      "spaRoutesExercised": 1,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Policy Acquisition Pipeline",
+      "status": "PASS",
+      "apiRoutes": 9,
+      "apiRoutesExercised": 3,
+      "apiRoutesAuthzProbedOnly": 9,
+      "spaRoutes": 0,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Policy Intelligence",
+      "status": "PASS",
+      "apiRoutes": 18,
+      "apiRoutesExercised": 5,
+      "apiRoutesAuthzProbedOnly": 18,
+      "spaRoutes": 7,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Queue Monitoring",
+      "status": "PASS",
+      "apiRoutes": 4,
+      "apiRoutesExercised": 2,
+      "apiRoutesAuthzProbedOnly": 4,
+      "spaRoutes": 0,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Security Logging",
+      "status": "PASS",
+      "apiRoutes": 3,
+      "apiRoutesExercised": 3,
+      "apiRoutesAuthzProbedOnly": 3,
+      "spaRoutes": 0,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Timeline",
+      "status": "PASS",
+      "apiRoutes": 5,
+      "apiRoutesExercised": 4,
+      "apiRoutesAuthzProbedOnly": 5,
+      "spaRoutes": 3,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Trial Exhibits",
+      "status": "UNKNOWN",
+      "apiRoutes": 0,
+      "apiRoutesExercised": 0,
+      "apiRoutesAuthzProbedOnly": 0,
+      "spaRoutes": 2,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    },
+    {
+      "feature": "Unclassified",
+      "status": "PASS",
+      "apiRoutes": 15,
+      "apiRoutesExercised": 8,
+      "apiRoutesAuthzProbedOnly": 14,
+      "spaRoutes": 0,
+      "spaRoutesExercised": 0,
+      "failing": [],
+      "warning": []
+    }
+  ],
+  "remainingDefects": [
+    {
+      "suite": "Document, media and failure handling",
+      "id": "ING-silent-bodycam.mp4",
+      "name": "silent-bodycam.mp4 failure not explained specifically",
+      "detail": "stored message \"\"silent-bodycam.mp4\" is a MP4 video and has been stored with the case. Automatic speech transcription is not available, so the words spoken in this recording are not searchable. To make its contents searchable, upload a written transcript alongside it.\" does not identify the cause (explain-no-speech)"
+    }
+  ],
+  "warnings": [
+    {
+      "suite": "Document, media and failure handling",
+      "id": "ING-discovery-production.zip",
+      "name": "discovery-production.zip archive handling",
+      "detail": "status=analyzed error=\"discovery-production.zip\" is a ZIP archive containing 3 file(s), and archives are not ingested directly. Please extract it and upload the documents individually: police-report.pdf, dispatch-log.pdf, emails.txt."
+    },
+    {
+      "suite": "Browser verification",
+      "id": "BR-/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/trial-exhibits",
+      "name": "Trial exhibits renders but logged 2 browser error(s)",
+      "detail": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    },
+    {
+      "suite": "Browser verification",
+      "id": "BR-/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/litigation-strategy",
+      "name": "Litigation strategy renders but logged 2 browser error(s)",
+      "detail": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    },
+    {
+      "suite": "Browser verification",
+      "id": "BR-/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/contradictions",
+      "name": "Contradictions renders but logged 2 browser error(s)",
+      "detail": "Failed to load resource: the server responded with a status of 404 (Not Found)"
+    }
+  ],
+  "screenshots": [
+    "reports/certification/screenshots/_cases.png",
+    "reports/certification/screenshots/_dashboard.png",
+    "reports/certification/screenshots/_login.png",
+    "reports/certification/screenshots/_pricing.png",
+    "reports/certification/screenshots/_register.png",
+    "reports/certification/screenshots/_settings.png",
+    "reports/certification/screenshots/after_register.png",
+    "reports/certification/screenshots/case_attorney_workbench.png",
+    "reports/certification/screenshots/case_charges.png",
+    "reports/certification/screenshots/case_create_dialog.png",
+    "reports/certification/screenshots/case_documents.png",
+    "reports/certification/screenshots/case_evidence.png",
+    "reports/certification/screenshots/case_litigation_strategy.png",
+    "reports/certification/screenshots/case_overview.png",
+    "reports/certification/screenshots/case_trial_exhibits.png",
+    "reports/certification/screenshots/register_filled.png"
+  ]
+}

@@ -287,11 +287,26 @@ export async function registerPolicyIntelligenceRoutes(
     ) => {
       try {
         const report = await getAgencyCoverage(request.params.agencyId);
+        if (!report) {
+          return reply.status(404).send({
+            success: false,
+            error: `No agency is registered with the id "${request.params.agencyId}".`,
+          });
+        }
         return reply.send({ success: true, data: report });
       } catch (error) {
+        // An unknown agency is a client mistake, not a server fault.
+        const message = error instanceof Error ? error.message : String(error);
+        if (/not found|no such agency/i.test(message)) {
+          return reply.status(404).send({
+            success: false,
+            error: `No agency is registered with the id "${request.params.agencyId}".`,
+          });
+        }
+        request.log.error({ err: error }, '[PolicyIntelligence] Agency coverage lookup failed');
         return reply.status(500).send({
           success: false,
-          error: 'Failed to get agency coverage',
+          error: 'Coverage for this agency could not be calculated. Please retry shortly.',
         });
       }
     },

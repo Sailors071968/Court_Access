@@ -1,0 +1,3161 @@
+{
+  "generatedAt": "2026-08-05T22:10:50.267Z",
+  "method": "Static extraction from backend/src route registrations and src/App.tsx <Route> elements",
+  "totals": {
+    "apiRoutes": 363,
+    "spaRoutes": 105,
+    "prismaModels": 103,
+    "bullmqQueues": 0,
+    "features": 40
+  },
+  "features": [
+    {
+      "feature": "Administration",
+      "apiRoutes": [
+        "GET /api/admin/alerts",
+        "GET /api/admin/audit",
+        "GET /api/admin/backup/status",
+        "POST /api/admin/backup/verify",
+        "GET /api/admin/billing/metrics",
+        "DELETE /api/admin/cases/:caseId",
+        "GET /api/admin/cases",
+        "GET /api/admin/changes",
+        "POST /api/admin/cpra/attachments/process/:attachmentId",
+        "POST /api/admin/cpra/attachments/process",
+        "POST /api/admin/cpra/classify-all",
+        "POST /api/admin/cpra/classify/:attachmentId",
+        "GET /api/admin/cpra/email-stats",
+        "GET /api/admin/cpra/emails/:agencyId",
+        "GET /api/admin/cpra/emails/conversation/:requestId",
+        "POST /api/admin/cpra/follow-up/:requestId",
+        "POST /api/admin/cpra/follow-up/check",
+        "POST /api/admin/cpra/follow-up/worker/start",
+        "POST /api/admin/cpra/follow-up/worker/stop",
+        "POST /api/admin/cpra/ingestion/process",
+        "POST /api/admin/cpra/ingestion/worker/start",
+        "POST /api/admin/cpra/ingestion/worker/stop",
+        "POST /api/admin/cpra/monitor/poll",
+        "POST /api/admin/cpra/monitor/simulate",
+        "POST /api/admin/cpra/monitor/start",
+        "POST /api/admin/cpra/monitor/stop",
+        "PUT /api/admin/cpra/notifications/:notificationId/read",
+        "DELETE /api/admin/cpra/notifications/:notificationId",
+        "GET /api/admin/cpra/notifications/count",
+        "PUT /api/admin/cpra/notifications/read-all",
+        "GET /api/admin/cpra/notifications/summary",
+        "GET /api/admin/cpra/notifications",
+        "GET /api/admin/cpra/progress",
+        "POST /api/admin/cpra/send-all-missing",
+        "POST /api/admin/cpra/send-batch",
+        "POST /api/admin/cpra/send",
+        "GET /api/admin/cpra/status",
+        "GET /api/admin/cpra/timeline/:agencyId",
+        "GET /api/admin/cpra/timeline",
+        "GET /api/admin/deployment-checks",
+        "GET /api/admin/engineering-dashboard",
+        "DELETE /api/admin/evidence/:evidenceId",
+        "GET /api/admin/operations/dashboard",
+        "GET /api/admin/production-gates",
+        "GET /api/admin/rate-limits",
+        "GET /api/admin/repository-integrity",
+        "POST /api/admin/reset-password",
+        "GET /api/admin/stats",
+        "DELETE /api/admin/users/:userId",
+        "GET /api/admin/users"
+      ],
+      "spaRoutes": [],
+      "apiRouteCount": 50,
+      "spaRouteCount": 0
+    },
+    {
+      "feature": "Attorney Workbench",
+      "apiRoutes": [
+        "GET /api/cases/:caseId/workbench/command-center",
+        "GET /api/cases/:caseId/workbench/export/:packageType",
+        "DELETE /api/cases/:caseId/workbench/notes/:noteId",
+        "PATCH /api/cases/:caseId/workbench/notes/:noteId",
+        "GET /api/cases/:caseId/workbench/notes",
+        "POST /api/cases/:caseId/workbench/notes",
+        "DELETE /api/cases/:caseId/workbench/pins/:pinId",
+        "GET /api/cases/:caseId/workbench/pins",
+        "POST /api/cases/:caseId/workbench/pins",
+        "DELETE /api/cases/:caseId/workbench/tasks/:taskId",
+        "PATCH /api/cases/:caseId/workbench/tasks/:taskId",
+        "GET /api/cases/:caseId/workbench/tasks",
+        "POST /api/cases/:caseId/workbench/tasks",
+        "GET /api/cases/:caseId/workbench/trial-prep",
+        "GET /api/cases/:caseId/workbench",
+        "GET /api/workbench/health"
+      ],
+      "spaRoutes": [
+        "attorney-workbench -> ProtectedRoute"
+      ],
+      "apiRouteCount": 16,
+      "spaRouteCount": 1
+    },
+    {
+      "feature": "Authentication",
+      "apiRoutes": [
+        "POST /api/auth/login",
+        "POST /api/auth/logout",
+        "GET /api/auth/me",
+        "POST /api/auth/refresh",
+        "POST /api/auth/register"
+      ],
+      "spaRoutes": [
+        "/login -> LoginPage",
+        "/register -> RegisterPage",
+        "/verify-email -> VerifyEmailPage",
+        "/accept-invitation -> AcceptInvitationPage"
+      ],
+      "apiRouteCount": 5,
+      "spaRouteCount": 4
+    },
+    {
+      "feature": "Billing & Stripe",
+      "apiRoutes": [
+        "GET /api/billing/checkout-status/:sessionId",
+        "POST /api/billing/create-checkout-session",
+        "POST /api/billing/create-portal-session",
+        "POST /api/billing/credit-packs/purchase",
+        "GET /api/billing/credit-packs",
+        "GET /api/billing/credits/by-type",
+        "POST /api/billing/credits/calculate",
+        "GET /api/billing/credits/costs",
+        "POST /api/billing/credits/deduct",
+        "GET /api/billing/credits/history",
+        "GET /api/billing/credits",
+        "GET /api/billing/plans/:planId",
+        "GET /api/billing/plans",
+        "GET /api/billing/subscription",
+        "POST /api/billing/subscription",
+        "POST /api/billing/usage/check-credits",
+        "POST /api/billing/usage/check-pages",
+        "POST /api/billing/usage/record-upload",
+        "GET /api/billing/usage"
+      ],
+      "spaRoutes": [
+        "/pricing -> PricingPage"
+      ],
+      "apiRouteCount": 19,
+      "spaRouteCount": 1
+    },
+    {
+      "feature": "CALCRIM",
+      "apiRoutes": [
+        "GET /api/calcrim/analyze/:caseId"
+      ],
+      "spaRoutes": [],
+      "apiRouteCount": 1,
+      "spaRouteCount": 0
+    },
+    {
+      "feature": "Case Management",
+      "apiRoutes": [
+        "POST /api/cases/:caseId/intelligence/analyze",
+        "GET /api/cases/:caseId/intelligence/report",
+        "GET /api/cases/:caseId/intelligence",
+        "POST /api/cases/:caseId/publication-sets/:setId/publish",
+        "GET /api/cases/:caseId/publication-sets",
+        "POST /api/cases/:caseId/publication-sets",
+        "DELETE /api/cases/:caseId",
+        "GET /api/cases/:caseId",
+        "PATCH /api/cases/:caseId",
+        "GET /api/cases",
+        "POST /api/cases"
+      ],
+      "spaRoutes": [],
+      "apiRouteCount": 11,
+      "spaRouteCount": 0
+    },
+    {
+      "feature": "Charges & Mens Rea",
+      "apiRoutes": [
+        "GET /api/charges/:caseId",
+        "DELETE /api/charges/:id",
+        "POST /api/charges"
+      ],
+      "spaRoutes": [
+        "charges -> ProtectedRoute"
+      ],
+      "apiRouteCount": 3,
+      "spaRouteCount": 1
+    },
+    {
+      "feature": "Client Domain",
+      "apiRoutes": [
+        "GET /api/cases/:caseId/hearings",
+        "POST /api/cases/:caseId/hearings",
+        "PATCH /api/cases/:caseId/messages/:messageId/read",
+        "GET /api/cases/:caseId/messages",
+        "POST /api/cases/:caseId/messages",
+        "DELETE /api/clients/:clientId",
+        "GET /api/clients/:clientId",
+        "PATCH /api/clients/:clientId",
+        "GET /api/clients",
+        "POST /api/clients"
+      ],
+      "spaRoutes": [
+        "/client-portal -> ProtectedRoute"
+      ],
+      "apiRouteCount": 10,
+      "spaRouteCount": 1
+    },
+    {
+      "feature": "Compliance Analysis",
+      "apiRoutes": [
+        "POST /api/compliance/analyze",
+        "GET /api/compliance/audit/:caseId",
+        "POST /api/compliance/compare",
+        "GET /api/compliance/comparisons",
+        "GET /api/compliance/dashboard",
+        "GET /api/compliance/events/:caseId/stats",
+        "GET /api/compliance/events/:caseId",
+        "POST /api/compliance/events/extract",
+        "POST /api/compliance/evolution/:agencyId/detect",
+        "GET /api/compliance/evolution/:agencyId",
+        "GET /api/compliance/exhibits/:caseId",
+        "GET /api/compliance/expert/:caseId",
+        "GET /api/compliance/findings/:caseId",
+        "GET /api/compliance/findings/agency/:agencyId",
+        "GET /api/compliance/heatmap",
+        "GET /api/compliance/jury/:caseId",
+        "GET /api/compliance/mappings/:eventType/:agencyId",
+        "POST /api/compliance/mappings/generate",
+        "POST /api/compliance/report/:caseId",
+        "PUT /api/compliance/reviews/:reviewId",
+        "GET /api/compliance/reviews/stats",
+        "GET /api/compliance/reviews",
+        "GET /api/compliance/rules/:agencyId",
+        "POST /api/compliance/rules/extract",
+        "POST /api/compliance/safety/check",
+        "POST /api/compliance/speech/analyze",
+        "GET /api/compliance/timeline/:caseId",
+        "POST /api/compliance/training/analyze",
+        "GET /api/compliance/video/:caseId/summary",
+        "POST /api/compliance/video/analyze"
+      ],
+      "spaRoutes": [],
+      "apiRouteCount": 30,
+      "spaRouteCount": 0
+    },
+    {
+      "feature": "Contradictions",
+      "apiRoutes": [
+        "POST /api/contradiction/analyze/:caseId",
+        "GET /api/contradiction/events/:caseId",
+        "POST /api/contradiction/extract",
+        "GET /api/contradiction/graph/:caseId/cypher",
+        "GET /api/contradiction/graph/:caseId",
+        "GET /api/contradiction/ontology/:category",
+        "GET /api/contradiction/ontology/event/:eventTypeId",
+        "GET /api/contradiction/ontology",
+        "GET /api/contradiction/recommendations/:caseId",
+        "GET /api/contradiction/status",
+        "POST /api/contradiction/timeline/:caseId",
+        "POST /api/contradiction/video/bodycam-gaps",
+        "POST /api/contradiction/video/process"
+      ],
+      "spaRoutes": [
+        "contradictions -> ProtectedRoute"
+      ],
+      "apiRouteCount": 13,
+      "spaRouteCount": 1
+    },
+    {
+      "feature": "CPRA",
+      "apiRoutes": [
+        "PUT /api/cpra/policy-matrix/:agencyId/:topicId",
+        "GET /api/cpra/policy-matrix/:agencyId",
+        "GET /api/cpra/policy-matrix/agencies",
+        "POST /api/cpra/policy-matrix/seed",
+        "GET /api/cpra/policy-matrix/summary",
+        "GET /api/cpra/policy-matrix/topics",
+        "GET /api/cpra/policy-matrix"
+      ],
+      "spaRoutes": [
+        "dashboard/cpra -> ProtectedRoute",
+        "dashboard/cpra-matrix -> ProtectedRoute",
+        "dashboard/cpra-autonomous -> ProtectedRoute"
+      ],
+      "apiRouteCount": 7,
+      "spaRouteCount": 3
+    },
+    {
+      "feature": "CSRF Protection",
+      "apiRoutes": [
+        "GET /api/auth/csrf-token"
+      ],
+      "spaRoutes": [],
+      "apiRouteCount": 1,
+      "spaRouteCount": 0
+    },
+    {
+      "feature": "Discount Codes",
+      "apiRoutes": [
+        "DELETE /api/admin/discount-codes/:codeId",
+        "PATCH /api/admin/discount-codes/:codeId",
+        "GET /api/admin/discount-codes",
+        "POST /api/admin/discount-codes",
+        "POST /api/discount-codes/apply",
+        "GET /api/discount-codes/validate"
+      ],
+      "spaRoutes": [],
+      "apiRouteCount": 6,
+      "spaRouteCount": 0
+    },
+    {
+      "feature": "Doctrine Intelligence",
+      "apiRoutes": [
+        "POST /api/doctrine/analyze",
+        "GET /api/doctrine/categories",
+        "GET /api/doctrine/chapters",
+        "GET /api/doctrine/domains",
+        "POST /api/doctrine/ingest",
+        "POST /api/doctrine/quick-scan",
+        "GET /api/doctrine/rules/:doctrineId",
+        "GET /api/doctrine/rules",
+        "GET /api/doctrine/search",
+        "POST /api/doctrine/seed-all",
+        "POST /api/doctrine/seed/:domainCode",
+        "POST /api/doctrine/seed",
+        "GET /api/doctrine/status"
+      ],
+      "spaRoutes": [],
+      "apiRouteCount": 13,
+      "spaRouteCount": 0
+    },
+    {
+      "feature": "Documents & Disclosure",
+      "apiRoutes": [
+        "POST /api/cases/:caseId/disclosures/:packageId/publish",
+        "GET /api/cases/:caseId/disclosures",
+        "POST /api/cases/:caseId/disclosures",
+        "POST /api/cases/:caseId/documents/:documentId/copies/original",
+        "GET /api/cases/:caseId/documents/:documentId/copies",
+        "POST /api/cases/:caseId/documents/:documentId/redactions/:redactionId/publish",
+        "GET /api/cases/:caseId/documents/:documentId/redactions",
+        "POST /api/cases/:caseId/documents/:documentId/redactions"
+      ],
+      "spaRoutes": [],
+      "apiRouteCount": 8,
+      "spaRouteCount": 0
+    },
+    {
+      "feature": "Evidence Gap Detection",
+      "apiRoutes": [
+        "POST /api/cases/:caseId/evidence-requests/detect",
+        "GET /api/cases/:caseId/evidence-requests",
+        "POST /api/evidence-requests/:id/respond"
+      ],
+      "spaRoutes": [],
+      "apiRouteCount": 3,
+      "spaRouteCount": 0
+    },
+    {
+      "feature": "Evidence Repository",
+      "apiRoutes": [
+        "GET /api/cases/:caseId/evidence",
+        "DELETE /api/evidence/:evidenceId",
+        "GET /api/evidence/:evidenceId",
+        "POST /api/evidence/upload-url",
+        "POST /api/evidence/upload",
+        "POST /api/evidence"
+      ],
+      "spaRoutes": [
+        "evidence -> ClientPortalEvidencePage",
+        "dashboard/evidence-management -> ProtectedRoute",
+        "dashboard/evidence-processing -> ProtectedRoute",
+        "dashboard/evidence-requests -> ProtectedRoute",
+        "evidence -> ProtectedRoute"
+      ],
+      "apiRouteCount": 6,
+      "spaRouteCount": 5
+    },
+    {
+      "feature": "Firm Operating Platform",
+      "apiRoutes": [
+        "GET /api/firm/analytics",
+        "PATCH /api/firm/approvals/:requestId",
+        "POST /api/firm/approvals",
+        "GET /api/firm/clients/:clientId/team",
+        "PUT /api/firm/clients/:clientId/team",
+        "POST /api/firm/conflicts/check",
+        "GET /api/firm/conflicts",
+        "GET /api/firm/departments",
+        "POST /api/firm/departments",
+        "GET /api/firm/knowledge",
+        "POST /api/firm/knowledge",
+        "GET /api/firm/messages",
+        "POST /api/firm/messages",
+        "POST /api/firm/offices/seed-california",
+        "GET /api/firm/permissions",
+        "POST /api/firm/permissions",
+        "PUT /api/firm/personnel/:userId",
+        "GET /api/firm/personnel",
+        "PATCH /api/firm/tasks/:taskId",
+        "GET /api/firm/tasks",
+        "POST /api/firm/tasks",
+        "PATCH /api/firm/theme"
+      ],
+      "spaRoutes": [],
+      "apiRouteCount": 22,
+      "spaRouteCount": 0
+    },
+    {
+      "feature": "Forensic Reconstruction",
+      "apiRoutes": [
+        "GET /api/forensic/camera-sync/:caseId",
+        "POST /api/forensic/camera-sync/synchronize",
+        "GET /api/forensic/evidence-graph/:caseId",
+        "POST /api/forensic/evidence-graph/build",
+        "GET /api/forensic/expert-package/:caseId",
+        "POST /api/forensic/expert-package/generate",
+        "GET /api/forensic/jury-view/:caseId",
+        "POST /api/forensic/jury-view/generate",
+        "GET /api/forensic/line-of-sight/:caseId",
+        "POST /api/forensic/line-of-sight/analyze",
+        "GET /api/forensic/scene/:caseId/exhibit",
+        "GET /api/forensic/scene/:caseId",
+        "POST /api/forensic/scene/build",
+        "GET /api/forensic/timeline/:caseId",
+        "GET /api/forensic/trajectory/:caseId",
+        "POST /api/forensic/trajectory/analyze",
+        "GET /api/forensic/trajectory/profiles",
+        "GET /api/forensic/visibility/:caseId",
+        "POST /api/forensic/visibility/simulate",
+        "GET /api/forensic/vision/:caseId/critical",
+        "GET /api/forensic/vision/:caseId",
+        "POST /api/forensic/vision/analyze"
+      ],
+      "spaRoutes": [],
+      "apiRouteCount": 22,
+      "spaRouteCount": 0
+    },
+    {
+      "feature": "Identity & MFA",
+      "apiRoutes": [
+        "POST /api/auth/mfa/challenge",
+        "POST /api/auth/mfa/confirm",
+        "POST /api/auth/mfa/disable",
+        "POST /api/auth/mfa/setup",
+        "POST /api/auth/verify-email"
+      ],
+      "spaRoutes": [],
+      "apiRouteCount": 5,
+      "spaRouteCount": 0
+    },
+    {
+      "feature": "Investigator Workbench",
+      "apiRoutes": [
+        "GET /api/cases/:caseId/investigator-workbench",
+        "POST /api/cases/:caseId/investigator/assignments",
+        "POST /api/cases/:caseId/investigator/field-notes",
+        "POST /api/cases/:caseId/investigator/leads",
+        "POST /api/cases/:caseId/investigator/witnesses",
+        "GET /api/investigator/health"
+      ],
+      "spaRoutes": [
+        "investigator-workbench -> ProtectedRoute"
+      ],
+      "apiRouteCount": 6,
+      "spaRouteCount": 1
+    },
+    {
+      "feature": "Job Processing",
+      "apiRoutes": [
+        "GET /api/jobs/:jobId"
+      ],
+      "spaRoutes": [],
+      "apiRouteCount": 1,
+      "spaRouteCount": 0
+    },
+    {
+      "feature": "Legislative Intelligence",
+      "apiRoutes": [
+        "GET /api/legislative/audit",
+        "GET /api/legislative/classifications/:code/:section",
+        "GET /api/legislative/coverage",
+        "GET /api/legislative/intelligence/:code/:section",
+        "GET /api/legislative/liability",
+        "GET /api/legislative/metrics",
+        "GET /api/legislative/repositories",
+        "GET /api/legislative/repository-integrity",
+        "GET /api/legislative/statutes/:code/:section"
+      ],
+      "spaRoutes": [],
+      "apiRouteCount": 9,
+      "spaRouteCount": 0
+    },
+    {
+      "feature": "Litigation Strategy",
+      "apiRoutes": [],
+      "spaRoutes": [
+        "litigation-strategy -> ProtectedRoute"
+      ],
+      "apiRouteCount": 0,
+      "spaRouteCount": 1
+    },
+    {
+      "feature": "Marketing & Contact",
+      "apiRoutes": [
+        "POST /api/contact"
+      ],
+      "spaRoutes": [],
+      "apiRouteCount": 1,
+      "spaRouteCount": 0
+    },
+    {
+      "feature": "Marketing & Public Site",
+      "apiRoutes": [],
+      "spaRoutes": [
+        "/ -> LandingPage",
+        "/for-defense -> ForDefensePage",
+        "/for-prosecutors -> ForProsecutorsPage",
+        "/government -> GovernmentPage",
+        "/contact -> ContactSalesPage",
+        "/about -> AboutPage",
+        "/features -> FeaturesPage",
+        "/faq -> FAQPage",
+        "/case-studies -> CaseStudiesPage",
+        "/legal-disclaimer -> LegalDisclaimerPage",
+        "/privacy -> PrivacyPolicyPage",
+        "/terms -> TermsOfServicePage",
+        "/how-it-works -> HowItWorksPage",
+        "/attorney -> AttorneyPage",
+        "/attorneys -> Navigate",
+        "/investigator -> InvestigatorPage",
+        "/investigators -> Navigate",
+        "/defendant -> DefendantPage",
+        "/defendants -> Navigate",
+        "/families -> FamiliesPage",
+        "/experts -> ExpertsAudiencePage",
+        "/security -> SecurityPage",
+        "/blog -> BlogPage",
+        "/knowledge-base -> KnowledgeBasePage",
+        "/support -> SupportPage",
+        "/accessibility -> AccessibilityPage",
+        "/sitemap -> SitemapPage",
+        "/press -> PressPage",
+        "/careers -> CareersPage",
+        "(index) -> ClientPortalIndex",
+        "dashboard -> ClientPortalDashboardPage",
+        "court-dates -> ClientPortalCourtDatesPage",
+        "messages -> ClientPortalMessagesPage",
+        "documents -> ClientPortalDocumentsPage",
+        "tasks -> ClientPortalTasksPage",
+        "billing -> ClientPortalBillingPage",
+        "notifications -> ClientPortalNotificationsPage",
+        "uploads -> ClientPortalUploadsPage",
+        "dashboard -> DashboardRouter",
+        "dashboard/repository-integrity -> ProtectedRoute",
+        "dashboard/demo-requests -> ProtectedRoute",
+        "dashboard/government-outreach -> ProtectedRoute",
+        "dashboard/marketing -> ProtectedRoute",
+        "dashboard/system-health -> ProtectedRoute",
+        "dashboard/discount-codes -> ProtectedRoute",
+        "dashboard/system/workers -> ProtectedRoute",
+        "dashboard/beta-verification -> ProtectedRoute",
+        "dashboard/usage -> UsageDashboard",
+        "cases -> CasesListPage",
+        "search -> SearchPage",
+        "notifications -> NotificationsPage",
+        "settings -> ProtectedRoute",
+        "shared-access -> ProtectedRoute",
+        "firm -> ProtectedRoute",
+        "organization/settings -> ProtectedRoute",
+        "admin -> ProtectedRoute",
+        "admin/operations -> ProtectedRoute",
+        "cases/:caseId -> CaseLayout",
+        "(index) -> Navigate",
+        "overview -> CaseOverviewPage",
+        "documents -> ProtectedRoute",
+        "documents/:documentId/redact -> ProtectedRoute",
+        "disclosures -> ProtectedRoute",
+        "experts -> ProtectedRoute",
+        "research -> ProtectedRoute",
+        "activity -> ProtectedRoute",
+        "settings -> ProtectedRoute",
+        "* -> Navigate"
+      ],
+      "apiRouteCount": 0,
+      "spaRouteCount": 68
+    },
+    {
+      "feature": "Membership & Onboarding",
+      "apiRoutes": [
+        "GET /api/membership/accessible-cases",
+        "GET /api/membership/account",
+        "GET /api/membership/onboarding",
+        "GET /api/membership/permission-check",
+        "POST /api/membership/permission-grants",
+        "GET /api/membership/permission-model",
+        "PATCH /api/membership/settings",
+        "GET /api/membership/shared-access"
+      ],
+      "spaRoutes": [
+        "/onboarding -> RoleOnboardingPage"
+      ],
+      "apiRouteCount": 8,
+      "spaRouteCount": 1
+    },
+    {
+      "feature": "Motion Intelligence",
+      "apiRoutes": [],
+      "spaRoutes": [
+        "motions -> ProtectedRoute"
+      ],
+      "apiRouteCount": 0,
+      "spaRouteCount": 1
+    },
+    {
+      "feature": "Narrative Analysis",
+      "apiRoutes": [
+        "GET /api/narrative/:caseId/claims",
+        "GET /api/narrative/:caseId/contradictions",
+        "GET /api/narrative/:caseId/impeachment",
+        "POST /api/narrative/analyze/:caseId",
+        "GET /api/narrative/health"
+      ],
+      "spaRoutes": [
+        "narrative-analysis -> ProtectedRoute"
+      ],
+      "apiRouteCount": 5,
+      "spaRouteCount": 1
+    },
+    {
+      "feature": "Observability",
+      "apiRoutes": [
+        "GET /api/health/deep",
+        "GET /api/health",
+        "GET /api/metrics/json",
+        "GET /api/metrics"
+      ],
+      "spaRoutes": [],
+      "apiRouteCount": 4,
+      "spaRouteCount": 0
+    },
+    {
+      "feature": "Operations Console",
+      "apiRoutes": [
+        "GET /api/operations/dashboard",
+        "GET /api/operations/deadlines",
+        "POST /api/operations/populate",
+        "POST /api/operations/report",
+        "GET /api/operations/topics/:agencyId/export/csv",
+        "GET /api/operations/topics/:agencyId",
+        "GET /api/operations/topics"
+      ],
+      "spaRoutes": [],
+      "apiRouteCount": 7,
+      "spaRouteCount": 0
+    },
+    {
+      "feature": "Organizations",
+      "apiRoutes": [
+        "GET /api/organizations/analytics",
+        "GET /api/organizations/audit-logs",
+        "GET /api/organizations/current",
+        "PATCH /api/organizations/current",
+        "GET /api/organizations/invitations/preview",
+        "GET /api/organizations/invitations",
+        "POST /api/organizations/invitations",
+        "GET /api/organizations/members",
+        "GET /api/organizations/offices",
+        "POST /api/organizations/offices",
+        "POST /api/organizations/onboarding",
+        "GET /api/organizations/practice-groups",
+        "POST /api/organizations/practice-groups",
+        "GET /api/organizations/search",
+        "GET /api/organizations/tenant-verify"
+      ],
+      "spaRoutes": [
+        "/organization/onboarding -> OrganizationOnboardingPage"
+      ],
+      "apiRouteCount": 15,
+      "spaRouteCount": 1
+    },
+    {
+      "feature": "Password Reset",
+      "apiRoutes": [
+        "POST /api/auth/forgot-password",
+        "POST /api/auth/reset-password"
+      ],
+      "spaRoutes": [
+        "/forgot-password -> ForgotPasswordPage",
+        "/reset-password -> ResetPasswordPage"
+      ],
+      "apiRouteCount": 2,
+      "spaRouteCount": 2
+    },
+    {
+      "feature": "Policy Acquisition Pipeline",
+      "apiRoutes": [
+        "GET /api/policy-pipeline/agencies/:agencyId",
+        "GET /api/policy-pipeline/agencies/search",
+        "GET /api/policy-pipeline/agencies",
+        "POST /api/policy-pipeline/intelligence",
+        "POST /api/policy-pipeline/run/enqueue-crawls",
+        "POST /api/policy-pipeline/run/full",
+        "POST /api/policy-pipeline/run/post-crawl",
+        "POST /api/policy-pipeline/run/rank",
+        "GET /api/policy-pipeline/stats"
+      ],
+      "spaRoutes": [],
+      "apiRouteCount": 9,
+      "spaRouteCount": 0
+    },
+    {
+      "feature": "Policy Intelligence",
+      "apiRoutes": [
+        "POST /api/policy-intelligence/chp/import",
+        "GET /api/policy-intelligence/chp/status",
+        "GET /api/policy-intelligence/classification/accuracy",
+        "GET /api/policy-intelligence/classification/validate",
+        "GET /api/policy-intelligence/coverage/agency/:agencyId",
+        "POST /api/policy-intelligence/coverage/generate",
+        "GET /api/policy-intelligence/coverage/heatmap",
+        "GET /api/policy-intelligence/coverage/summary",
+        "GET /api/policy-intelligence/cpra/campaign-status",
+        "POST /api/policy-intelligence/cpra/launch-campaign",
+        "POST /api/policy-intelligence/cpra/prepare-queue",
+        "GET /api/policy-intelligence/cpra/queue-status",
+        "GET /api/policy-intelligence/dashboard",
+        "GET /api/policy-intelligence/responses/health",
+        "POST /api/policy-intelligence/responses/process-pending",
+        "POST /api/policy-intelligence/responses/process",
+        "POST /api/policy-intelligence/sandbox/crawl",
+        "GET /api/policy-intelligence/sandbox/status"
+      ],
+      "spaRoutes": [
+        "dashboard/policy-acquisition/agencies -> ProtectedRoute",
+        "dashboard/policy-intelligence/coverage -> ProtectedRoute",
+        "dashboard/policy-operations -> ProtectedRoute",
+        "dashboard/policy-topics -> ProtectedRoute",
+        "dashboard/policy-compliance -> ProtectedRoute",
+        "dashboard/policy-topic-registry -> ProtectedRoute",
+        "dashboard/policy-matrix -> ProtectedRoute"
+      ],
+      "apiRouteCount": 18,
+      "spaRouteCount": 7
+    },
+    {
+      "feature": "Queue Monitoring",
+      "apiRoutes": [
+        "POST /api/admin/queues/:queueName/clean",
+        "POST /api/admin/queues/:queueName/retry-all",
+        "GET /api/admin/queues/:queueName",
+        "GET /api/admin/queues"
+      ],
+      "spaRoutes": [],
+      "apiRouteCount": 4,
+      "spaRouteCount": 0
+    },
+    {
+      "feature": "Security Logging",
+      "apiRoutes": [
+        "GET /api/security/log",
+        "GET /api/security/logs",
+        "GET /api/security/summary"
+      ],
+      "spaRoutes": [],
+      "apiRouteCount": 3,
+      "spaRouteCount": 0
+    },
+    {
+      "feature": "Timeline",
+      "apiRoutes": [
+        "GET /api/timeline/:caseId/conflicts",
+        "GET /api/timeline/:caseId/events",
+        "GET /api/timeline/health",
+        "POST /api/timeline/process",
+        "POST /api/timeline/rebuild/:caseId"
+      ],
+      "spaRoutes": [
+        "timeline -> ClientPortalTimelinePage",
+        "dashboard/case-timeline -> ProtectedRoute",
+        "dashboard/cpra-timeline -> ProtectedRoute"
+      ],
+      "apiRouteCount": 5,
+      "spaRouteCount": 3
+    },
+    {
+      "feature": "Trial Exhibits",
+      "apiRoutes": [],
+      "spaRoutes": [
+        "dashboard/exhibits/viewer -> ExhibitViewer",
+        "trial-exhibits -> ProtectedRoute"
+      ],
+      "apiRouteCount": 0,
+      "spaRouteCount": 2
+    },
+    {
+      "feature": "Unclassified",
+      "apiRoutes": [
+        "POST /api/auth/accept-invitation",
+        "POST /api/auth/resend-verification",
+        "DELETE /api/auth/sessions/:sessionId",
+        "GET /api/auth/sessions",
+        "POST /api/corpus/ingest",
+        "POST /api/corpus/lock",
+        "POST /api/corpus/register",
+        "GET /api/corpus/registry",
+        "GET /api/corpus/status",
+        "POST /api/corpus/unlock",
+        "GET /api/corpus/versions",
+        "GET /api/portal/court-dates",
+        "GET /api/system/health",
+        "GET /api/video/progress/:jobId",
+        "POST /api/video/upload"
+      ],
+      "spaRoutes": [],
+      "apiRouteCount": 15,
+      "spaRouteCount": 0
+    }
+  ],
+  "apiRoutes": [
+    {
+      "method": "GET",
+      "url": "/api/admin/alerts",
+      "source": "backend/src/productionOperations/productionOperationsRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/admin/audit",
+      "source": "backend/src/productionOperations/productionOperationsRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/admin/backup/status",
+      "source": "backend/src/productionOperations/productionOperationsRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/admin/backup/verify",
+      "source": "backend/src/productionOperations/productionOperationsRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/admin/billing/metrics",
+      "source": "backend/src/admin/adminRoutes.ts"
+    },
+    {
+      "method": "DELETE",
+      "url": "/api/admin/cases/:caseId",
+      "source": "backend/src/admin/adminRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/admin/cases",
+      "source": "backend/src/admin/adminRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/admin/changes",
+      "source": "backend/src/productionOperations/productionOperationsRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/admin/cpra/attachments/process/:attachmentId",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/admin/cpra/attachments/process",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/admin/cpra/classify-all",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/admin/cpra/classify/:attachmentId",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/admin/cpra/email-stats",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/admin/cpra/emails/:agencyId",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/admin/cpra/emails/conversation/:requestId",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/admin/cpra/follow-up/:requestId",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/admin/cpra/follow-up/check",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/admin/cpra/follow-up/worker/start",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/admin/cpra/follow-up/worker/stop",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/admin/cpra/ingestion/process",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/admin/cpra/ingestion/worker/start",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/admin/cpra/ingestion/worker/stop",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/admin/cpra/monitor/poll",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/admin/cpra/monitor/simulate",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/admin/cpra/monitor/start",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/admin/cpra/monitor/stop",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "PUT",
+      "url": "/api/admin/cpra/notifications/:notificationId/read",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "DELETE",
+      "url": "/api/admin/cpra/notifications/:notificationId",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/admin/cpra/notifications/count",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "PUT",
+      "url": "/api/admin/cpra/notifications/read-all",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/admin/cpra/notifications/summary",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/admin/cpra/notifications",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/admin/cpra/progress",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/admin/cpra/send-all-missing",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/admin/cpra/send-batch",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/admin/cpra/send",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/admin/cpra/status",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/admin/cpra/timeline/:agencyId",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/admin/cpra/timeline",
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/admin/deployment-checks",
+      "source": "backend/src/productionOperations/productionOperationsRoutes.ts"
+    },
+    {
+      "method": "DELETE",
+      "url": "/api/admin/discount-codes/:codeId",
+      "source": "backend/src/billing/discountRoutes.ts"
+    },
+    {
+      "method": "PATCH",
+      "url": "/api/admin/discount-codes/:codeId",
+      "source": "backend/src/billing/discountRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/admin/discount-codes",
+      "source": "backend/src/billing/discountRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/admin/discount-codes",
+      "source": "backend/src/billing/discountRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/admin/engineering-dashboard",
+      "source": "backend/src/productionOperations/productionOperationsRoutes.ts"
+    },
+    {
+      "method": "DELETE",
+      "url": "/api/admin/evidence/:evidenceId",
+      "source": "backend/src/admin/adminRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/admin/operations/dashboard",
+      "source": "backend/src/productionOperations/productionOperationsRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/admin/production-gates",
+      "source": "backend/src/productionGates/productionGatesRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/admin/queues/:queueName/clean",
+      "source": "backend/src/admin/queueMonitorRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/admin/queues/:queueName/retry-all",
+      "source": "backend/src/admin/queueMonitorRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/admin/queues/:queueName",
+      "source": "backend/src/admin/queueMonitorRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/admin/queues",
+      "source": "backend/src/admin/queueMonitorRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/admin/rate-limits",
+      "source": "backend/src/security/rateLimiter.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/admin/repository-integrity",
+      "source": "backend/src/productionOperations/productionOperationsRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/admin/reset-password",
+      "source": "backend/src/security/authMiddleware.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/admin/stats",
+      "source": "backend/src/admin/adminRoutes.ts"
+    },
+    {
+      "method": "DELETE",
+      "url": "/api/admin/users/:userId",
+      "source": "backend/src/admin/adminRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/admin/users",
+      "source": "backend/src/admin/adminRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/auth/accept-invitation",
+      "source": "backend/src/organizations/organizationRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/auth/csrf-token",
+      "source": "backend/src/server.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/auth/forgot-password",
+      "source": "backend/src/security/authMiddleware.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/auth/login",
+      "source": "backend/src/security/authMiddleware.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/auth/logout",
+      "source": "backend/src/security/authMiddleware.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/auth/me",
+      "source": "backend/src/security/authMiddleware.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/auth/mfa/challenge",
+      "source": "backend/src/security/identityRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/auth/mfa/confirm",
+      "source": "backend/src/security/identityRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/auth/mfa/disable",
+      "source": "backend/src/security/identityRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/auth/mfa/setup",
+      "source": "backend/src/security/identityRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/auth/refresh",
+      "source": "backend/src/security/authMiddleware.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/auth/register",
+      "source": "backend/src/security/authMiddleware.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/auth/resend-verification",
+      "source": "backend/src/security/identityRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/auth/reset-password",
+      "source": "backend/src/security/authMiddleware.ts"
+    },
+    {
+      "method": "DELETE",
+      "url": "/api/auth/sessions/:sessionId",
+      "source": "backend/src/security/identityRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/auth/sessions",
+      "source": "backend/src/security/identityRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/auth/verify-email",
+      "source": "backend/src/security/identityRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/billing/checkout-status/:sessionId",
+      "source": "backend/src/billing/stripeWebhookHandler.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/billing/create-checkout-session",
+      "source": "backend/src/billing/stripeWebhookHandler.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/billing/create-portal-session",
+      "source": "backend/src/billing/stripeWebhookHandler.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/billing/credit-packs/purchase",
+      "source": "backend/src/billing/billingRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/billing/credit-packs",
+      "source": "backend/src/billing/billingRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/billing/credits/by-type",
+      "source": "backend/src/billing/billingRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/billing/credits/calculate",
+      "source": "backend/src/billing/billingRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/billing/credits/costs",
+      "source": "backend/src/billing/billingRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/billing/credits/deduct",
+      "source": "backend/src/billing/billingRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/billing/credits/history",
+      "source": "backend/src/billing/billingRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/billing/credits",
+      "source": "backend/src/billing/billingRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/billing/plans/:planId",
+      "source": "backend/src/billing/billingRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/billing/plans",
+      "source": "backend/src/billing/billingRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/billing/subscription",
+      "source": "backend/src/billing/billingRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/billing/subscription",
+      "source": "backend/src/billing/billingRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/billing/usage/check-credits",
+      "source": "backend/src/billing/billingRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/billing/usage/check-pages",
+      "source": "backend/src/billing/billingRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/billing/usage/record-upload",
+      "source": "backend/src/billing/billingRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/billing/usage",
+      "source": "backend/src/billing/billingRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/calcrim/analyze/:caseId",
+      "source": "backend/src/routes/calcrimRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/cases/:caseId/disclosures/:packageId/publish",
+      "source": "backend/src/membership/membershipRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/cases/:caseId/disclosures",
+      "source": "backend/src/membership/membershipRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/cases/:caseId/disclosures",
+      "source": "backend/src/membership/membershipRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/cases/:caseId/documents/:documentId/copies/original",
+      "source": "backend/src/membership/membershipRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/cases/:caseId/documents/:documentId/copies",
+      "source": "backend/src/membership/membershipRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/cases/:caseId/documents/:documentId/redactions/:redactionId/publish",
+      "source": "backend/src/membership/membershipRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/cases/:caseId/documents/:documentId/redactions",
+      "source": "backend/src/membership/membershipRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/cases/:caseId/documents/:documentId/redactions",
+      "source": "backend/src/membership/membershipRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/cases/:caseId/evidence-requests/detect",
+      "source": "backend/src/evidence/evidenceRequestRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/cases/:caseId/evidence-requests",
+      "source": "backend/src/evidence/evidenceRequestRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/cases/:caseId/evidence",
+      "source": "backend/src/evidence/evidenceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/cases/:caseId/hearings",
+      "source": "backend/src/communications/hearingRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/cases/:caseId/hearings",
+      "source": "backend/src/communications/hearingRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/cases/:caseId/intelligence/analyze",
+      "source": "backend/src/intelligence/intelligenceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/cases/:caseId/intelligence/report",
+      "source": "backend/src/intelligence/intelligenceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/cases/:caseId/intelligence",
+      "source": "backend/src/intelligence/intelligenceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/cases/:caseId/investigator-workbench",
+      "source": "backend/src/investigator/investigatorRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/cases/:caseId/investigator/assignments",
+      "source": "backend/src/investigator/investigatorRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/cases/:caseId/investigator/field-notes",
+      "source": "backend/src/investigator/investigatorRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/cases/:caseId/investigator/leads",
+      "source": "backend/src/investigator/investigatorRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/cases/:caseId/investigator/witnesses",
+      "source": "backend/src/investigator/investigatorRoutes.ts"
+    },
+    {
+      "method": "PATCH",
+      "url": "/api/cases/:caseId/messages/:messageId/read",
+      "source": "backend/src/communications/messagingRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/cases/:caseId/messages",
+      "source": "backend/src/communications/messagingRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/cases/:caseId/messages",
+      "source": "backend/src/communications/messagingRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/cases/:caseId/publication-sets/:setId/publish",
+      "source": "backend/src/membership/membershipRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/cases/:caseId/publication-sets",
+      "source": "backend/src/membership/membershipRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/cases/:caseId/publication-sets",
+      "source": "backend/src/membership/membershipRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/cases/:caseId/workbench/command-center",
+      "source": "backend/src/workbench/workbenchRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/cases/:caseId/workbench/export/:packageType",
+      "source": "backend/src/workbench/workbenchRoutes.ts"
+    },
+    {
+      "method": "DELETE",
+      "url": "/api/cases/:caseId/workbench/notes/:noteId",
+      "source": "backend/src/workbench/workbenchRoutes.ts"
+    },
+    {
+      "method": "PATCH",
+      "url": "/api/cases/:caseId/workbench/notes/:noteId",
+      "source": "backend/src/workbench/workbenchRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/cases/:caseId/workbench/notes",
+      "source": "backend/src/workbench/workbenchRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/cases/:caseId/workbench/notes",
+      "source": "backend/src/workbench/workbenchRoutes.ts"
+    },
+    {
+      "method": "DELETE",
+      "url": "/api/cases/:caseId/workbench/pins/:pinId",
+      "source": "backend/src/workbench/workbenchRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/cases/:caseId/workbench/pins",
+      "source": "backend/src/workbench/workbenchRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/cases/:caseId/workbench/pins",
+      "source": "backend/src/workbench/workbenchRoutes.ts"
+    },
+    {
+      "method": "DELETE",
+      "url": "/api/cases/:caseId/workbench/tasks/:taskId",
+      "source": "backend/src/workbench/workbenchRoutes.ts"
+    },
+    {
+      "method": "PATCH",
+      "url": "/api/cases/:caseId/workbench/tasks/:taskId",
+      "source": "backend/src/workbench/workbenchRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/cases/:caseId/workbench/tasks",
+      "source": "backend/src/workbench/workbenchRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/cases/:caseId/workbench/tasks",
+      "source": "backend/src/workbench/workbenchRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/cases/:caseId/workbench/trial-prep",
+      "source": "backend/src/workbench/workbenchRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/cases/:caseId/workbench",
+      "source": "backend/src/workbench/workbenchRoutes.ts"
+    },
+    {
+      "method": "DELETE",
+      "url": "/api/cases/:caseId",
+      "source": "backend/src/evidence/caseRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/cases/:caseId",
+      "source": "backend/src/evidence/caseRoutes.ts"
+    },
+    {
+      "method": "PATCH",
+      "url": "/api/cases/:caseId",
+      "source": "backend/src/evidence/caseRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/cases",
+      "source": "backend/src/evidence/caseRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/cases",
+      "source": "backend/src/evidence/caseRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/charges/:caseId",
+      "source": "backend/src/charges/chargeRoutes.ts"
+    },
+    {
+      "method": "DELETE",
+      "url": "/api/charges/:id",
+      "source": "backend/src/charges/chargeRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/charges",
+      "source": "backend/src/charges/chargeRoutes.ts"
+    },
+    {
+      "method": "DELETE",
+      "url": "/api/clients/:clientId",
+      "source": "backend/src/clients/clientRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/clients/:clientId",
+      "source": "backend/src/clients/clientRoutes.ts"
+    },
+    {
+      "method": "PATCH",
+      "url": "/api/clients/:clientId",
+      "source": "backend/src/clients/clientRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/clients",
+      "source": "backend/src/clients/clientRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/clients",
+      "source": "backend/src/clients/clientRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/compliance/analyze",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/compliance/audit/:caseId",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/compliance/compare",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/compliance/comparisons",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/compliance/dashboard",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/compliance/events/:caseId/stats",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/compliance/events/:caseId",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/compliance/events/extract",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/compliance/evolution/:agencyId/detect",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/compliance/evolution/:agencyId",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/compliance/exhibits/:caseId",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/compliance/expert/:caseId",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/compliance/findings/:caseId",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/compliance/findings/agency/:agencyId",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/compliance/heatmap",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/compliance/jury/:caseId",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/compliance/mappings/:eventType/:agencyId",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/compliance/mappings/generate",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/compliance/report/:caseId",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "PUT",
+      "url": "/api/compliance/reviews/:reviewId",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/compliance/reviews/stats",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/compliance/reviews",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/compliance/rules/:agencyId",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/compliance/rules/extract",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/compliance/safety/check",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/compliance/speech/analyze",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/compliance/timeline/:caseId",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/compliance/training/analyze",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/compliance/video/:caseId/summary",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/compliance/video/analyze",
+      "source": "backend/src/evidence/complianceRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/contact",
+      "source": "backend/src/marketing/contactRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/contradiction/analyze/:caseId",
+      "source": "backend/src/contradiction/contradictionRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/contradiction/events/:caseId",
+      "source": "backend/src/contradiction/contradictionRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/contradiction/extract",
+      "source": "backend/src/contradiction/contradictionRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/contradiction/graph/:caseId/cypher",
+      "source": "backend/src/contradiction/contradictionRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/contradiction/graph/:caseId",
+      "source": "backend/src/contradiction/contradictionRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/contradiction/ontology/:category",
+      "source": "backend/src/contradiction/contradictionRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/contradiction/ontology/event/:eventTypeId",
+      "source": "backend/src/contradiction/contradictionRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/contradiction/ontology",
+      "source": "backend/src/contradiction/contradictionRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/contradiction/recommendations/:caseId",
+      "source": "backend/src/contradiction/contradictionRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/contradiction/status",
+      "source": "backend/src/contradiction/contradictionRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/contradiction/timeline/:caseId",
+      "source": "backend/src/contradiction/contradictionRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/contradiction/video/bodycam-gaps",
+      "source": "backend/src/contradiction/contradictionRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/contradiction/video/process",
+      "source": "backend/src/contradiction/contradictionRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/corpus/ingest",
+      "source": "backend/src/governance/governanceRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/corpus/lock",
+      "source": "backend/src/governance/governanceRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/corpus/register",
+      "source": "backend/src/governance/governanceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/corpus/registry",
+      "source": "backend/src/governance/governanceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/corpus/status",
+      "source": "backend/src/governance/governanceRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/corpus/unlock",
+      "source": "backend/src/governance/governanceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/corpus/versions",
+      "source": "backend/src/governance/governanceRoutes.ts"
+    },
+    {
+      "method": "PUT",
+      "url": "/api/cpra/policy-matrix/:agencyId/:topicId",
+      "source": "backend/src/cpra/policyMatrixRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/cpra/policy-matrix/:agencyId",
+      "source": "backend/src/cpra/policyMatrixRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/cpra/policy-matrix/agencies",
+      "source": "backend/src/cpra/policyMatrixRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/cpra/policy-matrix/seed",
+      "source": "backend/src/cpra/policyMatrixRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/cpra/policy-matrix/summary",
+      "source": "backend/src/cpra/policyMatrixRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/cpra/policy-matrix/topics",
+      "source": "backend/src/cpra/policyMatrixRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/cpra/policy-matrix",
+      "source": "backend/src/cpra/policyMatrixRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/discount-codes/apply",
+      "source": "backend/src/billing/discountRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/discount-codes/validate",
+      "source": "backend/src/billing/discountRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/doctrine/analyze",
+      "source": "backend/src/doctrine/doctrineRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/doctrine/categories",
+      "source": "backend/src/doctrine/doctrineRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/doctrine/chapters",
+      "source": "backend/src/doctrine/doctrineRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/doctrine/domains",
+      "source": "backend/src/doctrine/doctrineRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/doctrine/ingest",
+      "source": "backend/src/doctrine/doctrineRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/doctrine/quick-scan",
+      "source": "backend/src/doctrine/doctrineRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/doctrine/rules/:doctrineId",
+      "source": "backend/src/doctrine/doctrineRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/doctrine/rules",
+      "source": "backend/src/doctrine/doctrineRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/doctrine/search",
+      "source": "backend/src/doctrine/doctrineRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/doctrine/seed-all",
+      "source": "backend/src/doctrine/doctrineRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/doctrine/seed/:domainCode",
+      "source": "backend/src/doctrine/doctrineRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/doctrine/seed",
+      "source": "backend/src/doctrine/doctrineRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/doctrine/status",
+      "source": "backend/src/doctrine/doctrineRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/evidence-requests/:id/respond",
+      "source": "backend/src/evidence/evidenceRequestRoutes.ts"
+    },
+    {
+      "method": "DELETE",
+      "url": "/api/evidence/:evidenceId",
+      "source": "backend/src/evidence/evidenceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/evidence/:evidenceId",
+      "source": "backend/src/evidence/evidenceRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/evidence/upload-url",
+      "source": "backend/src/evidence/evidenceRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/evidence/upload",
+      "source": "backend/src/evidence/evidenceDirectUpload.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/evidence",
+      "source": "backend/src/evidence/evidenceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/firm/analytics",
+      "source": "backend/src/organizations/firmPlatformRoutes.ts"
+    },
+    {
+      "method": "PATCH",
+      "url": "/api/firm/approvals/:requestId",
+      "source": "backend/src/organizations/firmPlatformRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/firm/approvals",
+      "source": "backend/src/organizations/firmPlatformRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/firm/clients/:clientId/team",
+      "source": "backend/src/organizations/firmPlatformRoutes.ts"
+    },
+    {
+      "method": "PUT",
+      "url": "/api/firm/clients/:clientId/team",
+      "source": "backend/src/organizations/firmPlatformRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/firm/conflicts/check",
+      "source": "backend/src/organizations/firmPlatformRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/firm/conflicts",
+      "source": "backend/src/organizations/firmPlatformRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/firm/departments",
+      "source": "backend/src/organizations/firmPlatformRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/firm/departments",
+      "source": "backend/src/organizations/firmPlatformRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/firm/knowledge",
+      "source": "backend/src/organizations/firmPlatformRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/firm/knowledge",
+      "source": "backend/src/organizations/firmPlatformRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/firm/messages",
+      "source": "backend/src/organizations/firmPlatformRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/firm/messages",
+      "source": "backend/src/organizations/firmPlatformRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/firm/offices/seed-california",
+      "source": "backend/src/organizations/firmPlatformRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/firm/permissions",
+      "source": "backend/src/organizations/firmPlatformRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/firm/permissions",
+      "source": "backend/src/organizations/firmPlatformRoutes.ts"
+    },
+    {
+      "method": "PUT",
+      "url": "/api/firm/personnel/:userId",
+      "source": "backend/src/organizations/firmPlatformRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/firm/personnel",
+      "source": "backend/src/organizations/firmPlatformRoutes.ts"
+    },
+    {
+      "method": "PATCH",
+      "url": "/api/firm/tasks/:taskId",
+      "source": "backend/src/organizations/firmPlatformRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/firm/tasks",
+      "source": "backend/src/organizations/firmPlatformRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/firm/tasks",
+      "source": "backend/src/organizations/firmPlatformRoutes.ts"
+    },
+    {
+      "method": "PATCH",
+      "url": "/api/firm/theme",
+      "source": "backend/src/organizations/firmPlatformRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/forensic/camera-sync/:caseId",
+      "source": "backend/src/evidence/forensicReconstructionRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/forensic/camera-sync/synchronize",
+      "source": "backend/src/evidence/forensicReconstructionRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/forensic/evidence-graph/:caseId",
+      "source": "backend/src/evidence/forensicReconstructionRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/forensic/evidence-graph/build",
+      "source": "backend/src/evidence/forensicReconstructionRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/forensic/expert-package/:caseId",
+      "source": "backend/src/evidence/forensicReconstructionRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/forensic/expert-package/generate",
+      "source": "backend/src/evidence/forensicReconstructionRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/forensic/jury-view/:caseId",
+      "source": "backend/src/evidence/forensicReconstructionRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/forensic/jury-view/generate",
+      "source": "backend/src/evidence/forensicReconstructionRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/forensic/line-of-sight/:caseId",
+      "source": "backend/src/evidence/forensicReconstructionRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/forensic/line-of-sight/analyze",
+      "source": "backend/src/evidence/forensicReconstructionRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/forensic/scene/:caseId/exhibit",
+      "source": "backend/src/evidence/forensicReconstructionRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/forensic/scene/:caseId",
+      "source": "backend/src/evidence/forensicReconstructionRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/forensic/scene/build",
+      "source": "backend/src/evidence/forensicReconstructionRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/forensic/timeline/:caseId",
+      "source": "backend/src/evidence/forensicReconstructionRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/forensic/trajectory/:caseId",
+      "source": "backend/src/evidence/forensicReconstructionRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/forensic/trajectory/analyze",
+      "source": "backend/src/evidence/forensicReconstructionRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/forensic/trajectory/profiles",
+      "source": "backend/src/evidence/forensicReconstructionRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/forensic/visibility/:caseId",
+      "source": "backend/src/evidence/forensicReconstructionRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/forensic/visibility/simulate",
+      "source": "backend/src/evidence/forensicReconstructionRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/forensic/vision/:caseId/critical",
+      "source": "backend/src/evidence/forensicReconstructionRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/forensic/vision/:caseId",
+      "source": "backend/src/evidence/forensicReconstructionRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/forensic/vision/analyze",
+      "source": "backend/src/evidence/forensicReconstructionRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/health/deep",
+      "source": "backend/src/observability/observabilityRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/health",
+      "source": "backend/src/server.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/investigator/health",
+      "source": "backend/src/investigator/investigatorRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/jobs/:jobId",
+      "source": "backend/src/routes/jobRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/legislative/audit",
+      "source": "backend/src/legislative/legislativeRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/legislative/classifications/:code/:section",
+      "source": "backend/src/legislative/legislativeRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/legislative/coverage",
+      "source": "backend/src/legislative/legislativeRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/legislative/intelligence/:code/:section",
+      "source": "backend/src/legislative/legislativeRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/legislative/liability",
+      "source": "backend/src/legislative/legislativeRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/legislative/metrics",
+      "source": "backend/src/legislative/legislativeRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/legislative/repositories",
+      "source": "backend/src/legislative/legislativeRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/legislative/repository-integrity",
+      "source": "backend/src/legislative/legislativeRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/legislative/statutes/:code/:section",
+      "source": "backend/src/legislative/legislativeRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/membership/accessible-cases",
+      "source": "backend/src/membership/membershipRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/membership/account",
+      "source": "backend/src/membership/membershipRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/membership/onboarding",
+      "source": "backend/src/membership/membershipRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/membership/permission-check",
+      "source": "backend/src/membership/membershipRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/membership/permission-grants",
+      "source": "backend/src/membership/membershipRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/membership/permission-model",
+      "source": "backend/src/membership/membershipRoutes.ts"
+    },
+    {
+      "method": "PATCH",
+      "url": "/api/membership/settings",
+      "source": "backend/src/membership/membershipRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/membership/shared-access",
+      "source": "backend/src/membership/membershipRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/metrics/json",
+      "source": "backend/src/observability/observabilityRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/metrics",
+      "source": "backend/src/observability/observabilityRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/narrative/:caseId/claims",
+      "source": "backend/src/intelligence/intelligenceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/narrative/:caseId/contradictions",
+      "source": "backend/src/intelligence/intelligenceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/narrative/:caseId/impeachment",
+      "source": "backend/src/intelligence/intelligenceRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/narrative/analyze/:caseId",
+      "source": "backend/src/intelligence/intelligenceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/narrative/health",
+      "source": "backend/src/intelligence/intelligenceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/operations/dashboard",
+      "source": "backend/src/policy/pipeline/operationsConsoleRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/operations/deadlines",
+      "source": "backend/src/policy/pipeline/operationsConsoleRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/operations/populate",
+      "source": "backend/src/policy/pipeline/operationsConsoleRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/operations/report",
+      "source": "backend/src/policy/pipeline/operationsConsoleRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/operations/topics/:agencyId/export/csv",
+      "source": "backend/src/policy/pipeline/operationsConsoleRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/operations/topics/:agencyId",
+      "source": "backend/src/policy/pipeline/operationsConsoleRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/operations/topics",
+      "source": "backend/src/policy/pipeline/operationsConsoleRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/organizations/analytics",
+      "source": "backend/src/organizations/organizationRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/organizations/audit-logs",
+      "source": "backend/src/organizations/organizationRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/organizations/current",
+      "source": "backend/src/organizations/organizationRoutes.ts"
+    },
+    {
+      "method": "PATCH",
+      "url": "/api/organizations/current",
+      "source": "backend/src/organizations/organizationRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/organizations/invitations/preview",
+      "source": "backend/src/organizations/organizationRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/organizations/invitations",
+      "source": "backend/src/organizations/organizationRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/organizations/invitations",
+      "source": "backend/src/organizations/organizationRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/organizations/members",
+      "source": "backend/src/organizations/organizationRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/organizations/offices",
+      "source": "backend/src/organizations/organizationRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/organizations/offices",
+      "source": "backend/src/organizations/organizationRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/organizations/onboarding",
+      "source": "backend/src/organizations/organizationRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/organizations/practice-groups",
+      "source": "backend/src/organizations/organizationRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/organizations/practice-groups",
+      "source": "backend/src/organizations/organizationRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/organizations/search",
+      "source": "backend/src/organizations/organizationRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/organizations/tenant-verify",
+      "source": "backend/src/organizations/organizationRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/policy-intelligence/chp/import",
+      "source": "backend/src/policy/pipeline/policyIntelligenceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/policy-intelligence/chp/status",
+      "source": "backend/src/policy/pipeline/policyIntelligenceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/policy-intelligence/classification/accuracy",
+      "source": "backend/src/policy/pipeline/policyIntelligenceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/policy-intelligence/classification/validate",
+      "source": "backend/src/policy/pipeline/policyIntelligenceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/policy-intelligence/coverage/agency/:agencyId",
+      "source": "backend/src/policy/pipeline/policyIntelligenceRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/policy-intelligence/coverage/generate",
+      "source": "backend/src/policy/pipeline/policyIntelligenceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/policy-intelligence/coverage/heatmap",
+      "source": "backend/src/policy/pipeline/policyIntelligenceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/policy-intelligence/coverage/summary",
+      "source": "backend/src/policy/pipeline/policyIntelligenceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/policy-intelligence/cpra/campaign-status",
+      "source": "backend/src/policy/pipeline/policyIntelligenceRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/policy-intelligence/cpra/launch-campaign",
+      "source": "backend/src/policy/pipeline/policyIntelligenceRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/policy-intelligence/cpra/prepare-queue",
+      "source": "backend/src/policy/pipeline/policyIntelligenceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/policy-intelligence/cpra/queue-status",
+      "source": "backend/src/policy/pipeline/policyIntelligenceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/policy-intelligence/dashboard",
+      "source": "backend/src/policy/pipeline/policyIntelligenceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/policy-intelligence/responses/health",
+      "source": "backend/src/policy/pipeline/policyIntelligenceRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/policy-intelligence/responses/process-pending",
+      "source": "backend/src/policy/pipeline/policyIntelligenceRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/policy-intelligence/responses/process",
+      "source": "backend/src/policy/pipeline/policyIntelligenceRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/policy-intelligence/sandbox/crawl",
+      "source": "backend/src/policy/pipeline/policyIntelligenceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/policy-intelligence/sandbox/status",
+      "source": "backend/src/policy/pipeline/policyIntelligenceRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/policy-pipeline/agencies/:agencyId",
+      "source": "backend/src/policy/pipeline/pipelineRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/policy-pipeline/agencies/search",
+      "source": "backend/src/policy/pipeline/pipelineRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/policy-pipeline/agencies",
+      "source": "backend/src/policy/pipeline/pipelineRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/policy-pipeline/intelligence",
+      "source": "backend/src/policy/pipeline/pipelineRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/policy-pipeline/run/enqueue-crawls",
+      "source": "backend/src/policy/pipeline/pipelineRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/policy-pipeline/run/full",
+      "source": "backend/src/policy/pipeline/pipelineRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/policy-pipeline/run/post-crawl",
+      "source": "backend/src/policy/pipeline/pipelineRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/policy-pipeline/run/rank",
+      "source": "backend/src/policy/pipeline/pipelineRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/policy-pipeline/stats",
+      "source": "backend/src/policy/pipeline/pipelineRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/portal/court-dates",
+      "source": "backend/src/communications/hearingRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/security/log",
+      "source": "backend/src/security/authMiddleware.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/security/logs",
+      "source": "backend/src/security/securityLogger.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/security/summary",
+      "source": "backend/src/security/securityLogger.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/system/health",
+      "source": "backend/src/productionOperations/productionOperationsRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/timeline/:caseId/conflicts",
+      "source": "backend/src/timeline/timelineRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/timeline/:caseId/events",
+      "source": "backend/src/timeline/timelineRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/timeline/health",
+      "source": "backend/src/timeline/timelineRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/timeline/process",
+      "source": "backend/src/timeline/timelineRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/timeline/rebuild/:caseId",
+      "source": "backend/src/timeline/timelineRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/video/progress/:jobId",
+      "source": "backend/src/video/videoProgressRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/video/upload",
+      "source": "backend/src/video/videoRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/workbench/health",
+      "source": "backend/src/workbench/workbenchRoutes.ts"
+    }
+  ],
+  "spaRoutes": [
+    {
+      "path": "/",
+      "component": "LandingPage"
+    },
+    {
+      "path": "/for-defense",
+      "component": "ForDefensePage"
+    },
+    {
+      "path": "/for-prosecutors",
+      "component": "ForProsecutorsPage"
+    },
+    {
+      "path": "/government",
+      "component": "GovernmentPage"
+    },
+    {
+      "path": "/contact",
+      "component": "ContactSalesPage"
+    },
+    {
+      "path": "/about",
+      "component": "AboutPage"
+    },
+    {
+      "path": "/features",
+      "component": "FeaturesPage"
+    },
+    {
+      "path": "/faq",
+      "component": "FAQPage"
+    },
+    {
+      "path": "/case-studies",
+      "component": "CaseStudiesPage"
+    },
+    {
+      "path": "/legal-disclaimer",
+      "component": "LegalDisclaimerPage"
+    },
+    {
+      "path": "/privacy",
+      "component": "PrivacyPolicyPage"
+    },
+    {
+      "path": "/terms",
+      "component": "TermsOfServicePage"
+    },
+    {
+      "path": "/how-it-works",
+      "component": "HowItWorksPage"
+    },
+    {
+      "path": "/attorney",
+      "component": "AttorneyPage"
+    },
+    {
+      "path": "/attorneys",
+      "component": "Navigate"
+    },
+    {
+      "path": "/investigator",
+      "component": "InvestigatorPage"
+    },
+    {
+      "path": "/investigators",
+      "component": "Navigate"
+    },
+    {
+      "path": "/defendant",
+      "component": "DefendantPage"
+    },
+    {
+      "path": "/defendants",
+      "component": "Navigate"
+    },
+    {
+      "path": "/families",
+      "component": "FamiliesPage"
+    },
+    {
+      "path": "/experts",
+      "component": "ExpertsAudiencePage"
+    },
+    {
+      "path": "/security",
+      "component": "SecurityPage"
+    },
+    {
+      "path": "/blog",
+      "component": "BlogPage"
+    },
+    {
+      "path": "/knowledge-base",
+      "component": "KnowledgeBasePage"
+    },
+    {
+      "path": "/support",
+      "component": "SupportPage"
+    },
+    {
+      "path": "/accessibility",
+      "component": "AccessibilityPage"
+    },
+    {
+      "path": "/sitemap",
+      "component": "SitemapPage"
+    },
+    {
+      "path": "/press",
+      "component": "PressPage"
+    },
+    {
+      "path": "/careers",
+      "component": "CareersPage"
+    },
+    {
+      "path": "/pricing",
+      "component": "PricingPage"
+    },
+    {
+      "path": "/login",
+      "component": "LoginPage"
+    },
+    {
+      "path": "/register",
+      "component": "RegisterPage"
+    },
+    {
+      "path": "/forgot-password",
+      "component": "ForgotPasswordPage"
+    },
+    {
+      "path": "/reset-password",
+      "component": "ResetPasswordPage"
+    },
+    {
+      "path": "/verify-email",
+      "component": "VerifyEmailPage"
+    },
+    {
+      "path": "/onboarding",
+      "component": "RoleOnboardingPage"
+    },
+    {
+      "path": "/accept-invitation",
+      "component": "AcceptInvitationPage"
+    },
+    {
+      "path": "/organization/onboarding",
+      "component": "OrganizationOnboardingPage"
+    },
+    {
+      "path": "/client-portal",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "(index)",
+      "component": "ClientPortalIndex"
+    },
+    {
+      "path": "dashboard",
+      "component": "ClientPortalDashboardPage"
+    },
+    {
+      "path": "court-dates",
+      "component": "ClientPortalCourtDatesPage"
+    },
+    {
+      "path": "messages",
+      "component": "ClientPortalMessagesPage"
+    },
+    {
+      "path": "documents",
+      "component": "ClientPortalDocumentsPage"
+    },
+    {
+      "path": "evidence",
+      "component": "ClientPortalEvidencePage"
+    },
+    {
+      "path": "timeline",
+      "component": "ClientPortalTimelinePage"
+    },
+    {
+      "path": "tasks",
+      "component": "ClientPortalTasksPage"
+    },
+    {
+      "path": "billing",
+      "component": "ClientPortalBillingPage"
+    },
+    {
+      "path": "notifications",
+      "component": "ClientPortalNotificationsPage"
+    },
+    {
+      "path": "uploads",
+      "component": "ClientPortalUploadsPage"
+    },
+    {
+      "path": "dashboard",
+      "component": "DashboardRouter"
+    },
+    {
+      "path": "dashboard/policy-acquisition/agencies",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "dashboard/policy-intelligence/coverage",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "dashboard/repository-integrity",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "dashboard/cpra",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "dashboard/policy-operations",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "dashboard/policy-topics",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "dashboard/policy-compliance",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "dashboard/case-timeline",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "dashboard/exhibits/viewer",
+      "component": "ExhibitViewer"
+    },
+    {
+      "path": "dashboard/demo-requests",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "dashboard/government-outreach",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "dashboard/marketing",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "dashboard/system-health",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "dashboard/discount-codes",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "dashboard/evidence-management",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "dashboard/evidence-processing",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "dashboard/system/workers",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "dashboard/policy-topic-registry",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "dashboard/beta-verification",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "dashboard/policy-matrix",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "dashboard/cpra-timeline",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "dashboard/cpra-matrix",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "dashboard/cpra-autonomous",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "dashboard/usage",
+      "component": "UsageDashboard"
+    },
+    {
+      "path": "dashboard/evidence-requests",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "cases",
+      "component": "CasesListPage"
+    },
+    {
+      "path": "search",
+      "component": "SearchPage"
+    },
+    {
+      "path": "notifications",
+      "component": "NotificationsPage"
+    },
+    {
+      "path": "settings",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "shared-access",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "firm",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "organization/settings",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "admin",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "admin/operations",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "cases/:caseId",
+      "component": "CaseLayout"
+    },
+    {
+      "path": "(index)",
+      "component": "Navigate"
+    },
+    {
+      "path": "overview",
+      "component": "CaseOverviewPage"
+    },
+    {
+      "path": "charges",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "evidence",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "documents",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "documents/:documentId/redact",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "disclosures",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "experts",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "motions",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "research",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "activity",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "settings",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "investigator-workbench",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "attorney-workbench",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "trial-exhibits",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "litigation-strategy",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "contradictions",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "narrative-analysis",
+      "component": "ProtectedRoute"
+    },
+    {
+      "path": "*",
+      "component": "Navigate"
+    }
+  ],
+  "prismaModels": [
+    "User",
+    "PasswordResetToken",
+    "EmailVerificationToken",
+    "Subscription",
+    "RefreshToken",
+    "SecurityLog",
+    "CorpusIngestionState",
+    "CorpusIngestionLog",
+    "LegalDocument",
+    "CorpusRegistry",
+    "CorpusIngestionLock",
+    "LegislativeExtractionAudit",
+    "Agency",
+    "PolicyTopic",
+    "PolicyDocument",
+    "PolicyCoverage",
+    "CPRARequestCampaign",
+    "CPRAAgencyRequest",
+    "CPRAAnnualUpdate",
+    "AgencyPolicyStatus",
+    "PolicyInventory",
+    "PolicyTopicCoverage",
+    "CpraRequestLog",
+    "TrialExhibitScene",
+    "EvidenceEvent",
+    "PolicyRule",
+    "PolicyActionMapping",
+    "ComplianceFinding",
+    "EvidenceLink",
+    "ComplianceReviewQueue",
+    "CrossAgencyComparison",
+    "PolicyEvolution",
+    "ComplianceAuditTrail",
+    "VisionEvent",
+    "TrajectoryAnalysis",
+    "VisibilitySimulation",
+    "LineOfSightAnalysis",
+    "CameraSyncResult",
+    "SceneGeometry",
+    "EvidenceGraph",
+    "ExpertWitnessPackage",
+    "JuryVisualization",
+    "AgencyPolicyMatrix",
+    "CpraRequest",
+    "AiCreditBalance",
+    "AiCreditUsage",
+    "UsageTracking",
+    "CpraEmailLog",
+    "CpraEmailAttachment",
+    "CpraNotification",
+    "CpraTimelineEvent",
+    "Organization",
+    "OrganizationOffice",
+    "PracticeGroup",
+    "OrganizationMember",
+    "OrganizationInvitation",
+    "OrganizationDepartment",
+    "PersonnelProfile",
+    "ClientTeamAssignment",
+    "OrgInternalMessage",
+    "OrgTask",
+    "KnowledgeAsset",
+    "ConflictRecord",
+    "PermissionGrant",
+    "ApprovalRequest",
+    "Client",
+    "CriminalCase",
+    "CaseHearing",
+    "CaseMessage",
+    "Evidence",
+    "EvidenceChunk",
+    "VerifiedFact",
+    "NarrativeClaim",
+    "NormalizedClaimEvent",
+    "ClaimValidation",
+    "ImpeachmentCandidate",
+    "ProcessingJob",
+    "TimelineEvent",
+    "DiscountCode",
+    "DiscountUsage",
+    "DemoRequest",
+    "EnterpriseLicense",
+    "GovernmentLead",
+    "MarketingEvent",
+    "StripeWebhookEvent",
+    "EvidenceRequest",
+    "EvidenceRequestResponse",
+    "AttorneyNote",
+    "WorkbenchPin",
+    "InvestigationTask",
+    "CaseWitness",
+    "InvestigationLead",
+    "FieldNote",
+    "InvestigationAssignment",
+    "SchemaVersion",
+    "Charge",
+    "UserAccountSettings",
+    "DocumentRedactionVersion",
+    "DisclosurePackage",
+    "DocumentCopy",
+    "PublicationSet",
+    "PublicationSetItem",
+    "PublicationAuditLog"
+  ],
+  "bullmqQueues": []
+}

@@ -16,7 +16,9 @@ class VideoProcessingWorker extends CourtAccessWorker<VideoProcessingJobData> {
   protected async processJob(job: Job<VideoProcessingJobData>, signal: AbortSignal): Promise<void> {
     const { caseId, evidenceId, processingJobId } = job.data;
 
-    const safeCaseId = caseId || 'test-case';
+    if (!caseId) {
+      throw new Error(`Video job ${job.id} carries no caseId; refusing to process untargeted evidence`);
+    }
 
     if (processingJobId) {
       await prisma.processingJob.update({
@@ -44,7 +46,7 @@ class VideoProcessingWorker extends CourtAccessWorker<VideoProcessingJobData> {
 
       // 🔒 ENFORCE CHARGES
       const charges = await prisma.charge.findMany({
-        where: { caseId: safeCaseId },
+        where: { caseId },
       });
 
       if (!charges.length) {
@@ -67,8 +69,11 @@ class VideoProcessingWorker extends CourtAccessWorker<VideoProcessingJobData> {
 
       await prisma.timelineEvent.create({
         data: {
-          caseId: safeCaseId,
-          tenantId: 'dev-tenant',
+          caseId,
+          // The timeline row must land in the tenant that owns the evidence.
+          // A placeholder here writes case data outside its tenant, where the
+          // owning firm cannot see it and other queries may pick it up.
+          tenantId: evidence.tenantId,
           timestamp: new Date(),
           description: 'Video processed',
           sourceType: 'video',

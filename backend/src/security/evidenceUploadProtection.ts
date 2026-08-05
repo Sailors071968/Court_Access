@@ -35,6 +35,8 @@ const ALLOWED_MIME_TYPES: Record<string, string[]> = {
     'video/quicktime', // .mov
     'video/x-msvideo',  // .avi
     'video/webm',
+    'video/x-matroska', // .mkv
+    'video/x-m4v',      // .m4v
   ],
   image: [
     'image/jpeg',
@@ -47,9 +49,17 @@ const ALLOWED_MIME_TYPES: Record<string, string[]> = {
   audio: [
     'audio/mpeg',  // .mp3
     'audio/wav',
+    'audio/x-wav',
     'audio/ogg',
     'audio/webm',
-    'audio/mp4',
+    'audio/mp4',   // .m4a
+    'audio/x-m4a',
+    'audio/aac',   // .aac
+    'audio/flac',  // .flac
+    'audio/x-flac',
+  ],
+  archive: [
+    'application/zip',
   ],
 };
 
@@ -57,12 +67,16 @@ const ALL_ALLOWED_MIME_TYPES = new Set(
   Object.values(ALLOWED_MIME_TYPES).flat(),
 );
 
-// Allowed file extensions
+// Allowed file extensions. This list must cover every format the ingestion
+// pipeline claims to accept, otherwise legitimate discovery is rejected at the
+// door: body-camera exports are commonly .mkv or .m4v, jail-call recordings
+// .m4a or .aac, and producing parties routinely deliver .zip productions.
 const ALLOWED_EXTENSIONS = new Set([
-  '.pdf', '.docx', '.doc', '.txt', '.csv', '.json',
-  '.mp4', '.mov', '.avi', '.webm',
-  '.jpg', '.jpeg', '.png', '.gif', '.webp', '.tiff', '.bmp',
-  '.mp3', '.wav', '.ogg',
+  '.pdf', '.docx', '.doc', '.txt', '.csv', '.json', '.rtf',
+  '.mp4', '.mov', '.avi', '.webm', '.mkv', '.m4v',
+  '.jpg', '.jpeg', '.png', '.gif', '.webp', '.tiff', '.tif', '.bmp',
+  '.mp3', '.wav', '.ogg', '.m4a', '.aac', '.flac',
+  '.zip',
 ]);
 
 // Dangerous file extensions (always reject)

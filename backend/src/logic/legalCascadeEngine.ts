@@ -251,6 +251,13 @@ export function runLegalCascade({
   interactions = [],
   elements = [],
   contradictions = []
+}: {
+  // Typed explicitly because bare `= []` defaults infer never[], which made
+  // every caller a type error.
+  argumentsList?: any[];
+  interactions?: any[];
+  elements?: any[];
+  contradictions?: any[];
 }) {
 
   try {

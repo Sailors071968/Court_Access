@@ -134,7 +134,7 @@ function defaultKeyGenerator(request: FastifyRequest): string {
  * IP, which means a firm behind one office NAT address shares a single bucket.
  */
 function resolveUserId(request: FastifyRequest): string | null {
-  const preset = (request as Record<string, unknown>).user as { userId?: string } | undefined;
+  const preset = (request as unknown as Record<string, unknown>).user as { userId?: string } | undefined;
   if (preset?.userId) return preset.userId;
 
   const header = request.headers.authorization;

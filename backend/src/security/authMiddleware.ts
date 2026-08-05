@@ -78,7 +78,14 @@ export async function generateRefreshToken(
   payload: Omit<JwtPayload, 'iat' | 'exp'>,
   device?: { userAgent?: string; ipAddress?: string; deviceLabel?: string },
 ): Promise<string> {
-  const token = jwt.sign(payload, JWT_REFRESH_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRY });
+  // A JWT's `iat` has one-second resolution, so signing the same payload twice
+  // within a second produces byte-identical tokens. RefreshToken.token is
+  // unique, so a second sign-in in the same second — registering and then
+  // logging straight in, or two devices at once — failed with a 500. The jti
+  // makes each issued token distinct.
+  const token = jwt.sign({ ...payload, jti: crypto.randomUUID() }, JWT_REFRESH_SECRET, {
+    expiresIn: REFRESH_TOKEN_EXPIRY,
+  });
 
   await prisma.refreshToken.create({
     data: {
@@ -579,8 +586,6 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     const userRole = onboarding.platformRole as UserRole;
     const userName = name || email.split('@')[0];
     const tenantId = `tenant-${crypto.randomUUID()}`;
-    const memberOrgRole =
-      userRole === 'defendant' || userRole === 'staff' ? 'staff' : userRole === 'admin' ? 'admin' : userRole;
 
     const now = new Date();
     const trialEnd = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
@@ -661,7 +666,12 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
         data: {
           organizationId: tenantId,
           userId: created.id,
-          role: memberOrgRole,
+          // Registration creates this organisation, so the registering user is
+          // its founder and must hold the organisation-level admin role —
+          // otherwise nobody can complete onboarding, invite colleagues, or
+          // manage offices for a firm that has just signed up. This is scoped
+          // to their own organisation and does not change their platform role.
+          role: 'admin',
           personnelType: onboarding.personnelType,
           status: 'active',
         },

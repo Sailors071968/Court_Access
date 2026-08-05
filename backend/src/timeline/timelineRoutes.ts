@@ -23,8 +23,8 @@ import {
 import { extractContradictions } from "../services/contradictionExtractionService";
 
 import type { FastifyInstance, FastifyReply } from 'fastify';
-import { authMiddleware } from '../middleware/authMiddleware';
 import type { AuthenticatedRequest } from '../security/authMiddleware.js';
+import prisma from '../lib/prisma.js';
 
 import {
   getTimelineEvents,
@@ -35,16 +35,25 @@ import { enqueueTimelineProcessing } from '../workers/pipelineJobService.js';
 import { getQueueHealth } from '../lib/queues.js';
 
 import { runLegalAnalysis } from '../services/legalAnalysisEngine';
+// Was called without being imported, so every request threw a ReferenceError
+// that the surrounding try/catch turned into the "Cascade engine error"
+// fallback — the verdict, jury narrative, cross-examination and impeachment
+// output were never produced by the engine.
+import { runLegalCascade } from '../logic/legalCascadeEngine.js';
 
 // ============================================================================
 // CONTEXT RESOLVER
 // ============================================================================
-function resolveContext(request: AuthenticatedRequest) {
-  const user = request.user || {};
-  return {
-    userId: (user as any)?.userId || 'dev-user',
-    tenantId: (user as any)?.tenantId || 'dev-tenant'
-  };
+/**
+ * Identify the caller. There is no fallback: a placeholder identity would
+ * attribute jobs and timeline rows to a user and tenant that do not exist,
+ * which both breaks credit accounting and writes case data outside the
+ * tenant it belongs to.
+ */
+function resolveContext(request: AuthenticatedRequest): { userId: string; tenantId: string } | null {
+  const user = request.user;
+  if (!user?.userId || !user?.tenantId) return null;
+  return { userId: user.userId, tenantId: user.tenantId };
 }
 
 // ============================================================================
@@ -57,27 +66,54 @@ export async function registerTimelineRoutes(app: FastifyInstance): Promise<void
   // --------------------------------------------------------------------------
   app.get(
     '/api/timeline/:caseId/events',
-    {}, // 🔥 TEMP disable auth
-    async (_request: AuthenticatedRequest, reply: FastifyReply) => {
+    async (request: AuthenticatedRequest, reply: FastifyReply) => {
+      const ctx = resolveContext(request);
+      if (!ctx) return reply.code(401).send({ error: 'Authentication required' });
 
-      console.log("🚀 EVENTS ROUTE HIT (DEBUG)");
+      const { caseId } = request.params as { caseId: string };
 
       try {
-        // --------------------------------------------------
-        // TEST EVENTS
-        // --------------------------------------------------
-        const eventList = [
-          {
-            description: "Defendant entered the house",
-            action: "enter",
-            target: "house"
-          },
-          {
-            description: "Defendant was not present at the house",
-            action: "deny",
-            target: "presence"
-          }
-        ];
+        // The case must belong to the caller's tenant before anything is read.
+        const owningCase = await prisma.criminalCase.findFirst({
+          where: { caseId, tenantId: ctx.tenantId, deletedAt: null },
+          select: { caseId: true },
+        });
+        if (!owningCase) {
+          return reply.code(403).send({ error: 'Forbidden' });
+        }
+
+        // Real events for this case only. Analysis output is only meaningful
+        // if it is derived from the case's own evidence, so an empty timeline
+        // is reported as empty rather than filled with sample data.
+        const stored = await getTimelineEvents(caseId, ctx.tenantId, { limit: 500 });
+        const eventList = (stored.events ?? []).map((e) => ({
+          id: e.id,
+          timestamp: e.timestamp,
+          description: e.description,
+          action: e.action,
+          object: e.object,
+          target: e.target,
+          actor: e.actor,
+          sourceDoc: e.sourceDoc,
+          sourceType: e.sourceType,
+          confidence: e.confidence,
+          conflictFlag: e.conflictFlag,
+        }));
+
+        if (eventList.length === 0) {
+          return {
+            caseId,
+            events: [],
+            total: 0,
+            analysis: null,
+            arguments: [],
+            argumentInteractions: [],
+            explanation: null,
+            message:
+              'No timeline events have been extracted for this case yet. ' +
+              'Upload discovery documents and run a timeline rebuild to populate the chronology.',
+          };
+        }
 
         // --------------------------------------------------
         // CONTRADICTIONS
@@ -90,7 +126,6 @@ export async function registerTimelineRoutes(app: FastifyInstance): Promise<void
         const baseAnalysis = runLegalAnalysis({
           events: eventList,
           contradictions,
-          crimeType: 'burglary'
         });
 
         // --------------------------------------------------
@@ -184,6 +219,8 @@ export async function registerTimelineRoutes(app: FastifyInstance): Promise<void
         // RESPONSE (ENHANCED)
         // --------------------------------------------------
         return {
+          caseId,
+          total: stored.total ?? eventList.length,
           events: eventList,
           analysis,
           arguments: Array.from(argumentState?.values?.() || []),
@@ -212,11 +249,11 @@ export async function registerTimelineRoutes(app: FastifyInstance): Promise<void
   // --------------------------------------------------------------------------
   app.get(
     '/api/timeline/:caseId/conflicts',
-    { preHandler: authMiddleware },
-    async (request: AuthenticatedRequest) => {
-      const { tenantId } = resolveContext(request);
-      const { caseId } = request.params as any;
-      return await getTimelineConflicts(caseId, tenantId);
+    async (request: AuthenticatedRequest, reply: FastifyReply) => {
+      const ctx = resolveContext(request);
+      if (!ctx) return reply.code(401).send({ error: 'Authentication required' });
+      const { caseId } = request.params as { caseId: string };
+      return await getTimelineConflicts(caseId, ctx.tenantId);
     }
   );
 
@@ -225,15 +262,21 @@ export async function registerTimelineRoutes(app: FastifyInstance): Promise<void
   // --------------------------------------------------------------------------
   app.post(
     '/api/timeline/rebuild/:caseId',
-    { preHandler: authMiddleware },
-    async (request: AuthenticatedRequest) => {
-      const { userId, tenantId } = resolveContext(request);
-      const { caseId } = request.params as any;
+    async (request: AuthenticatedRequest, reply: FastifyReply) => {
+      const ctx = resolveContext(request);
+      if (!ctx) return reply.code(401).send({ error: 'Authentication required' });
+      const { caseId } = request.params as { caseId: string };
+
+      const owningCase = await prisma.criminalCase.findFirst({
+        where: { caseId, tenantId: ctx.tenantId, deletedAt: null },
+        select: { caseId: true },
+      });
+      if (!owningCase) return reply.code(403).send({ error: 'Forbidden' });
 
       return await enqueueTimelineProcessing({
-        userId,
-        tenantId,
-        caseId
+        userId: ctx.userId,
+        tenantId: ctx.tenantId,
+        caseId,
       });
     }
   );
@@ -243,15 +286,21 @@ export async function registerTimelineRoutes(app: FastifyInstance): Promise<void
   // --------------------------------------------------------------------------
   app.post(
     '/api/timeline/process',
-    { preHandler: authMiddleware },
     async (request: AuthenticatedRequest, reply: FastifyReply) => {
-
-      const { userId, tenantId } = resolveContext(request);
-      const body = request.body as any;
+      const ctx = resolveContext(request);
+      if (!ctx) return reply.code(401).send({ error: 'Authentication required' });
+      const { userId, tenantId } = ctx;
+      const body = request.body as { caseId?: string } | undefined;
 
       if (!body?.caseId) {
         return reply.code(400).send({ error: 'Missing caseId' });
       }
+
+      const owningCase = await prisma.criminalCase.findFirst({
+        where: { caseId: body.caseId, tenantId, deletedAt: null },
+        select: { caseId: true },
+      });
+      if (!owningCase) return reply.code(403).send({ error: 'Forbidden' });
 
       return await enqueueTimelineProcessing({
         userId,

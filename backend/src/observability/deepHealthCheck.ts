@@ -13,6 +13,7 @@
 // Intended for load balancers, monitoring dashboards, and alerting.
 // ============================================================================
 
+import { getHeapStatistics } from 'node:v8';
 import prisma from '../lib/prisma.js';
 
 // ---------------------------------------------------------------------------
@@ -177,7 +178,14 @@ async function checkMemory(): Promise<ComponentHealth> {
     const heapUsedMB = Math.round(usage.heapUsed / 1024 / 1024);
     const heapTotalMB = Math.round(usage.heapTotal / 1024 / 1024);
     const rssMB = Math.round(usage.rss / 1024 / 1024);
-    const heapPercent = Math.round((usage.heapUsed / usage.heapTotal) * 100);
+
+    // Compare against the heap ceiling rather than heapTotal. heapTotal is
+    // only what V8 has committed and grows on demand, so heapUsed/heapTotal is
+    // routinely above 90% in a healthy process — which made this endpoint
+    // report the service unhealthy at idle and would have had orchestrators
+    // restarting or de-registering perfectly good instances.
+    const heapLimitMB = Math.round(getHeapStatistics().heap_size_limit / 1024 / 1024);
+    const heapPercent = heapLimitMB > 0 ? Math.round((heapUsedMB / heapLimitMB) * 100) : 0;
 
     // Thresholds
     let status: ComponentStatus = 'healthy';
@@ -190,7 +198,7 @@ async function checkMemory(): Promise<ComponentHealth> {
     return {
       status,
       latencyMs: Math.round(performance.now() - start),
-      message: `heap=${heapUsedMB}/${heapTotalMB}MB (${heapPercent}%) rss=${rssMB}MB`,
+      message: `heap=${heapUsedMB}/${heapLimitMB}MB (${heapPercent}% of limit, ${heapTotalMB}MB committed) rss=${rssMB}MB`,
     };
   } catch {
     return {

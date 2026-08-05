@@ -13,6 +13,7 @@ import { generateEngineeringDashboard } from '../legislative/engineeringDashboar
 import { metrics } from '../observability/metricsCollector.js';
 import { evaluateOperationsAlerts } from './alertingService.js';
 import type { ComponentHealth, HealthStatus, OperationsDashboard } from './types.js';
+import type { ProductionGatesReport } from '../productionGates/types.js';
 
 function mapComponent(status: string): HealthStatus {
   if (status === 'healthy' || status === 'PASS' || status === 'OPERATIONAL' || status === 'READY') return 'healthy';
@@ -67,7 +68,27 @@ async function computeOperationsDashboard(): Promise<OperationsDashboard> {
     productionMetrics,
     engineering,
   ] = await Promise.all([
-    runProductionGates(),
+    // The gate suite performs transactional writes as part of the billing
+    // certification, so it can fail on a write conflict. That must degrade the
+    // gates panel rather than fail the whole operations console, which is
+    // exactly what an operator needs during an incident.
+    runProductionGates().catch((err): ProductionGatesReport => {
+      const message = err instanceof Error ? err.message : String(err);
+      console.error('[OperationsDashboard] Production gates could not be evaluated:', message);
+      return {
+        generatedAt: new Date().toISOString(),
+        version: 'unavailable',
+        program: 'PRODUCTION_CERTIFICATION',
+        overallResult: 'NOT_READY',
+        deploymentBlocked: true,
+        passCount: 0,
+        failCount: 0,
+        partialCount: 0,
+        skipCount: 0,
+        gates: [],
+        blockers: ['Production gates could not be evaluated on this request; the rest of the dashboard is unaffected.'],
+      };
+    }),
     runDeepHealthCheck(),
     getRedisMemorySnapshot().catch(() => null),
     getQueueHealth().catch(() => ({} as Record<string, { waiting: number; active: number; completed: number; failed: number }>)),

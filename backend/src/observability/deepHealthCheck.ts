@@ -187,18 +187,28 @@ async function checkMemory(): Promise<ComponentHealth> {
     const heapLimitMB = Math.round(getHeapStatistics().heap_size_limit / 1024 / 1024);
     const heapPercent = heapLimitMB > 0 ? Math.round((heapUsedMB / heapLimitMB) * 100) : 0;
 
-    // Thresholds
+    // Resident size was compared against a fixed 1500MB, which a Node process
+    // holding a 4GB heap crosses under ordinary load — so the endpoint went
+    // 503 during a load test and would take instances out of rotation exactly
+    // when traffic is highest. The budget is now the container's memory limit
+    // where the operator supplies one, and otherwise scales with the heap
+    // ceiling.
+    const rssBudgetMB = parseInt(process.env.HEALTH_RSS_LIMIT_MB || '', 10) || Math.round(heapLimitMB * 1.5);
+    const rssPercent = rssBudgetMB > 0 ? Math.round((rssMB / rssBudgetMB) * 100) : 0;
+
     let status: ComponentStatus = 'healthy';
-    if (heapPercent > 90 || rssMB > 1500) {
+    if (heapPercent > 90 || rssPercent > 90) {
       status = 'unhealthy';
-    } else if (heapPercent > 75 || rssMB > 1000) {
+    } else if (heapPercent > 75 || rssPercent > 75) {
       status = 'degraded';
     }
 
     return {
       status,
       latencyMs: Math.round(performance.now() - start),
-      message: `heap=${heapUsedMB}/${heapLimitMB}MB (${heapPercent}% of limit, ${heapTotalMB}MB committed) rss=${rssMB}MB`,
+      message:
+        `heap=${heapUsedMB}/${heapLimitMB}MB (${heapPercent}% of limit, ${heapTotalMB}MB committed) ` +
+        `rss=${rssMB}/${rssBudgetMB}MB (${rssPercent}% of budget)`,
     };
   } catch {
     return {

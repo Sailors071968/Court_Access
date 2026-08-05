@@ -1,0 +1,367 @@
+{
+  "report": "STRESS_CERTIFICATION",
+  "phase": "Phase 6/11 — Stress and Performance",
+  "generatedAt": "2026-08-05T21:13:45.830Z",
+  "apiBase": "http://127.0.0.1:3001",
+  "summary": {
+    "total": 14,
+    "PASS": 14,
+    "FAIL": 0,
+    "WARNING": 0,
+    "UNKNOWN": 0,
+    "passRate": 100
+  },
+  "measurements": {
+    "caseVolume": [
+      {
+        "cases": 1,
+        "listStats": {
+          "count": 5,
+          "minMs": 4,
+          "p50Ms": 5,
+          "p95Ms": 15,
+          "p99Ms": 15,
+          "maxMs": 15,
+          "meanMs": 7
+        },
+        "apiCreateStats": {
+          "count": 1,
+          "minMs": 49,
+          "p50Ms": 49,
+          "p95Ms": 49,
+          "p99Ms": 49,
+          "maxMs": 49,
+          "meanMs": 49
+        }
+      },
+      {
+        "cases": 10,
+        "listStats": {
+          "count": 5,
+          "minMs": 4,
+          "p50Ms": 4,
+          "p95Ms": 6,
+          "p99Ms": 6,
+          "maxMs": 6,
+          "meanMs": 5
+        },
+        "apiCreateStats": null
+      },
+      {
+        "cases": 100,
+        "listStats": {
+          "count": 5,
+          "minMs": 5,
+          "p50Ms": 6,
+          "p95Ms": 6,
+          "p99Ms": 6,
+          "maxMs": 6,
+          "meanMs": 6
+        },
+        "apiCreateStats": null
+      },
+      {
+        "cases": 500,
+        "listStats": {
+          "count": 5,
+          "minMs": 14,
+          "p50Ms": 15,
+          "p95Ms": 20,
+          "p99Ms": 20,
+          "maxMs": 20,
+          "meanMs": 16
+        },
+        "apiCreateStats": null
+      },
+      {
+        "cases": 5000,
+        "listStats": {
+          "count": 5,
+          "minMs": 94,
+          "p50Ms": 109,
+          "p95Ms": 117,
+          "p99Ms": 117,
+          "maxMs": 117,
+          "meanMs": 107
+        },
+        "apiCreateStats": null
+      }
+    ],
+    "concurrency": {
+      "users": 25,
+      "requestsPerUser": 20,
+      "totalRequests": 500,
+      "wallClockMs": 763,
+      "throughputPerSecond": 655,
+      "errors": 0,
+      "latency": {
+        "count": 500,
+        "minMs": 4,
+        "p50Ms": 37,
+        "p95Ms": 48,
+        "p99Ms": 64,
+        "maxMs": 76,
+        "meanMs": 37
+      }
+    },
+    "simultaneousUploads": {
+      "attempted": 20,
+      "accepted": 20,
+      "wallClockMs": 113,
+      "latency": {
+        "count": 20,
+        "minMs": 101,
+        "p50Ms": 106,
+        "p95Ms": 111,
+        "p99Ms": 111,
+        "maxMs": 111,
+        "meanMs": 107
+      },
+      "statusCounts": {
+        "201": 20
+      }
+    },
+    "ingestionDrainMs": 1004,
+    "largeDocument": {
+      "fileName": "large-2000-page.pdf",
+      "pages": 2000,
+      "bytes": 2910048,
+      "uploadMs": 13,
+      "processingMs": 2006,
+      "chunks": 335,
+      "finalStatus": "analyzed"
+    },
+    "sustainedLoad": {
+      "durationSeconds": 20,
+      "parallelClients": 12,
+      "requests": 20237,
+      "errors": 0,
+      "throughputPerSecond": 1012,
+      "latency": {
+        "count": 20237,
+        "minMs": 3,
+        "p50Ms": 11,
+        "p95Ms": 16,
+        "p99Ms": 19,
+        "maxMs": 38,
+        "meanMs": 12
+      }
+    },
+    "deepHealth": {
+      "status": "healthy",
+      "timestamp": "2026-08-05T21:13:45.829Z",
+      "uptimeSeconds": 71,
+      "version": "1.1.0",
+      "environment": "development",
+      "components": {
+        "postgres": {
+          "status": "healthy",
+          "latencyMs": 1
+        },
+        "redis": {
+          "status": "healthy",
+          "latencyMs": 1
+        },
+        "neo4j": {
+          "status": "unknown",
+          "latencyMs": 0,
+          "message": "NEO4J_URI not configured"
+        },
+        "memory": {
+          "status": "healthy",
+          "latencyMs": 0,
+          "message": "heap=301/4144MB (7% of limit, 426MB committed) rss=962MB"
+        }
+      }
+    }
+  },
+  "checks": [
+    {
+      "id": "STRESS-CASES-1",
+      "name": "Case list responds with 1 cases in the tenant",
+      "status": "PASS",
+      "detail": "p50 5ms, p95 15ms, max 15ms",
+      "evidence": {
+        "count": 5,
+        "minMs": 4,
+        "p50Ms": 5,
+        "p95Ms": 15,
+        "p99Ms": 15,
+        "maxMs": 15,
+        "meanMs": 7
+      }
+    },
+    {
+      "id": "STRESS-CASES-10",
+      "name": "Case list responds with 10 cases in the tenant",
+      "status": "PASS",
+      "detail": "p50 4ms, p95 6ms, max 6ms",
+      "evidence": {
+        "count": 5,
+        "minMs": 4,
+        "p50Ms": 4,
+        "p95Ms": 6,
+        "p99Ms": 6,
+        "maxMs": 6,
+        "meanMs": 5
+      }
+    },
+    {
+      "id": "STRESS-CASES-100",
+      "name": "Case list responds with 100 cases in the tenant",
+      "status": "PASS",
+      "detail": "p50 6ms, p95 6ms, max 6ms",
+      "evidence": {
+        "count": 5,
+        "minMs": 5,
+        "p50Ms": 6,
+        "p95Ms": 6,
+        "p99Ms": 6,
+        "maxMs": 6,
+        "meanMs": 6
+      }
+    },
+    {
+      "id": "STRESS-CASES-500",
+      "name": "Case list responds with 500 cases in the tenant",
+      "status": "PASS",
+      "detail": "p50 15ms, p95 20ms, max 20ms",
+      "evidence": {
+        "count": 5,
+        "minMs": 14,
+        "p50Ms": 15,
+        "p95Ms": 20,
+        "p99Ms": 20,
+        "maxMs": 20,
+        "meanMs": 16
+      }
+    },
+    {
+      "id": "STRESS-CASES-5000",
+      "name": "Case list responds with 5000 cases in the tenant",
+      "status": "PASS",
+      "detail": "p50 109ms, p95 117ms, max 117ms",
+      "evidence": {
+        "count": 5,
+        "minMs": 94,
+        "p50Ms": 109,
+        "p95Ms": 117,
+        "p99Ms": 117,
+        "maxMs": 117,
+        "meanMs": 107
+      }
+    },
+    {
+      "id": "STRESS-CASES-LATENCY",
+      "name": "Case list stays under 5s at 5,000 cases",
+      "status": "PASS",
+      "detail": "p95 117ms"
+    },
+    {
+      "id": "STRESS-USERS-REG",
+      "name": "25 accounts registered for the concurrency test",
+      "status": "PASS",
+      "detail": "25/25 succeeded"
+    },
+    {
+      "id": "STRESS-CONCURRENCY",
+      "name": "25 concurrent users complete 500 requests without error",
+      "status": "PASS",
+      "detail": "655 req/s, p95 48ms",
+      "evidence": {
+        "users": 25,
+        "requestsPerUser": 20,
+        "totalRequests": 500,
+        "wallClockMs": 763,
+        "throughputPerSecond": 655,
+        "errors": 0,
+        "latency": {
+          "count": 500,
+          "minMs": 4,
+          "p50Ms": 37,
+          "p95Ms": 48,
+          "p99Ms": 64,
+          "maxMs": 76,
+          "meanMs": 37
+        }
+      }
+    },
+    {
+      "id": "STRESS-UPLOAD-CONCURRENT",
+      "name": "20 simultaneous uploads all accepted",
+      "status": "PASS",
+      "detail": "p95 111ms",
+      "evidence": {
+        "attempted": 20,
+        "accepted": 20,
+        "wallClockMs": 113,
+        "latency": {
+          "count": 20,
+          "minMs": 101,
+          "p50Ms": 106,
+          "p95Ms": 111,
+          "p99Ms": 111,
+          "maxMs": 111,
+          "meanMs": 107
+        },
+        "statusCounts": {
+          "201": 20
+        }
+      }
+    },
+    {
+      "id": "STRESS-UPLOAD-DRAIN",
+      "name": "Ingestion backlog of 20 documents cleared",
+      "status": "PASS",
+      "detail": "1004ms (50ms per document)"
+    },
+    {
+      "id": "STRESS-LARGE-PDF",
+      "name": "A 2,000-page PDF uploads and is fully indexed",
+      "status": "PASS",
+      "detail": "upload 13ms, extraction 2006ms, 335 chunks",
+      "evidence": {
+        "fileName": "large-2000-page.pdf",
+        "pages": 2000,
+        "bytes": 2910048,
+        "uploadMs": 13,
+        "processingMs": 2006,
+        "chunks": 335,
+        "finalStatus": "analyzed"
+      }
+    },
+    {
+      "id": "STRESS-API-LOAD",
+      "name": "Sustained load of 12 clients for 20s completes without error",
+      "status": "PASS",
+      "detail": "1012 req/s, p95 16ms",
+      "evidence": {
+        "durationSeconds": 20,
+        "parallelClients": 12,
+        "requests": 20237,
+        "errors": 0,
+        "throughputPerSecond": 1012,
+        "latency": {
+          "count": 20237,
+          "minMs": 3,
+          "p50Ms": 11,
+          "p95Ms": 16,
+          "p99Ms": 19,
+          "maxMs": 38,
+          "meanMs": 12
+        }
+      }
+    },
+    {
+      "id": "STRESS-SURVIVAL",
+      "name": "The API is still healthy after the full stress run",
+      "status": "PASS"
+    },
+    {
+      "id": "STRESS-HEALTH-DEEP",
+      "name": "Deep health check passes after load",
+      "status": "PASS",
+      "detail": "{\"status\":\"healthy\",\"timestamp\":\"2026-08-05T21:13:45.829Z\",\"uptimeSeconds\":71,\"version\":\"1.1.0\",\"environment\":\"development\",\"components\":{\"postgres\":{\"status\":\""
+    }
+  ]
+}

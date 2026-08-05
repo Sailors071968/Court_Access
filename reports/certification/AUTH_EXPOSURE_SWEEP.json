@@ -1,0 +1,108 @@
+{
+  "report": "AUTH_EXPOSURE_SWEEP",
+  "phase": "Phase 7 — Security Testing",
+  "generatedAt": "2026-08-05T20:16:36.451Z",
+  "apiBase": "http://127.0.0.1:3001",
+  "summary": {
+    "total": 4,
+    "PASS": 0,
+    "FAIL": 3,
+    "WARNING": 1,
+    "UNKNOWN": 0,
+    "passRate": 0
+  },
+  "routesProbed": 350,
+  "routesInInventory": 364,
+  "exposedRoutes": [
+    {
+      "method": "GET",
+      "url": "/api/auth/debug-check",
+      "declaredUrl": "/api/auth/debug-check",
+      "status": 200,
+      "source": "backend/src/security/authMiddleware.ts",
+      "bodyPreview": "{\"authVersion\":\"PR74-bcrypt\",\"bcryptLoaded\":true,\"hashMethod\":\"bcrypt\",\"timestamp\":\"2026-08-05T20:16:36.226Z\"}"
+    },
+    {
+      "method": "POST",
+      "url": "/api/auth/mfa/challenge",
+      "declaredUrl": "/api/auth/mfa/challenge",
+      "status": 400,
+      "source": "backend/src/security/identityRoutes.ts",
+      "bodyPreview": "{\"error\":\"MFA session token and code are required\"}"
+    },
+    {
+      "method": "GET",
+      "url": "/api/organizations/invitations/preview",
+      "declaredUrl": "/api/organizations/invitations/preview",
+      "status": 400,
+      "source": "backend/src/organizations/organizationRoutes.ts",
+      "bodyPreview": "{\"error\":\"Token is required\"}"
+    }
+  ],
+  "serverErrors": [
+    {
+      "method": "POST",
+      "url": "/api/auth/accept-invitation",
+      "status": 500,
+      "body": "{\"statusCode\":500,\"error\":\"Internal Server Error\",\"message\":\"Cannot read properties of undefined (reading 'token')\"}",
+      "source": "backend/src/organizations/organizationRoutes.ts"
+    }
+  ],
+  "checks": [
+    {
+      "id": "SEC-EXPOSURE-01",
+      "name": "Unauthenticated access permitted: GET /api/auth/debug-check",
+      "status": "FAIL",
+      "detail": "HTTP 200 from backend/src/security/authMiddleware.ts",
+      "evidence": {
+        "method": "GET",
+        "url": "/api/auth/debug-check",
+        "declaredUrl": "/api/auth/debug-check",
+        "status": 200,
+        "source": "backend/src/security/authMiddleware.ts",
+        "bodyPreview": "{\"authVersion\":\"PR74-bcrypt\",\"bcryptLoaded\":true,\"hashMethod\":\"bcrypt\",\"timestamp\":\"2026-08-05T20:16:36.226Z\"}"
+      }
+    },
+    {
+      "id": "SEC-EXPOSURE-01",
+      "name": "Unauthenticated access permitted: POST /api/auth/mfa/challenge",
+      "status": "FAIL",
+      "detail": "HTTP 400 from backend/src/security/identityRoutes.ts",
+      "evidence": {
+        "method": "POST",
+        "url": "/api/auth/mfa/challenge",
+        "declaredUrl": "/api/auth/mfa/challenge",
+        "status": 400,
+        "source": "backend/src/security/identityRoutes.ts",
+        "bodyPreview": "{\"error\":\"MFA session token and code are required\"}"
+      }
+    },
+    {
+      "id": "SEC-EXPOSURE-01",
+      "name": "Unauthenticated access permitted: GET /api/organizations/invitations/preview",
+      "status": "FAIL",
+      "detail": "HTTP 400 from backend/src/organizations/organizationRoutes.ts",
+      "evidence": {
+        "method": "GET",
+        "url": "/api/organizations/invitations/preview",
+        "declaredUrl": "/api/organizations/invitations/preview",
+        "status": 400,
+        "source": "backend/src/organizations/organizationRoutes.ts",
+        "bodyPreview": "{\"error\":\"Token is required\"}"
+      }
+    },
+    {
+      "id": "SEC-EXPOSURE-02",
+      "name": "Unauthenticated probe produced a server error: POST /api/auth/accept-invitation",
+      "status": "WARNING",
+      "detail": "HTTP 500",
+      "evidence": {
+        "method": "POST",
+        "url": "/api/auth/accept-invitation",
+        "status": 500,
+        "body": "{\"statusCode\":500,\"error\":\"Internal Server Error\",\"message\":\"Cannot read properties of undefined (reading 'token')\"}",
+        "source": "backend/src/organizations/organizationRoutes.ts"
+      }
+    }
+  ]
+}

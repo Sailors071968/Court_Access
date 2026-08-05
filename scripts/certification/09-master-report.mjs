@@ -328,6 +328,29 @@ ${
     : report.warnings.map((c) => `- **${c.id}** (${c.suite}) — ${c.name}${c.detail ? `: ${c.detail}` : ''}`).join('\n')
 }
 
+## Known functional gaps
+
+These are features the product presents but does not implement. They were
+found by driving the interface, and each is now reported to the user instead
+of being hidden behind an ordinary empty state.
+
+- **Speech transcription** — no speech-to-text exists. Audio and video are
+  stored and listed against the case, but nothing spoken in them is
+  searchable. \`speechAnalysisService.ts\` describes Whisper in a comment and
+  never calls any recogniser. This is the one remaining failing check.
+- **Trial exhibits** — the workspace renders, but \`/api/cases/:caseId/trial-exhibits\`
+  is not implemented, so there is no exhibit data to show.
+- **Litigation strategy** — the dashboard renders, but
+  \`/api/cases/:caseId/litigation-strategy\` is not implemented.
+- **ZIP discovery productions** — accepted and their contents listed, but not
+  expanded. The uploader is told to extract and upload the documents
+  individually.
+- **Timeline extraction scope** — the extractor recognises a fixed list of
+  use-of-force events (taser, restraint, Miranda, pursuit, commands and
+  similar). A general narrative document with timestamps yields few or no
+  events. This is a capability boundary, not a fault: a use-of-force
+  supplement produced twelve correctly timed events in testing.
+
 ## What this run could not measure
 
 - **Knowledge graph** — Neo4j is not configured in this environment, so graph

@@ -1,12 +1,12 @@
 {
-  "generatedAt": "2026-08-05T20:04:35.599Z",
+  "generatedAt": "2026-08-05T22:10:50.267Z",
   "method": "Static extraction from backend/src route registrations and src/App.tsx <Route> elements",
   "totals": {
-    "apiRoutes": 364,
+    "apiRoutes": 363,
     "spaRoutes": 105,
     "prismaModels": 103,
     "bullmqQueues": 0,
-    "features": 39
+    "features": 40
   },
   "features": [
     {
@@ -70,12 +70,27 @@
     {
       "feature": "Attorney Workbench",
       "apiRoutes": [
+        "GET /api/cases/:caseId/workbench/command-center",
+        "GET /api/cases/:caseId/workbench/export/:packageType",
+        "DELETE /api/cases/:caseId/workbench/notes/:noteId",
+        "PATCH /api/cases/:caseId/workbench/notes/:noteId",
+        "GET /api/cases/:caseId/workbench/notes",
+        "POST /api/cases/:caseId/workbench/notes",
+        "DELETE /api/cases/:caseId/workbench/pins/:pinId",
+        "GET /api/cases/:caseId/workbench/pins",
+        "POST /api/cases/:caseId/workbench/pins",
+        "DELETE /api/cases/:caseId/workbench/tasks/:taskId",
+        "PATCH /api/cases/:caseId/workbench/tasks/:taskId",
+        "GET /api/cases/:caseId/workbench/tasks",
+        "POST /api/cases/:caseId/workbench/tasks",
+        "GET /api/cases/:caseId/workbench/trial-prep",
+        "GET /api/cases/:caseId/workbench",
         "GET /api/workbench/health"
       ],
       "spaRoutes": [
         "attorney-workbench -> ProtectedRoute"
       ],
-      "apiRouteCount": 1,
+      "apiRouteCount": 16,
       "spaRouteCount": 1
     },
     {
@@ -137,48 +152,12 @@
     {
       "feature": "Case Management",
       "apiRoutes": [
-        "POST /api/cases/:caseId/disclosures/:packageId/publish",
-        "GET /api/cases/:caseId/disclosures",
-        "POST /api/cases/:caseId/disclosures",
-        "POST /api/cases/:caseId/documents/:documentId/copies/original",
-        "GET /api/cases/:caseId/documents/:documentId/copies",
-        "POST /api/cases/:caseId/documents/:documentId/redactions/:redactionId/publish",
-        "GET /api/cases/:caseId/documents/:documentId/redactions",
-        "POST /api/cases/:caseId/documents/:documentId/redactions",
-        "POST /api/cases/:caseId/evidence-requests/detect",
-        "GET /api/cases/:caseId/evidence-requests",
-        "GET /api/cases/:caseId/evidence",
-        "GET /api/cases/:caseId/hearings",
-        "POST /api/cases/:caseId/hearings",
         "POST /api/cases/:caseId/intelligence/analyze",
         "GET /api/cases/:caseId/intelligence/report",
         "GET /api/cases/:caseId/intelligence",
-        "GET /api/cases/:caseId/investigator-workbench",
-        "POST /api/cases/:caseId/investigator/assignments",
-        "POST /api/cases/:caseId/investigator/field-notes",
-        "POST /api/cases/:caseId/investigator/leads",
-        "POST /api/cases/:caseId/investigator/witnesses",
-        "PATCH /api/cases/:caseId/messages/:messageId/read",
-        "GET /api/cases/:caseId/messages",
-        "POST /api/cases/:caseId/messages",
         "POST /api/cases/:caseId/publication-sets/:setId/publish",
         "GET /api/cases/:caseId/publication-sets",
         "POST /api/cases/:caseId/publication-sets",
-        "GET /api/cases/:caseId/workbench/command-center",
-        "GET /api/cases/:caseId/workbench/export/:packageType",
-        "DELETE /api/cases/:caseId/workbench/notes/:noteId",
-        "PATCH /api/cases/:caseId/workbench/notes/:noteId",
-        "GET /api/cases/:caseId/workbench/notes",
-        "POST /api/cases/:caseId/workbench/notes",
-        "DELETE /api/cases/:caseId/workbench/pins/:pinId",
-        "GET /api/cases/:caseId/workbench/pins",
-        "POST /api/cases/:caseId/workbench/pins",
-        "DELETE /api/cases/:caseId/workbench/tasks/:taskId",
-        "PATCH /api/cases/:caseId/workbench/tasks/:taskId",
-        "GET /api/cases/:caseId/workbench/tasks",
-        "POST /api/cases/:caseId/workbench/tasks",
-        "GET /api/cases/:caseId/workbench/trial-prep",
-        "GET /api/cases/:caseId/workbench",
         "DELETE /api/cases/:caseId",
         "GET /api/cases/:caseId",
         "PATCH /api/cases/:caseId",
@@ -186,7 +165,7 @@
         "POST /api/cases"
       ],
       "spaRoutes": [],
-      "apiRouteCount": 47,
+      "apiRouteCount": 11,
       "spaRouteCount": 0
     },
     {
@@ -205,6 +184,11 @@
     {
       "feature": "Client Domain",
       "apiRoutes": [
+        "GET /api/cases/:caseId/hearings",
+        "POST /api/cases/:caseId/hearings",
+        "PATCH /api/cases/:caseId/messages/:messageId/read",
+        "GET /api/cases/:caseId/messages",
+        "POST /api/cases/:caseId/messages",
         "DELETE /api/clients/:clientId",
         "GET /api/clients/:clientId",
         "PATCH /api/clients/:clientId",
@@ -214,7 +198,7 @@
       "spaRoutes": [
         "/client-portal -> ProtectedRoute"
       ],
-      "apiRouteCount": 5,
+      "apiRouteCount": 10,
       "spaRouteCount": 1
     },
     {
@@ -342,17 +326,36 @@
       "spaRouteCount": 0
     },
     {
+      "feature": "Documents & Disclosure",
+      "apiRoutes": [
+        "POST /api/cases/:caseId/disclosures/:packageId/publish",
+        "GET /api/cases/:caseId/disclosures",
+        "POST /api/cases/:caseId/disclosures",
+        "POST /api/cases/:caseId/documents/:documentId/copies/original",
+        "GET /api/cases/:caseId/documents/:documentId/copies",
+        "POST /api/cases/:caseId/documents/:documentId/redactions/:redactionId/publish",
+        "GET /api/cases/:caseId/documents/:documentId/redactions",
+        "POST /api/cases/:caseId/documents/:documentId/redactions"
+      ],
+      "spaRoutes": [],
+      "apiRouteCount": 8,
+      "spaRouteCount": 0
+    },
+    {
       "feature": "Evidence Gap Detection",
       "apiRoutes": [
+        "POST /api/cases/:caseId/evidence-requests/detect",
+        "GET /api/cases/:caseId/evidence-requests",
         "POST /api/evidence-requests/:id/respond"
       ],
       "spaRoutes": [],
-      "apiRouteCount": 1,
+      "apiRouteCount": 3,
       "spaRouteCount": 0
     },
     {
       "feature": "Evidence Repository",
       "apiRoutes": [
+        "GET /api/cases/:caseId/evidence",
         "DELETE /api/evidence/:evidenceId",
         "GET /api/evidence/:evidenceId",
         "POST /api/evidence/upload-url",
@@ -366,7 +369,7 @@
         "dashboard/evidence-requests -> ProtectedRoute",
         "evidence -> ProtectedRoute"
       ],
-      "apiRouteCount": 5,
+      "apiRouteCount": 6,
       "spaRouteCount": 5
     },
     {
@@ -445,12 +448,17 @@
     {
       "feature": "Investigator Workbench",
       "apiRoutes": [
+        "GET /api/cases/:caseId/investigator-workbench",
+        "POST /api/cases/:caseId/investigator/assignments",
+        "POST /api/cases/:caseId/investigator/field-notes",
+        "POST /api/cases/:caseId/investigator/leads",
+        "POST /api/cases/:caseId/investigator/witnesses",
         "GET /api/investigator/health"
       ],
       "spaRoutes": [
         "investigator-workbench -> ProtectedRoute"
       ],
-      "apiRouteCount": 1,
+      "apiRouteCount": 6,
       "spaRouteCount": 1
     },
     {
@@ -785,7 +793,6 @@
       "feature": "Unclassified",
       "apiRoutes": [
         "POST /api/auth/accept-invitation",
-        "GET /api/auth/debug-check",
         "POST /api/auth/resend-verification",
         "DELETE /api/auth/sessions/:sessionId",
         "GET /api/auth/sessions",
@@ -802,7 +809,7 @@
         "POST /api/video/upload"
       ],
       "spaRoutes": [],
-      "apiRouteCount": 16,
+      "apiRouteCount": 15,
       "spaRouteCount": 0
     }
   ],
@@ -1106,11 +1113,6 @@
       "method": "GET",
       "url": "/api/auth/csrf-token",
       "source": "backend/src/server.ts"
-    },
-    {
-      "method": "GET",
-      "url": "/api/auth/debug-check",
-      "source": "backend/src/security/authMiddleware.ts"
     },
     {
       "method": "POST",

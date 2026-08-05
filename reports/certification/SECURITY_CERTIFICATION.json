@@ -1,7 +1,7 @@
 {
   "report": "SECURITY_CERTIFICATION",
   "phase": "Phase 7 — Security Testing",
-  "generatedAt": "2026-08-05T20:49:16.562Z",
+  "generatedAt": "2026-08-05T22:11:56.244Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 34,
@@ -11,14 +11,48 @@
     "UNKNOWN": 0,
     "passRate": 100
   },
+  "exercisedApiRoutes": [
+    "DELETE /api/cases/:id",
+    "DELETE /api/evidence/:id",
+    "GET /api/admin/cases",
+    "GET /api/admin/stats",
+    "GET /api/admin/users",
+    "GET /api/auth/me",
+    "GET /api/cases",
+    "GET /api/cases/'%20OR%20'1'%3D'1",
+    "GET /api/cases/:id",
+    "GET /api/cases/:id/evidence",
+    "GET /api/cases/:id/evidence-requests",
+    "GET /api/charges/:id",
+    "GET /api/contradiction/graph/:id",
+    "GET /api/evidence/:id",
+    "GET /api/health",
+    "GET /api/security/logs",
+    "GET /api/security/summary",
+    "GET /api/timeline/:id",
+    "GET /api/workbench/cases/:id/notes",
+    "PATCH /api/cases/:id",
+    "POST /api/auth/accept-invitation",
+    "POST /api/auth/login",
+    "POST /api/auth/register",
+    "POST /api/cases",
+    "POST /api/evidence/upload"
+  ],
+  "exercisedSpaRoutes": [],
+  "rateLimitConfiguration": {
+    "login": "product default (RATE_LIMIT_LOGIN_PER_MINUTE unset)",
+    "general": "product default (RATE_LIMIT_GENERAL_PER_MINUTE unset)",
+    "register": "raised to 500/min for test throughput",
+    "upload": "raised to 500/min for test throughput"
+  },
   "tenants": {
     "firmA": {
-      "tenantId": "tenant-0e344b9a-9d10-40e2-8b05-f9a537548e4c",
-      "caseId": "2eb07d35-560a-412b-b489-10325868e892"
+      "tenantId": "tenant-7cbe00bd-eac8-4c99-9862-1e45a05c4431",
+      "caseId": "93b90bf2-e74f-4fa3-bd7e-2313a78e2b91"
     },
     "firmB": {
-      "tenantId": "tenant-e32cdd10-7728-4518-92a6-6d4f3cccf0a7",
-      "caseId": "e4f34a04-854f-4edd-b8be-b9cd9d160fa6"
+      "tenantId": "tenant-6545508c-2363-4906-b618-af9e60403717",
+      "caseId": "d7490a70-e741-4041-aa5a-aa52cb7832c7"
     }
   },
   "checks": [
@@ -116,7 +150,7 @@
       "id": "SEC-TOKEN-IDENTITY",
       "name": "Session reports the caller's own tenant",
       "status": "PASS",
-      "detail": "tenant-0e344b9a-9d10-40e2-8b05-f9a537548e4c"
+      "detail": "tenant-7cbe00bd-eac8-4c99-9862-1e45a05c4431"
     },
     {
       "id": "SEC-RBAC-/api/admin/stats",
@@ -155,7 +189,7 @@
       "detail": "HTTP 403"
     },
     {
-      "id": "SEC-RBAC-DEFENDANT-/api/cases/2eb07d35-560a-412b-b489-10325868e892",
+      "id": "SEC-RBAC-DEFENDANT-/api/cases/93b90bf2-e74f-4fa3-bd7e-2313a78e2b91",
       "name": "A defendant cannot read an unrelated case",
       "status": "PASS",
       "detail": "HTTP 403"
@@ -193,7 +227,7 @@
       "id": "SEC-TRAVERSAL-01",
       "name": "Traversal sequences in filenames are neutralised",
       "status": "PASS",
-      "detail": "stored as evidence/tenant-0e344b9a-9d10-40e2-8b05-f9a537548e4c/2eb07d35-560a-412b-b489-10325868e892/b292875e-6d9b-4e13-90d4-d8eedeafee58/escaped.txt"
+      "detail": "stored as evidence/tenant-7cbe00bd-eac8-4c99-9862-1e45a05c4431/93b90bf2-e74f-4fa3-bd7e-2313a78e2b91/7ccb1d54-3fd3-47f4-b65f-9acb81cfea7d/escaped.txt"
     },
     {
       "id": "SEC-HEADER-X-Content-Type-Options",

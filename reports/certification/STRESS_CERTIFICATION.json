@@ -1,7 +1,7 @@
 {
   "report": "STRESS_CERTIFICATION",
   "phase": "Phase 6/11 — Stress and Performance",
-  "generatedAt": "2026-08-05T21:13:45.830Z",
+  "generatedAt": "2026-08-05T22:12:28.936Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 14,
@@ -11,6 +11,17 @@
     "UNKNOWN": 0,
     "passRate": 100
   },
+  "exercisedApiRoutes": [
+    "GET /api/auth/me",
+    "GET /api/cases",
+    "GET /api/cases/:id",
+    "GET /api/health",
+    "GET /api/health/deep",
+    "POST /api/auth/register",
+    "POST /api/cases",
+    "POST /api/evidence/upload"
+  ],
+  "exercisedSpaRoutes": [],
   "measurements": {
     "caseVolume": [
       {
@@ -18,20 +29,20 @@
         "listStats": {
           "count": 5,
           "minMs": 4,
-          "p50Ms": 5,
-          "p95Ms": 15,
-          "p99Ms": 15,
-          "maxMs": 15,
-          "meanMs": 7
+          "p50Ms": 4,
+          "p95Ms": 13,
+          "p99Ms": 13,
+          "maxMs": 13,
+          "meanMs": 6
         },
         "apiCreateStats": {
           "count": 1,
-          "minMs": 49,
-          "p50Ms": 49,
-          "p95Ms": 49,
-          "p99Ms": 49,
-          "maxMs": 49,
-          "meanMs": 49
+          "minMs": 47,
+          "p50Ms": 47,
+          "p95Ms": 47,
+          "p99Ms": 47,
+          "maxMs": 47,
+          "meanMs": 47
         }
       },
       {
@@ -40,10 +51,10 @@
           "count": 5,
           "minMs": 4,
           "p50Ms": 4,
-          "p95Ms": 6,
-          "p99Ms": 6,
-          "maxMs": 6,
-          "meanMs": 5
+          "p95Ms": 5,
+          "p99Ms": 5,
+          "maxMs": 5,
+          "meanMs": 4
         },
         "apiCreateStats": null
       },
@@ -66,10 +77,10 @@
           "count": 5,
           "minMs": 14,
           "p50Ms": 15,
-          "p95Ms": 20,
-          "p99Ms": 20,
-          "maxMs": 20,
-          "meanMs": 16
+          "p95Ms": 15,
+          "p99Ms": 15,
+          "maxMs": 15,
+          "meanMs": 15
         },
         "apiCreateStats": null
       },
@@ -77,12 +88,12 @@
         "cases": 5000,
         "listStats": {
           "count": 5,
-          "minMs": 94,
-          "p50Ms": 109,
-          "p95Ms": 117,
-          "p99Ms": 117,
-          "maxMs": 117,
-          "meanMs": 107
+          "minMs": 109,
+          "p50Ms": 113,
+          "p95Ms": 125,
+          "p99Ms": 125,
+          "maxMs": 125,
+          "meanMs": 116
         },
         "apiCreateStats": null
       }
@@ -91,31 +102,31 @@
       "users": 25,
       "requestsPerUser": 20,
       "totalRequests": 500,
-      "wallClockMs": 763,
-      "throughputPerSecond": 655,
+      "wallClockMs": 713,
+      "throughputPerSecond": 701,
       "errors": 0,
       "latency": {
         "count": 500,
-        "minMs": 4,
-        "p50Ms": 37,
-        "p95Ms": 48,
-        "p99Ms": 64,
-        "maxMs": 76,
-        "meanMs": 37
+        "minMs": 2,
+        "p50Ms": 33,
+        "p95Ms": 45,
+        "p99Ms": 99,
+        "maxMs": 169,
+        "meanMs": 34
       }
     },
     "simultaneousUploads": {
       "attempted": 20,
       "accepted": 20,
-      "wallClockMs": 113,
+      "wallClockMs": 112,
       "latency": {
         "count": 20,
-        "minMs": 101,
-        "p50Ms": 106,
-        "p95Ms": 111,
-        "p99Ms": 111,
-        "maxMs": 111,
-        "meanMs": 107
+        "minMs": 99,
+        "p50Ms": 103,
+        "p95Ms": 109,
+        "p99Ms": 109,
+        "maxMs": 109,
+        "meanMs": 104
       },
       "statusCounts": {
         "201": 20
@@ -126,7 +137,7 @@
       "fileName": "large-2000-page.pdf",
       "pages": 2000,
       "bytes": 2910048,
-      "uploadMs": 13,
+      "uploadMs": 10,
       "processingMs": 2006,
       "chunks": 335,
       "finalStatus": "analyzed"
@@ -134,23 +145,23 @@
     "sustainedLoad": {
       "durationSeconds": 20,
       "parallelClients": 12,
-      "requests": 20237,
+      "requests": 20305,
       "errors": 0,
-      "throughputPerSecond": 1012,
+      "throughputPerSecond": 1015,
       "latency": {
-        "count": 20237,
+        "count": 20305,
         "minMs": 3,
         "p50Ms": 11,
         "p95Ms": 16,
-        "p99Ms": 19,
-        "maxMs": 38,
+        "p99Ms": 18,
+        "maxMs": 46,
         "meanMs": 12
       }
     },
     "deepHealth": {
       "status": "healthy",
-      "timestamp": "2026-08-05T21:13:45.829Z",
-      "uptimeSeconds": 71,
+      "timestamp": "2026-08-05T22:12:28.936Z",
+      "uptimeSeconds": 31,
       "version": "1.1.0",
       "environment": "development",
       "components": {
@@ -170,7 +181,7 @@
         "memory": {
           "status": "healthy",
           "latencyMs": 0,
-          "message": "heap=301/4144MB (7% of limit, 426MB committed) rss=962MB"
+          "message": "heap=627/4144MB (15% of limit, 660MB committed) rss=1028/6216MB (17% of budget)"
         }
       }
     }
@@ -180,30 +191,30 @@
       "id": "STRESS-CASES-1",
       "name": "Case list responds with 1 cases in the tenant",
       "status": "PASS",
-      "detail": "p50 5ms, p95 15ms, max 15ms",
+      "detail": "p50 4ms, p95 13ms, max 13ms",
       "evidence": {
         "count": 5,
         "minMs": 4,
-        "p50Ms": 5,
-        "p95Ms": 15,
-        "p99Ms": 15,
-        "maxMs": 15,
-        "meanMs": 7
+        "p50Ms": 4,
+        "p95Ms": 13,
+        "p99Ms": 13,
+        "maxMs": 13,
+        "meanMs": 6
       }
     },
     {
       "id": "STRESS-CASES-10",
       "name": "Case list responds with 10 cases in the tenant",
       "status": "PASS",
-      "detail": "p50 4ms, p95 6ms, max 6ms",
+      "detail": "p50 4ms, p95 5ms, max 5ms",
       "evidence": {
         "count": 5,
         "minMs": 4,
         "p50Ms": 4,
-        "p95Ms": 6,
-        "p99Ms": 6,
-        "maxMs": 6,
-        "meanMs": 5
+        "p95Ms": 5,
+        "p99Ms": 5,
+        "maxMs": 5,
+        "meanMs": 4
       }
     },
     {
@@ -225,37 +236,37 @@
       "id": "STRESS-CASES-500",
       "name": "Case list responds with 500 cases in the tenant",
       "status": "PASS",
-      "detail": "p50 15ms, p95 20ms, max 20ms",
+      "detail": "p50 15ms, p95 15ms, max 15ms",
       "evidence": {
         "count": 5,
         "minMs": 14,
         "p50Ms": 15,
-        "p95Ms": 20,
-        "p99Ms": 20,
-        "maxMs": 20,
-        "meanMs": 16
+        "p95Ms": 15,
+        "p99Ms": 15,
+        "maxMs": 15,
+        "meanMs": 15
       }
     },
     {
       "id": "STRESS-CASES-5000",
       "name": "Case list responds with 5000 cases in the tenant",
       "status": "PASS",
-      "detail": "p50 109ms, p95 117ms, max 117ms",
+      "detail": "p50 113ms, p95 125ms, max 125ms",
       "evidence": {
         "count": 5,
-        "minMs": 94,
-        "p50Ms": 109,
-        "p95Ms": 117,
-        "p99Ms": 117,
-        "maxMs": 117,
-        "meanMs": 107
+        "minMs": 109,
+        "p50Ms": 113,
+        "p95Ms": 125,
+        "p99Ms": 125,
+        "maxMs": 125,
+        "meanMs": 116
       }
     },
     {
       "id": "STRESS-CASES-LATENCY",
       "name": "Case list stays under 5s at 5,000 cases",
       "status": "PASS",
-      "detail": "p95 117ms"
+      "detail": "p95 125ms"
     },
     {
       "id": "STRESS-USERS-REG",
@@ -267,22 +278,22 @@
       "id": "STRESS-CONCURRENCY",
       "name": "25 concurrent users complete 500 requests without error",
       "status": "PASS",
-      "detail": "655 req/s, p95 48ms",
+      "detail": "701 req/s, p95 45ms",
       "evidence": {
         "users": 25,
         "requestsPerUser": 20,
         "totalRequests": 500,
-        "wallClockMs": 763,
-        "throughputPerSecond": 655,
+        "wallClockMs": 713,
+        "throughputPerSecond": 701,
         "errors": 0,
         "latency": {
           "count": 500,
-          "minMs": 4,
-          "p50Ms": 37,
-          "p95Ms": 48,
-          "p99Ms": 64,
-          "maxMs": 76,
-          "meanMs": 37
+          "minMs": 2,
+          "p50Ms": 33,
+          "p95Ms": 45,
+          "p99Ms": 99,
+          "maxMs": 169,
+          "meanMs": 34
         }
       }
     },
@@ -290,19 +301,19 @@
       "id": "STRESS-UPLOAD-CONCURRENT",
       "name": "20 simultaneous uploads all accepted",
       "status": "PASS",
-      "detail": "p95 111ms",
+      "detail": "p95 109ms",
       "evidence": {
         "attempted": 20,
         "accepted": 20,
-        "wallClockMs": 113,
+        "wallClockMs": 112,
         "latency": {
           "count": 20,
-          "minMs": 101,
-          "p50Ms": 106,
-          "p95Ms": 111,
-          "p99Ms": 111,
-          "maxMs": 111,
-          "meanMs": 107
+          "minMs": 99,
+          "p50Ms": 103,
+          "p95Ms": 109,
+          "p99Ms": 109,
+          "maxMs": 109,
+          "meanMs": 104
         },
         "statusCounts": {
           "201": 20
@@ -319,12 +330,12 @@
       "id": "STRESS-LARGE-PDF",
       "name": "A 2,000-page PDF uploads and is fully indexed",
       "status": "PASS",
-      "detail": "upload 13ms, extraction 2006ms, 335 chunks",
+      "detail": "upload 10ms, extraction 2006ms, 335 chunks",
       "evidence": {
         "fileName": "large-2000-page.pdf",
         "pages": 2000,
         "bytes": 2910048,
-        "uploadMs": 13,
+        "uploadMs": 10,
         "processingMs": 2006,
         "chunks": 335,
         "finalStatus": "analyzed"
@@ -334,20 +345,20 @@
       "id": "STRESS-API-LOAD",
       "name": "Sustained load of 12 clients for 20s completes without error",
       "status": "PASS",
-      "detail": "1012 req/s, p95 16ms",
+      "detail": "1015 req/s, p95 16ms",
       "evidence": {
         "durationSeconds": 20,
         "parallelClients": 12,
-        "requests": 20237,
+        "requests": 20305,
         "errors": 0,
-        "throughputPerSecond": 1012,
+        "throughputPerSecond": 1015,
         "latency": {
-          "count": 20237,
+          "count": 20305,
           "minMs": 3,
           "p50Ms": 11,
           "p95Ms": 16,
-          "p99Ms": 19,
-          "maxMs": 38,
+          "p99Ms": 18,
+          "maxMs": 46,
           "meanMs": 12
         }
       }
@@ -361,7 +372,7 @@
       "id": "STRESS-HEALTH-DEEP",
       "name": "Deep health check passes after load",
       "status": "PASS",
-      "detail": "{\"status\":\"healthy\",\"timestamp\":\"2026-08-05T21:13:45.829Z\",\"uptimeSeconds\":71,\"version\":\"1.1.0\",\"environment\":\"development\",\"components\":{\"postgres\":{\"status\":\""
+      "detail": "{\"status\":\"healthy\",\"timestamp\":\"2026-08-05T22:12:28.936Z\",\"uptimeSeconds\":31,\"version\":\"1.1.0\",\"environment\":\"development\",\"components\":{\"postgres\":{\"status\":\""
     }
   ]
 }

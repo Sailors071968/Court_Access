@@ -1,7 +1,7 @@
 {
   "report": "WORKFLOW_CERTIFICATION",
   "phase": "Phase 2/8/9 — Litigation Workflow",
-  "generatedAt": "2026-08-05T21:08:15.502Z",
+  "generatedAt": "2026-08-05T22:11:51.630Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 40,
@@ -11,53 +11,86 @@
     "UNKNOWN": 0,
     "passRate": 100
   },
-  "caseId": "bafa0e6c-c03b-4ddf-966c-8dfcde4e2959",
+  "exercisedApiRoutes": [
+    "DELETE /api/cases/:id",
+    "DELETE /api/evidence/:id",
+    "GET /api/auth/me",
+    "GET /api/cases",
+    "GET /api/cases/:id",
+    "GET /api/cases/:id/evidence",
+    "GET /api/cases/:id/evidence-requests",
+    "GET /api/cases/:id/investigator-workbench",
+    "GET /api/cases/:id/workbench",
+    "GET /api/cases/:id/workbench/notes",
+    "GET /api/cases/:id/workbench/trial-prep",
+    "GET /api/charges/:id",
+    "GET /api/contradiction/graph/:id",
+    "GET /api/contradiction/recommendations/:id",
+    "GET /api/evidence/:id",
+    "GET /api/organizations/members",
+    "GET /api/timeline/:id",
+    "GET /api/timeline/:id/conflicts",
+    "GET /api/timeline/:id/events",
+    "PATCH /api/cases/:id",
+    "POST /api/auth/login",
+    "POST /api/auth/logout",
+    "POST /api/auth/register",
+    "POST /api/cases",
+    "POST /api/charges",
+    "POST /api/evidence/upload",
+    "POST /api/organizations/invitations",
+    "POST /api/organizations/offices",
+    "POST /api/organizations/onboarding",
+    "POST /api/timeline/rebuild/:id"
+  ],
+  "exercisedSpaRoutes": [],
+  "caseId": "cfe0608f-0637-47a1-a329-eca8c29f4d57",
   "timings": {
-    "register": 277,
-    "login": 214,
-    "createCase": 43,
-    "uploadDiscovery": 89,
-    "Attorney workbench": 239,
-    "Timeline events": 4,
-    "Timeline conflicts": 3,
+    "register": 244,
+    "login": 206,
+    "createCase": 3,
+    "uploadDiscovery": 67,
+    "Attorney workbench": 201,
+    "Timeline events": 3,
+    "Timeline conflicts": 2,
     "Contradiction graph": 2,
     "Contradiction recommendations": 2,
-    "Evidence gap detection": 4,
+    "Evidence gap detection": 3,
     "Attorney workbench notes": 4,
-    "Investigator workbench": 13,
-    "Trial prep package": 203,
-    "timelineRebuild": 6
+    "Investigator workbench": 11,
+    "Trial prep package": 199,
+    "timelineRebuild": 5
   },
   "uploaded": [
     {
       "file": "police-report.pdf",
       "status": 201,
-      "evidenceId": "475cfbb7-397b-4269-93f6-c376a8739120"
+      "evidenceId": "8430b69f-3842-47e0-b983-b057ab817364"
     },
     {
       "file": "preliminary-hearing-transcript.pdf",
       "status": 201,
-      "evidenceId": "2586fdf3-6a8c-40d4-8fd3-85d2292b9050"
+      "evidenceId": "1902a72b-44b4-4a57-926a-85973a7acacd"
     },
     {
       "file": "dispatch-log.pdf",
       "status": 201,
-      "evidenceId": "98b5812c-8c5f-436c-8178-108150d533d3"
+      "evidenceId": "2014dc7f-3c20-4846-9a25-e68119d0dde3"
     },
     {
       "file": "laboratory-report.pdf",
       "status": 201,
-      "evidenceId": "b6ce35bd-65e0-4773-97c7-3a65cf1414f3"
+      "evidenceId": "bb2e149c-53eb-43e5-87b9-c64a065dc684"
     },
     {
       "file": "scanned-police-report.png",
       "status": 201,
-      "evidenceId": "e0fb062d-d7ee-4aa3-b3a0-d190d084c776"
+      "evidenceId": "97939351-28fb-429a-a29e-7e263791718f"
     },
     {
       "file": "bodycam.mp4",
       "status": 201,
-      "evidenceId": "4294095a-86c9-47fa-ad97-1e15b32c37de"
+      "evidenceId": "42596059-d7b3-4380-a6ec-c8c182ce8f48"
     }
   ],
   "checks": [
@@ -65,7 +98,7 @@
       "id": "WF-01",
       "name": "Attorney can register",
       "status": "PASS",
-      "detail": "HTTP 200, tenant tenant-dc98fab3-b39f-4cd7-8499-15160dfa11ac"
+      "detail": "HTTP 200, tenant tenant-5882dff1-bc45-494d-a86d-f64b89871279"
     },
     {
       "id": "WF-02",
@@ -77,7 +110,7 @@
       "id": "WF-03",
       "name": "Session endpoint returns the signed-in user",
       "status": "PASS",
-      "detail": "wf-attorney-1785964091037-1-8siaec@certification.test"
+      "detail": "wf-attorney-1785967907477-1-d17qa7@certification.test"
     },
     {
       "id": "WF-04",
@@ -113,7 +146,7 @@
       "id": "WF-07",
       "name": "Attorney can open a case",
       "status": "PASS",
-      "detail": "caseId bafa0e6c-c03b-4ddf-966c-8dfcde4e2959"
+      "detail": "caseId cfe0608f-0637-47a1-a329-eca8c29f4d57"
     },
     {
       "id": "WF-08",
@@ -148,7 +181,7 @@
       "id": "WF-13",
       "name": "Charges read back for the case",
       "status": "PASS",
-      "detail": "{\"success\":true,\"charges\":[{\"id\":\"9d39d169-88ff-4be7-9f60-8e35dd012298\",\"caseId\":\"bafa0e6c-c03b-4ddf"
+      "detail": "{\"success\":true,\"charges\":[{\"id\":\"8d791f6b-3a84-45f4-ba25-1dedfb4a8740\",\"caseId\":\"cfe0608f-0637-47a1"
     },
     {
       "id": "WF-14",
@@ -207,37 +240,37 @@
       "id": "WF-23",
       "name": "Attorney workbench responds for a populated case",
       "status": "PASS",
-      "detail": "HTTP 200 in 238ms"
+      "detail": "HTTP 200 in 201ms"
     },
     {
       "id": "WF-24",
       "name": "Timeline events responds for a populated case",
       "status": "PASS",
-      "detail": "HTTP 200 in 4ms"
+      "detail": "HTTP 200 in 3ms"
     },
     {
       "id": "WF-25",
       "name": "Timeline conflicts responds for a populated case",
       "status": "PASS",
-      "detail": "HTTP 200 in 3ms"
+      "detail": "HTTP 200 in 2ms"
     },
     {
       "id": "WF-26",
       "name": "Contradiction graph reports an empty result rather than failing",
       "status": "PASS",
-      "detail": "HTTP 404: No events found for case: bafa0e6c-c03b-4ddf-966c-8dfcde4e2959."
+      "detail": "HTTP 404: No events found for case: cfe0608f-0637-47a1-a329-eca8c29f4d57."
     },
     {
       "id": "WF-27",
       "name": "Contradiction recommendations reports an empty result rather than failing",
       "status": "PASS",
-      "detail": "HTTP 404: No events found for case: bafa0e6c-c03b-4ddf-966c-8dfcde4e2959."
+      "detail": "HTTP 404: No events found for case: cfe0608f-0637-47a1-a329-eca8c29f4d57."
     },
     {
       "id": "WF-28",
       "name": "Evidence gap detection responds for a populated case",
       "status": "PASS",
-      "detail": "HTTP 200 in 4ms"
+      "detail": "HTTP 200 in 3ms"
     },
     {
       "id": "WF-29",
@@ -249,13 +282,13 @@
       "id": "WF-30",
       "name": "Investigator workbench responds for a populated case",
       "status": "PASS",
-      "detail": "HTTP 200 in 12ms"
+      "detail": "HTTP 200 in 11ms"
     },
     {
       "id": "WF-30b",
       "name": "Trial prep package responds for a populated case",
       "status": "PASS",
-      "detail": "HTTP 200 in 203ms"
+      "detail": "HTTP 200 in 199ms"
     },
     {
       "id": "WF-30c",
@@ -273,7 +306,7 @@
       "id": "WF-32",
       "name": "Timeline worker completed the job",
       "status": "PASS",
-      "detail": "job 9f13b811-2ba4-40d3-af22-06529db041f5"
+      "detail": "job e8680086-147a-4963-b504-fb93a6a7083d"
     },
     {
       "id": "WF-32b",

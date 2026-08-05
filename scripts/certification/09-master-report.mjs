@@ -328,6 +328,28 @@ ${
     : report.warnings.map((c) => `- **${c.id}** (${c.suite}) — ${c.name}${c.detail ? `: ${c.detail}` : ''}`).join('\n')
 }
 
+## Deployment status
+
+Nothing in this branch has been deployed. This environment has no public
+ingress and no deployment credentials, so there is no staging URL for the
+certified build. Every result above was measured against the stack running
+locally in this environment, described under "How these results were
+produced".
+
+Observed from here, read-only, at the time of the run:
+
+| | |
+|---|---|
+| \`https://courtaccess.net\` | HTTP 200, nginx, \`Last-Modified: Fri, 26 Jun 2026\` |
+| Page title served | \`Court Access System\` (this repository builds \`CourtAccess — Criminal Case Intelligence Platform\`) |
+| Bundle served | a different asset hash from the current build |
+| \`https://courtaccess.net/api/health\` | HTTP 200, but returns \`{status, uptime, timestamp}\` where this codebase returns \`{status, timestamp, version, service, environment}\` |
+| \`https://beta.courtaccess.net\` | did not resolve |
+
+Production is therefore serving a build that predates this repository state,
+front end and API both. None of the repairs certified here are live, and the
+certification says nothing about the currently deployed system.
+
 ## Known functional gaps
 
 These are features the product presents but does not implement. They were

@@ -1,7 +1,7 @@
 # CourtAccess V1 — Production Certification
 
-Generated 2026-08-05T22:14:02.640Z
-Commit `61c96eaa608a87b817b1bd6278bc565c821d53a4` on branch `cursor/v1-production-certification-9f94`
+Generated 2026-08-05T22:15:53.736Z
+Commit `0997a3ea4b876f4783a6b147fe89494d772a154a` on branch `cursor/v1-production-certification-9f94`
 
 ## How these results were produced
 
@@ -115,6 +115,28 @@ marked AUTHZ ONLY rather than PASS.
 - **BR-/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/trial-exhibits** (Browser verification) — Trial exhibits renders but logged 2 browser error(s): Failed to load resource: the server responded with a status of 404 (Not Found)
 - **BR-/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/litigation-strategy** (Browser verification) — Litigation strategy renders but logged 2 browser error(s): Failed to load resource: the server responded with a status of 404 (Not Found)
 - **BR-/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/contradictions** (Browser verification) — Contradictions renders but logged 2 browser error(s): Failed to load resource: the server responded with a status of 404 (Not Found)
+
+## Deployment status
+
+Nothing in this branch has been deployed. This environment has no public
+ingress and no deployment credentials, so there is no staging URL for the
+certified build. Every result above was measured against the stack running
+locally in this environment, described under "How these results were
+produced".
+
+Observed from here, read-only, at the time of the run:
+
+| | |
+|---|---|
+| `https://courtaccess.net` | HTTP 200, nginx, `Last-Modified: Fri, 26 Jun 2026` |
+| Page title served | `Court Access System` (this repository builds `CourtAccess — Criminal Case Intelligence Platform`) |
+| Bundle served | a different asset hash from the current build |
+| `https://courtaccess.net/api/health` | HTTP 200, but returns `{status, uptime, timestamp}` where this codebase returns `{status, timestamp, version, service, environment}` |
+| `https://beta.courtaccess.net` | did not resolve |
+
+Production is therefore serving a build that predates this repository state,
+front end and API both. None of the repairs certified here are live, and the
+certification says nothing about the currently deployed system.
 
 ## Known functional gaps
 

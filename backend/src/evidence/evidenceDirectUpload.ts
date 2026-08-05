@@ -16,6 +16,16 @@ import type { AuthenticatedRequest } from '../security/authMiddleware.js';
 import { validateEvidenceUpload } from './evidenceValidation.js';
 import { chunkAndPersistEvidence } from '../services/evidenceChunkingService.js';
 import prisma from '../lib/prisma.js';
+import {
+  describe,
+  detectFormat,
+  extractDocxText,
+  inspectPdf,
+  isTruncatedIsoMedia,
+  listZipEntries,
+  sanitizeExtractedText,
+} from './fileDiagnostics.js';
+import { validateFileExtension } from '../security/evidenceUploadProtection.js';
 
 // ---------------------------------------------------------------------------
 // Configuration
@@ -46,81 +56,344 @@ type EvidenceType = typeof VALID_EVIDENCE_TYPES[number];
 // PDF Text Extraction (inline, no R2 dependency)
 // ---------------------------------------------------------------------------
 
-async function extractTextFromFile(filePath: string, mimeType: string): Promise<string | null> {
+/** Minimum mean OCR confidence before a scan is flagged for manual review. */
+const OCR_CONFIDENCE_THRESHOLD = parseInt(process.env.OCR_CONFIDENCE_THRESHOLD || '65', 10);
+
+export interface ExtractionOutcome {
+  /** Extracted text, or null when nothing could be read. */
+  text: string | null;
+  /** 'analyzed' when the file was handled as intended, 'failed' otherwise. */
+  status: 'analyzed' | 'failed';
+  /**
+   * What to tell the user. Always populated when text is null, and also
+   * populated for successful-but-qualified outcomes such as a low-confidence
+   * scan. Null means "read cleanly, nothing to report".
+   */
+  message: string | null;
+  detectedFormat: string;
+  detectedMimeType: string;
+  ocrConfidence?: number;
+}
+
+function ok(text: string, format: string, mime: string, extra: Partial<ExtractionOutcome> = {}): ExtractionOutcome {
+  return { text, status: 'analyzed', message: null, detectedFormat: format, detectedMimeType: mime, ...extra };
+}
+
+function problem(
+  message: string,
+  format: string,
+  mime: string,
+  status: 'analyzed' | 'failed' = 'failed',
+): ExtractionOutcome {
+  return { text: null, status, message, detectedFormat: format, detectedMimeType: mime };
+}
+
+/** Extensions whose contents should match a specific detected format. */
+const EXTENSION_EXPECTATION: Record<string, string[]> = {
+  pdf: ['pdf'],
+  docx: ['docx'],
+  doc: ['docx'],
+  png: ['png'],
+  jpg: ['jpeg'],
+  jpeg: ['jpeg'],
+  tiff: ['tiff'],
+  tif: ['tiff'],
+  zip: ['zip', 'docx', 'xlsx', 'pptx'],
+  mp4: ['mp4', 'quicktime'],
+  mov: ['quicktime', 'mp4'],
+};
+
+function extensionMismatch(fileName: string, detected: string): string | null {
+  const ext = fileName.includes('.') ? fileName.split('.').pop()!.toLowerCase() : '';
+  const expected = EXTENSION_EXPECTATION[ext];
+  if (!expected || expected.includes(detected)) return null;
+  return (
+    `"${fileName}" is named as a .${ext} file but its contents are not a valid ${ext.toUpperCase()} — ` +
+    `the file was read as ${describe(detected as never).label}. ` +
+    'This usually means the export or download was incomplete. Its readable text has been indexed, ' +
+    'but please confirm you have the complete original.'
+  );
+}
+
+/**
+ * Read the text of an uploaded file.
+ *
+ * The declared MIME type is only a hint — clients routinely send
+ * application/octet-stream — so the format is determined from the file's own
+ * bytes. Every path that cannot produce text explains why in terms the
+ * uploading attorney or paralegal can act on.
+ */
+async function extractTextFromFile(
+  filePath: string,
+  declaredMimeType: string,
+  fileName: string,
+): Promise<ExtractionOutcome> {
+  let buffer: Buffer;
   try {
-    // Plain text files
-    if (mimeType === 'text/plain' || mimeType === 'text/csv') {
-      return await fs.readFile(filePath, 'utf-8');
-    }
-
-    // PDF files
-    if (mimeType === 'application/pdf') {
-      try {
-        const buffer = await fs.readFile(filePath);
-        // pdf-parse v2 uses PDFParse class
-        const { PDFParse } = await import('pdf-parse');
-        const parser = new PDFParse({ data: buffer });
-        await (parser as unknown as { load(): Promise<void> }).load();
-        const result = await parser.getText();
-        const text = (
-          typeof result === 'object' && result !== null
-            ? (result as { text?: string }).text || ''
-            : String(result || '')
-        ).trim();
-        await parser.destroy();
-        return text.length > 0 ? text : null;
-      } catch (pdfErr) {
-        console.warn('[DirectUpload] PDF extraction failed:', pdfErr instanceof Error ? pdfErr.message : pdfErr);
-        return null;
-      }
-    }
-
-    // Images — attempt OCR with Tesseract
-    if (mimeType.startsWith('image/')) {
-      try {
-        const Tesseract = await import('tesseract.js');
-        const buffer = await fs.readFile(filePath);
-        const worker = await Tesseract.createWorker('eng');
-        const result = await worker.recognize(buffer);
-        await worker.terminate();
-        const text = result.data.text?.trim();
-        return text && text.length > 0 ? text : null;
-      } catch (ocrErr) {
-        console.warn('[DirectUpload] OCR failed:', ocrErr instanceof Error ? ocrErr.message : ocrErr);
-        return null;
-      }
-    }
-
-    // DOCX — best-effort plain text extraction
-    if (mimeType === 'application/vnd.openxmlformats-officedocument.wordprocessingml.document') {
-      // Read as text (won't work for binary DOCX, but it's a fallback)
-      const content = await fs.readFile(filePath, 'utf-8');
-      if (isProbablyText(content)) return content;
-      return null;
-    }
-
-    // Unknown type — try reading as text
-    const content = await fs.readFile(filePath, 'utf-8');
-    if (isProbablyText(content)) return content;
-    return null;
+    buffer = await fs.readFile(filePath);
   } catch (err) {
-    console.error('[DirectUpload] Text extraction failed:', err);
-    return null;
+    console.error('[DirectUpload] Could not read stored file:', err);
+    return problem(
+      'The uploaded file could not be read back from storage. Please try uploading it again.',
+      'unknown',
+      declaredMimeType,
+    );
   }
-}
 
-function isProbablyText(content: string): boolean {
-  if (content.length === 0) return false;
-  const sample = content.slice(0, 1000);
-  let printable = 0;
-  for (let i = 0; i < sample.length; i++) {
-    const code = sample.charCodeAt(i);
-    if ((code >= 32 && code <= 126) || code === 9 || code === 10 || code === 13) {
-      printable++;
+  const detected = detectFormat(buffer, fileName);
+  const fmt = detected.format;
+  const mime = detected.mimeType;
+
+  if (fmt === 'empty') {
+    return problem(
+      `"${fileName}" is empty (0 bytes). The upload may have been interrupted — please re-send the file.`,
+      fmt,
+      mime,
+    );
+  }
+
+  if (fmt === 'executable') {
+    return problem(
+      `"${fileName}" is a Windows executable, which cannot be accepted as evidence. ` +
+        'Please upload the underlying document, image, or recording instead.',
+      fmt,
+      mime,
+    );
+  }
+
+  // --- PDF ------------------------------------------------------------------
+  if (fmt === 'pdf') {
+    const inspection = inspectPdf(buffer);
+
+    if (inspection.encrypted) {
+      return problem(
+        `"${fileName}" is password protected, so its pages cannot be read. ` +
+          'Please remove the password and upload the file again, or supply an unrestricted copy from the producing party.',
+        fmt,
+        mime,
+      );
+    }
+
+    try {
+      const { PDFParse } = await import('pdf-parse');
+      const parser = new PDFParse({ data: buffer });
+      await (parser as unknown as { load(): Promise<void> }).load();
+      const result = await parser.getText();
+      const text = (
+        typeof result === 'object' && result !== null
+          ? (result as { text?: string }).text || ''
+          : String(result || '')
+      ).trim();
+      await parser.destroy();
+
+      if (text.length > 0) {
+        if (inspection.truncated) {
+          return ok(text, fmt, mime, {
+            message:
+              `"${fileName}" is missing its end-of-file marker, so the upload may be incomplete. ` +
+              'The text that could be read has been indexed; please verify the page count against the source.',
+          });
+        }
+        return ok(text, fmt, mime);
+      }
+
+      // Parsed cleanly but carries no text layer — this is a scanned PDF.
+      return problem(
+        `"${fileName}" contains no text layer, which means it is a scanned document. ` +
+          'Page images could not be read automatically; please upload the pages as images (PNG, JPEG, or TIFF) so they can be run through OCR.',
+        fmt,
+        mime,
+      );
+    } catch (pdfErr) {
+      const detail = pdfErr instanceof Error ? pdfErr.message : String(pdfErr);
+      console.warn('[DirectUpload] PDF extraction failed:', detail);
+
+      if (/password|encrypt/i.test(detail)) {
+        return problem(
+          `"${fileName}" is password protected, so its pages cannot be read. ` +
+            'Please remove the password and upload the file again.',
+          fmt,
+          mime,
+        );
+      }
+      if (inspection.truncated) {
+        return problem(
+          `"${fileName}" is an incomplete PDF — the file ends before its final page marker, ` +
+            'which usually means the upload or the original download was cut short. Please re-send the complete file.',
+          fmt,
+          mime,
+        );
+      }
+      return problem(
+        `"${fileName}" is a damaged PDF and its page structure could not be read. ` +
+          'Please obtain a fresh copy from the producing party and upload it again.',
+        fmt,
+        mime,
+      );
     }
   }
-  return printable / sample.length > 0.85;
+
+  // --- Images: OCR ----------------------------------------------------------
+  if (detected.category === 'image') {
+    try {
+      const Tesseract = await import('tesseract.js');
+      // Without an errorHandler tesseract.js rethrows worker failures from its
+      // message callback, which arrives as an uncaught exception rather than a
+      // rejected promise — a single corrupt image would take the API down.
+      const worker = await Tesseract.createWorker('eng', undefined, {
+        errorHandler: (err: unknown) => {
+          console.warn('[DirectUpload] OCR worker reported an error:', err);
+        },
+      });
+      let recognised;
+      try {
+        recognised = await worker.recognize(buffer);
+      } finally {
+        await worker.terminate().catch(() => {});
+      }
+
+      const text = recognised.data.text?.trim() ?? '';
+      const confidence = typeof recognised.data.confidence === 'number' ? recognised.data.confidence : null;
+
+      if (text.length === 0) {
+        return problem(
+          `No text could be recognised on "${fileName}". ` +
+            'The page appears to be blank, or it is a photograph rather than a document. ' +
+            'If it should contain text, re-scan it at 300 DPI or higher and upload it again.',
+          fmt,
+          mime,
+          'analyzed',
+        );
+      }
+
+      if (confidence !== null && confidence < OCR_CONFIDENCE_THRESHOLD) {
+        return ok(text, fmt, mime, {
+          ocrConfidence: confidence,
+          message:
+            `OCR confidence for "${fileName}" is ${confidence.toFixed(0)}%, below the ${OCR_CONFIDENCE_THRESHOLD}% threshold, ` +
+            'because the scan quality is poor. The text has been indexed but requires manual review before it is relied on. ' +
+            'Re-scanning at 300 DPI or higher will improve the result.',
+        });
+      }
+
+      return ok(text, fmt, mime, { ocrConfidence: confidence ?? undefined });
+    } catch (ocrErr) {
+      const detail = ocrErr instanceof Error ? ocrErr.message : String(ocrErr);
+      console.warn('[DirectUpload] OCR failed:', detail);
+      return problem(
+        `"${fileName}" could not be processed as an image — the file is corrupt or its image data is truncated. ` +
+          'Please re-export or re-scan the page and upload it again.',
+        fmt,
+        mime,
+      );
+    }
+  }
+
+  // --- Word documents -------------------------------------------------------
+  if (fmt === 'docx') {
+    const text = extractDocxText(buffer);
+    if (text) return ok(text, fmt, mime);
+    return problem(
+      `"${fileName}" is a Word document whose text content could not be read; the file may be damaged. ` +
+        'Please re-save it from Word, or export it as a PDF, and upload it again.',
+      fmt,
+      mime,
+    );
+  }
+
+  if (fmt === 'xlsx' || fmt === 'pptx') {
+    return problem(
+      `"${fileName}" is ${describe(fmt).label === 'Excel workbook' ? 'an' : 'a'} ${describe(fmt).label}, ` +
+        'which is not yet supported for text extraction. Please export it to PDF and upload the PDF.',
+      fmt,
+      mime,
+    );
+  }
+
+  // --- Archives -------------------------------------------------------------
+  if (fmt === 'zip') {
+    const entries = listZipEntries(buffer).filter((e) => !e.name.endsWith('/'));
+    const names = entries.slice(0, 25).map((e) => e.name);
+    return problem(
+      `"${fileName}" is a ZIP archive containing ${entries.length} file(s), and archives are not ingested directly. ` +
+        `Please extract it and upload the documents individually` +
+        (names.length ? `: ${names.join(', ')}${entries.length > names.length ? ', …' : ''}` : '') +
+        '.',
+      fmt,
+      mime,
+      'analyzed',
+    );
+  }
+
+  // --- Media ----------------------------------------------------------------
+  if (detected.category === 'video' || detected.category === 'audio') {
+    if ((fmt === 'mp4' || fmt === 'quicktime') && isTruncatedIsoMedia(buffer)) {
+      return problem(
+        `"${fileName}" is an incomplete ${detected.label} — the recording is missing the index or the ` +
+          'picture data that should follow its header, which means the transfer was cut short. ' +
+          'Please re-export the recording from its source system and upload the complete file.',
+        fmt,
+        mime,
+      );
+    }
+    const article = /^[AEIOU]/.test(detected.label) ? 'an' : 'a';
+    return problem(
+      `"${fileName}" is ${article} ${detected.label} and has been stored with the case. ` +
+        'Automatic speech transcription is not available, so the words spoken in this recording ' +
+        'are not searchable. To make its contents searchable, upload a written transcript alongside it.',
+      fmt,
+      mime,
+      'analyzed',
+    );
+  }
+
+  // --- Plain text -----------------------------------------------------------
+  if (fmt === 'text' || fmt === 'rtf') {
+    const content = buffer.toString('utf-8');
+    if (content.trim().length === 0) {
+      return problem(
+        `"${fileName}" contains no readable text — the file appears to be blank.`,
+        fmt,
+        mime,
+      );
+    }
+    // A file named .pdf/.docx that is really plain text is usually a failed
+    // export or a truncated download, and the discrepancy must not be silent.
+    const mismatch = extensionMismatch(fileName, fmt);
+    return ok(content, fmt, mime, mismatch ? { message: mismatch } : {});
+  }
+
+  // --- Anything else --------------------------------------------------------
+  const extension = fileName.includes('.') ? fileName.split('.').pop()!.toLowerCase() : '';
+
+  // The extension allowlist already ran, so an unrecognisable file that still
+  // carries a supported extension is a damaged file rather than a wrong one.
+  if (extension && ALLOWED_MEDIA_EXTENSIONS.has(extension)) {
+    return problem(
+      `"${fileName}" is named as a .${extension} recording but its contents could not be recognised — ` +
+        'the file header is damaged or the transfer was incomplete. ' +
+        'Please re-export the recording from its source system and upload it again.',
+      fmt,
+      mime,
+    );
+  }
+
+  const declaredHint =
+    extension && !declaredMimeType.includes(extension)
+      ? ` The file is named ".${extension}" but its contents do not match that format.`
+      : '';
+  return problem(
+    `"${fileName}" is not in a supported format, so no text could be extracted.${declaredHint} ` +
+      'Supported formats are PDF, DOCX, TXT, JPEG, PNG, TIFF, and common audio and video files.',
+    fmt,
+    mime,
+  );
 }
+
+const ALLOWED_MEDIA_EXTENSIONS = new Set([
+  'mp4', 'mov', 'avi', 'mkv', 'm4v', 'webm',
+  'mp3', 'wav', 'aac', 'm4a', 'flac', 'ogg',
+]);
 
 /** Guess MIME type from file extension */
 function guessMimeType(fileName: string): string {
@@ -219,7 +492,29 @@ export async function registerDirectUploadRoutes(app: FastifyInstance): Promise<
     const rawFileName = data.filename || 'unnamed-file';
     // Sanitize filename: strip path separators and traversal sequences
     const fileName = path.basename(rawFileName).replace(/\.\./g, '_');
-    const mimeType = data.mimetype || guessMimeType(fileName);
+
+    // The onRequest upload hook can only see the request Content-Type, which
+    // for a multipart post is always multipart/form-data, so the extension
+    // allowlist has to be applied here where the member filename is known.
+    const extensionCheck = validateFileExtension(fileName);
+    if (!extensionCheck.valid) {
+      return reply.code(415).send({
+        error: 'Unsupported file type',
+        message:
+          `"${fileName}" cannot be uploaded as evidence: ${extensionCheck.reason}. ` +
+          'Supported formats are PDF, DOCX, TXT, images (JPEG, PNG, TIFF), and common audio and video files.',
+        fileName,
+      });
+    }
+
+    // Clients frequently send application/octet-stream; fall back to the
+    // extension so the stored record is not misleading. The ingestion pipeline
+    // re-derives the true type from the file's bytes regardless.
+    const declaredMime = data.mimetype;
+    const mimeType =
+      !declaredMime || declaredMime === 'application/octet-stream'
+        ? guessMimeType(fileName)
+        : declaredMime;
 
     // Create tenant-scoped directory
     const uploadDir = path.join(UPLOAD_DIR, user.tenantId, caseId);
@@ -297,7 +592,7 @@ export async function registerDirectUploadRoutes(app: FastifyInstance): Promise<
 
     // Run text extraction + chunking synchronously (no Redis/BullMQ dependency)
     // This runs in the background so the upload response isn't delayed
-    processEvidenceAsync(evidence.evidenceId, user.tenantId, localPath, mimeType).catch((err) => {
+    processEvidenceAsync(evidence.evidenceId, user.tenantId, localPath, mimeType, fileName).catch((err) => {
       console.error(`[DirectUpload] Background processing failed for ${evidence.evidenceId}:`, err);
     });
 
@@ -342,40 +637,47 @@ async function processEvidenceAsync(
   tenantId: string,
   localPath: string,
   mimeType: string,
+  fileName: string,
 ): Promise<void> {
   try {
     console.log(`[DirectUpload] Starting text extraction for ${evidenceId}...`);
 
     // Step 1: Extract text from file
-    const extractedText = await extractTextFromFile(localPath, mimeType);
+    const outcome = await extractTextFromFile(localPath, mimeType, fileName);
 
-    if (!extractedText || extractedText.trim().length === 0) {
-      console.warn(`[DirectUpload] No text extracted from ${evidenceId} (mimeType: ${mimeType})`);
+    if (!outcome.text || outcome.text.trim().length === 0) {
+      console.warn(
+        `[DirectUpload] No text extracted from ${evidenceId} (detected: ${outcome.detectedFormat}) — ${outcome.message}`,
+      );
       await prisma.evidence.update({
         where: { evidenceId },
         data: {
-          processingStatus: 'analyzed',
-          processingError: mimeType.startsWith('video/') || mimeType.startsWith('audio/')
-            ? 'Audio/video files require transcript pipeline'
-            : 'No extractable text found',
+          processingStatus: outcome.status,
+          processingError: outcome.message,
+          mimeType: outcome.detectedMimeType,
         },
       });
       return;
     }
 
-    console.log(`[DirectUpload] Extracted ${extractedText.length} chars from ${evidenceId}`);
+    console.log(`[DirectUpload] Extracted ${outcome.text.length} chars from ${evidenceId}`);
 
-    // Step 2: Chunk text and persist to EvidenceChunk table
-    const chunkResult = await chunkAndPersistEvidence(evidenceId, tenantId, extractedText);
+    // Step 2: Chunk text and persist to EvidenceChunk table.
+    // Extraction output can carry NUL bytes and lone surrogates, neither of
+    // which PostgreSQL will accept in a text column.
+    const clean = sanitizeExtractedText(outcome.text);
+    const chunkResult = await chunkAndPersistEvidence(evidenceId, tenantId, clean);
 
     console.log(`[DirectUpload] Chunked ${evidenceId}: ${chunkResult.chunkCount} chunks in ${chunkResult.durationMs}ms`);
 
-    // Step 3: Update evidence processing status
+    // Step 3: Update evidence processing status. A qualified success (for
+    // example a low-confidence scan) keeps its message so the caveat survives.
     await prisma.evidence.update({
       where: { evidenceId },
       data: {
         processingStatus: 'analyzed',
-        processingError: null,
+        processingError: outcome.message,
+        mimeType: outcome.detectedMimeType,
         normalizedPageCount: chunkResult.chunkCount,
       },
     });
@@ -387,7 +689,10 @@ async function processEvidenceAsync(
       where: { evidenceId },
       data: {
         processingStatus: 'failed',
-        processingError: err instanceof Error ? err.message : 'Processing failed',
+        // Internal exception text is not shown to the user; it is in the logs.
+        processingError:
+          `"${fileName}" could not be processed because of an unexpected error while reading it. ` +
+          'The file has been stored. Please retry the upload, and contact support with the file name if it fails again.',
       },
     }).catch((updateErr) => {
       console.error(`[DirectUpload] Failed to update error status for ${evidenceId}:`, updateErr);

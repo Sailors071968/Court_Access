@@ -8,7 +8,7 @@
 
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { Results, req, registerUser, login, API } from './lib/harness.mjs';
+import { Results, req, registerUser, login, API, exercisedApiRoutes } from './lib/harness.mjs';
 import { PrismaClient } from '../../backend/node_modules/@prisma/client/default.js';
 
 const prisma = new PrismaClient();
@@ -188,7 +188,8 @@ await timed('uploadDiscovery', async () => {
     form.append('caseId', caseId);
     form.append('evidenceType', type);
     form.append('file', new Blob([await readFile(path.join(FIXTURES, file))], { type: mime }), file);
-    const res = await fetch(`${API}/api/evidence/upload`, {
+    exercisedApiRoutes.add('POST /api/evidence/upload');
+  const res = await fetch(`${API}/api/evidence/upload`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${token}` },
       body: form,

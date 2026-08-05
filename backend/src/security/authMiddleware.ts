@@ -276,7 +276,6 @@ const PUBLIC_ROUTES = [
   '/api/auth/register',
   '/api/auth/refresh',
   '/api/auth/logout',
-  '/api/auth/debug-check',
   '/api/auth/forgot-password',
   '/api/auth/reset-password',
   '/api/auth/verify-email',
@@ -366,28 +365,10 @@ export async function authenticationHook(
 // User accounts are now persisted to PostgreSQL via Prisma User model.
 
 export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
-  // GET /api/auth/debug-check — deployment verification (no auth required)
-  // Returns which code version is running so you can confirm PR #74 is deployed.
-  // REMOVE THIS ENDPOINT once auth is confirmed working in production.
-  app.get('/api/auth/debug-check', async (_request: FastifyRequest, _reply: FastifyReply) => {
-    let bcryptLoaded = false;
-    try {
-      // Verify bcrypt native module actually loads
-      const testHash = await bcrypt.hash('test', 4);
-      bcryptLoaded = testHash.startsWith('$2');
-    } catch {
-      bcryptLoaded = false;
-    }
-
-    // No user-lookup on unauthenticated endpoint — only return version/bcrypt info.
-    // Use PM2 logs or admin endpoints for user-level debugging.
-    return {
-      authVersion: 'PR74-bcrypt',
-      bcryptLoaded,
-      hashMethod: 'bcrypt',
-      timestamp: new Date().toISOString(),
-    };
-  });
+  // The unauthenticated /api/auth/debug-check deployment probe was removed as
+  // its own comment instructed: it disclosed the running auth build and
+  // password-hashing configuration to anyone. /api/health reports liveness and
+  // /api/health/deep reports component status to operators.
 
   // POST /api/auth/login
   app.post('/api/auth/login', async (request: FastifyRequest, reply: FastifyReply) => {

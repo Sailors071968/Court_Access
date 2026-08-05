@@ -8,7 +8,7 @@
 
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
-import { Results, req, registerUser, login, API, OUT_DIR } from './lib/harness.mjs';
+import { Results, req, registerUser, login, API, OUT_DIR, exercisedApiRoutes } from './lib/harness.mjs';
 
 const results = new Results('SECURITY_CERTIFICATION', 'Phase 7 — Security Testing');
 
@@ -34,11 +34,13 @@ async function makeTenant(prefix, role = 'attorney') {
   form.append('caseId', c.json.case.caseId);
   form.append('evidenceType', 'police_report');
   form.append('file', new Blob([await readFile('/tmp/courtaccess-fixtures/police-report.pdf')], { type: 'application/pdf' }), 'police-report.pdf');
+  exercisedApiRoutes.add('POST /api/evidence/upload');
   const up = await fetch(`${API}/api/evidence/upload`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${user.token}` },
     body: form,
   });
+  exercisedApiRoutes.add('POST /api/evidence/upload');
   const upJson = await up.json();
 
   return {
@@ -269,6 +271,7 @@ if (injection.status >= 500) {
   form.append('caseId', firmA.caseId);
   form.append('evidenceType', 'other_document');
   form.append('file', new Blob([Buffer.from('traversal probe')], { type: 'text/plain' }), '../../../../tmp/escaped.txt');
+  exercisedApiRoutes.add('POST /api/evidence/upload');
   const res = await fetch(`${API}/api/evidence/upload`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${firmA.token}` },

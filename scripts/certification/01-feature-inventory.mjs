@@ -14,7 +14,23 @@ const OUT_DIR = path.join(ROOT, 'reports/certification');
 
 // Maps a URL prefix onto the product-level feature it belongs to, so the
 // route table can be rolled up into the feature list used for certification.
+// Order matters: the first pattern to match wins, so case-scoped sub-features
+// have to be listed before the general /api/cases prefix or the workbench,
+// evidence and charge endpoints all collapse into Case Management.
 const FEATURE_MAP = [
+  [/^\/api\/cases\/:caseId\/workbench/, 'Attorney Workbench'],
+  [/^\/api\/cases\/:caseId\/investigator/, 'Investigator Workbench'],
+  [/^\/api\/cases\/:caseId\/evidence-requests/, 'Evidence Gap Detection'],
+  [/^\/api\/cases\/:caseId\/evidence/, 'Evidence Repository'],
+  [/^\/api\/cases\/:caseId\/charges/, 'Charges & Mens Rea'],
+  [/^\/api\/cases\/:caseId\/timeline/, 'Timeline'],
+  [/^\/api\/cases\/:caseId\/contradictions/, 'Contradictions'],
+  [/^\/api\/cases\/:caseId\/narrative/, 'Narrative Analysis'],
+  [/^\/api\/cases\/:caseId\/exhibits|^\/api\/cases\/:caseId\/trial/, 'Trial Exhibits'],
+  [/^\/api\/cases\/:caseId\/motions/, 'Motion Intelligence'],
+  [/^\/api\/cases\/:caseId\/(strategy|litigation)/, 'Litigation Strategy'],
+  [/^\/api\/cases\/:caseId\/(documents|disclosure|redaction)/, 'Documents & Disclosure'],
+  [/^\/api\/cases\/:caseId\/(clients?|hearings|messages)/, 'Client Domain'],
   [/^\/api\/auth\/(login|register|logout|refresh|me)/, 'Authentication'],
   [/^\/api\/auth\/(forgot-password|reset-password)/, 'Password Reset'],
   [/^\/api\/auth\/(verify-email|mfa)/, 'Identity & MFA'],

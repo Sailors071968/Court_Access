@@ -29,7 +29,35 @@ function worstStatus(...statuses: HealthStatus[]): HealthStatus {
   return 'unknown';
 }
 
+/**
+ * Building this dashboard runs the full production-gate suite, which performs
+ * transactional writes (the billing certification exercises credit balances).
+ * Three admin endpoints call it, so two concurrent requests used to collide on
+ * those writes and fail with Prisma P2034. Concurrent callers now share a
+ * single in-flight computation, and the result is held briefly so that opening
+ * the operations console does not re-run the whole suite per panel.
+ */
+const DASHBOARD_TTL_MS = parseInt(process.env.OPERATIONS_DASHBOARD_TTL_MS || '15000', 10);
+let inFlight: Promise<OperationsDashboard> | null = null;
+let cached: { at: number; value: OperationsDashboard } | null = null;
+
 export async function buildOperationsDashboard(): Promise<OperationsDashboard> {
+  if (cached && Date.now() - cached.at < DASHBOARD_TTL_MS) return cached.value;
+  if (inFlight) return inFlight;
+
+  inFlight = computeOperationsDashboard()
+    .then((value) => {
+      cached = { at: Date.now(), value };
+      return value;
+    })
+    .finally(() => {
+      inFlight = null;
+    });
+
+  return inFlight;
+}
+
+async function computeOperationsDashboard(): Promise<OperationsDashboard> {
   const [
     gatesReport,
     deepHealth,

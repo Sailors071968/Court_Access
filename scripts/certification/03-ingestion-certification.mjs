@@ -9,7 +9,7 @@
 
 import { readFile, readdir, stat } from 'node:fs/promises';
 import path from 'node:path';
-import { Results, req, registerUser, API, ROOT } from './lib/harness.mjs';
+import { Results, req, registerUser, API, ROOT, exercisedApiRoutes } from './lib/harness.mjs';
 import { PrismaClient } from '../../backend/node_modules/@prisma/client/default.js';
 
 const FIXTURES = '/tmp/courtaccess-fixtures';
@@ -85,6 +85,7 @@ async function uploadFixture(token, caseId, file) {
   form.append('file', new Blob([buf], { type }), file);
 
   const started = performance.now();
+  exercisedApiRoutes.add('POST /api/evidence/upload');
   const res = await fetch(`${API}/api/evidence/upload`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${token}` },

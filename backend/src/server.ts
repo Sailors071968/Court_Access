@@ -5,6 +5,7 @@
 // Usage: npx tsx backend/src/server.ts
 // ============================================================================
 
+import { randomUUID } from 'node:crypto';
 import Fastify from 'fastify';
 import cors from '@fastify/cors';
 import cookie from '@fastify/cookie';
@@ -109,6 +110,68 @@ async function startServer() {
   await app.register(cookie, {
     secret: process.env.COOKIE_SECRET || 'court-access-cookie-secret-change-in-production',
   });
+
+  // Any error that reaches Fastify unhandled would otherwise be serialised
+  // straight to the client, which for a Prisma failure means the query, the
+  // source file and the surrounding lines. Log the detail, hand the caller a
+  // reference they can quote to support, and say what they can do next.
+  app.setErrorHandler((rawError, request, reply) => {
+    const error = rawError as Error & { statusCode?: number; code?: string };
+    const reference = randomUUID().slice(0, 8);
+    const code = error.code;
+
+    request.log.error(
+      { err: error, reference, path: request.url, method: request.method },
+      `[Server] Unhandled error ${reference}`,
+    );
+
+    // Errors Fastify itself raises for a malformed request are already safe
+    // and specific, so they are passed through.
+    if (error.statusCode && error.statusCode >= 400 && error.statusCode < 500) {
+      return reply.code(error.statusCode).send({
+        error: error.name || 'Bad Request',
+        message: error.message,
+      });
+    }
+
+    // Prisma constraint violations describe a client mistake, not a fault.
+    if (code === 'P2002') {
+      return reply.code(409).send({
+        error: 'Conflict',
+        message: 'A record with these details already exists.',
+        reference,
+      });
+    }
+    if (code === 'P2025') {
+      return reply.code(404).send({
+        error: 'Not Found',
+        message: 'The requested record does not exist.',
+        reference,
+      });
+    }
+    if (code === 'P1001' || code === 'P1017') {
+      return reply.code(503).send({
+        error: 'Service Unavailable',
+        message: 'The database is temporarily unreachable. Please retry in a few moments.',
+        reference,
+      });
+    }
+
+    return reply.code(500).send({
+      error: 'Internal Server Error',
+      message:
+        'The request could not be completed because of an unexpected error on our side. ' +
+        'Nothing you sent was at fault. Please retry, and quote the reference below if it keeps happening.',
+      reference,
+    });
+  });
+
+  app.setNotFoundHandler((request, reply) =>
+    reply.code(404).send({
+      error: 'Not Found',
+      message: `No endpoint is registered for ${request.method} ${request.url.split('?')[0]}.`,
+    }),
+  );
 
   // Phase 194 — Security headers (applied to all responses)
   app.addHook('onRequest', securityHeadersHook);

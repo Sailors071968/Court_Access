@@ -16,11 +16,18 @@ function concretise(url) {
   return url.replace(/:([A-Za-z0-9_]+)/g, NONEXISTENT_ID).replace(/\*/g, 'x');
 }
 
-// Routes that legitimately answer without a session.
+// Routes that legitimately answer without a session. This mirrors
+// PUBLIC_ROUTES in backend/src/security/authMiddleware.ts; a route that is
+// public in the server but missing here would be reported as an exposure, and
+// a route listed here but not in the server is simply never probed.
 const PUBLIC_ALLOWLIST = [
   /^\/api\/health/,
   /^\/api\/metrics/,
-  /^\/api\/auth\/(login|register|logout|refresh|forgot-password|reset-password|verify-email|csrf-token)/,
+  // Pre-session auth endpoints. mfa/challenge completes a login that has not
+  // yet produced a session, and accept-invitation creates the account itself.
+  /^\/api\/auth\/(login|register|logout|refresh|forgot-password|reset-password|verify-email|csrf-token|mfa\/challenge|accept-invitation)/,
+  // Shows an invitee the firm and role they were invited to before they sign up.
+  /^\/api\/organizations\/invitations\/preview/,
   /^\/api\/contact/,
   /^\/api\/marketing\/(track|lead|demo-request)/,
   /^\/api\/billing\/webhook/,

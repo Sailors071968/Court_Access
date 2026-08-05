@@ -10,7 +10,7 @@ import { execFile } from 'node:child_process';
 import { promisify } from 'node:util';
 import { readFile } from 'node:fs/promises';
 import net from 'node:net';
-import { Results, req, registerUser, login, API } from './lib/harness.mjs';
+import { Results, req, registerUser, login, API, exercisedApiRoutes } from './lib/harness.mjs';
 import { PrismaClient } from '../../backend/node_modules/@prisma/client/default.js';
 
 const exec = promisify(execFile);
@@ -73,6 +73,7 @@ const reportBytes = await readFile('/tmp/courtaccess-fixtures/police-report.pdf'
     headers: { Authorization: `Bearer ${user.token}` },
     body: form,
   });
+  exercisedApiRoutes.add('POST /api/evidence/upload');
 }
 await new Promise((r) => setTimeout(r, 3000));
 
@@ -169,10 +170,15 @@ downCheck.status === 0 || downCheck.status >= 500
   ? results.pass('REC-06', 'The API is confirmed down before the restart test', `status ${downCheck.status}`)
   : results.warn('REC-06', 'The API was still answering after the kill', `status ${downCheck.status}`);
 
+// The restarted process must come back on the same database this run is
+// using, otherwise the restart looks like data loss when it is really the
+// server talking to a different schema.
+const dbOverride = process.env.DATABASE_URL ? `export DATABASE_URL='${process.env.DATABASE_URL}'; ` : '';
 await sh(
   "cd /workspace/backend && tmux -f /exec-daemon/tmux.portal.conf kill-session -t courtaccess-api 2>/dev/null; " +
     "tmux -f /exec-daemon/tmux.portal.conf new-session -d -s courtaccess-api -c /workspace/backend -- " +
     "bash -lc 'set -a; . ./.env.certification; set +a; " +
+    dbOverride +
     'export RATE_LIMIT_REGISTER_PER_MINUTE=5000 RATE_LIMIT_GENERAL_PER_MINUTE=100000 ' +
     'RATE_LIMIT_LOGIN_PER_MINUTE=5000 RATE_LIMIT_UPLOAD_PER_MINUTE=100000 RATE_LIMIT_COMPLIANCE_PER_MINUTE=10000; ' +
     "npx tsx src/server.ts 2>&1 | tee /tmp/backend-run.log'",
@@ -265,11 +271,13 @@ if (evidenceAfterCut === evidenceBeforeCut) {
   form.append('caseId', caseId);
   form.append('evidenceType', 'police_report');
   form.append('file', new Blob([reportBytes], { type: 'application/pdf' }), 'after-interruption.pdf');
+  exercisedApiRoutes.add('POST /api/evidence/upload');
   const res = await fetch(`${API}/api/evidence/upload`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${user.token}` },
     body: form,
   });
+  exercisedApiRoutes.add('POST /api/evidence/upload');
   res.status === 201
     ? results.pass('REC-13', 'Uploads still succeed after an interrupted transfer', 'HTTP 201')
     : results.fail('REC-13', 'Uploads fail after an interrupted transfer', `HTTP ${res.status}`);

@@ -7,7 +7,7 @@
 // reported here is measured in this run.
 
 import { readFile } from 'node:fs/promises';
-import { Results, req, registerUser, API } from './lib/harness.mjs';
+import { Results, req, registerUser, API, exercisedApiRoutes } from './lib/harness.mjs';
 import { PrismaClient } from '../../backend/node_modules/@prisma/client/default.js';
 
 const prisma = new PrismaClient();
@@ -209,7 +209,8 @@ const upResults = await Promise.all(
     form.append('evidenceType', 'police_report');
     form.append('file', new Blob([reportBytes], { type: 'application/pdf' }), `concurrent-${i}.pdf`);
     const t0 = performance.now();
-    const res = await fetch(`${API}/api/evidence/upload`, {
+    exercisedApiRoutes.add('POST /api/evidence/upload');
+  const res = await fetch(`${API}/api/evidence/upload`, {
       method: 'POST',
       headers: { Authorization: `Bearer ${owner.token}` },
       body: form,

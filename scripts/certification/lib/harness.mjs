@@ -9,7 +9,23 @@ export const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '
 export const OUT_DIR = path.join(ROOT, 'reports/certification');
 export const API = process.env.CERT_API_BASE || 'http://127.0.0.1:3001';
 
+// Every API path this process touches, with ids collapsed back to :param, so
+// suite reports can state exactly which routes they exercised instead of the
+// master report having to guess from prose.
+export const exercisedApiRoutes = new Set();
+export const exercisedSpaRoutes = new Set();
+
+const UUID_RE = /[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi;
+
+export function normalisePath(url) {
+  return url
+    .split('?')[0]
+    .replace(UUID_RE, ':id')
+    .replace(/\/tenant-:id/g, '/:id');
+}
+
 export async function req(method, url, { token, body, headers = {}, raw, timeoutMs = 30000 } = {}) {
+  exercisedApiRoutes.add(`${method.toUpperCase()} ${normalisePath(url)}`);
   const started = performance.now();
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -92,6 +108,8 @@ export class Results {
       generatedAt: new Date().toISOString(),
       apiBase: API,
       summary: this.summary,
+      exercisedApiRoutes: [...exercisedApiRoutes].sort(),
+      exercisedSpaRoutes: [...exercisedSpaRoutes].sort(),
       ...extra,
       checks: this.checks,
     };

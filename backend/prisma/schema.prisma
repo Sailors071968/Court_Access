@@ -2767,3 +2767,99 @@ model PublicationAuditLog {
   @@index([entityType, entityId])
   @@map("publication_audit_logs")
 }
+
+
+// ============================================================================
+// Official California law.
+//
+// The authoritative source is leginfo.legislature.ca.gov, not this database.
+// What is stored here is a verified compilation cache: the text as it was
+// retrieved, when it was retrieved, and a fingerprint of it. A change in the
+// fingerprint is a change in the law, which is how synchronisation works and
+// how a case analysed last year can be reproduced under the law as it stood.
+// ============================================================================
+
+model OfficialStatute {
+  officialStatuteId String   @id @default(uuid())
+
+  /** e.g. PEN, HSC, VEH. The code as leginfo names it. */
+  code              String
+  /** e.g. "459." — kept with the trailing period leginfo uses. */
+  section           String
+  /** The exact page this text came from. Every citation resolves here. */
+  officialUrl       String
+
+  /** retrieved | not_found | repealed | unavailable */
+  status            String   @default("retrieved")
+  httpStatus        Int?
+  /** Why a retrieval produced nothing, in words a lawyer can act on. */
+  unavailableReason String?
+
+  /** Statutory text exactly as published, with markup removed. */
+  text              String?
+  /** SHA-256 of the normalised text. A new value means the law changed. */
+  fingerprint       String?
+  /** "(Amended by Stats. 2025, Ch. 533, Sec. 1. (AB 468))" and similar. */
+  legislativeNote   String?
+  /** Part / Title / Chapter headings, in order, as published. */
+  hierarchy         Json?
+
+  /** What the compiler made of the text. Null until compiled. */
+  compilation       Json?
+  compilerVersion   String?
+  extractionVersion String?
+
+  retrievedAt       DateTime @default(now())
+  /** Set when a later retrieval returned different text. */
+  supersededAt      DateTime?
+  /** How many times this cached retrieval has been served. */
+  cacheHits         Int      @default(0)
+  /** When synchronisation last confirmed this text still matches the source. */
+  lastVerifiedAt    DateTime?
+
+  snapshots CaseStatuteSnapshot[]
+
+  @@unique([code, section, fingerprint])
+  @@index([code, section])
+  @@index([status])
+  @@index([supersededAt])
+  @@map("official_statutes")
+}
+
+// Pins the exact statutory text a case was analysed against, so reprocessing
+// reproduces the original legal context rather than silently re-running under
+// law that has since changed.
+model CaseStatuteSnapshot {
+  caseStatuteSnapshotId String @id @default(uuid())
+  caseId                String
+  officialStatuteId     String
+  officialStatute       OfficialStatute @relation(fields: [officialStatuteId], references: [officialStatuteId], onDelete: Cascade)
+
+  /** Why this statute is in the case: charged, referenced, defined. */
+  relationship          String   @default("charged")
+  /** How the reference was reached, when it was not charged directly. */
+  reachedVia            String?
+  pinnedAt              DateTime @default(now())
+
+  @@unique([caseId, officialStatuteId, relationship])
+  @@index([caseId])
+  @@map("case_statute_snapshots")
+}
+
+// A record of every synchronisation pass, so a change in the law has a date
+// and a diff rather than appearing without explanation.
+model LegislativeSyncEvent {
+  legislativeSyncEventId String  @id @default(uuid())
+  code                   String
+  section                String
+  /** unchanged | amended | repealed | disappeared | new | error */
+  outcome                String
+  previousFingerprint    String?
+  currentFingerprint     String?
+  detail                 String?
+  detectedAt             DateTime @default(now())
+
+  @@index([outcome])
+  @@index([detectedAt])
+  @@map("legislative_sync_events")
+}

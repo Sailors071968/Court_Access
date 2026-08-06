@@ -228,6 +228,10 @@ const ROUTE_PERMISSIONS: Record<string, UserRole[]> = {
   // Gold Standard Certification is an internal QA module: it reads real
   // discovery corpora and every run touches them, so it is administrator-only.
   '/api/certification': ['admin'],
+  // Statutory retrieval underpins every analysis, so any authenticated role may
+  // read it. Forcing a refresh and running synchronisation reach out to the
+  // Legislature's own servers and are restricted inside the handlers.
+  '/api/law/synchronize': ['admin'],
   '/api/forensic': ['admin', 'attorney', 'investigator'],
   '/api/forensic/expert-package': ['admin', 'attorney'],
   '/api/forensic/jury-view': ['admin', 'attorney'],

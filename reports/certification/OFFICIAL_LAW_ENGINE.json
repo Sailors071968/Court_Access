@@ -1,0 +1,274 @@
+{
+  "report": "OFFICIAL_LAW_ENGINE",
+  "phase": "Program 147 — Official California Law Engine",
+  "generatedAt": "2026-08-06T19:14:14.501Z",
+  "apiBase": "http://127.0.0.1:3001",
+  "summary": {
+    "total": 37,
+    "PASS": 37,
+    "FAIL": 0,
+    "WARNING": 0,
+    "UNKNOWN": 0,
+    "passRate": 100
+  },
+  "exercisedApiRoutes": [
+    "GET /api/law/calcrim/HSC/11350",
+    "GET /api/law/calcrim/PEN/459",
+    "GET /api/law/case/:id/snapshot",
+    "GET /api/law/status",
+    "GET /api/law/statute/PEN/187",
+    "GET /api/law/statute/PEN/20",
+    "GET /api/law/statute/PEN/459",
+    "GET /api/law/statute/PEN/99999",
+    "GET /api/law/statute/ZZZ/1",
+    "POST /api/auth/login",
+    "POST /api/auth/register",
+    "POST /api/cases",
+    "POST /api/law/context",
+    "POST /api/law/synchronize"
+  ],
+  "exercisedSpaRoutes": [],
+  "officialSource": "https://leginfo.legislature.ca.gov/",
+  "checks": [
+    {
+      "id": "LAW-01",
+      "name": "Statutory text is retrieved from the official California source",
+      "status": "PASS",
+      "detail": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PEN&sectionNum=459."
+    },
+    {
+      "id": "LAW-02",
+      "name": "The retrieved text is the statute itself",
+      "status": "PASS",
+      "detail": "1448 characters of Penal Code 459"
+    },
+    {
+      "id": "LAW-03",
+      "name": "No page markup leaks into the statutory text",
+      "status": "PASS",
+      "detail": "text is clean enough to quote"
+    },
+    {
+      "id": "LAW-04",
+      "name": "Each retrieval carries a deterministic fingerprint",
+      "status": "PASS",
+      "detail": "39c148e07c37e50f9336484c"
+    },
+    {
+      "id": "LAW-05",
+      "name": "The legislative version is captured from the source",
+      "status": "PASS",
+      "detail": "(Amended by Stats. 2025, Ch. 533, Sec. 1. (AB 468) Effective January 1, 2026.)"
+    },
+    {
+      "id": "LAW-06",
+      "name": "The effective date is captured where the Legislature publishes one",
+      "status": "PASS",
+      "detail": "Effective January 1, 2026."
+    },
+    {
+      "id": "LAW-07",
+      "name": "The statute carries its place in the code",
+      "status": "PASS",
+      "detail": "Penal Code - PEN / PART 1 / TITLE 13 / CHAPTER 2 / 459"
+    },
+    {
+      "id": "LAW-08",
+      "name": "The compiler recognises a section that creates criminal liability",
+      "status": "PASS",
+      "detail": "creates criminal liability — \"is guilty of\", in a part of the code headed as defining crimes"
+    },
+    {
+      "id": "LAW-09",
+      "name": "Mens rea is extracted from the statutory language and cites it",
+      "status": "PASS",
+      "detail": "…the Vehicle Code, when the doors are locked, aircraft as defined by Section 21012 of the Public Utilities Cod"
+    },
+    {
+      "id": "LAW-10",
+      "name": "Cross references resolve to the code the statute names, not the code being read",
+      "status": "PASS",
+      "detail": "HNC 21., HSC 18075.55., VEH 635., VEH 362., VEH 243., PUC 21012."
+    },
+    {
+      "id": "LAW-11",
+      "name": "Definitional references are distinguished from plain references",
+      "status": "PASS",
+      "detail": "5 definitional"
+    },
+    {
+      "id": "LAW-12",
+      "name": "Terms the statute defines are extracted",
+      "status": "PASS",
+      "detail": "inhabited"
+    },
+    {
+      "id": "LAW-13",
+      "name": "A section that does not exist is reported, never invented",
+      "status": "PASS",
+      "detail": "The official source has no section 99999. in the Penal Code. It may never have existed, or it may have been re"
+    },
+    {
+      "id": "LAW-14",
+      "name": "An unrecognised code is refused with the recognised list",
+      "status": "PASS",
+      "detail": "\"ZZZ\" is not a California code published on leginfo. Recognised codes are BPC, CIV, CCP, COM, CORP, "
+    },
+    {
+      "id": "LAW-15",
+      "name": "A section that creates no liability is given no mens rea, though it discusses several",
+      "status": "PASS",
+      "detail": "Penal Code 20 names intent and criminal negligence; neither is attributed to it"
+    },
+    {
+      "id": "LAW-16",
+      "name": "The reason a mental state is unknown is recorded",
+      "status": "PASS",
+      "detail": "This section is a unknown rather than a provision creating liability, so no mental state attaches to it."
+    },
+    {
+      "id": "LAW-17",
+      "name": "An offence defined rather than announced is still recognised, with its mental state",
+      "status": "PASS",
+      "detail": "offense, malice aforethought"
+    },
+    {
+      "id": "LAW-18",
+      "name": "A reference separated from its code name by several clauses still resolves",
+      "status": "PASS",
+      "detail": "HSC 123400., HSC 123460."
+    },
+    {
+      "id": "LAW-20",
+      "name": "A charge pulls in the statutes it depends on, automatically",
+      "status": "PASS",
+      "detail": "7 sections: PEN 459., PUC 21012., HNC 21., VEH 243., VEH 635., VEH 362., HSC 18075.55."
+    },
+    {
+      "id": "LAW-19",
+      "name": "Every section in the context carries its official URL and fingerprint",
+      "status": "PASS",
+      "detail": "7 traceable nodes"
+    },
+    {
+      "id": "LAW-21",
+      "name": "Definitions the charge depends on are followed and labelled as such",
+      "status": "PASS",
+      "detail": "PUC 21012., HNC 21., VEH 243., VEH 635., VEH 362."
+    },
+    {
+      "id": "LAW-22",
+      "name": "Every dependency records the words that led to it",
+      "status": "PASS",
+      "detail": "PEN 459.: defined by Section 21012"
+    },
+    {
+      "id": "LAW-23",
+      "name": "Verified law is served from cache rather than re-read every time",
+      "status": "PASS",
+      "detail": "5ms cached against 260ms from the source"
+    },
+    {
+      "id": "LAW-24",
+      "name": "Cache utilisation is reported",
+      "status": "PASS",
+      "detail": "9 statutes cached across 5 codes, 2 hits",
+      "evidence": {
+        "statutesCached": 9,
+        "currentVersions": 9,
+        "supersededVersions": 0,
+        "repealed": 0,
+        "cacheHits": 2,
+        "syncEventsRecorded": 5,
+        "legislativeChangesDetected": 0,
+        "byCode": {
+          "HNC": 1,
+          "HSC": 1,
+          "PEN": 3,
+          "PUC": 1,
+          "VEH": 3
+        },
+        "compilerVersion": "1.0.0",
+        "extractionVersion": "1.0.0"
+      }
+    },
+    {
+      "id": "LAW-25",
+      "name": "The engine addresses the California codes, not one hardcoded list of offences",
+      "status": "PASS",
+      "detail": "29 codes"
+    },
+    {
+      "id": "LAW-26",
+      "name": "A mapped charge returns its instruction with elements compiled from the statute",
+      "status": "PASS",
+      "detail": "CALCRIM 1700, 4 elements from the official text"
+    },
+    {
+      "id": "LAW-27",
+      "name": "An unmapped charge returns UNKNOWN rather than a guessed instruction",
+      "status": "PASS",
+      "detail": "No verified CALCRIM correspondence is recorded for HSC 11350.. The statutory elements above were compiled from"
+    },
+    {
+      "id": "LAW-28",
+      "name": "Statutory elements are still compiled where no instruction is mapped",
+      "status": "PASS",
+      "detail": "7 elements from the official text"
+    },
+    {
+      "id": "LAW-29",
+      "name": "Cached law is re-read against the official source and compared",
+      "status": "PASS",
+      "detail": "5 checked, 5 unchanged, 0 changed"
+    },
+    {
+      "id": "LAW-30",
+      "name": "Synchronisation compares fingerprints rather than assuming",
+      "status": "PASS",
+      "detail": "5 comparisons"
+    },
+    {
+      "id": "LAW-31",
+      "name": "Every synchronisation pass is recorded with a date and an outcome",
+      "status": "PASS",
+      "detail": "10 events"
+    },
+    {
+      "id": "LAW-32",
+      "name": "The law a case was analysed under is pinned to it",
+      "status": "PASS",
+      "detail": "2 sections pinned"
+    },
+    {
+      "id": "LAW-33",
+      "name": "The snapshot records source, fingerprint, retrieval time and both versions",
+      "status": "PASS",
+      "detail": "2 sections, compiler 1.0.0, extraction 1.0.0"
+    },
+    {
+      "id": "LAW-34",
+      "name": "The snapshot reports which sections have since been amended",
+      "status": "PASS",
+      "detail": "0 amended since analysis"
+    },
+    {
+      "id": "LAW-35",
+      "name": "Only administrators may reach out to the official source in bulk",
+      "status": "PASS",
+      "detail": "HTTP 403"
+    },
+    {
+      "id": "LAW-36",
+      "name": "Any authenticated user can read the law their case depends on",
+      "status": "PASS",
+      "detail": "HTTP 200 for an attorney"
+    },
+    {
+      "id": "LAW-37",
+      "name": "Statutory retrieval requires authentication",
+      "status": "PASS",
+      "detail": "HTTP 401"
+    }
+  ]
+}

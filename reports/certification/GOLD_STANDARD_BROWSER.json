@@ -1,7 +1,7 @@
 {
   "report": "GOLD_STANDARD_BROWSER",
   "phase": "Program 144 — Gold Standard Browser Verification",
-  "generatedAt": "2026-08-06T16:52:10.784Z",
+  "generatedAt": "2026-08-06T17:18:25.541Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 17,
@@ -17,7 +17,7 @@
   ],
   "base": "http://127.0.0.1:4180",
   "corpus": "/tmp/courtaccess-certification-corpus/SYNTHETIC-001",
-  "reference": "UI-088125",
+  "reference": "UI-663880",
   "screenshotDirectory": "/workspace/reports/certification/screenshots",
   "pageErrors": [],
   "checks": [
@@ -37,16 +37,16 @@
       "id": "GSUI-03",
       "name": "A non-administrator is offered no entry point and sees none of the module",
       "status": "PASS",
-      "detail": "no link and none of the module's controls are present",
+      "detail": "no navigation entry, no link and none of the module's controls are present",
       "evidence": {
         "mentionContext": ""
       }
     },
     {
       "id": "GSUI-04",
-      "name": "Administration offers a Gold Standard Certification entry point",
+      "name": "An administrator can reach the module from the navigation without typing a URL",
       "status": "PASS",
-      "detail": "link present on /admin"
+      "detail": "Admin → Gold Standard Certification present in the sidebar"
     },
     {
       "id": "GSUI-05",
@@ -110,7 +110,7 @@
       "id": "GSUI-15",
       "name": "The imported corpus is listed and retained",
       "status": "PASS",
-      "detail": "reference UI-088125 shown"
+      "detail": "reference UI-663880 shown"
     },
     {
       "id": "GSUI-16",

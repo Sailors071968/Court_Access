@@ -102,11 +102,13 @@ const mentionContext =
     ? adminPageText.replace(/\s+/g, ' ').slice(Math.max(0, mentionIndex - 120), mentionIndex + 120)
     : '';
 
-advertisedLinks === 0 && moduleControls === 0
+const attorneySidebarEntry = await attorneyPage.locator('aside a[href="/admin/gold-standard"]').count();
+
+advertisedLinks === 0 && moduleControls === 0 && attorneySidebarEntry === 0
   ? results.pass(
       'GSUI-03',
       'A non-administrator is offered no entry point and sees none of the module',
-      `no link and none of the module's controls are present`,
+      `no navigation entry, no link and none of the module's controls are present`,
       { mentionContext },
     )
   : results.fail(
@@ -142,17 +144,35 @@ await adminPage.evaluate(async (email) => {
   localStorage.setItem('court-access-auth', JSON.stringify(stored));
 }, adminEmail);
 
-// Administration → Gold Standard Certification, by clicking, not by URL.
-await adminPage.goto(`${BASE}/admin`, { waitUntil: 'networkidle' });
+// Reach the module the way an administrator actually would: start where login
+// lands and use nothing but clicks. Navigating straight to /admin by URL would
+// prove only that a link sits on that page, not that anyone can get to it.
+await adminPage.goto(`${BASE}/dashboard`, { waitUntil: 'networkidle' });
+
+// Open the Admin section in the sidebar if it is collapsed.
+const adminSection = adminPage.locator('aside button', { hasText: /^Admin$/ }).first();
+if ((await adminSection.count()) > 0) {
+  const alreadyOpen = (await adminPage.locator('aside a[href="/admin/gold-standard"]').count()) > 0;
+  if (!alreadyOpen) await adminSection.click();
+  await adminPage.waitForTimeout(400);
+}
 await adminPage.screenshot({ path: path.join(SHOTS, 'gold_standard_admin_entry.png') });
 
-const entryLink = adminPage.locator('a:has-text("Gold Standard Certification")').first();
+const entryLink = adminPage.locator('aside a:has-text("Gold Standard Certification")').first();
 if (await entryLink.count()) {
-  results.pass('GSUI-04', 'Administration offers a Gold Standard Certification entry point', 'link present on /admin');
+  results.pass(
+    'GSUI-04',
+    'An administrator can reach the module from the navigation without typing a URL',
+    'Admin → Gold Standard Certification present in the sidebar',
+  );
   await entryLink.click();
   await adminPage.waitForLoadState('networkidle');
 } else {
-  results.fail('GSUI-04', 'No entry point to the module from Administration', 'link not found on /admin');
+  results.fail(
+    'GSUI-04',
+    'The module cannot be reached from the navigation',
+    'no Gold Standard Certification entry in the Admin sidebar section',
+  );
   await adminPage.goto(`${BASE}/admin/gold-standard`, { waitUntil: 'networkidle' });
 }
 

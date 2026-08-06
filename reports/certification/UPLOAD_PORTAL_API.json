@@ -1,7 +1,7 @@
 {
   "report": "UPLOAD_PORTAL_API",
   "phase": "Program 145 — Upload Portal API",
-  "generatedAt": "2026-08-06T16:50:45.600Z",
+  "generatedAt": "2026-08-06T16:54:34.256Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 22,
@@ -23,8 +23,8 @@
     "POST /api/certification/uploads/:id/commit"
   ],
   "exercisedSpaRoutes": [],
-  "uploadSessionId": "2f471baf-af60-499a-9f5e-0049a9f29afd",
-  "reference": "UP-040063",
+  "uploadSessionId": "cf9b89f0-90bd-4bc3-95d4-14fcd6b38177",
+  "reference": "UP-268746",
   "selectionFiles": 29,
   "selectionBytes": 1300024,
   "checks": [
@@ -44,7 +44,7 @@
       "id": "UP-03",
       "name": "Files upload in chunks with their folder paths preserved",
       "status": "PASS",
-      "detail": "29 file(s) in 107ms"
+      "detail": "29 file(s) in 104ms"
     },
     {
       "id": "UP-04",
@@ -137,13 +137,13 @@
       "id": "UP-17",
       "name": "The operator is told which stage the work is on throughout",
       "status": "PASS",
-      "detail": "stages reported: Reading the delivery → Ingesting discovery → Building repositories → Certification complete"
+      "detail": "stages reported: Starting import → Ingesting discovery → Building repositories → Certification complete"
     },
     {
       "id": "UP-18",
       "name": "The upload produced a certification corpus and a run",
       "status": "PASS",
-      "detail": "case a8f17dea"
+      "detail": "case 385f5f32"
     },
     {
       "id": "UP-19",

@@ -9,6 +9,7 @@ import {
   LayoutDashboard, Briefcase, Search, Bell, Settings, Shield, LogOut,
   ChevronLeft, ChevronRight, ChevronDown,
   FileText, Tag, Upload, BarChart3, Globe, Activity, Server, BookOpen, CheckSquare, FileQuestion,
+  ShieldCheck, LayoutList,
 } from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
 import { ROLE_PERMISSIONS } from '../../constants';
@@ -71,6 +72,8 @@ const navItems: NavItem[] = [
     icon: 'Shield',
     permission: 'canViewAdmin',
     children: [
+      { id: 'admin-dashboard', label: 'Admin Dashboard', path: '/admin', icon: <LayoutList size={16} />, permission: 'canViewAdmin' },
+      { id: 'gold-standard', label: 'Gold Standard Certification', path: '/admin/gold-standard', icon: <ShieldCheck size={16} />, permission: 'canViewAdmin' },
       { id: 'cpra', label: 'CPRA Campaigns', path: '/dashboard/cpra', icon: <Globe size={16} /> },
       { id: 'policy-ops', label: 'Policy Operations', path: '/dashboard/policy-operations', icon: <FileText size={16} /> },
       { id: 'discount-codes', label: 'Discount Codes', path: '/dashboard/discount-codes', icon: <Tag size={16} /> },

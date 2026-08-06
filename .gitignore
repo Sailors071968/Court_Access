@@ -48,3 +48,4 @@ reports/certification/screenshots/*
 !reports/certification/screenshots/register_filled.png
 !reports/certification/screenshots/after_register.png
 !reports/certification/screenshots/case_create_dialog.png
+backend/*.traineddata

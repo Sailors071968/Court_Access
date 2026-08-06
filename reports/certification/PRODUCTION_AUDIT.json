@@ -1,7 +1,7 @@
 {
   "report": "PRODUCTION_AUDIT",
   "phase": "Program 146 — Production Audit",
-  "generatedAt": "2026-08-06T22:12:41.805Z",
+  "generatedAt": "2026-08-06T22:19:49.420Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 21,

@@ -1,7 +1,7 @@
 {
   "report": "FABRICATION_AUDIT",
   "phase": "Program 144 — Anti-Fabrication Audit",
-  "generatedAt": "2026-08-06T18:00:51.446Z",
+  "generatedAt": "2026-08-06T22:20:38.415Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 5,
@@ -53,8 +53,8 @@
     "POST /api/evidence/upload"
   ],
   "exercisedSpaRoutes": [],
-  "emptyCaseId": "b4f9c21c-fe83-4b19-83d6-782688762d13",
-  "populatedCaseId": "d1189da8-6845-4c7c-9991-21b92dd83e2f",
+  "emptyCaseId": "428d8c3a-dd2b-4388-a0c4-11ee86ac33a9",
+  "populatedCaseId": "1cee2350-a2c1-4f6a-a30b-43e98432f79e",
   "endpointsProbed": 35,
   "emptyCaseResponses": [
     {

@@ -6,8 +6,8 @@
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 import {
-  FileText, Scale, Calendar, Lightbulb, AlertTriangle, Search as SearchIcon,
-  Plus, Upload, BarChart3, Users, Clock, TrendingUp, Briefcase, Loader2
+   Scale, Calendar, Lightbulb, AlertTriangle, Search as SearchIcon,
+  Plus, Upload, BarChart3, Users,  TrendingUp, Briefcase, Loader2
 } from 'lucide-react';
 import { Card, StatCard } from '../../components/common/Card';
 import { STATUS_COLORS, TEXT_COLORS } from '../../constants/designTokens';
@@ -33,6 +33,9 @@ interface ActionCentre {
 
 export function StaffDashboard() {
   const [actionCentre, setActionCentre] = useState<ActionCentre | null>(null);
+  const [upcomingHearings, setUpcomingHearings] = useState<
+    Array<{ caseId: string; title: string; nextHearing: string; nextHearingNote: string | null }>
+  >([]);
   const [actionUnavailable, setActionUnavailable] = useState<string | null>(null);
 
   const navigate = useNavigate();
@@ -63,6 +66,22 @@ export function StaffDashboard() {
         const allCases = await fetchCases().catch(() => []);
         if (cancelled) return;
         setCases(allCases ?? []);
+
+        // Hearings come from the cases themselves, soonest first.
+        const now = Date.now();
+        setUpcomingHearings(
+          (allCases ?? [])
+            .filter((c) => (c as { nextHearing?: string }).nextHearing)
+            .map((c) => ({
+              caseId: c.caseId,
+              title: c.title,
+              nextHearing: (c as unknown as { nextHearing: string }).nextHearing,
+              nextHearingNote: (c as unknown as { nextHearingNote?: string }).nextHearingNote ?? null,
+            }))
+            .filter((h) => new Date(h.nextHearing).getTime() >= now)
+            .sort((a, b) => new Date(a.nextHearing).getTime() - new Date(b.nextHearing).getTime())
+            .slice(0, 5),
+        );
         const first = allCases?.[0] ?? null;
         setPrimaryCase(first);
         if (first) {
@@ -271,29 +290,37 @@ export function StaffDashboard() {
             </button>
           </Card>
 
-          {/* 4. Calendar Widget */}
+          {/* Upcoming hearings, read from the cases themselves. This replaced
+              three invented entries dated February 2024 that appeared on every
+              account regardless of what was in it. */}
           <Card>
             <h2 className="text-lg font-semibold text-gray-900 mb-4">Upcoming Schedule</h2>
-            <div className="space-y-3">
-              {[
-                { type: 'hearing', label: 'Hearing — People v. Smith', date: 'Feb 15, 2024', icon: Scale },
-                { type: 'deadline', label: 'Filing Deadline — Motion to Suppress', date: 'Feb 20, 2024', icon: Clock },
-                { type: 'discovery', label: 'Discovery Deadline', date: 'Mar 1, 2024', icon: FileText },
-              ].map((event, i) => {
-                const Icon = event.icon;
-                return (
-                  <div key={i} className="flex items-start gap-3 p-2 rounded-lg hover:bg-gray-50">
+            {upcomingHearings.length === 0 ? (
+              <p className="text-sm text-gray-500" data-testid="schedule-empty">
+                No hearing date is recorded on any of your cases. Dates appear here once they are set on the case.
+              </p>
+            ) : (
+              <div className="space-y-3" data-testid="schedule-items">
+                {upcomingHearings.map((h) => (
+                  <div
+                    key={h.caseId}
+                    onClick={() => navigate(`/cases/${h.caseId}/overview`)}
+                    className="flex items-start gap-3 p-2 rounded-lg hover:bg-gray-50 cursor-pointer"
+                  >
                     <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 bg-blue-50 text-blue-600">
-                      <Icon size={14} />
+                      <Scale size={14} />
                     </div>
                     <div>
-                      <p className="text-sm font-medium text-gray-900">{event.label}</p>
-                      <p className="text-xs text-gray-500 mt-0.5">{event.date}</p>
+                      <p className="text-sm font-medium text-gray-900">{h.title}</p>
+                      <p className="text-xs text-gray-500 mt-0.5">
+                        {new Date(h.nextHearing).toLocaleDateString()}
+                        {h.nextHearingNote ? ` — ${h.nextHearingNote}` : ''}
+                      </p>
                     </div>
                   </div>
-                );
-              })}
-            </div>
+                ))}
+              </div>
+            )}
           </Card>
 
           {/* 6. Quick Actions */}

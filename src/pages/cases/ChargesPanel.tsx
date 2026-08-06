@@ -9,9 +9,10 @@
 import { useCallback, useEffect, useState } from 'react';
 import {
   AlertTriangle, ArrowRight, CheckCircle2, ChevronDown, ChevronRight,
-  FilePlus2, Gavel, History, Loader2, Scale, XCircle,
+  FilePlus2, Gavel, Grid3x3, History, Loader2, Scale, XCircle,
 } from 'lucide-react';
 import { authorizedFetch, describeFailure } from '../../services/session';
+import { ComplaintWorkspace } from './ComplaintWorkspace';
 
 interface Defendant {
   name: string;
@@ -87,6 +88,13 @@ export function ChargesPanel({ caseId }: { caseId: string }) {
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState<Record<string, boolean>>({});
   const [comparison, setComparison] = useState<{ from: string; to: string; changes: Change[] } | null>(null);
+  const [workspaceOpen, setWorkspaceOpen] = useState(false);
+  const [matrix, setMatrix] = useState<{
+    defendants: string[];
+    counts: Array<{ filedChargeId: string; countNumber: number; citation: string; status: string; allegations: string[]; exposureNote: string }>;
+    cells: Array<{ countNumber: number; defendant: string; state: string; note: string | null }>;
+    jointCounts: number[];
+  } | null>(null);
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -99,6 +107,7 @@ export function ChargesPanel({ caseId }: { caseId: string }) {
       setCurrent(c);
       setTimeline(t.timeline);
       await get<{ codes: typeof codes }>('/api/charging/codes').then((r) => setCodes(r.codes)).catch(() => {});
+      await get<NonNullable<typeof matrix>>(`/api/cases/${caseId}/charges/matrix`).then(setMatrix).catch(() => {});
     } catch (err) {
       setError(err instanceof Error ? err.message : 'The charges could not be loaded.');
     } finally {
@@ -135,6 +144,26 @@ export function ChargesPanel({ caseId }: { caseId: string }) {
         <div className="bg-red-50 border border-red-200 rounded-xl p-4 flex items-start gap-2">
           <XCircle size={16} className="text-red-600 mt-0.5" />
           <p className="text-sm text-red-800">{error}</p>
+        </div>
+      )}
+
+      {/* Filing a new document ------------------------------------------------ */}
+      {workspaceOpen ? (
+        <ComplaintWorkspace
+          caseId={caseId}
+          priorFilings={timeline.map((t) => ({ chargingDocumentId: t.chargingDocumentId, name: t.name }))}
+          onFiled={() => void load()}
+          onClose={() => setWorkspaceOpen(false)}
+        />
+      ) : (
+        <div className="flex justify-end">
+          <button
+            data-testid="open-workspace"
+            onClick={() => setWorkspaceOpen(true)}
+            className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 flex items-center gap-2"
+          >
+            <FilePlus2 size={15} /> File a charging document
+          </button>
         </div>
       )}
 
@@ -222,6 +251,69 @@ export function ChargesPanel({ caseId }: { caseId: string }) {
           </ul>
         )}
       </section>
+
+      {/* Defendant and count matrix -------------------------------------------- */}
+      {matrix && matrix.defendants.length > 0 && (
+        <section className="bg-white rounded-xl border border-gray-200 p-5" data-testid="defendant-matrix">
+          <h2 className="text-base font-semibold text-gray-900 flex items-center gap-2 mb-1">
+            <Grid3x3 size={16} /> Defendants and counts
+          </h2>
+          <p className="text-sm text-gray-500 mb-4">
+            Who is charged with what under the operative document. A blank cell means that defendant is not charged
+            on that count.
+          </p>
+          <div className="overflow-auto">
+            <table className="w-full text-xs border-collapse">
+              <thead>
+                <tr>
+                  <th className="text-left py-2 pr-4 font-medium text-gray-600 border-b border-gray-200">Count</th>
+                  {matrix.defendants.map((d) => (
+                    <th key={d} className="text-left py-2 px-3 font-medium text-gray-600 border-b border-gray-200 whitespace-nowrap">
+                      {d}
+                    </th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {matrix.counts.map((count) => (
+                  <tr key={count.filedChargeId} className="border-b border-gray-100">
+                    <td className="py-2 pr-4 align-top">
+                      <p className="font-medium text-gray-900">
+                        Count {count.countNumber}
+                        {count.status === 'dismissed' && <span className="ml-1.5 text-red-700">(dismissed)</span>}
+                      </p>
+                      <p className="text-gray-500">{count.citation}</p>
+                      {count.allegations.length > 0 && (
+                        <p className="text-amber-700 mt-1">{count.allegations.join(' · ')}</p>
+                      )}
+                      <p className="text-gray-400 mt-1">{count.exposureNote}</p>
+                    </td>
+                    {matrix.defendants.map((d) => {
+                      const cell = matrix.cells.find((x) => x.countNumber === count.countNumber && x.defendant === d);
+                      const state = cell?.state ?? 'not_charged';
+                      return (
+                        <td key={d} className="py-2 px-3 align-top whitespace-nowrap">
+                          {state === 'charged' && <span className="text-emerald-700">Charged</span>}
+                          {state === 'dismissed' && <span className="text-red-700">Dismissed</span>}
+                          {state === 'severed' && (
+                            <span className="text-amber-700" title={cell?.note ?? ''}>Severed</span>
+                          )}
+                          {state === 'not_charged' && <span className="text-gray-300">—</span>}
+                        </td>
+                      );
+                    })}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          {matrix.jointCounts.length > 0 && (
+            <p className="text-xs text-gray-500 mt-3">
+              Count(s) {matrix.jointCounts.join(', ')} are charged jointly.
+            </p>
+          )}
+        </section>
+      )}
 
       {/* Charging history ---------------------------------------------------- */}
       {timeline.length > 0 && (

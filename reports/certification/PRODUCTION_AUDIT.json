@@ -1,7 +1,7 @@
 {
   "report": "PRODUCTION_AUDIT",
   "phase": "Program 146 — Production Audit",
-  "generatedAt": "2026-08-06T19:41:02.734Z",
+  "generatedAt": "2026-08-06T21:47:24.655Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 21,
@@ -27,9 +27,9 @@
   ],
   "exercisedSpaRoutes": [],
   "routes": 106,
-  "pages": 99,
-  "endpoints": 398,
-  "tables": 114,
+  "pages": 100,
+  "endpoints": 405,
+  "tables": 115,
   "workers": 35,
   "markers": {
     "TODO": 0,
@@ -48,7 +48,7 @@
       "id": "AUD-ROUTES",
       "name": "Every route element resolves to an imported component",
       "status": "PASS",
-      "detail": "106 routes, 99 page files"
+      "detail": "106 routes, 100 page files"
     },
     {
       "id": "AUD-NAV",
@@ -66,19 +66,19 @@
       "id": "AUD-ENDPOINTS",
       "name": "API endpoints inventoried",
       "status": "PASS",
-      "detail": "398 registered route handlers"
+      "detail": "405 registered route handlers"
     },
     {
       "id": "AUD-TABLES",
       "name": "Database tables inventoried from the live schema",
       "status": "PASS",
-      "detail": "114 tables"
+      "detail": "115 tables"
     },
     {
       "id": "AUD-MIGRATIONS",
       "name": "All database migrations applied cleanly",
       "status": "PASS",
-      "detail": "26 migrations"
+      "detail": "27 migrations"
     },
     {
       "id": "AUD-HEALTH",
@@ -164,7 +164,7 @@
       "id": "AUD-FABRICATION",
       "name": "No sample or mock datasets are declared in shipped views",
       "status": "PASS",
-      "detail": "123 components scanned"
+      "detail": "124 components scanned"
     },
     {
       "id": "AUD-DASHBOARDS",

@@ -1,7 +1,7 @@
 {
   "report": "CHARGING_DOCUMENTS",
   "phase": "Program 148 — Charging Documents",
-  "generatedAt": "2026-08-06T19:36:25.087Z",
+  "generatedAt": "2026-08-06T21:47:13.043Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 34,
@@ -23,7 +23,7 @@
     "POST /api/cases/:id/charges/documents"
   ],
   "exercisedSpaRoutes": [],
-  "caseId": "ff891399-b938-4a36-b223-db6d2a89dc91",
+  "caseId": "b3edc725-1332-4840-af63-cfe0dcce3c09",
   "checks": [
     {
       "id": "CHG-01",
@@ -113,7 +113,7 @@
       "id": "CHG-15",
       "name": "A superseded filing is marked rather than removed",
       "status": "PASS",
-      "detail": "superseded 2026-08-06T19:36:24.527Z"
+      "detail": "superseded 2026-08-06T21:47:12.495Z"
     },
     {
       "id": "CHG-16",

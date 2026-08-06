@@ -1,6 +1,6 @@
 # CourtAccess — Status
 
-Last updated by Production Program 148 (Charging Document Intelligence).
+Last updated by Production Program 149 (Charge Lifecycle Intelligence).
 
 Every figure below was produced by executing the platform: PostgreSQL 16 and
 Redis 7 provisioned, all Prisma migrations applied, the Fastify API and its
@@ -14,12 +14,12 @@ Reproduce with `bash scripts/certification/run-all.sh`.
 
 | | |
 |---|---|
-| Checks executed | 558 |
-| Passed | 525 |
+| Checks executed | 617 |
+| Passed | 584 |
 | Failed | 0 |
 | Warnings | 20 |
 | Not measurable here | 13 |
-| Engineering pass rate | 94.1% |
+| Engineering pass rate | 94.7% |
 | **Release gate** | **NOT READY** |
 
 **The gate is blocked by two things, and neither is an engineering defect.**
@@ -38,7 +38,7 @@ CALCRIM: seven verified instruction correspondences, with every other charge
 returning UNKNOWN. The gate's repository criterion still reflects the older
 measurement and will clear as instruction mapping is extended.
 
-Every other gate criterion passes: zero critical defects across 558 checks,
+Every other gate criterion passes: zero critical defects across 617 checks,
 zero broken navigation, zero broken permissions or authentication, zero broken
 upload pipelines, zero broken traceability, browser verified and stress tested.
 
@@ -74,6 +74,8 @@ criterion beneath it says otherwise.
 | Official California law engine | 37 | 37 | 0 |
 | Charging documents | 34 | 34 | 0 |
 | Charging documents browser | 17 | 17 | 0 |
+| Charge lifecycle | 36 | 36 | 0 |
+| Complaint workspace browser | 23 | 23 | 0 |
 | Static statutory dependencies | 7 | 5 | 0 |
 | Statutory intelligence browser | 12 | 12 | 0 |
 | Executive readiness dashboard | 12 | 12 | 0 |
@@ -152,6 +154,39 @@ explains why rather than returning a bare error.
 
 Charges may cite any of the 29 California codes. Live on any case under
 **Charges**.
+
+### The complaint workspace
+
+Program 149 made charge entry a browser workflow. An attorney files a charging
+document from the case itself: pick the document kind, choose the code from the
+selector, enter the section and the People's wording, tick the allegations
+pleaded, preview it, file it. No API call is needed at any point.
+
+- **A draft changes nothing until it is filed.** A pleading can be built over
+  several sittings without the case analysis moving underneath the person
+  building it. Filing it makes it operative and rebuilds the charges every
+  analysis reads.
+- **An amendment can be copied from a prior filing**, carrying its counts and
+  allegations forward, because amendments usually change a little and repeat
+  the rest.
+- **Counts carry the allegations that change exposure**: attempt, strike,
+  serious and violent felony, three strikes, gang, firearm, great bodily
+  injury, special circumstance, sex registration, prior convictions, drug
+  weight and restitution.
+- **Maximum exposure is reported as the People pleaded it and never
+  calculated.** A term computed from a statute and shown as a number would be
+  relied on in plea discussions.
+- **A pasted charging document can be read automatically**, with confidence
+  reported per field and the result presented as a proposal for review. Fields
+  an attorney corrects are marked so the parser will not write over them.
+- **Every manual correction is audited** with the field, both values, the
+  author and the time.
+- **A filing locks once the case relies on it.** It can be superseded or its
+  counts dismissed, never altered, because a motion already argues against what
+  it says.
+
+A defendant and count matrix shows who is charged with what, distinguishing
+charged, dismissed, severed and not charged on that count.
 
 ## Gold Standard Certification
 

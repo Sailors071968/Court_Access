@@ -29,6 +29,7 @@ import { registerClientRoutes } from './clients/clientRoutes.js';
 import { registerEvidenceRoutes } from './evidence/evidenceRoutes.js';
 import { registerDirectUploadRoutes } from './evidence/evidenceDirectUpload.js';
 import { registerEvidenceRequestRoutes } from './evidence/evidenceRequestRoutes.js';
+import { registerCitationRoutes } from './evidence/citationRoutes.js';
 import { registerIntelligenceRoutes, registerNarrativeIntelligenceRoutes } from './intelligence/intelligenceRoutes.js';
 import { registerWorkbenchRoutes } from './workbench/workbenchRoutes.js';
 import { registerInvestigatorRoutes } from './investigator/investigatorRoutes.js';
@@ -284,6 +285,10 @@ async function startServer() {
   // Evidence Gap Detection — AI evidence requests
   console.log('[Server] Registering evidence request routes...');
   await registerEvidenceRequestRoutes(app);
+
+  // Page and line citation resolution for repository-backed findings
+  console.log('[Server] Registering citation routes...');
+  await registerCitationRoutes(app);
 
   // Narrative Deconstruction Engine routes
   console.log('[Server] Registering Attorney Intelligence routes...');

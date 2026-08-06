@@ -526,8 +526,47 @@ record("broken-metadata.mp4", "video-broken-header", "explain-corrupt")
 
 os.remove(SPEECH_SRC)
 
-# --- Manifest ---------------------------------------------------------------
 import json
+
+
+# ---------------------------------------------------------------------------
+# Citation fixture — known content at known page and line positions
+#
+# Each page carries a sentinel line whose page and line number are encoded in
+# the text itself, so a citation the platform issues can be checked against
+# the document rather than taken on trust.
+# ---------------------------------------------------------------------------
+
+def make_citation_fixture(path, pages=4, lines_per_page=30):
+    c = canvas.Canvas(path, pagesize=LETTER)
+    c.setTitle("Citation certification transcript")
+    expected = []
+    for pg in range(1, pages + 1):
+        y = H - 72
+        c.setFont("Helvetica", 10)
+        for ln in range(1, lines_per_page + 1):
+            if ln == 7:
+                line = f"SENTINEL PAGE {pg} LINE {ln} UNIQUEMARK{pg:02d}{ln:02d}"
+                expected.append({"page": pg, "line": ln, "marker": f"UNIQUEMARK{pg:02d}{ln:02d}", "text": line})
+            elif ln == 19:
+                line = f"SENTINEL PAGE {pg} LINE {ln} UNIQUEMARK{pg:02d}{ln:02d}"
+                expected.append({"page": pg, "line": ln, "marker": f"UNIQUEMARK{pg:02d}{ln:02d}", "text": line})
+            else:
+                line = f"{ln:>3}  Q. Directing your attention to page {pg}, what did you observe?"
+            c.drawString(60, y, line)
+            y -= 14
+        c.showPage()
+    c.save()
+    return expected
+
+
+_expected = make_citation_fixture(os.path.join(OUT, "citation-transcript.pdf"))
+with open(os.path.join(OUT, "citation-transcript.expected.json"), "w") as fh:
+    json.dump({"pages": 4, "linesPerPage": 30, "sentinels": _expected}, fh, indent=2)
+record("citation-transcript.pdf", "pdf-citation", "extract-text", "4 pages, sentinels at known lines")
+print(f"citation fixture: {len(_expected)} sentinels across 4 pages")
+
+# --- Manifest ---------------------------------------------------------------
 
 with open(os.path.join(OUT, "MANIFEST.json"), "w") as fh:
     json.dump(manifest, fh, indent=2)

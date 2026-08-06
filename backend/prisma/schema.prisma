@@ -1839,6 +1839,12 @@ model Evidence {
   multiplexCount    Int?
   normalizedPageCount Int?
 
+  // Page boundaries within the extracted text, as
+  // [{ page, startOffset, endOffset }]. Lets any character offset in a chunk
+  // or an extracted event be resolved back to a page and a line on that page,
+  // which is what a citation in a brief has to name.
+  pageMap          Json?
+
   // ACU compute preparation (Part 15)
   acuCost          Float?
   acuConsumed      Float    @default(0)

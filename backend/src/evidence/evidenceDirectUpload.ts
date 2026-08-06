@@ -19,6 +19,8 @@ import prisma from '../lib/prisma.js';
 import {
   describe,
   detectFormat,
+  joinPagesWithMap,
+  type PageSpan,
   extractDocxText,
   inspectPdf,
   isTruncatedIsoMedia,
@@ -73,6 +75,12 @@ export interface ExtractionOutcome {
   detectedFormat: string;
   detectedMimeType: string;
   ocrConfidence?: number;
+  /**
+   * Where each page begins and ends within `text`. Present for formats that
+   * expose page boundaries, which is what lets a finding cite a page and line
+   * rather than a character offset.
+   */
+  pageMap?: PageSpan[];
 }
 
 function ok(text: string, format: string, mime: string, extra: Partial<ExtractionOutcome> = {}): ExtractionOutcome {
@@ -179,22 +187,41 @@ async function extractTextFromFile(
       const parser = new PDFParse({ data: buffer });
       await (parser as unknown as { load(): Promise<void> }).load();
       const result = await parser.getText();
-      const text = (
-        typeof result === 'object' && result !== null
-          ? (result as { text?: string }).text || ''
-          : String(result || '')
-      ).trim();
+
+      // Prefer the per-page breakdown so page boundaries can be recorded; fall
+      // back to the flat text when a document does not expose pages.
+      const rawPages = (result as { pages?: Array<{ text?: string }> })?.pages;
+      let text: string;
+      let pageMap: PageSpan[] | undefined;
+      if (Array.isArray(rawPages) && rawPages.length > 0) {
+        const joined = joinPagesWithMap(rawPages.map((p) => String(p?.text ?? '')));
+        text = joined.text.trim();
+        // trim() shifts offsets, so build the map against the trimmed text.
+        const lead = joined.text.length - joined.text.trimStart().length;
+        pageMap = joined.pageMap.map((p) => ({
+          page: p.page,
+          startOffset: Math.max(0, p.startOffset - lead),
+          endOffset: Math.max(0, Math.min(p.endOffset - lead, text.length)),
+        }));
+      } else {
+        text = (
+          typeof result === 'object' && result !== null
+            ? (result as { text?: string }).text || ''
+            : String(result || '')
+        ).trim();
+      }
       await parser.destroy();
 
       if (text.length > 0) {
         if (inspection.truncated) {
           return ok(text, fmt, mime, {
+            pageMap,
             message:
               `"${fileName}" is missing its end-of-file marker, so the upload may be incomplete. ` +
               'The text that could be read has been indexed; please verify the page count against the source.',
           });
         }
-        return ok(text, fmt, mime);
+        return ok(text, fmt, mime, { pageMap });
       }
 
       // Parsed cleanly but carries no text layer — this is a scanned PDF.
@@ -679,6 +706,10 @@ async function processEvidenceAsync(
         processingError: outcome.message,
         mimeType: outcome.detectedMimeType,
         normalizedPageCount: chunkResult.chunkCount,
+        // Recorded so a finding's character offset can be cited as a page and
+        // a line rather than an offset into a blob.
+        pageMap: outcome.pageMap ? (outcome.pageMap as unknown as object) : undefined,
+        pageCount: outcome.pageMap ? outcome.pageMap.length : undefined,
       },
     });
 

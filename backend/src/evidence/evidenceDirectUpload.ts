@@ -14,6 +14,7 @@ import { createWriteStream } from 'fs';
 import { pipeline } from 'stream/promises';
 import type { AuthenticatedRequest } from '../security/authMiddleware.js';
 import { validateEvidenceUpload } from './evidenceValidation.js';
+import { assessAudio } from '../certification/mediaProbe.js';
 import { chunkAndPersistEvidence } from '../services/evidenceChunkingService.js';
 import prisma from '../lib/prisma.js';
 import {
@@ -390,6 +391,36 @@ async function extractTextFromFile(
       );
     }
     const article = /^[AEIOU]/.test(detected.label) ? 'an' : 'a';
+
+    // A recording that was muted and one that simply has not been transcribed
+    // are different problems for counsel, so look at the audio itself rather
+    // than reporting the same thing for both.
+    const audio = filePath ? await assessAudio(filePath) : { hasAudioStream: false, peakDb: null, silent: false, measured: false };
+
+    if (audio.measured && !audio.hasAudioStream) {
+      return problem(
+        `"${fileName}" is ${article} ${detected.label} and has been stored with the case, but it carries ` +
+          'no audio track at all — the recording is picture only. If this recording was expected to ' +
+          'capture what was said, the audio was not recorded or was removed before disclosure, and the ' +
+          'original should be requested from the producing party.',
+        fmt,
+        mime,
+        'analyzed',
+      );
+    }
+
+    if (audio.measured && audio.silent) {
+      return problem(
+        `"${fileName}" is ${article} ${detected.label} and has been stored with the case, but its audio is ` +
+          `effectively silent — the loudest point measures ${audio.peakDb?.toFixed(1)} dBFS, far below ` +
+          'ordinary speech. Nothing said during this recording is audible or intelligible. Request the ' +
+          'original from the producing party, or confirm the microphone was muted.',
+        fmt,
+        mime,
+        'analyzed',
+      );
+    }
+
     return problem(
       `"${fileName}" is ${article} ${detected.label} and has been stored with the case. ` +
         'Automatic speech transcription is not available, so the words spoken in this recording ' +

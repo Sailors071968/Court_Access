@@ -274,9 +274,19 @@ finished
       finalStatus ? `${finalStatus.status}: ${finalStatus.error ?? finalStatus.stage}` : 'no status returned',
     );
 
+// The dashboard is polled while the pipeline runs, so only the stages that
+// happen to be current when a poll lands are observed. On a corpus this small
+// ingestion dominates and the rest pass in well under a second each.
 stagesSeen.size >= 2
   ? results.pass('UPB-16', 'The operator is never left wondering what is happening', [...stagesSeen].join(' → '))
-  : results.warn('UPB-16', 'Few stages were observed in the browser', [...stagesSeen].join(', '));
+  : results.warn(
+      'UPB-16',
+      'The browser sampled only one stage on a corpus that processes in seconds',
+      `observed "${[...stagesSeen].join(', ')}". The server reports four distinct stages for the same ` +
+        'corpus (see UP-17 in the upload portal API suite); the other three complete faster than the ' +
+        'polling interval, so a browser poll rarely lands on them. Not a gap in reporting, but stage ' +
+        'coverage in the browser has only been demonstrated for the long-running stage.',
+    );
 
 // --- The corpus must exist and be inventoried -------------------------------
 await page.waitForTimeout(2500);

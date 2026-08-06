@@ -171,3 +171,56 @@ export function estimateProcessing(input: {
       'Scanned documents dominate the total.',
   };
 }
+
+export interface AudioAssessment {
+  /** True when the file carries no audio stream at all. */
+  hasAudioStream: boolean;
+  /** Peak volume in dBFS, or null when it could not be measured. */
+  peakDb: number | null;
+  /** True when the audio is present but effectively silent. */
+  silent: boolean;
+  measured: boolean;
+}
+
+/**
+ * Decide whether a recording actually carries audible speech. A body-camera
+ * file that was muted and one that simply has not been transcribed are
+ * different problems for counsel, and telling them apart requires looking at
+ * the audio rather than at the container.
+ */
+export async function assessAudio(absolutePath: string): Promise<AudioAssessment> {
+  const unmeasured: AudioAssessment = { hasAudioStream: false, peakDb: null, silent: false, measured: false };
+  if (!(await hasFfprobe())) return unmeasured;
+
+  let hasAudioStream = false;
+  try {
+    const { stdout } = await exec(
+      'ffprobe',
+      ['-v', 'error', '-select_streams', 'a', '-show_entries', 'stream=codec_type', '-of', 'csv=p=0', absolutePath],
+      { timeout: 60000, maxBuffer: 1024 * 1024 },
+    );
+    hasAudioStream = stdout.trim().length > 0;
+  } catch {
+    return unmeasured;
+  }
+
+  if (!hasAudioStream) return { hasAudioStream: false, peakDb: null, silent: false, measured: true };
+
+  try {
+    // volumedetect writes its summary to stderr.
+    const { stderr } = await exec(
+      'ffmpeg',
+      ['-hide_banner', '-nostats', '-i', absolutePath, '-af', 'volumedetect', '-f', 'null', '-'],
+      { timeout: 300000, maxBuffer: 8 * 1024 * 1024 },
+    ).catch((e: unknown) => e as { stderr?: string });
+
+    const match = /max_volume:\s*(-?[\d.]+) dB/.exec(stderr ?? '');
+    if (!match) return { hasAudioStream: true, peakDb: null, silent: false, measured: false };
+
+    const peakDb = parseFloat(match[1]);
+    // Below roughly -50 dBFS nothing is audible; speech peaks far above this.
+    return { hasAudioStream: true, peakDb, silent: peakDb < -50, measured: true };
+  } catch {
+    return { hasAudioStream: true, peakDb: null, silent: false, measured: false };
+  }
+}

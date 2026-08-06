@@ -1,7 +1,7 @@
 {
   "report": "GOLD_STANDARD_FRAMEWORK",
   "phase": "Program 144 — Gold Standard Certification Framework",
-  "generatedAt": "2026-08-06T15:41:29.650Z",
+  "generatedAt": "2026-08-06T16:41:36.613Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 27,
@@ -26,8 +26,8 @@
   "corpus": "/tmp/courtaccess-certification-corpus/SYNTHETIC-001",
   "corpusTreeHashBefore": "c8cbff7993c574d6d653c87ade5811563c141d2ccdf10dea97863fd5de1ecb59",
   "corpusTreeHashAfter": "c8cbff7993c574d6d653c87ade5811563c141d2ccdf10dea97863fd5de1ecb59",
-  "reference": "SYN-883022",
-  "certificationCaseId": "47871919-f0a1-4695-a566-8fdca4cfc145",
+  "reference": "SYN-491266",
+  "certificationCaseId": "7537b047-de8a-4870-8dfc-13022ed20fff",
   "checks": [
     {
       "id": "GS-01",
@@ -71,9 +71,9 @@
       "status": "PASS",
       "detail": "31 ingested, 1 duplicate(s), 0 failed, of 32 files",
       "evidence": {
-        "certificationCaseId": "47871919-f0a1-4695-a566-8fdca4cfc145",
-        "reference": "SYN-883022",
-        "caseId": "0593dcdc-df4d-4589-86fb-b227637a2043",
+        "certificationCaseId": "7537b047-de8a-4870-8dfc-13022ed20fff",
+        "reference": "SYN-491266",
+        "caseId": "307df11a-da8f-4d71-ad8d-b884efb13ff9",
         "fileCount": 32,
         "ingested": 31,
         "duplicates": 1,
@@ -99,7 +99,7 @@
       "id": "GS-10",
       "name": "A corpus reference cannot be reused",
       "status": "PASS",
-      "detail": "A certification corpus with reference \"SYN-883022\" already exists. Certification corpora are permanent; choose a new ref"
+      "detail": "A certification corpus with reference \"SYN-491266\" already exists. Certification corpora are permanent; choose a new ref"
     },
     {
       "id": "GS-11",
@@ -121,7 +121,11 @@
         "images": 4,
         "duplicates": 1,
         "ingested": 31,
-        "failed": 0
+        "failed": 0,
+        "pages": 54,
+        "videoSeconds": 12,
+        "audioSeconds": 8,
+        "unmeasured": 4
       }
     },
     {

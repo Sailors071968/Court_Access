@@ -4,6 +4,10 @@
 // ============================================================================
 
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import type { AuthenticatedRequest } from '../security/authMiddleware.js';
+// Case-scoped compliance output is privileged work product. Every handler that
+// takes a caseId must confirm the caller may read that case before touching it.
+import { guardCaseAccess } from '../membership/resourceAuthMiddleware.js';
 import { extractEventsForCase, getCaseEvents, getCaseEventStats } from './eventExtractionService.js';
 import { analyzeVideoEvidence, getVideoAnalysisSummary } from './videoActionDetectionService.js';
 import { runSpeechAnalysis } from './speechAnalysisService.js';
@@ -73,6 +77,10 @@ export async function registerComplianceRoutes(app: FastifyInstance): Promise<vo
   app.get(
     '/api/compliance/events/:caseId',
     async (request: FastifyRequest<{ Params: { caseId: string } }>, reply: FastifyReply) => {
+      const user = (request as AuthenticatedRequest).user;
+      if (!user) return reply.code(401).send({ success: false, error: 'Authentication required' });
+      if (!(await guardCaseAccess(user, request.params.caseId, 'view', reply))) return;
+
       try {
         const events = await getCaseEvents(request.params.caseId);
         return reply.send({ success: true, data: events });
@@ -86,6 +94,10 @@ export async function registerComplianceRoutes(app: FastifyInstance): Promise<vo
   app.get(
     '/api/compliance/events/:caseId/stats',
     async (request: FastifyRequest<{ Params: { caseId: string } }>, reply: FastifyReply) => {
+      const user = (request as AuthenticatedRequest).user;
+      if (!user) return reply.code(401).send({ success: false, error: 'Authentication required' });
+      if (!(await guardCaseAccess(user, request.params.caseId, 'view', reply))) return;
+
       try {
         const stats = await getCaseEventStats(request.params.caseId);
         return reply.send({ success: true, data: stats });
@@ -130,6 +142,10 @@ export async function registerComplianceRoutes(app: FastifyInstance): Promise<vo
   app.get(
     '/api/compliance/video/:caseId/summary',
     async (request: FastifyRequest<{ Params: { caseId: string } }>, reply: FastifyReply) => {
+      const user = (request as AuthenticatedRequest).user;
+      if (!user) return reply.code(401).send({ success: false, error: 'Authentication required' });
+      if (!(await guardCaseAccess(user, request.params.caseId, 'view', reply))) return;
+
       try {
         const summary = await getVideoAnalysisSummary(request.params.caseId);
         return reply.send({ success: true, data: summary });
@@ -177,6 +193,10 @@ export async function registerComplianceRoutes(app: FastifyInstance): Promise<vo
       }>,
       reply: FastifyReply,
     ) => {
+      const user = (request as AuthenticatedRequest).user;
+      if (!user) return reply.code(401).send({ success: false, error: 'Authentication required' });
+      if (!(await guardCaseAccess(user, request.params.caseId, 'view', reply))) return;
+
       try {
         const timeline = await buildOfficerTimeline(request.params.caseId);
         if (request.query.format === 'text') {
@@ -579,6 +599,10 @@ export async function registerComplianceRoutes(app: FastifyInstance): Promise<vo
   app.get(
     '/api/compliance/expert/:caseId',
     async (request: FastifyRequest<{ Params: { caseId: string } }>, reply: FastifyReply) => {
+      const user = (request as AuthenticatedRequest).user;
+      if (!user) return reply.code(401).send({ success: false, error: 'Authentication required' });
+      if (!(await guardCaseAccess(user, request.params.caseId, 'view', reply))) return;
+
       try {
         const pkg = await generateExpertWitnessPackage(request.params.caseId);
         return reply.send({ success: true, data: pkg });
@@ -596,6 +620,10 @@ export async function registerComplianceRoutes(app: FastifyInstance): Promise<vo
   app.get(
     '/api/compliance/jury/:caseId',
     async (request: FastifyRequest<{ Params: { caseId: string } }>, reply: FastifyReply) => {
+      const user = (request as AuthenticatedRequest).user;
+      if (!user) return reply.code(401).send({ success: false, error: 'Authentication required' });
+      if (!(await guardCaseAccess(user, request.params.caseId, 'view', reply))) return;
+
       try {
         const viz = await generateJuryVisualizations(request.params.caseId);
         return reply.send({ success: true, data: viz });

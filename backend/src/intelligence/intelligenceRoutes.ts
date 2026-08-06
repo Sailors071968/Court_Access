@@ -73,6 +73,7 @@ export async function registerNarrativeIntelligenceRoutes(app: FastifyInstance):
     const user = request.user;
     if (!user) return reply.code(401).send({ error: 'Authentication required' });
     const { caseId } = request.params as { caseId: string };
+    if (!(await guardCaseAccess(user, caseId, 'view', reply))) return;
 
     const claims = await prisma.narrativeClaim.findMany({
       where: { caseId, tenantId: user.tenantId },
@@ -96,6 +97,7 @@ export async function registerNarrativeIntelligenceRoutes(app: FastifyInstance):
     const user = request.user;
     if (!user) return reply.code(401).send({ error: 'Authentication required' });
     const { caseId } = request.params as { caseId: string };
+    if (!(await guardCaseAccess(user, caseId, 'view', reply))) return;
 
     const intelligence = await buildCaseIntelligence(caseId, user.tenantId);
     const contradictions = intelligence?.contradictionAnalysis ?? [];
@@ -106,6 +108,7 @@ export async function registerNarrativeIntelligenceRoutes(app: FastifyInstance):
     const user = request.user;
     if (!user) return reply.code(401).send({ error: 'Authentication required' });
     const { caseId } = request.params as { caseId: string };
+    if (!(await guardCaseAccess(user, caseId, 'view', reply))) return;
 
     const candidates = await prisma.impeachmentCandidate.findMany({
       where: { caseId, tenantId: user.tenantId },

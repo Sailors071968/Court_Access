@@ -1,6 +1,6 @@
 # CourtAccess — Status
 
-Last updated by Production Program 149 (Charge Lifecycle Intelligence).
+Last updated by Production Program 150 (Defence Strategy and Litigation Intelligence).
 
 Every figure below was produced by executing the platform: PostgreSQL 16 and
 Redis 7 provisioned, all Prisma migrations applied, the Fastify API and its
@@ -14,12 +14,12 @@ Reproduce with `bash scripts/certification/run-all.sh`.
 
 | | |
 |---|---|
-| Checks executed | 617 |
-| Passed | 584 |
+| Checks executed | 662 |
+| Passed | 630 |
 | Failed | 0 |
-| Warnings | 20 |
+| Warnings | 19 |
 | Not measurable here | 13 |
-| Engineering pass rate | 94.7% |
+| Engineering pass rate | 95.2% |
 | **Release gate** | **NOT READY** |
 
 **The gate is blocked by two things, and neither is an engineering defect.**
@@ -38,7 +38,7 @@ CALCRIM: seven verified instruction correspondences, with every other charge
 returning UNKNOWN. The gate's repository criterion still reflects the older
 measurement and will clear as instruction mapping is extended.
 
-Every other gate criterion passes: zero critical defects across 617 checks,
+Every other gate criterion passes: zero critical defects across 662 checks,
 zero broken navigation, zero broken permissions or authentication, zero broken
 upload pipelines, zero broken traceability, browser verified and stress tested.
 
@@ -76,6 +76,8 @@ criterion beneath it says otherwise.
 | Charging documents browser | 17 | 17 | 0 |
 | Charge lifecycle | 36 | 36 | 0 |
 | Complaint workspace browser | 23 | 23 | 0 |
+| Defence strategy and motion intelligence | 30 | 30 | 0 |
+| Strategy workspace browser | 15 | 15 | 0 |
 | Static statutory dependencies | 7 | 5 | 0 |
 | Statutory intelligence browser | 12 | 12 | 0 |
 | Executive readiness dashboard | 12 | 12 | 0 |
@@ -187,6 +189,62 @@ pleaded, preview it, file it. No API call is needed at any point.
 
 A defendant and count matrix shows who is charged with what, distinguishing
 charged, dismissed, severed and not charged on that count.
+
+## Defence strategy
+
+Program 150 organises the record into the thirty-one themes a defence lawyer
+thinks in — identity, alibi, self defence, lack of intent, the Fourth
+Amendment, Miranda, chain of custody, credibility and the rest. A theme appears
+because a document said something, and the passage that raised it is quoted
+with its source, so every entry can be checked against the original.
+
+**It organises and does not conclude.** Nothing says a defence is available,
+sound or worth running; a certification check asserts the response contains no
+advisory or predictive language at all. A theme with nothing behind it is
+reported as unsupported with the reason, because "nothing found on alibi" and
+"we never looked" are different answers.
+
+Motion intelligence raises the procedural and constitutional issues the record
+touches, each phrased as warranting attorney review and never as advice to
+file. Live on any case under **Litigation Strategy** and **Motions**.
+
+### Two fabricated widgets removed
+
+The staff dashboard showed five invented alerts to every user on sign-in,
+naming a case that does not exist, quoting a case number nobody was assigned,
+carrying fixed strings like "2 hours ago", and announcing a motion
+recommendation nobody had made — all under a heading reading "Alerts & Action
+Queue, sorted by urgency". A second widget showed three invented hearings and
+deadlines dated February and March 2024.
+
+Both are gone. The action centre now counts real outstanding work — evidence
+that failed to process, investigation tasks outstanding, charges amended,
+cases with no charging document, hearings inside a fortnight — and each entry
+links to the record it is about. The schedule reads the hearing dates on the
+cases and says plainly when there are none.
+
+The Program 146 fabrication audit missed both because it looked for a named
+variable holding a literal dataset, and these were written inline inside the
+render. The audit now catches inline literal arrays whose content reads as a
+fact about a case, verified by running it against the previous version of the
+file, which it fails.
+
+### What Program 150 did not build
+
+Stated rather than implied. The programme asked for ten surfaces; four were
+built or repaired and the rest were not reached:
+
+- **Administrative Operations Center** — not built. The billing metrics API
+  exists and returns real MRR and subscription counts, but there is no revenue,
+  churn or subscriber dashboard consuming it.
+- **Customer Support Console** — not built. There is no ticket model, no
+  per-subscriber diagnostic view, and no support workspace.
+- **Attorney War Room** — not built as specified. The existing Attorney
+  Workbench covers much of it and reads real data, but it was not extended to
+  the unified view the programme describes.
+- **Family Dashboard** — not built as specified. Family members reach the
+  client portal, which shares the defendant dashboard; the simplified
+  family-specific view with suggested questions was not built.
 
 ## Gold Standard Certification
 

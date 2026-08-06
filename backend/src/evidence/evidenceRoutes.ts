@@ -12,6 +12,7 @@ import type { AuthenticatedRequest } from '../security/authMiddleware.js';
 import { requireCaseAccess, sendForbidden } from '../membership/resourceAuthMiddleware.js';
 import { validateEvidenceUpload } from './evidenceValidation.js';
 import { enqueueEvidenceIngestion } from './evidenceProcessingPipeline.js';
+import { purgeEvidenceDerivedFindings } from './evidenceDerivedData.js';
 
 const prisma = new PrismaClient();
 
@@ -370,9 +371,18 @@ export async function registerEvidenceRoutes(app: FastifyInstance): Promise<void
         // Continue with DB deletion even if S3 fails — log for manual cleanup
       }
 
-      await prisma.evidence.delete({
-        where: { evidenceId },
+      // Findings inferred from this document cannot outlive it — they would
+      // cite a source the case no longer holds.
+      const purged = await prisma.$transaction(async (tx) => {
+        const counts = await purgeEvidenceDerivedFindings(tx, [evidenceId]);
+        await tx.evidence.delete({ where: { evidenceId } });
+        return counts;
       });
+      console.log(
+        `[EvidenceRoutes] Deleted evidence ${evidenceId} and its derived findings: ` +
+          `${purged.chunks} chunks, ${purged.events} events, ${purged.verifiedFacts} verified facts, ` +
+          `${purged.narrativeClaims} narrative claims; ${purged.fieldNotesDetached} field note(s) detached`,
+      );
 
       return { message: 'Evidence deleted', evidenceId };
     } catch (err) {

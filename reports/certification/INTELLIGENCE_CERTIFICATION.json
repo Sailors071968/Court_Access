@@ -1,0 +1,172 @@
+{
+  "report": "INTELLIGENCE_CERTIFICATION",
+  "phase": "Program 144 — CALCRIM, Mens Rea, Investigation, Motions",
+  "generatedAt": "2026-08-06T14:04:03.801Z",
+  "apiBase": "http://127.0.0.1:3001",
+  "summary": {
+    "total": 14,
+    "PASS": 12,
+    "FAIL": 0,
+    "WARNING": 2,
+    "UNKNOWN": 0,
+    "passRate": 85.7
+  },
+  "exercisedApiRoutes": [
+    "GET /api/calcrim/analyze/:id",
+    "GET /api/cases/:id/evidence-requests",
+    "GET /api/cases/:id/intelligence",
+    "GET /api/cases/:id/intelligence/report",
+    "GET /api/cases/:id/investigator-workbench",
+    "GET /api/cases/:id/workbench/trial-prep",
+    "GET /api/legislative/intelligence/PEN/187",
+    "POST /api/auth/login",
+    "POST /api/auth/register",
+    "POST /api/cases",
+    "POST /api/charges",
+    "POST /api/evidence/upload"
+  ],
+  "exercisedSpaRoutes": [],
+  "mappedOffences": [
+    "Penal Code 459",
+    "Penal Code 484"
+  ],
+  "mensReaRecordCount": 5,
+  "motionResponses": [
+    {
+      "url": "/api/cases/f4f5fa6f-0774-4649-9609-43f6f7793840/intelligence",
+      "status": 200,
+      "hasMotionContent": true
+    },
+    {
+      "url": "/api/cases/f4f5fa6f-0774-4649-9609-43f6f7793840/intelligence/report",
+      "status": 200,
+      "hasMotionContent": true
+    },
+    {
+      "url": "/api/cases/f4f5fa6f-0774-4649-9609-43f6f7793840/workbench/trial-prep",
+      "status": 200,
+      "hasMotionContent": false
+    }
+  ],
+  "checks": [
+    {
+      "id": "CAL-01",
+      "name": "A case with no charges is reported as UNKNOWN, not assessed",
+      "status": "PASS",
+      "detail": "No charges have been entered for this case, so no CALCRIM instruction can be organised. Add the charged offences to see their elements."
+    },
+    {
+      "id": "CAL-02",
+      "name": "A charged offence with no instruction is reported rather than silently dropped",
+      "status": "PASS",
+      "detail": "No CALCRIM instruction is held for PC 245(a)(1). Its elements cannot be organised, and nothing about this count is asserted. The instruction library c"
+    },
+    {
+      "id": "CAL-03",
+      "name": "No case assessment is offered when nothing could be analysed",
+      "status": "PASS",
+      "detail": "overallCaseStrength=UNKNOWN"
+    },
+    {
+      "id": "CAL-04",
+      "name": "No element is satisfied before any evidence exists",
+      "status": "PASS",
+      "detail": "2 elements of CALCRIM 1700, all unsupported"
+    },
+    {
+      "id": "CAL-05",
+      "name": "An element becomes supported only when evidence is present, and cites it",
+      "status": "PASS",
+      "detail": "entry supported by 1 item(s) from police_report"
+    },
+    {
+      "id": "CAL-06",
+      "name": "An element with no supporting evidence stays unsatisfied and is listed as missing",
+      "status": "PASS",
+      "detail": "intent unsupported; missing: intent"
+    },
+    {
+      "id": "CAL-07",
+      "name": "The CALCRIM instruction library covers only a small number of offences",
+      "status": "WARNING",
+      "detail": "2 mapped: Penal Code 459, Penal Code 484. Any other charged count returns UNKNOWN.",
+      "evidence": {
+        "mappedOffences": [
+          "Penal Code 459",
+          "Penal Code 484"
+        ]
+      }
+    },
+    {
+      "id": "MR-01",
+      "name": "Every mens rea record carries an explicit confidence on each field",
+      "status": "PASS",
+      "detail": "5 records; undetermined fields are recorded as UNKNOWN rather than guessed"
+    },
+    {
+      "id": "MR-02",
+      "name": "Every mens rea record cites the statute text it was extracted from",
+      "status": "PASS",
+      "detail": "each carries a source URL and a content hash; e.g. https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PEN&"
+    },
+    {
+      "id": "MR-03",
+      "name": "Mens rea coverage is very small",
+      "status": "WARNING",
+      "detail": "5 statute(s) have an extracted mental state, of which 4 are UNKNOWN. Charged offences outside this set have no mens rea analysis.",
+      "evidence": {
+        "records": 5,
+        "unknown": 4
+      }
+    },
+    {
+      "id": "MR-04",
+      "name": "A statute outside the repository returns nothing rather than invented analysis",
+      "status": "PASS",
+      "detail": "HTTP 404: Statute intelligence not found. Run leginfo:process first."
+    },
+    {
+      "id": "INV-01",
+      "name": "Investigation output describes what is absent rather than asserting facts",
+      "status": "PASS",
+      "detail": "2 gap statement(s); e.g. \"No indexed witness statements — UNKNOWN witness coverage\"",
+      "evidence": {
+        "gaps": [
+          "No indexed witness statements — UNKNOWN witness coverage",
+          "Evidence uploaded but no timeline events reconstructed"
+        ]
+      }
+    },
+    {
+      "id": "INV-02",
+      "name": "Evidence gap detection responds for a populated case",
+      "status": "PASS",
+      "detail": "0 outstanding request(s)"
+    },
+    {
+      "id": "MOT-01",
+      "name": "Motion-related issues are surfaced through the API",
+      "status": "PASS",
+      "detail": "/api/cases/:caseId/intelligence, /api/cases/:caseId/intelligence/report",
+      "evidence": {
+        "motionResponses": [
+          {
+            "url": "/api/cases/f4f5fa6f-0774-4649-9609-43f6f7793840/intelligence",
+            "status": 200,
+            "hasMotionContent": true
+          },
+          {
+            "url": "/api/cases/f4f5fa6f-0774-4649-9609-43f6f7793840/intelligence/report",
+            "status": 200,
+            "hasMotionContent": true
+          },
+          {
+            "url": "/api/cases/f4f5fa6f-0774-4649-9609-43f6f7793840/workbench/trial-prep",
+            "status": 200,
+            "hasMotionContent": false
+          }
+        ]
+      }
+    }
+  ]
+}

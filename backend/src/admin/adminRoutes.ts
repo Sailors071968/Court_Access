@@ -11,6 +11,7 @@ import { PrismaClient } from '@prisma/client';
 import { S3Client, DeleteObjectCommand, ListObjectsV2Command, DeleteObjectsCommand } from '@aws-sdk/client-s3';
 import type { AuthenticatedRequest } from '../security/authMiddleware.js';
 import { collectBillingReadinessMetrics } from '../billing/billingMetricsService.js';
+import { purgeEvidenceDerivedFindings } from '../evidence/evidenceDerivedData.js';
 
 const prisma = new PrismaClient();
 
@@ -271,9 +272,7 @@ export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
 
       await prisma.$transaction(async (tx) => {
         if (caseIds.length > 0) {
-          if (evidenceIds.length > 0) {
-            await tx.evidenceChunk.deleteMany({ where: { evidenceId: { in: evidenceIds } } });
-          }
+          await purgeEvidenceDerivedFindings(tx, evidenceIds);
           await tx.evidence.deleteMany({ where: { caseId: { in: caseIds } } });
           await tx.criminalCase.deleteMany({ where: { caseId: { in: caseIds } } });
         }
@@ -329,9 +328,7 @@ export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
 
       const evidenceIds = allEvidence.map((e) => e.evidenceId);
       await prisma.$transaction(async (tx) => {
-        if (evidenceIds.length > 0) {
-          await tx.evidenceChunk.deleteMany({ where: { evidenceId: { in: evidenceIds } } });
-        }
+        await purgeEvidenceDerivedFindings(tx, evidenceIds);
         await tx.evidence.deleteMany({ where: { caseId } });
         await tx.criminalCase.delete({ where: { caseId } });
       });
@@ -373,7 +370,7 @@ export async function registerAdminRoutes(app: FastifyInstance): Promise<void> {
       }
 
       await prisma.$transaction(async (tx) => {
-        await tx.evidenceChunk.deleteMany({ where: { evidenceId } });
+        await purgeEvidenceDerivedFindings(tx, [evidenceId]);
         await tx.evidence.delete({ where: { evidenceId } });
       });
 

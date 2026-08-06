@@ -63,6 +63,7 @@ curl -sf -o /dev/null http://127.0.0.1:4180/ && echo "SPA healthy"
 echo
 echo "=== generating fixtures ==="
 python3 scripts/certification/fixtures/generate_fixtures.py
+python3 scripts/certification/fixtures/generate_failure_fixtures.py
 
 run() {
   echo
@@ -76,6 +77,11 @@ run "Phase 1 — feature inventory"                01-feature-inventory.mjs 8
 run "Phase 7 — unauthenticated exposure sweep"   02-auth-exposure-sweep.mjs 12
 run "Phase 3/4/5 — ingestion and failure modes"  03-ingestion-certification.mjs 8
 run "Phase 2 — authenticated read surface"       10-read-surface-certification.mjs 12
+run "P144 — anti-fabrication audit"              11-fabrication-audit.mjs 10
+run "P144 — case-scoped tenant isolation"        12-case-scoped-isolation.mjs 10
+run "P144 — evidence traceability"               13-traceability-certification.mjs 14
+run "P144 — CALCRIM / mens rea / investigation"  14-intelligence-certification.mjs 18
+run "P144 — defendant and family access"         15-portal-permissions-certification.mjs 16
 run "Phase 2/8 — litigation workflow"            05-workflow-certification.mjs 8
 
 # Security runs against product-default login and general limits so that the

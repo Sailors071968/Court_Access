@@ -1,7 +1,7 @@
 {
   "report": "AUTH_EXPOSURE_SWEEP",
   "phase": "Phase 7 — Security Testing",
-  "generatedAt": "2026-08-05T22:10:50.590Z",
+  "generatedAt": "2026-08-06T14:02:37.830Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 2,
@@ -130,6 +130,8 @@
     "GET /api/doctrine/search",
     "GET /api/doctrine/status",
     "GET /api/evidence/:id",
+    "GET /api/evidence/:id/citation",
+    "GET /api/evidence/:id/pages",
     "GET /api/firm/analytics",
     "GET /api/firm/clients/:id/team",
     "GET /api/firm/conflicts",
@@ -360,8 +362,8 @@
     "PUT /api/firm/personnel/:id"
   ],
   "exercisedSpaRoutes": [],
-  "routesProbed": 346,
-  "routesInInventory": 363,
+  "routesProbed": 348,
+  "routesInInventory": 365,
   "exposedRoutes": [],
   "serverErrors": [],
   "checks": [
@@ -369,7 +371,7 @@
       "id": "SEC-EXPOSURE-01",
       "name": "No non-public API route responds without authentication",
       "status": "PASS",
-      "detail": "346 routes probed, all returned 401/403/404"
+      "detail": "348 routes probed, all returned 401/403/404"
     },
     {
       "id": "SEC-EXPOSURE-02",

@@ -150,7 +150,12 @@ export const ROLE_ONBOARDING_CONFIG: Record<DefaultRole, RoleOnboardingConfig> =
     defaultRole: 'family_member',
     label: 'Family Member',
     description: 'Authorized family member supporting a defendant',
-    platformRole: 'staff',
+    // A portal role, not a firm role. 'staff' is what paralegals and office
+    // administrators hold and it carries firm-wide client and organisation
+    // access, which a defendant's relative must not have. Everything this
+    // role is described as needing — court dates, published updates, family
+    // messaging — is portal-scoped.
+    platformRole: 'defendant',
     personnelType: null,
     orgType: 'solo',
     defaultDashboard: '/client-portal',
@@ -202,7 +207,11 @@ export const ROLE_ONBOARDING_CONFIG: Record<DefaultRole, RoleOnboardingConfig> =
     defaultRole: 'other',
     label: 'Other',
     description: 'Other authorized case participant',
-    platformRole: 'staff',
+    // This is also the fallback for any unrecognised value, so it is what an
+    // arbitrary signup receives. It must therefore be the least-privileged
+    // role; a firm elevates the account deliberately by inviting it into an
+    // organisation with a chosen role.
+    platformRole: 'defendant',
     personnelType: null,
     orgType: 'solo',
     defaultDashboard: '/dashboard',

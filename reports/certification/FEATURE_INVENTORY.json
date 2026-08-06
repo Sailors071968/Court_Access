@@ -1,8 +1,8 @@
 {
-  "generatedAt": "2026-08-05T22:10:50.267Z",
+  "generatedAt": "2026-08-06T14:02:37.496Z",
   "method": "Static extraction from backend/src route registrations and src/App.tsx <Route> elements",
   "totals": {
-    "apiRoutes": 363,
+    "apiRoutes": 365,
     "spaRoutes": 105,
     "prismaModels": 103,
     "bullmqQueues": 0,
@@ -356,6 +356,8 @@
       "feature": "Evidence Repository",
       "apiRoutes": [
         "GET /api/cases/:caseId/evidence",
+        "GET /api/evidence/:evidenceId/citation",
+        "GET /api/evidence/:evidenceId/pages",
         "DELETE /api/evidence/:evidenceId",
         "GET /api/evidence/:evidenceId",
         "POST /api/evidence/upload-url",
@@ -369,7 +371,7 @@
         "dashboard/evidence-requests -> ProtectedRoute",
         "evidence -> ProtectedRoute"
       ],
-      "apiRouteCount": 6,
+      "apiRouteCount": 8,
       "spaRouteCount": 5
     },
     {
@@ -1933,6 +1935,16 @@
       "method": "POST",
       "url": "/api/evidence-requests/:id/respond",
       "source": "backend/src/evidence/evidenceRequestRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/evidence/:evidenceId/citation",
+      "source": "backend/src/evidence/citationRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/evidence/:evidenceId/pages",
+      "source": "backend/src/evidence/citationRoutes.ts"
     },
     {
       "method": "DELETE",

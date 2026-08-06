@@ -1,7 +1,7 @@
 {
   "report": "RECOVERY_CERTIFICATION",
   "phase": "Phase 10 — Recovery Testing",
-  "generatedAt": "2026-08-05T22:13:36.691Z",
+  "generatedAt": "2026-08-06T14:05:57.927Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 14,
@@ -23,7 +23,7 @@
     "POST /api/timeline/rebuild/:id"
   ],
   "exercisedSpaRoutes": [],
-  "caseId": "fc484d20-e726-4e92-a1ec-4baad4ee0360",
+  "caseId": "2937b638-caf2-4a78-9e9d-560422d3b3ec",
   "baselineEvidence": 1,
   "baselineChunks": 1,
   "checks": [
@@ -66,7 +66,7 @@
       "id": "REC-07",
       "name": "The API restarts and serves traffic again",
       "status": "PASS",
-      "detail": "healthy within 2009ms"
+      "detail": "healthy within 2008ms"
     },
     {
       "id": "REC-08",
@@ -108,7 +108,7 @@
       "id": "REC-14",
       "name": "Queue workers process jobs after every restart in this run",
       "status": "PASS",
-      "detail": "job 1aff3881-507d-4882-8c36-2c773332a644 completed"
+      "detail": "job 38f0ca33-b21b-4cc7-bf4b-9ea166a86ad4 completed"
     }
   ]
 }

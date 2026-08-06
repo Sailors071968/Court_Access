@@ -14,7 +14,12 @@ import { OUT_DIR, ROOT } from './lib/harness.mjs';
 const exec = promisify(execFile);
 
 const SUITES = [
-  ['AUTH_EXPOSURE_SWEEP', 'Unauthenticated exposure sweep', 'Phase 7'],
+  ['AUTH_EXPOSURE_SWEEP', 'Unauthenticated exposure sweep', 'P143 Phase 7'],
+  ['CASE_ISOLATION_SWEEP', 'Case-scoped tenant isolation', 'P144'],
+  ['FABRICATION_AUDIT', 'Anti-fabrication audit', 'P144'],
+  ['TRACEABILITY_CERTIFICATION', 'Evidence traceability and citation', 'P144 Phase 2/3'],
+  ['INTELLIGENCE_CERTIFICATION', 'CALCRIM, mens rea, investigation, motions', 'P144 Phase 5/6/8/9'],
+  ['PORTAL_PERMISSIONS_CERTIFICATION', 'Defendant and family access', 'P144 Phase 10'],
   ['SECURITY_CERTIFICATION', 'Security', 'Phase 7'],
   ['INGESTION_CERTIFICATION', 'Document, media and failure handling', 'Phase 3/4/5'],
   ['READ_SURFACE_CERTIFICATION', 'Authenticated read surface', 'Phase 2'],
@@ -327,6 +332,31 @@ ${
     ? 'None.'
     : report.warnings.map((c) => `- **${c.id}** (${c.suite}) — ${c.name}${c.detail ? `: ${c.detail}` : ''}`).join('\n')
 }
+
+## Real discovery — not certified
+
+This program asks for certification against attorney-authorized California
+criminal discovery. **No case files were supplied to this environment.** The
+filesystem was searched; the only documents present are unrelated system
+documentation and the synthetic fixtures this harness generates.
+
+Processing invented case files and reporting the result as real-discovery
+certification would be the fabrication the constitution forbids, so Phase 1 is
+recorded as **UNKNOWN**, and with it every finding that depends on real
+charged offences: CALCRIM element organisation for actual counts, mens rea for
+actual counts, contradictions between actual witnesses, and the investigation
+and motion issues that would follow from them.
+
+What was certified instead is the property those phases rest on: that the
+platform asserts only what its repository supports, that every finding is
+traceable to a document, page and line, and that a finding cannot outlive its
+source. Those are measured above and hold.
+
+To run the real-discovery certification, place the discovery under
+\`/tmp/courtaccess-discovery/\` and run
+\`node scripts/certification/03-ingestion-certification.mjs\` followed by
+\`13-traceability-certification.mjs\` and \`14-intelligence-certification.mjs\`
+against a case created from those files.
 
 ## Deployment status
 

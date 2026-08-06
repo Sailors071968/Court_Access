@@ -253,6 +253,13 @@ export async function registerTimelineRoutes(app: FastifyInstance): Promise<void
       const ctx = resolveContext(request);
       if (!ctx) return reply.code(401).send({ error: 'Authentication required' });
       const { caseId } = request.params as { caseId: string };
+
+      const owningCase = await prisma.criminalCase.findFirst({
+        where: { caseId, tenantId: ctx.tenantId, deletedAt: null },
+        select: { caseId: true },
+      });
+      if (!owningCase) return reply.code(403).send({ error: 'Forbidden' });
+
       return await getTimelineConflicts(caseId, ctx.tenantId);
     }
   );

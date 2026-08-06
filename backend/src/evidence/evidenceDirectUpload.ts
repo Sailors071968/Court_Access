@@ -19,6 +19,10 @@ import prisma from '../lib/prisma.js';
 import {
   describe,
   detectFormat,
+  checkPagination,
+  describeMissingPages,
+  joinPagesWithMap,
+  type PageSpan,
   extractDocxText,
   inspectPdf,
   isTruncatedIsoMedia,
@@ -73,6 +77,12 @@ export interface ExtractionOutcome {
   detectedFormat: string;
   detectedMimeType: string;
   ocrConfidence?: number;
+  /**
+   * Where each page begins and ends within `text`. Present for formats that
+   * expose page boundaries, which is what lets a finding cite a page and line
+   * rather than a character offset.
+   */
+  pageMap?: PageSpan[];
 }
 
 function ok(text: string, format: string, mime: string, extra: Partial<ExtractionOutcome> = {}): ExtractionOutcome {
@@ -179,22 +189,53 @@ async function extractTextFromFile(
       const parser = new PDFParse({ data: buffer });
       await (parser as unknown as { load(): Promise<void> }).load();
       const result = await parser.getText();
-      const text = (
-        typeof result === 'object' && result !== null
-          ? (result as { text?: string }).text || ''
-          : String(result || '')
-      ).trim();
+
+      // Prefer the per-page breakdown so page boundaries can be recorded; fall
+      // back to the flat text when a document does not expose pages.
+      const rawPages = (result as { pages?: Array<{ text?: string }> })?.pages;
+      let text: string;
+      let pageMap: PageSpan[] | undefined;
+      if (Array.isArray(rawPages) && rawPages.length > 0) {
+        const joined = joinPagesWithMap(rawPages.map((p) => String(p?.text ?? '')));
+        text = joined.text.trim();
+        // trim() shifts offsets, so build the map against the trimmed text.
+        const lead = joined.text.length - joined.text.trimStart().length;
+        pageMap = joined.pageMap.map((p) => ({
+          page: p.page,
+          startOffset: Math.max(0, p.startOffset - lead),
+          endOffset: Math.max(0, Math.min(p.endOffset - lead, text.length)),
+        }));
+      } else {
+        text = (
+          typeof result === 'object' && result !== null
+            ? (result as { text?: string }).text || ''
+            : String(result || '')
+        ).trim();
+      }
       await parser.destroy();
 
       if (text.length > 0) {
         if (inspection.truncated) {
           return ok(text, fmt, mime, {
+            pageMap,
             message:
               `"${fileName}" is missing its end-of-file marker, so the upload may be incomplete. ` +
               'The text that could be read has been indexed; please verify the page count against the source.',
           });
         }
-        return ok(text, fmt, mime);
+
+        // A production that says it is ten pages and arrives as four is not an
+        // error, but the gap has to be surfaced before the document is relied
+        // on as complete.
+        if (Array.isArray(rawPages) && rawPages.length > 0) {
+          const pagination = checkPagination(rawPages.map((p) => String(p?.text ?? '')));
+          const missingNotice = describeMissingPages(fileName, pagination);
+          if (missingNotice) {
+            return ok(text, fmt, mime, { pageMap, message: missingNotice });
+          }
+        }
+
+        return ok(text, fmt, mime, { pageMap });
       }
 
       // Parsed cleanly but carries no text layer — this is a scanned PDF.
@@ -267,12 +308,24 @@ async function extractTextFromFile(
       }
 
       if (confidence !== null && confidence < OCR_CONFIDENCE_THRESHOLD) {
+        // Below roughly a third, the recognised text is rarely a degraded
+        // version of the page — it is usually a page the engine cannot read at
+        // all: handwriting, a page fed sideways, or a photograph of text. The
+        // cause is not determined here, so the message names the possibilities
+        // rather than asserting one.
+        const severelyLow = confidence < 35;
+        const cause = severelyLow
+          ? 'Text this unreadable is usually handwriting, a page scanned sideways, or a photograph of a document ' +
+            'rather than a scan. Check the orientation of the page, and if it is handwritten it will need to be ' +
+            'transcribed by hand.'
+          : 'This usually means the scan resolution is low or the page is faint. Re-scanning at 300 DPI or higher ' +
+            'will improve the result.';
+
         return ok(text, fmt, mime, {
           ocrConfidence: confidence,
           message:
-            `OCR confidence for "${fileName}" is ${confidence.toFixed(0)}%, below the ${OCR_CONFIDENCE_THRESHOLD}% threshold, ` +
-            'because the scan quality is poor. The text has been indexed but requires manual review before it is relied on. ' +
-            'Re-scanning at 300 DPI or higher will improve the result.',
+            `OCR confidence for "${fileName}" is ${confidence.toFixed(0)}%, below the ${OCR_CONFIDENCE_THRESHOLD}% threshold. ` +
+            `${cause} The text that was recognised has been indexed but must be checked against the page before it is relied on.`,
         });
       }
 
@@ -679,6 +732,10 @@ async function processEvidenceAsync(
         processingError: outcome.message,
         mimeType: outcome.detectedMimeType,
         normalizedPageCount: chunkResult.chunkCount,
+        // Recorded so a finding's character offset can be cited as a page and
+        // a line rather than an offset into a blob.
+        pageMap: outcome.pageMap ? (outcome.pageMap as unknown as object) : undefined,
+        pageCount: outcome.pageMap ? outcome.pageMap.length : undefined,
       },
     });
 

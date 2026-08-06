@@ -1,7 +1,7 @@
 # CourtAccess V1 — Production Certification
 
-Generated 2026-08-05T22:15:53.736Z
-Commit `0997a3ea4b876f4783a6b147fe89494d772a154a` on branch `cursor/v1-production-certification-9f94`
+Generated 2026-08-06T14:05:58.709Z
+Commit `edd04bd950735de9aeb46dbe8c9d2eea83b98c75` on branch `cursor/v1-discovery-intelligence-certification-9f94`
 
 ## How these results were produced
 
@@ -14,12 +14,12 @@ UNKNOWN. Nothing here is inferred from reading source code.
 
 | | |
 |---|---|
-| Production readiness | **95.5%** |
+| Production readiness | **95.4%** |
 | Recommended launch status | **READY WITH LIMITATIONS** |
-| Checks executed | 236 |
-| Passed | 231 |
+| Checks executed | 280 |
+| Passed | 273 |
 | Failed | 1 |
-| Warnings | 4 |
+| Warnings | 6 |
 | Features in inventory | 40 |
 | Features exercised and passing | 36 |
 | Features failing | 0 |
@@ -36,9 +36,14 @@ was actually proven rather than what exists in the codebase.
 
 | Area | Phase | Checks | Pass | Fail | Warn | Rate |
 |---|---|---|---|---|---|---|
-| Unauthenticated exposure sweep | Phase 7 | 2 | 2 | 0 | 0 | 100% |
+| Unauthenticated exposure sweep | P143 Phase 7 | 2 | 2 | 0 | 0 | 100% |
+| Case-scoped tenant isolation | P144 | 3 | 3 | 0 | 0 | 100% |
+| Anti-fabrication audit | P144 | 5 | 5 | 0 | 0 | 100% |
+| Evidence traceability and citation | P144 Phase 2/3 | 9 | 9 | 0 | 0 | 100% |
+| CALCRIM, mens rea, investigation, motions | P144 Phase 5/6/8/9 | 14 | 12 | 0 | 2 | 85.7% |
+| Defendant and family access | P144 Phase 10 | 12 | 12 | 0 | 0 | 100% |
 | Security | Phase 7 | 34 | 34 | 0 | 0 | 100% |
-| Document, media and failure handling | Phase 3/4/5 | 63 | 61 | 1 | 1 | 96.8% |
+| Document, media and failure handling | Phase 3/4/5 | 64 | 62 | 1 | 1 | 96.9% |
 | Authenticated read surface | Phase 2 | 5 | 5 | 0 | 0 | 100% |
 | Litigation workflow and data integrity | Phase 2/8 | 40 | 40 | 0 | 0 | 100% |
 | Stress and performance | Phase 6/11 | 14 | 14 | 0 | 0 | 100% |
@@ -49,7 +54,7 @@ was actually proven rather than what exists in the codebase.
 
 | | |
 |---|---|
-| API routes | 363 |
+| API routes | 365 |
 | SPA routes | 105 |
 | Prisma models | 103 |
 | Features | 40 |
@@ -80,7 +85,7 @@ marked AUTHZ ONLY rather than PASS.
 | Doctrine Intelligence | PASS | 7/13 | 13/13 | 0/0 |
 | Documents & Disclosure | PASS | 3/8 | 8/8 | 0/0 |
 | Evidence Gap Detection | PASS | 1/3 | 3/3 | 0/0 |
-| Evidence Repository | PASS | 4/6 | 6/6 | 0/5 |
+| Evidence Repository | PASS | 6/8 | 8/8 | 0/5 |
 | Firm Operating Platform | PASS | 9/22 | 22/22 | 0/0 |
 | Forensic Reconstruction | PASS | 13/22 | 22/22 | 0/0 |
 | Identity & MFA | AUTHZ ONLY | 0/5 | 3/5 | 0/0 |
@@ -111,10 +116,37 @@ marked AUTHZ ONLY rather than PASS.
 
 ## Warnings
 
+- **CAL-07** (CALCRIM, mens rea, investigation, motions) — The CALCRIM instruction library covers only a small number of offences: 2 mapped: Penal Code 459, Penal Code 484. Any other charged count returns UNKNOWN.
+- **MR-03** (CALCRIM, mens rea, investigation, motions) — Mens rea coverage is very small: 5 statute(s) have an extracted mental state, of which 4 are UNKNOWN. Charged offences outside this set have no mens rea analysis.
 - **ING-discovery-production.zip** (Document, media and failure handling) — discovery-production.zip archive handling: status=analyzed error="discovery-production.zip" is a ZIP archive containing 3 file(s), and archives are not ingested directly. Please extract it and upload the documents individually: police-report.pdf, dispatch-log.pdf, emails.txt.
-- **BR-/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/trial-exhibits** (Browser verification) — Trial exhibits renders but logged 2 browser error(s): Failed to load resource: the server responded with a status of 404 (Not Found)
-- **BR-/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/litigation-strategy** (Browser verification) — Litigation strategy renders but logged 2 browser error(s): Failed to load resource: the server responded with a status of 404 (Not Found)
-- **BR-/cases/6031fdc8-985b-4785-a47d-f8e3ed831a80/contradictions** (Browser verification) — Contradictions renders but logged 2 browser error(s): Failed to load resource: the server responded with a status of 404 (Not Found)
+- **BR-/cases/8d751c88-8095-4d2a-99e8-3c77e08ac0fd/trial-exhibits** (Browser verification) — Trial exhibits renders but logged 2 browser error(s): Failed to load resource: the server responded with a status of 404 (Not Found)
+- **BR-/cases/8d751c88-8095-4d2a-99e8-3c77e08ac0fd/litigation-strategy** (Browser verification) — Litigation strategy renders but logged 2 browser error(s): Failed to load resource: the server responded with a status of 404 (Not Found)
+- **BR-/cases/8d751c88-8095-4d2a-99e8-3c77e08ac0fd/contradictions** (Browser verification) — Contradictions renders but logged 2 browser error(s): Failed to load resource: the server responded with a status of 404 (Not Found)
+
+## Real discovery — not certified
+
+This program asks for certification against attorney-authorized California
+criminal discovery. **No case files were supplied to this environment.** The
+filesystem was searched; the only documents present are unrelated system
+documentation and the synthetic fixtures this harness generates.
+
+Processing invented case files and reporting the result as real-discovery
+certification would be the fabrication the constitution forbids, so Phase 1 is
+recorded as **UNKNOWN**, and with it every finding that depends on real
+charged offences: CALCRIM element organisation for actual counts, mens rea for
+actual counts, contradictions between actual witnesses, and the investigation
+and motion issues that would follow from them.
+
+What was certified instead is the property those phases rest on: that the
+platform asserts only what its repository supports, that every finding is
+traceable to a document, page and line, and that a finding cannot outlive its
+source. Those are measured above and hold.
+
+To run the real-discovery certification, place the discovery under
+`/tmp/courtaccess-discovery/` and run
+`node scripts/certification/03-ingestion-certification.mjs` followed by
+`13-traceability-certification.mjs` and `14-intelligence-certification.mjs`
+against a case created from those files.
 
 ## Deployment status
 

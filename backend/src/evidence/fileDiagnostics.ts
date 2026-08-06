@@ -194,6 +194,173 @@ export function inspectPdf(buf: Buffer): PdfInspection {
   };
 }
 
+// ---------------------------------------------------------------------------
+// Missing pages
+// ---------------------------------------------------------------------------
+
+export interface PaginationCheck {
+  /** Highest total declared by a "Page X of N" marker in the text. */
+  declaredTotal: number | null;
+  /** Page numbers the document says it contains. */
+  declaredPages: number[];
+  /** Pages the declaration implies but that are not present. */
+  missingPages: number[];
+  actualPages: number;
+}
+
+/**
+ * Compare what a production says it contains against what arrived.
+ *
+ * Discovery is routinely produced in parts, and a set that is missing pages
+ * looks exactly like a complete one unless the footers are read. Where pages
+ * carry "Page X of N" markers, the declared numbering is checked against the
+ * pages actually present.
+ */
+export function checkPagination(pageTexts: string[]): PaginationCheck {
+  const declaredPages: number[] = [];
+  let declaredTotal: number | null = null;
+
+  // "Page 7 of 10", "PAGE 7 OF 10", "7 of 10"
+  const re = /(?:page\s+)?(\d{1,5})\s+of\s+(\d{1,5})/gi;
+
+  for (const pageText of pageTexts) {
+    for (const m of pageText.matchAll(re)) {
+      const num = parseInt(m[1], 10);
+      const total = parseInt(m[2], 10);
+      if (!Number.isFinite(num) || !Number.isFinite(total)) continue;
+      // Guard against matching prose such as "3 of 4 witnesses".
+      if (total > 100000 || num > total) continue;
+      declaredPages.push(num);
+      declaredTotal = Math.max(declaredTotal ?? 0, total);
+    }
+  }
+
+  const unique = [...new Set(declaredPages)].sort((a, b) => a - b);
+  const missingPages: number[] = [];
+  if (declaredTotal !== null && unique.length > 0) {
+    const present = new Set(unique);
+    for (let p = 1; p <= declaredTotal; p++) {
+      if (!present.has(p)) missingPages.push(p);
+    }
+  }
+
+  return {
+    declaredTotal,
+    declaredPages: unique,
+    missingPages,
+    actualPages: pageTexts.length,
+  };
+}
+
+/** Render a missing-page finding as something an attorney can act on. */
+export function describeMissingPages(fileName: string, check: PaginationCheck): string | null {
+  if (check.declaredTotal === null || check.missingPages.length === 0) return null;
+
+  const ranges: string[] = [];
+  let start = check.missingPages[0];
+  let prev = start;
+  for (const p of check.missingPages.slice(1)) {
+    if (p === prev + 1) {
+      prev = p;
+      continue;
+    }
+    ranges.push(start === prev ? `${start}` : `${start}\u2013${prev}`);
+    start = p;
+    prev = p;
+  }
+  ranges.push(start === prev ? `${start}` : `${start}\u2013${prev}`);
+
+  return (
+    `"${fileName}" states that it is ${check.declaredTotal} pages, but only ${check.actualPages} were received ` +
+    `and page(s) ${ranges.join(', ')} are absent. The text that was received has been indexed. ` +
+    'Request the missing pages from the producing party before relying on this document as complete.'
+  );
+}
+
+// ---------------------------------------------------------------------------
+// Page and line citation
+// ---------------------------------------------------------------------------
+
+export interface PageSpan {
+  page: number;
+  startOffset: number;
+  endOffset: number;
+}
+
+export interface Citation {
+  page: number;
+  /** 1-based line number within that page. */
+  line: number;
+  /** The full text of the cited line, for verification against the source. */
+  lineText: string;
+  offset: number;
+}
+
+/**
+ * Join per-page text into the single string the rest of the pipeline indexes,
+ * recording where each page starts and ends so an offset can be turned back
+ * into a page and line.
+ */
+export function joinPagesWithMap(pages: string[]): { text: string; pageMap: PageSpan[] } {
+  const pageMap: PageSpan[] = [];
+  let text = '';
+
+  pages.forEach((pageText, i) => {
+    const startOffset = text.length;
+    text += pageText;
+    pageMap.push({ page: i + 1, startOffset, endOffset: text.length });
+    // Pages are separated by a newline so the last line of one page and the
+    // first of the next are not run together.
+    if (i < pages.length - 1) text += '\n';
+  });
+
+  return { text, pageMap };
+}
+
+/**
+ * Resolve a character offset in the extracted text to the page it falls on and
+ * the line within that page, returning the line itself so the citation can be
+ * checked against the document.
+ */
+export function resolveCitation(text: string, pageMap: PageSpan[], offset: number): Citation | null {
+  if (!Number.isFinite(offset) || offset < 0 || offset > text.length) return null;
+  if (!Array.isArray(pageMap) || pageMap.length === 0) return null;
+
+  const span =
+    pageMap.find((p) => offset >= p.startOffset && offset < p.endOffset) ??
+    (offset >= pageMap[pageMap.length - 1].endOffset ? pageMap[pageMap.length - 1] : null);
+  if (!span) return null;
+
+  const pageText = text.slice(span.startOffset, span.endOffset);
+  const withinPage = Math.min(Math.max(offset - span.startOffset, 0), Math.max(pageText.length - 1, 0));
+
+  const lines = pageText.split('\n');
+  let consumed = 0;
+  for (let i = 0; i < lines.length; i++) {
+    const lineEnd = consumed + lines[i].length;
+    if (withinPage <= lineEnd) {
+      return { page: span.page, line: i + 1, lineText: lines[i], offset };
+    }
+    consumed = lineEnd + 1; // account for the newline
+  }
+
+  return {
+    page: span.page,
+    line: lines.length,
+    lineText: lines[lines.length - 1] ?? '',
+    offset,
+  };
+}
+
+/** Locate a quoted passage in the extracted text and cite where it sits. */
+export function citeQuote(text: string, pageMap: PageSpan[], quote: string): Citation | null {
+  const needle = quote.trim();
+  if (!needle) return null;
+  const at = text.indexOf(needle);
+  if (at < 0) return null;
+  return resolveCitation(text, pageMap, at);
+}
+
 /**
  * An ISO base-media file (MP4/MOV/M4V) needs a `moov` atom to describe its
  * tracks and an `mdat` atom holding the samples. A recording truncated in

@@ -1,7 +1,7 @@
 {
   "report": "READ_SURFACE_CERTIFICATION",
   "phase": "Phase 2 — Authenticated Read Surface",
-  "generatedAt": "2026-08-05T22:11:47.421Z",
+  "generatedAt": "2026-08-06T14:03:37.620Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 5,
@@ -119,6 +119,8 @@
     "GET /api/doctrine/search",
     "GET /api/doctrine/status",
     "GET /api/evidence/:id",
+    "GET /api/evidence/:id/citation",
+    "GET /api/evidence/:id/pages",
     "GET /api/firm/analytics",
     "GET /api/firm/clients/:id/team",
     "GET /api/firm/conflicts",
@@ -207,11 +209,11 @@
     "POST /api/evidence/upload"
   ],
   "exercisedSpaRoutes": [],
-  "caseId": "c162663f-230b-449b-859a-b995937e0da7",
-  "endpointsDriven": 188,
+  "caseId": "5ca40301-3739-44eb-afab-f1f72d94a141",
+  "endpointsDriven": 190,
   "statusDistribution": {
-    "200": 161,
-    "400": 9,
+    "200": 162,
+    "400": 10,
     "403": 1,
     "404": 17
   },
@@ -221,68 +223,68 @@
     {
       "route": "GET /api/admin/alerts",
       "status": 200,
-      "ms": 257,
+      "ms": 246,
       "source": "backend/src/productionOperations/productionOperationsRoutes.ts"
     },
     {
       "route": "GET /api/policy-intelligence/dashboard",
       "status": 200,
-      "ms": 225,
+      "ms": 211,
       "source": "backend/src/policy/pipeline/policyIntelligenceRoutes.ts"
+    },
+    {
+      "route": "GET /api/admin/engineering-dashboard",
+      "status": 200,
+      "ms": 209,
+      "source": "backend/src/productionOperations/productionOperationsRoutes.ts"
     },
     {
       "route": "GET /api/cases/:caseId/workbench/command-center",
       "status": 200,
-      "ms": 210,
+      "ms": 206,
       "source": "backend/src/workbench/workbenchRoutes.ts"
     },
     {
       "route": "GET /api/cases/:caseId/workbench/trial-prep",
       "status": 200,
-      "ms": 209,
+      "ms": 199,
       "source": "backend/src/workbench/workbenchRoutes.ts"
-    },
-    {
-      "route": "GET /api/admin/engineering-dashboard",
-      "status": 200,
-      "ms": 202,
-      "source": "backend/src/productionOperations/productionOperationsRoutes.ts"
     },
     {
       "route": "GET /api/cases/:caseId/workbench",
       "status": 200,
-      "ms": 198,
+      "ms": 197,
       "source": "backend/src/workbench/workbenchRoutes.ts"
     },
     {
       "route": "GET /api/admin/production-gates",
       "status": 200,
-      "ms": 188,
+      "ms": 187,
       "source": "backend/src/productionGates/productionGatesRoutes.ts"
     },
     {
       "route": "GET /api/operations/dashboard",
       "status": 200,
-      "ms": 59,
+      "ms": 60,
       "source": "backend/src/policy/pipeline/operationsConsoleRoutes.ts"
-    },
-    {
-      "route": "GET /api/policy-intelligence/coverage/summary",
-      "status": 200,
-      "ms": 54,
-      "source": "backend/src/policy/pipeline/policyIntelligenceRoutes.ts"
-    },
-    {
-      "route": "GET /api/admin/cpra/email-stats",
-      "status": 200,
-      "ms": 52,
-      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
     },
     {
       "route": "GET /api/forensic/timeline/:caseId",
       "status": 200,
-      "ms": 51,
+      "ms": 52,
       "source": "backend/src/evidence/forensicReconstructionRoutes.ts"
+    },
+    {
+      "route": "GET /api/admin/cpra/email-stats",
+      "status": 200,
+      "ms": 51,
+      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
+    },
+    {
+      "route": "GET /api/policy-intelligence/coverage/summary",
+      "status": 200,
+      "ms": 51,
+      "source": "backend/src/policy/pipeline/policyIntelligenceRoutes.ts"
     },
     {
       "route": "GET /api/admin/cpra/progress",
@@ -291,22 +293,22 @@
       "source": "backend/src/cpra/autonomousCpraRoutes.ts"
     },
     {
-      "route": "GET /api/admin/cases",
+      "route": "GET /api/forensic/trajectory/:caseId",
+      "status": 200,
+      "ms": 46,
+      "source": "backend/src/evidence/forensicReconstructionRoutes.ts"
+    },
+    {
+      "route": "GET /api/forensic/line-of-sight/:caseId",
       "status": 200,
       "ms": 45,
-      "source": "backend/src/admin/adminRoutes.ts"
+      "source": "backend/src/evidence/forensicReconstructionRoutes.ts"
     },
     {
-      "route": "GET /api/admin/cpra/notifications/count",
+      "route": "GET /api/forensic/vision/:caseId/critical",
       "status": 200,
-      "ms": 43,
-      "source": "backend/src/cpra/autonomousCpraRoutes.ts"
-    },
-    {
-      "route": "GET /api/cases/:caseId/evidence",
-      "status": 200,
-      "ms": 43,
-      "source": "backend/src/evidence/evidenceRoutes.ts"
+      "ms": 45,
+      "source": "backend/src/evidence/forensicReconstructionRoutes.ts"
     }
   ],
   "checks": [
@@ -314,10 +316,10 @@
       "id": "READ-01",
       "name": "Every GET endpoint answered an authenticated admin",
       "status": "PASS",
-      "detail": "161 returned data, 1 refused by role, 17 reported no such resource, 9 required parameters",
+      "detail": "162 returned data, 1 refused by role, 17 reported no such resource, 10 required parameters",
       "evidence": {
-        "200": 161,
-        "400": 9,
+        "200": 162,
+        "400": 10,
         "403": 1,
         "404": 17
       }
@@ -326,7 +328,7 @@
       "id": "READ-02",
       "name": "No GET endpoint returned a server error",
       "status": "PASS",
-      "detail": "188 endpoints driven"
+      "detail": "190 endpoints driven"
     },
     {
       "id": "READ-03",
@@ -338,7 +340,7 @@
       "id": "READ-04",
       "name": "Read surface stays responsive",
       "status": "PASS",
-      "detail": "p95 52ms across 188 endpoints"
+      "detail": "p95 51ms across 190 endpoints"
     },
     {
       "id": "READ-05",

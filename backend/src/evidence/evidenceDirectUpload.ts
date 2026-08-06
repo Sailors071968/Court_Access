@@ -478,6 +478,249 @@ function guessMimeType(fileName: string): string {
 // Route Registration
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// Ingestion core
+//
+// This is the whole of the production ingestion path: validation, storage,
+// the Evidence record, and extraction. The HTTP route below is a thin
+// multipart wrapper around it, and the Gold Standard certification importer
+// calls the same function with a file already on disk. There is deliberately
+// only one implementation, so certifying this path certifies what customers
+// use.
+// ---------------------------------------------------------------------------
+
+export interface IngestEvidenceRequest {
+  user: { userId: string; tenantId: string };
+  caseId: string;
+  evidenceType: string;
+  /** Name as the uploader supplied it; sanitised here. */
+  fileName: string;
+  /** Provide exactly one source. */
+  stream?: NodeJS.ReadableStream & { truncated?: boolean };
+  sourcePath?: string;
+  declaredMimeType?: string;
+  /**
+   * Wait for extraction to finish. The HTTP route returns immediately so the
+   * client is not held open; the importer waits so it can report per-file
+   * outcomes.
+   */
+  awaitProcessing?: boolean;
+}
+
+export interface IngestEvidenceResult {
+  ok: boolean;
+  status: number;
+  error?: string;
+  message?: string;
+  detail?: Record<string, unknown>;
+  evidence?: Record<string, unknown>;
+  /** Absolute path the bytes were written to. */
+  storedPath?: string;
+}
+
+function serialiseEvidence(evidence: {
+  evidenceId: string;
+  caseId: string;
+  tenantId: string;
+  fileName: string;
+  mimeType: string | null;
+  size: bigint;
+  evidenceType: string;
+  s3Key: string | null;
+  uploadedBy: string;
+  uploadedAt: Date;
+  processingStatus: string;
+  processingError: string | null;
+  multiplexDetected: boolean;
+  multiplexCount: number | null;
+  normalizedPageCount: number | null;
+  acuCost: number | null;
+  acuConsumed: number;
+  analysisStatus: string;
+  createdAt: Date;
+  updatedAt: Date;
+}): Record<string, unknown> {
+  return {
+    evidenceId: evidence.evidenceId,
+    caseId: evidence.caseId,
+    tenantId: evidence.tenantId,
+    fileName: evidence.fileName,
+    mimeType: evidence.mimeType,
+    size: evidence.size.toString(),
+    evidenceType: evidence.evidenceType,
+    s3Key: evidence.s3Key,
+    uploadedBy: evidence.uploadedBy,
+    uploadedAt: evidence.uploadedAt,
+    processingStatus: evidence.processingStatus,
+    processingError: evidence.processingError,
+    multiplexDetected: evidence.multiplexDetected,
+    multiplexCount: evidence.multiplexCount,
+    normalizedPageCount: evidence.normalizedPageCount,
+    acuCost: evidence.acuCost,
+    acuConsumed: evidence.acuConsumed,
+    analysisStatus: evidence.analysisStatus,
+    createdAt: evidence.createdAt,
+    updatedAt: evidence.updatedAt,
+  };
+}
+
+export async function ingestEvidence(req: IngestEvidenceRequest): Promise<IngestEvidenceResult> {
+  const { user, caseId, evidenceType } = req;
+
+  if (!caseId) {
+    return { ok: false, status: 400, error: 'Missing required field: caseId' };
+  }
+
+  if (!VALID_EVIDENCE_TYPES.includes(evidenceType as EvidenceType)) {
+    return {
+      ok: false,
+      status: 400,
+      error: `Invalid evidenceType. Must be one of: ${VALID_EVIDENCE_TYPES.join(', ')}`,
+    };
+  }
+
+  // Verify case access (tenant isolation)
+  try {
+    const caseRecord = await prisma.criminalCase.findFirst({
+      where: { caseId, tenantId: user.tenantId, deletedAt: null },
+    });
+    if (!caseRecord) {
+      return { ok: false, status: 403, error: 'Forbidden: case not found or access denied' };
+    }
+  } catch (err) {
+    console.error('[DirectUpload] Case access check failed:', err);
+    return { ok: false, status: 500, error: 'Failed to verify case access' };
+  }
+
+  const fileId = crypto.randomUUID();
+  const fileName = path.basename(req.fileName || 'unnamed-file').replace(/\.\./g, '_');
+
+  // The onRequest upload hook can only see the request Content-Type, which for
+  // a multipart post is always multipart/form-data, so the extension allowlist
+  // has to be applied here where the member filename is known.
+  const extensionCheck = validateFileExtension(fileName);
+  if (!extensionCheck.valid) {
+    return {
+      ok: false,
+      status: 415,
+      error: 'Unsupported file type',
+      message:
+        `"${fileName}" cannot be uploaded as evidence: ${extensionCheck.reason}. ` +
+        'Supported formats are PDF, DOCX, TXT, images (JPEG, PNG, TIFF), and common audio and video files.',
+      detail: { fileName },
+    };
+  }
+
+  // Clients frequently send application/octet-stream; fall back to the
+  // extension so the stored record is not misleading. The ingestion pipeline
+  // re-derives the true type from the file's bytes regardless.
+  const declaredMime = req.declaredMimeType;
+  const mimeType =
+    !declaredMime || declaredMime === 'application/octet-stream'
+      ? guessMimeType(fileName)
+      : declaredMime;
+
+  const uploadDir = path.join(UPLOAD_DIR, user.tenantId, caseId);
+  await fs.mkdir(uploadDir, { recursive: true });
+
+  const localPath = path.join(uploadDir, `${fileId}_${fileName}`);
+  const resolvedLocal = path.resolve(localPath);
+  const resolvedBase = path.resolve(UPLOAD_DIR);
+  if (!resolvedLocal.startsWith(resolvedBase + path.sep)) {
+    return { ok: false, status: 400, error: 'Invalid filename' };
+  }
+  const s3Key = `evidence/${user.tenantId}/${caseId}/${fileId}/${fileName}`;
+
+  let fileSize = 0;
+  try {
+    if (req.stream) {
+      const writeStream = createWriteStream(localPath);
+      await pipeline(req.stream, writeStream);
+      if (req.stream.truncated) {
+        await fs.unlink(localPath).catch(() => {});
+        return {
+          ok: false,
+          status: 413,
+          error: 'File too large',
+          message: `File exceeds maximum upload size of ${MAX_FILE_SIZE / (1024 * 1024)}MB`,
+          detail: { maxSize: MAX_FILE_SIZE },
+        };
+      }
+    } else if (req.sourcePath) {
+      // Copy rather than move: certification corpora must never be altered.
+      await fs.copyFile(req.sourcePath, localPath);
+    } else {
+      return { ok: false, status: 400, error: 'No file provided' };
+    }
+    const stat = await fs.stat(localPath);
+    fileSize = stat.size;
+  } catch (err) {
+    console.error('[DirectUpload] Failed to save file:', err);
+    await fs.unlink(localPath).catch(() => {});
+    if (err && ((err as { code?: string }).code === 'FST_FILES_LIMIT' || (err as Error)?.message?.includes('Too Large'))) {
+      return { ok: false, status: 413, error: 'File too large', detail: { maxSize: MAX_FILE_SIZE } };
+    }
+    return { ok: false, status: 500, error: 'Failed to save uploaded file' };
+  }
+
+  const validation = await validateEvidenceUpload(user.tenantId, caseId, fileSize, evidenceType);
+  if (!validation.allowed) {
+    await fs.unlink(localPath).catch(() => {});
+    return {
+      ok: false,
+      status: validation.statusCode,
+      error: validation.error,
+      detail: { limit: validation.limit, current: validation.current },
+    };
+  }
+
+  let evidence: Awaited<ReturnType<typeof prisma.evidence.create>>;
+  try {
+    evidence = await prisma.evidence.create({
+      data: {
+        caseId,
+        tenantId: user.tenantId,
+        fileName,
+        mimeType,
+        size: BigInt(fileSize),
+        evidenceType,
+        s3Key,
+        uploadedBy: user.userId,
+        processingStatus: 'ingesting',
+      },
+    });
+  } catch (err) {
+    console.error('[DirectUpload] Failed to create evidence record:', err);
+    await fs.unlink(localPath).catch(() => {});
+    return { ok: false, status: 500, error: 'Failed to register evidence' };
+  }
+
+  console.log(`[DirectUpload] Evidence ${evidence.evidenceId} saved: ${fileName} (${fileSize} bytes)`);
+
+  const processing = processEvidenceAsync(
+    evidence.evidenceId,
+    user.tenantId,
+    localPath,
+    mimeType,
+    fileName,
+  ).catch((err) => {
+    console.error(`[DirectUpload] Background processing failed for ${evidence.evidenceId}:`, err);
+  });
+
+  if (req.awaitProcessing) {
+    await processing;
+    const refreshed = await prisma.evidence.findUnique({ where: { evidenceId: evidence.evidenceId } });
+    if (refreshed) evidence = refreshed;
+  }
+
+  return {
+    ok: true,
+    status: 201,
+    evidence: serialiseEvidence(evidence),
+    storedPath: localPath,
+  };
+}
+
 export async function registerDirectUploadRoutes(app: FastifyInstance): Promise<void> {
   // Register multipart in an encapsulated plugin so it doesn't break JSON
   // body parsing on other routes. Fastify scoping keeps this isolated.
@@ -510,170 +753,30 @@ export async function registerDirectUploadRoutes(app: FastifyInstance): Promise<
 
     // Extract form fields
     const fields = data.fields as Record<string, { value?: string } | undefined>;
-    const caseId = fields.caseId?.value;
+    const caseId = fields.caseId?.value ?? '';
     const evidenceType = fields.evidenceType?.value || 'other_document';
 
-    if (!caseId) {
-      return reply.code(400).send({ error: 'Missing required field: caseId' });
-    }
-
-    if (!VALID_EVIDENCE_TYPES.includes(evidenceType as EvidenceType)) {
-      return reply.code(400).send({
-        error: `Invalid evidenceType. Must be one of: ${VALID_EVIDENCE_TYPES.join(', ')}`,
-      });
-    }
-
-    // Verify case access (tenant isolation)
-    try {
-      const caseRecord = await prisma.criminalCase.findFirst({
-        where: {
-          caseId,
-          tenantId: user.tenantId,
-          deletedAt: null,
-        },
-      });
-      if (!caseRecord) {
-        return reply.code(403).send({ error: 'Forbidden: case not found or access denied' });
-      }
-    } catch (err) {
-      console.error('[DirectUpload] Case access check failed:', err);
-      return reply.code(500).send({ error: 'Failed to verify case access' });
-    }
-
-    // Save file to local disk
-    const fileId = crypto.randomUUID();
-    const rawFileName = data.filename || 'unnamed-file';
-    // Sanitize filename: strip path separators and traversal sequences
-    const fileName = path.basename(rawFileName).replace(/\.\./g, '_');
-
-    // The onRequest upload hook can only see the request Content-Type, which
-    // for a multipart post is always multipart/form-data, so the extension
-    // allowlist has to be applied here where the member filename is known.
-    const extensionCheck = validateFileExtension(fileName);
-    if (!extensionCheck.valid) {
-      return reply.code(415).send({
-        error: 'Unsupported file type',
-        message:
-          `"${fileName}" cannot be uploaded as evidence: ${extensionCheck.reason}. ` +
-          'Supported formats are PDF, DOCX, TXT, images (JPEG, PNG, TIFF), and common audio and video files.',
-        fileName,
-      });
-    }
-
-    // Clients frequently send application/octet-stream; fall back to the
-    // extension so the stored record is not misleading. The ingestion pipeline
-    // re-derives the true type from the file's bytes regardless.
-    const declaredMime = data.mimetype;
-    const mimeType =
-      !declaredMime || declaredMime === 'application/octet-stream'
-        ? guessMimeType(fileName)
-        : declaredMime;
-
-    // Create tenant-scoped directory
-    const uploadDir = path.join(UPLOAD_DIR, user.tenantId, caseId);
-    await fs.mkdir(uploadDir, { recursive: true });
-
-    const localPath = path.join(uploadDir, `${fileId}_${fileName}`);
-    // Verify resolved path is still within the root upload directory (prevent path traversal)
-    const resolvedLocal = path.resolve(localPath);
-    const resolvedBase = path.resolve(UPLOAD_DIR);
-    if (!resolvedLocal.startsWith(resolvedBase + path.sep)) {
-      return reply.code(400).send({ error: 'Invalid filename' });
-    }
-    const s3Key = `evidence/${user.tenantId}/${caseId}/${fileId}/${fileName}`;
-
-    let fileSize = 0;
-    try {
-      const writeStream = createWriteStream(localPath);
-      await pipeline(data.file, writeStream);
-      // Check if file was truncated due to exceeding the size limit
-      if (data.file.truncated) {
-        await fs.unlink(localPath).catch(() => {});
-        return reply.code(413).send({
-          error: 'File too large',
-          message: `File exceeds maximum upload size of ${MAX_FILE_SIZE / (1024 * 1024)}MB`,
-          maxSize: MAX_FILE_SIZE,
-        });
-      }
-      const stat = await fs.stat(localPath);
-      fileSize = stat.size;
-    } catch (err) {
-      console.error('[DirectUpload] Failed to save file:', err);
-      // Clean up partial file
-      await fs.unlink(localPath).catch(() => {});
-      // Return 413 if the error is a file-too-large error from @fastify/multipart
-      if (err && ((err as { code?: string }).code === 'FST_FILES_LIMIT' || (err as Error)?.message?.includes('Too Large'))) {
-        return reply.code(413).send({ error: 'File too large', maxSize: MAX_FILE_SIZE });
-      }
-      return reply.code(500).send({ error: 'Failed to save uploaded file' });
-    }
-
-    // Validate upload limits
-    const validation = await validateEvidenceUpload(user.tenantId, caseId, fileSize, evidenceType);
-    if (!validation.allowed) {
-      await fs.unlink(localPath).catch(() => {});
-      return reply.code(validation.statusCode).send({
-        error: validation.error,
-        limit: validation.limit,
-        current: validation.current,
-      });
-    }
-
-    // Create evidence DB record
-    let evidence;
-    try {
-      evidence = await prisma.evidence.create({
-        data: {
-          caseId,
-          tenantId: user.tenantId,
-          fileName,
-          mimeType,
-          size: BigInt(fileSize),
-          evidenceType,
-          s3Key,
-          uploadedBy: user.userId,
-          processingStatus: 'ingesting',
-        },
-      });
-    } catch (err) {
-      console.error('[DirectUpload] Failed to create evidence record:', err);
-      await fs.unlink(localPath).catch(() => {});
-      return reply.code(500).send({ error: 'Failed to register evidence' });
-    }
-
-    console.log(`[DirectUpload] Evidence ${evidence.evidenceId} saved: ${fileName} (${fileSize} bytes)`);
-
-    // Run text extraction + chunking synchronously (no Redis/BullMQ dependency)
-    // This runs in the background so the upload response isn't delayed
-    processEvidenceAsync(evidence.evidenceId, user.tenantId, localPath, mimeType, fileName).catch((err) => {
-      console.error(`[DirectUpload] Background processing failed for ${evidence.evidenceId}:`, err);
+    // Everything below this point is the shared ingestion core, which the
+    // certification importer also calls. This handler only adapts multipart to
+    // it and maps the result onto HTTP.
+    const result = await ingestEvidence({
+      user: { userId: user.userId, tenantId: user.tenantId },
+      caseId,
+      evidenceType,
+      fileName: data.filename || 'unnamed-file',
+      stream: data.file,
+      declaredMimeType: data.mimetype,
     });
 
-    // Return response immediately
-    return reply.code(201).send({
-      evidence: {
-        evidenceId: evidence.evidenceId,
-        caseId: evidence.caseId,
-        tenantId: evidence.tenantId,
-        fileName: evidence.fileName,
-        mimeType: evidence.mimeType,
-        size: evidence.size.toString(),
-        evidenceType: evidence.evidenceType,
-        s3Key: evidence.s3Key,
-        uploadedBy: evidence.uploadedBy,
-        uploadedAt: evidence.uploadedAt,
-        processingStatus: evidence.processingStatus,
-        processingError: evidence.processingError,
-        multiplexDetected: evidence.multiplexDetected,
-        multiplexCount: evidence.multiplexCount,
-        normalizedPageCount: evidence.normalizedPageCount,
-        acuCost: evidence.acuCost,
-        acuConsumed: evidence.acuConsumed,
-        analysisStatus: evidence.analysisStatus,
-        createdAt: evidence.createdAt,
-        updatedAt: evidence.updatedAt,
-      },
-    });
+    if (!result.ok) {
+      return reply.code(result.status).send({
+        error: result.error,
+        ...(result.message ? { message: result.message } : {}),
+        ...(result.detail ?? {}),
+      });
+    }
+
+    return reply.code(201).send({ evidence: result.evidence });
   }); // end instance.post
 
   }); // end uploadPlugin

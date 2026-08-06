@@ -30,6 +30,7 @@ import { registerEvidenceRoutes } from './evidence/evidenceRoutes.js';
 import { registerDirectUploadRoutes } from './evidence/evidenceDirectUpload.js';
 import { registerEvidenceRequestRoutes } from './evidence/evidenceRequestRoutes.js';
 import { registerCitationRoutes } from './evidence/citationRoutes.js';
+import { registerCertificationRoutes } from './certification/certificationRoutes.js';
 import { registerIntelligenceRoutes, registerNarrativeIntelligenceRoutes } from './intelligence/intelligenceRoutes.js';
 import { registerWorkbenchRoutes } from './workbench/workbenchRoutes.js';
 import { registerInvestigatorRoutes } from './investigator/investigatorRoutes.js';
@@ -289,6 +290,10 @@ async function startServer() {
   // Page and line citation resolution for repository-backed findings
   console.log('[Server] Registering citation routes...');
   await registerCitationRoutes(app);
+
+  // Gold Standard Certification — administrator only
+  console.log('[Server] Registering Gold Standard Certification routes...');
+  await registerCertificationRoutes(app);
 
   // Narrative Deconstruction Engine routes
   console.log('[Server] Registering Attorney Intelligence routes...');

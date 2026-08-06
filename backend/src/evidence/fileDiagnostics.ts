@@ -195,6 +195,89 @@ export function inspectPdf(buf: Buffer): PdfInspection {
 }
 
 // ---------------------------------------------------------------------------
+// Missing pages
+// ---------------------------------------------------------------------------
+
+export interface PaginationCheck {
+  /** Highest total declared by a "Page X of N" marker in the text. */
+  declaredTotal: number | null;
+  /** Page numbers the document says it contains. */
+  declaredPages: number[];
+  /** Pages the declaration implies but that are not present. */
+  missingPages: number[];
+  actualPages: number;
+}
+
+/**
+ * Compare what a production says it contains against what arrived.
+ *
+ * Discovery is routinely produced in parts, and a set that is missing pages
+ * looks exactly like a complete one unless the footers are read. Where pages
+ * carry "Page X of N" markers, the declared numbering is checked against the
+ * pages actually present.
+ */
+export function checkPagination(pageTexts: string[]): PaginationCheck {
+  const declaredPages: number[] = [];
+  let declaredTotal: number | null = null;
+
+  // "Page 7 of 10", "PAGE 7 OF 10", "7 of 10"
+  const re = /(?:page\s+)?(\d{1,5})\s+of\s+(\d{1,5})/gi;
+
+  for (const pageText of pageTexts) {
+    for (const m of pageText.matchAll(re)) {
+      const num = parseInt(m[1], 10);
+      const total = parseInt(m[2], 10);
+      if (!Number.isFinite(num) || !Number.isFinite(total)) continue;
+      // Guard against matching prose such as "3 of 4 witnesses".
+      if (total > 100000 || num > total) continue;
+      declaredPages.push(num);
+      declaredTotal = Math.max(declaredTotal ?? 0, total);
+    }
+  }
+
+  const unique = [...new Set(declaredPages)].sort((a, b) => a - b);
+  const missingPages: number[] = [];
+  if (declaredTotal !== null && unique.length > 0) {
+    const present = new Set(unique);
+    for (let p = 1; p <= declaredTotal; p++) {
+      if (!present.has(p)) missingPages.push(p);
+    }
+  }
+
+  return {
+    declaredTotal,
+    declaredPages: unique,
+    missingPages,
+    actualPages: pageTexts.length,
+  };
+}
+
+/** Render a missing-page finding as something an attorney can act on. */
+export function describeMissingPages(fileName: string, check: PaginationCheck): string | null {
+  if (check.declaredTotal === null || check.missingPages.length === 0) return null;
+
+  const ranges: string[] = [];
+  let start = check.missingPages[0];
+  let prev = start;
+  for (const p of check.missingPages.slice(1)) {
+    if (p === prev + 1) {
+      prev = p;
+      continue;
+    }
+    ranges.push(start === prev ? `${start}` : `${start}\u2013${prev}`);
+    start = p;
+    prev = p;
+  }
+  ranges.push(start === prev ? `${start}` : `${start}\u2013${prev}`);
+
+  return (
+    `"${fileName}" states that it is ${check.declaredTotal} pages, but only ${check.actualPages} were received ` +
+    `and page(s) ${ranges.join(', ')} are absent. The text that was received has been indexed. ` +
+    'Request the missing pages from the producing party before relying on this document as complete.'
+  );
+}
+
+// ---------------------------------------------------------------------------
 // Page and line citation
 // ---------------------------------------------------------------------------
 

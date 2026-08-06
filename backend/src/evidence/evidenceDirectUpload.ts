@@ -19,6 +19,8 @@ import prisma from '../lib/prisma.js';
 import {
   describe,
   detectFormat,
+  checkPagination,
+  describeMissingPages,
   joinPagesWithMap,
   type PageSpan,
   extractDocxText,
@@ -221,6 +223,18 @@ async function extractTextFromFile(
               'The text that could be read has been indexed; please verify the page count against the source.',
           });
         }
+
+        // A production that says it is ten pages and arrives as four is not an
+        // error, but the gap has to be surfaced before the document is relied
+        // on as complete.
+        if (Array.isArray(rawPages) && rawPages.length > 0) {
+          const pagination = checkPagination(rawPages.map((p) => String(p?.text ?? '')));
+          const missingNotice = describeMissingPages(fileName, pagination);
+          if (missingNotice) {
+            return ok(text, fmt, mime, { pageMap, message: missingNotice });
+          }
+        }
+
         return ok(text, fmt, mime, { pageMap });
       }
 
@@ -294,12 +308,24 @@ async function extractTextFromFile(
       }
 
       if (confidence !== null && confidence < OCR_CONFIDENCE_THRESHOLD) {
+        // Below roughly a third, the recognised text is rarely a degraded
+        // version of the page — it is usually a page the engine cannot read at
+        // all: handwriting, a page fed sideways, or a photograph of text. The
+        // cause is not determined here, so the message names the possibilities
+        // rather than asserting one.
+        const severelyLow = confidence < 35;
+        const cause = severelyLow
+          ? 'Text this unreadable is usually handwriting, a page scanned sideways, or a photograph of a document ' +
+            'rather than a scan. Check the orientation of the page, and if it is handwritten it will need to be ' +
+            'transcribed by hand.'
+          : 'This usually means the scan resolution is low or the page is faint. Re-scanning at 300 DPI or higher ' +
+            'will improve the result.';
+
         return ok(text, fmt, mime, {
           ocrConfidence: confidence,
           message:
-            `OCR confidence for "${fileName}" is ${confidence.toFixed(0)}%, below the ${OCR_CONFIDENCE_THRESHOLD}% threshold, ` +
-            'because the scan quality is poor. The text has been indexed but requires manual review before it is relied on. ' +
-            'Re-scanning at 300 DPI or higher will improve the result.',
+            `OCR confidence for "${fileName}" is ${confidence.toFixed(0)}%, below the ${OCR_CONFIDENCE_THRESHOLD}% threshold. ` +
+            `${cause} The text that was recognised has been indexed but must be checked against the page before it is relied on.`,
         });
       }
 

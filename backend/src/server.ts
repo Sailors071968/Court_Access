@@ -34,6 +34,7 @@ import { registerCertificationRoutes } from './certification/certificationRoutes
 import { registerUploadPortalRoutes } from './certification/uploadPortalRoutes.js';
 import { registerLawRoutes } from './law/lawRoutes.js';
 import { registerChargingRoutes } from './charges/chargingRoutes.js';
+import { registerStrategyRoutes } from './intelligence/strategyRoutes.js';
 import { registerIntelligenceRoutes, registerNarrativeIntelligenceRoutes } from './intelligence/intelligenceRoutes.js';
 import { registerWorkbenchRoutes } from './workbench/workbenchRoutes.js';
 import { registerInvestigatorRoutes } from './investigator/investigatorRoutes.js';
@@ -304,6 +305,9 @@ async function startServer() {
 
   // Charging documents — the charges the People have actually filed
   await registerChargingRoutes(app);
+
+  // Defence strategy, motion issues and the action centre
+  await registerStrategyRoutes(app);
 
   // Narrative Deconstruction Engine routes
   console.log('[Server] Registering Attorney Intelligence routes...');

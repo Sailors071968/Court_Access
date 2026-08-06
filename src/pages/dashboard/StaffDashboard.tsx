@@ -13,9 +13,41 @@ import { Card, StatCard } from '../../components/common/Card';
 import { STATUS_COLORS, TEXT_COLORS } from '../../constants/designTokens';
 import { useAuthStore } from '../../stores/authStore';
 import { fetchCases, fetchCaseEvidence, type ApiCase, type ApiEvidence } from '../../services/caseApi';
+import { loadPanel } from '../../services/authedFetch';
+
+interface ActionItem {
+  id: string;
+  urgency: 'high' | 'medium' | 'low';
+  title: string;
+  detail: string;
+  caseId: string | null;
+  caseTitle: string | null;
+  href: string | null;
+}
+
+interface ActionCentre {
+  items: ActionItem[];
+  counts: { high: number; medium: number; low: number; total: number };
+  scope: string;
+}
 
 export function StaffDashboard() {
+  const [actionCentre, setActionCentre] = useState<ActionCentre | null>(null);
+  const [actionUnavailable, setActionUnavailable] = useState<string | null>(null);
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    let cancelled = false;
+    void loadPanel<ActionCentre>('/action-center', 'The action centre').then((r) => {
+      if (cancelled) return;
+      if (r.data) setActionCentre(r.data);
+      else setActionUnavailable(r.unavailableReason);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
   const { user } = useAuthStore();
 
   const [cases, setCases] = useState<ApiCase[]>([]);
@@ -117,36 +149,62 @@ export function StaffDashboard() {
       <div className="grid lg:grid-cols-3 gap-6">
         {/* 2. Alerts & Action Queue */}
         <div className="lg:col-span-2 space-y-6">
+          {/* The action centre. Every entry is counted from the database and
+              links to the record it is about. This replaced a hand-written list
+              of example alerts that named cases which did not exist and
+              announced a motion recommendation nobody had made. */}
           <Card>
             <div className="flex items-center justify-between mb-4">
-              <h2 className="text-lg font-semibold text-gray-900">Alerts & Action Queue</h2>
-              <span className="text-xs text-gray-400">Sorted by urgency</span>
+              <h2 className="text-lg font-semibold text-gray-900">Action Center</h2>
+              <span className="text-xs text-gray-400">
+                {actionCentre ? actionCentre.scope : 'Loading…'}
+              </span>
             </div>
-            <div className="space-y-3">
-              {[
-                { type: 'high', icon: AlertTriangle, color: STATUS_COLORS.danger, label: 'Evidence dispute added — People v. Smith', time: '2 hours ago' },
-                { type: 'high', icon: Lightbulb, color: STATUS_COLORS.warning, label: 'Motion recommendation signal: Motion to Suppress (HIGH)', time: '4 hours ago' },
-                { type: 'medium', icon: Upload, color: STATUS_COLORS.info, label: 'New defendant upload — 3 documents pending review', time: '6 hours ago' },
-                { type: 'medium', icon: Users, color: STATUS_COLORS.accent, label: 'Expert recommendation flagged: Forensic Toxicologist', time: '1 day ago' },
-                { type: 'low', icon: Clock, color: STATUS_COLORS.neutral, label: 'Discovery deadline approaching — Case #2024-CF-001234', time: '2 days ago' },
-              ].map((alert, i) => {
-                const Icon = alert.icon;
-                return (
-                  <div key={i} className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors">
-                    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${alert.color}`}>
-                      <Icon size={14} />
+
+            {actionUnavailable ? (
+              <p className="text-sm text-amber-800 bg-amber-50 border border-amber-200 rounded-lg p-3">
+                {actionUnavailable}
+              </p>
+            ) : !actionCentre ? (
+              <p className="text-sm text-gray-500">Loading…</p>
+            ) : actionCentre.items.length === 0 ? (
+              <p className="text-sm text-gray-500" data-testid="action-center-empty">
+                Nothing needs attention. No evidence has failed to process, no investigation task is outstanding,
+                and no hearing is within the fortnight.
+              </p>
+            ) : (
+              <div className="space-y-3" data-testid="action-center-items">
+                {actionCentre.items.slice(0, 12).map((item) => (
+                  <div
+                    key={item.id}
+                    onClick={() => item.href && navigate(item.href)}
+                    className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 cursor-pointer transition-colors"
+                  >
+                    <div
+                      className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 ${
+                        item.urgency === 'high'
+                          ? STATUS_COLORS.danger
+                          : item.urgency === 'medium'
+                            ? STATUS_COLORS.warning
+                            : STATUS_COLORS.neutral
+                      }`}
+                    >
+                      <AlertTriangle size={14} />
                     </div>
                     <div className="flex-1 min-w-0">
-                      <p className="text-sm font-medium text-gray-900">{alert.label}</p>
-                      <p className="text-xs text-gray-500 mt-0.5">{alert.time}</p>
+                      <p className="text-sm font-medium text-gray-900">{item.title}</p>
+                      <p className="text-xs text-gray-500 mt-0.5">{item.detail}</p>
+                      {item.caseTitle && <p className="text-xs text-gray-400 mt-0.5">{item.caseTitle}</p>}
                     </div>
-                    {alert.type === 'high' && (
-                      <span className="text-xs px-2 py-0.5 bg-red-100 text-red-700 rounded-full font-medium flex-shrink-0">Urgent</span>
+                    {item.urgency === 'high' && (
+                      <span className="text-xs px-2 py-0.5 bg-red-100 text-red-700 rounded-full font-medium flex-shrink-0">
+                        Urgent
+                      </span>
                     )}
                   </div>
-                );
-              })}
-            </div>
+                ))}
+              </div>
+            )}
           </Card>
 
           {/* Recent Documents */}

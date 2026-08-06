@@ -259,9 +259,26 @@ blocking === 0
 const suspects = [];
 for (const f of await walk(SRC, (f) => f.endsWith('.tsx'))) {
   const src = await readFile(f, 'utf8');
-  // A literal array of objects carrying case-like fields, outside of tests.
+  const rel = f.replace('/workspace/', '');
+
+  // A named literal dataset.
   if (/const\s+\w*(mock|sample|dummy|fake|demo)\w*\s*(?::[^=]+)?=\s*\[/i.test(src)) {
-    suspects.push(f.replace('/workspace/', ''));
+    suspects.push(`${rel} (named literal dataset)`);
+    continue;
+  }
+
+  // An inline array of object literals mapped straight into JSX. This is how
+  // fabricated content actually reached a screen: five invented alerts naming
+  // cases that did not exist were written directly inside a render, so the
+  // named-variable check above never saw them.
+  for (const m of src.matchAll(/\{\s*\[\s*\n([\s\S]{40,4000}?)\]\s*\.map\(/g)) {
+    const block = m[1];
+    if (!/^\s*\{/m.test(block)) continue;
+    // Content a user would read as a fact about their case.
+    if (/\b(?:People v\.|Case #|hours ago|days ago|minutes ago|recommendation|deadline approaching)\b/i.test(block)) {
+      suspects.push(`${rel} (inline literal dataset rendered to the user)`);
+      break;
+    }
   }
 }
 suspects.length === 0

@@ -92,15 +92,15 @@ import { GoldStandardCertification } from './pages/admin/GoldStandardCertificati
 import { CaseLayout } from './pages/case/CaseLayout';
 import { CaseOverviewPage } from './pages/case/CaseOverviewPage';
 import { ChargesPage } from './pages/case/ChargesPage';
+import { DefenseStrategyWorkspace } from './pages/case/DefenseStrategyWorkspace';
+import { MotionIssuesPage } from './pages/case/MotionIssuesPage';
 import { EvidencePage } from './pages/case/EvidencePage';
 import { ExpertsPage } from './pages/case/ExpertsPage';
-import { MotionsPage } from './pages/case/MotionsPage';
 import { ResearchPage } from './pages/case/ResearchPage';
 import { ActivityPage } from './pages/case/ActivityPage';
 import { DocumentsPage } from './pages/case/DocumentsPage';
 import { CaseSettingsPage } from './pages/case/CaseSettingsPage';
 import { TrialExhibitWorkspace } from './pages/case/TrialExhibitWorkspace';
-import { LitigationStrategyView } from './pages/case/LitigationStrategyView';
 import { ContradictionDashboardPage } from './pages/case/ContradictionDashboardPage';
 import { NarrativeAnalysisPage } from './pages/case/NarrativeAnalysisPage';
 import { AttorneyWorkbenchPage } from './pages/case/AttorneyWorkbenchPage';
@@ -523,7 +523,7 @@ function App() {
               path="motions"
               element={
                 <ProtectedRoute requiredPermission="canViewMotions">
-                  <MotionsPage />
+                  <MotionIssuesPage />
                 </ProtectedRoute>
               }
             />
@@ -579,7 +579,7 @@ function App() {
               path="litigation-strategy"
               element={
                 <ProtectedRoute requiredPermission="canViewEvidence">
-                  <LitigationStrategyView />
+                  <DefenseStrategyWorkspace />
                 </ProtectedRoute>
               }
             />

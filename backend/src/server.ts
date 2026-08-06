@@ -33,6 +33,7 @@ import { registerCitationRoutes } from './evidence/citationRoutes.js';
 import { registerCertificationRoutes } from './certification/certificationRoutes.js';
 import { registerUploadPortalRoutes } from './certification/uploadPortalRoutes.js';
 import { registerLawRoutes } from './law/lawRoutes.js';
+import { registerChargingRoutes } from './charges/chargingRoutes.js';
 import { registerIntelligenceRoutes, registerNarrativeIntelligenceRoutes } from './intelligence/intelligenceRoutes.js';
 import { registerWorkbenchRoutes } from './workbench/workbenchRoutes.js';
 import { registerInvestigatorRoutes } from './investigator/investigatorRoutes.js';
@@ -300,6 +301,9 @@ async function startServer() {
 
   // Official California law — the authoritative statutory source
   await registerLawRoutes(app);
+
+  // Charging documents — the charges the People have actually filed
+  await registerChargingRoutes(app);
 
   // Narrative Deconstruction Engine routes
   console.log('[Server] Registering Attorney Intelligence routes...');

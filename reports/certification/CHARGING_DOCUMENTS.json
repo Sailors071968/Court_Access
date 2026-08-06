@@ -1,0 +1,233 @@
+{
+  "report": "CHARGING_DOCUMENTS",
+  "phase": "Program 148 — Charging Documents",
+  "generatedAt": "2026-08-06T19:36:25.087Z",
+  "apiBase": "http://127.0.0.1:3001",
+  "summary": {
+    "total": 34,
+    "PASS": 34,
+    "FAIL": 0,
+    "WARNING": 0,
+    "UNKNOWN": 0,
+    "passRate": 100
+  },
+  "exercisedApiRoutes": [
+    "DELETE /api/charging/counts/:id",
+    "GET /api/cases/:id/charges/compare",
+    "GET /api/cases/:id/charges/current",
+    "GET /api/cases/:id/charges/history",
+    "GET /api/cases/:id/charges/timeline",
+    "GET /api/charging/codes",
+    "POST /api/auth/register",
+    "POST /api/cases",
+    "POST /api/cases/:id/charges/documents"
+  ],
+  "exercisedSpaRoutes": [],
+  "caseId": "ff891399-b938-4a36-b223-db6d2a89dc91",
+  "checks": [
+    {
+      "id": "CHG-01",
+      "name": "Every California code is offered for charge entry",
+      "status": "PASS",
+      "detail": "29 codes, including Business and Professions Code, Civil Code, Code of Civil Procedure"
+    },
+    {
+      "id": "CHG-02",
+      "name": "The codes a California charge actually cites are all present",
+      "status": "PASS",
+      "detail": "Penal Code, Vehicle Code, Health and Safety Code, Fish and Game Code, Welfare and Institutions Code"
+    },
+    {
+      "id": "CHG-03",
+      "name": "A complaint is filed with its counts",
+      "status": "PASS",
+      "detail": "3 counts"
+    },
+    {
+      "id": "CHG-04",
+      "name": "The People's wording is stored exactly as filed, not paraphrased",
+      "status": "PASS",
+      "detail": "On or about January 2, 2026, the crime of FIRST DEGREE RESIDENTIAL BURGLARY, in violation of PENAL C"
+    },
+    {
+      "id": "CHG-05",
+      "name": "A normalised citation is stored beside the verbatim text",
+      "status": "PASS",
+      "detail": "Penal Code section 459"
+    },
+    {
+      "id": "CHG-06",
+      "name": "A charged subdivision is carried into the citation",
+      "status": "PASS",
+      "detail": "Penal Code section 245(a)(4)"
+    },
+    {
+      "id": "CHG-07",
+      "name": "Every charged section is resolved against the official source",
+      "status": "PASS",
+      "detail": "3 of 3 counts"
+    },
+    {
+      "id": "CHG-08",
+      "name": "A count can be charged against more than one defendant",
+      "status": "PASS",
+      "detail": "Marco Rivera and Luis Doe"
+    },
+    {
+      "id": "CHG-09",
+      "name": "A count can be charged against one defendant alone",
+      "status": "PASS",
+      "detail": "count 3 names Luis Doe only"
+    },
+    {
+      "id": "CHG-10",
+      "name": "Enhancements alleged with a count are recorded verbatim",
+      "status": "PASS",
+      "detail": "PC 12022(a)(1) — principal armed with a firearm"
+    },
+    {
+      "id": "CHG-11",
+      "name": "An amended complaint is filed after the original",
+      "status": "PASS",
+      "detail": "3 counts"
+    },
+    {
+      "id": "CHG-12",
+      "name": "The newest filing determines the current charges",
+      "status": "PASS",
+      "detail": "operative: First Amended Complaint"
+    },
+    {
+      "id": "CHG-13",
+      "name": "A count dropped from the amended pleading is not among the current charges",
+      "status": "PASS",
+      "detail": "HSC 11350 is no longer charged"
+    },
+    {
+      "id": "CHG-14",
+      "name": "The original complaint survives intact, including the count later dropped",
+      "status": "PASS",
+      "detail": "3 counts still recorded, HSC 11350 among them"
+    },
+    {
+      "id": "CHG-15",
+      "name": "A superseded filing is marked rather than removed",
+      "status": "PASS",
+      "detail": "superseded 2026-08-06T19:36:24.527Z"
+    },
+    {
+      "id": "CHG-16",
+      "name": "An added count is identified",
+      "status": "PASS",
+      "detail": "Count 2, Penal Code section 211, was added in the First Amended Complaint."
+    },
+    {
+      "id": "CHG-17",
+      "name": "A count no longer charged is identified",
+      "status": "PASS",
+      "detail": "Count 3, Health and Safety Code section 11350, does not appear in the First Amended Complaint. It is no longer charged."
+    },
+    {
+      "id": "CHG-18",
+      "name": "A renumbered count is identified as renumbered, not as a dismissal and an addition",
+      "status": "PASS",
+      "detail": "Penal Code section 245(a)(4) moved from count 2 to count 3. The charge itself is unchanged."
+    },
+    {
+      "id": "CHG-19",
+      "name": "A rewritten allegation is identified",
+      "status": "PASS",
+      "detail": "The allegation for Penal Code section 459 was rewritten in the First Amended Complaint."
+    },
+    {
+      "id": "CHG-20",
+      "name": "An enhancement no longer alleged is identified",
+      "status": "PASS",
+      "detail": "An enhancement previously alleged with Penal Code section 459 is no longer charged: PC 12022(a)(1) — principal armed with a firearm"
+    },
+    {
+      "id": "CHG-21",
+      "name": "A defendant no longer charged on a count is identified",
+      "status": "PASS",
+      "detail": "Luis Doe is no longer charged on Penal Code section 459."
+    },
+    {
+      "id": "CHG-22",
+      "name": "The first filing has nothing to compare against and is not operative",
+      "status": "PASS",
+      "detail": "Complaint"
+    },
+    {
+      "id": "CHG-23",
+      "name": "An information is filed after the amended complaint",
+      "status": "PASS",
+      "detail": "three filings now on record"
+    },
+    {
+      "id": "CHG-24",
+      "name": "The information becomes the operative document",
+      "status": "PASS",
+      "detail": "Information"
+    },
+    {
+      "id": "CHG-25",
+      "name": "Dismissed counts are shown as dismissed, not hidden",
+      "status": "PASS",
+      "detail": "1 active, 1 dismissed"
+    },
+    {
+      "id": "CHG-26",
+      "name": "A severed defendant is recorded as severed, with the reason",
+      "status": "PASS",
+      "detail": "Luis Doe: Severed for separate trial on motion of the People."
+    },
+    {
+      "id": "CHG-27",
+      "name": "The charges the analysis engines read are rebuilt from the operative document",
+      "status": "PASS",
+      "detail": "1 active count synchronised"
+    },
+    {
+      "id": "CHG-28",
+      "name": "Downstream analysis sees exactly the counts still charged",
+      "status": "PASS",
+      "detail": "PEN 459"
+    },
+    {
+      "id": "CHG-29",
+      "name": "Any two filings can be compared, not only consecutive ones",
+      "status": "PASS",
+      "detail": "6 changes between the Complaint and the Information"
+    },
+    {
+      "id": "CHG-30",
+      "name": "A charge cannot be deleted, and the refusal explains why",
+      "status": "PASS",
+      "detail": "A charge is never removed from the record. Mark it dismissed, or file the amended document that drops it — both leave th"
+    },
+    {
+      "id": "CHG-31",
+      "name": "Every count ever filed is still on record",
+      "status": "PASS",
+      "detail": "8 counts across three filings"
+    },
+    {
+      "id": "CHG-32",
+      "name": "A defendant cannot file a charging document",
+      "status": "PASS",
+      "detail": "HTTP 403"
+    },
+    {
+      "id": "CHG-33",
+      "name": "Charges are not visible to another firm",
+      "status": "PASS",
+      "detail": "HTTP 404"
+    },
+    {
+      "id": "CHG-34",
+      "name": "A charge citing a code that does not exist is refused",
+      "status": "PASS",
+      "detail": "\"XYZ\" is not a California code. Choose one of BPC, CIV, CCP, COM, CORP, EDC, ELEC, EVID, FAM, FIN, F"
+    }
+  ]
+}

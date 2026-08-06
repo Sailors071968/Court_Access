@@ -2863,3 +2863,113 @@ model LegislativeSyncEvent {
   @@index([detectedAt])
   @@map("legislative_sync_events")
 }
+
+
+// ============================================================================
+// Charging documents.
+//
+// Charges in a California criminal case are not a list; they are a sequence of
+// filings. The People file a complaint, amend it, file an information, amend
+// that, dismiss counts, add enhancements, renumber what is left. What a
+// defendant faces today is whatever the most recent filing says, and what they
+// faced last month still matters — it is the basis of prior motions, prior
+// discovery and prior plea discussions.
+//
+// So nothing here is ever destroyed. A charge that goes away is marked as
+// having gone away, in a filing that is dated, and the earlier filing stays
+// exactly as it was.
+// ============================================================================
+
+model ChargingDocument {
+  chargingDocumentId String   @id @default(uuid())
+  caseId             String
+  tenantId           String
+
+  /** complaint | amended_complaint | information | amended_information | dismissal */
+  kind               String
+  /** As the document titles itself, e.g. "First Amended Complaint". */
+  name               String
+  filedAt            DateTime
+  court              String?
+  courtCaseNumber    String?
+
+  /** Order of filing within the case. The highest is the operative document. */
+  filingSequence     Int
+
+  /** The uploaded PDF this was read from, when there is one. */
+  sourceEvidenceId   String?
+  /** How to cite the document itself. */
+  citation           String?
+
+  uploadedById       String
+  /** Set when a later document supersedes this one. Never deleted. */
+  supersededAt       DateTime?
+  notes              String?
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  charges FiledCharge[]
+
+  @@unique([caseId, filingSequence])
+  @@index([caseId, filedAt])
+  @@index([tenantId])
+  @@map("charging_documents")
+}
+
+model FiledCharge {
+  filedChargeId      String   @id @default(uuid())
+  chargingDocumentId String
+  chargingDocument   ChargingDocument @relation(fields: [chargingDocumentId], references: [chargingDocumentId], onDelete: Cascade)
+  caseId             String
+
+  /** The count as numbered in this document. Renumbering is normal. */
+  countNumber        Int
+  /** e.g. PEN, VEH, HSC — the code as leginfo names it. */
+  code               String
+  section            String
+  /** e.g. "(a)(4)" — the part charged, where the document specifies one. */
+  subdivision        String?
+
+  /** The People's words, exactly as they appear. Never normalised. */
+  verbatimText       String
+  /** e.g. "Penal Code section 245(a)(4)". */
+  normalizedCitation String
+
+  /** The official statute this count was resolved against, when it resolved. */
+  officialStatuteId  String?
+  /** Why resolution failed, when it did. */
+  statuteNote        String?
+
+  /** active | dismissed | superseded */
+  status             String   @default("active")
+  /** Enhancements alleged with this count, verbatim. */
+  enhancements       Json?
+
+  createdAt          DateTime @default(now())
+
+  defendants ChargeDefendant[]
+
+  @@index([chargingDocumentId])
+  @@index([caseId])
+  @@index([code, section])
+  @@map("filed_charges")
+}
+
+model ChargeDefendant {
+  chargeDefendantId String @id @default(uuid())
+  filedChargeId     String
+  filedCharge       FiledCharge @relation(fields: [filedChargeId], references: [filedChargeId], onDelete: Cascade)
+
+  /** As named in the charging document. */
+  defendantName     String
+  /** The client record, where this defendant is one of ours. */
+  clientId          String?
+  /** charged | dismissed | severed */
+  status            String @default("charged")
+  note              String?
+
+  @@unique([filedChargeId, defendantName])
+  @@index([filedChargeId])
+  @@map("charge_defendants")
+}

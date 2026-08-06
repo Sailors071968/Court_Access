@@ -1,7 +1,7 @@
 {
   "report": "WORKFLOW_CERTIFICATION",
   "phase": "Phase 2/8/9 — Litigation Workflow",
-  "generatedAt": "2026-08-06T14:04:13.095Z",
+  "generatedAt": "2026-08-06T15:59:23.635Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 40,
@@ -44,53 +44,53 @@
     "POST /api/timeline/rebuild/:id"
   ],
   "exercisedSpaRoutes": [],
-  "caseId": "4d367e7d-afc6-44c3-a735-4e2b6b6652b9",
+  "caseId": "abbe6459-f38c-4754-9194-97d177824b74",
   "timings": {
-    "register": 241,
-    "login": 206,
+    "register": 239,
+    "login": 205,
     "createCase": 3,
-    "uploadDiscovery": 45,
-    "Attorney workbench": 195,
+    "uploadDiscovery": 91,
+    "Attorney workbench": 196,
     "Timeline events": 3,
     "Timeline conflicts": 3,
     "Contradiction graph": 2,
     "Contradiction recommendations": 2,
-    "Evidence gap detection": 4,
+    "Evidence gap detection": 3,
     "Attorney workbench notes": 4,
     "Investigator workbench": 10,
-    "Trial prep package": 195,
+    "Trial prep package": 192,
     "timelineRebuild": 5
   },
   "uploaded": [
     {
       "file": "police-report.pdf",
       "status": 201,
-      "evidenceId": "9e0e7f2b-9634-4e90-80f8-eda1e0c9e082"
+      "evidenceId": "84c428de-42cc-4c78-a720-33b7ca3d6b74"
     },
     {
       "file": "preliminary-hearing-transcript.pdf",
       "status": 201,
-      "evidenceId": "295730bd-e8e6-4edd-8573-bbd718d56957"
+      "evidenceId": "c0226475-4281-42e9-8d11-142a53861ada"
     },
     {
       "file": "dispatch-log.pdf",
       "status": 201,
-      "evidenceId": "705b07c9-f191-4c04-9941-192587753492"
+      "evidenceId": "64994f8c-472c-4175-8001-7bd3c3add708"
     },
     {
       "file": "laboratory-report.pdf",
       "status": 201,
-      "evidenceId": "3ee22a2f-6707-42a7-b01a-d2c7f403f6ba"
+      "evidenceId": "3af138cc-60f0-47ec-b310-0451ae2c9afa"
     },
     {
       "file": "scanned-police-report.png",
       "status": 201,
-      "evidenceId": "3bab6870-f4e3-49e9-9f4e-9cef41032597"
+      "evidenceId": "86782a93-a403-4791-810d-aaab0cb36d7a"
     },
     {
       "file": "bodycam.mp4",
       "status": 201,
-      "evidenceId": "ad445815-5927-4c0a-a916-ae4bbebcfd59"
+      "evidenceId": "f98b9a4f-4b06-46c8-82c0-eb19675e2050"
     }
   ],
   "checks": [
@@ -98,7 +98,7 @@
       "id": "WF-01",
       "name": "Attorney can register",
       "status": "PASS",
-      "detail": "HTTP 200, tenant tenant-abc7332a-fce9-497c-b057-c30d0e0c40e7"
+      "detail": "HTTP 200, tenant tenant-bd666102-e880-4c36-bd0d-2bcbbf46051f"
     },
     {
       "id": "WF-02",
@@ -110,7 +110,7 @@
       "id": "WF-03",
       "name": "Session endpoint returns the signed-in user",
       "status": "PASS",
-      "detail": "wf-attorney-1786025048923-1-lx35ok@certification.test"
+      "detail": "wf-attorney-1786031959287-1-w48qjf@certification.test"
     },
     {
       "id": "WF-04",
@@ -146,7 +146,7 @@
       "id": "WF-07",
       "name": "Attorney can open a case",
       "status": "PASS",
-      "detail": "caseId 4d367e7d-afc6-44c3-a735-4e2b6b6652b9"
+      "detail": "caseId abbe6459-f38c-4754-9194-97d177824b74"
     },
     {
       "id": "WF-08",
@@ -181,7 +181,7 @@
       "id": "WF-13",
       "name": "Charges read back for the case",
       "status": "PASS",
-      "detail": "{\"success\":true,\"charges\":[{\"id\":\"45068001-0fff-4e15-9c13-a9d967aec52d\",\"caseId\":\"4d367e7d-afc6-44c3"
+      "detail": "{\"success\":true,\"charges\":[{\"id\":\"0f7ab831-d2ad-45a3-8b19-72b43457ea9c\",\"caseId\":\"abbe6459-f38c-4754"
     },
     {
       "id": "WF-14",
@@ -240,7 +240,7 @@
       "id": "WF-23",
       "name": "Attorney workbench responds for a populated case",
       "status": "PASS",
-      "detail": "HTTP 200 in 195ms"
+      "detail": "HTTP 200 in 196ms"
     },
     {
       "id": "WF-24",
@@ -258,19 +258,19 @@
       "id": "WF-26",
       "name": "Contradiction graph reports an empty result rather than failing",
       "status": "PASS",
-      "detail": "HTTP 404: No events found for case: 4d367e7d-afc6-44c3-a735-4e2b6b6652b9."
+      "detail": "HTTP 404: No events found for case: abbe6459-f38c-4754-9194-97d177824b74."
     },
     {
       "id": "WF-27",
       "name": "Contradiction recommendations reports an empty result rather than failing",
       "status": "PASS",
-      "detail": "HTTP 404: No events found for case: 4d367e7d-afc6-44c3-a735-4e2b6b6652b9."
+      "detail": "HTTP 404: No events found for case: abbe6459-f38c-4754-9194-97d177824b74."
     },
     {
       "id": "WF-28",
       "name": "Evidence gap detection responds for a populated case",
       "status": "PASS",
-      "detail": "HTTP 200 in 4ms"
+      "detail": "HTTP 200 in 3ms"
     },
     {
       "id": "WF-29",
@@ -288,7 +288,7 @@
       "id": "WF-30b",
       "name": "Trial prep package responds for a populated case",
       "status": "PASS",
-      "detail": "HTTP 200 in 195ms"
+      "detail": "HTTP 200 in 192ms"
     },
     {
       "id": "WF-30c",
@@ -306,7 +306,7 @@
       "id": "WF-32",
       "name": "Timeline worker completed the job",
       "status": "PASS",
-      "detail": "job ed4b52bc-1422-42aa-a7c7-f250ede5ff2d"
+      "detail": "job 4376a851-2e1e-4f60-8943-99c761ab8cc9"
     },
     {
       "id": "WF-32b",

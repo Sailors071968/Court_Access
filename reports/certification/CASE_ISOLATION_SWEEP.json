@@ -1,7 +1,7 @@
 {
   "report": "CASE_ISOLATION_SWEEP",
   "phase": "Program 144 — Case-Scoped Isolation",
-  "generatedAt": "2026-08-06T14:03:48.830Z",
+  "generatedAt": "2026-08-06T15:59:00.198Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 3,
@@ -69,7 +69,7 @@
     "POST /api/evidence/upload"
   ],
   "exercisedSpaRoutes": [],
-  "caseId": "6c196455-b529-4837-9c2b-b1115d40da76",
+  "caseId": "3c549907-f776-470c-a560-b0ee19b2cf8e",
   "routesProbed": 51,
   "refused": [
     {

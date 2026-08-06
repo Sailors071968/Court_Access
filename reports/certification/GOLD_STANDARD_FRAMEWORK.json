@@ -1,0 +1,361 @@
+{
+  "report": "GOLD_STANDARD_FRAMEWORK",
+  "phase": "Program 144 — Gold Standard Certification Framework",
+  "generatedAt": "2026-08-06T15:41:29.650Z",
+  "apiBase": "http://127.0.0.1:3001",
+  "summary": {
+    "total": 27,
+    "PASS": 27,
+    "FAIL": 0,
+    "WARNING": 0,
+    "UNKNOWN": 0,
+    "passRate": 100
+  },
+  "exercisedApiRoutes": [
+    "GET /api/certification/cases/:id/inventory",
+    "GET /api/certification/cases/:id/runs",
+    "GET /api/certification/compare",
+    "GET /api/certification/status",
+    "POST /api/auth/login",
+    "POST /api/auth/register",
+    "POST /api/certification/cases/:id/run",
+    "POST /api/certification/import",
+    "POST /api/certification/preview"
+  ],
+  "exercisedSpaRoutes": [],
+  "corpus": "/tmp/courtaccess-certification-corpus/SYNTHETIC-001",
+  "corpusTreeHashBefore": "c8cbff7993c574d6d653c87ade5811563c141d2ccdf10dea97863fd5de1ecb59",
+  "corpusTreeHashAfter": "c8cbff7993c574d6d653c87ade5811563c141d2ccdf10dea97863fd5de1ecb59",
+  "reference": "SYN-883022",
+  "certificationCaseId": "47871919-f0a1-4695-a566-8fdca4cfc145",
+  "checks": [
+    {
+      "id": "GS-01",
+      "name": "Gold Standard Certification is closed to every non-administrator role",
+      "status": "PASS",
+      "detail": "8 roles × 4 routes, all refused"
+    },
+    {
+      "id": "GS-02",
+      "name": "An administrator can open the module",
+      "status": "PASS",
+      "detail": "26 document classes registered"
+    },
+    {
+      "id": "GS-03",
+      "name": "Preview walks the delivery and expands nested archives",
+      "status": "PASS",
+      "detail": "32 files (29 on disk + 3 archive members)"
+    },
+    {
+      "id": "GS-04",
+      "name": "Files inside a delivered ZIP are inventoried individually",
+      "status": "PASS",
+      "detail": "09 Digital/Production 3.zip!/Digital Evidence/emails.txt, 09 Digital/Production 3.zip!/Digital Evidence/financial-records.pdf, 09 Digital/Production 3.zip!/Digital Evidence/text-messages.txt"
+    },
+    {
+      "id": "GS-05",
+      "name": "The delivered folder hierarchy is preserved",
+      "status": "PASS",
+      "detail": "e.g. 01 Police Reports/Doc0001.pdf"
+    },
+    {
+      "id": "GS-06",
+      "name": "A folder that does not exist is refused with an explanation",
+      "status": "PASS",
+      "detail": "\"/tmp/does-not-exist-anywhere\" is not a readable folder on the server."
+    },
+    {
+      "id": "GS-07",
+      "name": "The corpus imports through the production ingestion path",
+      "status": "PASS",
+      "detail": "31 ingested, 1 duplicate(s), 0 failed, of 32 files",
+      "evidence": {
+        "certificationCaseId": "47871919-f0a1-4695-a566-8fdca4cfc145",
+        "reference": "SYN-883022",
+        "caseId": "0593dcdc-df4d-4589-86fb-b227637a2043",
+        "fileCount": 32,
+        "ingested": 31,
+        "duplicates": 1,
+        "failed": 0,
+        "totalBytes": 1303617,
+        "corpusHash": "09ddf281fbd4ba3893627a9bc220104fb5ac0eeb45e8a3b49103620a6b99e2a9",
+        "warnings": []
+      }
+    },
+    {
+      "id": "GS-08",
+      "name": "Duplicate files are detected by content hash, not by name",
+      "status": "PASS",
+      "detail": "1 identified"
+    },
+    {
+      "id": "GS-09",
+      "name": "The corpus is fingerprinted so later runs can prove they read the same material",
+      "status": "PASS",
+      "detail": "09ddf281fbd4ba3893627a9b"
+    },
+    {
+      "id": "GS-10",
+      "name": "A corpus reference cannot be reused",
+      "status": "PASS",
+      "detail": "A certification corpus with reference \"SYN-883022\" already exists. Certification corpora are permanent; choose a new ref"
+    },
+    {
+      "id": "GS-11",
+      "name": "The delivered corpus is byte-identical after import",
+      "status": "PASS",
+      "detail": "29 files, tree hash unchanged (c8cbff7993c574d6)"
+    },
+    {
+      "id": "GS-12",
+      "name": "The inventory accounts for every file that arrived",
+      "status": "PASS",
+      "detail": "32 files, 1.3MB — 25 documents, 2 video, 1 audio, 4 images",
+      "evidence": {
+        "files": 32,
+        "bytes": 1303617,
+        "documents": 25,
+        "videos": 2,
+        "audio": 1,
+        "images": 4,
+        "duplicates": 1,
+        "ingested": 31,
+        "failed": 0
+      }
+    },
+    {
+      "id": "GS-13",
+      "name": "Every file carries a SHA-256",
+      "status": "PASS",
+      "detail": "32 files"
+    },
+    {
+      "id": "GS-14",
+      "name": "Original modification times are preserved where the medium carried one",
+      "status": "PASS",
+      "detail": "29/32 files"
+    },
+    {
+      "id": "GS-15",
+      "name": "Every file has a recorded outcome",
+      "status": "PASS",
+      "detail": "none left pending"
+    },
+    {
+      "id": "GS-16",
+      "name": "No file failed to ingest",
+      "status": "PASS",
+      "detail": "32 files"
+    },
+    {
+      "id": "GS-17",
+      "name": "Every classification states the evidence it rests on",
+      "status": "PASS",
+      "detail": "24/32 classified; 8 left unknown",
+      "evidence": {
+        "byClassification": {
+          "police_report": 8,
+          "preliminary_hearing_transcript": 2,
+          "laboratory_report": 2,
+          "medical_report": 2,
+          "dispatch_log": 3,
+          "video": 2,
+          "audio": 1,
+          "photograph": 2,
+          "expert_report": 1,
+          "unknown": 8,
+          "supplemental_report": 1
+        }
+      }
+    },
+    {
+      "id": "GS-18",
+      "name": "Mixed discovery is separated into distinct document types automatically",
+      "status": "PASS",
+      "detail": "10 classes identified: police_report, preliminary_hearing_transcript, laboratory_report, medical_report, dispatch_log, video, audio, photograph, expert_report, supplemental_report"
+    },
+    {
+      "id": "GS-19",
+      "name": "A certification run completes and records what the pipeline produced",
+      "status": "PASS",
+      "detail": "22 documents with text, 44 pages, 4 timeline events, 32 graph nodes",
+      "evidence": {
+        "corpus": {
+          "files": 32,
+          "bytes": 1303617,
+          "ingested": 31,
+          "duplicates": 1,
+          "failedToIngest": 0,
+          "corpusHash": "09ddf281fbd4ba3893627a9bc220104fb5ac0eeb45e8a3b49103620a6b99e2a9"
+        },
+        "extraction": {
+          "documentsWithText": 22,
+          "documentsWithoutText": 9,
+          "totalPages": 44,
+          "documentsWithPageMap": 18,
+          "totalChunks": 22,
+          "totalCharacters": 41010
+        },
+        "ocr": {
+          "imagesProcessed": 4,
+          "belowConfidenceThreshold": 1,
+          "lowConfidenceFiles": [
+            "Witness Statement.png"
+          ]
+        },
+        "classification": {
+          "classified": 24,
+          "unknown": 8,
+          "byClass": {
+            "police_report": 8,
+            "preliminary_hearing_transcript": 2,
+            "laboratory_report": 2,
+            "medical_report": 2,
+            "dispatch_log": 3,
+            "video": 2,
+            "audio": 1,
+            "photograph": 2,
+            "expert_report": 1,
+            "unknown": 8,
+            "supplemental_report": 1
+          },
+          "lowConfidence": 1
+        },
+        "repositories": {
+          "evidence": 31,
+          "evidenceChunks": 22,
+          "timelineEvents": 4,
+          "evidenceEvents": 12,
+          "narrativeClaims": 0,
+          "verifiedFacts": 0,
+          "charges": 0
+        },
+        "knowledgeGraph": {
+          "nodes": 32,
+          "edges": 12,
+          "actors": 1,
+          "sourceDocuments": 8
+        },
+        "calcrim": {
+          "chargesAnalysed": 0,
+          "chargesUnmapped": 0,
+          "elementsTotal": 0,
+          "elementsSupported": 0,
+          "elementsMissing": 0,
+          "caseStrength": "UNKNOWN"
+        },
+        "mensRea": {
+          "resolved": 0,
+          "unknown": 0
+        },
+        "contradictions": {
+          "detected": 4
+        },
+        "intelligence": {
+          "investigationGaps": 1,
+          "motionCandidates": 0
+        },
+        "failures": [
+          {
+            "file": "Damaged.png",
+            "stage": "extraction",
+            "message": "\"Damaged.png\" could not be processed as an image — the file is corrupt or its image data is truncated. Please re-export or re-scan the page and upload it again."
+          },
+          {
+            "file": "Empty.pdf",
+            "stage": "extraction",
+            "message": "\"Empty.pdf\" is empty (0 bytes). The upload may have been interrupted — please re-send the file."
+          },
+          {
+            "file": "Partial.pdf",
+            "stage": "extraction",
+            "message": "\"Partial.pdf\" is an incomplete PDF — the file ends before its final page marker, which usually means the upload or the original download was cut short. Please re-send the complete file."
+          },
+          {
+            "file": "Protected.pdf",
+            "stage": "extraction",
+            "message": "\"Protected.pdf\" is password protected, so its pages cannot be read. Please remove the password and upload the file again, or supply an unrestricted copy from the producing party."
+          }
+        ],
+        "unknowns": [
+          {
+            "subject": "3L41_BWC.mp4",
+            "reason": "\"3L41_BWC.mp4\" is a MP4 video and has been stored with the case. Automatic speech transcription is not available, so the words spoken in this recording are not searchable. To make its contents searchable, upload a written transcript alongside it."
+          },
+          {
+            "subject": "Call 0417.wav",
+            "reason": "\"Call 0417.wav\" is a WAV audio and has been stored with the case. Automatic speech transcription is not available, so the words spoken in this recording are not searchable. To make its contents searchable, upload a written transcript alongside it."
+          },
+          {
+            "subject": "IMG_0042.jpeg",
+            "reason": "No text could be recognised on \"IMG_0042.jpeg\". The page appears to be blank, or it is a photograph rather than a document. If it should contain text, re-scan it at 300 DPI or higher and upload it again."
+          },
+          {
+            "subject": "Unit 3L47 dash.mov",
+            "reason": "\"Unit 3L47 dash.mov\" is a QuickTime video and has been stored with the case. Automatic speech transcription is not available, so the words spoken in this recording are not searchable. To make its contents searchable, upload a written transcript alongside it."
+          },
+          {
+            "subject": "Short Production.pdf",
+            "reason": "\"Short Production.pdf\" states that it is 10 pages, but only 4 were received and page(s) 3–6, 8–9 are absent. The text that was received has been indexed. Request the missing pages from the producing party before relying on this document as complete."
+          },
+          {
+            "subject": "Witness Statement.png",
+            "reason": "OCR confidence for \"Witness Statement.png\" is 20%, below the 65% threshold. Text this unreadable is usually handwriting, a page scanned sideways, or a photograph of a document rather than a scan. Check the orientation of the page, and if it is handwritten it will need to be transcribed by hand. The text that was recognised has been indexed but must be checked against the page before it is relied on."
+          },
+          {
+            "subject": "Production 3.zip",
+            "reason": "\"Production 3.zip\" is a ZIP archive containing 3 file(s), and archives are not ingested directly. Please extract it and upload the documents individually: Digital Evidence/emails.txt, Digital Evidence/text-messages.txt, Digital Evidence/financial-records.pdf."
+          }
+        ]
+      }
+    },
+    {
+      "id": "GS-20",
+      "name": "Pages are numbered so findings can cite them",
+      "status": "PASS",
+      "detail": "44 pages across 18 documents"
+    },
+    {
+      "id": "GS-21",
+      "name": "UNKNOWN findings are enumerated rather than omitted",
+      "status": "PASS",
+      "detail": "7 recorded; e.g. 3L41_BWC.mp4"
+    },
+    {
+      "id": "GS-22",
+      "name": "Processing failures are enumerated with a reason",
+      "status": "PASS",
+      "detail": "4 recorded"
+    },
+    {
+      "id": "GS-23",
+      "name": "The first run becomes the baseline with nothing to compare against",
+      "status": "PASS"
+    },
+    {
+      "id": "GS-24",
+      "name": "Re-running the same corpus on the same build reports no regression",
+      "status": "PASS",
+      "detail": "0 difference(s), none a regression"
+    },
+    {
+      "id": "GS-25",
+      "name": "Any two runs can be compared directly",
+      "status": "PASS",
+      "detail": "0 difference(s): 0 regression, 0 improvement"
+    },
+    {
+      "id": "GS-26",
+      "name": "Certification history is retained",
+      "status": "PASS",
+      "detail": "2 runs recorded"
+    },
+    {
+      "id": "GS-27",
+      "name": "A build that extracts less is detected as a regression",
+      "status": "PASS",
+      "detail": "documents yielding text fell from 22 to 19 on the same input. documents left unclassified rose from 8 to 13 on the same input."
+    }
+  ]
+}

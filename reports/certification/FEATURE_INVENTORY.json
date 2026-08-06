@@ -1,10 +1,10 @@
 {
-  "generatedAt": "2026-08-06T14:02:37.496Z",
+  "generatedAt": "2026-08-06T15:57:49.522Z",
   "method": "Static extraction from backend/src route registrations and src/App.tsx <Route> elements",
   "totals": {
-    "apiRoutes": 365,
-    "spaRoutes": 105,
-    "prismaModels": 103,
+    "apiRoutes": 374,
+    "spaRoutes": 106,
+    "prismaModels": 106,
     "bullmqQueues": 0,
     "features": 40
   },
@@ -568,6 +568,7 @@
         "organization/settings -> ProtectedRoute",
         "admin -> ProtectedRoute",
         "admin/operations -> ProtectedRoute",
+        "admin/gold-standard -> ProtectedRoute",
         "cases/:caseId -> CaseLayout",
         "(index) -> Navigate",
         "overview -> CaseOverviewPage",
@@ -581,7 +582,7 @@
         "* -> Navigate"
       ],
       "apiRouteCount": 0,
-      "spaRouteCount": 68
+      "spaRouteCount": 69
     },
     {
       "feature": "Membership & Onboarding",
@@ -798,6 +799,15 @@
         "POST /api/auth/resend-verification",
         "DELETE /api/auth/sessions/:sessionId",
         "GET /api/auth/sessions",
+        "GET /api/certification/cases/:certificationCaseId/inventory",
+        "POST /api/certification/cases/:certificationCaseId/run",
+        "GET /api/certification/cases/:certificationCaseId/runs",
+        "GET /api/certification/compare",
+        "POST /api/certification/import",
+        "POST /api/certification/preview",
+        "POST /api/certification/runs/:certificationRunId/baseline",
+        "GET /api/certification/runs/:certificationRunId",
+        "GET /api/certification/status",
         "POST /api/corpus/ingest",
         "POST /api/corpus/lock",
         "POST /api/corpus/register",
@@ -811,7 +821,7 @@
         "POST /api/video/upload"
       ],
       "spaRoutes": [],
-      "apiRouteCount": 15,
+      "apiRouteCount": 24,
       "spaRouteCount": 0
     }
   ],
@@ -1525,6 +1535,51 @@
       "method": "POST",
       "url": "/api/cases",
       "source": "backend/src/evidence/caseRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/certification/cases/:certificationCaseId/inventory",
+      "source": "backend/src/certification/certificationRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/certification/cases/:certificationCaseId/run",
+      "source": "backend/src/certification/certificationRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/certification/cases/:certificationCaseId/runs",
+      "source": "backend/src/certification/certificationRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/certification/compare",
+      "source": "backend/src/certification/certificationRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/certification/import",
+      "source": "backend/src/certification/certificationRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/certification/preview",
+      "source": "backend/src/certification/certificationRoutes.ts"
+    },
+    {
+      "method": "POST",
+      "url": "/api/certification/runs/:certificationRunId/baseline",
+      "source": "backend/src/certification/certificationRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/certification/runs/:certificationRunId",
+      "source": "backend/src/certification/certificationRoutes.ts"
+    },
+    {
+      "method": "GET",
+      "url": "/api/certification/status",
+      "source": "backend/src/certification/certificationRoutes.ts"
     },
     {
       "method": "GET",
@@ -2984,6 +3039,10 @@
       "component": "ProtectedRoute"
     },
     {
+      "path": "admin/gold-standard",
+      "component": "ProtectedRoute"
+    },
+    {
       "path": "cases/:caseId",
       "component": "CaseLayout"
     },
@@ -3160,6 +3219,9 @@
     "FieldNote",
     "InvestigationAssignment",
     "SchemaVersion",
+    "CertificationCase",
+    "CertificationFile",
+    "CertificationRun",
     "Charge",
     "UserAccountSettings",
     "DocumentRedactionVersion",

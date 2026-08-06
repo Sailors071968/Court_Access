@@ -1,7 +1,7 @@
 {
   "report": "INTELLIGENCE_CERTIFICATION",
   "phase": "Program 144 — CALCRIM, Mens Rea, Investigation, Motions",
-  "generatedAt": "2026-08-06T14:04:03.801Z",
+  "generatedAt": "2026-08-06T15:59:14.172Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 14,
@@ -33,17 +33,17 @@
   "mensReaRecordCount": 5,
   "motionResponses": [
     {
-      "url": "/api/cases/f4f5fa6f-0774-4649-9609-43f6f7793840/intelligence",
+      "url": "/api/cases/ee2be116-2a30-4ac0-bdef-84dd7fd20f2c/intelligence",
       "status": 200,
       "hasMotionContent": true
     },
     {
-      "url": "/api/cases/f4f5fa6f-0774-4649-9609-43f6f7793840/intelligence/report",
+      "url": "/api/cases/ee2be116-2a30-4ac0-bdef-84dd7fd20f2c/intelligence/report",
       "status": 200,
       "hasMotionContent": true
     },
     {
-      "url": "/api/cases/f4f5fa6f-0774-4649-9609-43f6f7793840/workbench/trial-prep",
+      "url": "/api/cases/ee2be116-2a30-4ac0-bdef-84dd7fd20f2c/workbench/trial-prep",
       "status": 200,
       "hasMotionContent": false
     }
@@ -151,17 +151,17 @@
       "evidence": {
         "motionResponses": [
           {
-            "url": "/api/cases/f4f5fa6f-0774-4649-9609-43f6f7793840/intelligence",
+            "url": "/api/cases/ee2be116-2a30-4ac0-bdef-84dd7fd20f2c/intelligence",
             "status": 200,
             "hasMotionContent": true
           },
           {
-            "url": "/api/cases/f4f5fa6f-0774-4649-9609-43f6f7793840/intelligence/report",
+            "url": "/api/cases/ee2be116-2a30-4ac0-bdef-84dd7fd20f2c/intelligence/report",
             "status": 200,
             "hasMotionContent": true
           },
           {
-            "url": "/api/cases/f4f5fa6f-0774-4649-9609-43f6f7793840/workbench/trial-prep",
+            "url": "/api/cases/ee2be116-2a30-4ac0-bdef-84dd7fd20f2c/workbench/trial-prep",
             "status": 200,
             "hasMotionContent": false
           }

@@ -9,15 +9,14 @@
 
 import { useCallback, useEffect, useState } from 'react';
 import {
-  AlertTriangle, Archive, CheckCircle2, ChevronRight, Clock, Database,
+  AlertTriangle, CheckCircle2, ChevronRight, Clock, Database,
   FileSearch, FolderInput, History, Loader2, PlayCircle, Scale, ShieldCheck, XCircle,
 } from 'lucide-react';
+import { CertificationUploadPortal } from './CertificationUploadPortal';
 import {
   certificationApi,
   type Inventory,
-  type ImportResult,
   type ModuleStatus,
-  type PreviewResult,
   type Regression,
   type RunHistoryEntry,
   type RunResult,
@@ -76,12 +75,6 @@ export function GoldStandardCertification() {
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState<string | null>(null);
 
-  const [sourceDirectory, setSourceDirectory] = useState('');
-  const [reference, setReference] = useState('');
-  const [label, setLabel] = useState('');
-  const [description, setDescription] = useState('');
-  const [preview, setPreview] = useState<PreviewResult | null>(null);
-  const [imported, setImported] = useState<ImportResult | null>(null);
 
   const [selectedCaseId, setSelectedCaseId] = useState<string | null>(null);
   const [inventory, setInventory] = useState<Inventory | null>(null);
@@ -258,137 +251,16 @@ export function GoldStandardCertification() {
 
       {/* ---------------------------------------------------------------- */}
       {step === 'import' && (
-        <div className="space-y-4">
-          <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
-            <div>
-              <h2 className="text-base font-semibold text-gray-900">Import certification case</h2>
-              <p className="text-sm text-gray-500 mt-1">
-                Point at the folder holding the discovery exactly as counsel delivered it. Nested folders and ZIP
-                archives are read through; nothing in the folder is modified.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <label className="block">
-                <span className="text-xs font-medium text-gray-700">Reference</span>
-                <input
-                  value={reference}
-                  onChange={(e) => setReference(e.target.value)}
-                  placeholder="GS-001"
-                  className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
-                />
-              </label>
-              <label className="block">
-                <span className="text-xs font-medium text-gray-700">Label</span>
-                <input
-                  value={label}
-                  onChange={(e) => setLabel(e.target.value)}
-                  placeholder="People v. Doe — certification corpus"
-                  className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
-                />
-              </label>
-            </div>
-
-            <label className="block">
-              <span className="text-xs font-medium text-gray-700">Source folder on the server</span>
-              <input
-                value={sourceDirectory}
-                onChange={(e) => setSourceDirectory(e.target.value)}
-                placeholder="/srv/courtaccess/certification/GS-001"
-                className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm font-mono"
-              />
-            </label>
-
-            <label className="block">
-              <span className="text-xs font-medium text-gray-700">Notes (optional)</span>
-              <textarea
-                value={description}
-                onChange={(e) => setDescription(e.target.value)}
-                rows={2}
-                className="mt-1 w-full border border-gray-300 rounded-lg px-3 py-2 text-sm"
-              />
-            </label>
-
-            <div className="flex items-center gap-3">
-              <button
-                disabled={!sourceDirectory || busy !== null}
-                onClick={() =>
-                  void guard('preview', async () => {
-                    setPreview(await certificationApi.preview(sourceDirectory));
-                    setImported(null);
-                  })
-                }
-                className="px-4 py-2 border border-gray-300 text-sm font-medium rounded-lg hover:bg-gray-50 disabled:opacity-50 flex items-center gap-2"
-              >
-                {busy === 'preview' ? <Loader2 size={15} className="animate-spin" /> : <FileSearch size={15} />}
-                Preview folder
-              </button>
-              <button
-                disabled={!preview || !reference || !label || busy !== null}
-                onClick={() =>
-                  void guard('import', async () => {
-                    const res = await certificationApi.import({ reference, label, description, sourceDirectory });
-                    setImported(res);
-                    await loadStatus();
-                    setSelectedCaseId(res.certificationCaseId);
-                    setInventory(await certificationApi.inventory(res.certificationCaseId));
-                    setStep('inventory');
-                  })
-                }
-                className="px-4 py-2 bg-indigo-600 text-white text-sm font-medium rounded-lg hover:bg-indigo-700 disabled:opacity-50 flex items-center gap-2"
-              >
-                {busy === 'import' ? <Loader2 size={15} className="animate-spin" /> : <FolderInput size={15} />}
-                Import
-              </button>
-            </div>
-          </div>
-
-          {preview && (
-            <div className="bg-white rounded-xl border border-gray-200 p-6 space-y-4">
-              <h3 className="text-sm font-semibold text-gray-900">
-                {preview.fileCount} file(s), {bytes(preview.totalBytes)}
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {Object.entries(preview.byExtension)
-                  .sort((a, b) => b[1] - a[1])
-                  .map(([ext, n]) => (
-                    <span key={ext} className="text-xs bg-gray-100 text-gray-700 rounded-full px-2.5 py-1">
-                      .{ext} × {n}
-                    </span>
-                  ))}
-              </div>
-              {preview.warnings.length > 0 && (
-                <Notice kind="warn" title={`${preview.warnings.length} item(s) need attention`}>
-                  <ul className="list-disc pl-4 space-y-0.5">
-                    {preview.warnings.slice(0, 6).map((w) => <li key={w}>{w}</li>)}
-                  </ul>
-                </Notice>
-              )}
-              <div className="max-h-72 overflow-auto border border-gray-100 rounded-lg">
-                <table className="w-full text-xs">
-                  <tbody className="divide-y divide-gray-100">
-                    {preview.files.slice(0, 200).map((f) => (
-                      <tr key={f.relativePath}>
-                        <td className="px-3 py-1.5 font-mono text-gray-600">{f.relativePath}</td>
-                        <td className="px-3 py-1.5 text-gray-500 text-right whitespace-nowrap">{bytes(f.sizeBytes)}</td>
-                        <td className="px-3 py-1.5 text-gray-400 whitespace-nowrap">
-                          {f.fromArchive ? <span className="flex items-center gap-1"><Archive size={11} /> in archive</span> : ''}
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </div>
-          )}
-
-          {imported && (
-            <Notice kind="info" title={`Imported as ${imported.reference}`}>
-              {imported.ingested} ingested, {imported.duplicates} duplicate(s) skipped, {imported.failed} failed.
-              Corpus fingerprint {imported.corpusHash.slice(0, 16)}.
-            </Notice>
-          )}
-        </div>
+        <CertificationUploadPortal
+          onCertified={(certificationCaseId) => {
+            void guard('inventory', async () => {
+              await loadStatus();
+              setSelectedCaseId(certificationCaseId);
+              setInventory(await certificationApi.inventory(certificationCaseId));
+              setStep('inventory');
+            });
+          }}
+        />
       )}
 
       {/* ---------------------------------------------------------------- */}

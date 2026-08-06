@@ -163,7 +163,65 @@ export interface RunHistoryEntry {
   regressions: Regression[] | null;
 }
 
+export interface UploadPreview {
+  uploadSessionId: string;
+  reference: string;
+  label: string;
+  fileCount: number;
+  totalBytes: number;
+  detected: {
+    documents: number;
+    videos: number;
+    audio: number;
+    images: number;
+    totalPages: number;
+    videoSeconds: number;
+    audioSeconds: number;
+  };
+  byExtension: Record<string, number>;
+  estimate: { ocrSeconds: number; mediaSeconds: number; analysisSeconds: number; totalSeconds: number; basis: string };
+  unmeasured: Array<{ file: string; reason: string }>;
+  warnings: string[];
+  files: Array<{ relativePath: string; fileName: string; sizeBytes: number; modifiedAt: string | null; fromArchive: string | null }>;
+  truncated: boolean;
+}
+
+export interface UploadSessionStatus {
+  uploadSessionId: string;
+  reference: string;
+  label: string;
+  status: 'staging' | 'importing' | 'processing' | 'completed' | 'failed' | 'cancelled';
+  stage: string | null;
+  stageDetail: string | null;
+  progressCurrent: number;
+  progressTotal: number;
+  certificationCaseId: string | null;
+  certificationRunId: string | null;
+  error: string | null;
+  createdAt: string;
+  completedAt: string | null;
+}
+
 export const certificationApi = {
+  createUpload: (payload: { reference: string; label: string; description?: string; fileCount: number; totalBytes: number }) =>
+    call<{ uploadSessionId: string; chunkBytes: number; status: string }>('/uploads', {
+      method: 'POST',
+      body: JSON.stringify(payload),
+    }),
+
+  uploadPreview: (uploadSessionId: string) => call<UploadPreview>(`/uploads/${uploadSessionId}/preview`),
+
+  uploadStatus: (uploadSessionId: string) => call<UploadSessionStatus>(`/uploads/${uploadSessionId}`),
+
+  commitUpload: (uploadSessionId: string) =>
+    call<{ uploadSessionId: string; status: string; message: string }>(`/uploads/${uploadSessionId}/commit`, {
+      method: 'POST',
+      body: '{}',
+    }),
+
+  cancelUpload: (uploadSessionId: string) =>
+    call<{ uploadSessionId: string; status: string }>(`/uploads/${uploadSessionId}`, { method: 'DELETE' }),
+
   status: () => call<ModuleStatus>('/status'),
 
   preview: (sourceDirectory: string) =>

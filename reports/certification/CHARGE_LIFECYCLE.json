@@ -1,0 +1,247 @@
+{
+  "report": "CHARGE_LIFECYCLE",
+  "phase": "Program 149 — Charge Lifecycle",
+  "generatedAt": "2026-08-06T21:42:23.779Z",
+  "apiBase": "http://127.0.0.1:3001",
+  "summary": {
+    "total": 36,
+    "PASS": 36,
+    "FAIL": 0,
+    "WARNING": 0,
+    "UNKNOWN": 0,
+    "passRate": 100
+  },
+  "exercisedApiRoutes": [
+    "GET /api/cases/:id/charges/audit",
+    "GET /api/cases/:id/charges/current",
+    "GET /api/cases/:id/charges/matrix",
+    "GET /api/cases/:id/charges/timeline",
+    "PATCH /api/charging/counts/:id/edit",
+    "POST /api/auth/register",
+    "POST /api/cases",
+    "POST /api/cases/:id/charges/drafts",
+    "POST /api/cases/:id/charges/parse",
+    "POST /api/charging/documents/:id/counts",
+    "POST /api/charging/documents/:id/finalize"
+  ],
+  "exercisedSpaRoutes": [],
+  "caseId": "a0f91e2d-4fec-4856-a09b-9bfcbf5a6309",
+  "checks": [
+    {
+      "id": "LIF-01",
+      "name": "A charging document can be started as a draft",
+      "status": "PASS",
+      "detail": "Complaint (draft)"
+    },
+    {
+      "id": "LIF-02",
+      "name": "A draft does not become the current charges until it is filed",
+      "status": "PASS",
+      "detail": "no operative document while drafting"
+    },
+    {
+      "id": "LIF-03",
+      "name": "A document with no counts cannot be filed",
+      "status": "PASS",
+      "detail": "A charging document cannot be filed with no counts. Add at least one count first."
+    },
+    {
+      "id": "LIF-04",
+      "name": "Counts are added to a draft with the allegations the People plead",
+      "status": "PASS",
+      "detail": "2 counts"
+    },
+    {
+      "id": "LIF-05",
+      "name": "Filing a draft makes it operative and drives the case analysis",
+      "status": "PASS",
+      "detail": "2 counts synchronised"
+    },
+    {
+      "id": "LIF-06",
+      "name": "The matrix lists every defendant across the counts",
+      "status": "PASS",
+      "detail": "Ana Vasquez, David Okonkwo"
+    },
+    {
+      "id": "LIF-07",
+      "name": "A defendant not charged on a count is shown as not charged, not left blank",
+      "status": "PASS",
+      "detail": "David Okonkwo is not charged on count 1"
+    },
+    {
+      "id": "LIF-08",
+      "name": "Joint counts are identified as joint",
+      "status": "PASS",
+      "detail": "count(s) 2"
+    },
+    {
+      "id": "LIF-09",
+      "name": "Allegations pleaded against a count are reported",
+      "status": "PASS",
+      "detail": "Strike allegation; Serious felony; Great bodily injury; Prior conviction alleged: PC 459 conviction, 2019, Los Angeles County"
+    },
+    {
+      "id": "LIF-10",
+      "name": "Prior convictions pleaded against a count are reported",
+      "status": "PASS",
+      "detail": "Prior conviction alleged: PC 459 conviction, 2019, Los Angeles County"
+    },
+    {
+      "id": "LIF-11",
+      "name": "A drug weight allegation is reported as pleaded",
+      "status": "PASS",
+      "detail": "Weight alleged: 112 grams of methamphetamine"
+    },
+    {
+      "id": "LIF-12",
+      "name": "Maximum exposure is reported as the People pleaded it",
+      "status": "PASS",
+      "detail": "Maximum exposure as pleaded by the People: Seven years in state prison as pleaded"
+    },
+    {
+      "id": "LIF-13",
+      "name": "Where the People plead no exposure, none is calculated and the reason is given",
+      "status": "PASS",
+      "detail": "The charging document does not state a maximum exposure for this count, and none has been calculated. Exposure"
+    },
+    {
+      "id": "LIF-14",
+      "name": "An attorney can correct a count by hand",
+      "status": "PASS",
+      "detail": "2 fields changed"
+    },
+    {
+      "id": "LIF-15",
+      "name": "Every manual correction is recorded with the field, the values and the author",
+      "status": "PASS",
+      "detail": "Count 1 (Penal Code section 245(a)(4)): firearmAllegation changed from \"false\" to \"true\"."
+    },
+    {
+      "id": "LIF-16",
+      "name": "Each audit entry names who made the change and when",
+      "status": "PASS",
+      "detail": "attorney at 2026-08-06T21:42:23.448Z"
+    },
+    {
+      "id": "LIF-17",
+      "name": "Filing a document is itself audited",
+      "status": "PASS",
+      "detail": "Complaint was filed with 2 count(s). It is now the operative charging document; 2 count(s) drive the case anal"
+    },
+    {
+      "id": "LIF-18",
+      "name": "Fields that are not an attorney's to change are refused",
+      "status": "PASS",
+      "detail": "These fields cannot be edited directly: officialStatuteId, caseId."
+    },
+    {
+      "id": "LIF-19",
+      "name": "An amendment can be started from a prior filing, carrying its counts forward",
+      "status": "PASS",
+      "detail": "2 counts duplicated"
+    },
+    {
+      "id": "LIF-20",
+      "name": "Allegations carry forward with the count, so they need not be retyped",
+      "status": "PASS",
+      "detail": "strike and serious felony carried"
+    },
+    {
+      "id": "LIF-21",
+      "name": "A duplicated filing starts as a draft, so it can be edited before it takes effect",
+      "status": "PASS",
+      "detail": "draft"
+    },
+    {
+      "id": "LIF-22",
+      "name": "The amendment is filed and becomes operative",
+      "status": "PASS",
+      "detail": "2 counts"
+    },
+    {
+      "id": "LIF-23",
+      "name": "A newly pleaded allegation is reported in plain words",
+      "status": "PASS",
+      "detail": "Count 2, Health and Safety Code section 11378, now carries a gang allegation."
+    },
+    {
+      "id": "LIF-24",
+      "name": "A filing the case relies on cannot be altered, and the refusal explains why",
+      "status": "PASS",
+      "detail": "Complaint is part of the litigation record: A later charging document has been filed against it. Supersede it with a new"
+    },
+    {
+      "id": "LIF-25",
+      "name": "The lock records why the filing became part of the record",
+      "status": "PASS",
+      "detail": "A later charging document has been filed against it."
+    },
+    {
+      "id": "LIF-26",
+      "name": "Counts are read out of an uploaded charging document",
+      "status": "PASS",
+      "detail": "3 counts found"
+    },
+    {
+      "id": "LIF-27",
+      "name": "The code, section and count number are extracted",
+      "status": "PASS",
+      "detail": "Count 1: PEN 211"
+    },
+    {
+      "id": "LIF-28",
+      "name": "A count citing a different code resolves to that code",
+      "status": "PASS",
+      "detail": "HSC 11350"
+    },
+    {
+      "id": "LIF-29",
+      "name": "An attempt and a charged subdivision are recognised",
+      "status": "PASS",
+      "detail": "attempt, subdivision (a)"
+    },
+    {
+      "id": "LIF-30",
+      "name": "The defendant named on a count is extracted",
+      "status": "PASS",
+      "detail": "ANA VASQUEZ"
+    },
+    {
+      "id": "LIF-31",
+      "name": "An enhancement pleaded with a count is extracted",
+      "status": "PASS",
+      "detail": "PC 12022.53(b) that a principal personally used a firearm"
+    },
+    {
+      "id": "LIF-32",
+      "name": "Every extracted field carries the confidence it was read with",
+      "status": "PASS",
+      "detail": "countNumber 0.98, code 0.95, section 0.95, subdivision 0, defendants 0.8"
+    },
+    {
+      "id": "LIF-33",
+      "name": "A parse is presented as a proposal for review, never as a filing",
+      "status": "PASS",
+      "detail": "80% overall confidence"
+    },
+    {
+      "id": "LIF-34",
+      "name": "The court case number is read from the document",
+      "status": "PASS",
+      "detail": "BA778899"
+    },
+    {
+      "id": "LIF-35",
+      "name": "A document with no readable counts is explained, not silently empty",
+      "status": "PASS",
+      "detail": "No counts could be identified. The document does not use \"COUNT 1\", \"COUNT TWO\" or similar headings that this parser rec"
+    },
+    {
+      "id": "LIF-36",
+      "name": "A defendant cannot draft a charging document",
+      "status": "PASS",
+      "detail": "HTTP 403"
+    }
+  ]
+}

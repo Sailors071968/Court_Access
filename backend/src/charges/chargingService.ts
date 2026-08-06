@@ -32,8 +32,22 @@ export interface ChargeInput {
   subdivision?: string | null;
   /** The People's words. Stored exactly as given. */
   verbatimText: string;
-  status?: 'active' | 'dismissed';
+  status?: 'active' | 'dismissed' | 'pending';
   enhancements?: string[];
+  attempt?: boolean;
+  strikeAllegation?: boolean;
+  seriousFelony?: boolean;
+  violentFelony?: boolean;
+  gangAllegation?: boolean;
+  firearmAllegation?: boolean;
+  greatBodilyInjury?: boolean;
+  specialCircumstance?: boolean;
+  threeStrikes?: boolean;
+  sexRegistration?: boolean;
+  priorConvictions?: string[];
+  drugWeight?: string | null;
+  restitution?: string | null;
+  maximumExposure?: string | null;
   defendants?: Array<{ name: string; status?: 'charged' | 'dismissed' | 'severed'; clientId?: string | null; note?: string }>;
 }
 
@@ -115,49 +129,68 @@ export async function fileChargingDocument(input: FileDocumentInput) {
   });
 
   for (const charge of input.charges) {
-    const { officialStatuteId, note } = await resolveStatute(charge.code, charge.section);
-
-    const filed = await prisma.filedCharge.create({
-      data: {
-        chargingDocumentId: document.chargingDocumentId,
-        caseId: input.caseId,
-        countNumber: charge.countNumber,
-        code: charge.code.toUpperCase(),
-        section: normalizeSection(charge.section),
-        subdivision: charge.subdivision ?? null,
-        verbatimText: charge.verbatimText,
-        normalizedCitation: normalizedCitation(charge.code, charge.section, charge.subdivision),
-        officialStatuteId,
-        statuteNote: note,
-        status: charge.status ?? 'active',
-        enhancements: charge.enhancements?.length ? charge.enhancements : undefined,
-      },
-    });
-
-    for (const d of charge.defendants ?? []) {
-      await prisma.chargeDefendant
-        .create({
-          data: {
-            filedChargeId: filed.filedChargeId,
-            defendantName: d.name,
-            clientId: d.clientId ?? null,
-            status: d.status ?? 'charged',
-            note: d.note,
-          },
-        })
-        .catch(() => {
-          // A defendant named twice on one count is the same defendant.
-        });
-    }
+    await addCountToDocument(document.chargingDocumentId, input.caseId, charge);
   }
 
   // Everything filed earlier is superseded, and kept.
   await prisma.chargingDocument.updateMany({
-    where: { caseId: input.caseId, filingSequence: { lt: filingSequence }, supersededAt: null },
+    where: { caseId: input.caseId, status: 'filed', filingSequence: { lt: filingSequence }, supersededAt: null },
     data: { supersededAt: new Date() },
   });
 
   return getChargingDocument(document.chargingDocumentId);
+}
+
+/** Add one count to a draft, resolving its statute against the Legislature. */
+export async function addCountToDocument(chargingDocumentId: string, caseId: string, charge: ChargeInput) {
+  const { officialStatuteId, note } = await resolveStatute(charge.code, charge.section);
+
+  const created = await prisma.filedCharge.create({
+    data: {
+      chargingDocumentId,
+      caseId,
+      countNumber: charge.countNumber,
+      code: charge.code.toUpperCase(),
+      section: normalizeSection(charge.section),
+      subdivision: charge.subdivision ?? null,
+      verbatimText: charge.verbatimText,
+      normalizedCitation: normalizedCitation(charge.code, charge.section, charge.subdivision),
+      officialStatuteId,
+      statuteNote: note,
+      status: charge.status ?? 'active',
+      enhancements: charge.enhancements?.length ? charge.enhancements : undefined,
+      attempt: charge.attempt ?? false,
+      strikeAllegation: charge.strikeAllegation ?? false,
+      seriousFelony: charge.seriousFelony ?? false,
+      violentFelony: charge.violentFelony ?? false,
+      gangAllegation: charge.gangAllegation ?? false,
+      firearmAllegation: charge.firearmAllegation ?? false,
+      greatBodilyInjury: charge.greatBodilyInjury ?? false,
+      specialCircumstance: charge.specialCircumstance ?? false,
+      threeStrikes: charge.threeStrikes ?? false,
+      sexRegistration: charge.sexRegistration ?? false,
+      priorConvictions: charge.priorConvictions?.length ? charge.priorConvictions : undefined,
+      drugWeight: charge.drugWeight ?? null,
+      restitution: charge.restitution ?? null,
+      maximumExposure: charge.maximumExposure ?? null,
+    },
+  });
+
+  for (const d of charge.defendants ?? []) {
+    await prisma.chargeDefendant
+      .create({
+        data: {
+          filedChargeId: created.filedChargeId,
+          defendantName: d.name,
+          clientId: d.clientId ?? null,
+          status: d.status ?? 'charged',
+          note: d.note,
+        },
+      })
+      .catch(() => {});
+  }
+
+  return created;
 }
 
 export async function getChargingDocument(chargingDocumentId: string) {
@@ -167,10 +200,14 @@ export async function getChargingDocument(chargingDocumentId: string) {
   });
 }
 
-/** The operative document: the most recent filing in the case. */
+/**
+ * The operative document: the most recent *filed* document in the case. A
+ * draft is deliberately excluded — an attorney part-way through preparing an
+ * amendment must not change what the defendant is shown as facing.
+ */
 export async function getOperativeDocument(caseId: string) {
   return prisma.chargingDocument.findFirst({
-    where: { caseId },
+    where: { caseId, status: 'filed' },
     orderBy: { filingSequence: 'desc' },
     include: { charges: { include: { defendants: true }, orderBy: { countNumber: 'asc' } } },
   });
@@ -179,7 +216,7 @@ export async function getOperativeDocument(caseId: string) {
 /** Every filing in the case, oldest first. Nothing is omitted. */
 export async function getChargingHistory(caseId: string) {
   return prisma.chargingDocument.findMany({
-    where: { caseId },
+    where: { caseId, status: 'filed' },
     orderBy: { filingSequence: 'asc' },
     include: { charges: { include: { defendants: true }, orderBy: { countNumber: 'asc' } } },
   });
@@ -199,7 +236,10 @@ export interface ChargeChange {
     | 'enhancement_dismissed'
     | 'defendant_added'
     | 'defendant_removed'
-    | 'defendant_status_changed';
+    | 'defendant_status_changed'
+    | 'allegation_added'
+    | 'allegation_dropped'
+    | 'statute_changed';
   /** What the reader needs to know, in a sentence. */
   description: string;
   citation: string;
@@ -217,7 +257,31 @@ type ChargeWithDefendants = {
   status: string;
   enhancements: unknown;
   defendants: Array<{ defendantName: string; status: string }>;
+  attempt?: boolean;
+  strikeAllegation?: boolean;
+  seriousFelony?: boolean;
+  violentFelony?: boolean;
+  gangAllegation?: boolean;
+  firearmAllegation?: boolean;
+  greatBodilyInjury?: boolean;
+  specialCircumstance?: boolean;
+  threeStrikes?: boolean;
+  sexRegistration?: boolean;
 };
+
+/** Allegations that must be pleaded, and how to say each one in a sentence. */
+const ALLEGATION_LABELS: Array<[keyof ChargeWithDefendants, string]> = [
+  ['attempt', 'charged as an attempt'],
+  ['strikeAllegation', 'a strike allegation'],
+  ['seriousFelony', 'a serious felony allegation'],
+  ['violentFelony', 'a violent felony allegation'],
+  ['threeStrikes', 'a three strikes allegation'],
+  ['gangAllegation', 'a gang allegation'],
+  ['firearmAllegation', 'a firearm allegation'],
+  ['greatBodilyInjury', 'a great bodily injury allegation'],
+  ['specialCircumstance', 'a special circumstance'],
+  ['sexRegistration', 'a sex offender registration allegation'],
+];
 
 /** A count is the same count across filings if it charges the same provision. */
 function chargeKey(c: { code: string; section: string; subdivision: string | null }): string {
@@ -305,6 +369,28 @@ export function compareDocuments(
           citation: a.normalizedCitation,
           description: `An enhancement previously alleged with ${a.normalizedCitation} is no longer charged: ${e}`,
           before: { text: e },
+        });
+      }
+    }
+
+    // Allegations drive exposure, so one appearing or going away is the kind
+    // of change counsel needs told about in terms, not as a diff.
+    for (const [field, label] of ALLEGATION_LABELS) {
+      const had = Boolean(b[field]);
+      const has = Boolean(a[field]);
+      if (!had && has) {
+        changes.push({
+          type: 'allegation_added',
+          citation: a.normalizedCitation,
+          description: `Count ${a.countNumber}, ${a.normalizedCitation}, now carries ${label}.`,
+          after: { text: label },
+        });
+      } else if (had && !has) {
+        changes.push({
+          type: 'allegation_dropped',
+          citation: a.normalizedCitation,
+          description: `${label.charAt(0).toUpperCase()}${label.slice(1)} previously pleaded against count ${a.countNumber}, ${a.normalizedCitation}, is no longer alleged.`,
+          before: { text: label },
         });
       }
     }

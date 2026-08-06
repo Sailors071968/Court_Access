@@ -2902,9 +2902,22 @@ model ChargingDocument {
   citation           String?
 
   uploadedById       String
+  /** draft | filed. A draft is not operative and supersedes nothing. */
+  status             String   @default("filed")
   /** Set when a later document supersedes this one. Never deleted. */
   supersededAt       DateTime?
   notes              String?
+
+  /** Set once anything in the case relies on this filing. Locked filings can
+   *  be superseded or dismissed, never removed. */
+  lockedAt           DateTime?
+  lockedReason       String?
+
+  /** When the counts were read out of an uploaded PDF rather than typed. */
+  parsedFromEvidenceId String?
+  /** How much of the document the parser was confident about, 0 to 1. */
+  parseConfidence      Float?
+  parseNotes           String?
 
   createdAt          DateTime @default(now())
   updatedAt          DateTime @updatedAt
@@ -2941,10 +2954,42 @@ model FiledCharge {
   /** Why resolution failed, when it did. */
   statuteNote        String?
 
-  /** active | dismissed | superseded */
+  /** active | dismissed | superseded | pending */
   status             String   @default("active")
   /** Enhancements alleged with this count, verbatim. */
   enhancements       Json?
+
+  /** Charged as an attempt rather than a completed offence. */
+  attempt            Boolean  @default(false)
+
+  /** Allegations that change exposure and must be pleaded and proved. Each is
+   *  recorded only when the charging document actually alleges it; absent
+   *  means not alleged, which is different from alleged and not proved. */
+  strikeAllegation      Boolean @default(false)
+  seriousFelony         Boolean @default(false)
+  violentFelony         Boolean @default(false)
+  gangAllegation        Boolean @default(false)
+  firearmAllegation     Boolean @default(false)
+  greatBodilyInjury     Boolean @default(false)
+  specialCircumstance   Boolean @default(false)
+  threeStrikes          Boolean @default(false)
+  sexRegistration       Boolean @default(false)
+
+  /** Prior convictions pleaded against this count, verbatim. */
+  priorConvictions   Json?
+  /** Weight alleged in a controlled substance count, as pleaded. */
+  drugWeight         String?
+  /** Restitution sought, as pleaded. */
+  restitution        String?
+  /** Maximum exposure as pleaded by the People, in their words. Never
+   *  calculated by this platform: a sentence computed from a statute and
+   *  presented as fact would be relied on in plea discussions. */
+  maximumExposure    String?
+
+  /** Which fields the parser produced, and how sure it was about each. */
+  parseConfidence    Json?
+  /** Fields an attorney corrected by hand. The parser never overwrites these. */
+  attorneyEdited     Json?
 
   createdAt          DateTime @default(now())
 
@@ -2972,4 +3017,33 @@ model ChargeDefendant {
   @@unique([filedChargeId, defendantName])
   @@index([filedChargeId])
   @@map("charge_defendants")
+}
+
+
+// Every manual change to a charge, so a correction has an author and a time.
+// Charges drive the whole analysis, and a silent edit would change what a case
+// is about with nothing to show who did it.
+model ChargeAuditEvent {
+  chargeAuditEventId String   @id @default(uuid())
+  caseId             String
+  chargingDocumentId String?
+  filedChargeId      String?
+  tenantId           String
+
+  /** created | edited | dismissed | reinstated | finalized | parsed | locked */
+  action             String
+  /** The field changed, when the change was to one field. */
+  field              String?
+  previousValue      String?
+  newValue           String?
+  /** What happened, in a sentence. */
+  description        String
+
+  actorId            String
+  actorRole          String
+  occurredAt         DateTime @default(now())
+
+  @@index([caseId, occurredAt])
+  @@index([filedChargeId])
+  @@map("charge_audit_events")
 }

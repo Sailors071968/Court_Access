@@ -12,6 +12,17 @@ import type { AuthenticatedRequest } from '../security/authMiddleware.js';
 import prisma from '../lib/prisma.js';
 import { CALIFORNIA_CODES } from '../law/officialLawSource.js';
 import {
+  allegationSummary,
+  audit,
+  auditTrail,
+  duplicateFiling,
+  editCharge,
+  finalizeDraft,
+  type Actor,
+} from './chargeLifecycle.js';
+import { parseComplaint } from './complaintParser.js';
+import { addCountToDocument } from './chargingService.js';
+import {
   CHARGING_DOCUMENT_KINDS,
   chargingTimeline,
   compareDocuments,
@@ -285,6 +296,257 @@ export async function registerChargingRoutes(app: FastifyInstance): Promise<void
 
     const synced = await syncOperativeCharges(charge.chargingDocument.caseId);
     return reply.send({ charge: updated, operativeChargesSynchronised: synced.synced });
+  });
+
+  // -------------------------------------------------------------------------
+  // Drafts: create empty, duplicate a prior filing, finalise
+  // -------------------------------------------------------------------------
+  app.post('/api/cases/:caseId/charges/drafts', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!request.user) return reply.code(401).send({ error: 'Authentication required' });
+    if (!FILING_ROLES.has(request.user.role)) {
+      return reply.code(403).send({ error: 'Forbidden', message: 'Only attorneys, paralegals and administrators may draft a filing.' });
+    }
+    const { caseId } = request.params as { caseId: string };
+    if (!(await caseInTenant(caseId, request.user.tenantId))) {
+      return reply.code(404).send({ error: 'Not Found', message: 'No such case in this account.' });
+    }
+
+    const body = (request.body ?? {}) as {
+      kind?: string; name?: string; filedAt?: string; court?: string; courtCaseNumber?: string;
+      duplicateOf?: string;
+    };
+    if (!body.kind || !CHARGING_DOCUMENT_KINDS.includes(body.kind as ChargingDocumentKind) || !body.name || !body.filedAt) {
+      return reply.code(400).send({ error: 'Bad Request', message: 'A draft needs a kind, a name and a filing date.' });
+    }
+
+    const actor: Actor = { userId: request.user.userId, role: request.user.role, tenantId: request.user.tenantId };
+
+    if (body.duplicateOf) {
+      const result = await duplicateFiling({
+        sourceChargingDocumentId: body.duplicateOf,
+        kind: body.kind,
+        name: body.name,
+        filedAt: new Date(body.filedAt),
+        actor,
+      });
+      if (!result.ok) return reply.code(result.status).send({ error: 'Not Found', message: result.message });
+      return reply.code(201).send({ document: await getChargingDocument(result.chargingDocumentId), duplicated: true });
+    }
+
+    const last = await prisma.chargingDocument.findFirst({
+      where: { caseId }, orderBy: { filingSequence: 'desc' }, select: { filingSequence: true },
+    });
+    const created = await prisma.chargingDocument.create({
+      data: {
+        caseId, tenantId: request.user.tenantId, uploadedById: request.user.userId,
+        kind: body.kind, name: body.name, filedAt: new Date(body.filedAt),
+        court: body.court, courtCaseNumber: body.courtCaseNumber,
+        filingSequence: (last?.filingSequence ?? 0) + 1,
+        status: 'draft',
+      },
+    });
+    await audit({
+      caseId, tenantId: request.user.tenantId, actor, action: 'created',
+      chargingDocumentId: created.chargingDocumentId,
+      description: `${body.name} was started as a draft.`,
+    });
+    return reply.code(201).send({ document: await getChargingDocument(created.chargingDocumentId) });
+  });
+
+  // Add a count to a draft.
+  app.post('/api/charging/documents/:chargingDocumentId/counts', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!request.user) return reply.code(401).send({ error: 'Authentication required' });
+    if (!FILING_ROLES.has(request.user.role)) {
+      return reply.code(403).send({ error: 'Forbidden', message: 'Only attorneys, paralegals and administrators may add a count.' });
+    }
+    const { chargingDocumentId } = request.params as { chargingDocumentId: string };
+    const doc = await prisma.chargingDocument.findUnique({ where: { chargingDocumentId } });
+    if (!doc || doc.tenantId !== request.user.tenantId) {
+      return reply.code(404).send({ error: 'Not Found', message: 'No such charging document.' });
+    }
+    if (doc.lockedAt) {
+      return reply.code(409).send({
+        error: 'Filing locked',
+        message:
+          `${doc.name} is part of the litigation record: ${doc.lockedReason} Supersede it with a new filing ` +
+          'rather than changing what was filed.',
+      });
+    }
+
+    const c = (request.body ?? {}) as ChargeInput;
+    if (!c.code || !c.section || !c.verbatimText || typeof c.countNumber !== 'number') {
+      return reply.code(400).send({
+        error: 'Bad Request',
+        message: 'A count needs a number, a code, a section, and the wording exactly as it appears.',
+      });
+    }
+    if (!CALIFORNIA_CODES[c.code.toUpperCase()]) {
+      return reply.code(400).send({ error: 'Bad Request', message: `"${c.code}" is not a California code.` });
+    }
+
+    const added = await addCountToDocument(chargingDocumentId, doc.caseId, c);
+    await audit({
+      caseId: doc.caseId, tenantId: doc.tenantId,
+      actor: { userId: request.user.userId, role: request.user.role, tenantId: request.user.tenantId },
+      action: 'created', chargingDocumentId, filedChargeId: added.filedChargeId,
+      description: `Count ${c.countNumber} charging ${added.normalizedCitation} was added to ${doc.name}.`,
+    });
+    return reply.code(201).send({ charge: added });
+  });
+
+  app.post('/api/charging/documents/:chargingDocumentId/finalize', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!request.user) return reply.code(401).send({ error: 'Authentication required' });
+    if (!FILING_ROLES.has(request.user.role)) {
+      return reply.code(403).send({ error: 'Forbidden', message: 'Only attorneys, paralegals and administrators may file a document.' });
+    }
+    const { chargingDocumentId } = request.params as { chargingDocumentId: string };
+    const result = await finalizeDraft(chargingDocumentId, {
+      userId: request.user.userId, role: request.user.role, tenantId: request.user.tenantId,
+    });
+    if (!result.ok) return reply.code(result.status).send({ error: 'Cannot file', message: result.message });
+    return reply.send({
+      chargingDocumentId,
+      operativeChargesSynchronised: result.synced,
+      message: 'Filed. This document is now operative and the case analysis follows its counts.',
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // Manual correction, audited
+  // -------------------------------------------------------------------------
+  app.patch('/api/charging/counts/:filedChargeId/edit', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!request.user) return reply.code(401).send({ error: 'Authentication required' });
+    if (!FILING_ROLES.has(request.user.role)) {
+      return reply.code(403).send({ error: 'Forbidden', message: 'Only attorneys, paralegals and administrators may correct a charge.' });
+    }
+    const { filedChargeId } = request.params as { filedChargeId: string };
+    const result = await editCharge({
+      filedChargeId,
+      changes: (request.body ?? {}) as Record<string, unknown>,
+      actor: { userId: request.user.userId, role: request.user.role, tenantId: request.user.tenantId },
+    });
+    if (!result.ok) return reply.code(result.status).send({ error: 'Cannot edit', message: result.message });
+    return reply.send({ changed: result.changed });
+  });
+
+  // -------------------------------------------------------------------------
+  // Parse an uploaded charging document
+  // -------------------------------------------------------------------------
+  app.post('/api/cases/:caseId/charges/parse', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!request.user) return reply.code(401).send({ error: 'Authentication required' });
+    if (!FILING_ROLES.has(request.user.role)) {
+      return reply.code(403).send({ error: 'Forbidden', message: 'Only attorneys, paralegals and administrators may parse a filing.' });
+    }
+    const { caseId } = request.params as { caseId: string };
+    if (!(await caseInTenant(caseId, request.user.tenantId))) {
+      return reply.code(404).send({ error: 'Not Found', message: 'No such case in this account.' });
+    }
+
+    const body = (request.body ?? {}) as { text?: string; evidenceId?: string };
+    let text = body.text;
+
+    if (!text && body.evidenceId) {
+      const evidence = await prisma.evidence.findFirst({
+        where: { evidenceId: body.evidenceId, caseId },
+        select: { evidenceId: true, fileName: true },
+      });
+      if (!evidence) return reply.code(404).send({ error: 'Not Found', message: 'No such evidence in this case.' });
+
+      // Extracted text is stored in chunks, in order.
+      const chunks = await prisma.evidenceChunk.findMany({
+        where: { evidenceId: evidence.evidenceId },
+        orderBy: { chunkIndex: 'asc' },
+        select: { text: true },
+      });
+      const joined = chunks.map((c) => c.text).join('\n');
+
+      if (joined.trim().length === 0) {
+        return reply.code(422).send({
+          error: 'No text',
+          message:
+            `No text could be read from "${evidence.fileName}", so its counts cannot be extracted. ` +
+            'The document may be a scan without a readable text layer. Enter the counts by hand.',
+        });
+      }
+      text = joined;
+    }
+
+    if (!text) {
+      return reply.code(400).send({ error: 'Bad Request', message: 'Provide either the document text or an evidenceId.' });
+    }
+
+    const parsed = parseComplaint(text);
+    return reply.send({
+      ...parsed,
+      message:
+        'These counts were read from the document and are a proposal, not a filing. Check every one against ' +
+        'the document, correct anything wrong, then file it.',
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // Audit trail
+  // -------------------------------------------------------------------------
+  app.get('/api/cases/:caseId/charges/audit', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!request.user) return reply.code(401).send({ error: 'Authentication required' });
+    const { caseId } = request.params as { caseId: string };
+    if (!(await caseInTenant(caseId, request.user.tenantId))) {
+      return reply.code(404).send({ error: 'Not Found', message: 'No such case in this account.' });
+    }
+    return reply.send({ caseId, events: await auditTrail(caseId) });
+  });
+
+  // -------------------------------------------------------------------------
+  // The defendant and count matrix
+  // -------------------------------------------------------------------------
+  app.get('/api/cases/:caseId/charges/matrix', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!request.user) return reply.code(401).send({ error: 'Authentication required' });
+    const { caseId } = request.params as { caseId: string };
+    if (!(await caseInTenant(caseId, request.user.tenantId))) {
+      return reply.code(404).send({ error: 'Not Found', message: 'No such case in this account.' });
+    }
+
+    const operative = await getOperativeDocument(caseId);
+    if (!operative) return reply.send({ caseId, defendants: [], counts: [], cells: [] });
+
+    const defendants = [...new Set(operative.charges.flatMap((c) => c.defendants.map((d) => d.defendantName)))].sort();
+
+    const counts = operative.charges.map((c) => {
+      const summary = allegationSummary(c);
+      return {
+        filedChargeId: c.filedChargeId,
+        countNumber: c.countNumber,
+        citation: c.normalizedCitation,
+        status: c.status,
+        attempt: c.attempt,
+        enhancements: (c.enhancements as string[]) ?? [],
+        allegations: summary.alleged,
+        exposureNote: summary.exposureNote,
+      };
+    });
+
+    const cells = operative.charges.flatMap((c) =>
+      defendants.map((name) => {
+        const on = c.defendants.find((d) => d.defendantName === name);
+        return {
+          filedChargeId: c.filedChargeId,
+          countNumber: c.countNumber,
+          defendant: name,
+          // charged | dismissed | severed | not_charged
+          state: on ? on.status : 'not_charged',
+          note: on?.note ?? null,
+        };
+      }),
+    );
+
+    return reply.send({
+      caseId,
+      operativeDocument: { name: operative.name, filedAt: operative.filedAt },
+      defendants,
+      counts,
+      cells,
+      jointCounts: operative.charges.filter((c) => c.defendants.length > 1).map((c) => c.countNumber),
+    });
   });
 
   // A charge cannot be deleted. Say so rather than returning a bare 405.

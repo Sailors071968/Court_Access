@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-06T17:50:33.418Z",
+  "generatedAt": "2026-08-06T18:01:10.166Z",
   "drillVersion": "1.0.0",
   "overallResult": "PASS",
   "passCount": 9,
@@ -46,7 +46,7 @@
       "id": "critical-tables",
       "label": "Critical tables accessible",
       "result": "PASS",
-      "detail": "users:121, criminal_cases:59, evidence:962, clients:9"
+      "detail": "users:166, criminal_cases:5073, evidence:998, clients:10"
     },
     {
       "id": "migration-state",
@@ -71,39 +71,39 @@
   "auditTrail": [
     {
       "step": "Verify DISASTER_RECOVERY.md",
-      "timestamp": "2026-08-06T17:50:33.414Z"
+      "timestamp": "2026-08-06T18:01:10.162Z"
     },
     {
       "step": "Verify db-safe-migrate.sh",
-      "timestamp": "2026-08-06T17:50:33.414Z"
+      "timestamp": "2026-08-06T18:01:10.162Z"
     },
     {
       "step": "Verify database integrity audit",
-      "timestamp": "2026-08-06T17:50:33.414Z"
+      "timestamp": "2026-08-06T18:01:10.162Z"
     },
     {
       "step": "Verify legislative repository snapshots",
-      "timestamp": "2026-08-06T17:50:33.414Z"
+      "timestamp": "2026-08-06T18:01:10.162Z"
     },
     {
       "step": "Verify configuration template",
-      "timestamp": "2026-08-06T17:50:33.414Z"
+      "timestamp": "2026-08-06T18:01:10.162Z"
     },
     {
       "step": "Verify database connectivity",
-      "timestamp": "2026-08-06T17:50:33.414Z"
+      "timestamp": "2026-08-06T18:01:10.162Z"
     },
     {
       "step": "Verify critical tables accessible",
-      "timestamp": "2026-08-06T17:50:33.415Z"
+      "timestamp": "2026-08-06T18:01:10.163Z"
     },
     {
       "step": "Verify migration state",
-      "timestamp": "2026-08-06T17:50:33.417Z"
+      "timestamp": "2026-08-06T18:01:10.165Z"
     },
     {
       "step": "Verify schema version control",
-      "timestamp": "2026-08-06T17:50:33.418Z"
+      "timestamp": "2026-08-06T18:01:10.165Z"
     }
   ]
 }

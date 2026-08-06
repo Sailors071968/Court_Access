@@ -1,7 +1,7 @@
 {
   "report": "AUTH_EXPOSURE_SWEEP",
   "phase": "Phase 7 — Security Testing",
-  "generatedAt": "2026-08-06T15:57:49.855Z",
+  "generatedAt": "2026-08-06T17:59:24.214Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 2,

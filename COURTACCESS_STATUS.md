@@ -1,6 +1,6 @@
 # CourtAccess — Status
 
-Last updated by Production Program 145 (Gold Standard Discovery Upload Portal).
+Last updated by Production Program 146 (Production Hardening and Release Candidate Validation).
 
 Every figure below was produced by executing the platform: PostgreSQL 16 and
 Redis 7 provisioned, all Prisma migrations applied, the Fastify API and its
@@ -14,20 +14,37 @@ Reproduce with `bash scripts/certification/run-all.sh`.
 
 | | |
 |---|---|
-| Checks executed | 379 |
-| Passed | 371 |
+| Checks executed | 451 |
+| Passed | 420 |
 | Failed | 0 |
-| Warnings | 6 |
-| Not measurable here | 2 |
-| Production readiness | 97.9% |
-| Recommended launch status | READY WITH LIMITATIONS |
+| Warnings | 18 |
+| Not measurable here | 13 |
+| Engineering pass rate | 93.1% |
+| **Release gate** | **NOT READY** |
 
-The single failure carried over from Program 144 — a muted body-camera
-recording reported with the same wording as an untranscribed one — is fixed.
-No check now fails. The two items recorded as not measurable are a
-20,000-page document and a 20-hour recording, neither of which this
-environment has the disk or the source material for; they are reported as not
-exercised rather than extrapolated from smaller runs.
+**The gate is blocked by two things, and neither is an engineering defect.**
+
+No attorney-authorized case has been processed. All twenty certification
+corpora are synthetic fixtures created by the test suites. Real-discovery
+certification is the one test that exercises the material this platform exists
+to handle, and it has not been run — Cases 001, 002 and 003 have never been
+uploaded. The portal is built, browser verified and waiting.
+
+Legal knowledge coverage is 0.3% of the Penal Code. The repositories hold 81
+records covering four Penal Code sections and one of roughly 800 CALCRIM
+instructions. Nine areas the product names — Evidence Code, search and seizure,
+Pitchess, Brady, Miranda, voluntariness, identification, expert testimony and
+constitutional authority — have no repository at all and can only return
+UNKNOWN. The retrieval, citation and traceability machinery around them is
+built and certified; what is missing is the law itself.
+
+Every other gate criterion passes: zero critical defects across 451 checks,
+zero broken navigation, zero broken permissions or authentication, zero broken
+upload pipelines, zero broken traceability, browser verified and stress tested.
+
+Live at **Admin → Production Readiness**, where the gate is evaluated from the
+suite results rather than asserted, so the page cannot claim readiness while a
+criterion beneath it says otherwise.
 
 ## Certification suites
 
@@ -51,6 +68,40 @@ exercised rather than extrapolated from smaller runs.
 | Upload portal API | 22 | 22 | 0 |
 | Upload portal browser verification | 21 | 21 | 0 |
 | Upload stress | 12 | 10 | 0 |
+| Session renewal | 17 | 17 | 0 |
+| Production audit | 21 | 20 | 0 |
+| Legal knowledge coverage | 22 | 0 | 0 |
+| Executive readiness dashboard | 12 | 12 | 0 |
+
+The legal knowledge suite records no passes by design: every check reports how
+thin a repository is, and there is nothing there to pass.
+
+## Legal knowledge coverage
+
+Measured for the first time in Program 146, and the most consequential finding
+in the platform.
+
+| Repository | Records |
+|---|---|
+| Statutes | 13 |
+| Authorities | 16 |
+| Cross references | 16 |
+| Exceptions | 12 |
+| Elements | 10 |
+| Offenses | 5 |
+| Mens rea | 5 |
+| Statute classifications | 3 |
+| CALCRIM links | 1 |
+| Defenses | 0 |
+
+Four Penal Code sections carry records: PEN 25, 26, 27 and 459. Against roughly
+1,300 operative sections that is about 0.3%. One CALCRIM instruction link
+against roughly 800 published instructions is about 0.13%.
+
+This is a demonstration corpus, not a working library. Populating it is a
+content acquisition exercise rather than an engineering one, and until it is
+done the platform will correctly answer UNKNOWN for almost every charged
+offence it is shown.
 
 ## Gold Standard Certification
 
@@ -148,10 +199,10 @@ Stated rather than implied.
   effectively silent, are now told apart and explained separately with the
   measured peak level quoted — but a recording with ordinary audible speech is
   still only stored, not transcribed.
-- **The CALCRIM instruction library covers two offences** — Penal Code 459 and
-  484. Any other charged count is reported as UNKNOWN, which is correct
-  behaviour but is not coverage.
-- **Mens rea holds five statutes**, four of them recorded as UNKNOWN.
+- **Legal knowledge coverage is 0.3% of the Penal Code.** Measured, not
+  estimated: see the coverage table above. This is the single largest gap in
+  the platform and the reason the release gate cannot pass on engineering
+  results alone.
 - **Trial exhibits and litigation strategy have no backend.** The views say so
   rather than rendering an empty state that looks like an answer.
 - **ZIP discovery productions** are inventoried and listed but not expanded
@@ -196,11 +247,32 @@ Recorded as UNKNOWN, not as passes.
 
 ## Deployment
 
-Nothing on this branch is deployed and there is no staging URL: this
+Nothing on this branch is deployed and there is no permanent staging URL: this
 environment has no public ingress or deployment credentials. Read-only checks
 show `courtaccess.net` serving a 26 June 2026 bundle with an API whose health
 response predates this codebase, so production is running a build well behind
 the repository and none of these repairs are live.
+
+A temporary Cloudflare tunnel has been used for hands-on review during
+Programs 145 and 146. It is not a staging environment: it points at a
+disposable VM, it disappears when that VM stops, and real attorney-authorized
+discovery must not be uploaded through it.
+
+## What would close the gate
+
+1. **Upload Case 001 through the portal** at Admin → Gold Standard
+   Certification → Import, on a deployment you control. Then 002 and 003. This
+   is the only item that cannot be completed by engineering.
+2. **Populate the legal knowledge repositories.** The machinery is certified;
+   it needs the Penal Code, the CALCRIM instruction set and the authority
+   corpora behind Evidence Code, search and seizure, Pitchess, Brady, Miranda,
+   voluntariness, identification and expert testimony.
+3. **Raise the ingestion size caps** if any case contains a single non-video
+   document above 500 MB.
+
+Items 1 and 2 are independent: real discovery can be certified for ingestion,
+traceability and repository population while legal coverage is still thin, and
+the readiness dashboard will report each separately.
 
 ## Importing Case 001
 

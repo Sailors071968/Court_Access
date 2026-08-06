@@ -85,6 +85,7 @@ import { SharedAccessPage } from './pages/membership/SharedAccessPage';
 import { AdminPage } from './pages/admin/AdminPage';
 import { OperationsCommandCenter } from './pages/admin/OperationsCommandCenter';
 import { ProductionReadiness } from './pages/admin/ProductionReadiness';
+import { StatutoryIntelligence } from './pages/admin/StatutoryIntelligence';
 import { GoldStandardCertification } from './pages/admin/GoldStandardCertification';
 
 // Case Pages
@@ -446,6 +447,14 @@ function App() {
             element={
               <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
                 <GoldStandardCertification />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/statutory-intelligence"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <StatutoryIntelligence />
               </ProtectedRoute>
             }
           />

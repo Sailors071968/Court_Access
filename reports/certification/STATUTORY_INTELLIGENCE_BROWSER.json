@@ -1,0 +1,89 @@
+{
+  "report": "STATUTORY_INTELLIGENCE_BROWSER",
+  "phase": "Program 147 — Statutory Intelligence Browser",
+  "generatedAt": "2026-08-06T19:23:47.260Z",
+  "apiBase": "http://127.0.0.1:3001",
+  "summary": {
+    "total": 12,
+    "PASS": 12,
+    "FAIL": 0,
+    "WARNING": 0,
+    "UNKNOWN": 0,
+    "passRate": 100
+  },
+  "exercisedApiRoutes": [],
+  "exercisedSpaRoutes": [],
+  "base": "http://127.0.0.1:4180",
+  "checks": [
+    {
+      "id": "SIB-01",
+      "name": "An administrator can reach statutory intelligence from the navigation",
+      "status": "PASS",
+      "detail": "Admin → Statutory Intelligence"
+    },
+    {
+      "id": "SIB-02",
+      "name": "Every California code is selectable",
+      "status": "PASS",
+      "detail": "29 codes"
+    },
+    {
+      "id": "SIB-03",
+      "name": "The statute the Legislature publishes is shown in full",
+      "status": "PASS",
+      "detail": "Penal Code 459 text rendered"
+    },
+    {
+      "id": "SIB-04",
+      "name": "The reader can open the official page and check it",
+      "status": "PASS",
+      "detail": "2 link(s) to the official source"
+    },
+    {
+      "id": "SIB-05",
+      "name": "Provenance is shown alongside the text",
+      "status": "PASS",
+      "detail": "Legislative version, Fingerprint, Retrieved, Served from"
+    },
+    {
+      "id": "SIB-06",
+      "name": "The legislative version is displayed",
+      "status": "PASS",
+      "detail": "Amended by Stats. 2025, Ch. 533, Sec. 1. (AB 468)"
+    },
+    {
+      "id": "SIB-07",
+      "name": "The mental state compiled from the statute is shown with the words that establish it",
+      "status": "PASS"
+    },
+    {
+      "id": "SIB-08",
+      "name": "The sections this charge depends on are listed",
+      "status": "PASS",
+      "detail": "Depends on 6 other section(s)"
+    },
+    {
+      "id": "SIB-09",
+      "name": "A dependency can be followed by clicking it",
+      "status": "PASS",
+      "detail": "followed HNC 21."
+    },
+    {
+      "id": "SIB-10",
+      "name": "A charge with no verified instruction shows UNKNOWN, not a guess",
+      "status": "PASS",
+      "detail": "CALCRIM reported as unknown"
+    },
+    {
+      "id": "SIB-11",
+      "name": "A section that does not exist is explained rather than shown blank",
+      "status": "PASS",
+      "detail": "The official source has no section 99999. in the Penal Code. It may never have existed, or it may have been re"
+    },
+    {
+      "id": "SIB-12",
+      "name": "No uncaught JavaScript exceptions across statutory lookup",
+      "status": "PASS"
+    }
+  ]
+}

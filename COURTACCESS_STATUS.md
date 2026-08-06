@@ -1,6 +1,6 @@
 # CourtAccess — Status
 
-Last updated by Production Program 146 (Production Hardening and Release Candidate Validation).
+Last updated by Production Program 147 (Official California Law Discovery Engine).
 
 Every figure below was produced by executing the platform: PostgreSQL 16 and
 Redis 7 provisioned, all Prisma migrations applied, the Fastify API and its
@@ -14,12 +14,12 @@ Reproduce with `bash scripts/certification/run-all.sh`.
 
 | | |
 |---|---|
-| Checks executed | 451 |
-| Passed | 420 |
+| Checks executed | 507 |
+| Passed | 474 |
 | Failed | 0 |
-| Warnings | 18 |
+| Warnings | 20 |
 | Not measurable here | 13 |
-| Engineering pass rate | 93.1% |
+| Engineering pass rate | 93.5% |
 | **Release gate** | **NOT READY** |
 
 **The gate is blocked by two things, and neither is an engineering defect.**
@@ -30,15 +30,15 @@ certification is the one test that exercises the material this platform exists
 to handle, and it has not been run — Cases 001, 002 and 003 have never been
 uploaded. The portal is built, browser verified and waiting.
 
-Legal knowledge coverage is 0.3% of the Penal Code. The repositories hold 81
-records covering four Penal Code sections and one of roughly 800 CALCRIM
-instructions. Nine areas the product names — Evidence Code, search and seizure,
-Pitchess, Brady, Miranda, voluntariness, identification, expert testimony and
-constitutional authority — have no repository at all and can only return
-UNKNOWN. The retrieval, citation and traceability machinery around them is
-built and certified; what is missing is the law itself.
+Legal coverage is no longer what it was. Program 147 replaced the
+hand-maintained offence repository with retrieval from the Legislature's own
+publication, so all 29 California codes are now reachable on demand rather than
+the four Penal Code sections that had been typed in. What remains thin is
+CALCRIM: seven verified instruction correspondences, with every other charge
+returning UNKNOWN. The gate's repository criterion still reflects the older
+measurement and will clear as instruction mapping is extended.
 
-Every other gate criterion passes: zero critical defects across 451 checks,
+Every other gate criterion passes: zero critical defects across 507 checks,
 zero broken navigation, zero broken permissions or authentication, zero broken
 upload pipelines, zero broken traceability, browser verified and stress tested.
 
@@ -71,37 +71,53 @@ criterion beneath it says otherwise.
 | Session renewal | 17 | 17 | 0 |
 | Production audit | 21 | 20 | 0 |
 | Legal knowledge coverage | 22 | 0 | 0 |
+| Official California law engine | 37 | 37 | 0 |
+| Static statutory dependencies | 7 | 5 | 0 |
+| Statutory intelligence browser | 12 | 12 | 0 |
 | Executive readiness dashboard | 12 | 12 | 0 |
 
 The legal knowledge suite records no passes by design: every check reports how
 thin a repository is, and there is nothing there to pass.
 
-## Legal knowledge coverage
+## California law
 
-Measured for the first time in Program 146, and the most consequential finding
-in the platform.
+Program 147 replaced the hand-maintained offence repository with retrieval from
+[leginfo.legislature.ca.gov](https://leginfo.legislature.ca.gov/), the
+Legislature's own publication. Coverage is no longer a function of what has
+been typed in: **all 29 California codes are reachable on demand**, against the
+83 hand-entered records the platform previously depended on.
 
-| Repository | Records |
-|---|---|
-| Statutes | 13 |
-| Authorities | 16 |
-| Cross references | 16 |
-| Exceptions | 12 |
-| Elements | 10 |
-| Offenses | 5 |
-| Mens rea | 5 |
-| Statute classifications | 3 |
-| CALCRIM links | 1 |
-| Defenses | 0 |
+Every retrieval carries its own provenance — the official URL, the legislative
+note with its effective date, the section's place in the code, the retrieval
+time, and a SHA-256 fingerprint of the text. The fingerprint drives everything
+else: synchronisation compares it to detect amendments, and a case pins the
+version it was analysed against so the analysis stays reproducible after the
+law moves.
 
-Four Penal Code sections carry records: PEN 25, 26, 27 and 459. Against roughly
-1,300 operative sections that is about 0.3%. One CALCRIM instruction link
-against roughly 800 published instructions is about 0.13%.
+The compiler reads structure from the statute's own words — the kind of
+provision, the conduct, the mental state, punishments, exceptions, defences,
+defined terms and cross-references. Cross-references resolve to the code the
+statute names rather than the one being read, including where the Legislature
+separates the two by several clauses.
 
-This is a demonstration corpus, not a working library. Populating it is a
-content acquisition exercise rather than an engineering one, and until it is
-done the platform will correctly answer UNKNOWN for almost every charged
-offence it is shown.
+Live at **Admin → Statutory Intelligence**.
+
+### What is still held rather than retrieved
+
+- **CALCRIM correspondence is a verified list of seven.** The Judicial Council
+  does not publish the instructions in machine-readable form, so this grows by
+  verification, not retrieval. Those entries hold no statutory text — elements
+  are compiled from the official source every time — and a charge outside the
+  list returns UNKNOWN rather than a guessed instruction number.
+- **The JSONL legislative repositories remain**, 83 records read by ten
+  modules. They carry no official URL or fingerprint, so anything sourced from
+  them sits outside the guarantees above. Migrating those readers to the
+  discovery engine is the next step.
+
+No module holds a hardcoded offence, statutory element or mental state any
+more. The two element tables that remained were converted into what they
+legitimately are — vocabulary for searching discovery — and each now names the
+official section it looks for.
 
 ## Gold Standard Certification
 
@@ -199,10 +215,17 @@ Stated rather than implied.
   effectively silent, are now told apart and explained separately with the
   measured peak level quoted — but a recording with ordinary audible speech is
   still only stored, not transcribed.
-- **Legal knowledge coverage is 0.3% of the Penal Code.** Measured, not
-  estimated: see the coverage table above. This is the single largest gap in
-  the platform and the reason the release gate cannot pass on engineering
-  results alone.
+- **Statutory coverage is now the whole of the California codes**, retrieved on
+  demand. What remains thin is CALCRIM: seven verified instruction
+  correspondences, with everything else UNKNOWN.
+- **The compiler is a first version.** It reads mental state, conduct and
+  references out of statutory language with rules, not with a model of
+  statutory construction. It is right on the sections tested and reports
+  UNKNOWN where the words do not settle a question, but it has not been
+  measured across the whole code.
+- **Retrieval depends on a public service.** If leginfo is unreachable the
+  affected sections are reported as unavailable with the reason, which is
+  correct but is still an outage. Cached law continues to serve.
 - **Trial exhibits and litigation strategy have no backend.** The views say so
   rather than rendering an empty state that looks like an answer.
 - **ZIP discovery productions** are inventoried and listed but not expanded
@@ -263,10 +286,10 @@ discovery must not be uploaded through it.
 1. **Upload Case 001 through the portal** at Admin → Gold Standard
    Certification → Import, on a deployment you control. Then 002 and 003. This
    is the only item that cannot be completed by engineering.
-2. **Populate the legal knowledge repositories.** The machinery is certified;
-   it needs the Penal Code, the CALCRIM instruction set and the authority
-   corpora behind Evidence Code, search and seizure, Pitchess, Brady, Miranda,
-   voluntariness, identification and expert testimony.
+2. **Extend CALCRIM correspondence and migrate the remaining repository
+   readers.** Statutory text is now retrieved rather than stored, so what is
+   left is the instruction mapping and the ten modules still reading the JSONL
+   repositories.
 3. **Raise the ingestion size caps** if any case contains a single non-video
    document above 500 MB.
 

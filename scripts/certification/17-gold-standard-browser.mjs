@@ -179,42 +179,56 @@ missingSteps.length === 0
   ? results.pass('GSUI-06', 'The administrator workflow is presented as steps', railLabels.join(' → '))
   : results.fail('GSUI-06', 'Workflow steps are missing', missingSteps.join(', '));
 
-// --- Import wizard ---------------------------------------------------------
+// --- Import step -----------------------------------------------------------
+//
+// Import is now the upload portal: discovery comes from the operator's own
+// machine rather than a path on the server. The portal's own workflow is
+// certified in the upload portal browser suite; here we confirm the console
+// presents it, then drive it to produce the corpus the later steps inspect.
 
 await adminPage.locator('button:has-text("Import")').first().click();
-await adminPage.waitForTimeout(600);
+await adminPage.waitForTimeout(800);
 
 const reference = `UI-${Date.now().toString().slice(-6)}`;
-await adminPage.locator('input[placeholder="GS-001"]').fill(reference);
-await adminPage.locator('input[placeholder*="certification corpus"]').fill('Browser-verified corpus');
-await adminPage.locator('input[placeholder*="/srv/courtaccess"]').fill(CORPUS);
-await adminPage.screenshot({ path: path.join(SHOTS, 'gold_standard_import_form.png') });
 
-await adminPage.locator('button:has-text("Preview folder")').click();
-await adminPage.waitForTimeout(6000);
-const previewText = (await adminPage.textContent('body')) ?? '';
-await adminPage.screenshot({ path: path.join(SHOTS, 'gold_standard_preview.png') });
-
-/\b32 file\(s\)/.test(previewText) || /\d+ file\(s\),/.test(previewText)
+const portalPresent = (await adminPage.locator('[data-testid="upload-dropzone"]').count()) > 0;
+portalPresent
   ? results.pass(
       'GSUI-07',
-      'Preview lists the delivery before anything is imported',
-      (previewText.match(/\d+ file\(s\), [\d.]+ [KMG]?B/) ?? ['counts shown'])[0],
+      'The import step offers upload from the operator\'s own computer',
+      'drag & drop and file selection presented, with no server path required',
     )
-  : results.fail('GSUI-07', 'Preview produced no file listing', previewText.slice(0, 200));
+  : results.fail('GSUI-07', 'The import step does not present the upload portal');
 
-/in archive/i.test(previewText)
-  ? results.pass('GSUI-08', 'Files inside a delivered archive are shown individually in the preview')
-  : results.warn('GSUI-08', 'The preview did not mark any archive members', 'expected the nested ZIP to be expanded');
+const noServerPath = (await adminPage.locator('input[placeholder*="/srv/"]').count()) === 0;
+noServerPath
+  ? results.pass('GSUI-08', 'The administrator is never asked for a path on the server', 'no server-path field remains')
+  : results.fail('GSUI-08', 'A server path is still being requested from the administrator');
 
-await adminPage.locator('button:has-text("Import")').last().click();
-// Import ingests and processes every file; give it room.
-await adminPage.waitForTimeout(45000);
+await adminPage.locator('[data-testid="upload-reference"]').fill(reference);
+await adminPage.locator('[data-testid="upload-label"]').fill('Browser-verified corpus');
+await adminPage.locator('input[type=file][webkitdirectory]').setInputFiles(CORPUS);
+await adminPage.waitForTimeout(1500);
+await adminPage.screenshot({ path: path.join(SHOTS, 'gold_standard_import_form.png') });
+
+await adminPage.locator('[data-testid="start-upload"]').click();
+await adminPage.locator('[data-testid="upload-preview"]').waitFor({ timeout: 180000 }).catch(() => {});
+await adminPage.screenshot({ path: path.join(SHOTS, 'gold_standard_preview.png') });
+
+await adminPage.locator('[data-testid="confirm-processing"]').click().catch(() => {});
+
+// Processing runs in the background; wait for the console to land on the
+// inventory rather than guessing at a duration.
+await adminPage
+  .locator('text=Document classification')
+  .first()
+  .waitFor({ timeout: 600000 })
+  .catch(() => {});
 const inventoryText = (await adminPage.textContent('body')) ?? '';
 await adminPage.screenshot({ path: path.join(SHOTS, 'gold_standard_inventory.png'), fullPage: false });
 
 /Document classification/i.test(inventoryText)
-  ? results.pass('GSUI-09', 'Import completes and lands on the inventory', 'classification panel rendered')
+  ? results.pass('GSUI-09', 'An uploaded corpus completes processing and lands on the inventory', 'classification panel rendered')
   : results.fail('GSUI-09', 'Import did not reach the inventory', inventoryText.slice(0, 250));
 
 // The inventory must show the counts Phase 3 asks for.

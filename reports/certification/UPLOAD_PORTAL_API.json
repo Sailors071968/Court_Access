@@ -1,7 +1,7 @@
 {
   "report": "UPLOAD_PORTAL_API",
   "phase": "Program 145 — Upload Portal API",
-  "generatedAt": "2026-08-06T16:26:26.615Z",
+  "generatedAt": "2026-08-06T16:50:45.600Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 22,
@@ -23,8 +23,8 @@
     "POST /api/certification/uploads/:id/commit"
   ],
   "exercisedSpaRoutes": [],
-  "uploadSessionId": "affd18c0-c989-4b5a-8185-a795f98651b5",
-  "reference": "UP-580031",
+  "uploadSessionId": "2f471baf-af60-499a-9f5e-0049a9f29afd",
+  "reference": "UP-040063",
   "selectionFiles": 29,
   "selectionBytes": 1300024,
   "checks": [
@@ -44,7 +44,7 @@
       "id": "UP-03",
       "name": "Files upload in chunks with their folder paths preserved",
       "status": "PASS",
-      "detail": "29 file(s) in 128ms"
+      "detail": "29 file(s) in 107ms"
     },
     {
       "id": "UP-04",
@@ -143,7 +143,7 @@
       "id": "UP-18",
       "name": "The upload produced a certification corpus and a run",
       "status": "PASS",
-      "detail": "case 2bf422e8"
+      "detail": "case a8f17dea"
     },
     {
       "id": "UP-19",

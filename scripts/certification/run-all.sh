@@ -115,6 +115,9 @@ for _ in $(seq 1 60); do curl -sf -o /dev/null http://127.0.0.1:3001/api/health 
 run "Phase 6/11 — stress and performance"        06-stress-certification.mjs 18
 run "Phase 9 — browser verification"             08-browser-certification.mjs 8
 run "Gold Standard — browser verification"       17-gold-standard-browser.mjs 22
+run "Upload portal — API"                        18-upload-portal-api.mjs 20
+run "Upload portal — browser verification"       19-upload-portal-browser.mjs 20
+run "Upload portal — stress"                     20-upload-stress.mjs 25
 run "Phase 10 — recovery"                        07-recovery-certification.mjs 18
 
 echo

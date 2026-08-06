@@ -876,6 +876,8 @@ export interface JuryVisualization {
     description: string;
     visualData: Record<string, unknown>;
   }>;
+  /** Present only when no exhibit is supported by the repository. */
+  message?: string;
 }
 
 /**
@@ -895,25 +897,32 @@ export async function generateJuryVisualizations(caseId: string): Promise<JuryVi
   const exhibits: JuryVisualization['exhibits'] = [];
   let exhibitNumber = 1;
 
-  // Timeline exhibit
-  exhibits.push({
-    exhibitNumber: exhibitNumber++,
-    type: 'timeline',
-    title: 'Chronological Event Timeline',
-    description: 'Complete sequence of detected events from all evidence sources',
-    visualData: {
-      events: events.map(e => ({
-        time: e.timestamp,
-        action: e.eventType.replace(/_/g, ' '),
-        source: e.sourceType,
-        confidence: `${(e.confidence * 100).toFixed(0)}%`,
-      })),
-      totalEvents: events.length,
-      timeRange: events.length > 0
-        ? `${events[0].timestamp} to ${events[events.length - 1].timestamp}`
-        : 'N/A',
-    },
-  });
+  // Timeline exhibit — only when there is something to exhibit. An exhibit
+  // built from no events has nothing behind it, and describing it as a
+  // "complete sequence" asserts a completeness the repository cannot support:
+  // it holds what was extracted from the discovery that was uploaded, which is
+  // not the same as everything that happened.
+  if (events.length > 0) {
+    exhibits.push({
+      exhibitNumber: exhibitNumber++,
+      type: 'timeline',
+      title: 'Chronological Event Timeline',
+      description:
+        `Sequence of ${events.length} event(s) extracted from the discovery indexed for this case. ` +
+        'Events not described in the uploaded materials do not appear here.',
+      visualData: {
+        events: events.map(e => ({
+          time: e.timestamp,
+          action: e.eventType.replace(/_/g, ' '),
+          source: e.sourceType,
+          sourceEvidence: e.sourceEvidence,
+          confidence: `${(e.confidence * 100).toFixed(0)}%`,
+        })),
+        totalEvents: events.length,
+        timeRange: `${events[0].timestamp} to ${events[events.length - 1].timestamp}`,
+      },
+    });
+  }
 
   // Finding-specific exhibits
   for (const finding of findings) {
@@ -956,5 +965,15 @@ export async function generateJuryVisualizations(caseId: string): Promise<JuryVi
     caseId,
     title: applySafetyGuardrails('Policy Compliance Analysis — Visual Exhibits'),
     exhibits,
+    // Say so explicitly rather than returning a bare empty list, so the
+    // absence of exhibits reads as "nothing supports one yet" rather than as
+    // a rendering failure.
+    ...(exhibits.length === 0
+      ? {
+          message:
+            'No exhibits can be produced for this case. No compliance findings or extracted events are held ' +
+            'in the repository for it, and an exhibit is only generated from material already indexed.',
+        }
+      : {}),
   };
 }

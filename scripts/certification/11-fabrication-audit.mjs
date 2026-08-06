@@ -34,9 +34,15 @@ const FINDING_KEYS = new Set([
   'events', 'timeline', 'contradictions', 'claims', 'impeachment', 'findings',
   'recommendations', 'observations', 'tasks', 'leads', 'exhibits', 'elements',
   'arguments', 'argumentInteractions', 'failureRankings', 'crossExamination',
-  'gaps', 'requests', 'alerts', 'issues', 'opportunities', 'witnesses',
+  'requests', 'alerts', 'issues', 'opportunities', 'witnesses',
   'nodes', 'edges', 'relationships', 'entities', 'charges', 'notes', 'pins',
 ]);
+
+// A gap is a statement that something is *absent* from the repository. That is
+// the opposite of a fabricated finding — the constitution asks for exactly
+// this — so gap collections are inspected separately and are never counted as
+// assertions about the case.
+const ABSENCE_KEYS = new Set(['gaps', 'missing', 'unknowns', 'notInterviewed', 'notObtained']);
 
 // Narrative fields that assert something about the case in prose.
 const PROSE_KEYS = new Set([
@@ -59,6 +65,9 @@ function collectFindings(body, atPath = '$', out = [], depth = 0) {
 
   for (const [key, value] of Object.entries(body)) {
     const here = `${atPath}.${key}`;
+
+    // Statements of absence are not assertions about the case.
+    if (ABSENCE_KEYS.has(key)) continue;
 
     if (FINDING_KEYS.has(key) && Array.isArray(value) && value.length > 0) {
       out.push({ path: here, kind: 'collection', count: value.length, sample: JSON.stringify(value[0]).slice(0, 240) });
@@ -229,8 +238,13 @@ const SOURCE_KEYS = [
   'sourceEventIds', 'reference', 'exhibitId',
 ];
 
+// Graph nodes carry their provenance as the identifier itself: the node id is
+// the record it stands for. An id plus a label is traceable, so it counts.
+const IDENTITY_KEYS = ['"id"', '"nodeId"', '"eventId"'];
+
 function hasSource(sampleJson) {
-  return SOURCE_KEYS.some((k) => sampleJson.includes(`"${k}"`));
+  if (SOURCE_KEYS.some((k) => sampleJson.includes(`"${k}"`))) return true;
+  return IDENTITY_KEYS.some((k) => sampleJson.includes(k)) && sampleJson.includes('"label"');
 }
 
 const populatedFindings = populatedRows.flatMap((r) =>

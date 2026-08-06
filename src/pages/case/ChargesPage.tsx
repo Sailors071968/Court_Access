@@ -11,6 +11,7 @@ import type { ChargeEntity } from '../../models/CaseModel';
 import { useParams } from 'react-router-dom';
 import { ArrowRight, AlertTriangle } from 'lucide-react';
 import { fetchCase } from '../../services/caseApi';
+import { ChargesPanel } from '../cases/ChargesPanel';
 
 export function ChargesPage() {
   const { caseId } = useParams<{ caseId: string }>();
@@ -48,8 +49,21 @@ export function ChargesPage() {
 
   return (
     <div className="space-y-6">
+      {/* What the People have actually filed, and everything they filed before. */}
+      {caseId && <ChargesPanel caseId={caseId} />}
+
+      {/* Per-charge defence analysis. This reads the analysis engines rather
+          than the charging documents, so it is only shown when it has
+          something to say — an empty state here would contradict the charges
+          set out directly above. */}
+      {charges.length > 0 && (
+        <div className="pt-2 border-t border-gray-200">
+          <h2 className="text-base font-semibold text-gray-900 mb-3">Charge analysis</h2>
+        </div>
+      )}
+
       {/* Charge Tabs */}
-      <div className="flex gap-2 overflow-x-auto pb-2">
+      <div className={`flex gap-2 overflow-x-auto pb-2 ${charges.length === 0 ? 'hidden' : ''}`}>
         <button
           onClick={() => setActiveChargeIndex(-1)}
           className={`px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
@@ -71,12 +85,7 @@ export function ChargesPage() {
         ))}
       </div>
 
-      {charges.length === 0 ? (
-        <div className="text-center py-12">
-          <AlertTriangle size={48} className="text-gray-300 mx-auto mb-4" />
-          <p className="text-gray-500 text-sm">No charges filed yet. Charges will appear here once they are added to the case.</p>
-        </div>
-      ) : activeChargeIndex >= 0 && activeCharge ? (
+      {charges.length === 0 ? null : activeChargeIndex >= 0 && activeCharge ? (
         <div className="grid lg:grid-cols-3 gap-6">
           {/* Elements Breakdown */}
           <div className="lg:col-span-2 space-y-6">

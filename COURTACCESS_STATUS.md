@@ -1,6 +1,6 @@
 # CourtAccess — Status
 
-Last updated by Production Program 147 (Official California Law Discovery Engine).
+Last updated by Production Program 148 (Charging Document Intelligence).
 
 Every figure below was produced by executing the platform: PostgreSQL 16 and
 Redis 7 provisioned, all Prisma migrations applied, the Fastify API and its
@@ -14,12 +14,12 @@ Reproduce with `bash scripts/certification/run-all.sh`.
 
 | | |
 |---|---|
-| Checks executed | 507 |
-| Passed | 474 |
+| Checks executed | 558 |
+| Passed | 525 |
 | Failed | 0 |
 | Warnings | 20 |
 | Not measurable here | 13 |
-| Engineering pass rate | 93.5% |
+| Engineering pass rate | 94.1% |
 | **Release gate** | **NOT READY** |
 
 **The gate is blocked by two things, and neither is an engineering defect.**
@@ -38,7 +38,7 @@ CALCRIM: seven verified instruction correspondences, with every other charge
 returning UNKNOWN. The gate's repository criterion still reflects the older
 measurement and will clear as instruction mapping is extended.
 
-Every other gate criterion passes: zero critical defects across 507 checks,
+Every other gate criterion passes: zero critical defects across 558 checks,
 zero broken navigation, zero broken permissions or authentication, zero broken
 upload pipelines, zero broken traceability, browser verified and stress tested.
 
@@ -72,6 +72,8 @@ criterion beneath it says otherwise.
 | Production audit | 21 | 20 | 0 |
 | Legal knowledge coverage | 22 | 0 | 0 |
 | Official California law engine | 37 | 37 | 0 |
+| Charging documents | 34 | 34 | 0 |
+| Charging documents browser | 17 | 17 | 0 |
 | Static statutory dependencies | 7 | 5 | 0 |
 | Statutory intelligence browser | 12 | 12 | 0 |
 | Executive readiness dashboard | 12 | 12 | 0 |
@@ -118,6 +120,38 @@ No module holds a hardcoded offence, statutory element or mental state any
 more. The two element tables that remained were converted into what they
 legitimately are — vocabulary for searching discovery — and each now names the
 official section it looks for.
+
+## Charges
+
+Program 148 models charging documents as the sequence of filings they are
+rather than as a list. The People file a complaint, amend it, file an
+information, dismiss counts and renumber what is left, sever a codefendant —
+and what the defendant faces today is whatever the latest filing says.
+
+**Nothing is ever destroyed.** Superseding a document marks it and leaves its
+counts exactly as the People wrote them, because the earlier pleading is the
+basis of every motion already filed against it. The delete endpoint refuses and
+explains why rather than returning a bare error.
+
+- **Charge text is verbatim.** The People's wording is what a motion quotes, so
+  it is never normalised or paraphrased. A normalised citation is stored beside
+  it, not instead of it.
+- **Every charged section resolves against the Legislature** through the
+  Program 147 engine, so a count carries the official text of the statute it
+  charges. A count whose section cannot be read is still recorded, with the
+  reason.
+- **Counts are matched across filings on the provision charged**, not the count
+  number, so a count that moves from 2 to 3 is reported as renumbered rather
+  than as a dismissal and an addition.
+- **Changes are named in words**: counts added, counts no longer charged,
+  renumbering, rewritten allegations, enhancements added and dropped, and
+  defendants added, removed or severed.
+- **The analysis engines follow the operative document.** When a new filing
+  changes what is charged, the charge table those engines read is rebuilt from
+  it, so CALCRIM and mens rea track the counts actually on file.
+
+Charges may cite any of the 29 California codes. Live on any case under
+**Charges**.
 
 ## Gold Standard Certification
 

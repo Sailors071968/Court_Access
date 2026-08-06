@@ -1,7 +1,7 @@
 {
   "report": "PRODUCTION_AUDIT",
   "phase": "Program 146 — Production Audit",
-  "generatedAt": "2026-08-06T19:20:58.499Z",
+  "generatedAt": "2026-08-06T19:41:02.734Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 21,
@@ -26,10 +26,10 @@
     "POST /api/cases"
   ],
   "exercisedSpaRoutes": [],
-  "routes": 105,
-  "pages": 97,
-  "endpoints": 390,
-  "tables": 111,
+  "routes": 106,
+  "pages": 99,
+  "endpoints": 398,
+  "tables": 114,
   "workers": 35,
   "markers": {
     "TODO": 0,
@@ -48,37 +48,37 @@
       "id": "AUD-ROUTES",
       "name": "Every route element resolves to an imported component",
       "status": "PASS",
-      "detail": "105 routes, 97 page files"
+      "detail": "106 routes, 99 page files"
     },
     {
       "id": "AUD-NAV",
       "name": "Every navigation entry points at a declared route",
       "status": "PASS",
-      "detail": "26 navigation targets"
+      "detail": "27 navigation targets"
     },
     {
       "id": "AUD-ADMIN-NAV",
       "name": "Every administrator page can be reached from the navigation",
       "status": "PASS",
-      "detail": "4 administrator routes"
+      "detail": "5 administrator routes"
     },
     {
       "id": "AUD-ENDPOINTS",
       "name": "API endpoints inventoried",
       "status": "PASS",
-      "detail": "390 registered route handlers"
+      "detail": "398 registered route handlers"
     },
     {
       "id": "AUD-TABLES",
       "name": "Database tables inventoried from the live schema",
       "status": "PASS",
-      "detail": "111 tables"
+      "detail": "114 tables"
     },
     {
       "id": "AUD-MIGRATIONS",
       "name": "All database migrations applied cleanly",
       "status": "PASS",
-      "detail": "25 migrations"
+      "detail": "26 migrations"
     },
     {
       "id": "AUD-HEALTH",
@@ -164,7 +164,7 @@
       "id": "AUD-FABRICATION",
       "name": "No sample or mock datasets are declared in shipped views",
       "status": "PASS",
-      "detail": "121 components scanned"
+      "detail": "123 components scanned"
     },
     {
       "id": "AUD-DASHBOARDS",

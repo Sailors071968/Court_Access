@@ -1,8 +1,8 @@
 {
-  "routes": 105,
-  "pages": 97,
-  "endpoints": 390,
-  "tables": 111,
+  "routes": 106,
+  "pages": 99,
+  "endpoints": 398,
+  "tables": 114,
   "workers": 35,
   "markers": {
     "TODO": 0,

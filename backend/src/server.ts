@@ -31,6 +31,7 @@ import { registerDirectUploadRoutes } from './evidence/evidenceDirectUpload.js';
 import { registerEvidenceRequestRoutes } from './evidence/evidenceRequestRoutes.js';
 import { registerCitationRoutes } from './evidence/citationRoutes.js';
 import { registerCertificationRoutes } from './certification/certificationRoutes.js';
+import { registerUploadPortalRoutes } from './certification/uploadPortalRoutes.js';
 import { registerIntelligenceRoutes, registerNarrativeIntelligenceRoutes } from './intelligence/intelligenceRoutes.js';
 import { registerWorkbenchRoutes } from './workbench/workbenchRoutes.js';
 import { registerInvestigatorRoutes } from './investigator/investigatorRoutes.js';
@@ -294,6 +295,7 @@ async function startServer() {
   // Gold Standard Certification — administrator only
   console.log('[Server] Registering Gold Standard Certification routes...');
   await registerCertificationRoutes(app);
+  await registerUploadPortalRoutes(app);
 
   // Narrative Deconstruction Engine routes
   console.log('[Server] Registering Attorney Intelligence routes...');

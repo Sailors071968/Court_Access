@@ -2510,6 +2510,46 @@ model CertificationCase {
   @@map("certification_cases")
 }
 
+// An in-progress upload of a certification corpus from an administrator's own
+// machine. Bytes land in a staging tree that mirrors the folder they selected;
+// resume state is the size of each partial file on disk rather than a
+// bookkeeping row, so a crash mid-upload cannot leave the two disagreeing.
+model CertificationUploadSession {
+  uploadSessionId String   @id @default(uuid())
+  reference       String
+  label           String
+  description     String?
+  tenantId        String
+  createdById     String
+
+  /** Where the uploaded bytes are assembled. Removed when the session ends. */
+  stagingDir      String
+
+  status          String   @default("staging") // staging | importing | processing | completed | failed | cancelled
+
+  /** What the operator is being shown right now. */
+  stage           String?
+  stageDetail     String?
+  progressCurrent Int      @default(0)
+  progressTotal   Int      @default(0)
+
+  /** What the browser said it was going to send, for reconciliation. */
+  declaredFileCount Int    @default(0)
+  declaredBytes     BigInt @default(0)
+
+  certificationCaseId String?
+  certificationRunId  String?
+  error             String?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  completedAt     DateTime?
+
+  @@index([tenantId])
+  @@index([status])
+  @@map("certification_upload_sessions")
+}
+
 model CertificationFile {
   certificationFileId String   @id @default(uuid())
   certificationCaseId String
@@ -2532,6 +2572,13 @@ model CertificationFile {
   classification      String   @default("unknown")
   classificationConfidence Float @default(0)
   classificationBasis String?
+
+  /** Page count for paginated documents; null when the format has no pages. */
+  pageCount           Int?
+  /** Duration in seconds for audio and video; null when not determinable. */
+  durationSeconds     Float?
+  /** Why a duration or page count could not be determined, when it could not. */
+  mediaProbeNote      String?
 
   /** The Evidence row produced by the production ingestion path. */
   evidenceId          String?

@@ -23,10 +23,19 @@ import prisma from '../lib/prisma.js';
 import { ingestEvidence } from '../evidence/evidenceDirectUpload.js';
 import { classifyDocument, evidenceTypeFor, type DocumentClass } from './documentClassifier.js';
 import { listZipEntries, readZipEntry } from '../evidence/fileDiagnostics.js';
+import { measure } from './mediaProbe.js';
 
 /** Directories that are packaging noise rather than discovery. */
 const SKIP_DIRS = new Set(['__MACOSX', '.git', 'node_modules', '.DS_Store']);
 const SKIP_FILES = new Set(['.DS_Store', 'Thumbs.db', 'desktop.ini']);
+
+/** Called as each file is handled so a live dashboard can follow along. */
+export type ProgressReporter = (update: {
+  stage: string;
+  detail?: string;
+  current?: number;
+  total?: number;
+}) => void | Promise<void>;
 
 export interface ImportOptions {
   reference: string;
@@ -40,6 +49,8 @@ export interface ImportOptions {
   expandArchives?: boolean;
   /** Walk the tree without importing, to preview what would happen. */
   dryRun?: boolean;
+  /** Progress callback for the live dashboard. */
+  onProgress?: ProgressReporter;
 }
 
 export interface DiscoveredFile {
@@ -85,6 +96,10 @@ export async function discoverFiles(
 
     for (const entry of entries) {
       if (SKIP_DIRS.has(entry.name) || SKIP_FILES.has(entry.name)) continue;
+      // Hidden directories are never delivered discovery; they are scratch and
+      // system artefacts, and importing them would put files in the corpus
+      // that counsel never sent.
+      if (entry.isDirectory() && entry.name.startsWith('.')) continue;
       const abs = path.join(dir, entry.name);
 
       if (entry.isDirectory()) {
@@ -217,6 +232,16 @@ export async function importCertificationCase(options: ImportOptions): Promise<I
   await fs.rm(scratchDir, { recursive: true, force: true }).catch(() => {});
   await fs.mkdir(scratchDir, { recursive: true });
 
+  const report = async (stage: string, detail?: string, current?: number, total?: number) => {
+    try {
+      await options.onProgress?.({ stage, detail, current, total });
+    } catch {
+      // Never let progress reporting break the import.
+    }
+  };
+
+  await report('Reading the delivery', 'Walking folders and expanding archives');
+
   const { files, warnings } = await discoverFiles(root, {
     expandArchives: options.expandArchives ?? true,
     scratchDir,
@@ -264,7 +289,11 @@ export async function importCertificationCase(options: ImportOptions): Promise<I
   let duplicates = 0;
   let failed = 0;
 
+  let processedCount = 0;
   for (const file of files) {
+    processedCount++;
+    await report('Ingesting discovery', file.relativePath, processedCount, files.length);
+
     let sha256: string;
     try {
       sha256 = await sha256OfFile(file.absolutePath);
@@ -351,6 +380,13 @@ export async function importCertificationCase(options: ImportOptions): Promise<I
     ingested++;
     const evidenceId = result.evidence?.evidenceId as string;
 
+    // Measure the file so the inventory can report pages and running time.
+    const measured = await measure(file.absolutePath, file.fileName).catch(() => ({
+      durationSeconds: null,
+      pageCount: null,
+      note: 'The file could not be measured.',
+    }));
+
     // Classify from the text ingestion actually extracted, not from the name.
     const chunks = await prisma.evidenceChunk.findMany({
       where: { evidenceId },
@@ -377,9 +413,14 @@ export async function importCertificationCase(options: ImportOptions): Promise<I
         classification: classification.classification,
         classificationConfidence: classification.confidence,
         classificationBasis: classification.basis,
+        pageCount: measured.pageCount,
+        durationSeconds: measured.durationSeconds,
+        mediaProbeNote: measured.note,
       },
     });
   }
+
+  await report('Fingerprinting the corpus', `${hashes.length} file hashes`, files.length, files.length);
 
   // Identifies the corpus itself, so a later run can prove it read the same
   // material.
@@ -427,6 +468,11 @@ export interface InventorySummary {
     duplicates: number;
     ingested: number;
     failed: number;
+    pages: number;
+    videoSeconds: number;
+    audioSeconds: number;
+    /** Files whose duration or page count could not be determined. */
+    unmeasured: number;
   };
   byExtension: Record<string, number>;
   byClassification: Record<string, number>;
@@ -440,6 +486,9 @@ export interface InventorySummary {
     classification: string;
     classificationConfidence: number;
     classificationBasis: string | null;
+    pageCount: number | null;
+    durationSeconds: number | null;
+    mediaProbeNote: string | null;
     ingestStatus: string;
     ingestMessage: string | null;
     evidenceId: string | null;
@@ -469,6 +518,10 @@ export async function buildInventory(certificationCaseId: string): Promise<Inven
   let ingestedCount = 0;
   let failedCount = 0;
   let bytes = 0;
+  let pages = 0;
+  let videoSeconds = 0;
+  let audioSeconds = 0;
+  let unmeasured = 0;
 
   for (const f of certCase.files) {
     const ext = f.extension ?? 'none';
@@ -476,10 +529,22 @@ export async function buildInventory(certificationCaseId: string): Promise<Inven
     byClassification[f.classification] = (byClassification[f.classification] ?? 0) + 1;
     bytes += Number(f.sizeBytes);
 
-    if (VIDEO_EXT.has(ext)) videos++;
-    else if (AUDIO_EXT.has(ext)) audio++;
-    else if (IMAGE_EXT.has(ext)) images++;
-    else documents++;
+    if (VIDEO_EXT.has(ext)) {
+      videos++;
+      if (f.durationSeconds) videoSeconds += f.durationSeconds;
+      else unmeasured++;
+    } else if (AUDIO_EXT.has(ext)) {
+      audio++;
+      if (f.durationSeconds) audioSeconds += f.durationSeconds;
+      else unmeasured++;
+    } else if (IMAGE_EXT.has(ext)) {
+      images++;
+      pages += f.pageCount ?? 0;
+    } else {
+      documents++;
+      if (f.pageCount) pages += f.pageCount;
+      else if (f.ingestStatus === 'ingested') unmeasured++;
+    }
 
     if (f.duplicateOfFileId) duplicates++;
     if (f.ingestStatus === 'ingested') ingestedCount++;
@@ -504,6 +569,10 @@ export async function buildInventory(certificationCaseId: string): Promise<Inven
       duplicates,
       ingested: ingestedCount,
       failed: failedCount,
+      pages,
+      videoSeconds: Math.round(videoSeconds),
+      audioSeconds: Math.round(audioSeconds),
+      unmeasured,
     },
     byExtension,
     byClassification,
@@ -517,6 +586,9 @@ export async function buildInventory(certificationCaseId: string): Promise<Inven
       classification: f.classification,
       classificationConfidence: f.classificationConfidence,
       classificationBasis: f.classificationBasis,
+      pageCount: f.pageCount,
+      durationSeconds: f.durationSeconds,
+      mediaProbeNote: f.mediaProbeNote,
       ingestStatus: f.ingestStatus,
       ingestMessage: f.ingestMessage,
       evidenceId: f.evidenceId,

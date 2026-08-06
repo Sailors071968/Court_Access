@@ -1,0 +1,308 @@
+{
+  "report": "CASE_ISOLATION_SWEEP",
+  "phase": "Program 144 — Case-Scoped Isolation",
+  "generatedAt": "2026-08-06T14:03:48.830Z",
+  "apiBase": "http://127.0.0.1:3001",
+  "summary": {
+    "total": 3,
+    "PASS": 3,
+    "FAIL": 0,
+    "WARNING": 0,
+    "UNKNOWN": 0,
+    "passRate": 100
+  },
+  "exercisedApiRoutes": [
+    "GET /api/calcrim/analyze/:id",
+    "GET /api/cases/:id",
+    "GET /api/cases/:id/disclosures",
+    "GET /api/cases/:id/documents/:id/copies",
+    "GET /api/cases/:id/documents/:id/redactions",
+    "GET /api/cases/:id/evidence",
+    "GET /api/cases/:id/evidence-requests",
+    "GET /api/cases/:id/hearings",
+    "GET /api/cases/:id/intelligence",
+    "GET /api/cases/:id/intelligence/report",
+    "GET /api/cases/:id/investigator-workbench",
+    "GET /api/cases/:id/messages",
+    "GET /api/cases/:id/publication-sets",
+    "GET /api/cases/:id/workbench",
+    "GET /api/cases/:id/workbench/command-center",
+    "GET /api/cases/:id/workbench/export/attorney_report",
+    "GET /api/cases/:id/workbench/notes",
+    "GET /api/cases/:id/workbench/pins",
+    "GET /api/cases/:id/workbench/tasks",
+    "GET /api/cases/:id/workbench/trial-prep",
+    "GET /api/charges/:id",
+    "GET /api/compliance/audit/:id",
+    "GET /api/compliance/events/:id",
+    "GET /api/compliance/events/:id/stats",
+    "GET /api/compliance/exhibits/:id",
+    "GET /api/compliance/expert/:id",
+    "GET /api/compliance/findings/:id",
+    "GET /api/compliance/jury/:id",
+    "GET /api/compliance/timeline/:id",
+    "GET /api/compliance/video/:id/summary",
+    "GET /api/contradiction/events/:id",
+    "GET /api/contradiction/graph/:id",
+    "GET /api/contradiction/graph/:id/cypher",
+    "GET /api/contradiction/recommendations/:id",
+    "GET /api/forensic/camera-sync/:id",
+    "GET /api/forensic/evidence-graph/:id",
+    "GET /api/forensic/expert-package/:id",
+    "GET /api/forensic/jury-view/:id",
+    "GET /api/forensic/line-of-sight/:id",
+    "GET /api/forensic/scene/:id",
+    "GET /api/forensic/scene/:id/exhibit",
+    "GET /api/forensic/timeline/:id",
+    "GET /api/forensic/trajectory/:id",
+    "GET /api/forensic/visibility/:id",
+    "GET /api/forensic/vision/:id",
+    "GET /api/forensic/vision/:id/critical",
+    "GET /api/narrative/:id/claims",
+    "GET /api/narrative/:id/contradictions",
+    "GET /api/narrative/:id/impeachment",
+    "GET /api/timeline/:id/conflicts",
+    "GET /api/timeline/:id/events",
+    "POST /api/auth/register",
+    "POST /api/cases",
+    "POST /api/charges",
+    "POST /api/evidence/upload"
+  ],
+  "exercisedSpaRoutes": [],
+  "caseId": "6c196455-b529-4837-9c2b-b1115d40da76",
+  "routesProbed": 51,
+  "refused": [
+    {
+      "route": "/api/calcrim/analyze/:caseId",
+      "status": 403
+    },
+    {
+      "route": "/api/cases/:caseId/disclosures",
+      "status": 403
+    },
+    {
+      "route": "/api/cases/:caseId/documents/:documentId/copies",
+      "status": 403
+    },
+    {
+      "route": "/api/cases/:caseId/documents/:documentId/redactions",
+      "status": 403
+    },
+    {
+      "route": "/api/cases/:caseId/evidence-requests",
+      "status": 403
+    },
+    {
+      "route": "/api/cases/:caseId/evidence",
+      "status": 403
+    },
+    {
+      "route": "/api/cases/:caseId/hearings",
+      "status": 403
+    },
+    {
+      "route": "/api/cases/:caseId/intelligence/report",
+      "status": 403
+    },
+    {
+      "route": "/api/cases/:caseId/intelligence",
+      "status": 403
+    },
+    {
+      "route": "/api/cases/:caseId/investigator-workbench",
+      "status": 403
+    },
+    {
+      "route": "/api/cases/:caseId/messages",
+      "status": 403
+    },
+    {
+      "route": "/api/cases/:caseId/publication-sets",
+      "status": 403
+    },
+    {
+      "route": "/api/cases/:caseId/workbench/command-center",
+      "status": 403
+    },
+    {
+      "route": "/api/cases/:caseId/workbench/export/:packageType",
+      "status": 403
+    },
+    {
+      "route": "/api/cases/:caseId/workbench/notes",
+      "status": 403
+    },
+    {
+      "route": "/api/cases/:caseId/workbench/pins",
+      "status": 403
+    },
+    {
+      "route": "/api/cases/:caseId/workbench/tasks",
+      "status": 403
+    },
+    {
+      "route": "/api/cases/:caseId/workbench/trial-prep",
+      "status": 403
+    },
+    {
+      "route": "/api/cases/:caseId/workbench",
+      "status": 403
+    },
+    {
+      "route": "/api/cases/:caseId",
+      "status": 403
+    },
+    {
+      "route": "/api/charges/:caseId",
+      "status": 403
+    },
+    {
+      "route": "/api/compliance/audit/:caseId",
+      "status": 200,
+      "note": "answered but disclosed nothing"
+    },
+    {
+      "route": "/api/compliance/events/:caseId/stats",
+      "status": 403
+    },
+    {
+      "route": "/api/compliance/events/:caseId",
+      "status": 403
+    },
+    {
+      "route": "/api/compliance/exhibits/:caseId",
+      "status": 200,
+      "note": "answered but disclosed nothing"
+    },
+    {
+      "route": "/api/compliance/expert/:caseId",
+      "status": 403
+    },
+    {
+      "route": "/api/compliance/findings/:caseId",
+      "status": 200,
+      "note": "answered but disclosed nothing"
+    },
+    {
+      "route": "/api/compliance/jury/:caseId",
+      "status": 403
+    },
+    {
+      "route": "/api/compliance/timeline/:caseId",
+      "status": 403
+    },
+    {
+      "route": "/api/compliance/video/:caseId/summary",
+      "status": 403
+    },
+    {
+      "route": "/api/contradiction/events/:caseId",
+      "status": 403
+    },
+    {
+      "route": "/api/contradiction/graph/:caseId/cypher",
+      "status": 404
+    },
+    {
+      "route": "/api/contradiction/graph/:caseId",
+      "status": 404
+    },
+    {
+      "route": "/api/contradiction/recommendations/:caseId",
+      "status": 404
+    },
+    {
+      "route": "/api/forensic/camera-sync/:caseId",
+      "status": 403
+    },
+    {
+      "route": "/api/forensic/evidence-graph/:caseId",
+      "status": 403
+    },
+    {
+      "route": "/api/forensic/expert-package/:caseId",
+      "status": 403
+    },
+    {
+      "route": "/api/forensic/jury-view/:caseId",
+      "status": 403
+    },
+    {
+      "route": "/api/forensic/line-of-sight/:caseId",
+      "status": 403
+    },
+    {
+      "route": "/api/forensic/scene/:caseId/exhibit",
+      "status": 403
+    },
+    {
+      "route": "/api/forensic/scene/:caseId",
+      "status": 403
+    },
+    {
+      "route": "/api/forensic/timeline/:caseId",
+      "status": 403
+    },
+    {
+      "route": "/api/forensic/trajectory/:caseId",
+      "status": 403
+    },
+    {
+      "route": "/api/forensic/visibility/:caseId",
+      "status": 403
+    },
+    {
+      "route": "/api/forensic/vision/:caseId/critical",
+      "status": 403
+    },
+    {
+      "route": "/api/forensic/vision/:caseId",
+      "status": 403
+    },
+    {
+      "route": "/api/narrative/:caseId/claims",
+      "status": 403
+    },
+    {
+      "route": "/api/narrative/:caseId/contradictions",
+      "status": 403
+    },
+    {
+      "route": "/api/narrative/:caseId/impeachment",
+      "status": 403
+    },
+    {
+      "route": "/api/timeline/:caseId/conflicts",
+      "status": 403
+    },
+    {
+      "route": "/api/timeline/:caseId/events",
+      "status": 403
+    }
+  ],
+  "leaks": [],
+  "errors": [],
+  "ghostAnswers": [],
+  "checks": [
+    {
+      "id": "ISO-01",
+      "name": "No case-scoped endpoint answers an unrelated firm",
+      "status": "PASS",
+      "detail": "51 routes probed, 51 refused",
+      "evidence": {
+        "probed": 51
+      }
+    },
+    {
+      "id": "ISO-02",
+      "name": "No case-scoped endpoint errored on a cross-tenant probe",
+      "status": "PASS"
+    },
+    {
+      "id": "ISO-03",
+      "name": "No case-scoped endpoint answers for a case that does not exist",
+      "status": "PASS",
+      "detail": "51 routes probed with an unknown case id"
+    }
+  ]
+}

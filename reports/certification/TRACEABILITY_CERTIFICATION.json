@@ -1,0 +1,307 @@
+{
+  "report": "TRACEABILITY_CERTIFICATION",
+  "phase": "Program 144 — Evidence Traceability",
+  "generatedAt": "2026-08-06T14:03:58.938Z",
+  "apiBase": "http://127.0.0.1:3001",
+  "summary": {
+    "total": 9,
+    "PASS": 9,
+    "FAIL": 0,
+    "WARNING": 0,
+    "UNKNOWN": 0,
+    "passRate": 100
+  },
+  "exercisedApiRoutes": [
+    "DELETE /api/evidence/:id",
+    "GET /api/evidence/:id/citation",
+    "GET /api/evidence/:id/pages",
+    "POST /api/auth/login",
+    "POST /api/auth/register",
+    "POST /api/cases",
+    "POST /api/charges",
+    "POST /api/evidence/upload",
+    "POST /api/timeline/rebuild/:id"
+  ],
+  "exercisedSpaRoutes": [],
+  "caseId": "78200616-4811-491f-8395-3f4ff4d70aef",
+  "transcriptId": "d31084c1-263d-46fb-8b53-e4110123aec2",
+  "expectedPages": 4,
+  "citationChecks": [
+    {
+      "page": 1,
+      "line": 7,
+      "marker": "UNIQUEMARK0107",
+      "text": "SENTINEL PAGE 1 LINE 7 UNIQUEMARK0107",
+      "ok": true,
+      "reportedPage": 1,
+      "reportedLine": 7,
+      "lineText": "SENTINEL PAGE 1 LINE 7 UNIQUEMARK0107",
+      "formatted": "citation-transcript.pdf, p. 1, l. 7",
+      "why": ""
+    },
+    {
+      "page": 1,
+      "line": 19,
+      "marker": "UNIQUEMARK0119",
+      "text": "SENTINEL PAGE 1 LINE 19 UNIQUEMARK0119",
+      "ok": true,
+      "reportedPage": 1,
+      "reportedLine": 19,
+      "lineText": "SENTINEL PAGE 1 LINE 19 UNIQUEMARK0119",
+      "formatted": "citation-transcript.pdf, p. 1, l. 19",
+      "why": ""
+    },
+    {
+      "page": 2,
+      "line": 7,
+      "marker": "UNIQUEMARK0207",
+      "text": "SENTINEL PAGE 2 LINE 7 UNIQUEMARK0207",
+      "ok": true,
+      "reportedPage": 2,
+      "reportedLine": 7,
+      "lineText": "SENTINEL PAGE 2 LINE 7 UNIQUEMARK0207",
+      "formatted": "citation-transcript.pdf, p. 2, l. 7",
+      "why": ""
+    },
+    {
+      "page": 2,
+      "line": 19,
+      "marker": "UNIQUEMARK0219",
+      "text": "SENTINEL PAGE 2 LINE 19 UNIQUEMARK0219",
+      "ok": true,
+      "reportedPage": 2,
+      "reportedLine": 19,
+      "lineText": "SENTINEL PAGE 2 LINE 19 UNIQUEMARK0219",
+      "formatted": "citation-transcript.pdf, p. 2, l. 19",
+      "why": ""
+    },
+    {
+      "page": 3,
+      "line": 7,
+      "marker": "UNIQUEMARK0307",
+      "text": "SENTINEL PAGE 3 LINE 7 UNIQUEMARK0307",
+      "ok": true,
+      "reportedPage": 3,
+      "reportedLine": 7,
+      "lineText": "SENTINEL PAGE 3 LINE 7 UNIQUEMARK0307",
+      "formatted": "citation-transcript.pdf, p. 3, l. 7",
+      "why": ""
+    },
+    {
+      "page": 3,
+      "line": 19,
+      "marker": "UNIQUEMARK0319",
+      "text": "SENTINEL PAGE 3 LINE 19 UNIQUEMARK0319",
+      "ok": true,
+      "reportedPage": 3,
+      "reportedLine": 19,
+      "lineText": "SENTINEL PAGE 3 LINE 19 UNIQUEMARK0319",
+      "formatted": "citation-transcript.pdf, p. 3, l. 19",
+      "why": ""
+    },
+    {
+      "page": 4,
+      "line": 7,
+      "marker": "UNIQUEMARK0407",
+      "text": "SENTINEL PAGE 4 LINE 7 UNIQUEMARK0407",
+      "ok": true,
+      "reportedPage": 4,
+      "reportedLine": 7,
+      "lineText": "SENTINEL PAGE 4 LINE 7 UNIQUEMARK0407",
+      "formatted": "citation-transcript.pdf, p. 4, l. 7",
+      "why": ""
+    },
+    {
+      "page": 4,
+      "line": 19,
+      "marker": "UNIQUEMARK0419",
+      "text": "SENTINEL PAGE 4 LINE 19 UNIQUEMARK0419",
+      "ok": true,
+      "reportedPage": 4,
+      "reportedLine": 19,
+      "lineText": "SENTINEL PAGE 4 LINE 19 UNIQUEMARK0419",
+      "formatted": "citation-transcript.pdf, p. 4, l. 19",
+      "why": ""
+    }
+  ],
+  "findingsTraced": 11,
+  "checks": [
+    {
+      "id": "TRACE-01",
+      "name": "Every page of the document is indexed",
+      "status": "PASS",
+      "detail": "4 pages, matching the source",
+      "evidence": {
+        "pages": [
+          {
+            "page": 1,
+            "endOffset": 1860,
+            "startOffset": 0
+          },
+          {
+            "page": 2,
+            "endOffset": 3721,
+            "startOffset": 1861
+          },
+          {
+            "page": 3,
+            "endOffset": 5582,
+            "startOffset": 3722
+          },
+          {
+            "page": 4,
+            "endOffset": 7443,
+            "startOffset": 5583
+          }
+        ]
+      }
+    },
+    {
+      "id": "TRACE-02",
+      "name": "Every citation names the page and line the passage really is on",
+      "status": "PASS",
+      "detail": "8 passages checked across 4 pages; e.g. \"citation-transcript.pdf, p. 1, l. 7\"",
+      "evidence": {
+        "checks": [
+          {
+            "page": 1,
+            "line": 7,
+            "marker": "UNIQUEMARK0107",
+            "text": "SENTINEL PAGE 1 LINE 7 UNIQUEMARK0107",
+            "ok": true,
+            "reportedPage": 1,
+            "reportedLine": 7,
+            "lineText": "SENTINEL PAGE 1 LINE 7 UNIQUEMARK0107",
+            "formatted": "citation-transcript.pdf, p. 1, l. 7",
+            "why": ""
+          },
+          {
+            "page": 1,
+            "line": 19,
+            "marker": "UNIQUEMARK0119",
+            "text": "SENTINEL PAGE 1 LINE 19 UNIQUEMARK0119",
+            "ok": true,
+            "reportedPage": 1,
+            "reportedLine": 19,
+            "lineText": "SENTINEL PAGE 1 LINE 19 UNIQUEMARK0119",
+            "formatted": "citation-transcript.pdf, p. 1, l. 19",
+            "why": ""
+          },
+          {
+            "page": 2,
+            "line": 7,
+            "marker": "UNIQUEMARK0207",
+            "text": "SENTINEL PAGE 2 LINE 7 UNIQUEMARK0207",
+            "ok": true,
+            "reportedPage": 2,
+            "reportedLine": 7,
+            "lineText": "SENTINEL PAGE 2 LINE 7 UNIQUEMARK0207",
+            "formatted": "citation-transcript.pdf, p. 2, l. 7",
+            "why": ""
+          },
+          {
+            "page": 2,
+            "line": 19,
+            "marker": "UNIQUEMARK0219",
+            "text": "SENTINEL PAGE 2 LINE 19 UNIQUEMARK0219",
+            "ok": true,
+            "reportedPage": 2,
+            "reportedLine": 19,
+            "lineText": "SENTINEL PAGE 2 LINE 19 UNIQUEMARK0219",
+            "formatted": "citation-transcript.pdf, p. 2, l. 19",
+            "why": ""
+          },
+          {
+            "page": 3,
+            "line": 7,
+            "marker": "UNIQUEMARK0307",
+            "text": "SENTINEL PAGE 3 LINE 7 UNIQUEMARK0307",
+            "ok": true,
+            "reportedPage": 3,
+            "reportedLine": 7,
+            "lineText": "SENTINEL PAGE 3 LINE 7 UNIQUEMARK0307",
+            "formatted": "citation-transcript.pdf, p. 3, l. 7",
+            "why": ""
+          },
+          {
+            "page": 3,
+            "line": 19,
+            "marker": "UNIQUEMARK0319",
+            "text": "SENTINEL PAGE 3 LINE 19 UNIQUEMARK0319",
+            "ok": true,
+            "reportedPage": 3,
+            "reportedLine": 19,
+            "lineText": "SENTINEL PAGE 3 LINE 19 UNIQUEMARK0319",
+            "formatted": "citation-transcript.pdf, p. 3, l. 19",
+            "why": ""
+          },
+          {
+            "page": 4,
+            "line": 7,
+            "marker": "UNIQUEMARK0407",
+            "text": "SENTINEL PAGE 4 LINE 7 UNIQUEMARK0407",
+            "ok": true,
+            "reportedPage": 4,
+            "reportedLine": 7,
+            "lineText": "SENTINEL PAGE 4 LINE 7 UNIQUEMARK0407",
+            "formatted": "citation-transcript.pdf, p. 4, l. 7",
+            "why": ""
+          },
+          {
+            "page": 4,
+            "line": 19,
+            "marker": "UNIQUEMARK0419",
+            "text": "SENTINEL PAGE 4 LINE 19 UNIQUEMARK0419",
+            "ok": true,
+            "reportedPage": 4,
+            "reportedLine": 19,
+            "lineText": "SENTINEL PAGE 4 LINE 19 UNIQUEMARK0419",
+            "formatted": "citation-transcript.pdf, p. 4, l. 19",
+            "why": ""
+          }
+        ]
+      }
+    },
+    {
+      "id": "TRACE-03",
+      "name": "A passage that is not in the document receives no citation",
+      "status": "PASS",
+      "detail": "HTTP 404: That passage does not appear in \"citation-transcript.pdf\". A citation is only issued for text actually present in the do"
+    },
+    {
+      "id": "TRACE-04",
+      "name": "An offset beyond the document does not resolve to a page",
+      "status": "PASS"
+    },
+    {
+      "id": "TRACE-05",
+      "name": "Every finding names a document that exists in the case",
+      "status": "PASS",
+      "detail": "11 events checked against 2 documents"
+    },
+    {
+      "id": "TRACE-06",
+      "name": "Every quoted passage appears verbatim in the document it cites",
+      "status": "PASS",
+      "detail": "11 quotations verified against the indexed source"
+    },
+    {
+      "id": "TRACE-07",
+      "name": "Every finding carries the time it is placed at",
+      "status": "PASS",
+      "detail": "11 events"
+    },
+    {
+      "id": "TRACE-08",
+      "name": "Removing a document removes the findings derived from it",
+      "status": "PASS",
+      "detail": "11 findings before deletion, none afterwards"
+    },
+    {
+      "id": "TRACE-09",
+      "name": "Citations are not issued against another firm's document",
+      "status": "PASS",
+      "detail": "HTTP 404"
+    }
+  ]
+}

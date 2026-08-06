@@ -34,6 +34,8 @@ function requireAdministrator(request: AuthenticatedRequest, reply: FastifyReply
   return true;
 }
 
+import { buildReadinessReport } from './readinessService.js';
+
 export async function registerCertificationRoutes(app: FastifyInstance): Promise<void> {
   // -------------------------------------------------------------------------
   // Module status — what the administrator lands on
@@ -330,6 +332,21 @@ export async function registerCertificationRoutes(app: FastifyInstance): Promise
     ]);
 
     return reply.send({ certificationRunId, isBaseline: true });
+  });
+
+  // -------------------------------------------------------------------------
+  // Production readiness — the release gate, evaluated on measured evidence
+  // -------------------------------------------------------------------------
+  app.get('/api/certification/readiness', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!requireAdministrator(request, reply)) return;
+    try {
+      return reply.send(await buildReadinessReport());
+    } catch (err) {
+      return reply.code(500).send({
+        error: 'Readiness unavailable',
+        message: `The readiness report could not be assembled: ${(err as Error).message}`,
+      });
+    }
   });
 
   console.log('[Server] Gold Standard Certification routes registered (administrator only): /api/certification/*');

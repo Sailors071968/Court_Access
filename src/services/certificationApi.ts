@@ -193,7 +193,31 @@ export interface UploadSessionStatus {
   completedAt: string | null;
 }
 
+export interface ReadinessReport {
+  generatedAt: string;
+  totals: { checks: number; pass: number; fail: number; warning: number; unknown: number; passRate: number };
+  suites: Array<{ suite: string; title: string; pass: number; fail: number; warning: number; unknown: number; passRate: number }>;
+  criticalDefects: Array<{ suite: string; id: string; title: string; detail: string }>;
+  warnings: number;
+  unknownCoverage: Array<{ suite: string; id: string; title: string; detail: string }>;
+  goldStandard: {
+    corporaTotal: number;
+    authorizedCases: Array<{ reference: string; label: string; fileCount: number; status: string }>;
+    runs: number;
+    baselineSet: boolean;
+  };
+  gate: {
+    criteria: Array<{ id: string; requirement: string; status: 'PASS' | 'FAIL' | 'UNKNOWN'; evidence: string }>;
+    passed: boolean;
+    blockedBy: string[];
+  };
+  recommendation: 'NOT READY' | 'READY WITH LIMITATIONS' | 'READY FOR PRODUCTION';
+  recommendationBasis: string;
+}
+
 export const certificationApi = {
+  readiness: () => call<ReadinessReport>('/readiness'),
+
   createUpload: (payload: { reference: string; label: string; description?: string; fileCount: number; totalBytes: number }) =>
     call<{ uploadSessionId: string; chunkBytes: number; status: string }>('/uploads', {
       method: 'POST',

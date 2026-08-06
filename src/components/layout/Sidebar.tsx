@@ -74,6 +74,7 @@ const navItems: NavItem[] = [
     children: [
       { id: 'admin-dashboard', label: 'Admin Dashboard', path: '/admin', icon: <LayoutList size={16} />, permission: 'canViewAdmin' },
       { id: 'gold-standard', label: 'Gold Standard Certification', path: '/admin/gold-standard', icon: <ShieldCheck size={16} />, permission: 'canViewAdmin' },
+      { id: 'readiness', label: 'Production Readiness', path: '/admin/readiness', icon: <BarChart3 size={16} />, permission: 'canViewAdmin' },
       { id: 'operations', label: 'Production Operations', path: '/admin/operations', icon: <Activity size={16} />, permission: 'canViewAdmin' },
       { id: 'cpra', label: 'CPRA Campaigns', path: '/dashboard/cpra', icon: <Globe size={16} /> },
       { id: 'policy-ops', label: 'Policy Operations', path: '/dashboard/policy-operations', icon: <FileText size={16} /> },

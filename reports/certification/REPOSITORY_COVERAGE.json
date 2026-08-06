@@ -1,0 +1,220 @@
+{
+  "report": "REPOSITORY_COVERAGE",
+  "phase": "Program 146 — Legal Knowledge Coverage",
+  "generatedAt": "2026-08-06T17:56:42.712Z",
+  "apiBase": "http://127.0.0.1:3001",
+  "summary": {
+    "total": 22,
+    "PASS": 0,
+    "FAIL": 0,
+    "WARNING": 12,
+    "UNKNOWN": 10,
+    "passRate": 0
+  },
+  "exercisedApiRoutes": [],
+  "exercisedSpaRoutes": [],
+  "counts": {
+    "statutes": 13,
+    "offenses": 5,
+    "elements": 10,
+    "mens_rea": 5,
+    "defenses": 0,
+    "exceptions": 12,
+    "authorities": 16,
+    "calcrim_links": 1,
+    "cross_references": 16,
+    "statute_classifications": 3
+  },
+  "coveredSections": [
+    "PEN 25.",
+    "PEN 26.",
+    "PEN 27.",
+    "PEN 459."
+  ],
+  "scope": {
+    "penalCodeSections": 1300,
+    "calcrimInstructions": 800
+  },
+  "checks": [
+    {
+      "id": "COV-STATUTES",
+      "name": "Statutes repository holds 13 record(s)",
+      "status": "WARNING",
+      "detail": "Enough to answer for the statutes it covers and nothing else. Every other statute returns UNKNOWN.",
+      "evidence": {
+        "records": 13
+      }
+    },
+    {
+      "id": "COV-OFFENSES",
+      "name": "Offenses repository holds 5 record(s)",
+      "status": "WARNING",
+      "detail": "Enough to answer for the statutes it covers and nothing else. Every other statute returns UNKNOWN.",
+      "evidence": {
+        "records": 5
+      }
+    },
+    {
+      "id": "COV-ELEMENTS",
+      "name": "Elements repository holds 10 record(s)",
+      "status": "WARNING",
+      "detail": "Enough to answer for the statutes it covers and nothing else. Every other statute returns UNKNOWN.",
+      "evidence": {
+        "records": 10
+      }
+    },
+    {
+      "id": "COV-MENSREA",
+      "name": "Mens rea repository holds 5 record(s)",
+      "status": "WARNING",
+      "detail": "Enough to answer for the statutes it covers and nothing else. Every other statute returns UNKNOWN.",
+      "evidence": {
+        "records": 5
+      }
+    },
+    {
+      "id": "COV-DEFENSES",
+      "name": "Defenses repository is empty",
+      "status": "UNKNOWN",
+      "detail": "No records at all, so every question in this area returns UNKNOWN. This is a content gap, not a defect."
+    },
+    {
+      "id": "COV-EXCEPTIONS",
+      "name": "Exceptions repository holds 12 record(s)",
+      "status": "WARNING",
+      "detail": "Enough to answer for the statutes it covers and nothing else. Every other statute returns UNKNOWN.",
+      "evidence": {
+        "records": 12
+      }
+    },
+    {
+      "id": "COV-AUTHORITIES",
+      "name": "Authorities repository holds 16 record(s)",
+      "status": "WARNING",
+      "detail": "Enough to answer for the statutes it covers and nothing else. Every other statute returns UNKNOWN.",
+      "evidence": {
+        "records": 16
+      }
+    },
+    {
+      "id": "COV-CALCRIMLINKS",
+      "name": "CALCRIM links repository holds 1 record(s)",
+      "status": "WARNING",
+      "detail": "Enough to answer for the statutes it covers and nothing else. Every other statute returns UNKNOWN.",
+      "evidence": {
+        "records": 1
+      }
+    },
+    {
+      "id": "COV-CROSSREFERENCES",
+      "name": "Cross references repository holds 16 record(s)",
+      "status": "WARNING",
+      "detail": "Enough to answer for the statutes it covers and nothing else. Every other statute returns UNKNOWN.",
+      "evidence": {
+        "records": 16
+      }
+    },
+    {
+      "id": "COV-STATUTECLASSIFICATIONS",
+      "name": "Statute classifications repository holds 3 record(s)",
+      "status": "WARNING",
+      "detail": "Enough to answer for the statutes it covers and nothing else. Every other statute returns UNKNOWN.",
+      "evidence": {
+        "records": 3
+      }
+    },
+    {
+      "id": "COV-PENALCODE",
+      "name": "California Penal Code coverage is a small fraction of the code",
+      "status": "WARNING",
+      "detail": "4 section(s) carry repository records, against roughly 1300 operative Penal Code sections — about 0.3%. Covered: PEN 25., PEN 26., PEN 27., PEN 459.. Every other section returns UNKNOWN, which is correct behaviour but is not coverage.",
+      "evidence": {
+        "coveredSections": [
+          "PEN 25.",
+          "PEN 26.",
+          "PEN 27.",
+          "PEN 459."
+        ],
+        "approximateTotal": 1300
+      }
+    },
+    {
+      "id": "COV-CALCRIM",
+      "name": "CALCRIM coverage is a small fraction of the instruction set",
+      "status": "WARNING",
+      "detail": "1 instruction link(s) against roughly 800 published CALCRIM instructions — about 0.13%. A charged offence outside this set is reported as UNKNOWN rather than analysed."
+    },
+    {
+      "id": "COV-EVIDENCECODE",
+      "name": "Evidence Code coverage is unknown",
+      "status": "UNKNOWN",
+      "detail": "No Evidence Code repository exists. Objections, hearsay exceptions and foundation requirements are not modelled."
+    },
+    {
+      "id": "COV-SEARCHANDSEI",
+      "name": "Search and seizure coverage is unknown",
+      "status": "UNKNOWN",
+      "detail": "No repository of Fourth Amendment authority. Suppression issues are organised from the discovery itself, not from law."
+    },
+    {
+      "id": "COV-PITCHESS",
+      "name": "Pitchess coverage is unknown",
+      "status": "UNKNOWN",
+      "detail": "No repository of Pitchess procedure or authority."
+    },
+    {
+      "id": "COV-BRADY",
+      "name": "Brady coverage is unknown",
+      "status": "UNKNOWN",
+      "detail": "No repository of Brady authority; disclosure gaps are surfaced from the discovery, not measured against case law."
+    },
+    {
+      "id": "COV-MIRANDA",
+      "name": "Miranda coverage is unknown",
+      "status": "UNKNOWN",
+      "detail": "No repository of Miranda authority. Custodial interrogation issues are not evaluated against law."
+    },
+    {
+      "id": "COV-VOLUNTARINES",
+      "name": "Voluntariness coverage is unknown",
+      "status": "UNKNOWN",
+      "detail": "No repository of voluntariness authority."
+    },
+    {
+      "id": "COV-IDENTIFICATI",
+      "name": "Identification coverage is unknown",
+      "status": "UNKNOWN",
+      "detail": "No repository of eyewitness identification authority."
+    },
+    {
+      "id": "COV-EXPERTTESTIM",
+      "name": "Expert testimony coverage is unknown",
+      "status": "UNKNOWN",
+      "detail": "No repository of expert qualification or Kelly/Frye authority."
+    },
+    {
+      "id": "COV-CONSTITUTION",
+      "name": "Constitutional issues coverage is unknown",
+      "status": "UNKNOWN",
+      "detail": "No constitutional authority repository beyond the 16 authority records above."
+    },
+    {
+      "id": "COV-SUMMARY",
+      "name": "The legal knowledge repositories are a demonstration corpus, not a working library",
+      "status": "WARNING",
+      "detail": "81 records across 10 repositories, covering 4 statute section(s). The retrieval, citation and traceability machinery around them is built and certified; what is missing is the law itself. Populating it is a content acquisition exercise, not an engineering one.",
+      "evidence": {
+        "statutes": 13,
+        "offenses": 5,
+        "elements": 10,
+        "mens_rea": 5,
+        "defenses": 0,
+        "exceptions": 12,
+        "authorities": 16,
+        "calcrim_links": 1,
+        "cross_references": 16,
+        "statute_classifications": 3
+      }
+    }
+  ]
+}

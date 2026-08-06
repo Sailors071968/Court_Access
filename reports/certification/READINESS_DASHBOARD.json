@@ -1,0 +1,102 @@
+{
+  "report": "READINESS_DASHBOARD",
+  "phase": "Program 146 — Executive Readiness Dashboard",
+  "generatedAt": "2026-08-06T17:58:55.144Z",
+  "apiBase": "http://127.0.0.1:3001",
+  "summary": {
+    "total": 12,
+    "PASS": 12,
+    "FAIL": 0,
+    "WARNING": 0,
+    "UNKNOWN": 0,
+    "passRate": 100
+  },
+  "exercisedApiRoutes": [
+    "GET /api/certification/readiness",
+    "POST /api/auth/login",
+    "POST /api/auth/register"
+  ],
+  "exercisedSpaRoutes": [],
+  "base": "http://127.0.0.1:4180",
+  "checks": [
+    {
+      "id": "RDY-01",
+      "name": "The readiness report is closed to every non-administrator role",
+      "status": "PASS",
+      "detail": "5 roles probed"
+    },
+    {
+      "id": "RDY-02",
+      "name": "The readiness report assembles from executed suites",
+      "status": "PASS",
+      "detail": "22 suites, 439 checks, 92.9% passing",
+      "evidence": {
+        "checks": 439,
+        "pass": 408,
+        "fail": 0,
+        "warning": 18,
+        "unknown": 13,
+        "passRate": 92.9
+      }
+    },
+    {
+      "id": "RDY-03",
+      "name": "The recommendation follows from the release gate",
+      "status": "PASS",
+      "detail": "gate blocked by CASE-001, CASE-002, CASE-003, REPOSITORY → NOT READY"
+    },
+    {
+      "id": "RDY-04",
+      "name": "Every failing check is named in the defect list",
+      "status": "PASS",
+      "detail": "0 defect(s)"
+    },
+    {
+      "id": "RDY-05",
+      "name": "Everything unmeasured is listed rather than counted as a pass",
+      "status": "PASS",
+      "detail": "13 unknown"
+    },
+    {
+      "id": "RDY-06",
+      "name": "The gate requires all three attorney-authorized cases",
+      "status": "PASS",
+      "detail": "CASE-001=UNKNOWN, CASE-002=UNKNOWN, CASE-003=UNKNOWN"
+    },
+    {
+      "id": "RDY-07",
+      "name": "The platform cannot be declared production ready without real discovery",
+      "status": "PASS",
+      "detail": "20 corpora, none authorized → NOT READY"
+    },
+    {
+      "id": "RDY-08",
+      "name": "An administrator can reach the dashboard from the navigation",
+      "status": "PASS",
+      "detail": "Admin → Production Readiness"
+    },
+    {
+      "id": "RDY-09",
+      "name": "The dashboard presents the recommendation, gate, corpora and suite results",
+      "status": "PASS",
+      "detail": "Release recommendation, Release gate, Gold Standard certification, Certification suites"
+    },
+    {
+      "id": "RDY-10",
+      "name": "The recommendation shown matches the measured one",
+      "status": "PASS",
+      "detail": "NOT READY"
+    },
+    {
+      "id": "RDY-11",
+      "name": "The dashboard states the Gold Standard position plainly",
+      "status": "PASS",
+      "detail": "real-discovery status shown"
+    },
+    {
+      "id": "RDY-12",
+      "name": "No uncaught JavaScript exceptions on the readiness dashboard",
+      "status": "PASS"
+    }
+  ]
+}

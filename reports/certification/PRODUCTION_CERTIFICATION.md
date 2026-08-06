@@ -1,7 +1,7 @@
 # CourtAccess V1 — Production Certification
 
-Generated 2026-08-06T14:05:58.709Z
-Commit `edd04bd950735de9aeb46dbe8c9d2eea83b98c75` on branch `cursor/v1-discovery-intelligence-certification-9f94`
+Generated 2026-08-06T16:01:28.749Z
+Commit `a97a23fa9c1bdaeac90e2b62cca53eb8164a56f6` on branch `cursor/gold-standard-certification-9f94`
 
 ## How these results were produced
 
@@ -14,10 +14,10 @@ UNKNOWN. Nothing here is inferred from reading source code.
 
 | | |
 |---|---|
-| Production readiness | **95.4%** |
+| Production readiness | **95.5%** |
 | Recommended launch status | **READY WITH LIMITATIONS** |
-| Checks executed | 280 |
-| Passed | 273 |
+| Checks executed | 324 |
+| Passed | 317 |
 | Failed | 1 |
 | Warnings | 6 |
 | Features in inventory | 40 |
@@ -42,6 +42,8 @@ was actually proven rather than what exists in the codebase.
 | Evidence traceability and citation | P144 Phase 2/3 | 9 | 9 | 0 | 0 | 100% |
 | CALCRIM, mens rea, investigation, motions | P144 Phase 5/6/8/9 | 14 | 12 | 0 | 2 | 85.7% |
 | Defendant and family access | P144 Phase 10 | 12 | 12 | 0 | 0 | 100% |
+| Gold Standard certification framework | GS Phase 1-9 | 27 | 27 | 0 | 0 | 100% |
+| Gold Standard browser verification | GS Phase 10 | 17 | 17 | 0 | 0 | 100% |
 | Security | Phase 7 | 34 | 34 | 0 | 0 | 100% |
 | Document, media and failure handling | Phase 3/4/5 | 64 | 62 | 1 | 1 | 96.9% |
 | Authenticated read surface | Phase 2 | 5 | 5 | 0 | 0 | 100% |
@@ -54,9 +56,9 @@ was actually proven rather than what exists in the codebase.
 
 | | |
 |---|---|
-| API routes | 365 |
-| SPA routes | 105 |
-| Prisma models | 103 |
+| API routes | 374 |
+| SPA routes | 106 |
+| Prisma models | 106 |
 | Features | 40 |
 
 ## Feature verdicts
@@ -94,7 +96,7 @@ marked AUTHZ ONLY rather than PASS.
 | Legislative Intelligence | PASS | 9/9 | 9/9 | 0/0 |
 | Litigation Strategy | UNKNOWN | 0/0 | 0/0 | 0/1 |
 | Marketing & Contact | PASS | 1/1 | 0/1 | 0/0 |
-| Marketing & Public Site | PASS | 0/0 | 0/0 | 26/68 |
+| Marketing & Public Site | PASS | 0/0 | 0/0 | 26/69 |
 | Membership & Onboarding | PASS | 6/8 | 8/8 | 0/1 |
 | Motion Intelligence | UNKNOWN | 0/0 | 0/0 | 0/1 |
 | Narrative Analysis | PASS | 4/5 | 5/5 | 0/1 |
@@ -108,7 +110,7 @@ marked AUTHZ ONLY rather than PASS.
 | Security Logging | PASS | 3/3 | 3/3 | 0/0 |
 | Timeline | PASS | 4/5 | 5/5 | 0/3 |
 | Trial Exhibits | UNKNOWN | 0/0 | 0/0 | 0/2 |
-| Unclassified | PASS | 8/15 | 14/15 | 0/0 |
+| Unclassified | PASS | 16/24 | 23/24 | 0/0 |
 
 ## Remaining defects
 
@@ -119,9 +121,9 @@ marked AUTHZ ONLY rather than PASS.
 - **CAL-07** (CALCRIM, mens rea, investigation, motions) — The CALCRIM instruction library covers only a small number of offences: 2 mapped: Penal Code 459, Penal Code 484. Any other charged count returns UNKNOWN.
 - **MR-03** (CALCRIM, mens rea, investigation, motions) — Mens rea coverage is very small: 5 statute(s) have an extracted mental state, of which 4 are UNKNOWN. Charged offences outside this set have no mens rea analysis.
 - **ING-discovery-production.zip** (Document, media and failure handling) — discovery-production.zip archive handling: status=analyzed error="discovery-production.zip" is a ZIP archive containing 3 file(s), and archives are not ingested directly. Please extract it and upload the documents individually: police-report.pdf, dispatch-log.pdf, emails.txt.
-- **BR-/cases/8d751c88-8095-4d2a-99e8-3c77e08ac0fd/trial-exhibits** (Browser verification) — Trial exhibits renders but logged 2 browser error(s): Failed to load resource: the server responded with a status of 404 (Not Found)
-- **BR-/cases/8d751c88-8095-4d2a-99e8-3c77e08ac0fd/litigation-strategy** (Browser verification) — Litigation strategy renders but logged 2 browser error(s): Failed to load resource: the server responded with a status of 404 (Not Found)
-- **BR-/cases/8d751c88-8095-4d2a-99e8-3c77e08ac0fd/contradictions** (Browser verification) — Contradictions renders but logged 2 browser error(s): Failed to load resource: the server responded with a status of 404 (Not Found)
+- **BR-/cases/f6101335-560f-43ef-bcae-43dc31295c86/trial-exhibits** (Browser verification) — Trial exhibits renders but logged 2 browser error(s): Failed to load resource: the server responded with a status of 404 (Not Found)
+- **BR-/cases/f6101335-560f-43ef-bcae-43dc31295c86/litigation-strategy** (Browser verification) — Litigation strategy renders but logged 2 browser error(s): Failed to load resource: the server responded with a status of 404 (Not Found)
+- **BR-/cases/f6101335-560f-43ef-bcae-43dc31295c86/contradictions** (Browser verification) — Contradictions renders but logged 2 browser error(s): Failed to load resource: the server responded with a status of 404 (Not Found)
 
 ## Real discovery — not certified
 

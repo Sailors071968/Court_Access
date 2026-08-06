@@ -1,7 +1,7 @@
 {
   "report": "TRACEABILITY_CERTIFICATION",
   "phase": "Program 144 — Evidence Traceability",
-  "generatedAt": "2026-08-06T14:03:58.938Z",
+  "generatedAt": "2026-08-06T15:59:09.334Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 9,
@@ -23,8 +23,8 @@
     "POST /api/timeline/rebuild/:id"
   ],
   "exercisedSpaRoutes": [],
-  "caseId": "78200616-4811-491f-8395-3f4ff4d70aef",
-  "transcriptId": "d31084c1-263d-46fb-8b53-e4110123aec2",
+  "caseId": "ada27999-fd24-45d9-a381-a111f5b711d1",
+  "transcriptId": "1171bcdd-0d74-491e-96bf-a73b94440707",
   "expectedPages": 4,
   "citationChecks": [
     {

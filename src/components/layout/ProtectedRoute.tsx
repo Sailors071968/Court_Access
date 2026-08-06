@@ -10,11 +10,18 @@ import type { RolePermissions } from '../../types';
 interface ProtectedRouteProps {
   children: React.ReactNode;
   requiredPermission?: keyof RolePermissions;
+  /**
+   * Restrict to one platform role outright. Used where a permission flag is
+   * not specific enough — an internal module holding real case material has to
+   * name the role it is for rather than rely on a flag that could later be
+   * granted to another role.
+   */
+  requiredRole?: string;
   /** If true, skip subscription check (used for /pricing route itself) */
   skipSubscriptionCheck?: boolean;
 }
 
-export function ProtectedRoute({ children, requiredPermission, skipSubscriptionCheck }: ProtectedRouteProps) {
+export function ProtectedRoute({ children, requiredPermission, requiredRole, skipSubscriptionCheck }: ProtectedRouteProps) {
   const { isAuthenticated, hasPermission, subscriptionStatus } = useAuthStore();
   const location = useLocation();
 
@@ -28,6 +35,18 @@ export function ProtectedRoute({ children, requiredPermission, skipSubscriptionC
   const isStaffOrAdmin = user?.role === 'admin' || user?.role === 'staff';
   if (!skipSubscriptionCheck && !isStaffOrAdmin && subscriptionStatus !== 'active' && subscriptionStatus !== 'trial' && subscriptionStatus !== 'trialing') {
     return <Navigate to="/pricing" replace />;
+  }
+
+  if (requiredRole && user?.role !== requiredRole) {
+    return (
+      <div className="flex items-center justify-center min-h-[60vh]">
+        <div className="text-center">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Access Denied</h2>
+          <p className="text-gray-500">This area is restricted to administrators.</p>
+          <p className="text-sm text-gray-400 mt-2">Contact your administrator for access.</p>
+        </div>
+      </div>
+    );
   }
 
   if (requiredPermission && !hasPermission(requiredPermission)) {

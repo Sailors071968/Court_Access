@@ -1,7 +1,7 @@
 {
   "report": "SECURITY_CERTIFICATION",
   "phase": "Phase 7 — Security Testing",
-  "generatedAt": "2026-08-06T14:04:17.708Z",
+  "generatedAt": "2026-08-06T15:59:28.239Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 34,
@@ -47,12 +47,12 @@
   },
   "tenants": {
     "firmA": {
-      "tenantId": "tenant-54452074-c4a5-4f01-94e6-dcfed8601c26",
-      "caseId": "11b60061-20b6-4e36-b369-c8ae41212b53"
+      "tenantId": "tenant-564937a1-e748-4356-8da9-f14096053479",
+      "caseId": "21055678-e64a-4626-9c30-43e041f841c1"
     },
     "firmB": {
-      "tenantId": "tenant-fbd5dd77-e60a-4807-9cbf-c17ecfeb7d45",
-      "caseId": "2f47485d-bc3c-47ea-a4c2-8faead554332"
+      "tenantId": "tenant-fd4adf3b-5070-4220-96cb-ab33963db0b3",
+      "caseId": "30411179-79ae-492d-840a-1a88a0f65adc"
     }
   },
   "checks": [
@@ -150,7 +150,7 @@
       "id": "SEC-TOKEN-IDENTITY",
       "name": "Session reports the caller's own tenant",
       "status": "PASS",
-      "detail": "tenant-54452074-c4a5-4f01-94e6-dcfed8601c26"
+      "detail": "tenant-564937a1-e748-4356-8da9-f14096053479"
     },
     {
       "id": "SEC-RBAC-/api/admin/stats",
@@ -189,7 +189,7 @@
       "detail": "HTTP 403"
     },
     {
-      "id": "SEC-RBAC-DEFENDANT-/api/cases/11b60061-20b6-4e36-b369-c8ae41212b53",
+      "id": "SEC-RBAC-DEFENDANT-/api/cases/21055678-e64a-4626-9c30-43e041f841c1",
       "name": "A defendant cannot read an unrelated case",
       "status": "PASS",
       "detail": "HTTP 403"
@@ -227,7 +227,7 @@
       "id": "SEC-TRAVERSAL-01",
       "name": "Traversal sequences in filenames are neutralised",
       "status": "PASS",
-      "detail": "stored as evidence/tenant-54452074-c4a5-4f01-94e6-dcfed8601c26/11b60061-20b6-4e36-b369-c8ae41212b53/3b239f31-b662-4742-9426-410273be034e/escaped.txt"
+      "detail": "stored as evidence/tenant-564937a1-e748-4356-8da9-f14096053479/21055678-e64a-4626-9c30-43e041f841c1/de4b5d60-9cf5-423b-bd96-e3acff645800/escaped.txt"
     },
     {
       "id": "SEC-HEADER-X-Content-Type-Options",

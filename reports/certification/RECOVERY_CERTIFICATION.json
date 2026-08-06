@@ -1,7 +1,7 @@
 {
   "report": "RECOVERY_CERTIFICATION",
   "phase": "Phase 10 — Recovery Testing",
-  "generatedAt": "2026-08-06T14:05:57.927Z",
+  "generatedAt": "2026-08-06T16:01:09.735Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 14,
@@ -23,7 +23,7 @@
     "POST /api/timeline/rebuild/:id"
   ],
   "exercisedSpaRoutes": [],
-  "caseId": "2937b638-caf2-4a78-9e9d-560422d3b3ec",
+  "caseId": "f17b2eb6-1a60-4dc1-b082-d9ba273857b3",
   "baselineEvidence": 1,
   "baselineChunks": 1,
   "checks": [
@@ -31,7 +31,7 @@
       "id": "REC-01",
       "name": "The API reconnects to PostgreSQL after a database restart",
       "status": "PASS",
-      "detail": "recovered on attempt 2"
+      "detail": "recovered on attempt 3"
     },
     {
       "id": "REC-02",
@@ -108,7 +108,7 @@
       "id": "REC-14",
       "name": "Queue workers process jobs after every restart in this run",
       "status": "PASS",
-      "detail": "job 38f0ca33-b21b-4cc7-bf4b-9ea166a86ad4 completed"
+      "detail": "job f13a4d3d-c948-4c13-b993-51ca9fac37fa completed"
     }
   ]
 }

@@ -1,7 +1,7 @@
 {
   "report": "PORTAL_PERMISSIONS_CERTIFICATION",
   "phase": "Program 144 — Defendant and Family Access",
-  "generatedAt": "2026-08-06T14:04:08.868Z",
+  "generatedAt": "2026-08-06T15:59:19.232Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 12,
@@ -32,7 +32,7 @@
     "POST /api/evidence/upload"
   ],
   "exercisedSpaRoutes": [],
-  "caseId": "a9e71142-375e-4588-9aac-d1ca20bb075d",
+  "caseId": "c16b60aa-1f85-4e0a-8541-f6e9b1427155",
   "defendantRole": "defendant",
   "familyRole": "defendant",
   "checks": [
@@ -100,7 +100,7 @@
       "id": "PORT-07",
       "name": "A defendant account is linked to a client record it can be shared with",
       "status": "PASS",
-      "detail": "clientId e279e6f5-1c9b-4da3-8039-1c5e86a7a8f3"
+      "detail": "clientId e887d2f3-5a4d-4b00-9d0c-2f3c83625682"
     },
     {
       "id": "PORT-08",

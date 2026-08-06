@@ -1,7 +1,7 @@
 {
   "report": "AUTH_EXPOSURE_SWEEP",
   "phase": "Phase 7 — Security Testing",
-  "generatedAt": "2026-08-06T14:02:37.830Z",
+  "generatedAt": "2026-08-06T15:57:49.855Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 2,
@@ -85,6 +85,11 @@
     "GET /api/cases/:id/workbench/pins",
     "GET /api/cases/:id/workbench/tasks",
     "GET /api/cases/:id/workbench/trial-prep",
+    "GET /api/certification/cases/:id/inventory",
+    "GET /api/certification/cases/:id/runs",
+    "GET /api/certification/compare",
+    "GET /api/certification/runs/:id",
+    "GET /api/certification/status",
     "GET /api/charges/:id",
     "GET /api/clients",
     "GET /api/clients/:id",
@@ -280,6 +285,10 @@
     "POST /api/cases/:id/workbench/notes",
     "POST /api/cases/:id/workbench/pins",
     "POST /api/cases/:id/workbench/tasks",
+    "POST /api/certification/cases/:id/run",
+    "POST /api/certification/import",
+    "POST /api/certification/preview",
+    "POST /api/certification/runs/:id/baseline",
     "POST /api/charges",
     "POST /api/clients",
     "POST /api/compliance/analyze",
@@ -362,8 +371,8 @@
     "PUT /api/firm/personnel/:id"
   ],
   "exercisedSpaRoutes": [],
-  "routesProbed": 348,
-  "routesInInventory": 365,
+  "routesProbed": 357,
+  "routesInInventory": 374,
   "exposedRoutes": [],
   "serverErrors": [],
   "checks": [
@@ -371,7 +380,7 @@
       "id": "SEC-EXPOSURE-01",
       "name": "No non-public API route responds without authentication",
       "status": "PASS",
-      "detail": "348 routes probed, all returned 401/403/404"
+      "detail": "357 routes probed, all returned 401/403/404"
     },
     {
       "id": "SEC-EXPOSURE-02",

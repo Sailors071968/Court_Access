@@ -225,6 +225,9 @@ const ROUTE_PERMISSIONS: Record<string, UserRole[]> = {
   // organisation's name.
   '/api/cpra': ['admin'],
   '/api/crawler': ['admin'],
+  // Gold Standard Certification is an internal QA module: it reads real
+  // discovery corpora and every run touches them, so it is administrator-only.
+  '/api/certification': ['admin'],
   '/api/forensic': ['admin', 'attorney', 'investigator'],
   '/api/forensic/expert-package': ['admin', 'attorney'],
   '/api/forensic/jury-view': ['admin', 'attorney'],

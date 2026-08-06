@@ -2471,6 +2471,107 @@ model SchemaVersion {
   @@map("schema_versions")
 }
 
+// ---------------------------------------------------------------------------
+// Gold Standard Certification
+//
+// A certification case is a real discovery set, authorised for certification
+// use, imported through the production pipeline and then kept unchanged. Each
+// release re-runs the same corpus and the results are compared, so a
+// regression in extraction, classification or analysis shows up as a diff
+// against the recorded baseline rather than as a surprise in production.
+// ---------------------------------------------------------------------------
+
+model CertificationCase {
+  certificationCaseId String   @id @default(uuid())
+  /** Short stable handle, e.g. GS-001. */
+  reference           String   @unique
+  label               String
+  description         String?
+  /** Where the untouched originals live. Never written to after import. */
+  sourceDirectory     String
+  /** The CriminalCase the imported evidence was ingested into. */
+  caseId              String?
+  tenantId            String
+  importedById        String
+  status              String   @default("importing") // importing | imported | failed
+  /** SHA-256 over the sorted per-file hashes; identifies the corpus itself. */
+  corpusHash          String?
+  fileCount           Int      @default(0)
+  totalBytes          BigInt   @default(0)
+  importStartedAt     DateTime @default(now())
+  importCompletedAt   DateTime?
+  importErrors        Json?
+
+  files CertificationFile[]
+  runs  CertificationRun[]
+
+  @@index([tenantId])
+  @@index([status])
+  @@map("certification_cases")
+}
+
+model CertificationFile {
+  certificationFileId String   @id @default(uuid())
+  certificationCaseId String
+  certificationCase   CertificationCase @relation(fields: [certificationCaseId], references: [certificationCaseId], onDelete: Cascade)
+
+  /** Path relative to the import root, so the producing party's folder
+   *  hierarchy is preserved exactly as delivered. */
+  relativePath        String
+  fileName            String
+  extension           String?
+  mimeType            String?
+  sizeBytes           BigInt
+  sha256              String
+  /** Modification time from the source, where the medium carried one. */
+  originalModifiedAt  DateTime?
+  /** Set when an identical hash was already imported in this corpus. */
+  duplicateOfFileId   String?
+
+  /** What the classifier decided, and how sure it was. */
+  classification      String   @default("unknown")
+  classificationConfidence Float @default(0)
+  classificationBasis String?
+
+  /** The Evidence row produced by the production ingestion path. */
+  evidenceId          String?
+  ingestStatus        String   @default("pending") // pending | ingested | skipped | failed
+  ingestMessage       String?
+
+  importedAt          DateTime @default(now())
+
+  @@unique([certificationCaseId, relativePath])
+  @@index([certificationCaseId])
+  @@index([sha256])
+  @@index([classification])
+  @@map("certification_files")
+}
+
+model CertificationRun {
+  certificationRunId  String   @id @default(uuid())
+  certificationCaseId String
+  certificationCase   CertificationCase @relation(fields: [certificationCaseId], references: [certificationCaseId], onDelete: Cascade)
+
+  /** Which build produced this result. */
+  gitCommit           String?
+  startedAt           DateTime @default(now())
+  completedAt         DateTime?
+  status              String   @default("running") // running | completed | failed
+
+  /** Everything counted in this run, compared against the baseline. */
+  metrics             Json?
+  /** Per-file processing failures, with the reason shown to the user. */
+  failures            Json?
+  /** Whether this run is the reference other runs are compared against. */
+  isBaseline          Boolean  @default(false)
+  /** Differences against the baseline run, when one exists. */
+  regressions         Json?
+
+  @@index([certificationCaseId])
+  @@index([status])
+  @@map("certification_runs")
+}
+
 model Charge {
   id             String   @id @default(uuid())
   caseId         String

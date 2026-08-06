@@ -64,6 +64,7 @@ echo
 echo "=== generating fixtures ==="
 python3 scripts/certification/fixtures/generate_fixtures.py
 python3 scripts/certification/fixtures/generate_failure_fixtures.py
+python3 scripts/certification/fixtures/build_corpus.py
 
 run() {
   echo
@@ -82,6 +83,7 @@ run "P144 — case-scoped tenant isolation"        12-case-scoped-isolation.mjs 
 run "P144 — evidence traceability"               13-traceability-certification.mjs 14
 run "P144 — CALCRIM / mens rea / investigation"  14-intelligence-certification.mjs 18
 run "P144 — defendant and family access"         15-portal-permissions-certification.mjs 16
+run "Gold Standard — certification framework"    16-gold-standard-framework.mjs 32
 run "Phase 2/8 — litigation workflow"            05-workflow-certification.mjs 8
 
 # Security runs against product-default login and general limits so that the
@@ -112,6 +114,7 @@ for _ in $(seq 1 60); do curl -sf -o /dev/null http://127.0.0.1:3001/api/health 
 
 run "Phase 6/11 — stress and performance"        06-stress-certification.mjs 18
 run "Phase 9 — browser verification"             08-browser-certification.mjs 8
+run "Gold Standard — browser verification"       17-gold-standard-browser.mjs 22
 run "Phase 10 — recovery"                        07-recovery-certification.mjs 18
 
 echo

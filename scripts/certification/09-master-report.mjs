@@ -20,6 +20,8 @@ const SUITES = [
   ['TRACEABILITY_CERTIFICATION', 'Evidence traceability and citation', 'P144 Phase 2/3'],
   ['INTELLIGENCE_CERTIFICATION', 'CALCRIM, mens rea, investigation, motions', 'P144 Phase 5/6/8/9'],
   ['PORTAL_PERMISSIONS_CERTIFICATION', 'Defendant and family access', 'P144 Phase 10'],
+  ['GOLD_STANDARD_FRAMEWORK', 'Gold Standard certification framework', 'GS Phase 1-9'],
+  ['GOLD_STANDARD_BROWSER', 'Gold Standard browser verification', 'GS Phase 10'],
   ['SECURITY_CERTIFICATION', 'Security', 'Phase 7'],
   ['INGESTION_CERTIFICATION', 'Document, media and failure handling', 'Phase 3/4/5'],
   ['READ_SURFACE_CERTIFICATION', 'Authenticated read surface', 'Phase 2'],

@@ -84,6 +84,7 @@ import { AccountSettingsPage } from './pages/membership/AccountSettingsPage';
 import { SharedAccessPage } from './pages/membership/SharedAccessPage';
 import { AdminPage } from './pages/admin/AdminPage';
 import { OperationsCommandCenter } from './pages/admin/OperationsCommandCenter';
+import { GoldStandardCertification } from './pages/admin/GoldStandardCertification';
 
 // Case Pages
 import { CaseLayout } from './pages/case/CaseLayout';
@@ -433,6 +434,17 @@ function App() {
             element={
               <ProtectedRoute requiredPermission="canViewAdmin">
                 <OperationsCommandCenter />
+              </ProtectedRoute>
+            }
+          />
+          {/* Gold Standard Certification is an internal QA module holding real
+              discovery corpora, so it is restricted to administrators. The
+              server enforces the same restriction independently. */}
+          <Route
+            path="admin/gold-standard"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <GoldStandardCertification />
               </ProtectedRoute>
             }
           />

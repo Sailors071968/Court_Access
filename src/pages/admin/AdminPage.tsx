@@ -5,7 +5,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { Card, StatCard } from '../../components/common/Card';
-import { Users, Briefcase, FileText, Shield, Activity, Trash2, Settings } from 'lucide-react';
+import { Users, Briefcase, FileText, Shield, Activity, Trash2, Settings , ShieldCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
 interface AdminStats {
@@ -98,13 +98,22 @@ export function AdminPage() {
           <h1 className="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
           <p className="text-sm text-gray-500 mt-1">System overview and management</p>
         </div>
-        <Link
-          to="/admin/operations"
-          className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700"
-        >
-          <Settings size={16} />
-          Production Operations
-        </Link>
+        <div className="flex items-center gap-2">
+          <Link
+            to="/admin/gold-standard"
+            className="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg text-sm font-medium hover:bg-indigo-700"
+          >
+            <ShieldCheck size={16} />
+            Gold Standard Certification
+          </Link>
+          <Link
+            to="/admin/operations"
+            className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700"
+          >
+            <Settings size={16} />
+            Production Operations
+          </Link>
+        </div>
       </div>
 
       {/* Confirmation Modal */}

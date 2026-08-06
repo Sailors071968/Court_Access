@@ -12,6 +12,7 @@ import type { AuthenticatedRequest } from '../security/authMiddleware.js';
 import prisma from '../lib/prisma.js';
 import { CALIFORNIA_CODES } from './officialLawSource.js';
 import {
+  authoritativeElements,
   buildStatutoryContext,
   cacheStatistics,
   getCaseSnapshot,
@@ -93,6 +94,19 @@ export async function registerLawRoutes(app: FastifyInstance): Promise<void> {
         retrievedAt: record.retrievedAt,
       },
     });
+  });
+
+  // -------------------------------------------------------------------------
+  // What the People must prove, from the statute rather than a stored definition
+  // -------------------------------------------------------------------------
+  app.get('/api/law/elements/:code/:section', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!request.user) return reply.code(401).send({ error: 'Authentication required' });
+    const { code, section } = request.params as { code: string; section: string };
+    const result = await authoritativeElements(code, section);
+    if (result.status === 'unavailable') {
+      return reply.code(404).send({ error: 'Statute unavailable', message: result.reason, officialUrl: result.officialUrl });
+    }
+    return reply.send(result);
   });
 
   // -------------------------------------------------------------------------

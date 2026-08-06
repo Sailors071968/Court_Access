@@ -1,7 +1,7 @@
 {
   "report": "OFFICIAL_LAW_ENGINE",
   "phase": "Program 147 — Official California Law Engine",
-  "generatedAt": "2026-08-06T19:14:14.501Z",
+  "generatedAt": "2026-08-06T19:20:57.443Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 37,
@@ -166,27 +166,27 @@
       "id": "LAW-23",
       "name": "Verified law is served from cache rather than re-read every time",
       "status": "PASS",
-      "detail": "5ms cached against 260ms from the source"
+      "detail": "5ms cached against 371ms from the source"
     },
     {
       "id": "LAW-24",
       "name": "Cache utilisation is reported",
       "status": "PASS",
-      "detail": "9 statutes cached across 5 codes, 2 hits",
+      "detail": "12 statutes cached across 5 codes, 18 hits",
       "evidence": {
-        "statutesCached": 9,
-        "currentVersions": 9,
+        "statutesCached": 12,
+        "currentVersions": 12,
         "supersededVersions": 0,
         "repealed": 0,
-        "cacheHits": 2,
-        "syncEventsRecorded": 5,
+        "cacheHits": 18,
+        "syncEventsRecorded": 10,
         "legislativeChangesDetected": 0,
         "byCode": {
-          "HNC": 1,
-          "HSC": 1,
-          "PEN": 3,
           "PUC": 1,
-          "VEH": 3
+          "VEH": 3,
+          "HNC": 1,
+          "PEN": 4,
+          "HSC": 3
         },
         "compilerVersion": "1.0.0",
         "extractionVersion": "1.0.0"
@@ -232,7 +232,7 @@
       "id": "LAW-31",
       "name": "Every synchronisation pass is recorded with a date and an outcome",
       "status": "PASS",
-      "detail": "10 events"
+      "detail": "15 events"
     },
     {
       "id": "LAW-32",

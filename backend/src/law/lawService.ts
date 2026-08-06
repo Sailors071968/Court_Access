@@ -476,3 +476,64 @@ export async function cacheStatistics() {
     extractionVersion: EXTRACTION_VERSION,
   };
 }
+
+// ---------------------------------------------------------------------------
+// Law-backed elements for an analysed charge
+// ---------------------------------------------------------------------------
+
+export interface AuthoritativeElements {
+  code: string;
+  section: string;
+  officialUrl: string;
+  fingerprint: string | null;
+  legislativeNote: string | null;
+  /** Elements as the statute states them, each quoting the text. */
+  elements: Array<{ element: string; source: string }>;
+  mentalStates: Array<{ mentalState: string; basis: string | null }>;
+  status: 'compiled' | 'unavailable';
+  reason: string | null;
+}
+
+/**
+ * What the People must prove, taken from the statute rather than from a stored
+ * definition. Returns unavailable with the reason when the section cannot be
+ * read, so a caller never mistakes silence for an absence of elements.
+ */
+export async function authoritativeElements(code: string, section: string): Promise<AuthoritativeElements> {
+  const record = await getStatute(code, section);
+
+  if (!record.text || !record.compilation) {
+    return {
+      code: record.code,
+      section: record.section,
+      officialUrl: record.officialUrl,
+      fingerprint: null,
+      legislativeNote: null,
+      elements: [],
+      mentalStates: [],
+      status: 'unavailable',
+      reason: record.unavailableReason ?? 'The section could not be read from the official source.',
+    };
+  }
+
+  const c = record.compilation;
+  const elements = [
+    ...c.conduct.map((t) => ({ element: t, source: 'conduct stated in the section' })),
+    ...c.subdivisions
+      .filter((s) => s.text.length > 40)
+      .slice(0, 8)
+      .map((s) => ({ element: `${s.label} ${s.text.slice(0, 300)}`, source: `subdivision ${s.label}` })),
+  ];
+
+  return {
+    code: record.code,
+    section: record.section,
+    officialUrl: record.officialUrl,
+    fingerprint: record.fingerprint,
+    legislativeNote: record.legislativeNote,
+    elements,
+    mentalStates: c.mentalStates.map((m) => ({ mentalState: m.mentalState, basis: m.basis })),
+    status: 'compiled',
+    reason: null,
+  };
+}

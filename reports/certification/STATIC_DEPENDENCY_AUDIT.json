@@ -1,0 +1,120 @@
+{
+  "report": "STATIC_DEPENDENCY_AUDIT",
+  "phase": "Program 147 — Static Statutory Dependencies",
+  "generatedAt": "2026-08-06T19:20:29.265Z",
+  "apiBase": "http://127.0.0.1:3001",
+  "summary": {
+    "total": 7,
+    "PASS": 5,
+    "FAIL": 0,
+    "WARNING": 2,
+    "UNKNOWN": 0,
+    "passRate": 71.4
+  },
+  "exercisedApiRoutes": [
+    "GET /api/law/status",
+    "GET /api/law/statute/PEN/211",
+    "POST /api/auth/login",
+    "POST /api/auth/register"
+  ],
+  "exercisedSpaRoutes": [],
+  "repoCounts": {
+    "authorities": 16,
+    "calcrim_links": 1,
+    "cross_references": 16,
+    "defenses": 0,
+    "elements": 10,
+    "exceptions": 12,
+    "mens_rea": 5,
+    "offenses": 5,
+    "regulatory_incorporations": 2,
+    "statute_classifications": 3,
+    "statutes": 13
+  },
+  "readers": [
+    "backend/src/legislative/attorneyIntelligence.ts",
+    "backend/src/legislative/cli.ts",
+    "backend/src/legislative/knowledgeGraph/pipeline.ts",
+    "backend/src/legislative/legislativeIngestService.ts",
+    "backend/src/legislative/legislativeRoutes.ts",
+    "backend/src/legislative/liabilityDiscovery/metrics.ts",
+    "backend/src/legislative/productionMetrics.ts",
+    "backend/src/legislative/repositoryIntegrityDashboard.ts",
+    "backend/src/productionOperations/backupOperations.ts",
+    "backend/src/productionOperations/backupRestoreDrill.ts"
+  ],
+  "elementHolders": [],
+  "mensReaHolders": [],
+  "offenseHolders": [],
+  "checks": [
+    {
+      "id": "DEP-01",
+      "name": "No module holds a hardcoded list of statutory elements",
+      "status": "PASS",
+      "detail": "690 source files scanned"
+    },
+    {
+      "id": "DEP-02",
+      "name": "No module holds a hardcoded mental state for a statute",
+      "status": "PASS",
+      "detail": "mens rea is read from the statutory text"
+    },
+    {
+      "id": "DEP-03",
+      "name": "No offence definition table remains",
+      "status": "PASS",
+      "detail": "offences are discovered from the official source"
+    },
+    {
+      "id": "DEP-04",
+      "name": "The hand-maintained legislative repositories are still present and still read",
+      "status": "WARNING",
+      "detail": "83 records across 11 repositories, read by 10 module(s): backend/src/legislative/attorneyIntelligence.ts, backend/src/legislative/cli.ts, backend/src/legislative/knowledgeGraph/pipeline.ts, backend/src/legislative/legislativeIngestService.ts. These are not retrieved from the Legislature and do not carry an official URL or a fingerprint, so anything sourced from them is outside the guarantees of the new engine.",
+      "evidence": {
+        "repoCounts": {
+          "authorities": 16,
+          "calcrim_links": 1,
+          "cross_references": 16,
+          "defenses": 0,
+          "elements": 10,
+          "exceptions": 12,
+          "mens_rea": 5,
+          "offenses": 5,
+          "regulatory_incorporations": 2,
+          "statute_classifications": 3,
+          "statutes": 13
+        },
+        "readers": [
+          "backend/src/legislative/attorneyIntelligence.ts",
+          "backend/src/legislative/cli.ts",
+          "backend/src/legislative/knowledgeGraph/pipeline.ts",
+          "backend/src/legislative/legislativeIngestService.ts",
+          "backend/src/legislative/legislativeRoutes.ts",
+          "backend/src/legislative/liabilityDiscovery/metrics.ts",
+          "backend/src/legislative/productionMetrics.ts",
+          "backend/src/legislative/repositoryIntegrityDashboard.ts",
+          "backend/src/productionOperations/backupOperations.ts",
+          "backend/src/productionOperations/backupRestoreDrill.ts"
+        ]
+      }
+    },
+    {
+      "id": "DEP-05",
+      "name": "The official source addresses the whole of the California codes",
+      "status": "PASS",
+      "detail": "29 codes reachable on demand, against 83 hand-entered records. Coverage is no longer a function of what has been typed in."
+    },
+    {
+      "id": "DEP-06",
+      "name": "CALCRIM correspondence is still a hand-verified list",
+      "status": "WARNING",
+      "detail": "7 verified mappings: PEN 187., PEN 459., PEN 211., PEN 484., PEN 245., PEN 242., PEN 240.. These hold no statutory text — elements always come from the official source — but which instruction governs a charge outside this list is UNKNOWN. The Judicial Council does not publish the instructions in a machine-readable form, so this list grows by verification rather than by retrieval."
+    },
+    {
+      "id": "DEP-07",
+      "name": "A statute served to a user carries everything needed to verify it independently",
+      "status": "PASS",
+      "detail": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PEN&sectionNum=211. — (Enacted 1872.)"
+    }
+  ]
+}

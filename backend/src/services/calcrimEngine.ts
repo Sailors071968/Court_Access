@@ -267,7 +267,7 @@ export async function analyzeCase(caseId: string) {
       // 🔥 INTENT OVERRIDE
       if (
         element.id === "intent" ||
-        element.text.toLowerCase().includes("intent")
+        element.searchHeading.toLowerCase().includes("intent")
       ) {
         supported = intentInference.supported;
         matchingEvents = intentInference.evidence;
@@ -291,7 +291,7 @@ export async function analyzeCase(caseId: string) {
 
       elementResults.push({
         elementId: element.id,
-        elementText: element.text,
+        elementText: element.searchHeading,
         supported,
         supportingEvidence: sortedEvents.map(e => ({
           id: e.id,

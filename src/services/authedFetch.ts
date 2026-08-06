@@ -5,6 +5,8 @@
 // state. In a litigation tool that is worse than an error: it tells an attorney
 // there are no exhibits when in fact nothing was ever loaded.
 
+import { authorizedFetch as renewingFetch, SESSION_EXPIRED_MESSAGE, SessionExpiredError } from './session';
+
 const API_BASE = '/api';
 
 export interface LoadResult<T> {
@@ -17,18 +19,10 @@ export interface LoadResult<T> {
   unavailableReason: string | null;
 }
 
-function authHeaders(): Record<string, string> {
-  const token = localStorage.getItem('court-access-token');
-  return {
-    'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-  };
-}
-
 export async function authedFetch(path: string, init: RequestInit = {}): Promise<Response> {
-  return fetch(`${API_BASE}${path}`, {
+  return renewingFetch(`${API_BASE}${path}`, {
     ...init,
-    headers: { ...authHeaders(), ...(init.headers as Record<string, string> | undefined) },
+    headers: { 'Content-Type': 'application/json', ...(init.headers as Record<string, string> | undefined) },
   });
 }
 
@@ -40,7 +34,10 @@ export async function loadPanel<T>(path: string, label: string): Promise<LoadRes
   let res: Response;
   try {
     res = await authedFetch(path);
-  } catch {
+  } catch (err) {
+    if (err instanceof SessionExpiredError) {
+      return { data: null, unavailableReason: SESSION_EXPIRED_MESSAGE };
+    }
     return {
       data: null,
       unavailableReason: `${label} could not be loaded because the server could not be reached. Check your connection and reload.`,
@@ -53,7 +50,7 @@ export async function loadPanel<T>(path: string, label: string): Promise<LoadRes
   const body = await res.text().catch(() => '');
 
   if (res.status === 401) {
-    return { data: null, unavailableReason: 'Your session has expired. Sign in again to view this page.' };
+    return { data: null, unavailableReason: SESSION_EXPIRED_MESSAGE };
   }
   if (res.status === 403) {
     return { data: null, unavailableReason: `You do not have permission to view ${label.toLowerCase()} for this case.` };

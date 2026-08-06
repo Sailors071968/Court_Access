@@ -1,0 +1,120 @@
+{
+  "report": "SESSION_RENEWAL",
+  "phase": "Program 145 — Session Renewal",
+  "generatedAt": "2026-08-06T17:32:15.112Z",
+  "apiBase": "http://127.0.0.1:3001",
+  "summary": {
+    "total": 17,
+    "PASS": 17,
+    "FAIL": 0,
+    "WARNING": 0,
+    "UNKNOWN": 0,
+    "passRate": 100
+  },
+  "exercisedApiRoutes": [],
+  "exercisedSpaRoutes": [],
+  "base": "http://127.0.0.1:4180",
+  "accessTokenLifetimeMinutes": 15,
+  "refreshTokenLifetimeDays": 7,
+  "checks": [
+    {
+      "id": "SES-01",
+      "name": "A fresh login signs in and stores an access token",
+      "status": "PASS",
+      "detail": "expires 2026-08-06T17:46:37.000Z"
+    },
+    {
+      "id": "SES-02",
+      "name": "A refresh token is stored alongside the access token",
+      "status": "PASS",
+      "detail": "available for renewal"
+    },
+    {
+      "id": "SES-03",
+      "name": "The Gold Standard page loads on a valid session",
+      "status": "PASS",
+      "detail": "no error banner"
+    },
+    {
+      "id": "SES-04",
+      "name": "The browser is now holding a genuinely expired token",
+      "status": "PASS",
+      "detail": "expired at 2026-08-06T17:21:44.000Z, 10 minutes ago"
+    },
+    {
+      "id": "SES-05",
+      "name": "The raw backend wording \"jwt expired\" is never shown to the operator",
+      "status": "PASS"
+    },
+    {
+      "id": "SES-06",
+      "name": "An expired token is renewed automatically without the operator signing in again",
+      "status": "PASS",
+      "detail": "new token valid to 2026-08-06T17:46:44.000Z"
+    },
+    {
+      "id": "SES-07",
+      "name": "The operator stays on the page they were using",
+      "status": "PASS",
+      "detail": "http://127.0.0.1:4180/admin/gold-standard"
+    },
+    {
+      "id": "SES-08",
+      "name": "Certification corpora load after the renewal",
+      "status": "PASS",
+      "detail": "no error banner after renewal"
+    },
+    {
+      "id": "SES-09",
+      "name": "The import page works after a renewal",
+      "status": "PASS",
+      "detail": "upload portal rendered"
+    },
+    {
+      "id": "SES-10",
+      "name": "A browser refresh keeps the session",
+      "status": "PASS",
+      "detail": "page reloaded signed in"
+    },
+    {
+      "id": "SES-11",
+      "name": "Navigating between pages keeps the session",
+      "status": "PASS",
+      "detail": "4 routes visited"
+    },
+    {
+      "id": "SES-12",
+      "name": "When renewal cannot succeed the operator is returned to sign-in",
+      "status": "PASS",
+      "detail": "http://127.0.0.1:4180/login?expired=1"
+    },
+    {
+      "id": "SES-13",
+      "name": "The sign-in page explains why the operator is there",
+      "status": "PASS",
+      "detail": "session expiry message shown"
+    },
+    {
+      "id": "SES-14",
+      "name": "No raw backend error reaches the operator on a failed renewal",
+      "status": "PASS"
+    },
+    {
+      "id": "SES-15",
+      "name": "Signing in again restores full access to the module",
+      "status": "PASS",
+      "detail": "module loaded"
+    },
+    {
+      "id": "SES-16",
+      "name": "Logout clears the stored session",
+      "status": "PASS",
+      "detail": "no access token remains"
+    },
+    {
+      "id": "SES-17",
+      "name": "No uncaught JavaScript exceptions across the session workflow",
+      "status": "PASS"
+    }
+  ]
+}

@@ -10,6 +10,8 @@
 // and the page stays responsive throughout.
 // ============================================================================
 
+import { authorizedFetch } from './session';
+
 export interface SelectedFile {
   file: File;
   /** Path within the selected folder, as the browser reported it. */
@@ -43,11 +45,6 @@ interface StartOptions {
   chunkBytes: number;
   files: SelectedFile[];
   onProgress: ProgressHandler;
-}
-
-function authHeader(): Record<string, string> {
-  const token = localStorage.getItem('court-access-token');
-  return token ? { Authorization: `Bearer ${token}` } : {};
 }
 
 /**
@@ -121,9 +118,7 @@ export class UploadController {
 
   /** Ask the server what it already holds, so a resumed run skips it. */
   private async serverOffsets(): Promise<Map<string, number>> {
-    const res = await fetch(`/api/certification/uploads/${this.options.uploadSessionId}/manifest`, {
-      headers: authHeader(),
-    });
+    const res = await authorizedFetch(`/api/certification/uploads/${this.options.uploadSessionId}/manifest`);
     if (!res.ok) return new Map();
     const body = await res.json();
     return new Map<string, number>((body.held ?? []).map((h: { relativePath: string; bytes: number }) => [h.relativePath, h.bytes]));
@@ -143,9 +138,10 @@ export class UploadController {
     form.append('isFinal', isFinal ? 'true' : 'false');
     form.append('chunk', blob, 'chunk');
 
-    const res = await fetch(`/api/certification/uploads/${this.options.uploadSessionId}/chunk`, {
+    // A large transfer outlives a fifteen-minute access token, so every chunk
+    // goes through the renewing client rather than a token captured at start.
+    const res = await authorizedFetch(`/api/certification/uploads/${this.options.uploadSessionId}/chunk`, {
       method: 'PUT',
-      headers: authHeader(),
       body: form,
     });
 

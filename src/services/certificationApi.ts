@@ -1,30 +1,21 @@
 // Gold Standard Certification API client. Administrator-only; the server
 // enforces that independently on every route.
 
+import { authorizedFetch, describeFailure } from './session';
+
 const API_BASE = '/api/certification';
 
-function authHeaders(): Record<string, string> {
-  const token = localStorage.getItem('court-access-token');
-  return {
-    'Content-Type': 'application/json',
-    ...(token ? { Authorization: `Bearer ${token}` } : {}),
-  };
-}
-
 async function call<T>(path: string, init: RequestInit = {}): Promise<T> {
-  const res = await fetch(`${API_BASE}${path}`, { ...init, headers: authHeaders() });
+  // authorizedFetch renews an expiring token before the request and retries
+  // once if the server rejects it, so a long-running certification session
+  // does not die fifteen minutes after sign-in.
+  const res = await authorizedFetch(`${API_BASE}${path}`, {
+    ...init,
+    headers: { 'Content-Type': 'application/json', ...(init.headers as Record<string, string> | undefined) },
+  });
   const body = await res.text();
 
-  if (!res.ok) {
-    let message = `Request failed with status ${res.status}`;
-    try {
-      const parsed = JSON.parse(body);
-      message = parsed.message || parsed.error || message;
-    } catch {
-      /* keep the status message */
-    }
-    throw new Error(message);
-  }
+  if (!res.ok) throw new Error(await describeFailure(res, body));
 
   return JSON.parse(body) as T;
 }

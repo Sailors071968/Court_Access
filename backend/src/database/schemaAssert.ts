@@ -5,13 +5,41 @@
 // ============================================================================
 
 import { createHash } from 'node:crypto';
-import { readFileSync, readdirSync } from 'node:fs';
-import { resolve, dirname } from 'node:path';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import prisma from '../lib/prisma.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+/**
+ * Locate the prisma directory in whichever layout we are running under.
+ *
+ * From source this file is at backend/src/database/, so prisma/ is two levels
+ * up. In the deployed bundle every module collapses into <release>/dist/index.js
+ * and esbuild derives __dirname from import.meta.url, so prisma/ is one level
+ * up instead. Resolving only the source layout meant the bundle found nothing —
+ * and because every read below is individually guarded, the entire schema check
+ * silently degraded to a connectivity test while still reporting
+ * "Schema locked and matching". A candidate only counts if it actually holds
+ * schema.prisma or migrations/, so an unrelated directory cannot satisfy it.
+ */
+function resolvePrismaDir(): string | null {
+  const candidates = [
+    resolve(__dirname, '../../prisma'), // source: backend/src/database → backend/prisma
+    resolve(__dirname, '../prisma'), // bundle: <release>/dist → <release>/prisma
+    resolve(process.cwd(), 'prisma'),
+  ];
+  for (const dir of candidates) {
+    if (existsSync(join(dir, 'schema.prisma')) || existsSync(join(dir, 'migrations'))) {
+      return dir;
+    }
+  }
+  return null;
+}
+
+const PRISMA_DIR = resolvePrismaDir();
 
 // The expected schema version — bump this when adding new migrations
 export const EXPECTED_SCHEMA_VERSION = '1.0.0';
@@ -21,7 +49,8 @@ export const EXPECTED_SCHEMA_VERSION = '1.0.0';
  * Returns a SHA-256 hash of the concatenated migration contents.
  */
 export function computeMigrationChecksum(): string {
-  const migrationsDir = resolve(__dirname, '../../prisma/migrations');
+  if (!PRISMA_DIR) return 'no-migrations';
+  const migrationsDir = join(PRISMA_DIR, 'migrations');
   const hash = createHash('sha256');
 
   try {
@@ -56,7 +85,8 @@ async function countPendingMigrations(): Promise<{
   appliedCount: number;
   pending: string[];
 }> {
-  const migrationsDir = resolve(__dirname, '../../prisma/migrations');
+  if (!PRISMA_DIR) return { diskCount: 0, appliedCount: 0, pending: [] };
+  const migrationsDir = join(PRISMA_DIR, 'migrations');
 
   // Get migrations on disk
   let diskMigrations: string[] = [];
@@ -173,9 +203,10 @@ export function parseExpectedTables(schemaText: string): ParsedModel[] {
  * datamodel requires that the live database does not have.
  */
 async function findMissingColumns(): Promise<string[]> {
+  if (!PRISMA_DIR) return [];
   let schemaText: string;
   try {
-    schemaText = readFileSync(resolve(__dirname, '../../prisma/schema.prisma'), 'utf-8');
+    schemaText = readFileSync(join(PRISMA_DIR, 'schema.prisma'), 'utf-8');
   } catch {
     return [];
   }

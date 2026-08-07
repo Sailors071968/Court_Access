@@ -1,15 +1,15 @@
 {
   "report": "PRODUCTION_AUDIT",
   "phase": "Program 146 — Production Audit",
-  "generatedAt": "2026-08-06T22:19:49.420Z",
+  "generatedAt": "2026-08-07T13:43:00.594Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 21,
-    "PASS": 20,
-    "FAIL": 0,
+    "PASS": 19,
+    "FAIL": 1,
     "WARNING": 0,
     "UNKNOWN": 1,
-    "passRate": 95.2
+    "passRate": 90.5
   },
   "exercisedApiRoutes": [
     "GET /api/_routes",
@@ -27,7 +27,7 @@
   ],
   "exercisedSpaRoutes": [],
   "routes": 106,
-  "pages": 102,
+  "pages": 103,
   "endpoints": 410,
   "tables": 115,
   "workers": 35,
@@ -36,7 +36,7 @@
     "FIXME": 0,
     "STUB": 5,
     "MOCK": 28,
-    "PLACEHOLDER": 35,
+    "PLACEHOLDER": 36,
     "HACK": 0
   },
   "corpora": {
@@ -48,7 +48,7 @@
       "id": "AUD-ROUTES",
       "name": "Every route element resolves to an imported component",
       "status": "PASS",
-      "detail": "106 routes, 102 page files"
+      "detail": "106 routes, 103 page files"
     },
     {
       "id": "AUD-NAV",
@@ -156,15 +156,15 @@
         "FIXME": 0,
         "STUB": 5,
         "MOCK": 28,
-        "PLACEHOLDER": 35,
+        "PLACEHOLDER": 36,
         "HACK": 0
       }
     },
     {
       "id": "AUD-FABRICATION",
-      "name": "No sample or mock datasets are declared in shipped views",
-      "status": "PASS",
-      "detail": "126 components scanned"
+      "name": "Views declare sample or mock datasets",
+      "status": "FAIL",
+      "detail": "src/pages/dashboard/__Probe.tsx (inline literal dataset rendered to the user)"
     },
     {
       "id": "AUD-DASHBOARDS",

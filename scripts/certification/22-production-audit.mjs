@@ -275,7 +275,12 @@ for (const f of await walk(SRC, (f) => f.endsWith('.tsx'))) {
     const block = m[1];
     if (!/^\s*\{/m.test(block)) continue;
     // Content a user would read as a fact about their case.
-    if (/\b(?:People v\.|Case #|hours ago|days ago|minutes ago|recommendation|deadline approaching)\b/i.test(block)) {
+    const readsAsFact = /\b(?:People v\.|Case #|hours ago|days ago|minutes ago|recommendation|deadline approaching)\b/i.test(block);
+    // A fixed number rendered beside a label is a finding as far as the reader
+    // is concerned. "Prosecution Vulnerabilities: 3" shipped for months.
+    const fixedStatistics =
+      /\blabel\s*:\s*['"][^'"]{4,60}['"]/.test(block) && /\bvalue\s*:\s*['"]?\d/.test(block);
+    if (readsAsFact || fixedStatistics) {
       suspects.push(`${rel} (inline literal dataset rendered to the user)`);
       break;
     }

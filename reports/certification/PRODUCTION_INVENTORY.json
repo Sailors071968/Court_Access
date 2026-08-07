@@ -1,6 +1,6 @@
 {
   "routes": 106,
-  "pages": 102,
+  "pages": 103,
   "endpoints": 410,
   "tables": 115,
   "workers": 35,
@@ -9,7 +9,7 @@
     "FIXME": 0,
     "STUB": 5,
     "MOCK": 28,
-    "PLACEHOLDER": 35,
+    "PLACEHOLDER": 36,
     "HACK": 0
   },
   "corpora": {

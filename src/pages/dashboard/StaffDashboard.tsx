@@ -265,22 +265,32 @@ export function StaffDashboard() {
 
         {/* Right Column */}
         <div className="space-y-6">
-          {/* 3. Case Intelligence Overview */}
+          {/* Counts taken from the action centre, which derives them from
+              records. This replaced four fixed numbers — "Prosecution
+              Vulnerabilities: 3" among them — that appeared identically on
+              every account and read as analysis findings. */}
           <Card>
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Case Intelligence Overview</h2>
-            <div className="space-y-3">
-              {[
-                { label: 'Priority cases', value: '1', color: TEXT_COLORS.danger },
-                { label: 'Prosecution Vulnerabilities', value: '3', color: TEXT_COLORS.warning },
-                { label: 'Sentencing Exposure Flags', value: '2', color: TEXT_COLORS.orange },
-                { label: 'Procedural deadline warnings', value: '1', color: TEXT_COLORS.info },
-              ].map((insight, i) => (
-                <div key={i} className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50">
-                  <span className="text-sm text-gray-700">{insight.label}</span>
-                  <span className={`text-sm font-bold ${insight.color}`}>{insight.value}</span>
-                </div>
-              ))}
-            </div>
+            <h2 className="text-lg font-semibold text-gray-900 mb-4">What needs attention</h2>
+            {!actionCentre ? (
+              <p className="text-sm text-gray-500">Loading…</p>
+            ) : actionCentre.counts.total === 0 ? (
+              <p className="text-sm text-gray-500" data-testid="attention-empty">
+                Nothing outstanding across your cases.
+              </p>
+            ) : (
+              <div className="space-y-3" data-testid="attention-counts">
+                {([
+                  ['Needs attention now', actionCentre.counts.high, TEXT_COLORS.danger],
+                  ['Worth reviewing', actionCentre.counts.medium, TEXT_COLORS.warning],
+                  ['In progress', actionCentre.counts.low, TEXT_COLORS.info],
+                ] as Array<[string, number, string]>).map(([label, value, colour]) => (
+                  <div key={label} className="flex items-center justify-between p-2 rounded-lg hover:bg-gray-50">
+                    <span className="text-sm text-gray-700">{label}</span>
+                    <span className={`text-sm font-bold ${colour}`}>{value}</span>
+                  </div>
+                ))}
+              </div>
+            )}
             <button
               onClick={() => navigate(`/cases/${primaryCase.caseId}/charges`)}
               className="mt-4 inline-flex items-center gap-2 px-4 py-2 bg-amber-50 text-amber-700 rounded-lg text-sm font-medium hover:bg-amber-100 transition-colors w-full justify-center"

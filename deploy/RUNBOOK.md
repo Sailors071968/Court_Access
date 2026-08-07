@@ -165,12 +165,91 @@ echo | openssl s_client -servername courtaccess.net -connect courtaccess.net:443
 
 The **serial** is the reliable signal, not the date alone.
 
-Renewal should now be automatic. Confirm the timer exists so this does not
-recur, at some point before 5 November:
+## B-follow-up · Automatic renewal is **UNKNOWN**, and probably absent
+
+The certificate is current. Whether it will renew itself is a separate question,
+and the evidence points the wrong way.
+
+**What is known:** the previous certificate was allowed to reach two days
+remaining. Let's Encrypt issues for 90 days and certbot renews at 30, so
+**nothing renewed it for at least 28 days**. Today's renewal followed a report
+saying it was about to expire. The most likely explanation is that it was
+renewed by hand, which means **the same thing happens again around 5 November**.
+
+I do not know this. It is inference from a gap in the timeline, not an
+observation, and it is exactly the sort of thing that needs checking rather
+than assuming — including the earlier version of this section, which told you to
+run `systemctl list-timers` as though a systemd timer were the only possibility.
+On Amazon Linux 2023 certbot may come from `dnf`, from `pip`, or from a manual
+install, and those have completely different renewal mechanisms. **A
+pip-installed certbot has none at all.**
+
+### How to find out — read-only
 
 ```bash
-systemctl list-timers | grep -i certbot
+# 1. Where did certbot come from? This determines everything below.
+which certbot
+certbot --version
+rpm -qa | grep -i certbot          # dnf/rpm install
+pip3 list 2>/dev/null | grep -i certbot   # pip install — no renewal mechanism
+ls -la /snap/bin/certbot 2>/dev/null      # snap — renews itself
+
+# 2. systemd timers, under either name used by the packages
+systemctl status certbot-renew.timer 2>/dev/null
+systemctl status certbot.timer 2>/dev/null
+systemctl list-unit-files | grep -i certbot
+systemctl list-timers --all | grep -i certbot
+
+# 3. cron, which is what the RHEL-family packages have often used
+sudo crontab -l 2>/dev/null | grep -i certbot
+sudo ls -la /etc/cron.d/ /etc/cron.daily/ | grep -i certbot
+sudo cat /etc/cron.d/certbot 2>/dev/null
+
+# 4. What the renewal would actually do
+sudo cat /etc/letsencrypt/renewal/courtaccess.net.conf
+
+# 5. Has renewal ever run unattended? The log is the honest answer.
+sudo grep -c "Cert not yet due for renewal\|Renewing an existing cert" /var/log/letsencrypt/letsencrypt.log* 2>/dev/null
+sudo ls -la /var/log/letsencrypt/ | tail -5
 ```
+
+**Reading the result.** Item 4 matters as much as the timer: the renewal config
+records the authenticator. If it is `webroot`, the path must still exist and be
+served; if it is `nginx`, the plugin must still be installed; if it is
+`standalone`, renewal needs port 80 free, which it will not be while nginx is
+running — that is a renewal that succeeds by hand and fails unattended.
+
+Item 5 distinguishes "renewal is configured" from "renewal has ever worked."
+
+### If nothing is configured
+
+Two things are needed, and the second is the one people forget:
+
+```bash
+# A timer or cron entry that runs it
+sudo systemctl enable --now certbot-renew.timer     # if the unit exists
+# otherwise, a cron entry twice daily at a random minute:
+#   0 0,12 * * * root sleep $((RANDOM % 3600)) && certbot renew -q --deploy-hook "systemctl reload nginx"
+
+# A deploy hook, so nginx actually serves the new certificate
+sudo certbot renew --dry-run --deploy-hook "systemctl reload nginx"
+```
+
+**The deploy hook is not optional.** Renewal without it produces exactly what
+happened today: a new certificate on disk that browsers do not receive until
+something reloads nginx. A renewal that silently fails to take effect is
+indistinguishable from no renewal at all, right up to the moment the old
+certificate expires.
+
+### Verify it will work, rather than that it is configured
+
+```bash
+sudo certbot renew --dry-run
+```
+
+This performs a full renewal against the staging endpoint and writes no
+certificate. Configuration proves intent; the dry run proves capability. Both
+are needed, and the deadline is **5 November 2026**.
 
 ---
 
@@ -810,6 +889,22 @@ delete it through the portal. Do not delete files from disk directly — the
 database would still reference them.
 
 ---
+
+---
+
+# Standing operational obligations
+
+Things that are not deployment steps but will cause an outage if nobody owns
+them. Each has a date, because "someone should look at this" is how the
+certificate reached two days.
+
+| By | Obligation | Why | Check |
+|---|---|---|---|
+| **Before 5 Oct 2026** | **Confirm certbot renewal is automatic and takes effect** | Automatic renewal is UNKNOWN and the timeline suggests it is absent — see Stage B follow-up. A month of margin before the 5 Nov expiry leaves room to fix it. | `sudo certbot renew --dry-run`, plus a timer or cron entry, plus a `--deploy-hook` that reloads nginx |
+| **After the first upload** | **Confirm evidence landed outside the release** | `EVIDENCE_UPLOAD_DIR` defaults inside `/var/www/courtaccess`, where the next deployment destroys it | `du -sh` on both the configured path and `$APP/uploads/evidence` |
+| **Weekly** | **Check disk headroom** | Evidence exists twice during upload — staged chunks plus the ingested copy | `/api/health/ready` reports disk; degraded below 10 GB |
+| **Weekly** | **Check the PM2 restart counter** | A crash loop is visible here long before anyone reports an outage | `pm2 list`, the `↺` column |
+| **Before Case 002** | **Verify backups still restore** | A dump that cannot be restored is not a backup, and the migration chain is irreversible | `pg_restore -l` on the newest dump |
 
 # Where each blocker is eliminated
 

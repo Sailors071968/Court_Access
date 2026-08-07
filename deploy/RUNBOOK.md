@@ -1,7 +1,19 @@
 # Deployment execution — CourtAccess 1.0
 
-Program 168. Not an audit. This is the sequence from the current state to
-Case 001 in production.
+Program 168, revised. Not an audit. This is the sequence from the current state
+to Case 001 in production.
+
+> **Revision note.** The first version of this runbook deployed by symlinking
+> `/var/www/courtaccess` to a versioned release directory. **There is no
+> observed evidence that production uses versioned releases or symlinks** —
+> every recorded fact describes `/var/www/courtaccess` as a plain path — so that
+> was a redesign of the deployment model, not a reconciliation with it. It is
+> withdrawn. This version deploys **in place**, into the existing directory,
+> introducing no new architecture.
+>
+> Rehearsing the in-place model exposed two failures the symlink version would
+> also have hit. Both are now handled in Stage D4 and F3. See "Two failures
+> found in rehearsal" near the end.
 
 ## How to read this
 
@@ -22,12 +34,14 @@ before touching the database so a build failure costs nothing.
 ## Session setup — run first, in every new shell
 
 ```bash
-export RELEASE=/opt/courtaccess/releases/$(date +%Y%m%d-%H%M)
 export APP=/var/www/courtaccess
-set -a; . "$APP/.env" 2>/dev/null; set +a
-echo "RELEASE=$RELEASE"
-echo "DATABASE_URL=$(echo "${DATABASE_URL:-<EMPTY>}" | sed -E 's#(//[^:]+):[^@]*@#\1:***@#')"
+export BUILD=/opt/courtaccess-build          # scratch only; never served from
+echo "APP=$APP  BUILD=$BUILD"
 ```
+
+Do **not** source `.env` here. Stage D4 explains why the shell environment at
+the moment of `pm2 reload` decides what the application actually runs with, and
+sourcing it early makes that easy to get wrong by accident.
 
 ---
 
@@ -44,6 +58,23 @@ sudo nginx -T | grep -n 'server_name.*courtaccess'
 sudo nginx -T | grep -nE '^\s*(root|client_max_body_size|proxy_pass|proxy_request_buffering)'
 pm2 startup          # WITHOUT sudo — it prints, it does not install
 ```
+
+**Confirm the deployment model**, since this runbook assumes a plain directory:
+
+```bash
+[ -L "$APP" ] && echo "SYMLINK -> $(readlink -f "$APP")" || echo "plain directory"
+ls -la /var/www/
+ls -la "$APP" | head -15
+ls -d /opt/courtaccess* /var/www/releases /var/www/*/releases 2>/dev/null || echo "no release directories"
+```
+
+**Expected:** `plain directory`, a conventional layout under `$APP` containing
+`dist/`, `node_modules/` and `.env`, and no release directories.
+
+**Stop if:** it reports `SYMLINK`. Production would then already use a versioned
+release model, and Stage F3 should swap the symlink instead of renaming
+directories. Report what it points at before continuing — the rest of this
+runbook assumes in-place.
 
 **Expected:** Node `v22.x` or later. Exactly one application process in
 `pm2 list`; **write its name down**, everything below calls it `$PM2_NAME`. At
@@ -199,17 +230,20 @@ None needed. Nothing was changed. To undo the disk usage,
 Nothing here touches production. The release is inert until Stage F.
 
 ```bash
-mkdir -p /opt/courtaccess/releases
-cd /opt/courtaccess
+sudo mkdir -p "$BUILD" && sudo chown "$(whoami)":"$(whoami)" "$BUILD"
+cd "$BUILD"
 git clone --branch cursor/gold-standard-upload-portal-9f94 \
-  https://github.com/Sailors071968/Court_Access.git build-src 2>/dev/null || \
-  (cd build-src && git fetch origin cursor/gold-standard-upload-portal-9f94 && \
+  https://github.com/Sailors071968/Court_Access.git src 2>/dev/null || \
+  (cd src && git fetch origin cursor/gold-standard-upload-portal-9f94 && \
    git checkout cursor/gold-standard-upload-portal-9f94 && git pull)
-cd /opt/courtaccess/build-src
+cd "$BUILD/src"
 git rev-parse HEAD
 unset NODE_ENV
-bash deploy/build-release.sh "$RELEASE"
+bash deploy/build-release.sh "$BUILD/out"
 ```
+
+`$BUILD` is scratch space. Nothing is ever served from it, and it can be deleted
+after the deployment.
 
 **Expected:** the script reports the assembled release with `dist/index.js`,
 the file count under `dist/public/`, and the `node_modules` size.
@@ -222,11 +256,11 @@ and unsetting it is belt and braces.
 ## D2 [R] · Verify the artifact
 
 ```bash
-sha256sum "$RELEASE/dist/index.js"
-ls -la "$RELEASE/dist/public/index.html" "$RELEASE/dist/build-info.json"
-cat "$RELEASE/dist/build-info.json"
-find "$RELEASE" -name '*.ts' -not -path '*/node_modules/*' | wc -l
-grep -o "CourtAccess build:[^<]*" "$RELEASE/dist/public/index.html"
+sha256sum "$BUILD/out/dist/index.js"
+ls -la "$BUILD/out/dist/public/index.html" "$BUILD/out/dist/build-info.json"
+cat "$BUILD/out/dist/build-info.json"
+find "$BUILD/out" -name '*.ts' -not -path '*/node_modules/*' | wc -l
+grep -o "CourtAccess build:[^<]*" "$BUILD/out/dist/public/index.html"
 ```
 
 **Expected:**
@@ -268,20 +302,51 @@ moves, so the original is still there — leave it until after Stage G.
 
 `sudo rm -rf /var/lib/courtaccess`. Nothing was removed from the old location.
 
-## D4 [R] · Write the release configuration
+## D4 [R] · Build the environment file — read this before writing it
+
+**The application does not read `.env`.** Verified: the 2 MB bundle contains
+**zero** occurrences of `dotenv`. Environment variables reach it only from the
+process PM2 starts it with. A `.env` file on disk is documentation and a source
+for your shell — nothing more.
+
+This matters because of how `pm2 reload --update-env` behaves. **It replaces
+the process environment with the environment of the shell that invokes it.** In
+rehearsal, a stray `PORT=3200` in the invoking shell put the application on port
+3200 while `.env` plainly said otherwise, and the app came up healthy on the
+wrong port — which behind nginx is a silent 502.
+
+So two things must be true at the moment of reload: the file is correct, **and
+the shell has been loaded from it**.
+
+### Capture what the running process already has
+
+Do this before writing anything. PM2 holds the current environment, and
+`--update-env` will discard whatever you fail to carry forward.
 
 ```bash
-sudo cp "$APP/.env" "$RELEASE/.env" 2>/dev/null || touch "$RELEASE/.env"
-chmod 600 "$RELEASE/.env"
+PID=$(pm2 jlist | python3 -c 'import json,sys;print([p["pid"] for p in json.load(sys.stdin) if p["name"]=="'"$PM2_NAME"'"][0])')
+sudo tr '\0' '\n' < /proc/$PID/environ | grep -oE '^[A-Z_]+' | sort > /tmp/current-env-names.txt
+cat /tmp/current-env-names.txt
 ```
 
-Then edit `$RELEASE/.env` so it contains, with **your** values — invent none:
+**Expected:** the names of every variable the running service has. Any name in
+this list that is not in your new file will be **lost** at reload. Values are
+not printed.
+
+### Write the file
+
+```bash
+sudo cp "$APP/.env" ~/rollback/env.backup 2>/dev/null || echo "no existing .env"
+sudo -e "$APP/.env"
+```
+
+Contents, with **your** values — invent none:
 
 ```
 NODE_ENV=production
 PORT=3000
 HOST=127.0.0.1
-DATABASE_URL=<carried forward from the existing .env>
+DATABASE_URL=<carried forward>
 JWT_SECRET=<carried forward — a new value signs every user out>
 JWT_REFRESH_SECRET=<carried forward>
 COOKIE_SECRET=<carried forward>
@@ -291,23 +356,31 @@ CERTIFICATION_STAGING_DIR=/var/lib/courtaccess/staging
 EVIDENCE_UPLOAD_DIR=/var/lib/courtaccess/evidence
 ```
 
+Plus anything from `/tmp/current-env-names.txt` that the service needs and this
+list does not already cover.
+
 Two names matter more than they look.
 
-- **`PORT=3000`.** The RC defaults to 3001. nginx proxies to 3000, so without
-  this every API call returns 502.
+- **`PORT=3000`.** The RC defaults to 3001 (`server.ts:60`). nginx proxies to
+  3000, so without this every API call returns 502.
 - **`EVIDENCE_UPLOAD_DIR`.** Not `EVIDENCE_STORAGE_DIR`, which the application
-  does not read. Setting the wrong name silently sends evidence back to the
-  default inside the application directory.
+  does not read. The wrong name silently sends evidence to the default inside
+  the application directory.
 
 ### Verify
 
 ```bash
-grep -c '=' "$RELEASE/.env"
-grep -oE '^[A-Z_]+' "$RELEASE/.env" | sort
-stat -c '%a' "$RELEASE/.env"      # expect 600
+sudo chmod 600 "$APP/.env"
+stat -c '%a' "$APP/.env"                          # expect 600
+sudo grep -oE '^[A-Z_]+' "$APP/.env" | sort > /tmp/new-env-names.txt
+comm -23 /tmp/current-env-names.txt /tmp/new-env-names.txt
 ```
 
-Confirm `PORT`, `DISABLE_WORKERS` and `EVIDENCE_UPLOAD_DIR` are in the list.
+**Expected:** `600`, and the `comm` output showing only variables you have
+deliberately decided to drop. Anything unexpected there is about to be lost.
+
+Confirm by eye that `PORT`, `DISABLE_WORKERS` and `EVIDENCE_UPLOAD_DIR` are
+present.
 
 ---
 
@@ -318,10 +391,14 @@ Confirm `PORT`, `DISABLE_WORKERS` and `EVIDENCE_UPLOAD_DIR` are in the list.
 **The first irreversible step.** Do not start it without C1 verified.
 
 ```bash
-cd "$RELEASE"
-set -a; . "$RELEASE/.env"; set +a
+cd "$BUILD/src/backend"
+set -a; . "$APP/.env"; set +a
+echo "PORT=$PORT  DB=$(echo "$DATABASE_URL" | sed -E 's#(//[^:]+):[^@]*@#\1:***@#')"
 npx prisma migrate deploy
 ```
+
+The `echo` is there deliberately: it is the first place the sourced environment
+is used, and confirming `PORT=3000` here catches a bad `.env` before Stage F.
 
 **Expected:** `All migrations have been successfully applied.` — or, if A2
 reported a complete schema, `No pending migrations to apply.`
@@ -334,6 +411,7 @@ DDL. Return to A2.
 ### Verify immediately
 
 ```bash
+cd "$BUILD/src/backend"
 psql "$DATABASE_URL" -tAc "select count(*) from information_schema.tables where table_schema='public' and table_type='BASE TABLE';"
 psql "$DATABASE_URL" -tAc "select count(*) filter (where finished_at is not null), count(*) filter (where finished_at is null) from _prisma_migrations;"
 npx prisma migrate diff --from-url "$DATABASE_URL" --to-schema-datamodel prisma/schema.prisma
@@ -362,8 +440,8 @@ Production is untouched. This proves the release works against the real,
 now-migrated database before anything is switched.
 
 ```bash
-cd "$RELEASE"
-set -a; . "$RELEASE/.env"; set +a
+cd "$BUILD/out"
+set -a; . "$APP/.env"; set +a
 PORT=3399 node dist/index.js > /tmp/smoke.log 2>&1 &
 SMOKE=$!
 sleep 5
@@ -437,24 +515,63 @@ sudo cp /tmp/nginx-block.backup <the server-block file>
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
-## F3 [P] · Swap the release
+## F3 [P] · Replace the application, in place
 
-The mechanism below was rehearsed end to end: symlink swap plus `pm2 reload`,
-with **measured downtime of about 1.2 seconds** in fork mode.
+No symlink, no new directory layout. The new `dist` and `node_modules` are
+staged **inside `$APP`** — same filesystem, so the swap is a rename rather than
+a copy — and then renamed into position. Rehearsed end to end: the rename took
+**5 ms**, total downtime **about 2.2 seconds**, and `uploads/` was untouched
+throughout.
+
+### Stage alongside — slow, and the service keeps running
 
 ```bash
-# Turn the application directory into a symlink, preserving every path that
-# PM2 and nginx already record.
-sudo mv "$APP" "$APP.previous"
-sudo ln -sfn "$RELEASE" "$APP"
-ls -la /var/www/ | grep courtaccess
+rm -rf "$APP/dist.new" "$APP/node_modules.new"
+sudo -u "$(stat -c '%U' "$APP")" mkdir -p "$APP/dist.new"
+sudo cp -a "$BUILD/out/dist/." "$APP/dist.new/"
+sudo cp -a "$BUILD/out/node_modules" "$APP/node_modules.new"
+sudo chown -R "$(stat -c '%U:%G' "$APP")" "$APP/dist.new" "$APP/node_modules.new"
 ```
 
-**Expected:** `courtaccess -> /opt/courtaccess/releases/<timestamp>`.
+### Verify the staged copy before switching to it
 
 ```bash
+sha256sum "$APP/dist.new/index.js"
+ls "$APP/dist.new/public/index.html" "$APP/dist.new/build-info.json"
+ls -d "$APP/node_modules.new/@prisma" "$APP/node_modules.new/fastify"
+du -sh "$APP/dist.new" "$APP/node_modules.new"
+```
+
+**Expected:** the checksum matches D2, both files exist, both packages are
+present. **Nothing has been switched yet** — stop here freely if anything is
+off, and `rm -rf` the two `.new` directories.
+
+### Warm the page cache
+
+The staged `node_modules` has just been written and is cold. In rehearsal a
+cold copy pushed restart time from about 2 seconds to about 9.
+
+```bash
+find "$APP/node_modules.new" -type f -exec cat {} + > /dev/null 2>&1
+cat "$APP/dist.new/index.js" > /dev/null
+```
+
+### The swap — four renames, then one reload
+
+```bash
+set -a; . "$APP/.env"; set +a
+echo "PORT=$PORT"          # MUST print 3000 before you continue
+
+sudo mv "$APP/dist" "$APP/dist.previous" && sudo mv "$APP/dist.new" "$APP/dist"
+sudo mv "$APP/node_modules" "$APP/node_modules.previous" && sudo mv "$APP/node_modules.new" "$APP/node_modules"
+
 pm2 reload "$PM2_NAME" --update-env
 ```
+
+**`echo "PORT=$PORT"` is not decoration.** `--update-env` takes the environment
+from *this shell*. If it prints anything but 3000, stop and fix `.env` — the
+application would come up on the wrong port and nginx would return 502 while
+the process looked perfectly healthy.
 
 ### Verify immediately
 
@@ -462,7 +579,11 @@ pm2 reload "$PM2_NAME" --update-env
 sleep 5
 curl -s https://courtaccess.net/api/health
 PID=$(pm2 jlist | python3 -c 'import json,sys;print([p["pid"] for p in json.load(sys.stdin) if p["name"]=="'"$PM2_NAME"'"][0])')
-readlink /proc/$PID/cwd
+sudo tr '\0' '\n' < /proc/$PID/environ | grep -E '^(PORT|NODE_ENV|DISABLE_WORKERS|EVIDENCE_UPLOAD_DIR)='
+sudo tr '\0' '\n' < /proc/$PID/environ | grep -c '^JWT_SECRET='
+sudo ss -lntp | grep ':3000'
+cat "$APP/dist/build-info.json"
+pm2 logs "$PM2_NAME" --lines 40 --nostream | grep -A3 'Schema Assert'
 pm2 list
 ```
 
@@ -470,8 +591,28 @@ pm2 list
 
 - health returns `version: "1.1.0"` — **this is the moment the deployment
   either worked or did not**
-- `/proc/<pid>/cwd` resolves to the new release directory
-- `pm2 list` shows `online` and a restart count of `0`
+- health reports `"environment":"production"`; anything else means cookies are
+  being set without the `secure` flag
+- the running environment shows `PORT=3000`, `DISABLE_WORKERS=true`, and
+  `EVIDENCE_UPLOAD_DIR` pointing outside `$APP`
+- **the `JWT_SECRET` count is `1`**
+- something is listening on 3000
+- `build-info.json` names the commit you built
+- `pm2 list` shows `online`
+
+**The `JWT_SECRET` count is not optional.** If it is `0`, the application
+generated a random signing key at startup and every user will be signed out on
+the next restart — with no error, no warning, and a perfectly healthy-looking
+service. It is the only symptom this failure has. See
+[`ENV_TRACE.md`](ENV_TRACE.md).
+
+**On the Schema Assert lines**, expect `Migrations: 30/30 applied`. If they
+read `Checksum: no-migrations` and `Migrations: 0/0 applied`, the schema
+integrity guard could not find the Prisma directory and has silently degraded
+to a connectivity test — it is **not** verifying the schema, whatever
+"Schema locked and matching" says. That does not block the deployment, since
+Stage E1 already verified the schema directly with `migrate diff`, but do not
+rely on the guard afterwards.
 
 **Watch the restart counter for five minutes.** A crash-looping deploy shows as
 a rising `↺` within seconds, long before anyone reports an outage.
@@ -482,14 +623,22 @@ sleep 300; pm2 list
 
 ### Rollback for F3
 
-Rehearsed at about 1.2 seconds:
+Rehearsed: the renames and reload returned in **198 ms**, with about **1.2
+seconds** of downtime, and the previous build stamp was confirmed restored.
 
 ```bash
-sudo ln -sfn "$APP.previous" "$APP"
+sudo mv "$APP/dist" "$APP/dist.failed" && sudo mv "$APP/dist.previous" "$APP/dist"
+sudo mv "$APP/node_modules" "$APP/node_modules.failed" && sudo mv "$APP/node_modules.previous" "$APP/node_modules"
+set -a; . ~/rollback/env.backup; set +a
 pm2 reload "$PM2_NAME" --update-env
 sleep 5
 curl -s https://courtaccess.net/api/health
+cat "$APP/dist/build-info.json" 2>/dev/null || echo "previous build had no stamp — expected"
 ```
+
+Note the rollback sources the **backed-up** environment, not the new one.
+Restoring the old code with the new environment is a third configuration nobody
+has tested.
 
 If PM2 itself is unhealthy:
 
@@ -501,6 +650,9 @@ pm2 resurrect
 
 Understand what this restores: a health-check stub in front of a frontend that
 cannot sign anyone in. It is a known state, not a working service.
+
+**Leave `dist.previous` and `node_modules.previous` in place** until Stage G
+passes. They are the rollback. Remove them only after Case 001 succeeds.
 
 ## F4 [P] · Persist the process list
 
@@ -665,22 +817,71 @@ database would still reference them.
 
 ## Measured figures
 
-Rehearsed in this workspace, not estimated:
+Rehearsed in this workspace against the real bundle under PM2 7.0.3, not
+estimated:
 
 | | |
 |---|---|
 | Application boot to first `200` | **1.3 s** |
-| Cut-over downtime, `pm2 reload`, fork mode | **~1.2 s** |
-| Rollback downtime, symlink swap back | **~1.2 s** |
+| Rename window during the swap | **5 ms** |
+| Cut-over downtime, in place, warm cache | **~2.2 s** |
+| Cut-over downtime, **cold** `node_modules` | **~9 s** |
+| Rollback downtime | **~1.2 s** |
+| Rollback command wall clock | **198 ms** |
 | PM2 `resurrect` recovery | **3 s** |
 
-The earlier estimate of 20–25 seconds of downtime was wrong and too pessimistic.
+The original estimate of 20–25 seconds was wrong and far too pessimistic. The
+cold-cache figure is why F3 warms the page cache before swapping.
 
-## The two things most likely to go wrong
+## Two failures found in rehearsal
+
+Both were found by rehearsing the in-place model, and both would have hit the
+symlink version too. They are the reason this revision exists.
+
+### 1 · The application never reads `.env`
+
+```
+$ grep -c "dotenv" dist/index.js
+0
+```
+
+Zero occurrences in the 2 MB bundle. Writing `PORT=3000` into `.env` does
+nothing on its own. Environment variables reach the application only through
+the process PM2 starts it with.
+
+### 2 · `pm2 reload --update-env` takes the *shell's* environment
+
+In rehearsal, a stray `PORT=3200` in the invoking shell put the application on
+port 3200 while `.env` said 3510. The process reported healthy. Behind nginx
+that is a silent 502 with a green health check.
+
+```
+PORT in the running process: 3200
+PORT in .env:                3510
+```
+
+Sourcing the file into the shell first produced the correct result:
+
+```
+$ set -a; . "$APP/.env"; set +a
+$ pm2 reload courtaccess --update-env
+PORT in the running process: 3510      health: 200
+```
+
+This is why D4 captures the current process environment before writing the new
+file, and why F3 echoes `PORT` immediately before the reload.
+
+## The three things most likely to go wrong
 
 **Login returns 404 after F3.** The cut-over did not take. Check
-`readlink /proc/<pid>/cwd` — if it still points at `$APP.previous`, PM2 did not
-pick up the swap. `pm2 restart` rather than `reload`.
+`cat "$APP/dist/build-info.json"` — if it is missing or names the old commit,
+the renames did not complete. Re-run them, then `pm2 restart` rather than
+`reload`.
 
-**Every API call returns 502 after F3.** `PORT` is not `3000`. The RC defaults
-to 3001. Fix `$RELEASE/.env` and `pm2 reload "$PM2_NAME" --update-env`.
+**Every API call returns 502 after F3.** The application is on the wrong port.
+Confirm with `sudo tr '\0' '\n' < /proc/<pid>/environ | grep '^PORT='`. Fix
+`.env`, re-source it **in the shell**, and reload again.
+
+**The application will not start and the log names a missing module.** The
+`node_modules` swap did not complete, or the staged copy was truncated. Roll
+back with the F3 procedure and re-stage.

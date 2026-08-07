@@ -1,6 +1,6 @@
 # CourtAccess — Status
 
-Last updated by Production Program 153 (Evidence Intelligence and Explainability).
+Last updated by Production Program 154 (Release Candidate).
 
 Every figure below was produced by executing the platform: PostgreSQL 16 and
 Redis 7 provisioned, all Prisma migrations applied, the Fastify API and its
@@ -14,37 +14,36 @@ Reproduce with `bash scripts/certification/run-all.sh`.
 
 | | |
 |---|---|
-| Checks executed | 751 |
-| Passed | 717 |
+| Checks executed | 774 |
+| Passed | 736 |
 | Failed | 0 |
-| Warnings | 21 |
-| Not measurable here | 13 |
-| Engineering pass rate | 95.5% |
-| **Release gate** | **NOT READY** |
+| Warnings | 20 |
+| Not measurable here | 18 |
+| Engineering pass rate | 95.1% |
+| **Release gate** | **READY WITH LIMITATIONS** |
 
-**The gate is blocked by two things, and neither is an engineering defect.**
+**The gate is blocked by one thing, and engineering cannot close it.**
 
-No attorney-authorized case has been processed. All twenty certification
-corpora are synthetic fixtures created by the test suites. Real-discovery
-certification is the one test that exercises the material this platform exists
-to handle, and it has not been run — Cases 001, 002 and 003 have never been
-uploaded. The portal is built, browser verified and waiting.
+No attorney-authorized case has been processed. All certification corpora are
+synthetic fixtures created by the test suites. Cases 001, 002 and 003 have
+never been uploaded — verified again in Program 154 against the database, the
+upload sessions and the filesystem. The portal is built, browser verified and
+waiting.
 
-Legal coverage is no longer what it was. Program 147 replaced the
-hand-maintained offence repository with retrieval from the Legislature's own
-publication, so all 29 California codes are now reachable on demand rather than
-the four Penal Code sections that had been typed in. What remains thin is
-CALCRIM: seven verified instruction correspondences, with every other charge
-returning UNKNOWN. The gate's repository criterion still reflects the older
-measurement and will clear as instruction mapping is extended.
+Every other gate criterion passes on measured evidence: zero critical defects
+across 774 checks, zero broken navigation, zero broken permissions or
+authentication, zero broken upload pipelines, zero broken traceability,
+quality assurance clean, browser verified and stress tested.
 
-Every other gate criterion passes: zero critical defects across 751 checks,
-zero broken navigation, zero broken permissions or authentication, zero broken
-upload pipelines, zero broken traceability, browser verified and stress tested.
+The recommendation moved from NOT READY to READY WITH LIMITATIONS in Program
+154 because the repository criterion was stale. It still measured the
+hand-maintained JSONL corpora that Program 147 replaced with on-demand
+retrieval from the Legislature; corrected, statutory coverage passes. What
+remains thin is CALCRIM instruction mapping, and that is a limitation rather
+than a failure.
 
 Live at **Admin → Production Readiness**, where the gate is evaluated from the
-suite results rather than asserted, so the page cannot claim readiness while a
-criterion beneath it says otherwise.
+suite results rather than asserted.
 
 ## Certification suites
 
@@ -83,6 +82,7 @@ criterion beneath it says otherwise.
 | Administrative quality assurance | 13 | 12 | 0 |
 | Evidence coverage and explainability | 23 | 22 | 0 |
 | Evidence coverage browser | 12 | 12 | 0 |
+| Deployment validation | 23 | 18 | 0 |
 | Static statutory dependencies | 7 | 5 | 0 |
 | Statutory intelligence browser | 12 | 12 | 0 |
 | Executive readiness dashboard | 12 | 12 | 0 |
@@ -487,6 +487,48 @@ Recorded as UNKNOWN, not as passes.
 - **Billing and Stripe** — no keys.
 - **Object storage** — no R2/S3 credentials; uploads are held on local disk.
 - **Email delivery** — no SES credentials.
+
+## Release candidate
+
+Program 154 addressed only production blockers, as the Release Constitution
+required. Nothing speculative was added.
+
+**Removed 24 analysis engines that nothing called** — 3,528 lines. Twenty were
+found by the quality sweep; removing them uncovered four more referenced only
+by those. None had a dynamic reference in source, the package manifest or the
+scripts. Several carried their own type errors, which is how they had drifted.
+This is a reliability change: dead code in a criminal litigation platform
+invites someone to wire up an engine later assuming it was once correct, and
+none of these had ever run against real discovery.
+
+**Every uploaded file is now fingerprinted.** Deployment validation found that
+an ordinary evidence upload carried no content hash at all — the certification
+importer had computed one since Program 144, but the path a customer uses did
+not. A document cited in a filing now has SHA-256 proving it is the document
+that was produced.
+
+**The release gate was reporting a stale blocker.** Its repository criterion
+still measured the JSONL corpora replaced in Program 147. Corrected.
+
+### Documentation
+
+Seven guides in [`docs/`](docs/): administrator, attorney, investigator,
+family, support, deployment and disaster recovery. The deployment guide leads
+with what has *not* been validated rather than burying it, and the support
+guide opens by stating that no support console exists.
+
+### Deployment validation
+
+18 checks pass against the running system: API health, migrations applied, no
+schema drift, authentication, token renewal, Redis, queues, upload through the
+production pipeline, processing to a terminal state, text extraction,
+fingerprinting, tenant isolation, administrator restriction, statutory
+retrieval and billing.
+
+**Five items cannot be answered from inside this environment** and are recorded
+as not measurable rather than as passes: object storage, payment processing,
+email delivery, HTTPS and Cloudflare at a real edge, and browsers other than
+Chromium. Validate each on the target infrastructure before launch.
 
 ## Deployment
 

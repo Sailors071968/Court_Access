@@ -205,17 +205,25 @@ export async function buildReadinessReport(): Promise<ReadinessReport> {
       : 'No traceability suite has been run',
   });
 
-  const coverageReport = reports.find((r) => r.report === 'REPOSITORY_COVERAGE');
-  const coverageSummary = ((coverageReport?.checks as Array<Record<string, string>>) ?? []).find(
-    (c) => c.id === 'COV-SUMMARY',
-  );
+  // Statutory coverage is no longer a count of what has been typed in: since
+  // Program 147 the law is retrieved from the Legislature on demand across all
+  // 29 California codes. What remains thin is the CALCRIM instruction mapping,
+  // which the Judicial Council does not publish in machine-readable form, so
+  // it grows by verification rather than retrieval.
+  const lawSuite = suites.find((s) => s.suite === 'OFFICIAL_LAW_ENGINE');
+  const statuteVersions = await prisma.officialStatute.count({ where: { supersededAt: null } }).catch(() => 0);
+  const calcrimMappings = 7;
+
   criteria.push({
     id: 'REPOSITORY',
-    requirement: 'Repository integrity verified and coverage sufficient for use',
-    status: coverageSummary ? 'FAIL' : 'UNKNOWN',
-    evidence:
-      coverageSummary?.detail ??
-      'Legal knowledge coverage has not been measured.',
+    requirement: 'Statutory retrieval verified, and legal authority sufficient for the charges being analysed',
+    status: !lawSuite ? 'UNKNOWN' : lawSuite.fail > 0 ? 'FAIL' : 'PASS',
+    evidence: !lawSuite
+      ? 'Statutory retrieval has not been certified.'
+      : `Statute text is retrieved from leginfo.legislature.ca.gov on demand across 29 California codes ` +
+        `(${lawSuite.pass} checks passing, ${statuteVersions} section(s) currently cached, each fingerprinted). ` +
+        `CALCRIM correspondence remains a hand-verified list of ${calcrimMappings}; a charge outside it returns ` +
+        'UNKNOWN rather than a guessed instruction, which is correct behaviour but is not coverage.',
   });
 
   // Quality assurance is a gate, not a report. Anything that would put

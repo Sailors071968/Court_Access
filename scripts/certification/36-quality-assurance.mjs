@@ -284,6 +284,41 @@ orphans.length === 0
     );
 
 // ---------------------------------------------------------------------------
+// A test fixture must never be counted as attorney-authorized discovery
+//
+// The gate used to identify real cases by excluding known-test prefixes, which
+// failed open: an acceptance rehearsal using a new prefix was counted as two
+// certified cases. It now counts only corpora explicitly attested, so a fixture
+// created by any suite is inert by default.
+// ---------------------------------------------------------------------------
+
+const allCorpora = await prisma.certificationCase.findMany({
+  select: { reference: true, authorized: true, authorizationNote: true },
+});
+const wronglyAuthorized = allCorpora.filter(
+  (c) => c.authorized && !c.authorizationNote,
+);
+const fixturesCounted = allCorpora.filter(
+  (c) => c.authorized && /^(SYN|UI|UP|PORTAL|STR|CONC|INT|PDF|RESUME|AUD|ACC|COV|LOS|QA)/.test(c.reference),
+);
+
+wronglyAuthorized.length === 0
+  ? results.pass('QA-14', 'No corpus counts as authorized without a recorded attestation', `${allCorpora.length} corpora checked`)
+  : results.fail('QA-14', 'A corpus is marked authorized with no attestation', wronglyAuthorized.map((c) => c.reference).join(', '));
+
+fixturesCounted.length === 0
+  ? results.pass(
+      'QA-15',
+      'No corpus created by a certification suite is counted as attorney-authorized discovery',
+      `${allCorpora.filter((c) => !c.authorized).length} corpora inert by default`,
+    )
+  : results.fail(
+      'QA-15',
+      'A test fixture is being counted as real criminal discovery',
+      fixturesCounted.map((c) => c.reference).join(', '),
+    );
+
+// ---------------------------------------------------------------------------
 // The verdict, written where the release gate can read it
 // ---------------------------------------------------------------------------
 

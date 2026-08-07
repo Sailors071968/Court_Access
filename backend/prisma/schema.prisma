@@ -2498,6 +2498,16 @@ model CertificationCase {
   tenantId            String
   importedById        String
   status              String   @default("importing") // importing | imported | failed
+  /** Whether this corpus is attorney-authorized discovery rather than a test
+   *  fixture. Defaults to false and must be attested explicitly: the release
+   *  gate counts only authorized corpora, and identifying them by excluding
+   *  known-test prefixes fails open the moment a new prefix appears. */
+  authorized          Boolean  @default(false)
+  authorizedById      String?
+  authorizedAt        DateTime?
+  /** Who authorised the use of this material, in their words. */
+  authorizationNote   String?
+
   /** SHA-256 over the sorted per-file hashes; identifies the corpus itself. */
   corpusHash          String?
   fileCount           Int      @default(0)

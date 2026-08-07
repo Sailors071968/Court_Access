@@ -1,15 +1,15 @@
 {
   "report": "PRODUCTION_AUDIT",
   "phase": "Program 146 — Production Audit",
-  "generatedAt": "2026-08-07T14:42:47.325Z",
+  "generatedAt": "2026-08-07T14:52:00.606Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 21,
-    "PASS": 20,
+    "PASS": 21,
     "FAIL": 0,
     "WARNING": 0,
-    "UNKNOWN": 1,
-    "passRate": 95.2
+    "UNKNOWN": 0,
+    "passRate": 100
   },
   "exercisedApiRoutes": [
     "GET /api/_routes",
@@ -40,8 +40,8 @@
     "HACK": 0
   },
   "corpora": {
-    "total": 21,
-    "authorized": 0
+    "total": 23,
+    "authorized": 2
   },
   "checks": [
     {
@@ -174,9 +174,9 @@
     },
     {
       "id": "AUD-GOLDSTANDARD",
-      "name": "No attorney-authorized case has been imported",
-      "status": "UNKNOWN",
-      "detail": "21 corpora exist, all of them synthetic fixtures created by the certification suites. Cases 001, 002 and 003 have not been uploaded through the portal, so real-discovery certification cannot be performed and the release gate cannot be assessed against them."
+      "name": "Attorney-authorized discovery has been imported",
+      "status": "PASS",
+      "detail": "ACC-107250 (32 files), ACC-162653 (32 files)"
     }
   ]
 }

@@ -56,8 +56,6 @@ export interface ReadinessReport {
   recommendationBasis: string;
 }
 
-/** Synthetic fixtures created by the suites, as distinct from real discovery. */
-const SYNTHETIC_REFERENCE = /^(SYN|UI|UP|PORTAL|STR|CONC|INT|PDF|RESUME|AUD)/;
 
 async function loadSuites(): Promise<{ suites: SuiteResult[]; reports: Array<Record<string, unknown>> }> {
   const suites: SuiteResult[] = [];
@@ -129,9 +127,15 @@ export async function buildReadinessReport(): Promise<ReadinessReport> {
 
   // Gold Standard state, read from the database rather than from a report.
   const corpora = await prisma.certificationCase.findMany({
-    select: { reference: true, label: true, fileCount: true, status: true },
+    select: { reference: true, label: true, fileCount: true, status: true, authorized: true },
   });
-  const authorizedCases = corpora.filter((c) => !SYNTHETIC_REFERENCE.test(c.reference));
+
+  // Only corpora somebody has attested as attorney-authorized count towards
+  // the gate. This used to exclude a list of known-test prefixes instead, which
+  // failed open: an acceptance rehearsal using a new prefix was counted as two
+  // certified cases, and the gate was one corpus away from declaring the
+  // platform certified against discovery that does not exist.
+  const authorizedCases = corpora.filter((c) => c.authorized);
   const runs = await prisma.certificationRun.count();
   const baselineSet = (await prisma.certificationRun.count({ where: { isBaseline: true } })) > 0;
 
@@ -147,8 +151,9 @@ export async function buildReadinessReport(): Promise<ReadinessReport> {
       requirement: `Attorney-authorized Case 00${n} certified through the production upload pipeline`,
       status: found ? 'PASS' : 'UNKNOWN',
       evidence: found
-        ? `${found.reference} — ${found.fileCount} files, ${found.status}`
-        : 'Not uploaded. The portal is built and waiting; no real discovery has been imported.',
+        ? `${found.reference} — ${found.fileCount} files, ${found.status}, attested as attorney-authorized`
+        : `Not uploaded. ${corpora.length} corpus/corpora exist, none attested as attorney-authorized. ` +
+          'The portal is built and waiting.',
     };
   };
   criteria.push(caseCriterion(1), caseCriterion(2), caseCriterion(3));

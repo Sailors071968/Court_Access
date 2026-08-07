@@ -132,6 +132,7 @@ export async function registerCertificationRoutes(app: FastifyInstance): Promise
       reference?: string;
       label?: string;
       description?: string;
+      authorizationNote?: string;
       sourceDirectory?: string;
       expandArchives?: boolean;
     };
@@ -347,6 +348,62 @@ export async function registerCertificationRoutes(app: FastifyInstance): Promise
         message: `The readiness report could not be assembled: ${(err as Error).message}`,
       });
     }
+  });
+
+  // -------------------------------------------------------------------------
+  // Attest a corpus as attorney-authorized
+  //
+  // The release gate counts only corpora attested here. It is deliberately a
+  // separate, explicit act: a corpus is a test fixture until somebody with
+  // authority says otherwise and records who authorised the use of the
+  // material.
+  // -------------------------------------------------------------------------
+  app.post('/api/certification/cases/:certificationCaseId/authorize', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!requireAdministrator(request, reply)) return;
+    const { certificationCaseId } = request.params as { certificationCaseId: string };
+    const body = (request.body ?? {}) as { authorizationNote?: string; authorized?: boolean };
+
+    const corpus = await prisma.certificationCase.findUnique({ where: { certificationCaseId } });
+    if (!corpus || corpus.tenantId !== request.user!.tenantId) {
+      return reply.code(404).send({ error: 'Not Found', message: 'No such certification corpus.' });
+    }
+
+    // Withdrawing an attestation needs no note; making one does.
+    if (body.authorized === false) {
+      await prisma.certificationCase.update({
+        where: { certificationCaseId },
+        data: { authorized: false, authorizedAt: null, authorizedById: null, authorizationNote: null },
+      });
+      return reply.send({ certificationCaseId, authorized: false, message: 'Attestation withdrawn.' });
+    }
+
+    const note = body.authorizationNote?.trim();
+    if (!note || note.length < 20) {
+      return reply.code(400).send({
+        error: 'Attestation required',
+        message:
+          'Record who authorised the use of this discovery and on what basis, in at least twenty characters. ' +
+          'The release gate treats an attested corpus as real criminal material, so the attestation is the only ' +
+          'thing standing between a test fixture and a certification claim.',
+      });
+    }
+
+    await prisma.certificationCase.update({
+      where: { certificationCaseId },
+      data: {
+        authorized: true,
+        authorizedAt: new Date(),
+        authorizedById: request.user!.userId,
+        authorizationNote: note,
+      },
+    });
+
+    return reply.send({
+      certificationCaseId,
+      reference: corpus.reference,
+      authorized: true,
+      message: 'Attested. This corpus now counts towards the release gate.',
+    });
   });
 
   console.log('[Server] Gold Standard Certification routes registered (administrator only): /api/certification/*');

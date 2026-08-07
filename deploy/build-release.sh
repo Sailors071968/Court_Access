@@ -51,7 +51,16 @@ cp -a "$ROOT/dist/." "$OUT/dist/public/"
 # The bundle keeps node_modules external, so they ship with it, along with the
 # Prisma schema and migrations the runtime and deployment need.
 cp -a "$ROOT/backend/node_modules" "$OUT/node_modules"
-cp -a "$ROOT/backend/prisma" "$OUT/prisma"
+
+# Only what the release actually needs: schemaAssert reads schema.prisma for
+# drift detection and migrations/ for the checksum and pending count, and
+# `prisma migrate deploy` needs both. Copying the whole prisma/ tree also
+# shipped prisma/schema/, which holds CI-only TypeScript tooling — source
+# files have no business in a production release.
+mkdir -p "$OUT/prisma"
+cp "$ROOT/backend/prisma/schema.prisma" "$OUT/prisma/schema.prisma"
+cp -a "$ROOT/backend/prisma/migrations" "$OUT/prisma/migrations"
+
 cp "$ROOT/backend/package.json" "$OUT/package.json"
 
 # A release is not a git checkout, so the commit has to travel with it. Without

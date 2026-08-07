@@ -1,4 +1,42 @@
-# Staging deployment
+# Deployment
+
+**Read [AUDIT.md](AUDIT.md) first.** It records what is running on
+courtaccess.net today: a June frontend in front of a health check that answers
+nothing else. Registration, sign-in and upload all return 404 and have done for
+about six weeks.
+
+## One command
+
+On the EC2 instance, as a user with sudo:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/Sailors071968/Court_Access/cursor/gold-standard-upload-portal-9f94/deploy/bootstrap-ec2.sh \
+  | bash -s -- --domain courtaccess.net --email you@example.com
+```
+
+It installs Docker if missing, fetches this branch, generates secrets, brings
+up the stack, applies migrations, creates the administrator, points the host's
+nginx at the application, requests a certificate, then **restarts everything
+and re-checks** — because a deployment that survives a reboot should be tested
+rather than claimed. It prints the administrator credentials at the end and is
+safe to re-run.
+
+## If you would rather I did it
+
+Add these as Cloud Agent secrets in the Cursor dashboard and I can deploy
+without you touching the box:
+
+| Secret | What it is |
+|---|---|
+| `DEPLOY_HOST` | The EC2 address, e.g. `44.209.225.79` |
+| `DEPLOY_USER` | The SSH user, e.g. `ubuntu` |
+| `DEPLOY_SSH_KEY` | The private key, whole file including the header and footer lines |
+
+Those are the same three the existing frontend workflow already uses. With them
+I can run the bootstrap, verify it from outside, and hand you back a working
+URL rather than instructions.
+
+## The compose stack
 
 Brings up PostgreSQL, Redis, the API, the frontend and a nightly backup on one
 host, with data on named volumes so it survives a reboot.
@@ -7,7 +45,7 @@ This is the piece that did not exist. The GitHub workflow deploys the frontend
 only, which is why `courtaccess.net` serves a bundle whose API predates this
 codebase.
 
-## First run
+## Running it by hand instead
 
 ```bash
 cd deploy

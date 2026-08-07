@@ -583,6 +583,24 @@ Chromium. Validate each on the target infrastructure before launch.
 
 ## Deployment
 
+**courtaccess.net has no working backend.** Audited by remote probe on 7 August
+2026: nginx serves a frontend bundle dated 26 June, and `/api/health` answers
+`{"status":"ok"}` — but every other route returns 404. Registration, sign-in,
+cases, evidence upload, certification, statutory retrieval and billing are all
+404. A visitor cannot sign in. The health endpoint has been up 46 days, so the
+site has been in that state for roughly six weeks.
+
+The cause is that **no backend deployment path has ever existed**. The GitHub
+workflow deploys the frontend only — its trigger paths cover `src/`,
+`index.html` and `vite.config.ts`, nothing under `backend/` — and it fires on
+pushes to `dev`, which this branch has not been merged into. There is no Cloudflare
+in front of the host; DNS points straight at the EC2 address.
+
+Full findings in [`deploy/AUDIT.md`](deploy/AUDIT.md).
+[`deploy/bootstrap-ec2.sh`](deploy/bootstrap-ec2.sh) deploys the whole platform
+in one command and verifies it survives a restart. It has not been run: this
+environment has no credentials for the host.
+
 Nothing on this branch is deployed and there is no permanent staging URL: this
 environment has no public ingress or deployment credentials. Read-only checks
 show `courtaccess.net` serving a 26 June 2026 bundle with an API whose health

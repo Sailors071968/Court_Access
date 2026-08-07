@@ -96,6 +96,17 @@ export async function registerUploadPortalRoutes(app: FastifyInstance): Promise<
       if (!Number.isFinite(declaredOffset) || declaredOffset < 0) {
         return reply.code(400).send({ error: 'Bad Request', message: 'offset must be a byte position.' });
       }
+      // totalSize is the only thing that lets the server prove the transfer
+      // arrived whole. Missing or unparseable, parseInt yields 0 or NaN and the
+      // completion check silently does nothing — so the upload would be
+      // accepted, hashed, and its hash recorded as provenance for bytes nobody
+      // verified. Refuse rather than accept an unverifiable file.
+      if (!Number.isFinite(totalSize) || totalSize <= 0) {
+        return reply.code(400).send({
+          error: 'Bad Request',
+          message: 'totalSize must be the full byte length of the file, so the server can verify the transfer arrived complete.',
+        });
+      }
 
       const result = await receiveChunk({
         uploadSessionId,

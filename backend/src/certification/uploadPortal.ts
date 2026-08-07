@@ -100,6 +100,31 @@ export interface ChunkResult {
  * a mismatch is reported with the true offset rather than silently corrupting
  * the file by appending in the wrong place.
  */
+/**
+ * Serialises work per staging path.
+ *
+ * Entries are removed once a call is the tail of its chain, so a long-running
+ * session cannot grow the map without bound. A rejection is isolated: the
+ * stored chain is always a settled-safe promise, so one failed chunk does not
+ * poison every later chunk for the same file.
+ */
+const chainByPath = new Map<string, Promise<unknown>>();
+
+async function withPathLock<T>(key: string, fn: () => Promise<T>): Promise<T> {
+  const prior = chainByPath.get(key) ?? Promise.resolve();
+  const run = prior.then(fn, fn);
+  const guard = run.then(
+    () => undefined,
+    () => undefined,
+  );
+  chainByPath.set(key, guard);
+  try {
+    return await run;
+  } finally {
+    if (chainByPath.get(key) === guard) chainByPath.delete(key);
+  }
+}
+
 export async function receiveChunk(params: {
   uploadSessionId: string;
   relativePath: string;
@@ -141,45 +166,81 @@ export async function receiveChunk(params: {
 
   await fs.mkdir(path.dirname(target), { recursive: true });
 
-  const current = await fs.stat(target).then((s) => s.size).catch(() => 0);
-  if (current !== params.declaredOffset) {
-    // Tell the browser where the file really stands so it can resume correctly.
-    return {
-      ok: false,
-      status: 409,
-      error: 'Offset mismatch',
-      message:
-        `The server holds ${current} byte(s) of "${params.relativePath}" but the chunk was sent for offset ` +
-        `${params.declaredOffset}. Resume from ${current}.`,
-      offset: current,
-    };
-  }
+  // Reading the size, comparing it to the declared offset, and then appending
+  // is a check-then-act sequence. Two chunks for the same file in flight at
+  // once — most realistically a client retrying a chunk that actually
+  // succeeded — could both pass the check and both append, interleaving or
+  // duplicating bytes. Serialising per file makes the check and the append
+  // atomic with respect to each other, which is the only way the offset means
+  // anything.
+  return withPathLock(target, async () => {
+    const current = await fs.stat(target).then((s) => s.size).catch(() => 0);
+    if (current !== params.declaredOffset) {
+      // Tell the browser where the file really stands so it can resume correctly.
+      return {
+        ok: false,
+        status: 409,
+        error: 'Offset mismatch',
+        message:
+          `The server holds ${current} byte(s) of "${params.relativePath}" but the chunk was sent for offset ` +
+          `${params.declaredOffset}. Resume from ${current}.`,
+        offset: current,
+      };
+    }
 
-  const writeStream = createWriteStream(target, { flags: 'a' });
-  await pipeline(params.stream, writeStream);
-
-  const offset = await fs.stat(target).then((s) => s.size).catch(() => 0);
-
-  if (params.isFinal) {
-    if (params.totalSize > 0 && offset !== params.totalSize) {
+    // Never let a file grow past what was declared, even mid-transfer. Without
+    // this the overrun is only noticed on the final chunk, and only if one
+    // arrives at all.
+    if (params.totalSize > 0 && current + 1 > params.totalSize) {
       return {
         ok: false,
         status: 422,
-        error: 'Incomplete file',
+        error: 'Overrun',
         message:
-          `"${params.relativePath}" finished at ${offset} bytes but was declared as ${params.totalSize}. ` +
-          'The transfer was truncated; the file needs to be sent again.',
+          `"${params.relativePath}" already holds ${current} byte(s) of a declared ${params.totalSize}. ` +
+          'The staged file is inconsistent and needs to be sent again.',
+        offset: current,
+      };
+    }
+
+    const writeStream = createWriteStream(target, { flags: 'a' });
+    await pipeline(params.stream, writeStream);
+
+    const offset = await fs.stat(target).then((s) => s.size).catch(() => 0);
+
+    if (params.totalSize > 0 && offset > params.totalSize) {
+      return {
+        ok: false,
+        status: 422,
+        error: 'Overrun',
+        message:
+          `"${params.relativePath}" reached ${offset} bytes but was declared as ${params.totalSize}. ` +
+          'The transfer is inconsistent and the file needs to be sent again.',
         offset,
       };
     }
-    // Preserve the modification time from the operator's machine.
-    if (params.lastModifiedMs && Number.isFinite(params.lastModifiedMs)) {
-      const when = new Date(params.lastModifiedMs);
-      await fs.utimes(target, when, when).catch(() => {});
-    }
-  }
 
-  return { ok: true, status: 200, offset, complete: params.isFinal };
+    if (params.isFinal) {
+      if (params.totalSize > 0 && offset !== params.totalSize) {
+        return {
+          ok: false,
+          status: 422,
+          error: 'Incomplete file',
+          message:
+            `"${params.relativePath}" finished at ${offset} bytes but was declared as ${params.totalSize}. ` +
+            'The transfer was truncated; the file needs to be sent again.',
+          offset,
+        };
+      }
+      // Preserve the modification time from the operator's machine.
+      if (params.lastModifiedMs && Number.isFinite(params.lastModifiedMs)) {
+        const when = new Date(params.lastModifiedMs);
+        await fs.utimes(target, when, when).catch(() => {});
+      }
+    }
+
+    return { ok: true, status: 200, offset, complete: params.isFinal };
+  });
 }
 
 export interface StagedFile {

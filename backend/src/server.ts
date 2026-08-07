@@ -57,10 +57,13 @@ import { registerDoctrineRoutes } from './doctrine/doctrineRoutes.ts';
 import { registerProductionGatesRoutes } from './productionGates/productionGatesRoutes.js';
 import { registerProductionOperationsRoutes } from './productionOperations/productionOperationsRoutes.js';
 import { validateEnvironment, printValidationReport } from './startup/validateEnvironment.js';
+import { getBuildInfo, describeBuild } from './lib/buildInfo.js';
 import prisma from './lib/prisma.js';
 
 /** Held so the signal handlers can close the server they did not create. */
 let appRef: FastifyInstance | null = null;
+
+const APP_VERSION = '1.1.0';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -83,6 +86,12 @@ process.on('uncaughtException', (err) => {
 });
 
 async function startServer() {
+  // Say which build this is before anything else. Every incident starts with
+  // that question, and until now neither the log nor the API could answer it.
+  const build = await getBuildInfo();
+  console.log(`[Server] CourtAccess ${APP_VERSION} — ${describeBuild(build)}`);
+  console.log(`[Server] node ${process.versions.node}, pid ${process.pid}`);
+
   // Configuration first: a missing secret or an unwritable upload directory is
   // cheaper to report here than to discover from its symptoms later.
   const validation = validateEnvironment();
@@ -215,12 +224,21 @@ async function startServer() {
   await registerSecurityLogging(app);
 
   // Health check
+  // Liveness. Deliberately does no I/O: its job is to answer "is this process
+  // serving?" for the supervisor, and a check that fails when a dependency
+  // blips turns a recoverable outage into a restart storm. Readiness at
+  // /api/health/ready is the one that reports dependency state.
+  //
+  // `commit` is the addition that matters operationally — after a deployment
+  // this is how you confirm which build is actually live.
   app.get('/api/health', async () => ({
     status: 'ok',
     timestamp: new Date().toISOString(),
-    version: '1.1.0',
+    version: APP_VERSION,
+    commit: build.commit,
     service: 'court-access-backend',
     environment: process.env.NODE_ENV || 'development',
+    uptimeSeconds: Math.floor(process.uptime()),
   }));
 
   // Register route modules

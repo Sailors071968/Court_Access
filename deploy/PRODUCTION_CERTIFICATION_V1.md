@@ -2,8 +2,14 @@
 
 **Certification date:** 7 August 2026
 **Branch:** `cursor/gold-standard-upload-portal-9f94`
-**Commit:** `4bdaca19b171cb8a920a50a4a6eb19e2733ed724`
+**Certified commit:** `4bdaca19b171cb8a920a50a4a6eb19e2733ed724`
 **Programs consolidated:** 158–166
+
+Every artifact figure below was measured at `4bdaca1`. Commits after it change
+only files under `deploy/`, so `dist/index.js` still hashes to the same value —
+re-verified after this document was written. The frontend build stamp embeds
+whichever commit it is built from, so expect it to name the commit you deploy,
+not necessarily `4bdaca1`.
 
 This is the permanent deployment record. Where it disagrees with any earlier
 document in `deploy/`, this one governs.
@@ -631,8 +637,10 @@ ls "$RELEASE/dist/public/index.html" "$RELEASE/dist/build-info.json"
 find "$RELEASE" -name '*.ts' -not -path '*/node_modules/*' | wc -l   # expect 0
 ```
 
-**Failure condition:** a differing checksum means the build did not come from
-this commit. Stop.
+**Failure condition:** a differing checksum means the backend bundle did not
+come from the certified commit. Stop. The checksum holds for any commit that
+changes only `deploy/`; it will legitimately differ once `backend/src` changes,
+and re-certification is then required.
 
 ## Stage 6 — Configuration
 

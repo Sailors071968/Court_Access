@@ -7,7 +7,12 @@
 # nothing else. This brings up everything: PostgreSQL, Redis, the API, the
 # frontend and nightly backups, all on named volumes so they survive a reboot.
 #
-# Run it on the EC2 instance as a user with sudo:
+# TARGETS DEBIAN/UBUNTU ON A FRESH HOST. It calls apt-get and installs Docker.
+# The existing courtaccess.net host runs Amazon Linux 2023 with an established
+# layout under /var/www/courtaccess — do not run this against it. Use
+# deploy/DEPLOYMENT_PLAN.md for that host.
+#
+# Run it on a fresh EC2 instance as a user with sudo:
 #
 #   curl -fsSL https://raw.githubusercontent.com/Sailors071968/Court_Access/cursor/gold-standard-upload-portal-9f94/deploy/bootstrap-ec2.sh | bash -s -- --domain courtaccess.net --email you@example.com
 #

@@ -1,5 +1,11 @@
 # Deployment
 
+> **For the existing production host, read
+> [DEPLOYMENT_PLAN.md](DEPLOYMENT_PLAN.md).** That host runs Amazon Linux 2023
+> with an established layout. `bootstrap-ec2.sh` below targets Debian/Ubuntu
+> with `apt-get` and Docker, and **must not be run there.** It remains valid
+> for a fresh host only.
+
 **Read [AUDIT.md](AUDIT.md) first.** It records what is running on
 courtaccess.net today: a June frontend in front of a health check that answers
 nothing else. Registration, sign-in and upload all return 404 and have done for

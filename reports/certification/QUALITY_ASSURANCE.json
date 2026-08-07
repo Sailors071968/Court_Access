@@ -1,15 +1,15 @@
 {
   "report": "QUALITY_ASSURANCE",
   "phase": "Program 153 — Administrative Quality Assurance",
-  "generatedAt": "2026-08-07T14:24:34.728Z",
+  "generatedAt": "2026-08-07T14:32:41.548Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 13,
-    "PASS": 12,
+    "PASS": 13,
     "FAIL": 0,
-    "WARNING": 1,
+    "WARNING": 0,
     "UNKNOWN": 0,
-    "passRate": 92.3
+    "passRate": 100
   },
   "exercisedApiRoutes": [
     "GET /api/cases/:id/defense-themes",
@@ -30,7 +30,7 @@
     "uncited": []
   },
   "componentsScanned": 129,
-  "backendModulesScanned": 433,
+  "backendModulesScanned": 409,
   "checks": [
     {
       "id": "QA-01",
@@ -100,9 +100,9 @@
     },
     {
       "id": "QA-12",
-      "name": "An analysis engine is shipped that nothing calls",
-      "status": "WARNING",
-      "detail": "20: backend/src/exhibits/objectPlacementService.ts, backend/src/exhibits/terrain/terrainGenerator.ts, backend/src/services/actorExtractionService.ts, backend/src/services/actorResolutionService.ts, backend/src/services/caseAnalysisCacheService.ts. Dead code invites someone to wire it up later without knowing whether it was ever correct."
+      "name": "No analysis engine is shipped that nothing calls",
+      "status": "PASS",
+      "detail": "409 modules scanned"
     },
     {
       "id": "QA-13",

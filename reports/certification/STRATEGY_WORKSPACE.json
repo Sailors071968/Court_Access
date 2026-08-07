@@ -1,7 +1,7 @@
 {
   "report": "STRATEGY_WORKSPACE",
   "phase": "Program 150 — Defence Strategy and Motion Intelligence",
-  "generatedAt": "2026-08-07T14:24:36.234Z",
+  "generatedAt": "2026-08-07T14:32:42.175Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 30,
@@ -20,7 +20,7 @@
     "POST /api/cases"
   ],
   "exercisedSpaRoutes": [],
-  "caseId": "06bb2d45-0778-42a4-82eb-d8430219e2fb",
+  "caseId": "46b46b46-998c-4d5d-80d7-8d0aaf3a384d",
   "checks": [
     {
       "id": "STR-01",

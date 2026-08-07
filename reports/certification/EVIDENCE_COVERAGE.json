@@ -1,7 +1,7 @@
 {
   "report": "EVIDENCE_COVERAGE",
   "phase": "Program 153 — Evidence Coverage and Explainability",
-  "generatedAt": "2026-08-07T14:20:49.725Z",
+  "generatedAt": "2026-08-07T14:32:45.295Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 23,
@@ -21,7 +21,7 @@
     "POST /api/cases/:id/charges/documents"
   ],
   "exercisedSpaRoutes": [],
-  "caseId": "1a415917-06d5-4b0b-8024-f2609d90a765",
+  "caseId": "6a96695d-7106-404b-8c6c-98d9ed654937",
   "checks": [
     {
       "id": "COV-01",

@@ -1,6 +1,6 @@
 # CourtAccess — Status
 
-Last updated by Production Program 150 (Defence Strategy and Litigation Intelligence).
+Last updated by Production Program 151 (Litigation Operating System).
 
 Every figure below was produced by executing the platform: PostgreSQL 16 and
 Redis 7 provisioned, all Prisma migrations applied, the Fastify API and its
@@ -14,12 +14,12 @@ Reproduce with `bash scripts/certification/run-all.sh`.
 
 | | |
 |---|---|
-| Checks executed | 662 |
-| Passed | 630 |
+| Checks executed | 703 |
+| Passed | 671 |
 | Failed | 0 |
 | Warnings | 19 |
 | Not measurable here | 13 |
-| Engineering pass rate | 95.2% |
+| Engineering pass rate | 95.4% |
 | **Release gate** | **NOT READY** |
 
 **The gate is blocked by two things, and neither is an engineering defect.**
@@ -38,7 +38,7 @@ CALCRIM: seven verified instruction correspondences, with every other charge
 returning UNKNOWN. The gate's repository criterion still reflects the older
 measurement and will clear as instruction mapping is extended.
 
-Every other gate criterion passes: zero critical defects across 662 checks,
+Every other gate criterion passes: zero critical defects across 703 checks,
 zero broken navigation, zero broken permissions or authentication, zero broken
 upload pipelines, zero broken traceability, browser verified and stress tested.
 
@@ -78,6 +78,8 @@ criterion beneath it says otherwise.
 | Complaint workspace browser | 23 | 23 | 0 |
 | Defence strategy and motion intelligence | 30 | 30 | 0 |
 | Strategy workspace browser | 15 | 15 | 0 |
+| Litigation operating system | 30 | 30 | 0 |
+| War room browser | 11 | 11 | 0 |
 | Static statutory dependencies | 7 | 5 | 0 |
 | Statutory intelligence browser | 12 | 12 | 0 |
 | Executive readiness dashboard | 12 | 12 | 0 |
@@ -190,6 +192,41 @@ pleaded, preview it, file it. No API call is needed at any point.
 A defendant and count matrix shows who is charged with what, distinguishing
 charged, dismissed, severed and not charged on that count.
 
+## Case lifecycle
+
+Program 151 gave every case a stage, worked out from what is on the record with
+the reasoning shown rather than only the answer. A filed information settles a
+later stage because that is what filing one means; a complaint plus discovery
+puts the case in discovery; nothing on file leaves the stage undetermined and
+says so. Counsel can override and inference never overwrites that. Every change
+is kept with what caused it.
+
+The **case evolution engine** sets out what has happened in order and what each
+change meant downstream, leaving a consequence blank where the record does not
+establish one.
+
+The **war room** is one screen — stage, operative charges, the issues the record
+raises with the passage that raised each, what is not in the record, and what
+changed lately. Live on any case under **War Room**.
+
+The **family portal** says the same things without jargon and without advising
+anybody. Charges appear in the People's own words, the stage is explained in a
+sentence, and the questions to ask the attorney come from what is genuinely
+missing on a theme this case raised, each naming the document that prompted it.
+
+### A third fabricated widget
+
+The staff dashboard's Case Intelligence Overview showed four counts that never
+changed — one priority case, three prosecution vulnerabilities, two sentencing
+exposure flags, one procedural deadline warning — identically on every account,
+reading as repository-backed findings. That is the third fabricated widget
+found in that one file. It now shows counts from the action centre.
+
+The fabrication detector now also treats a fixed number rendered beside a label
+as a finding, which is what a reader takes it for. Both detector additions are
+verified by running them against the previous version of the file, which they
+fail.
+
 ## Defence strategy
 
 Program 150 organises the record into the thirty-one themes a defence lawyer
@@ -229,22 +266,25 @@ render. The audit now catches inline literal arrays whose content reads as a
 fact about a case, verified by running it against the previous version of the
 file, which it fails.
 
-### What Program 150 did not build
+### What Programs 150 and 151 did not build
 
-Stated rather than implied. The programme asked for ten surfaces; four were
-built or repaired and the rest were not reached:
+Stated rather than implied. The attorney war room and the family portal, listed
+here as missing after Program 150, were built in Program 151. These remain:
 
 - **Administrative Operations Center** — not built. The billing metrics API
   exists and returns real MRR and subscription counts, but there is no revenue,
   churn or subscriber dashboard consuming it.
-- **Customer Support Console** — not built. There is no ticket model, no
+- **Customer Success Platform** — not built. There is no ticket model, no
   per-subscriber diagnostic view, and no support workspace.
-- **Attorney War Room** — not built as specified. The existing Attorney
-  Workbench covers much of it and reads real data, but it was not extended to
-  the unified view the programme describes.
-- **Family Dashboard** — not built as specified. Family members reach the
-  client portal, which shares the defendant dashboard; the simplified
-  family-specific view with suggested questions was not built.
+- **Enterprise search** — not built. Search remains per-entity rather than
+  unified across cases, people, evidence, charges and subscribers.
+- **Observability dashboard** — not built as specified. Individual health
+  endpoints exist and the production operations page reads some of them, but
+  there is no single view of latency, queue depth and failure rate per
+  subsystem.
+- **Investigation operations as project management** — not built. The
+  investigator workbench holds tasks and leads against real data, but it was
+  not extended into assignment, due dates and completion evidence.
 
 ## Gold Standard Certification
 

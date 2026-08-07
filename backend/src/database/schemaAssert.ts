@@ -8,7 +8,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync, readdirSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { prisma } from '../lib/prisma.js';
+import prisma from '../lib/prisma.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

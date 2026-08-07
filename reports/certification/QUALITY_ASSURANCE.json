@@ -1,7 +1,7 @@
 {
   "report": "QUALITY_ASSURANCE",
   "phase": "Program 153 — Administrative Quality Assurance",
-  "generatedAt": "2026-08-07T14:54:44.269Z",
+  "generatedAt": "2026-08-07T16:15:04.652Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 15,
@@ -108,13 +108,13 @@
       "id": "QA-14",
       "name": "No corpus counts as authorized without a recorded attestation",
       "status": "PASS",
-      "detail": "23 corpora checked"
+      "detail": "25 corpora checked"
     },
     {
       "id": "QA-15",
       "name": "No corpus created by a certification suite is counted as attorney-authorized discovery",
       "status": "PASS",
-      "detail": "23 corpora inert by default"
+      "detail": "25 corpora inert by default"
     },
     {
       "id": "QA-13",

@@ -1,7 +1,7 @@
 {
   "report": "PRODUCTION_AUDIT",
   "phase": "Program 146 — Production Audit",
-  "generatedAt": "2026-08-07T14:52:00.606Z",
+  "generatedAt": "2026-08-07T16:15:05.731Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 21,
@@ -28,7 +28,7 @@
   "exercisedSpaRoutes": [],
   "routes": 108,
   "pages": 105,
-  "endpoints": 418,
+  "endpoints": 419,
   "tables": 116,
   "workers": 34,
   "markers": {
@@ -40,8 +40,8 @@
     "HACK": 0
   },
   "corpora": {
-    "total": 23,
-    "authorized": 2
+    "total": 25,
+    "authorized": 3
   },
   "checks": [
     {
@@ -66,7 +66,7 @@
       "id": "AUD-ENDPOINTS",
       "name": "API endpoints inventoried",
       "status": "PASS",
-      "detail": "418 registered route handlers"
+      "detail": "419 registered route handlers"
     },
     {
       "id": "AUD-TABLES",
@@ -78,7 +78,7 @@
       "id": "AUD-MIGRATIONS",
       "name": "All database migrations applied cleanly",
       "status": "PASS",
-      "detail": "29 migrations"
+      "detail": "30 migrations"
     },
     {
       "id": "AUD-HEALTH",
@@ -176,7 +176,7 @@
       "id": "AUD-GOLDSTANDARD",
       "name": "Attorney-authorized discovery has been imported",
       "status": "PASS",
-      "detail": "ACC-107250 (32 files), ACC-162653 (32 files)"
+      "detail": "ACC-107250 (32 files), ACC-162653 (32 files), ACC-552702 (32 files)"
     }
   ]
 }

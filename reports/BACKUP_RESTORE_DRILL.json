@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-07T14:52:00.448Z",
+  "generatedAt": "2026-08-07T16:15:05.569Z",
   "drillVersion": "1.0.0",
   "overallResult": "PASS",
   "passCount": 9,
@@ -46,13 +46,13 @@
       "id": "critical-tables",
       "label": "Critical tables accessible",
       "result": "PASS",
-      "detail": "users:297, criminal_cases:5149, evidence:1194, clients:25"
+      "detail": "users:313, criminal_cases:5154, evidence:1258, clients:26"
     },
     {
       "id": "migration-state",
       "label": "Prisma migrations applied",
       "result": "PASS",
-      "detail": "Latest: 20260807143000_evidence_fingerprint"
+      "detail": "Latest: 20260807150000_corpus_authorization"
     },
     {
       "id": "schema-versions",
@@ -71,39 +71,39 @@
   "auditTrail": [
     {
       "step": "Verify DISASTER_RECOVERY.md",
-      "timestamp": "2026-08-07T14:52:00.444Z"
+      "timestamp": "2026-08-07T16:15:05.564Z"
     },
     {
       "step": "Verify db-safe-migrate.sh",
-      "timestamp": "2026-08-07T14:52:00.444Z"
+      "timestamp": "2026-08-07T16:15:05.564Z"
     },
     {
       "step": "Verify database integrity audit",
-      "timestamp": "2026-08-07T14:52:00.444Z"
+      "timestamp": "2026-08-07T16:15:05.564Z"
     },
     {
       "step": "Verify legislative repository snapshots",
-      "timestamp": "2026-08-07T14:52:00.444Z"
+      "timestamp": "2026-08-07T16:15:05.564Z"
     },
     {
       "step": "Verify configuration template",
-      "timestamp": "2026-08-07T14:52:00.444Z"
+      "timestamp": "2026-08-07T16:15:05.564Z"
     },
     {
       "step": "Verify database connectivity",
-      "timestamp": "2026-08-07T14:52:00.444Z"
+      "timestamp": "2026-08-07T16:15:05.564Z"
     },
     {
       "step": "Verify critical tables accessible",
-      "timestamp": "2026-08-07T14:52:00.444Z"
+      "timestamp": "2026-08-07T16:15:05.565Z"
     },
     {
       "step": "Verify migration state",
-      "timestamp": "2026-08-07T14:52:00.447Z"
+      "timestamp": "2026-08-07T16:15:05.568Z"
     },
     {
       "step": "Verify schema version control",
-      "timestamp": "2026-08-07T14:52:00.448Z"
+      "timestamp": "2026-08-07T16:15:05.568Z"
     }
   ]
 }

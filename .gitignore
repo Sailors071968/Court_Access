@@ -50,3 +50,6 @@ reports/certification/screenshots/*
 !reports/certification/screenshots/case_create_dialog.png
 !reports/certification/screenshots/gold_standard_*.png
 backend/*.traineddata
+
+# Backend bundle, produced by `npm run build` in backend/
+backend/dist/

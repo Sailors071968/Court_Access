@@ -1,7 +1,7 @@
 {
   "routes": 108,
   "pages": 105,
-  "endpoints": 418,
+  "endpoints": 419,
   "tables": 116,
   "workers": 34,
   "markers": {
@@ -13,7 +13,7 @@
     "HACK": 0
   },
   "corpora": {
-    "total": 23,
-    "authorized": 2
+    "total": 25,
+    "authorized": 3
   }
 }

@@ -53,7 +53,7 @@ services:
       PORT: 3001
       # Upload chunks are assembled here. Needs room for the largest corpus.
       CERTIFICATION_STAGING_DIR: /data/staging
-      EVIDENCE_STORAGE_DIR: /data/evidence
+      EVIDENCE_UPLOAD_DIR: /data/evidence
     volumes:
       - evidence-data:/data
     healthcheck:

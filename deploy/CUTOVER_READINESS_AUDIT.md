@@ -229,7 +229,7 @@ The inventory the Release Candidate requires:
 | `COOKIE_SECRET` | Yes | none | No | Yes | |
 | `FRONTEND_URL` | Yes | none | Yes | Yes | CORS and links |
 | `CERTIFICATION_STAGING_DIR` | Recommended | `/var/tmp/...` | Yes | Yes | Must have room for the largest corpus |
-| `EVIDENCE_STORAGE_DIR` | Recommended | app-relative | Yes | Yes | **Keep outside the release directory** or a deploy destroys uploads |
+| `EVIDENCE_UPLOAD_DIR` | Recommended | app-relative | Yes | Yes | **Keep outside the release directory** or a deploy destroys uploads |
 | `STRIPE_SECRET_KEY` | No | none | Yes | Yes | Billing inert without it |
 | `AWS_*` | No | none | Yes | Yes | Object storage unused today |
 | `LAW_CACHE_MAX_AGE_MS` | No | 24 h | Yes | Yes | |

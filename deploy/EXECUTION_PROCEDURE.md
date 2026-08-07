@@ -197,7 +197,14 @@ DATABASE_URL=postgresql://USER:PASSWORD@HOST:5432/courtaccess?schema=public
 JWT_SECRET=                        # changing this signs everyone out
 FRONTEND_URL=https://courtaccess.net
 CERTIFICATION_STAGING_DIR=/var/lib/courtaccess/staging
-EVIDENCE_STORAGE_DIR=/var/lib/courtaccess/evidence
+
+# EVIDENCE_UPLOAD_DIR — note the name. Earlier revisions of this document said
+# EVIDENCE_STORAGE_DIR, which the application does not read. Setting that name
+# has no effect, and evidence then silently falls back to the default,
+# /var/www/courtaccess/uploads/evidence — inside the application directory,
+# where a later deployment can destroy it. The name below is the one
+# evidenceDirectUpload.ts:40 actually reads.
+EVIDENCE_UPLOAD_DIR=/var/lib/courtaccess/evidence
 
 # Redis is not configured on this host, and the certification path does not
 # need it — upload, ingest, timeline, contradictions and CALCRIM all run

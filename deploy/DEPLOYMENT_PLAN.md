@@ -251,7 +251,7 @@ JWT_SECRET=                                # 48+ random bytes; changing it signs
 FRONTEND_URL=https://courtaccess.net
 
 CERTIFICATION_STAGING_DIR=/var/lib/courtaccess/staging
-EVIDENCE_STORAGE_DIR=/var/lib/courtaccess/evidence
+EVIDENCE_UPLOAD_DIR=/var/lib/courtaccess/evidence
 ```
 
 ```bash

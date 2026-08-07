@@ -288,7 +288,7 @@ Not a blocker, but install it before Case 001 if you can.
 ```bash
 PID=$(pm2 jlist | python3 -c 'import json,sys;[print(p["pid"]) for p in json.load(sys.stdin) if p["pm2_env"]["status"]=="online"]' | head -1)
 ps -o user= -p $PID
-sudo tr '\0' '\n' < /proc/$PID/environ | grep -E '^(CERTIFICATION_STAGING_DIR|EVIDENCE_STORAGE_DIR)='
+sudo tr '\0' '\n' < /proc/$PID/environ | grep -E '^(CERTIFICATION_STAGING_DIR|EVIDENCE_UPLOAD_DIR)='
 ls -ld /var/lib/courtaccess /var/lib/courtaccess/staging /var/lib/courtaccess/evidence 2>/dev/null
 ```
 

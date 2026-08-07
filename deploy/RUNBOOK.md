@@ -455,17 +455,37 @@ curl -s http://127.0.0.1:3399/api/health
  "service":"court-access-backend","environment":"production"}
 ```
 
-Check the log for the worker line and no fatal errors:
+**Read the startup validator output first.** It runs before the server binds and
+reports every configuration problem at once, each naming the variable and the
+remedy:
 
 ```bash
+grep -E "^\[Startup\]|^  (PASS|WARNING|FAIL)" /tmp/smoke.log
+```
+
+**Expected:** every line `PASS` and `[Startup] Configuration OK`. A `FAIL` means
+the process exited without binding — fix the named variable and re-run. This is
+where a missing `JWT_SECRET` or an `EVIDENCE_UPLOAD_DIR` still pointing inside
+the release is caught, and it is the cheapest place to catch either.
+
+Then the schema guard and the worker line:
+
+```bash
+grep -A4 "Schema Assert" /tmp/smoke.log
 grep -E "PipelineWorkers|Security hardening" /tmp/smoke.log
+curl -s http://127.0.0.1:3399/api/health/ready
 kill $SMOKE
 ```
 
-**Expected:** `[PipelineWorkers] Workers disabled via DISABLE_WORKERS env var`.
+**Expected:** `Migrations: 30/30 applied` with a real checksum — **not**
+`no-migrations` and `0/0`, which meant the guard could not find the Prisma
+directory and was verifying nothing. `[PipelineWorkers] Workers disabled via
+DISABLE_WORKERS env var`. And readiness reporting `healthy` with `postgres`,
+`uploads` and `disk` each listed.
 
-**Stop if:** health does not return `version: "1.1.0"`, or the process exits.
-Nothing has been switched; read `/tmp/smoke.log` and fix before continuing.
+**Stop if:** health does not return `version: "1.1.0"`, readiness is not
+`healthy`, or the process exits. Nothing has been switched; read
+`/tmp/smoke.log` and fix before continuing.
 
 ## F2 [P] · Raise the nginx upload limit
 
@@ -730,6 +750,13 @@ curl -s https://courtaccess.net/ | grep -o "CourtAccess build:[^<]*"
 | `/api/law/status` | **401** | Route exists and is authenticated |
 | `/api/charging/codes` | **401** | Same |
 | build stamp | the commit you deployed | The new frontend is being served |
+| `/api/health/ready` | **200, `healthy`** | Database, upload directory and disk all usable |
+| `/api/health/deep` | **200** | Redis shows `unknown — workers disabled`, which is correct here |
+
+Add readiness to whatever monitors the site, **not** `/api/health`. Liveness
+returns a literal and cannot report anything wrong — that is correct for
+restart decisions and useless as evidence the platform works. It is precisely
+how the current stub went unnoticed for six weeks.
 
 **A 404 on login is the signal that the cut-over did not take.** That is the
 single clearest indicator, because the old stub 404s every route.

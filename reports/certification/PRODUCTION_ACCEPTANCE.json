@@ -1,7 +1,7 @@
 {
   "report": "PRODUCTION_ACCEPTANCE",
   "phase": "Program 155 — Production Acceptance Rehearsal",
-  "generatedAt": "2026-08-07T14:49:27.595Z",
+  "generatedAt": "2026-08-07T14:55:57.655Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 29,
@@ -37,8 +37,8 @@
     "POST /api/charging/documents/:id/finalize"
   ],
   "exercisedSpaRoutes": [],
-  "caseId": "9cf17e1d-0579-4791-bcf8-899f2b2908b9",
-  "reference": "ACC-162653",
+  "caseId": "237a9c6a-03be-41f7-8120-06939153eec7",
+  "reference": "ACC-552702",
   "failures": [],
   "filesUploaded": 29,
   "checks": [
@@ -46,19 +46,19 @@
       "id": "ACC-01",
       "name": "A new customer can register and is signed in",
       "status": "PASS",
-      "detail": "acceptance-1786114161921-1-dbtpzg@certification.test"
+      "detail": "acceptance-1786114551973-1-mgumtm@certification.test"
     },
     {
       "id": "ACC-02",
       "name": "A case is created through the interface",
       "status": "PASS",
-      "detail": "ACC-1786114162170"
+      "detail": "ACC-1786114552220"
     },
     {
       "id": "ACC-03",
       "name": "Discovery uploads through the portal, chunked, as the browser sends it",
       "status": "PASS",
-      "detail": "29 files, 1.3MB in 112ms"
+      "detail": "29 files, 1.3MB in 120ms"
     },
     {
       "id": "ACC-04",

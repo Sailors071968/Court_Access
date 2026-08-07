@@ -1,6 +1,6 @@
 # CourtAccess — Status
 
-Last updated by Production Program 154 (Release Candidate).
+Last updated by Production Program 155 (Production Acceptance).
 
 Every figure below was produced by executing the platform: PostgreSQL 16 and
 Redis 7 provisioned, all Prisma migrations applied, the Fastify API and its
@@ -14,12 +14,12 @@ Reproduce with `bash scripts/certification/run-all.sh`.
 
 | | |
 |---|---|
-| Checks executed | 774 |
-| Passed | 736 |
+| Checks executed | 805 |
+| Passed | 767 |
 | Failed | 0 |
 | Warnings | 20 |
 | Not measurable here | 18 |
-| Engineering pass rate | 95.1% |
+| Engineering pass rate | 95.3% |
 | **Release gate** | **READY WITH LIMITATIONS** |
 
 **The gate is blocked by one thing, and engineering cannot close it.**
@@ -487,6 +487,57 @@ Recorded as UNKNOWN, not as passes.
 - **Billing and Stripe** — no keys.
 - **Object storage** — no R2/S3 credentials; uploads are held on local disk.
 - **Email delivery** — no SES credentials.
+
+## The gate was counting test fixtures as real cases
+
+Program 155's acceptance rehearsal found the most serious defect in this
+platform, and found it by accident.
+
+The release gate identified attorney-authorized cases by **excluding a
+hardcoded list of known-test reference prefixes**. The rehearsal created corpora
+prefixed `ACC-`, which matched nothing on that list, so the gate counted them as
+Case 001 and Case 002 and reported both certified. It was one corpus away from
+declaring CourtAccess certified against real criminal discovery that has never
+existed.
+
+The design failed open: any new prefix would have been treated as real material.
+
+It now fails closed. A corpus is a test fixture unless somebody with authority
+attests otherwise, recording who authorised the use of the material and on what
+basis. Attestation is a deliberate act on its own endpoint, administrator-only,
+refused without an explanation, and withdrawable. Twenty-three existing corpora
+are inert by default. Two quality checks guard it, and both gate the release.
+
+## Production acceptance rehearsal
+
+One continuous run through the workflow a customer uses — register, create a
+case, upload discovery in chunks through the portal, review, process, file a
+complaint through the workspace, then check every intelligence surface.
+
+**Nothing was written to the database directly.** Earlier suites inserted
+evidence rows to save time, which proves the result but not the path. Here
+every record arrived as a customer's would.
+
+28 of 28 measurable checks pass. It is recorded as a rehearsal, not a
+certification: it runs against synthetic discovery and proves the path works.
+It cannot prove the platform behaves correctly on real criminal material.
+
+## Staging deployment
+
+Phase 1 asked for deployment to a persistent server. There was no way to do it:
+the GitHub workflow deploys the frontend only, which is why `courtaccess.net`
+serves a bundle whose API predates this codebase.
+
+[`deploy/`](deploy/) now contains the missing piece — one compose file bringing
+up PostgreSQL, Redis, the API, the frontend and a nightly backup, with data on
+named volumes so it survives a reboot, ffmpeg in the API image, nginx proxying
+`/api` same-origin with request buffering off so upload chunks stream, and a
+bootstrap script that creates the administrator through the normal registration
+route and proves it signs in.
+
+It has not been run. Docker is not available in this environment and no
+credentials for the owner's host were supplied, so it is structurally validated
+only.
 
 ## Release candidate
 

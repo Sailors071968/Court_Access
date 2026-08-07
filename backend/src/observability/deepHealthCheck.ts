@@ -13,6 +13,8 @@
 // Intended for load balancers, monitoring dashboards, and alerting.
 // ============================================================================
 
+import { mkdir, statfs, unlink, writeFile } from 'node:fs/promises';
+import { join } from 'node:path';
 import { getHeapStatistics } from 'node:v8';
 import prisma from '../lib/prisma.js';
 
@@ -107,6 +109,19 @@ async function checkPostgres(): Promise<ComponentHealth> {
 
 async function checkRedis(): Promise<ComponentHealth> {
   const start = performance.now();
+
+  // Redis being unreachable is only a fault if something is trying to use it.
+  // The certified deployment runs with no Redis and DISABLE_WORKERS=true, and
+  // reporting that as unhealthy made the whole endpoint report a working
+  // platform as down — an alarm that is always on is an alarm nobody reads.
+  if (process.env.DISABLE_WORKERS === 'true') {
+    return {
+      status: 'unknown',
+      latencyMs: 0,
+      message: 'not checked — workers disabled by DISABLE_WORKERS',
+    };
+  }
+
   try {
     // Dynamic import to avoid hard dependency at module load time
     const { redisConnection } = await import('../lib/redis.js');
@@ -217,4 +232,98 @@ async function checkMemory(): Promise<ComponentHealth> {
       message: 'Memory check failed',
     };
   }
+}
+
+// ---------------------------------------------------------------------------
+// Readiness
+// ---------------------------------------------------------------------------
+
+/**
+ * Readiness answers a narrower question than the deep check: should this
+ * instance be given traffic right now?
+ *
+ * It deliberately checks only what serving a request needs, and deliberately
+ * excludes Redis, Neo4j and OpenAI — a request can be served without any of
+ * them. Migrations are not re-checked either: the server refuses to start on a
+ * drifted schema, so a running process has already proven that once and
+ * re-proving it on every poll costs a query for nothing.
+ *
+ * What it does check is what can change while the process is alive: the
+ * database going away, the disk filling, the upload directory becoming
+ * unwritable.
+ */
+export interface ReadinessReport {
+  status: ComponentStatus;
+  timestamp: string;
+  uptimeSeconds: number;
+  components: {
+    postgres: ComponentHealth;
+    uploads: ComponentHealth;
+    disk: ComponentHealth;
+  };
+}
+
+const UPLOAD_DIR = () => process.env.EVIDENCE_UPLOAD_DIR || '/var/www/courtaccess/uploads/evidence';
+
+async function checkUploadsWritable(): Promise<ComponentHealth> {
+  const start = performance.now();
+  const dir = UPLOAD_DIR();
+  const probe = join(dir, `.ready-probe-${process.pid}`);
+  try {
+    await mkdir(dir, { recursive: true });
+    await writeFile(probe, '');
+    await unlink(probe);
+    return { status: 'healthy', latencyMs: Math.round(performance.now() - start), message: dir };
+  } catch (err) {
+    return {
+      status: 'unhealthy',
+      latencyMs: Math.round(performance.now() - start),
+      message: `${dir} is not writable: ${err instanceof Error ? err.message : 'unknown error'}`,
+    };
+  }
+}
+
+async function checkDisk(): Promise<ComponentHealth> {
+  const start = performance.now();
+  try {
+    const stats = await statfs(UPLOAD_DIR());
+    const freeBytes = stats.bavail * stats.bsize;
+    const freeGB = freeBytes / 1024 ** 3;
+    // Evidence exists twice during an upload — staged chunks plus the ingested
+    // copy — so headroom matters more here than for a typical service.
+    const status: ComponentStatus = freeGB < 2 ? 'unhealthy' : freeGB < 10 ? 'degraded' : 'healthy';
+    return {
+      status,
+      latencyMs: Math.round(performance.now() - start),
+      message: `${freeGB.toFixed(1)} GB free`,
+    };
+  } catch (err) {
+    return {
+      status: 'unknown',
+      latencyMs: Math.round(performance.now() - start),
+      message: err instanceof Error ? err.message : 'disk check failed',
+    };
+  }
+}
+
+export async function runReadinessCheck(): Promise<ReadinessReport> {
+  const [postgres, uploads, disk] = await Promise.all([
+    checkPostgres(),
+    checkUploadsWritable(),
+    checkDisk(),
+  ]);
+
+  const statuses = [postgres.status, uploads.status, disk.status];
+  const status: ComponentStatus = statuses.includes('unhealthy')
+    ? 'unhealthy'
+    : statuses.includes('degraded')
+      ? 'degraded'
+      : 'healthy';
+
+  return {
+    status,
+    timestamp: new Date().toISOString(),
+    uptimeSeconds: Math.floor((Date.now() - PROCESS_START) / 1000),
+    components: { postgres, uploads, disk },
+  };
 }

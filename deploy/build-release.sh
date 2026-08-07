@@ -54,6 +54,17 @@ cp -a "$ROOT/backend/node_modules" "$OUT/node_modules"
 cp -a "$ROOT/backend/prisma" "$OUT/prisma"
 cp "$ROOT/backend/package.json" "$OUT/package.json"
 
+# A release is not a git checkout, so the commit has to travel with it. Without
+# this, every certification record stores a null commit and the permanent
+# history cannot say which build produced a finding.
+cat > "$OUT/dist/build-info.json" <<EOF
+{
+  "commit": "$(git -C "$ROOT" rev-parse HEAD)",
+  "branch": "$(git -C "$ROOT" rev-parse --abbrev-ref HEAD)",
+  "builtAt": "$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+}
+EOF
+
 echo
 echo "Release assembled at $OUT"
 echo "  dist/index.js      $(du -h "$OUT/dist/index.js" | cut -f1)"

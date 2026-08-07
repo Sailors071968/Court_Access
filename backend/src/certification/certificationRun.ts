@@ -13,6 +13,9 @@
 // ============================================================================
 
 import { execFile } from 'node:child_process';
+import { readFile } from 'node:fs/promises';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { promisify } from 'node:util';
 import prisma from '../lib/prisma.js';
 import { reconstructTimeline } from '../timeline/timelineReconstructionService.js';
@@ -92,8 +95,20 @@ export interface CertificationMetrics {
 }
 
 async function currentCommit(): Promise<string | null> {
+  if (process.env.GIT_COMMIT) return process.env.GIT_COMMIT.trim();
+
+  // A deployed release is not a git checkout, so it carries its commit in a
+  // stamp written beside the bundle at build time.
   try {
-    const { stdout } = await exec('git', ['-C', '/workspace', 'rev-parse', 'HEAD']);
+    const stamp = path.join(path.dirname(fileURLToPath(import.meta.url)), 'build-info.json');
+    const { commit } = JSON.parse(await readFile(stamp, 'utf8'));
+    if (commit) return String(commit);
+  } catch {
+    // Not a stamped release — fall through to asking git.
+  }
+
+  try {
+    const { stdout } = await exec('git', ['-C', process.cwd(), 'rev-parse', 'HEAD']);
     return stdout.trim();
   } catch {
     return null;

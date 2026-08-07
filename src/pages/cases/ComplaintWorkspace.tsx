@@ -113,6 +113,9 @@ interface Props {
 
 export function ComplaintWorkspace({ caseId, priorFilings, onFiled, onClose }: Props) {
   const [codes, setCodes] = useState<CodeOption[]>([]);
+  // The selector renders empty until this resolves. An empty dropdown with no
+  // explanation reads as a broken control, so its state is shown.
+  const [codesState, setCodesState] = useState<'loading' | 'ready' | 'failed'>('loading');
   const [kind, setKind] = useState('complaint');
   const [name, setName] = useState('Complaint');
   const [filedAt, setFiledAt] = useState(new Date().toISOString().slice(0, 10));
@@ -132,8 +135,11 @@ export function ComplaintWorkspace({ caseId, priorFilings, onFiled, onClose }: P
 
   useEffect(() => {
     void call<{ codes: CodeOption[] }>('/api/charging/codes')
-      .then((r) => setCodes(r.codes))
-      .catch(() => {});
+      .then((r) => {
+        setCodes(r.codes);
+        setCodesState(r.codes.length > 0 ? 'ready' : 'failed');
+      })
+      .catch(() => setCodesState('failed'));
   }, []);
 
   const update = useCallback((i: number, patch: Partial<DraftCount>) => {
@@ -426,8 +432,11 @@ export function ComplaintWorkspace({ caseId, priorFilings, onFiled, onClose }: P
                     data-testid={`count-code-${i}`}
                     value={c.code}
                     onChange={(e) => update(i, { code: e.target.value })}
-                    className="mt-1 w-full border border-gray-300 rounded px-2 py-1.5 text-sm"
+                    disabled={codesState !== 'ready'}
+                    className="mt-1 w-full border border-gray-300 rounded px-2 py-1.5 text-sm disabled:bg-gray-50 disabled:text-gray-400"
                   >
+                    {codesState === 'loading' && <option value="">Loading the California codes…</option>}
+                    {codesState === 'failed' && <option value="">Codes unavailable — reload the page</option>}
                     {codes.map((o) => (
                       <option key={o.abbreviation} value={o.abbreviation}>
                         {o.name} ({o.abbreviation})

@@ -1,8 +1,8 @@
 {
   "report": "WAR_ROOM_BROWSER",
   "phase": "Program 151 — War Room Browser",
-  "generatedAt": "2026-08-07T13:51:52.499Z",
-  "apiBase": "http://127.0.0.1:3001",
+  "generatedAt": "2026-08-07T16:38:21.902Z",
+  "apiBase": "http://127.0.0.1:8081",
   "summary": {
     "total": 11,
     "PASS": 11,
@@ -13,8 +13,8 @@
   },
   "exercisedApiRoutes": [],
   "exercisedSpaRoutes": [],
-  "caseId": "c5241d84-5a16-4e21-969f-c22fc9c8e3e2",
-  "base": "http://127.0.0.1:4180",
+  "caseId": "7da102ef-54f2-49a4-ad97-5b67025b51fc",
+  "base": "http://127.0.0.1:8081",
   "checks": [
     {
       "id": "WRB-01",

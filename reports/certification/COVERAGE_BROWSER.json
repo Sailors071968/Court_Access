@@ -1,8 +1,8 @@
 {
   "report": "COVERAGE_BROWSER",
   "phase": "Program 153 — Evidence Coverage Browser",
-  "generatedAt": "2026-08-07T14:24:13.547Z",
-  "apiBase": "http://127.0.0.1:3001",
+  "generatedAt": "2026-08-07T16:39:52.519Z",
+  "apiBase": "http://127.0.0.1:8081",
   "summary": {
     "total": 12,
     "PASS": 12,
@@ -13,8 +13,8 @@
   },
   "exercisedApiRoutes": [],
   "exercisedSpaRoutes": [],
-  "caseId": "4e1d273d-aa9e-4cb6-8408-06b14ba804cb",
-  "base": "http://127.0.0.1:4180",
+  "caseId": "d04a6e77-f92a-42c9-8774-1588c311f7a6",
+  "base": "http://127.0.0.1:8081",
   "checks": [
     {
       "id": "CVB-01",

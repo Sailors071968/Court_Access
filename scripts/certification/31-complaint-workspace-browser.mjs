@@ -71,6 +71,18 @@ kinds >= 5
   ? results.pass('WSB-02', 'Every kind of charging document can be created', `${kinds} kinds offered`)
   : results.fail('WSB-02', 'Not every document kind is offered', String(kinds));
 
+// The selector populates from an API call, so wait for it rather than racing
+// it. This failed against the production artifact behind nginx and passed
+// against the dev server purely on timing.
+await page
+  .locator('[data-testid="count-code-0"] option')
+  .first()
+  .waitFor({ timeout: 20000 })
+  .catch(() => {});
+await page.waitForFunction(
+  () => (document.querySelector('[data-testid="count-code-0"]')?.children.length ?? 0) > 5,
+  { timeout: 20000 },
+).catch(() => {});
 const codeOptions = await page.locator('[data-testid="count-code-0"] option').count();
 codeOptions >= 29
   ? results.pass('WSB-03', 'The California code selector offers every code', `${codeOptions} codes`)

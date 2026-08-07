@@ -1,8 +1,8 @@
 {
   "report": "COMPLAINT_WORKSPACE_BROWSER",
   "phase": "Program 149 — Complaint Workspace Browser",
-  "generatedAt": "2026-08-06T21:46:58.278Z",
-  "apiBase": "http://127.0.0.1:3001",
+  "generatedAt": "2026-08-07T16:43:08.335Z",
+  "apiBase": "http://127.0.0.1:8081",
   "summary": {
     "total": 23,
     "PASS": 23,
@@ -13,8 +13,8 @@
   },
   "exercisedApiRoutes": [],
   "exercisedSpaRoutes": [],
-  "caseId": "cd3eafb1-e63b-4565-8640-7b2fb9bc9ebe",
-  "base": "http://127.0.0.1:4180",
+  "caseId": "8fff4782-641c-4a20-b7bd-b83e36e95fde",
+  "base": "http://127.0.0.1:8081",
   "checks": [
     {
       "id": "WSB-01",
@@ -38,7 +38,7 @@
       "id": "WSB-04",
       "name": "The filing can be previewed before it is committed",
       "status": "PASS",
-      "detail": "Complaint, to be filed 8/6/2026Count 1 — Penal Code section 245On or about April 2, 2026, the crime of ASSAULT"
+      "detail": "Complaint, to be filed 8/7/2026Count 1 — Penal Code section 245On or about April 2, 2026, the crime of ASSAULT"
     },
     {
       "id": "WSB-05",

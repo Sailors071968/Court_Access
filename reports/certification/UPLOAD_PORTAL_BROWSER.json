@@ -1,8 +1,8 @@
 {
   "report": "UPLOAD_PORTAL_BROWSER",
   "phase": "Program 145 — Upload Portal Browser Verification",
-  "generatedAt": "2026-08-06T17:34:10.351Z",
-  "apiBase": "http://127.0.0.1:3001",
+  "generatedAt": "2026-08-07T16:38:54.331Z",
+  "apiBase": "http://127.0.0.1:8081",
   "summary": {
     "total": 21,
     "PASS": 21,
@@ -13,8 +13,8 @@
   },
   "exercisedApiRoutes": [],
   "exercisedSpaRoutes": [],
-  "base": "http://127.0.0.1:4180",
-  "reference": "PORTAL-609254",
+  "base": "http://127.0.0.1:8081",
+  "reference": "PORTAL-723272",
   "localFiles": 29,
   "localBytes": 1300024,
   "screenshotDirectory": "/workspace/reports/certification/screenshots",

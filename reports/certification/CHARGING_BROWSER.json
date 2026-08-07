@@ -1,8 +1,8 @@
 {
   "report": "CHARGING_BROWSER",
   "phase": "Program 148 — Charging Documents Browser",
-  "generatedAt": "2026-08-06T21:47:23.557Z",
-  "apiBase": "http://127.0.0.1:3001",
+  "generatedAt": "2026-08-07T16:38:12.732Z",
+  "apiBase": "http://127.0.0.1:8081",
   "summary": {
     "total": 17,
     "PASS": 17,
@@ -13,8 +13,8 @@
   },
   "exercisedApiRoutes": [],
   "exercisedSpaRoutes": [],
-  "caseId": "c511af6a-c4e9-4cab-b013-570134c484fb",
-  "base": "http://127.0.0.1:4180",
+  "caseId": "6904b987-6812-43a6-b362-778e4cf18685",
+  "base": "http://127.0.0.1:8081",
   "checks": [
     {
       "id": "CHB-01",

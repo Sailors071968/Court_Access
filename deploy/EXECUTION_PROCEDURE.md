@@ -307,6 +307,14 @@ there will be a gap of roughly the application's startup time, which was about
 PM2 records the script path and cwd when a process is started, so changing the
 directory contents is not enough — it must be restarted against the new path.
 
+**Take the rollback dump first.** The dress rehearsal showed this turns
+rollback from a 25-second restart into a 3-second `pm2 resurrect`:
+
+```bash
+pm2 save
+cp ~/.pm2/dump.pm2 ~/pm2-rollback-$(date +%F-%H%M).dump
+```
+
 ```bash
 # Name from `pm2 list`
 pm2 delete courtaccess
@@ -324,8 +332,11 @@ pm2 save          # rewrites ~/.pm2/dump.pm2 so this survives a reboot
 **Expected:** `pm2 list` shows `courtaccess` **online**. `pm2 save` reports the
 dump was written.
 
-**Failure condition:** status `errored` or a climbing restart count. Read
-`pm2 logs courtaccess --lines 100` and go to section 10.
+**Failure condition:** status `errored` or a climbing restart count. In the
+rehearsal a broken bundle produced 15 restarts within twelve seconds, so the
+`↺` column in `pm2 list` is the fastest signal that something is wrong — well
+before anyone reports an outage. Read `pm2 logs courtaccess --lines 100` and go
+to section 10.
 
 ### 8.3 Nginx
 
@@ -411,7 +422,26 @@ Then repeat the load-and-sign-in checks in Chrome, Firefox and Edge.
 
 ## 10. Rollback
 
-### 10.1 Application — under a minute
+### 10.1 Fastest path — resurrect the saved dump
+
+Measured at **3 seconds** in the dress rehearsal, against 20–25 seconds for a
+manual restart:
+
+```bash
+pm2 delete all
+cp ~/pm2-rollback-<timestamp>.dump ~/.pm2/dump.pm2
+pm2 resurrect
+curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:3000/api/health
+```
+
+Confirm it is genuinely the old release, not a cached response:
+
+```bash
+pm2 jlist | grep -o '"pm_exec_path":"[^"]*"'
+curl -s -o /dev/null -w '%{http_code}\n' http://127.0.0.1:3000/api/law/status   # 401 = real app
+```
+
+### 10.2 Manual — if no dump was taken
 
 ```bash
 pm2 delete courtaccess
@@ -426,7 +456,7 @@ sudo nginx -t && sudo systemctl reload nginx
 curl -s -o /dev/null -w 'health: %{http_code}\n' http://127.0.0.1:3000/api/health
 ```
 
-### 10.2 PM2 configuration
+### 10.3 PM2 configuration
 
 ```bash
 pm2 kill
@@ -435,7 +465,7 @@ pm2 resurrect
 pm2 list
 ```
 
-### 10.3 Database
+### 10.4 Database
 
 Prisma migrations do not roll back. The RC's are **additive**, so the previous
 application runs unchanged against a migrated database — it simply does not use
@@ -453,7 +483,7 @@ pm2 start courtaccess
 **Anything uploaded since the backup is lost.** If Case 001 has been uploaded,
 copy `/var/lib/courtaccess/evidence` elsewhere before restoring.
 
-### 10.4 Complete restoration
+### 10.5 Complete restoration
 
 ```bash
 pm2 delete courtaccess
@@ -465,7 +495,7 @@ pm2 save
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
-### 10.5 Roll back immediately, without further diagnosis, if
+### 10.6 Roll back immediately, without further diagnosis, if
 
 - Any route returns 404 that returned 200 in the section 7 smoke test
 - Sign-in fails for an account that worked before
@@ -509,6 +539,10 @@ Every line must be **yes**.
 - [ ] Application, database and `dump.pm2` backed up **and verified listable**
 - [ ] `DATABASE_URL`, `REDIS_URL` and `JWT_SECRET` supplied, not invented
 - [ ] Release built by `deploy/build-release.sh`, both artefacts present
+- [ ] Built with `NODE_ENV` unset or `--include=dev` — npm skips
+      devDependencies under `NODE_ENV=production` and the build fails with
+      `tsc: not found` (dress rehearsal, D1)
+- [ ] `pm2 save` dump taken and copied aside as the rollback point
 - [ ] Branch tip recorded for rollback
 - [ ] `exec mode` known — cluster gives zero downtime; fork does not
 

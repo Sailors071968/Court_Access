@@ -11,6 +11,7 @@ import type { AuthenticatedRequest } from '../security/authMiddleware.js';
 import prisma from '../lib/prisma.js';
 import { buildDefenseThemes, DEFENSE_THEMES } from './defenseThemes.js';
 import { buildActionCentre } from './actionCenter.js';
+import { buildEvidenceCoverage, explain } from './evidenceCoverage.js';
 import {
   LIFECYCLE_STAGES,
   STAGE_LABELS,
@@ -461,6 +462,107 @@ export async function registerStrategyRoutes(app: FastifyInstance): Promise<void
         'This page is a summary of what is in the case file. It is not legal advice, it does not say whether ' +
         'anyone is guilty or innocent, and it cannot tell you how the case will end. Only the attorney can ' +
         'advise you.',
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // Evidence coverage — the material beside each element
+  // -------------------------------------------------------------------------
+  app.get('/api/cases/:caseId/evidence-coverage', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!request.user) return reply.code(401).send({ error: 'Authentication required' });
+    const { caseId } = request.params as { caseId: string };
+    if (!(await caseInTenant(caseId, request.user.tenantId))) {
+      return reply.code(404).send({ error: 'Not Found', message: 'No such case in this account.' });
+    }
+    return reply.send(await buildEvidenceCoverage(caseId, request.user.tenantId));
+  });
+
+  // -------------------------------------------------------------------------
+  // Explain this
+  // -------------------------------------------------------------------------
+  app.get('/api/cases/:caseId/explain/:kind/:id', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!request.user) return reply.code(401).send({ error: 'Authentication required' });
+    const { caseId, kind, id } = request.params as { caseId: string; kind: string; id: string };
+    if (!(await caseInTenant(caseId, request.user.tenantId))) {
+      return reply.code(404).send({ error: 'Not Found', message: 'No such case in this account.' });
+    }
+    if (kind !== 'count' && kind !== 'theme') {
+      return reply.code(400).send({ error: 'Bad Request', message: 'kind must be count or theme.' });
+    }
+
+    const explanation = await explain({ caseId, tenantId: request.user.tenantId, kind, id });
+    if (!explanation) {
+      return reply.code(404).send({
+        error: 'Nothing to explain',
+        message: `No ${kind} with that identifier is being shown for this case.`,
+      });
+    }
+    return reply.send(explanation);
+  });
+
+  // -------------------------------------------------------------------------
+  // Repository completeness
+  // -------------------------------------------------------------------------
+  app.get('/api/repositories/completeness', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!request.user) return reply.code(401).send({ error: 'Authentication required' });
+
+    const [statutes, current, superseded, syncEvents, changes, corpora] = await Promise.all([
+      prisma.officialStatute.count(),
+      prisma.officialStatute.count({ where: { supersededAt: null } }),
+      prisma.officialStatute.count({ where: { supersededAt: { not: null } } }),
+      prisma.legislativeSyncEvent.count(),
+      prisma.legislativeSyncEvent.count({ where: { outcome: { in: ['amended', 'repealed', 'disappeared'] } } }),
+      prisma.certificationCase.count(),
+    ]);
+
+    const lastSync = await prisma.legislativeSyncEvent.findFirst({ orderBy: { detectedAt: 'desc' } });
+
+    return reply.send({
+      repositories: [
+        {
+          name: 'Official California law',
+          source: 'https://leginfo.legislature.ca.gov/',
+          coverage: `${current} section(s) retrieved and cached across the 29 California codes`,
+          unknownItems: 'Any section not yet requested. Retrieval is on demand, so coverage grows with use.',
+          missingSources: [],
+          version: 'compiler 1.0.0, extraction 1.0.0',
+          fingerprinted: true,
+          synchronization: lastSync
+            ? `Last checked ${lastSync.detectedAt.toISOString()}; ${changes} legislative change(s) detected across ${syncEvents} check(s).`
+            : 'Never synchronised.',
+          supersededVersions: superseded,
+          totalVersions: statutes,
+        },
+        {
+          name: 'CALCRIM correspondence',
+          source: 'Judicial Council of California, verified by hand',
+          coverage: '7 verified instruction correspondences',
+          unknownItems:
+            'Every charged section outside those 7 returns UNKNOWN. The Judicial Council does not publish the ' +
+            'instructions in machine-readable form, so this grows by verification rather than retrieval.',
+          missingSources: ['A machine-readable CALCRIM corpus'],
+          version: 'hand-verified list',
+          fingerprinted: false,
+          synchronization: 'Not synchronised: there is no feed to synchronise against.',
+          supersededVersions: 0,
+          totalVersions: 7,
+        },
+        {
+          name: 'Gold Standard corpora',
+          source: 'Discovery uploaded through the certification portal',
+          coverage: `${corpora} corpus/corpora imported`,
+          unknownItems: 'No attorney-authorized case has been imported; all corpora are synthetic fixtures.',
+          missingSources: ['Case 001', 'Case 002', 'Case 003'],
+          version: 'per-corpus fingerprint',
+          fingerprinted: true,
+          synchronization: 'Not applicable: a corpus is fixed once imported.',
+          supersededVersions: 0,
+          totalVersions: corpora,
+        },
+      ],
+      caveat:
+        'Coverage is reported as what has been retrieved, not as a proportion of what exists. Where a proportion ' +
+        'is not known it is described rather than given a number.',
     });
   });
 

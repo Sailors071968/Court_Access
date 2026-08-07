@@ -218,6 +218,23 @@ export async function buildReadinessReport(): Promise<ReadinessReport> {
       'Legal knowledge coverage has not been measured.',
   });
 
+  // Quality assurance is a gate, not a report. Anything that would put
+  // unsupported content in front of a user blocks the release, because the
+  // whole platform's claim is that what it shows can be relied on.
+  const qaReport = reports.find((r) => r.report === 'QUALITY_ASSURANCE');
+  const qaChecks = (qaReport?.checks as Array<Record<string, string>>) ?? [];
+  const qaFailures = qaChecks.filter((c) => c.status === 'FAIL');
+  criteria.push({
+    id: 'QUALITY',
+    requirement: 'No fabricated content, fixed metrics, dead routes or uncited findings',
+    status: !qaReport ? 'UNKNOWN' : qaFailures.length === 0 ? 'PASS' : 'FAIL',
+    evidence: !qaReport
+      ? 'The quality assurance sweep has not been run.'
+      : qaFailures.length === 0
+        ? `${qaChecks.length} quality checks, none failing`
+        : `${qaFailures.length} failing: ${qaFailures.map((c) => `${c.id} ${c.title}`).join('; ')}`,
+  });
+
   const browserSuites = suites.filter((s) => /BROWSER/i.test(s.suite));
   criteria.push({
     id: 'BROWSER',

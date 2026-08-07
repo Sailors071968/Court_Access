@@ -1,0 +1,114 @@
+{
+  "report": "QUALITY_ASSURANCE",
+  "phase": "Program 153 — Administrative Quality Assurance",
+  "generatedAt": "2026-08-07T14:21:04.570Z",
+  "apiBase": "http://127.0.0.1:3001",
+  "summary": {
+    "total": 13,
+    "PASS": 12,
+    "FAIL": 0,
+    "WARNING": 1,
+    "UNKNOWN": 0,
+    "passRate": 92.3
+  },
+  "exercisedApiRoutes": [
+    "GET /api/cases/:id/defense-themes",
+    "GET /api/cases/:id/executive-summary",
+    "GET /api/cases/:id/family-view",
+    "GET /api/cases/:id/motion-issues",
+    "GET /api/cases/:id/war-room",
+    "POST /api/auth/register",
+    "POST /api/cases"
+  ],
+  "exercisedSpaRoutes": [],
+  "findings": {
+    "fabricated": [],
+    "fixedMetrics": [],
+    "placeholders": [],
+    "deadRoutes": [],
+    "unreachable": [],
+    "uncited": []
+  },
+  "componentsScanned": 128,
+  "backendModulesScanned": 433,
+  "checks": [
+    {
+      "id": "QA-01",
+      "name": "No view writes invented case data into the page",
+      "status": "PASS",
+      "detail": "128 components scanned"
+    },
+    {
+      "id": "QA-02",
+      "name": "No view renders a fixed number as though it were a measurement",
+      "status": "PASS",
+      "detail": "no static metrics"
+    },
+    {
+      "id": "QA-03",
+      "name": "No surface tells the user it is unfinished",
+      "status": "PASS",
+      "detail": "no placeholder surfaces"
+    },
+    {
+      "id": "QA-04",
+      "name": "Every route renders a component that exists",
+      "status": "PASS",
+      "detail": "107 routes"
+    },
+    {
+      "id": "QA-05",
+      "name": "Every administrator page can be reached from the navigation",
+      "status": "PASS",
+      "detail": "no URL-only pages"
+    },
+    {
+      "id": "QA-06",
+      "name": "Every sampled route is served by the application",
+      "status": "PASS",
+      "detail": "6/6"
+    },
+    {
+      "id": "QA-07",
+      "name": "Every finding served is accompanied by the passage that produced it",
+      "status": "PASS",
+      "detail": "6 findings, all cited"
+    },
+    {
+      "id": "QA-08",
+      "name": "Every citation points at a document that exists in the case",
+      "status": "PASS",
+      "detail": "6 citations resolved"
+    },
+    {
+      "id": "QA-09",
+      "name": "Every quoted passage genuinely appears in the document it is attributed to",
+      "status": "PASS",
+      "detail": "no misquotation"
+    },
+    {
+      "id": "QA-10",
+      "name": "Every issue explains why it appears and cites what raised it",
+      "status": "PASS",
+      "detail": "4 issues"
+    },
+    {
+      "id": "QA-11",
+      "name": "No surface states a conclusion about guilt, merits or outcome",
+      "status": "PASS",
+      "detail": "5 surfaces checked"
+    },
+    {
+      "id": "QA-12",
+      "name": "An analysis engine is shipped that nothing calls",
+      "status": "WARNING",
+      "detail": "20: backend/src/exhibits/objectPlacementService.ts, backend/src/exhibits/terrain/terrainGenerator.ts, backend/src/services/actorExtractionService.ts, backend/src/services/actorResolutionService.ts, backend/src/services/caseAnalysisCacheService.ts. Dead code invites someone to wire it up later without knowing whether it was ever correct."
+    },
+    {
+      "id": "QA-13",
+      "name": "Nothing found that would put unsupported content in front of a user",
+      "status": "PASS",
+      "detail": "no fabricated data, no fixed metrics, no dead routes, no unreachable pages"
+    }
+  ]
+}

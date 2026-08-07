@@ -82,11 +82,15 @@ establish that the server it points to is reachable, what major version it runs,
 whether the target database contains the production schema, or — the question
 that actually decides the deployment — whether `_prisma_migrations` exists.
 
-That last one is the live risk. The migration chain was rehearsed only against
-an **empty** database, where it applies cleanly and produces 116 tables
-[REPOSITORY]. If the production database has tables but no `_prisma_migrations`
-table, Prisma treats every migration as pending and will attempt to create
-tables that already exist, failing partway and leaving a half-migrated schema.
+That last one is the live risk, though **not** in the way I first described it.
+I wrote that Prisma would attempt to create tables that already exist and fail
+partway, leaving a half-migrated schema. Program 165 tested that and it is
+**disproven**: `prisma migrate deploy` against a non-empty, non-Prisma-managed
+database aborts with `P3005` **before executing any DDL**, leaving the database
+byte-for-byte unchanged. The real risk in that state is not corruption but
+deadlock — the RC cannot run, and the tempting remedy (`migrate resolve
+--applied`) would be actively destructive. See
+[`DATABASE_CERTIFICATION.md`](DATABASE_CERTIFICATION.md).
 
 **Still needed:**
 

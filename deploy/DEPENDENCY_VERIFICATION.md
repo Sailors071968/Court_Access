@@ -205,9 +205,22 @@ The first command lists the database names; the rest assume it is called
 shows no application database at all, that is A2 failing rather than B5 —
 there is nothing to migrate.
 
-**Blocks if:** tables exist but `_prisma_migrations` does not. Prisma will fail
-partway through, leaving a half-migrated schema. That needs baselining before
-any deployment — do not run `migrate deploy` in that state.
+**These commands assume PostgreSQL runs on the EC2 instance.** `sudo -u postgres
+psql` connects over the local socket as a superuser, and fails outright if
+`DATABASE_URL` points at RDS or any external host — which would read as "no
+database" and be exactly the wrong conclusion. Use the `psql "$DATABASE_URL"`
+forms in [`DATABASE_CERTIFICATION.md`](DATABASE_CERTIFICATION.md) instead; they
+are correct either way.
+
+**Blocks if:** tables exist but `_prisma_migrations` does not.
+
+**Corrected by Program 165.** I originally wrote that Prisma would fail partway
+and leave a half-migrated schema, and that baselining was the fix. Both were
+wrong. `migrate deploy` aborts with `P3005` before executing any DDL, so nothing
+is modified — but the RC then cannot run at all, and **baselining is the one
+action here capable of causing unrecoverable damage**, because it records 30
+migrations as applied without creating any of their tables. Run the read-only
+schema diff in [`DATABASE_CERTIFICATION.md`](DATABASE_CERTIFICATION.md) first.
 
 **Also blocks if:** the unfinished count is non-zero. A previous migration was
 interrupted and must be resolved first.

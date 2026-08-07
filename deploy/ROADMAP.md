@@ -15,11 +15,14 @@ capture:
 
 ---
 
-## Completed in this program
+## Completed
 
-Five changes, each built, typechecked, regression-tested at 446 tests
-(442 pass, 4 fail — identical to baseline throughout), and verified at runtime
-against a production-shaped release.
+Nine changes across Programs 181 and 183, each built, typechecked,
+regression-tested, and verified at runtime against a production-shaped release.
+The suite went from 446 tests (442 pass, 4 fail) to **453 (449 pass, 4 fail)** —
+the same four pre-existing failures throughout, plus seven new tests.
+
+Programs 181 (items 1–5) and 183 (items 6–9).
 
 ### 1 · Event-loop holders removed
 
@@ -112,6 +115,60 @@ rather than preventing one.
 dependency fault cannot trigger a restart storm — and both recovered when
 permissions were restored.
 
+### 6 · Upload transfer integrity
+
+`certification/uploadPortal.ts`, `uploadPortalRoutes.ts`, and a new
+`tests/upload-portal-concurrency.test.ts`
+
+One class of defect: **the server accepted bytes it could not verify.**
+`receiveChunk` read the staged size, compared it to the declared offset, then
+appended — a check-then-act sequence, so two chunks in flight for the same file
+could both pass and both append. The only backstop was a final-size comparison,
+and that was itself optional because `totalSize` was parsed with `?? '0'`.
+
+Appends are now serialised per staging path, `totalSize` is required and must be
+positive, and overrun is detected as it happens rather than only if a final
+chunk arrives.
+
+**Verified the test catches the real defect:** with the lock reverted, "does not
+duplicate bytes when the same chunk is sent twice concurrently" fails because
+both chunks are applied. Seven tests added.
+
+### 7 · Build identity
+
+`lib/buildInfo.ts` (new), `server.ts`, `certification/certificationRun.ts`
+
+Nothing recorded which build was running. `/api/health` reported a hardcoded
+`1.1.0` that never changed, and `dist/build-info.json` was read only by the
+certification record. That resolution is now one module used by the startup log,
+the health endpoint and the certification record, so a finding cannot disagree
+with the API about which code produced it.
+
+**Verified:** startup logs
+`CourtAccess 1.1.0 — 6874085 · <branch> · built <ts> (from stamp)`, and the
+commit in `/api/health` matches `dist/build-info.json` exactly.
+
+### 8 · Readiness stopped mutating what it checks
+
+`observability/deepHealthCheck.ts`
+
+My own code from item 5 ran `mkdir` + write probe + `unlink` on every poll —
+thousands of writes a day into the evidence directory, and it created what it
+was checking, so a mistyped `EVIDENCE_UPLOAD_DIR` would be created and reported
+healthy. Now `access(W_OK)`, with a missing directory reported as degraded
+rather than conjured into existence.
+
+### 9 · Test suite variance, recorded
+
+While verifying item 8 a run reported 440 tests where three consecutive runs
+before and after reported 453. Investigated rather than dismissed: no suite was
+lost, and five graph-related suites appeared in one run and not another, so the
+composition varies with external state rather than with the code. Three
+consecutive identical runs confirm the current state.
+
+**Consequence for verification:** test counts alone are a weak regression
+signal for this suite. Compare the failing-test *names*, not just totals.
+
 ---
 
 ## Required before Version 1.0 deployment
@@ -189,9 +246,9 @@ have them. A hung connection holds a request and its database connection
 indefinitely. Size **S**; the fuller design is in
 [`OPENAI_INTEGRATION.md`](OPENAI_INTEGRATION.md).
 
-**B9 · Log build identity and resolved configuration at startup.** Nothing logs
-the commit anywhere, and `/api/health` reports a hardcoded `1.1.0` that has never
-changed. `dist/build-info.json` exists and nothing reads it. Size **S**.
+**B9 · ~~Log build identity at startup~~** — done, item 7 above. The second half,
+logging the *resolved configuration*, is covered by the startup validator's
+report from item 3.
 
 ### MEDIUM
 

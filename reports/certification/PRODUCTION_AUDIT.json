@@ -1,7 +1,7 @@
 {
   "report": "PRODUCTION_AUDIT",
   "phase": "Program 146 — Production Audit",
-  "generatedAt": "2026-08-07T13:52:20.711Z",
+  "generatedAt": "2026-08-07T14:24:37.311Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 21,
@@ -26,9 +26,9 @@
     "POST /api/cases"
   ],
   "exercisedSpaRoutes": [],
-  "routes": 107,
-  "pages": 104,
-  "endpoints": 415,
+  "routes": 108,
+  "pages": 105,
+  "endpoints": 418,
   "tables": 116,
   "workers": 35,
   "markers": {
@@ -48,7 +48,7 @@
       "id": "AUD-ROUTES",
       "name": "Every route element resolves to an imported component",
       "status": "PASS",
-      "detail": "107 routes, 104 page files"
+      "detail": "108 routes, 105 page files"
     },
     {
       "id": "AUD-NAV",
@@ -66,7 +66,7 @@
       "id": "AUD-ENDPOINTS",
       "name": "API endpoints inventoried",
       "status": "PASS",
-      "detail": "415 registered route handlers"
+      "detail": "418 registered route handlers"
     },
     {
       "id": "AUD-TABLES",
@@ -164,7 +164,7 @@
       "id": "AUD-FABRICATION",
       "name": "No sample or mock datasets are declared in shipped views",
       "status": "PASS",
-      "detail": "128 components scanned"
+      "detail": "129 components scanned"
     },
     {
       "id": "AUD-DASHBOARDS",

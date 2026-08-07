@@ -94,6 +94,7 @@ import { CaseOverviewPage } from './pages/case/CaseOverviewPage';
 import { ChargesPage } from './pages/case/ChargesPage';
 import { DefenseStrategyWorkspace } from './pages/case/DefenseStrategyWorkspace';
 import { AttorneyWarRoom } from './pages/case/AttorneyWarRoom';
+import { EvidenceCoveragePage } from './pages/case/EvidenceCoveragePage';
 import { MotionIssuesPage } from './pages/case/MotionIssuesPage';
 import { EvidencePage } from './pages/case/EvidencePage';
 import { ExpertsPage } from './pages/case/ExpertsPage';
@@ -472,6 +473,14 @@ function App() {
           <Route path="cases/:caseId" element={<CaseLayout />}>
             <Route index element={<Navigate to="overview" replace />} />
             <Route path="overview" element={<CaseOverviewPage />} />
+            <Route
+              path="evidence-coverage"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <EvidenceCoveragePage />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="war-room"
               element={

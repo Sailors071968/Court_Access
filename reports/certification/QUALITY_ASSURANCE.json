@@ -1,7 +1,7 @@
 {
   "report": "QUALITY_ASSURANCE",
   "phase": "Program 153 — Administrative Quality Assurance",
-  "generatedAt": "2026-08-07T14:21:04.570Z",
+  "generatedAt": "2026-08-07T14:24:34.728Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 13,
@@ -29,14 +29,14 @@
     "unreachable": [],
     "uncited": []
   },
-  "componentsScanned": 128,
+  "componentsScanned": 129,
   "backendModulesScanned": 433,
   "checks": [
     {
       "id": "QA-01",
       "name": "No view writes invented case data into the page",
       "status": "PASS",
-      "detail": "128 components scanned"
+      "detail": "129 components scanned"
     },
     {
       "id": "QA-02",
@@ -54,7 +54,7 @@
       "id": "QA-04",
       "name": "Every route renders a component that exists",
       "status": "PASS",
-      "detail": "107 routes"
+      "detail": "108 routes"
     },
     {
       "id": "QA-05",

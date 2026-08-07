@@ -1,7 +1,7 @@
 {
   "report": "LITIGATION_OS",
   "phase": "Program 151 — Litigation Operating System",
-  "generatedAt": "2026-08-07T13:50:53.904Z",
+  "generatedAt": "2026-08-07T14:24:35.628Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 30,
@@ -22,7 +22,7 @@
     "PUT /api/cases/:id/stage"
   ],
   "exercisedSpaRoutes": [],
-  "caseId": "919d1fd1-0602-4684-a043-ffdb1297e19f",
+  "caseId": "2598f2c5-14eb-4366-9133-e8c27cacb2a9",
   "checks": [
     {
       "id": "LOS-01",

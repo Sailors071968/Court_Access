@@ -1,6 +1,6 @@
 # CourtAccess — Status
 
-Last updated by Production Program 151 (Litigation Operating System).
+Last updated by Production Program 153 (Evidence Intelligence and Explainability).
 
 Every figure below was produced by executing the platform: PostgreSQL 16 and
 Redis 7 provisioned, all Prisma migrations applied, the Fastify API and its
@@ -14,12 +14,12 @@ Reproduce with `bash scripts/certification/run-all.sh`.
 
 | | |
 |---|---|
-| Checks executed | 703 |
-| Passed | 671 |
+| Checks executed | 751 |
+| Passed | 717 |
 | Failed | 0 |
-| Warnings | 19 |
+| Warnings | 21 |
 | Not measurable here | 13 |
-| Engineering pass rate | 95.4% |
+| Engineering pass rate | 95.5% |
 | **Release gate** | **NOT READY** |
 
 **The gate is blocked by two things, and neither is an engineering defect.**
@@ -38,7 +38,7 @@ CALCRIM: seven verified instruction correspondences, with every other charge
 returning UNKNOWN. The gate's repository criterion still reflects the older
 measurement and will clear as instruction mapping is extended.
 
-Every other gate criterion passes: zero critical defects across 703 checks,
+Every other gate criterion passes: zero critical defects across 751 checks,
 zero broken navigation, zero broken permissions or authentication, zero broken
 upload pipelines, zero broken traceability, browser verified and stress tested.
 
@@ -80,6 +80,9 @@ criterion beneath it says otherwise.
 | Strategy workspace browser | 15 | 15 | 0 |
 | Litigation operating system | 30 | 30 | 0 |
 | War room browser | 11 | 11 | 0 |
+| Administrative quality assurance | 13 | 12 | 0 |
+| Evidence coverage and explainability | 23 | 22 | 0 |
+| Evidence coverage browser | 12 | 12 | 0 |
 | Static statutory dependencies | 7 | 5 | 0 |
 | Statutory intelligence browser | 12 | 12 | 0 |
 | Executive readiness dashboard | 12 | 12 | 0 |
@@ -192,6 +195,45 @@ pleaded, preview it, file it. No API call is needed at any point.
 A defendant and count matrix shows who is charged with what, distinguishing
 charged, dismissed, severed and not charged on that count.
 
+## Quality assurance as a release gate
+
+Three fabricated widgets were found in this codebase by hand across two
+programmes, every one in a view an attorney saw on sign-in. Program 153 turned
+that into an automated sweep and made it a gate criterion, so a breach blocks
+certification rather than being noted and forgotten.
+
+It checks for invented case data written into a view, fixed numbers rendered as
+measurements, surfaces that admit they are unfinished, routes that render
+nothing, administrator pages reachable only by typing a URL, findings served
+without a citation, citations pointing at documents not in the case, and quoted
+passages that are not in the document they are attributed to.
+
+It currently passes with one warning: **twenty analysis engines are shipped
+that nothing calls**. Dead code does not mislead a user, so it does not block,
+but it invites someone to wire it up later without knowing whether it was ever
+correct. The names are in the report.
+
+## Evidence coverage
+
+For each charged count, the elements are taken from the statute itself —
+retrieved from the Legislature, never from a stored list — and the material in
+the record is placed beside each one. Material that cuts the other way is shown
+separately rather than folded into support. An element with nothing behind it
+says so, and says what that does and does not mean.
+
+**It decides nothing.** Whether an element is proved is a jury question on
+evidence a court has admitted, and a check asserts the response never claims
+otherwise. A count whose statute cannot be read is reported with the reason
+rather than dropped.
+
+**Explain This** answers, for anything displayed, why it is on screen, what
+produced it, from which repository, what supports it, what cuts against it,
+what is missing and what authority bears on it. Anything it cannot answer is
+listed as unknown rather than left blank. Asking to explain something not on
+screen returns nothing rather than an invention.
+
+Live on any case under **Evidence Coverage**.
+
 ## Case lifecycle
 
 Program 151 gave every case a stage, worked out from what is on the record with
@@ -285,6 +327,17 @@ here as missing after Program 150, were built in Program 151. These remain:
 - **Investigation operations as project management** — not built. The
   investigator workbench holds tasks and leads against real data, but it was
   not extended into assignment, due dates and completion evidence.
+- **Evidence relationship engine** — not built as specified. Relationships are
+  drawn between an element and the material touching it, and between a theme
+  and its documents, but there is no general graph relating witnesses,
+  officers, exhibits and timeline events to one another with a stated
+  confidence for each edge.
+- **Contradiction explainability** — not built as specified. Contradictions are
+  detected elsewhere in the platform; they were not brought into the
+  explainability layer with both statements, their sources and their timeline
+  positions.
+- **Twenty analysis engines are shipped that nothing calls.** Named in the
+  quality assurance report.
 
 ## Gold Standard Certification
 

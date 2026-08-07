@@ -56,6 +56,7 @@ import { registerLegislativeRoutes } from './legislative/legislativeRoutes.ts';
 import { registerDoctrineRoutes } from './doctrine/doctrineRoutes.ts';
 import { registerProductionGatesRoutes } from './productionGates/productionGatesRoutes.js';
 import { registerProductionOperationsRoutes } from './productionOperations/productionOperationsRoutes.js';
+import { validateEnvironment, printValidationReport } from './startup/validateEnvironment.js';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -78,6 +79,14 @@ process.on('uncaughtException', (err) => {
 });
 
 async function startServer() {
+  // Configuration first: a missing secret or an unwritable upload directory is
+  // cheaper to report here than to discover from its symptoms later.
+  const validation = validateEnvironment();
+  printValidationReport(validation);
+  if (validation.overall === 'FAIL') {
+    process.exit(1);
+  }
+
   // PR 1 — Hard-fail if schema is drifted or migrations are pending
   await enforceSchemaOnBoot();
   const app = Fastify({
@@ -468,7 +477,16 @@ async function startServer() {
   }
 }
 
-startServer();
+// Anything that throws before the try block inside startServer would otherwise
+// reach the unhandledRejection handler above, which logs "server kept running"
+// and does exactly that — leaving a live process with no HTTP listener. PM2
+// reports it online with a restart count of zero and nothing serves, which is
+// harder to notice than a crash loop.
+startServer().catch((err: unknown) => {
+  const detail = err instanceof Error ? (err.stack ?? err.message) : String(err);
+  console.error('[Server] Failed to start:', detail);
+  process.exit(1);
+});
 
 // Graceful shutdown — stop pipeline workers before exit
 const shutdown = async (signal: string) => {

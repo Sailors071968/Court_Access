@@ -56,8 +56,36 @@ export interface AuthenticatedRequest extends FastifyRequest {
 // Configuration
 // ---------------------------------------------------------------------------
 
-const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(64).toString('hex');
-const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || crypto.randomBytes(64).toString('hex');
+/**
+ * Signing keys.
+ *
+ * A generated fallback is convenient in development and dangerous in
+ * production: the process starts normally, login works, and then every restart
+ * invalidates every token in existence and signs out every user — with no error
+ * and no server-side symptom. It is the only failure here that is completely
+ * silent, so in production it is fatal instead.
+ *
+ * The startup validator reports this as a FAIL before the server binds; this is
+ * the backstop for any path that reaches the middleware first.
+ */
+function requireSigningKey(name: 'JWT_SECRET' | 'JWT_REFRESH_SECRET'): string {
+  const value = process.env[name];
+  if (value) return value;
+
+  if (process.env.NODE_ENV === 'production') {
+    console.error(
+      `[Auth] FATAL: ${name} is not set. Refusing to start with a generated key — ` +
+        'every restart would sign out every user with no other symptom.',
+    );
+    process.exit(1);
+  }
+
+  console.warn(`[Auth] ${name} is not set; generating an ephemeral key. Sessions will not survive a restart.`);
+  return crypto.randomBytes(64).toString('hex');
+}
+
+const JWT_SECRET = requireSigningKey('JWT_SECRET');
+const JWT_REFRESH_SECRET = requireSigningKey('JWT_REFRESH_SECRET');
 const ACCESS_TOKEN_EXPIRY = '15m';
 const REFRESH_TOKEN_EXPIRY = '7d';
 const ACCESS_TOKEN_EXPIRY_SECONDS = 15 * 60;

@@ -7,6 +7,12 @@ Run them in the order given. The order is deliberate: the cheapest checks that
 can abort the whole deployment come first, so you do not spend time on
 configuration detail before knowing whether the platform can run at all.
 
+> **Superseded in part by [`RECONCILIATION.md`](RECONCILIATION.md)
+> (Program 164).** `DATABASE_URL` is now verified present, so A2 is reduced to a
+> version and schema-state question. A3 (Redis) was wrong and is withdrawn. Read
+> the reconciliation for the current classification of every blocker; this
+> document remains the source for the commands themselves.
+
 Fourteen UNKNOWNs remain from the audit, in three groups:
 
 - **Ten block the deployment itself** (groups A and B) — the Release Candidate
@@ -56,23 +62,19 @@ without `DATABASE_URL`** pointing at a reachable PostgreSQL.
 nowhere for the application's data to go. Below PostgreSQL 14 also blocks —
 the Prisma schema uses features not present in older majors.
 
-### A3 · Redis is present and reachable
+### A3 · Redis — **withdrawn, this was wrong**
 
-```bash
-sudo ss -lntp 'sport = :6379'
-redis-cli ping
-redis-cli INFO server | grep redis_version
-```
+Superseded by [`RECONCILIATION.md`](RECONCILIATION.md). Redis is **not**
+required to deploy and **not** required for Case 001.
 
-**Why:** queues carry evidence processing. Without Redis the API starts but
-every upload sits unprocessed — the file is stored, no text is extracted, and
-nothing can cite it.
+I originally wrote that its absence "blocks", inferring that from BullMQ
+appearing across 40-odd files rather than from tracing the certification path.
+Having traced it: upload, inventory, ingest, timeline, contradictions and
+CALCRIM are all synchronous and none of them touch Redis. The Redis reconciliation
+section of that document has the call-by-call evidence.
 
-**Expected:** listener on 6379, `PONG`, version 6 or later.
-
-**Blocks if:** absent. Case 001 could be uploaded and would never be analysed,
-which is worse than not uploading it, because the interface would show a corpus
-that appears imported.
+Set `DISABLE_WORKERS=true` in the release environment so the five BullMQ workers
+do not start and retry forever. Nothing else is needed.
 
 ### A4 · Free disk space
 

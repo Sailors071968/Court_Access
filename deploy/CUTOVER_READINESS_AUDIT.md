@@ -129,9 +129,12 @@ empty database the full chain applies cleanly and produces 116 tables with no
 drift, verified in the dress rehearsal. Against a *populated* production
 database the chain is unrehearsed, because the production schema is unknown.
 
-### Phase 3 — Redis · **NOT VERIFIABLE FROM HERE**
+### Phase 3 — Redis · **RESOLVED — absent, and not required**
 
-Nothing about Redis is observable from outside. Collected by "PHASE 3".
+Superseded by [`RECONCILIATION.md`](RECONCILIATION.md). Redis is not configured
+on the host, and the certification path does not use it: upload, inventory,
+ingest, timeline, contradictions and CALCRIM are all synchronous. Deploy with
+`DISABLE_WORKERS=true`.
 
 ### Phase 4 — Storage · **NOT VERIFIABLE FROM HERE**
 
@@ -190,8 +193,8 @@ are unknown rather than merely untested.
 | Service | Configured | Verified | Blocking? |
 |---|---|---|---|
 | California Legislative Information | Unknown on host | **Reachable from here** (HTTP 200) | **Yes if unreachable** — every charged statute would fall back to cache or report unavailable |
-| PostgreSQL | Unknown | Not verifiable remotely | **Yes** — the API will not start without `DATABASE_URL` |
-| Redis | Unknown | Not verifiable remotely | **Yes for processing** — queues cannot run |
+| PostgreSQL | **`DATABASE_URL` verified present** (Program 164) | Version and schema state still unknown | **Partly** — the API will not start without it, but it is set |
+| Redis | **Verified absent** (Program 164) | Certification path traced and is synchronous throughout | **No** — see `RECONCILIATION.md`; set `DISABLE_WORKERS=true` |
 | OCR (tesseract / ffmpeg) | Unknown | Not verifiable remotely | **Degrading** — media durations report unknown; silent recordings indistinguishable from untranscribed |
 | Cloudflare | **Not present** | Observed: DNS resolves straight to `44.209.225.79`; no `CF-Ray` header | No |
 | Stripe | Unknown | Never exercised by this platform | No — billing inert without it |

@@ -191,14 +191,20 @@ sudo cp /var/www/courtaccess/.env "$RELEASE/.env" 2>/dev/null || \
 
 ```
 NODE_ENV=production
-PORT=3000
+PORT=3000                          # the RC defaults to 3001; nginx proxies to 3000
 HOST=127.0.0.1
 DATABASE_URL=postgresql://USER:PASSWORD@HOST:5432/courtaccess?schema=public
-REDIS_URL=redis://127.0.0.1:6379
 JWT_SECRET=                        # changing this signs everyone out
 FRONTEND_URL=https://courtaccess.net
 CERTIFICATION_STAGING_DIR=/var/lib/courtaccess/staging
 EVIDENCE_STORAGE_DIR=/var/lib/courtaccess/evidence
+
+# Redis is not configured on this host, and the certification path does not
+# need it — upload, ingest, timeline, contradictions and CALCRIM all run
+# synchronously. Without this flag the server starts five BullMQ workers that
+# retry a connection they will never get. Set REDIS_URL and drop this line if
+# Redis is ever added.
+DISABLE_WORKERS=true
 ```
 
 ```bash
@@ -533,11 +539,15 @@ Every line must be **yes**.
 
 **Before deployment**
 
-- [ ] PostgreSQL and Redis confirmed reachable from the host
+- [ ] TLS certificate renewed — `certbot renew` succeeded and the new expiry is
+      at least 60 days out (this is a live incident, not a deployment step)
+- [ ] PostgreSQL reachable from the host, and `_prisma_migrations` present if
+      the database already has tables
 - [ ] Node 22 or later on the host
 - [ ] `pm2 list` recorded; process name known
 - [ ] Application, database and `dump.pm2` backed up **and verified listable**
-- [ ] `DATABASE_URL`, `REDIS_URL` and `JWT_SECRET` supplied, not invented
+- [ ] `DATABASE_URL` and `JWT_SECRET` supplied, not invented
+- [ ] `PORT=3000` and `DISABLE_WORKERS=true` set in `$RELEASE/.env`
 - [ ] Release built by `deploy/build-release.sh`, both artefacts present
 - [ ] Built with `NODE_ENV` unset or `--include=dev` — npm skips
       devDependencies under `NODE_ENV=production` and the build fails with

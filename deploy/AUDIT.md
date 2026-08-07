@@ -56,10 +56,18 @@ replaced.
 
 ## What deploying properly requires
 
-The application needs PostgreSQL, Redis, the Fastify API, the built frontend
-and background workers, with ffmpeg present for media measurement and outbound
-HTTPS to `leginfo.legislature.ca.gov` for statutory retrieval. None of that
-exists on the host today.
+> **Corrected by [`RECONCILIATION.md`](RECONCILIATION.md) (Program 164).** This
+> section originally claimed none of the following existed on the host. That was
+> written without host access and is **disproven**: `DATABASE_URL` is verified
+> present, and PM2 manages the application.
 
-[`bootstrap-ec2.sh`](bootstrap-ec2.sh) does the whole thing in one command.
-[`README.md`](README.md) covers the compose stack it brings up.
+The application needs PostgreSQL and the Fastify API serving the built frontend.
+Redis is **optional** — the certification path is synchronous end to end, so
+deploy with `DISABLE_WORKERS=true` and add Redis in 1.1 when video and narrative
+processing matter. ffmpeg is degrading-only; without it media durations report
+as unknown. Outbound HTTPS to `leginfo.legislature.ca.gov` is needed for
+statutory retrieval and is unverified from the host.
+
+For the existing courtaccess.net host, follow
+[`EXECUTION_PROCEDURE.md`](EXECUTION_PROCEDURE.md). `bootstrap-ec2.sh` targets a
+**fresh Debian/Ubuntu host** and must not be run against production.

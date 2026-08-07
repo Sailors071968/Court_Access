@@ -56,7 +56,8 @@ const CSRF_EXEMPT_ROUTES = [
 
 const csrfTokenStore = new Map<string, CsrfTokenRecord>();
 
-// Cleanup expired tokens every 5 minutes
+// Cleanup expired tokens every 5 minutes. Unreferenced for the same reason as
+// the rate-limiter sweep: housekeeping must not keep the process alive.
 setInterval(() => {
   const now = Date.now();
   for (const [key, record] of csrfTokenStore) {
@@ -64,7 +65,7 @@ setInterval(() => {
       csrfTokenStore.delete(key);
     }
   }
-}, 5 * 60_000);
+}, 5 * 60_000).unref();
 
 // ---------------------------------------------------------------------------
 // CSRF Token Generation & Validation

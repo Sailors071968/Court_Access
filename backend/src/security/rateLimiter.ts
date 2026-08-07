@@ -38,7 +38,10 @@ function getOrCreateStore(storeName: string): Map<string, RateLimitEntry> {
   return store;
 }
 
-// Cleanup expired entries every 60 seconds
+// Cleanup expired entries every 60 seconds. Unreferenced so a sweep that is
+// only housekeeping cannot hold the event loop open — otherwise importing this
+// module keeps any process alive forever, which is what made `npm test` hang
+// after every test had already passed.
 setInterval(() => {
   const now = Date.now();
   for (const [, store] of rateLimitStores) {
@@ -48,7 +51,7 @@ setInterval(() => {
       }
     }
   }
-}, 60_000);
+}, 60_000).unref();
 
 // ---------------------------------------------------------------------------
 // Rate limit checker

@@ -11,6 +11,21 @@ re-verified after this document was written. The frontend build stamp embeds
 whichever commit it is built from, so expect it to name the commit you deploy,
 not necessarily `4bdaca1`.
 
+> **Superseded in part, 7 August 2026, 23:14 UTC.** This is a dated record and
+> its observations stand as made. Two things have changed since:
+>
+> - **Critical blocker C1, the TLS certificate, is RESOLVED.** Renewed to
+>   `Nov 5 22:08:52 2026`, serial `060359B4860A6029304A03177AE6E3F61602`,
+>   issuer `YE1`, verified by TLS handshake. The critical count is now **2**,
+>   not 3.
+> - **Several High findings have been implemented** in Programs 181 and 183 —
+>   startup validation, signing-key fail-fast, orderly shutdown, the schema
+>   guard, and upload transfer integrity. See
+>   [`ROADMAP.md`](ROADMAP.md) for the current position.
+>
+> The verdict below remains **NO GO**, on the nginx body limit and the
+> unobserved database rather than on the certificate.
+
 This is the permanent deployment record. Where it disagrees with any earlier
 document in `deploy/`, this one governs.
 
@@ -774,8 +789,11 @@ There are remaining deployment UNKNOWNs. Every command below is read-only.
 
 ## Critical
 
-**C1 — The TLS certificate expires 9 August 2026**
-*Evidence* [OBSERVED]: `notAfter = Aug 9 18:14:08 2026 GMT`; not renewed in ≥28 days.
+**C1 — The TLS certificate expires 9 August 2026 · RESOLVED 7 August 2026**
+*Renewed the same day* to `Nov 5 22:08:52 2026`, serial `060359B4…`, issuer
+`YE1`, verified by TLS handshake. The entry is retained as the record of what
+was observed; it is no longer a blocker.
+*Evidence at the time* [OBSERVED]: `notAfter = Aug 9 18:14:08 2026 GMT`; not renewed in ≥28 days.
 *Impact:* every browser refuses the site with a full-page interstitial. Peter cannot reach the portal in any browser.
 *Probability:* certain unless renewal is fixed.
 *Mitigation:* `sudo certbot renew --dry-run` today, then renew.

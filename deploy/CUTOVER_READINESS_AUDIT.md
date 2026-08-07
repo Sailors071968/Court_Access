@@ -22,7 +22,14 @@ is a live production incident independent of any deployment.
 
 ---
 
-## Blocker 1 — The TLS certificate expires in 2 days
+## Blocker 1 — The TLS certificate expires in 2 days · **RESOLVED 7 Aug 2026**
+
+> Closed the same day. Renewed to `Nov 5 22:08:52 2026`, serial
+> `060359B4860A6029304A03177AE6E3F61602`, issuer `YE1`, verified by TLS
+> handshake at 23:14 UTC. The observation below stands as made at 16:53; it is
+> retained because the renewal timer is what actually failed, and that is worth
+> remembering before 5 November.
+
 
 **Observed** by TLS handshake against `courtaccess.net:443`:
 

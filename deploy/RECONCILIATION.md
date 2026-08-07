@@ -41,7 +41,7 @@ them in a single step.
 
 | # | Blocker as previously stated | Classification | Basis |
 |---|---|---|---|
-| 1 | TLS certificate expires 9 August | **VERIFIED** | [OBSERVED] |
+| 1 | ~~TLS certificate expires 9 August~~ | **RESOLVED 7 Aug** — renewed to 5 Nov 2026 | [OBSERVED] |
 | 2 | nginx caps request bodies at 1 MB | **VERIFIED** | [OBSERVED] |
 | 3 | Deployed frontend is a different application generation | **VERIFIED** | [OBSERVED] |
 | 4 | The RC backend produces no build output | **DISPROVEN** | [REPOSITORY] |
@@ -251,7 +251,12 @@ weeks of nobody being able to sign in is the state we would be returning to.
 This also means the deployment cannot make the user-facing situation worse. It
 is currently at zero.
 
-### SSL renewal
+### SSL renewal — **RESOLVED 7 August 2026**
+
+> Renewed the same day to `Nov 5 22:08:52 2026`, serial `060359B4…`, issuer
+> `YE1`. The reasoning below stands; the deadline it describes has passed
+> without incident.
+
 
 **Classification: VERIFIED. The most urgent item here, and the only one whose
 deadline is not under your control.**
@@ -369,7 +374,7 @@ known one-line fixes.
 
 | | Blocker | Fix |
 |---|---|---|
-| 1 | TLS certificate expires 9 August | `certbot renew`; independent of deployment; **do this today** |
+| ~~1~~ | ~~TLS certificate expires 9 August~~ | **Done 7 Aug** — valid to 5 Nov 2026, serial `060359B4…` |
 | 2 | nginx `client_max_body_size` is 1 MB against 8 MB chunks | `client_max_body_size 64m;` during cut-over |
 
 ### Unresolved UNKNOWNs that gate the decision — 5

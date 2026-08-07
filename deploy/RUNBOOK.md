@@ -132,62 +132,45 @@ on and record the latest restore point instead.
 
 ---
 
-# STAGE B — The certificate
+# STAGE B — The certificate · **RESOLVED 7 August 2026**
 
-Independent of the deployment. **Do this first regardless of everything else.**
-The certificate expires `Aug 9 18:14:08 2026 GMT`.
+**No action required.** Verified by TLS handshake at 23:14 UTC on 7 August:
 
-## B1 [R] · Confirm the diagnosis
+```
+issuer    = C = US, O = Let's Encrypt, CN = YE1
+notBefore = Aug  7 22:08:53 2026 GMT
+notAfter  = Nov  5 22:08:52 2026 GMT
+serial    = 060359B4860A6029304A03177AE6E3F61602
+```
+
+89 days remaining. A new serial and a different issuing intermediate (`YE1`,
+previously `E7`) confirm this is a genuinely new certificate rather than a
+cached read.
+
+**One observation worth keeping**, because it cost a confusing twelve minutes.
+The certificate was issued at 22:08:53, but a handshake at 23:02 was still
+served the old one; the new certificate only appeared at 23:14. **Renewal and
+service are two separate events** — certbot writes the new files, and nginx
+continues serving the old certificate from memory until it reloads. Checking
+`certbot certificates` alone would have shown success while browsers were still
+being handed a certificate about to expire.
+
+For future renewals, verify from outside rather than from certbot's own
+report:
 
 ```bash
-sudo certbot certificates
+echo | openssl s_client -servername courtaccess.net -connect courtaccess.net:443 2>/dev/null \
+  | openssl x509 -noout -dates -serial
+```
+
+The **serial** is the reliable signal, not the date alone.
+
+Renewal should now be automatic. Confirm the timer exists so this does not
+recur, at some point before 5 November:
+
+```bash
 systemctl list-timers | grep -i certbot
-sudo certbot renew --dry-run
 ```
-
-**Expected:** the dry run reports success. It uses the staging endpoint and
-writes no certificate.
-
-**If the dry run fails,** fix the cause before B2. The usual causes are a
-webroot that has moved, or port 80 no longer reaching certbot.
-
-## B2 [P] · Renew
-
-```bash
-sudo certbot renew
-```
-
-**Expected:** `Congratulations, all renewals succeeded`. If certbot's nginx
-installer is in use it reloads nginx itself; otherwise:
-
-```bash
-sudo nginx -t && sudo systemctl reload nginx
-```
-
-### Verify immediately
-
-```bash
-echo | openssl s_client -servername courtaccess.net -connect courtaccess.net:443 2>/dev/null | openssl x509 -noout -dates
-curl -sI https://courtaccess.net/api/health | head -1
-```
-
-**Expected:** `notAfter` roughly 90 days out, and `HTTP/2 200`.
-
-**Do not continue until `notAfter` has moved.**
-
-### Rollback for B2
-
-Certbot keeps the previous certificate:
-
-```bash
-sudo ls -la /etc/letsencrypt/archive/courtaccess.net/
-# repoint the symlinks in /etc/letsencrypt/live/courtaccess.net/ to the prior
-# certN.pem / privkeyN.pem, then:
-sudo nginx -t && sudo systemctl reload nginx
-```
-
-Reverting to a certificate that expires in two days is only worth doing if the
-new one is somehow broken.
 
 ---
 
@@ -832,7 +815,7 @@ database would still reference them.
 
 | Blocker | Eliminated at | Verified at |
 |---|---|---|
-| TLS certificate expiring 9 August | B2 | `openssl x509 -noout -dates` |
+| ~~TLS certificate expiring 9 August~~ | **Resolved 7 Aug** | New certificate valid to 5 Nov, serial `060359B4…` |
 | nginx 1 MB body limit | F2 | 2 MB POST returns 404, not 413 |
 | Production database state unknown | A2 | Inspector summary |
 | Node version unknown | A1 | `node --version` |

@@ -546,8 +546,8 @@ Every line must be **yes**.
 
 **Before deployment**
 
-- [ ] TLS certificate renewed — `certbot renew` succeeded and the new expiry is
-      at least 60 days out (this is a live incident, not a deployment step)
+- [x] ~~TLS certificate renewed~~ — **done 7 Aug 2026**, valid to
+      `Nov 5 22:08:52 2026`, serial `060359B4…`, verified by TLS handshake
 - [ ] PostgreSQL reachable from the host, and `_prisma_migrations` present if
       the database already has tables
 - [ ] Node 22 or later on the host

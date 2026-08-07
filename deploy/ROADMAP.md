@@ -178,8 +178,8 @@ Nothing further in code. What remains is operational and is already in
 
 | | Item | Evidence |
 |---|---|---|
-| 1 | **Renew the TLS certificate** | `notAfter = Aug 9 18:14:08 2026 GMT`, observed; renewal has not run in ≥28 days |
-| 2 | **Raise nginx `client_max_body_size` to 64m** | 413 measured at 1536 KB against 8 MB chunks |
+| ~~1~~ | ~~**Renew the TLS certificate**~~ | **RESOLVED 7 Aug 2026.** New certificate valid to `Nov 5 22:08:52 2026`, serial `060359B4860A6029304A03177AE6E3F61602`, issuer `YE1`. 89 days. |
+| 2 | **Raise nginx `client_max_body_size` to 64m** | 413 measured at 1536 KB **and 3 MB**, re-confirmed 7 Aug 23:14 |
 | 3 | **Run `inspect-database.mjs`** against production | Database state unobserved; one of three states makes the RC unrunnable |
 | 4 | **Confirm `node --version` ≥ 22** | Bundle targets `node22` |
 | 5 | **Take a verified `pg_dump`** | 30 migrations, no down migrations, four irreversible `DROP COLUMN` |

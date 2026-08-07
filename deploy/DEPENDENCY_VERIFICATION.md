@@ -305,7 +305,17 @@ are owned by that user, or they do not exist yet and will be created by section
 already contain data. Moving them is then part of the deployment, not an
 afterthought.
 
-### C4 · Certbot renewal
+### C4 · Certbot renewal — **RESOLVED 7 August 2026**
+
+> Superseded. The certificate was renewed on 7 August and is valid to
+> `Nov 5 22:08:52 2026` (serial `060359B4…`, issuer `YE1`), verified by TLS
+> handshake. The commands below remain useful for confirming the **timer** so
+> this does not recur, but the incident is closed.
+>
+> One thing learned: renewal and service are separate events. A handshake at
+> 23:02 still returned the old certificate although the new one was issued at
+> 22:08; it only appeared after nginx reloaded. Verify from outside, and treat
+> the **serial** as the signal rather than the date.
 
 ```bash
 sudo certbot certificates
@@ -340,7 +350,7 @@ B4  nginx configuration file            │
 B5  database state                      │
 B6  backup capability                  ─┘
 
-C4  certbot renewal   ← run this first in practice; it is the live incident
+C4  certbot renewal   ← RESOLVED 7 Aug; certificate valid to 5 Nov 2026
 C1  leginfo reachable                  ─┐
 C2  ffmpeg                              │  determines whether Case 001
 C3  upload directories                 ─┘  will work once deployed

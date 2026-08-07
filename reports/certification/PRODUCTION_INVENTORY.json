@@ -1,15 +1,15 @@
 {
-  "routes": 106,
-  "pages": 103,
-  "endpoints": 410,
-  "tables": 115,
+  "routes": 107,
+  "pages": 104,
+  "endpoints": 415,
+  "tables": 116,
   "workers": 35,
   "markers": {
     "TODO": 0,
     "FIXME": 0,
     "STUB": 5,
     "MOCK": 28,
-    "PLACEHOLDER": 36,
+    "PLACEHOLDER": 35,
     "HACK": 0
   },
   "corpora": {

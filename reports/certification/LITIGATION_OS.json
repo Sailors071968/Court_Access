@@ -1,0 +1,206 @@
+{
+  "report": "LITIGATION_OS",
+  "phase": "Program 151 — Litigation Operating System",
+  "generatedAt": "2026-08-07T13:50:53.904Z",
+  "apiBase": "http://127.0.0.1:3001",
+  "summary": {
+    "total": 30,
+    "PASS": 30,
+    "FAIL": 0,
+    "WARNING": 0,
+    "UNKNOWN": 0,
+    "passRate": 100
+  },
+  "exercisedApiRoutes": [
+    "GET /api/cases/:id/evolution",
+    "GET /api/cases/:id/family-view",
+    "GET /api/cases/:id/stage",
+    "GET /api/cases/:id/war-room",
+    "POST /api/auth/register",
+    "POST /api/cases",
+    "POST /api/cases/:id/charges/documents",
+    "PUT /api/cases/:id/stage"
+  ],
+  "exercisedSpaRoutes": [],
+  "caseId": "919d1fd1-0602-4684-a043-ffdb1297e19f",
+  "checks": [
+    {
+      "id": "LOS-01",
+      "name": "A case with nothing on file has an undetermined stage, and says why",
+      "status": "PASS",
+      "detail": "Nothing on the record settles the stage: no charging document has been filed and no evidence has been uploaded"
+    },
+    {
+      "id": "LOS-02",
+      "name": "Every litigation stage is supported",
+      "status": "PASS",
+      "detail": "22 stages"
+    },
+    {
+      "id": "LOS-03",
+      "name": "Evidence with no charges puts the case at investigation",
+      "status": "PASS",
+      "detail": "No charging document is on file, and 1 item(s) of material have been gathered."
+    },
+    {
+      "id": "LOS-04",
+      "name": "A complaint plus discovery moves the case to the discovery stage",
+      "status": "PASS",
+      "detail": "A complaint is on file and 1 item(s) of discovery have been received."
+    },
+    {
+      "id": "LOS-05",
+      "name": "The reasoning behind the stage is shown, not just the answer",
+      "status": "PASS",
+      "detail": "Charging documents on file: Complaint. 1 item(s) of evidence have been uploaded."
+    },
+    {
+      "id": "LOS-06",
+      "name": "An information on file settles a later stage",
+      "status": "PASS",
+      "detail": "An information has been filed, which follows the preliminary hearing stage."
+    },
+    {
+      "id": "LOS-07",
+      "name": "Counsel can set the stage",
+      "status": "PASS",
+      "detail": "Motion practice"
+    },
+    {
+      "id": "LOS-08",
+      "name": "Inference never overrides counsel’s own judgement about the case",
+      "status": "PASS",
+      "detail": "Suppression motion set for hearing on 12 August."
+    },
+    {
+      "id": "LOS-09",
+      "name": "Every stage change is kept, so the history can be reconstructed",
+      "status": "PASS",
+      "detail": "4 events"
+    },
+    {
+      "id": "LOS-10",
+      "name": "A stage that does not exist is refused",
+      "status": "PASS",
+      "detail": "HTTP 400"
+    },
+    {
+      "id": "LOS-11",
+      "name": "A defendant cannot change the stage of their own case",
+      "status": "PASS",
+      "detail": "HTTP 403"
+    },
+    {
+      "id": "LOS-12",
+      "name": "The evolution covers charges, evidence and stage changes",
+      "status": "PASS",
+      "detail": "charges, evidence, stage"
+    },
+    {
+      "id": "LOS-13",
+      "name": "Each change explains what it changed downstream",
+      "status": "PASS",
+      "detail": "The charges the case analysis reads were established by this filing."
+    },
+    {
+      "id": "LOS-14",
+      "name": "The evolution is in chronological order",
+      "status": "PASS",
+      "detail": "7 entries"
+    },
+    {
+      "id": "LOS-15",
+      "name": "Where a consequence cannot be established it is left blank, not invented",
+      "status": "PASS",
+      "detail": "Every entry is a record that exists. Where a change had a consequence that cannot be established from the reco"
+    },
+    {
+      "id": "LOS-16",
+      "name": "The war room shows the current stage",
+      "status": "PASS",
+      "detail": "Motion practice"
+    },
+    {
+      "id": "LOS-17",
+      "name": "The war room shows the operative charges",
+      "status": "PASS",
+      "detail": "1 count from the Information"
+    },
+    {
+      "id": "LOS-18",
+      "name": "Issues appear with the required wording, never as advice",
+      "status": "PASS",
+      "detail": "5 issues"
+    },
+    {
+      "id": "LOS-19",
+      "name": "Every issue on the war room cites a document",
+      "status": "PASS",
+      "detail": "Investigative Report.pdf"
+    },
+    {
+      "id": "LOS-20",
+      "name": "What is not in the record is shown alongside what is",
+      "status": "PASS",
+      "detail": "Lighting and distance measurements at the scene"
+    },
+    {
+      "id": "LOS-21",
+      "name": "The war room shows what has changed lately",
+      "status": "PASS",
+      "detail": "7 recent entries"
+    },
+    {
+      "id": "LOS-22",
+      "name": "The war room states no conclusion about guilt, merits or outcome",
+      "status": "PASS"
+    },
+    {
+      "id": "LOS-23",
+      "name": "The stage is explained without jargon",
+      "status": "PASS",
+      "detail": "The lawyers are asking the judge to decide legal questions before trial."
+    },
+    {
+      "id": "LOS-24",
+      "name": "Charges are named in the People’s own words, not a code citation alone",
+      "status": "PASS",
+      "detail": "Possession For Sale Of A Controlled Substance,"
+    },
+    {
+      "id": "LOS-25",
+      "name": "Questions to ask the attorney are drawn from this case",
+      "status": "PASS",
+      "detail": "Has lighting and distance measurements at the scene been requested?"
+    },
+    {
+      "id": "LOS-26",
+      "name": "Each question explains why it is being raised",
+      "status": "PASS",
+      "detail": "The case file mentions mistaken identification, and this is something usually needed to look into that properl"
+    },
+    {
+      "id": "LOS-27",
+      "name": "Questions name the document that prompted them",
+      "status": "PASS",
+      "detail": "Investigative Report.pdf"
+    },
+    {
+      "id": "LOS-28",
+      "name": "The family view gives no advice and states no conclusion",
+      "status": "PASS"
+    },
+    {
+      "id": "LOS-29",
+      "name": "The family view says plainly that it is not advice",
+      "status": "PASS",
+      "detail": "This page is a summary of what is in the case file. It is not legal advice, it does not say whether anyone is "
+    },
+    {
+      "id": "LOS-30",
+      "name": "None of these surfaces is visible to another firm",
+      "status": "PASS",
+      "detail": "4 endpoints probed"
+    }
+  ]
+}

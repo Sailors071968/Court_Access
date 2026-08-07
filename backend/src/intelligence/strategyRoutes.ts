@@ -11,6 +11,15 @@ import type { AuthenticatedRequest } from '../security/authMiddleware.js';
 import prisma from '../lib/prisma.js';
 import { buildDefenseThemes, DEFENSE_THEMES } from './defenseThemes.js';
 import { buildActionCentre } from './actionCenter.js';
+import {
+  LIFECYCLE_STAGES,
+  STAGE_LABELS,
+  STAGE_PLAIN_ENGLISH,
+  caseEvolution,
+  determineStage,
+  recordStage,
+  stageHistory,
+} from './caseLifecycle.js';
 
 async function caseInTenant(caseId: string, tenantId: string): Promise<boolean> {
   const found = await prisma.criminalCase.findFirst({ where: { caseId, tenantId }, select: { caseId: true } });
@@ -199,5 +208,262 @@ export async function registerStrategyRoutes(app: FastifyInstance): Promise<void
     });
   });
 
+  // -------------------------------------------------------------------------
+  // Case lifecycle
+  // -------------------------------------------------------------------------
+  app.get('/api/cases/:caseId/stage', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!request.user) return reply.code(401).send({ error: 'Authentication required' });
+    const { caseId } = request.params as { caseId: string };
+    if (!(await caseInTenant(caseId, request.user.tenantId))) {
+      return reply.code(404).send({ error: 'Not Found', message: 'No such case in this account.' });
+    }
+
+    const determination = await determineStage(caseId, request.user.tenantId);
+    if (determination.source === 'inferred') {
+      await recordStage({
+        caseId,
+        tenantId: request.user.tenantId,
+        stage: determination.stage,
+        basis: determination.basis,
+        source: 'inferred',
+      });
+    }
+
+    return reply.send({
+      caseId,
+      ...determination,
+      stages: LIFECYCLE_STAGES.map((s) => ({ id: s, label: STAGE_LABELS[s] })),
+      history: await stageHistory(caseId),
+    });
+  });
+
+  app.put('/api/cases/:caseId/stage', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!request.user) return reply.code(401).send({ error: 'Authentication required' });
+    if (!['admin', 'attorney', 'paralegal'].includes(request.user.role)) {
+      return reply.code(403).send({
+        error: 'Forbidden',
+        message: 'Setting the stage of a case is limited to attorneys, paralegals and administrators.',
+      });
+    }
+    const { caseId } = request.params as { caseId: string };
+    if (!(await caseInTenant(caseId, request.user.tenantId))) {
+      return reply.code(404).send({ error: 'Not Found', message: 'No such case in this account.' });
+    }
+
+    const body = (request.body ?? {}) as { stage?: string; basis?: string };
+    if (!body.stage || !LIFECYCLE_STAGES.includes(body.stage as never)) {
+      return reply.code(400).send({
+        error: 'Bad Request',
+        message: `stage must be one of ${LIFECYCLE_STAGES.join(', ')}.`,
+      });
+    }
+
+    await recordStage({
+      caseId,
+      tenantId: request.user.tenantId,
+      stage: body.stage,
+      basis: body.basis?.trim() || 'Set by counsel.',
+      source: 'attorney',
+      actorId: request.user.userId,
+    });
+
+    return reply.send({
+      caseId,
+      stage: body.stage,
+      label: STAGE_LABELS[body.stage],
+      plainEnglish: STAGE_PLAIN_ENGLISH[body.stage],
+      source: 'attorney',
+      message: 'Set. Inference will not override this.',
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // Case evolution — what changed, and what it changed
+  // -------------------------------------------------------------------------
+  app.get('/api/cases/:caseId/evolution', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!request.user) return reply.code(401).send({ error: 'Authentication required' });
+    const { caseId } = request.params as { caseId: string };
+    if (!(await caseInTenant(caseId, request.user.tenantId))) {
+      return reply.code(404).send({ error: 'Not Found', message: 'No such case in this account.' });
+    }
+    const entries = await caseEvolution(caseId, request.user.tenantId);
+    return reply.send({
+      caseId,
+      entries,
+      note:
+        'Every entry is a record that exists. Where a change had a consequence that cannot be established from ' +
+        'the record, the consequence is left blank rather than asserted.',
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // Attorney war room — one screen
+  // -------------------------------------------------------------------------
+  app.get('/api/cases/:caseId/war-room', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!request.user) return reply.code(401).send({ error: 'Authentication required' });
+    const { caseId } = request.params as { caseId: string };
+    if (!(await caseInTenant(caseId, request.user.tenantId))) {
+      return reply.code(404).send({ error: 'Not Found', message: 'No such case in this account.' });
+    }
+
+    const [stage, operative, themesResult, evolution, criminalCase] = await Promise.all([
+      determineStage(caseId, request.user.tenantId),
+      prisma.chargingDocument.findFirst({
+        where: { caseId, status: 'filed' },
+        orderBy: { filingSequence: 'desc' },
+        include: { charges: { include: { defendants: true }, orderBy: { countNumber: 'asc' } } },
+      }).catch(() => null),
+      buildDefenseThemes(caseId, request.user.tenantId),
+      caseEvolution(caseId, request.user.tenantId),
+      prisma.criminalCase.findUnique({
+        where: { caseId },
+        select: { title: true, caseNumber: true, court: true, nextHearing: true, nextHearingNote: true },
+      }),
+    ]);
+
+    const supported = themesResult.themes.filter((t) => t.status === 'supported');
+    const motionIssues = supported.filter((t) => MOTION_THEME_IDS.has(t.id));
+
+    // The most recent things to have happened, newest first.
+    const recent = [...evolution].reverse().slice(0, 15);
+
+    return reply.send({
+      caseId,
+      case: criminalCase,
+      stage: {
+        stage: stage.stage,
+        label: stage.label,
+        source: stage.source,
+        basis: stage.basis,
+      },
+      charges: {
+        operativeDocument: operative ? { name: operative.name, filedAt: operative.filedAt, kind: operative.kind } : null,
+        counts: (operative?.charges ?? []).map((c) => ({
+          countNumber: c.countNumber,
+          citation: c.normalizedCitation,
+          status: c.status,
+          defendants: c.defendants.map((d) => ({ name: d.defendantName, status: d.status })),
+        })),
+        note: operative ? null : 'No charging document has been filed, so there are no charges to show.',
+      },
+      repositoryIssues: motionIssues.map((t) => ({
+        id: t.id,
+        topic: t.label,
+        documentCount: t.documentCount,
+        statement: 'This repository-backed issue may warrant attorney review.',
+        firstPassage: t.citations[0] ?? null,
+      })),
+      defenceThemes: {
+        supported: supported.length,
+        examined: themesResult.themes.length,
+        topThemes: supported.slice(0, 6).map((t) => ({ id: t.id, label: t.label, documentCount: t.documentCount })),
+      },
+      outstanding: {
+        missingMaterial: [...new Set(supported.flatMap((t) => t.missing))].slice(0, 12),
+      },
+      recentActivity: recent,
+      caveat:
+        'Everything here is drawn from records in this case and links to them. Nothing on this screen states a ' +
+        'conclusion about guilt, the merits of an issue, or how the case will end.',
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // Family view — plain English, no advice
+  // -------------------------------------------------------------------------
+  app.get('/api/cases/:caseId/family-view', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!request.user) return reply.code(401).send({ error: 'Authentication required' });
+    const { caseId } = request.params as { caseId: string };
+    if (!(await caseInTenant(caseId, request.user.tenantId))) {
+      return reply.code(404).send({ error: 'Not Found', message: 'No such case in this account.' });
+    }
+
+    const [criminalCase, stage, operative, evidence, themesResult] = await Promise.all([
+      prisma.criminalCase.findUnique({
+        where: { caseId },
+        select: { title: true, nextHearing: true, nextHearingNote: true },
+      }),
+      determineStage(caseId, request.user.tenantId),
+      prisma.chargingDocument.findFirst({
+        where: { caseId, status: 'filed' },
+        orderBy: { filingSequence: 'desc' },
+        include: { charges: { orderBy: { countNumber: 'asc' } } },
+      }).catch(() => null),
+      prisma.evidence.findMany({
+        where: { caseId },
+        select: { fileName: true, createdAt: true, processingStatus: true },
+        orderBy: { createdAt: 'desc' },
+        take: 6,
+      }),
+      buildDefenseThemes(caseId, request.user.tenantId),
+    ]);
+
+    // The charge in the People's own words, trimmed to the offence named,
+    // rather than a paraphrase this platform invented.
+    const charges = (operative?.charges ?? [])
+      .filter((c) => c.status === 'active')
+      .map((c) => {
+        const named = c.verbatimText.match(/the crime of ([A-Z][A-Z ,'()-]{4,90})/);
+        return {
+          countNumber: c.countNumber,
+          plainLanguage: named
+            ? named[1].trim().toLowerCase().replace(/\b\w/g, (m) => m.toUpperCase())
+            : c.normalizedCitation,
+          citation: c.normalizedCitation,
+        };
+      });
+
+    // Questions come from what is missing on a theme the record actually
+    // raised. Each one names what prompted it, so it is a real question about
+    // this case rather than a generic checklist.
+    const questions: Array<{ question: string; why: string; basedOn: string | null }> = [];
+    for (const theme of themesResult.themes.filter((t) => t.status === 'supported')) {
+      for (const missing of theme.missing.slice(0, 2)) {
+        questions.push({
+          question: `Has ${missing.charAt(0).toLowerCase()}${missing.slice(1)} been requested?`,
+          why:
+            `The case file mentions ${theme.label.toLowerCase()}, and this is something usually needed to look ` +
+            'into that properly. It may already be in hand.',
+          basedOn: theme.citations[0]?.fileName ?? null,
+        });
+      }
+      if (questions.length >= 8) break;
+    }
+
+    const unreadable = evidence.filter((e) => e.processingStatus === 'failed');
+    for (const u of unreadable.slice(0, 2)) {
+      questions.push({
+        question: `Is there a readable copy of ${u.fileName}?`,
+        why: 'This file was added to the case but the system could not read what is inside it.',
+        basedOn: u.fileName,
+      });
+    }
+
+    return reply.send({
+      caseTitle: criminalCase?.title ?? 'This case',
+      stage: { label: stage.label, plainEnglish: stage.plainEnglish },
+      charges,
+      chargesNote:
+        charges.length > 0
+          ? null
+          : 'No charges have been entered into the system for this case yet. That does not necessarily mean none ' +
+            'have been filed in court — ask the attorney.',
+      nextHearing: criminalCase?.nextHearing
+        ? { date: criminalCase.nextHearing, note: criminalCase.nextHearingNote }
+        : null,
+      recentlyAdded: evidence.map((e) => ({
+        fileName: e.fileName,
+        addedAt: e.createdAt,
+        readable: e.processingStatus === 'completed',
+      })),
+      questions: questions.slice(0, 8),
+      caveat:
+        'This page is a summary of what is in the case file. It is not legal advice, it does not say whether ' +
+        'anyone is guilty or innocent, and it cannot tell you how the case will end. Only the attorney can ' +
+        'advise you.',
+    });
+  });
+
+  console.log('[Server] Case lifecycle, evolution and war room registered');
   console.log('[Server] Defence strategy, motion issues and action centre registered');
 }

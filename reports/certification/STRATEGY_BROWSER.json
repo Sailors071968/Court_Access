@@ -1,7 +1,7 @@
 {
   "report": "STRATEGY_BROWSER",
   "phase": "Program 150 — Strategy Workspace Browser",
-  "generatedAt": "2026-08-06T22:19:38.745Z",
+  "generatedAt": "2026-08-07T13:52:19.618Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 15,
@@ -13,7 +13,7 @@
   },
   "exercisedApiRoutes": [],
   "exercisedSpaRoutes": [],
-  "caseId": "a737f5aa-7b2f-48fd-a36c-d3876aeb0219",
+  "caseId": "72807572-c872-477c-ab06-3d1cbb375144",
   "base": "http://127.0.0.1:4180",
   "checks": [
     {

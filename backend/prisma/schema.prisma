@@ -3047,3 +3047,35 @@ model ChargeAuditEvent {
   @@index([filedChargeId])
   @@map("charge_audit_events")
 }
+
+
+// ============================================================================
+// Case lifecycle.
+//
+// A criminal case moves through stages, and what matters at each is different:
+// nothing about motion practice is useful before arraignment, and discovery
+// disputes stop mattering after verdict. The stage is inferred from what is on
+// the record where the record settles it, and counsel can always say otherwise.
+//
+// Every change is kept, with what caused it, so the stage a dashboard adapted
+// to on a given day can be reconstructed.
+// ============================================================================
+
+model CaseStageEvent {
+  caseStageEventId String   @id @default(uuid())
+  caseId           String
+  tenantId         String
+
+  stage            String
+  previousStage    String?
+  /** inferred | attorney — who decided. */
+  source           String   @default("inferred")
+  /** The record that settled it, in a sentence. */
+  basis            String
+  /** Set when counsel overrode an inference. */
+  overriddenById   String?
+  occurredAt       DateTime @default(now())
+
+  @@index([caseId, occurredAt])
+  @@map("case_stage_events")
+}

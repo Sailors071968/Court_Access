@@ -13,8 +13,8 @@
 // Intended for load balancers, monitoring dashboards, and alerting.
 // ============================================================================
 
-import { mkdir, statfs, unlink, writeFile } from 'node:fs/promises';
-import { join } from 'node:path';
+import { constants as fsConstants } from 'node:fs';
+import { access, statfs } from 'node:fs/promises';
 import { getHeapStatistics } from 'node:v8';
 import prisma from '../lib/prisma.js';
 
@@ -268,13 +268,28 @@ const UPLOAD_DIR = () => process.env.EVIDENCE_UPLOAD_DIR || '/var/www/courtacces
 async function checkUploadsWritable(): Promise<ComponentHealth> {
   const start = performance.now();
   const dir = UPLOAD_DIR();
-  const probe = join(dir, `.ready-probe-${process.pid}`);
   try {
-    await mkdir(dir, { recursive: true });
-    await writeFile(probe, '');
-    await unlink(probe);
+    // Observe, do not mutate. The first version created the directory and wrote
+    // a probe file on every poll: at a five-second interval that is thousands
+    // of writes a day into the directory holding privileged evidence, and
+    // because it created what it was checking, a mistyped EVIDENCE_UPLOAD_DIR
+    // would be brought into existence and then reported healthy.
+    //
+    // access(W_OK) reports EACCES for permissions and EROFS for a read-only
+    // mount, which are the two ways this realistically fails while running.
+    // A non-existent directory is reported as degraded rather than unhealthy:
+    // the upload path creates it on demand, so the instance can still serve.
+    await access(dir, fsConstants.W_OK);
     return { status: 'healthy', latencyMs: Math.round(performance.now() - start), message: dir };
   } catch (err) {
+    const code = (err as NodeJS.ErrnoException).code;
+    if (code === 'ENOENT') {
+      return {
+        status: 'degraded',
+        latencyMs: Math.round(performance.now() - start),
+        message: `${dir} does not exist yet; it will be created on first upload`,
+      };
+    }
     return {
       status: 'unhealthy',
       latencyMs: Math.round(performance.now() - start),

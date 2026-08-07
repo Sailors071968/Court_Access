@@ -1,0 +1,98 @@
+# CourtAccess staging — persistent, single host.
+#
+# The existing GitHub workflow deploys the frontend only, which is why
+# courtaccess.net serves a bundle whose API predates this codebase. This brings
+# up everything the platform actually needs, with data on named volumes so it
+# survives a reboot.
+#
+#   cp .env.example .env    # then fill it in
+#   docker compose up -d
+#   docker compose exec api npx prisma migrate deploy
+#   docker compose exec api node /app/deploy/bootstrap-admin.mjs
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:?set in .env}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?set in .env}
+      POSTGRES_DB: ${POSTGRES_DB:-courtaccess}
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER}']
+      interval: 10s
+      retries: 10
+
+  redis:
+    image: redis:7-alpine
+    restart: always
+    # Queues survive a restart; losing them loses in-flight work only.
+    command: redis-server --appendonly yes
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ['CMD', 'redis-cli', 'ping']
+      interval: 10s
+      retries: 10
+
+  api:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.api
+    restart: always
+    depends_on:
+      postgres: { condition: service_healthy }
+      redis: { condition: service_healthy }
+    environment:
+      DATABASE_URL: postgresql://${POSTGRES_USER}:${POSTGRES_PASSWORD}@postgres:5432/${POSTGRES_DB:-courtaccess}?schema=public
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: ${JWT_SECRET:?set in .env}
+      NODE_ENV: production
+      PORT: 3001
+      # Upload chunks are assembled here. Needs room for the largest corpus.
+      CERTIFICATION_STAGING_DIR: /data/staging
+      EVIDENCE_STORAGE_DIR: /data/evidence
+    volumes:
+      - evidence-data:/data
+    healthcheck:
+      test: ['CMD', 'wget', '-qO-', 'http://127.0.0.1:3001/api/health']
+      interval: 15s
+      retries: 10
+
+  web:
+    build:
+      context: ..
+      dockerfile: deploy/Dockerfile.web
+    restart: always
+    depends_on:
+      api: { condition: service_healthy }
+    # Serves the built frontend and proxies /api to the API on the same origin.
+    # Session renewal and chunked upload both assume same-origin.
+    ports:
+      - '127.0.0.1:8080:80'
+
+  # Nightly dump, kept for a fortnight. Restoring is in the recovery guide.
+  backup:
+    image: postgres:16-alpine
+    restart: always
+    depends_on:
+      postgres: { condition: service_healthy }
+    environment:
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - backup-data:/backups
+    entrypoint: >
+      sh -c 'while true; do
+        pg_dump -h postgres -U ${POSTGRES_USER} -Fc ${POSTGRES_DB:-courtaccess}
+          > /backups/courtaccess-$$(date +%%Y%%m%%d-%%H%%M).dump
+          && find /backups -name "*.dump" -mtime +14 -delete;
+        sleep 86400;
+      done'
+
+volumes:
+  postgres-data:
+  redis-data:
+  evidence-data:
+  backup-data:

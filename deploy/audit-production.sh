@@ -103,6 +103,13 @@ else
   echo "  redis-cli not installed"
 fi
 
+say "PHASE 1 — HOST RESOURCES"
+val "cpu cores" "$(nproc 2>/dev/null)"
+val "load average" "$(cut -d' ' -f1-3 /proc/loadavg 2>/dev/null)"
+echo "-- memory --"; free -h 2>/dev/null | sed 's/^/  /'
+echo "-- swap --"; swapon --show 2>/dev/null | sed 's/^/  /' || echo "  no swap configured"
+val "uptime" "$(uptime -p 2>/dev/null)"
+
 say "PHASE 4 — STORAGE"
 df -h / /var /var/www 2>/dev/null | sed 's/^/  /'
 echo "-- upload directories --"
@@ -123,9 +130,47 @@ echo "-- certificates --"
 for C in $(nginx -T 2>/dev/null | grep -oP 'ssl_certificate\s+\K[^;]+' | sort -u); do
   echo "  $C"; openssl x509 -in "$C" -noout -subject -dates 2>/dev/null | sed 's/^/    /'
 done
-echo "-- certbot renewal --"
-systemctl list-timers 2>/dev/null | grep -i certbot | sed 's/^/  /' || echo "  no certbot timer"
+echo "-- certificate as actually served (the authoritative check) --"
+echo | timeout 15 openssl s_client -servername courtaccess.net -connect 127.0.0.1:443 2>/dev/null \
+  | openssl x509 -noout -dates -serial 2>/dev/null | sed 's/^/  /' || echo "  could not handshake locally"
+
+echo "-- certbot: how is it installed? this decides where renewal lives --"
+val "certbot path" "$(which certbot 2>/dev/null)"
+val "certbot version" "$(command -v certbot >/dev/null && certbot --version 2>&1 | head -1)"
+val "rpm package" "$(rpm -qa 2>/dev/null | grep -i certbot | tr '\n' ' ')"
+val "pip package" "$(pip3 list 2>/dev/null | grep -i certbot | tr '\n' ' ')"
+val "snap" "$([ -x /snap/bin/certbot ] && echo present)"
+
+echo "-- certbot: is renewal scheduled? both unit names, and cron --"
+for U in certbot-renew.timer certbot.timer snap.certbot.renew.timer; do
+  STATE=$(systemctl is-enabled "$U" 2>/dev/null)
+  printf '  %-30s %s\n' "$U" "${STATE:-not present}"
+done
+systemctl list-timers --all 2>/dev/null | grep -i certbot | sed 's/^/  /' || echo "  no certbot timer"
+crontab -l 2>/dev/null | grep -i certbot | sed 's/^/  cron(user): /'
+sudo -n crontab -l 2>/dev/null | grep -i certbot | sed 's/^/  cron(root): /'
+ls -la /etc/cron.d/ 2>/dev/null | grep -i certbot | sed 's/^/  /'
+cat /etc/cron.d/certbot 2>/dev/null | grep -v '^#' | sed 's/^/  /'
+
+echo "-- certbot: what would renewal actually do? --"
+# The authenticator decides whether renewal can work unattended. 'standalone'
+# needs port 80, which nginx holds — that renews by hand and fails on a timer.
+grep -E 'authenticator|installer|renew_hook|deploy_hook|webroot_path' \
+  /etc/letsencrypt/renewal/*.conf 2>/dev/null | sed 's/^/  /' || echo "  no renewal config readable"
+
+echo "-- certbot: has renewal ever run unattended? --"
+ls -la /var/log/letsencrypt/ 2>/dev/null | tail -4 | sed 's/^/  /' || echo "  no letsencrypt log"
 certbot certificates 2>/dev/null | grep -E 'Certificate Name|Expiry Date|Domains' | sed 's/^/  /' || echo "  certbot not available to this user"
+
+say "PHASE 1 — DEPLOYMENT ARTIFACT (if a release has been staged)"
+for R in "${RELEASE:-}" /opt/courtaccess-build/out; do
+  [ -n "$R" ] && [ -d "$R" ] || continue
+  echo "  $R"
+  val "  dist/index.js sha256" "$(sha256sum "$R/dist/index.js" 2>/dev/null | cut -d' ' -f1)"
+  val "  build-info" "$(cat "$R/dist/build-info.json" 2>/dev/null | tr -d '\n ')"
+  val "  .ts outside node_modules" "$(find "$R" -name '*.ts' -not -path '*/node_modules/*' 2>/dev/null | wc -l)"
+  val "  migrations" "$(ls -d "$R"/prisma/migrations/*/ 2>/dev/null | wc -l)"
+done
 
 say "PHASE 7 — EXTERNAL REACHABILITY (from the host)"
 for U in https://leginfo.legislature.ca.gov/ https://api.openai.com https://api.anthropic.com https://api.stripe.com; do

@@ -1831,6 +1831,10 @@ model Evidence {
   uploadedAt      DateTime @default(now())
 
   // Processing status
+  /** SHA-256 of the stored bytes. A document cited in a filing has to be
+   *  provably the document that was produced, and a fingerprint is the only
+   *  thing that shows the file has not changed since it was analysed. */
+  sha256           String?
   processingStatus String  @default("pending") // pending | ingesting | normalized | analyzed | failed
   processingError  String?
 

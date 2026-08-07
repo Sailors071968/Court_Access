@@ -1,0 +1,168 @@
+{
+  "report": "DEPLOYMENT_VALIDATION",
+  "phase": "Program 154 — Deployment Validation",
+  "generatedAt": "2026-08-07T14:36:19.998Z",
+  "apiBase": "http://127.0.0.1:3001",
+  "summary": {
+    "total": 23,
+    "PASS": 18,
+    "FAIL": 0,
+    "WARNING": 0,
+    "UNKNOWN": 5,
+    "passRate": 78.3
+  },
+  "exercisedApiRoutes": [
+    "GET /api/admin/queues",
+    "GET /api/billing/subscription",
+    "GET /api/cases",
+    "GET /api/cases/:id",
+    "GET /api/certification/status",
+    "GET /api/health",
+    "GET /api/law/statute/PEN/459",
+    "POST /api/auth/refresh",
+    "POST /api/auth/register",
+    "POST /api/cases"
+  ],
+  "exercisedSpaRoutes": [],
+  "web": "http://127.0.0.1:4180",
+  "checks": [
+    {
+      "id": "DEP-01",
+      "name": "The API is running and reports healthy",
+      "status": "PASS",
+      "detail": "version 1.1.0, development"
+    },
+    {
+      "id": "DEP-02",
+      "name": "The application is served",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "id": "DEP-03",
+      "name": "Every database migration has been applied",
+      "status": "PASS",
+      "detail": "29 migrations, none pending"
+    },
+    {
+      "id": "DEP-04",
+      "name": "The schema is present in the running database",
+      "status": "PASS",
+      "detail": "116 tables"
+    },
+    {
+      "id": "DEP-05",
+      "name": "The running database matches the schema in the code",
+      "status": "PASS",
+      "detail": "no drift"
+    },
+    {
+      "id": "DEP-06",
+      "name": "Registration and sign-in work end to end",
+      "status": "PASS",
+      "detail": "token issued"
+    },
+    {
+      "id": "DEP-07",
+      "name": "Protected routes refuse an unauthenticated caller",
+      "status": "PASS",
+      "detail": "HTTP 401"
+    },
+    {
+      "id": "DEP-08",
+      "name": "Token renewal works, so a session outlives fifteen minutes",
+      "status": "PASS",
+      "detail": "new access token issued"
+    },
+    {
+      "id": "DEP-09",
+      "name": "Redis is reachable, so queues can run",
+      "status": "PASS",
+      "detail": "PONG"
+    },
+    {
+      "id": "DEP-10",
+      "name": "The queue endpoint responds and is access controlled",
+      "status": "PASS",
+      "detail": "HTTP 403"
+    },
+    {
+      "id": "DEP-11",
+      "name": "A document uploads through the production pipeline",
+      "status": "PASS",
+      "detail": "deployment-probe.pdf"
+    },
+    {
+      "id": "DEP-12",
+      "name": "An uploaded document is processed to a terminal state",
+      "status": "PASS",
+      "detail": "analyzed"
+    },
+    {
+      "id": "DEP-13",
+      "name": "Text is extracted and stored so findings can cite it",
+      "status": "PASS",
+      "detail": "1 chunk(s)"
+    },
+    {
+      "id": "DEP-14",
+      "name": "Uploaded bytes are fingerprinted on storage",
+      "status": "PASS",
+      "detail": "7a982400f9f02e71"
+    },
+    {
+      "id": "DEP-15",
+      "name": "A case is not visible to another firm",
+      "status": "PASS",
+      "detail": "HTTP 403"
+    },
+    {
+      "id": "DEP-16",
+      "name": "Administrator surfaces refuse a non-administrator",
+      "status": "PASS",
+      "detail": "HTTP 403"
+    },
+    {
+      "id": "DEP-17",
+      "name": "The official California source is reachable from this deployment",
+      "status": "PASS",
+      "detail": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PEN&"
+    },
+    {
+      "id": "DEP-18",
+      "name": "The billing endpoint responds",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "id": "DEP-19",
+      "name": "Payment processing is not configured in this environment",
+      "status": "UNKNOWN",
+      "detail": "No Stripe key is present, so a real subscription, renewal, refund or chargeback cannot be exercised here. The billing model and metrics API exist and are covered by other suites."
+    },
+    {
+      "id": "DEP-20",
+      "name": "Object storage has not been exercised",
+      "status": "UNKNOWN",
+      "detail": "No R2 or S3 credentials are present. Uploads are written to local disk, which is what the upload and stress suites measured. Behaviour against remote object storage — latency, partial writes, credential expiry — is unproven."
+    },
+    {
+      "id": "DEP-21",
+      "name": "Email delivery has not been exercised",
+      "status": "UNKNOWN",
+      "detail": "No SES credentials are present, so verification mail, invitations and notifications cannot be sent or observed from here."
+    },
+    {
+      "id": "DEP-22",
+      "name": "HTTPS and Cloudflare in front of a real deployment have not been validated",
+      "status": "UNKNOWN",
+      "detail": "This environment has no public ingress of its own. Review has been done through a temporary tunnel, which terminates TLS elsewhere and is not the production edge. Certificate handling, WAF rules, caching and rate limiting at the edge are unproven."
+    },
+    {
+      "id": "DEP-23",
+      "name": "Browser compatibility beyond Chromium has not been measured",
+      "status": "UNKNOWN",
+      "detail": "Every browser check in this platform runs in Chromium. Safari and Firefox are untested, which matters most for the upload portal, since directory selection and resumable upload behave differently across engines."
+    }
+  ]
+}

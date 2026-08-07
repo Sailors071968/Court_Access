@@ -10,7 +10,7 @@ import multipart from '@fastify/multipart';
 import fs from 'fs/promises';
 import path from 'path';
 import crypto from 'crypto';
-import { createWriteStream } from 'fs';
+import { createWriteStream, createReadStream } from 'fs';
 import { pipeline } from 'stream/promises';
 import type { AuthenticatedRequest } from '../security/authMiddleware.js';
 import { validateEvidenceUpload } from './evidenceValidation.js';
@@ -663,6 +663,7 @@ export async function ingestEvidence(req: IngestEvidenceRequest): Promise<Ingest
   const s3Key = `evidence/${user.tenantId}/${caseId}/${fileId}/${fileName}`;
 
   let fileSize = 0;
+  let contentHash: string | null = null;
   try {
     if (req.stream) {
       const writeStream = createWriteStream(localPath);
@@ -685,6 +686,18 @@ export async function ingestEvidence(req: IngestEvidenceRequest): Promise<Ingest
     }
     const stat = await fs.stat(localPath);
     fileSize = stat.size;
+
+    // Fingerprint the bytes as stored. A document cited in a filing has to be
+    // provably the document that was produced, and a hash is the only thing
+    // that shows the file has not changed since it was analysed. Streamed so
+    // a large recording is not read into memory to compute it.
+    contentHash = await new Promise<string>((resolve, reject) => {
+      const hash = crypto.createHash('sha256');
+      const readStream = createReadStream(localPath);
+      readStream.on('data', (chunk) => hash.update(chunk));
+      readStream.on('end', () => resolve(hash.digest('hex')));
+      readStream.on('error', reject);
+    });
   } catch (err) {
     console.error('[DirectUpload] Failed to save file:', err);
     await fs.unlink(localPath).catch(() => {});
@@ -714,6 +727,7 @@ export async function ingestEvidence(req: IngestEvidenceRequest): Promise<Ingest
         fileName,
         mimeType,
         size: BigInt(fileSize),
+        sha256: contentHash,
         evidenceType,
         s3Key,
         uploadedBy: user.userId,

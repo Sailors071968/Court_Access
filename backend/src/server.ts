@@ -6,7 +6,7 @@
 // ============================================================================
 
 import { randomUUID } from 'node:crypto';
-import Fastify from 'fastify';
+import Fastify, { type FastifyInstance } from 'fastify';
 import cors from '@fastify/cors';
 import cookie from '@fastify/cookie';
 import { registerPipelineRoutes } from './policy/pipeline/pipelineRoutes.js';
@@ -57,6 +57,10 @@ import { registerDoctrineRoutes } from './doctrine/doctrineRoutes.ts';
 import { registerProductionGatesRoutes } from './productionGates/productionGatesRoutes.js';
 import { registerProductionOperationsRoutes } from './productionOperations/productionOperationsRoutes.js';
 import { validateEnvironment, printValidationReport } from './startup/validateEnvironment.js';
+import prisma from './lib/prisma.js';
+
+/** Held so the signal handlers can close the server they did not create. */
+let appRef: FastifyInstance | null = null;
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
@@ -93,6 +97,7 @@ async function startServer() {
     logger: true,
     bodyLimit: 10 * 1024 * 1024, // 10MB
   });
+  appRef = app;
 
   // CORS — production domains + local dev
   const CORS_ORIGINS = process.env.NODE_ENV === 'production'
@@ -488,12 +493,43 @@ startServer().catch((err: unknown) => {
   process.exit(1);
 });
 
-// Graceful shutdown — stop pipeline workers before exit
+// Graceful shutdown.
+//
+// This previously stopped the workers and exited without closing the HTTP
+// server, so every `pm2 reload` terminated in-flight requests mid-response. For
+// a GET that is a retry; for a multi-gigabyte evidence upload it is a truncated
+// file, and the deployment procedure reloads at least once. Database
+// connections were dropped rather than released.
+const SHUTDOWN_TIMEOUT_MS = Number(process.env.SHUTDOWN_TIMEOUT_MS ?? 30_000);
+let shuttingDown = false;
+
 const shutdown = async (signal: string) => {
-  console.log(`[Server] Received ${signal}, shutting down pipeline workers...`);
-  stopRedisMemoryMonitor();
-  await stopPipelineWorkers();
-  process.exit(0);
+  if (shuttingDown) return; // SIGTERM followed by SIGINT must not run this twice
+  shuttingDown = true;
+  console.log(`[Server] Received ${signal}, shutting down...`);
+
+  // A request that never finishes must not stop the process exiting, or the
+  // supervisor eventually SIGKILLs it and the orderly close is lost anyway.
+  const deadline = setTimeout(() => {
+    console.error(`[Server] Shutdown exceeded ${SHUTDOWN_TIMEOUT_MS}ms — forcing exit.`);
+    process.exit(1);
+  }, SHUTDOWN_TIMEOUT_MS);
+  deadline.unref();
+
+  try {
+    if (appRef) {
+      await appRef.close();
+      console.log('[Server] HTTP server closed; in-flight requests completed.');
+    }
+    stopRedisMemoryMonitor();
+    await stopPipelineWorkers();
+    await prisma.$disconnect();
+    console.log('[Server] Shutdown complete.');
+    process.exit(0);
+  } catch (err) {
+    console.error('[Server] Error during shutdown:', err instanceof Error ? err.message : err);
+    process.exit(1);
+  }
 };
 process.on('SIGINT', () => void shutdown('SIGINT'));
 process.on('SIGTERM', () => void shutdown('SIGTERM'));

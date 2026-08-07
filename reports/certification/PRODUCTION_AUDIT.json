@@ -1,7 +1,7 @@
 {
   "report": "PRODUCTION_AUDIT",
   "phase": "Program 146 — Production Audit",
-  "generatedAt": "2026-08-07T14:24:37.311Z",
+  "generatedAt": "2026-08-07T14:42:47.325Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 21,
@@ -30,7 +30,7 @@
   "pages": 105,
   "endpoints": 418,
   "tables": 116,
-  "workers": 35,
+  "workers": 34,
   "markers": {
     "TODO": 0,
     "FIXME": 0,
@@ -40,7 +40,7 @@
     "HACK": 0
   },
   "corpora": {
-    "total": 20,
+    "total": 21,
     "authorized": 0
   },
   "checks": [
@@ -78,7 +78,7 @@
       "id": "AUD-MIGRATIONS",
       "name": "All database migrations applied cleanly",
       "status": "PASS",
-      "detail": "28 migrations"
+      "detail": "29 migrations"
     },
     {
       "id": "AUD-HEALTH",
@@ -144,7 +144,7 @@
       "id": "AUD-WORKERS",
       "name": "Background workers and queues present",
       "status": "PASS",
-      "detail": "35 worker/queue modules, queue API HTTP 200"
+      "detail": "34 worker/queue modules, queue API HTTP 200"
     },
     {
       "id": "AUD-MARKERS",
@@ -176,7 +176,7 @@
       "id": "AUD-GOLDSTANDARD",
       "name": "No attorney-authorized case has been imported",
       "status": "UNKNOWN",
-      "detail": "20 corpora exist, all of them synthetic fixtures created by the certification suites. Cases 001, 002 and 003 have not been uploaded through the portal, so real-discovery certification cannot be performed and the release gate cannot be assessed against them."
+      "detail": "21 corpora exist, all of them synthetic fixtures created by the certification suites. Cases 001, 002 and 003 have not been uploaded through the portal, so real-discovery certification cannot be performed and the release gate cannot be assessed against them."
     }
   ]
 }

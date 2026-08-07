@@ -1,7 +1,7 @@
 {
   "report": "BROWSER_CERTIFICATION",
   "phase": "Phase 9 — Browser Verification",
-  "generatedAt": "2026-08-07T14:25:19.314Z",
+  "generatedAt": "2026-08-07T14:42:46.271Z",
   "apiBase": "http://127.0.0.1:3001",
   "summary": {
     "total": 64,
@@ -48,22 +48,22 @@
     "/careers",
     "/case-studies",
     "/cases",
-    "/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/activity",
-    "/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/attorney-workbench",
-    "/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/charges",
-    "/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/contradictions",
-    "/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/disclosures",
-    "/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/documents",
-    "/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/evidence",
-    "/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/experts",
-    "/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/investigator-workbench",
-    "/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/litigation-strategy",
-    "/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/motions",
-    "/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/narrative-analysis",
-    "/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/overview",
-    "/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/research",
-    "/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/settings",
-    "/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/trial-exhibits",
+    "/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/activity",
+    "/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/attorney-workbench",
+    "/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/charges",
+    "/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/contradictions",
+    "/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/disclosures",
+    "/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/documents",
+    "/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/evidence",
+    "/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/experts",
+    "/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/investigator-workbench",
+    "/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/litigation-strategy",
+    "/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/motions",
+    "/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/narrative-analysis",
+    "/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/overview",
+    "/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/research",
+    "/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/settings",
+    "/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/trial-exhibits",
     "/contact",
     "/dashboard",
     "/defendant",
@@ -97,19 +97,19 @@
   "screenshotDirectory": "/workspace/reports/certification/screenshots",
   "consoleErrors": [
     {
-      "url": "http://127.0.0.1:4180/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/trial-exhibits",
+      "url": "http://127.0.0.1:4180/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/trial-exhibits",
       "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
     },
     {
-      "url": "http://127.0.0.1:4180/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/trial-exhibits",
+      "url": "http://127.0.0.1:4180/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/trial-exhibits",
       "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
     },
     {
-      "url": "http://127.0.0.1:4180/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/contradictions",
+      "url": "http://127.0.0.1:4180/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/contradictions",
       "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
     },
     {
-      "url": "http://127.0.0.1:4180/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/contradictions",
+      "url": "http://127.0.0.1:4180/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/contradictions",
       "text": "Failed to load resource: the server responded with a status of 404 (Not Found)"
     }
   ],
@@ -384,100 +384,100 @@
       "id": "BR-CASE-CREATE",
       "name": "A case can be created from the browser session",
       "status": "PASS",
-      "detail": "caseId 0a2a8fa1-33ac-44d0-8a79-d4f638af7626"
+      "detail": "caseId 7cbfba77-bf08-4389-a4ad-ecc8f881d75e"
     },
     {
-      "id": "BR-/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/overview",
+      "id": "BR-/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/overview",
       "name": "Case overview renders cleanly",
       "status": "PASS",
       "detail": "1155 characters, 8 control(s), screenshot captured"
     },
     {
-      "id": "BR-/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/charges",
+      "id": "BR-/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/charges",
       "name": "Charges renders cleanly",
       "status": "PASS",
       "detail": "836 characters, 7 control(s), screenshot captured"
     },
     {
-      "id": "BR-/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/evidence",
+      "id": "BR-/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/evidence",
       "name": "Evidence renders cleanly",
       "status": "PASS",
       "detail": "917 characters, 10 control(s), screenshot captured"
     },
     {
-      "id": "BR-/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/documents",
+      "id": "BR-/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/documents",
       "name": "Documents renders cleanly",
       "status": "PASS",
       "detail": "770 characters, 6 control(s), screenshot captured"
     },
     {
-      "id": "BR-/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/disclosures",
+      "id": "BR-/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/disclosures",
       "name": "Disclosures renders cleanly",
       "status": "PASS",
       "detail": "828 characters, 9 control(s), screenshot captured"
     },
     {
-      "id": "BR-/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/experts",
+      "id": "BR-/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/experts",
       "name": "Experts renders cleanly",
       "status": "PASS",
       "detail": "646 characters, 5 control(s), screenshot captured"
     },
     {
-      "id": "BR-/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/motions",
+      "id": "BR-/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/motions",
       "name": "Motions renders cleanly",
       "status": "PASS",
       "detail": "646 characters, 5 control(s), screenshot captured"
     },
     {
-      "id": "BR-/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/research",
+      "id": "BR-/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/research",
       "name": "Research renders cleanly",
       "status": "PASS",
       "detail": "646 characters, 5 control(s), screenshot captured"
     },
     {
-      "id": "BR-/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/activity",
+      "id": "BR-/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/activity",
       "name": "Activity renders cleanly",
       "status": "PASS",
       "detail": "682 characters, 5 control(s), screenshot captured"
     },
     {
-      "id": "BR-/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/settings",
+      "id": "BR-/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/settings",
       "name": "Case settings renders cleanly",
       "status": "PASS",
       "detail": "646 characters, 5 control(s), screenshot captured"
     },
     {
-      "id": "BR-/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/investigator-workbench",
+      "id": "BR-/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/investigator-workbench",
       "name": "Investigator workbench renders cleanly",
       "status": "PASS",
       "detail": "745 characters, 13 control(s), screenshot captured"
     },
     {
-      "id": "BR-/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/attorney-workbench",
+      "id": "BR-/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/attorney-workbench",
       "name": "Attorney workbench renders cleanly",
       "status": "PASS",
       "detail": "998 characters, 15 control(s), screenshot captured"
     },
     {
-      "id": "BR-/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/trial-exhibits",
+      "id": "BR-/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/trial-exhibits",
       "name": "Trial exhibits renders but logged 2 browser error(s)",
       "status": "WARNING",
       "detail": "Failed to load resource: the server responded with a status of 404 (Not Found)"
     },
     {
-      "id": "BR-/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/litigation-strategy",
+      "id": "BR-/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/litigation-strategy",
       "name": "Litigation strategy renders cleanly",
       "status": "PASS",
       "detail": "1181 characters, 6 control(s), screenshot captured"
     },
     {
-      "id": "BR-/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/contradictions",
+      "id": "BR-/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/contradictions",
       "name": "Contradictions renders but logged 2 browser error(s)",
       "status": "WARNING",
       "detail": "Failed to load resource: the server responded with a status of 404 (Not Found)"
     },
     {
-      "id": "BR-/cases/0a2a8fa1-33ac-44d0-8a79-d4f638af7626/narrative-analysis",
+      "id": "BR-/cases/7cbfba77-bf08-4389-a4ad-ecc8f881d75e/narrative-analysis",
       "name": "Narrative analysis renders cleanly",
       "status": "PASS",
       "detail": "881 characters, 7 control(s), screenshot captured"

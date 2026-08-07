@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-07-04T22:10:20.817Z",
+  "generatedAt": "2026-08-07T21:23:11.643Z",
   "version": "4.0",
   "program": "PRODUCTION_CERTIFICATION",
   "gates": [
@@ -7,9 +7,9 @@
       "id": "PG-001",
       "name": "Stripe Billing",
       "program": "Program 1 / Program 9",
-      "result": "PARTIAL",
+      "result": "FAIL",
       "checks": {
-        "pass": 17,
+        "pass": 15,
         "total": 18
       },
       "testSteps": [
@@ -17,12 +17,12 @@
         "Collect billing readiness metrics"
       ],
       "evidence": [
-        "PRODUCTION_CERTIFICATION: INCOMPLETE (17/18 PASS)",
+        "PRODUCTION_CERTIFICATION: INCOMPLETE (15/18 PASS)",
         "billingIntegrity: FAIL",
         "webhookEventsProcessed: 0"
       ],
       "blockers": [
-        "1A-012: Live Stripe Test Mode API certification in staging"
+        "2 certification workflow(s) failed"
       ],
       "recoveryBehavior": "Configure sk_test_ credentials and run npm run billing:certify"
     },
@@ -97,9 +97,9 @@
       "id": "PG-005",
       "name": "Document Upload",
       "program": "Program 1 / Program 2",
-      "result": "PASS",
+      "result": "PARTIAL",
       "checks": {
-        "pass": 4,
+        "pass": 3,
         "total": 4
       },
       "testSteps": [
@@ -109,10 +109,11 @@
       "evidence": [
         "evidenceRoutes.ts",
         "evidenceDirectUpload.ts",
-        "File upload security report",
+        "File upload security report"
+      ],
+      "blockers": [
         "R2/S3 storage configured"
       ],
-      "blockers": [],
       "recoveryBehavior": "Configure R2 credentials and verify upload security hardening"
     },
     {
@@ -349,12 +350,13 @@
       "recoveryBehavior": "Run npm run backup:drill and verify BACKUP_RESTORE_DRILL.json"
     }
   ],
-  "passCount": 14,
-  "failCount": 0,
+  "passCount": 13,
+  "failCount": 1,
   "partialCount": 1,
   "skipCount": 0,
   "blockers": [
-    "PG-001: 1A-012: Live Stripe Test Mode API certification in staging"
+    "PG-001: 2 certification workflow(s) failed",
+    "PG-005: R2/S3 storage configured"
   ],
   "deploymentBlocked": true,
   "overallResult": "NOT_READY"

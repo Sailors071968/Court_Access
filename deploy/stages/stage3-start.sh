@@ -102,9 +102,16 @@ pm2 logs "$V1_PM2_NAME" --lines 200 --nostream 2>/dev/null \
 
 LOGS="$(pm2 logs "$V1_PM2_NAME" --lines 200 --nostream 2>/dev/null)"
 printf '%s' "$LOGS" | grep -q "Configuration OK"            && ok "startup validator passed"        || bad "startup validator did not report Configuration OK"
-printf '%s' "$LOGS" | grep -q "Migrations: $EXPECTED_MIGRATIONS/$EXPECTED_MIGRATIONS applied" \
-  && ok "schema guard reports $EXPECTED_MIGRATIONS/$EXPECTED_MIGRATIONS applied" \
-  || bad "schema guard did not report $EXPECTED_MIGRATIONS/$EXPECTED_MIGRATIONS (check for 'no-migrations' / '0/0')"
+
+# The schema guard must report the artifact's own migration count applied.
+# 'no-migrations' or '0/0' means the guard could not find prisma/ and is inert.
+MIG_EXPECT="$(artifact_migration_count)"
+if printf '%s' "$LOGS" | grep -q "Migrations: $MIG_EXPECT/$MIG_EXPECT applied"; then
+  ok "schema guard reports $MIG_EXPECT/$MIG_EXPECT applied"
+else
+  bad "schema guard did not report $MIG_EXPECT/$MIG_EXPECT applied"
+  printf '%s' "$LOGS" | grep -o "Migrations:[^,)]*" | head -3 | sed 's/^/      observed: /'
+fi
 printf '%s' "$LOGS" | grep -q "Security hardening active"    && ok "security hardening active"       || bad "security hardening line absent"
 
 say "HEALTH ENDPOINTS"

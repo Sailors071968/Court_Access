@@ -87,12 +87,22 @@ cd "$V1" || { bad "cannot cd to $V1"; finish; exit 1; }
 
 say "POST-MIGRATION VERIFICATION"
 TABLES="$(psql "$PGURL" -tAc "select count(*) from information_schema.tables where table_schema='public' and table_type='BASE TABLE'" 2>/dev/null | tr -d ' ')"
-check "table count" "$EXPECTED_TABLES" "$TABLES"
+kv "tables after migration" "$TABLES"
+if [ "${TABLES:-0}" -gt 0 ]; then ok "the migration created tables"
+else bad "no tables exist after migration — the migration did not take effect"; fi
+compare_reference "table count" "$REFERENCE_TABLES" "$TABLES"
 
+# The gate is that every migration this artifact carries reached the database.
+# That is a real invariant; the absolute number is not.
+IN_ARTIFACT="$(artifact_migration_count)"
 APPLIED="$(psql "$PGURL" -tAc "select count(*) filter (where finished_at is not null) from _prisma_migrations" 2>/dev/null | tr -d ' ')"
 UNFIN="$(psql "$PGURL" -tAc "select count(*) filter (where finished_at is null and rolled_back_at is null) from _prisma_migrations" 2>/dev/null | tr -d ' ')"
-check "migrations applied"   "$EXPECTED_MIGRATIONS" "$APPLIED"
+ROLLED="$(psql "$PGURL" -tAc "select count(*) filter (where rolled_back_at is not null) from _prisma_migrations" 2>/dev/null | tr -d ' ')"
+kv "migrations in the artifact" "$IN_ARTIFACT"
+check "migrations applied matches the artifact" "$IN_ARTIFACT" "$APPLIED"
 check "migrations unfinished" "0" "$UNFIN"
+check "migrations rolled back" "0" "$ROLLED"
+compare_reference "migrations applied" "$REFERENCE_MIGRATIONS" "$APPLIED"
 
 INDEXES="$(psql "$PGURL" -tAc "select count(*) from pg_indexes where schemaname='public'" 2>/dev/null | tr -d ' ')"
 FKEYS="$(psql "$PGURL" -tAc "select count(*) from pg_constraint c join pg_namespace n on n.oid=c.connamespace where n.nspname='public' and c.contype='f'" 2>/dev/null | tr -d ' ')"

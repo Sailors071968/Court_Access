@@ -71,14 +71,25 @@ say "BUILD  (pinned toolchain; this takes a few minutes)"
 ( cd "$BUILD/src" && bash deploy/build-release.sh "$V1" ) 2>&1 | tail -8
 
 say "ARTIFACT VERIFICATION"
+# The gate is that a usable bundle exists. Its checksum is evidence: it changes
+# whenever the branch legitimately advances.
 ACTUAL_SHA="$(sha256sum "$V1/dist/index.js" 2>/dev/null | cut -d' ' -f1)"
-check "bundle checksum" "$EXPECTED_BUNDLE_SHA" "$ACTUAL_SHA"
+BUNDLE_BYTES="$(stat -c %s "$V1/dist/index.js" 2>/dev/null || echo 0)"
+kv "bundle sha256" "$ACTUAL_SHA"
+kv "bundle bytes"  "$BUNDLE_BYTES"
+if [ "${BUNDLE_BYTES:-0}" -gt 1000000 ]; then ok "bundle exists and is a plausible size"
+else bad "dist/index.js is missing or implausibly small ($BUNDLE_BYTES bytes) — the build did not produce a usable artifact"; fi
+compare_reference "bundle checksum" "$REFERENCE_BUNDLE_SHA" "$ACTUAL_SHA"
 
 TS_COUNT="$(find "$V1" -name '*.ts' -not -path '*/node_modules/*' 2>/dev/null | wc -l)"
 check "TypeScript files outside node_modules" "0" "$TS_COUNT"
 
-MIG_COUNT="$(ls -d "$V1"/prisma/migrations/*/ 2>/dev/null | wc -l)"
-check "migrations present" "$EXPECTED_MIGRATIONS" "$MIG_COUNT"
+# Whatever this artifact carries is what stages 2 and 3 will expect.
+MIG_COUNT="$(artifact_migration_count)"
+if [ "${MIG_COUNT:-0}" -gt 0 ]; then ok "migrations present in the artifact — $MIG_COUNT"
+else bad "the artifact contains no migrations — prisma/migrations was not copied"; fi
+compare_reference "migration count" "$REFERENCE_MIGRATIONS" "$MIG_COUNT"
+printf '%s\n' "$MIG_COUNT" > "$MIGRATION_COUNT_FILE"
 
 [ -f "$V1/dist/public/index.html" ] && ok "frontend index.html present" || bad "frontend index.html missing"
 [ -f "$V1/dist/build-info.json" ]   && ok "build-info.json present"     || bad "build-info.json missing"

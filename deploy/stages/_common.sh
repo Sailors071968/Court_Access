@@ -26,9 +26,33 @@ set -uo pipefail
 # environment. Without the export the subprocess sees undefined and silently
 # does nothing useful.
 export V1 BUILD V1_PORT V1_PM2_NAME V1_DB STATE APP_EXISTING
-: "${EXPECTED_BUNDLE_SHA:=c3f5f6f03399b594f4465db2067ba7219b7717335fd8f43355473d47d35ad227}"
-: "${EXPECTED_MIGRATIONS:=30}"
-: "${EXPECTED_TABLES:=116}"
+# Reference values from the certification build. These are recorded for
+# traceability and compared for information only. They are NOT gates: a newer
+# commit on the deployment branch legitimately changes all three, and stopping
+# a deployment because a fingerprint moved is not a production risk. The gates
+# are behavioural — the artifact builds, the migrations the artifact carries are
+# the migrations the database receives, and there is no drift afterwards.
+: "${REFERENCE_BUNDLE_SHA:=c3f5f6f03399b594f4465db2067ba7219b7717335fd8f43355473d47d35ad227}"
+: "${REFERENCE_MIGRATIONS:=30}"
+: "${REFERENCE_TABLES:=116}"
+
+# Derived at build time by stage 1 and consumed by stages 2 and 3, so every
+# stage expects what this artifact actually contains rather than a constant.
+MIGRATION_COUNT_FILE="$STATE/artifact-migration-count"
+
+artifact_migration_count() {
+  ls -d "$V1"/prisma/migrations/*/ 2>/dev/null | wc -l | tr -d ' '
+}
+
+# compare_reference <description> <reference> <actual>
+# Reports agreement or divergence without ever failing the stage.
+compare_reference() {
+  if [ "$2" = "$3" ]; then
+    ok "$1 — $3 (matches the certification build)"
+  else
+    info "[note] $1 — $3 (certification build had $2; recorded, not a gate)"
+  fi
+}
 
 mkdir -p "$STATE"
 

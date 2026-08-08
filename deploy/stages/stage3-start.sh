@@ -35,6 +35,30 @@ if sudo ss -lntp 2>/dev/null | grep -q ":$V1_PORT\b"; then
   finish; exit 1
 else ok "port $V1_PORT is free"; fi
 
+# Rollback is `pm2 delete`, which needs a responsive daemon and needs the name
+# to belong to this deployment. A process already carrying that name but
+# running something outside $V1 would be destroyed by both the start below and
+# the rollback, so it stops the stage instead.
+ROLLBACK_READY=no
+if ! pm2 ping >/dev/null 2>&1; then
+  info "pm2 daemon is not responding — 'pm2 delete' would not work"
+else
+  FOREIGN="$(pm2 jlist 2>/dev/null | "$NODE22" -e '
+    let d="";process.stdin.on("data",c=>d+=c).on("end",()=>{
+      let ps=[];try{ps=JSON.parse(d)}catch(e){}
+      const p=ps.find(x=>x.name===process.env.V1_PM2_NAME);
+      const path=p&&p.pm2_env?String(p.pm2_env.pm_exec_path||""):"";
+      console.log(path && !path.startsWith(process.env.V1) ? path : "");});' 2>/dev/null)"
+  if [ -n "$FOREIGN" ]; then
+    info "a PM2 process named $V1_PM2_NAME already runs $FOREIGN — that is not this deployment"
+  else
+    ROLLBACK_READY=yes
+  fi
+fi
+go_no_go "1 to 2 minutes" "Low — new process on port $V1_PORT; nginx still routes to the existing application" \
+         "$ROLLBACK_READY" "pm2 delete $V1_PM2_NAME" \
+  || { finish; exit 1; }
+
 say "START  (pinned interpreter)"
 set -a; . "$V1/.env"; set +a
 pm2 delete "$V1_PM2_NAME" >/dev/null 2>&1 || true

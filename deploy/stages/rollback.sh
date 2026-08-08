@@ -26,6 +26,11 @@ BACKUP="$STATE/nginx-site.backup"
 deploy_env || true   # rollback must work even if the toolchain is unhappy
 
 say "PRE-FLIGHT"
+# Stage 4 recorded the path it backed up, so a rollback works from any shell.
+if [ -z "${NGINX_SITE:-}" ] && [ -s "$STATE/nginx-site.path" ]; then
+  NGINX_SITE="$(cat "$STATE/nginx-site.path")"
+  info "NGINX_SITE taken from the cut-over record: $NGINX_SITE"
+fi
 if [ -z "${NGINX_SITE:-}" ]; then
   bad "NGINX_SITE is not set — export the path to the server block changed at cut-over"
   finish; exit 1

@@ -72,6 +72,15 @@ else
   finish; exit 1
 fi
 
+# Rollback is dropping the database this stage is about to write to. That is
+# only a safe thing to offer because the name was verified above to be the
+# dedicated V1 database and it was verified to be empty.
+ROLLBACK_READY=no
+[ "$NEWDB" = "$V1_DB" ] && [ "${PRE_TABLES:-1}" -eq 0 ] && ROLLBACK_READY=yes
+go_no_go "1 to 3 minutes" "Medium — writes to a new, empty database; the existing database is not opened" \
+         "$ROLLBACK_READY" "sudo -u postgres dropdb $V1_DB" \
+  || { finish; exit 1; }
+
 say "APPLY MIGRATIONS  (pinned interpreter; no npx)"
 cd "$V1" || { bad "cannot cd to $V1"; finish; exit 1; }
 "$NODE22" node_modules/.bin/prisma migrate deploy 2>&1 | tail -6

@@ -149,6 +149,13 @@ baseline_existing() {
   fi
 }
 
+# Quiet form of the comparison below: answers the question without printing or
+# counting a failure, so the Go/No-Go gate can consult it.
+_existing_matches_baseline() {
+  [ -f "$BASELINE" ] || return 1
+  [ "$(_existing_snapshot)" = "$(cat "$BASELINE")" ]
+}
+
 assert_existing_unchanged() {
   say "EXISTING PRODUCTION — UNCHANGED?"
   if [ ! -f "$BASELINE" ]; then
@@ -265,6 +272,49 @@ assert_artifact_frozen() {
     info "The verified artifact is not the one about to deploy."
     info "Re-run stages 1 to 3 before cutting over."
   fi
+}
+
+# --- Gate before an irreversible action -------------------------------------
+# Printed immediately before the three actions that cannot simply be undone by
+# deleting a directory: applying migrations, spawning a PM2 process, and
+# switching nginx. Every line is computed, not asserted by the caller, except
+# the two facts only the caller can know: how long it takes and how risky it is.
+#
+#   go_no_go <duration> <risk> <rollback-ready yes|no> <rollback command>
+#
+# Returns non-zero on NO-GO and records a failure, so the stage reports FAIL.
+go_no_go() {
+  local duration="$1" risk="$2" rollback_ready="$3" rollback_cmd="$4"
+  local precond="No" protected="No" recommendation="NO-GO"
+
+  [ "$FAILURES" -eq 0 ] && precond="Yes"
+  _existing_matches_baseline && protected="Yes"
+
+  if [ "$precond" = "Yes" ] && [ "$protected" = "Yes" ] && [ "$rollback_ready" = "yes" ]; then
+    recommendation="GO"
+  fi
+
+  say "GO / NO-GO — $STAGE_NAME"
+  kv "Current stage"           "$STAGE_NAME"
+  kv "Preconditions satisfied" "$precond"
+  kv "Rollback available"      "$([ "$rollback_ready" = "yes" ] && echo Yes || echo No)"
+  kv "Rollback command"        "$rollback_cmd"
+  kv "Production protected"    "$protected"
+  kv "Expected duration"       "$duration"
+  kv "Risk level"              "$risk"
+  kv "Recommendation"          "$recommendation"
+
+  manifest_record "goNoGo" "$recommendation"
+
+  if [ "$recommendation" = "GO" ]; then
+    ok "gate open — proceeding"
+    return 0
+  fi
+  bad "NO-GO — the irreversible action was not attempted"
+  [ "$precond" = "Yes" ]         || info "  cause: a precondition check above failed"
+  [ "$protected" = "Yes" ]       || info "  cause: the existing production process moved since the baseline"
+  [ "$rollback_ready" = "yes" ]  || info "  cause: rollback is not in place for this stage"
+  return 1
 }
 
 # --- Standard 6: one outcome per stage --------------------------------------

@@ -63,11 +63,35 @@ if [ "$MODE" = "precheck" ]; then
 
   say "BACK UP THE FILE FIRST"
   mkdir -p "$STATE"
-  info "Set NGINX_SITE to the file you identified, then:"
-  info "  sudo cp \"\$NGINX_SITE\" $STATE/nginx-site.backup"
-  info "  ls -l $STATE/nginx-site.backup"
+  BACKUP="$STATE/nginx-site.backup"
+  ROLLBACK_READY=no
+  if [ -z "${NGINX_SITE:-}" ]; then
+    bad "NGINX_SITE is not set — export the path to the server block for $SITE and re-run precheck"
+    info "  export NGINX_SITE=/etc/nginx/sites-available/<file identified above>"
+  elif [ -f "$BACKUP" ]; then
+    # Never overwrite: the first copy is the pre-cut-over state, which is
+    # precisely what rollback has to restore.
+    ok "backup already present — $BACKUP ($(stat -c '%y' "$BACKUP" 2>/dev/null))"
+    ROLLBACK_READY=yes
+  elif sudo cp "$NGINX_SITE" "$BACKUP" 2>/dev/null; then
+    ok "backed up $NGINX_SITE to $BACKUP"
+    ROLLBACK_READY=yes
+  else
+    bad "could not read $NGINX_SITE — check the path"
+  fi
+  if [ "$ROLLBACK_READY" = "yes" ]; then
+    # rollback.sh reads NGINX_SITE from the environment; persisting it here
+    # means a rollback still works from a fresh shell under pressure.
+    printf '%s\n' "$NGINX_SITE" > "$STATE/nginx-site.path"
+    kv "backup sha256" "$(sha256sum "$BACKUP" | cut -d' ' -f1)"
+  fi
 
-  say "THEN CHANGE EXACTLY THESE THREE THINGS"
+  go_no_go "5 to 10 minutes including verification" \
+           "High — the only user-visible change in the deployment" \
+           "$ROLLBACK_READY" "bash deploy/stages/rollback.sh" \
+    || { assert_existing_unchanged; finish; exit 1; }
+
+  say "NOW CHANGE EXACTLY THESE THREE THINGS"
   cat <<EOF
     root $V1/dist/public;                    # was $APP_EXISTING/dist/public
 

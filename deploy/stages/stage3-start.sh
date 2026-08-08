@@ -59,14 +59,26 @@ go_no_go "1 to 2 minutes" "Low — new process on port $V1_PORT; nginx still rou
          "$ROLLBACK_READY" "pm2 delete $V1_PM2_NAME" \
   || { finish; exit 1; }
 
-say "START  (pinned interpreter)"
+say "START  (pinned interpreter, environment loaded by Node itself)"
+# Node reads .env at every spawn via --env-file, and PM2 persists node_args in
+# both its live definition and dump.pm2. That makes the environment a function
+# of the file rather than state held in the PM2 daemon's memory.
+#
+# The previous form exported .env into this shell and let PM2 snapshot it. The
+# snapshot lived only in the daemon: a daemon restart, a resurrect, a reboot, or
+# a `pm2 restart --update-env` from a shell without those exports replaced it
+# with an empty environment. The process then reached enforceSchemaOnBoot with
+# no DATABASE_URL and exited 1 on every respawn — observed as a 578-restart
+# crash loop after the daemon reloaded its saved definition.
+#
+# .env is still sourced here because later checks in this stage read PORT.
 set -a; . "$V1/.env"; set +a
 pm2 delete "$V1_PM2_NAME" >/dev/null 2>&1 || true
 pm2 start "$V1/dist/index.js" \
   --name "$V1_PM2_NAME" \
   --cwd "$V1" \
   --interpreter "$NODE22" \
-  --update-env 2>&1 | tail -4
+  --node-args="--env-file=$V1/.env" 2>&1 | tail -4
 
 info "waiting for startup..."
 for _ in $(seq 1 40); do

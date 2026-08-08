@@ -627,7 +627,7 @@ unfinished migrations at 0. **Stop** on `POPULATED BUT NOT PRISMA-MANAGED` and
 
 ## Stage 3 — Backup checklist
 
-- [ ] `pg_dump "$DATABASE_URL" -Fc -f ~/backup-$(date +%F).dump` — or, if RDS, a snapshot with its restore point recorded
+- [ ] `pg_dump "$PGURL" -Fc -f ~/backup-$(date +%F).dump` — or, if RDS, a snapshot with its restore point recorded
 - [ ] Restore verified listable: `pg_restore -l ~/backup-*.dump | head`
 - [ ] `cp ~/.pm2/dump.pm2 ~/dump.pm2.rollback`
 - [ ] `sudo cp -a /var/www/courtaccess /var/www/courtaccess.rollback`
@@ -752,7 +752,7 @@ There are remaining deployment UNKNOWNs. Every command below is read-only.
 | Production database state | The RC reads 115 tables unconditionally; one state makes it unrunnable | `node deploy/inspect-database.mjs` | Yes — enforced by `BEGIN TRANSACTION READ ONLY`; 8 write types refused with 25006 |
 | Node version | Bundle targets `node22`; older runtimes fail with a `SyntaxError` inside a 2 MB file | `node --version` | Yes |
 | Certificate renewal works | Expiry is ~2 days out; lapse locks everyone out of the site | `sudo certbot renew --dry-run` | Yes — staging endpoint, writes no certificate |
-| Backup capability | The chain is irreversible; a dump is the only rollback | `pg_dump --version && pg_dump "$DATABASE_URL" --schema-only -f /tmp/probe.sql` | Yes — reads only |
+| Backup capability | The chain is irreversible; a dump is the only rollback | `pg_dump --version && pg_dump "$PGURL" --schema-only -f /tmp/probe.sql` | Yes — reads only |
 
 ## Blocking the cut-over specifically
 

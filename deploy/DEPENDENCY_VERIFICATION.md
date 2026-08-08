@@ -208,9 +208,14 @@ there is nothing to migrate.
 **These commands assume PostgreSQL runs on the EC2 instance.** `sudo -u postgres
 psql` connects over the local socket as a superuser, and fails outright if
 `DATABASE_URL` points at RDS or any external host — which would read as "no
-database" and be exactly the wrong conclusion. Use the `psql "$DATABASE_URL"`
+database" and be exactly the wrong conclusion. Use the `psql "$PGURL"`
 forms in [`DATABASE_CERTIFICATION.md`](DATABASE_CERTIFICATION.md) instead; they
 are correct either way.
+
+`PGURL` is `DATABASE_URL` with the query string removed —
+`export PGURL="${DATABASE_URL%%\?*}"`. Prisma's URL carries `?schema=public`,
+and `psql` and `pg_dump` reject it with
+`invalid URI query parameter: "schema"`.
 
 **Blocks if:** tables exist but `_prisma_migrations` does not.
 

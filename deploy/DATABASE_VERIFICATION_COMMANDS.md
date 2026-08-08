@@ -37,7 +37,7 @@ individually with `25006`, and the database was unchanged afterwards:
 And under `PGOPTIONS`:
 
 ```
-$ psql "$DATABASE_URL" -c "CREATE TABLE should_fail(id int);"
+$ psql "$PGURL" -c "CREATE TABLE should_fail(id int);"
 ERROR:  cannot execute CREATE TABLE in a read-only transaction
 ```
 
@@ -69,7 +69,16 @@ release directory — then use the `psql` alternatives instead.
 ```bash
 set -a; . /var/www/courtaccess/.env 2>/dev/null; set +a
 echo "${DATABASE_URL:-<EMPTY>}" | sed -E 's#(//[^:]+):[^@]*@#\1:***@#'
+
+# Prisma's URL carries ?schema=public. psql and pg_dump reject that outright
+# with: invalid URI query parameter: "schema". Strip the query string for
+# them; Prisma commands keep using DATABASE_URL unchanged.
+export PGURL="${DATABASE_URL%%\?*}"
+psql "$PGURL" -tAc "select 1"
 ```
+
+**Expected:** the masked URL, then `1`. If `psql` errors on the URI, the strip
+did not apply — check that `PGURL` has no `?` in it.
 
 **Why:** everything else depends on it, and the host portion is what determines
 whether the server is on this machine or elsewhere. The `sed` masks the password
@@ -295,7 +304,7 @@ table the RC uses.
 
 ```bash
 pg_dump --version
-pg_dump "$DATABASE_URL" --schema-only --no-owner -f /tmp/schema-probe.sql && wc -l /tmp/schema-probe.sql
+pg_dump "$PGURL" --schema-only --no-owner -f /tmp/schema-probe.sql && wc -l /tmp/schema-probe.sql
 ```
 
 **Why:** the migration chain has no down migrations, so a dump is the only
@@ -335,7 +344,7 @@ transaction`.
 ### Phase 1
 
 ```bash
-psql "$DATABASE_URL" -c "
+psql "$PGURL" -c "
 select version() as version,
        current_database() as db,
        current_user, session_user,
@@ -345,14 +354,14 @@ select version() as version,
        inet_server_port() as server_port,
        pg_is_in_recovery() as is_replica;"
 
-psql "$DATABASE_URL" -c "
+psql "$PGURL" -c "
 select pg_size_pretty(pg_database_size(current_database())) as size,
        pg_get_userbyid(datdba) as owner,
        pg_encoding_to_char(encoding) as encoding,
        datcollate, datctype
 from pg_database where datname = current_database();"
 
-psql "$DATABASE_URL" -c "
+psql "$PGURL" -c "
 select (select count(*) from information_schema.tables where table_schema='public' and table_type='BASE TABLE') as tables,
        (select count(*) from pg_indexes where schemaname='public') as indexes,
        (select count(*) from information_schema.views where table_schema='public') as views,
@@ -362,7 +371,7 @@ select (select count(*) from information_schema.tables where table_schema='publi
        (select count(*) from pg_constraint c join pg_namespace n on n.oid=c.connamespace where n.nspname='public' and c.contype='f') as fkeys,
        (select count(*) from pg_type t join pg_namespace n on n.oid=t.typnamespace where n.nspname='public' and t.typtype='e') as enums;"
 
-psql "$DATABASE_URL" -c "select extname, extversion from pg_extension order by extname;"
+psql "$PGURL" -c "select extname, extversion from pg_extension order by extname;"
 ```
 
 **Why:** the same fields Step 2 collects. **Expected:** PostgreSQL 14 or later,
@@ -371,16 +380,16 @@ psql "$DATABASE_URL" -c "select extname, extversion from pg_extension order by e
 ### Phase 2
 
 ```bash
-psql "$DATABASE_URL" -tAc "select to_regclass('public._prisma_migrations') is not null as prisma_managed;"
+psql "$PGURL" -tAc "select to_regclass('public._prisma_migrations') is not null as prisma_managed;"
 
-psql "$DATABASE_URL" -c "
+psql "$PGURL" -c "
 select count(*) as total,
        count(*) filter (where finished_at is not null) as applied,
        count(*) filter (where finished_at is null and rolled_back_at is null) as unfinished,
        count(*) filter (where rolled_back_at is not null) as rolled_back
 from _prisma_migrations;"
 
-psql "$DATABASE_URL" -c "
+psql "$PGURL" -c "
 select migration_name, started_at, finished_at, rolled_back_at, applied_steps_count
 from _prisma_migrations order by started_at;"
 ```
@@ -395,8 +404,8 @@ exist` if the first returned `f`. That is the expected consequence, not a fault.
 ### Phase 3
 
 ```bash
-psql "$DATABASE_URL" -c "\dt public.*"
-psql "$DATABASE_URL" -c "
+psql "$PGURL" -c "\dt public.*"
+psql "$PGURL" -c "
 select table_name, count(column_name) as columns
 from information_schema.columns
 where table_schema='public'

@@ -81,7 +81,7 @@ If `DATABASE_URL` points at RDS or any external host, every one of those
 commands fails with "role postgres does not exist" or a missing socket — and
 would be misread as "no database", which is exactly the wrong conclusion.
 
-**All commands in this document use `psql "$DATABASE_URL"` instead**, which is
+**All commands in this document use `psql "$PGURL"` instead**, which is
 correct whether the server is local or remote. Determining which it is takes one
 command and is step 1.
 
@@ -331,7 +331,7 @@ mid-chain failure leaves behind. Take the dump.
 
 **External vs. local PostgreSQL.** Previously assumed local, implicitly, by
 using `sudo -u postgres psql`. **Disproven as a safe assumption** — nothing
-establishes locality. All commands here use `psql "$DATABASE_URL"`. Step 1
+establishes locality. All commands here use `psql "$PGURL"`. Step 1
 settles it. This matters beyond syntax: an external database means backups may
 be RDS snapshots rather than `pg_dump`, and network reachability from the EC2
 instance becomes its own precondition.
@@ -411,6 +411,16 @@ answer.
 
 ## Read-only commands, in execution order
 
+> **Before any of these**, define `PGURL`. Prisma's `DATABASE_URL` carries
+> `?schema=public`, which `psql` and `pg_dump` reject with
+> `invalid URI query parameter: "schema"`. Prisma commands keep using
+> `DATABASE_URL`; the PostgreSQL client tools need the query string removed:
+>
+> ```bash
+> set -a; . /var/www/courtaccess/.env; set +a
+> export PGURL="${DATABASE_URL%%\?*}"
+> ```
+
 None of these modify the database. There is no `CREATE`, no `ALTER`, no
 `INSERT`, no `migrate deploy`, and no `migrate resolve`. `pg_dump` reads only.
 
@@ -431,7 +441,7 @@ are `pg_dump` or RDS snapshots. **Expected:** a URL with the password masked.
 ### 2 · Confirm the database is reachable
 
 ```bash
-psql "$DATABASE_URL" -tAc "select 1;"
+psql "$PGURL" -tAc "select 1;"
 ```
 
 **Why:** `DATABASE_URL` being set proves nothing about reachability.
@@ -440,7 +450,7 @@ psql "$DATABASE_URL" -tAc "select 1;"
 ### 3 · Phase 1 discovery, in one query
 
 ```bash
-psql "$DATABASE_URL" -c "
+psql "$PGURL" -c "
 select version() as server_version,
        current_database()      as database_name,
        current_schema()        as current_schema,
@@ -459,7 +469,7 @@ from pg_database where datname = current_database();"
 ### 4 · Connection count
 
 ```bash
-psql "$DATABASE_URL" -c "select state, count(*) from pg_stat_activity where datname = current_database() group by state;"
+psql "$PGURL" -c "select state, count(*) from pg_stat_activity where datname = current_database() group by state;"
 ```
 
 **Why:** shows whether anything else is using this database — another
@@ -469,8 +479,8 @@ application on the same database changes the risk picture entirely.
 ### 5 · Is it Prisma-managed? — **the decisive question**
 
 ```bash
-psql "$DATABASE_URL" -tAc "select to_regclass('public._prisma_migrations') is not null as prisma_managed;"
-psql "$DATABASE_URL" -tAc "select count(*) from information_schema.tables where table_schema='public' and table_type='BASE TABLE';"
+psql "$PGURL" -tAc "select to_regclass('public._prisma_migrations') is not null as prisma_managed;"
+psql "$PGURL" -tAc "select count(*) from information_schema.tables where table_schema='public' and table_type='BASE TABLE';"
 ```
 
 **Why:** these two values select the scenario, and the scenario is the answer.
@@ -486,10 +496,10 @@ psql "$DATABASE_URL" -tAc "select count(*) from information_schema.tables where 
 ### 6 · Migration state, if Prisma-managed
 
 ```bash
-psql "$DATABASE_URL" -c "
+psql "$PGURL" -c "
 select migration_name, started_at, finished_at, rolled_back_at, applied_steps_count
 from _prisma_migrations order by started_at;"
-psql "$DATABASE_URL" -tAc "select count(*) filter (where finished_at is not null) as applied,
+psql "$PGURL" -tAc "select count(*) filter (where finished_at is not null) as applied,
                                   count(*) filter (where finished_at is null) as unfinished,
                                   count(*) filter (where rolled_back_at is not null) as rolled_back
                            from _prisma_migrations;"
@@ -504,9 +514,9 @@ resolved before any deploy.
 ### 7 · Table inventory
 
 ```bash
-psql "$DATABASE_URL" -c "\dt public.*" | head -40
-psql "$DATABASE_URL" -c "select count(*) from pg_indexes where schemaname='public';"
-psql "$DATABASE_URL" -c "select extname from pg_extension;"
+psql "$PGURL" -c "\dt public.*" | head -40
+psql "$PGURL" -c "select count(*) from pg_indexes where schemaname='public';"
+psql "$PGURL" -c "select extname from pg_extension;"
 ```
 
 **Why:** shows at a glance whether the tables look like CourtAccess or like a
@@ -547,7 +557,7 @@ database still held exactly its original two tables afterwards.
 
 ```bash
 pg_dump --version
-pg_dump "$DATABASE_URL" --schema-only --no-owner -f /tmp/schema-probe.sql && wc -l /tmp/schema-probe.sql
+pg_dump "$PGURL" --schema-only --no-owner -f /tmp/schema-probe.sql && wc -l /tmp/schema-probe.sql
 ```
 
 **Why:** the chain is irreversible, so a restorable dump is the only rollback.

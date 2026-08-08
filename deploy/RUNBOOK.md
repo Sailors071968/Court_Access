@@ -36,8 +36,23 @@ before touching the database so a build failure costs nothing.
 ```bash
 export APP=/var/www/courtaccess
 export BUILD=/opt/courtaccess-build          # scratch only; never served from
+
+# Prisma's DATABASE_URL carries ?schema=public, which is a Prisma-specific
+# parameter. psql and pg_dump both reject it outright:
+#     psql: error: invalid URI query parameter: "schema"
+# Prisma commands take DATABASE_URL; psql and pg_dump take PGURL.
+set -a; . "$APP/.env" 2>/dev/null; set +a
+export PGURL="${DATABASE_URL%%\?*}"
+
 echo "APP=$APP  BUILD=$BUILD"
+echo "PGURL=$(echo "${PGURL:-<unset>}" | sed -E 's#(//[^:]+):[^@]*@#\1:***@#')"
+psql "$PGURL" -tAc "select 1" >/dev/null 2>&1 && echo "psql connects OK" || echo "psql cannot connect — resolve before continuing"
 ```
+
+**One caution about the line above.** Sourcing `.env` here is for `psql` and
+`pg_dump` only. Do **not** rely on it for the PM2 reload: `--update-env`
+replaces the process environment with this shell's, so Stage F3 re-sources it
+deliberately and checks `PORT` immediately before reloading.
 
 Do **not** source `.env` here. Stage D4 explains why the shell environment at
 the moment of `pm2 reload` decides what the application actually runs with, and
@@ -121,7 +136,7 @@ the RC should use before continuing.
 
 ```bash
 pg_dump --version
-pg_dump "$DATABASE_URL" --schema-only --no-owner -f /tmp/schema-probe.sql && wc -l /tmp/schema-probe.sql
+pg_dump "$PGURL" --schema-only --no-owner -f /tmp/schema-probe.sql && wc -l /tmp/schema-probe.sql
 ```
 
 **Expected:** a version, then a file of a few thousand lines.
@@ -261,7 +276,7 @@ Changes disk, not service.
 
 ```bash
 mkdir -p ~/rollback
-pg_dump "$DATABASE_URL" -Fc -f ~/rollback/db-$(date +%F-%H%M).dump
+pg_dump "$PGURL" -Fc -f ~/rollback/db-$(date +%F-%H%M).dump
 cp ~/.pm2/dump.pm2 ~/rollback/dump.pm2.rollback
 sudo cp -a /etc/nginx ~/rollback/nginx-$(date +%F)
 sudo cp -a "$APP" "$APP.rollback-$(date +%F)"
@@ -474,8 +489,8 @@ DDL. Return to A2.
 
 ```bash
 cd "$BUILD/src/backend"
-psql "$DATABASE_URL" -tAc "select count(*) from information_schema.tables where table_schema='public' and table_type='BASE TABLE';"
-psql "$DATABASE_URL" -tAc "select count(*) filter (where finished_at is not null), count(*) filter (where finished_at is null) from _prisma_migrations;"
+psql "$PGURL" -tAc "select count(*) from information_schema.tables where table_schema='public' and table_type='BASE TABLE';"
+psql "$PGURL" -tAc "select count(*) filter (where finished_at is not null), count(*) filter (where finished_at is null) from _prisma_migrations;"
 npx prisma migrate diff --from-url "$DATABASE_URL" --to-schema-datamodel prisma/schema.prisma
 ```
 
@@ -488,8 +503,8 @@ npx prisma migrate diff --from-url "$DATABASE_URL" --to-schema-datamodel prisma/
 ```bash
 # Only if you are abandoning the deployment. Migrations are not reversible:
 # there are no down migrations, and four columns of schema_versions are dropped.
-psql "$DATABASE_URL" -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = current_database() AND pid <> pg_backend_pid();"
-pg_restore -d "$DATABASE_URL" --clean --if-exists ~/rollback/db-*.dump
+psql "$PGURL" -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = current_database() AND pid <> pg_backend_pid();"
+pg_restore -d "$PGURL" --clean --if-exists ~/rollback/db-*.dump
 ```
 
 ---

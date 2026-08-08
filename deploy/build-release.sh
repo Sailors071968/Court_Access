@@ -43,7 +43,14 @@ if [ -e "$OUT/.env" ] || [ -d "$OUT/evidence" ] || [ -d "$OUT/staging" ]; then
   exit 1
 fi
 
-rm -rf "$OUT"
+# Clear the contents rather than the directory. Removing $OUT itself needs write
+# permission on its parent, and a deployment target under /var/www is created by
+# an administrator inside a root-owned parent — so the unlink fails even though
+# the build user owns the directory. Emptying it achieves the same result and
+# preserves the ownership the administrator set.
+if [ -d "$OUT" ]; then
+  find "$OUT" -mindepth 1 -maxdepth 1 -exec rm -rf {} +
+fi
 mkdir -p "$OUT/dist/public"
 cp "$ROOT/backend/dist/index.js" "$OUT/dist/index.js"
 cp -a "$ROOT/dist/." "$OUT/dist/public/"

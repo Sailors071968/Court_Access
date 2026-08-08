@@ -33,6 +33,8 @@ if [ "$MODE" = "precheck" ]; then
   verify_interpreter
   baseline_existing
 
+  assert_artifact_frozen
+
   say "GATE — the new installation must be fully healthy first"
   BASE="http://127.0.0.1:$V1_PORT"
   for pair in "health:/api/health" "ready:/api/health/ready" "deep:/api/health/deep"; do

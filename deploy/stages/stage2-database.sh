@@ -100,5 +100,10 @@ else
   bad "drift detected between the database and schema.prisma"
 fi
 
+manifest_record "databaseName"  "$NEWDB"
+manifest_record "databaseHost"  "$(printf '%s' "$PGURL" | sed -E 's#.*@([^/]+)/.*#\\1#')"
+manifest_record "tablesCreated" "$TABLES"
+manifest_record "migrationsApplied" "$APPLIED"
+
 assert_existing_unchanged
 finish

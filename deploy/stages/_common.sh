@@ -22,6 +22,10 @@ set -uo pipefail
 : "${V1_PM2_NAME:=courtaccess-v1}"
 : "${V1_DB:=courtaccess_v1}"
 : "${STATE:=$HOME/courtaccess-deploy-state}"
+# Exported because several checks shell out to node, which reads them from the
+# environment. Without the export the subprocess sees undefined and silently
+# does nothing useful.
+export V1 BUILD V1_PORT V1_PM2_NAME V1_DB STATE APP_EXISTING
 : "${EXPECTED_BUNDLE_SHA:=c3f5f6f03399b594f4465db2067ba7219b7717335fd8f43355473d47d35ad227}"
 : "${EXPECTED_MIGRATIONS:=30}"
 : "${EXPECTED_TABLES:=116}"
@@ -162,14 +166,116 @@ assert_existing_unchanged() {
   fi
 }
 
+# --- Deployment manifest ----------------------------------------------------
+# One append-only record for the whole deployment. Every stage adds to it
+# rather than producing a separate report, so there is a single authoritative
+# audit trail afterwards.
+export MANIFEST="$STATE/deployment-manifest.json"
+
+manifest_init() {
+  [ -f "$MANIFEST" ] && { ok "manifest already exists — appending to $MANIFEST"; return 0; }
+  "$NODE22" -e '
+    const fs=require("fs");
+    fs.writeFileSync(process.env.MANIFEST, JSON.stringify({
+      deployment: {
+        startedAtUtc: new Date().toISOString(),
+        operator: process.env.USER || process.env.LOGNAME || "unknown",
+        host: require("os").hostname(),
+      },
+      stages: [],
+    }, null, 2));
+  ' && ok "manifest created at $MANIFEST" || bad "could not create manifest"
+}
+
+# manifest_record <key> <value>   — buffered, flushed by manifest_flush
+declare -a _MF_KEYS=() _MF_VALS=()
+manifest_record() { _MF_KEYS+=("$1"); _MF_VALS+=("${2:-}"); }
+
+manifest_flush() {
+  local result="$1"
+  local payload="{}"
+  if [ "${#_MF_KEYS[@]}" -gt 0 ]; then
+    payload="$(
+      { printf '{'
+        local i first=1
+        for i in "${!_MF_KEYS[@]}"; do
+          [ $first -eq 0 ] && printf ','
+          first=0
+          printf '%s:%s' \
+            "$("$NODE22" -pe 'JSON.stringify(process.argv[1])' "${_MF_KEYS[$i]}")" \
+            "$("$NODE22" -pe 'JSON.stringify(process.argv[1])' "${_MF_VALS[$i]}")"
+        done
+        printf '}'; }
+    )"
+  fi
+  MF_STAGE="$STAGE_NAME" MF_RESULT="$result" MF_PAYLOAD="$payload" "$NODE22" -e '
+    const fs=require("fs"), p=process.env.MANIFEST;
+    let m={deployment:{},stages:[]};
+    try{m=JSON.parse(fs.readFileSync(p,"utf8"))}catch(e){}
+    m.stages.push({
+      stage: process.env.MF_STAGE,
+      result: process.env.MF_RESULT,
+      atUtc: new Date().toISOString(),
+      facts: JSON.parse(process.env.MF_PAYLOAD),
+    });
+    fs.writeFileSync(p, JSON.stringify(m,null,2));
+  ' 2>/dev/null || true
+}
+
+# --- Standards 4 & 5: freeze the verified artifact --------------------------
+# After stage 3 passes, the tree that was verified is the tree that deploys.
+# A fingerprint over the artifact detects any rebuild, npm install, git pull
+# or edit between verification and cut-over.
+FREEZE="$STATE/artifact-freeze.sha256"
+
+_artifact_fingerprint() {
+  {
+    sha256sum "$V1/dist/index.js" 2>/dev/null
+    sha256sum "$V1/dist/build-info.json" 2>/dev/null
+    sha256sum "$V1/dist/public/index.html" 2>/dev/null
+    sha256sum "$V1/.env" 2>/dev/null
+    find "$V1/dist/public" -type f -printf '%p %s\n' 2>/dev/null | sort
+    ls -d "$V1"/prisma/migrations/*/ 2>/dev/null | sort
+  } | sha256sum | cut -d' ' -f1
+}
+
+freeze_artifact() {
+  say "FREEZE POINT"
+  _artifact_fingerprint > "$FREEZE"
+  kv "artifact fingerprint" "$(cat "$FREEZE")"
+  ok "frozen — from here, do not rebuild, npm install, git pull, or edit .env"
+}
+
+assert_artifact_frozen() {
+  say "FREEZE VERIFICATION"
+  if [ ! -f "$FREEZE" ]; then
+    bad "no freeze recorded — stage 3 must pass before cut-over"
+    return 1
+  fi
+  local now; now="$(_artifact_fingerprint)"
+  if [ "$now" = "$(cat "$FREEZE")" ]; then
+    ok "artifact is unchanged since verification — $now"
+  else
+    bad "THE ARTIFACT CHANGED since it was verified"
+    info "  frozen: $(cat "$FREEZE")"
+    info "  now:    $now"
+    info "The verified artifact is not the one about to deploy."
+    info "Re-run stages 1 to 3 before cutting over."
+  fi
+}
+
 # --- Standard 6: one outcome per stage --------------------------------------
 finish() {
   say "STAGE RESULT — $STAGE_NAME"
   if [ "$FAILURES" -eq 0 ]; then
-    printf '    PASS\n\n'
+    manifest_flush "PASS"
+    printf '    PASS\n'
+    printf '    manifest: %s\n\n' "$MANIFEST"
     return 0
   fi
+  manifest_flush "FAIL"
   printf '    FAIL — %s check(s) failed\n' "$FAILURES"
-  printf '    Do not proceed to the next stage. Report the [FAIL] lines above.\n\n'
+  printf '    Do not proceed to the next stage. Report the [FAIL] lines above.\n'
+  printf '    manifest: %s\n\n' "$MANIFEST"
   return 1
 }

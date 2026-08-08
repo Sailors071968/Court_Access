@@ -110,5 +110,22 @@ check "jsDelivr (OCR language model)" "200" "$JSD"
 check "leginfo (statute retrieval)"   "200" "$LEG"
 [ "$JSD" != "200" ] && info "OCR will report every scanned page as blank — indistinguishable from a genuinely blank page."
 
+say "FUNCTIONAL SMOKE TEST — exercises the running application"
+if "$NODE22" "$DIR/smoke-test.mjs" "$BASE"; then
+  ok "functional smoke test passed"
+else
+  bad "functional smoke test FAILED — cut-over must not begin"
+fi
+
+manifest_record "v1Pid"          "$V1PID"
+manifest_record "v1Interpreter"  "$ACTUAL_EXE"
+manifest_record "v1Port"         "$V1_PORT"
+manifest_record "liveCommit"     "$LIVE_COMMIT"
+manifest_record "jsDelivrReachable" "$JSD"
+manifest_record "leginfoReachable"  "$LEG"
+
+# Standards 4 and 5: the artifact verified here is the artifact that deploys.
+[ "$FAILURES" -eq 0 ] && freeze_artifact
+
 assert_existing_unchanged
 finish

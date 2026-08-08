@@ -22,6 +22,7 @@ REPO="${REPO:-https://github.com/Sailors071968/Court_Access.git}"
 
 deploy_env || { finish; exit 1; }
 verify_interpreter
+manifest_init
 baseline_existing
 
 say "PRE-FLIGHT"
@@ -89,6 +90,18 @@ kv "installed size" "$(du -sh "$V1" 2>/dev/null | cut -f1)"
 
 STAMP_COMMIT="$("$NODE22" -pe "JSON.parse(require('fs').readFileSync('$V1/dist/build-info.json','utf8')).commit" 2>/dev/null)"
 check "build stamp commit matches the clone" "$CLONED_COMMIT" "$STAMP_COMMIT"
+
+manifest_record "gitCommit"     "$CLONED_COMMIT"
+manifest_record "gitBranch"     "$BRANCH"
+manifest_record "rootCommit"    "$ROOT_COMMIT"
+manifest_record "bundleSha256"  "$ACTUAL_SHA"
+manifest_record "targetDir"     "$V1"
+manifest_record "nodeInterpreter" "$NODE22"
+manifest_record "nodeVersion"   "$("$NODE22" --version 2>&1)"
+manifest_record "npmVersion"    "$("$NPM22" --version 2>&1)"
+manifest_record "pm2Version"    "$(pm2 --version 2>&1 | tail -1)"
+manifest_record "opensslVersion" "$(openssl version 2>&1)"
+manifest_record "migrationsInArtifact" "$MIG_COUNT"
 
 assert_existing_unchanged
 finish

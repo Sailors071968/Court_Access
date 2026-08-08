@@ -1,0 +1,335 @@
+{
+  "report": "WORKFLOW_CERTIFICATION",
+  "phase": "Phase 2/8/9 — Litigation Workflow",
+  "generatedAt": "2026-08-06T17:59:38.569Z",
+  "apiBase": "http://127.0.0.1:3001",
+  "summary": {
+    "total": 40,
+    "PASS": 40,
+    "FAIL": 0,
+    "WARNING": 0,
+    "UNKNOWN": 0,
+    "passRate": 100
+  },
+  "exercisedApiRoutes": [
+    "DELETE /api/cases/:id",
+    "DELETE /api/evidence/:id",
+    "GET /api/auth/me",
+    "GET /api/cases",
+    "GET /api/cases/:id",
+    "GET /api/cases/:id/evidence",
+    "GET /api/cases/:id/evidence-requests",
+    "GET /api/cases/:id/investigator-workbench",
+    "GET /api/cases/:id/workbench",
+    "GET /api/cases/:id/workbench/notes",
+    "GET /api/cases/:id/workbench/trial-prep",
+    "GET /api/charges/:id",
+    "GET /api/contradiction/graph/:id",
+    "GET /api/contradiction/recommendations/:id",
+    "GET /api/evidence/:id",
+    "GET /api/organizations/members",
+    "GET /api/timeline/:id",
+    "GET /api/timeline/:id/conflicts",
+    "GET /api/timeline/:id/events",
+    "PATCH /api/cases/:id",
+    "POST /api/auth/login",
+    "POST /api/auth/logout",
+    "POST /api/auth/register",
+    "POST /api/cases",
+    "POST /api/charges",
+    "POST /api/evidence/upload",
+    "POST /api/organizations/invitations",
+    "POST /api/organizations/offices",
+    "POST /api/organizations/onboarding",
+    "POST /api/timeline/rebuild/:id"
+  ],
+  "exercisedSpaRoutes": [],
+  "caseId": "8d4a6874-b5c8-480a-8788-104f17ee3e1c",
+  "timings": {
+    "register": 244,
+    "login": 206,
+    "createCase": 3,
+    "uploadDiscovery": 67,
+    "Attorney workbench": 240,
+    "Timeline events": 4,
+    "Timeline conflicts": 3,
+    "Contradiction graph": 2,
+    "Contradiction recommendations": 2,
+    "Evidence gap detection": 4,
+    "Attorney workbench notes": 4,
+    "Investigator workbench": 14,
+    "Trial prep package": 212,
+    "timelineRebuild": 6
+  },
+  "uploaded": [
+    {
+      "file": "police-report.pdf",
+      "status": 201,
+      "evidenceId": "e6d5b1b1-0fb0-46bf-ac34-f74231a113d5"
+    },
+    {
+      "file": "preliminary-hearing-transcript.pdf",
+      "status": 201,
+      "evidenceId": "13476c79-5662-4d60-9034-f50e02faca88"
+    },
+    {
+      "file": "dispatch-log.pdf",
+      "status": 201,
+      "evidenceId": "e7d340a6-6638-4e59-9764-0f62f5f1acd4"
+    },
+    {
+      "file": "laboratory-report.pdf",
+      "status": 201,
+      "evidenceId": "1f521300-be76-468f-9b97-3aaf5ca4c10e"
+    },
+    {
+      "file": "scanned-police-report.png",
+      "status": 201,
+      "evidenceId": "4a847505-4352-4187-b670-d9ce56c656e0"
+    },
+    {
+      "file": "bodycam.mp4",
+      "status": 201,
+      "evidenceId": "b7f72a99-6db4-409b-a4af-51ecc4478942"
+    }
+  ],
+  "checks": [
+    {
+      "id": "WF-01",
+      "name": "Attorney can register",
+      "status": "PASS",
+      "detail": "HTTP 200, tenant tenant-fa50060a-3204-4fcc-a717-45b3b92885c1"
+    },
+    {
+      "id": "WF-02",
+      "name": "Attorney can log in again with the same credentials",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "id": "WF-03",
+      "name": "Session endpoint returns the signed-in user",
+      "status": "PASS",
+      "detail": "wf-attorney-1786039174255-1-eulaci@certification.test"
+    },
+    {
+      "id": "WF-04",
+      "name": "Registration provisions a subscription",
+      "status": "PASS",
+      "detail": "status=trial"
+    },
+    {
+      "id": "WF-05",
+      "name": "The registering attorney can advance organisation onboarding",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "id": "WF-05b",
+      "name": "An office can be added to the organisation",
+      "status": "PASS",
+      "detail": "HTTP 201"
+    },
+    {
+      "id": "WF-05c",
+      "name": "A colleague can be invited to the organisation",
+      "status": "PASS",
+      "detail": "HTTP 201"
+    },
+    {
+      "id": "WF-06",
+      "name": "Organisation membership is readable",
+      "status": "PASS",
+      "detail": "1 member(s)"
+    },
+    {
+      "id": "WF-07",
+      "name": "Attorney can open a case",
+      "status": "PASS",
+      "detail": "caseId 8d4a6874-b5c8-480a-8788-104f17ee3e1c"
+    },
+    {
+      "id": "WF-08",
+      "name": "Case reads back with the values it was created with",
+      "status": "PASS",
+      "detail": "People v. Doe"
+    },
+    {
+      "id": "WF-09",
+      "name": "Case can be updated",
+      "status": "PASS",
+      "detail": "phase -> pretrial"
+    },
+    {
+      "id": "WF-10",
+      "name": "New case appears in the case list",
+      "status": "PASS"
+    },
+    {
+      "id": "WF-11",
+      "name": "Duplicate case number is refused",
+      "status": "PASS",
+      "detail": "HTTP 409"
+    },
+    {
+      "id": "WF-12",
+      "name": "Charge can be added to a case",
+      "status": "PASS",
+      "detail": "HTTP 201"
+    },
+    {
+      "id": "WF-13",
+      "name": "Charges read back for the case",
+      "status": "PASS",
+      "detail": "{\"success\":true,\"charges\":[{\"id\":\"8d99bc4b-8687-479b-97a9-e75f77151905\",\"caseId\":\"8d4a6874-b5c8-480a"
+    },
+    {
+      "id": "WF-14",
+      "name": "All discovery documents upload",
+      "status": "PASS",
+      "detail": "6/6 accepted"
+    },
+    {
+      "id": "WF-15",
+      "name": "Uploaded evidence is listed against the case",
+      "status": "PASS",
+      "detail": "6 items"
+    },
+    {
+      "id": "WF-16",
+      "name": "Discovery text is indexed into retrievable chunks",
+      "status": "PASS",
+      "detail": "5 chunks"
+    },
+    {
+      "id": "WF-17",
+      "name": "Every chunk is attributable to an uploaded document",
+      "status": "PASS",
+      "detail": "5 chunks checked"
+    },
+    {
+      "id": "WF-18",
+      "name": "Chunk offsets are well formed",
+      "status": "PASS",
+      "detail": "5 chunks checked"
+    },
+    {
+      "id": "WF-19",
+      "name": "Recorded character counts match the stored text",
+      "status": "PASS",
+      "detail": "5 chunks checked"
+    },
+    {
+      "id": "WF-20",
+      "name": "Every chunk carries an integrity checksum",
+      "status": "PASS"
+    },
+    {
+      "id": "WF-21",
+      "name": "Source content is preserved verbatim in the index",
+      "status": "PASS",
+      "detail": "report number and officer name both present"
+    },
+    {
+      "id": "WF-22",
+      "name": "OCR output is attributed to the scanned document",
+      "status": "PASS",
+      "detail": "header text recovered from the scan"
+    },
+    {
+      "id": "WF-23",
+      "name": "Attorney workbench responds for a populated case",
+      "status": "PASS",
+      "detail": "HTTP 200 in 240ms"
+    },
+    {
+      "id": "WF-24",
+      "name": "Timeline events responds for a populated case",
+      "status": "PASS",
+      "detail": "HTTP 200 in 4ms"
+    },
+    {
+      "id": "WF-25",
+      "name": "Timeline conflicts responds for a populated case",
+      "status": "PASS",
+      "detail": "HTTP 200 in 3ms"
+    },
+    {
+      "id": "WF-26",
+      "name": "Contradiction graph reports an empty result rather than failing",
+      "status": "PASS",
+      "detail": "HTTP 404: No events found for case: 8d4a6874-b5c8-480a-8788-104f17ee3e1c."
+    },
+    {
+      "id": "WF-27",
+      "name": "Contradiction recommendations reports an empty result rather than failing",
+      "status": "PASS",
+      "detail": "HTTP 404: No events found for case: 8d4a6874-b5c8-480a-8788-104f17ee3e1c."
+    },
+    {
+      "id": "WF-28",
+      "name": "Evidence gap detection responds for a populated case",
+      "status": "PASS",
+      "detail": "HTTP 200 in 3ms"
+    },
+    {
+      "id": "WF-29",
+      "name": "Attorney workbench notes responds for a populated case",
+      "status": "PASS",
+      "detail": "HTTP 200 in 4ms"
+    },
+    {
+      "id": "WF-30",
+      "name": "Investigator workbench responds for a populated case",
+      "status": "PASS",
+      "detail": "HTTP 200 in 14ms"
+    },
+    {
+      "id": "WF-30b",
+      "name": "Trial prep package responds for a populated case",
+      "status": "PASS",
+      "detail": "HTTP 200 in 212ms"
+    },
+    {
+      "id": "WF-30c",
+      "name": "Advertised timeline route resolves",
+      "status": "PASS",
+      "detail": "HTTP 404"
+    },
+    {
+      "id": "WF-31",
+      "name": "Timeline rebuild is accepted",
+      "status": "PASS",
+      "detail": "HTTP 200 in 6ms"
+    },
+    {
+      "id": "WF-32",
+      "name": "Timeline worker completed the job",
+      "status": "PASS",
+      "detail": "job 55108b82-75ca-4283-9406-428575a12e9d"
+    },
+    {
+      "id": "WF-32b",
+      "name": "Timeline rebuild produced events",
+      "status": "PASS",
+      "detail": "1 events"
+    },
+    {
+      "id": "WF-33",
+      "name": "Deleted evidence is no longer retrievable",
+      "status": "PASS",
+      "detail": "HTTP 403"
+    },
+    {
+      "id": "WF-34",
+      "name": "Deleted case is removed from the case list",
+      "status": "PASS"
+    },
+    {
+      "id": "WF-35",
+      "name": "Logout succeeds",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    }
+  ]
+}

@@ -84,20 +84,25 @@ import { AccountSettingsPage } from './pages/membership/AccountSettingsPage';
 import { SharedAccessPage } from './pages/membership/SharedAccessPage';
 import { AdminPage } from './pages/admin/AdminPage';
 import { OperationsCommandCenter } from './pages/admin/OperationsCommandCenter';
+import { ProductionReadiness } from './pages/admin/ProductionReadiness';
+import { StatutoryIntelligence } from './pages/admin/StatutoryIntelligence';
+import { GoldStandardCertification } from './pages/admin/GoldStandardCertification';
 
 // Case Pages
 import { CaseLayout } from './pages/case/CaseLayout';
 import { CaseOverviewPage } from './pages/case/CaseOverviewPage';
 import { ChargesPage } from './pages/case/ChargesPage';
+import { DefenseStrategyWorkspace } from './pages/case/DefenseStrategyWorkspace';
+import { AttorneyWarRoom } from './pages/case/AttorneyWarRoom';
+import { EvidenceCoveragePage } from './pages/case/EvidenceCoveragePage';
+import { MotionIssuesPage } from './pages/case/MotionIssuesPage';
 import { EvidencePage } from './pages/case/EvidencePage';
 import { ExpertsPage } from './pages/case/ExpertsPage';
-import { MotionsPage } from './pages/case/MotionsPage';
 import { ResearchPage } from './pages/case/ResearchPage';
 import { ActivityPage } from './pages/case/ActivityPage';
 import { DocumentsPage } from './pages/case/DocumentsPage';
 import { CaseSettingsPage } from './pages/case/CaseSettingsPage';
 import { TrialExhibitWorkspace } from './pages/case/TrialExhibitWorkspace';
-import { LitigationStrategyView } from './pages/case/LitigationStrategyView';
 import { ContradictionDashboardPage } from './pages/case/ContradictionDashboardPage';
 import { NarrativeAnalysisPage } from './pages/case/NarrativeAnalysisPage';
 import { AttorneyWorkbenchPage } from './pages/case/AttorneyWorkbenchPage';
@@ -436,11 +441,54 @@ function App() {
               </ProtectedRoute>
             }
           />
+          {/* Gold Standard Certification is an internal QA module holding real
+              discovery corpora, so it is restricted to administrators. The
+              server enforces the same restriction independently. */}
+          <Route
+            path="admin/gold-standard"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <GoldStandardCertification />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/statutory-intelligence"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <StatutoryIntelligence />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/readiness"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <ProductionReadiness />
+              </ProtectedRoute>
+            }
+          />
 
           {/* Case Routes — deterministic tab structure */}
           <Route path="cases/:caseId" element={<CaseLayout />}>
             <Route index element={<Navigate to="overview" replace />} />
             <Route path="overview" element={<CaseOverviewPage />} />
+            <Route
+              path="evidence-coverage"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <EvidenceCoveragePage />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="war-room"
+              element={
+                <ProtectedRoute requiredPermission="canViewEvidence">
+                  <AttorneyWarRoom />
+                </ProtectedRoute>
+              }
+            />
             <Route
               path="charges"
               element={
@@ -493,7 +541,7 @@ function App() {
               path="motions"
               element={
                 <ProtectedRoute requiredPermission="canViewMotions">
-                  <MotionsPage />
+                  <MotionIssuesPage />
                 </ProtectedRoute>
               }
             />
@@ -549,7 +597,7 @@ function App() {
               path="litigation-strategy"
               element={
                 <ProtectedRoute requiredPermission="canViewEvidence">
-                  <LitigationStrategyView />
+                  <DefenseStrategyWorkspace />
                 </ProtectedRoute>
               }
             />

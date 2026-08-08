@@ -1,0 +1,108 @@
+{
+  "report": "STRATEGY_BROWSER",
+  "phase": "Program 150 — Strategy Workspace Browser",
+  "generatedAt": "2026-08-07T16:39:42.366Z",
+  "apiBase": "http://127.0.0.1:8081",
+  "summary": {
+    "total": 15,
+    "PASS": 15,
+    "FAIL": 0,
+    "WARNING": 0,
+    "UNKNOWN": 0,
+    "passRate": 100
+  },
+  "exercisedApiRoutes": [],
+  "exercisedSpaRoutes": [],
+  "caseId": "e3c1c71c-6758-476c-a6bd-16d80a6849e6",
+  "base": "http://127.0.0.1:8081",
+  "checks": [
+    {
+      "id": "SBR-01",
+      "name": "The staff dashboard no longer shows invented cases or recommendations",
+      "status": "PASS",
+      "detail": "fabricated alerts gone"
+    },
+    {
+      "id": "SBR-02",
+      "name": "The dashboard shows an action centre",
+      "status": "PASS",
+      "detail": "Action Center rendered"
+    },
+    {
+      "id": "SBR-03",
+      "name": "The queue shows real outstanding work, or says there is none",
+      "status": "PASS",
+      "detail": "real entry or honest empty state"
+    },
+    {
+      "id": "SBR-04",
+      "name": "The defence strategy workspace renders",
+      "status": "PASS",
+      "detail": "workspace present"
+    },
+    {
+      "id": "SBR-05",
+      "name": "Themes raised by the record are shown",
+      "status": "PASS",
+      "detail": "Fourth Amendment and Miranda present"
+    },
+    {
+      "id": "SBR-06",
+      "name": "The page says plainly that the judgement is counsel’s",
+      "status": "PASS",
+      "detail": "caveat displayed"
+    },
+    {
+      "id": "SBR-07",
+      "name": "A theme quotes the passage and names the document it came from",
+      "status": "PASS",
+      "detail": "passage and source shown"
+    },
+    {
+      "id": "SBR-08",
+      "name": "What is missing is named alongside what is present",
+      "status": "PASS",
+      "detail": "missing material listed"
+    },
+    {
+      "id": "SBR-09",
+      "name": "Unanswered questions are shown rather than resolved",
+      "status": "PASS",
+      "detail": "open questions listed"
+    },
+    {
+      "id": "SBR-10",
+      "name": "Themes with nothing in the record are listed and explained",
+      "status": "PASS",
+      "detail": "examined-but-empty themes shown"
+    },
+    {
+      "id": "SBR-11",
+      "name": "Motion intelligence renders real issues rather than an empty stub",
+      "status": "PASS",
+      "detail": "page present"
+    },
+    {
+      "id": "SBR-12",
+      "name": "Issues are phrased as warranting review, never as advice to file",
+      "status": "PASS",
+      "detail": "required wording shown"
+    },
+    {
+      "id": "SBR-13",
+      "name": "No page tells the reader to file anything or predicts an outcome",
+      "status": "PASS"
+    },
+    {
+      "id": "SBR-14",
+      "name": "The page states its own limits",
+      "status": "PASS",
+      "detail": "caveat displayed"
+    },
+    {
+      "id": "SBR-15",
+      "name": "No uncaught JavaScript exceptions across the strategy surfaces",
+      "status": "PASS"
+    }
+  ]
+}

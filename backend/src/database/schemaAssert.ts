@@ -5,13 +5,41 @@
 // ============================================================================
 
 import { createHash } from 'node:crypto';
-import { readFileSync, readdirSync } from 'node:fs';
-import { resolve, dirname } from 'node:path';
+import { existsSync, readFileSync, readdirSync } from 'node:fs';
+import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { prisma } from '../lib/prisma.js';
+import prisma from '../lib/prisma.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
+
+/**
+ * Locate the prisma directory in whichever layout we are running under.
+ *
+ * From source this file is at backend/src/database/, so prisma/ is two levels
+ * up. In the deployed bundle every module collapses into <release>/dist/index.js
+ * and esbuild derives __dirname from import.meta.url, so prisma/ is one level
+ * up instead. Resolving only the source layout meant the bundle found nothing —
+ * and because every read below is individually guarded, the entire schema check
+ * silently degraded to a connectivity test while still reporting
+ * "Schema locked and matching". A candidate only counts if it actually holds
+ * schema.prisma or migrations/, so an unrelated directory cannot satisfy it.
+ */
+function resolvePrismaDir(): string | null {
+  const candidates = [
+    resolve(__dirname, '../../prisma'), // source: backend/src/database → backend/prisma
+    resolve(__dirname, '../prisma'), // bundle: <release>/dist → <release>/prisma
+    resolve(process.cwd(), 'prisma'),
+  ];
+  for (const dir of candidates) {
+    if (existsSync(join(dir, 'schema.prisma')) || existsSync(join(dir, 'migrations'))) {
+      return dir;
+    }
+  }
+  return null;
+}
+
+const PRISMA_DIR = resolvePrismaDir();
 
 // The expected schema version — bump this when adding new migrations
 export const EXPECTED_SCHEMA_VERSION = '1.0.0';
@@ -21,7 +49,8 @@ export const EXPECTED_SCHEMA_VERSION = '1.0.0';
  * Returns a SHA-256 hash of the concatenated migration contents.
  */
 export function computeMigrationChecksum(): string {
-  const migrationsDir = resolve(__dirname, '../../prisma/migrations');
+  if (!PRISMA_DIR) return 'no-migrations';
+  const migrationsDir = join(PRISMA_DIR, 'migrations');
   const hash = createHash('sha256');
 
   try {
@@ -56,7 +85,8 @@ async function countPendingMigrations(): Promise<{
   appliedCount: number;
   pending: string[];
 }> {
-  const migrationsDir = resolve(__dirname, '../../prisma/migrations');
+  if (!PRISMA_DIR) return { diskCount: 0, appliedCount: 0, pending: [] };
+  const migrationsDir = join(PRISMA_DIR, 'migrations');
 
   // Get migrations on disk
   let diskMigrations: string[] = [];
@@ -121,7 +151,97 @@ export interface SchemaAssertResult {
   failedMigrations: string[];
   diskMigrationCount: number;
   appliedMigrationCount: number;
+  missingColumns: string[];
   errors: string[];
+}
+
+interface ParsedModel {
+  table: string;
+  columns: string[];
+}
+
+/**
+ * Parse schema.prisma into the set of physical tables and scalar columns it
+ * expects. Relation fields carry no column of their own and are skipped; the
+ * underlying foreign-key scalars are declared separately and are picked up.
+ */
+export function parseExpectedTables(schemaText: string): ParsedModel[] {
+  const modelNames = new Set(
+    [...schemaText.matchAll(/^model\s+(\w+)\s*\{/gm)].map((m) => m[1]),
+  );
+  const models: ParsedModel[] = [];
+
+  const blockRe = /^model\s+(\w+)\s*\{([\s\S]*?)^\}/gm;
+  for (const block of schemaText.matchAll(blockRe)) {
+    const [, modelName, body] = block;
+    const mapMatch = body.match(/@@map\(\s*"([^"]+)"\s*\)/);
+    const table = mapMatch ? mapMatch[1] : modelName;
+
+    const columns: string[] = [];
+    for (const rawLine of body.split('\n')) {
+      const line = rawLine.trim();
+      if (!line || line.startsWith('//') || line.startsWith('@@')) continue;
+
+      const fieldMatch = line.match(/^(\w+)\s+(\w+)(\[\])?(\?)?\s*(.*)$/);
+      if (!fieldMatch) continue;
+      const [, fieldName, fieldType, isList, , attrs] = fieldMatch;
+
+      // Relation fields (including lists of models) have no column.
+      if (modelNames.has(fieldType)) continue;
+      if (isList && modelNames.has(fieldType)) continue;
+
+      const colMapMatch = attrs.match(/@map\(\s*"([^"]+)"\s*\)/);
+      columns.push(colMapMatch ? colMapMatch[1] : fieldName);
+    }
+    models.push({ table, columns });
+  }
+  return models;
+}
+
+/**
+ * Returns "table.column" (or "table (missing table)") for everything the
+ * datamodel requires that the live database does not have.
+ */
+async function findMissingColumns(): Promise<string[]> {
+  if (!PRISMA_DIR) return [];
+  let schemaText: string;
+  try {
+    schemaText = readFileSync(join(PRISMA_DIR, 'schema.prisma'), 'utf-8');
+  } catch {
+    return [];
+  }
+
+  const expected = parseExpectedTables(schemaText);
+
+  let rows: Array<{ table_name: string; column_name: string }>;
+  try {
+    rows = await prisma.$queryRaw<Array<{ table_name: string; column_name: string }>>`
+      SELECT table_name, column_name
+      FROM information_schema.columns
+      WHERE table_schema = current_schema()
+    `;
+  } catch {
+    return [];
+  }
+
+  const actual = new Map<string, Set<string>>();
+  for (const row of rows) {
+    if (!actual.has(row.table_name)) actual.set(row.table_name, new Set());
+    actual.get(row.table_name)!.add(row.column_name);
+  }
+
+  const missing: string[] = [];
+  for (const model of expected) {
+    const cols = actual.get(model.table);
+    if (!cols) {
+      missing.push(`${model.table} (missing table)`);
+      continue;
+    }
+    for (const col of model.columns) {
+      if (!cols.has(col)) missing.push(`${model.table}.${col}`);
+    }
+  }
+  return missing;
 }
 
 /**
@@ -151,6 +271,7 @@ export async function assertSchemaIntegrity(): Promise<SchemaAssertResult> {
       failedMigrations: [],
       diskMigrationCount: 0,
       appliedMigrationCount: 0,
+      missingColumns: [],
       errors: [`Database unreachable: ${msg}`],
     };
   }
@@ -172,14 +293,28 @@ export async function assertSchemaIntegrity(): Promise<SchemaAssertResult> {
     );
   }
 
-  // 4. Record/update schema version in schema_versions table
+  // 4. Compare the live database against the datamodel the Prisma client was
+  //    generated from. Counting applied migrations is not enough: a migration
+  //    history that has fallen behind schema.prisma applies cleanly and still
+  //    leaves the server issuing queries for columns that do not exist.
+  const missing = await findMissingColumns();
+  if (missing.length > 0) {
+    const preview = missing.slice(0, 10).join(', ');
+    errors.push(
+      `${missing.length} column(s)/table(s) required by schema.prisma are missing from the database: ` +
+        `${preview}${missing.length > 10 ? `, and ${missing.length - 10} more` : ''}. ` +
+        'The migration history is behind schema.prisma.',
+    );
+  }
+
+  // 5. Record/update schema version in schema_versions table
   try {
     // Try to upsert the current version record
     await prisma.$executeRaw`
-      INSERT INTO "schema_versions" ("id", "version", "checksum", "migration_name", "description", "applied_by", "drift_checked")
+      INSERT INTO "schema_versions" ("id", "version", "checksum", "migrationName", "description", "appliedBy", "driftChecked")
       VALUES (gen_random_uuid(), ${EXPECTED_SCHEMA_VERSION}, ${checksum}, 'boot-assertion', 'Boot-time schema integrity check', 'server-boot', true)
       ON CONFLICT ("version") DO UPDATE
-      SET "checksum" = ${checksum}, "drift_checked" = true
+      SET "checksum" = ${checksum}, "driftChecked" = true
     `;
   } catch {
     // schema_versions table may not exist yet (pre-migration) — that's a pending migration issue
@@ -198,6 +333,7 @@ export async function assertSchemaIntegrity(): Promise<SchemaAssertResult> {
     failedMigrations: failed,
     diskMigrationCount: diskCount,
     appliedMigrationCount: appliedCount,
+    missingColumns: missing,
     errors,
   };
 }

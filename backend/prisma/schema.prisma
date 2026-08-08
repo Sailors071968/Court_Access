@@ -1831,6 +1831,10 @@ model Evidence {
   uploadedAt      DateTime @default(now())
 
   // Processing status
+  /** SHA-256 of the stored bytes. A document cited in a filing has to be
+   *  provably the document that was produced, and a fingerprint is the only
+   *  thing that shows the file has not changed since it was analysed. */
+  sha256           String?
   processingStatus String  @default("pending") // pending | ingesting | normalized | analyzed | failed
   processingError  String?
 
@@ -1838,6 +1842,12 @@ model Evidence {
   multiplexDetected Boolean @default(false)
   multiplexCount    Int?
   normalizedPageCount Int?
+
+  // Page boundaries within the extracted text, as
+  // [{ page, startOffset, endOffset }]. Lets any character offset in a chunk
+  // or an extracted event be resolved back to a page and a line on that page,
+  // which is what a citation in a brief has to name.
+  pageMap          Json?
 
   // ACU compute preparation (Part 15)
   acuCost          Float?
@@ -2465,6 +2475,164 @@ model SchemaVersion {
   @@map("schema_versions")
 }
 
+// ---------------------------------------------------------------------------
+// Gold Standard Certification
+//
+// A certification case is a real discovery set, authorised for certification
+// use, imported through the production pipeline and then kept unchanged. Each
+// release re-runs the same corpus and the results are compared, so a
+// regression in extraction, classification or analysis shows up as a diff
+// against the recorded baseline rather than as a surprise in production.
+// ---------------------------------------------------------------------------
+
+model CertificationCase {
+  certificationCaseId String   @id @default(uuid())
+  /** Short stable handle, e.g. GS-001. */
+  reference           String   @unique
+  label               String
+  description         String?
+  /** Where the untouched originals live. Never written to after import. */
+  sourceDirectory     String
+  /** The CriminalCase the imported evidence was ingested into. */
+  caseId              String?
+  tenantId            String
+  importedById        String
+  status              String   @default("importing") // importing | imported | failed
+  /** Whether this corpus is attorney-authorized discovery rather than a test
+   *  fixture. Defaults to false and must be attested explicitly: the release
+   *  gate counts only authorized corpora, and identifying them by excluding
+   *  known-test prefixes fails open the moment a new prefix appears. */
+  authorized          Boolean  @default(false)
+  authorizedById      String?
+  authorizedAt        DateTime?
+  /** Who authorised the use of this material, in their words. */
+  authorizationNote   String?
+
+  /** SHA-256 over the sorted per-file hashes; identifies the corpus itself. */
+  corpusHash          String?
+  fileCount           Int      @default(0)
+  totalBytes          BigInt   @default(0)
+  importStartedAt     DateTime @default(now())
+  importCompletedAt   DateTime?
+  importErrors        Json?
+
+  files CertificationFile[]
+  runs  CertificationRun[]
+
+  @@index([tenantId])
+  @@index([status])
+  @@map("certification_cases")
+}
+
+// An in-progress upload of a certification corpus from an administrator's own
+// machine. Bytes land in a staging tree that mirrors the folder they selected;
+// resume state is the size of each partial file on disk rather than a
+// bookkeeping row, so a crash mid-upload cannot leave the two disagreeing.
+model CertificationUploadSession {
+  uploadSessionId String   @id @default(uuid())
+  reference       String
+  label           String
+  description     String?
+  tenantId        String
+  createdById     String
+
+  /** Where the uploaded bytes are assembled. Removed when the session ends. */
+  stagingDir      String
+
+  status          String   @default("staging") // staging | importing | processing | completed | failed | cancelled
+
+  /** What the operator is being shown right now. */
+  stage           String?
+  stageDetail     String?
+  progressCurrent Int      @default(0)
+  progressTotal   Int      @default(0)
+
+  /** What the browser said it was going to send, for reconciliation. */
+  declaredFileCount Int    @default(0)
+  declaredBytes     BigInt @default(0)
+
+  certificationCaseId String?
+  certificationRunId  String?
+  error             String?
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  completedAt     DateTime?
+
+  @@index([tenantId])
+  @@index([status])
+  @@map("certification_upload_sessions")
+}
+
+model CertificationFile {
+  certificationFileId String   @id @default(uuid())
+  certificationCaseId String
+  certificationCase   CertificationCase @relation(fields: [certificationCaseId], references: [certificationCaseId], onDelete: Cascade)
+
+  /** Path relative to the import root, so the producing party's folder
+   *  hierarchy is preserved exactly as delivered. */
+  relativePath        String
+  fileName            String
+  extension           String?
+  mimeType            String?
+  sizeBytes           BigInt
+  sha256              String
+  /** Modification time from the source, where the medium carried one. */
+  originalModifiedAt  DateTime?
+  /** Set when an identical hash was already imported in this corpus. */
+  duplicateOfFileId   String?
+
+  /** What the classifier decided, and how sure it was. */
+  classification      String   @default("unknown")
+  classificationConfidence Float @default(0)
+  classificationBasis String?
+
+  /** Page count for paginated documents; null when the format has no pages. */
+  pageCount           Int?
+  /** Duration in seconds for audio and video; null when not determinable. */
+  durationSeconds     Float?
+  /** Why a duration or page count could not be determined, when it could not. */
+  mediaProbeNote      String?
+
+  /** The Evidence row produced by the production ingestion path. */
+  evidenceId          String?
+  ingestStatus        String   @default("pending") // pending | ingested | skipped | failed
+  ingestMessage       String?
+
+  importedAt          DateTime @default(now())
+
+  @@unique([certificationCaseId, relativePath])
+  @@index([certificationCaseId])
+  @@index([sha256])
+  @@index([classification])
+  @@map("certification_files")
+}
+
+model CertificationRun {
+  certificationRunId  String   @id @default(uuid())
+  certificationCaseId String
+  certificationCase   CertificationCase @relation(fields: [certificationCaseId], references: [certificationCaseId], onDelete: Cascade)
+
+  /** Which build produced this result. */
+  gitCommit           String?
+  startedAt           DateTime @default(now())
+  completedAt         DateTime?
+  status              String   @default("running") // running | completed | failed
+
+  /** Everything counted in this run, compared against the baseline. */
+  metrics             Json?
+  /** Per-file processing failures, with the reason shown to the user. */
+  failures            Json?
+  /** Whether this run is the reference other runs are compared against. */
+  isBaseline          Boolean  @default(false)
+  /** Differences against the baseline run, when one exists. */
+  regressions         Json?
+
+  @@index([certificationCaseId])
+  @@index([status])
+  @@map("certification_runs")
+}
+
 model Charge {
   id             String   @id @default(uuid())
   caseId         String
@@ -2612,4 +2780,316 @@ model PublicationAuditLog {
   @@index([tenantId, caseId])
   @@index([entityType, entityId])
   @@map("publication_audit_logs")
+}
+
+
+// ============================================================================
+// Official California law.
+//
+// The authoritative source is leginfo.legislature.ca.gov, not this database.
+// What is stored here is a verified compilation cache: the text as it was
+// retrieved, when it was retrieved, and a fingerprint of it. A change in the
+// fingerprint is a change in the law, which is how synchronisation works and
+// how a case analysed last year can be reproduced under the law as it stood.
+// ============================================================================
+
+model OfficialStatute {
+  officialStatuteId String   @id @default(uuid())
+
+  /** e.g. PEN, HSC, VEH. The code as leginfo names it. */
+  code              String
+  /** e.g. "459." — kept with the trailing period leginfo uses. */
+  section           String
+  /** The exact page this text came from. Every citation resolves here. */
+  officialUrl       String
+
+  /** retrieved | not_found | repealed | unavailable */
+  status            String   @default("retrieved")
+  httpStatus        Int?
+  /** Why a retrieval produced nothing, in words a lawyer can act on. */
+  unavailableReason String?
+
+  /** Statutory text exactly as published, with markup removed. */
+  text              String?
+  /** SHA-256 of the normalised text. A new value means the law changed. */
+  fingerprint       String?
+  /** "(Amended by Stats. 2025, Ch. 533, Sec. 1. (AB 468))" and similar. */
+  legislativeNote   String?
+  /** Part / Title / Chapter headings, in order, as published. */
+  hierarchy         Json?
+
+  /** What the compiler made of the text. Null until compiled. */
+  compilation       Json?
+  compilerVersion   String?
+  extractionVersion String?
+
+  retrievedAt       DateTime @default(now())
+  /** Set when a later retrieval returned different text. */
+  supersededAt      DateTime?
+  /** How many times this cached retrieval has been served. */
+  cacheHits         Int      @default(0)
+  /** When synchronisation last confirmed this text still matches the source. */
+  lastVerifiedAt    DateTime?
+
+  snapshots CaseStatuteSnapshot[]
+
+  @@unique([code, section, fingerprint])
+  @@index([code, section])
+  @@index([status])
+  @@index([supersededAt])
+  @@map("official_statutes")
+}
+
+// Pins the exact statutory text a case was analysed against, so reprocessing
+// reproduces the original legal context rather than silently re-running under
+// law that has since changed.
+model CaseStatuteSnapshot {
+  caseStatuteSnapshotId String @id @default(uuid())
+  caseId                String
+  officialStatuteId     String
+  officialStatute       OfficialStatute @relation(fields: [officialStatuteId], references: [officialStatuteId], onDelete: Cascade)
+
+  /** Why this statute is in the case: charged, referenced, defined. */
+  relationship          String   @default("charged")
+  /** How the reference was reached, when it was not charged directly. */
+  reachedVia            String?
+  pinnedAt              DateTime @default(now())
+
+  @@unique([caseId, officialStatuteId, relationship])
+  @@index([caseId])
+  @@map("case_statute_snapshots")
+}
+
+// A record of every synchronisation pass, so a change in the law has a date
+// and a diff rather than appearing without explanation.
+model LegislativeSyncEvent {
+  legislativeSyncEventId String  @id @default(uuid())
+  code                   String
+  section                String
+  /** unchanged | amended | repealed | disappeared | new | error */
+  outcome                String
+  previousFingerprint    String?
+  currentFingerprint     String?
+  detail                 String?
+  detectedAt             DateTime @default(now())
+
+  @@index([outcome])
+  @@index([detectedAt])
+  @@map("legislative_sync_events")
+}
+
+
+// ============================================================================
+// Charging documents.
+//
+// Charges in a California criminal case are not a list; they are a sequence of
+// filings. The People file a complaint, amend it, file an information, amend
+// that, dismiss counts, add enhancements, renumber what is left. What a
+// defendant faces today is whatever the most recent filing says, and what they
+// faced last month still matters — it is the basis of prior motions, prior
+// discovery and prior plea discussions.
+//
+// So nothing here is ever destroyed. A charge that goes away is marked as
+// having gone away, in a filing that is dated, and the earlier filing stays
+// exactly as it was.
+// ============================================================================
+
+model ChargingDocument {
+  chargingDocumentId String   @id @default(uuid())
+  caseId             String
+  tenantId           String
+
+  /** complaint | amended_complaint | information | amended_information | dismissal */
+  kind               String
+  /** As the document titles itself, e.g. "First Amended Complaint". */
+  name               String
+  filedAt            DateTime
+  court              String?
+  courtCaseNumber    String?
+
+  /** Order of filing within the case. The highest is the operative document. */
+  filingSequence     Int
+
+  /** The uploaded PDF this was read from, when there is one. */
+  sourceEvidenceId   String?
+  /** How to cite the document itself. */
+  citation           String?
+
+  uploadedById       String
+  /** draft | filed. A draft is not operative and supersedes nothing. */
+  status             String   @default("filed")
+  /** Set when a later document supersedes this one. Never deleted. */
+  supersededAt       DateTime?
+  notes              String?
+
+  /** Set once anything in the case relies on this filing. Locked filings can
+   *  be superseded or dismissed, never removed. */
+  lockedAt           DateTime?
+  lockedReason       String?
+
+  /** When the counts were read out of an uploaded PDF rather than typed. */
+  parsedFromEvidenceId String?
+  /** How much of the document the parser was confident about, 0 to 1. */
+  parseConfidence      Float?
+  parseNotes           String?
+
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  charges FiledCharge[]
+
+  @@unique([caseId, filingSequence])
+  @@index([caseId, filedAt])
+  @@index([tenantId])
+  @@map("charging_documents")
+}
+
+model FiledCharge {
+  filedChargeId      String   @id @default(uuid())
+  chargingDocumentId String
+  chargingDocument   ChargingDocument @relation(fields: [chargingDocumentId], references: [chargingDocumentId], onDelete: Cascade)
+  caseId             String
+
+  /** The count as numbered in this document. Renumbering is normal. */
+  countNumber        Int
+  /** e.g. PEN, VEH, HSC — the code as leginfo names it. */
+  code               String
+  section            String
+  /** e.g. "(a)(4)" — the part charged, where the document specifies one. */
+  subdivision        String?
+
+  /** The People's words, exactly as they appear. Never normalised. */
+  verbatimText       String
+  /** e.g. "Penal Code section 245(a)(4)". */
+  normalizedCitation String
+
+  /** The official statute this count was resolved against, when it resolved. */
+  officialStatuteId  String?
+  /** Why resolution failed, when it did. */
+  statuteNote        String?
+
+  /** active | dismissed | superseded | pending */
+  status             String   @default("active")
+  /** Enhancements alleged with this count, verbatim. */
+  enhancements       Json?
+
+  /** Charged as an attempt rather than a completed offence. */
+  attempt            Boolean  @default(false)
+
+  /** Allegations that change exposure and must be pleaded and proved. Each is
+   *  recorded only when the charging document actually alleges it; absent
+   *  means not alleged, which is different from alleged and not proved. */
+  strikeAllegation      Boolean @default(false)
+  seriousFelony         Boolean @default(false)
+  violentFelony         Boolean @default(false)
+  gangAllegation        Boolean @default(false)
+  firearmAllegation     Boolean @default(false)
+  greatBodilyInjury     Boolean @default(false)
+  specialCircumstance   Boolean @default(false)
+  threeStrikes          Boolean @default(false)
+  sexRegistration       Boolean @default(false)
+
+  /** Prior convictions pleaded against this count, verbatim. */
+  priorConvictions   Json?
+  /** Weight alleged in a controlled substance count, as pleaded. */
+  drugWeight         String?
+  /** Restitution sought, as pleaded. */
+  restitution        String?
+  /** Maximum exposure as pleaded by the People, in their words. Never
+   *  calculated by this platform: a sentence computed from a statute and
+   *  presented as fact would be relied on in plea discussions. */
+  maximumExposure    String?
+
+  /** Which fields the parser produced, and how sure it was about each. */
+  parseConfidence    Json?
+  /** Fields an attorney corrected by hand. The parser never overwrites these. */
+  attorneyEdited     Json?
+
+  createdAt          DateTime @default(now())
+
+  defendants ChargeDefendant[]
+
+  @@index([chargingDocumentId])
+  @@index([caseId])
+  @@index([code, section])
+  @@map("filed_charges")
+}
+
+model ChargeDefendant {
+  chargeDefendantId String @id @default(uuid())
+  filedChargeId     String
+  filedCharge       FiledCharge @relation(fields: [filedChargeId], references: [filedChargeId], onDelete: Cascade)
+
+  /** As named in the charging document. */
+  defendantName     String
+  /** The client record, where this defendant is one of ours. */
+  clientId          String?
+  /** charged | dismissed | severed */
+  status            String @default("charged")
+  note              String?
+
+  @@unique([filedChargeId, defendantName])
+  @@index([filedChargeId])
+  @@map("charge_defendants")
+}
+
+
+// Every manual change to a charge, so a correction has an author and a time.
+// Charges drive the whole analysis, and a silent edit would change what a case
+// is about with nothing to show who did it.
+model ChargeAuditEvent {
+  chargeAuditEventId String   @id @default(uuid())
+  caseId             String
+  chargingDocumentId String?
+  filedChargeId      String?
+  tenantId           String
+
+  /** created | edited | dismissed | reinstated | finalized | parsed | locked */
+  action             String
+  /** The field changed, when the change was to one field. */
+  field              String?
+  previousValue      String?
+  newValue           String?
+  /** What happened, in a sentence. */
+  description        String
+
+  actorId            String
+  actorRole          String
+  occurredAt         DateTime @default(now())
+
+  @@index([caseId, occurredAt])
+  @@index([filedChargeId])
+  @@map("charge_audit_events")
+}
+
+
+// ============================================================================
+// Case lifecycle.
+//
+// A criminal case moves through stages, and what matters at each is different:
+// nothing about motion practice is useful before arraignment, and discovery
+// disputes stop mattering after verdict. The stage is inferred from what is on
+// the record where the record settles it, and counsel can always say otherwise.
+//
+// Every change is kept, with what caused it, so the stage a dashboard adapted
+// to on a given day can be reconstructed.
+// ============================================================================
+
+model CaseStageEvent {
+  caseStageEventId String   @id @default(uuid())
+  caseId           String
+  tenantId         String
+
+  stage            String
+  previousStage    String?
+  /** inferred | attorney — who decided. */
+  source           String   @default("inferred")
+  /** The record that settled it, in a sentence. */
+  basis            String
+  /** Set when counsel overrode an inference. */
+  overriddenById   String?
+  occurredAt       DateTime @default(now())
+
+  @@index([caseId, occurredAt])
+  @@map("case_stage_events")
 }

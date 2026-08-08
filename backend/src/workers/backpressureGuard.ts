@@ -4,6 +4,7 @@
 // and providing pause/resume controls for all pipeline workers.
 // ============================================================================
 
+import { getHeapStatistics } from 'node:v8';
 import { getQueue, QUEUE_NAMES } from '../lib/queues.js';
 
 // ---------------------------------------------------------------------------
@@ -49,6 +50,8 @@ export interface MemorySnapshot {
   heapUsedMB: number;
   heapTotalMB: number;
   rssMB: number;
+  /** V8's hard heap ceiling — the figure usagePct is measured against. */
+  heapLimitMB: number;
   usagePct: number;
   underPressure: boolean;
 }
@@ -58,10 +61,19 @@ export function getMemorySnapshot(thresholdPct: number = DEFAULT_CONFIG.memoryTh
   const heapUsedMB = Math.round(mem.heapUsed / 1024 / 1024);
   const heapTotalMB = Math.round(mem.heapTotal / 1024 / 1024);
   const rssMB = Math.round(mem.rss / 1024 / 1024);
-  const usagePct = mem.heapUsed / mem.heapTotal;
+
+  // Measure against the heap ceiling, not heapTotal. heapTotal is only what
+  // V8 has committed so far and it grows on demand, so heapUsed/heapTotal sits
+  // between 85% and 95% in a perfectly healthy process — this process reports
+  // 92% while holding 51MB. Using that ratio made the guard reject pipeline
+  // jobs during normal operation.
+  const heapLimitBytes = getHeapStatistics().heap_size_limit;
+  const usagePct = heapLimitBytes > 0 ? mem.heapUsed / heapLimitBytes : 0;
+
   return {
     heapUsedMB,
     heapTotalMB,
+    heapLimitMB: Math.round(heapLimitBytes / 1024 / 1024),
     rssMB,
     usagePct: Math.round(usagePct * 100) / 100,
     underPressure: usagePct >= thresholdPct,

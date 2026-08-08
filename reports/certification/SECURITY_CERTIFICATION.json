@@ -1,0 +1,263 @@
+{
+  "report": "SECURITY_CERTIFICATION",
+  "phase": "Phase 7 — Security Testing",
+  "generatedAt": "2026-08-06T18:02:02.197Z",
+  "apiBase": "http://127.0.0.1:3001",
+  "summary": {
+    "total": 34,
+    "PASS": 34,
+    "FAIL": 0,
+    "WARNING": 0,
+    "UNKNOWN": 0,
+    "passRate": 100
+  },
+  "exercisedApiRoutes": [
+    "DELETE /api/cases/:id",
+    "DELETE /api/evidence/:id",
+    "GET /api/admin/cases",
+    "GET /api/admin/stats",
+    "GET /api/admin/users",
+    "GET /api/auth/me",
+    "GET /api/cases",
+    "GET /api/cases/'%20OR%20'1'%3D'1",
+    "GET /api/cases/:id",
+    "GET /api/cases/:id/evidence",
+    "GET /api/cases/:id/evidence-requests",
+    "GET /api/charges/:id",
+    "GET /api/contradiction/graph/:id",
+    "GET /api/evidence/:id",
+    "GET /api/health",
+    "GET /api/security/logs",
+    "GET /api/security/summary",
+    "GET /api/timeline/:id",
+    "GET /api/workbench/cases/:id/notes",
+    "PATCH /api/cases/:id",
+    "POST /api/auth/accept-invitation",
+    "POST /api/auth/login",
+    "POST /api/auth/register",
+    "POST /api/cases",
+    "POST /api/evidence/upload"
+  ],
+  "exercisedSpaRoutes": [],
+  "rateLimitConfiguration": {
+    "login": "product default (RATE_LIMIT_LOGIN_PER_MINUTE unset)",
+    "general": "product default (RATE_LIMIT_GENERAL_PER_MINUTE unset)",
+    "register": "raised to 500/min for test throughput",
+    "upload": "raised to 500/min for test throughput"
+  },
+  "tenants": {
+    "firmA": {
+      "tenantId": "tenant-5021d089-950f-4e12-8497-5e1f06d8b58f",
+      "caseId": "db1d969c-2322-4206-a489-152c3449c559"
+    },
+    "firmB": {
+      "tenantId": "tenant-2ebbd33f-02dd-4a71-9fac-949b573dcd61",
+      "caseId": "60552286-b1c2-45d1-8b5e-a72fe904b90b"
+    }
+  },
+  "checks": [
+    {
+      "id": "SEC-TENANT-read another firm's case",
+      "name": "Firm A cannot read another firm's case",
+      "status": "PASS",
+      "detail": "HTTP 403"
+    },
+    {
+      "id": "SEC-TENANT-modify another firm's case",
+      "name": "Firm A cannot modify another firm's case",
+      "status": "PASS",
+      "detail": "HTTP 403"
+    },
+    {
+      "id": "SEC-TENANT-delete another firm's case",
+      "name": "Firm A cannot delete another firm's case",
+      "status": "PASS",
+      "detail": "HTTP 403"
+    },
+    {
+      "id": "SEC-TENANT-list another firm's evidence",
+      "name": "Firm A cannot list another firm's evidence",
+      "status": "PASS",
+      "detail": "HTTP 403"
+    },
+    {
+      "id": "SEC-TENANT-read another firm's evidence record",
+      "name": "Firm A cannot read another firm's evidence record",
+      "status": "PASS",
+      "detail": "HTTP 403"
+    },
+    {
+      "id": "SEC-TENANT-delete another firm's evidence",
+      "name": "Firm A cannot delete another firm's evidence",
+      "status": "PASS",
+      "detail": "HTTP 403"
+    },
+    {
+      "id": "SEC-TENANT-read another firm's timeline",
+      "name": "Firm A cannot read another firm's timeline",
+      "status": "PASS",
+      "detail": "HTTP 404"
+    },
+    {
+      "id": "SEC-TENANT-read another firm's evidence requests",
+      "name": "Firm A cannot read another firm's evidence requests",
+      "status": "PASS",
+      "detail": "HTTP 403"
+    },
+    {
+      "id": "SEC-TENANT-read another firm's charges",
+      "name": "Firm A cannot read another firm's charges",
+      "status": "PASS",
+      "detail": "HTTP 403"
+    },
+    {
+      "id": "SEC-TENANT-read another firm's contradiction graph",
+      "name": "Firm A cannot read another firm's contradiction graph",
+      "status": "PASS",
+      "detail": "HTTP 404"
+    },
+    {
+      "id": "SEC-TENANT-read another firm's workbench notes",
+      "name": "Firm A cannot read another firm's workbench notes",
+      "status": "PASS",
+      "detail": "HTTP 404"
+    },
+    {
+      "id": "SEC-TENANT-LIST",
+      "name": "Case list is scoped to the caller's tenant",
+      "status": "PASS",
+      "detail": "1 cases returned, none belonging to firm B"
+    },
+    {
+      "id": "SEC-TOKEN-garbage token",
+      "name": "Rejects garbage token",
+      "status": "PASS",
+      "detail": "HTTP 401"
+    },
+    {
+      "id": "SEC-TOKEN-well-formed JWT signed with the wrong key",
+      "name": "Rejects well-formed JWT signed with the wrong key",
+      "status": "PASS",
+      "detail": "HTTP 401"
+    },
+    {
+      "id": "SEC-TOKEN-alg=none token",
+      "name": "Rejects alg=none token",
+      "status": "PASS",
+      "detail": "HTTP 401"
+    },
+    {
+      "id": "SEC-TOKEN-IDENTITY",
+      "name": "Session reports the caller's own tenant",
+      "status": "PASS",
+      "detail": "tenant-5021d089-950f-4e12-8497-5e1f06d8b58f"
+    },
+    {
+      "id": "SEC-RBAC-/api/admin/stats",
+      "name": "An attorney cannot read admin statistics",
+      "status": "PASS",
+      "detail": "HTTP 403"
+    },
+    {
+      "id": "SEC-RBAC-/api/admin/users",
+      "name": "An attorney cannot read the user directory",
+      "status": "PASS",
+      "detail": "HTTP 403"
+    },
+    {
+      "id": "SEC-RBAC-/api/admin/cases",
+      "name": "An attorney cannot read every case in the system",
+      "status": "PASS",
+      "detail": "HTTP 403"
+    },
+    {
+      "id": "SEC-RBAC-/api/security/logs",
+      "name": "An attorney cannot read the security audit log",
+      "status": "PASS",
+      "detail": "HTTP 403"
+    },
+    {
+      "id": "SEC-RBAC-/api/security/summary",
+      "name": "An attorney cannot read the security summary",
+      "status": "PASS",
+      "detail": "HTTP 403"
+    },
+    {
+      "id": "SEC-RBAC-DEFENDANT-/api/admin/stats",
+      "name": "A defendant cannot read admin statistics",
+      "status": "PASS",
+      "detail": "HTTP 403"
+    },
+    {
+      "id": "SEC-RBAC-DEFENDANT-/api/cases/db1d969c-2322-4206-a489-152c3449c559",
+      "name": "A defendant cannot read an unrelated case",
+      "status": "PASS",
+      "detail": "HTTP 403"
+    },
+    {
+      "id": "SEC-CRED-01",
+      "name": "Wrong password is rejected",
+      "status": "PASS",
+      "detail": "HTTP 401"
+    },
+    {
+      "id": "SEC-CRED-02",
+      "name": "Login does not reveal whether an account exists",
+      "status": "PASS",
+      "detail": "both cases return HTTP 401 with the same message"
+    },
+    {
+      "id": "SEC-CRED-03",
+      "name": "Session response contains no credential material",
+      "status": "PASS"
+    },
+    {
+      "id": "SEC-RATE-01",
+      "name": "Repeated failed logins are throttled",
+      "status": "PASS",
+      "detail": "HTTP 429 after 4 attempts"
+    },
+    {
+      "id": "SEC-INJECT-01",
+      "name": "SQL-style input is handled safely",
+      "status": "PASS",
+      "detail": "HTTP 403"
+    },
+    {
+      "id": "SEC-TRAVERSAL-01",
+      "name": "Traversal sequences in filenames are neutralised",
+      "status": "PASS",
+      "detail": "stored as evidence/tenant-5021d089-950f-4e12-8497-5e1f06d8b58f/db1d969c-2322-4206-a489-152c3449c559/2172d38c-4e24-4fff-b5e3-171cf38f20c2/escaped.txt"
+    },
+    {
+      "id": "SEC-HEADER-X-Content-Type-Options",
+      "name": "X-Content-Type-Options is set",
+      "status": "PASS",
+      "detail": "nosniff"
+    },
+    {
+      "id": "SEC-HEADER-X-Frame-Options",
+      "name": "X-Frame-Options is set",
+      "status": "PASS",
+      "detail": "DENY"
+    },
+    {
+      "id": "SEC-HEADER-Content-Security-Policy",
+      "name": "Content-Security-Policy is set",
+      "status": "PASS",
+      "detail": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src '"
+    },
+    {
+      "id": "SEC-HEADER-Strict-Transport-Security",
+      "name": "Strict-Transport-Security is set",
+      "status": "PASS",
+      "detail": "max-age=31536000; includeSubDomains; preload"
+    },
+    {
+      "id": "SEC-LEAK-01",
+      "name": "Malformed request does not leak internal detail",
+      "status": "PASS",
+      "detail": "HTTP 400"
+    }
+  ]
+}

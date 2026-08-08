@@ -1,0 +1,205 @@
+{
+  "report": "STRATEGY_WORKSPACE",
+  "phase": "Program 150 — Defence Strategy and Motion Intelligence",
+  "generatedAt": "2026-08-07T14:32:42.175Z",
+  "apiBase": "http://127.0.0.1:3001",
+  "summary": {
+    "total": 30,
+    "PASS": 30,
+    "FAIL": 0,
+    "WARNING": 0,
+    "UNKNOWN": 0,
+    "passRate": 100
+  },
+  "exercisedApiRoutes": [
+    "GET /api/action-center",
+    "GET /api/cases/:id/defense-themes",
+    "GET /api/cases/:id/executive-summary",
+    "GET /api/cases/:id/motion-issues",
+    "POST /api/auth/register",
+    "POST /api/cases"
+  ],
+  "exercisedSpaRoutes": [],
+  "caseId": "46b46b46-998c-4d5d-80d7-8d0aaf3a384d",
+  "checks": [
+    {
+      "id": "STR-01",
+      "name": "Every defence theme is examined, not a chosen few",
+      "status": "PASS",
+      "detail": "31 themes"
+    },
+    {
+      "id": "STR-02",
+      "name": "With no evidence in the case every theme is unsupported",
+      "status": "PASS",
+      "detail": "nothing claimed from an empty record"
+    },
+    {
+      "id": "STR-03",
+      "name": "An empty record is distinguished from themes that were examined and found wanting",
+      "status": "PASS",
+      "detail": "No evidence has been processed for this case yet, so there is nothing to organise. Every theme is reported as "
+    },
+    {
+      "id": "STR-04",
+      "name": "Themes surface from the language of the record",
+      "status": "PASS",
+      "detail": "10 supported: Identity, Mistaken identification, Lack of knowledge, Possession and constructive possession, Fourth Amendment, Miranda, Chain of custody, Forensic reliability, Officer credibility, Timeline conflicts"
+    },
+    {
+      "id": "STR-05",
+      "name": "A warrantless search in the report raises the Fourth Amendment",
+      "status": "PASS",
+      "detail": "search"
+    },
+    {
+      "id": "STR-06",
+      "name": "A Miranda advisement in the report raises Miranda",
+      "status": "PASS",
+      "detail": "Miranda"
+    },
+    {
+      "id": "STR-07",
+      "name": "Shared access to a vehicle raises constructive possession",
+      "status": "PASS",
+      "detail": "access to"
+    },
+    {
+      "id": "STR-08",
+      "name": "A distant sighting in poor lighting raises mistaken identification",
+      "status": "PASS",
+      "detail": "briefly saw"
+    },
+    {
+      "id": "STR-09",
+      "name": "Booking and transfer language raises chain of custody",
+      "status": "PASS",
+      "detail": "booked into evidence"
+    },
+    {
+      "id": "STR-10",
+      "name": "Every quoted passage appears in the document it is attributed to",
+      "status": "PASS",
+      "detail": "10 passages checked against the source"
+    },
+    {
+      "id": "STR-11",
+      "name": "Every passage names the document it came from",
+      "status": "PASS",
+      "detail": "Investigative Report 26-114872.pdf"
+    },
+    {
+      "id": "STR-12",
+      "name": "A theme with nothing in the record is reported as such, not as unavailable",
+      "status": "PASS",
+      "detail": "Nothing in the 1 document(s) examined uses language bearing on alibi. That is what the record shows, not a conclusion th"
+    },
+    {
+      "id": "STR-13",
+      "name": "What is commonly needed and absent is named",
+      "status": "PASS",
+      "detail": "The search warrant and its supporting affidavit; The warrant return; Body-worn camera covering the stop and the search"
+    },
+    {
+      "id": "STR-14",
+      "name": "Unanswered questions are stated rather than resolved",
+      "status": "PASS",
+      "detail": "Does anything in the record contradict the passages above on fourth amendment?"
+    },
+    {
+      "id": "STR-15",
+      "name": "The workspace states no conclusion about guilt, merits or outcome",
+      "status": "PASS",
+      "detail": "no advisory or predictive language in the response"
+    },
+    {
+      "id": "STR-16",
+      "name": "The workspace says plainly that the judgement is counsel’s",
+      "status": "PASS",
+      "detail": "These themes organise what is in the record. Nothing here says a defence is available, sound or worth running:"
+    },
+    {
+      "id": "STR-17",
+      "name": "Motion issues are raised from the record",
+      "status": "PASS",
+      "detail": "Identity, Mistaken identification, Fourth Amendment, Miranda, Chain of custody, Forensic reliability"
+    },
+    {
+      "id": "STR-18",
+      "name": "Every issue uses the wording the constitution requires, never advice to file",
+      "status": "PASS",
+      "detail": "This repository-backed issue may warrant attorney review."
+    },
+    {
+      "id": "STR-19",
+      "name": "Motion intelligence never recommends filing or assesses merits",
+      "status": "PASS"
+    },
+    {
+      "id": "STR-20",
+      "name": "Every issue cites the passages that raised it",
+      "status": "PASS",
+      "detail": "6 issues, all cited"
+    },
+    {
+      "id": "STR-21",
+      "name": "Topics the record does not raise are listed so it is clear they were examined",
+      "status": "PASS",
+      "detail": "7 not raised"
+    },
+    {
+      "id": "STR-22",
+      "name": "Evidence figures are counted from the record",
+      "status": "PASS",
+      "detail": "1 item, 1 processed"
+    },
+    {
+      "id": "STR-23",
+      "name": "A case with no charges says so rather than showing a bare zero",
+      "status": "PASS",
+      "detail": "No charging document has been filed, so there are no charges to report."
+    },
+    {
+      "id": "STR-24",
+      "name": "The executive summary states that its figures are counts, not estimates",
+      "status": "PASS",
+      "detail": "Every figure here is a count of records that exist. Where something has not been produced or processed the cou"
+    },
+    {
+      "id": "STR-25",
+      "name": "The action centre reports real outstanding work",
+      "status": "PASS",
+      "detail": "People v. Reyes has no charging document on record"
+    },
+    {
+      "id": "STR-26",
+      "name": "Every queue entry explains why it is there",
+      "status": "PASS",
+      "detail": "CALCRIM, mens rea and the elements analysis all read the charges, so they cannot run until a complaint or info"
+    },
+    {
+      "id": "STR-27",
+      "name": "Every queue entry links to the record it is about",
+      "status": "PASS",
+      "detail": "1 entries"
+    },
+    {
+      "id": "STR-28",
+      "name": "The queue contains no invented cases, numbers or timestamps",
+      "status": "PASS",
+      "detail": "all entries derived from records"
+    },
+    {
+      "id": "STR-29",
+      "name": "Defence strategy is not visible to another firm",
+      "status": "PASS",
+      "detail": "HTTP 404"
+    },
+    {
+      "id": "STR-30",
+      "name": "The action centre shows only the firm’s own cases",
+      "status": "PASS",
+      "detail": "0 entries, none from another firm"
+    }
+  ]
+}

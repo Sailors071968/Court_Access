@@ -5,7 +5,8 @@
 // Usage: npx tsx backend/src/server.ts
 // ============================================================================
 
-import Fastify from 'fastify';
+import { randomUUID } from 'node:crypto';
+import Fastify, { type FastifyInstance } from 'fastify';
 import cors from '@fastify/cors';
 import cookie from '@fastify/cookie';
 import { registerPipelineRoutes } from './policy/pipeline/pipelineRoutes.js';
@@ -28,6 +29,12 @@ import { registerClientRoutes } from './clients/clientRoutes.js';
 import { registerEvidenceRoutes } from './evidence/evidenceRoutes.js';
 import { registerDirectUploadRoutes } from './evidence/evidenceDirectUpload.js';
 import { registerEvidenceRequestRoutes } from './evidence/evidenceRequestRoutes.js';
+import { registerCitationRoutes } from './evidence/citationRoutes.js';
+import { registerCertificationRoutes } from './certification/certificationRoutes.js';
+import { registerUploadPortalRoutes } from './certification/uploadPortalRoutes.js';
+import { registerLawRoutes } from './law/lawRoutes.js';
+import { registerChargingRoutes } from './charges/chargingRoutes.js';
+import { registerStrategyRoutes } from './intelligence/strategyRoutes.js';
 import { registerIntelligenceRoutes, registerNarrativeIntelligenceRoutes } from './intelligence/intelligenceRoutes.js';
 import { registerWorkbenchRoutes } from './workbench/workbenchRoutes.js';
 import { registerInvestigatorRoutes } from './investigator/investigatorRoutes.js';
@@ -49,17 +56,57 @@ import { registerLegislativeRoutes } from './legislative/legislativeRoutes.ts';
 import { registerDoctrineRoutes } from './doctrine/doctrineRoutes.ts';
 import { registerProductionGatesRoutes } from './productionGates/productionGatesRoutes.js';
 import { registerProductionOperationsRoutes } from './productionOperations/productionOperationsRoutes.js';
+import { validateEnvironment, printValidationReport } from './startup/validateEnvironment.js';
+import { getBuildInfo, describeBuild } from './lib/buildInfo.js';
+import prisma from './lib/prisma.js';
+
+/** Held so the signal handlers can close the server they did not create. */
+let appRef: FastifyInstance | null = null;
+
+const APP_VERSION = '1.1.0';
 
 const PORT = parseInt(process.env.PORT || '3001', 10);
 const HOST = process.env.HOST || '0.0.0.0';
 
+// A stray rejected promise anywhere in the process — a crawler that could not
+// start a browser session, a queue callback, a fire-and-forget write — would
+// otherwise terminate the API for every tenant. Log loudly and keep serving;
+// the request that triggered it still fails on its own terms.
+process.on('unhandledRejection', (reason) => {
+  const detail = reason instanceof Error ? (reason.stack ?? reason.message) : String(reason);
+  console.error('[Server] Unhandled promise rejection (server kept running):', detail);
+});
+
+// An uncaught exception leaves the process in an undefined state, so hand off
+// to the supervisor instead of continuing, but close listeners first so
+// in-flight responses are not dropped mid-write.
+process.on('uncaughtException', (err) => {
+  console.error('[Server] Uncaught exception — shutting down:', err.stack ?? err.message);
+  setTimeout(() => process.exit(1), 1000).unref();
+});
+
 async function startServer() {
+  // Say which build this is before anything else. Every incident starts with
+  // that question, and until now neither the log nor the API could answer it.
+  const build = await getBuildInfo();
+  console.log(`[Server] CourtAccess ${APP_VERSION} — ${describeBuild(build)}`);
+  console.log(`[Server] node ${process.versions.node}, pid ${process.pid}`);
+
+  // Configuration first: a missing secret or an unwritable upload directory is
+  // cheaper to report here than to discover from its symptoms later.
+  const validation = validateEnvironment();
+  printValidationReport(validation);
+  if (validation.overall === 'FAIL') {
+    process.exit(1);
+  }
+
   // PR 1 — Hard-fail if schema is drifted or migrations are pending
   await enforceSchemaOnBoot();
   const app = Fastify({
     logger: true,
     bodyLimit: 10 * 1024 * 1024, // 10MB
   });
+  appRef = app;
 
   // CORS — production domains + local dev
   const CORS_ORIGINS = process.env.NODE_ENV === 'production'
@@ -93,14 +140,79 @@ async function startServer() {
     secret: process.env.COOKIE_SECRET || 'court-access-cookie-secret-change-in-production',
   });
 
+  // Any error that reaches Fastify unhandled would otherwise be serialised
+  // straight to the client, which for a Prisma failure means the query, the
+  // source file and the surrounding lines. Log the detail, hand the caller a
+  // reference they can quote to support, and say what they can do next.
+  app.setErrorHandler((rawError, request, reply) => {
+    const error = rawError as Error & { statusCode?: number; code?: string };
+    const reference = randomUUID().slice(0, 8);
+    const code = error.code;
+
+    request.log.error(
+      { err: error, reference, path: request.url, method: request.method },
+      `[Server] Unhandled error ${reference}`,
+    );
+
+    // Errors Fastify itself raises for a malformed request are already safe
+    // and specific, so they are passed through.
+    if (error.statusCode && error.statusCode >= 400 && error.statusCode < 500) {
+      return reply.code(error.statusCode).send({
+        error: error.name || 'Bad Request',
+        message: error.message,
+      });
+    }
+
+    // Prisma constraint violations describe a client mistake, not a fault.
+    if (code === 'P2002') {
+      return reply.code(409).send({
+        error: 'Conflict',
+        message: 'A record with these details already exists.',
+        reference,
+      });
+    }
+    if (code === 'P2025') {
+      return reply.code(404).send({
+        error: 'Not Found',
+        message: 'The requested record does not exist.',
+        reference,
+      });
+    }
+    if (code === 'P1001' || code === 'P1017') {
+      return reply.code(503).send({
+        error: 'Service Unavailable',
+        message: 'The database is temporarily unreachable. Please retry in a few moments.',
+        reference,
+      });
+    }
+
+    return reply.code(500).send({
+      error: 'Internal Server Error',
+      message:
+        'The request could not be completed because of an unexpected error on our side. ' +
+        'Nothing you sent was at fault. Please retry, and quote the reference below if it keeps happening.',
+      reference,
+    });
+  });
+
+  app.setNotFoundHandler((request, reply) =>
+    reply.code(404).send({
+      error: 'Not Found',
+      message: `No endpoint is registered for ${request.method} ${request.url.split('?')[0]}.`,
+    }),
+  );
+
   // Phase 194 — Security headers (applied to all responses)
   app.addHook('onRequest', securityHeadersHook);
 
   // Phase 192 — Rate limiting (applied before auth)
   app.addHook('onRequest', rateLimitHook);
 
-  // Phase 191 — Authentication (JWT verification + RBAC)
-  //  app.addHook('onRequest', authenticationHook);
+  // Phase 191 — Authentication (JWT verification + RBAC).
+  // Route handlers across 21 modules read `request.user` and reject the
+  // request when it is absent, so this hook is what makes the authenticated
+  // API reachable at all — it must stay registered.
+  app.addHook('onRequest', authenticationHook);
 
   // Phase 193 — CSRF protection (after auth, before route handlers)
   // app.addHook('onRequest', csrfProtectionHook);
@@ -112,12 +224,21 @@ async function startServer() {
   await registerSecurityLogging(app);
 
   // Health check
+  // Liveness. Deliberately does no I/O: its job is to answer "is this process
+  // serving?" for the supervisor, and a check that fails when a dependency
+  // blips turns a recoverable outage into a restart storm. Readiness at
+  // /api/health/ready is the one that reports dependency state.
+  //
+  // `commit` is the addition that matters operationally — after a deployment
+  // this is how you confirm which build is actually live.
   app.get('/api/health', async () => ({
     status: 'ok',
     timestamp: new Date().toISOString(),
-    version: '1.1.0',
+    version: APP_VERSION,
+    commit: build.commit,
     service: 'court-access-backend',
     environment: process.env.NODE_ENV || 'development',
+    uptimeSeconds: Math.floor(process.uptime()),
   }));
 
   // Register route modules
@@ -201,6 +322,24 @@ async function startServer() {
   // Evidence Gap Detection — AI evidence requests
   console.log('[Server] Registering evidence request routes...');
   await registerEvidenceRequestRoutes(app);
+
+  // Page and line citation resolution for repository-backed findings
+  console.log('[Server] Registering citation routes...');
+  await registerCitationRoutes(app);
+
+  // Gold Standard Certification — administrator only
+  console.log('[Server] Registering Gold Standard Certification routes...');
+  await registerCertificationRoutes(app);
+  await registerUploadPortalRoutes(app);
+
+  // Official California law — the authoritative statutory source
+  await registerLawRoutes(app);
+
+  // Charging documents — the charges the People have actually filed
+  await registerChargingRoutes(app);
+
+  // Defence strategy, motion issues and the action centre
+  await registerStrategyRoutes(app);
 
   // Narrative Deconstruction Engine routes
   console.log('[Server] Registering Attorney Intelligence routes...');
@@ -361,14 +500,54 @@ async function startServer() {
   }
 }
 
-startServer();
+// Anything that throws before the try block inside startServer would otherwise
+// reach the unhandledRejection handler above, which logs "server kept running"
+// and does exactly that — leaving a live process with no HTTP listener. PM2
+// reports it online with a restart count of zero and nothing serves, which is
+// harder to notice than a crash loop.
+startServer().catch((err: unknown) => {
+  const detail = err instanceof Error ? (err.stack ?? err.message) : String(err);
+  console.error('[Server] Failed to start:', detail);
+  process.exit(1);
+});
 
-// Graceful shutdown — stop pipeline workers before exit
+// Graceful shutdown.
+//
+// This previously stopped the workers and exited without closing the HTTP
+// server, so every `pm2 reload` terminated in-flight requests mid-response. For
+// a GET that is a retry; for a multi-gigabyte evidence upload it is a truncated
+// file, and the deployment procedure reloads at least once. Database
+// connections were dropped rather than released.
+const SHUTDOWN_TIMEOUT_MS = Number(process.env.SHUTDOWN_TIMEOUT_MS ?? 30_000);
+let shuttingDown = false;
+
 const shutdown = async (signal: string) => {
-  console.log(`[Server] Received ${signal}, shutting down pipeline workers...`);
-  stopRedisMemoryMonitor();
-  await stopPipelineWorkers();
-  process.exit(0);
+  if (shuttingDown) return; // SIGTERM followed by SIGINT must not run this twice
+  shuttingDown = true;
+  console.log(`[Server] Received ${signal}, shutting down...`);
+
+  // A request that never finishes must not stop the process exiting, or the
+  // supervisor eventually SIGKILLs it and the orderly close is lost anyway.
+  const deadline = setTimeout(() => {
+    console.error(`[Server] Shutdown exceeded ${SHUTDOWN_TIMEOUT_MS}ms — forcing exit.`);
+    process.exit(1);
+  }, SHUTDOWN_TIMEOUT_MS);
+  deadline.unref();
+
+  try {
+    if (appRef) {
+      await appRef.close();
+      console.log('[Server] HTTP server closed; in-flight requests completed.');
+    }
+    stopRedisMemoryMonitor();
+    await stopPipelineWorkers();
+    await prisma.$disconnect();
+    console.log('[Server] Shutdown complete.');
+    process.exit(0);
+  } catch (err) {
+    console.error('[Server] Error during shutdown:', err instanceof Error ? err.message : err);
+    process.exit(1);
+  }
 };
 process.on('SIGINT', () => void shutdown('SIGINT'));
 process.on('SIGTERM', () => void shutdown('SIGTERM'));

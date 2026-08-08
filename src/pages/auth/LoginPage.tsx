@@ -3,7 +3,7 @@
 // ============================================
 
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { useAuthStore } from '../../stores/authStore';
 import { Scale, Eye, EyeOff } from 'lucide-react';
 
@@ -11,7 +11,12 @@ export function LoginPage() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [error, setError] = useState('');
+  // Set when the session layer sent the user here after a failed renewal, so
+  // they are told why they are looking at a sign-in form again.
+  const [searchParams] = useSearchParams();
+  const [error, setError] = useState(
+    searchParams.get('expired') === '1' ? 'Your session has expired. Please sign in again.' : '',
+  );
   const [mfaSessionToken, setMfaSessionToken] = useState<string | null>(null);
   const [mfaCode, setMfaCode] = useState('');
   const { login, completeMfaLogin, isLoading } = useAuthStore();

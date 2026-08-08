@@ -1,0 +1,157 @@
+{
+  "report": "COMPLAINT_WORKSPACE_BROWSER",
+  "phase": "Program 149 — Complaint Workspace Browser",
+  "generatedAt": "2026-08-07T16:43:08.335Z",
+  "apiBase": "http://127.0.0.1:8081",
+  "summary": {
+    "total": 23,
+    "PASS": 23,
+    "FAIL": 0,
+    "WARNING": 0,
+    "UNKNOWN": 0,
+    "passRate": 100
+  },
+  "exercisedApiRoutes": [],
+  "exercisedSpaRoutes": [],
+  "caseId": "8fff4782-641c-4a20-b7bd-b83e36e95fde",
+  "base": "http://127.0.0.1:8081",
+  "checks": [
+    {
+      "id": "WSB-01",
+      "name": "An attorney is offered a way to file a charging document from the case",
+      "status": "PASS",
+      "detail": "workspace opener present"
+    },
+    {
+      "id": "WSB-02",
+      "name": "Every kind of charging document can be created",
+      "status": "PASS",
+      "detail": "5 kinds offered"
+    },
+    {
+      "id": "WSB-03",
+      "name": "The California code selector offers every code",
+      "status": "PASS",
+      "detail": "29 codes"
+    },
+    {
+      "id": "WSB-04",
+      "name": "The filing can be previewed before it is committed",
+      "status": "PASS",
+      "detail": "Complaint, to be filed 8/7/2026Count 1 — Penal Code section 245On or about April 2, 2026, the crime of ASSAULT"
+    },
+    {
+      "id": "WSB-05",
+      "name": "Nothing changes on the case until the document is filed",
+      "status": "PASS",
+      "detail": "no current charges while drafting"
+    },
+    {
+      "id": "WSB-06",
+      "name": "Filing from the browser makes the document operative",
+      "status": "PASS",
+      "detail": "Complaint is now operative"
+    },
+    {
+      "id": "WSB-07",
+      "name": "The counts entered in the browser appear as the current charges",
+      "status": "PASS",
+      "detail": "count 1 shown"
+    },
+    {
+      "id": "WSB-08",
+      "name": "A defendant and count matrix is displayed",
+      "status": "PASS",
+      "detail": "matrix rendered"
+    },
+    {
+      "id": "WSB-09",
+      "name": "Every defendant appears in the matrix",
+      "status": "PASS",
+      "detail": "both defendants shown"
+    },
+    {
+      "id": "WSB-10",
+      "name": "The matrix distinguishes a charged defendant from one not charged on that count",
+      "status": "PASS",
+      "detail": "charged and blank cells shown"
+    },
+    {
+      "id": "WSB-11",
+      "name": "Allegations entered in the browser are shown against the count",
+      "status": "PASS",
+      "detail": "strike, serious felony, firearm"
+    },
+    {
+      "id": "WSB-12",
+      "name": "Where the People plead no exposure, none is invented",
+      "status": "PASS",
+      "detail": "exposure reported as not calculated"
+    },
+    {
+      "id": "WSB-13",
+      "name": "A parsed document reports its confidence and asks to be checked",
+      "status": "PASS",
+      "detail": " Read from the document with 83% overall confidence — check every count before filing"
+    },
+    {
+      "id": "WSB-14",
+      "name": "The parsed counts are loaded into the form for review, not filed",
+      "status": "PASS",
+      "detail": "sections 245 and 211"
+    },
+    {
+      "id": "WSB-15",
+      "name": "A document read from pasted text can be reviewed and filed",
+      "status": "PASS",
+      "detail": "Amended Complaint is operative"
+    },
+    {
+      "id": "WSB-16",
+      "name": "A count added by the amendment appears in the current charges",
+      "status": "PASS",
+      "detail": "PC 211 charged"
+    },
+    {
+      "id": "WSB-17",
+      "name": "What the amendment changed is explained in the history",
+      "status": "PASS",
+      "detail": "change described"
+    },
+    {
+      "id": "WSB-18",
+      "name": "A new filing can be started from any prior one",
+      "status": "PASS",
+      "detail": "2 prior filing(s) offered"
+    },
+    {
+      "id": "WSB-19",
+      "name": "A filing copied from a prior one can be filed as an Information",
+      "status": "PASS",
+      "detail": "Information is operative"
+    },
+    {
+      "id": "WSB-20",
+      "name": "Every filing made in this session remains on the record",
+      "status": "PASS",
+      "detail": "Complaint → Amended Complaint → Information"
+    },
+    {
+      "id": "WSB-21",
+      "name": "Everything done in the browser is recorded in the audit trail",
+      "status": "PASS",
+      "detail": "10 events"
+    },
+    {
+      "id": "WSB-22",
+      "name": "Three documents were filed and none was destroyed",
+      "status": "PASS",
+      "detail": "3 charging documents"
+    },
+    {
+      "id": "WSB-23",
+      "name": "No uncaught JavaScript exceptions across the workspace",
+      "status": "PASS"
+    }
+  ]
+}

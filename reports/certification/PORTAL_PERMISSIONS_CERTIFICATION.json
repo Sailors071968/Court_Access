@@ -1,0 +1,112 @@
+{
+  "report": "PORTAL_PERMISSIONS_CERTIFICATION",
+  "phase": "Program 144 — Defendant and Family Access",
+  "generatedAt": "2026-08-06T18:01:15.257Z",
+  "apiBase": "http://127.0.0.1:3001",
+  "summary": {
+    "total": 12,
+    "PASS": 12,
+    "FAIL": 0,
+    "WARNING": 0,
+    "UNKNOWN": 0,
+    "passRate": 100
+  },
+  "exercisedApiRoutes": [
+    "GET /api/admin/users",
+    "GET /api/auth/me",
+    "GET /api/cases/:id",
+    "GET /api/cases/:id/disclosures",
+    "GET /api/cases/:id/evidence",
+    "GET /api/cases/:id/workbench",
+    "GET /api/clients",
+    "GET /api/compliance/findings/:id",
+    "GET /api/firm/overview",
+    "GET /api/membership/onboarding",
+    "GET /api/organizations/members",
+    "GET /api/organizations/offices",
+    "GET /api/portal/court-dates",
+    "GET /api/timeline/:id/events",
+    "POST /api/auth/login",
+    "POST /api/auth/register",
+    "POST /api/cases",
+    "POST /api/evidence/upload"
+  ],
+  "exercisedSpaRoutes": [],
+  "caseId": "4c6599f8-a47d-45a4-996b-f39e3c620856",
+  "defendantRole": "defendant",
+  "familyRole": "defendant",
+  "checks": [
+    {
+      "id": "PORT-01",
+      "name": "A criminal defendant registers into the least-privileged role",
+      "status": "PASS",
+      "detail": "platform role \"defendant\""
+    },
+    {
+      "id": "PORT-02",
+      "name": "A family member registers into a portal role, not a law-firm role",
+      "status": "PASS",
+      "detail": "platform role \"defendant\""
+    },
+    {
+      "id": "PORT-03-defendant",
+      "name": "An unconnected defendant cannot reach the defence team's case",
+      "status": "PASS",
+      "detail": "5 views probed, all refused"
+    },
+    {
+      "id": "PORT-03-family member",
+      "name": "An unconnected family member cannot reach the defence team's case",
+      "status": "PASS",
+      "detail": "5 views probed, all refused"
+    },
+    {
+      "id": "PORT-04-defendant",
+      "name": "A defendant cannot reach firm-level surfaces",
+      "status": "PASS",
+      "detail": "4 probed, all refused"
+    },
+    {
+      "id": "PORT-04-family member",
+      "name": "A family member cannot reach firm-level surfaces",
+      "status": "PASS",
+      "detail": "4 probed, all refused"
+    },
+    {
+      "id": "PORT-05-defendant",
+      "name": "A defendant cannot read the user directory",
+      "status": "PASS",
+      "detail": "HTTP 403"
+    },
+    {
+      "id": "PORT-05-family member",
+      "name": "A family member cannot read the user directory",
+      "status": "PASS",
+      "detail": "HTTP 403"
+    },
+    {
+      "id": "PORT-06-defendant",
+      "name": "The portal surfaces answer a defendant without error",
+      "status": "PASS",
+      "detail": "3 probed"
+    },
+    {
+      "id": "PORT-06-family member",
+      "name": "The portal surfaces answer a family member without error",
+      "status": "PASS",
+      "detail": "3 probed"
+    },
+    {
+      "id": "PORT-07",
+      "name": "A defendant account is linked to a client record it can be shared with",
+      "status": "PASS",
+      "detail": "clientId b3ea7e7b-3c50-4136-add5-4cc9ddca316e"
+    },
+    {
+      "id": "PORT-08",
+      "name": "The disclosure surface is available to the defence team",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    }
+  ]
+}

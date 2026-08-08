@@ -1,0 +1,148 @@
+{
+  "report": "UPLOAD_PORTAL_BROWSER",
+  "phase": "Program 145 — Upload Portal Browser Verification",
+  "generatedAt": "2026-08-07T16:38:54.331Z",
+  "apiBase": "http://127.0.0.1:8081",
+  "summary": {
+    "total": 21,
+    "PASS": 21,
+    "FAIL": 0,
+    "WARNING": 0,
+    "UNKNOWN": 0,
+    "passRate": 100
+  },
+  "exercisedApiRoutes": [],
+  "exercisedSpaRoutes": [],
+  "base": "http://127.0.0.1:8081",
+  "reference": "PORTAL-723272",
+  "localFiles": 29,
+  "localBytes": 1300024,
+  "screenshotDirectory": "/workspace/reports/certification/screenshots",
+  "checks": [
+    {
+      "id": "UPB-01",
+      "name": "The portal offers drag & drop and file selection from the local machine",
+      "status": "PASS",
+      "detail": "dropzone rendered"
+    },
+    {
+      "id": "UPB-02",
+      "name": "The portal offers \"Select Discovery\"",
+      "status": "PASS",
+      "detail": "control present"
+    },
+    {
+      "id": "UPB-03",
+      "name": "The portal offers \"Select Folder\"",
+      "status": "PASS",
+      "detail": "control present"
+    },
+    {
+      "id": "UPB-04",
+      "name": "Folder selection uses a real directory picker",
+      "status": "PASS",
+      "detail": "input carries webkitdirectory"
+    },
+    {
+      "id": "UPB-05",
+      "name": "A dropped file is taken into the selection",
+      "status": "PASS",
+      "detail": "1 file(s) selected, 5 BCleardropped-note.txt5 B Upload 1 file(s)"
+    },
+    {
+      "id": "UPB-06",
+      "name": "A whole folder is selected from the local machine",
+      "status": "PASS",
+      "detail": "29 file(s) selected, 1.2 MBClearSYNTHETIC-001/07 Problem Files/Protected.pdf5 KBSYNTHETIC-001/07 Pro"
+    },
+    {
+      "id": "UPB-07",
+      "name": "Upload progress reports overall, transferred, speed, time remaining and files remaining",
+      "status": "PASS",
+      "detail": "Overall, Transferred, Speed, Time remaining, Files remaining"
+    },
+    {
+      "id": "UPB-08",
+      "name": "The upload can be paused",
+      "status": "PASS",
+      "detail": "control present"
+    },
+    {
+      "id": "UPB-09",
+      "name": "The upload can be retry failedd",
+      "status": "PASS",
+      "detail": "control present"
+    },
+    {
+      "id": "UPB-10",
+      "name": "The upload can be canceld",
+      "status": "PASS",
+      "detail": "control present"
+    },
+    {
+      "id": "UPB-11",
+      "name": "Pausing an upload offers Resume",
+      "status": "PASS",
+      "detail": "resume control appeared"
+    },
+    {
+      "id": "UPB-12",
+      "name": "The page stays responsive while uploading",
+      "status": "PASS",
+      "detail": "animation frame served during transfer"
+    },
+    {
+      "id": "UPB-13",
+      "name": "Review shows detected counts and processing estimates before anything runs",
+      "status": "PASS",
+      "detail": "Documents, Videos, Audio, Images, Pages, Estimated processing time"
+    },
+    {
+      "id": "UPB-14",
+      "name": "The operator confirms before processing begins",
+      "status": "PASS",
+      "detail": "confirmation required"
+    },
+    {
+      "id": "UPB-15",
+      "name": "Processing runs to completion with live stage reporting",
+      "status": "PASS",
+      "detail": "2 distinct stage(s) shown to the operator"
+    },
+    {
+      "id": "UPB-16",
+      "name": "The operator is never left wondering what is happening",
+      "status": "PASS",
+      "detail": "Ingesting discovery → Building repositories"
+    },
+    {
+      "id": "UPB-17",
+      "name": "The portal lands on the inventory for the uploaded corpus",
+      "status": "PASS",
+      "detail": "inventory rendered"
+    },
+    {
+      "id": "UPB-18",
+      "name": "A certification corpus exists for the browser upload",
+      "status": "PASS",
+      "detail": "32 files, fingerprint 09ddf281fbd4"
+    },
+    {
+      "id": "UPB-19",
+      "name": "The folder structure from the local machine survives the browser upload",
+      "status": "PASS",
+      "detail": "32 nested file(s)"
+    },
+    {
+      "id": "UPB-20",
+      "name": "Uploaded video and audio have measured running times",
+      "status": "PASS",
+      "detail": "3 recording(s) measured"
+    },
+    {
+      "id": "UPB-21",
+      "name": "No uncaught JavaScript exceptions across the upload workflow",
+      "status": "PASS"
+    }
+  ]
+}

@@ -1,0 +1,114 @@
+{
+  "report": "RECOVERY_CERTIFICATION",
+  "phase": "Phase 10 — Recovery Testing",
+  "generatedAt": "2026-08-06T18:00:38.063Z",
+  "apiBase": "http://127.0.0.1:3001",
+  "summary": {
+    "total": 14,
+    "PASS": 14,
+    "FAIL": 0,
+    "WARNING": 0,
+    "UNKNOWN": 0,
+    "passRate": 100
+  },
+  "exercisedApiRoutes": [
+    "GET /api/auth/me",
+    "GET /api/cases",
+    "GET /api/cases/:id/evidence",
+    "GET /api/health",
+    "POST /api/auth/login",
+    "POST /api/auth/register",
+    "POST /api/cases",
+    "POST /api/evidence/upload",
+    "POST /api/timeline/rebuild/:id"
+  ],
+  "exercisedSpaRoutes": [],
+  "caseId": "b246ac12-9fa3-4e47-8240-22e3a4d7c04b",
+  "baselineEvidence": 1,
+  "baselineChunks": 1,
+  "checks": [
+    {
+      "id": "REC-01",
+      "name": "The API reconnects to PostgreSQL after a database restart",
+      "status": "PASS",
+      "detail": "recovered on attempt 5"
+    },
+    {
+      "id": "REC-02",
+      "name": "After a database restart: case data is intact",
+      "status": "PASS",
+      "detail": "1 evidence records still readable through the API"
+    },
+    {
+      "id": "REC-03",
+      "name": "Redis restarts cleanly",
+      "status": "PASS"
+    },
+    {
+      "id": "REC-04",
+      "name": "The API stays up across a Redis restart",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "id": "REC-05",
+      "name": "Queue work is accepted again after a Redis restart",
+      "status": "PASS",
+      "detail": "recovered on attempt 1"
+    },
+    {
+      "id": "REC-06",
+      "name": "The API is confirmed down before the restart test",
+      "status": "PASS",
+      "detail": "status 0"
+    },
+    {
+      "id": "REC-07",
+      "name": "The API restarts and serves traffic again",
+      "status": "PASS",
+      "detail": "healthy within 2008ms"
+    },
+    {
+      "id": "REC-08",
+      "name": "After an API restart: case data is intact",
+      "status": "PASS",
+      "detail": "1 evidence records still readable through the API"
+    },
+    {
+      "id": "REC-09",
+      "name": "An existing session survives an API restart",
+      "status": "PASS",
+      "detail": "the token is still accepted"
+    },
+    {
+      "id": "REC-10",
+      "name": "Users can log in again after an API restart",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "id": "REC-11",
+      "name": "An interrupted upload does not destabilise the API",
+      "status": "PASS",
+      "detail": "health still 200"
+    },
+    {
+      "id": "REC-12",
+      "name": "An interrupted upload leaves no partial evidence record",
+      "status": "PASS",
+      "detail": "still 1 records"
+    },
+    {
+      "id": "REC-13",
+      "name": "Uploads still succeed after an interrupted transfer",
+      "status": "PASS",
+      "detail": "HTTP 201"
+    },
+    {
+      "id": "REC-14",
+      "name": "Queue workers process jobs after every restart in this run",
+      "status": "PASS",
+      "detail": "job 4b0d03a1-c2e1-41ed-9ab3-24eb94da6897 completed"
+    }
+  ]
+}

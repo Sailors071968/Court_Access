@@ -1,0 +1,90 @@
+{
+  "report": "COVERAGE_BROWSER",
+  "phase": "Program 153 — Evidence Coverage Browser",
+  "generatedAt": "2026-08-07T16:39:52.519Z",
+  "apiBase": "http://127.0.0.1:8081",
+  "summary": {
+    "total": 12,
+    "PASS": 12,
+    "FAIL": 0,
+    "WARNING": 0,
+    "UNKNOWN": 0,
+    "passRate": 100
+  },
+  "exercisedApiRoutes": [],
+  "exercisedSpaRoutes": [],
+  "caseId": "d04a6e77-f92a-42c9-8774-1588c311f7a6",
+  "base": "http://127.0.0.1:8081",
+  "checks": [
+    {
+      "id": "CVB-01",
+      "name": "Evidence coverage is offered as a case tab",
+      "status": "PASS",
+      "detail": "reachable by clicking"
+    },
+    {
+      "id": "CVB-02",
+      "name": "The coverage matrix renders",
+      "status": "PASS",
+      "detail": "panel present"
+    },
+    {
+      "id": "CVB-03",
+      "name": "The charged count is shown with its citation",
+      "status": "PASS",
+      "detail": "PEN 459"
+    },
+    {
+      "id": "CVB-04",
+      "name": "Elements with material and elements without are both counted",
+      "status": "PASS",
+      "detail": "both reported"
+    },
+    {
+      "id": "CVB-05",
+      "name": "The page says plainly that it decides nothing",
+      "status": "PASS",
+      "detail": "caveat shown"
+    },
+    {
+      "id": "CVB-06",
+      "name": "Each element shows the document its material came from",
+      "status": "PASS",
+      "detail": "source named"
+    },
+    {
+      "id": "CVB-07",
+      "name": "Supporting and contrary material are shown separately",
+      "status": "PASS",
+      "detail": "both sides labelled"
+    },
+    {
+      "id": "CVB-08",
+      "name": "Explain This opens for a displayed item",
+      "status": "PASS",
+      "detail": "panel opened"
+    },
+    {
+      "id": "CVB-09",
+      "name": "The explanation says why it is shown, what produced it and from which repository",
+      "status": "PASS",
+      "detail": "all three answered"
+    },
+    {
+      "id": "CVB-10",
+      "name": "The explanation links to the authority behind the item",
+      "status": "PASS",
+      "detail": "authority shown"
+    },
+    {
+      "id": "CVB-11",
+      "name": "Nothing on the page asserts a conclusion, and the disclaimers are not mistaken for one",
+      "status": "PASS"
+    },
+    {
+      "id": "CVB-12",
+      "name": "No uncaught JavaScript exceptions on the coverage page",
+      "status": "PASS"
+    }
+  ]
+}

@@ -1,0 +1,164 @@
+{
+  "report": "EVIDENCE_COVERAGE",
+  "phase": "Program 153 — Evidence Coverage and Explainability",
+  "generatedAt": "2026-08-07T14:32:45.295Z",
+  "apiBase": "http://127.0.0.1:3001",
+  "summary": {
+    "total": 23,
+    "PASS": 22,
+    "FAIL": 0,
+    "WARNING": 1,
+    "UNKNOWN": 0,
+    "passRate": 95.7
+  },
+  "exercisedApiRoutes": [
+    "GET /api/cases/:id/evidence-coverage",
+    "GET /api/cases/:id/explain/count/1",
+    "GET /api/cases/:id/explain/count/99",
+    "GET /api/repositories/completeness",
+    "POST /api/auth/register",
+    "POST /api/cases",
+    "POST /api/cases/:id/charges/documents"
+  ],
+  "exercisedSpaRoutes": [],
+  "caseId": "6a96695d-7106-404b-8c6c-98d9ed654937",
+  "checks": [
+    {
+      "id": "COV-01",
+      "name": "A case with no charges says so rather than showing an empty matrix",
+      "status": "PASS",
+      "detail": "No charging document has been filed, so there are no counts to cover."
+    },
+    {
+      "id": "COV-02",
+      "name": "Every charged count appears in the matrix",
+      "status": "PASS",
+      "detail": "2 counts"
+    },
+    {
+      "id": "COV-03",
+      "name": "Elements are taken from the statute, not from a stored list",
+      "status": "PASS",
+      "detail": "3 elements, sourced from the section"
+    },
+    {
+      "id": "COV-04",
+      "name": "Each element names where in the statute it came from",
+      "status": "PASS",
+      "detail": "conduct stated in the section"
+    },
+    {
+      "id": "COV-05",
+      "name": "The count links to the official statute it charges",
+      "status": "PASS",
+      "detail": "https://leginfo.legislature.ca.gov/faces/codes_displaySection.xhtml?lawCode=PEN&sectionNum"
+    },
+    {
+      "id": "COV-06",
+      "name": "Material in the record is placed beside the elements it touches",
+      "status": "PASS",
+      "detail": "3 element(s) have material"
+    },
+    {
+      "id": "COV-07",
+      "name": "Every quoted passage appears in the document it is attributed to",
+      "status": "PASS",
+      "detail": "5 passages verified"
+    },
+    {
+      "id": "COV-08",
+      "name": "Material that cuts the other way is shown separately, not folded into support",
+      "status": "PASS",
+      "detail": "…residence is an inhabited dwelling house occupied by the reporting party. A television and a laptop were take"
+    },
+    {
+      "id": "COV-09",
+      "name": "Every element of this count has material, so the empty cell was not exercised here",
+      "status": "WARNING",
+      "detail": "The report used is deliberately rich. Count 2 exercises the neighbouring case, where the statute itself cannot be read and no elements exist to cover."
+    },
+    {
+      "id": "COV-10",
+      "name": "The matrix never decides whether an element is proved",
+      "status": "PASS"
+    },
+    {
+      "id": "COV-11",
+      "name": "The matrix says plainly that it decides nothing",
+      "status": "PASS",
+      "detail": "This matrix organises the material beside each element. It does not decide whether an element is proved: that "
+    },
+    {
+      "id": "COV-12",
+      "name": "A count whose statute cannot be read is reported with the reason, not silently dropped",
+      "status": "PASS",
+      "detail": "The official source has no section 99999. in the Penal Code. It may never have existed, or it may have been renumbered. "
+    },
+    {
+      "id": "COV-13",
+      "name": "The CALCRIM correspondence is shown where one is verified",
+      "status": "PASS",
+      "detail": "CALCRIM 1700"
+    },
+    {
+      "id": "COV-14",
+      "name": "The mental state comes from the statute with the words that establish it",
+      "status": "PASS",
+      "detail": "…the Vehicle Code, when the doors are locked, aircraft as defined by Section 21012 of the Public Uti"
+    },
+    {
+      "id": "COV-15",
+      "name": "An explanation answers why it is shown, what produced it, and what supports it",
+      "status": "PASS",
+      "detail": "whyDisplayed, producedBy, repository, supportingEvidence, conflictingEvidence, missingEvidence, unknown"
+    },
+    {
+      "id": "COV-16",
+      "name": "The explanation says why the item is on screen",
+      "status": "PASS",
+      "detail": "This count appears because it is charged in the operative charging document filed in this case."
+    },
+    {
+      "id": "COV-17",
+      "name": "The explanation links to the legal authority behind the item",
+      "status": "PASS",
+      "detail": "Penal Code section 459"
+    },
+    {
+      "id": "COV-18",
+      "name": "Anything the explanation cannot answer is listed rather than left blank",
+      "status": "PASS",
+      "detail": "0 unknown item(s)"
+    },
+    {
+      "id": "COV-19",
+      "name": "Asking to explain something not on screen returns nothing, not an invention",
+      "status": "PASS",
+      "detail": "HTTP 404"
+    },
+    {
+      "id": "COV-21",
+      "name": "Every repository reports coverage, unknowns and synchronisation",
+      "status": "PASS",
+      "detail": "Official California law, CALCRIM correspondence, Gold Standard corpora"
+    },
+    {
+      "id": "COV-20",
+      "name": "The missing Gold Standard cases are named as missing sources",
+      "status": "PASS",
+      "detail": "Case 001, Case 002, Case 003"
+    },
+    {
+      "id": "COV-22",
+      "name": "Coverage is described rather than given a number nobody can justify",
+      "status": "PASS",
+      "detail": "Coverage is reported as what has been retrieved, not as a proportion of what exists. Where a proportion is not"
+    },
+    {
+      "id": "COV-23",
+      "name": "The coverage matrix is not visible to another firm",
+      "status": "PASS",
+      "detail": "HTTP 404"
+    }
+  ]
+}

@@ -1,0 +1,188 @@
+{
+  "report": "UPLOAD_PORTAL_API",
+  "phase": "Program 145 — Upload Portal API",
+  "generatedAt": "2026-08-07T14:37:33.052Z",
+  "apiBase": "http://127.0.0.1:3001",
+  "summary": {
+    "total": 22,
+    "PASS": 22,
+    "FAIL": 0,
+    "WARNING": 0,
+    "UNKNOWN": 0,
+    "passRate": 100
+  },
+  "exercisedApiRoutes": [
+    "DELETE /api/certification/uploads/:id",
+    "GET /api/certification/cases/:id/inventory",
+    "GET /api/certification/uploads/:id",
+    "GET /api/certification/uploads/:id/manifest",
+    "GET /api/certification/uploads/:id/preview",
+    "POST /api/auth/login",
+    "POST /api/auth/register",
+    "POST /api/certification/uploads",
+    "POST /api/certification/uploads/:id/commit"
+  ],
+  "exercisedSpaRoutes": [],
+  "uploadSessionId": "0813cf2e-36c8-4768-9ca0-8ab348a32db9",
+  "reference": "UP-447523",
+  "selectionFiles": 29,
+  "selectionBytes": 1300024,
+  "checks": [
+    {
+      "id": "UP-01",
+      "name": "The upload portal is closed to every non-administrator role",
+      "status": "PASS",
+      "detail": "5 roles probed"
+    },
+    {
+      "id": "UP-02",
+      "name": "An administrator can open an upload session",
+      "status": "PASS",
+      "detail": "chunk size 8MB"
+    },
+    {
+      "id": "UP-03",
+      "name": "Files upload in chunks with their folder paths preserved",
+      "status": "PASS",
+      "detail": "29 file(s) in 108ms"
+    },
+    {
+      "id": "UP-04",
+      "name": "An interrupted multi-chunk upload is held partially and the server reports how much it has",
+      "status": "PASS",
+      "detail": "8MB of 21MB held"
+    },
+    {
+      "id": "UP-05",
+      "name": "A chunk sent for the wrong offset is refused and the true offset returned",
+      "status": "PASS",
+      "detail": "HTTP 409, resume from 8388608"
+    },
+    {
+      "id": "UP-06",
+      "name": "A resumed upload reassembles byte-for-byte identical to the original",
+      "status": "PASS",
+      "detail": "21MB across 3 chunks, SHA-256 matches"
+    },
+    {
+      "id": "UP-07",
+      "name": "Every selected file arrived complete and byte-exact, including zero-byte files",
+      "status": "PASS",
+      "detail": "29 files, 1.3MB"
+    },
+    {
+      "id": "UP-08",
+      "name": "Uploaded bytes match the file on the operator's machine",
+      "status": "PASS",
+      "detail": "SHA-256 ec7b5614ea92f854"
+    },
+    {
+      "id": "UP-09",
+      "name": "A transfer that ends short of its declared size is refused",
+      "status": "PASS",
+      "detail": "\"SYNTHETIC-001/liar.txt\" finished at 100 bytes but was declared as 5000. The transfer was truncated; the file needs to be sent aga"
+    },
+    {
+      "id": "UP-10",
+      "name": "A traversal path in the upload is refused",
+      "status": "PASS",
+      "detail": "HTTP 400"
+    },
+    {
+      "id": "UP-11",
+      "name": "Preview reports what arrived before anything is processed",
+      "status": "PASS",
+      "detail": "26 documents, 2 video, 1 audio, 4 images, 57 pages",
+      "evidence": {
+        "documents": 26,
+        "videos": 2,
+        "audio": 1,
+        "images": 4,
+        "totalPages": 57,
+        "videoSeconds": 12,
+        "audioSeconds": 8
+      }
+    },
+    {
+      "id": "UP-12",
+      "name": "Media running times are measured from the files themselves",
+      "status": "PASS",
+      "detail": "12s of video, 8s of audio"
+    },
+    {
+      "id": "UP-13",
+      "name": "Processing time is estimated and the basis stated",
+      "status": "PASS",
+      "detail": "about 22s total"
+    },
+    {
+      "id": "UP-14",
+      "name": "Files that could not be measured are named rather than averaged away",
+      "status": "PASS",
+      "detail": "0 unmeasured"
+    },
+    {
+      "id": "UP-15",
+      "name": "Committing starts processing without blocking the browser",
+      "status": "PASS",
+      "detail": "HTTP 202"
+    },
+    {
+      "id": "UP-16",
+      "name": "Upload, import and certification complete end to end",
+      "status": "PASS",
+      "detail": "Certification complete — 23 document(s) yielded text"
+    },
+    {
+      "id": "UP-17",
+      "name": "The operator is told which stage the work is on throughout",
+      "status": "PASS",
+      "detail": "stages reported: Reading the delivery → Ingesting discovery → Building repositories → Certification complete"
+    },
+    {
+      "id": "UP-18",
+      "name": "The upload produced a certification corpus and a run",
+      "status": "PASS",
+      "detail": "case ddd996bf"
+    },
+    {
+      "id": "UP-19",
+      "name": "The uploaded corpus is inventoried with pages and durations",
+      "status": "PASS",
+      "detail": "33 files, 54 pages, 12s video, 8s audio, 1 duplicate(s)",
+      "evidence": {
+        "files": 33,
+        "bytes": 1303717,
+        "documents": 26,
+        "videos": 2,
+        "audio": 1,
+        "images": 4,
+        "duplicates": 1,
+        "ingested": 32,
+        "failed": 0,
+        "pages": 54,
+        "videoSeconds": 12,
+        "audioSeconds": 8,
+        "unmeasured": 5
+      }
+    },
+    {
+      "id": "UP-20",
+      "name": "The operator's folder hierarchy survives the upload",
+      "status": "PASS",
+      "detail": "e.g. SYNTHETIC-001/01 Police Reports/Doc0001.pdf"
+    },
+    {
+      "id": "UP-21",
+      "name": "Modification times from the operator's machine are preserved",
+      "status": "PASS",
+      "detail": "30/33 files"
+    },
+    {
+      "id": "UP-22",
+      "name": "Cancelling after commit is handled deliberately",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    }
+  ]
+}

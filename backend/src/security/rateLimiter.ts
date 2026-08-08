@@ -5,6 +5,7 @@
 // ============================================================================
 
 import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import { verifyAccessToken } from './authMiddleware.js';
 
 // ---------------------------------------------------------------------------
 // Types
@@ -37,7 +38,10 @@ function getOrCreateStore(storeName: string): Map<string, RateLimitEntry> {
   return store;
 }
 
-// Cleanup expired entries every 60 seconds
+// Cleanup expired entries every 60 seconds. Unreferenced so a sweep that is
+// only housekeeping cannot hold the event loop open — otherwise importing this
+// module keeps any process alive forever, which is what made `npm test` hang
+// after every test had already passed.
 setInterval(() => {
   const now = Date.now();
   for (const [, store] of rateLimitStores) {
@@ -47,7 +51,7 @@ setInterval(() => {
       }
     }
   }
-}, 60_000);
+}, 60_000).unref();
 
 // ---------------------------------------------------------------------------
 // Rate limit checker
@@ -117,22 +121,60 @@ function peekRateLimit(storeName: string, key: string, config: RateLimitConfig):
 // ---------------------------------------------------------------------------
 
 function defaultKeyGenerator(request: FastifyRequest): string {
-  const user = (request as Record<string, unknown>).user as { userId?: string } | undefined;
-  if (user?.userId) {
-    return `user:${user.userId}`;
+  const userId = resolveUserId(request);
+  if (userId) {
+    return `user:${userId}`;
   }
   return `ip:${request.ip}`;
+}
+
+/**
+ * Identify the caller for rate-limit bucketing.
+ *
+ * This hook runs on `onRequest`, which is before any authentication has had a
+ * chance to populate `request.user`, so the bearer token has to be read here
+ * directly. Without this every authenticated request falls back to the source
+ * IP, which means a firm behind one office NAT address shares a single bucket.
+ */
+function resolveUserId(request: FastifyRequest): string | null {
+  const preset = (request as unknown as Record<string, unknown>).user as { userId?: string } | undefined;
+  if (preset?.userId) return preset.userId;
+
+  const header = request.headers.authorization;
+  if (!header || !header.startsWith('Bearer ')) return null;
+  try {
+    const payload = verifyAccessToken(header.slice(7).trim());
+    return payload.userId ?? null;
+  } catch {
+    // Invalid/expired tokens fall back to IP bucketing so that a stream of bad
+    // tokens cannot be used to bypass the limit.
+    return null;
+  }
+}
+
+/** Reads a positive integer from the environment, falling back to `fallback`. */
+function envInt(name: string, fallback: number): number {
+  const raw = process.env[name];
+  if (!raw) return fallback;
+  const parsed = parseInt(raw, 10);
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : fallback;
 }
 
 // ---------------------------------------------------------------------------
 // Rate limit configurations
 // ---------------------------------------------------------------------------
 
+const GENERAL_MAX = envInt('RATE_LIMIT_GENERAL_PER_MINUTE', 100);
+const UPLOAD_MAX = envInt('RATE_LIMIT_UPLOAD_PER_MINUTE', 10);
+const COMPLIANCE_MAX = envInt('RATE_LIMIT_COMPLIANCE_PER_MINUTE', 5);
+const LOGIN_MAX = envInt('RATE_LIMIT_LOGIN_PER_MINUTE', 5);
+const REGISTER_MAX = envInt('RATE_LIMIT_REGISTER_PER_MINUTE', 3);
+
 const RATE_LIMIT_CONFIGS = {
   // General API: 100 requests per minute
   general: {
     windowMs: 60_000,
-    maxRequests: 100,
+    maxRequests: GENERAL_MAX,
     message: 'Too many requests. Please try again in a moment.',
     keyGenerator: defaultKeyGenerator,
   } satisfies RateLimitConfig,
@@ -140,23 +182,23 @@ const RATE_LIMIT_CONFIGS = {
   // File uploads: 10 per minute
   upload: {
     windowMs: 60_000,
-    maxRequests: 10,
-    message: 'Upload rate limit exceeded. Maximum 10 uploads per minute.',
+    maxRequests: UPLOAD_MAX,
+    message: `Upload rate limit exceeded. Maximum ${UPLOAD_MAX} uploads per minute.`,
     keyGenerator: defaultKeyGenerator,
   } satisfies RateLimitConfig,
 
   // Compliance analyses: 5 per minute
   compliance: {
     windowMs: 60_000,
-    maxRequests: 5,
-    message: 'Compliance analysis rate limit exceeded. Maximum 5 analyses per minute.',
+    maxRequests: COMPLIANCE_MAX,
+    message: `Compliance analysis rate limit exceeded. Maximum ${COMPLIANCE_MAX} analyses per minute.`,
     keyGenerator: defaultKeyGenerator,
   } satisfies RateLimitConfig,
 
   // Login attempts: 5 per minute (brute force protection)
   login: {
     windowMs: 60_000,
-    maxRequests: 5,
+    maxRequests: LOGIN_MAX,
     message: 'Too many login attempts. Please wait before trying again.',
     keyGenerator: (request: FastifyRequest) => `login:${request.ip}`,
   } satisfies RateLimitConfig,
@@ -180,7 +222,7 @@ const RATE_LIMIT_CONFIGS = {
   // Registration: 3 per minute per IP (spam protection)
   register: {
     windowMs: 60_000,
-    maxRequests: 3,
+    maxRequests: REGISTER_MAX,
     message: 'Too many registration attempts. Please wait before trying again.',
     keyGenerator: (request: FastifyRequest) => `register:${request.ip}`,
   } satisfies RateLimitConfig,
@@ -352,11 +394,31 @@ export async function registerRateLimitRoutes(app: FastifyInstance): Promise<voi
 // ---------------------------------------------------------------------------
 
 export const RATE_LIMIT_CONFIG = {
-  general: { windowMs: 60_000, maxRequests: 100, description: '100 requests per minute per user/IP' },
-  upload: { windowMs: 60_000, maxRequests: 10, description: '10 uploads per minute per user/IP' },
-  compliance: { windowMs: 60_000, maxRequests: 5, description: '5 compliance analyses per minute per user/IP' },
-  login: { windowMs: 60_000, maxRequests: 5, description: '5 login attempts per minute per IP' },
+  general: {
+    windowMs: 60_000,
+    maxRequests: GENERAL_MAX,
+    description: `${GENERAL_MAX} requests per minute per user/IP (RATE_LIMIT_GENERAL_PER_MINUTE)`,
+  },
+  upload: {
+    windowMs: 60_000,
+    maxRequests: UPLOAD_MAX,
+    description: `${UPLOAD_MAX} uploads per minute per user/IP (RATE_LIMIT_UPLOAD_PER_MINUTE)`,
+  },
+  compliance: {
+    windowMs: 60_000,
+    maxRequests: COMPLIANCE_MAX,
+    description: `${COMPLIANCE_MAX} compliance analyses per minute per user/IP (RATE_LIMIT_COMPLIANCE_PER_MINUTE)`,
+  },
+  login: {
+    windowMs: 60_000,
+    maxRequests: LOGIN_MAX,
+    description: `${LOGIN_MAX} login attempts per minute per IP (RATE_LIMIT_LOGIN_PER_MINUTE)`,
+  },
   cpraEmail: { windowMs: 60_000, maxRequests: 5, description: '5 CPRA emails per minute (configurable via env)' },
   cpraEmailDaily: { windowMs: 86_400_000, maxRequests: 50, description: '50 CPRA emails per day (configurable via env)' },
-  register: { windowMs: 60_000, maxRequests: 3, description: '3 registrations per minute per IP' },
+  register: {
+    windowMs: 60_000,
+    maxRequests: REGISTER_MAX,
+    description: `${REGISTER_MAX} registrations per minute per IP (RATE_LIMIT_REGISTER_PER_MINUTE)`,
+  },
 };

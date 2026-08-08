@@ -173,13 +173,50 @@ function inferIntent(events: any[]) {
 // --------------------------------------------------
 // MAIN ENGINE
 // --------------------------------------------------
+/**
+ * Charges are stored with whatever abbreviation the user typed — "PC",
+ * "P.C.", "Penal Code" — while the mapping table is keyed on the long form.
+ * Build the candidate keys for a charge so an abbreviation still finds its
+ * instruction, and fall back to the base section when a subdivision such as
+ * 459(a) has no entry of its own.
+ */
+export function calcrimLookupKeys(code: string, section: string): string[] {
+  const cleanedCode = (code ?? '').trim().replace(/\./g, '');
+  const cleanedSection = (section ?? '').trim();
+  const baseSection = cleanedSection.replace(/\s*\(.*$/, '');
+
+  const codeForms = new Set([cleanedCode, code?.trim()].filter(Boolean) as string[]);
+  if (/^pc$/i.test(cleanedCode)) codeForms.add('Penal Code');
+  if (/^penal code$/i.test(cleanedCode)) codeForms.add('PC');
+  if (/^vc$/i.test(cleanedCode)) codeForms.add('Vehicle Code');
+  if (/^hs$/i.test(cleanedCode)) codeForms.add('Health and Safety Code');
+
+  const keys: string[] = [];
+  for (const c of codeForms) {
+    keys.push(`${c} ${cleanedSection}`);
+    if (baseSection !== cleanedSection) keys.push(`${c} ${baseSection}`);
+  }
+  return keys;
+}
+
 export async function analyzeCase(caseId: string) {
   const charges = await prisma.charge.findMany({
     where: { caseId },
   });
 
   if (!charges.length) {
-    throw new Error("No charges found for case");
+    // Not an error: a case may simply not have charges entered yet. Say so
+    // rather than throwing, and assert nothing about its strength.
+    return {
+      caseId,
+      charges: [],
+      unmappedCharges: [],
+      overallCaseStrength: 'UNKNOWN',
+      caseScore: null,
+      message:
+        'No charges have been entered for this case, so no CALCRIM instruction can be organised. ' +
+        'Add the charged offences to see their elements.',
+    };
   }
 
   const events = await prisma.timelineEvent.findMany({
@@ -189,12 +226,28 @@ export async function analyzeCase(caseId: string) {
   const contradictions = detectContradictions(events);
 
   const chargeResults = [];
+  // Charges with no instruction in the mapping table used to be skipped
+  // silently, so a charged offence simply vanished from the analysis. They are
+  // reported instead, as UNKNOWN rather than as absent.
+  const unmappedCharges: Array<{ charge: string; title: string | null; reason: string }> = [];
 
   for (const charge of charges) {
+    const keys = calcrimLookupKeys(charge.code, charge.section);
+    const matchedKey = keys.find((k) => calcrimMapping[k]);
+    const calcrim = matchedKey ? calcrimMapping[matchedKey] : undefined;
     const key = `${charge.code} ${charge.section}`;
-    const calcrim = calcrimMapping[key];
 
-    if (!calcrim) continue;
+    if (!calcrim) {
+      unmappedCharges.push({
+        charge: key,
+        title: charge.title ?? null,
+        reason:
+          `No CALCRIM instruction is held for ${key}. Its elements cannot be organised, and nothing ` +
+          'about this count is asserted. The instruction library currently covers a limited set of ' +
+          'offences; this count needs to be reviewed against CALCRIM directly.',
+      });
+      continue;
+    }
 
     const elementResults = [];
     const intentInference = inferIntent(events);
@@ -214,7 +267,7 @@ export async function analyzeCase(caseId: string) {
       // 🔥 INTENT OVERRIDE
       if (
         element.id === "intent" ||
-        element.text.toLowerCase().includes("intent")
+        element.searchHeading.toLowerCase().includes("intent")
       ) {
         supported = intentInference.supported;
         matchingEvents = intentInference.evidence;
@@ -238,7 +291,7 @@ export async function analyzeCase(caseId: string) {
 
       elementResults.push({
         elementId: element.id,
-        elementText: element.text,
+        elementText: element.searchHeading,
         supported,
         supportingEvidence: sortedEvents.map(e => ({
           id: e.id,
@@ -275,6 +328,22 @@ export async function analyzeCase(caseId: string) {
     });
   }
 
+  // Characterising the case requires having analysed at least one count. With
+  // nothing analysed the score is undefined, and calling the case "WEAK"
+  // asserts a conclusion no evidence supports.
+  if (chargeResults.length === 0) {
+    return {
+      caseId,
+      charges: [],
+      unmappedCharges,
+      overallCaseStrength: 'UNKNOWN',
+      caseScore: null,
+      message:
+        `None of the ${charges.length} charged count(s) on this case has a CALCRIM instruction in the ` +
+        'library, so no elements could be organised and no assessment of the case is offered.',
+    };
+  }
+
   const caseScore =
     chargeResults.reduce((sum, c) => sum + c.overallScore, 0) /
     chargeResults.length;
@@ -286,7 +355,15 @@ export async function analyzeCase(caseId: string) {
   return {
     caseId,
     charges: chargeResults,
+    unmappedCharges,
     overallCaseStrength: caseStrength,
     caseScore,
+    ...(unmappedCharges.length > 0
+      ? {
+          message:
+            `${unmappedCharges.length} charged count(s) have no CALCRIM instruction in the library and are ` +
+            'excluded from the assessment above. They are listed under unmappedCharges.',
+        }
+      : {}),
   };
 }

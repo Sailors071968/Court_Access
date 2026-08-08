@@ -1,0 +1,19 @@
+{
+  "routes": 108,
+  "pages": 105,
+  "endpoints": 419,
+  "tables": 116,
+  "workers": 34,
+  "markers": {
+    "TODO": 0,
+    "FIXME": 0,
+    "STUB": 5,
+    "MOCK": 28,
+    "PLACEHOLDER": 35,
+    "HACK": 0
+  },
+  "corpora": {
+    "total": 25,
+    "authorized": 3
+  }
+}

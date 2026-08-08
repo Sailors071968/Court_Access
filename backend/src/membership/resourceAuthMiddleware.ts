@@ -47,11 +47,16 @@ export async function sendUnauthorized(reply: FastifyReply): Promise<FastifyRepl
   return reply.code(401).send({ error: 'Authentication required' });
 }
 
-/** Guard helper for route handlers — returns false if response already sent. */
+/**
+ * Guard helper for route handlers — returns false if response already sent.
+ *
+ * This cannot be declared as a type predicate: predicates are not permitted on
+ * async functions, and awaiting the call would discard the narrowing anyway.
+ */
 export async function guardAuth(
   user: AuthUser | undefined,
   reply: FastifyReply,
-): Promise<user is AuthUser> {
+): Promise<boolean> {
   if (!user?.userId || !user?.tenantId) {
     await sendUnauthorized(reply);
     return false;

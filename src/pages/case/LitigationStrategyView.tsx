@@ -7,6 +7,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { loadPanel } from '../../services/authedFetch';
 import {
   Target, BarChart3, CheckCircle, Clock, AlertTriangle,
   Search, Gavel, Send, Globe, Users, ChevronDown, ChevronRight,
@@ -90,23 +91,26 @@ export function LitigationStrategyView() {
   const [readiness, setReadiness] = useState<ReadinessMetric[]>([]);
   const [roadmap, setRoadmap] = useState<RoadmapStep[]>([]);
 
+  const [unavailableReason, setUnavailableReason] = useState<string | null>(null);
+
   useEffect(() => {
     async function fetchStrategy() {
       setIsLoading(true);
-      try {
-        const res = await fetch(`/api/cases/${caseId}/litigation-strategy`);
-        if (res.ok) {
-          const json = await res.json();
-          if (json.observations) setObservations(json.observations);
-          if (json.recommendations) setRecommendations(json.recommendations);
-          if (json.readiness) setReadiness(json.readiness);
-          if (json.roadmap) setRoadmap(json.roadmap);
-        }
-      } catch {
-        // API not available yet
-      } finally {
-        setIsLoading(false);
+      const { data, unavailableReason: reason } = await loadPanel<{
+        observations?: StrategyObservation[];
+        recommendations?: StrategyRecommendation[];
+        readiness?: ReadinessMetric[];
+        roadmap?: RoadmapStep[];
+      }>(`/cases/${caseId}/litigation-strategy`, 'Litigation strategy');
+
+      setUnavailableReason(reason);
+      if (data) {
+        if (data.observations) setObservations(data.observations);
+        if (data.recommendations) setRecommendations(data.recommendations);
+        if (data.readiness) setReadiness(data.readiness);
+        if (data.roadmap) setRoadmap(data.roadmap);
       }
+      setIsLoading(false);
     }
     if (caseId) fetchStrategy();
   }, [caseId]);
@@ -147,7 +151,17 @@ export function LitigationStrategyView() {
         </p>
       </div>
 
-      {hasNoData && (
+      {unavailableReason && (
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4 flex items-start gap-2">
+          <Info size={16} className="text-red-600 mt-0.5 flex-shrink-0" />
+          <div>
+            <p className="text-sm font-medium text-red-800">Litigation strategy could not be loaded</p>
+            <p className="text-xs text-red-700 mt-1">{unavailableReason}</p>
+          </div>
+        </div>
+      )}
+
+      {!unavailableReason && hasNoData && (
         <div className="text-center py-12 bg-white rounded-xl border border-gray-200">
           <Target size={48} className="mx-auto mb-3 text-gray-300" />
           <p className="text-sm text-gray-500">No litigation strategy data available yet.</p>

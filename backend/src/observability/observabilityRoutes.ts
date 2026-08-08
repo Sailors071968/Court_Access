@@ -12,7 +12,7 @@
 // ============================================================================
 
 import type { FastifyInstance } from 'fastify';
-import { runDeepHealthCheck } from './deepHealthCheck.ts';
+import { runDeepHealthCheck, runReadinessCheck } from './deepHealthCheck.ts';
 import { metrics } from './metricsCollector.ts';
 
 // ---------------------------------------------------------------------------
@@ -33,6 +33,28 @@ export async function registerObservabilityRoutes(app: FastifyInstance): Promise
     const report = await runDeepHealthCheck();
     const statusCode = report.status === 'healthy' ? 200 : 503;
     return reply.status(statusCode).send(report);
+  });
+
+  /**
+   * GET /api/health/ready
+   * Readiness — should this instance receive traffic?
+   *
+   * Checks only what serving a request needs: the database, a writable upload
+   * directory, and disk headroom. Redis, Neo4j and OpenAI are excluded because
+   * a request can be served without them, and taking an instance out of
+   * rotation for an optional dependency causes an outage rather than
+   * preventing one.
+   *
+   * Degraded still returns 200: an instance low on disk is worse than a healthy
+   * one and better than no instance at all.
+   *
+   * Response codes:
+   *   200 — healthy or degraded, safe to route traffic here
+   *   503 — unhealthy, do not route traffic here
+   */
+  app.get('/api/health/ready', async (_request, reply) => {
+    const report = await runReadinessCheck();
+    return reply.status(report.status === 'unhealthy' ? 503 : 200).send(report);
   });
 
   /**

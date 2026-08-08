@@ -5,6 +5,7 @@
 
 import { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { loadPanel } from '../../services/authedFetch';
 import {
   Layers, Box, MapPin, Play, Download, Image, Video,
   Clock, Eye, Plus,
@@ -86,18 +87,21 @@ export function TrialExhibitWorkspace() {
   const [markers, setMarkers] = useState<ExhibitMarker[]>([]);
   const [animations, setAnimations] = useState<ExhibitAnimation[]>([]);
 
+  const [unavailableReason, setUnavailableReason] = useState<string | null>(null);
+
   useEffect(() => {
     async function fetchExhibits() {
-      try {
-        const res = await fetch(`/api/cases/${caseId}/trial-exhibits`);
-        if (res.ok) {
-          const json = await res.json();
-          if (json.exhibits) setExhibits(json.exhibits);
-          if (json.markers) setMarkers(json.markers);
-          if (json.animations) setAnimations(json.animations);
-        }
-      } catch {
-        // API not available yet
+      const { data, unavailableReason: reason } = await loadPanel<{
+        exhibits?: TrialExhibit[];
+        markers?: ExhibitMarker[];
+        animations?: ExhibitAnimation[];
+      }>(`/cases/${caseId}/trial-exhibits`, 'Trial exhibits');
+
+      setUnavailableReason(reason);
+      if (data) {
+        if (data.exhibits) setExhibits(data.exhibits);
+        if (data.markers) setMarkers(data.markers);
+        if (data.animations) setAnimations(data.animations);
       }
     }
     if (caseId) fetchExhibits();
@@ -117,6 +121,13 @@ export function TrialExhibitWorkspace() {
         <h2 className="text-xl font-bold text-gray-900">Trial Exhibit Workspace</h2>
         <p className="text-sm text-gray-500 mt-1">Build, annotate, and export trial-ready exhibits</p>
       </div>
+
+      {unavailableReason && (
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+          <p className="text-sm font-medium text-red-800">Exhibits could not be loaded</p>
+          <p className="text-xs text-red-700 mt-1">{unavailableReason}</p>
+        </div>
+      )}
 
       {/* Workspace Tabs */}
       <div className="flex gap-1 bg-gray-100 rounded-lg p-1">

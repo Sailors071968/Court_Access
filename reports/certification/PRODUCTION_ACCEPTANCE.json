@@ -1,0 +1,220 @@
+{
+  "report": "PRODUCTION_ACCEPTANCE",
+  "phase": "Program 155 — Production Acceptance Rehearsal",
+  "generatedAt": "2026-08-07T14:55:57.655Z",
+  "apiBase": "http://127.0.0.1:3001",
+  "summary": {
+    "total": 29,
+    "PASS": 28,
+    "FAIL": 0,
+    "WARNING": 0,
+    "UNKNOWN": 1,
+    "passRate": 96.6
+  },
+  "exercisedApiRoutes": [
+    "GET /api/cases/:id/charges/current",
+    "GET /api/cases/:id/defense-themes",
+    "GET /api/cases/:id/evidence-coverage",
+    "GET /api/cases/:id/evolution",
+    "GET /api/cases/:id/executive-summary",
+    "GET /api/cases/:id/explain/count/1",
+    "GET /api/cases/:id/family-view",
+    "GET /api/cases/:id/motion-issues",
+    "GET /api/cases/:id/stage",
+    "GET /api/cases/:id/war-room",
+    "GET /api/certification/cases/:id/inventory",
+    "GET /api/certification/uploads/:id",
+    "GET /api/certification/uploads/:id/preview",
+    "GET /api/law/calcrim/PEN/459",
+    "GET /api/law/statute/PEN/459",
+    "POST /api/auth/login",
+    "POST /api/auth/register",
+    "POST /api/cases",
+    "POST /api/cases/:id/charges/drafts",
+    "POST /api/certification/uploads",
+    "POST /api/certification/uploads/:id/commit",
+    "POST /api/charging/documents/:id/counts",
+    "POST /api/charging/documents/:id/finalize"
+  ],
+  "exercisedSpaRoutes": [],
+  "caseId": "237a9c6a-03be-41f7-8120-06939153eec7",
+  "reference": "ACC-552702",
+  "failures": [],
+  "filesUploaded": 29,
+  "checks": [
+    {
+      "id": "ACC-01",
+      "name": "A new customer can register and is signed in",
+      "status": "PASS",
+      "detail": "acceptance-1786114551973-1-mgumtm@certification.test"
+    },
+    {
+      "id": "ACC-02",
+      "name": "A case is created through the interface",
+      "status": "PASS",
+      "detail": "ACC-1786114552220"
+    },
+    {
+      "id": "ACC-03",
+      "name": "Discovery uploads through the portal, chunked, as the browser sends it",
+      "status": "PASS",
+      "detail": "29 files, 1.3MB in 120ms"
+    },
+    {
+      "id": "ACC-04",
+      "name": "The operator reviews what arrived before anything is processed",
+      "status": "PASS",
+      "detail": "32 file(s) from 29 uploaded — archives are expanded, so their members are counted too. 25 documents, 2 video, 1 audio."
+    },
+    {
+      "id": "ACC-05",
+      "name": "Processing starts on confirmation without blocking",
+      "status": "PASS",
+      "detail": "HTTP 202"
+    },
+    {
+      "id": "ACC-06",
+      "name": "Upload, import and certification complete end to end",
+      "status": "PASS",
+      "detail": "22 document(s) yielded text"
+    },
+    {
+      "id": "ACC-07",
+      "name": "Every uploaded document appears in the inventory",
+      "status": "PASS",
+      "detail": "32 files inventoried"
+    },
+    {
+      "id": "ACC-08",
+      "name": "Every file is fingerprinted so it can be proved unchanged",
+      "status": "PASS",
+      "detail": "32 SHA-256 hashes"
+    },
+    {
+      "id": "ACC-09",
+      "name": "Page counts are recorded for paginated documents",
+      "status": "PASS",
+      "detail": "54 pages"
+    },
+    {
+      "id": "ACC-10",
+      "name": "Media running times are measured from the files",
+      "status": "PASS",
+      "detail": "12s video, 8s audio"
+    },
+    {
+      "id": "ACC-11",
+      "name": "The folder structure the operator selected survives",
+      "status": "PASS",
+      "detail": "32 nested files"
+    },
+    {
+      "id": "ACC-12",
+      "name": "Documents are classified from their contents",
+      "status": "PASS",
+      "detail": "24 classified, 8 unknown"
+    },
+    {
+      "id": "ACC-13",
+      "name": "Every file that failed is explained rather than silently dropped",
+      "status": "PASS",
+      "detail": "0 failure(s), all explained"
+    },
+    {
+      "id": "ACC-14",
+      "name": "A complaint is drafted and filed through the workspace",
+      "status": "PASS",
+      "detail": "1 count synchronised"
+    },
+    {
+      "id": "ACC-15",
+      "name": "The charged section resolves against the California Legislature",
+      "status": "PASS",
+      "detail": "Penal Code section 459"
+    },
+    {
+      "id": "ACC-16",
+      "name": "The CALCRIM correspondence is retrieved for the charge",
+      "status": "PASS",
+      "detail": "CALCRIM 1700"
+    },
+    {
+      "id": "ACC-17",
+      "name": "Mens rea is extracted from the statutory text",
+      "status": "PASS",
+      "detail": "intent, with the words that establish it"
+    },
+    {
+      "id": "ACC-18",
+      "name": "The case stage is determined from the record",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "id": "ACC-19",
+      "name": "The war room assembles from the case",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "id": "ACC-20",
+      "name": "Defence themes are organised from the record",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "id": "ACC-21",
+      "name": "Motion issues are raised from the record",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "id": "ACC-22",
+      "name": "Evidence coverage is built against the charged elements",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "id": "ACC-23",
+      "name": "The executive summary counts what exists",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "id": "ACC-24",
+      "name": "The family view renders in plain English",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "id": "ACC-25",
+      "name": "The case evolution records what changed",
+      "status": "PASS",
+      "detail": "HTTP 200"
+    },
+    {
+      "id": "ACC-26",
+      "name": "Any displayed item explains itself, with unknowns named",
+      "status": "PASS",
+      "detail": "This count appears because it is charged in the operative charging document filed in this "
+    },
+    {
+      "id": "ACC-27",
+      "name": "No surface states a conclusion about guilt, merits or outcome",
+      "status": "PASS",
+      "detail": "8 surfaces checked"
+    },
+    {
+      "id": "ACC-28",
+      "name": "Every record in this run arrived through the production interface",
+      "status": "PASS",
+      "detail": "No direct database write was performed: 0 evidence row(s) on the case, all created by the upload pipeline. The database was read for verification only."
+    },
+    {
+      "id": "ACC-29",
+      "name": "This is a rehearsal of the workflow, not certification of the platform",
+      "status": "UNKNOWN",
+      "detail": "It runs against synthetic discovery because no attorney-authorized case has been supplied. It proves the path a customer takes works end to end. It cannot prove the platform behaves correctly on real criminal discovery, which is a different question and the one the release gate is waiting on."
+    }
+  ]
+}

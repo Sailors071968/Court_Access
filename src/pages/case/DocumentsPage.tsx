@@ -4,6 +4,8 @@
 
 import { useState, useEffect } from 'react';
 import { Upload, FileText, Film, Image, CheckCircle, MoreHorizontal, Eye } from 'lucide-react';
+import { useParams } from 'react-router-dom';
+import { loadPanel } from '../../services/authedFetch';
 import { Card } from '../../components/common/Card';
 
 interface UploadedFile {
@@ -17,24 +19,65 @@ interface UploadedFile {
 
 
 
+function extensionOf(fileName: string): UploadedFile['type'] {
+  const ext = fileName.split('.').pop()?.toLowerCase() ?? '';
+  if (ext === 'pdf') return 'pdf';
+  if (['mp4', 'mov', 'avi', 'mkv', 'm4v'].includes(ext)) return 'mp4';
+  if (['jpg', 'jpeg', 'png', 'gif', 'tif', 'tiff', 'bmp', 'webp'].includes(ext)) return 'jpg';
+  return 'pdf';
+}
+
+function formatSize(bytes: number): string {
+  if (!Number.isFinite(bytes) || bytes <= 0) return '—';
+  if (bytes < 1024) return `${bytes} B`;
+  if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(0)} KB`;
+  return `${(bytes / 1024 / 1024).toFixed(1)} MB`;
+}
+
 export function DocumentsPage() {
+  const { caseId } = useParams<{ caseId: string }>();
   const [isDragging, setIsDragging] = useState(false);
   const [uploads, setUploads] = useState<UploadedFile[]>([]);
+  const [unavailableReason, setUnavailableReason] = useState<string | null>(null);
 
   useEffect(() => {
+    if (!caseId) return;
     async function fetchUploads() {
-      try {
-        const res = await fetch("/api/evidence/uploads");
-        if (res.ok) {
-          const json = await res.json();
-          if (json.data) setUploads(json.data);
-        }
-      } catch {
-        // API not available yet
+      // The case's evidence list is the real source for this panel. It
+      // previously requested /api/evidence/uploads, which does not exist and
+      // collides with GET /api/evidence/:evidenceId, so the panel was always
+      // empty.
+      const { data, unavailableReason: reason } = await loadPanel<{
+        evidence?: Array<{
+          evidenceId: string;
+          fileName: string;
+          size: string | number;
+          uploadedAt: string;
+          processingStatus: string;
+        }>;
+      }>(`/cases/${caseId}/evidence`, 'Uploaded documents');
+
+      setUnavailableReason(reason);
+      if (data?.evidence) {
+        setUploads(
+          data.evidence.map((e) => ({
+            id: e.evidenceId,
+            name: e.fileName,
+            size: formatSize(Number(e.size)),
+            date: new Date(e.uploadedAt).toLocaleDateString(),
+            status:
+              e.processingStatus === 'analyzed'
+                ? 'analyzed'
+                : e.processingStatus === 'failed'
+                  ? 'pending'
+                  : 'processing',
+            type: extensionOf(e.fileName),
+          })),
+        );
       }
     }
     fetchUploads();
-  }, []);
+  }, [caseId]);
 
   const handleDrag = (e: React.DragEvent) => {
     e.preventDefault();
@@ -62,6 +105,13 @@ export function DocumentsPage() {
         </div>
         {uploads.length > 0 && <span className="text-sm text-gray-500">Status: {uploads.length} files uploaded</span>}
       </div>
+
+      {unavailableReason && (
+        <div className="bg-red-50 border border-red-200 rounded-xl p-4">
+          <p className="text-sm font-medium text-red-800">The uploaded document list could not be loaded</p>
+          <p className="text-xs text-red-700 mt-1">{unavailableReason}</p>
+        </div>
+      )}
 
       {/* Upload Zone */}
       <div

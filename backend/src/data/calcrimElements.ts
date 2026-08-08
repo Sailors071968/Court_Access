@@ -1,5 +1,16 @@
 // ============================================================================
-// CALCRIM Registry (ENHANCED + PRODUCTION READY)
+// Evidence-matching vocabulary.
+//
+// This file holds no law. What it holds is the language to look for in
+// discovery when deciding which statutes a case might involve: the words a
+// police report uses for entering a building, taking property, striking a
+// person.
+//
+// The elements of an offence are not here. They are compiled from the statute
+// itself, retrieved from the Legislature — see src/law. Each entry names the
+// section it searches for so the authoritative text can be fetched, and the
+// labels below are search headings, not statements of what the People must
+// prove.
 // ============================================================================
 
 export type ElementDef = {
@@ -14,6 +25,8 @@ export type ElementDef = {
 
 export type CrimeDef = {
   code: string;
+  /** The official section this vocabulary searches for, for retrieval. */
+  statute: { code: string; section: string };
   intentType: "specific" | "general";
   keywords: string[];
   elements: ElementDef[];
@@ -25,6 +38,7 @@ export const calcrimElements: Record<string, CrimeDef> = {
   // ---------------- Penal Code ----------------
   burglary: {
     code: "PC 459",
+    statute: { code: "PEN", section: "459" },
     intentType: "specific",
     keywords: [
       "enter", "entered", "break in", "broke into",
@@ -53,6 +67,7 @@ export const calcrimElements: Record<string, CrimeDef> = {
 
   robbery: {
     code: "PC 211",
+    statute: { code: "PEN", section: "211" },
     intentType: "specific",
     keywords: [
       "rob", "robbed", "robbery",
@@ -90,6 +105,7 @@ export const calcrimElements: Record<string, CrimeDef> = {
 
   assault: {
     code: "PC 240",
+    statute: { code: "PEN", section: "240" },
     intentType: "general",
     keywords: [
       "hit","strike","attack","swing","punch","attempted to hit"
@@ -111,6 +127,7 @@ export const calcrimElements: Record<string, CrimeDef> = {
 
   theft: {
     code: "PC 484",
+    statute: { code: "PEN", section: "484" },
     intentType: "specific",
     keywords: [
       "steal","stole","shoplift","took property","larceny"
@@ -139,6 +156,7 @@ export const calcrimElements: Record<string, CrimeDef> = {
   // ---------------- Vehicle Code ----------------
   dui: {
     code: "VC 23152",
+    statute: { code: "VEH", section: "23152" },
     intentType: "general",
     keywords: [
       "drive","driving","vehicle","dui","intoxicated","drunk driving"
@@ -166,6 +184,7 @@ export const calcrimElements: Record<string, CrimeDef> = {
   // ---------------- Health & Safety ----------------
   narcotics_possession: {
     code: "HSC 11350",
+    statute: { code: "HSC", section: "11350" },
     intentType: "general",
     keywords: [
       "drug","drugs","possession","cocaine","heroin","controlled substance"

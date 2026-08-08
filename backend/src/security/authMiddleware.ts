@@ -56,8 +56,36 @@ export interface AuthenticatedRequest extends FastifyRequest {
 // Configuration
 // ---------------------------------------------------------------------------
 
-const JWT_SECRET = process.env.JWT_SECRET || crypto.randomBytes(64).toString('hex');
-const JWT_REFRESH_SECRET = process.env.JWT_REFRESH_SECRET || crypto.randomBytes(64).toString('hex');
+/**
+ * Signing keys.
+ *
+ * A generated fallback is convenient in development and dangerous in
+ * production: the process starts normally, login works, and then every restart
+ * invalidates every token in existence and signs out every user — with no error
+ * and no server-side symptom. It is the only failure here that is completely
+ * silent, so in production it is fatal instead.
+ *
+ * The startup validator reports this as a FAIL before the server binds; this is
+ * the backstop for any path that reaches the middleware first.
+ */
+function requireSigningKey(name: 'JWT_SECRET' | 'JWT_REFRESH_SECRET'): string {
+  const value = process.env[name];
+  if (value) return value;
+
+  if (process.env.NODE_ENV === 'production') {
+    console.error(
+      `[Auth] FATAL: ${name} is not set. Refusing to start with a generated key — ` +
+        'every restart would sign out every user with no other symptom.',
+    );
+    process.exit(1);
+  }
+
+  console.warn(`[Auth] ${name} is not set; generating an ephemeral key. Sessions will not survive a restart.`);
+  return crypto.randomBytes(64).toString('hex');
+}
+
+const JWT_SECRET = requireSigningKey('JWT_SECRET');
+const JWT_REFRESH_SECRET = requireSigningKey('JWT_REFRESH_SECRET');
 const ACCESS_TOKEN_EXPIRY = '15m';
 const REFRESH_TOKEN_EXPIRY = '7d';
 const ACCESS_TOKEN_EXPIRY_SECONDS = 15 * 60;
@@ -78,7 +106,14 @@ export async function generateRefreshToken(
   payload: Omit<JwtPayload, 'iat' | 'exp'>,
   device?: { userAgent?: string; ipAddress?: string; deviceLabel?: string },
 ): Promise<string> {
-  const token = jwt.sign(payload, JWT_REFRESH_SECRET, { expiresIn: REFRESH_TOKEN_EXPIRY });
+  // A JWT's `iat` has one-second resolution, so signing the same payload twice
+  // within a second produces byte-identical tokens. RefreshToken.token is
+  // unique, so a second sign-in in the same second — registering and then
+  // logging straight in, or two devices at once — failed with a 500. The jti
+  // makes each issued token distinct.
+  const token = jwt.sign({ ...payload, jti: crypto.randomUUID() }, JWT_REFRESH_SECRET, {
+    expiresIn: REFRESH_TOKEN_EXPIRY,
+  });
 
   await prisma.refreshToken.create({
     data: {
@@ -194,35 +229,54 @@ const ROLE_HIERARCHY: Record<UserRole, number> = {
   defendant: 0,
 };
 
-// Route permission map: route prefix → minimum required roles
+// Route permission map: route prefix → minimum required roles.
+//
+// Note on 'staff': self-service registration resolves several public-facing
+// signup roles — family member, interpreter, consultant, expert witness, and
+// the "other" fallback that catches any unrecognised value — onto the platform
+// role 'staff'. Anyone on the internet can therefore obtain 'staff'. It may
+// only be used for tenant-scoped firm features, never for platform-operator
+// consoles, cross-tenant reads, destructive actions, or anything that sends
+// mail on the organisation's behalf.
 const ROUTE_PERMISSIONS: Record<string, UserRole[]> = {
   '/api/compliance': ['admin', 'attorney', 'investigator'],
   '/api/clients': ['admin', 'attorney', 'investigator', 'staff'],
   '/api/organizations': ['admin', 'attorney', 'investigator', 'staff'],
   '/api/firm': ['admin', 'attorney', 'investigator', 'staff'],
   '/api/policy-intelligence': ['admin', 'attorney', 'staff'],
-  '/api/policy-pipeline': ['admin', 'staff'],
-  '/api/operations': ['admin', 'staff'],
+  // Starts headless-browser crawls of external agency websites.
+  '/api/policy-pipeline': ['admin'],
+  // Platform operations console — cross-tenant.
+  '/api/operations': ['admin'],
   '/api/exhibits': ['admin', 'attorney'],
-  '/api/cpra': ['admin', 'staff'],
+  // Prepares and sends California Public Records Act requests by email in the
+  // organisation's name.
+  '/api/cpra': ['admin'],
   '/api/crawler': ['admin'],
+  // Gold Standard Certification is an internal QA module: it reads real
+  // discovery corpora and every run touches them, so it is administrator-only.
+  '/api/certification': ['admin'],
+  // Statutory retrieval underpins every analysis, so any authenticated role may
+  // read it. Forcing a refresh and running synchronisation reach out to the
+  // Legislature's own servers and are restricted inside the handlers.
+  '/api/law/synchronize': ['admin'],
   '/api/forensic': ['admin', 'attorney', 'investigator'],
   '/api/forensic/expert-package': ['admin', 'attorney'],
   '/api/forensic/jury-view': ['admin', 'attorney'],
-  '/api/admin/billing/metrics': ['admin', 'staff'],
-  '/api/admin/production-gates': ['admin', 'staff'],
-  '/api/admin/operations': ['admin', 'staff'],
-  '/api/admin/audit': ['admin', 'staff'],
-  '/api/admin/alerts': ['admin', 'staff'],
-  '/api/admin/changes': ['admin', 'staff'],
+  '/api/admin/billing/metrics': ['admin'],
+  '/api/admin/production-gates': ['admin'],
+  '/api/admin/operations': ['admin'],
+  '/api/admin/audit': ['admin'],
+  '/api/admin/alerts': ['admin'],
+  '/api/admin/changes': ['admin'],
   '/api/admin/backup': ['admin'],
-  '/api/admin/engineering-dashboard': ['admin', 'staff'],
-  '/api/admin/deployment-checks': ['admin', 'staff'],
-  '/api/admin/discount-codes': ['admin', 'staff'],
-  '/api/admin/stats': ['admin', 'staff'],
-  '/api/admin/users': ['admin', 'staff'],
-  '/api/admin/cases': ['admin', 'staff'],
-  '/api/admin/evidence': ['admin', 'staff'],
+  '/api/admin/engineering-dashboard': ['admin'],
+  '/api/admin/deployment-checks': ['admin'],
+  '/api/admin/discount-codes': ['admin'],
+  '/api/admin/stats': ['admin'],
+  '/api/admin/users': ['admin'],
+  '/api/admin/cases': ['admin'],
+  '/api/admin/evidence': ['admin'],
   '/api/admin': ['admin'],
   '/api/security': ['admin'],
   '/api/corpus': ['admin'],
@@ -257,7 +311,6 @@ const PUBLIC_ROUTES = [
   '/api/auth/register',
   '/api/auth/refresh',
   '/api/auth/logout',
-  '/api/auth/debug-check',
   '/api/auth/forgot-password',
   '/api/auth/reset-password',
   '/api/auth/verify-email',
@@ -347,28 +400,10 @@ export async function authenticationHook(
 // User accounts are now persisted to PostgreSQL via Prisma User model.
 
 export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
-  // GET /api/auth/debug-check — deployment verification (no auth required)
-  // Returns which code version is running so you can confirm PR #74 is deployed.
-  // REMOVE THIS ENDPOINT once auth is confirmed working in production.
-  app.get('/api/auth/debug-check', async (_request: FastifyRequest, _reply: FastifyReply) => {
-    let bcryptLoaded = false;
-    try {
-      // Verify bcrypt native module actually loads
-      const testHash = await bcrypt.hash('test', 4);
-      bcryptLoaded = testHash.startsWith('$2');
-    } catch {
-      bcryptLoaded = false;
-    }
-
-    // No user-lookup on unauthenticated endpoint — only return version/bcrypt info.
-    // Use PM2 logs or admin endpoints for user-level debugging.
-    return {
-      authVersion: 'PR74-bcrypt',
-      bcryptLoaded,
-      hashMethod: 'bcrypt',
-      timestamp: new Date().toISOString(),
-    };
-  });
+  // The unauthenticated /api/auth/debug-check deployment probe was removed as
+  // its own comment instructed: it disclosed the running auth build and
+  // password-hashing configuration to anyone. /api/health reports liveness and
+  // /api/health/deep reports component status to operators.
 
   // POST /api/auth/login
   app.post('/api/auth/login', async (request: FastifyRequest, reply: FastifyReply) => {
@@ -541,7 +576,6 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     const email = body.email.trim().toLowerCase();
     const password = body.password;
     const name = body.name;
-    const role = body.role;
 
     // Check for existing user — also check case-insensitive to prevent duplicates
     // with legacy mixed-case emails (e.g. Admin@Company.com vs admin@company.com)
@@ -568,8 +602,6 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
     const userRole = onboarding.platformRole as UserRole;
     const userName = name || email.split('@')[0];
     const tenantId = `tenant-${crypto.randomUUID()}`;
-    const memberOrgRole =
-      userRole === 'defendant' || userRole === 'staff' ? 'staff' : userRole === 'admin' ? 'admin' : userRole;
 
     const now = new Date();
     const trialEnd = new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000);
@@ -650,7 +682,12 @@ export async function registerAuthRoutes(app: FastifyInstance): Promise<void> {
         data: {
           organizationId: tenantId,
           userId: created.id,
-          role: memberOrgRole,
+          // Registration creates this organisation, so the registering user is
+          // its founder and must hold the organisation-level admin role —
+          // otherwise nobody can complete onboarding, invite colleagues, or
+          // manage offices for a firm that has just signed up. This is scoped
+          // to their own organisation and does not change their platform role.
+          role: 'admin',
           personnelType: onboarding.personnelType,
           status: 'active',
         },

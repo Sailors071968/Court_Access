@@ -24,7 +24,10 @@ const INVITE_EXPIRY_MS = 7 * 24 * 60 * 60 * 1000;
 const BCRYPT_ROUNDS = 12;
 
 export async function ensureMembership(userId: string, tenantId: string) {
-  const existing = await prisma.organizationMember.findUnique({ where: { userId } });
+  // userId alone is not unique on OrganizationMember — the unique key is the
+  // (organizationId, userId) pair — so findUnique rejected the call and every
+  // organisation route answered 500.
+  const existing = await prisma.organizationMember.findFirst({ where: { userId } });
   if (existing) return existing;
 
   const user = await prisma.user.findUnique({ where: { id: userId } });

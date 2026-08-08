@@ -1,0 +1,452 @@
+{
+  "report": "FABRICATION_AUDIT",
+  "phase": "Program 144 — Anti-Fabrication Audit",
+  "generatedAt": "2026-08-06T22:20:38.415Z",
+  "apiBase": "http://127.0.0.1:3001",
+  "summary": {
+    "total": 5,
+    "PASS": 5,
+    "FAIL": 0,
+    "WARNING": 0,
+    "UNKNOWN": 0,
+    "passRate": 100
+  },
+  "exercisedApiRoutes": [
+    "GET /api/calcrim/analyze/:id",
+    "GET /api/cases/:id/evidence-requests",
+    "GET /api/cases/:id/intelligence",
+    "GET /api/cases/:id/intelligence/report",
+    "GET /api/cases/:id/investigator-workbench",
+    "GET /api/cases/:id/workbench",
+    "GET /api/cases/:id/workbench/command-center",
+    "GET /api/cases/:id/workbench/trial-prep",
+    "GET /api/charges/:id",
+    "GET /api/compliance/audit/:id",
+    "GET /api/compliance/events/:id",
+    "GET /api/compliance/exhibits/:id",
+    "GET /api/compliance/expert/:id",
+    "GET /api/compliance/findings/:id",
+    "GET /api/compliance/jury/:id",
+    "GET /api/compliance/timeline/:id",
+    "GET /api/contradiction/events/:id",
+    "GET /api/contradiction/graph/:id",
+    "GET /api/contradiction/recommendations/:id",
+    "GET /api/forensic/camera-sync/:id",
+    "GET /api/forensic/evidence-graph/:id",
+    "GET /api/forensic/expert-package/:id",
+    "GET /api/forensic/jury-view/:id",
+    "GET /api/forensic/line-of-sight/:id",
+    "GET /api/forensic/scene/:id",
+    "GET /api/forensic/timeline/:id",
+    "GET /api/forensic/trajectory/:id",
+    "GET /api/forensic/visibility/:id",
+    "GET /api/forensic/vision/:id",
+    "GET /api/forensic/vision/:id/critical",
+    "GET /api/narrative/:id/claims",
+    "GET /api/narrative/:id/contradictions",
+    "GET /api/narrative/:id/impeachment",
+    "GET /api/timeline/:id/conflicts",
+    "GET /api/timeline/:id/events",
+    "POST /api/auth/login",
+    "POST /api/auth/register",
+    "POST /api/cases",
+    "POST /api/evidence/upload"
+  ],
+  "exercisedSpaRoutes": [],
+  "emptyCaseId": "428d8c3a-dd2b-4388-a0c4-11ee86ac33a9",
+  "populatedCaseId": "1cee2350-a2c1-4f6a-a30b-43e98432f79e",
+  "endpointsProbed": 35,
+  "emptyCaseResponses": [
+    {
+      "label": "Timeline events",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Timeline conflicts",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Contradiction graph",
+      "status": 404,
+      "findingCount": 0
+    },
+    {
+      "label": "Contradiction recommendations",
+      "status": 404,
+      "findingCount": 0
+    },
+    {
+      "label": "Contradiction events",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "CALCRIM analysis",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Charges",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Case intelligence",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Case intelligence report",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Narrative claims",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Narrative contradictions",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Narrative impeachment",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Attorney workbench",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Workbench command center",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Workbench trial prep",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Investigator workbench",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Evidence gap detection",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Compliance findings",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Compliance timeline",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Compliance events",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Compliance audit",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Compliance expert package",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Compliance jury package",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Compliance exhibits",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Forensic timeline",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Forensic evidence graph",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Forensic vision analysis",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Forensic critical vision",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Forensic trajectory",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Forensic visibility",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Forensic line of sight",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Forensic camera sync",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Forensic scene",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Forensic expert package",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Forensic jury view",
+      "status": 200,
+      "findingCount": 0
+    }
+  ],
+  "populatedCaseResponses": [
+    {
+      "label": "Timeline events",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Timeline conflicts",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Contradiction graph",
+      "status": 404,
+      "findingCount": 0
+    },
+    {
+      "label": "Contradiction recommendations",
+      "status": 404,
+      "findingCount": 0
+    },
+    {
+      "label": "Contradiction events",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "CALCRIM analysis",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Charges",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Case intelligence",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Case intelligence report",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Narrative claims",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Narrative contradictions",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Narrative impeachment",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Attorney workbench",
+      "status": 200,
+      "findingCount": 2
+    },
+    {
+      "label": "Workbench command center",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Workbench trial prep",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Investigator workbench",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Evidence gap detection",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Compliance findings",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Compliance timeline",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Compliance events",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Compliance audit",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Compliance expert package",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Compliance jury package",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Compliance exhibits",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Forensic timeline",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Forensic evidence graph",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Forensic vision analysis",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Forensic critical vision",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Forensic trajectory",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Forensic visibility",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Forensic line of sight",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Forensic camera sync",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Forensic scene",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Forensic expert package",
+      "status": 200,
+      "findingCount": 0
+    },
+    {
+      "label": "Forensic jury view",
+      "status": 200,
+      "findingCount": 0
+    }
+  ],
+  "emptyCaseFindings": [],
+  "checks": [
+    {
+      "id": "FAB-01",
+      "name": "No intelligence endpoint asserts anything about a case with no evidence",
+      "status": "PASS",
+      "detail": "35 endpoints probed against an empty case",
+      "evidence": {
+        "endpointsProbed": 35
+      }
+    },
+    {
+      "id": "FAB-02",
+      "name": "The intelligence endpoints are reachable, so the empty-case result is meaningful",
+      "status": "PASS",
+      "detail": "33/35 answered for the populated case (33 for the empty one)"
+    },
+    {
+      "id": "FAB-03",
+      "name": "Every finding on the populated case names a source",
+      "status": "PASS",
+      "detail": "2 finding collections inspected",
+      "evidence": {
+        "inspected": 2
+      }
+    },
+    {
+      "id": "FAB-04",
+      "name": "No endpoint asserts anything about a case that does not exist",
+      "status": "PASS",
+      "detail": "35 endpoints probed with a non-existent case id"
+    },
+    {
+      "id": "FAB-05",
+      "name": "Intelligence endpoints do not serve another firm's analysis",
+      "status": "PASS",
+      "detail": "35 endpoints probed as an unrelated attorney"
+    }
+  ]
+}

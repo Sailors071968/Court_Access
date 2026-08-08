@@ -4,6 +4,10 @@
 // ============================================================================
 
 import { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
+import type { AuthenticatedRequest } from '../security/authMiddleware.js';
+// Forensic reconstruction output is case work product; confirm the caller
+// may read the case before any of it is assembled.
+import { guardCaseAccess } from '../membership/resourceAuthMiddleware.js';
 import { analyzeBodycamFootage, getCaseVisionEvents, getCriticalMoments } from './bodycamVisionService.js';
 import { computeTrajectoryAnalysis, storeTrajectoryAnalysis, getCaseTrajectoryAnalysis, getBallisticProfiles } from './trajectoryAnalysisService.js';
 import { simulateVisibility, storeVisibilitySimulation, getCaseVisibilitySimulations } from './visibilitySimulationService.js';
@@ -47,6 +51,9 @@ export async function registerForensicRoutes(app: FastifyInstance): Promise<void
   app.get(
     '/api/forensic/vision/:caseId',
     async (request: FastifyRequest<{ Params: { caseId: string } }>, reply: FastifyReply) => {
+      const user = (request as AuthenticatedRequest).user;
+      if (!user) return reply.code(401).send({ success: false, error: 'Authentication required' });
+      if (!(await guardCaseAccess(user, request.params.caseId, 'view', reply))) return;
       try {
         const events = await getCaseVisionEvents(request.params.caseId);
         return reply.send({ success: true, data: events });
@@ -65,6 +72,9 @@ export async function registerForensicRoutes(app: FastifyInstance): Promise<void
       }>,
       reply: FastifyReply,
     ) => {
+      const user = (request as AuthenticatedRequest).user;
+      if (!user) return reply.code(401).send({ success: false, error: 'Authentication required' });
+      if (!(await guardCaseAccess(user, request.params.caseId, 'view', reply))) return;
       try {
         const threshold = request.query.threshold ? parseFloat(request.query.threshold) : undefined;
         const moments = await getCriticalMoments(request.params.caseId, threshold);
@@ -116,6 +126,9 @@ export async function registerForensicRoutes(app: FastifyInstance): Promise<void
   app.get(
     '/api/forensic/trajectory/:caseId',
     async (request: FastifyRequest<{ Params: { caseId: string } }>, reply: FastifyReply) => {
+      const user = (request as AuthenticatedRequest).user;
+      if (!user) return reply.code(401).send({ success: false, error: 'Authentication required' });
+      if (!(await guardCaseAccess(user, request.params.caseId, 'view', reply))) return;
       try {
         const analyses = await getCaseTrajectoryAnalysis(request.params.caseId);
         return reply.send({ success: true, data: analyses });
@@ -182,6 +195,9 @@ export async function registerForensicRoutes(app: FastifyInstance): Promise<void
   app.get(
     '/api/forensic/visibility/:caseId',
     async (request: FastifyRequest<{ Params: { caseId: string } }>, reply: FastifyReply) => {
+      const user = (request as AuthenticatedRequest).user;
+      if (!user) return reply.code(401).send({ success: false, error: 'Authentication required' });
+      if (!(await guardCaseAccess(user, request.params.caseId, 'view', reply))) return;
       try {
         const simulations = await getCaseVisibilitySimulations(request.params.caseId);
         return reply.send({ success: true, data: simulations });
@@ -225,6 +241,9 @@ export async function registerForensicRoutes(app: FastifyInstance): Promise<void
   app.get(
     '/api/forensic/line-of-sight/:caseId',
     async (request: FastifyRequest<{ Params: { caseId: string } }>, reply: FastifyReply) => {
+      const user = (request as AuthenticatedRequest).user;
+      if (!user) return reply.code(401).send({ success: false, error: 'Authentication required' });
+      if (!(await guardCaseAccess(user, request.params.caseId, 'view', reply))) return;
       try {
         const analyses = await getCaseLineOfSightAnalyses(request.params.caseId);
         return reply.send({ success: true, data: analyses });
@@ -280,6 +299,9 @@ export async function registerForensicRoutes(app: FastifyInstance): Promise<void
   app.get(
     '/api/forensic/camera-sync/:caseId',
     async (request: FastifyRequest<{ Params: { caseId: string } }>, reply: FastifyReply) => {
+      const user = (request as AuthenticatedRequest).user;
+      if (!user) return reply.code(401).send({ success: false, error: 'Authentication required' });
+      if (!(await guardCaseAccess(user, request.params.caseId, 'view', reply))) return;
       try {
         const results = await getCaseSyncResults(request.params.caseId);
         return reply.send({ success: true, data: results });
@@ -335,6 +357,9 @@ export async function registerForensicRoutes(app: FastifyInstance): Promise<void
   app.get(
     '/api/forensic/scene/:caseId',
     async (request: FastifyRequest<{ Params: { caseId: string } }>, reply: FastifyReply) => {
+      const user = (request as AuthenticatedRequest).user;
+      if (!user) return reply.code(401).send({ success: false, error: 'Authentication required' });
+      if (!(await guardCaseAccess(user, request.params.caseId, 'view', reply))) return;
       try {
         const geometries = await getCaseSceneGeometry(request.params.caseId);
         return reply.send({ success: true, data: geometries });
@@ -347,6 +372,9 @@ export async function registerForensicRoutes(app: FastifyInstance): Promise<void
   app.get(
     '/api/forensic/scene/:caseId/exhibit',
     async (request: FastifyRequest<{ Params: { caseId: string } }>, reply: FastifyReply) => {
+      const user = (request as AuthenticatedRequest).user;
+      if (!user) return reply.code(401).send({ success: false, error: 'Authentication required' });
+      if (!(await guardCaseAccess(user, request.params.caseId, 'view', reply))) return;
       try {
         const geometries = await getCaseSceneGeometry(request.params.caseId);
         if (geometries.length === 0) {
@@ -380,6 +408,9 @@ export async function registerForensicRoutes(app: FastifyInstance): Promise<void
   app.get(
     '/api/forensic/timeline/:caseId',
     async (request: FastifyRequest<{ Params: { caseId: string } }>, reply: FastifyReply) => {
+      const user = (request as AuthenticatedRequest).user;
+      if (!user) return reply.code(401).send({ success: false, error: 'Authentication required' });
+      if (!(await guardCaseAccess(user, request.params.caseId, 'view', reply))) return;
       try {
         const { PrismaClient } = await import('@prisma/client');
         const prisma = new PrismaClient();
@@ -464,6 +495,9 @@ export async function registerForensicRoutes(app: FastifyInstance): Promise<void
   app.get(
     '/api/forensic/evidence-graph/:caseId',
     async (request: FastifyRequest<{ Params: { caseId: string } }>, reply: FastifyReply) => {
+      const user = (request as AuthenticatedRequest).user;
+      if (!user) return reply.code(401).send({ success: false, error: 'Authentication required' });
+      if (!(await guardCaseAccess(user, request.params.caseId, 'view', reply))) return;
       try {
         const graphs = await getCaseEvidenceGraphs(request.params.caseId);
         return reply.send({ success: true, data: graphs });
@@ -503,6 +537,9 @@ export async function registerForensicRoutes(app: FastifyInstance): Promise<void
   app.get(
     '/api/forensic/expert-package/:caseId',
     async (request: FastifyRequest<{ Params: { caseId: string } }>, reply: FastifyReply) => {
+      const user = (request as AuthenticatedRequest).user;
+      if (!user) return reply.code(401).send({ success: false, error: 'Authentication required' });
+      if (!(await guardCaseAccess(user, request.params.caseId, 'view', reply))) return;
       try {
         const packages = await getCaseExpertPackages(request.params.caseId);
         return reply.send({ success: true, data: packages });
@@ -546,6 +583,9 @@ export async function registerForensicRoutes(app: FastifyInstance): Promise<void
   app.get(
     '/api/forensic/jury-view/:caseId',
     async (request: FastifyRequest<{ Params: { caseId: string } }>, reply: FastifyReply) => {
+      const user = (request as AuthenticatedRequest).user;
+      if (!user) return reply.code(401).send({ success: false, error: 'Authentication required' });
+      if (!(await guardCaseAccess(user, request.params.caseId, 'view', reply))) return;
       try {
         const visualizations = await getCaseJuryVisualizations(request.params.caseId);
         return reply.send({ success: true, data: visualizations });

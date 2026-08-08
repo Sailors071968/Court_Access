@@ -4,6 +4,8 @@
 // analysis, doctrine matching, litigation intelligence, and graph queries.
 // ============================================================================
 
+import type { AuthenticatedRequest } from '../security/authMiddleware.js';
+import { guardCaseAccess } from '../membership/resourceAuthMiddleware.js';
 import { extractEvents } from './eventExtractionEngine.ts';
 import { buildUnifiedTimeline, findTimelineGaps } from './timelineEngine.ts';
 import { processVideo, detectBodycamGaps } from './videoIntelligencePipeline.ts';
@@ -150,8 +152,15 @@ export function registerContradictionRoutes(app: FastifyInstance): void {
   // -----------------------------------------------------------------------
   // GET /api/contradiction/events/:caseId — get extracted events for a case
   // -----------------------------------------------------------------------
-  app.get('/api/contradiction/events/:caseId', async (req: FastifyRequest, _reply: FastifyReply) => {
+  app.get('/api/contradiction/events/:caseId', async (req: FastifyRequest, reply: FastifyReply) => {
     const { caseId } = req.params;
+
+    const user = (req as AuthenticatedRequest).user;
+    if (!user) return reply.code(401).send({ error: 'Authentication required' });
+    // This router declares its handlers with the un-parameterised FastifyReply,
+    // which does not structurally match the guard's default generics.
+    if (!(await guardCaseAccess(user, caseId, 'view', reply as Parameters<typeof guardCaseAccess>[3]))) return;
+
     const events = getEventsForCase(caseId);
 
     return {

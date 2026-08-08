@@ -1,0 +1,84 @@
+{
+  "report": "WAR_ROOM_BROWSER",
+  "phase": "Program 151 — War Room Browser",
+  "generatedAt": "2026-08-07T16:38:21.902Z",
+  "apiBase": "http://127.0.0.1:8081",
+  "summary": {
+    "total": 11,
+    "PASS": 11,
+    "FAIL": 0,
+    "WARNING": 0,
+    "UNKNOWN": 0,
+    "passRate": 100
+  },
+  "exercisedApiRoutes": [],
+  "exercisedSpaRoutes": [],
+  "caseId": "7da102ef-54f2-49a4-ad97-5b67025b51fc",
+  "base": "http://127.0.0.1:8081",
+  "checks": [
+    {
+      "id": "WRB-01",
+      "name": "The war room is offered as a case tab",
+      "status": "PASS",
+      "detail": "War Room tab present"
+    },
+    {
+      "id": "WRB-02",
+      "name": "The war room renders",
+      "status": "PASS",
+      "detail": "panel present"
+    },
+    {
+      "id": "WRB-03",
+      "name": "The current stage is shown",
+      "status": "PASS",
+      "detail": "Discovery"
+    },
+    {
+      "id": "WRB-04",
+      "name": "The page says how the stage was determined",
+      "status": "PASS",
+      "detail": "inference explained"
+    },
+    {
+      "id": "WRB-05",
+      "name": "The operative charges are shown",
+      "status": "PASS",
+      "detail": "HSC 11378"
+    },
+    {
+      "id": "WRB-06",
+      "name": "Issues appear with the required wording",
+      "status": "PASS",
+      "detail": "required phrasing shown"
+    },
+    {
+      "id": "WRB-07",
+      "name": "Each issue cites the document that raised it",
+      "status": "PASS",
+      "detail": "source named"
+    },
+    {
+      "id": "WRB-08",
+      "name": "What is not in the record is shown alongside what is",
+      "status": "PASS",
+      "detail": "missing material listed"
+    },
+    {
+      "id": "WRB-09",
+      "name": "What has changed on the case is shown",
+      "status": "PASS",
+      "detail": "recent activity listed"
+    },
+    {
+      "id": "WRB-10",
+      "name": "The war room tells nobody what to conclude",
+      "status": "PASS"
+    },
+    {
+      "id": "WRB-11",
+      "name": "No uncaught JavaScript exceptions on the war room",
+      "status": "PASS"
+    }
+  ]
+}

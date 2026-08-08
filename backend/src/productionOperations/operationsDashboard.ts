@@ -13,6 +13,7 @@ import { generateEngineeringDashboard } from '../legislative/engineeringDashboar
 import { metrics } from '../observability/metricsCollector.js';
 import { evaluateOperationsAlerts } from './alertingService.js';
 import type { ComponentHealth, HealthStatus, OperationsDashboard } from './types.js';
+import type { ProductionGatesReport } from '../productionGates/types.js';
 
 function mapComponent(status: string): HealthStatus {
   if (status === 'healthy' || status === 'PASS' || status === 'OPERATIONAL' || status === 'READY') return 'healthy';
@@ -29,7 +30,35 @@ function worstStatus(...statuses: HealthStatus[]): HealthStatus {
   return 'unknown';
 }
 
+/**
+ * Building this dashboard runs the full production-gate suite, which performs
+ * transactional writes (the billing certification exercises credit balances).
+ * Three admin endpoints call it, so two concurrent requests used to collide on
+ * those writes and fail with Prisma P2034. Concurrent callers now share a
+ * single in-flight computation, and the result is held briefly so that opening
+ * the operations console does not re-run the whole suite per panel.
+ */
+const DASHBOARD_TTL_MS = parseInt(process.env.OPERATIONS_DASHBOARD_TTL_MS || '15000', 10);
+let inFlight: Promise<OperationsDashboard> | null = null;
+let cached: { at: number; value: OperationsDashboard } | null = null;
+
 export async function buildOperationsDashboard(): Promise<OperationsDashboard> {
+  if (cached && Date.now() - cached.at < DASHBOARD_TTL_MS) return cached.value;
+  if (inFlight) return inFlight;
+
+  inFlight = computeOperationsDashboard()
+    .then((value) => {
+      cached = { at: Date.now(), value };
+      return value;
+    })
+    .finally(() => {
+      inFlight = null;
+    });
+
+  return inFlight;
+}
+
+async function computeOperationsDashboard(): Promise<OperationsDashboard> {
   const [
     gatesReport,
     deepHealth,
@@ -39,7 +68,27 @@ export async function buildOperationsDashboard(): Promise<OperationsDashboard> {
     productionMetrics,
     engineering,
   ] = await Promise.all([
-    runProductionGates(),
+    // The gate suite performs transactional writes as part of the billing
+    // certification, so it can fail on a write conflict. That must degrade the
+    // gates panel rather than fail the whole operations console, which is
+    // exactly what an operator needs during an incident.
+    runProductionGates().catch((err): ProductionGatesReport => {
+      const message = err instanceof Error ? err.message : String(err);
+      console.error('[OperationsDashboard] Production gates could not be evaluated:', message);
+      return {
+        generatedAt: new Date().toISOString(),
+        version: 'unavailable',
+        program: 'PRODUCTION_CERTIFICATION',
+        overallResult: 'NOT_READY',
+        deploymentBlocked: true,
+        passCount: 0,
+        failCount: 0,
+        partialCount: 0,
+        skipCount: 0,
+        gates: [],
+        blockers: ['Production gates could not be evaluated on this request; the rest of the dashboard is unaffected.'],
+      };
+    }),
     runDeepHealthCheck(),
     getRedisMemorySnapshot().catch(() => null),
     getQueueHealth().catch(() => ({} as Record<string, { waiting: number; active: number; completed: number; failed: number }>)),

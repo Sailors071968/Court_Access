@@ -1,0 +1,121 @@
+{
+  "report": "CHARGING_BROWSER",
+  "phase": "Program 148 — Charging Documents Browser",
+  "generatedAt": "2026-08-07T16:38:12.732Z",
+  "apiBase": "http://127.0.0.1:8081",
+  "summary": {
+    "total": 17,
+    "PASS": 17,
+    "FAIL": 0,
+    "WARNING": 0,
+    "UNKNOWN": 0,
+    "passRate": 100
+  },
+  "exercisedApiRoutes": [],
+  "exercisedSpaRoutes": [],
+  "caseId": "6904b987-6812-43a6-b362-778e4cf18685",
+  "base": "http://127.0.0.1:8081",
+  "checks": [
+    {
+      "id": "CHB-01",
+      "name": "Current charges are shown prominently",
+      "status": "PASS",
+      "detail": "current charges panel rendered"
+    },
+    {
+      "id": "CHB-02",
+      "name": "The operative document is named, and it is the newest filing",
+      "status": "PASS",
+      "detail": "Information"
+    },
+    {
+      "id": "CHB-03",
+      "name": "Counts are shown with their citation",
+      "status": "PASS",
+      "detail": "Count 1 — Penal Code section 459"
+    },
+    {
+      "id": "CHB-04",
+      "name": "The People's own wording is displayed, not a paraphrase",
+      "status": "PASS",
+      "detail": "verbatim allegation rendered"
+    },
+    {
+      "id": "CHB-05",
+      "name": "Dismissed counts are shown as dismissed rather than hidden",
+      "status": "PASS",
+      "detail": "1 active, 1 dismissed"
+    },
+    {
+      "id": "CHB-06",
+      "name": "A severed defendant is shown as severed",
+      "status": "PASS",
+      "detail": "Luis Doe severed"
+    },
+    {
+      "id": "CHB-07",
+      "name": "Each count shows whether its statute was retrieved from the Legislature",
+      "status": "PASS",
+      "detail": "statute status shown per count"
+    },
+    {
+      "id": "CHB-08",
+      "name": "The charging history is shown below the current charges",
+      "status": "PASS",
+      "detail": "history panel rendered"
+    },
+    {
+      "id": "CHB-09",
+      "name": "Every filing remains visible, including superseded ones",
+      "status": "PASS",
+      "detail": "Complaint → First Amended Complaint → Information"
+    },
+    {
+      "id": "CHB-10",
+      "name": "The operative filing is marked in the history",
+      "status": "PASS",
+      "detail": "operative badge shown"
+    },
+    {
+      "id": "CHB-11",
+      "name": "An added count is explained in words",
+      "status": "PASS",
+      "detail": "addition described"
+    },
+    {
+      "id": "CHB-12",
+      "name": "A count no longer charged is explained",
+      "status": "PASS",
+      "detail": "removal described"
+    },
+    {
+      "id": "CHB-13",
+      "name": "A rewritten allegation is flagged",
+      "status": "PASS",
+      "detail": "modification described"
+    },
+    {
+      "id": "CHB-14",
+      "name": "A defendant removed from a count is named",
+      "status": "PASS",
+      "detail": "defendant removal described"
+    },
+    {
+      "id": "CHB-15",
+      "name": "Two filings can be compared from the interface",
+      "status": "PASS",
+      "detail": "Complaint First Amended ComplaintCloseAllegation rewritten: The allegation for Penal Code section 459 was rewr"
+    },
+    {
+      "id": "CHB-17",
+      "name": "Nothing on the page contradicts the charges set out at the top",
+      "status": "PASS",
+      "detail": "no conflicting empty state"
+    },
+    {
+      "id": "CHB-16",
+      "name": "No uncaught JavaScript exceptions across the charging workflow",
+      "status": "PASS"
+    }
+  ]
+}

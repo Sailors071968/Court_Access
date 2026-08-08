@@ -192,6 +192,9 @@ declare -a _MF_KEYS=() _MF_VALS=()
 manifest_record() { _MF_KEYS+=("$1"); _MF_VALS+=("${2:-}"); }
 
 manifest_flush() {
+  # The host audit runs before Node 22 exists. Skip recording rather than
+  # failing the stage on a missing interpreter.
+  [ -n "${NODE22:-}" ] && [ -x "${NODE22:-}" ] || return 0
   local result="$1"
   local payload="{}"
   if [ "${#_MF_KEYS[@]}" -gt 0 ]; then

@@ -53,30 +53,53 @@ else info "note: node ($ND) and npm ($NPD) come from different installations —
 rpm -qa 2>/dev/null | grep -iE '^nodejs' | sed 's/^/    rpm:  /'
 dpkg -l 2>/dev/null | awk '/^ii +nodejs/{print "    deb:  "$2" "$3}'
 
-say "3. NVM AND NODE 22"
+say "3. NODE 22 AVAILABILITY"
 NODE22_FOUND=""
-if [ -s "$HOME/.nvm/nvm.sh" ]; then
-  ok "nvm present at \$HOME/.nvm"
-  kv "installed versions" "$(ls "$HOME/.nvm/versions/node" 2>/dev/null | tr '\n' ' ')"
-  # Resolve without sourcing nvm (sourcing can write to the shell profile).
-  for d in "$HOME"/.nvm/versions/node/v22.*/bin/node; do
-    [ -x "$d" ] && NODE22_FOUND="$d"
-  done
-else
-  info "nvm is absent"
+NODE22_SOURCE=""
+
+# Accept any Node 22+, wherever it comes from. nvm is one option, not a
+# requirement: a system installation that already exists is preferable to
+# installing anything.
+_is_node22() { [ -x "${1:-}" ] && [ "$("$1" -pe 'process.versions.node.split(".")[0]' 2>/dev/null || echo 0)" -ge 22 ] 2>/dev/null; }
+
+# 1. an interpreter the operator has already chosen
+if [ -n "${NODE22:-}" ] && _is_node22 "$NODE22"; then
+  NODE22_FOUND="$NODE22"; NODE22_SOURCE="NODE22 environment variable"
 fi
-# A system Node 22 is equally acceptable.
+# 2. the system interpreter — note the existing production process uses this
+if [ -z "$NODE22_FOUND" ] && _is_node22 /usr/bin/node; then
+  NODE22_FOUND="/usr/bin/node"; NODE22_SOURCE="system install (/usr/bin/node)"
+fi
+# 3. whatever PATH resolves
 if [ -z "$NODE22_FOUND" ]; then
-  SYSMAJ="$(node -pe 'process.versions.node.split(".")[0]' 2>/dev/null || echo 0)"
-  [ "${SYSMAJ:-0}" -ge 22 ] && NODE22_FOUND="$(command -v node)"
+  P="$(command -v node 2>/dev/null || true)"
+  _is_node22 "$P" && { NODE22_FOUND="$P"; NODE22_SOURCE="PATH"; }
+fi
+# 4. nvm
+if [ -z "$NODE22_FOUND" ]; then
+  for d in "$HOME"/.nvm/versions/node/v22.*/bin/node; do
+    _is_node22 "$d" && { NODE22_FOUND="$d"; NODE22_SOURCE="nvm"; }
+  done
 fi
 
+if [ -s "$HOME/.nvm/nvm.sh" ]; then
+  kv "nvm" "present — versions: $(ls "$HOME/.nvm/versions/node" 2>/dev/null | tr '\n' ' ')"
+else
+  kv "nvm" "absent (not required)"
+fi
+kv "/usr/bin/node" "$( [ -x /usr/bin/node ] && /usr/bin/node --version 2>&1 || echo 'absent' )"
+
 if [ -n "$NODE22_FOUND" ]; then
-  ok "Node 22 available — $NODE22_FOUND ($("$NODE22_FOUND" --version 2>&1))"
-  kv "matching npm" "$(dirname "$NODE22_FOUND")/npm  $("$(dirname "$NODE22_FOUND")/npm" --version 2>/dev/null)"
+  ok "Node 22 available — $NODE22_FOUND ($("$NODE22_FOUND" --version 2>&1)) via $NODE22_SOURCE"
+  NPM_CAND="$(dirname "$NODE22_FOUND")/npm"
+  if [ -x "$NPM_CAND" ]; then
+    kv "matching npm" "$NPM_CAND  $("$NPM_CAND" --version 2>/dev/null)"
+  else
+    blocker "no npm alongside $NODE22_FOUND" "install the npm that ships with that Node, or choose an installation that has one"
+  fi
   info "for Stage 1:  export NODE22=\"$NODE22_FOUND\""
 else
-  blocker "Node 22 is not installed" \
+  blocker "Node 22 is not installed anywhere (checked NODE22, /usr/bin/node, PATH, nvm)" \
 "curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.1/install.sh | bash
      export NVM_DIR=\"\$HOME/.nvm\"; . \"\$NVM_DIR/nvm.sh\"
      nvm install 22

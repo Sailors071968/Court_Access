@@ -16,7 +16,8 @@ import {
   compareDob, editDistance, resolveIdentity, RESOLVER_VERSION,
 } from '../src/intelligence/inmates/identityResolution.js';
 import {
-  displayNamePart, normalizeNamePart, normalizeRecord, normalizeSex, parseCharges,
+  displayNamePart, normalizeNamePart, normalizeRecord, normalizeSex, parseBoolean,
+  parseCharges, parseHeightInches, parseWeightPounds,
   parseDate, parseMoneyCents, splitFullName,
 } from '../src/intelligence/inmates/normalization.js';
 import { deriveNameKeys } from '../src/intelligence/inmates/nameKeys.js';
@@ -370,3 +371,89 @@ test('the display name never becomes a matching key', () => {
 
 /** The real Sacramento map, so these tests exercise the profile in production use. */
 const SACRAMENTO_MAP = getColumnMap('sacramento')!;
+
+// ---------------------------------------------------------------------------
+// The real Sacramento columns
+// ---------------------------------------------------------------------------
+
+test('a height written four ways for the same person reads as the same inches', () => {
+  // Rosters are not consistent about this even within one file.
+  assert.equal(parseHeightInches(`5'11"`), 71);
+  assert.equal(parseHeightInches('5-11'), 71);
+  assert.equal(parseHeightInches('511'), 71);
+  assert.equal(parseHeightInches('71'), 71);
+});
+
+test('an unparseable or implausible height is absent rather than guessed', () => {
+  // A number carries an authority a blank does not: 511 inches is a worse answer
+  // than "the roster did not say".
+  assert.equal(parseHeightInches('511 cm'), undefined);
+  assert.equal(parseHeightInches('999'), undefined);
+  assert.equal(parseHeightInches('5-13'), undefined, 'thirteen inches is not a height');
+  assert.equal(parseHeightInches(''), undefined);
+});
+
+test('weight tolerates a unit and refuses the implausible', () => {
+  assert.equal(parseWeightPounds('180'), 180);
+  assert.equal(parseWeightPounds('180 lbs'), 180);
+  assert.equal(parseWeightPounds('1200'), undefined);
+  assert.equal(parseWeightPounds('12'), undefined);
+});
+
+test('an unrecognised warrant value stays absent, because "none" is a claim', () => {
+  assert.equal(parseBoolean('Y'), true);
+  assert.equal(parseBoolean('NONE'), false);
+  assert.equal(parseBoolean('UNKNOWN'), undefined);
+  assert.equal(parseBoolean('PENDING'), undefined);
+});
+
+test('a bare double quote is a literal, so an inches mark does not eat the roster', () => {
+  // RFC 4180 requires a quote inside a field to be quoted and doubled; county
+  // exports write 5'11" as-is. Treating that as an opening quote swallowed every
+  // following line until the file ended.
+  const fields = splitCsvLine(`2026-081101,NGUYEN,5'11",180`);
+  assert.deepEqual(fields, ['2026-081101', 'NGUYEN', `5'11"`, '180']);
+});
+
+test('a properly quoted field containing a comma still parses', () => {
+  // The lenient rule must not break the case quoting exists for.
+  const fields = splitCsvLine('2026-081101,"NGUYEN, BINH",180');
+  assert.deepEqual(fields, ['2026-081101', 'NGUYEN, BINH', '180']);
+});
+
+test('a doubled quote inside a quoted field is one literal quote', () => {
+  const fields = splitCsvLine('a,"he said ""stop""",c');
+  assert.deepEqual(fields, ['a', 'he said "stop"', 'c']);
+});
+
+test('a projected release is not a release', () => {
+  // The distinction the schema keeps: one is a forecast the jail revises, the other
+  // is a fact. Merged, a forecast would put someone at liberty on paper.
+  const record = normalizeRecord(
+    {
+      'Last Name': 'SMITH', 'First Name': 'JAMES', 'Booking Date': '08/09/2026',
+      'Projected Release Date': '08/20/2026',
+      __lineNumber: '2',
+    },
+    SACRAMENTO_MAP,
+  ).record;
+
+  assert.equal(record?.projectedReleaseAt?.slice(0, 10), '2026-08-20');
+  assert.equal(record?.releasedAt, undefined, 'no actual release was stated');
+});
+
+test('the Sacramento profile maps the booking number and the X-Ref to different fields', () => {
+  // One identifies a stay, the other a person. Conflating them is the worst single
+  // mistake available in this map.
+  const record = normalizeRecord(
+    {
+      'Booking Number': '2026-081101', 'X-Ref': 'XR-100001',
+      'Last Name': 'NGUYEN', 'First Name': 'BINH', 'Booking Date': '08/09/2026',
+      __lineNumber: '2',
+    },
+    SACRAMENTO_MAP,
+  ).record;
+
+  assert.equal(record?.externalBookingId, '2026-081101');
+  assert.equal(record?.externalPersonId, 'XR-100001');
+});

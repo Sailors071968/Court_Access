@@ -51,6 +51,23 @@ export interface NormalizedRecord {
   bailAmountCents?: bigint;
   housingLocation?: string;
   charges: NormalizedCharge[];
+
+  /** A forecast, revised as a case moves. Never treated as a release. */
+  projectedReleaseAt?: string;
+  /** e.g. warrant, on-view, citation, remand — as the roster words it. */
+  arrestType?: string;
+  /** ISO date of the next scheduled appearance. */
+  courtDate?: string;
+  /** The court hearing the case, as published. */
+  courtName?: string;
+  /** Whether the roster flags outstanding warrants. Undefined means it did not say,
+   *  which is not the same as "none". */
+  outstandingWarrants?: boolean;
+  /** Inches. Stored numerically so a range query is possible, parsed from the
+   *  county's feet-and-inches notation. */
+  heightInches?: number;
+  /** Pounds. */
+  weightPounds?: number;
 }
 
 export interface NormalizedCharge {
@@ -323,7 +340,23 @@ export type CanonicalField =
   | 'dateOfBirth' | 'sex' | 'race'
   | 'externalBookingId' | 'externalPersonId' | 'bookedAt' | 'releasedAt'
   | 'arrestingAgency' | 'bailAmount' | 'housingLocation'
-  | 'charges';
+  | 'charges'
+  // Fields Sacramento County publishes that earlier profiles could not read. The
+  // list comes from the Sheriff's own description of the roster rather than from a
+  // sample file, so a column present in the export has somewhere to go.
+  //
+  // `projectedReleaseAt` is deliberately separate from `releasedAt`. One is a
+  // forecast the jail publishes and revises; the other is a fact. Mapping both to
+  // the same field would let a forecast read as a recorded release, and the
+  // difference between "released" and "expected to be released" is the difference
+  // between a person being at liberty and not.
+  | 'projectedReleaseAt'
+  | 'arrestType'
+  | 'courtDate'
+  | 'courtName'
+  | 'outstandingWarrants'
+  | 'height'
+  | 'weight';
 
 export type DateFormat = 'iso' | 'mm/dd/yyyy' | 'dd/mm/yyyy' | 'yyyy-mm-dd' | 'mm-dd-yyyy';
 

@@ -157,6 +157,58 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
   }
 
   // Rosters repeat a person once per charge; those rows are one booking.
+  // --- Validate against the profile that read the document -----------------
+  //
+  // After parsing and normalizing, before a single row is written. A profile that
+  // no longer matches the export produces mostly-empty rows, and an import of empty
+  // rows is indistinguishable from a quiet day at the jail — so the document is
+  // checked against what the profile promised about it, and a mismatch fails the
+  // batch rather than half-filling the repository.
+  if (profile.validationRules) {
+    const { validateDocument } = await import('./parsers/sacramento.js');
+
+    // How many rows carried a value for each canonical field.
+    const coverage: Record<string, number> = {};
+    for (const entry of normalized) {
+      const record = entry.record as unknown as Record<string, unknown>;
+      for (const field of ['last', 'first', 'dateOfBirth', 'externalBookingId',
+                           'externalPersonId', 'bookedAt', 'bailAmountCents',
+                           'housingLocation', 'courtDate', 'projectedReleaseAt']) {
+        if (record[field] !== undefined && record[field] !== null) {
+          coverage[field] = (coverage[field] ?? 0) + 1;
+        }
+      }
+      if (entry.record.charges.length > 0) coverage.charges = (coverage.charges ?? 0) + 1;
+    }
+
+    const headersFound = Object.keys(parsed.records[0] ?? {}).filter((h) => h !== '__lineNumber');
+    const mappedHeaders = new Set(
+      Object.values(map.fields).flat().map((h) => String(h).toLowerCase()),
+    );
+    const unmappedHeaders = headersFound.filter((h) => !mappedHeaders.has(h.toLowerCase()));
+
+    const findings = validateDocument({
+      rules: profile.validationRules as never,
+      headers: headersFound,
+      coverage,
+      rowsParsed: normalized.length,
+      rowsFailed: parsed.stats.unparseableLines,
+      unmappedHeaders,
+    });
+
+    for (const finding of findings) {
+      issues.push({ severity: finding.severity, code: finding.code, message: finding.message });
+    }
+
+    if (findings.some((f) => f.severity === 'error')) {
+      return failed(
+        request, startedAt,
+        'The document did not match the parser profile that read it. Nothing was written. Publish a new profile version rather than accepting the loss.',
+        issues, sourceSha256, parsed.stats.ocrUsed ? 'pdf_ocr' : sourceType,
+      );
+    }
+  }
+
   const collapsed = collapseWithinBatch(normalized);
   for (const entry of collapsed) {
     if (entry.mergedLines.length > 0) {

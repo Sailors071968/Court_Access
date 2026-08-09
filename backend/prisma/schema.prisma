@@ -3400,6 +3400,24 @@ model InmateBooking {
   charges     InmateBookingCharge[]
 
   observations InmateBookingObservation[]
+  /**
+   * The jail's forecast, revised as a case moves. Deliberately not `releasedAt`:
+   * one is a prediction and the other is a fact, and a forecast that read as a
+   * release would put a person at liberty on paper who is still in custody.
+   */
+  projectedReleaseAt DateTime?
+  /** As the roster words it — warrant, on-view, citation, remand. */
+  arrestType      String?
+  /** The court hearing the case. `courtDate` already exists above — this is the
+   *  name that goes with it, which the roster publishes and nothing recorded. */
+  courtName       String?
+  /** Null means the roster did not say, which is not the same as "none". */
+  outstandingWarrants Boolean?
+  /** Observed at booking. People's height is stable; weight is not, which is why
+   *  both live on the booking rather than on the person. */
+  heightInches    Int?
+  weightPounds    Int?
+
   @@index([inmateId, bookedAt])
   @@index([bookedAt])
   @@index([facility, externalBookingId])
@@ -3452,6 +3470,23 @@ model InmateWatchListEntry {
   reason            String
   active            Boolean   @default(true)
   notifyOnRebooking Boolean   @default(true)
+  /** routine | elevated | urgent. Decides how a match is presented, not whether
+   *  it is recorded — every match is recorded regardless. */
+  priority          String    @default("routine")
+  /** Optional label, so a list of thirty entries is navigable. */
+  label             String?
+  /**
+   * After this the entry stops matching but is not deleted.
+   *
+   * An expired watch list still explains why a notification was sent last month,
+   * which deleting it would not.
+   */
+  expiresAt         DateTime?
+  /** Set when an entry is disabled by hand rather than by expiry. */
+  disabledById      String?
+  disabledReason    String?
+  updatedAt         DateTime  @updatedAt
+
   createdAt         DateTime  @default(now())
   deactivatedAt     DateTime?
 
@@ -3607,6 +3642,31 @@ model InmateReviewQueueItem {
   resolvedAt     DateTime?
   /** What the reviewer decided and why, in their words. */
   resolutionNote String?
+  /** Who is working it. Null is unassigned, which is a different state from
+   *  pending-and-assigned when a queue has more than one reviewer. */
+  assignedToId      String?
+  assignedAt        DateTime?
+  assignedById      String?
+  /** routine | elevated | urgent — set by the policy, adjustable by a reviewer. */
+  priority          String    @default("routine")
+  /**
+   * A reviewer can decline to decide and say what would let them.
+   *
+   * Deciding on insufficient evidence is worse than leaving an item open, and
+   * without somewhere to record the request the reviewer's only options are a guess
+   * or silence.
+   */
+  evidenceRequested String?
+  evidenceRequestedById String?
+  evidenceRequestedAt DateTime?
+  /** The algorithm versions in force when the item was raised, so a decision stays
+   *  interpretable after the resolver changes. */
+  resolverVersion   String?
+  mergePolicyVersion String?
+  /** Set when a reviewer overrode what the engine recommended, with their reason. */
+  overrodeRecommendation Boolean @default(false)
+  overrideReason    String?
+
   createdAt      DateTime @default(now())
 
   @@index([status, createdAt])
@@ -3643,6 +3703,12 @@ model InmateBookingObservation {
    *  without comparing every row. */
   chargeSetHash   String?
   chargeCount     Int?
+
+  /** Observed values for the fields a roster revises between snapshots. */
+  projectedReleaseAt DateTime?
+  courtName       String?
+  outstandingWarrants Boolean?
+  arrestType      String?
 
   booking        InmateBooking @relation(fields: [bookingId], references: [bookingId], onDelete: Cascade)
 
@@ -4024,6 +4090,24 @@ model InmateParserProfile {
   normalizationVersion String?
   /** OCR engine and model version, when the source is scanned. */
   ocrVersion   String?
+
+  /**
+   * The header row this version was written against.
+   *
+   * Stored so a document's headers can be compared to what the profile expects.
+   * Header order changes constantly and means nothing, but a header the profile has
+   * never seen is the earliest sign that a new version will be needed.
+   */
+  expectedHeaders  String[]
+  /** The normalization rules in force, as prose, for a reader years from now. */
+  normalizationRules String[]
+  /**
+   * What the profile promises about the document: required fields, expected
+   * coverage, minimum rows, tolerable row failure. Checked after parsing and before
+   * anything is written, so a changed export fails loudly instead of importing a
+   * roster of nulls that reads as a quiet day at the jail.
+   */
+  validationRules  Json?
 
   effectiveFrom DateTime?
   effectiveTo   DateTime?

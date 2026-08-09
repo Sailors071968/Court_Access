@@ -59,6 +59,15 @@ export async function attachBooking(tx: Tx, args: AttachBookingArgs): Promise<{ 
       arrestingAgency: record.arrestingAgency ?? null,
       bailAmountCents: record.bailAmountCents ?? null,
       housingLocation: record.housingLocation ?? null,
+      // The fields Sacramento publishes that earlier imports discarded. A forecast
+      // release stays in its own column, never merged into releasedAt.
+      projectedReleaseAt: record.projectedReleaseAt ? new Date(record.projectedReleaseAt) : null,
+      arrestType: record.arrestType ?? null,
+      courtDate: record.courtDate ? new Date(record.courtDate) : null,
+      courtName: record.courtName ?? null,
+      outstandingWarrants: record.outstandingWarrants ?? null,
+      heightInches: record.heightInches ?? null,
+      weightPounds: record.weightPounds ?? null,
       contentHash: bookingContentHash(record),
       sourceBatchId: batchId,
       sourceRecordId: args.recordId,

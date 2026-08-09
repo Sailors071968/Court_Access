@@ -28,6 +28,75 @@ import type {
  */
 export const NORMALIZATION_VERSION = '1.1.0';
 
+/**
+ * Height, as inches.
+ *
+ * Rosters write this several ways for the same person: `5'11"`, `5-11`, `511`,
+ * `71`, `5 ft 11 in`. Parsed to a number so a range query is possible at all, and
+ * refused rather than guessed when the result would be outside human range — a
+ * mis-parsed `511` becoming 511 inches is worse than an absent height, because a
+ * number carries an authority that a blank does not.
+ */
+export function parseHeightInches(value: string | undefined | null): number | undefined {
+  const text = cleanText(value).toUpperCase();
+  if (!text) return undefined;
+
+  // 5'11", 5-11, 5 ft 11 in, 5FT11
+  const feetInches = /^(\d)\s*(?:'|-|FT\.?|FEET)\s*(\d{1,2})?\s*(?:"|IN\.?|INCHES)?$/.exec(text);
+  if (feetInches) {
+    const feet = Number(feetInches[1]);
+    const inches = feetInches[2] ? Number(feetInches[2]) : 0;
+    if (inches > 11) return undefined;
+    const total = feet * 12 + inches;
+    return total >= 24 && total <= 96 ? total : undefined;
+  }
+
+  // 511 meaning 5'11" — a common roster shorthand. Three digits where the last two
+  // are a valid inch count.
+  const packed = /^(\d)(\d{2})$/.exec(text);
+  if (packed) {
+    const inches = Number(packed[2]);
+    if (inches <= 11) {
+      const total = Number(packed[1]) * 12 + inches;
+      return total >= 24 && total <= 96 ? total : undefined;
+    }
+  }
+
+  // A plain inch count.
+  const plain = /^(\d{2})$/.exec(text);
+  if (plain) {
+    const total = Number(plain[1]);
+    return total >= 24 && total <= 96 ? total : undefined;
+  }
+
+  return undefined;
+}
+
+/** Weight in pounds. Refused outside a plausible range for the same reason. */
+export function parseWeightPounds(value: string | undefined | null): number | undefined {
+  const text = cleanText(value).toUpperCase().replace(/\s*(LBS?|POUNDS?)\.?$/, '');
+  if (!text) return undefined;
+  const match = /^(\d{2,3})$/.exec(text.trim());
+  if (!match) return undefined;
+  const pounds = Number(match[1]);
+  return pounds >= 50 && pounds <= 700 ? pounds : undefined;
+}
+
+/**
+ * A yes/no column.
+ *
+ * Returns undefined for anything unrecognised rather than false. "No outstanding
+ * warrants" and "the roster did not say" are different claims, and only one of them
+ * is safe to repeat.
+ */
+export function parseBoolean(value: string | undefined | null): boolean | undefined {
+  const text = cleanText(value).toUpperCase();
+  if (!text) return undefined;
+  if (['Y', 'YES', 'TRUE', 'T', '1', 'X'].includes(text)) return true;
+  if (['N', 'NO', 'FALSE', 'F', '0', 'NONE'].includes(text)) return false;
+  return undefined;
+}
+
 /** Honorifics and noise that rosters add to names and matching must ignore. */
 const HONORIFICS = new Set(['MR', 'MRS', 'MS', 'MISS', 'DR', 'SIR', 'REV', 'FR', 'HON']);
 
@@ -431,6 +500,15 @@ export function normalizeRecord(row: RawRecord, map: ColumnMap): NormalizeOutcom
     bailAmountCents: parseMoneyCents(pick(row, map, 'bailAmount')),
     housingLocation: cleanText(pick(row, map, 'housingLocation')) || undefined,
     charges: parseCharges(pick(row, map, 'charges'), map.chargeSeparator ?? ';'),
+
+    // A forecast, kept apart from the recorded release date above.
+    projectedReleaseAt: parseDateTime(pick(row, map, 'projectedReleaseAt'), map.dateFormats),
+    arrestType: cleanText(pick(row, map, 'arrestType')) || undefined,
+    courtDate: parseDate(pick(row, map, 'courtDate'), map.dateFormats),
+    courtName: cleanText(pick(row, map, 'courtName')) || undefined,
+    outstandingWarrants: parseBoolean(pick(row, map, 'outstandingWarrants')),
+    heightInches: parseHeightInches(pick(row, map, 'height')),
+    weightPounds: parseWeightPounds(pick(row, map, 'weight')),
   };
 
   return { record, issues };

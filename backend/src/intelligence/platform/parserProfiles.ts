@@ -34,6 +34,10 @@ export interface ResolvedProfile {
   parseOptions: Record<string, unknown>;
   normalizationVersion: string | null;
   ocrVersion: string | null;
+  /** The header row this version was written against, for drift comparison. */
+  expectedHeaders: string[];
+  /** What the profile promises about the document; checked before any write. */
+  validationRules: unknown;
   /** True when no stored profile applied and the compiled-in map was used. Recorded
    *  rather than hidden: a document parsed without a profile has weaker provenance
    *  than one parsed with a versioned profile, and an operator should be able to
@@ -85,6 +89,10 @@ export async function resolveProfile(args: {
       parseOptions: {},
       normalizationVersion: null,
       ocrVersion: null,
+      expectedHeaders: [],
+      // No stored profile means no promises to check. The import proceeds with the
+      // compiled-in map and the weaker provenance is recorded as a warning.
+      validationRules: null,
       fallback: true,
     };
   }
@@ -99,6 +107,8 @@ export async function resolveProfile(args: {
     parseOptions: (profile.parseOptions ?? {}) as Record<string, unknown>,
     normalizationVersion: profile.normalizationVersion,
     ocrVersion: profile.ocrVersion,
+    expectedHeaders: profile.expectedHeaders,
+    validationRules: profile.validationRules,
     fallback: false,
   };
 }
@@ -118,6 +128,9 @@ export async function publishProfile(args: {
   parseOptions?: Record<string, unknown>;
   normalizationVersion?: string;
   ocrVersion?: string;
+  expectedHeaders?: string[];
+  normalizationRules?: string[];
+  validationRules?: unknown;
   effectiveFrom?: Date;
   changeNote: string;
   createdById?: string;
@@ -150,6 +163,9 @@ export async function publishProfile(args: {
         parseOptions: (args.parseOptions ?? {}) as object,
         normalizationVersion: args.normalizationVersion ?? null,
         ocrVersion: args.ocrVersion ?? null,
+        expectedHeaders: args.expectedHeaders ?? [],
+        normalizationRules: args.normalizationRules ?? [],
+        validationRules: (args.validationRules ?? null) as object,
         effectiveFrom,
         changeNote: args.changeNote,
         createdById: args.createdById ?? null,

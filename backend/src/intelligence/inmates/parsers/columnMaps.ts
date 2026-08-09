@@ -12,6 +12,7 @@
 // exists.
 // ============================================================================
 
+import { SACRAMENTO_CSV } from './sacramento.js';
 import type { ColumnMap } from '../types.js';
 
 /** Fields a roster must supply for a row to become a booking. */
@@ -74,56 +75,12 @@ const EXAMPLE_COUNTY: ColumnMap = {
 
 
 /**
- * Sacramento County Main Jail and Rio Cosumnes Correctional Center.
+ * Sacramento County.
  *
- * The first real facility, and the only one in scope for version 1. The header
- * aliases below are deliberately generous: the county's published roster has
- * appeared with several spellings of the same column across formats (the CSV export
- * and the PDF "Inmate Information" listing do not agree with each other), and a
- * header this parser cannot place fails the batch rather than importing nulls.
- *
- * Correct these against a real export rather than adding a fallback. A roster that
- * imports with an unrecognised header set looks exactly like a quiet day at the
- * jail, which is the one failure mode worth refusing to have.
+ * Taken from the CSV profile in sacramento.ts rather than written again here, so the
+ * compiled-in fallback and the published profile cannot describe different columns.
  */
-const SACRAMENTO: ColumnMap = {
-  ...GENERIC,
-  facility: 'sacramento',
-  label: 'Sacramento County — jail roster (CSV and PDF)',
-  // The county writes mm/dd/yyyy in the PDF and ISO in some CSV exports, so both
-  // are tried, most specific first.
-  dateFormats: ['mm/dd/yyyy', 'iso', 'yyyy-mm-dd'],
-  nameOrder: 'last_first',
-  chargeSeparator: ';',
-  fields: {
-    ...GENERIC.fields,
-    fullName: ['name', 'inmate name', 'defendant name', 'full name'],
-    last: ['last name', 'last', 'lastname', 'surname'],
-    first: ['first name', 'first', 'firstname'],
-    middle: ['middle name', 'middle', 'mi', 'middle initial'],
-    suffix: ['suffix', 'sfx'],
-    dateOfBirth: ['dob', 'date of birth', 'birth date', 'birthdate'],
-    sex: ['sex', 'gender'],
-    race: ['race', 'ethnicity', 'descent'],
-    // Sacramento's booking number and its person-level "X-Ref"/SO number are
-    // different identifiers and must not be conflated: one is per stay, the other
-    // is per person and is what makes identity resolution reliable here.
-    externalBookingId: ['booking number', 'booking #', 'booking no', 'book #', 'booking id', 'bkg #', 'bkg no'],
-    externalPersonId: ['x-ref', 'xref', 'x ref', 'so #', 'so number', 'sonumber',
-                       'inmate #', 'inmate number', 'subject number', 'main id', 'mni'],
-    bookedAt: ['booking date', 'booked', 'book date', 'booking date/time', 'arrest date', 'date booked',
-               'intake date', 'booking date time'],
-    releasedAt: ['release date', 'released', 'release date/time', 'projected release'],
-    arrestingAgency: ['arresting agency', 'agency', 'arr agency', 'law enforcement agency'],
-    bailAmount: ['bail', 'bail amount', 'total bail', 'bond', 'bond amount'],
-    housingLocation: ['housing', 'housing location', 'location', 'facility housing', 'cell', 'pod', 'unit'],
-    charges: ['charges', 'charge', 'charge description', 'offense', 'offenses', 'charge(s)', 'crime'],
-    // Sacramento's roster carries a court date, but there is no canonical field for
-    // it yet: an observation records one while a booking does not, so mapping it
-    // here would parse a value nothing consumes. Left out until the booking model
-    // carries it, rather than mapped into a column that discards it.
-  },
-};
+const SACRAMENTO: ColumnMap = SACRAMENTO_CSV.columnMap;
 
 const MAPS = new Map<string, ColumnMap>([
   [GENERIC.facility, GENERIC],

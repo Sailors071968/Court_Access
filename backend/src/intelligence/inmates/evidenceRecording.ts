@@ -109,7 +109,7 @@ export async function recordObservation(
     housingLocation: args.record.housingLocation ?? null,
     bailAmountCents: args.record.bailAmountCents ?? null,
     releasedAt: args.record.releasedAt ? new Date(args.record.releasedAt) : null,
-    courtDate: null,
+    courtDate: args.record.courtDate ? new Date(args.record.courtDate) : null,
     // A release date says the person was released. Its absence says the source
     // did not mention one — which is not the same as saying they are in custody.
     // Deriving 'in_custody' from a missing column had this source contradicting
@@ -136,6 +136,12 @@ export async function recordObservation(
       custodyStatus: attributes.custodyStatus ?? null,
       chargeSetHash: attributes.chargeSetHash ?? null,
       chargeCount: attributes.chargeCount ?? null,
+      // Recorded per observation because the jail revises all four between
+      // snapshots: a court date moves, a projected release slips, a warrant clears.
+      projectedReleaseAt: args.record.projectedReleaseAt ? new Date(args.record.projectedReleaseAt) : null,
+      courtName: args.record.courtName ?? null,
+      outstandingWarrants: args.record.outstandingWarrants ?? null,
+      arrestType: args.record.arrestType ?? null,
     },
     select: { observationId: true },
   });

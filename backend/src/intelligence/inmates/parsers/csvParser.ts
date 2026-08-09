@@ -35,7 +35,19 @@ export function splitCsvLine(line: string): string[] {
         if (line[i + 1] === '"') { current += '"'; i++; }   // doubled quote is a literal
         else inQuotes = false;
       } else current += ch;
-    } else if (ch === '"') inQuotes = true;
+    } else if (ch === '"') {
+      // A quote only opens a quoted field at the start of one. Anywhere else it is a
+      // literal character.
+      //
+      // RFC 4180 says a field containing a quote must be quoted and its quotes
+      // doubled, and county exports routinely ignore that: a height column writes
+      // 5'11" as-is. Treating that quote as the start of a quoted field swallows the
+      // rest of the line, then the next, until the file ends — one inches mark
+      // rejects the whole roster. Strictness here buys nothing, because the only
+      // documents this parser reads are the ones the county actually sends.
+      if (current === '') inQuotes = true;
+      else current += ch;
+    }
     else if (ch === ',') { fields.push(current); current = ''; }
     else current += ch;
   }
@@ -71,7 +83,7 @@ export async function parseCsvRoster(
   for await (const rawLine of rl) {
     lineNumber++;
     pending = pending ? `${pending}\n${rawLine}` : rawLine;
-    if (countQuotes(pending) % 2 !== 0) continue;      // still inside a quoted field
+    if (endsInsideQuotedField(pending)) continue;      // still inside a quoted field
 
     const line = pending;
     pending = '';
@@ -144,8 +156,36 @@ export async function parseCsvRoster(
   return { records, stats: { ocrUsed: false, unparseableLines }, issues };
 }
 
-function countQuotes(s: string): number {
-  let n = 0;
-  for (const ch of s) if (ch === '"') n++;
-  return n;
+/**
+ * Whether the text ends part-way through a quoted field.
+ *
+ * Uses the same rule as `splitCsvLine`: a quote opens a field only at the start of
+ * one, and is a literal character anywhere else. Counting quotes instead — which is
+ * what this replaced — meant a height written 5'11" left an odd count, so the reader
+ * decided it was inside a quoted field and swallowed every following line until the
+ * file ended. One inches mark rejected the whole roster.
+ *
+ * The two must agree. If the splitter treats a quote as literal and this treats it as
+ * an opening quote, records silently merge.
+ */
+function endsInsideQuotedField(text: string): boolean {
+  let inQuotes = false;
+  let fieldEmpty = true;
+
+  for (let i = 0; i < text.length; i++) {
+    const ch = text[i];
+    if (inQuotes) {
+      if (ch === '"') {
+        if (text[i + 1] === '"') i++;
+        else inQuotes = false;
+      }
+    } else if (ch === '"') {
+      if (fieldEmpty) { inQuotes = true; fieldEmpty = false; }
+    } else if (ch === ',') {
+      fieldEmpty = true;
+    } else {
+      fieldEmpty = false;
+    }
+  }
+  return inQuotes;
 }

@@ -39,7 +39,11 @@ cd /path/to/repo
 deploy/verify-operational.sh            # writes reports/operational-verification/
 ```
 
-Full transcript: [`00-full-transcript.log`](00-full-transcript.log) (328 lines).
+Run consecutively three times to confirm; all three reported 10 of 10. That is not
+ceremony — the first attempt at a repeat run failed for a reason worth recording,
+described under *Two false positives* below.
+
+Full transcript: [`00-full-transcript.log`](00-full-transcript.log).
 
 ---
 
@@ -160,6 +164,12 @@ $ psql -c "CREATE DATABASE courtaccess_verify OWNER courtaccess"
 $ npx prisma migrate deploy
   38 migrations found in prisma/migrations
   ... all 38 applied ...
+```
+
+Proven to have run **from nothing**, not merely to have a matching count:
+
+```
+  tables present before migrating: 0   (must be 0)
 ```
 
 Counted from the database rather than from the command's exit code:
@@ -372,7 +382,7 @@ Nothing that adds capability.
 | Change | Why |
 | --- | --- |
 | `deploy/bootstrap-admin.mjs` | Reads `DATABASE_URL` from the env file rather than the environment; prints the database; verifies the registered account is visible before promoting; refuses with a diagnosis instead of leaving an `attorney`. |
-| `deploy/verify-operational.sh` | New. The ten criteria as a reproducible script. |
+| `deploy/verify-operational.sh` | New. The ten criteria as a reproducible script — verified reproducible by running it three times consecutively. |
 | `deploy/DEPLOY_FROM_SCRATCH.md` | Steps 12 (seed the facility and parser profiles) and 13 (run this verification), plus a note on checking the database the bootstrap prints. |
 | `vite.config.ts` | The dev proxy target is configurable. It was hard-coded to `3001`, so a browser pointed at a release on the documented port `3100` silently reached a different service or nothing. |
 
@@ -389,6 +399,23 @@ refuses to run at all if the port is held by a process it did not start.
 **It measured its own shell.** Criterion 2 checked that variables were *present*,
 which they were — from the shell, not the file. It now strips them first and compares
 values against what the file declares.
+
+**It reported on migrations that never ran.** Found by running the script a second
+time. It leaves the service running for the browser checks, and that service holds
+connections to the target database — so `DROP DATABASE` failed. Postgres refuses
+rather than disconnecting clients, and the failure was not checked. `migrate deploy`
+then ran against a database that was already migrated, printed *"No pending
+migrations to apply"*, and criterion 4 passed anyway: 38 recorded as applied equals
+38 directories on disk is true whether or not anything happened in this run.
+
+A criterion that reads *"Prisma migrations complete successfully"* passing on a
+database nobody migrated is the worst kind of false pass, because it is the criterion
+everything else depends on. Three things now prevent it: a leftover service is
+stopped before the database work rather than at the boot step, remaining sessions are
+terminated with `pg_terminate_backend` before the drop, and the table count must be
+zero before migrating. The phrase *"No pending migrations to apply"* is also grepped
+for and fails the criterion outright — redundant with the emptiness check, and kept
+because it is the sentence that hid this.
 
 ## Not verified
 

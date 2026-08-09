@@ -65,6 +65,34 @@ say "scope:     the instance built by this script, and nothing else"
 say "======================================================================"
 
 # ---------------------------------------------------------------------------
+hr; say "PRE-FLIGHT: reclaim the port from a previous run of this script"
+hr
+
+# Done before the database work, not at the boot step. A service left running by
+# the previous run holds connections to the target database, which makes DROP
+# DATABASE fail — and then migrations run against a database that was already
+# migrated, so "38 of 38 applied" is true without a single migration executing.
+# That is a false pass on the criterion that matters most.
+HOLDING="$(ss -ltnp 2>/dev/null | grep ":$APP_PORT " || true)"
+if [ -n "$HOLDING" ]; then
+  HOLD_PID="$(printf '%s' "$HOLDING" | grep -oE 'pid=[0-9]+' | head -1 | cut -d= -f2)"
+  HOLD_CMD="$(tr '\0' ' ' < "/proc/${HOLD_PID:-0}/cmdline" 2>/dev/null || true)"
+  say "  port $APP_PORT is held by pid ${HOLD_PID:-unknown}: ${HOLD_CMD:-<unreadable>}"
+  if [ -n "$HOLD_PID" ] && [[ "$HOLD_CMD" == *"$RELEASE/dist/index.js"* ]]; then
+    say "  this script's own release from a previous run; stopping it"
+    kill "$HOLD_PID" 2>/dev/null || true
+    for _ in $(seq 1 20); do kill -0 "$HOLD_PID" 2>/dev/null || break; sleep 1; done
+    say "  stopped: $(kill -0 "$HOLD_PID" 2>/dev/null && echo no || echo yes)"
+  else
+    say "  a process this script did not start. Leaving it alone."
+    say "  Choose another port with VERIFY_APP_PORT, or stop that process first."
+    exit 1
+  fi
+else
+  say "  port $APP_PORT is free"
+fi
+
+# ---------------------------------------------------------------------------
 hr; say "CRITERION 4 (first, because everything else needs it): Prisma migrations"
 hr
 
@@ -72,8 +100,27 @@ PSQL_ADMIN="postgresql://$DB_OWNER:$DB_PASSWORD@$DB_HOST:$DB_PORT/postgres"
 DB_URL="postgresql://$DB_OWNER:$DB_PASSWORD@$DB_HOST:$DB_PORT/$DB_NAME"
 
 say "Recreating the database so migrations run from nothing."
+
+# Any remaining connection makes DROP DATABASE fail. Postgres refuses rather than
+# disconnecting clients, so the sessions are closed explicitly first.
+run psql "$PSQL_ADMIN" -c "SELECT pg_terminate_backend(pid) FROM pg_stat_activity WHERE datname = '$DB_NAME' AND pid <> pg_backend_pid()"
 run psql "$PSQL_ADMIN" -c "DROP DATABASE IF EXISTS $DB_NAME"
+DROP_STATUS=$?
 run psql "$PSQL_ADMIN" -c "CREATE DATABASE $DB_NAME OWNER $DB_OWNER"
+CREATE_STATUS=$?
+
+# The database must be empty before migrations run, or "38 of 38 applied" is
+# satisfied by a database that was already migrated and this criterion proves
+# nothing. Checked rather than assumed, because the drop silently failing is
+# exactly how that happened.
+TABLES_BEFORE="$(psql "$DB_URL" -tAc "SELECT count(*) FROM information_schema.tables WHERE table_schema='public'" 2>/dev/null | tr -d ' ')"
+say "  tables present before migrating: ${TABLES_BEFORE:-unknown}   (must be 0)"
+
+if [ "${DROP_STATUS:-1}" -ne 0 ] || [ "${CREATE_STATUS:-1}" -ne 0 ] || [ "${TABLES_BEFORE:-1}" != "0" ]; then
+  bad "the database was not recreated empty, so migrations could not be verified from nothing (drop exit ${DROP_STATUS:-?}, create exit ${CREATE_STATUS:-?}, tables before ${TABLES_BEFORE:-?})"
+  say "Refusing to report on migrations that may not have run."
+  exit 1
+fi
 
 cd "$REPO/backend"
 say "\$ DATABASE_URL=<$DB_NAME> npx prisma migrate deploy"
@@ -90,8 +137,13 @@ say "  migrations recorded as applied:          $MIGRATIONS_APPLIED"
 say "  migrations failed or rolled back:        $MIGRATIONS_FAILED"
 say "  tables created:                          $TABLES"
 
-if [ "$MIGRATE_STATUS" -eq 0 ] && [ "$MIGRATIONS_APPLIED" = "$MIGRATION_FILES" ] && [ "$MIGRATIONS_FAILED" = "0" ]; then
-  ok "all $MIGRATIONS_APPLIED migrations applied, none failed, $TABLES tables created"
+# "No pending migrations to apply" means this run did nothing. Combined with the
+# empty-database check above it cannot happen, and it is asserted anyway because
+# this is the sentence that hid the failure.
+if grep -q "No pending migrations to apply" "$EVIDENCE/migrate-deploy.log"; then
+  bad "migrate deploy had nothing to do, so no migration was verified in this run"
+elif [ "$MIGRATE_STATUS" -eq 0 ] && [ "$MIGRATIONS_APPLIED" = "$MIGRATION_FILES" ] && [ "$MIGRATIONS_FAILED" = "0" ]; then
+  ok "all $MIGRATIONS_APPLIED migrations applied to an empty database in this run, none failed, $TABLES tables created"
 else
   bad "migrations did not complete cleanly (exit $MIGRATE_STATUS, applied $MIGRATIONS_APPLIED of $MIGRATION_FILES, failed $MIGRATIONS_FAILED)"
 fi
@@ -283,10 +335,8 @@ start_app() {
   echo $!
 }
 
-# A previous run of this script leaves its service running for the browser checks.
-# Reclaiming that is safe and makes the script repeatable; reclaiming anything else
-# is not, so a process this script did not start is a hard refusal rather than a
-# kill. The distinction is drawn on the executable path, not the port.
+# Pre-flight already reclaimed a leftover from a previous run; this is the
+# last-moment check that nothing has taken the port since.
 PRE_EXISTING="$(ss -ltnp 2>/dev/null | grep ":$APP_PORT " || true)"
 if [ -n "$PRE_EXISTING" ]; then
   HOLDER_PID="$(printf '%s' "$PRE_EXISTING" | grep -oE 'pid=[0-9]+' | head -1 | cut -d= -f2)"

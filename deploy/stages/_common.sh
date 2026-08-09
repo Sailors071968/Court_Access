@@ -33,8 +33,8 @@ export V1 BUILD V1_PORT V1_PM2_NAME V1_DB STATE APP_EXISTING
 # are behavioural — the artifact builds, the migrations the artifact carries are
 # the migrations the database receives, and there is no drift afterwards.
 : "${REFERENCE_BUNDLE_SHA:=c3f5f6f03399b594f4465db2067ba7219b7717335fd8f43355473d47d35ad227}"
-: "${REFERENCE_MIGRATIONS:=30}"
-: "${REFERENCE_TABLES:=116}"
+: "${REFERENCE_MIGRATIONS:=31}"
+: "${REFERENCE_TABLES:=125}"
 
 # Derived at build time by stage 1 and consumed by stages 2 and 3, so every
 # stage expects what this artifact actually contains rather than a constant.

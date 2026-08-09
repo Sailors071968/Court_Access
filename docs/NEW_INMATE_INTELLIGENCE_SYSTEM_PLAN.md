@@ -36,9 +36,33 @@ BullMQ workers do not run. An ingestion pipeline built on BullMQ would not
 execute on the production host, and enabling Redis changes the certified
 configuration and re-opens certification.
 
-So ingestion is a **CLI command invoked by a systemd timer**, not a queue. It
-needs no Redis, no new runtime dependency, and no change to the deployment
-architecture. §5 covers the scheduling; §11 covers why this matters.
+So ingestion **must not depend on a queue**. But committing to a systemd timer
+instead would trade one hard dependency for another, so the engine does not know
+how it was started:
+
+```
+              ┌──────────────────────────────────────┐
+              │  runIngestion(request) → outcome     │   all ingestion logic
+              │  ingestionEngine.ts                  │   lives here, only here
+              └──────────────────▲───────────────────┘
+                                 │  adapters build a request and call it
+   ┌──────────────┬──────────────┼──────────────┬──────────────┬─────────────┐
+   │ manual run   │ CLI          │ systemd      │ cron         │ future      │
+   │ (dashboard)  │ (cli.ts)     │ timer        │              │ queue / job │
+   └──────────────┴──────────────┴──────────────┴──────────────┴─────────────┘
+```
+
+An adapter parses its own arguments, builds an `IngestionRequest`, and calls
+`runIngestion`. None of them contains parsing, normalization, resolution or
+persistence, and **the engine may not branch on `trigger`** — the trigger is
+recorded on the batch so the origin of a run is known, not so behaviour can
+differ by caller. Adopting Redis or a scheduled job later is then a new adapter
+rather than a rewrite, and the certified configuration is unaffected either way.
+
+A systemd timer is the recommended *first* adapter for unattended runs, because
+it has the same ownership and logging model as the `pm2` unit the deployment
+already depends on. That is a deployment recommendation, not an architectural
+commitment. §11 covers the deployment side.
 
 ## 2 · Domain model
 
@@ -348,11 +372,26 @@ routing. The freeze in `DEPLOYMENT_CERTIFICATION.md` §12 holds.
    through the existing staged procedure. `audit-deployment.sh` must still report
    `PRODUCTION READY` afterwards, and the artifact fingerprint changes — expected,
    and the reason the reference sha is recorded rather than gated.
-3. **Scheduled ingestion.** A systemd timer invoking the CLI, not cron and not
-   BullMQ: it has the same ownership and logging model as the `pm2` unit the
-   deployment already depends on, and it needs no Redis. The timer unit is new
-   deployment infrastructure, so it is documented in the playbook and checked by
-   the audit before it is relied on.
+3. **The generated Prisma client is part of the artifact.** A schema change is
+   not complete when the migration is written: `node_modules/.prisma` ships
+   inside the release, so a client generated before the schema changed leaves
+   every new model `undefined` at runtime. `build-release.sh` already runs
+   `prisma generate` before copying `node_modules`, so a proper release build is
+   correct — but a hand-patched release is not. Observed: replacing only
+   `dist/index.js` in a release produced `Cannot read properties of undefined
+   (reading 'count')` on the first query against a new table.
+4. **Scheduled ingestion.** A systemd timer invoking the CLI is the recommended
+   first adapter — no Redis, and the same ownership and logging model as the
+   `pm2` unit the deployment already depends on. The timer unit is new deployment
+   infrastructure, so it is documented in the playbook and checked by the audit
+   before it is relied on. Because scheduling is an adapter (§1), replacing it
+   later touches no ingestion logic.
+5. **Shipping the CLI is deferred.** `backend/package.json` builds
+   `dist/inmate-cli.js`, but `build-release.sh` copies `dist/index.js` by name,
+   so including the CLI in a release is a one-line change to a deployment script
+   that is about to be frozen. During Phase 1 the CLI is run from the source
+   checkout with `tsx`, which is how a dry run is done anyway. The change lands
+   with Phase 5, when unattended scheduling actually needs it.
 
 **Per-phase gate.** Each phase ships behind the administrator gate and is not
 announced until: migrations applied and the schema guard reporting the new count;

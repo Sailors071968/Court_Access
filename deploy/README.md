@@ -1,5 +1,18 @@
 # Deployment
 
+> ## Deploying the service? Read [DEPLOY_FROM_SCRATCH.md](DEPLOY_FROM_SCRATCH.md).
+>
+> It is the clone-to-healthy procedure for the **PM2 deployment, which is what
+> production runs**, and it has been executed end to end against a clean clone
+> and an empty database.
+>
+> **The rest of this file describes a Docker Compose stack.** That is a
+> different architecture with a *different environment file*. `.env.example`
+> here is the compose environment — it has no `DATABASE_URL`, because compose
+> builds one from the `POSTGRES_*` parts. Copying it into a PM2 release gives
+> you a service that cannot start and a crash loop whose error message blames
+> the database. Use `env.release.example` for that deployment.
+
 > **For the existing production host, read
 > [DEPLOYMENT_PLAN.md](DEPLOYMENT_PLAN.md).** That host runs Amazon Linux 2023
 > with an established layout. `bootstrap-ec2.sh` below targets Debian/Ubuntu

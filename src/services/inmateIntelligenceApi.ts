@@ -459,8 +459,8 @@ export const intelligenceApi = {
    * what is reviewed on screen is exactly what prints. Fetched as text and handed to
    * a print window rather than parsed.
    */
-  async report(params: { from?: string; to?: string; facility?: string } = {}): Promise<string> {
-    const res = await authorizedFetch(`${API_BASE}/reports/new-inmates${query(params)}`, {
+  async report(params: { date?: string; facility?: string } = {}): Promise<string> {
+    const res = await authorizedFetch(`${API_BASE}/reports/daily${query(params)}`, {
       headers: { Accept: 'text/html' },
     });
     const body = await res.text();

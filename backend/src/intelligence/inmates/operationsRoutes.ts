@@ -247,6 +247,40 @@ export async function registerInmateOperationsRoutes(app: FastifyInstance): Prom
   });
 
   // -------------------------------------------------------------------------
+  // The daily intelligence report — the operational product
+  // -------------------------------------------------------------------------
+
+  /**
+   * The report an operator prints each morning.
+   *
+   * Returns HTML by default because the server renders it with a print stylesheet:
+   * what is reviewed on screen is exactly what prints, with no second rendering path
+   * that could disagree. `?format=json` returns the assembled sections for a caller
+   * that wants the data rather than the document.
+   */
+  app.get('/api/admin/intelligence/reports/daily', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!requireAdministrator(request, reply)) return;
+    const q = request.query as { date?: string; facility?: string; format?: string };
+
+    const { generateDailyReport } = await import('./dailyReport.js');
+    const { reportId, html, report } = await generateDailyReport(
+      { date: q.date, facility: q.facility },
+      request.user!.userId,
+    );
+
+    await recordAccess({
+      userId: request.user!.userId,
+      action: 'generate_report',
+      parameters: { reportId, date: report.summary.reportDate, type: 'daily_intelligence' },
+      resultCount: report.newlyBooked.length + report.returning.length,
+      ipAddress: request.ip,
+    });
+
+    if (q.format === 'json') return reply.send({ reportId, ...report });
+    return reply.type('text/html; charset=utf-8').send(html);
+  });
+
+  // -------------------------------------------------------------------------
   // Dashboard and import history
   // -------------------------------------------------------------------------
 

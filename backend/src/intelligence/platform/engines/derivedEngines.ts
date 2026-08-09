@@ -255,8 +255,17 @@ export const watchListEngine: IntelligenceEngine = {
     if (personIds.length === 0) return [];
 
     const entries = await prisma.inmateWatchListEntry.findMany({
-      where: { inmateId: { in: personIds }, active: true },
-      select: { entryId: true, inmateId: true, reason: true, notifyOnRebooking: true },
+      where: {
+        inmateId: { in: personIds },
+        active: true,
+        // An expired entry stops matching but is not deleted: it still explains why a
+        // notification was sent last month, which deleting it would not.
+        OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }],
+      },
+      select: {
+        entryId: true, inmateId: true, reason: true, notifyOnRebooking: true,
+        priority: true, label: true, expiresAt: true,
+      },
     });
     if (entries.length === 0) return [];
 
@@ -280,14 +289,18 @@ export const watchListEngine: IntelligenceEngine = {
 
         findings.push({
           type: 'watch_list_hit',
-          severity: matchType === 'new_booking' ? 'critical' : 'significant',
+          // A new booking is the event a bail bondsman is waiting for; everything
+          // else about a watched person is worth knowing but not worth waking for.
+          severity: matchType === 'new_booking' ? 'critical'
+            : matchType === 'release' || matchType === 'bail_change' ? 'significant'
+            : 'notable',
           subjectKind: 'person',
           subjectId: inmateId,
           relatedKind: 'watch_list_entry',
           relatedId: entry.entryId,
           confidence: 100,
           rule: `watch:${matchType}`,
-          explanation: `A person on a watch list appears in new intelligence (${matchType.replace(/_/g, ' ')}). The list was created because: ${entry.reason}. Triggering finding: ${item.explanation}`,
+          explanation: `${entry.priority === 'urgent' ? 'URGENT: ' : ''}A person on a watch list appears in new intelligence (${matchType.replace(/_/g, ' ')})${entry.label ? ` — list "${entry.label}"` : ''}. The list was created because: ${entry.reason}. Triggering finding: ${item.explanation}`,
           reviewRequired: false,
           disposition: 'auto_applied',
           evidenceObservationIds: item.evidenceObservationIds,
@@ -297,7 +310,11 @@ export const watchListEngine: IntelligenceEngine = {
             triggeringItemId: item.itemId,
             triggeringType: item.type,
           },
-          payload: { matchType, entryId: entry.entryId, notify: entry.notifyOnRebooking, recommendation: 'notify' },
+          payload: {
+            matchType, entryId: entry.entryId, notify: entry.notifyOnRebooking,
+            priority: entry.priority, label: entry.label,
+            recommendation: 'notify',
+          },
         });
       }
     }
@@ -305,18 +322,49 @@ export const watchListEngine: IntelligenceEngine = {
   },
 };
 
-/** Which intelligence constitutes a watch list hit. Null means it does not. */
+/**
+ * Which intelligence constitutes a watch list hit. Null means it does not.
+ *
+ * The change names here are the ones changeDetection.ts actually emits. They were
+ * guessed once — `bail_changed` for what is emitted as `bail_change` — and the
+ * consequence was silent: a watched person's bail doubled, the change was recorded,
+ * and no notification was raised, because the string did not match. Nothing failed and
+ * nothing was logged. If a name changes in the change engine, it must change here too.
+ *
+ * A restatement is deliberately not a hit. A person who remains in custody appears on
+ * every roster, and notifying on that would send an alert every morning until they
+ * were released — after which the alerts that mattered would be ignored.
+ */
 function watchMatchType(type: string, payload: unknown): string | null {
   if (type === 'identity_candidate') {
     const outcome = (payload as { outcome?: string } | null)?.outcome;
     return outcome === 'matched' || outcome === 'new_inmate' ? 'new_booking' : null;
   }
+
   const changeType = (payload as { changeType?: string } | null)?.changeType;
-  if (changeType === 'new_inmate' || changeType === 'returning_inmate') return 'new_booking';
-  if (changeType === 'released' || changeType === 'departed_roster') return 'release';
-  if (changeType === 'facility_changed') return 'transfer';
-  if (changeType === 'bail_changed') return 'bail_change';
-  return null;
+  switch (changeType) {
+    case 'new_inmate':
+    case 'returning_inmate':
+      return 'new_booking';
+    case 'released':
+      return 'release';
+    case 'departed_roster':
+      // Said as what it is: the jail stopped listing them, which is not a release.
+      return 'left_roster';
+    case 'housing_change':
+      return 'transfer';
+    case 'bail_change':
+      return 'bail_change';
+    case 'custody_status_change':
+      return 'custody_change';
+    case 'charge_added':
+    case 'charge_removed':
+      return 'charge_change';
+    case 'court_date_change':
+      return 'court_date_change';
+    default:
+      return null;
+  }
 }
 
 // ---------------------------------------------------------------------------

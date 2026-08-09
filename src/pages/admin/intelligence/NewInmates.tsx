@@ -110,7 +110,7 @@ export function NewInmates() {
     setPrinting(true);
     setPrintError(null);
     try {
-      const html = await intelligenceApi.report({ from: from || undefined, to: to || undefined });
+      const html = await intelligenceApi.report({ date: from || undefined });
       printHtmlDocument(html, setPrintError);
     } catch (err) {
       setPrintError(err instanceof Error ? err.message : 'The report could not be generated.');

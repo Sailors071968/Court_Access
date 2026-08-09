@@ -529,9 +529,32 @@ async function persist(args: {
           attributes,
           isNewBooking: false,
         });
+        // The booking row carries current truth, and every screen and the printed
+        // report read it rather than the observation history. Updating only
+        // lastObservedAt left it holding the first roster's values forever: the jail
+        // raised this bail to $75,000 and the report kept printing $50,000, which an
+        // operator would quote to a customer.
+        //
+        // Only fields the source actually stated are written. A roster that omits a
+        // column has not set it to nothing, and letting an absence overwrite a known
+        // value would lose data every time a source published less than the last one.
         await tx.inmateBooking.update({
           where: { bookingId: existing.bookingId },
-          data: { lastObservedAt: new Date() },
+          data: {
+            lastObservedAt: new Date(),
+            ...(record.bailAmountCents !== undefined ? { bailAmountCents: record.bailAmountCents } : {}),
+            ...(record.housingLocation !== undefined ? { housingLocation: record.housingLocation } : {}),
+            ...(record.releasedAt !== undefined ? { releasedAt: new Date(record.releasedAt), custodyStatus: 'released' } : {}),
+            ...(record.projectedReleaseAt !== undefined ? { projectedReleaseAt: new Date(record.projectedReleaseAt) } : {}),
+            ...(record.courtDate !== undefined ? { courtDate: new Date(record.courtDate) } : {}),
+            ...(record.courtName !== undefined ? { courtName: record.courtName } : {}),
+            ...(record.outstandingWarrants !== undefined ? { outstandingWarrants: record.outstandingWarrants } : {}),
+            ...(record.arrestType !== undefined ? { arrestType: record.arrestType } : {}),
+            // A booking that was marked as having left the roster is listed again, so
+            // it has not left. Cleared, or a person restored to the roster would stay
+            // absent from the population screen.
+            departedRosterAt: null,
+          },
         });
         writtenInmateId = existing.inmateId;
         writtenBookingId = existing.bookingId;

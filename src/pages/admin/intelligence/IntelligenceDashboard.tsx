@@ -56,9 +56,10 @@ export function IntelligenceDashboard() {
     setPrinting(true);
     setPrintError(null);
     try {
-      const rosterDate = summary?.session.rosterDates[0];
+      // The report is scoped to the import day, not the roster date: a roster dated
+      // yesterday and imported this morning belongs in this morning's report.
       const html = await intelligenceApi.report(
-        rosterDate ? { from: rosterDate, to: rosterDate } : {},
+        summary?.session.date ? { date: summary.session.date } : {},
       );
       printHtmlDocument(html, setPrintError);
     } catch (err) {

@@ -38,14 +38,33 @@ file's `PORT` is the port under test, and then asserts provenance — the
 application secrets must be absent from `/proc/<pid>/environ` while the
 application is healthy.
 
-**Not implemented — needs a decision.** Both guards for a missing environment
-(`authMiddleware.ts:75`, `validateEnvironment.ts:195`) are conditional on
-`NODE_ENV === 'production'`, which is itself missing from the environment they
-exist to check. An empty environment is therefore treated as a developer laptop,
-four fatal conditions are downgraded to warnings, and the failure surfaces
-~400 ms later as `Database unreachable` / `Run: npx prisma migrate deploy` —
-naming a subsystem that was never at fault. This is why the incident was
-investigated as Redis and then as the database. See §9.
+**Startup diagnostics — now resolved.** Both guards for a missing environment
+were conditional on `NODE_ENV === 'production'`, which is itself missing from the
+environment they exist to check, so an empty environment was treated as a
+developer laptop: four fatal conditions downgraded to warnings, and the failure
+surfacing ~400 ms later as `Database unreachable` / `Run: npx prisma migrate
+deploy`, naming a subsystem that was never at fault.
+
+`DATABASE_URL` is now a second signal. There is no way to run this server
+usefully without it — the schema guard exits 1 within a second of boot when it is
+absent — so a process holding neither it nor `NODE_ENV` was configured by nobody,
+and enforcement is switched back on. When it enforces outside production it says
+why, so it cannot be mistaken for the validator misfiring on a laptop.
+
+This adds no new way to refuse to start, which was the design rule the validator
+set for itself: every case it now stops was already going to exit 1 moments
+later. Only the message and its timing change. Verified against the release
+artifact:
+
+| Environment | Before | After |
+|---|---|---|
+| Full, from `.env` | `Configuration OK`, health 200 | unchanged |
+| Empty | 4 fatals waived, dies in Prisma at 996 ms blaming the database | **FAIL naming the cause, exit before Prisma, never binds** |
+| `DATABASE_URL` set, no `NODE_ENV` (developer) | warnings, boots | unchanged — still boots, health 200 |
+| `NODE_ENV` only | exit 1 at the signing-key guard | unchanged |
+
+The third row is the one that matters for regressions: a developer with a
+database and nothing else still gets a running server.
 
 ## 3 · Verification environment
 
@@ -230,7 +249,7 @@ database, or `.env`.
 
 | Risk | Severity | Mitigation |
 |---|---|---|
-| A missing environment still surfaces as a database fault | High — it cost this incident its diagnosis time | Not yet fixed; §2 |
+| A missing environment surfaces as a database fault | Was high — it cost this incident its diagnosis time | **Resolved**; §2. A process with neither `NODE_ENV` nor `DATABASE_URL` now stops at the validator, naming the cause |
 | Reboot depends on `pm2 save` being current and a `pm2` unit being enabled | High | `verify-restart-survival.sh` detects both; run it after any process-list change |
 | `.env` must remain parseable by Node, which is not the shell | Medium | Stage 3 fails the deployment if Node cannot read a required variable, or if the file contains `export`, `${VAR}` or `$(cmd)` |
 | Replica fidelity | Medium | Same bundle lineage and schema, but the host's `.env`, permissions and systemd are unverified |
@@ -310,6 +329,59 @@ gap recorded in §8, surfacing exactly where it should.
 This does not change the verdict — it is still a replica, not the host — but the
 procedure is now reproducible from a clean clone by someone with no prior
 knowledge of the project, which was not true before.
+
+## 13 · Rollback, verified by executing it
+
+Previously unverified: the procedure existed and had never been run. Tested by
+building the conditions it is written for — a previous application on `:3001`,
+real TLS, the state stage 4 records, a cut-over to V1 — and then running
+`rollback.sh`.
+
+**It found a defect in the rollback's own verification.** The check asserted only
+that `https://$SITE/api/health` returns 200. The release being rolled back
+answers that URL too, so a reload that did not take still returned 200 and the
+rollback reported success while the new release kept serving. That is what
+happened on the first rehearsal: the reload failed, and the verification still
+printed `[ OK ] responds — 200` with the new release's commit in the body.
+
+The script already knew the discriminator — it printed *"the previous application
+returns no 'commit' field — that is how you know it is back"* — as prose beneath
+the check rather than as the check. It is now asserted.
+
+Both directions reproduced after the fix:
+
+| Scenario | Mechanical steps | Verdict |
+|---|---|---|
+| Backup also points at the new release — everything "succeeds" | restore OK, `nginx -t` OK, reload OK, health 200 | **FAIL** — "the NEW release is still serving" |
+| Genuine rollback to the previous application | restore OK, `nginx -t` OK, reload OK, health 200 | **PASS** — no commit field |
+
+The reload now also falls back to `nginx -s reload` when systemd does not answer.
+A rollback is the last thing that should fail for want of an init system, and the
+restored configuration was already on disk when it did.
+
+## 14 · Phase 1 exit criteria
+
+| # | Criterion | Status |
+|---|---|---|
+| 1 | Clean clone deployment succeeds using only the documentation | **Met** — 12 steps, 0 deviations, §12 |
+| 2 | Standalone validation succeeds | **Met** — §4 |
+| 3 | Controlled deployment succeeds | **Met (replica)** — §5 |
+| 4 | PM2 restart validation succeeds | **Met (replica)** — §6 |
+| 5 | PM2 resurrect validation succeeds | **Met (replica)** — §6 |
+| 6 | Reboot validation succeeds **on the production host** | **Not met** — no host access; simulated only |
+| 7 | Health endpoints healthy locally and through nginx | **Met (replica)** — §7. On production all three return 502 |
+| 8 | Production deployment follows the exact documented process | **Not met** — no production deployment has been performed |
+| 9 | A second engineer can repeat the deployment without assistance | **Evidence, not proof** — the clean-room run is a proxy for this, not a second person |
+| 10 | Rollback procedure is verified | **Met (replica)** — §13, and it found a defect |
+| 11 | Deployment certification report is completed | **Met** — this document |
+
+Eight of eleven are met against the replica. The three that are not — 6, 8 and
+the literal reading of 9 — cannot be met from here at all: they are statements
+about the production host and about a second human being. Nothing in the
+engineering blocks them.
+
+**Phase 1 is not complete**, and the remaining work is execution on the host
+rather than development.
 
 ---
 

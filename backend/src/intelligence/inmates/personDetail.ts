@@ -240,13 +240,18 @@ export async function getPersonDetail(inmateId: string): Promise<PersonDetail | 
       bookingId: o.bookingId,
     }));
 
+  // Shown with punctuation where the roster had it. The canonical columns stay the
+  // basis for matching; these are what a person reads.
+  const shownLast = inmate.displayLast ?? inmate.canonicalLast;
+  const shownFirst = inmate.displayFirst ?? inmate.canonicalFirst;
+
   return {
     identity: {
       inmateId: inmate.inmateId,
-      name: `${inmate.canonicalLast}, ${inmate.canonicalFirst}`,
-      first: inmate.canonicalFirst,
-      last: inmate.canonicalLast,
-      middle: inmate.canonicalMiddle,
+      name: `${shownLast}, ${shownFirst}`,
+      first: shownFirst,
+      last: shownLast,
+      middle: inmate.displayMiddle ?? inmate.canonicalMiddle,
       suffix: inmate.suffix,
       dateOfBirth: day(inmate.dateOfBirth),
       sex: inmate.sex,
@@ -500,10 +505,10 @@ export async function searchHistorical(params: HistoricalSearchParams) {
       const latest = row.bookings[0];
       return {
         inmateId: row.inmateId,
-        name: `${row.canonicalLast}, ${row.canonicalFirst}`,
-        first: row.canonicalFirst,
-        last: row.canonicalLast,
-        middle: row.canonicalMiddle,
+        name: `${row.displayLast ?? row.canonicalLast}, ${row.displayFirst ?? row.canonicalFirst}`,
+        first: row.displayFirst ?? row.canonicalFirst,
+        last: row.displayLast ?? row.canonicalLast,
+        middle: row.displayMiddle ?? row.canonicalMiddle,
         dateOfBirth: day(row.dateOfBirth),
         sex: row.sex,
         race: row.race,

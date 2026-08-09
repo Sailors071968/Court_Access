@@ -16,9 +16,10 @@ import {
   compareDob, editDistance, resolveIdentity, RESOLVER_VERSION,
 } from '../src/intelligence/inmates/identityResolution.js';
 import {
-  normalizeNamePart, normalizeRecord, normalizeSex, parseCharges,
+  displayNamePart, normalizeNamePart, normalizeRecord, normalizeSex, parseCharges,
   parseDate, parseMoneyCents, splitFullName,
 } from '../src/intelligence/inmates/normalization.js';
+import { deriveNameKeys } from '../src/intelligence/inmates/nameKeys.js';
 import { splitCsvLine } from '../src/intelligence/inmates/parsers/csvParser.js';
 import { getColumnMap, inspectHeaders } from '../src/intelligence/inmates/parsers/columnMaps.js';
 import type {
@@ -308,3 +309,64 @@ test('conflicting sex is recorded as evidence without blocking an otherwise exac
   assert.equal(result.outcome, 'matched');
   assert.ok(result.evidence.conflicts.some((c) => c.code === 'sex_differs' && !c.blocking));
 });
+
+// ---------------------------------------------------------------------------
+// Display names versus matching names
+// ---------------------------------------------------------------------------
+
+test('the matching form removes punctuation so two spellings are one surname', () => {
+  // This is what makes O'BRIEN and OBRIEN the same person, and it must not change.
+  assert.equal(normalizeNamePart("O'BRIEN"), 'OBRIEN');
+  assert.equal(normalizeNamePart('GARCIA-LOPEZ'), 'GARCIALOPEZ');
+});
+
+test('the display form keeps punctuation, because a printed name must be right', () => {
+  assert.equal(displayNamePart("o'brien"), "O'BRIEN");
+  assert.equal(displayNamePart('garcia-lopez'), 'GARCIA-LOPEZ');
+});
+
+test('both forms still strip honorifics and stray commas', () => {
+  assert.equal(displayNamePart('MR. GARCIA-LOPEZ,'), 'GARCIA-LOPEZ');
+  assert.equal(normalizeNamePart('MR. GARCIA-LOPEZ,'), 'GARCIALOPEZ');
+});
+
+test('a display name is only recorded when it differs from the matching form', () => {
+  // A name with no punctuation must not carry a redundant second copy of itself,
+  // or every row in the repository grows three columns for nothing.
+  const plain = normalizeRecord(
+    {
+      'Last Name': 'SMITH', 'First Name': 'JAMES', 'Booking Date': '2026-08-08',
+      __lineNumber: '2',
+    },
+    SACRAMENTO_MAP,
+  );
+  assert.equal(plain.record?.displayLast, undefined);
+  assert.equal(plain.record?.last, 'SMITH');
+
+  const punctuated = normalizeRecord(
+    {
+      'Last Name': 'GARCIA-LOPEZ', 'First Name': 'MIGUEL', 'Booking Date': '2026-08-08',
+      __lineNumber: '3',
+    },
+    SACRAMENTO_MAP,
+  );
+  assert.equal(punctuated.record?.last, 'GARCIALOPEZ', 'matching form is folded');
+  assert.equal(punctuated.record?.displayLast, 'GARCIA-LOPEZ', 'display form is preserved');
+});
+
+test('the display name never becomes a matching key', () => {
+  // The guarantee that adding display columns cannot change a merge decision: the
+  // folded surname is what every blocking key derives from.
+  const record = normalizeRecord(
+    {
+      'Last Name': "O'BRIEN", 'First Name': 'CATHERINE', 'Booking Date': '2026-08-08',
+      __lineNumber: '4',
+    },
+    SACRAMENTO_MAP,
+  );
+  assert.equal(record.record?.last, 'OBRIEN');
+  assert.equal(deriveNameKeys(record.record!.last).collapsed, deriveNameKeys('OBRIEN').collapsed);
+});
+
+/** The real Sacramento map, so these tests exercise the profile in production use. */
+const SACRAMENTO_MAP = getColumnMap('sacramento')!;

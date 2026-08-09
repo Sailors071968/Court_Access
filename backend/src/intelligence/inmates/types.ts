@@ -17,10 +17,23 @@ export type RawRecord = Record<string, string>;
 
 /** A row after normalization. Every parser converges on this before matching. */
 export interface NormalizedRecord {
+  /** The matching form: uppercase, punctuation removed, so O'BRIEN and OBRIEN are
+   *  the same surname. Every comparison and every blocking key uses these. */
   first: string;
   last: string;
   middle?: string;
   suffix?: string;
+  /**
+   * The form to show and print, when it differs.
+   *
+   * GARCIA-LOPEZ rather than GARCIALOPEZ. Present only when punctuation was removed,
+   * and used for display only — nothing compares these and no key derives from them,
+   * because a report handed to a deputy must not spell a name wrong while matching
+   * must still treat the two spellings as one person.
+   */
+  displayFirst?: string;
+  displayLast?: string;
+  displayMiddle?: string;
   /** ISO date, or undefined when absent or unparseable. */
   dateOfBirth?: string;
   sex?: Sex;

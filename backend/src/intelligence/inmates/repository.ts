@@ -8,6 +8,7 @@
 // ============================================================================
 
 import prisma from '../../lib/prisma.js';
+import { displayName } from './displayName.js';
 
 export interface InmateSummary {
   inmateId: string;
@@ -66,7 +67,7 @@ export async function getInmate(inmateId: string): Promise<InmateSummary | null>
 
   return {
     inmateId: row.inmateId,
-    name: `${row.canonicalLast}, ${row.canonicalFirst}`,
+    name: displayName(row),
     first: row.canonicalFirst,
     last: row.canonicalLast,
     middle: row.canonicalMiddle,
@@ -177,10 +178,10 @@ export async function searchInmates(params: SearchParams): Promise<{ total: numb
     total,
     results: rows.map((row) => ({
       inmateId: row.inmateId,
-      name: `${row.canonicalLast}, ${row.canonicalFirst}`,
-      first: row.canonicalFirst,
-      last: row.canonicalLast,
-      middle: row.canonicalMiddle,
+      name: `${row.displayLast ?? row.canonicalLast}, ${row.displayFirst ?? row.canonicalFirst}`,
+      first: row.displayFirst ?? row.canonicalFirst,
+      last: row.displayLast ?? row.canonicalLast,
+      middle: row.displayMiddle ?? row.canonicalMiddle,
       dateOfBirth: row.dateOfBirth?.toISOString().slice(0, 10) ?? null,
       sex: row.sex,
       race: row.race,
@@ -234,7 +235,7 @@ export async function getNewInmates(params: NewInmateParams) {
     total,
     results: await Promise.all(bookings.map(async (b) => ({
       inmateId: b.inmateId,
-      name: `${b.inmate.canonicalLast}, ${b.inmate.canonicalFirst}`,
+      name: `${b.inmate.displayLast ?? b.inmate.canonicalLast}, ${b.inmate.displayFirst ?? b.inmate.canonicalFirst}`,
       dateOfBirth: b.inmate.dateOfBirth?.toISOString().slice(0, 10) ?? null,
       sex: b.inmate.sex,
       race: b.inmate.race,

@@ -19,6 +19,7 @@ import {
   type ChangeEventDraft, type ObservationAttributes,
 } from './changeDetection.js';
 import { reconcileObservations, type ObservationForComparison } from './sourceReconciliation.js';
+import { displayName } from './displayName.js';
 import type { MatchEvidence, NormalizedRecord, ResolutionResult } from './types.js';
 
 type Tx = Prisma.TransactionClient | PrismaClient;
@@ -387,7 +388,7 @@ export async function recordWatchListMatches(
 
   const entries = await prisma.inmateWatchListEntry.findMany({
     where: { inmateId: { in: inmateIds }, active: true },
-    include: { inmate: { select: { canonicalFirst: true, canonicalLast: true } } },
+    include: { inmate: { select: { canonicalFirst: true, canonicalLast: true, displayFirst: true, displayLast: true } } },
   });
   if (entries.length === 0) return 0;
 
@@ -407,7 +408,7 @@ export async function recordWatchListMatches(
       data: {
         kind: 'watch_list_hit',
         severity: 'warning',
-        title: `Watch list: ${entry.inmate.canonicalLast}, ${entry.inmate.canonicalFirst} appears in a roster`,
+        title: `Watch list: ${displayName(entry.inmate)} appears in a roster`,
         body: `Reason on the watch list: ${entry.reason}`,
         inmateId: entry.inmateId,
         batchId: args.batchId,

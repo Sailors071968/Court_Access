@@ -68,6 +68,22 @@ export function cleanText(value: string | undefined | null): string {
  * "O'Brien" and "OBrien" — the same person, spelled two ways by two clerks —
  * normalize identically.
  */
+/**
+ * The name as it should be shown and printed.
+ *
+ * Keeps the hyphen in GARCIA-LOPEZ and the apostrophe in O'BRIEN, which the matching
+ * form deliberately removes. Two forms are needed because they answer different
+ * questions: matching must treat O'BRIEN and OBRIEN as the same surname, and a report
+ * handed to a deputy must not spell a person's name wrong.
+ *
+ * Only for display. Nothing compares these, and no blocking key derives from them.
+ */
+export function displayNamePart(value: string | undefined | null): string {
+  const cleaned = cleanText(value).toUpperCase().replace(/[.,]/g, '');
+  const words = cleaned.split(' ').filter((w) => w && !HONORIFICS.has(w));
+  return words.join(' ').trim();
+}
+
 export function normalizeNamePart(value: string | undefined | null): string {
   const cleaned = cleanText(value).toUpperCase().replace(/[.,]/g, '');
   const withoutPunctuation = cleaned.replace(/['\u2019\-]/g, '');
@@ -339,12 +355,22 @@ export function normalizeRecord(row: RawRecord, map: ColumnMap): NormalizeOutcom
   const issues: NormalizeOutcome['issues'] = [];
 
   let name: SplitName | null = null;
+  let displayLast: string | undefined;
+  let displayFirst: string | undefined;
+  let displayMiddle: string | undefined;
+
   const fullName = pick(row, map, 'fullName');
   if (fullName) {
     name = splitFullName(fullName, map.nameOrder);
+    // A single name column is split on the matching form, so the display halves are
+    // not recoverable from it without splitting twice. Left undefined rather than
+    // guessed: the matching form is a correct name, just a punctuation-free one.
   } else {
     const last = normalizeNamePart(pick(row, map, 'last'));
     const first = normalizeNamePart(pick(row, map, 'first'));
+    displayLast = displayNamePart(pick(row, map, 'last'));
+    displayFirst = displayNamePart(pick(row, map, 'first'));
+    displayMiddle = displayNamePart(pick(row, map, 'middle')) || undefined;
     if (last || first) {
       name = withSuffix({
         first,
@@ -388,6 +414,11 @@ export function normalizeRecord(row: RawRecord, map: ColumnMap): NormalizeOutcom
     last: name.last,
     middle: name.middle,
     suffix: name.suffix,
+    // Only set when they differ from the matching form, so a name with no
+    // punctuation does not carry a redundant second copy of itself.
+    displayFirst: displayFirst && displayFirst !== name.first ? displayFirst : undefined,
+    displayLast: displayLast && displayLast !== name.last ? displayLast : undefined,
+    displayMiddle: displayMiddle && displayMiddle !== name.middle ? displayMiddle : undefined,
     dateOfBirth,
     sex: normalizeSex(pick(row, map, 'sex')),
     race: normalizeRace(pick(row, map, 'race')),

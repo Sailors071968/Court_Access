@@ -14,6 +14,7 @@
 import type { FastifyInstance, FastifyReply } from 'fastify';
 
 import type { AuthenticatedRequest } from '../../security/authMiddleware.js';
+import { displayName } from './displayName.js';
 import prisma from '../../lib/prisma.js';
 import { recordAccess } from './auditLog.js';
 import { runIngestion } from './ingestionEngine.js';
@@ -263,7 +264,7 @@ export async function registerInmateIntelligenceRoutes(app: FastifyInstance): Pr
       results: bookings.map((b) => ({
         inmateId: b.inmateId,
         bookingId: b.bookingId,
-        name: `${b.inmate.canonicalLast}, ${b.inmate.canonicalFirst}`,
+        name: displayName(b.inmate),
         facility: b.facility,
         bookedAt: b.bookedAt.toISOString(),
         housingLocation: b.housingLocation,
@@ -302,10 +303,10 @@ export async function registerInmateIntelligenceRoutes(app: FastifyInstance): Pr
     const inmates = inmateIds.length > 0
       ? await prisma.inmate.findMany({
           where: { inmateId: { in: inmateIds } },
-          select: { inmateId: true, canonicalFirst: true, canonicalLast: true },
+          select: { inmateId: true, canonicalFirst: true, canonicalLast: true, displayFirst: true, displayLast: true },
         })
       : [];
-    const nameOf = new Map(inmates.map((i) => [i.inmateId, `${i.canonicalLast}, ${i.canonicalFirst}`]));
+    const nameOf = new Map(inmates.map((i) => [i.inmateId, displayName(i)]));
 
     return reply.send({
       total,
@@ -390,7 +391,7 @@ export async function registerInmateIntelligenceRoutes(app: FastifyInstance): Pr
       booking: {
         bookingId: booking.bookingId,
         inmateId: booking.inmateId,
-        name: `${booking.inmate.canonicalLast}, ${booking.inmate.canonicalFirst}`,
+        name: displayName(booking.inmate),
         facility: booking.facility,
         externalBookingId: booking.externalBookingId,
         bookedAt: booking.bookedAt.toISOString(),
@@ -510,7 +511,7 @@ export async function registerInmateIntelligenceRoutes(app: FastifyInstance): Pr
       results: entries.map((e) => ({
         entryId: e.entryId,
         inmateId: e.inmateId,
-        name: `${e.inmate.canonicalLast}, ${e.inmate.canonicalFirst}`,
+        name: displayName(e.inmate),
         reason: e.reason,
         createdAt: e.createdAt.toISOString(),
         recentMatches: e.matches.map((m) => ({

@@ -79,9 +79,13 @@ export async function attachBooking(tx: Tx, args: AttachBookingArgs): Promise<{ 
     },
   });
 
+  // The person is linked here rather than when the record was written, because for a
+  // newly discovered person they did not exist yet — the record was created before
+  // the person was. Leaving it null made "which import found this person"
+  // unanswerable for exactly the people this system is about.
   await tx.inmateIngestionRecord.update({
     where: { recordId: args.recordId },
-    data: { bookingId: booking.bookingId },
+    data: { bookingId: booking.bookingId, resolvedInmateId: inmateId },
   });
 
   const { observationId, attributes } = await recordObservation(tx, {
@@ -227,6 +231,9 @@ export async function createPersonFromRecord(
       canonicalFirst: record.first,
       canonicalLast: record.last,
       canonicalMiddle: record.middle ?? null,
+      displayFirst: record.displayFirst ?? null,
+      displayLast: record.displayLast ?? null,
+      displayMiddle: record.displayMiddle ?? null,
       suffix: record.suffix ?? null,
       phoneticLast: keys.phonetic,
       collapsedLast: keys.collapsed,

@@ -3260,6 +3260,17 @@ model Inmate {
   canonicalFirst     String
   canonicalLast      String
   canonicalMiddle    String?
+  /**
+   * The name as it should be shown and printed, when it differs from the canonical
+   * matching form. GARCIA-LOPEZ rather than GARCIALOPEZ, O'BRIEN rather than OBRIEN.
+   *
+   * Display only. Nothing matches on these and no blocking key derives from them —
+   * the canonical columns remain the single basis for identity, so adding these
+   * cannot change a merge decision.
+   */
+  displayFirst       String?
+  displayLast        String?
+  displayMiddle      String?
   suffix             String?
   dateOfBirth        DateTime?
   sex                String?

@@ -24,6 +24,7 @@
 
 import prisma from '../../lib/prisma.js';
 import { attachBooking, createPersonFromRecord } from './bookingWriter.js';
+import { displayName } from './displayName.js';
 import type { NormalizedRecord } from './types.js';
 
 export type ReviewDecision = 'approve_merge' | 'reject_merge' | 'create_new_person';
@@ -322,6 +323,7 @@ export async function reviewQueueDetailed(args: { limit: number; offset: number 
         where: { inmateId: { in: candidateIds } },
         select: {
           inmateId: true, canonicalFirst: true, canonicalLast: true, canonicalMiddle: true,
+          displayFirst: true, displayLast: true, displayMiddle: true,
           dateOfBirth: true, sex: true, race: true, bookingCount: true,
           firstSeenAt: true, lastSeenAt: true, identityConfidence: true,
           aliases: { select: { first: true, last: true, dateOfBirth: true }, take: 10 },
@@ -377,7 +379,7 @@ export async function reviewQueueDetailed(args: { limit: number; offset: number 
         /** Who the engine thought it might be, in enough detail to judge. */
         candidate: candidate ? {
           inmateId: candidate.inmateId,
-          name: `${candidate.canonicalLast}, ${candidate.canonicalFirst}`,
+          name: displayName(candidate),
           middle: candidate.canonicalMiddle,
           dateOfBirth: candidate.dateOfBirth?.toISOString().slice(0, 10) ?? null,
           sex: candidate.sex,

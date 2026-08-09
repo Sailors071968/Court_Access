@@ -15,6 +15,7 @@
 // ============================================================================
 
 import prisma from '../../lib/prisma.js';
+import { displayName } from './displayName.js';
 
 export interface ReportParameters {
   from?: string;
@@ -119,7 +120,7 @@ export async function buildNewInmateReport(params: ReportParameters): Promise<Re
 
     rows.push({
       inmateId: b.inmateId,
-      name: `${b.inmate.canonicalLast}, ${b.inmate.canonicalFirst}${b.inmate.canonicalMiddle ? ' ' + b.inmate.canonicalMiddle : ''}`,
+      name: displayName(b.inmate, { includeMiddle: true }),
       dateOfBirth: b.inmate.dateOfBirth?.toISOString().slice(0, 10) ?? null,
       sex: b.inmate.sex,
       bookingDate: b.bookedAt.toISOString(),

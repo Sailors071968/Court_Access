@@ -3156,6 +3156,21 @@ model InmateIngestionBatch {
    *  source that lists everyone in custody. */
   rosterKind       String    @default("full_population")
   /** Last line committed, so a large import can resume where it stopped. */
+  /**
+   * The deterministic lifecycle state.
+   *
+   * Separate from `status`, which is the coarse three-value field the earlier code
+   * wrote and every existing query filters on. Renaming that would have rewritten
+   * history; this is additive, and `status` continues to mean what it always did.
+   */
+  lifecycleState String   @default("uploaded")
+  cancelledById  String?
+  cancelledAt    DateTime?
+  cancelReason   String?
+  /** Set when an operator closes a batch, which is the end of the daily workflow. */
+  closedById     String?
+  closedAt       DateTime?
+
   resumeCursor     Int?
   startedAt        DateTime  @default(now())
   finishedAt       DateTime?
@@ -3845,6 +3860,30 @@ model InmateIntelligenceReport {
   rowCount     Int
   /** The rendered report, retained verbatim. */
   renderedHtml String?
+  /**
+   * draft | reviewed | approved | printed | archived
+   *
+   * A report is a permanent historical record, so the state moves forward and the
+   * document itself never changes. "Printed" matters operationally: it is the moment a
+   * conclusion left the building on paper, and after that the report cannot be quietly
+   * superseded — a correction is a new report that says what it replaces.
+   */
+  approvalState  String   @default("draft")
+  reviewedById   String?
+  reviewedAt     DateTime?
+  approvedById   String?
+  approvedAt     DateTime?
+  approvalNote   String?
+  printedById    String?
+  printedAt      DateTime?
+  printCount     Int      @default(0)
+  archivedAt     DateTime?
+  /** Set when this report supersedes an earlier one, with the reason. */
+  supersedesReportId String?
+  supersedeReason    String?
+  /** The batches this report drew on, so it can be traced to its sources. */
+  batchIds       String[]
+
   generatedById String
   generatedAt  DateTime @default(now())
 
@@ -4235,4 +4274,92 @@ model InmateImportInspection {
   @@index([sha256])
   @@index([verdict, inspectedAt])
   @@map("inmate_import_inspections")
+}
+
+/**
+ * One transition in a batch's lifecycle.
+ *
+ * The batch row carries its current state; this carries how it got there. A batch that
+ * failed at identity analysis and a batch that failed at parsing are the same row with
+ * the same status, and the difference is the whole diagnosis — so every transition is
+ * recorded with when, who, and the algorithm versions in force at that moment.
+ *
+ * Append-only. A transition is never updated or deleted, because the sequence is the
+ * audit trail: "this import spent four minutes in identity analysis and then failed"
+ * is only answerable if both transitions survive.
+ */
+model InmateBatchTransition {
+  transitionId String   @id @default(uuid())
+  batchId      String
+
+  /** The state left. Null for the first transition into the lifecycle. */
+  fromState    String?
+  toState      String
+  /** Why, when a transition needs explaining — a failure, a cancellation, a retry. */
+  reason       String?
+
+  /** Who caused it. Null when the pipeline advanced on its own. */
+  actorId      String?
+  /** manual | cli | timer | queue | system */
+  actor        String   @default("system")
+
+  /** The versions in force at this moment, so a decision stays interpretable after
+   *  the algorithms change. Copied rather than referenced for the same reason. */
+  parserProfileId      String?
+  parserVersion        Int?
+  normalizationVersion String?
+  resolverVersion      String?
+  mergePolicyVersion   String?
+
+  /** Milliseconds spent in the state being left. Null for the first transition. */
+  durationMs   Int?
+  /** Counters as they stood at this transition, for a progress display and for metrics. */
+  metrics      Json?
+
+  occurredAt   DateTime @default(now())
+
+  @@index([batchId, occurredAt])
+  @@index([toState, occurredAt])
+  @@map("inmate_batch_transitions")
+}
+
+/**
+ * A comparison of two consecutive imports.
+ *
+ * Recorded rather than computed on demand, because the comparison is intelligence in its
+ * own right: "these eleven people were released between Tuesday and Wednesday" is a
+ * conclusion drawn from two documents, and it should be as durable and as auditable as
+ * any other. Recomputing it later against a repository that has since been corrected
+ * would silently change what Wednesday looked like.
+ */
+model InmateBatchComparison {
+  comparisonId String   @id @default(uuid())
+  facility     String
+  /** The earlier batch. */
+  baselineBatchId String
+  /** The later one. */
+  currentBatchId  String
+  baselineRosterDate DateTime?
+  currentRosterDate  DateTime?
+
+  newInmates      Int @default(0)
+  releases        Int @default(0)
+  returns         Int @default(0)
+  housingMoves    Int @default(0)
+  bailChanges     Int @default(0)
+  chargeChanges   Int @default(0)
+  courtChanges    Int @default(0)
+  departures      Int @default(0)
+
+  /** The detail: who, and what changed. Bounded when the roster is large. */
+  detail       Json
+  /** True when the detail was capped and the counts above are the complete figures. */
+  detailTruncated Boolean @default(false)
+
+  generatedById String?
+  generatedAt   DateTime @default(now())
+
+  @@unique([baselineBatchId, currentBatchId])
+  @@index([facility, generatedAt])
+  @@map("inmate_batch_comparisons")
 }

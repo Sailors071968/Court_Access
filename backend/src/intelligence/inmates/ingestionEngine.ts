@@ -27,6 +27,7 @@ import { stat } from 'node:fs/promises';
 import { basename, extname } from 'node:path';
 
 import prisma from '../../lib/prisma.js';
+import { recordTransition } from './batchLifecycle.js';
 import { attachBooking, createPersonFromRecord } from './bookingWriter.js';
 import { generateCandidates } from './candidateGeneration.js';
 import { collapseWithinBatch, bookingContentHash } from './deduplication.js';
@@ -34,7 +35,8 @@ import {
   enqueueForReview, recordBookingChanges, recordDepartures, recordIdentityMatch,
   recordObservation, reconcileBatch,
 } from './evidenceRecording.js';
-import { resolveIdentity } from './identityResolution.js';
+import { RESOLVER_VERSION, resolveIdentity } from './identityResolution.js';
+import { MERGE_POLICY_VERSION } from './mergePolicy.js';
 import { NORMALIZATION_VERSION, normalizeRecord } from './normalization.js';
 import { publishBatchIntelligence } from '../platform/publication.js';
 import { resolveProfile } from '../platform/parserProfiles.js';
@@ -349,6 +351,37 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
     },
   });
 
+  // The lifecycle starts here because the batch row does. Everything before this point
+  // — parsing the header, normalizing, validating — happened without a batch to attach a
+  // transition to, so it is recorded as the state the batch is created in rather than
+  // replayed as transitions that would claim timestamps they did not have.
+  const lifecycleVersions = {
+    parserProfileId: profile.profileId,
+    parserVersion: profile.version,
+    normalizationVersion: profile.normalizationVersion ?? NORMALIZATION_VERSION,
+    resolverVersion: RESOLVER_VERSION,
+    mergePolicyVersion: MERGE_POLICY_VERSION,
+  };
+  await recordTransition({
+    batchId: batch.batchId,
+    to: 'validation_passed',
+    actorId: request.userId,
+    actor: request.trigger === 'manual' ? 'manual' : request.trigger === 'cli' ? 'cli' : 'system',
+    versions: lifecycleVersions,
+    metrics: {
+      rowsParsed: normalized.length,
+      rowsUnreadable: parsed.stats.unparseableLines,
+      parserConfidence: validationReport?.parserConfidence ?? null,
+    },
+  });
+  await recordTransition({
+    batchId: batch.batchId, to: 'parsing', versions: lifecycleVersions,
+    metrics: { rowsToProcess: collapsed.length },
+  });
+  await recordTransition({
+    batchId: batch.batchId, to: 'observation_creation', versions: lifecycleVersions,
+  });
+
   const sourceDoc: SourceDocument = {
     batchId: batch.batchId,
     filename: basename(request.filePath),
@@ -361,6 +394,10 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
   const rosterDate = request.rosterDate ? new Date(request.rosterDate) : null;
 
   try {
+    await recordTransition({
+      batchId: batch.batchId, to: 'identity_analysis', versions: lifecycleVersions,
+      metrics: { rowsToResolve: collapsed.length },
+    });
     report('matching', { processed: 0, total: collapsed.length });
     let processed = 0;
     for (const entry of collapsed) {
@@ -406,6 +443,15 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
     counts.conflicts = conflictCount;
     counts.departures = departureCount;
 
+    await recordTransition({
+      batchId: batch.batchId, to: 'intelligence_generation', versions: lifecycleVersions,
+      metrics: {
+        newInmates: counts.newInmates, matched: counts.matched,
+        duplicates: counts.duplicates, needsReview: counts.needsReview,
+        conflicts: counts.conflicts, departures: counts.departures,
+      },
+    });
+
     // Evidence is now complete for this batch, so the engines can conclude from it.
     // Watch lists are evaluated inside this pass, against intelligence rather than
     // against the roster — which is why nothing here matches people to lists.
@@ -419,6 +465,11 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
     });
     counts.watchListHits = published.watchListHits;
 
+    await recordTransition({
+      batchId: batch.batchId, to: 'persisted', versions: lifecycleVersions,
+      metrics: { watchListHits: counts.watchListHits },
+    });
+
     await prisma.inmateIngestionBatch.update({
       where: { batchId: batch.batchId },
       data: {
@@ -431,8 +482,25 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
         recordsFailed: counts.failed,
       },
     });
+    // Completed is recorded after the row is updated, so a crash between the two leaves
+    // the batch persisted rather than falsely completed.
+    await recordTransition({
+      batchId: batch.batchId, to: 'completed', versions: lifecycleVersions,
+      metrics: {
+        recordsTotal: counts.total, newInmates: counts.newInmates,
+        matched: counts.matched, duplicates: counts.duplicates,
+        needsReview: counts.needsReview, failed: counts.failed,
+        durationMs: Date.now() - startedAt,
+      },
+    });
   } catch (err) {
     const reason = err instanceof Error ? err.message : String(err);
+    // The transition names the state it failed *from*, which is the diagnosis: a batch
+    // that failed in identity_analysis and one that failed in parsing are otherwise the
+    // same row.
+    await recordTransition({
+      batchId: batch.batchId, to: 'failed', reason, versions: lifecycleVersions,
+    });
     await prisma.inmateIngestionBatch.update({
       where: { batchId: batch.batchId },
       data: { status: 'failed', finishedAt: new Date(), failureReason: reason },

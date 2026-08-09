@@ -281,6 +281,149 @@ export async function registerInmateOperationsRoutes(app: FastifyInstance): Prom
   });
 
   // -------------------------------------------------------------------------
+  // Morning Operations Summary — the first thing an operator sees
+  // -------------------------------------------------------------------------
+
+  app.get('/api/admin/intelligence/morning', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!requireAdministrator(request, reply)) return;
+    const { getMorningSummary } = await import('./operations.js');
+    return reply.send(await getMorningSummary());
+  });
+
+  // -------------------------------------------------------------------------
+  // Batch lifecycle
+  // -------------------------------------------------------------------------
+
+  /** One batch, with every state it passed through and how long each took. */
+  app.get('/api/admin/intelligence/batches/:batchId/lifecycle', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!requireAdministrator(request, reply)) return;
+    const { batchId } = request.params as { batchId: string };
+
+    const { getBatchLifecycle } = await import('./batchLifecycle.js');
+    const view = await getBatchLifecycle(batchId);
+    if (!view) return reply.code(404).send({ error: 'Not found', message: 'No such batch.' });
+    return reply.send(view);
+  });
+
+  /** Close a batch: the operator has read the intelligence and is finished with it. */
+  app.post('/api/admin/intelligence/batches/:batchId/close', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!requireAdministrator(request, reply)) return;
+    const { batchId } = request.params as { batchId: string };
+
+    const { closeBatch } = await import('./batchLifecycle.js');
+    const outcome = await closeBatch({ batchId, actorId: request.user!.userId });
+    if (!outcome.ok) return reply.code(409).send({ error: 'Cannot close', message: outcome.reason });
+    return reply.send({ batchId, closed: true });
+  });
+
+  app.post('/api/admin/intelligence/batches/:batchId/cancel', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!requireAdministrator(request, reply)) return;
+    const { batchId } = request.params as { batchId: string };
+    const body = (request.body ?? {}) as { reason?: string };
+
+    const { cancelBatch } = await import('./batchLifecycle.js');
+    const outcome = await cancelBatch({ batchId, actorId: request.user!.userId, reason: body.reason ?? '' });
+    if (!outcome.ok) return reply.code(409).send({ error: 'Cannot cancel', message: outcome.reason });
+    return reply.send({ batchId, cancelled: true });
+  });
+
+  // -------------------------------------------------------------------------
+  // Batch comparison
+  // -------------------------------------------------------------------------
+
+  /** Compare the two most recent completed imports — "what changed since yesterday". */
+  app.get('/api/admin/intelligence/comparison/latest', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!requireAdministrator(request, reply)) return;
+    const { facility } = request.query as { facility?: string };
+
+    const { compareLatest } = await import('./operations.js');
+    const result = await compareLatest(facility ?? 'sacramento', request.user!.userId);
+    if (!result.ok) return reply.code(409).send({ error: 'Cannot compare', message: result.reason });
+    return reply.send(result);
+  });
+
+  app.post('/api/admin/intelligence/comparison', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!requireAdministrator(request, reply)) return;
+    const body = (request.body ?? {}) as { baselineBatchId?: string; currentBatchId?: string };
+    if (!body.baselineBatchId || !body.currentBatchId) {
+      return reply.code(400).send({ error: 'Two batches required', message: 'Send baselineBatchId and currentBatchId.' });
+    }
+
+    const { compareBatches } = await import('./operations.js');
+    const result = await compareBatches({
+      baselineBatchId: body.baselineBatchId,
+      currentBatchId: body.currentBatchId,
+      generatedById: request.user!.userId,
+      persist: true,
+    });
+    if (!result.ok) return reply.code(409).send({ error: 'Cannot compare', message: result.reason });
+    return reply.send(result);
+  });
+
+  // -------------------------------------------------------------------------
+  // Report approval
+  // -------------------------------------------------------------------------
+
+  app.get('/api/admin/intelligence/reports/list', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!requireAdministrator(request, reply)) return;
+    const q = request.query as { state?: string; limit?: string };
+
+    const { listReports } = await import('./operations.js');
+    return reply.send({ reports: await listReports({ limit: clampLimit(q.limit, 50, 200), state: q.state }) });
+  });
+
+  /**
+   * Move a report through its approval states.
+   *
+   * Forward only, and the document never changes. Printing is recorded because it is the
+   * moment a conclusion left the building on paper — after that a correction has to be a
+   * new report that says what it supersedes.
+   */
+  app.post('/api/admin/intelligence/reports/:reportId/state', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!requireAdministrator(request, reply)) return;
+    const { reportId } = request.params as { reportId: string };
+    const body = (request.body ?? {}) as { state?: string; note?: string };
+
+    const states = ['draft', 'reviewed', 'approved', 'printed', 'archived'];
+    if (!body.state || !states.includes(body.state)) {
+      return reply.code(400).send({ error: 'Invalid state', message: `One of: ${states.join(', ')}.` });
+    }
+
+    const { setReportState } = await import('./operations.js');
+    const outcome = await setReportState({
+      reportId,
+      to: body.state as 'draft' | 'reviewed' | 'approved' | 'printed' | 'archived',
+      actorId: request.user!.userId,
+      note: body.note,
+    });
+    if (!outcome.ok) return reply.code(409).send({ error: 'Cannot change state', message: outcome.reason });
+
+    await recordAccess({
+      userId: request.user!.userId,
+      action: 'generate_report',
+      parameters: { reportId, state: body.state },
+      ipAddress: request.ip,
+    });
+    return reply.send({ reportId, state: outcome.state, printCount: outcome.printCount });
+  });
+
+  // -------------------------------------------------------------------------
+  // Operational metrics
+  // -------------------------------------------------------------------------
+
+  app.get('/api/admin/intelligence/metrics', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!requireAdministrator(request, reply)) return;
+    const q = request.query as { limit?: string; facility?: string; trendDays?: string };
+
+    const { getBatchMetrics, getMetricTrend } = await import('./operations.js');
+    const [perBatch, trend] = await Promise.all([
+      getBatchMetrics({ limit: clampLimit(q.limit, 30, 200), facility: q.facility }),
+      getMetricTrend(Math.min(Number(q.trendDays) || 30, 180)),
+    ]);
+    return reply.send({ ...perBatch, ...trend });
+  });
+
+  // -------------------------------------------------------------------------
   // Dashboard and import history
   // -------------------------------------------------------------------------
 

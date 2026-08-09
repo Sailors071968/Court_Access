@@ -15,39 +15,39 @@ datasource db {
 // ---------------------------------------------------------------------------
 
 model User {
-  id              String  @id @default(uuid())
-  email           String  @unique
-  name            String
-  passwordHash    String
-  role            String  @default("staff") // admin | attorney | investigator | staff | defendant
-  defaultRole     String? // Program 2A onboarding role (attorney | criminal_investigator | ...)
-  tenantId        String
-  clientId        String? // Links defendant portal users to Client record
-  officeId        String?
+  id            String   @id @default(uuid())
+  email         String   @unique
+  name          String
+  passwordHash  String
+  role          String   @default("staff") // admin | attorney | investigator | staff | defendant
+  defaultRole   String?  // Program 2A onboarding role (attorney | criminal_investigator | ...)
+  tenantId      String
+  clientId      String?  // Links defendant portal users to Client record
+  officeId      String?
   practiceGroupId String?
 
-  emailVerifiedAt    DateTime?
-  termsAcceptedAt    DateTime?
-  privacyAcceptedAt  DateTime?
-  mfaEnabled         Boolean   @default(false)
-  mfaSecretEncrypted String?
+  emailVerifiedAt     DateTime?
+  termsAcceptedAt     DateTime?
+  privacyAcceptedAt   DateTime?
+  mfaEnabled          Boolean  @default(false)
+  mfaSecretEncrypted  String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
-  subscription            Subscription?
-  refreshTokens           RefreshToken[]
-  securityLogs            SecurityLog[]
-  passwordResetTokens     PasswordResetToken[]
+  subscription  Subscription?
+  refreshTokens RefreshToken[]
+  securityLogs  SecurityLog[]
+  passwordResetTokens PasswordResetToken[]
   emailVerificationTokens EmailVerificationToken[]
-  sentMessages            CaseMessage[]            @relation("MessageSender")
-  orgMessages             OrgInternalMessage[]     @relation("OrgMessageSender")
-  client                  Client?                  @relation(fields: [clientId], references: [clientId])
+  sentMessages  CaseMessage[] @relation("MessageSender")
+  orgMessages   OrgInternalMessage[] @relation("OrgMessageSender")
+  client        Client?  @relation(fields: [clientId], references: [clientId])
   organizationMemberships OrganizationMember[]
-  personnelProfile        PersonnelProfile?
-  accountSettings         UserAccountSettings?
-  office                  OrganizationOffice?      @relation(fields: [officeId], references: [officeId])
-  practiceGroup           PracticeGroup?           @relation(fields: [practiceGroupId], references: [practiceGroupId])
+  personnelProfile PersonnelProfile?
+  accountSettings UserAccountSettings?
+  office        OrganizationOffice? @relation(fields: [officeId], references: [officeId])
+  practiceGroup PracticeGroup? @relation(fields: [practiceGroupId], references: [practiceGroupId])
 
   @@index([email])
   @@index([tenantId])
@@ -63,13 +63,13 @@ model User {
 // ---------------------------------------------------------------------------
 
 model PasswordResetToken {
-  id        String    @id @default(uuid())
+  id        String   @id @default(uuid())
   userId    String
-  user      User      @relation(fields: [userId], references: [id])
-  tokenHash String // SHA-256 hash of the token (never store raw tokens)
+  user      User     @relation(fields: [userId], references: [id])
+  tokenHash String   // SHA-256 hash of the token (never store raw tokens)
   expiresAt DateTime
   usedAt    DateTime?
-  createdAt DateTime  @default(now())
+  createdAt DateTime @default(now())
 
   @@index([tokenHash])
   @@index([userId])
@@ -81,13 +81,13 @@ model PasswordResetToken {
 // ---------------------------------------------------------------------------
 
 model EmailVerificationToken {
-  id        String    @id @default(uuid())
+  id        String   @id @default(uuid())
   userId    String
-  user      User      @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
   tokenHash String
   expiresAt DateTime
   usedAt    DateTime?
-  createdAt DateTime  @default(now())
+  createdAt DateTime @default(now())
 
   @@index([tokenHash])
   @@index([userId])
@@ -99,22 +99,22 @@ model EmailVerificationToken {
 // ---------------------------------------------------------------------------
 
 model Subscription {
-  id                   String    @id @default(uuid())
-  userId               String    @unique
-  user                 User      @relation(fields: [userId], references: [id])
-  planId               String    @default("FREE")
-  activatedAt          DateTime  @default(now())
-  billingPeriodStart   DateTime  @default(now())
-  billingPeriodEnd     DateTime
-  stripeSubscriptionId String?
-  stripeCustomerId     String?
-  subscriptionStatus   String    @default("active") // active | past_due | canceled | trialing
-  subscriptionTier     String    @default("free") // free | individual | standard | complex | professional
-  trialEndsAt          DateTime?
-  billingInterval      String    @default("month") // month | year
+  id                    String   @id @default(uuid())
+  userId                String   @unique
+  user                  User     @relation(fields: [userId], references: [id])
+  planId                String   @default("FREE")
+  activatedAt           DateTime @default(now())
+  billingPeriodStart    DateTime @default(now())
+  billingPeriodEnd      DateTime
+  stripeSubscriptionId  String?
+  stripeCustomerId      String?
+  subscriptionStatus    String   @default("active") // active | past_due | canceled | trialing
+  subscriptionTier      String   @default("free")   // free | individual | standard | complex | professional
+  trialEndsAt           DateTime?
+  billingInterval       String   @default("month") // month | year
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 
   @@index([userId])
   @@index([planId])
@@ -154,12 +154,12 @@ model RefreshToken {
 // ---------------------------------------------------------------------------
 
 model SecurityLog {
-  id      String  @id @default(uuid())
-  event   String
-  userId  String?
-  user    User?   @relation(fields: [userId], references: [id])
-  ip      String?
-  details String?
+  id        String   @id @default(uuid())
+  event     String
+  userId    String?
+  user      User?    @relation(fields: [userId], references: [id])
+  ip        String?
+  details   String?
 
   createdAt DateTime @default(now())
 
@@ -175,16 +175,16 @@ model SecurityLog {
 // ---------------------------------------------------------------------------
 
 model CorpusIngestionState {
-  id                  String   @id @default(uuid())
-  corpusName          String
-  fileName            String
-  lastProcessedOffset Int      @default(0)
-  recordsProcessed    Int      @default(0)
-  totalRecords        Int?
-  status              String   @default("pending") // pending | in_progress | completed | failed | paused
-  errorMessage        String?
-  createdAt           DateTime @default(now())
-  updatedAt           DateTime @updatedAt
+  id                   String   @id @default(uuid())
+  corpusName           String
+  fileName             String
+  lastProcessedOffset  Int      @default(0)
+  recordsProcessed     Int      @default(0)
+  totalRecords         Int?
+  status               String   @default("pending") // pending | in_progress | completed | failed | paused
+  errorMessage         String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
 
   @@unique([corpusName, fileName])
   @@index([corpusName])
@@ -202,7 +202,7 @@ model CorpusIngestionLog {
   batchNumber     Int
   recordsInserted Int
   durationMs      Int
-  status          String // success | failed | skipped
+  status          String   // success | failed | skipped
   errorMessage    String?
   timestamp       DateTime @default(now())
 
@@ -216,30 +216,30 @@ model CorpusIngestionLog {
 // ---------------------------------------------------------------------------
 
 model LegalDocument {
-  id               String    @id @default(uuid())
-  tenantId         String
-  title            String
-  content          String
-  jurisdiction     String
-  documentType     String // policy | statute | case_law | transcript | evidence | investigative_report
-  source           String
-  version          String    @default("1.0")
-  corpusName       String?
-  sourceFile       String?
-  contentHash      String // SHA-256 of content for dedup
-  corpusVersion    String? // Version of the corpus this document belongs to
-  documentVersion  String    @default("1.0") // Version of this specific document
-  supersededBy     String? // ID of the document that supersedes this one
+  id              String   @id @default(uuid())
+  tenantId        String
+  title           String
+  content         String
+  jurisdiction    String
+  documentType    String   // policy | statute | case_law | transcript | evidence | investigative_report
+  source          String
+  version         String   @default("1.0")
+  corpusName      String?
+  sourceFile      String?
+  contentHash     String   // SHA-256 of content for dedup
+  corpusVersion   String?  // Version of the corpus this document belongs to
+  documentVersion String   @default("1.0") // Version of this specific document
+  supersededBy    String?  // ID of the document that supersedes this one
   // Epic 2A — statute-specific fields (nullable for backward compatibility)
-  statuteCode      String?
-  statuteSection   String?
-  statuteHierarchy String? // JSON StatuteHierarchy
-  sourceUrl        String?
-  retrievedAt      DateTime?
-  effectiveDate    String?
-  extractionAudit  String? // JSON AuditMetadata
-  createdAt        DateTime  @default(now())
-  updatedAt        DateTime  @updatedAt
+  statuteCode     String?
+  statuteSection  String?
+  statuteHierarchy String?  // JSON StatuteHierarchy
+  sourceUrl       String?
+  retrievedAt     DateTime?
+  effectiveDate   String?
+  extractionAudit String?  // JSON AuditMetadata
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   @@unique([contentHash, tenantId])
   @@index([tenantId])
@@ -257,19 +257,19 @@ model LegalDocument {
 // ---------------------------------------------------------------------------
 
 model CorpusRegistry {
-  id              String    @id @default(uuid())
-  corpusName      String
-  jurisdiction    String
-  sourceAuthority String // e.g. "California Legislature", "US Congress"
-  version         String    @default("1.0")
-  releaseDate     DateTime?
-  ingestionStatus String    @default("pending") // pending | in_progress | completed | failed
-  totalDocuments  Int       @default(0)
-  totalBytes      BigInt    @default(0)
-  checksum        String? // SHA-256 of the entire corpus file
-  metadata        String? // JSON string for extensible metadata
-  createdAt       DateTime  @default(now())
-  updatedAt       DateTime  @updatedAt
+  id               String   @id @default(uuid())
+  corpusName       String
+  jurisdiction     String
+  sourceAuthority  String   // e.g. "California Legislature", "US Congress"
+  version          String   @default("1.0")
+  releaseDate      DateTime?
+  ingestionStatus  String   @default("pending") // pending | in_progress | completed | failed
+  totalDocuments   Int      @default(0)
+  totalBytes       BigInt   @default(0)
+  checksum         String?  // SHA-256 of the entire corpus file
+  metadata         String?  // JSON string for extensible metadata
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   @@unique([corpusName, version])
   @@index([corpusName])
@@ -283,12 +283,12 @@ model CorpusRegistry {
 // ---------------------------------------------------------------------------
 
 model CorpusIngestionLock {
-  id         String   @id @default(uuid())
-  corpusName String   @unique
-  workerId   String
-  lockedAt   DateTime @default(now())
-  expiresAt  DateTime // Auto-expire to prevent deadlocks
-  metadata   String? // JSON string for worker info
+  id          String   @id @default(uuid())
+  corpusName  String   @unique
+  workerId    String
+  lockedAt    DateTime @default(now())
+  expiresAt   DateTime // Auto-expire to prevent deadlocks
+  metadata    String?  // JSON string for worker info
 
   @@index([corpusName])
   @@index([expiresAt])
@@ -306,14 +306,14 @@ model LegislativeExtractionAudit {
   sourceUrl        String
   contentHash      String?
   sourceStatuteId  String?
-  stage            String // parse | extract
-  status           String // success | rejected | partial
+  stage            String   // parse | extract
+  status           String   // success | rejected | partial
   rejectionReason  String?
   offenseCount     Int      @default(0)
   elementCount     Int      @default(0)
   parserVersion    String
   extractorVersion String
-  metadata         String? // JSON
+  metadata         String?  // JSON
   createdAt        DateTime @default(now())
 
   @@index([code, section])
@@ -335,36 +335,36 @@ model LegislativeExtractionAudit {
 // ---------------------------------------------------------------------------
 
 model Agency {
-  agencyId           String  @id @default(uuid())
-  agencyName         String
-  agencyType         String? // Police | Sheriff | State | TaskForce | Probation | Corrections | District_Attorney | University | Transit | Communications | Coroner | Other
-  city               String?
-  county             String?
-  populationEstimate Int?
-  jurisdictionRank   Int?
+  agencyId            String   @id @default(uuid())
+  agencyName          String
+  agencyType          String?  // Police | Sheriff | State | TaskForce | Probation | Corrections | District_Attorney | University | Transit | Communications | Coroner | Other
+  city                String?
+  county              String?
+  populationEstimate  Int?
+  jurisdictionRank    Int?
 
-  website          String?
-  postDirectoryUrl String?
+  website             String?
+  postDirectoryUrl    String?
 
   recordsRequestUrl   String?
   policyCollectionUrl String?
 
-  policiesDiscovered Boolean @default(false)
+  policiesDiscovered  Boolean  @default(false)
 
-  crawlStatus      String    @default("pending") // pending | in_progress | completed | failed | skipped
-  crawlError       String?
-  lastCrawledAt    DateTime?
-  pagesFound       Int       @default(0)
-  policyPagesFound Int       @default(0)
+  crawlStatus         String   @default("pending") // pending | in_progress | completed | failed | skipped
+  crawlError          String?
+  lastCrawledAt       DateTime?
+  pagesFound          Int      @default(0)
+  policyPagesFound    Int      @default(0)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
-  PolicyDocuments    PolicyDocument[]
-  PolicyCoverage     PolicyCoverage[]
-  CPRAAgencyRequests CPRAAgencyRequest[]
-  CPRAAnnualUpdates  CPRAAnnualUpdate[]
-  AgencyPolicyStatus AgencyPolicyStatus?
+  PolicyDocuments     PolicyDocument[]
+  PolicyCoverage      PolicyCoverage[]
+  CPRAAgencyRequests  CPRAAgencyRequest[]
+  CPRAAnnualUpdates   CPRAAnnualUpdate[]
+  AgencyPolicyStatus  AgencyPolicyStatus?
 
   @@unique([agencyName, county])
   @@index([county])
@@ -381,16 +381,16 @@ model Agency {
 model PolicyTopic {
   id           String   @id @default(uuid())
   topicName    String   @unique
-  category     String // Use_of_Force | Officer_Conduct | Internal_Affairs | Discipline | Arrest | Search_Seizure | Pursuit | Body_Camera | Evidence_Handling | Interrogation | Traffic | Training | Informants | Records | Custody | OIS | Critical_Incident | Special_Units
-  keywords     String // JSON array of search terms
+  category     String   // Use_of_Force | Officer_Conduct | Internal_Affairs | Discipline | Arrest | Search_Seizure | Pursuit | Body_Camera | Evidence_Handling | Interrogation | Traffic | Training | Informants | Records | Custody | OIS | Critical_Incident | Special_Units
+  keywords     String   // JSON array of search terms
   description  String?
-  chpReference String? // CHP policy number reference (e.g. HPM 100.68)
+  chpReference String?  // CHP policy number reference (e.g. HPM 100.68)
   sortOrder    Int      @default(0)
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  PolicyDocuments PolicyDocument[]
-  PolicyCoverage  PolicyCoverage[]
+  PolicyDocuments     PolicyDocument[]
+  PolicyCoverage      PolicyCoverage[]
 
   @@index([category])
   @@map("policy_topics")
@@ -401,37 +401,37 @@ model PolicyTopic {
 // ---------------------------------------------------------------------------
 
 model PolicyDocument {
-  documentId String @id @default(uuid())
+  documentId     String   @id @default(uuid())
 
-  agencyId String
-  Agency   Agency @relation(fields: [agencyId], references: [agencyId])
+  agencyId       String
+  Agency         Agency   @relation(fields: [agencyId], references: [agencyId])
 
-  topicId String?
-  Topic   PolicyTopic? @relation(fields: [topicId], references: [id])
+  topicId        String?
+  Topic          PolicyTopic? @relation(fields: [topicId], references: [id])
 
-  documentType String? // USE_OF_FORCE | INTERNAL_AFFAIRS | BODY_CAMERA | DISCIPLINE | TRAINING | GENERAL_POLICY
-  title        String?
-  policyNumber String? // e.g. HPM 100.68
+  documentType   String?  // USE_OF_FORCE | INTERNAL_AFFAIRS | BODY_CAMERA | DISCIPLINE | TRAINING | GENERAL_POLICY
+  title          String?
+  policyNumber   String?  // e.g. HPM 100.68
 
-  sourceUrl String
-  s3Url     String?
+  sourceUrl      String
+  s3Url          String?
 
-  mimeType      String?
-  fileSizeBytes Int?
+  mimeType       String?
+  fileSizeBytes  Int?
 
-  textExtracted Boolean @default(false)
-  textContent   String?
-  ocrStatus     String  @default("pending") // pending | in_progress | completed | failed | skipped
-  ocrError      String?
+  textExtracted  Boolean  @default(false)
+  textContent    String?
+  ocrStatus      String   @default("pending") // pending | in_progress | completed | failed | skipped
+  ocrError       String?
 
   classificationStatus String @default("pending") // pending | completed | failed
   classificationScore  Float?
 
-  isChpCanonical         Boolean @default(false) // true for CHP reference policies
+  isChpCanonical Boolean  @default(false) // true for CHP reference policies
   matchedTopicConfidence Float? // confidence of topic matching (0-1)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@index([agencyId])
   @@index([topicId])
@@ -447,20 +447,20 @@ model PolicyDocument {
 // ---------------------------------------------------------------------------
 
 model PolicyCoverage {
-  id       String @id @default(uuid())
-  agencyId String
-  Agency   Agency @relation(fields: [agencyId], references: [agencyId])
+  id          String   @id @default(uuid())
+  agencyId    String
+  Agency      Agency   @relation(fields: [agencyId], references: [agencyId])
 
-  topicId String
-  Topic   PolicyTopic @relation(fields: [topicId], references: [id])
+  topicId     String
+  Topic       PolicyTopic @relation(fields: [topicId], references: [id])
 
-  policyFound Boolean @default(false)
-  documentId  String? // reference to the discovered PolicyDocument
+  policyFound Boolean  @default(false)
+  documentId  String?  // reference to the discovered PolicyDocument
   sourceUrl   String?
   notes       String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@unique([agencyId, topicId])
   @@index([agencyId])
@@ -479,7 +479,7 @@ model CPRARequestCampaign {
   createdAt    DateTime @default(now())
   active       Boolean  @default(true)
 
-  requests CPRAAgencyRequest[]
+  requests     CPRAAgencyRequest[]
 
   @@index([active])
   @@map("cpra_request_campaigns")
@@ -490,31 +490,31 @@ model CPRARequestCampaign {
 // ---------------------------------------------------------------------------
 
 model CPRAAgencyRequest {
-  requestId String @id @default(uuid())
+  requestId          String   @id @default(uuid())
 
-  campaignId String
-  Campaign   CPRARequestCampaign @relation(fields: [campaignId], references: [campaignId])
+  campaignId         String
+  Campaign           CPRARequestCampaign @relation(fields: [campaignId], references: [campaignId])
 
-  agencyId String
-  Agency   Agency @relation(fields: [agencyId], references: [agencyId])
+  agencyId           String
+  Agency             Agency @relation(fields: [agencyId], references: [agencyId])
 
-  status String @default("draft") // draft | sent | awaiting_response | follow_up_1 | follow_up_2 | follow_up_final | documents_received | closed
+  status             String   @default("draft") // draft | sent | awaiting_response | follow_up_1 | follow_up_2 | follow_up_final | documents_received | closed
 
-  sentAt         DateTime?
-  lastFollowUpAt DateTime?
+  sentAt             DateTime?
+  lastFollowUpAt     DateTime?
 
-  responseReceived   Boolean   @default(false)
+  responseReceived   Boolean  @default(false)
   responseReceivedAt DateTime?
 
-  policyReceivedAt DateTime?
-  annualUpdateDue  DateTime?
+  policyReceivedAt   DateTime?
+  annualUpdateDue    DateTime?
 
-  closed Boolean @default(false)
+  closed             Boolean  @default(false)
 
-  followUpCount Int @default(0)
+  followUpCount      Int      @default(0)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   @@index([campaignId])
   @@index([agencyId])
@@ -530,26 +530,26 @@ model CPRAAgencyRequest {
 // ---------------------------------------------------------------------------
 
 model CPRAAnnualUpdate {
-  updateId String @id @default(uuid())
+  updateId           String   @id @default(uuid())
 
-  agencyId String
-  Agency   Agency @relation(fields: [agencyId], references: [agencyId])
+  agencyId           String
+  Agency             Agency @relation(fields: [agencyId], references: [agencyId])
 
   requestedAt        DateTime
-  responseReceived   Boolean   @default(false)
+  responseReceived   Boolean  @default(false)
   responseReceivedAt DateTime?
 
-  policyReceivedAt DateTime?
-  annualUpdateDue  DateTime?
+  policyReceivedAt   DateTime?
+  annualUpdateDue    DateTime?
 
-  followUpCount  Int       @default(0)
-  lastFollowUpAt DateTime?
+  followUpCount      Int      @default(0)
+  lastFollowUpAt     DateTime?
 
-  closed Boolean @default(false)
-  status String  @default("scheduled") // scheduled | sent | follow_up_1 | follow_up_2 | follow_up_final | received | closed
+  closed             Boolean  @default(false)
+  status             String   @default("scheduled") // scheduled | sent | follow_up_1 | follow_up_2 | follow_up_final | received | closed
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   @@index([agencyId])
   @@index([annualUpdateDue])
@@ -563,28 +563,28 @@ model CPRAAnnualUpdate {
 // ---------------------------------------------------------------------------
 
 model AgencyPolicyStatus {
-  id       String @id @default(uuid())
-  agencyId String @unique
-  Agency   Agency @relation(fields: [agencyId], references: [agencyId])
+  id                    String    @id @default(uuid())
+  agencyId              String    @unique
+  Agency                Agency    @relation(fields: [agencyId], references: [agencyId])
 
-  agencyName String
-  city       String?
-  county     String?
-  website    String?
+  agencyName            String
+  city                  String?
+  county                String?
+  website               String?
 
-  lastCrawledAt      DateTime?
-  policiesDiscovered Int       @default(0)
-  policiesDownloaded Int       @default(0)
-  policiesIngested   Int       @default(0)
-  coverageScore      Float     @default(0) // 0-100 percentage
+  lastCrawledAt         DateTime?
+  policiesDiscovered    Int       @default(0)
+  policiesDownloaded    Int       @default(0)
+  policiesIngested      Int       @default(0)
+  coverageScore         Float     @default(0)   // 0-100 percentage
 
-  cpraStatus           String    @default("none") // none | draft | sent | awaiting_response | follow_up | received | closed
-  lastCpraEmailSent    DateTime?
-  cpraDeadline         DateTime?
-  annualUpdateDeadline DateTime?
+  cpraStatus            String    @default("none") // none | draft | sent | awaiting_response | follow_up | received | closed
+  lastCpraEmailSent     DateTime?
+  cpraDeadline          DateTime?
+  annualUpdateDeadline  DateTime?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
 
   @@index([county])
   @@index([cpraStatus])
@@ -598,21 +598,21 @@ model AgencyPolicyStatus {
 // ---------------------------------------------------------------------------
 
 model PolicyInventory {
-  id                       String    @id @default(uuid())
-  policyId                 String // reference to PolicyDocument.documentId
-  agencyId                 String
-  policyTitle              String?
-  policyTopic              String? // topic category
-  sourceUrl                String
-  fileHash                 String?
-  discoveredAt             DateTime  @default(now())
-  downloadedAt             DateTime?
-  ocrProcessedAt           DateTime?
-  classificationConfidence Float?
-  ingestionStatus          String    @default("discovered") // discovered | downloaded | ocr_complete | classified | ingested | failed
+  id                        String    @id @default(uuid())
+  policyId                  String    // reference to PolicyDocument.documentId
+  agencyId                  String
+  policyTitle               String?
+  policyTopic               String?   // topic category
+  sourceUrl                 String
+  fileHash                  String?
+  discoveredAt              DateTime  @default(now())
+  downloadedAt              DateTime?
+  ocrProcessedAt            DateTime?
+  classificationConfidence  Float?
+  ingestionStatus           String    @default("discovered") // discovered | downloaded | ocr_complete | classified | ingested | failed
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt                 DateTime  @default(now())
+  updatedAt                 DateTime  @updatedAt
 
   @@index([agencyId])
   @@index([ingestionStatus])
@@ -625,10 +625,10 @@ model PolicyInventory {
 // ---------------------------------------------------------------------------
 
 model PolicyTopicCoverage {
-  id       String @id @default(uuid())
-  agencyId String
-  topic    String // topic name
-  status   String @default("MISSING") // FOUND | MISSING | CPRA_REQUESTED | RECEIVED
+  id        String   @id @default(uuid())
+  agencyId  String
+  topic     String   // topic name
+  status    String   @default("MISSING") // FOUND | MISSING | CPRA_REQUESTED | RECEIVED
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -645,20 +645,20 @@ model PolicyTopicCoverage {
 // ---------------------------------------------------------------------------
 
 model CpraRequestLog {
-  id                String    @id @default(uuid())
-  requestId         String // reference to CPRAAgencyRequest.requestId
-  agencyId          String
-  emailSentDate     DateTime?
-  emailTemplateUsed String?
-  recipientEmail    String?
-  responseReceived  Boolean   @default(false)
-  responseDate      DateTime?
-  documentsReceived Int       @default(0)
-  followUpRequired  Boolean   @default(false)
-  followUpDate      DateTime?
+  id                  String    @id @default(uuid())
+  requestId           String    // reference to CPRAAgencyRequest.requestId
+  agencyId            String
+  emailSentDate       DateTime?
+  emailTemplateUsed   String?
+  recipientEmail      String?
+  responseReceived    Boolean   @default(false)
+  responseDate        DateTime?
+  documentsReceived   Int       @default(0)
+  followUpRequired    Boolean   @default(false)
+  followUpDate        DateTime?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
 
   @@index([agencyId])
   @@index([requestId])
@@ -672,30 +672,30 @@ model CpraRequestLog {
 // ---------------------------------------------------------------------------
 
 model TrialExhibitScene {
-  sceneId     String  @id @default(uuid())
-  caseId      String?
-  name        String
-  description String?
+  sceneId         String   @id @default(uuid())
+  caseId          String?
+  name            String
+  description     String?
 
   // Location data
-  latitude  Float
-  longitude Float
-  address   String?
+  latitude        Float
+  longitude       Float
+  address         String?
 
   // Scene configuration (stored as JSON strings)
-  objectSettings String // JSON: { showTrees, showBushes, showVehicles, ... }
-  cameraSettings String? // JSON: { position, target, preset }
-  markers        String? // JSON: array of scene markers
-  sceneData      String? // JSON: buildings, roads, sidewalks, etc.
-  animationData  String? // JSON: timeline keyframes
+  objectSettings  String   // JSON: { showTrees, showBushes, showVehicles, ... }
+  cameraSettings  String?  // JSON: { position, target, preset }
+  markers         String?  // JSON: array of scene markers
+  sceneData       String?  // JSON: buildings, roads, sidewalks, etc.
+  animationData   String?  // JSON: timeline keyframes
 
   // Metadata
-  createdBy String?
-  thumbnail String? // base64 PNG thumbnail
-  isPublic  Boolean @default(false)
+  createdBy       String?
+  thumbnail       String?  // base64 PNG thumbnail
+  isPublic        Boolean  @default(false)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   @@index([caseId])
   @@index([createdBy])
@@ -707,19 +707,19 @@ model TrialExhibitScene {
 // ---------------------------------------------------------------------------
 
 model EvidenceEvent {
-  eventId        String  @id @default(uuid())
-  caseId         String
-  timestamp      String // HH:MM:SS or offset seconds
-  eventType      String // suspect_restrained | taser_deployed | neck_restraint | vehicle_search | verbal_command | miranda_warning | weapon_drawn | handcuffing | physical_strike | officer_proximity | threat_language | compliance_command | uof_warning | other
-  confidence     Float   @default(0)
-  sourceEvidence String // reference to evidence document/file
-  sourceType     String  @default("bodycam") // bodycam | dashcam | audio | transcript | police_report
-  description    String?
-  rawText        String? // extracted text snippet if applicable
-  metadata       String? // JSON: additional structured data
+  eventId         String   @id @default(uuid())
+  caseId          String
+  timestamp       String   // HH:MM:SS or offset seconds
+  eventType       String   // suspect_restrained | taser_deployed | neck_restraint | vehicle_search | verbal_command | miranda_warning | weapon_drawn | handcuffing | physical_strike | officer_proximity | threat_language | compliance_command | uof_warning | other
+  confidence      Float    @default(0)
+  sourceEvidence  String   // reference to evidence document/file
+  sourceType      String   @default("bodycam") // bodycam | dashcam | audio | transcript | police_report
+  description     String?
+  rawText         String?  // extracted text snippet if applicable
+  metadata        String?  // JSON: additional structured data
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   @@index([caseId])
   @@index([eventType])
@@ -733,21 +733,21 @@ model EvidenceEvent {
 // ---------------------------------------------------------------------------
 
 model PolicyRule {
-  ruleId         String    @id @default(uuid())
-  policyId       String // reference to PolicyDocument
-  agencyId       String
-  ruleType       String // prohibition | requirement | permission | conditional | escalation
-  ruleName       String
-  ruleText       String // full text of the rule
-  conditions     String? // JSON: conditions under which rule applies
-  exceptions     String? // JSON: exceptions to the rule
-  category       String // Use_of_Force | Pursuit | Body_Camera | Search_Seizure | Arrest | Interrogation | Custody | Officer_Conduct
-  severity       String    @default("standard") // critical | high | standard | low
-  effectiveDate  DateTime?
-  supersededDate DateTime?
+  ruleId          String   @id @default(uuid())
+  policyId        String   // reference to PolicyDocument
+  agencyId        String
+  ruleType        String   // prohibition | requirement | permission | conditional | escalation
+  ruleName        String
+  ruleText        String   // full text of the rule
+  conditions      String?  // JSON: conditions under which rule applies
+  exceptions      String?  // JSON: exceptions to the rule
+  category        String   // Use_of_Force | Pursuit | Body_Camera | Search_Seizure | Arrest | Interrogation | Custody | Officer_Conduct
+  severity        String   @default("standard") // critical | high | standard | low
+  effectiveDate   DateTime?
+  supersededDate  DateTime?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   @@index([policyId])
   @@index([agencyId])
@@ -762,14 +762,14 @@ model PolicyRule {
 // ---------------------------------------------------------------------------
 
 model PolicyActionMapping {
-  mappingId      String  @id @default(uuid())
-  eventType      String // matches EvidenceEvent.eventType
-  ruleId         String // reference to PolicyRule
-  relevanceScore Float   @default(0) // 0-1 how relevant this rule is to the action
-  mappingReason  String? // why this rule maps to this action
+  mappingId       String   @id @default(uuid())
+  eventType       String   // matches EvidenceEvent.eventType
+  ruleId          String   // reference to PolicyRule
+  relevanceScore  Float    @default(0) // 0-1 how relevant this rule is to the action
+  mappingReason   String?  // why this rule maps to this action
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   @@unique([eventType, ruleId])
   @@index([eventType])
@@ -782,25 +782,25 @@ model PolicyActionMapping {
 // ---------------------------------------------------------------------------
 
 model ComplianceFinding {
-  findingId          String  @id @default(uuid())
-  caseId             String
-  agencyId           String
-  findingType        String  @default("potential_inconsistency") // potential_inconsistency | consistent | insufficient_evidence | requires_review
-  policyReference    String // e.g. "Use-of-Force Section 3.2"
-  ruleId             String? // reference to PolicyRule
-  evidenceTimestamp  String // timestamp from evidence
-  evidenceEventId    String? // reference to EvidenceEvent
-  detectedAction     String // what was detected
-  ruleDescription    String // what the rule states
-  confidence         Float   @default(0) // 0-1 overall confidence
-  evidenceConfidence Float   @default(0) // confidence in evidence detection
-  ruleConfidence     Float   @default(0) // confidence in rule matching
-  analysisConfidence Float   @default(0) // confidence in analysis
-  explanation        String? // plain-language explanation (Phase 145)
-  safetyLanguage     String  @default("potential_policy_inconsistency") // Phase 150 guardrail
+  findingId           String   @id @default(uuid())
+  caseId              String
+  agencyId            String
+  findingType         String   @default("potential_inconsistency") // potential_inconsistency | consistent | insufficient_evidence | requires_review
+  policyReference     String   // e.g. "Use-of-Force Section 3.2"
+  ruleId              String?  // reference to PolicyRule
+  evidenceTimestamp   String   // timestamp from evidence
+  evidenceEventId     String?  // reference to EvidenceEvent
+  detectedAction      String   // what was detected
+  ruleDescription     String   // what the rule states
+  confidence          Float    @default(0) // 0-1 overall confidence
+  evidenceConfidence  Float    @default(0) // confidence in evidence detection
+  ruleConfidence      Float    @default(0) // confidence in rule matching
+  analysisConfidence  Float    @default(0) // confidence in analysis
+  explanation         String?  // plain-language explanation (Phase 145)
+  safetyLanguage      String   @default("potential_policy_inconsistency") // Phase 150 guardrail
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
 
   @@index([caseId])
   @@index([agencyId])
@@ -814,15 +814,15 @@ model ComplianceFinding {
 // ---------------------------------------------------------------------------
 
 model EvidenceLink {
-  linkId          String  @id @default(uuid())
-  findingId       String // reference to ComplianceFinding
-  linkType        String // video_timestamp | transcript_excerpt | policy_section | document_source | scene_reconstruction
-  sourceReference String // the actual reference (timestamp, section number, etc.)
-  sourceContent   String? // excerpt or description
-  sourceUrl       String? // URL to source if applicable
-  metadata        String? // JSON: additional data
+  linkId          String   @id @default(uuid())
+  findingId       String   // reference to ComplianceFinding
+  linkType        String   // video_timestamp | transcript_excerpt | policy_section | document_source | scene_reconstruction
+  sourceReference String   // the actual reference (timestamp, section number, etc.)
+  sourceContent   String?  // excerpt or description
+  sourceUrl       String?  // URL to source if applicable
+  metadata        String?  // JSON: additional data
 
-  createdAt DateTime @default(now())
+  createdAt       DateTime @default(now())
 
   @@index([findingId])
   @@index([linkType])
@@ -834,18 +834,18 @@ model EvidenceLink {
 // ---------------------------------------------------------------------------
 
 model ComplianceReviewQueue {
-  reviewId          String    @id @default(uuid())
-  findingId         String    @unique // reference to ComplianceFinding
-  reviewStatus      String    @default("pending") // pending | in_review | approved | rejected | needs_more_info
-  reviewerNotes     String?
-  reviewerId        String? // staff member reviewing
-  approvedForReport Boolean   @default(false)
-  priority          Int       @default(0) // 0=normal, 1=high, 2=urgent
-  assignedAt        DateTime?
-  reviewedAt        DateTime?
+  reviewId        String    @id @default(uuid())
+  findingId       String    @unique // reference to ComplianceFinding
+  reviewStatus    String    @default("pending") // pending | in_review | approved | rejected | needs_more_info
+  reviewerNotes   String?
+  reviewerId      String?   // staff member reviewing
+  approvedForReport Boolean @default(false)
+  priority        Int       @default(0) // 0=normal, 1=high, 2=urgent
+  assignedAt      DateTime?
+  reviewedAt      DateTime?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   @@index([reviewStatus])
   @@index([priority])
@@ -858,18 +858,18 @@ model ComplianceReviewQueue {
 // ---------------------------------------------------------------------------
 
 model CrossAgencyComparison {
-  comparisonId   String @id @default(uuid())
-  topic          String // policy topic being compared
-  agencyAId      String
-  agencyAName    String
-  agencyAPolicy  String // summary of agency A's policy
-  agencyBId      String
-  agencyBName    String
-  agencyBPolicy  String // summary of agency B's policy
-  differenceType String // prohibits_vs_allows | stricter | less_strict | same | no_policy
-  summary        String // plain-language comparison
+  comparisonId    String   @id @default(uuid())
+  topic           String   // policy topic being compared
+  agencyAId       String
+  agencyAName     String
+  agencyAPolicy   String   // summary of agency A's policy
+  agencyBId       String
+  agencyBName     String
+  agencyBPolicy   String   // summary of agency B's policy
+  differenceType  String   // prohibits_vs_allows | stricter | less_strict | same | no_policy
+  summary         String   // plain-language comparison
 
-  createdAt DateTime @default(now())
+  createdAt       DateTime @default(now())
 
   @@index([topic])
   @@index([agencyAId])
@@ -885,14 +885,14 @@ model PolicyEvolution {
   evolutionId     String    @id @default(uuid())
   agencyId        String
   policyTopic     String
-  previousVersion String? // previous policy text/summary
-  currentVersion  String // current policy text/summary
-  changeType      String // added | modified | removed | strengthened | weakened
-  changeSummary   String // plain-language description of change
+  previousVersion String?   // previous policy text/summary
+  currentVersion  String    // current policy text/summary
+  changeType      String    // added | modified | removed | strengthened | weakened
+  changeSummary   String    // plain-language description of change
   effectiveDate   DateTime?
   detectedAt      DateTime  @default(now())
 
-  createdAt DateTime @default(now())
+  createdAt       DateTime  @default(now())
 
   @@index([agencyId])
   @@index([policyTopic])
@@ -905,17 +905,17 @@ model PolicyEvolution {
 // ---------------------------------------------------------------------------
 
 model ComplianceAuditTrail {
-  auditId         String  @id @default(uuid())
+  auditId         String   @id @default(uuid())
   caseId          String
-  findingId       String? // reference to ComplianceFinding if applicable
-  stepName        String // evidence_upload | event_extraction | action_detection | policy_matching | compliance_analysis | review | report_generation
+  findingId       String?  // reference to ComplianceFinding if applicable
+  stepName        String   // evidence_upload | event_extraction | action_detection | policy_matching | compliance_analysis | review | report_generation
   stepDescription String
-  inputData       String? // JSON: what went in
-  outputData      String? // JSON: what came out
+  inputData       String?  // JSON: what went in
+  outputData      String?  // JSON: what came out
   durationMs      Int?
-  status          String  @default("completed") // completed | failed | skipped
+  status          String   @default("completed") // completed | failed | skipped
 
-  createdAt DateTime @default(now())
+  createdAt       DateTime @default(now())
 
   @@index([caseId])
   @@index([findingId])
@@ -928,20 +928,20 @@ model ComplianceAuditTrail {
 // ---------------------------------------------------------------------------
 
 model VisionEvent {
-  eventId           String  @id @default(uuid())
-  caseId            String
-  sourceId          String
-  timestamp         String
-  frameNumber       Int
-  eventCategory     String // officer_posture | hand_movement | weapon_deployment | physical_contact | subject_distance | suspect_position | restraint_technique | de_escalation_posture | crowd_formation | vehicle_interaction
-  detections        String // JSON: VisionDetection[]
-  poseEstimates     String // JSON: PoseEstimate[]
-  distanceEstimates String // JSON: DistanceEstimate[]
-  confidence        Float   @default(0)
-  metadata          String? // JSON
+  eventId          String   @id @default(uuid())
+  caseId           String
+  sourceId         String
+  timestamp        String
+  frameNumber      Int
+  eventCategory    String   // officer_posture | hand_movement | weapon_deployment | physical_contact | subject_distance | suspect_position | restraint_technique | de_escalation_posture | crowd_formation | vehicle_interaction
+  detections       String   // JSON: VisionDetection[]
+  poseEstimates    String   // JSON: PoseEstimate[]
+  distanceEstimates String  // JSON: DistanceEstimate[]
+  confidence       Float    @default(0)
+  metadata         String?  // JSON
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   @@index([caseId])
   @@index([sourceId])
@@ -955,17 +955,17 @@ model VisionEvent {
 // ---------------------------------------------------------------------------
 
 model TrajectoryAnalysis {
-  analysisId        String  @id @default(uuid())
-  caseId            String
-  sceneId           String?
-  trajectories      String // JSON: TrajectoryVector[]
-  impactPredictions String // JSON: ImpactPrediction[]
-  lineOfFire        String // JSON: LineOfFire[]
-  ballisticParams   String // JSON: BallisticParameters
-  summary           String // JSON: TrajectorySummary
+  analysisId       String   @id @default(uuid())
+  caseId           String
+  sceneId          String?
+  trajectories     String   // JSON: TrajectoryVector[]
+  impactPredictions String  // JSON: ImpactPrediction[]
+  lineOfFire       String   // JSON: LineOfFire[]
+  ballisticParams  String   // JSON: BallisticParameters
+  summary          String   // JSON: TrajectorySummary
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   @@index([caseId])
   @@index([sceneId])
@@ -977,18 +977,18 @@ model TrajectoryAnalysis {
 // ---------------------------------------------------------------------------
 
 model VisibilitySimulation {
-  simulationId      String  @id @default(uuid())
-  caseId            String
-  sceneId           String?
-  inputConditions   String // JSON: LightingConditions
-  visibilityMap     String // JSON: VisibilityMap
-  shadowMap         String // JSON: ShadowMap
-  lightSources      String // JSON: LightSource[]
-  subjectVisibility String // JSON: SubjectVisibility[]
-  summary           String // JSON: VisibilitySummary
+  simulationId     String   @id @default(uuid())
+  caseId           String
+  sceneId          String?
+  inputConditions  String   // JSON: LightingConditions
+  visibilityMap    String   // JSON: VisibilityMap
+  shadowMap        String   // JSON: ShadowMap
+  lightSources     String   // JSON: LightSource[]
+  subjectVisibility String  // JSON: SubjectVisibility[]
+  summary          String   // JSON: VisibilitySummary
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   @@index([caseId])
   @@index([sceneId])
@@ -1000,19 +1000,19 @@ model VisibilitySimulation {
 // ---------------------------------------------------------------------------
 
 model LineOfSightAnalysis {
-  analysisId        String  @id @default(uuid())
-  caseId            String
-  sceneId           String?
-  observerPosition  String // JSON: Position3D
-  viewDirection     String // JSON: ViewDirection
-  fieldOfView       String // JSON: FieldOfView
-  obstacles         String // JSON: SceneObstacle[]
-  visibilityResults String // JSON: VisibilityResult[]
-  obstructionMap    String // JSON: ObstructionMap
-  summary           String // JSON: LineOfSightSummary
+  analysisId       String   @id @default(uuid())
+  caseId           String
+  sceneId          String?
+  observerPosition String   // JSON: Position3D
+  viewDirection    String   // JSON: ViewDirection
+  fieldOfView      String   // JSON: FieldOfView
+  obstacles        String   // JSON: SceneObstacle[]
+  visibilityResults String  // JSON: VisibilityResult[]
+  obstructionMap   String   // JSON: ObstructionMap
+  summary          String   // JSON: LineOfSightSummary
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   @@index([caseId])
   @@index([sceneId])
@@ -1024,16 +1024,16 @@ model LineOfSightAnalysis {
 // ---------------------------------------------------------------------------
 
 model CameraSyncResult {
-  syncId         String @id @default(uuid())
-  caseId         String
-  sources        String // JSON: CameraSource[]
-  syncPairs      String // JSON: SyncPair[]
-  masterTimeline String // JSON: MasterTimelineEvent[]
-  syncQuality    String // JSON: SyncQuality
-  summary        String // JSON: SyncSummary
+  syncId           String   @id @default(uuid())
+  caseId           String
+  sources          String   // JSON: CameraSource[]
+  syncPairs        String   // JSON: SyncPair[]
+  masterTimeline   String   // JSON: MasterTimelineEvent[]
+  syncQuality      String   // JSON: SyncQuality
+  summary          String   // JSON: SyncSummary
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   @@index([caseId])
   @@map("camera_sync_results")
@@ -1044,21 +1044,21 @@ model CameraSyncResult {
 // ---------------------------------------------------------------------------
 
 model SceneGeometry {
-  geometryId String  @id @default(uuid())
-  caseId     String
-  sceneId    String?
-  bounds     String // JSON: SceneBounds
-  buildings  String // JSON: Building[]
-  roads      String // JSON: Road[]
-  sidewalks  String // JSON: Sidewalk[]
-  vehicles   String // JSON: Vehicle[]
-  vegetation String // JSON: Vegetation[]
-  obstacles  String // JSON: GeometryObstacle[]
-  terrain    String // JSON: TerrainData
-  metadata   String // JSON: SceneMetadata
+  geometryId       String   @id @default(uuid())
+  caseId           String
+  sceneId          String?
+  bounds           String   // JSON: SceneBounds
+  buildings        String   // JSON: Building[]
+  roads            String   // JSON: Road[]
+  sidewalks        String   // JSON: Sidewalk[]
+  vehicles         String   // JSON: Vehicle[]
+  vegetation       String   // JSON: Vegetation[]
+  obstacles        String   // JSON: GeometryObstacle[]
+  terrain          String   // JSON: TerrainData
+  metadata         String   // JSON: SceneMetadata
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   @@index([caseId])
   @@index([sceneId])
@@ -1070,16 +1070,16 @@ model SceneGeometry {
 // ---------------------------------------------------------------------------
 
 model EvidenceGraph {
-  graphId  String @id @default(uuid())
-  caseId   String
-  nodes    String // JSON: EvidenceNode[]
-  edges    String // JSON: EvidenceEdge[]
-  clusters String // JSON: EvidenceCluster[]
-  timeline String // JSON: UnifiedTimelineEntry[]
-  summary  String // JSON: GraphSummary
+  graphId          String   @id @default(uuid())
+  caseId           String
+  nodes            String   // JSON: EvidenceNode[]
+  edges            String   // JSON: EvidenceEdge[]
+  clusters         String   // JSON: EvidenceCluster[]
+  timeline         String   // JSON: UnifiedTimelineEntry[]
+  summary          String   // JSON: GraphSummary
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   @@index([caseId])
   @@map("evidence_graphs")
@@ -1090,21 +1090,21 @@ model EvidenceGraph {
 // ---------------------------------------------------------------------------
 
 model ExpertWitnessPackage {
-  packageId           String @id @default(uuid())
-  caseId              String
-  packageVersion      String
-  expertInfo          String // JSON: ExpertInfo
-  sections            String // JSON: PackageSection[]
+  packageId        String   @id @default(uuid())
+  caseId           String
+  packageVersion   String
+  expertInfo       String   // JSON: ExpertInfo
+  sections         String   // JSON: PackageSection[]
   sceneReconstruction String // JSON: SceneReconstructionSection
-  timeline            String // JSON: TimelineSection
-  policyAnalysis      String // JSON: PolicyAnalysisSection
-  evidenceClips       String // JSON: EvidenceClipSection
-  analysisReport      String // JSON: AnalysisReportSection
-  appendices          String // JSON: Appendix[]
-  metadata            String // JSON: PackageMetadata
+  timeline         String   // JSON: TimelineSection
+  policyAnalysis   String   // JSON: PolicyAnalysisSection
+  evidenceClips    String   // JSON: EvidenceClipSection
+  analysisReport   String   // JSON: AnalysisReportSection
+  appendices       String   // JSON: Appendix[]
+  metadata         String   // JSON: PackageMetadata
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   @@index([caseId])
   @@map("expert_witness_packages")
@@ -1115,18 +1115,18 @@ model ExpertWitnessPackage {
 // ---------------------------------------------------------------------------
 
 model JuryVisualization {
-  visualizationId   String @id @default(uuid())
-  caseId            String
-  title             String
-  sceneView         String // JSON: JurySceneView
-  timeline          String // JSON: JuryTimeline
-  highlightedEvents String // JSON: JuryHighlight[]
-  narrativeCards    String // JSON: NarrativeCard[]
-  viewerSettings    String // JSON: ViewerSettings
-  metadata          String // JSON: JuryViewMetadata
+  visualizationId  String   @id @default(uuid())
+  caseId           String
+  title            String
+  sceneView        String   // JSON: JurySceneView
+  timeline         String   // JSON: JuryTimeline
+  highlightedEvents String  // JSON: JuryHighlight[]
+  narrativeCards   String   // JSON: NarrativeCard[]
+  viewerSettings   String   // JSON: ViewerSettings
+  metadata         String   // JSON: JuryViewMetadata
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   @@index([caseId])
   @@map("jury_visualizations")
@@ -1137,19 +1137,19 @@ model JuryVisualization {
 // ---------------------------------------------------------------------------
 
 model AgencyPolicyMatrix {
-  id           String    @id @default(uuid())
-  agencyId     String
-  topicId      String
-  status       String    @default("NOT_REQUESTED") // NOT_REQUESTED | REQUESTED | RECEIVED | UPLOADED | IN_USE
-  requestDate  DateTime?
-  receivedDate DateTime?
-  uploadedDate DateTime?
-  inUseDate    DateTime?
-  fileUrl      String?
-  notes        String?
+  id              String    @id @default(uuid())
+  agencyId        String
+  topicId         String
+  status          String    @default("NOT_REQUESTED") // NOT_REQUESTED | REQUESTED | RECEIVED | UPLOADED | IN_USE
+  requestDate     DateTime?
+  receivedDate    DateTime?
+  uploadedDate    DateTime?
+  inUseDate       DateTime?
+  fileUrl         String?
+  notes           String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   @@unique([agencyId, topicId])
   @@index([agencyId])
@@ -1163,16 +1163,16 @@ model AgencyPolicyMatrix {
 // ---------------------------------------------------------------------------
 
 model CpraRequest {
-  id               String    @id @default(uuid())
-  agencyId         String
-  topicId          String
-  dateSent         DateTime?
-  status           String    @default("draft") // draft | sent | awaiting_response | follow_up | documents_received | closed
-  responseReceived Boolean   @default(false)
-  followupDate     DateTime?
+  id                String    @id @default(uuid())
+  agencyId          String
+  topicId           String
+  dateSent          DateTime?
+  status            String    @default("draft") // draft | sent | awaiting_response | follow_up | documents_received | closed
+  responseReceived  Boolean   @default(false)
+  followupDate      DateTime?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
   @@index([agencyId])
   @@index([topicId])
@@ -1185,16 +1185,16 @@ model CpraRequest {
 // ---------------------------------------------------------------------------
 
 model AiCreditBalance {
-  id                 String   @id @default(uuid())
-  userId             String   @unique
-  monthlyCredits     Int      @default(0)
-  purchasedCredits   Int      @default(0)
-  creditsUsed        Int      @default(0)
-  billingPeriodStart DateTime
-  billingPeriodEnd   DateTime
+  id                  String    @id @default(uuid())
+  userId              String    @unique
+  monthlyCredits      Int       @default(0)
+  purchasedCredits    Int       @default(0)
+  creditsUsed         Int       @default(0)
+  billingPeriodStart  DateTime
+  billingPeriodEnd    DateTime
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt           DateTime  @default(now())
+  updatedAt           DateTime  @updatedAt
 
   @@index([userId])
   @@index([billingPeriodEnd])
@@ -1206,14 +1206,14 @@ model AiCreditBalance {
 // ---------------------------------------------------------------------------
 
 model AiCreditUsage {
-  id           String   @id @default(uuid())
-  userId       String
-  caseId       String?
-  analysisType String // VIDEO_PROCESSING | CONTRADICTION_ENGINE | DOCTRINE_ANALYSIS | LITIGATION_INTELLIGENCE | RELIABILITY_SCORING
-  creditsUsed  Int
-  timestamp    DateTime @default(now())
+  id              String    @id @default(uuid())
+  userId          String
+  caseId          String?
+  analysisType    String    // VIDEO_PROCESSING | CONTRADICTION_ENGINE | DOCTRINE_ANALYSIS | LITIGATION_INTELLIGENCE | RELIABILITY_SCORING
+  creditsUsed     Int
+  timestamp       DateTime  @default(now())
 
-  createdAt DateTime @default(now())
+  createdAt       DateTime  @default(now())
 
   @@index([userId])
   @@index([caseId])
@@ -1227,16 +1227,16 @@ model AiCreditUsage {
 // ---------------------------------------------------------------------------
 
 model UsageTracking {
-  id                    String   @id @default(uuid())
-  userId                String
-  organizationId        String?
-  billingPeriodStart    DateTime
-  billingPeriodEnd      DateTime
-  pagesUploadedTotal    Int      @default(0)
-  videoMinutesProcessed Int      @default(0)
+  id                      String    @id @default(uuid())
+  userId                  String
+  organizationId          String?
+  billingPeriodStart      DateTime
+  billingPeriodEnd        DateTime
+  pagesUploadedTotal      Int       @default(0)
+  videoMinutesProcessed   Int       @default(0)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt               DateTime  @default(now())
+  updatedAt               DateTime  @updatedAt
 
   @@unique([userId, billingPeriodStart])
   @@index([userId])
@@ -1250,22 +1250,22 @@ model UsageTracking {
 // ---------------------------------------------------------------------------
 
 model CpraEmailLog {
-  emailId       String   @id @default(uuid())
-  agencyId      String?
-  direction     String // OUTBOUND | INBOUND
-  emailAddress  String
-  fromAddress   String?
-  subject       String
-  body          String
-  sentTimestamp DateTime @default(now())
-  requestId     String? // reference to CPRAAgencyRequest.requestId
-  policyTopics  String? // JSON array of requested policy topics
-  sesMessageId  String? // AWS SES message ID for outbound
-  processed     Boolean  @default(false) // whether inbound email has been processed
+  emailId         String    @id @default(uuid())
+  agencyId        String?
+  direction       String    // OUTBOUND | INBOUND
+  emailAddress    String
+  fromAddress     String?
+  subject         String
+  body            String
+  sentTimestamp   DateTime  @default(now())
+  requestId       String?   // reference to CPRAAgencyRequest.requestId
+  policyTopics    String?   // JSON array of requested policy topics
+  sesMessageId    String?   // AWS SES message ID for outbound
+  processed       Boolean   @default(false) // whether inbound email has been processed
 
-  attachments CpraEmailAttachment[]
+  attachments     CpraEmailAttachment[]
 
-  createdAt DateTime @default(now())
+  createdAt       DateTime  @default(now())
 
   @@index([agencyId])
   @@index([direction])
@@ -1280,21 +1280,21 @@ model CpraEmailLog {
 // ---------------------------------------------------------------------------
 
 model CpraEmailAttachment {
-  attachmentId             String       @id @default(uuid())
-  emailId                  String
-  Email                    CpraEmailLog @relation(fields: [emailId], references: [emailId])
-  fileName                 String
-  fileType                 String? // application/pdf, image/png, etc.
-  fileSizeBytes            Int?
-  fileUrl                  String? // R2 URL after upload
-  uploadTimestamp          DateTime?
-  documentType             String? // policy_document | procedural_manual | training_bulletin | general_response | non_policy
+  attachmentId    String    @id @default(uuid())
+  emailId         String
+  Email           CpraEmailLog @relation(fields: [emailId], references: [emailId])
+  fileName        String
+  fileType        String?   // application/pdf, image/png, etc.
+  fileSizeBytes   Int?
+  fileUrl         String?   // R2 URL after upload
+  uploadTimestamp DateTime?
+  documentType    String?   // policy_document | procedural_manual | training_bulletin | general_response | non_policy
   classificationConfidence Float?
   policyTopicDetected      String? // detected policy topic name
-  processingStatus         String       @default("pending") // pending | uploaded | classified | ingested | failed
+  processingStatus         String  @default("pending") // pending | uploaded | classified | ingested | failed
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   @@index([emailId])
   @@index([processingStatus])
@@ -1307,16 +1307,16 @@ model CpraEmailAttachment {
 // ---------------------------------------------------------------------------
 
 model CpraNotification {
-  notificationId String  @id @default(uuid())
-  agencyId       String?
-  eventType      String // EMAIL_SENT | EMAIL_RECEIVED | DOCUMENT_UPLOADED | POLICY_PARSED | POLICY_ACTIVE | FOLLOW_UP_SENT | REQUEST_CREATED
-  title          String
-  message        String
-  metadata       String? // JSON: additional event data
-  read           Boolean @default(false)
-  dismissed      Boolean @default(false)
+  notificationId  String    @id @default(uuid())
+  agencyId        String?
+  eventType       String    // EMAIL_SENT | EMAIL_RECEIVED | DOCUMENT_UPLOADED | POLICY_PARSED | POLICY_ACTIVE | FOLLOW_UP_SENT | REQUEST_CREATED
+  title           String
+  message         String
+  metadata        String?   // JSON: additional event data
+  read            Boolean   @default(false)
+  dismissed       Boolean   @default(false)
 
-  createdAt DateTime @default(now())
+  createdAt       DateTime  @default(now())
 
   @@index([agencyId])
   @@index([eventType])
@@ -1330,14 +1330,14 @@ model CpraNotification {
 // ---------------------------------------------------------------------------
 
 model CpraTimelineEvent {
-  eventId     String  @id @default(uuid())
-  agencyId    String
-  eventType   String // REQUEST_SENT | EMAIL_RECEIVED | ATTACHMENT_DETECTED | POLICY_UPLOADED | POLICY_INGESTED | FOLLOW_UP_SENT | STATUS_CHANGED
-  title       String
-  description String?
-  metadata    String? // JSON: attachments, policy topics, subjects, etc.
+  eventId         String    @id @default(uuid())
+  agencyId        String
+  eventType       String    // REQUEST_SENT | EMAIL_RECEIVED | ATTACHMENT_DETECTED | POLICY_UPLOADED | POLICY_INGESTED | FOLLOW_UP_SENT | STATUS_CHANGED
+  title           String
+  description     String?
+  metadata        String?   // JSON: attachments, policy topics, subjects, etc.
 
-  createdAt DateTime @default(now())
+  createdAt       DateTime  @default(now())
 
   @@index([agencyId])
   @@index([eventType])
@@ -1350,81 +1350,81 @@ model CpraTimelineEvent {
 // ---------------------------------------------------------------------------
 
 model Organization {
-  id                    String    @id // matches User.tenantId for org members
-  name                  String
-  orgType               String    @default("law_firm") // law_firm | solo | public_defender | investigator
-  settings              Json? // { timezone, defaultJurisdiction, notificationDefaults }
-  logoUrl               String?
-  primaryColor          String?   @default("#1e293b")
-  secondaryColor        String?
-  tagline               String?
-  website               String?
-  billingEmail          String?
-  stripeCustomerId      String?
-  onboardingStep        String    @default("created") // created | profile | offices | team | complete
+  id          String   @id // matches User.tenantId for org members
+  name        String
+  orgType     String   @default("law_firm") // law_firm | solo | public_defender | investigator
+  settings    Json?    // { timezone, defaultJurisdiction, notificationDefaults }
+  logoUrl     String?
+  primaryColor String? @default("#1e293b")
+  secondaryColor String?
+  tagline     String?
+  website     String?
+  billingEmail String?
+  stripeCustomerId String?
+  onboardingStep String @default("created") // created | profile | offices | team | complete
   onboardingCompletedAt DateTime?
-  themeSettings         Json? // { fontFamily, accentColor, sidebarStyle }
+  themeSettings Json?  // { fontFamily, accentColor, sidebarStyle }
 
-  offices           OrganizationOffice[]
-  departments       OrganizationDepartment[]
-  practiceGroups    PracticeGroup[]
-  members           OrganizationMember[]
-  invitations       OrganizationInvitation[]
+  offices       OrganizationOffice[]
+  departments   OrganizationDepartment[]
+  practiceGroups PracticeGroup[]
+  members       OrganizationMember[]
+  invitations   OrganizationInvitation[]
   personnelProfiles PersonnelProfile[]
-  knowledgeAssets   KnowledgeAsset[]
-  internalMessages  OrgInternalMessage[]
-  orgTasks          OrgTask[]
-  conflictRecords   ConflictRecord[]
-  permissionGrants  PermissionGrant[]
+  knowledgeAssets KnowledgeAsset[]
+  internalMessages OrgInternalMessage[]
+  orgTasks      OrgTask[]
+  conflictRecords ConflictRecord[]
+  permissionGrants PermissionGrant[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@map("organizations")
 }
 
 model OrganizationOffice {
-  officeId       String       @id @default(uuid())
+  officeId       String   @id @default(uuid())
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   name           String
   addressLine1   String?
   addressLine2   String?
   city           String?
-  state          String?      @default("CA")
+  state          String?  @default("CA")
   zip            String?
   phone          String?
-  isPrimary      Boolean      @default(false)
-  isBranch       Boolean      @default(false)
+  isPrimary      Boolean  @default(false)
+  isBranch       Boolean  @default(false)
 
   departments    OrganizationDepartment[]
   practiceGroups PracticeGroup[]
   members        OrganizationMember[]
   users          User[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@index([organizationId])
   @@map("organization_offices")
 }
 
 model PracticeGroup {
-  practiceGroupId String              @id @default(uuid())
+  practiceGroupId String   @id @default(uuid())
   organizationId  String
-  organization    Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organization    Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   officeId        String?
   office          OrganizationOffice? @relation(fields: [officeId], references: [officeId])
   name            String
   description     String?
-  practiceArea    String? // criminal_defense | appellate | juvenile | federal
+  practiceArea    String?  // criminal_defense | appellate | juvenile | federal
 
-  members     OrganizationMember[]
-  invitations OrganizationInvitation[]
-  users       User[]
+  members         OrganizationMember[]
+  invitations     OrganizationInvitation[]
+  users           User[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   @@index([organizationId])
   @@index([officeId])
@@ -1432,23 +1432,23 @@ model PracticeGroup {
 }
 
 model OrganizationMember {
-  memberId        String                  @id @default(uuid())
-  organizationId  String
-  organization    Organization            @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  userId          String
-  user            User                    @relation(fields: [userId], references: [id], onDelete: Cascade)
-  role            String // admin | attorney | investigator | staff
-  caseRole        String? // Program 4A — role within a specific case context
-  personnelType   String? // attorney | investigator | paralegal | legal_assistant | office_admin | receptionist | expert_witness | contract_investigator
-  officeId        String?
-  office          OrganizationOffice?     @relation(fields: [officeId], references: [officeId])
-  departmentId    String?
-  department      OrganizationDepartment? @relation(fields: [departmentId], references: [departmentId])
+  memberId       String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  role           String   // admin | attorney | investigator | staff
+  caseRole       String?  // Program 4A — role within a specific case context
+  personnelType  String?  // attorney | investigator | paralegal | legal_assistant | office_admin | receptionist | expert_witness | contract_investigator
+  officeId       String?
+  office         OrganizationOffice? @relation(fields: [officeId], references: [officeId])
+  departmentId   String?
+  department     OrganizationDepartment? @relation(fields: [departmentId], references: [departmentId])
   practiceGroupId String?
-  practiceGroup   PracticeGroup?          @relation(fields: [practiceGroupId], references: [practiceGroupId])
-  status          String                  @default("active") // active | suspended | removed
-  invitedById     String?
-  joinedAt        DateTime                @default(now())
+  practiceGroup  PracticeGroup? @relation(fields: [practiceGroupId], references: [practiceGroupId])
+  status         String   @default("active") // active | suspended | removed
+  invitedById    String?
+  joinedAt       DateTime @default(now())
 
   @@unique([organizationId, userId])
   @@index([organizationId])
@@ -1458,20 +1458,20 @@ model OrganizationMember {
 }
 
 model OrganizationInvitation {
-  invitationId    String         @id @default(uuid())
-  organizationId  String
-  organization    Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  email           String
-  role            String // admin | attorney | investigator | staff
-  officeId        String?
+  invitationId   String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  email          String
+  role           String   // admin | attorney | investigator | staff
+  officeId       String?
   practiceGroupId String?
-  practiceGroup   PracticeGroup? @relation(fields: [practiceGroupId], references: [practiceGroupId])
-  tokenHash       String
-  status          String         @default("pending") // pending | accepted | expired | revoked
-  invitedById     String
-  expiresAt       DateTime
-  acceptedAt      DateTime?
-  createdAt       DateTime       @default(now())
+  practiceGroup  PracticeGroup? @relation(fields: [practiceGroupId], references: [practiceGroupId])
+  tokenHash      String
+  status         String   @default("pending") // pending | accepted | expired | revoked
+  invitedById    String
+  expiresAt      DateTime
+  acceptedAt     DateTime?
+  createdAt      DateTime @default(now())
 
   @@index([tokenHash])
   @@index([organizationId, email])
@@ -1480,19 +1480,19 @@ model OrganizationInvitation {
 }
 
 model OrganizationDepartment {
-  departmentId   String              @id @default(uuid())
+  departmentId   String   @id @default(uuid())
   organizationId String
-  organization   Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   officeId       String?
   office         OrganizationOffice? @relation(fields: [officeId], references: [officeId])
   name           String
   description    String?
 
-  members          OrganizationMember[]
+  members        OrganizationMember[]
   permissionGrants PermissionGrant[]
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@index([organizationId])
   @@index([officeId])
@@ -1500,24 +1500,24 @@ model OrganizationDepartment {
 }
 
 model PersonnelProfile {
-  profileId        String       @id @default(uuid())
-  organizationId   String
-  organization     Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
-  userId           String       @unique
-  user             User         @relation(fields: [userId], references: [id], onDelete: Cascade)
-  personnelType    String // attorney | investigator | paralegal | legal_assistant | office_admin | receptionist | expert_witness | contract_investigator
-  jobTitle         String?
-  barNumber        String?
-  phone            String?
-  bio              String?
-  certifications   Json? // [{ name, issuer, issuedAt, expiresAt }]
-  licenses         Json? // [{ type, number, state, expiresAt }]
-  permissions      Json? // { canViewEvidence, canAssignCases, ... }
+  profileId      String   @id @default(uuid())
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String   @unique
+  user           User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  personnelType  String   // attorney | investigator | paralegal | legal_assistant | office_admin | receptionist | expert_witness | contract_investigator
+  jobTitle       String?
+  barNumber      String?
+  phone          String?
+  bio            String?
+  certifications Json?    // [{ name, issuer, issuedAt, expiresAt }]
+  licenses       Json?    // [{ type, number, state, expiresAt }]
+  permissions    Json?    // { canViewEvidence, canAssignCases, ... }
   calendarSettings Json?
-  isActive         Boolean      @default(true)
+  isActive       Boolean  @default(true)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@index([organizationId])
   @@index([personnelType])
@@ -1525,19 +1525,19 @@ model PersonnelProfile {
 }
 
 model ClientTeamAssignment {
-  assignmentId        String  @id @default(uuid())
-  clientId            String  @unique
-  client              Client  @relation(fields: [clientId], references: [clientId], onDelete: Cascade)
-  tenantId            String
-  primaryAttorneyId   String?
+  assignmentId       String   @id @default(uuid())
+  clientId           String   @unique
+  client             Client   @relation(fields: [clientId], references: [clientId], onDelete: Cascade)
+  tenantId           String
+  primaryAttorneyId  String?
   secondaryAttorneyId String?
-  investigatorId      String?
-  paralegalId         String?
-  legalAssistantId    String?
-  officeId            String?
+  investigatorId     String?
+  paralegalId        String?
+  legalAssistantId   String?
+  officeId           String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   @@index([tenantId])
   @@index([primaryAttorneyId])
@@ -1546,18 +1546,18 @@ model ClientTeamAssignment {
 }
 
 model OrgInternalMessage {
-  messageId      String       @id @default(uuid())
+  messageId      String   @id @default(uuid())
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   senderId       String
-  sender         User         @relation("OrgMessageSender", fields: [senderId], references: [id])
+  sender         User     @relation("OrgMessageSender", fields: [senderId], references: [id])
   recipientId    String?
-  channel        String       @default("direct") // direct | team | office | department
-  channelRef     String? // officeId or departmentId for scoped channels
+  channel        String   @default("direct") // direct | team | office | department
+  channelRef     String?  // officeId or departmentId for scoped channels
   body           String
   readAt         DateTime?
 
-  createdAt DateTime @default(now())
+  createdAt      DateTime @default(now())
 
   @@index([organizationId])
   @@index([senderId])
@@ -1567,22 +1567,22 @@ model OrgInternalMessage {
 }
 
 model OrgTask {
-  taskId         String       @id @default(uuid())
+  taskId         String   @id @default(uuid())
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   tenantId       String
   title          String
   description    String?
-  taskType       String       @default("general") // general | case | investigation | motion
+  taskType       String   @default("general") // general | case | investigation | motion
   caseId         String?
   assigneeId     String?
   assignerId     String
-  status         String       @default("pending") // pending | in_progress | complete | cancelled
+  status         String   @default("pending") // pending | in_progress | complete | cancelled
   dueDate        DateTime?
   completedAt    DateTime?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@index([organizationId])
   @@index([tenantId])
@@ -1593,19 +1593,19 @@ model OrgTask {
 }
 
 model KnowledgeAsset {
-  assetId        String       @id @default(uuid())
+  assetId        String   @id @default(uuid())
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   tenantId       String
-  assetType      String // internal_note | research | motion | template | procedure | policy
+  assetType      String   // internal_note | research | motion | template | procedure | policy
   title          String
   body           String
   tags           String?
   createdById    String
-  isPublished    Boolean      @default(true)
+  isPublished    Boolean  @default(true)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@index([organizationId])
   @@index([tenantId, assetType])
@@ -1613,17 +1613,17 @@ model KnowledgeAsset {
 }
 
 model ConflictRecord {
-  recordId       String       @id @default(uuid())
+  recordId       String   @id @default(uuid())
   organizationId String
   organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   tenantId       String
-  conflictType   String // client | witness | attorney | organization | related_case
+  conflictType   String   // client | witness | attorney | organization | related_case
   entityA        String
   entityB        String
-  severity       String       @default("review") // clear | review | blocked
-  status         String       @default("open") // open | waived | resolved
+  severity       String   @default("review") // clear | review | blocked
+  status         String   @default("open") // open | waived | resolved
   details        String?
-  detectedAt     DateTime     @default(now())
+  detectedAt     DateTime @default(now())
   resolvedAt     DateTime?
 
   @@index([organizationId])
@@ -1633,19 +1633,19 @@ model ConflictRecord {
 }
 
 model PermissionGrant {
-  grantId        String                  @id @default(uuid())
+  grantId        String   @id @default(uuid())
   organizationId String
-  organization   Organization            @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   userId         String
-  scope          String // office | department | case | document | evidence | admin
+  scope          String   // office | department | case | document | evidence | admin
   resourceId     String?
   departmentId   String?
   department     OrganizationDepartment? @relation(fields: [departmentId], references: [departmentId])
-  permission     String // view | edit | assign | approve | admin
+  permission     String   // view | edit | assign | approve | admin
   grantedById    String
   expiresAt      DateTime?
 
-  createdAt DateTime @default(now())
+  createdAt      DateTime @default(now())
 
   @@index([organizationId, userId])
   @@index([scope, resourceId])
@@ -1653,20 +1653,20 @@ model PermissionGrant {
 }
 
 model ApprovalRequest {
-  requestId      String    @id @default(uuid())
+  requestId      String   @id @default(uuid())
   organizationId String
   tenantId       String
-  requestType    String // case_assignment | document_release | billing | personnel
+  requestType    String   // case_assignment | document_release | billing | personnel
   resourceType   String
   resourceId     String
   requestedById  String
   approverId     String?
-  status         String    @default("pending") // pending | approved | denied
+  status         String   @default("pending") // pending | approved | denied
   notes          String?
   decidedAt      DateTime?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@index([organizationId])
   @@index([tenantId, status])
@@ -1678,41 +1678,41 @@ model ApprovalRequest {
 // ---------------------------------------------------------------------------
 
 model Client {
-  clientId String @id @default(uuid())
-  tenantId String
-  ownerId  String
+  clientId              String    @id @default(uuid())
+  tenantId              String
+  ownerId               String
 
-  firstName   String
-  lastName    String
-  middleName  String?
-  dateOfBirth DateTime?
-  status      String    @default("prospect") // prospect | intake | active | inactive | closed
+  firstName             String
+  lastName              String
+  middleName            String?
+  dateOfBirth           DateTime?
+  status                String    @default("prospect") // prospect | intake | active | inactive | closed
 
-  email    String?
-  phone    String?
-  phoneAlt String?
+  email                 String?
+  phone                 String?
+  phoneAlt              String?
 
-  alternateContacts Json? // [{ name, relationship, phone, email }]
-  emergencyContacts Json? // [{ name, relationship, phone }]
-  addressHistory    Json? // [{ line1, line2, city, state, zip, country, from, to }]
+  alternateContacts     Json?     // [{ name, relationship, phone, email }]
+  emergencyContacts     Json?     // [{ name, relationship, phone }]
+  addressHistory        Json?     // [{ line1, line2, city, state, zip, country, from, to }]
 
   communicationPreference String  @default("email") // email | phone | sms | mail
-  language                String  @default("en")
-  notes                   String?
+  language              String    @default("en")
+  notes                 String?
 
-  intakeDate      DateTime?
-  retentionStatus String    @default("pending") // pending | retained | declined
-  retainedAt      DateTime?
+  intakeDate            DateTime?
+  retentionStatus       String    @default("pending") // pending | retained | declined
+  retainedAt            DateTime?
 
-  portalUserId String? // Linked defendant User.id
+  portalUserId          String?   // Linked defendant User.id
 
-  deletedAt DateTime?
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
+  deletedAt             DateTime?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
 
-  cases          CriminalCase[]
-  portalUsers    User[]
-  teamAssignment ClientTeamAssignment?
+  cases                 CriminalCase[]
+  portalUsers           User[]
+  teamAssignment        ClientTeamAssignment?
 
   @@index([tenantId])
   @@index([ownerId])
@@ -1726,18 +1726,18 @@ model Client {
 // ---------------------------------------------------------------------------
 
 model CriminalCase {
-  caseId          String    @id @default(uuid())
+  caseId          String   @id @default(uuid())
   tenantId        String
   ownerId         String
   clientId        String?
-  client          Client?   @relation(fields: [clientId], references: [clientId])
+  client          Client?  @relation(fields: [clientId], references: [clientId])
   officeId        String?
   title           String
   caseNumber      String
   jurisdiction    String
-  caseType        String // felony | misdemeanor | infraction | federal
-  status          String    @default("active") // active | pending | closed | archived
-  phase           String    @default("intake") // intake | preliminary | pretrial | trial | sentencing | appeal | closed
+  caseType        String   // felony | misdemeanor | infraction | federal
+  status          String   @default("active") // active | pending | closed | archived
+  phase           String   @default("intake") // intake | preliminary | pretrial | trial | sentencing | appeal | closed
   court           String?
   judge           String?
   department      String?
@@ -1745,12 +1745,12 @@ model CriminalCase {
   nextHearingNote String?
   deletedAt       DateTime?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
-  evidence Evidence[]
-  hearings CaseHearing[]
-  messages CaseMessage[]
+  evidence        Evidence[]
+  hearings        CaseHearing[]
+  messages        CaseMessage[]
 
   @@unique([tenantId, caseNumber])
   @@index([tenantId])
@@ -1768,18 +1768,18 @@ model CriminalCase {
 // ---------------------------------------------------------------------------
 
 model CaseHearing {
-  hearingId      String       @id @default(uuid())
-  caseId         String
-  case           CriminalCase @relation(fields: [caseId], references: [caseId])
-  tenantId       String
-  hearingDate    DateTime
-  hearingType    String? // arraignment | pretrial | trial | sentencing | status
-  location       String?
-  notes          String?
+  hearingId     String   @id @default(uuid())
+  caseId        String
+  case          CriminalCase @relation(fields: [caseId], references: [caseId])
+  tenantId      String
+  hearingDate   DateTime
+  hearingType   String?  // arraignment | pretrial | trial | sentencing | status
+  location      String?
+  notes         String?
   reminderSentAt DateTime?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   @@index([caseId])
   @@index([tenantId])
@@ -1792,17 +1792,17 @@ model CaseHearing {
 // ---------------------------------------------------------------------------
 
 model CaseMessage {
-  messageId   String       @id @default(uuid())
+  messageId   String   @id @default(uuid())
   caseId      String
   case        CriminalCase @relation(fields: [caseId], references: [caseId])
   tenantId    String
   senderId    String
-  sender      User         @relation("MessageSender", fields: [senderId], references: [id])
+  sender      User     @relation("MessageSender", fields: [senderId], references: [id])
   body        String
   readAt      DateTime?
-  deliveredAt DateTime     @default(now())
+  deliveredAt DateTime @default(now())
 
-  createdAt DateTime @default(now())
+  createdAt   DateTime @default(now())
 
   @@index([caseId])
   @@index([tenantId])
@@ -1816,48 +1816,46 @@ model CaseMessage {
 // ---------------------------------------------------------------------------
 
 model Evidence {
-  evidenceId   String       @id @default(uuid())
-  caseId       String
-  case         CriminalCase @relation(fields: [caseId], references: [caseId])
-  tenantId     String
-  fileName     String
-  mimeType     String?
-  size         BigInt       @default(0)
-  duration     Int? // seconds, for video
-  pageCount    Int? // for documents
-  evidenceType String // transcript | police_report | bodycam | dashcam | witness_video | photo | dispatch_log | forensic_report | autopsy_report | other_document
-  s3Key        String?
-  uploadedBy   String
-  uploadedAt   DateTime     @default(now())
+  evidenceId      String   @id @default(uuid())
+  caseId          String
+  case            CriminalCase @relation(fields: [caseId], references: [caseId])
+  tenantId        String
+  fileName        String
+  mimeType        String?
+  size            BigInt   @default(0)
+  duration        Int?     // seconds, for video
+  pageCount       Int?     // for documents
+  evidenceType    String   // transcript | police_report | bodycam | dashcam | witness_video | photo | dispatch_log | forensic_report | autopsy_report | other_document
+  s3Key           String?
+  uploadedBy      String
+  uploadedAt      DateTime @default(now())
 
   // Processing status
-  /**
-   * /** SHA-256 of the stored bytes. A document cited in a filing has to be
-   * provably the document that was produced, and a fingerprint is the only
-   * thing that shows the file has not changed since it was analysed.
-   */
+  /** SHA-256 of the stored bytes. A document cited in a filing has to be
+   *  provably the document that was produced, and a fingerprint is the only
+   *  thing that shows the file has not changed since it was analysed. */
   sha256           String?
   processingStatus String  @default("pending") // pending | ingesting | normalized | analyzed | failed
   processingError  String?
 
   // Document normalization
-  multiplexDetected   Boolean @default(false)
-  multiplexCount      Int?
+  multiplexDetected Boolean @default(false)
+  multiplexCount    Int?
   normalizedPageCount Int?
 
   // Page boundaries within the extracted text, as
   // [{ page, startOffset, endOffset }]. Lets any character offset in a chunk
   // or an extracted event be resolved back to a page and a line on that page,
   // which is what a citation in a brief has to name.
-  pageMap Json?
+  pageMap          Json?
 
   // ACU compute preparation (Part 15)
-  acuCost        Float?
-  acuConsumed    Float  @default(0)
-  analysisStatus String @default("pending") // pending | queued | processing | completed | failed
+  acuCost          Float?
+  acuConsumed      Float    @default(0)
+  analysisStatus   String   @default("pending") // pending | queued | processing | completed | failed
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   @@index([caseId])
   @@index([tenantId])
@@ -1872,17 +1870,17 @@ model Evidence {
 // ---------------------------------------------------------------------------
 
 model EvidenceChunk {
-  id          String @id @default(uuid())
-  evidenceId  String
-  tenantId    String
-  chunkIndex  Int // Zero-based ordering within the evidence
-  text        String // The chunk text content
-  startOffset Int // Character offset in the original document
-  endOffset   Int // Character end offset in the original document
-  checksum    String // SHA-256 truncated to 16 hex chars
-  charCount   Int // Character count of this chunk
+  id             String   @id @default(uuid())
+  evidenceId     String
+  tenantId       String
+  chunkIndex     Int      // Zero-based ordering within the evidence
+  text           String   // The chunk text content
+  startOffset    Int      // Character offset in the original document
+  endOffset      Int      // Character end offset in the original document
+  checksum       String   // SHA-256 truncated to 16 hex chars
+  charCount      Int      // Character count of this chunk
 
-  createdAt DateTime @default(now())
+  createdAt      DateTime @default(now())
 
   @@unique([evidenceId, chunkIndex])
   @@index([evidenceId])
@@ -1896,20 +1894,20 @@ model EvidenceChunk {
 // ---------------------------------------------------------------------------
 
 model VerifiedFact {
-  factId           String    @id @default(uuid())
-  caseId           String
-  tenantId         String
-  factType         String // event | claim | observation | measurement | identity | location | timestamp_anchor | contradiction
-  content          String // The fact statement
-  contentHash      String // SHA-256 hash of tenantId:caseId:content
-  sourceEvidenceId String // Which evidence produced this fact
-  sourceType       String // timeline_event | narrative_claim | evidence_event | manual
-  confidence       Float     @default(0.5)
-  lockedAt         DateTime? // Once set, fact is immutable
-  metadata         String? // JSON: additional structured data
+  factId            String    @id @default(uuid())
+  caseId            String
+  tenantId          String
+  factType          String    // event | claim | observation | measurement | identity | location | timestamp_anchor | contradiction
+  content           String    // The fact statement
+  contentHash       String    // SHA-256 hash of tenantId:caseId:content
+  sourceEvidenceId  String    // Which evidence produced this fact
+  sourceType        String    // timeline_event | narrative_claim | evidence_event | manual
+  confidence        Float     @default(0.5)
+  lockedAt          DateTime? // Once set, fact is immutable
+  metadata          String?   // JSON: additional structured data
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
   @@unique([caseId, tenantId, contentHash])
   @@index([caseId])
@@ -1927,7 +1925,7 @@ model VerifiedFact {
 // ---------------------------------------------------------------------------
 
 model NarrativeClaim {
-  claimId            String  @id @default(uuid())
+  claimId            String   @id @default(uuid())
   caseId             String
   tenantId           String
   evidenceId         String
@@ -1937,12 +1935,12 @@ model NarrativeClaim {
   object             String?
   target             String?
   timestampReference String?
-  confidence         Float   @default(0.5)
-  sentenceIndex      Int     @default(0)
+  confidence         Float    @default(0.5)
+  sentenceIndex      Int      @default(0)
   metadata           Json?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   @@index([caseId])
   @@index([tenantId])
@@ -1957,21 +1955,21 @@ model NarrativeClaim {
 // ---------------------------------------------------------------------------
 
 model NormalizedClaimEvent {
-  eventId    String    @id @default(uuid())
-  claimId    String
-  caseId     String
-  tenantId   String
-  eventType  String
-  actor      String
-  actionNorm String
-  object     String?
-  target     String?
-  timestamp  DateTime?
-  confidence Float     @default(0.5)
-  metadata   Json?
+  eventId       String   @id @default(uuid())
+  claimId       String
+  caseId        String
+  tenantId      String
+  eventType     String
+  actor         String
+  actionNorm    String
+  object        String?
+  target        String?
+  timestamp     DateTime?
+  confidence    Float    @default(0.5)
+  metadata      Json?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
 
   @@index([claimId])
   @@index([caseId])
@@ -1985,19 +1983,19 @@ model NormalizedClaimEvent {
 // ---------------------------------------------------------------------------
 
 model ClaimValidation {
-  validationId             String  @id @default(uuid())
-  claimId                  String
-  caseId                   String
-  tenantId                 String
-  status                   String  @default("pending") // supported | contradicted | unverified | pending
-  supportingEvidenceIds    Json    @default("[]")
+  validationId            String   @id @default(uuid())
+  claimId                 String
+  caseId                  String
+  tenantId                String
+  status                  String   @default("pending") // supported | contradicted | unverified | pending
+  supportingEvidenceIds   Json     @default("[]")
   contradictingEvidenceIds Json    @default("[]")
-  confidence               Float   @default(0.5)
-  reasoning                String?
-  metadata                 Json?
+  confidence              Float    @default(0.5)
+  reasoning               String?
+  metadata                Json?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt               DateTime @default(now())
+  updatedAt               DateTime @updatedAt
 
   @@index([claimId])
   @@index([caseId])
@@ -2011,20 +2009,20 @@ model ClaimValidation {
 // ---------------------------------------------------------------------------
 
 model ImpeachmentCandidate {
-  impeachmentId         String  @id @default(uuid())
-  claimId               String
-  caseId                String
-  tenantId              String
-  severity              String  @default("medium") // high | medium | low
-  contradictionType     String
-  claimText             String
-  contradictingEvidence String
-  suggestedQuestion     String?
-  confidence            Float   @default(0.5)
-  metadata              Json?
+  impeachmentId          String   @id @default(uuid())
+  claimId                String
+  caseId                 String
+  tenantId               String
+  severity               String   @default("medium") // high | medium | low
+  contradictionType      String
+  claimText              String
+  contradictingEvidence  String
+  suggestedQuestion      String?
+  confidence             Float    @default(0.5)
+  metadata               Json?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
 
   @@index([claimId])
   @@index([caseId])
@@ -2038,21 +2036,21 @@ model ImpeachmentCandidate {
 // ---------------------------------------------------------------------------
 
 model ProcessingJob {
-  id          String  @id @default(uuid())
-  userId      String
-  tenantId    String
-  caseId      String?
-  pipeline    String // TIMELINE | NARRATIVE | CONTRADICTION | VIDEO | DOCTRINE | EVIDENCE_INGEST
-  status      String  @default("pending") // pending | active | completed | failed
-  payload     Json? // Job-specific input data
-  result      Json? // Job output/result data
-  error       String?
-  failureCode String? // ACU_EXHAUSTED | PROCESSING_ERROR | TIMEOUT
-  acuCredits  Int     @default(0) // ACU credits consumed
+  id              String    @id @default(uuid())
+  userId          String
+  tenantId        String
+  caseId          String?
+  pipeline        String    // TIMELINE | NARRATIVE | CONTRADICTION | VIDEO | DOCTRINE | EVIDENCE_INGEST
+  status          String    @default("pending") // pending | active | completed | failed
+  payload         Json?     // Job-specific input data
+  result          Json?     // Job output/result data
+  error           String?
+  failureCode     String?   // ACU_EXHAUSTED | PROCESSING_ERROR | TIMEOUT
+  acuCredits      Int       @default(0) // ACU credits consumed
 
-  createdAt   DateTime  @default(now())
-  startedAt   DateTime?
-  completedAt DateTime?
+  createdAt       DateTime  @default(now())
+  startedAt       DateTime?
+  completedAt     DateTime?
 
   @@index([userId])
   @@index([tenantId])
@@ -2068,32 +2066,32 @@ model ProcessingJob {
 // ---------------------------------------------------------------------------
 
 model TimelineEvent {
-  id       String  @id @default(uuid())
-  caseId   String
-  tenantId String?
+  id              String    @id @default(uuid())
+  caseId          String
+  tenantId        String?
 
-  timestamp DateTime?
-  timeText  String? // raw time text from source (e.g. "approximately 10:30 PM")
+  timestamp       DateTime?
+  timeText        String?   // raw time text from source (e.g. "approximately 10:30 PM")
 
-  actor  String? // who performed the action
-  action String? // what was done (raw, human-readable — e.g. "fired", "grabbed")
-  target String? // person, object, or location acted upon (e.g. "Suspect", "vehicle")
-  object String? // instrument or object used (e.g. "handgun", "taser")
+  actor           String?   // who performed the action
+  action          String?   // what was done (raw, human-readable — e.g. "fired", "grabbed")
+  target          String?   // person, object, or location acted upon (e.g. "Suspect", "vehicle")
+  object          String?   // instrument or object used (e.g. "handgun", "taser")
 
-  description String
+  description     String
 
-  sourceDoc  String? // evidence document that sourced this event
-  sourceType String? // police_report | bodycam | dispatch | witness | forensic
+  sourceDoc       String?   // evidence document that sourced this event
+  sourceType      String?   // police_report | bodycam | dispatch | witness | forensic
 
-  location   String?
-  confidence Float? // 0-1 confidence score
+  location        String?
+  confidence      Float?    // 0-1 confidence score
 
-  conflictFlag  Boolean @default(false) // flagged if conflicts with another event
-  conflictsWith String? // ID of conflicting TimelineEvent
-  metadata      Json?
+  conflictFlag    Boolean   @default(false) // flagged if conflicts with another event
+  conflictsWith   String?   // ID of conflicting TimelineEvent
+  metadata        Json?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   @@index([caseId])
   @@index([tenantId])
@@ -2111,20 +2109,20 @@ model TimelineEvent {
 // ---------------------------------------------------------------------------
 
 model DiscountCode {
-  id            String    @id @default(uuid())
-  codeName      String
-  codeValue     String    @unique // e.g. HUNT100
-  discountType  String // percent | fixed
-  discountValue Float
-  active        Boolean   @default(true)
-  usageLimit    Int?
-  usageCount    Int       @default(0)
-  expiresAt     DateTime?
+  id              String    @id @default(uuid())
+  codeName        String
+  codeValue       String    @unique // e.g. HUNT100
+  discountType    String    // percent | fixed
+  discountValue   Float
+  active          Boolean   @default(true)
+  usageLimit      Int?
+  usageCount      Int       @default(0)
+  expiresAt       DateTime?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
-  usages DiscountUsage[]
+  usages          DiscountUsage[]
 
   @@index([codeValue])
   @@index([active])
@@ -2136,12 +2134,12 @@ model DiscountCode {
 // ---------------------------------------------------------------------------
 
 model DiscountUsage {
-  id             String       @id @default(uuid())
-  discountCodeId String
-  discountCode   DiscountCode @relation(fields: [discountCodeId], references: [id])
-  userId         String
+  id              String    @id @default(uuid())
+  discountCodeId  String
+  discountCode    DiscountCode @relation(fields: [discountCodeId], references: [id])
+  userId          String
 
-  usedAt DateTime @default(now())
+  usedAt          DateTime  @default(now())
 
   @@index([discountCodeId])
   @@index([userId])
@@ -2153,18 +2151,18 @@ model DiscountUsage {
 // ---------------------------------------------------------------------------
 
 model DemoRequest {
-  id           String @id @default(uuid())
-  name         String
-  organization String
-  role         String
-  email        String
-  county       String
-  agencyType   String
-  message      String
-  status       String @default("new") // new | contacted | scheduled | completed | declined
+  id              String    @id @default(uuid())
+  name            String
+  organization    String
+  role            String
+  email           String
+  county          String
+  agencyType      String
+  message         String
+  status          String    @default("new") // new | contacted | scheduled | completed | declined
 
-  submittedAt DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  submittedAt     DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   @@index([status])
   @@index([email])
@@ -2177,20 +2175,20 @@ model DemoRequest {
 // ---------------------------------------------------------------------------
 
 model EnterpriseLicense {
-  id               String   @id @default(uuid())
-  organizationName String
-  agencyType       String // district_attorney | public_defender | defense_firm | state_agency | federal_defender | investigation_agency | other
-  seatCount        Int
-  licenseStart     DateTime
-  licenseEnd       DateTime
-  billingTier      String // starter | professional | enterprise | government
-  status           String   @default("pending") // active | expired | suspended | pending
-  adminEmail       String
-  county           String?
-  state            String?
+  id                String    @id @default(uuid())
+  organizationName  String
+  agencyType        String    // district_attorney | public_defender | defense_firm | state_agency | federal_defender | investigation_agency | other
+  seatCount         Int
+  licenseStart      DateTime
+  licenseEnd        DateTime
+  billingTier       String    // starter | professional | enterprise | government
+  status            String    @default("pending") // active | expired | suspended | pending
+  adminEmail        String
+  county            String?
+  state             String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
 
   @@index([status])
   @@index([adminEmail])
@@ -2203,19 +2201,19 @@ model EnterpriseLicense {
 // ---------------------------------------------------------------------------
 
 model GovernmentLead {
-  id           String @id @default(uuid())
-  agencyName   String
-  contactName  String
-  role         String
-  email        String
-  county       String
-  status       String @default("new") // new | contacted | demo_scheduled | demo_completed | contract_discussion | pilot_active | closed_won | closed_lost
-  notes        String
-  agencyType   String
-  seatEstimate Int
+  id              String    @id @default(uuid())
+  agencyName      String
+  contactName     String
+  role            String
+  email           String
+  county          String
+  status          String    @default("new") // new | contacted | demo_scheduled | demo_completed | contract_discussion | pilot_active | closed_won | closed_lost
+  notes           String
+  agencyType      String
+  seatEstimate    Int
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
   @@index([status])
   @@index([email])
@@ -2228,13 +2226,13 @@ model GovernmentLead {
 // ---------------------------------------------------------------------------
 
 model MarketingEvent {
-  id       String @id @default(uuid())
-  page     String
-  event    String // page_view | demo_request | signup | cta_click
-  source   String
-  metadata Json? // flexible key-value data
+  id              String    @id @default(uuid())
+  page            String
+  event           String    // page_view | demo_request | signup | cta_click
+  source          String
+  metadata        Json?     // flexible key-value data
 
-  createdAt DateTime @default(now())
+  createdAt       DateTime  @default(now())
 
   @@index([event])
   @@index([page])
@@ -2249,8 +2247,8 @@ model MarketingEvent {
 
 model StripeWebhookEvent {
   id          String   @id @default(uuid())
-  eventId     String   @unique // Stripe event ID (evt_xxx)
-  eventType   String // e.g. checkout.session.completed
+  eventId     String   @unique    // Stripe event ID (evt_xxx)
+  eventType   String              // e.g. checkout.session.completed
   processedAt DateTime @default(now())
 
   @@index([eventId])
@@ -2264,21 +2262,21 @@ model StripeWebhookEvent {
 // ---------------------------------------------------------------------------
 
 model EvidenceRequest {
-  id             String  @id @default(uuid())
-  caseId         String
-  tenantId       String
-  type           String // missing_bodycam | missing_witness_statement | timeline_gap | missing_dashcam | missing_dispatch_log | missing_forensic_report | missing_medical_record | other
-  title          String
-  description    String
-  priority       String  @default("medium") // low | medium | high
-  status         String  @default("pending") // pending | acknowledged | dismissed | deferred
-  sourceEventIds String? // JSON array of EvidenceEvent IDs that triggered this request
-  metadata       String? // JSON: additional structured data
+  id              String    @id @default(uuid())
+  caseId          String
+  tenantId        String
+  type            String    // missing_bodycam | missing_witness_statement | timeline_gap | missing_dashcam | missing_dispatch_log | missing_forensic_report | missing_medical_record | other
+  title           String
+  description     String
+  priority        String    @default("medium") // low | medium | high
+  status          String    @default("pending") // pending | acknowledged | dismissed | deferred
+  sourceEventIds  String?   // JSON array of EvidenceEvent IDs that triggered this request
+  metadata        String?   // JSON: additional structured data
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 
-  responses EvidenceRequestResponse[]
+  responses       EvidenceRequestResponse[]
 
   @@unique([caseId, tenantId, type, title])
   @@index([caseId])
@@ -2294,15 +2292,15 @@ model EvidenceRequest {
 // ---------------------------------------------------------------------------
 
 model EvidenceRequestResponse {
-  id             String          @id @default(uuid())
-  requestId      String
-  request        EvidenceRequest @relation(fields: [requestId], references: [id])
-  respondedBy    String // userId
-  responseType   String // requested | not_relevant | defer
-  deferUntilDate DateTime?
-  notes          String?
+  id              String    @id @default(uuid())
+  requestId       String
+  request         EvidenceRequest @relation(fields: [requestId], references: [id])
+  respondedBy     String    // userId
+  responseType    String    // requested | not_relevant | defer
+  deferUntilDate  DateTime?
+  notes           String?
 
-  createdAt DateTime @default(now())
+  createdAt       DateTime  @default(now())
 
   @@index([requestId])
   @@index([respondedBy])
@@ -2315,18 +2313,18 @@ model EvidenceRequestResponse {
 // ---------------------------------------------------------------------------
 
 model AttorneyNote {
-  id         String  @id @default(uuid())
-  caseId     String
-  tenantId   String
-  userId     String
-  title      String?
-  content    String
-  entityType String? // evidence | authority | witness | timeline | unknown | motion | investigation | general
-  entityId   String?
-  isPrivate  Boolean @default(true)
+  id          String   @id @default(uuid())
+  caseId      String
+  tenantId    String
+  userId      String
+  title       String?
+  content     String
+  entityType  String?  // evidence | authority | witness | timeline | unknown | motion | investigation | general
+  entityId    String?
+  isPrivate   Boolean  @default(true)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@index([caseId, tenantId])
   @@index([userId])
@@ -2335,16 +2333,16 @@ model AttorneyNote {
 }
 
 model WorkbenchPin {
-  id       String  @id @default(uuid())
-  caseId   String
-  tenantId String
-  userId   String
-  pinType  String // evidence | authority | witness | timeline | unknown | motion | investigation
-  entityId String
-  label    String?
-  metadata String? // JSON
+  id          String   @id @default(uuid())
+  caseId      String
+  tenantId    String
+  userId      String
+  pinType     String   // evidence | authority | witness | timeline | unknown | motion | investigation
+  entityId    String
+  label       String?
+  metadata    String?  // JSON
 
-  createdAt DateTime @default(now())
+  createdAt   DateTime @default(now())
 
   @@unique([caseId, tenantId, userId, pinType, entityId])
   @@index([caseId, tenantId])
@@ -2353,21 +2351,21 @@ model WorkbenchPin {
 }
 
 model InvestigationTask {
-  id          String    @id @default(uuid())
-  caseId      String
-  tenantId    String
-  title       String
-  description String?
-  status      String    @default("open") // open | in_progress | completed | deferred
-  priority    String    @default("medium") // low | medium | high
-  assignedTo  String?
-  dueDate     DateTime?
-  sourceType  String? // evidence_gap | subpoena | discovery | witness | timeline | manual
-  sourceId    String?
-  createdBy   String
+  id            String    @id @default(uuid())
+  caseId        String
+  tenantId      String
+  title         String
+  description   String?
+  status        String    @default("open") // open | in_progress | completed | deferred
+  priority      String    @default("medium") // low | medium | high
+  assignedTo    String?
+  dueDate       DateTime?
+  sourceType    String?   // evidence_gap | subpoena | discovery | witness | timeline | manual
+  sourceId      String?
+  createdBy     String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
   @@index([caseId, tenantId])
   @@index([status])
@@ -2380,62 +2378,62 @@ model InvestigationTask {
 // ---------------------------------------------------------------------------
 
 model CaseWitness {
-  id              String  @id @default(uuid())
+  id              String   @id @default(uuid())
   caseId          String
   tenantId        String
   name            String
   role            String?
   contactPhone    String?
   contactEmail    String?
-  status          String  @default("identified") // identified | contacted | interviewed | unavailable
-  interviewStatus String  @default("not_scheduled") // not_scheduled | scheduled | completed | declined
+  status          String   @default("identified") // identified | contacted | interviewed | unavailable
+  interviewStatus String   @default("not_scheduled") // not_scheduled | scheduled | completed | declined
   notes           String?
-  sourceType      String? // timeline | manual | discovery
+  sourceType      String?  // timeline | manual | discovery
   sourceId        String?
   createdBy       String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   @@index([caseId, tenantId])
   @@map("case_witnesses")
 }
 
 model InvestigationLead {
-  id          String  @id @default(uuid())
+  id          String   @id @default(uuid())
   caseId      String
   tenantId    String
   title       String
   description String?
-  status      String  @default("open") // open | pursuing | closed | unfounded
-  priority    String  @default("medium")
+  status      String   @default("open") // open | pursuing | closed | unfounded
+  priority    String   @default("medium")
   assignedTo  String?
   sourceType  String?
   sourceId    String?
   createdBy   String
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 
   @@index([caseId, tenantId])
   @@map("investigation_leads")
 }
 
 model FieldNote {
-  id         String  @id @default(uuid())
+  id         String   @id @default(uuid())
   caseId     String
   tenantId   String
   userId     String
   title      String?
   content    String
-  noteType   String  @default("general") // general | interview | surveillance | scene | gps
+  noteType   String   @default("general") // general | interview | surveillance | scene | gps
   latitude   Float?
   longitude  Float?
   evidenceId String?
   witnessId  String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
 
   @@index([caseId, tenantId])
   @@index([userId])
@@ -2464,14 +2462,14 @@ model InvestigationAssignment {
 // ---------------------------------------------------------------------------
 
 model SchemaVersion {
-  id            String   @id @default(uuid())
-  version       String   @unique
-  checksum      String
-  appliedAt     DateTime @default(now())
-  appliedBy     String   @default("prisma-migrate")
-  description   String?
-  migrationName String
-  driftChecked  Boolean  @default(false)
+  id             String   @id @default(uuid())
+  version        String   @unique
+  checksum       String
+  appliedAt      DateTime @default(now())
+  appliedBy      String   @default("prisma-migrate")
+  description    String?
+  migrationName  String
+  driftChecked   Boolean  @default(false)
 
   @@index([appliedAt])
   @@map("schema_versions")
@@ -2488,47 +2486,35 @@ model SchemaVersion {
 // ---------------------------------------------------------------------------
 
 model CertificationCase {
-  certificationCaseId String    @id @default(uuid())
-  /**
-   * Short stable handle, e.g. GS-001.
-   */
-  reference           String    @unique
+  certificationCaseId String   @id @default(uuid())
+  /** Short stable handle, e.g. GS-001. */
+  reference           String   @unique
   label               String
   description         String?
-  /**
-   * Where the untouched originals live. Never written to after import.
-   */
+  /** Where the untouched originals live. Never written to after import. */
   sourceDirectory     String
-  /**
-   * The CriminalCase the imported evidence was ingested into.
-   */
+  /** The CriminalCase the imported evidence was ingested into. */
   caseId              String?
   tenantId            String
   importedById        String
-  status              String    @default("importing") // importing | imported | failed
-  /**
-   * Whether this corpus is attorney-authorized discovery rather than a test
-   * fixture. Defaults to false and must be attested explicitly: the release
-   * gate counts only authorized corpora, and identifying them by excluding
-   * known-test prefixes fails open the moment a new prefix appears.
-   */
-  authorized          Boolean   @default(false)
+  status              String   @default("importing") // importing | imported | failed
+  /** Whether this corpus is attorney-authorized discovery rather than a test
+   *  fixture. Defaults to false and must be attested explicitly: the release
+   *  gate counts only authorized corpora, and identifying them by excluding
+   *  known-test prefixes fails open the moment a new prefix appears. */
+  authorized          Boolean  @default(false)
   authorizedById      String?
   authorizedAt        DateTime?
-  /**
-   * Who authorised the use of this material, in their words.
-   */
+  /** Who authorised the use of this material, in their words. */
   authorizationNote   String?
 
-  /**
-   * SHA-256 over the sorted per-file hashes; identifies the corpus itself.
-   */
-  corpusHash        String?
-  fileCount         Int       @default(0)
-  totalBytes        BigInt    @default(0)
-  importStartedAt   DateTime  @default(now())
-  importCompletedAt DateTime?
-  importErrors      Json?
+  /** SHA-256 over the sorted per-file hashes; identifies the corpus itself. */
+  corpusHash          String?
+  fileCount           Int      @default(0)
+  totalBytes          BigInt   @default(0)
+  importStartedAt     DateTime @default(now())
+  importCompletedAt   DateTime?
+  importErrors        Json?
 
   files CertificationFile[]
   runs  CertificationRun[]
@@ -2543,41 +2529,35 @@ model CertificationCase {
 // resume state is the size of each partial file on disk rather than a
 // bookkeeping row, so a crash mid-upload cannot leave the two disagreeing.
 model CertificationUploadSession {
-  uploadSessionId String  @id @default(uuid())
+  uploadSessionId String   @id @default(uuid())
   reference       String
   label           String
   description     String?
   tenantId        String
   createdById     String
 
-  /**
-   * Where the uploaded bytes are assembled. Removed when the session ends.
-   */
-  stagingDir String
+  /** Where the uploaded bytes are assembled. Removed when the session ends. */
+  stagingDir      String
 
-  status String @default("staging") // staging | importing | processing | completed | failed | cancelled
+  status          String   @default("staging") // staging | importing | processing | completed | failed | cancelled
 
-  /**
-   * What the operator is being shown right now.
-   */
+  /** What the operator is being shown right now. */
   stage           String?
   stageDetail     String?
-  progressCurrent Int     @default(0)
-  progressTotal   Int     @default(0)
+  progressCurrent Int      @default(0)
+  progressTotal   Int      @default(0)
 
-  /**
-   * What the browser said it was going to send, for reconciliation.
-   */
+  /** What the browser said it was going to send, for reconciliation. */
   declaredFileCount Int    @default(0)
   declaredBytes     BigInt @default(0)
 
   certificationCaseId String?
   certificationRunId  String?
-  error               String?
+  error             String?
 
-  createdAt   DateTime  @default(now())
-  updatedAt   DateTime  @updatedAt
-  completedAt DateTime?
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  completedAt     DateTime?
 
   @@index([tenantId])
   @@index([status])
@@ -2585,57 +2565,41 @@ model CertificationUploadSession {
 }
 
 model CertificationFile {
-  certificationFileId String            @id @default(uuid())
+  certificationFileId String   @id @default(uuid())
   certificationCaseId String
   certificationCase   CertificationCase @relation(fields: [certificationCaseId], references: [certificationCaseId], onDelete: Cascade)
 
-  /**
-   * Path relative to the import root, so the producing party's folder
-   * hierarchy is preserved exactly as delivered.
-   */
-  relativePath       String
-  fileName           String
-  extension          String?
-  mimeType           String?
-  sizeBytes          BigInt
-  sha256             String
-  /**
-   * Modification time from the source, where the medium carried one.
-   */
-  originalModifiedAt DateTime?
-  /**
-   * Set when an identical hash was already imported in this corpus.
-   */
-  duplicateOfFileId  String?
+  /** Path relative to the import root, so the producing party's folder
+   *  hierarchy is preserved exactly as delivered. */
+  relativePath        String
+  fileName            String
+  extension           String?
+  mimeType            String?
+  sizeBytes           BigInt
+  sha256              String
+  /** Modification time from the source, where the medium carried one. */
+  originalModifiedAt  DateTime?
+  /** Set when an identical hash was already imported in this corpus. */
+  duplicateOfFileId   String?
 
-  /**
-   * What the classifier decided, and how sure it was.
-   */
-  classification           String  @default("unknown")
-  classificationConfidence Float   @default(0)
-  classificationBasis      String?
+  /** What the classifier decided, and how sure it was. */
+  classification      String   @default("unknown")
+  classificationConfidence Float @default(0)
+  classificationBasis String?
 
-  /**
-   * Page count for paginated documents; null when the format has no pages.
-   */
-  pageCount       Int?
-  /**
-   * Duration in seconds for audio and video; null when not determinable.
-   */
-  durationSeconds Float?
-  /**
-   * Why a duration or page count could not be determined, when it could not.
-   */
-  mediaProbeNote  String?
+  /** Page count for paginated documents; null when the format has no pages. */
+  pageCount           Int?
+  /** Duration in seconds for audio and video; null when not determinable. */
+  durationSeconds     Float?
+  /** Why a duration or page count could not be determined, when it could not. */
+  mediaProbeNote      String?
 
-  /**
-   * The Evidence row produced by the production ingestion path.
-   */
-  evidenceId    String?
-  ingestStatus  String  @default("pending") // pending | ingested | skipped | failed
-  ingestMessage String?
+  /** The Evidence row produced by the production ingestion path. */
+  evidenceId          String?
+  ingestStatus        String   @default("pending") // pending | ingested | skipped | failed
+  ingestMessage       String?
 
-  importedAt DateTime @default(now())
+  importedAt          DateTime @default(now())
 
   @@unique([certificationCaseId, relativePath])
   @@index([certificationCaseId])
@@ -2645,34 +2609,24 @@ model CertificationFile {
 }
 
 model CertificationRun {
-  certificationRunId  String            @id @default(uuid())
+  certificationRunId  String   @id @default(uuid())
   certificationCaseId String
   certificationCase   CertificationCase @relation(fields: [certificationCaseId], references: [certificationCaseId], onDelete: Cascade)
 
-  /**
-   * Which build produced this result.
-   */
-  gitCommit   String?
-  startedAt   DateTime  @default(now())
-  completedAt DateTime?
-  status      String    @default("running") // running | completed | failed
+  /** Which build produced this result. */
+  gitCommit           String?
+  startedAt           DateTime @default(now())
+  completedAt         DateTime?
+  status              String   @default("running") // running | completed | failed
 
-  /**
-   * Everything counted in this run, compared against the baseline.
-   */
-  metrics     Json?
-  /**
-   * Per-file processing failures, with the reason shown to the user.
-   */
-  failures    Json?
-  /**
-   * Whether this run is the reference other runs are compared against.
-   */
-  isBaseline  Boolean @default(false)
-  /**
-   * Differences against the baseline run, when one exists.
-   */
-  regressions Json?
+  /** Everything counted in this run, compared against the baseline. */
+  metrics             Json?
+  /** Per-file processing failures, with the reason shown to the user. */
+  failures            Json?
+  /** Whether this run is the reference other runs are compared against. */
+  isBaseline          Boolean  @default(false)
+  /** Differences against the baseline run, when one exists. */
+  regressions         Json?
 
   @@index([certificationCaseId])
   @@index([status])
@@ -2680,14 +2634,14 @@ model CertificationRun {
 }
 
 model Charge {
-  id            String    @id @default(uuid())
-  caseId        String
-  code          String
-  section       String
-  title         String?
-  dateOfOffense DateTime?
-  victim        String
-  createdAt     DateTime  @default(now())
+  id             String   @id @default(uuid())
+  caseId         String
+  code           String
+  section        String
+  title          String?
+  dateOfOffense  DateTime?
+  victim         String
+  createdAt      DateTime @default(now())
 
   @@index([caseId])
 }
@@ -2697,19 +2651,19 @@ model Charge {
 // ---------------------------------------------------------------------------
 
 model UserAccountSettings {
-  id                   String   @id @default(uuid())
-  userId               String   @unique
-  user                 User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  notifyEmail          Boolean  @default(true)
-  notifyCaseUpdates    Boolean  @default(true)
-  notifyBilling        Boolean  @default(true)
-  notifyInvitations    Boolean  @default(true)
-  aiInsightsEnabled    Boolean  @default(true)
-  autoDocumentAnalysis Boolean  @default(true)
-  compactSidebar       Boolean  @default(false)
-  timezone             String   @default("America/Los_Angeles")
-  createdAt            DateTime @default(now())
-  updatedAt            DateTime @updatedAt
+  id                    String   @id @default(uuid())
+  userId                String   @unique
+  user                  User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  notifyEmail           Boolean  @default(true)
+  notifyCaseUpdates     Boolean  @default(true)
+  notifyBilling         Boolean  @default(true)
+  notifyInvitations     Boolean  @default(true)
+  aiInsightsEnabled     Boolean  @default(true)
+  autoDocumentAnalysis  Boolean  @default(true)
+  compactSidebar        Boolean  @default(false)
+  timezone              String   @default("America/Los_Angeles")
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
 
   @@map("user_account_settings")
 }
@@ -2719,19 +2673,19 @@ model UserAccountSettings {
 // ---------------------------------------------------------------------------
 
 model DocumentRedactionVersion {
-  redactionId   String   @id @default(uuid())
-  tenantId      String
-  caseId        String
-  documentId    String
-  profileName   String
-  versionNumber Int      @default(1)
-  s3KeyRedacted String?
-  status        String   @default("draft")
-  createdById   String
-  approvedById  String?
-  redactionData String   @default("[]")
-  createdAt     DateTime @default(now())
-  updatedAt     DateTime @updatedAt
+  redactionId    String   @id @default(uuid())
+  tenantId       String
+  caseId         String
+  documentId     String
+  profileName    String
+  versionNumber  Int      @default(1)
+  s3KeyRedacted  String?
+  status         String   @default("draft")
+  createdById    String
+  approvedById   String?
+  redactionData  String   @default("[]")
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
 
   @@index([tenantId, caseId, documentId])
   @@index([profileName])
@@ -2743,7 +2697,7 @@ model DocumentRedactionVersion {
 // ---------------------------------------------------------------------------
 
 model DisclosurePackage {
-  packageId       String    @id @default(uuid())
+  packageId       String   @id @default(uuid())
   tenantId        String
   caseId          String
   documentId      String
@@ -2751,10 +2705,10 @@ model DisclosurePackage {
   recipientType   String
   recipientUserId String?
   recipientEmail  String?
-  status          String    @default("draft")
+  status          String   @default("draft")
   publishedById   String
   publishedAt     DateTime?
-  createdAt       DateTime  @default(now())
+  createdAt       DateTime @default(now())
 
   @@index([tenantId, caseId])
   @@index([recipientUserId])
@@ -2770,7 +2724,7 @@ model DocumentCopy {
   tenantId         String
   caseId           String
   documentId       String
-  copyType         String // original | working | redacted | publication
+  copyType         String   // original | working | redacted | publication
   s3Key            String?
   parentCopyId     String?
   redactionId      String?
@@ -2785,15 +2739,15 @@ model DocumentCopy {
 }
 
 model PublicationSet {
-  setId         String               @id @default(uuid())
+  setId         String   @id @default(uuid())
   tenantId      String
   caseId        String
   name          String
   profileName   String
-  status        String               @default("draft")
+  status        String   @default("draft")
   publishedById String?
   publishedAt   DateTime?
-  createdAt     DateTime             @default(now())
+  createdAt     DateTime @default(now())
   items         PublicationSetItem[]
 
   @@index([tenantId, caseId])
@@ -2801,7 +2755,7 @@ model PublicationSet {
 }
 
 model PublicationSetItem {
-  itemId            String         @id @default(uuid())
+  itemId            String   @id @default(uuid())
   setId             String
   set               PublicationSet @relation(fields: [setId], references: [setId], onDelete: Cascade)
   documentId        String
@@ -2828,6 +2782,7 @@ model PublicationAuditLog {
   @@map("publication_audit_logs")
 }
 
+
 // ============================================================================
 // Official California law.
 //
@@ -2839,68 +2794,42 @@ model PublicationAuditLog {
 // ============================================================================
 
 model OfficialStatute {
-  officialStatuteId String @id @default(uuid())
+  officialStatuteId String   @id @default(uuid())
 
-  /**
-   * e.g. PEN, HSC, VEH. The code as leginfo names it.
-   */
-  code        String
-  /**
-   * e.g. "459." — kept with the trailing period leginfo uses.
-   */
-  section     String
-  /**
-   * The exact page this text came from. Every citation resolves here.
-   */
-  officialUrl String
+  /** e.g. PEN, HSC, VEH. The code as leginfo names it. */
+  code              String
+  /** e.g. "459." — kept with the trailing period leginfo uses. */
+  section           String
+  /** The exact page this text came from. Every citation resolves here. */
+  officialUrl       String
 
-  /**
-   * retrieved | not_found | repealed | unavailable
-   */
-  status            String  @default("retrieved")
+  /** retrieved | not_found | repealed | unavailable */
+  status            String   @default("retrieved")
   httpStatus        Int?
-  /**
-   * Why a retrieval produced nothing, in words a lawyer can act on.
-   */
+  /** Why a retrieval produced nothing, in words a lawyer can act on. */
   unavailableReason String?
 
-  /**
-   * Statutory text exactly as published, with markup removed.
-   */
-  text            String?
-  /**
-   * SHA-256 of the normalised text. A new value means the law changed.
-   */
-  fingerprint     String?
-  /**
-   * "(Amended by Stats. 2025, Ch. 533, Sec. 1. (AB 468))" and similar.
-   */
-  legislativeNote String?
-  /**
-   * Part / Title / Chapter headings, in order, as published.
-   */
-  hierarchy       Json?
+  /** Statutory text exactly as published, with markup removed. */
+  text              String?
+  /** SHA-256 of the normalised text. A new value means the law changed. */
+  fingerprint       String?
+  /** "(Amended by Stats. 2025, Ch. 533, Sec. 1. (AB 468))" and similar. */
+  legislativeNote   String?
+  /** Part / Title / Chapter headings, in order, as published. */
+  hierarchy         Json?
 
-  /**
-   * What the compiler made of the text. Null until compiled.
-   */
+  /** What the compiler made of the text. Null until compiled. */
   compilation       Json?
   compilerVersion   String?
   extractionVersion String?
 
-  retrievedAt    DateTime  @default(now())
-  /**
-   * Set when a later retrieval returned different text.
-   */
-  supersededAt   DateTime?
-  /**
-   * How many times this cached retrieval has been served.
-   */
-  cacheHits      Int       @default(0)
-  /**
-   * When synchronisation last confirmed this text still matches the source.
-   */
-  lastVerifiedAt DateTime?
+  retrievedAt       DateTime @default(now())
+  /** Set when a later retrieval returned different text. */
+  supersededAt      DateTime?
+  /** How many times this cached retrieval has been served. */
+  cacheHits         Int      @default(0)
+  /** When synchronisation last confirmed this text still matches the source. */
+  lastVerifiedAt    DateTime?
 
   snapshots CaseStatuteSnapshot[]
 
@@ -2915,20 +2844,16 @@ model OfficialStatute {
 // reproduces the original legal context rather than silently re-running under
 // law that has since changed.
 model CaseStatuteSnapshot {
-  caseStatuteSnapshotId String          @id @default(uuid())
+  caseStatuteSnapshotId String @id @default(uuid())
   caseId                String
   officialStatuteId     String
   officialStatute       OfficialStatute @relation(fields: [officialStatuteId], references: [officialStatuteId], onDelete: Cascade)
 
-  /**
-   * Why this statute is in the case: charged, referenced, defined.
-   */
-  relationship String   @default("charged")
-  /**
-   * How the reference was reached, when it was not charged directly.
-   */
-  reachedVia   String?
-  pinnedAt     DateTime @default(now())
+  /** Why this statute is in the case: charged, referenced, defined. */
+  relationship          String   @default("charged")
+  /** How the reference was reached, when it was not charged directly. */
+  reachedVia            String?
+  pinnedAt              DateTime @default(now())
 
   @@unique([caseId, officialStatuteId, relationship])
   @@index([caseId])
@@ -2938,12 +2863,10 @@ model CaseStatuteSnapshot {
 // A record of every synchronisation pass, so a change in the law has a date
 // and a diff rather than appearing without explanation.
 model LegislativeSyncEvent {
-  legislativeSyncEventId String   @id @default(uuid())
+  legislativeSyncEventId String  @id @default(uuid())
   code                   String
   section                String
-  /**
-   * unchanged | amended | repealed | disappeared | new | error
-   */
+  /** unchanged | amended | repealed | disappeared | new | error */
   outcome                String
   previousFingerprint    String?
   currentFingerprint     String?
@@ -2954,6 +2877,7 @@ model LegislativeSyncEvent {
   @@index([detectedAt])
   @@map("legislative_sync_events")
 }
+
 
 // ============================================================================
 // Charging documents.
@@ -2971,66 +2895,46 @@ model LegislativeSyncEvent {
 // ============================================================================
 
 model ChargingDocument {
-  chargingDocumentId String @id @default(uuid())
+  chargingDocumentId String   @id @default(uuid())
   caseId             String
   tenantId           String
 
-  /**
-   * complaint | amended_complaint | information | amended_information | dismissal
-   */
-  kind            String
-  /**
-   * As the document titles itself, e.g. "First Amended Complaint".
-   */
-  name            String
-  filedAt         DateTime
-  court           String?
-  courtCaseNumber String?
+  /** complaint | amended_complaint | information | amended_information | dismissal */
+  kind               String
+  /** As the document titles itself, e.g. "First Amended Complaint". */
+  name               String
+  filedAt            DateTime
+  court              String?
+  courtCaseNumber    String?
 
-  /**
-   * Order of filing within the case. The highest is the operative document.
-   */
-  filingSequence Int
+  /** Order of filing within the case. The highest is the operative document. */
+  filingSequence     Int
 
-  /**
-   * The uploaded PDF this was read from, when there is one.
-   */
-  sourceEvidenceId String?
-  /**
-   * How to cite the document itself.
-   */
-  citation         String?
+  /** The uploaded PDF this was read from, when there is one. */
+  sourceEvidenceId   String?
+  /** How to cite the document itself. */
+  citation           String?
 
-  uploadedById String
-  /**
-   * draft | filed. A draft is not operative and supersedes nothing.
-   */
-  status       String    @default("filed")
-  /**
-   * Set when a later document supersedes this one. Never deleted.
-   */
-  supersededAt DateTime?
-  notes        String?
+  uploadedById       String
+  /** draft | filed. A draft is not operative and supersedes nothing. */
+  status             String   @default("filed")
+  /** Set when a later document supersedes this one. Never deleted. */
+  supersededAt       DateTime?
+  notes              String?
 
-  /**
-   * Set once anything in the case relies on this filing. Locked filings can
-   * be superseded or dismissed, never removed.
-   */
-  lockedAt     DateTime?
-  lockedReason String?
+  /** Set once anything in the case relies on this filing. Locked filings can
+   *  be superseded or dismissed, never removed. */
+  lockedAt           DateTime?
+  lockedReason       String?
 
-  /**
-   * When the counts were read out of an uploaded PDF rather than typed.
-   */
+  /** When the counts were read out of an uploaded PDF rather than typed. */
   parsedFromEvidenceId String?
-  /**
-   * How much of the document the parser was confident about, 0 to 1.
-   */
+  /** How much of the document the parser was confident about, 0 to 1. */
   parseConfidence      Float?
   parseNotes           String?
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
 
   charges FiledCharge[]
 
@@ -3041,101 +2945,67 @@ model ChargingDocument {
 }
 
 model FiledCharge {
-  filedChargeId      String           @id @default(uuid())
+  filedChargeId      String   @id @default(uuid())
   chargingDocumentId String
   chargingDocument   ChargingDocument @relation(fields: [chargingDocumentId], references: [chargingDocumentId], onDelete: Cascade)
   caseId             String
 
-  /**
-   * The count as numbered in this document. Renumbering is normal.
-   */
-  countNumber Int
-  /**
-   * e.g. PEN, VEH, HSC — the code as leginfo names it.
-   */
-  code        String
-  section     String
-  /**
-   * e.g. "(a)(4)" — the part charged, where the document specifies one.
-   */
-  subdivision String?
+  /** The count as numbered in this document. Renumbering is normal. */
+  countNumber        Int
+  /** e.g. PEN, VEH, HSC — the code as leginfo names it. */
+  code               String
+  section            String
+  /** e.g. "(a)(4)" — the part charged, where the document specifies one. */
+  subdivision        String?
 
-  /**
-   * The People's words, exactly as they appear. Never normalised.
-   */
+  /** The People's words, exactly as they appear. Never normalised. */
   verbatimText       String
-  /**
-   * e.g. "Penal Code section 245(a)(4)".
-   */
+  /** e.g. "Penal Code section 245(a)(4)". */
   normalizedCitation String
 
-  /**
-   * The official statute this count was resolved against, when it resolved.
-   */
-  officialStatuteId String?
-  /**
-   * Why resolution failed, when it did.
-   */
-  statuteNote       String?
+  /** The official statute this count was resolved against, when it resolved. */
+  officialStatuteId  String?
+  /** Why resolution failed, when it did. */
+  statuteNote        String?
 
-  /**
-   * active | dismissed | superseded | pending
-   */
-  status       String @default("active")
-  /**
-   * Enhancements alleged with this count, verbatim.
-   */
-  enhancements Json?
+  /** active | dismissed | superseded | pending */
+  status             String   @default("active")
+  /** Enhancements alleged with this count, verbatim. */
+  enhancements       Json?
 
-  /**
-   * Charged as an attempt rather than a completed offence.
-   */
-  attempt Boolean @default(false)
+  /** Charged as an attempt rather than a completed offence. */
+  attempt            Boolean  @default(false)
 
-  /**
-   * Allegations that change exposure and must be pleaded and proved. Each is
-   * recorded only when the charging document actually alleges it; absent
-   * means not alleged, which is different from alleged and not proved.
-   */
-  strikeAllegation    Boolean @default(false)
-  seriousFelony       Boolean @default(false)
-  violentFelony       Boolean @default(false)
-  gangAllegation      Boolean @default(false)
-  firearmAllegation   Boolean @default(false)
-  greatBodilyInjury   Boolean @default(false)
-  specialCircumstance Boolean @default(false)
-  threeStrikes        Boolean @default(false)
-  sexRegistration     Boolean @default(false)
+  /** Allegations that change exposure and must be pleaded and proved. Each is
+   *  recorded only when the charging document actually alleges it; absent
+   *  means not alleged, which is different from alleged and not proved. */
+  strikeAllegation      Boolean @default(false)
+  seriousFelony         Boolean @default(false)
+  violentFelony         Boolean @default(false)
+  gangAllegation        Boolean @default(false)
+  firearmAllegation     Boolean @default(false)
+  greatBodilyInjury     Boolean @default(false)
+  specialCircumstance   Boolean @default(false)
+  threeStrikes          Boolean @default(false)
+  sexRegistration       Boolean @default(false)
 
-  /**
-   * Prior convictions pleaded against this count, verbatim.
-   */
-  priorConvictions Json?
-  /**
-   * Weight alleged in a controlled substance count, as pleaded.
-   */
-  drugWeight       String?
-  /**
-   * Restitution sought, as pleaded.
-   */
-  restitution      String?
-  /**
-   * Maximum exposure as pleaded by the People, in their words. Never
-   * calculated by this platform: a sentence computed from a statute and
-   * presented as fact would be relied on in plea discussions.
-   */
-  maximumExposure  String?
+  /** Prior convictions pleaded against this count, verbatim. */
+  priorConvictions   Json?
+  /** Weight alleged in a controlled substance count, as pleaded. */
+  drugWeight         String?
+  /** Restitution sought, as pleaded. */
+  restitution        String?
+  /** Maximum exposure as pleaded by the People, in their words. Never
+   *  calculated by this platform: a sentence computed from a statute and
+   *  presented as fact would be relied on in plea discussions. */
+  maximumExposure    String?
 
-  /**
-   * Which fields the parser produced, and how sure it was about each.
-   */
-  parseConfidence Json?
-  /**
-   * Fields an attorney corrected by hand. The parser never overwrites these.
-   */
-  attorneyEdited  Json?
+  /** Which fields the parser produced, and how sure it was about each. */
+  parseConfidence    Json?
+  /** Fields an attorney corrected by hand. The parser never overwrites these. */
+  attorneyEdited     Json?
 
-  createdAt DateTime @default(now())
+  createdAt          DateTime @default(now())
 
   defendants ChargeDefendant[]
 
@@ -3146,62 +3016,52 @@ model FiledCharge {
 }
 
 model ChargeDefendant {
-  chargeDefendantId String      @id @default(uuid())
+  chargeDefendantId String @id @default(uuid())
   filedChargeId     String
   filedCharge       FiledCharge @relation(fields: [filedChargeId], references: [filedChargeId], onDelete: Cascade)
 
-  /**
-   * As named in the charging document.
-   */
-  defendantName String
-  /**
-   * The client record, where this defendant is one of ours.
-   */
-  clientId      String?
-  /**
-   * charged | dismissed | severed
-   */
-  status        String  @default("charged")
-  note          String?
+  /** As named in the charging document. */
+  defendantName     String
+  /** The client record, where this defendant is one of ours. */
+  clientId          String?
+  /** charged | dismissed | severed */
+  status            String @default("charged")
+  note              String?
 
   @@unique([filedChargeId, defendantName])
   @@index([filedChargeId])
   @@map("charge_defendants")
 }
 
+
 // Every manual change to a charge, so a correction has an author and a time.
 // Charges drive the whole analysis, and a silent edit would change what a case
 // is about with nothing to show who did it.
 model ChargeAuditEvent {
-  chargeAuditEventId String  @id @default(uuid())
+  chargeAuditEventId String   @id @default(uuid())
   caseId             String
   chargingDocumentId String?
   filedChargeId      String?
   tenantId           String
 
-  /**
-   * created | edited | dismissed | reinstated | finalized | parsed | locked
-   */
-  action        String
-  /**
-   * The field changed, when the change was to one field.
-   */
-  field         String?
-  previousValue String?
-  newValue      String?
-  /**
-   * What happened, in a sentence.
-   */
-  description   String
+  /** created | edited | dismissed | reinstated | finalized | parsed | locked */
+  action             String
+  /** The field changed, when the change was to one field. */
+  field              String?
+  previousValue      String?
+  newValue           String?
+  /** What happened, in a sentence. */
+  description        String
 
-  actorId    String
-  actorRole  String
-  occurredAt DateTime @default(now())
+  actorId            String
+  actorRole          String
+  occurredAt         DateTime @default(now())
 
   @@index([caseId, occurredAt])
   @@index([filedChargeId])
   @@map("charge_audit_events")
 }
+
 
 // ============================================================================
 // Case lifecycle.
@@ -3216,25 +3076,19 @@ model ChargeAuditEvent {
 // ============================================================================
 
 model CaseStageEvent {
-  caseStageEventId String @id @default(uuid())
+  caseStageEventId String   @id @default(uuid())
   caseId           String
   tenantId         String
 
-  stage          String
-  previousStage  String?
-  /**
-   * inferred | attorney — who decided.
-   */
-  source         String   @default("inferred")
-  /**
-   * The record that settled it, in a sentence.
-   */
-  basis          String
-  /**
-   * Set when counsel overrode an inference.
-   */
-  overriddenById String?
-  occurredAt     DateTime @default(now())
+  stage            String
+  previousStage    String?
+  /** inferred | attorney — who decided. */
+  source           String   @default("inferred")
+  /** The record that settled it, in a sentence. */
+  basis            String
+  /** Set when counsel overrode an inference. */
+  overriddenById   String?
+  occurredAt       DateTime @default(now())
 
   @@index([caseId, occurredAt])
   @@map("case_stage_events")

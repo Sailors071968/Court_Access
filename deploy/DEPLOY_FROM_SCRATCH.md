@@ -114,6 +114,13 @@ replaces that directory, and would take uploaded discovery with it:
 sudo mkdir -p /var/lib/courtaccess/evidence && sudo chown "$USER" /var/lib/courtaccess/evidence
 ```
 
+This file now holds every secret the service has, so restrict it. `cp` gives it
+the mode of the example, which is world-readable:
+
+```bash
+chmod 600 /var/www/courtaccess-v1/.env
+```
+
 Confirm Node can read it. This is worth doing before anything else touches the
 file, because Node's parser is not the shell — it honours no `export` prefix, no
 `${VAR}`, no `$(command)`:

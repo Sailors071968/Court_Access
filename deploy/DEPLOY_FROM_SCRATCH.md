@@ -246,6 +246,17 @@ FULL_CYCLE=yes bash deploy/stages/verify-restart-survival.sh
 
 ## 10 · Verify
 
+One command covers everything below and about forty other assertions — the
+environment, the migrations, the ports, PM2's saved definition, rollback
+readiness, the artifact fingerprint. It is read-only and safe to re-run at any
+time, including during an incident:
+
+```bash
+bash deploy/audit-deployment.sh
+```
+
+It must end `PRODUCTION READY`. The checks by hand:
+
 ```bash
 for p in /api/health /api/health/ready /api/health/deep; do
   printf '%-20s local=%s  nginx=%s\n' "$p" \
@@ -288,6 +299,18 @@ Verified: the account signs in and holds the admin role.
 ```
 
 Record the password. It is printed once.
+
+---
+
+## Where to go next
+
+| Document | For |
+|---|---|
+| [`OPERATIONS_PLAYBOOK.md`](OPERATIONS_PLAYBOOK.md) | Running it: releases, rollback, restarts, PM2 and reboot recovery, database and disaster recovery |
+| [`DEPLOYMENT_ARCHITECTURE.md`](DEPLOYMENT_ARCHITECTURE.md) | Understanding the whole deployment without reading the source |
+| [`DEPLOYMENT_FAILURE_MODES.md`](DEPLOYMENT_FAILURE_MODES.md) | When something breaks — eighteen observed modes, with detection and recovery |
+| [`DEPLOYMENT_CERTIFICATION.md`](DEPLOYMENT_CERTIFICATION.md) | What is proven, what is not, and the conditions on certification |
+| `audit-deployment.sh` | Whether the deployment is production ready right now |
 
 ---
 

@@ -151,3 +151,101 @@ than from the report.
 
 That demonstration is worth doing once, on real files, rather than twice on synthetic
 ones.
+
+---
+
+# Phase 2A — Sacramento County Operational Readiness
+
+## What was built
+
+**Import Inspection Mode** (your additional directive), the **parser validation
+framework** (Priority 2) and the **mapping review tool** (Priority 3) turned out to be
+one feature seen from three angles, so they were built together.
+
+### Inspection
+
+Upload any Sacramento file; the system describes it and imports nothing. No batch, no
+observation, no person, no booking — the only write is the inspection record, kept
+because it is the description of a file's structure at the moment it arrived, which is
+what you want when a mapping later turns out to have been wrong. The uploaded bytes are
+deleted after reading: an inspected file has not been accepted as evidence of anything.
+
+The report gives, per column: the header as written, the inferred type with a
+confidence and a rationale, sample values, how many rows carried a value, whether every
+value is distinct, what the active profile maps it to, and — when it maps to nothing —
+what it probably is and why.
+
+Columns are described **from their values, not their headers**, because the header is
+exactly what cannot be trusted when a county renames a column. Suggestions score header
+text and value shape separately and add them, so a column whose name means nothing can
+still be identified from its values, and neither signal alone reaches the threshold the
+profile update uses.
+
+For a PDF the questions are different — there are no columns yet — so it reports page
+count, whether a text layer exists, whether OCR would be used, whether any line carries
+both a date and a name, and the first forty lines of extracted text.
+
+### The loop, verified end to end
+
+A Sacramento export with every column renamed:
+
+| Step | Result |
+| --- | --- |
+| Inspect | 32% parser confidence, **would be refused** — names the missing required column |
+| Publish the suggestion | Profile v2. v1 untouched, its window closed |
+| Re-inspect the same file | 79% parser confidence, **would import** |
+| Import | Completes; the renamed surname, bail and date-of-birth columns all read correctly |
+
+No code change, no deployment.
+
+### Validation framework
+
+Every import now carries a validation report on its batch: recognised, unknown,
+duplicate and empty-though-mapped columns; missing required columns; field coverage;
+profile version; parser confidence; every warning and every error. Stored rather than
+logged, because "why did this import produce so few records" arrives weeks later and a
+log line is gone. Warnings are recorded even on an import that completed — nothing
+silently succeeds.
+
+### Mapping editor
+
+Every canonical field with its header aliases, editable. Removing every alias from a
+field disables it, which is how an obsolete mapping is retired. Publishing requires a
+change note, because years from now it is the only answer to "why does this profile read
+the bail column from there". There is deliberately no route that edits a published
+version.
+
+## Defects Phase 2A found
+
+| Defect | Consequence |
+| --- | --- |
+| **A profile published mid-day left that day uncovered.** Publishing floored the old window to the previous day and started the new one at the current instant; a roster dated today parses to midnight and matched neither. | No profile applied, the import fell back silently to the compiled-in map, and failed on the very columns just mapped — on exactly the day an operator publishes. Windows are now day-granular throughout. |
+| A bare integer is a valid currency amount | A weight of 180 inferred as money. Three-digit bare integers are quantities now, stated as the heuristic it is. |
+| The packed height form matched any three digits | 205 became two feet five inches — in the inference *and* in the parser. Now constrained to four to seven feet. |
+| The verdict counted suggestions as already applied | A file that would be refused today reported "would import with warnings" — the one thing this mode exists to get right. |
+| Version history counted a ColumnMap's own keys | Every version reported six mapped fields regardless of its mapping, making the history useless for seeing what changed. |
+
+The first was found only by demonstrating the loop in a browser rather than by script,
+because the demo did the realistic thing: published a profile, then imported that same
+day's roster.
+
+## Priorities 4–10
+
+These require real Sacramento data, and inspection is what makes them safe to attempt
+the moment a file arrives — which was the point of building it first.
+
+| Priority | Status |
+| --- | --- |
+| 4 · Operational workflow verification | The workflow runs end to end through the dashboard with no CLI. Not yet run on a real export. |
+| 5 · Intelligence verification | Evidence, observations, confidence, candidates considered and merge rationale are all recorded and shown. Not yet checked against real people. |
+| 6 · Historical timeline validation | Timeline, charges, bail, housing, evidence and intelligence reconstruct from observations. Court history is derivable now that the fields exist; not yet surfaced. |
+| 7 · Report certification | All eight sections render and print; the document is stored verbatim. Not yet frozen as a versioned specification. |
+| 8 · Watch list validation | Matching, notifications and priority work from intelligence rather than bookings. Release and return-to-custody paths are wired but only exercised synthetically. |
+| 9 · Performance baseline | Not started. No measurement at projected scale. |
+| 10 · Acceptance demonstration | Recorded for the inspection loop. Cannot be recorded for real data without real data. |
+
+## Still the one thing that would unblock the rest
+
+A single real file. Inspection means it is now **safe** to hand the system an unknown
+Sacramento export: the worst case is a report saying it would be refused and why, rather
+than a repository quietly full of nulls.

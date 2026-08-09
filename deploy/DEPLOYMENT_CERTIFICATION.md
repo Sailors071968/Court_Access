@@ -268,3 +268,80 @@ appears to.
 One requirement is **FAIL** rather than NOT VERIFIED: 4.5. The production API
 returns 502 on every health endpoint and has throughout this work. No deployment
 can be certified over a service that is down.
+
+---
+
+## 11 · Discharging the conditions
+
+`certify-production.sh` runs every verification in order, writes an evidence
+bundle, and prints a verdict computed from the files rather than asserted. It
+certifies; it does not deploy. Bringing a release up is the staged procedure,
+which keeps its go/no-go gates.
+
+```bash
+export V1=/var/www/courtaccess-v1
+export SITE=courtaccess.net
+export NODE22="$(dirname "$(command -v npm)")/node"
+
+bash deploy/certify-production.sh              # C1, C2, C3, C5, C6, and the smoke test
+```
+
+C4 needs a real reboot, so it is a separate three-step sequence:
+
+```bash
+bash deploy/certify-production.sh reboot-before
+sudo reboot
+bash deploy/certify-production.sh reboot-after
+```
+
+`reboot-after` refuses to pass if the host's boot time has not changed, so the
+step cannot be satisfied by running it without rebooting. C7 is the backup drill
+in `OPERATIONS_PLAYBOOK.md` §9; record its result where the script asks.
+
+The bundle contains host facts, PM2 and saved-definition summaries, health
+bodies, listeners, the effective nginx configuration, provenance counts, and the
+full output of every check. **It contains no secret values** — only names, flags
+and counts — so it is safe to attach to a ticket. Verified: a search for the live
+`JWT_SECRET` and database password across a complete bundle returns zero matches.
+
+## 12 · Tagging and freeze
+
+Only when `certify-production.sh` prints **CERTIFIED** with all seven conditions
+PASS, from a bundle taken on the production host:
+
+```bash
+# 1 · Record the evidence in the repository, so the tag is falsifiable later
+cp -r "$STATE/certification/<bundle>" deploy/evidence/<date>-certified/
+#    Check first that it holds no secrets: the script's own guarantee is
+#    counts and flags only, but the bundle is now a committed artifact.
+
+# 2 · Update the verdict in this document from CONDITIONALLY CERTIFIED to
+#     CERTIFIED, with the bundle path and the host it came from.
+
+# 3 · Tag the exact commit the certified artifact was built from — which is the
+#     commit reported by /api/health, not necessarily HEAD
+git tag -a v1.0.0-certified -m "Deployment certified on <host> <date>
+
+Evidence: deploy/evidence/<date>-certified/
+Conditions C1-C7: PASS
+Artifact sha256: <dist/index.js sha>
+Live commit: <the commit /api/health reports>"
+git push origin v1.0.0-certified
+```
+
+Tag the commit the running artifact was built from. Tagging `HEAD` when the host
+runs something else produces a tag that certifies code that was never certified.
+
+**Freeze policy.** After the tag, `deploy/` and the deployment-relevant parts of
+`backend/src/startup/`, `backend/src/database/schemaAssert.ts` and
+`backend/src/lib/redis.ts` change only for:
+
+1. A defect that prevents deployment, restart, reboot recovery or rollback.
+2. A defect that causes a deployment fault to be reported as something else —
+   the class of problem that made the original incident expensive.
+3. A security fix.
+
+Anything else waits. A change admitted under 1–3 re-opens certification: re-run
+`certify-production.sh`, take a new bundle, and move the tag. The point of the
+freeze is not that the deployment is perfect; it is that its behaviour is known,
+and every change spends that knowledge.

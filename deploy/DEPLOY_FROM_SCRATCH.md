@@ -317,6 +317,53 @@ Verified: the account signs in and holds the admin role.
 
 Record the password. It is printed once.
 
+The script prints which database it connected to. Check it against `DATABASE_URL`
+in the release's `.env`. If the two differ, the account is registered through the
+API into one database and promoted in another, and what you get is an account that
+signs in but holds the `attorney` role — the deployment looks finished and every
+administrative route answers 403. The script refuses rather than leaving that
+behind, but the printed line is how you notice before it happens.
+
+## 12 · Register the facility and its parser profiles
+
+Without this the Inmate Intelligence screens load and are empty, and the first
+import either has no parser profile — importing with weaker provenance and a
+recorded warning — or fails outright for a facility with no compiled-in column map.
+It is idempotent, so it is safe on every deployment.
+
+```bash
+cd /var/www/courtaccess-src/backend
+(set -a; . /var/www/courtaccess-v1/.env; set +a; npx tsx scripts/seed-sacramento.ts)
+```
+
+Expect:
+
+```
+facility: sacramento (Sacramento County Jail)
+profile: sacramento/csv published as v1
+profile: sacramento/pdf_text published as v1
+```
+
+Confirm in the application under **Administration → New Inmate Intelligence →
+Settings**: the Facilities table lists `sacramento`, and Parser profiles lists a
+`v1` for both `csv` and `pdf_text`. An empty Parser profiles table there means this
+step has not been run.
+
+## 13 · Verify the whole thing
+
+One script, ten criteria, each answered with a command and its output:
+
+```bash
+cd /var/www/courtaccess-src
+deploy/verify-operational.sh
+```
+
+It builds a release, applies migrations to a scratch database, starts the service
+with a stripped environment, creates an administrator, signs in, calls the
+administrative routes, restarts the service and checks the session survived. It
+verifies the instance it builds — running it on this host says nothing about any
+other.
+
 ---
 
 ## Where to go next

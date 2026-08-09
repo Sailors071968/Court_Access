@@ -91,9 +91,29 @@ fi
 # Shell-only syntax parses differently in the two readers of this same file:
 # stage 2 sources it for Prisma, Node reads it here. A divergence means the
 # migrations and the running application disagree about the database.
-if grep -qE '^\s*export\s|\$\{|\$\(' "$V1/.env" 2>/dev/null; then
+#
+# Only assignments are examined. A first pass grepped the whole file and flagged
+# env.release.example, whose comments explain ${VAR} and $(command) in prose —
+# a false FAIL on a correct file, found the first time this ran against a
+# documented template rather than a hand-written one. Keys are reported, never
+# values.
+SHELLISMS="$("$NODE22" -e '
+  const fs=require("fs");
+  const bad=[];
+  fs.readFileSync(process.argv[1],"utf8").split("\n").forEach((line,i)=>{
+    const t=line.trim();
+    if (!t || t.startsWith("#")) return;
+    if (/^export\s/.test(t)) { bad.push(`line ${i+1}: export prefix — Node reads the key as "export ..."`); return; }
+    const m=/^([A-Za-z_][A-Za-z0-9_]*)\s*=(.*)$/.exec(t);
+    if (!m) return;
+    if (/\$\{|\$\(/.test(m[2])) bad.push(`line ${i+1}: ${m[1]} uses \${...} or $(...) — Node does not expand either`);
+  });
+  console.log(bad.join("\n"));
+' "$V1/.env" 2>/dev/null)"
+
+if [ -n "$SHELLISMS" ]; then
   bad "$V1/.env contains shell-only syntax that Node will read differently"
-  grep -nE '^\s*export\s|\$\{|\$\(' "$V1/.env" | cut -d= -f1 | head -6 | sed 's/^/      line /'
+  printf '%s\n' "$SHELLISMS" | head -6 | sed 's/^/      /'
 else
   ok ".env has no shell-only syntax — both readers see the same values"
 fi

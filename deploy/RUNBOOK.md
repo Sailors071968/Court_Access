@@ -1031,13 +1031,20 @@ PORT in the running process: 3510      health: 200
 
 ### 3 · That fix was the cause of the next outage
 
-Making the shell the source of truth put the environment in PM2's memory. PM2
-persists it — to the live definition and to `dump.pm2` — so a daemon reload, a
-resurrect or a reboot restored whatever had been captured. When it had been
-captured from a shell that had not sourced `.env`, that was nothing: the process
-reached `enforceSchemaOnBoot` with no `DATABASE_URL` and exited 1 on every
-respawn. Observed as a 578-restart crash loop, hours after a deployment that had
-passed a 30-minute observation window with zero restarts.
+Making the shell the source of truth put the environment in PM2's memory, where
+nothing about `.env` can tell you what it contains. A definition holding none of
+it produced a 578-restart crash loop — the process reached `enforceSchemaOnBoot`
+with no `DATABASE_URL` and exited 1 on every respawn — hours after a deployment
+that had passed a 30-minute observation window with zero restarts.
+
+Note what is *not* established: that some PM2 operation erased it. On PM2 7.0.3,
+`restart`, `restart --update-env`, `reload --update-env`, `save`/`kill`/
+`resurrect` and `pm2 update` all preserve the captured environment, including
+into `dump.pm2` [measured]. A snapshot does not decay. It is either never taken,
+or a boot-time resurrect reads a different `dump.pm2` than the one `pm2 save`
+wrote — which is what happens when the `pm2 startup` unit runs as a different
+user. `ROOT_CAUSE_CRASH_LOOP.md` §6 has the measurements and §8 the read-only
+commands that tell you which occurred.
 
 Adding `--env-file` was not sufficient by itself, because Node's `--env-file`
 does not replace a variable that is already set — the inherited value wins.

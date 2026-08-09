@@ -108,12 +108,23 @@ say "START  (pinned interpreter, environment loaded by Node itself)"
 # both its live definition and dump.pm2 [verified]. That makes the environment a
 # function of the file rather than state held in the PM2 daemon's memory.
 #
-# The previous form exported .env into this shell and let PM2 snapshot it. The
-# snapshot lived only in the daemon: a daemon restart, a resurrect, a reboot, or
-# a `pm2 restart --update-env` from a shell without those exports replaced it
-# with an empty environment. The process then reached enforceSchemaOnBoot with
-# no DATABASE_URL and exited 1 on every respawn — observed as a 578-restart
-# crash loop after the daemon reloaded its saved definition.
+# The previous form exported .env into this shell and let PM2 snapshot it, so
+# the environment was daemon state and a definition holding none of it produced
+# the 578-restart crash loop: the process reached enforceSchemaOnBoot with no
+# DATABASE_URL and exited 1 on every respawn.
+#
+# It was believed that a daemon restart, a resurrect or a `pm2 restart
+# --update-env` from a shell without the exports is what emptied the definition.
+# That does not reproduce: on PM2 7.0.3 all of restart, restart --update-env,
+# reload --update-env, save/kill/resurrect and `pm2 update` preserve the
+# captured environment, including into dump.pm2 [measured]. So a snapshot does
+# not decay — it is either never taken, or a boot-time resurrect reads a
+# different dump.pm2 than the one pm2 save wrote, which happens when the
+# pm2 startup unit runs as another user. See ROOT_CAUSE_CRASH_LOOP.md §6.
+#
+# Either way the conclusion is the same, and stronger for it: an environment
+# that lives in the daemon can be absent at a spawn nobody is watching, and
+# nothing about the file would tell you.
 #
 # Adding --env-file was not enough on its own. Node's --env-file does not
 # replace a variable that is already set: the inherited value wins [verified,

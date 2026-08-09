@@ -237,6 +237,80 @@ database, or `.env`.
 | `/proc/<pid>/environ` and `ps` cannot show `--env-file` values | Low, but caused a false alarm | Docs corrected; `pm2 jlist` is the reliable source |
 | `changeManagement.ts:12` resolves migrations to `<parent-of-release>/backend/prisma/migrations` and silently reports none | Low — admin reporting only, not boot | Noted, not fixed; out of scope for this change |
 
+## 12 · Reproducibility by a new engineer
+
+Acceptance criterion: clone the repository, follow the documented steps, obtain
+the same healthy result, without tribal knowledge. Tested by executing it —
+fresh clone from the remote, empty database, no PM2 state — and counting the
+deviations from the document required to succeed.
+
+**First attempt: FAILED at step 6 of 12, and the documentation reproduced the
+outage.** Three findings, all in the docs rather than the code:
+
+1. `deploy/README.md`, the obvious entry point, describes a Docker Compose
+   stack — not what production runs. No document gave a clone-to-healthy
+   sequence for the PM2 deployment. The only one naming the stage scripts is
+   `RUNBOOK.md`, and `GREENFIELD_DEPLOYMENT.md` claims to supersede it without
+   mentioning them.
+2. Following that README literally — `cp .env.example .env` — produces a release
+   `.env` with **no `DATABASE_URL`**, because that example is the compose
+   environment and compose synthesises the URL from `POSTGRES_*` parts. Booting
+   it reproduced the production failure exactly: the same warnings, the same
+   `Continuing because NODE_ENV is not production`, the same
+   `Database unreachable` and the same advice to run `prisma migrate deploy`.
+   **The documented procedure was a route to the incident.**
+3. No release environment template existed at all.
+
+Fixed by adding `env.release.example` (every variable the validator requires,
+with the reasons) and `DEPLOY_FROM_SCRATCH.md` (the procedure), and by
+signposting `README.md` so the compose path cannot be mistaken for the
+production one.
+
+**Second attempt: FAILED at step 6, on two defects in the new document itself** —
+which is the point of running it rather than reviewing it:
+
+- `export NODE22="$(command -v node)"` resolved to a directory containing `node`
+  and no `npm`. The stages pin npm from that directory, so every one stopped at
+  `PATH npm () is not the pinned npm`. Now derived from `npm` instead, so the
+  pair is guaranteed, with the reason and a check.
+- `bootstrap-admin.mjs` imports `@prisma/client`, which Node resolves relative to
+  the script's own directory; from the source checkout that is
+  `ERR_MODULE_NOT_FOUND`. The step now copies it into the release first.
+
+It also exposed a false positive in stage 3's own `.env` check, which grepped the
+whole file for `${...}` and `$(...)` and so failed on the new template, whose
+comments explain that syntax in prose. It now examines assignments only and
+reports the offending key rather than its value — verified still to catch an
+`export` prefix, a `${VAR}` and a `$(cmd)` in a deliberately bad file.
+
+**Third attempt: PASS — 12 steps, 0 deviations.**
+
+```
+STEP  1 §0  NODE22=/…/v22.22.2/bin/node (v22.22.2)
+STEP  2 §1  cloned at d6715a1; the guide is present in the clone
+STEP  3 §2  courtaccess_acc created and owned by courtaccess
+STEP  4 §3  Release assembled — dist/index.js 2.1M, dist/public 5 files
+STEP  5 §4  all six required variables: loaded
+STEP  6 §5  All migrations applied; tables: 116 (document says expect 116)
+STEP  7 §6  standalone-check.sh: PASS
+STEP  8 §7  nginx configured and reloaded
+STEP  9 §8  stage3-start.sh: PASS — 17/17 checks passed
+STEP 10 §9  pm2 save; restart survival green except the systemd unit
+STEP 11 §10 health 200 local and via nginx on all three; bad login 401
+STEP 12 §11 Administrator created and verified to sign in
+
+deviations required: 0
+```
+
+The one `[FAIL]` at step 10 is `no pm2 systemd unit`, which is correct: this
+container has no systemd, the document tells you to run `pm2 startup`, and the
+check reports its absence rather than assuming it. That is the manual-intervention
+gap recorded in §8, surfacing exactly where it should.
+
+This does not change the verdict — it is still a replica, not the host — but the
+procedure is now reproducible from a clean clone by someone with no prior
+knowledge of the project, which was not true before.
+
 ---
 
 **DEPLOYMENT NOT CERTIFIED**

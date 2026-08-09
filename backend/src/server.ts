@@ -337,6 +337,8 @@ async function startServer() {
   await registerInmateIntelligenceRoutes(app);
   const { registerIntelligencePlatformRoutes } = await import('./intelligence/platform/platformRoutes.js');
   await registerIntelligencePlatformRoutes(app);
+  const { registerInmateOperationsRoutes } = await import('./intelligence/inmates/operationsRoutes.js');
+  await registerInmateOperationsRoutes(app);
 
   // Official California law — the authoritative statutory source
   await registerLawRoutes(app);

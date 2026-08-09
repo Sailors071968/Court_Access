@@ -33,7 +33,11 @@ export type IntelligenceAction =
   | 'intelligence_disposition'
   | 'intelligence_reprocess'
   | 'intelligence_promote'
-  | 'parser_profile_published';
+  | 'parser_profile_published'
+  // Dashboard operations. An upload is the arrival of evidence, so it is audited
+  // like access to it.
+  | 'roster_uploaded'
+  | 'review_decision';
 
 export interface AccessEvent {
   userId: string;

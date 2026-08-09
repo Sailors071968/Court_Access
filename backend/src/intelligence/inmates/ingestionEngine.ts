@@ -27,9 +27,9 @@ import { stat } from 'node:fs/promises';
 import { basename, extname } from 'node:path';
 
 import prisma from '../../lib/prisma.js';
+import { attachBooking, createPersonFromRecord } from './bookingWriter.js';
 import { generateCandidates } from './candidateGeneration.js';
 import { collapseWithinBatch, bookingContentHash } from './deduplication.js';
-import { deriveNameKeys, NAME_KEY_VERSION } from './nameKeys.js';
 import {
   enqueueForReview, recordBookingChanges, recordDepartures, recordIdentityMatch,
   recordObservation, reconcileBatch,
@@ -53,6 +53,17 @@ import type {
 export async function runIngestion(request: IngestionRequest): Promise<IngestionOutcome> {
   const startedAt = Date.now();
   const issues: IngestionIssue[] = [];
+
+  // Progress reporting must never be able to fail an import. Whoever is watching
+  // may have closed the page, and a throw from a status writer would abort a
+  // roster that was importing correctly.
+  const report: NonNullable<IngestionRequest['onStage']> = (stage, detail) => {
+    try {
+      request.onStage?.(stage, detail);
+    } catch {
+      // Deliberately swallowed. See above.
+    }
+  };
 
   // The versioned profile decides how this document is read, chosen by roster date
   // so a document from before a layout change is parsed with the profile that was
@@ -118,6 +129,7 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
   }
 
   // --- Parse -------------------------------------------------------------
+  report('parsing');
   let parsed: ParseResult;
   const sourceType = extension === '.pdf' ? 'pdf_text' : 'csv';
   try {
@@ -135,6 +147,7 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
   }
 
   // --- Normalize ---------------------------------------------------------
+  report('normalizing', { total: parsed.records.length });
   const normalized: { lineNumber: number; record: NormalizedRecord }[] = [];
   for (const row of parsed.records) {
     const lineNumber = Number(row.__lineNumber ?? 0);
@@ -250,6 +263,8 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
   const rosterDate = request.rosterDate ? new Date(request.rosterDate) : null;
 
   try {
+    report('matching', { processed: 0, total: collapsed.length });
+    let processed = 0;
     for (const entry of collapsed) {
       const result = await resolveOne(entry.record, entry.lineNumber, { ...sourceDoc, lineNumber: entry.lineNumber });
       tally(counts, result.outcome);
@@ -270,7 +285,10 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
         where: { batchId: batch.batchId },
         data: { resumeCursor: entry.lineNumber },
       });
+      processed += 1;
+      report('saving', { processed, total: collapsed.length });
     }
+    report('concluding', { processed, total: collapsed.length });
 
     // Cross-source comparison, departures and watch-list hits are batch-level:
     // a conflict needs both sides, and the other source may have been ingested
@@ -327,6 +345,8 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
       counts, issues, failureReason: reason, durationMs: Date.now() - startedAt,
     };
   }
+
+  report('complete');
 
   if (issues.length > 0) {
     await prisma.inmateIngestionIssue.createMany({
@@ -472,175 +492,37 @@ async function persist(args: {
     let isFirstAppearance = false;
 
     if (result.outcome === 'new_inmate') {
-      const keys = deriveNameKeys(record.last);
-      const created = await tx.inmate.create({
-        data: {
-          canonicalFirst: record.first,
-          canonicalLast: record.last,
-          canonicalMiddle: record.middle ?? null,
-          suffix: record.suffix ?? null,
-          phoneticLast: keys.phonetic,
-          collapsedLast: keys.collapsed,
-          nameKeyVersion: NAME_KEY_VERSION,
-          dateOfBirth: record.dateOfBirth ? new Date(record.dateOfBirth) : null,
-          sex: record.sex ?? null,
-          race: record.race ?? null,
-          identityConfidence: result.evidence.confidence,
-          firstSeenAt: new Date(record.bookedAt),
-          lastSeenAt: new Date(record.bookedAt),
-        },
-      });
+      const created = await createPersonFromRecord(tx, { record, confidence: result.evidence.confidence });
       inmateId = created.inmateId;
       isFirstAppearance = true;
     } else if (inmateId) {
-      // "Newly discovered" is a property of ingestion, recorded now. Recomputing
-      // it later from a moving baseline would change historical reports whenever
-      // older data was backfilled.
+      // "Newly discovered" is a property of ingestion, recorded now. Recomputing it
+      // later from a moving baseline would change historical reports whenever older
+      // data was backfilled.
       const priorBookings = await tx.inmateBooking.count({ where: { inmateId } });
       isFirstAppearance = priorBookings === 0;
     }
 
     if (!inmateId) return;
 
-    const booking = await tx.inmateBooking.create({
-      data: {
-        inmateId,
-        facility: record.facility,
-        externalBookingId: record.externalBookingId ?? null,
-        bookedAt: new Date(record.bookedAt),
-        releasedAt: record.releasedAt ? new Date(record.releasedAt) : null,
-        arrestingAgency: record.arrestingAgency ?? null,
-        bailAmountCents: record.bailAmountCents ?? null,
-        housingLocation: record.housingLocation ?? null,
-        contentHash: bookingContentHash(record),
-        sourceBatchId: batchId,
-        sourceRecordId: ingestionRecord.recordId,
-        isFirstAppearance,
-        custodyStatus: record.releasedAt ? 'released' : 'in_custody',
-        lastObservedAt: new Date(),
-        charges: {
-          create: record.charges.map((c) => ({
-            statuteCode: c.statuteCode ?? null,
-            statuteSection: c.statuteSection ?? null,
-            description: c.description ?? null,
-            severity: c.severity,
-            counts: c.counts,
-            bailAmountCents: c.bailAmountCents ?? null,
-            rawText: c.rawText,
-          })),
-        },
-      },
-    });
-
-    await tx.inmateIngestionRecord.update({
-      where: { recordId: ingestionRecord.recordId },
-      data: { bookingId: booking.bookingId },
-    });
-
-    const { observationId, attributes } = await recordObservation(tx, {
-      bookingId: booking.bookingId,
+    // Shared with the review queue, so a reviewer-approved merge writes exactly what
+    // an automatic one writes.
+    const { bookingId } = await attachBooking(tx, {
+      inmateId,
+      record,
       batchId,
+      recordId: ingestionRecord.recordId,
       documentId: args.documentId,
       sourceType: args.sourceType,
       sourcePage: null,
       sourceRow: lineNumber,
       rosterDate: args.rosterDate,
-      record,
-    });
-
-    await recordBookingChanges(tx, {
-      batchId,
-      inmateId,
-      bookingId: booking.bookingId,
-      observationId,
-      rosterDate: args.rosterDate,
-      attributes,
-      isNewBooking: true,
-    });
-
-    // Every spelling ever seen, so a search by any of them finds the person.
-    //
-    // Deliberately findFirst-then-write rather than upsert. The natural key
-    // includes middle name and date of birth, both nullable, and in PostgreSQL
-    // two NULLs are distinct — so a unique constraint over them never fires and
-    // an upsert would insert a new alias row on every roster for anyone missing
-    // a middle name.
-    const aliasDob = record.dateOfBirth ? new Date(record.dateOfBirth) : null;
-    const existingAlias = await tx.inmateAlias.findFirst({
-      where: {
-        inmateId,
-        last: record.last,
-        first: record.first,
-        middle: record.middle ?? null,
-        dateOfBirth: aliasDob,
-      },
-      select: { aliasId: true },
-    });
-
-    if (existingAlias) {
-      await tx.inmateAlias.update({
-        where: { aliasId: existingAlias.aliasId },
-        data: { occurrences: { increment: 1 } },
-      });
-    } else {
-      const aliasKeys = deriveNameKeys(record.last);
-      await tx.inmateAlias.create({
-        data: {
-          inmateId,
-          last: record.last,
-          first: record.first,
-          middle: record.middle ?? null,
-          suffix: record.suffix ?? null,
-          dateOfBirth: aliasDob,
-          sourceBatchId: batchId,
-          phoneticLast: aliasKeys.phonetic,
-          collapsedLast: aliasKeys.collapsed,
-          nameKeyVersion: NAME_KEY_VERSION,
-        },
-      });
-    }
-
-    // The facility's own person identifier, if the roster supplies one. The
-    // strongest identity evidence available on the next roster, so it is recorded
-    // whenever seen — including for a person first matched by name.
-    if (record.externalPersonId) {
-      const existingId = await tx.inmateExternalId.findUnique({
-        where: { facility_externalId: { facility: record.facility, externalId: record.externalPersonId } },
-        select: { externalIdRow: true, inmateId: true },
-      });
-      if (!existingId) {
-        await tx.inmateExternalId.create({
-          data: {
-            inmateId,
-            facility: record.facility,
-            externalId: record.externalPersonId,
-            firstSeenBatchId: batchId,
-          },
-        });
-      } else if (existingId.inmateId === inmateId) {
-        await tx.inmateExternalId.update({
-          where: { externalIdRow: existingId.externalIdRow },
-          data: { occurrences: { increment: 1 } },
-        });
-      }
-      // An identifier already bound to a *different* person is left alone: it is
-      // a data problem, and silently rebinding it would move identity evidence
-      // from one person to another without a record.
-    }
-
-    await tx.inmate.update({
-      where: { inmateId },
-      data: {
-        bookingCount: { increment: 1 },
-        lastSeenAt: new Date(record.bookedAt),
-        // A weaker match lowers confidence in the identity; a stronger one does
-        // not raise it, because the weak evidence still happened.
-        identityConfidence: Math.min(result.evidence.confidence, 100),
-      },
+      isFirstAppearance,
+      confidence: result.evidence.confidence,
     });
 
     writtenInmateId = inmateId;
-    writtenBookingId = booking.bookingId;
+    writtenBookingId = bookingId;
   });
 
   return { inmateId: writtenInmateId, bookingId: writtenBookingId };

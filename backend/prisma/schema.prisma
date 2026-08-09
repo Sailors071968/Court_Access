@@ -4020,3 +4020,60 @@ model InmateParserProfile {
   @@index([facility, sourceType, active])
   @@map("inmate_parser_profiles")
 }
+
+/**
+ * A roster file an administrator uploaded through the dashboard.
+ *
+ * Separate from the ingestion batch on purpose. An upload exists the moment the
+ * bytes land and before anything has been parsed, so the operator can see the file
+ * arrived even if processing has not started or has failed. A batch only exists
+ * once a document has been parsed successfully — tying the two together would mean
+ * a failed parse left no record that a file was ever uploaded, which is the state an
+ * operator most needs to see.
+ *
+ * One upload maps to at most one batch. Re-processing an upload produces a second
+ * batch and the pointer moves, with the previous batch still readable by its own id.
+ */
+model InmateRosterUpload {
+  uploadId      String   @id @default(uuid())
+  facility      String
+  originalName  String
+  /** Where the bytes are on disk. Kept, because reprocessing needs the original. */
+  storedPath    String
+  sizeBytes     Int
+  sha256        String
+  /** csv | pdf, derived from the extension rather than trusted from the browser. */
+  fileKind      String
+  rosterDate    DateTime?
+  rosterKind    String   @default("full_population")
+
+  uploadedById  String
+  /** Denormalised for display: the operator's name at upload time, which is what a
+   *  later reader wants even if the account is renamed or removed. */
+  uploadedByName String?
+  uploadedAt    DateTime @default(now())
+
+  /** uploaded | queued | processing | completed | failed */
+  status        String   @default("uploaded")
+  /** The stage an operator sees: parsing | normalizing | matching | saving |
+   *  concluding | complete. Null until processing starts. */
+  stage         String?
+  /** Rows handled and rows expected, for a progress indicator. */
+  progressDone  Int?
+  progressTotal Int?
+
+  batchId       String?
+  processingStartedAt DateTime?
+  processedAt   DateTime?
+  durationMs    Int?
+  failureReason String?
+
+  /** The import's own numbers, copied here so the upload row alone answers "what
+   *  did processing this file do" without joining. */
+  resultCounts  Json?
+
+  @@index([facility, uploadedAt])
+  @@index([status, uploadedAt])
+  @@index([batchId])
+  @@map("inmate_roster_uploads")
+}

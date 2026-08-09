@@ -205,7 +205,24 @@ export interface IngestionRequest {
   rosterDate?: string;
   /** The administrator responsible, when there is one. */
   userId?: string;
+  /**
+   * Progress reporting, for a caller that is showing a live status.
+   *
+   * Optional and fire-and-forget: an import must not fail because whoever was
+   * watching it stopped watching. The stages are the ones an operator recognises
+   * from the dashboard rather than the internal steps.
+   */
+  onStage?: (stage: IngestionStage, detail?: { processed?: number; total?: number }) => void;
 }
+
+/** The stages an operator sees while an import runs. */
+export type IngestionStage =
+  | 'parsing'
+  | 'normalizing'
+  | 'matching'
+  | 'saving'
+  | 'concluding'
+  | 'complete';
 
 export interface IngestionOutcome {
   batchId: string | null;

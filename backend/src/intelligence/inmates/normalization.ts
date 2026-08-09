@@ -17,6 +17,17 @@ import type {
   NormalizedCharge, NormalizedRecord, RawRecord, Sex,
 } from './types.js';
 
+/**
+ * Version of the normalization rules.
+ *
+ * Stamped onto every batch and every intelligence item so a conclusion can be
+ * attributed to the rules that produced it. Bump this whenever a change here could
+ * alter a normalized value — a date format, a name-splitting rule, a sex or race
+ * mapping — because that is exactly the kind of change a reprocessing run needs to
+ * be able to identify as the cause of a difference.
+ */
+export const NORMALIZATION_VERSION = '1.1.0';
+
 /** Honorifics and noise that rosters add to names and matching must ignore. */
 const HONORIFICS = new Set(['MR', 'MRS', 'MS', 'MISS', 'DR', 'SIR', 'REV', 'FR', 'HON']);
 

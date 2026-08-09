@@ -335,6 +335,8 @@ async function startServer() {
   // New Inmate Intelligence System — administrator only
   const { registerInmateIntelligenceRoutes } = await import('./intelligence/inmates/inmateRoutes.js');
   await registerInmateIntelligenceRoutes(app);
+  const { registerIntelligencePlatformRoutes } = await import('./intelligence/platform/platformRoutes.js');
+  await registerIntelligencePlatformRoutes(app);
 
   // Official California law — the authoritative statutory source
   await registerLawRoutes(app);

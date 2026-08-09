@@ -25,7 +25,15 @@ export type IntelligenceAction =
   | 'unmerge'
   | 'ingest'
   | 'watch_list_add'
-  | 'watch_list_remove';
+  | 'watch_list_remove'
+  // Platform actions. A reviewer's decision and an algorithm promotion are audited
+  // for the same reason a merge is: they change what the system asserts.
+  | 'intelligence_query'
+  | 'intelligence_view'
+  | 'intelligence_disposition'
+  | 'intelligence_reprocess'
+  | 'intelligence_promote'
+  | 'parser_profile_published';
 
 export interface AccessEvent {
   userId: string;

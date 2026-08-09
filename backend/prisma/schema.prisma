@@ -3170,6 +3170,12 @@ model InmateIngestionBatch {
   @@index([facility, rosterDate])
   @@index([sourceSha256])
   @@index([status, startedAt])
+  /** Which versioned parser profile parsed this document, so historical data
+   *  can be reprocessed with the parser that was correct at the time. */
+  parserProfileId String?
+  parserVersion   Int?
+  normalizationVersion String?
+  ocrVersion      String?
   @@map("inmate_ingestion_batches")
 }
 
@@ -3779,4 +3785,238 @@ model InmateExternalId {
   @@unique([facility, externalId])
   @@index([inmateId])
   @@map("inmate_external_ids")
+}
+
+// ============================================================================
+// NIIS — the intelligence layer
+//
+//   Source document → Source record → Observation → Evidence → Intelligence
+//                                                                   ↓
+//                                                    Person / Booking / Charge
+//
+// The chain is one-directional. Observations state what a source said and never
+// conclude. Intelligence draws conclusions and never invents observations.
+// Reports read intelligence and never create facts.
+//
+// The governance question this layer answers is not "what happened" — the typed
+// tables already record that — it is "what did an engine conclude, from which
+// evidence, under which rules, and has a human accepted it". That is why an
+// intelligence item is separate from the conflict or change it describes: the
+// finding is durable, the disposition changes, and an algorithm upgrade
+// supersedes a conclusion without destroying the one it replaced.
+// ============================================================================
+
+/**
+ * One conclusion drawn by one engine from evidence.
+ *
+ * Deliberately type-agnostic. `type` is an open string and `payload` is free
+ * JSON, so an engine that does not exist yet needs no migration — which is the
+ * requirement that shapes this table. Engines with a typed detail table point at
+ * it through `detailTable`/`detailId` rather than duplicating it here; engines
+ * without one carry their finding in `payload`.
+ */
+model InmateIntelligenceItem {
+  itemId       String   @id @default(uuid())
+
+  /** Which engine produced this, and the version of its rules. Both recorded so
+   *  a conclusion stays interpretable after the engine changes. */
+  engine       String
+  engineVersion String
+  /** identity_candidate | source_conflict | change | watch_list_hit |
+   *  repeat_offender | facility_movement | bail_anomaly | … open vocabulary. */
+  type         String
+  /** info | notable | significant | critical — how much attention it warrants,
+   *  which is not the same as how confident the engine is. */
+  severity     String   @default("info")
+
+  /** What the conclusion is about. Polymorphic on purpose: a finding may concern
+   *  a person, a booking, an observation, a whole roster, or a pair of records. */
+  subjectKind  String
+  subjectId    String?
+  /** A second subject, for findings that relate two things — a merge candidate,
+   *  a conflict between two observations. */
+  relatedKind  String?
+  relatedId    String?
+
+  /** 0-100. Describes the conclusion; it does not authorise it. The engine's own
+   *  rules decide disposition. */
+  confidence   Int
+  /** The named rule that produced this, so a finding traces to one line of code
+   *  rather than to a score. */
+  rule         String?
+  /** In plain language, for a reviewer. Never a code. */
+  explanation  String
+
+  /** proposed | auto_applied | accepted | rejected | deferred | superseded |
+   *  expired. `proposed` never changed the repository; `auto_applied` did. */
+  disposition  String   @default("proposed")
+  /** True when the engine's rules require a person before anything is applied. */
+  reviewRequired Boolean @default(false)
+
+  /** The observations this rests on. Ids, so the evidence can be re-read rather
+   *  than trusted. */
+  evidenceObservationIds String[]
+  /** Import records, documents, and anything else consumed. */
+  inputs       Json?
+  /** The finding itself, for engines with no typed detail table. */
+  payload      Json?
+
+  /** The typed row carrying the detail, when one exists. */
+  detailTable  String?
+  detailId     String?
+
+  /** The version bundle. Every component that could change the conclusion, so a
+   *  reprocessing run can identify exactly what moved. */
+  ruleVersion         String?
+  confidenceVersion   String?
+  parserProfileId     String?
+  parserVersion       String?
+  normalizationVersion String?
+  nameKeyVersion      String?
+
+  /** The generation run that produced this. Null for live ingestion. */
+  runId        String?
+  /** The item this one replaces, set when an upgraded algorithm supersedes it. */
+  supersedesId String?
+  /** The item that replaced this one. */
+  supersededById String?
+
+  reviewedById String?
+  reviewedAt   DateTime?
+  reviewNote   String?
+
+  batchId      String?
+  createdAt    DateTime @default(now())
+
+  run          InmateIntelligenceRun? @relation(fields: [runId], references: [runId])
+  events       InmateIntelligenceEvent[]
+
+  /** The queue a reviewer works from: what needs attention, newest first. */
+  @@index([disposition, reviewRequired, createdAt])
+  /** Everything one engine version concluded — the unit of a reprocessing diff. */
+  @@index([engine, engineVersion, createdAt])
+  @@index([type, createdAt])
+  @@index([subjectKind, subjectId])
+  @@index([runId])
+  @@index([supersededById])
+  @@index([batchId])
+  @@map("inmate_intelligence_items")
+}
+
+/**
+ * The history of one intelligence item.
+ *
+ * Separate from the item because the item holds current state and this holds how
+ * it got there. A disposition that changed three times is three rows, and an
+ * algorithm upgrade that superseded a finding is an event on both.
+ */
+model InmateIntelligenceEvent {
+  eventId     String   @id @default(uuid())
+  itemId      String
+  /** created | modified | reviewed | accepted | rejected | deferred |
+   *  superseded | algorithm_upgrade | auto_applied | reverted */
+  action      String
+  /** Disposition before and after, when the action changed it. */
+  fromDisposition String?
+  toDisposition   String?
+  /** Who. Null for an engine acting on its own rules. */
+  actorId     String?
+  /** The engine version acting, when the actor is an engine. */
+  actorEngineVersion String?
+  note        String?
+  createdAt   DateTime @default(now())
+
+  item        InmateIntelligenceItem @relation(fields: [itemId], references: [itemId], onDelete: Cascade)
+
+  @@index([itemId, createdAt])
+  @@index([action, createdAt])
+  @@map("inmate_intelligence_events")
+}
+
+/**
+ * One execution of one engine over a scope of evidence.
+ *
+ * Live ingestion runs engines inline and records no run. A reprocessing run is
+ * explicit: it replays observations under a new algorithm version into a shadow
+ * generation, which is compared against the current one and promoted only when
+ * approved. Nothing is destructively updated.
+ */
+model InmateIntelligenceRun {
+  runId        String   @id @default(uuid())
+  engine       String
+  engineVersion String
+  /** live | reprocess | backfill | dry_run */
+  mode         String   @default("reprocess")
+  /** pending | running | completed | failed | promoted | discarded */
+  status       String   @default("pending")
+
+  /** What was replayed: a facility, a date range, a batch, or everything. */
+  scope        Json?
+  /** The run this one is compared against. */
+  baselineRunId String?
+
+  itemsCreated    Int   @default(0)
+  itemsUnchanged  Int   @default(0)
+  itemsChanged    Int   @default(0)
+  itemsNew        Int   @default(0)
+  itemsWithdrawn  Int   @default(0)
+
+  /** The comparison, once computed, so a reviewer sees the diff before promoting. */
+  comparison   Json?
+  startedAt    DateTime @default(now())
+  finishedAt   DateTime?
+  failureReason String?
+  triggeredById String?
+  promotedById  String?
+  promotedAt    DateTime?
+
+  items        InmateIntelligenceItem[]
+
+  @@index([engine, status, startedAt])
+  @@index([mode, status])
+  @@map("inmate_intelligence_runs")
+}
+
+/**
+ * A versioned parser profile for one source.
+ *
+ * A county changes its CSV layout without notice. Recording which profile version
+ * parsed a document means historical data can be reprocessed with the parser that
+ * was correct at the time, or re-parsed with a corrected one — and either way the
+ * provenance says which.
+ *
+ * The active profile for a facility is the one with the highest version whose
+ * effective window contains the roster date, so a layout change is a new version
+ * rather than an edit to the old one.
+ */
+model InmateParserProfile {
+  profileId    String   @id @default(uuid())
+  facility     String
+  /** csv | pdf_text | pdf_ocr */
+  sourceType   String
+  /** Monotonic per facility and source type. */
+  version      Int
+  label        String
+
+  /** The column map, as data rather than code, so a layout change is a row. */
+  columnMap    Json
+  /** Date formats, name order, charge separator, and anything else the parser
+   *  needs that differs per source. */
+  parseOptions Json?
+  /** Version of the normalization rules this profile expects. */
+  normalizationVersion String?
+  /** OCR engine and model version, when the source is scanned. */
+  ocrVersion   String?
+
+  effectiveFrom DateTime?
+  effectiveTo   DateTime?
+  active        Boolean  @default(true)
+  /** Why this version exists — the layout change it responds to. */
+  changeNote    String?
+  createdById   String?
+  createdAt     DateTime @default(now())
+
+  @@unique([facility, sourceType, version])
+  @@index([facility, sourceType, active])
+  @@map("inmate_parser_profiles")
 }

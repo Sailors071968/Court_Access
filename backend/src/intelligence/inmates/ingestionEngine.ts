@@ -32,10 +32,12 @@ import { collapseWithinBatch, bookingContentHash } from './deduplication.js';
 import { deriveNameKeys, NAME_KEY_VERSION } from './nameKeys.js';
 import {
   enqueueForReview, recordBookingChanges, recordDepartures, recordIdentityMatch,
-  recordObservation, recordWatchListMatches, reconcileBatch,
+  recordObservation, reconcileBatch,
 } from './evidenceRecording.js';
 import { resolveIdentity } from './identityResolution.js';
-import { normalizeRecord } from './normalization.js';
+import { NORMALIZATION_VERSION, normalizeRecord } from './normalization.js';
+import { publishBatchIntelligence } from '../platform/publication.js';
+import { resolveProfile } from '../platform/parserProfiles.js';
 import { getColumnMap } from './parsers/columnMaps.js';
 import { parseCsvRoster } from './parsers/csvParser.js';
 import { parsePdfRoster } from './parsers/pdfParser.js';
@@ -52,9 +54,25 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
   const startedAt = Date.now();
   const issues: IngestionIssue[] = [];
 
-  const map = getColumnMap(request.facility);
+  // The versioned profile decides how this document is read, chosen by roster date
+  // so a document from before a layout change is parsed with the profile that was
+  // correct for it. Falling back to the compiled-in map keeps a facility with no
+  // profile working, and the batch records that it happened.
+  const profile = await resolveProfile({
+    facility: request.facility,
+    sourceType: extname(request.filePath).toLowerCase() === '.pdf' ? 'pdf_text' : 'csv',
+    rosterDate: request.rosterDate ? new Date(request.rosterDate) : null,
+  });
+  const map = profile.columnMap ?? getColumnMap(request.facility);
   if (!map) {
     return failed(request, startedAt, `No column map is registered for facility "${request.facility}".`, issues);
+  }
+  if (profile.fallback) {
+    issues.push({
+      severity: 'warning',
+      code: 'no_parser_profile',
+      message: `No versioned parser profile exists for ${request.facility}; the compiled-in column map was used. Provenance for this import is weaker than for one parsed under a profile, and it cannot be reprocessed against a corrected mapping.`,
+    });
   }
 
   let fileStat;
@@ -209,6 +227,10 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
       extractionStats: parsed.stats as unknown as object,
       triggeredBy: request.trigger,
       ingestedById: request.userId ?? null,
+      parserProfileId: profile.profileId,
+      parserVersion: profile.version,
+      normalizationVersion: profile.normalizationVersion ?? NORMALIZATION_VERSION,
+      ocrVersion: parsed.stats.ocrUsed ? (profile.ocrVersion ?? 'tesseract:unrecorded') : null,
     },
   });
 
@@ -221,7 +243,6 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
   };
 
   const observedBookingIds = new Set<string>();
-  const bookingsByInmate = new Map<string, string>();
   const rosterDate = request.rosterDate ? new Date(request.rosterDate) : null;
 
   try {
@@ -239,7 +260,6 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
         rawRows: parsed.records,
       });
       if (written.bookingId) observedBookingIds.add(written.bookingId);
-      if (written.inmateId && written.bookingId) bookingsByInmate.set(written.inmateId, written.bookingId);
       // Resumability: the last line committed, so a large import can restart
       // where it stopped instead of from the beginning.
       await prisma.inmateIngestionBatch.update({
@@ -263,14 +283,21 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
       rosterDate,
       rosterIsFullPopulation: (request.rosterKind ?? 'full_population') === 'full_population',
     });
-    const watchListCount = await recordWatchListMatches(prisma, {
-      batchId: batch.batchId,
-      bookingsByInmate,
-      rosterDate,
-    });
     counts.conflicts = conflictCount;
     counts.departures = departureCount;
-    counts.watchListHits = watchListCount;
+
+    // Evidence is now complete for this batch, so the engines can conclude from it.
+    // Watch lists are evaluated inside this pass, against intelligence rather than
+    // against the roster — which is why nothing here matches people to lists.
+    const published = await publishBatchIntelligence({
+      batchId: batch.batchId,
+      versions: {
+        parserProfileId: profile.profileId ?? undefined,
+        parserVersion: profile.version === null ? undefined : String(profile.version),
+        normalizationVersion: profile.normalizationVersion ?? NORMALIZATION_VERSION,
+      },
+    });
+    counts.watchListHits = published.watchListHits;
 
     await prisma.inmateIngestionBatch.update({
       where: { batchId: batch.batchId },

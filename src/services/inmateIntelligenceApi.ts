@@ -361,6 +361,120 @@ export interface IntelligenceSettings {
 // Calls
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// Import Inspection Mode
+// ---------------------------------------------------------------------------
+
+export interface TypeInference {
+  type: string;
+  confidence: number;
+  rationale: string;
+  detectedFormats?: string[];
+  statistics: {
+    rowsSeen: number;
+    rowsPopulated: number;
+    distinctValues: number;
+    looksUnique: boolean;
+    minLength: number;
+    maxLength: number;
+    samples: string[];
+  };
+}
+
+export interface ColumnFinding {
+  position: number;
+  header: string;
+  mappedTo: string | null;
+  mappedBy: string;
+  inference: TypeInference;
+  suggestions: { field: string; confidence: number; reason: string }[];
+  duplicate: boolean;
+  typeMismatch: string | null;
+}
+
+export interface InspectionReport {
+  inspectionId?: string;
+  file: { filename: string; sizeBytes: number; sha256: string; kind: string };
+  facility: string;
+  profile: {
+    profileId: string | null;
+    version: number | null;
+    label: string;
+    sourceType: string;
+    isFallback: boolean;
+    expectedHeaders: string[];
+  };
+  structure: {
+    rowsSampled: number;
+    headerRow: string[];
+    ragged: { line: number; fields: number }[];
+    encodingWarnings: string[];
+    pageCount?: number;
+    hasTextLayer?: boolean;
+    ocrWouldBeUsed?: boolean;
+    sampleLines?: string[];
+  };
+  columns: ColumnFinding[];
+  summary: {
+    recognized: string[];
+    unknown: string[];
+    missingRequired: string[];
+    duplicated: string[];
+    emptyThoughMapped: string[];
+    suggestedMappings: { header: string; field: string; confidence: number }[];
+  };
+  compatibility: {
+    verdict: 'would_import' | 'would_import_with_warnings' | 'would_be_refused';
+    reasons: string[];
+    parserConfidence: number;
+  };
+  suggestedProfileUpdate: {
+    basedOnVersion: number | null;
+    addedAliases: { field: string; alias: string }[];
+  } | null;
+  inspectedAt: string;
+}
+
+export interface InspectionSummaryRow {
+  inspectionId: string;
+  facility: string;
+  filename: string;
+  sha256: string;
+  sizeBytes: number;
+  fileKind: string;
+  profileVersion: number | null;
+  verdict: string;
+  parserConfidence: number;
+  inspectedById: string | null;
+  inspectedAt: string;
+}
+
+export interface MappingEditorState {
+  facility: string;
+  sourceType: string;
+  active: {
+    profileId: string | null;
+    version: number | null;
+    label: string;
+    isFallback: boolean;
+    expectedHeaders: string[];
+    dateFormats: string[];
+    nameOrder: string;
+    chargeSeparator: string;
+    mappings: { field: string; label: string; note: string; aliases: string[]; required: boolean }[];
+  };
+  versionHistory: {
+    profileId: string;
+    version: number;
+    label: string;
+    effectiveFrom: string | null;
+    effectiveTo: string | null;
+    changeNote: string | null;
+    mappedFields: number;
+  }[];
+  canonicalFields: { field: string; label: string; note: string }[];
+}
+
 export const intelligenceApi = {
   dashboard: (date?: string) => call<DashboardSummary>(`/dashboard${query({ date })}`),
 
@@ -445,6 +559,59 @@ export const intelligenceApi = {
   batchIssues: (batchId: string) =>
     call<{ batchId: string; issues: { severity: string; code: string; message: string; lineNumber: number | null }[] }>(
       `/batches/${batchId}/issues`,
+    ),
+
+
+  /**
+   * Inspect files without importing them.
+   *
+   * Multipart, so it bypasses `call` for the same reason upload does: the browser must
+   * set its own boundary.
+   */
+  async inspect(
+    files: File[],
+    options: { facility?: string; rosterDate?: string } = {},
+  ): Promise<{ inspections: InspectionReport[]; rejected: { filename: string; reason: string }[] }> {
+    const form = new FormData();
+    for (const file of files) form.append('files', file, file.name);
+
+    const res = await authorizedFetch(
+      `${API_BASE}/inspect${query({ facility: options.facility ?? 'sacramento', rosterDate: options.rosterDate })}`,
+      { method: 'POST', body: form },
+    );
+    const body = await res.text();
+    if (!res.ok) throw new Error(await describeFailure(res, body));
+    return JSON.parse(body) as { inspections: InspectionReport[]; rejected: { filename: string; reason: string }[] };
+  },
+
+  inspections: (params: { facility?: string; limit?: number } = {}) =>
+    call<{ inspections: InspectionSummaryRow[] }>(`/inspections${query(params)}`),
+
+  inspection: (inspectionId: string) => call<InspectionReport>(`/inspections/${inspectionId}`),
+
+  publishFromInspection: (inspectionId: string, changeNote?: string) =>
+    call<{ profileId: string; version: number; message: string; addedAliases: { field: string; alias: string }[] }>(
+      `/inspections/${inspectionId}/publish`,
+      { method: 'POST', body: JSON.stringify({ changeNote }) },
+    ),
+
+  mappings: (facility: string, sourceType = 'csv') =>
+    call<MappingEditorState>(`/mappings/${facility}${query({ sourceType })}`),
+
+  publishMapping: (facility: string, body: {
+    sourceType?: string;
+    label?: string;
+    mappings: Record<string, string[]>;
+    dateFormats?: string[];
+    nameOrder?: string;
+    chargeSeparator?: string;
+    expectedHeaders?: string[];
+    changeNote: string;
+    effectiveFrom?: string;
+  }) =>
+    call<{ profileId: string; version: number; message: string; disabledFields: string[] }>(
+      `/mappings/${facility}/publish`,
+      { method: 'POST', body: JSON.stringify(body) },
     ),
 
   settings: () => call<IntelligenceSettings>('/settings'),

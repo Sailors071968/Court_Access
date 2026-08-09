@@ -95,6 +95,8 @@ import { HistoricalSearch } from './pages/admin/intelligence/HistoricalSearch';
 import { ImportHistory } from './pages/admin/intelligence/ImportHistory';
 import { ReviewQueue } from './pages/admin/intelligence/ReviewQueue';
 import { IntelligenceSettings } from './pages/admin/intelligence/IntelligenceSettings';
+import { ImportInspection } from './pages/admin/intelligence/ImportInspection';
+import { MappingEditor } from './pages/admin/intelligence/MappingEditor';
 import { StatutoryIntelligence } from './pages/admin/StatutoryIntelligence';
 import { GoldStandardCertification } from './pages/admin/GoldStandardCertification';
 
@@ -548,6 +550,22 @@ function App() {
             element={
               <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
                 <IntelligenceSettings />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/intelligence/inspect"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <ImportInspection />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/intelligence/mappings"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <MappingEditor />
               </ProtectedRoute>
             }
           />

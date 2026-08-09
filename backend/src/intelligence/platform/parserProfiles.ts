@@ -53,12 +53,26 @@ export interface ResolvedProfile {
  * the compiled-in column map keeps ingestion working for a facility nobody has
  * created a profile for yet, and marks the result so the gap is visible.
  */
+/**
+ * The start of a date's UTC day.
+ *
+ * Effective windows are day-granular, not instant-granular. A roster is dated to a
+ * day, and a profile published at 22:30 must cover that whole day — including a roster
+ * timestamped midnight, which is how a date-only roster date parses. Comparing instants
+ * put a roster dated today between a v1 closed yesterday evening and a v2 starting this
+ * evening, so no profile applied and the import silently fell back to the compiled-in
+ * map. That gap opened on exactly the day an operator publishes.
+ */
+function startOfUtcDay(date: Date): Date {
+  return new Date(Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate()));
+}
+
 export async function resolveProfile(args: {
   facility: string;
   sourceType: SourceType;
   rosterDate?: Date | null;
 }): Promise<ResolvedProfile> {
-  const asOf = args.rosterDate ?? new Date();
+  const asOf = startOfUtcDay(args.rosterDate ?? new Date());
 
   const candidates = await prisma.inmateParserProfile.findMany({
     where: {
@@ -143,10 +157,15 @@ export async function publishProfile(args: {
     });
 
     const version = (previous?.version ?? 0) + 1;
-    const effectiveFrom = args.effectiveFrom ?? new Date();
+    // Floored to the start of its day, so a version published at any hour covers the
+    // whole of the day it takes effect.
+    const effectiveFrom = startOfUtcDay(args.effectiveFrom ?? new Date());
 
     if (previous && previous.effectiveTo === null) {
-      const closeAt = new Date(effectiveFrom.getTime() - 86_400_000);
+      // The last instant of the previous day, so the two windows meet without either
+      // a gap or an overlap. Subtracting a whole day left the new version's first day
+      // uncovered by anything.
+      const closeAt = new Date(effectiveFrom.getTime() - 1);
       await tx.inmateParserProfile.update({
         where: { profileId: previous.profileId },
         data: { effectiveTo: closeAt },
@@ -194,7 +213,10 @@ export async function listProfiles(facility?: string) {
     normalizationVersion: p.normalizationVersion,
     ocrVersion: p.ocrVersion,
     changeNote: p.changeNote,
-    mappedFields: Object.keys(p.columnMap as object).length,
+    // The mapped fields, not the ColumnMap's own keys — that counted six for every
+    // profile regardless of its mapping, which made the version history useless for
+    // seeing what a version actually changed.
+    mappedFields: Object.keys(((p.columnMap as { fields?: object } | null)?.fields ?? {})).length,
     createdAt: p.createdAt.toISOString(),
   }));
 }

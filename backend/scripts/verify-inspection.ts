@@ -179,13 +179,55 @@ check(
   'the required column is now supplied',
 );
 
+console.log('\n=== 5b. A version published today covers today\'s roster ===');
+// The gap this closes: publishing at 22:30 floored the previous version's window to
+// the previous day and started the new one at 22:30, so a roster dated today at
+// midnight — which is how a date-only roster date parses — matched neither. The import
+// silently fell back to the compiled-in map and then failed, on exactly the day an
+// operator publishes.
+const publishedToday = await publishProfile({
+  facility: FACILITY,
+  sourceType: 'csv',
+  label: 'Sacramento CSV — published mid-day',
+  columnMap: renamed.suggestedProfileUpdate!.columnMap,
+  normalizationVersion: NORMALIZATION_VERSION,
+  expectedHeaders: renamed.structure.headerRow,
+  normalizationRules: [],
+  validationRules: before.validationRules,
+  // No effectiveFrom: defaults to now, which is mid-day.
+  changeNote: 'Published without an explicit effective date, to prove today is covered.',
+  createdById: OPERATOR,
+});
+const today = new Date().toISOString().slice(0, 10);
+const forToday = await resolveProfile({ facility: FACILITY, sourceType: 'csv', rosterDate: new Date(today) });
+console.log(`  published v${publishedToday.version} mid-day; a roster dated ${today} resolves to v${forToday.version}`);
+check(
+  forToday.version === publishedToday.version,
+  "a roster dated today resolves to the version published today, not to a gap",
+  `v${forToday.version}`,
+);
+check(!forToday.fallback, 'and does not fall back to the compiled-in map');
+
+// Yesterday must still resolve to the version that was in force then.
+const yesterday = new Date(Date.now() - 86_400_000).toISOString().slice(0, 10);
+const forYesterday = await resolveProfile({ facility: FACILITY, sourceType: 'csv', rosterDate: new Date(yesterday) });
+check(
+  forYesterday.version !== null && forYesterday.version < publishedToday.version,
+  "yesterday's roster still resolves to the version that was in force then",
+  `v${forYesterday.version}`,
+);
+
 console.log('\n=== 6. Importing the file the profile previously refused ===');
 const imported = await runIngestion({
-  filePath: '/tmp/sac2/renamed.csv', facility: FACILITY, rosterDate: '2026-08-10',
+  filePath: '/tmp/sac2/renamed.csv', facility: FACILITY, rosterDate: today,
   trigger: 'manual', dryRun: false, rosterKind: 'full_population', userId: OPERATOR,
 });
 console.log(`  status=${imported.status} counts=${JSON.stringify(imported.counts)}`);
 check(imported.status === 'completed', 'the import now succeeds', imported.failureReason ?? '');
+check(
+  !imported.issues.some((i) => i.code === 'no_parser_profile'),
+  'and reads under a published profile rather than falling back to the compiled-in map',
+);
 check(imported.counts.total === 5, 'all five rows became bookings', String(imported.counts.total));
 
 // The mapping must have actually taken effect, not merely stopped failing.

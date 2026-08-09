@@ -201,6 +201,23 @@ sudo ln -sf /etc/nginx/sites-available/courtaccess /etc/nginx/sites-enabled/cour
 sudo nginx -t && sudo systemctl reload nginx
 ```
 
+Record a restore point. `rollback.sh` restores exactly this file, and it reads the
+path from here, so without these two lines there is nothing to roll back to and
+`audit-deployment.sh` reports rollback readiness as failed:
+
+```bash
+export STATE="${STATE:-$HOME/courtaccess-deploy-state}"
+mkdir -p "$STATE"
+sudo cp /etc/nginx/sites-available/courtaccess "$STATE/nginx-site.backup"
+sudo chown "$USER" "$STATE/nginx-site.backup"
+printf '%s\n' /etc/nginx/sites-available/courtaccess > "$STATE/nginx-site.path"
+```
+
+On a first deployment this records the configuration you have just written, which
+is the state to return to if a later release goes wrong. On subsequent releases
+`stage4-cutover.sh precheck` does the same thing against the configuration that
+is already live.
+
 `proxy_pass` and `PORT` in `.env` must agree. If they disagree every request is a
 502 while the process looks perfectly healthy — stage 3 checks this for you.
 

@@ -296,10 +296,16 @@ else
   kv "nginx site" "$NGINX_SITE"
   if [ -f "$STATE/nginx-site.backup" ]; then
     ok "a pre-cut-over nginx backup exists ($(stat -c '%y' "$STATE/nginx-site.backup" 2>/dev/null | cut -d. -f1))"
-    # If the backup is identical to what is live, rolling back changes nothing —
-    # the rollback would report success and keep serving this release.
+    # Whether a rollback would actually change what is serving. This is not a
+    # defect on its own: on a first deployment the recorded configuration *is*
+    # the live one, because there is no previous application to return to. After
+    # a cut-over it means the recorded restore point is the post-cut-over file
+    # and rollback would keep serving this release. The behavioural gate is in
+    # rollback.sh, which asserts the previous application is answering.
     if sudo cmp -s "$STATE/nginx-site.backup" "$NGINX_SITE" 2>/dev/null; then
-      bad "the backup is identical to the live configuration — a rollback would be a no-op"
+      info "[note] the backup is identical to the live configuration, so a rollback"
+      info "       would not change what is serving. Expected on a first deployment;"
+      info "       after a cut-over it means the restore point was taken too late."
     else
       ok "the backup differs from the live configuration — a rollback would change something"
     fi

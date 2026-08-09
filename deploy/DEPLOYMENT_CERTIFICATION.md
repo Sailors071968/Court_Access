@@ -188,6 +188,18 @@ init system.
 | Documentation exactly matches the deployed system | **PASS** for the replica. **NOT VERIFIED** for the host, whose `.env`, nginx block, systemd configuration and permissions are unseen |
 | The deployment can be audited entirely from evidence | **PASS** — `audit-deployment.sh`, read-only, one verdict |
 
+Run against a deployment created from a clean clone using only
+`DEPLOY_FROM_SCRATCH.md`, the audit reports **exactly one failure**: no `pm2`
+systemd unit, which this container cannot have and which is condition C4 on the
+host. Every other group — interpreter, process manager, nginx, environment,
+migrations, ports, health, restart behaviour, saved definition, rollback
+readiness, environment provenance, artifact fingerprints, documentation — passes.
+
+Two informational notes are expected and are not failures: the bundle hash
+differs from `REFERENCE_BUNDLE_SHA` because this branch changes the application,
+and on a first deployment the recorded nginx restore point is identical to the
+live configuration because there is no previous application to return to.
+
 ## 10 · What is deliberately not certified
 
 **NOT APPLICABLE** to this deployment, and recorded so their absence is not

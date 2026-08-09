@@ -3290,6 +3290,16 @@ model Inmate {
   @@index([dateOfBirth])
   @@index([lastSeenAt])
   @@index([mergedIntoId])
+  /** Blocking keys for candidate generation. Derived, never authoritative: the
+   *  canonical name is what the repository asserts; these only widen a search.
+   *  Computed by nameKeys.ts, so a change there requires a backfill — which is
+   *  what nameKeyVersion is for. */
+  phoneticLast   String?
+  collapsedLast  String?
+  nameKeyVersion String?
+  externalIds    InmateExternalId[]
+  @@index([phoneticLast])
+  @@index([collapsedLast])
   @@map("inmates")
 }
 
@@ -3314,6 +3324,13 @@ model InmateAlias {
 
   @@unique([inmateId, last, first, middle, dateOfBirth])
   @@index([last, first, dateOfBirth])
+  /** The same derived keys, so an alias is reachable by sound and shape and not
+   *  only by exact spelling. */
+  phoneticLast   String?
+  collapsedLast  String?
+  nameKeyVersion String?
+  @@index([phoneticLast])
+  @@index([collapsedLast])
   @@map("inmate_aliases")
 }
 
@@ -3730,4 +3747,36 @@ model InmateIntelligenceReport {
 
   @@index([reportType, generatedAt])
   @@map("inmate_intelligence_reports")
+}
+
+/**
+ * A facility's own identifier for a person — an SO number, inmate number, or
+ * booking-system person id.
+ *
+ * The strongest identity evidence available, and stronger than name and date of
+ * birth together: it is assigned by the jail and is stable across bookings. Its
+ * absence is why name matching has to carry as much weight as it does, and its
+ * presence is what the date-of-birth policy means by "a stable unique identifier".
+ *
+ * Scoped to a facility, because two counties' numbering schemes are unrelated.
+ */
+model InmateExternalId {
+  externalIdRow    String   @id @default(uuid())
+  inmateId         String
+  facility         String
+  /** As the roster wrote it, trimmed and upper-cased. */
+  externalId       String
+  /** so_number | inmate_number | person_id | unknown */
+  idKind           String   @default("unknown")
+  firstSeenBatchId String?
+  occurrences      Int      @default(1)
+  createdAt        DateTime @default(now())
+
+  inmate           Inmate   @relation(fields: [inmateId], references: [inmateId], onDelete: Cascade)
+
+  /** One identifier belongs to one person at one facility. A collision here is a
+   *  data problem worth failing on rather than merging through. */
+  @@unique([facility, externalId])
+  @@index([inmateId])
+  @@map("inmate_external_ids")
 }

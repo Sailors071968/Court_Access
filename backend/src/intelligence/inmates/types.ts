@@ -27,6 +27,10 @@ export interface NormalizedRecord {
   race?: string;
   facility: string;
   externalBookingId?: string;
+  /** The facility's own identifier for the PERSON — an SO or inmate number.
+   *  Distinct from externalBookingId, which identifies the booking. The strongest
+   *  identity evidence available when a roster supplies it. */
+  externalPersonId?: string;
   /** ISO datetime. Required: a booking without a date is not a booking. */
   bookedAt: string;
   releasedAt?: string;
@@ -82,6 +86,17 @@ export interface MatchEvidence {
   /** Version of the resolution rules, so old decisions stay interpretable
    *  after the tiers change. */
   resolverVersion: string;
+  /** Version of the merge policy that produced the action. Separate from the
+   *  resolver, because scoring and deciding change independently. */
+  mergePolicyVersion?: string;
+  /** The named policy rule that fired, so a decision traces to one line of
+   *  mergePolicy.ts rather than to a score. */
+  policyRule?: string;
+  /** Which blocking keys found the chosen candidate — for auditing recall. */
+  foundBy?: string[];
+  /** True when a blocking key hit its cap, so the candidate set may be
+   *  incomplete and a missed match is possible. */
+  candidateSetTruncated?: boolean;
 }
 
 /**
@@ -91,6 +106,9 @@ export interface MatchEvidence {
 export type MatchTier =
   /** Same facility and the facility's own booking id. The same booking. */
   | 'exact_booking'
+  /** The facility's own PERSON identifier matched. Stronger than name and date
+   *  of birth together, because the jail assigns it and it is stable. */
+  | 'external_person_id'
   /** Normalized last, first and date of birth all match. */
   | 'exact_identity'
   /** Date of birth and last name match; first name within edit distance. */
@@ -160,6 +178,7 @@ export interface InmateCandidate {
   canonicalFirst: string;
   canonicalLast: string;
   canonicalMiddle?: string | null;
+  suffix?: string | null;
   dateOfBirth?: Date | null;
   sex?: string | null;
   race?: string | null;
@@ -272,7 +291,7 @@ export interface ColumnMap {
 export type CanonicalField =
   | 'fullName' | 'first' | 'last' | 'middle' | 'suffix'
   | 'dateOfBirth' | 'sex' | 'race'
-  | 'externalBookingId' | 'bookedAt' | 'releasedAt'
+  | 'externalBookingId' | 'externalPersonId' | 'bookedAt' | 'releasedAt'
   | 'arrestingAgency' | 'bailAmount' | 'housingLocation'
   | 'charges';
 

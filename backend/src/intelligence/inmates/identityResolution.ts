@@ -19,6 +19,8 @@
 // constructed candidates without a database.
 // ============================================================================
 
+import { decideMerge, MERGE_POLICY_VERSION, breakTie, type PolicyInput } from './mergePolicy.js';
+import { areNicknames, suffixesCompatible } from './nameKeys.js';
 import type {
   InmateCandidate, MatchConflict, MatchReason, MatchTier,
   NormalizedRecord, RejectedCandidate, ResolutionOutcome, ResolutionResult,
@@ -26,7 +28,7 @@ import type {
 } from './types.js';
 
 /** Bumped when the tiers or weights change, so old decisions stay readable. */
-export const RESOLVER_VERSION = '1.0.0';
+export const RESOLVER_VERSION = '1.1.0';
 
 /** Edit distance at which two given names are treated as the same name. */
 export const FIRST_NAME_DISTANCE = 2;
@@ -40,7 +42,8 @@ export type DobRelation = 'exact' | 'typo' | 'different';
 
 export interface ResolveInput {
   record: NormalizedRecord;
-  candidates: InmateCandidate[];
+  /** From candidateGeneration. May carry `foundBy` and an external-id flag. */
+  candidates: (InmateCandidate & { foundBy?: string[]; externalPersonIdMatched?: boolean })[];
   /** Bookings already known for a candidate, keyed by inmateId, used to detect
    *  the same booking arriving twice. */
   existingBookingKeys: Set<string>;
@@ -48,6 +51,8 @@ export interface ResolveInput {
   incomingBookingKey: string;
   sourceDocument: SourceDocument;
   sourceRecordIds?: string[];
+  /** True when a blocking key hit its cap, so a missed match is possible. */
+  candidateSetTruncated?: boolean;
 }
 
 // ---------------------------------------------------------------------------
@@ -118,6 +123,9 @@ interface Assessment {
   confidence: number;
   reasons: MatchReason[];
   conflicts: MatchConflict[];
+  /** The named facts phase 3 reads. Scoring produces them; it does not act on
+   *  them. Keeping them explicit is what stops a weight from deciding a merge. */
+  facts: Omit<PolicyInput, 'ambiguous'>;
 }
 
 /** Compare one candidate against the incoming row. */
@@ -142,8 +150,19 @@ function assess(record: NormalizedRecord, candidate: InmateCandidate): Assessmen
     });
   }
 
+  const nickname = !firstExact && areNicknames(record.first, candidate.canonicalFirst);
+  if (nickname) {
+    reasons.push({
+      code: 'first_name_nickname',
+      detail: `"${record.first}" and "${candidate.canonicalFirst}" are known forms of the same name.`,
+      weight: 20,
+    });
+  }
+
   if (firstExact) {
     reasons.push({ code: 'first_name_exact', detail: `Given name "${record.first}" matches exactly.`, weight: 25 });
+  } else if (nickname) {
+    // Already credited above; no distance conflict for a recognised nickname.
   } else if (firstDistance <= FIRST_NAME_DISTANCE) {
     reasons.push({
       code: 'first_name_near',
@@ -229,22 +248,93 @@ function assess(record: NormalizedRecord, candidate: InmateCandidate): Assessmen
     }
   }
 
-  const tier = deriveTier({ lastExact, firstExact, firstDistance, dob });
+  const suffixOk = suffixesCompatible(record.suffix, candidate.suffix);
+  if (!suffixOk) {
+    conflicts.push({
+      code: 'suffix_conflict',
+      detail: 'Generational suffixes differ — these are frequently father and son with the same name.',
+      existing: candidate.suffix ?? undefined,
+      incoming: record.suffix ?? undefined,
+      blocking: true,
+    });
+  } else if (record.suffix && candidate.suffix) {
+    reasons.push({ code: 'suffix_match', detail: `Suffix "${record.suffix}" matches.`, weight: 3 });
+  }
+
+  const externalMatched = Boolean((candidate as { externalPersonIdMatched?: boolean }).externalPersonIdMatched);
+  if (externalMatched) {
+    reasons.push({
+      code: 'external_person_id',
+      detail: "The facility's own person identifier matches this record.",
+      weight: 50,
+    });
+  }
+
+  const middleAgrees = reasons.some((r) => r.code === 'middle_name_exact' || r.code === 'middle_initial_match');
+  const middleConflict = conflicts.some((c) => c.code === 'middle_name_differs');
+
+  // Reached by a key other than the exact surname: phonetic, collapsed shape, an
+  // alias, or a part of a compound surname.
+  const foundBy = (candidate as { foundBy?: string[] }).foundBy ?? [];
+  const variantKey = !lastExact && foundBy.some((k) =>
+    k === 'phonetic_surname' || k === 'phonetic_alias'
+    || k === 'collapsed_surname' || k === 'collapsed_alias'
+    || k === 'alias_surname' || k === 'surname_part');
+
+  const facts: Omit<PolicyInput, 'ambiguous'> = {
+    tier: 'none',
+    externalPersonIdMatched: externalMatched,
+    surnameExact: lastExact,
+    surnameVariantKey: variantKey,
+    givenNameExact: firstExact,
+    givenNameNickname: nickname,
+    givenNameNear: !firstExact && !nickname && firstDistance <= FIRST_NAME_DISTANCE,
+    dobExact: dob === 'exact',
+    dobTypo: dob === 'typo',
+    dobConflict: dob === 'different',
+    dobUnknown: dob === 'unknown',
+    middleAgrees,
+    middleConflict,
+    suffixCompatible: suffixOk,
+    sexConflict: conflicts.some((c) => c.code === 'sex_differs'),
+  };
+
+  const tier = deriveTier({
+    lastExact, firstExact, firstDistance, dob,
+    nickname, externalMatched, variantKey,
+  });
+  facts.tier = tier;
+
   const confidence = Math.max(0, Math.min(100, reasons.reduce((sum, r) => sum + r.weight, 0)));
-  return { tier, confidence, reasons, conflicts };
+  return { tier, confidence, reasons, conflicts, facts };
 }
 
 function deriveTier(f: {
-  lastExact: boolean; firstExact: boolean; firstDistance: number; dob: DobRelation | 'unknown';
+  lastExact: boolean; firstExact: boolean; firstDistance: number;
+  dob: DobRelation | 'unknown'; nickname: boolean; externalMatched: boolean;
+  variantKey?: boolean;
 }): MatchTier {
-  if (!f.lastExact) return 'none';
+  // The jail's own person identifier outranks everything name-based.
+  if (f.externalMatched) return 'external_person_id';
+  // A surname variant with an exact date of birth is a probable split. It must
+  // reach the policy rather than being filtered out as 'none' here, or the
+  // duplicate is created silently.
+  if (!f.lastExact) return (f.variantKey && f.dob === 'exact') ? 'near_dob' : 'none';
+  const givenClose = f.firstExact || f.nickname || f.firstDistance <= FIRST_NAME_DISTANCE;
   if (f.dob === 'exact' && f.firstExact) return 'exact_identity';
-  if (f.dob === 'exact' && f.firstDistance <= FIRST_NAME_DISTANCE) return 'near_name';
-  if (f.dob === 'typo' && (f.firstExact || f.firstDistance <= FIRST_NAME_DISTANCE)) return 'near_dob';
+  if (f.dob === 'exact' && givenClose) return 'near_name';
+  // Exact surname AND exact date of birth, with an unrelated given name. Rare,
+  // and genuinely ambiguous: siblings share neither a birthday nor usually a
+  // surname spelling, but a person using an anglicised given name does. It has to
+  // reach the policy — filtering it out here as 'none' is what silently created
+  // the duplicate. `near_dob` is the "a person must look at this" bucket rather
+  // than a literal statement about the date; see the white paper on the naming.
+  if (f.dob === 'exact') return 'near_dob';
+  if (f.dob === 'typo' && givenClose) return 'near_dob';
   // Names alone, with no date of birth on either side, is too weak to merge on:
   // common names are common. It goes to review rather than to a new person, so
   // a human sees the collision.
-  if (f.dob === 'unknown' && f.firstExact) return 'near_dob';
+  if (f.dob === 'unknown' && (f.firstExact || f.nickname)) return 'near_dob';
   return 'none';
 }
 
@@ -252,10 +342,9 @@ function deriveTier(f: {
 // Resolution
 // ---------------------------------------------------------------------------
 
-/** Which tiers may be applied without a person looking at them. */
-const AUTOMATIC_TIERS: ReadonlySet<MatchTier> = new Set<MatchTier>([
-  'exact_booking', 'exact_identity', 'near_name',
-]);
+// Which tiers may be applied automatically is no longer a constant here: it is
+// the merge policy, in mergePolicy.ts. Keeping a list in this file as well would
+// be two places to change and one to forget.
 
 /**
  * Decide what the incoming row is: the same booking already held, an existing
@@ -287,14 +376,25 @@ export function resolveIdentity(input: ResolveInput): ResolutionResult {
         reviewRationale: 'The same booking is already in the repository, so nothing was written.',
         decidedAt,
         resolverVersion: RESOLVER_VERSION,
+        mergePolicyVersion: MERGE_POLICY_VERSION,
+        policyRule: 'booking_already_present',
+        candidateSetTruncated: input.candidateSetTruncated ?? false,
       },
     };
   }
 
-  const assessments = candidates
+  // --- Phase 2: rank -------------------------------------------------------
+  const assessed = candidates
     .map((candidate) => ({ candidate, ...assess(record, candidate) }))
-    .filter((a) => a.tier !== 'none')
-    .sort((a, b) => (tierRank(a.tier) - tierRank(b.tier)) || (b.confidence - a.confidence));
+    .filter((a) => a.tier !== 'none');
+
+  // Deterministic ordering: tier, then confidence, then inmateId. The last term
+  // is what makes identical inputs produce identical outputs when two candidates
+  // are otherwise indistinguishable.
+  const assessments = breakTie(
+    assessed.map((a) => ({ ...a, inmateId: a.candidate.inmateId })),
+    tierRank,
+  );
 
   if (assessments.length === 0) {
     return {
@@ -305,8 +405,8 @@ export function resolveIdentity(input: ResolveInput): ResolutionResult {
         reasons: [{
           code: 'no_candidate_matched',
           detail: candidates.length === 0
-            ? 'No existing record shares this surname.'
-            : `${candidates.length} record(s) share the surname; none matched on given name or date of birth.`,
+            ? 'No existing person was found by any blocking key.'
+            : `${candidates.length} candidate(s) were considered and none matched on given name or date of birth.`,
           weight: 100,
         }],
         conflicts: [],
@@ -316,44 +416,58 @@ export function resolveIdentity(input: ResolveInput): ResolutionResult {
           inmateId: c.inmateId,
           name: `${c.canonicalLast}, ${c.canonicalFirst}`,
           confidence: 0,
-          reason: 'Considered by surname; rejected on given name or date of birth.',
+          reason: `Found by ${(c.foundBy ?? ['unknown']).join(', ')}; rejected on given name or date of birth.`,
         })),
         humanReviewRequired: false,
         reviewRationale: 'Nothing matched, so this is recorded as a person not previously seen.',
         decidedAt,
         resolverVersion: RESOLVER_VERSION,
+        mergePolicyVersion: MERGE_POLICY_VERSION,
+        policyRule: 'no_candidate_matched',
+        candidateSetTruncated: input.candidateSetTruncated ?? false,
       },
     };
   }
 
   const best = assessments[0];
-  const rejected: RejectedCandidate[] = assessments.slice(1).map((a) => ({
-    inmateId: a.candidate.inmateId,
-    name: `${a.candidate.canonicalLast}, ${a.candidate.canonicalFirst}`,
-    confidence: a.confidence,
-    reason: `Weaker match (${a.tier}) than the chosen candidate.`,
-  }));
 
-  // More than one candidate reaching an automatic tier is itself a reason to
-  // stop: whichever is picked, the other was nearly as good.
-  const contenders = assessments.filter((a) => AUTOMATIC_TIERS.has(a.tier));
+  // Ambiguity is a property of the candidate set, not of one candidate, so it is
+  // computed here and handed to the policy rather than decided inside it.
+  const contenders = assessments.filter(
+    (a) => a.tier === 'external_person_id' || a.tier === 'exact_identity' || a.tier === 'near_name',
+  );
   const ambiguous = contenders.length > 1;
 
-  const automatic = AUTOMATIC_TIERS.has(best.tier) && !ambiguous;
-  const outcome: ResolutionOutcome = automatic ? 'matched' : 'needs_review';
+  // --- Phase 3: decide -----------------------------------------------------
+  // Rule-based and deterministic. It reads named facts, never the score.
+  const decision = decideMerge({ ...best.facts, ambiguous });
+
+  const outcome: ResolutionOutcome =
+    decision.action === 'merge' ? 'matched'
+    : decision.action === 'review' ? 'needs_review'
+    : 'new_inmate';
 
   const conflicts = [...best.conflicts];
   if (ambiguous) {
     conflicts.push({
       code: 'multiple_strong_candidates',
-      detail: `${contenders.length} existing records match strongly enough to be this person.`,
+      detail: `${contenders.length} existing people match strongly enough to be this person.`,
       blocking: true,
     });
   }
 
+  const rejected: RejectedCandidate[] = assessments.slice(1).map((a) => ({
+    inmateId: a.candidate.inmateId,
+    name: `${a.candidate.canonicalLast}, ${a.candidate.canonicalFirst}`,
+    confidence: a.confidence,
+    reason: `Weaker match (${a.tier}) than the chosen candidate; found by ${(a.candidate.foundBy ?? ['unknown']).join(', ')}.`,
+  }));
+
   return {
     outcome,
-    inmateId: best.candidate.inmateId,
+    // A new_person decision must not carry a candidate id: the row is not that
+    // person, and returning one would let a caller attach a booking to them.
+    inmateId: decision.action === 'new_person' ? undefined : best.candidate.inmateId,
     evidence: {
       confidence: best.confidence,
       tier: best.tier,
@@ -362,30 +476,21 @@ export function resolveIdentity(input: ResolveInput): ResolutionResult {
       sourceDocuments: [sourceDocument],
       sourceRecordIds,
       rejectedCandidates: rejected,
-      humanReviewRequired: !automatic,
-      reviewRationale: buildRationale(best.tier, ambiguous, contenders.length),
+      humanReviewRequired: decision.action === 'review',
+      reviewRationale: decision.rationale,
       decidedAt,
       resolverVersion: RESOLVER_VERSION,
+      mergePolicyVersion: MERGE_POLICY_VERSION,
+      policyRule: decision.rule,
+      foundBy: best.candidate.foundBy ?? [],
+      candidateSetTruncated: input.candidateSetTruncated ?? false,
     },
   };
 }
 
-function buildRationale(tier: MatchTier, ambiguous: boolean, contenders: number): string {
-  if (ambiguous) {
-    return `${contenders} existing people match this row strongly enough to be it. Merging would pick one arbitrarily, so a person must choose.`;
-  }
-  switch (tier) {
-    case 'exact_identity':
-      return 'Surname, given name and date of birth all match exactly, so the booking was attached to the existing person.';
-    case 'near_name':
-      return 'Date of birth and surname match exactly and the given name differs only by spelling, so the booking was attached to the existing person.';
-    case 'near_dob':
-      return 'The names match but the dates of birth are not identical. A typing error and two different people with the same name look the same here, so this is not merged automatically.';
-    default:
-      return 'The evidence was too weak to attach this booking to an existing person automatically.';
-  }
-}
-
 function tierRank(tier: MatchTier): number {
-  return { exact_booking: 0, exact_identity: 1, near_name: 2, near_dob: 3, none: 4 }[tier];
+  return {
+    exact_booking: 0, external_person_id: 1, exact_identity: 2,
+    near_name: 3, near_dob: 4, none: 5,
+  }[tier];
 }

@@ -382,6 +382,7 @@ export function normalizeRecord(row: RawRecord, map: ColumnMap): NormalizeOutcom
     race: normalizeRace(pick(row, map, 'race')),
     facility: map.facility,
     externalBookingId: cleanText(pick(row, map, 'externalBookingId')) || undefined,
+    externalPersonId: cleanText(pick(row, map, 'externalPersonId')).toUpperCase() || undefined,
     bookedAt,
     releasedAt: parseDateTime(pick(row, map, 'releasedAt'), map.dateFormats),
     arrestingAgency: cleanText(pick(row, map, 'arrestingAgency')) || undefined,

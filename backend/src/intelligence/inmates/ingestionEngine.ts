@@ -27,7 +27,9 @@ import { stat } from 'node:fs/promises';
 import { basename, extname } from 'node:path';
 
 import prisma from '../../lib/prisma.js';
+import { generateCandidates } from './candidateGeneration.js';
 import { collapseWithinBatch, bookingContentHash } from './deduplication.js';
+import { deriveNameKeys, NAME_KEY_VERSION } from './nameKeys.js';
 import {
   enqueueForReview, recordBookingChanges, recordDepartures, recordIdentityMatch,
   recordObservation, recordWatchListMatches, reconcileBatch,
@@ -39,13 +41,12 @@ import { parseCsvRoster } from './parsers/csvParser.js';
 import { parsePdfRoster } from './parsers/pdfParser.js';
 import type {
   IngestionCounts, IngestionIssue, IngestionOutcome, IngestionRequest,
-  InmateCandidate, NormalizedRecord, ParseResult, ResolutionPreview,
+  NormalizedRecord, ParseResult, ResolutionPreview,
   ResolutionResult, SourceDocument,
 } from './types.js';
 
-/** Candidate lookup is an index probe on (last, dob); this bounds a pathological
- *  surname so resolution cannot go quadratic on "SMITH". */
-const MAX_CANDIDATES = 200;
+// Candidate limits now live in candidateGeneration.ts, per blocking key, so a
+// broad key cannot crowd out a precise one.
 
 export async function runIngestion(request: IngestionRequest): Promise<IngestionOutcome> {
   const startedAt = Date.now();
@@ -316,18 +317,16 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
 
 // ---------------------------------------------------------------------------
 
-/** Load candidates by surname and ask the resolver. */
+/**
+ * Phase 1 then phases 2 and 3: find candidates by every blocking key, then ask
+ * the resolver to rank and the policy to decide.
+ *
+ * The candidate query used to be a single exact-surname lookup here. It is now a
+ * module of its own, because "who could this be" and "which of them is it" are
+ * different questions with opposite goals — recall against precision.
+ */
 async function resolveOne(record: NormalizedRecord, lineNumber: number, document: SourceDocument) {
-  const rows = await prisma.inmate.findMany({
-    where: { canonicalLast: record.last, mergedIntoId: null },
-    select: {
-      inmateId: true, canonicalFirst: true, canonicalLast: true, canonicalMiddle: true,
-      dateOfBirth: true, sex: true, race: true, bookingCount: true,
-    },
-    take: MAX_CANDIDATES,
-  });
-
-  const candidates: InmateCandidate[] = rows;
+  const generated = await generateCandidates(prisma, record);
   const incomingBookingKey = bookingContentHash(record);
 
   const existing = await prisma.inmateBooking.findUnique({
@@ -337,10 +336,11 @@ async function resolveOne(record: NormalizedRecord, lineNumber: number, document
 
   return resolveIdentity({
     record,
-    candidates,
+    candidates: generated.candidates,
     existingBookingKeys: new Set(existing ? [existing.contentHash] : []),
     incomingBookingKey,
     sourceDocument: { ...document, lineNumber },
+    candidateSetTruncated: generated.truncated,
   });
 }
 
@@ -441,12 +441,16 @@ async function persist(args: {
     let isFirstAppearance = false;
 
     if (result.outcome === 'new_inmate') {
+      const keys = deriveNameKeys(record.last);
       const created = await tx.inmate.create({
         data: {
           canonicalFirst: record.first,
           canonicalLast: record.last,
           canonicalMiddle: record.middle ?? null,
           suffix: record.suffix ?? null,
+          phoneticLast: keys.phonetic,
+          collapsedLast: keys.collapsed,
+          nameKeyVersion: NAME_KEY_VERSION,
           dateOfBirth: record.dateOfBirth ? new Date(record.dateOfBirth) : null,
           sex: record.sex ?? null,
           race: record.race ?? null,
@@ -548,6 +552,7 @@ async function persist(args: {
         data: { occurrences: { increment: 1 } },
       });
     } else {
+      const aliasKeys = deriveNameKeys(record.last);
       await tx.inmateAlias.create({
         data: {
           inmateId,
@@ -557,8 +562,39 @@ async function persist(args: {
           suffix: record.suffix ?? null,
           dateOfBirth: aliasDob,
           sourceBatchId: batchId,
+          phoneticLast: aliasKeys.phonetic,
+          collapsedLast: aliasKeys.collapsed,
+          nameKeyVersion: NAME_KEY_VERSION,
         },
       });
+    }
+
+    // The facility's own person identifier, if the roster supplies one. The
+    // strongest identity evidence available on the next roster, so it is recorded
+    // whenever seen — including for a person first matched by name.
+    if (record.externalPersonId) {
+      const existingId = await tx.inmateExternalId.findUnique({
+        where: { facility_externalId: { facility: record.facility, externalId: record.externalPersonId } },
+        select: { externalIdRow: true, inmateId: true },
+      });
+      if (!existingId) {
+        await tx.inmateExternalId.create({
+          data: {
+            inmateId,
+            facility: record.facility,
+            externalId: record.externalPersonId,
+            firstSeenBatchId: batchId,
+          },
+        });
+      } else if (existingId.inmateId === inmateId) {
+        await tx.inmateExternalId.update({
+          where: { externalIdRow: existingId.externalIdRow },
+          data: { occurrences: { increment: 1 } },
+        });
+      }
+      // An identifier already bound to a *different* person is left alone: it is
+      // a data problem, and silently rebinding it would move identity evidence
+      // from one person to another without a record.
     }
 
     await tx.inmate.update({

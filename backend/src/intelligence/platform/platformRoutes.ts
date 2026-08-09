@@ -128,7 +128,11 @@ export async function registerIntelligencePlatformRoutes(app: FastifyInstance): 
   // Review
   // -------------------------------------------------------------------------
 
-  app.get('/api/admin/intelligence/review', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+  // `/review-items` rather than `/review`: this queue holds intelligence items — a
+  // conflict awaiting a decision, a finding awaiting acceptance — while `/review`
+  // holds import records awaiting an identity decision. Two different queues over two
+  // different things, and they collided at boot when both wanted the shorter name.
+  app.get('/api/admin/intelligence/review-items', async (request: AuthenticatedRequest, reply: FastifyReply) => {
     if (!requireAdministrator(request, reply)) return;
     const q = request.query as Record<string, string | undefined>;
     const result = await reviewQueue(clampLimit(q.limit), offsetOf(q.offset));

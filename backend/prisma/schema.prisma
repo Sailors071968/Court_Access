@@ -3330,6 +3330,12 @@ model InmateAlias {
   first         String
   last          String
   middle        String?
+  /** The spelling as the roster wrote it, when punctuation was folded away for
+   *  matching. An alias list is a record of what sources actually said, so showing
+   *  GARCIALOPEZ where the jail wrote GARCIA-LOPEZ would misreport the source. */
+  displayFirst  String?
+  displayLast   String?
+  displayMiddle String?
   suffix        String?
   dateOfBirth   DateTime?
   sourceBatchId String?

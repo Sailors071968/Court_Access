@@ -247,6 +247,31 @@ export async function registerInmateOperationsRoutes(app: FastifyInstance): Prom
   });
 
   // -------------------------------------------------------------------------
+  // Dashboard and import history
+  // -------------------------------------------------------------------------
+
+  /** What the dashboard shows immediately after Process Import. */
+  app.get('/api/admin/intelligence/dashboard', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!requireAdministrator(request, reply)) return;
+    const { date } = request.query as { date?: string };
+
+    const { getDashboardSummary } = await import('./dashboardSummary.js');
+    return reply.send(await getDashboardSummary({ date }));
+  });
+
+  /** One row per processing run, with everything a run is required to record. */
+  app.get('/api/admin/intelligence/import-history', async (request: AuthenticatedRequest, reply: FastifyReply) => {
+    if (!requireAdministrator(request, reply)) return;
+    const q = request.query as { limit?: string; offset?: string };
+
+    const { getImportHistory } = await import('./dashboardSummary.js');
+    return reply.send(await getImportHistory({
+      limit: clampLimit(q.limit),
+      offset: offsetOf(q.offset),
+    }));
+  });
+
+  // -------------------------------------------------------------------------
   // Person detail and historical search
   // -------------------------------------------------------------------------
 

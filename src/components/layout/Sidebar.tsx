@@ -10,7 +10,7 @@ import {
   ChevronLeft, ChevronRight, ChevronDown,
   FileText, Tag, Upload, BarChart3, Globe, Activity, Server, BookOpen, CheckSquare, FileQuestion,
   ShieldCheck, LayoutList, Scale,
-  Users, History, ListChecks, Cog, Gauge, UserSearch, FileSearch, Columns3,
+  Users, History, ListChecks, Cog, Gauge, UserSearch, FileSearch, Columns3, FileCheck2,
 } from 'lucide-react';
 import { useAuthStore } from '../../stores/authStore';
 import { ROLE_PERMISSIONS } from '../../constants';
@@ -89,7 +89,8 @@ const navItems: NavItem[] = [
         icon: <UserSearch size={16} />,
         permission: 'canViewAdmin',
         children: [
-          { id: 'niis-dashboard', label: 'Dashboard', path: '/admin/intelligence', icon: <Gauge size={14} /> },
+          { id: 'niis-ops', label: 'Morning Operations', path: '/admin/intelligence', icon: <Gauge size={14} /> },
+          { id: 'niis-dashboard', label: 'Import Summary', path: '/admin/intelligence/import-summary', icon: <LayoutList size={14} /> },
           { id: 'niis-upload', label: 'Upload Files', path: '/admin/intelligence/upload', icon: <Upload size={14} /> },
           { id: 'niis-queue', label: 'Processing Queue', path: '/admin/intelligence/queue', icon: <Activity size={14} /> },
           { id: 'niis-inspect', label: 'Import Inspection', path: '/admin/intelligence/inspect', icon: <FileSearch size={14} /> },
@@ -97,6 +98,7 @@ const navItems: NavItem[] = [
           { id: 'niis-new', label: "Today's New Inmates", path: '/admin/intelligence/new-inmates', icon: <Users size={14} /> },
           { id: 'niis-search', label: 'Historical Search', path: '/admin/intelligence/search', icon: <Search size={14} /> },
           { id: 'niis-imports', label: 'Import History', path: '/admin/intelligence/import-history', icon: <History size={14} /> },
+          { id: 'niis-reports', label: 'Reports', path: '/admin/intelligence/reports', icon: <FileCheck2 size={14} /> },
           { id: 'niis-review', label: 'Review Queue', path: '/admin/intelligence/review', icon: <ListChecks size={14} /> },
           { id: 'niis-settings', label: 'Settings', path: '/admin/intelligence/settings', icon: <Cog size={14} /> },
         ],

@@ -97,6 +97,8 @@ import { ReviewQueue } from './pages/admin/intelligence/ReviewQueue';
 import { IntelligenceSettings } from './pages/admin/intelligence/IntelligenceSettings';
 import { ImportInspection } from './pages/admin/intelligence/ImportInspection';
 import { MappingEditor } from './pages/admin/intelligence/MappingEditor';
+import { OperationsConsole } from './pages/admin/intelligence/OperationsConsole';
+import { Reports } from './pages/admin/intelligence/Reports';
 import { StatutoryIntelligence } from './pages/admin/StatutoryIntelligence';
 import { GoldStandardCertification } from './pages/admin/GoldStandardCertification';
 
@@ -481,11 +483,29 @@ function App() {
             }
           />
           {/* New Inmate Intelligence — administrator only, isolated from public features */}
+          {/* The operations console is the home screen: an operator opening the
+              subsystem should see what to do next, not a summary of yesterday. */}
           <Route
             path="admin/intelligence"
             element={
               <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <OperationsConsole />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/intelligence/import-summary"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
                 <IntelligenceDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="admin/intelligence/reports"
+            element={
+              <ProtectedRoute requiredPermission="canViewAdmin" requiredRole="admin">
+                <Reports />
               </ProtectedRoute>
             }
           />

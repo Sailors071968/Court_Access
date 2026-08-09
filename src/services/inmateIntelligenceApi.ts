@@ -475,6 +475,134 @@ export interface MappingEditorState {
   canonicalFields: { field: string; label: string; note: string }[];
 }
 
+// ---------------------------------------------------------------------------
+// Operations console
+// ---------------------------------------------------------------------------
+
+export interface MorningSummary {
+  headline: string;
+  posture: 'ok' | 'attention' | 'action_required';
+  lastSuccessfulImport: {
+    batchId: string; at: string; rosterDate: string | null;
+    filename: string; operator: string | null; hoursAgo: number;
+  } | null;
+  today: {
+    date: string; processed: boolean; batchesStarted: number;
+    batchesCompleted: number; batchesFailed: number; batchesInProgress: number;
+    todaysRosterImported: boolean;
+  };
+  intelligence: {
+    newInmates: number; returningInmates: number; watchListMatches: number;
+    unresolvedReviewItems: number; unresolvedConflicts: number; significantChanges: number;
+  };
+  parserWarnings: { facility: string; sourceType: string; message: string; severity: string }[];
+  health: {
+    database: string; facilitiesConfigured: number; activeParserProfiles: number;
+    stalledBatches: number; oldestUnresolvedReviewDays: number | null;
+    repository: { people: number; bookings: number; observations: number };
+  };
+  reports: { draft: number; reviewed: number; approvedNotPrinted: number };
+}
+
+export interface BatchLifecycle {
+  batchId: string;
+  facility: string;
+  filename: string;
+  sourceType: string;
+  rosterDate: string | null;
+  lifecycleState: string;
+  status: string;
+  isTerminal: boolean;
+  operator: string | null;
+  parserProfile: string | null;
+  parserConfidence: number | null;
+  startedAt: string;
+  finishedAt: string | null;
+  totalDurationMs: number | null;
+  closedAt: string | null;
+  cancelReason: string | null;
+  failureReason: string | null;
+  transitions: {
+    fromState: string | null; toState: string; reason: string | null;
+    actor: string; actorId: string | null; durationMs: number | null; occurredAt: string;
+    versions: {
+      parserVersion: number | null; normalizationVersion: string | null;
+      resolverVersion: string | null; mergePolicyVersion: string | null;
+    };
+  }[];
+  progress: { step: number; total: number; label: string };
+}
+
+export interface ComparisonDetail {
+  kind: string;
+  inmateId: string | null;
+  name: string;
+  bookingNumber: string | null;
+  from: string | null;
+  to: string | null;
+  note: string | null;
+}
+
+export interface BatchComparison {
+  ok: boolean;
+  comparisonId: string | null;
+  counts: Record<string, number>;
+  detail: ComparisonDetail[];
+  truncated: boolean;
+}
+
+export interface ReportRecord {
+  reportId: string;
+  reportType: string;
+  rowCount: number;
+  approvalState: string;
+  generatedById: string;
+  generatedAt: string;
+  reviewedById: string | null;
+  reviewedAt: string | null;
+  approvedById: string | null;
+  approvedAt: string | null;
+  printedById: string | null;
+  printedAt: string | null;
+  printCount: number;
+  archivedAt: string | null;
+  approvalNote: string | null;
+}
+
+export interface BatchMetric {
+  batchId: string;
+  facility: string;
+  filename: string;
+  sourceType: string;
+  rosterDate: string | null;
+  startedAt: string;
+  lifecycleState: string;
+  status: string;
+  filesProcessed: number;
+  recordsParsed: number;
+  observationsCreated: number;
+  identitiesMatched: number;
+  newInmates: number;
+  conflictsGenerated: number;
+  reviewItems: number;
+  parserConfidence: number | null;
+  importDurationMs: number | null;
+  parsingMs: number | null;
+  identityAnalysisMs: number | null;
+  intelligenceMs: number | null;
+}
+
+export interface MetricTrendDay {
+  date: string;
+  imports: number;
+  failed: number;
+  records: number;
+  matched: number;
+  reviews: number;
+  averageParserConfidence: number | null;
+  averageDurationMs: number | null;
+}
+
 export const intelligenceApi = {
   dashboard: (date?: string) => call<DashboardSummary>(`/dashboard${query({ date })}`),
 
@@ -613,6 +741,38 @@ export const intelligenceApi = {
       `/mappings/${facility}/publish`,
       { method: 'POST', body: JSON.stringify(body) },
     ),
+
+
+  morning: () => call<MorningSummary>('/morning'),
+
+  batchLifecycle: (batchId: string) => call<BatchLifecycle>(`/batches/${batchId}/lifecycle`),
+
+  closeBatch: (batchId: string) =>
+    call<{ batchId: string; closed: boolean }>(`/batches/${batchId}/close`, { method: 'POST' }),
+
+  cancelBatch: (batchId: string, reason: string) =>
+    call<{ batchId: string; cancelled: boolean }>(`/batches/${batchId}/cancel`, {
+      method: 'POST', body: JSON.stringify({ reason }),
+    }),
+
+  compareLatest: (facility = 'sacramento') =>
+    call<BatchComparison>(`/comparison/latest${query({ facility })}`),
+
+  compare: (baselineBatchId: string, currentBatchId: string) =>
+    call<BatchComparison>('/comparison', {
+      method: 'POST', body: JSON.stringify({ baselineBatchId, currentBatchId }),
+    }),
+
+  reportList: (params: { state?: string; limit?: number } = {}) =>
+    call<{ reports: ReportRecord[] }>(`/reports/list${query(params)}`),
+
+  setReportState: (reportId: string, state: string, note?: string) =>
+    call<{ reportId: string; state: string; printCount: number }>(`/reports/${reportId}/state`, {
+      method: 'POST', body: JSON.stringify({ state, note }),
+    }),
+
+  metrics: (params: { limit?: number; facility?: string; trendDays?: number } = {}) =>
+    call<{ batches: BatchMetric[]; days: MetricTrendDay[] }>(`/metrics${query(params)}`),
 
   settings: () => call<IntelligenceSettings>('/settings'),
 

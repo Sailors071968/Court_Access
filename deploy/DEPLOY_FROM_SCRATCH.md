@@ -31,13 +31,25 @@ It is pinned by absolute path rather than resolved from `PATH`, because PM2
 records the bare string `node` and re-resolves it at spawn — which on a host with
 more than one Node has started the service on the wrong runtime.
 
+**`node` and `npm` must come from the same installation.** The stages pin npm
+from `NODE22`'s own directory and refuse to run if it is not there, because a
+build compiled by one toolchain and executed by another has produced mismatched
+native modules. Deriving `NODE22` from `npm` guarantees the pair:
+
 ```bash
-export NODE22="$(command -v node)"
-"$NODE22" --version          # must be v22.x
+export NODE22="$(dirname "$(command -v npm)")/node"
+"$NODE22" --version                       # must be v22.x
+ls "$(dirname "$NODE22")/npm" >/dev/null && echo "node and npm are paired"
 ```
 
-If you use nvm, the scripts will find Node 22 themselves and you can skip this.
-Set it in the shell you run every stage from; nothing persists it for you.
+Do not simply use `command -v node`. On a host with more than one Node that can
+resolve to a directory containing `node` and no `npm`, and every stage then stops
+at `PATH npm () is not the pinned npm` — which was exactly the first failure when
+this procedure was tested from a clean clone.
+
+Set it in the shell you run every stage from; nothing persists it for you. If you
+use nvm, `nvm which 22` gives the same answer and the scripts will find it
+themselves.
 
 ## 1 · Clone
 
@@ -247,15 +259,28 @@ build is answering; a 404 means something older is.
 
 ## 11 · Create the administrator
 
+The script imports `@prisma/client`, and Node resolves that from the directory
+the *script* lives in — not the working directory. Run it from inside the
+release, which is where `node_modules` is; from the source checkout it fails
+with `ERR_MODULE_NOT_FOUND`.
+
 ```bash
-cd /var/www/courtaccess-src
-(set -a; . /var/www/courtaccess-v1/.env; set +a; \
+cp /var/www/courtaccess-src/deploy/bootstrap-admin.mjs /var/www/courtaccess-v1/
+cd /var/www/courtaccess-v1
+(set -a; . ./.env; set +a; \
  ADMIN_EMAIL=you@example.com ADMIN_PASSWORD="$(openssl rand -base64 24)" \
- API_URL=http://127.0.0.1:3100 "$NODE22" deploy/bootstrap-admin.mjs)
+ API_URL=http://127.0.0.1:3100 "$NODE22" ./bootstrap-admin.mjs)
 ```
 
-Registers through the same route a customer uses, sets the admin role, and
-proves the account signs in. Record the password it prints.
+The service must already be running — this registers through the same route a
+customer uses, then sets the admin role and proves the account signs in. Expect:
+
+```
+Administrator created: you@example.com
+Verified: the account signs in and holds the admin role.
+```
+
+Record the password. It is printed once.
 
 ---
 

@@ -51,15 +51,13 @@ export function parseHeightInches(value: string | undefined | null): number | un
     return total >= 24 && total <= 96 ? total : undefined;
   }
 
-  // 511 meaning 5'11" — a common roster shorthand. Three digits where the last two
-  // are a valid inch count.
-  const packed = /^(\d)(\d{2})$/.exec(text);
+  // 511 meaning 5'11" — a common roster shorthand. Constrained to four to seven feet,
+  // because otherwise a weight of 205 in a mis-mapped column reads as 2 feet 5 inches
+  // and passes the plausibility check below.
+  const packed = /^([4-7])(\d{2})$/.exec(text);
   if (packed) {
     const inches = Number(packed[2]);
-    if (inches <= 11) {
-      const total = Number(packed[1]) * 12 + inches;
-      return total >= 24 && total <= 96 ? total : undefined;
-    }
+    if (inches <= 11) return Number(packed[1]) * 12 + inches;
   }
 
   // A plain inch count.

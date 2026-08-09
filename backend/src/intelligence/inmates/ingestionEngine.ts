@@ -157,6 +157,9 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
   }
 
   // Rosters repeat a person once per charge; those rows are one booking.
+  // The validation report, attached to the batch once one exists.
+  let validationReport: Record<string, unknown> | null = null;
+
   // --- Validate against the profile that read the document -----------------
   //
   // After parsing and normalizing, before a single row is written. A profile that
@@ -199,6 +202,47 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
     for (const finding of findings) {
       issues.push({ severity: finding.severity, code: finding.code, message: finding.message });
     }
+
+    // The report Priority 2 asks for, assembled here where every input is in hand and
+    // attached to the batch below. Stored rather than logged: "why did this import
+    // produce so few records" is a question that arrives weeks later, by which time a
+    // log line is gone.
+    const duplicatedHeaders = headersFound.filter(
+      (h, i) => headersFound.findIndex((o) => o.toLowerCase() === h.toLowerCase()) !== i,
+    );
+    validationReport = {
+      profileId: profile.profileId,
+      profileVersion: profile.version,
+      profileLabel: profile.label,
+      usedFallbackMap: profile.fallback,
+      recognizedColumns: headersFound.filter((h) => !unmappedHeaders.includes(h)),
+      unknownColumns: unmappedHeaders,
+      duplicateColumns: [...new Set(duplicatedHeaders)],
+      // A mapped column that carried no value in any row. The column exists; the
+      // export is not filling it, which is a different problem from a missing column.
+      emptyMappedColumns: Object.keys(map.fields).filter(
+        (field) => (coverage[field] ?? 0) === 0
+          && (map.fields[field as keyof typeof map.fields] ?? []).some(
+            (alias) => headersFound.some((h) => h.toLowerCase() === String(alias).toLowerCase()),
+          ),
+      ),
+      missingRequiredColumns: findings
+        .filter((f) => f.code === 'required_field_absent')
+        .map((f) => f.message),
+      fieldCoverage: coverage,
+      rowsParsed: normalized.length,
+      rowsUnreadable: parsed.stats.unparseableLines,
+      // Column-weighted, because an unmapped column loses every value in it.
+      parserConfidence: headersFound.length === 0
+        ? 0
+        : Math.max(0, Math.round(
+            ((headersFound.length - unmappedHeaders.length) / headersFound.length) * 100,
+          ) - (profile.fallback ? 15 : 0) - (duplicatedHeaders.length > 0 ? 10 : 0)),
+      warnings: findings.filter((f) => f.severity === 'warning').map((f) => `${f.code}: ${f.message}`),
+      errors: findings.filter((f) => f.severity === 'error').map((f) => `${f.code}: ${f.message}`),
+      normalizationVersion: profile.normalizationVersion ?? NORMALIZATION_VERSION,
+      validatedAt: new Date().toISOString(),
+    };
 
     if (findings.some((f) => f.severity === 'error')) {
       return failed(
@@ -300,6 +344,8 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
       parserVersion: profile.version,
       normalizationVersion: profile.normalizationVersion ?? NORMALIZATION_VERSION,
       ocrVersion: parsed.stats.ocrUsed ? (profile.ocrVersion ?? 'tesseract:unrecorded') : null,
+      validationReport: (validationReport ?? null) as object,
+      parserConfidence: (validationReport?.parserConfidence as number | undefined) ?? null,
     },
   });
 

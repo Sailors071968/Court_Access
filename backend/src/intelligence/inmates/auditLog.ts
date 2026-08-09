@@ -37,7 +37,10 @@ export type IntelligenceAction =
   // Dashboard operations. An upload is the arrival of evidence, so it is audited
   // like access to it.
   | 'roster_uploaded'
-  | 'review_decision';
+  | 'review_decision'
+  // Inspection reads a file and writes nothing to the repository, but it is still
+  // access to source data and is audited as such.
+  | 'import_inspected';
 
 export interface AccessEvent {
   userId: string;

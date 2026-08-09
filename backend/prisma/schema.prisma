@@ -3176,6 +3176,20 @@ model InmateIngestionBatch {
   parserVersion   Int?
   normalizationVersion String?
   ocrVersion      String?
+  /**
+   * The parser validation report for this import.
+   *
+   * Recognised, unknown, missing, duplicated and ignored columns; the profile version
+   * used; parser confidence; every warning and error. Stored with the batch rather
+   * than logged, because the question "why did this import produce so few records"
+   * arrives weeks later and a log line will be gone.
+   *
+   * Nothing silently succeeds: an import with warnings carries them here even when it
+   * completed.
+   */
+  validationReport Json?
+  /** Denormalised from the report so a list of imports can be sorted by it. */
+  parserConfidence Int?
   @@map("inmate_ingestion_batches")
 }
 
@@ -4177,4 +4191,48 @@ model InmateRosterUpload {
   @@index([status, uploadedAt])
   @@index([batchId])
   @@map("inmate_roster_uploads")
+}
+
+/**
+ * An Import Inspection: what a file looked like before anyone decided what to do
+ * with it.
+ *
+ * Inspection analyses a document and writes nothing to the repository — no batch, no
+ * observation, no person. This row is the exception, and it is kept because it is the
+ * record of a file's structure at the moment it arrived. When a mapping later turns out
+ * to have been wrong, the question is what the file actually contained, and an
+ * inspection answers it without re-reading a file that may no longer exist.
+ *
+ * Deliberately not linked to an ingestion batch. Most inspections never become
+ * imports — that is the point of the mode — and a foreign key would imply otherwise.
+ * The sha256 is how an inspection is matched to the import that eventually followed.
+ */
+model InmateImportInspection {
+  inspectionId    String   @id @default(uuid())
+  facility        String
+  filename        String
+  sha256          String
+  sizeBytes       Int
+  /** csv | pdf | unknown */
+  fileKind        String
+
+  /** The profile the file would have been read with, as it stood at inspection time. */
+  profileId       String?
+  profileVersion  Int?
+
+  /** would_import | would_import_with_warnings | would_be_refused */
+  verdict         String
+  /** 0–100. How much of the document the profile understands. */
+  parserConfidence Int
+
+  /** The full report: columns, inferred types, samples, suggestions. */
+  report          Json
+
+  inspectedById   String?
+  inspectedAt     DateTime @default(now())
+
+  @@index([facility, inspectedAt])
+  @@index([sha256])
+  @@index([verdict, inspectedAt])
+  @@map("inmate_import_inspections")
 }

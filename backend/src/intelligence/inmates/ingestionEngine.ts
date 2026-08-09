@@ -91,8 +91,12 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
   // The same file already ingested is a no-op, not a second import. Checked
   // before parsing so re-running a timer costs nothing.
   if (!request.dryRun) {
+    // Scoped to the facility. Identical bytes are the same roster only for the
+    // same facility: a shared regional export, or a mis-filed import being filed
+    // correctly, must still import. Matching on the hash alone made the second
+    // facility's roster silently write nothing and report the first one's batch.
     const previous = await prisma.inmateIngestionBatch.findFirst({
-      where: { sourceSha256, status: 'completed' },
+      where: { sourceSha256, facility: request.facility, status: 'completed' },
       select: { batchId: true, startedAt: true },
     });
     if (previous) {

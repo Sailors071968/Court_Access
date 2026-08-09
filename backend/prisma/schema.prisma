@@ -3132,6 +3132,7 @@ model InmateIngestionBatch {
    * pending | parsing | resolving | completed | failed
    */
   status           String    @default("pending")
+  document InmateSourceDocument? @relation(fields: [documentId], references: [documentId])
   recordsTotal     Int       @default(0)
   recordsNew       Int       @default(0)
   recordsMatched   Int       @default(0)
@@ -3149,6 +3150,13 @@ model InmateIngestionBatch {
    */
   triggeredBy      String    @default("cli")
   ingestedById     String?
+  /** The document this run processed. */
+  documentId       String?
+  /** full_population | incremental — departures can only be inferred from a
+   *  source that lists everyone in custody. */
+  rosterKind       String    @default("full_population")
+  /** Last line committed, so a large import can resume where it stopped. */
+  resumeCursor     Int?
   startedAt        DateTime  @default(now())
   finishedAt       DateTime?
   failureReason    String?
@@ -3204,6 +3212,12 @@ model InmateIngestionRecord {
 
   batch InmateIngestionBatch @relation(fields: [batchId], references: [batchId], onDelete: Cascade)
 
+  /** Where in the source document this row came from. */
+  sourcePage Int?
+  /** text_layer | ocr | csv */
+  extractionMethod String?
+  /** Trust in the extraction itself, distinct from match confidence. */
+  extractionConfidence Int?
   @@index([batchId, resolution])
   @@index([resolvedInmateId])
   @@map("inmate_ingestion_records")
@@ -3331,12 +3345,20 @@ model InmateBooking {
    * would change historical reports every time older data was backfilled.
    */
   isFirstAppearance Boolean   @default(false)
+  /** Current best understanding, updated from observations. */
+  custodyStatus     String    @default("unknown")
+  courtDate         DateTime?
+  /** When any source last described this booking. */
+  lastObservedAt    DateTime?
+  /** Set when a full-population roster stopped listing them. */
+  departedRosterAt  DateTime?
   createdAt         DateTime  @default(now())
 
   inmate      Inmate                @relation(fields: [inmateId], references: [inmateId], onDelete: Cascade)
   sourceBatch InmateIngestionBatch  @relation(fields: [sourceBatchId], references: [batchId])
   charges     InmateBookingCharge[]
 
+  observations InmateBookingObservation[]
   @@index([inmateId, bookedAt])
   @@index([bookedAt])
   @@index([facility, externalBookingId])
@@ -3393,6 +3415,7 @@ model InmateWatchListEntry {
 
   inmate Inmate @relation(fields: [inmateId], references: [inmateId], onDelete: Cascade)
 
+  matches InmateWatchListMatch[]
   @@unique([inmateId, createdById])
   @@index([active])
   @@map("inmate_watch_list_entries")
@@ -3424,4 +3447,286 @@ model InmateAccessLog {
   @@index([action, createdAt])
   @@index([inmateId])
   @@map("inmate_access_logs")
+}
+
+// ============================================================================
+// New Inmate Intelligence System — Phase 1 extension
+//
+// Adds the entities the operational objective needs and the first pass did not
+// have: a facility of its own, the source document as a thing separate from the
+// run that processed it, the confidence analysis as a row rather than a JSON
+// blob, and the three mechanisms the primary deliverable depends on —
+// observations, conflicts and change events.
+//
+// The design rule that produced these three: CSV and PDF are both authoritative
+// and neither replaces the other. So a source does not overwrite a booking. It
+// records what it said (BookingObservation), disagreements between sources are
+// kept (SourceConflict), and differences from the previously known state are
+// kept (ChangeEvent). The booking row holds the current best understanding; the
+// observations are why it says that.
+// ============================================================================
+
+/** A jail. Was a bare string; it owns the column map and the population rules. */
+model InmateFacility {
+  facilityId    String   @id @default(uuid())
+  /** Stable handle used on the command line and in column maps. */
+  code          String   @unique
+  name          String
+  county        String?
+  /** Whether this facility's rosters are a full population snapshot. Departures
+   *  can only be inferred from a source that lists everyone in custody. */
+  rostersAreFullPopulation Boolean @default(true)
+  active        Boolean  @default(true)
+  notes         String?
+  createdAt     DateTime @default(now())
+
+  documents     InmateSourceDocument[]
+
+  @@map("inmate_facilities")
+}
+
+/** The file, as received. Immutable, and separate from the runs that process it:
+ *  a large PDF may be processed more than once, and a resumed import must know
+ *  it is the same document. */
+model InmateSourceDocument {
+  documentId     String   @id @default(uuid())
+  /** SHA-256 of the bytes. The identity of the document. */
+  sha256         String   @unique
+  filename       String
+  byteSize       BigInt
+  /** csv | pdf */
+  mediaType      String
+  facilityCode   String
+  /** The date the roster represents. */
+  rosterDate     DateTime?
+  /** Where the original is kept. Outside the release directory. */
+  storagePath    String?
+  pageCount      Int?
+  /** Per-page character counts. An empty OCR page and a blank page are
+   *  indistinguishable without them. */
+  pageStats      Json?
+  receivedAt     DateTime @default(now())
+  receivedById   String?
+
+  facility       InmateFacility? @relation(fields: [facilityCode], references: [code])
+  batches        InmateIngestionBatch[]
+
+  @@index([facilityCode, rosterDate])
+  @@map("inmate_source_documents")
+}
+
+/** The confidence analysis behind one identity decision, as a row.
+ *
+ *  It was a JSON column on the import record, which is fine to write and useless
+ *  to query: "show me every automatic merge that rested on a date-of-birth typo"
+ *  is a question this system will be asked. */
+model InmateIdentityMatch {
+  matchId          String   @id @default(uuid())
+  importRecordId   String
+  /** The person the row was attached to, or the candidate under review. */
+  inmateId         String?
+  /** exact_booking | exact_identity | near_name | near_dob | none */
+  tier             String
+  confidence       Int
+  /** new_inmate | matched | duplicate | needs_review | failed */
+  outcome          String
+  humanReviewRequired Boolean
+  reviewRationale  String
+  resolverVersion  String
+  /** Weighted signals that contributed. */
+  reasons          Json
+  /** Anything that disagreed, with blocking flags. */
+  conflicts        Json
+  /** Candidates considered and why they lost. */
+  rejectedCandidates Json
+  /** Documents and rows the decision rests on. */
+  sourceDocuments  Json
+  decidedAt        DateTime @default(now())
+
+  @@index([outcome, tier])
+  @@index([inmateId])
+  @@index([importRecordId])
+  @@index([humanReviewRequired, decidedAt])
+  @@map("inmate_identity_matches")
+}
+
+/** A decision a person has to make before the repository changes. */
+model InmateReviewQueueItem {
+  reviewId       String   @id @default(uuid())
+  importRecordId String   @unique
+  matchId        String?
+  batchId        String
+  /** pending | merged | rejected | new_person | dismissed */
+  status         String   @default("pending")
+  /** Why it is here, in a sentence the reviewer reads first. */
+  reason         String
+  confidence     Int
+  candidateInmateId String?
+  resolvedById   String?
+  resolvedAt     DateTime?
+  /** What the reviewer decided and why, in their words. */
+  resolutionNote String?
+  createdAt      DateTime @default(now())
+
+  @@index([status, createdAt])
+  @@index([batchId])
+  @@map("inmate_review_queue")
+}
+
+/** What one source said about one booking, at one time.
+ *
+ *  The unit of evidence for cross-source comparison. Two sources describing the
+ *  same booking produce two observations; neither is discarded. */
+model InmateBookingObservation {
+  observationId  String   @id @default(uuid())
+  bookingId      String
+  batchId        String
+  documentId     String?
+  /** csv | pdf_text | pdf_ocr */
+  sourceType     String
+  /** Where in the document, for evidence. */
+  sourcePage     Int?
+  sourceRow      Int?
+  observedAt     DateTime @default(now())
+  /** The roster date this observation describes, not when it was processed. */
+  rosterDate     DateTime?
+
+  /** The observed attributes. Null means the source did not say, which is not
+   *  the same as the value being absent — hence nullable throughout. */
+  housingLocation String?
+  bailAmountCents BigInt?
+  releasedAt      DateTime?
+  courtDate       DateTime?
+  custodyStatus   String?
+  /** Hash over the normalized charge list, so a charge change is detectable
+   *  without comparing every row. */
+  chargeSetHash   String?
+  chargeCount     Int?
+
+  booking        InmateBooking @relation(fields: [bookingId], references: [bookingId], onDelete: Cascade)
+
+  @@index([bookingId, observedAt])
+  @@index([batchId])
+  @@map("inmate_booking_observations")
+}
+
+/** Two authoritative sources disagreeing about the same fact.
+ *
+ *  Recorded rather than resolved. Where there is no basis for preferring one,
+ *  the resolution is UNKNOWN and stays that way until a human says otherwise. */
+model InmateSourceConflict {
+  conflictId     String   @id @default(uuid())
+  bookingId      String?
+  inmateId       String?
+  /** housing | bail | release_date | court_date | charges | custody_status | identity */
+  field          String
+  /** What each source said. */
+  valueA         String?
+  sourceA        String
+  observationAId String?
+  valueB         String?
+  sourceB        String
+  observationBId String?
+  rosterDate     DateTime?
+  /** unknown | source_a | source_b | resolved_manually */
+  resolution     String   @default("unknown")
+  resolvedById   String?
+  resolvedAt     DateTime?
+  resolutionNote String?
+  detectedAt     DateTime @default(now())
+  batchId        String?
+
+  @@index([resolution, detectedAt])
+  @@index([bookingId])
+  @@index([field])
+  @@map("inmate_source_conflicts")
+}
+
+/** Something materially different from the previously known state.
+ *
+ *  The operational output alongside new inmates: what changed since last time. */
+model InmateChangeEvent {
+  eventId     String   @id @default(uuid())
+  inmateId    String?
+  bookingId   String?
+  batchId     String
+  /** new_inmate | returning_inmate | known_inmate | released | departed_roster |
+   *  housing_change | bail_change | charge_added | charge_removed |
+   *  court_date_change | custody_status_change */
+  changeType  String
+  /** The field that moved, when the change is an attribute change. */
+  field       String?
+  previousValue String?
+  newValue      String?
+  /** Whether this is worth an operator's attention. Not every change is. */
+  material    Boolean  @default(true)
+  /** The observation that revealed it, for evidence. */
+  observationId String?
+  rosterDate  DateTime?
+  detectedAt  DateTime @default(now())
+
+  @@index([batchId, changeType])
+  @@index([inmateId, detectedAt])
+  @@index([changeType, rosterDate])
+  @@map("inmate_change_events")
+}
+
+/** A watched person appearing in a roster. */
+model InmateWatchListMatch {
+  matchId      String   @id @default(uuid())
+  entryId      String
+  inmateId     String
+  bookingId    String?
+  batchId      String
+  /** new_booking | still_in_custody | released | charge_change */
+  matchType    String
+  rosterDate   DateTime?
+  detectedAt   DateTime @default(now())
+  acknowledgedById String?
+  acknowledgedAt   DateTime?
+
+  entry        InmateWatchListEntry @relation(fields: [entryId], references: [entryId], onDelete: Cascade)
+
+  @@index([entryId, detectedAt])
+  @@index([acknowledgedAt])
+  @@map("inmate_watch_list_matches")
+}
+
+/** Something an administrator should see. In-application only: the certified
+ *  configuration has no mail credentials, and a notification that silently fails
+ *  to send is worse than one that does not claim to. */
+model InmateNotification {
+  notificationId String   @id @default(uuid())
+  /** watch_list_hit | review_required | ingestion_failed | source_conflict */
+  kind           String
+  severity       String   @default("info")
+  title          String
+  body           String
+  inmateId       String?
+  batchId        String?
+  referenceId    String?
+  readById       String?
+  readAt         DateTime?
+  createdAt      DateTime @default(now())
+
+  @@index([kind, createdAt])
+  @@index([readAt])
+  @@map("inmate_notifications")
+}
+
+/** A generated intelligence report, kept so a printed list is reproducible
+ *  exactly — including after the underlying data has been corrected. */
+model InmateIntelligenceReport {
+  reportId     String   @id @default(uuid())
+  /** new_inmates | population | changes */
+  reportType   String
+  parameters   Json
+  rowCount     Int
+  /** The rendered report, retained verbatim. */
+  renderedHtml String?
+  generatedById String
+  generatedAt  DateTime @default(now())
+
+  @@index([reportType, generatedAt])
+  @@map("inmate_intelligence_reports")
 }

@@ -178,6 +178,9 @@ export interface IngestionRequest {
   filePath: string;
   facility: string;
   trigger: IngestionTrigger;
+  /** full_population | incremental. Departures can only be inferred from a
+   *  source that lists everyone in custody. */
+  rosterKind?: 'full_population' | 'incremental';
   /** Parse, normalize and resolve, then report without writing. */
   dryRun: boolean;
   rosterDate?: string;
@@ -207,6 +210,11 @@ export interface IngestionCounts {
   duplicates: number;
   needsReview: number;
   failed: number;
+  /** Cross-source disagreements recorded by this run. */
+  conflicts?: number;
+  /** Bookings a full-population roster stopped listing. */
+  departures?: number;
+  watchListHits?: number;
 }
 
 export interface IngestionIssue {

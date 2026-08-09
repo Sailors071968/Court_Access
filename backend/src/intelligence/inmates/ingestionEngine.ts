@@ -28,6 +28,10 @@ import { basename, extname } from 'node:path';
 
 import prisma from '../../lib/prisma.js';
 import { collapseWithinBatch, bookingContentHash } from './deduplication.js';
+import {
+  enqueueForReview, recordBookingChanges, recordDepartures, recordIdentityMatch,
+  recordObservation, recordWatchListMatches, reconcileBatch,
+} from './evidenceRecording.js';
 import { resolveIdentity } from './identityResolution.js';
 import { normalizeRecord } from './normalization.js';
 import { getColumnMap } from './parsers/columnMaps.js';
@@ -35,7 +39,8 @@ import { parseCsvRoster } from './parsers/csvParser.js';
 import { parsePdfRoster } from './parsers/pdfParser.js';
 import type {
   IngestionCounts, IngestionIssue, IngestionOutcome, IngestionRequest,
-  InmateCandidate, NormalizedRecord, ParseResult, ResolutionPreview, SourceDocument,
+  InmateCandidate, NormalizedRecord, ParseResult, ResolutionPreview,
+  ResolutionResult, SourceDocument,
 } from './types.js';
 
 /** Candidate lookup is an index probe on (last, dob); this bounds a pathological
@@ -166,10 +171,34 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
   }
 
   // --- Write -------------------------------------------------------------
-  // One transaction per batch, so a failure leaves no half-imported roster.
+  // The document is recorded before the run that processes it, and separately:
+  // the same file may be processed more than once, and a resumed import has to
+  // know it is the same document.
+  const resolvedSourceType = parsed.stats.ocrUsed ? 'pdf_ocr' : sourceType;
+  const document = await prisma.inmateSourceDocument.upsert({
+    where: { sha256: sourceSha256 },
+    create: {
+      sha256: sourceSha256,
+      filename: basename(request.filePath),
+      byteSize: BigInt(fileStat.size),
+      mediaType: extension === '.pdf' ? 'pdf' : 'csv',
+      facilityCode: request.facility,
+      rosterDate: request.rosterDate ? new Date(request.rosterDate) : null,
+      storagePath: request.filePath,
+      pageCount: parsed.stats.pageCount ?? null,
+      pageStats: (parsed.stats as unknown as object) ?? null,
+      receivedById: request.userId ?? null,
+    },
+    update: { pageStats: (parsed.stats as unknown as object) ?? null },
+    select: { documentId: true },
+  });
+
+  // One transaction per row, so a failure leaves no half-imported booking.
   const batch = await prisma.inmateIngestionBatch.create({
     data: {
-      sourceType: parsed.stats.ocrUsed ? 'pdf_ocr' : sourceType,
+      sourceType: resolvedSourceType,
+      documentId: document.documentId,
+      rosterKind: request.rosterKind ?? 'full_population',
       sourceFilename: basename(request.filePath),
       sourceSha256,
       facility: request.facility,
@@ -182,20 +211,65 @@ export async function runIngestion(request: IngestionRequest): Promise<Ingestion
     },
   });
 
-  const document: SourceDocument = {
+  const sourceDoc: SourceDocument = {
     batchId: batch.batchId,
     filename: basename(request.filePath),
     sha256: sourceSha256,
-    sourceType,
+    sourceType: resolvedSourceType,
     rosterDate: request.rosterDate,
   };
 
+  const observedBookingIds = new Set<string>();
+  const bookingsByInmate = new Map<string, string>();
+  const rosterDate = request.rosterDate ? new Date(request.rosterDate) : null;
+
   try {
     for (const entry of collapsed) {
-      const result = await resolveOne(entry.record, entry.lineNumber, { ...document, lineNumber: entry.lineNumber });
+      const result = await resolveOne(entry.record, entry.lineNumber, { ...sourceDoc, lineNumber: entry.lineNumber });
       tally(counts, result.outcome);
-      await persist(batch.batchId, entry.record, entry.lineNumber, result, parsed.records);
+      const written = await persist({
+        batchId: batch.batchId,
+        documentId: document.documentId,
+        sourceType: resolvedSourceType,
+        rosterDate,
+        record: entry.record,
+        lineNumber: entry.lineNumber,
+        result,
+        rawRows: parsed.records,
+      });
+      if (written.bookingId) observedBookingIds.add(written.bookingId);
+      if (written.inmateId && written.bookingId) bookingsByInmate.set(written.inmateId, written.bookingId);
+      // Resumability: the last line committed, so a large import can restart
+      // where it stopped instead of from the beginning.
+      await prisma.inmateIngestionBatch.update({
+        where: { batchId: batch.batchId },
+        data: { resumeCursor: entry.lineNumber },
+      });
     }
+
+    // Cross-source comparison, departures and watch-list hits are batch-level:
+    // a conflict needs both sides, and the other source may have been ingested
+    // hours earlier.
+    const conflictCount = await reconcileBatch(prisma, {
+      batchId: batch.batchId,
+      bookingIds: [...observedBookingIds],
+      rosterDate,
+    });
+    const departureCount = await recordDepartures(prisma, {
+      batchId: batch.batchId,
+      facility: request.facility,
+      observedBookingIds,
+      rosterDate,
+      rosterIsFullPopulation: (request.rosterKind ?? 'full_population') === 'full_population',
+    });
+    const watchListCount = await recordWatchListMatches(prisma, {
+      batchId: batch.batchId,
+      bookingsByInmate,
+      rosterDate,
+    });
+    counts.conflicts = conflictCount;
+    counts.departures = departureCount;
+    counts.watchListHits = watchListCount;
 
     await prisma.inmateIngestionBatch.update({
       where: { batchId: batch.batchId },
@@ -270,15 +344,27 @@ async function resolveOne(record: NormalizedRecord, lineNumber: number, document
   });
 }
 
-/** Write the record, and the person and booking when the decision allows it. */
-async function persist(
-  batchId: string,
-  record: NormalizedRecord,
-  lineNumber: number,
-  result: Awaited<ReturnType<typeof resolveOne>>,
-  rawRows: { __lineNumber?: string }[],
-): Promise<void> {
-  const raw = rawRows.find((r) => Number(r.__lineNumber ?? -1) === lineNumber) ?? {};
+/**
+ * Write the record, and the person and booking when the decision allows it.
+ *
+ * Returns what it wrote, because the batch-level passes — cross-source
+ * reconciliation, departures, watch-list hits — need to know which bookings this
+ * run actually observed.
+ */
+async function persist(args: {
+  batchId: string;
+  documentId: string;
+  sourceType: string;
+  rosterDate: Date | null;
+  record: NormalizedRecord;
+  lineNumber: number;
+  result: ResolutionResult;
+  rawRows: { __lineNumber?: string }[];
+}): Promise<{ inmateId: string | null; bookingId: string | null }> {
+  const { batchId, record, lineNumber, result } = args;
+  const raw = args.rawRows.find((r) => Number(r.__lineNumber ?? -1) === lineNumber) ?? {};
+  let writtenInmateId: string | null = null;
+  let writtenBookingId: string | null = null;
 
   await prisma.$transaction(async (tx) => {
     const ingestionRecord = await tx.inmateIngestionRecord.create({
@@ -292,12 +378,64 @@ async function persist(
         confidence: result.evidence.confidence,
         matchTier: result.evidence.tier,
         matchEvidence: result.evidence as unknown as object,
+        sourcePage: result.evidence.sourceDocuments[0]?.lineNumber ? null : null,
+        extractionMethod: args.sourceType === 'csv' ? 'csv'
+          : args.sourceType === 'pdf_ocr' ? 'ocr' : 'text_layer',
+        // OCR is a transcription of an image and can misread characters, so the
+        // extraction is trusted less than a machine-written export. This is
+        // separate from match confidence: a perfectly confident match on a badly
+        // transcribed row is still a badly transcribed row.
+        extractionConfidence: args.sourceType === 'pdf_ocr' ? 70 : 100,
       },
     });
 
-    // A duplicate booking is already held, and a row needing review must not
-    // change the repository before a person has looked at it.
-    if (result.outcome === 'duplicate' || result.outcome === 'needs_review' || result.outcome === 'failed') return;
+    // The confidence analysis, as a queryable row as well as JSON above.
+    const matchId = await recordIdentityMatch(tx, ingestionRecord.recordId, result);
+
+    // A row needing review must not change the repository before a person has
+    // looked at it, and a duplicate is already held.
+    if (result.outcome === 'needs_review') {
+      await enqueueForReview(tx, { importRecordId: ingestionRecord.recordId, matchId, batchId, result });
+      return;
+    }
+    if (result.outcome === 'duplicate') {
+      // Still an observation: the same booking seen again is evidence that the
+      // jail is still listing it, which is how a departure is distinguished from
+      // a gap in the sources.
+      const existing = await tx.inmateBooking.findUnique({
+        where: { contentHash: bookingContentHash(record) },
+        select: { bookingId: true, inmateId: true },
+      });
+      if (existing) {
+        const { observationId, attributes } = await recordObservation(tx, {
+          bookingId: existing.bookingId,
+          batchId,
+          documentId: args.documentId,
+          sourceType: args.sourceType,
+          sourcePage: null,
+          sourceRow: lineNumber,
+          rosterDate: args.rosterDate,
+          record,
+        });
+        await recordBookingChanges(tx, {
+          batchId,
+          inmateId: existing.inmateId,
+          bookingId: existing.bookingId,
+          observationId,
+          rosterDate: args.rosterDate,
+          attributes,
+          isNewBooking: false,
+        });
+        await tx.inmateBooking.update({
+          where: { bookingId: existing.bookingId },
+          data: { lastObservedAt: new Date() },
+        });
+        writtenInmateId = existing.inmateId;
+        writtenBookingId = existing.bookingId;
+      }
+      return;
+    }
+    if (result.outcome === 'failed') return;
 
     let inmateId = result.inmateId;
     let isFirstAppearance = false;
@@ -343,6 +481,8 @@ async function persist(
         sourceBatchId: batchId,
         sourceRecordId: ingestionRecord.recordId,
         isFirstAppearance,
+        custodyStatus: record.releasedAt ? 'released' : 'in_custody',
+        lastObservedAt: new Date(),
         charges: {
           create: record.charges.map((c) => ({
             statuteCode: c.statuteCode ?? null,
@@ -362,14 +502,34 @@ async function persist(
       data: { bookingId: booking.bookingId },
     });
 
+    const { observationId, attributes } = await recordObservation(tx, {
+      bookingId: booking.bookingId,
+      batchId,
+      documentId: args.documentId,
+      sourceType: args.sourceType,
+      sourcePage: null,
+      sourceRow: lineNumber,
+      rosterDate: args.rosterDate,
+      record,
+    });
+
+    await recordBookingChanges(tx, {
+      batchId,
+      inmateId,
+      bookingId: booking.bookingId,
+      observationId,
+      rosterDate: args.rosterDate,
+      attributes,
+      isNewBooking: true,
+    });
+
     // Every spelling ever seen, so a search by any of them finds the person.
     //
     // Deliberately findFirst-then-write rather than upsert. The natural key
     // includes middle name and date of birth, both nullable, and in PostgreSQL
     // two NULLs are distinct — so a unique constraint over them never fires and
     // an upsert would insert a new alias row on every roster for anyone missing
-    // a middle name. The constraint stays for the fully-populated case; this is
-    // what makes the partially-populated case correct.
+    // a middle name.
     const aliasDob = record.dateOfBirth ? new Date(record.dateOfBirth) : null;
     const existingAlias = await tx.inmateAlias.findFirst({
       where: {
@@ -411,7 +571,12 @@ async function persist(
         identityConfidence: Math.min(result.evidence.confidence, 100),
       },
     });
+
+    writtenInmateId = inmateId;
+    writtenBookingId = booking.bookingId;
   });
+
+  return { inmateId: writtenInmateId, bookingId: writtenBookingId };
 }
 
 // ---------------------------------------------------------------------------

@@ -33,11 +33,12 @@ program
   .requiredOption('-f, --file <path>', 'roster file (.csv or .pdf)')
   .requiredOption('-c, --facility <id>', 'facility identifier, selecting the column map')
   .option('--roster-date <date>', 'the date the roster represents (ISO)')
+  .option('--roster-kind <kind>', 'full_population | incremental — departures can only be inferred from a full roster', 'full_population')
   .option('--dry-run', 'parse, normalize and resolve without writing', false)
   .option('--trigger <origin>', 'manual | cli | timer | queue', 'cli')
   .option('--json', 'emit the outcome as JSON', false)
   .action(async (options: {
-    file: string; facility: string; rosterDate?: string;
+    file: string; facility: string; rosterDate?: string; rosterKind?: string;
     dryRun: boolean; trigger: string; json: boolean;
   }) => {
     const outcome = await runIngestion({
@@ -47,6 +48,7 @@ program
         ? options.trigger : 'cli') as IngestionTrigger,
       dryRun: options.dryRun,
       rosterDate: options.rosterDate,
+      rosterKind: options.rosterKind === 'incremental' ? 'incremental' : 'full_population',
     });
 
     if (options.json) {

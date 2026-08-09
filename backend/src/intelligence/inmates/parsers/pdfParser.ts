@@ -101,15 +101,28 @@ export async function parsePdfRoster(
   };
 }
 
-/** Per-page text via pdf-parse. Imported lazily so a CSV-only run does not pay for it. */
+/**
+ * Per-page text via pdf-parse. Imported lazily so a CSV-only run does not pay
+ * for it.
+ *
+ * pdf-parse v2 exports a `PDFParse` class and returns text per page. An earlier
+ * version of this function assumed the v1 `default(buffer)` signature, which
+ * type-checks against `unknown` and fails only when a PDF is actually ingested —
+ * found by putting a real PDF through it.
+ */
 async function extractTextLayer(buffer: Buffer): Promise<string[]> {
-  const mod = await import('pdf-parse');
-  const pdfParse = (mod as unknown as { default: (b: Buffer) => Promise<{ text: string; numpages: number }> }).default
-    ?? (mod as unknown as (b: Buffer) => Promise<{ text: string; numpages: number }>);
-  const result = await pdfParse(buffer);
-  // pdf-parse returns one string; form feeds delimit pages when present.
-  const pages = result.text.split('\f');
-  return pages.length > 1 ? pages : [result.text];
+  const { PDFParse } = await import('pdf-parse');
+  const parser = new PDFParse({ data: new Uint8Array(buffer) });
+  try {
+    const result = await parser.getText();
+    const pages = (result.pages ?? []).map((p: { text?: string }) => p.text ?? '');
+    if (pages.length > 0) return pages;
+    return result.text ? [result.text] : [];
+  } finally {
+    // Releases the worker. Without it the process keeps an open handle and a CLI
+    // run does not exit.
+    await parser.destroy();
+  }
 }
 
 /**

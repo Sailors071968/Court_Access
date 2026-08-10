@@ -15,7 +15,7 @@
 | Were the SACJAILSCAN PDFs imported into the repository? | **No** — Import Inspection only |
 | Can the PDF parser extract inmate rows from these files today? | **No** — 0 columns recognized (45% on 08/09 & truncated 08/10; 75% on compressed 08/10) |
 | Durable PDF bytes on EC2 after inspect? | **No** — confirmed absent from `/var/lib/courtaccess/niis-uploads` and inspect tmp |
-| Is the compressed 08/10 PDF a complete daily roster? | **Unconfirmed** — 59 pages vs 87 on 08/09; roster date not in stored sample lines |
+| Is the compressed 08/10 PDF a complete daily roster? | **Yes (admin confirmed)** — 59 pp vs 87 pp is spacing (08/10 single-spaced rows, 08/09 double-spaced), not truncation |
 | Production “new inmates” count | **10** (sample-fixture people only — not any of the 67) |
 | Feature work status | **Stopped.** No fixes implemented. |
 
@@ -60,7 +60,7 @@ These were uploaded through **Import Inspection** (analysis only — **nothing w
 
 **Finding R-10 (inspection does not retain PDF bytes):** Import Inspection stages the file under a temp directory and deletes it after analysis. EC2 search after inspect found **no** durable copy of either SACJAILSCAN PDF on disk. Therefore a full offline match of the 67 names against complete extracted text **cannot** be completed from the inspection alone — only the DB inspection report (40 sample lines) remains. To finish the audit, the PDFs must be uploaded through a path that **persists** files (NIIS **Upload Files** / Import Jobs that finish uploading), or re-attached to the agent by another durable channel.
 
-**Finding R-11 (08/09 vs 08/10 page-count asymmetry):** 08/09 inspection = **87** pages; 08/10 compressed = **59** pages. That may be a real population change or an incomplete 08/10 export — needs administrator confirmation once durable files exist.
+**Finding R-11 (08/09 vs 08/10 page-count asymmetry — resolved):** 08/09 = **87** pages; 08/10 compressed = **59** pages. **Administrator confirmed both are complete.** Difference is layout spacing: 08/10 uses **single-spaced** rows; 08/09 uses **double-spaced** rows. Page-count asymmetry is **not** an incompleteness signal.
 
 ### 2.3 Sample fixtures still in git (not the ground-truth pair)
 
@@ -233,7 +233,7 @@ PDF parsed → CSV parsed → Normalized → Identity candidates → Merged
 | Change detection (these files) | 0 | 0 | 0 | Never imported |
 | Report generation (these 67) | 0 | 0 | 0 | Never classified as new |
 | Full-text match of 67 names | — | 0/67 on local fixture only | **not run** | Target PDF bytes unavailable |
-| **Disappearances** | — | — | — | All 67 lost at **parser/profile + non-persist inspect**; 08/10 completeness unconfirmed |
+| **Disappearances** | — | — | — | All 67 lost at **parser/profile + non-persist inspect** (08/10 page count confirmed complete) |
 
 ### 5.3 Counts — production morning snapshot (contaminated)
 
@@ -376,7 +376,7 @@ Scores are **evidence grades**, not production accuracy claims against the 67. S
 | RC-6 | **Sample fixtures documented as non-final** | Success on samples does not prove county headers |
 | RC-7 | **Sacramento PDF profile expects wrong layout** | Real roster is multi-line Name/XREF/Housing; v1 profile expects single-line BOOKING/NAME… → 0 columns |
 | RC-8 | **Import Inspection ≠ Import** | Analysis path did not ingest; stuck Import Jobs never received bytes (08/09 nginx 504) |
-| RC-9 | **08/10 file integrity / completeness** | Truncated upload was wrong date (1 pp / 08/09 header). Compressed replacement is 59 pp vs 87 on 08/09 — completeness unconfirmed |
+| RC-9 | **08/10 truncated upload was bad; compressed replacement is complete** | Truncated 345 KB upload was wrong (1 pp / 08/09 header). Compressed **59 pp** is the full 08/10 roster (admin confirmed; fewer pages than 08/09’s **87** because 08/10 is single-spaced vs 08/09 double-spaced) |
 | RC-10 | **Inspect temp deleted after analysis** | EC2 confirmed: no matching SHA/size under `niis-uploads`; only DB inspection metadata remains |
 
 ---
@@ -385,7 +385,7 @@ Scores are **evidence grades**, not production accuracy claims against the 67. S
 
 1. **C-1 Re-provide durable PDFs (blocker)**  
    - Place complete `SACJAILSCAN08-09-2026.pdf` and `SACJAILSCAN08-10-2026 (1)_compressed.pdf` (or full 08/10) onto the agent under `/tmp/sacjail/` **or** upload via NIIS **Upload Files** so bytes persist under `/var/lib/courtaccess/niis-uploads`.  
-   - Confirm 08/10 roster header date is **08/10/2026** and the file is complete (59 vs 87 pages).  
+   - Page counts confirmed complete (59 vs 87 = single vs double spacing). Still need durable file bytes + roster header date visible in full extract.  
    - Optional: Sacramento CSV exports for both dates; DOB / booking # / X-Ref for the 67 if available.
 
 2. **C-2 Isolate a clean validation environment**  
@@ -423,10 +423,9 @@ Scores are **evidence grades**, not production accuracy claims against the 67. S
 
 Ground-truth **67 names are in hand**. Production disk search confirmed both SACJAILSCAN PDFs are **gone** after Import Inspection. Remaining unblocks before any fix work:
 
-1. **Re-attach durable copies** of `SACJAILSCAN08-09-2026.pdf` and the full 08/10 roster (compressed or original) — prefer NIIS **Upload Files** (persist) over Inspect-only, or drop onto the agent at `/tmp/sacjail/`.  
-2. Confirm the 08/10 file is dated **08/10/2026** and is complete (page count vs 08/09).  
-3. If available, Sacramento **CSV** exports for both dates.  
-4. Confirm OK to wipe/use a **clean validation DB** before any ingest attempt.  
-5. After durable files exist: extract text → match all 67 → only then consider controlled import — **still no feature/parser code changes until you approve the root-cause package**.
+1. **Re-attach durable copies** of `SACJAILSCAN08-09-2026.pdf` (87 pp) and `SACJAILSCAN08-10-2026 (1)_compressed.pdf` (59 pp) — prefer NIIS **Upload Files** (persist) over Inspect-only, or drop onto the agent at `/tmp/sacjail/`. Page counts are confirmed complete (single- vs double-spaced rows).  
+2. If available, Sacramento **CSV** exports for both dates.  
+3. Confirm OK to wipe/use a **clean validation DB** before any ingest attempt.  
+4. After durable files exist: extract text → match all 67 → only then consider controlled import — **still no feature/parser code changes until you approve the root-cause package**.
 
 **No NIIS feature development** under this directive until corrections are approved.

@@ -11,7 +11,7 @@
 import prisma from '../src/lib/prisma.js';
 import { NORMALIZATION_VERSION } from '../src/intelligence/inmates/normalization.js';
 import { SACRAMENTO_PROFILES } from '../src/intelligence/inmates/parsers/sacramento.js';
-import { listProfiles, publishProfile } from '../src/intelligence/platform/parserProfiles.js';
+import { listProfiles, normaliseEffectiveWindows, publishProfile } from '../src/intelligence/platform/parserProfiles.js';
 
 const FACILITY = 'sacramento';
 
@@ -30,6 +30,14 @@ const facility = await prisma.inmateFacility.upsert({
   update: { active: true, name: 'Sacramento County Main Jail', county: 'Sacramento' },
 });
 console.log(`facility: ${facility.code} (${facility.name})`);
+
+// Repair any effective window written before they were day-granular. A version
+// published at 22:41 used to leave that whole day uncovered, so a roster dated in the
+// gap imported under the compiled-in map. Idempotent.
+const repair = await normaliseEffectiveWindows();
+if (repair.repaired > 0) {
+  console.log(`windows: normalised ${repair.repaired} of ${repair.examined} effective window(s) to day boundaries`);
+}
 
 const existing = await listProfiles(FACILITY);
 

@@ -227,7 +227,14 @@ version.
 
 The first was found only by demonstrating the loop in a browser rather than by script,
 because the demo did the realistic thing: published a profile, then imported that same
-day's roster.
+day's roster. Sixty-five scripted checks had not touched that path. Effective windows
+are day-granular throughout now, with a verify step that publishes mid-day and resolves
+that day's roster, and an idempotent repair (`normaliseEffectiveWindows`) on Sacramento
+seed so any pre-fix window left in a database is closed on deploy.
+
+The inspection-loop recording ends on that import failure. It was left that way rather
+than re-recorded clean, because it is the honest artifact — that is how the defect was
+found.
 
 ## Priorities 4–10
 

@@ -196,6 +196,55 @@ export async function publishProfile(args: {
   });
 }
 
+/**
+ * Normalise existing effective windows to day boundaries.
+ *
+ * Idempotent, and safe to run on every deploy. It repairs rows written before windows
+ * were day-granular: publishing at 22:41 set the previous version's `effectiveTo` to
+ * 22:41 the day before and the new version's `effectiveFrom` to 22:41 that day, leaving
+ * the whole of the intervening day uncovered. A roster dated in that gap matched no
+ * profile and imported under the compiled-in map instead.
+ *
+ * Only the boundaries move, and only to the day the publisher chose — the intent was
+ * always "this version applies from this day", and a timestamp was an artefact of when
+ * the button was pressed. No mapping changes, so nothing about how a document was read
+ * is altered.
+ */
+export async function normaliseEffectiveWindows(): Promise<{ examined: number; repaired: number }> {
+  const profiles = await prisma.inmateParserProfile.findMany({
+    orderBy: [{ facility: 'asc' }, { sourceType: 'asc' }, { version: 'asc' }],
+    select: { profileId: true, effectiveFrom: true, effectiveTo: true },
+  });
+
+  let repaired = 0;
+  for (const profile of profiles) {
+    const data: { effectiveFrom?: Date; effectiveTo?: Date } = {};
+
+    if (profile.effectiveFrom && !isStartOfUtcDay(profile.effectiveFrom)) {
+      data.effectiveFrom = startOfUtcDay(profile.effectiveFrom);
+    }
+    // The last instant of a day, so consecutive windows meet without a gap.
+    if (profile.effectiveTo && !isEndOfUtcDay(profile.effectiveTo)) {
+      data.effectiveTo = new Date(startOfUtcDay(profile.effectiveTo).getTime() + 86_400_000 - 1);
+    }
+
+    if (Object.keys(data).length > 0) {
+      await prisma.inmateParserProfile.update({ where: { profileId: profile.profileId }, data });
+      repaired += 1;
+    }
+  }
+
+  return { examined: profiles.length, repaired };
+}
+
+function isStartOfUtcDay(date: Date): boolean {
+  return date.getTime() === startOfUtcDay(date).getTime();
+}
+
+function isEndOfUtcDay(date: Date): boolean {
+  return date.getTime() === startOfUtcDay(date).getTime() + 86_400_000 - 1;
+}
+
 export async function listProfiles(facility?: string) {
   const profiles = await prisma.inmateParserProfile.findMany({
     where: facility ? { facility } : {},

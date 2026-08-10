@@ -1,7 +1,7 @@
 # NIIS Reliability Assessment — Phase 1 Validation Audit
 
-**Status:** BLOCKED — cannot score accuracy against the administrator ground truth of **67 newly booked inmates**.  
-**Date of audit:** 2026-08-10  
+**Status:** BLOCKED on full 67-row scoring — real PDFs are now visible via Import Inspection, but they have **not been imported into the repository**, and the **67-name list is still outstanding**.  
+**Date of audit:** 2026-08-10 (updated after SACJAILSCAN Import Inspection)  
 **Directive:** Stop feature development until core new-inmate detection is validated against known ground truth. **No code fixes are implemented in this deliverable.**
 
 ---
@@ -28,9 +28,30 @@
 |---|---|
 | Prior roster date | 2026-08-09 |
 | Current roster date | 2026-08-10 |
-| Ground-truth newly booked | **67** |
+| Ground-truth newly booked | **67** (human visual comparison of the two PDFs) |
+| Prior file name | `SACJAILSCAN08-09-2026.pdf` |
+| Current file name | `SACJAILSCAN08-10-2026.pdf` |
 
-### 2.2 Available in workspace
+### 2.2 Real county PDFs — Import Inspection (production, 2026-08-10)
+
+These were uploaded through **Import Inspection** (analysis only — **nothing written to the inmate repository**). Fingerprints match the stuck Import Jobs that never received bytes.
+
+| File | Inspection ID | Size | Pages | Text layer | OCR used | Verdict | Parser confidence |
+|---|---|---:|---:|---|---|---|---:|
+| `SACJAILSCAN08-09-2026.pdf` | `74087247-dd79-4d6f-bc8d-f976ab1bc48b` | 27.6 MB | **87** | yes | no | would_import_with_warnings | **45%** |
+| `SACJAILSCAN08-10-2026.pdf` | `4de36a2a-a26a-490d-acf8-09c90164dd28` | 345 KB | **1** | yes | no | would_import_with_warnings | **45%** |
+
+**Inspection structural findings (both files):**
+- `columns: []` — **zero columns recognized** against the published Sacramento PDF profile (expects BOOKING, NAME, DOB, SEX, BOOKED, HOUSING, CHARGES, BAIL).
+- Layout is **multi-line per inmate** (Name / XREF / Housing / Classification / Gender / DOB on separate lines). Compatibility reason: *“No line carries both a date and a name…”*
+- Sample text on **08/09** includes visitor-instruction pages plus “Active Inmate Basic Roster **08/09/2026**” (garbled tokens like `Of=FICE`, `Classlflcatlon`).
+- Sample text on the file named **08/10** shows roster header date **`08/09/2026 06:20`** and only **1 page** — **file-identity risk: this may not be a full 08/10 roster** (size/page count vs 87-page prior is inconsistent with a same-format daily roster).
+
+**Finding R-07 (parser / profile):** Real Sacramento PDF layout does not match the v1 PDF profile. Import Inspection correctly warns at 45% confidence; a successful “Would import with warnings” is **not** evidence that 67 new inmates can be extracted.
+
+**Finding R-08 (08/10 file integrity):** Before scoring the 67, confirm `SACJAILSCAN08-10-2026.pdf` is the complete 08/10 Active Inmate Basic Roster (expected: multi-page, date line 08/10/2026). Current inspection text says **08/09/2026** on a **1-page** file.
+
+### 2.3 Sample fixtures still in git (not the ground-truth pair)
 
 | File | Rows (excl. header) | Role |
 |---|---:|---|
@@ -317,10 +338,12 @@ Scores are **evidence grades**, not production accuracy claims against the 67. S
 
 ## 14. Immediate ask to the administrator
 
-To un-block Phase 1 validation, provide:
+PDFs are on production via Import Inspection. To un-block Phase 1 scoring:
 
-1. Sacramento County jail roster files for **08/09/2026** and **08/10/2026** (CSV required; PDF if that is an operational source).  
-2. The authoritative list of the **67** newly booked inmates.  
-3. Confirmation whether validation may use a **wiped/staging** NIIS database (recommended: yes).
+1. **Confirm** `SACJAILSCAN08-10-2026.pdf` is the full 08/10 roster (inspection currently shows date **08/09/2026** and **1 page**). Re-upload the correct file if needed.  
+2. Provide the authoritative list of the **67** newly booked names (booking # / DOB if available).  
+3. Prefer a **Sacramento CSV export** for the same two dates if the Sheriff provides one — PDF multi-line layout is already failing profile match at 45% confidence.  
+4. Confirm OK to use a **wiped/staging** NIIS database before any import of these files (production is still polluted by acceptance clones).  
+5. Complete Import Jobs upload **only after** parser/profile fitness is accepted — inspection alone does not ingest.
 
-Until those arrive, **no NIIS feature development** should proceed under this directive.
+Until the 67 list and a verified 08/10 file are in hand, **no NIIS feature development** should proceed under this directive.

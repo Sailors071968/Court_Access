@@ -41,7 +41,8 @@ These were uploaded through **Import Inspection** (analysis only — **nothing w
 | File | Inspection ID | Size | Pages | Text layer | OCR used | Verdict | Parser confidence |
 |---|---|---:|---:|---|---|---|---:|
 | `SACJAILSCAN08-09-2026.pdf` | `74087247-dd79-4d6f-bc8d-f976ab1bc48b` | 27.6 MB | **87** | yes | no | would_import_with_warnings | **45%** |
-| `SACJAILSCAN08-10-2026.pdf` | `4de36a2a-a26a-490d-acf8-09c90164dd28` | 345 KB | **1** | yes | no | would_import_with_warnings | **45%** |
+| `SACJAILSCAN08-10-2026.pdf` *(truncated fragment)* | `4de36a2a-a26a-490d-acf8-09c90164dd28` | 345 KB | **1** | yes | no | would_import_with_warnings | **45%** |
+| `SACJAILSCAN08-10-2026 (1)_compressed.pdf` *(replacement)* | `a49ccf06-bb58-4003-aaa2-2f59bc6e7d16` | **4.3 MB** | **59** | yes | no | **would_import** | **75%** |
 
 **Inspection structural findings (both files):**
 - `columns: []` — **zero columns recognized** against the published Sacramento PDF profile (expects BOOKING, NAME, DOB, SEX, BOOKED, HOUSING, CHARGES, BAIL).
@@ -51,15 +52,14 @@ These were uploaded through **Import Inspection** (analysis only — **nothing w
 
 **Finding R-07 (parser / profile):** Real Sacramento PDF layout does not match the v1 PDF profile. Import Inspection correctly warns at 45% confidence; a successful “Would import with warnings” is **not** evidence that 67 new inmates can be extracted.
 
-**Finding R-08 (08/10 file integrity) — CONFIRMED:** Administrator re-attached `SACJAILSCAN08-10-2026.pdf` to the agent (saved under `fixtures/sacramento/real/`). SHA-256 **`47f0955b913e0edf…`** is **identical** to the Import Inspection file. Local extract shows:
+**Finding R-08 (08/10 file integrity):**
 
-- **1 page** only  
-- Header: `Active Inmate Basic Roster **08/09/2026** 06:20` (not 08/10)  
-- Footer: `Page **2 of 86**`  
-- Names begin at ALFARO… (ALDANA absent)  
-- **0 / 67** ground-truth names appear on this fragment  
+1. **Truncated upload (superseded):** `SACJAILSCAN08-10-2026.pdf` (345 KB) — SHA `47f0955b913e0edf…` — **1 page**, header **08/09/2026**, footer “Page 2 of 86”, **0/67** names. Not a valid 08/10 roster.
+2. **Replacement upload (current):** `SACJAILSCAN08-10-2026 (1)_compressed.pdf` — inspection `a49ccf06-bb58-4003-aaa2-2f59bc6e7d16` — **4.3 MB, 59 pages**, verdict **would_import**, confidence **75%**, text layer present, ~14,351 lines sampled. Still **`columns: []` / 0 recognized columns** against the Sacramento PDF profile. Sample lines show visitor-instruction pages plus “Active Inmate Basic Roster” / Name / XREF headers (multi-line layout).
 
-This is a **single-page export of page 2 of an 86-page roster dated 08/09**, not a complete 08/10 daily roster.
+**Finding R-10 (inspection does not retain PDF bytes):** Import Inspection stages the file under a temp directory and deletes it after analysis. EC2 search after inspect found **no** durable copy of either SACJAILSCAN PDF on disk. Therefore a full offline match of the 67 names against complete extracted text **cannot** be completed from the inspection alone — only the DB inspection report (40 sample lines) remains. To finish the audit, the PDFs must be uploaded through a path that **persists** files (NIIS **Upload Files** / Import Jobs that finish uploading), or re-attached to the agent by another durable channel.
+
+**Finding R-11 (08/09 vs 08/10 page-count asymmetry):** 08/09 inspection = **87** pages; 08/10 compressed = **59** pages. That may be a real population change or an incomplete 08/10 export — needs administrator confirmation once durable files exist.
 
 ### 2.3 Sample fixtures still in git (not the ground-truth pair)
 

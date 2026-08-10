@@ -22,11 +22,13 @@ export function UploadFiles() {
   const fileInput = useRef<HTMLInputElement>(null);
 
   const [uploads, setUploads] = useState<RosterUpload[]>([]);
+  const [waitingCount, setWaitingCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [notice, setNotice] = useState<string | null>(null);
   const [rejections, setRejections] = useState<{ filename: string; reason: string }[]>([]);
   const [uploading, setUploading] = useState(false);
+  const [uploadProgress, setUploadProgress] = useState<string | null>(null);
   const [processing, setProcessing] = useState(false);
   const [rosterDate, setRosterDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [dragging, setDragging] = useState(false);
@@ -34,8 +36,14 @@ export function UploadFiles() {
   const load = useCallback(async (showSpinner: boolean) => {
     if (showSpinner) setLoading(true);
     try {
-      const result = await intelligenceApi.listUploads({ limit: 50 });
+      // List page shows recent files; separately count everything still waiting so
+      // Process Import is not greyed out when waiting rows fall outside the first page.
+      const [result, waitingPage] = await Promise.all([
+        intelligenceApi.listUploads({ limit: 100 }),
+        intelligenceApi.listUploads({ limit: 1, status: 'uploaded' }),
+      ]);
       setUploads(result.uploads);
+      setWaitingCount(waitingPage.total);
       setError(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'The uploads could not be loaded.');
@@ -60,17 +68,27 @@ export function UploadFiles() {
   const send = async (files: File[]) => {
     if (files.length === 0) return;
     setUploading(true);
+    setUploadProgress(files.length > 25 ? `Uploading 0 of ${files.length}…` : null);
     setNotice(null);
     setRejections([]);
     setError(null);
     try {
-      const result = await intelligenceApi.upload(files, { facility: 'sacramento', rosterDate });
+      const result = await intelligenceApi.upload(files, {
+        facility: 'sacramento',
+        rosterDate,
+        onChunk: (done, total) => {
+          setUploadProgress(total > 25 ? `Uploading ${done} of ${total}…` : null);
+        },
+      });
       setRejections(result.rejected);
 
       const duplicates = result.accepted.filter((a) => a.duplicateOf);
       const parts: string[] = [];
       if (result.accepted.length > 0) {
         parts.push(`${result.accepted.length} file${result.accepted.length === 1 ? '' : 's'} stored.`);
+        parts.push('Process Import is enabled for files still in “uploaded” status.');
+      } else {
+        parts.push('No files were stored.');
       }
       if (duplicates.length > 0) {
         // Worth saying rather than hiding: re-uploading the same bytes is usually a
@@ -80,12 +98,15 @@ export function UploadFiles() {
           `${duplicates.length} of them ${duplicates.length === 1 ? 'has' : 'have'} identical content to a file already uploaded, so processing will report no new records.`,
         );
       }
-      setNotice(parts.join(' ') || null);
+      setNotice(parts.join(' '));
       await load(false);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'The upload failed.');
+      // Refresh anyway — earlier chunks may have landed before the failure.
+      await load(false);
     } finally {
       setUploading(false);
+      setUploadProgress(null);
       if (fileInput.current) fileInput.current.value = '';
     }
   };
@@ -192,7 +213,9 @@ export function UploadFiles() {
         >
           <Upload className="mx-auto h-6 w-6 text-gray-400" />
           <p className="mt-2 text-sm font-medium text-gray-700">Drop the CSV and PDF here</p>
-          <p className="mt-1 text-xs text-gray-500">Or choose them. Both can be uploaded at once.</p>
+          <p className="mt-1 text-xs text-gray-500">
+            Or choose them. Large folders are uploaded in batches of 25 so the request is not rejected.
+          </p>
           <input
             ref={fileInput}
             type="file"
@@ -204,9 +227,16 @@ export function UploadFiles() {
           />
           <div className="mt-4">
             <Button variant="secondary" onClick={() => fileInput.current?.click()} disabled={uploading}>
-              {uploading ? 'Uploading…' : 'Choose files'}
+              {uploading ? (uploadProgress ?? 'Uploading…') : 'Choose files'}
             </Button>
           </div>
+          {waiting.length === 0 && !uploading ? (
+            <p className="mt-3 text-xs text-gray-500">
+              Process Import stays disabled until at least one file reaches status “uploaded”.
+              If a large drop never appears in the list, the browser request was rejected before storage —
+              try again after a refresh; bulk uploads are now chunked.
+            </p>
+          ) : null}
         </div>
       </Panel>
 

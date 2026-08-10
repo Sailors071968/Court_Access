@@ -613,37 +613,84 @@ export const intelligenceApi = {
    * because the browser has to set its own boundary. `authorizedFetch` is used
    * directly so the token renewal behaviour is still there.
    */
+  /**
+   * Upload roster files in chunks.
+   *
+   * A single FormData with hundreds of files was rejected by nginx (413) and by
+   * the multipart `files` cap. Chunking keeps each request small enough to land
+   * and lets the operator see progress as batches complete.
+   */
   async upload(
     files: File[],
-    options: { facility?: string; rosterDate?: string; rosterKind?: string } = {},
+    options: {
+      facility?: string;
+      rosterDate?: string;
+      rosterKind?: string;
+      onChunk?: (done: number, total: number) => void;
+    } = {},
   ): Promise<{ accepted: UploadAccepted[]; rejected: { filename: string; reason: string }[] }> {
-    const form = new FormData();
-    for (const file of files) form.append('files', file, file.name);
+    const CHUNK = 25;
+    const accepted: UploadAccepted[] = [];
+    const rejected: { filename: string; reason: string }[] = [];
 
-    const res = await authorizedFetch(
-      `${API_BASE}/uploads${query({
-        facility: options.facility ?? 'sacramento',
-        rosterDate: options.rosterDate,
-        rosterKind: options.rosterKind,
-      })}`,
-      { method: 'POST', body: form },
-    );
+    for (let i = 0; i < files.length; i += CHUNK) {
+      const slice = files.slice(i, i + CHUNK);
+      const form = new FormData();
+      for (const file of slice) form.append('files', file, file.name);
 
-    const body = await res.text();
-    if (!res.ok) {
-      // A partial failure still returns the accepted files, so surface those rather
-      // than throwing away work the operator already waited for.
-      try {
-        const parsed = JSON.parse(body) as { accepted?: UploadAccepted[]; rejected?: { filename: string; reason: string }[]; message?: string };
-        if (parsed.rejected?.length) {
-          return { accepted: parsed.accepted ?? [], rejected: parsed.rejected };
+      const res = await authorizedFetch(
+        `${API_BASE}/uploads${query({
+          facility: options.facility ?? 'sacramento',
+          rosterDate: options.rosterDate,
+          rosterKind: options.rosterKind,
+        })}`,
+        { method: 'POST', body: form },
+      );
+
+      const body = await res.text();
+      if (!res.ok) {
+        if (res.status === 413) {
+          throw new Error(
+            `Upload rejected as too large (HTTP 413) after ${accepted.length} file(s) stored. ` +
+            `Try fewer files at once, or upload in smaller batches.`,
+          );
         }
-      } catch {
-        // Fall through to the generic message.
+        try {
+          const parsed = JSON.parse(body) as {
+            accepted?: UploadAccepted[];
+            rejected?: { filename: string; reason: string }[];
+            message?: string;
+          };
+          if (parsed.accepted?.length || parsed.rejected?.length) {
+            accepted.push(...(parsed.accepted ?? []));
+            rejected.push(...(parsed.rejected ?? []));
+            if (parsed.message && !parsed.accepted?.length) {
+              rejected.push({ filename: slice[0]?.name ?? 'batch', reason: parsed.message });
+            }
+          } else {
+            throw new Error(await describeFailure(res, body));
+          }
+        } catch (err) {
+          if (err instanceof Error && err.message.startsWith('Upload rejected')) throw err;
+          if (accepted.length > 0) {
+            rejected.push({
+              filename: `(batch starting ${slice[0]?.name ?? 'files'})`,
+              reason: err instanceof Error ? err.message : await describeFailure(res, body),
+            });
+            break;
+          }
+          throw new Error(await describeFailure(res, body));
+        }
+      } else {
+        const parsed = JSON.parse(body) as { accepted: UploadAccepted[]; rejected: { filename: string; reason: string }[] };
+        accepted.push(...(parsed.accepted ?? []));
+        rejected.push(...(parsed.rejected ?? []));
       }
-      throw new Error(await describeFailure(res, body));
+
+      options.onChunk?.(Math.min(i + slice.length, files.length), files.length);
     }
-    return JSON.parse(body) as { accepted: UploadAccepted[]; rejected: { filename: string; reason: string }[] };
+
+    return { accepted, rejected };
   },
 
   listUploads: (params: { limit?: number; offset?: number; status?: string } = {}) =>

@@ -17,8 +17,8 @@ import prisma from '../../lib/prisma.js';
 import type { AuthenticatedRequest } from '../../security/authMiddleware.js';
 import { recordAccess } from './auditLog.js';
 import {
-  MAX_UPLOAD_BYTES, SUPPORTED_FACILITIES, deleteUpload, getUpload,
-  listUploads, processingQueue, startProcessing, storeUpload,
+  MAX_UPLOAD_BYTES, SUPPORTED_FACILITIES, UPLOAD_FILES_PER_REQUEST,
+  deleteUpload, getUpload, listUploads, processingQueue, startProcessing, storeUpload,
 } from './rosterUploads.js';
 
 function requireAdministrator(request: AuthenticatedRequest, reply: FastifyReply): boolean {
@@ -51,15 +51,18 @@ export async function registerInmateOperationsRoutes(app: FastifyInstance): Prom
   // Upload — its own scope, so multipart does not affect JSON parsing elsewhere
   // -------------------------------------------------------------------------
   await app.register(async function rosterUploadPlugin(instance) {
+    // Cap per request, not per day. The Admin UI uploads large folders in chunks of
+    // UPLOAD_FILES_PER_REQUEST so a 1,000+ file drop does not arrive as one body.
+    // nginx client_max_body_size must stay above (chunk size × typical file size).
     await instance.register(multipart, {
-      limits: { fileSize: MAX_UPLOAD_BYTES, files: 4 },
+      limits: { fileSize: MAX_UPLOAD_BYTES, files: UPLOAD_FILES_PER_REQUEST },
     });
 
     /**
      * Receive one or more roster files.
      *
      * Streamed to disk rather than buffered, so a large scanned PDF does not sit in
-     * memory. Each file is registered independently: one bad file in a set of four
+     * memory. Each file is registered independently: one bad file in a batch
      * reports its own error and the others still land.
      */
     instance.post('/api/admin/intelligence/uploads', async (request: AuthenticatedRequest, reply: FastifyReply) => {

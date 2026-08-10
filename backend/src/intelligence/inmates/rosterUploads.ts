@@ -46,6 +46,15 @@ export type SupportedFacility = (typeof SUPPORTED_FACILITIES)[number];
 /** 200 MB. A county roster is a few megabytes; this is a guard, not a target. */
 export const MAX_UPLOAD_BYTES = 200 * 1024 * 1024;
 
+/**
+ * Maximum files accepted in one multipart request.
+ *
+ * The Admin UI chunks larger drops into requests of this size. Raising it without
+ * chunking the client would recreate the failure mode where a 1,000-file folder
+ * becomes one enormous POST that nginx or the browser aborts.
+ */
+export const UPLOAD_FILES_PER_REQUEST = 50;
+
 const ALLOWED_EXTENSIONS = new Set(['.csv', '.pdf']);
 
 export interface StoreUploadArgs {

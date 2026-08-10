@@ -82,7 +82,7 @@ const SACRAMENTO_FIELDS: ColumnMap['fields'] = {
   // available here. The booking number identifies one stay; the X-Ref identifies the
   // person across every stay, and it is what makes identity resolution reliable.
   externalBookingId: ['booking number', 'booking #', 'booking no', 'bkg #', 'bkg no',
-                      'registry number', 'registry #', 'book #', 'booking id'],
+                      'registry number', 'registry #', 'book #', 'booking id', 'booking'],
   externalPersonId: ['x-ref', 'xref', 'x ref', 'x-ref number', 'xref number',
                      'so #', 'so number', 'main id', 'subject number', 'inmate #'],
 
@@ -181,7 +181,7 @@ export const SACRAMENTO_PDF: SacramentoProfile = {
   changeNote:
     'Initial profile. The PDF is a paginated listing, not a table; layout is inferred per page. Expect to publish v2 once a real roster is available.',
   expectedHeaders: [
-    'BOOKING', 'NAME', 'DOB', 'SEX', 'BOOKED', 'HOUSING', 'CHARGES', 'BAIL',
+    'Booking Number', 'Name', 'DOB', 'Sex', 'Booked', 'Housing', 'Charges', 'Bail',
   ],
   columnMap: {
     facility: 'sacramento',

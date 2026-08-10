@@ -221,13 +221,30 @@ function rowsFromText(text: string, map: ColumnMap): {
   return { records, unparseableLines, issues };
 }
 
-/** Whichever candidate appears consistently across the sampled lines. */
-function detectDelimiter(lines: string[]): string | null {
+/**
+ * Whichever candidate splits the sampled lines into a stable column count.
+ *
+ * Commas are tried last: inmate names are often "LAST, FIRST", and bail amounts
+ * are written as "$25,000", so a comma count alone looks like a delimited table
+ * when it is not. Preferring a delimiter that yields a consistent field count
+ * across most lines avoids attaching one person's charges to the next.
+ */
+function detectDelimiter(lines: string[]): string | RegExp | null {
   const sample = lines.slice(0, 25);
-  for (const candidate of ['\t', '|', ',', '  ']) {
-    const counts = sample.map((l) => l.split(candidate).length - 1).filter((n) => n > 0);
-    if (counts.length >= Math.min(3, sample.length) && counts.length >= sample.length * 0.6) {
-      return candidate === '  ' ? /\s{2,}/ as unknown as string : candidate;
+  for (const candidate of ['\t', '|', '  ', ','] as const) {
+    const splitter: string | RegExp = candidate === '  ' ? /\s{2,}/ : candidate;
+    const fieldCounts = sample
+      .map((l) => l.split(splitter).map((f) => f.trim()).filter((f) => f.length > 0).length)
+      .filter((n) => n >= 4);
+    if (fieldCounts.length < Math.min(3, sample.length)) continue;
+    if (fieldCounts.length < sample.length * 0.5) continue;
+
+    // Majority of delimited lines must share one column count.
+    const tallies = new Map<number, number>();
+    for (const n of fieldCounts) tallies.set(n, (tallies.get(n) ?? 0) + 1);
+    const [bestCount, bestHits] = [...tallies.entries()].sort((a, b) => b[1] - a[1])[0]!;
+    if (bestCount >= 4 && bestHits >= fieldCounts.length * 0.7) {
+      return splitter;
     }
   }
   return null;

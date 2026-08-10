@@ -2,7 +2,9 @@
 // Manages corpus ingestion state, audit logs, and legal document storage.
 
 generator client {
-  provider = "prisma-client-js"
+  provider      = "prisma-client-js"
+  // Amazon Linux 2023 on courtaccess.net needs the RHEL engine; local agents use Debian.
+  binaryTargets = ["native", "debian-openssl-3.0.x", "rhel-openssl-3.0.x"]
 }
 
 datasource db {

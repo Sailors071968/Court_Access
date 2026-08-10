@@ -14,7 +14,7 @@
  *
  * Optional: --counts 1,25,100,500,1200
  */
-import { createHash } from 'node:crypto';
+import { createHash, randomBytes } from 'node:crypto';
 import { readFileSync, existsSync } from 'node:fs';
 import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -43,8 +43,7 @@ if (!existsSync(fixturePath)) {
   process.exit(2);
 }
 
-const fixtureBytes = readFileSync(fixturePath);
-const fixtureName = 'roster-2026-08-10.csv';
+const fixtureText = readFileSync(fixturePath, 'utf8');
 
 function sha256(buf) {
   return createHash('sha256').update(buf).digest('hex');
@@ -84,17 +83,30 @@ async function api(token, path, init = {}) {
   return json;
 }
 
+/**
+ * Clone the Sacramento fixture with unique Booking Number / X-Ref values so each
+ * file has a distinct fingerprint AND still matches the published parser profile.
+ */
+function makeSacramentoCsv(index) {
+  const tag = `${Date.now().toString(36)}${randomBytes(2).toString('hex')}${index}`;
+  let n = 0;
+  const text = fixtureText
+    .replace(/\bBK-[A-Z0-9-]+/g, () => {
+      n += 1;
+      return `BK-ACC-${tag}-${String(n).padStart(3, '0')}`;
+    })
+    .replace(/\bXR-[A-Z0-9-]+/g, () => {
+      n += 1;
+      return `XR-ACC-${tag}-${String(n).padStart(3, '0')}`;
+    });
+  return Buffer.from(text, 'utf8');
+}
+
 function makeFiles(n) {
-  // Unique content per file so fingerprints differ; first file uses the real fixture.
   const files = [];
   for (let i = 0; i < n; i += 1) {
-    const bytes = i === 0
-      ? fixtureBytes
-      : Buffer.from(
-        `${fixtureBytes.toString('utf8')}\n#acceptance-clone-${i}-${Date.now()}\n`,
-        'utf8',
-      );
-    const name = i === 0 ? fixtureName : `roster-acceptance-${String(i).padStart(5, '0')}.csv`;
+    const bytes = makeSacramentoCsv(i);
+    const name = `roster-acceptance-${String(i).padStart(5, '0')}.csv`;
     files.push({ name, bytes, sha256: sha256(bytes), sizeBytes: bytes.length });
   }
   return files;
@@ -165,7 +177,8 @@ async function runCount(token, n) {
 
   // Poll until terminal.
   let job;
-  for (let t = 0; t < 180; t += 1) {
+  const pollLimit = Math.max(180, n * 3);
+  for (let t = 0; t < pollLimit; t += 1) {
     job = await api(token, `/api/admin/intelligence/import-jobs/${jobId}`);
     if (['completed', 'failed', 'cancelled'].includes(job.status)) break;
     if (job.status === 'queued' || (job.filesUploaded > 0 && job.filesProcessing === 0 && job.filesCompleted === 0 && job.filesPending === 0)) {
@@ -188,8 +201,12 @@ async function runCount(token, n) {
     `files/min=${job.metrics?.filesPerMinute ?? '—'} rows/s=${job.metrics?.rowsPerSecond ?? '—'} ${elapsed}s`,
   );
 
-  if (job.status !== 'completed' && job.filesCompleted + job.filesSkippedDuplicate < n) {
-    throw new Error(`Acceptance failed for n=${n}: status=${job.status}`);
+  const settled = job.filesCompleted + job.filesSkippedDuplicate;
+  if (job.status !== 'completed' || settled < n || job.filesFailedProcessing > 0 || job.filesFailedUpload > 0) {
+    throw new Error(
+      `Acceptance failed for n=${n}: status=${job.status} settled=${settled} ` +
+      `failed_up=${job.filesFailedUpload} failed_proc=${job.filesFailedProcessing}`,
+    );
   }
   return job;
 }
